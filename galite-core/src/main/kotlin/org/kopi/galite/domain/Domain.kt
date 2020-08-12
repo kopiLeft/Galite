@@ -25,12 +25,32 @@ package org.kopi.galite.domain
  */
 open class Domain<T: Comparable<T>>(val length: Int? = null) {
 
-    /** Override it if you want to define a constraint that the domain values ​​must meet. */
+    /**
+     * Override it if you want to define a constraint that the domain values ​​must meet.
+     */
     open val check: ((value: T) -> Boolean)? = null
+
+    /**
+     * Allows to define list of possible values that the domain can take
+     */
+    open val code: (() -> Any)? = null
 
     /**
      * Override it if you want to apply transformation on values.
      *
+     * You can use [Transformation.convertUpper] to apply convert to uppercase transformation
      */
-    open val transformation: Transfomation.TransfomationType? = null
+    open val transformation: Transformation.TransfomationType? = null
+
+    /**
+     * Maps a name with a value
+     *
+     * @param name the name
+     * @param value the value
+     */
+    operator fun set(name: String, value: T) {
+        codes[name] = value
+    }
+
+    val codes = mutableMapOf<String, T>()
 }

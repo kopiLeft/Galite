@@ -20,7 +20,7 @@ package org.kopi.galite.domain
 /**
  * transformations that can be applied on a field
  */
-object Transfomation {
+object Transformation {
 
     /** Transforms values in capital letters. */
     fun Domain<String>.convertUpper(): TransfomationType = TransfomationType.CONVERT_UPPER

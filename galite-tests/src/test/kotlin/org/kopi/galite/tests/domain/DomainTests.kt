@@ -20,7 +20,7 @@ package org.kopi.galite.tests.domain
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.Field
-import org.kopi.galite.domain.Transfomation.convertUpper
+import org.kopi.galite.domain.Transformation.convertUpper
 import org.kopi.galite.domain.exceptions.InvalidValueException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -58,11 +58,11 @@ class DomainTests {
     /**
      * Tests the creation of a domain with check
      *
-     * succeed the value does respect the check method.
+     * succeed if the value does respect the check method.
      * fails otherwise.
      */
     @Test
-    fun dmainWithCheckTest() {
+    fun domainWithCheckTest() {
         // Declaration of the domain with length
         class StringTestType: Domain<String>(5) {
             override val check = { value: String ->
@@ -86,11 +86,11 @@ class DomainTests {
     /**
      * Tests the creation of a domain with check
      *
-     * succeed the value does respect the check method.
+     * succeed if the is converted to uppercase.
      * fails otherwise.
      */
     @Test
-    fun dmainWithConvertUpper() {
+    fun domainWithConvertUpperTest() {
         // Declaration of the domain with length
         class StringTestType: Domain<String>(5) {
             override val transformation = convertUpper()
@@ -102,5 +102,28 @@ class DomainTests {
         // test converted value
         val convertedToUpper = field.convertUpper("Abcdef")
         assertEquals("ABCDEF", convertedToUpper)
+    }
+
+    /**
+     * Tests the creation of a domain of a type code.
+     */
+    @Test
+    fun domainCodeTest() {
+        // Declaration of the domain with length
+        class IntTestType: Domain<Long>(5) {
+            override val code = {
+                this["cde1"] = 1
+                this["cde2"] = 2
+            }
+        }
+
+        // Creating a field with the domain IntTestType
+        val field = Field(IntTestType())
+
+        // test code values
+        val codes = field.getCodes()
+        assertEquals(2, codes!!.size)
+        assertEquals(1, codes["cde1"])
+        assertEquals(2, codes["cde2"])
     }
 }

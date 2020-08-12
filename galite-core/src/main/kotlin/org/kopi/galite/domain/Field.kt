@@ -66,7 +66,15 @@ class Field<T: Comparable<T>>(val domain: Domain<T>? = null)  {
      */
     fun convertUpper(value: String): String = when {
         domain == null -> (value)
-        domain.transformation != Transfomation.TransfomationType.CONVERT_UPPER -> (value)
+        domain.transformation != Transformation.TransfomationType.CONVERT_UPPER -> (value)
         else-> value.toUpperCase()
+    }
+
+    /**
+     * returns list of code values that can this field get.
+     */
+    fun getCodes() : MutableMap<String, T>? {
+        domain?.code?.invoke()
+        return domain?.codes
     }
 }
