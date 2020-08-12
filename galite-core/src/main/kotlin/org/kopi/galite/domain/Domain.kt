@@ -15,24 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.kopi.galite.domain
 
-plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.72" apply false
-}
+/**
+ * A domain is used to specify the type of values that a [Field] can hold. It allow to specify
+ * the set of values that a [Field] can hold. You can also do some checks on these values.
+ *
+ * @param length the maximum length of the value that can be passed
+ */
+open class Domain<T: Comparable<T>>(val length: Int? = null) {
 
-subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        "implementation"(kotlin("stdlib-jdk8"))
-    }
-
-    tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
-    }
+    /** Override it if you want to check values when they are passed. */
+    open val check: ((value: T) -> Boolean)? = null
 }
