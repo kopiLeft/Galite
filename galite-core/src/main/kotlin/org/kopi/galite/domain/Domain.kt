@@ -25,6 +25,12 @@ package org.kopi.galite.domain
  */
 open class Domain<T: Comparable<T>>(val length: Int? = null) {
 
-    /** Override it if you want to check values when they are passed. */
+    /** Override it if you want to define a constraint that the domain values ​​must meet. */
     open val check: ((value: T) -> Boolean)? = null
+
+    /**
+     * Override it if you want to apply transformation on values.
+     *
+     */
+    open val transformation: Transfomation.TransfomationType? = null
 }
