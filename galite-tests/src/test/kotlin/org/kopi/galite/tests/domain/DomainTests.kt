@@ -3,6 +3,8 @@ package org.kopi.galite.tests.domain
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.Field
+import org.kopi.galite.domain.exceptions.InvalidValueException
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -32,5 +34,33 @@ class DomainTests {
         // test with an invalid value
         val checkInvalid = field.checkLength("abcdef")
         assertFalse(checkInvalid)
+    }
+
+    /**
+     * Tests the creation of a domain with check
+     *
+     * succeed the value does respect the check method.
+     * fails otherwise.
+     */
+    @Test
+    fun dmainWithCheckTest() {
+        // Declaration of the domain with length
+        class StringTestType: Domain<String>(5) {
+            override val check = { value: String ->
+                value.startsWith("A")
+            }
+        }
+
+        // Creating a field with the domain StringTestType
+        val field = Field(StringTestType())
+
+        // test with a valid value
+        val checkValid = field.checkValue("Abcdef")
+        assertTrue(checkValid)
+
+        // test with an invalid value
+        assertFailsWith<InvalidValueException> {
+            field.checkValue("abcdef")
+        }
     }
 }
