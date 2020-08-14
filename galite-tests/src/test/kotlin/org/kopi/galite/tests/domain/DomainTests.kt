@@ -127,4 +127,28 @@ class DomainTests {
         assertEquals(1, codes["cde1"])
         assertEquals(2, codes["cde2"])
     }
+
+    /**
+     * Tests Domain of a type code with redundant code.
+     */
+    @Test
+    fun domainRedundantCodeTest() {
+        // Declaration of the domain with codes
+        class IntTestType: Domain<Long>(5) {
+            override val values = code {
+                this["cde1"] = 1
+                this["cde2"] = 2
+                this["cde1"] = 7
+            }
+        }
+
+        // Creating a field with the domain IntTestType
+        val field = Field(IntTestType())
+
+        // test code values
+        val codes = field.getCodes()
+        assertEquals(2, codes!!.size)
+        assertEquals(7, codes["cde1"])
+        assertEquals(2, codes["cde2"])
+    }
 }
