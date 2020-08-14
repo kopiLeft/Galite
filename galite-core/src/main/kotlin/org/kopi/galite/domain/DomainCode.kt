@@ -33,5 +33,8 @@ class DomainCode<T: Comparable<T>> {
         codes[text] = value
     }
 
+    /**
+     * Mapping of all values that a domain can take
+     */
     val codes: MutableMap<String, T> = mutableMapOf()
 }
