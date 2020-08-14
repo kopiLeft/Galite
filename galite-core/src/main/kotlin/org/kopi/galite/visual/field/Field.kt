@@ -27,54 +27,54 @@ import org.kopi.galite.visual.exceptions.InvalidValueException
  *
  * @param domain the field's domain
  */
-class Field<T: Comparable<T>>(val domain: Domain<T>? = null)  {
+class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
 
-    /** Field's label */
-    var label: String = ""
+  /** Field's label */
+  var label: String = ""
 
-    /**
-     * Checks if the value passed to the field doesn't exceed the length of the field's domain
-     *
-     * @param value passed value
-     * @return true if the domain is not defined or the value's length doesn't exceed the domain size,
-     * and returns false otherwise.
-     */
-    fun checkLength(value: T): Boolean = when {
-        domain == null -> true
-        domain.length == null -> true
-        else -> value.toString().length <= domain.length
-    }
+  /**
+   * Checks if the value passed to the field doesn't exceed the length of the field's domain
+   *
+   * @param value passed value
+   * @return true if the domain is not defined or the value's length doesn't exceed the domain size,
+   * and returns false otherwise.
+   */
+  fun checkLength(value: T): Boolean = when {
+    domain == null -> true
+    domain.length == null -> true
+    else -> value.toString().length <= domain.length
+  }
 
-    /**
-     * Checks if the value passed to the field respects the [domain.check] constraint
-     *
-     * @param value passed value
-     * @return  true if the domain is not defined or if the values if verified by the domain's constraint
-     * @throws InvalidValueException otherwise
-     */
-    fun checkValue(value: T): Boolean = when {
-        domain == null -> true
-        domain.check == null -> true
-        domain.check!!.invoke(value) -> true
-        else -> throw InvalidValueException(value, label)
-    }
+  /**
+   * Checks if the value passed to the field respects the [domain.check] constraint
+   *
+   * @param value passed value
+   * @return  true if the domain is not defined or if the values if verified by the domain's constraint
+   * @throws InvalidValueException otherwise
+   */
+  fun checkValue(value: T): Boolean = when {
+    domain == null -> true
+    domain.check == null -> true
+    domain.check!!.invoke(value) -> true
+    else -> throw InvalidValueException(value, label)
+  }
 
-    /**
-     * Converts the value to uppercase format.
-     *
-     * @param value passed value
-     * @return the uppercase of the value
-     */
-    fun convertUpper(value: String): String = when {
-        domain == null -> (value)
-        domain.transformation != Transformation.TransfomationType.CONVERT_UPPER -> (value)
-        else-> value.toUpperCase()
-    }
+  /**
+   * Converts the value to uppercase format.
+   *
+   * @param value passed value
+   * @return the uppercase of the value
+   */
+  fun convertUpper(value: String): String = when {
+    domain == null -> (value)
+    domain.transformation != Transformation.TransfomationType.CONVERT_UPPER -> (value)
+    else -> value.toUpperCase()
+  }
 
-    /**
-     * returns list of code values that can this field get.
-     */
-    fun getCodes() : MutableMap<String, T>? {
-        return domain?.domainCode?.codes
-    }
+  /**
+   * returns list of code values that can this field get.
+   */
+  fun getCodes(): MutableMap<String, T>? {
+    return domain?.domainCode?.codes
+  }
 }

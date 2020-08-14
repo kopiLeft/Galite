@@ -18,21 +18,21 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.72" apply false
+  id("org.jetbrains.kotlin.jvm") version "1.3.72" apply false
 }
 
 subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
+  apply(plugin = "org.jetbrains.kotlin.jvm")
 
-    repositories {
-        jcenter()
-    }
+  repositories {
+    jcenter()
+  }
 
-    dependencies {
-        "implementation"(kotlin("stdlib-jdk8"))
-    }
+  dependencies {
+    "implementation"(kotlin("stdlib-jdk8"))
+  }
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
-    }
+  tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+  }
 }

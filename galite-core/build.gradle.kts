@@ -16,5 +16,5 @@
  */
 
 plugins {
-    kotlin("jvm") apply true
+  kotlin("jvm") apply true
 }

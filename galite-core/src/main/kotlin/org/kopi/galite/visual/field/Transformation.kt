@@ -24,11 +24,15 @@ import org.kopi.galite.domain.Domain
  */
 object Transformation {
 
-    /** Transforms values in capital letters. */
-    fun Domain<String>.convertUpper(): TransfomationType = TransfomationType.CONVERT_UPPER
+  /**
+   * Transforms values in capital letters.
+   */
+  fun Domain<String>.convertUpper(): TransfomationType = TransfomationType.CONVERT_UPPER
 
-    /** Transformation types */
-    enum class TransfomationType {
-        CONVERT_UPPER
-    }
+  /**
+   * Transformation types
+   */
+  enum class TransfomationType {
+    CONVERT_UPPER
+  }
 }

@@ -25,45 +25,45 @@ import org.kopi.galite.visual.field.Transformation
  *
  * @param length the maximum length of the value that can be passed
  */
-open class Domain<T: Comparable<T>>(val length: Int? = null) {
+open class Domain<T : Comparable<T>>(val length: Int? = null) {
 
-    /**
-     * Allows to define the possible codes that the domain can take
-     *
-     * @param init
-     */
-    fun code(init: DomainCode<T>.() -> Unit): DomainType {
-        domainCode.init()
-        return DomainType.CODE
-    }
+  /**
+   * Allows to define the possible codes that the domain can take
+   *
+   * @param init
+   */
+  fun code(init: DomainCode<T>.() -> Unit): DomainType {
+    domainCode.init()
+    return DomainType.CODE
+  }
 
-    /**
-     * Override it if you want to define a constraint that the domain values ​​must verify.
-     */
-    open val check: ((value: T) -> Boolean)? = null
+  /**
+   * Override it if you want to define a constraint that the domain values ​​must verify.
+   */
+  open val check: ((value: T) -> Boolean)? = null
 
-    /**
-     * Override it if you want to define a constraint that the domain values ​​must meet.
-     */
-    open val values: DomainType? = null
+  /**
+   * Override it if you want to define a constraint that the domain values ​​must meet.
+   */
+  open val values: DomainType? = null
 
-    /**
-     * Override it if you want to apply transformation on values.
-     *
-     * You can use [Transformation.convertUpper] to apply convert to uppercase transformation
-     */
-    open val transformation: Transformation.TransfomationType? = null
+  /**
+   * Override it if you want to apply transformation on values.
+   *
+   * You can use [Transformation.convertUpper] to apply convert to uppercase transformation
+   */
+  open val transformation: Transformation.TransfomationType? = null
 
-    /**
-     * Codes that this domain can take
-     */
-    var domainCode = DomainCode<T>()
+  /**
+   * Codes that this domain can take
+   */
+  var domainCode = DomainCode<T>()
 }
 
 /**
  * Defines the domain types
  */
 enum class DomainType {
-    LIST,
-    CODE
+  LIST,
+  CODE
 }

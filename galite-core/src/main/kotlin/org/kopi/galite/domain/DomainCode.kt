@@ -20,21 +20,21 @@ package org.kopi.galite.domain
 /**
  * Represents the codes that a domain can take
  */
-class DomainCode<T: Comparable<T>> {
+class DomainCode<T : Comparable<T>> {
 
-    /**
-     * Sets a mapping between the values that the domain can take
-     * and a corresponding text to be displayed in a [Field].
-     *
-     * @param text the text
-     * @param value the value
-     */
-    operator fun set(text: String, value: T) {
-        codes[text] = value
-    }
+  /**
+   * Sets a mapping between the values that the domain can take
+   * and a corresponding text to be displayed in a [Field].
+   *
+   * @param text the text
+   * @param value the value
+   */
+  operator fun set(text: String, value: T) {
+    codes[text] = value
+  }
 
-    /**
-     * Mapping of all values that a domain can take
-     */
-    val codes: MutableMap<String, T> = mutableMapOf()
+  /**
+   * Mapping of all values that a domain can take
+   */
+  val codes: MutableMap<String, T> = mutableMapOf()
 }

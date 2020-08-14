@@ -25,5 +25,5 @@ package org.kopi.galite.visual.exceptions
  *
  */
 class InvalidValueException(value: Comparable<*>, label: String) : IllegalArgumentException() {
-    override val message = "invalid value $value for the field $label"
+  override val message = "invalid value $value for the field $label"
 }

@@ -16,17 +16,17 @@
  */
 
 plugins {
-    kotlin("jvm") apply true
+  kotlin("jvm") apply true
 }
 
 dependencies {
-    implementation(project(":galite-core"))
+  implementation(project(":galite-core"))
 
-    implementation(kotlin("test-junit"))
+  implementation(kotlin("test-junit"))
 }
 
 tasks {
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
+  compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+  }
 }
