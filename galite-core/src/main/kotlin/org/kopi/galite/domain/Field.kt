@@ -74,7 +74,6 @@ class Field<T: Comparable<T>>(val domain: Domain<T>? = null)  {
      * returns list of code values that can this field get.
      */
     fun getCodes() : MutableMap<String, T>? {
-        domain?.code?.invoke()
-        return domain?.codes
+        return domain?.domainCode?.codes
     }
 }

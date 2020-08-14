@@ -15,18 +15,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-plugins {
-    kotlin("jvm") apply true
-}
+package org.kopi.galite.domain
 
-dependencies {
-    implementation(project(":galite-core"))
+/**
+ * Represents the codes that a domain can take
+ */
+class DomainCode<T: Comparable<T>> {
 
-    implementation(kotlin("test-junit"))
-}
-
-tasks {
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+    /**
+     * Sets a mapping between the values that the domain can take
+     * and a corresponding text to be displayed in a [Field].
+     *
+     * @param text the text
+     * @param value the value
+     */
+    operator fun set(text: String, value: T) {
+        codes[text] = value
     }
+
+    val codes: MutableMap<String, T> = mutableMapOf()
 }

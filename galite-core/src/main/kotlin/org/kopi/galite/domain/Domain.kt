@@ -26,14 +26,24 @@ package org.kopi.galite.domain
 open class Domain<T: Comparable<T>>(val length: Int? = null) {
 
     /**
-     * Override it if you want to define a constraint that the domain values ​​must meet.
+     * Allows to define the possible codes that the domain can take
+     *
+     * @param init
+     */
+    fun code(init: DomainCode<T>.() -> Unit): DomainType {
+        domainCode.init()
+        return DomainType.CODE
+    }
+
+    /**
+     * Override it if you want to define a constraint that the domain values ​​must verify.
      */
     open val check: ((value: T) -> Boolean)? = null
 
     /**
-     * Allows to define list of possible values that the domain can take
+     * Override it if you want to define a constraint that the domain values ​​must meet.
      */
-    open val code: (() -> Any)? = null
+    open val values: DomainType? = null
 
     /**
      * Override it if you want to apply transformation on values.
@@ -43,14 +53,15 @@ open class Domain<T: Comparable<T>>(val length: Int? = null) {
     open val transformation: Transformation.TransfomationType? = null
 
     /**
-     * Maps a name with a value
-     *
-     * @param name the name
-     * @param value the value
+     * Codes that this domain can take
      */
-    operator fun set(name: String, value: T) {
-        codes[name] = value
-    }
+    var domainCode = DomainCode<T>()
+}
 
-    val codes = mutableMapOf<String, T>()
+/**
+ * Defines the domain types
+ */
+enum class DomainType {
+    LIST,
+    CODE
 }

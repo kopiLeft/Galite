@@ -22,6 +22,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.Field
 import org.kopi.galite.domain.Transformation.convertUpper
 import org.kopi.galite.domain.exceptions.InvalidValueException
+
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
@@ -109,9 +110,9 @@ class DomainTests {
      */
     @Test
     fun domainCodeTest() {
-        // Declaration of the domain with length
+        // Declaration of the domain with codes
         class IntTestType: Domain<Long>(5) {
-            override val code = {
+            override val values = code {
                 this["cde1"] = 1
                 this["cde2"] = 2
             }
