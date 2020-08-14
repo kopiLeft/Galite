@@ -15,15 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.domain.exceptions
+package org.kopi.galite.visual.field
+
+import org.kopi.galite.domain.Domain
 
 /**
- * Thrown to indicate that an invalid value has been passed to a field.
- *
- * @param value to pass
- * @param label the field's label
- *
+ * transformations that can be applied on a field
  */
-class InvalidValueException(value: Comparable<*>, label: String) : IllegalArgumentException() {
-    override val message = "invalid value $value for the field $label"
+object Transformation {
+
+    /** Transforms values in capital letters. */
+    fun Domain<String>.convertUpper(): TransfomationType = TransfomationType.CONVERT_UPPER
+
+    /** Transformation types */
+    enum class TransfomationType {
+        CONVERT_UPPER
+    }
 }

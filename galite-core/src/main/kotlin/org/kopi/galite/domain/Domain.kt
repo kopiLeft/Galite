@@ -17,6 +17,8 @@
 
 package org.kopi.galite.domain
 
+import org.kopi.galite.visual.field.Transformation
+
 /**
  * A domain is used to specify the type of values that a [Field] can hold. It allow to specify
  * the set of values that a [Field] can hold. You can also do some checks on these values.

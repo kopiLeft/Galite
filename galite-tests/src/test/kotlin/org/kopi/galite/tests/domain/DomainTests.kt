@@ -19,9 +19,9 @@ package org.kopi.galite.tests.domain
 
 import org.junit.Test
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.domain.Field
-import org.kopi.galite.domain.Transformation.convertUpper
-import org.kopi.galite.domain.exceptions.InvalidValueException
+import org.kopi.galite.visual.field.Field
+import org.kopi.galite.visual.field.Transformation.convertUpper
+import org.kopi.galite.visual.exceptions.InvalidValueException
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
