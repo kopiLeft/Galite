@@ -65,14 +65,14 @@ class DomainTests {
     @Test
     fun domainWithCheckTest() {
         // Declaration of the domain with length
-        class StringTestType: Domain<String>(5) {
+        class StringTestType(val param: String): Domain<String>(5) {
             override val check = { value: String ->
-                value.startsWith("A")
+                value.startsWith(param)
             }
         }
 
         // Creating a field with the domain StringTestType
-        val field = Field(StringTestType())
+        val field = Field(StringTestType("A"))
 
         // test with a valid value
         val checkValid = field.checkValue("Abcdef")
