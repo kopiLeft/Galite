@@ -62,15 +62,16 @@ class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
   }
 
   /**
-   * Converts the value to uppercase format.
+   * Applies a transformation on the value.
    *
    * @param value passed value
-   * @return the uppercase of the value
+   * @return value after transformation
    */
-  fun convertUpper(value: String): String = when {
-    domain == null -> (value)
-    domain.transformation != Transformation.TransfomationType.CONVERT_UPPER -> (value)
-    else -> value.toUpperCase()
+  fun applyTransformation(value: T): Any? = when {
+    domain == null -> value
+    domain.transformation == null -> value
+    domain.transformation == Transformation.TransfomationType.CONVERT_UPPER -> (value as String).toUpperCase()
+    else -> null
   }
 
   /**

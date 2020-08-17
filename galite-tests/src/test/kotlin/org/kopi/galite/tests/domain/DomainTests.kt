@@ -101,7 +101,7 @@ class DomainTests {
     val field = Field(StringTestType())
 
     // test converted value
-    val convertedToUpper = field.convertUpper("Abcdef")
+    val convertedToUpper = field.applyTransformation("Abcdef")
     assertEquals("ABCDEF", convertedToUpper)
   }
 
