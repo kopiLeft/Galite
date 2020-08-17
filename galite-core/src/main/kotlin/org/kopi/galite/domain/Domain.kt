@@ -43,7 +43,7 @@ open class Domain<T : Comparable<T>>(val length: Int? = null) {
   open val check: ((value: T) -> Boolean)? = null
 
   /**
-   * Override it if you want to define a constraint that the domain values ​​must meet.
+   * Allows to define the values that the domain can take.
    */
   open val values: DomainType? = null
 
