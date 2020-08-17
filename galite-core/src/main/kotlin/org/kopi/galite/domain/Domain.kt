@@ -25,7 +25,7 @@ import org.kopi.galite.visual.field.Transformation
  *
  * @param length the maximum length of the value that can be passed
  */
-open class Domain<T : Comparable<T>>(val length: Int? = null) {
+abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
 
   /**
    * Allows to define the possible codes that the domain can take
@@ -45,7 +45,7 @@ open class Domain<T : Comparable<T>>(val length: Int? = null) {
   /**
    * Allows to define the values that the domain can take.
    */
-  open val values: DomainType? = null
+  abstract val values: DomainType
 
   /**
    * Override it if you want to apply transformation on values.

@@ -19,6 +19,7 @@ package org.kopi.galite.tests.domain
 
 import org.junit.Test
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.DomainType
 import org.kopi.galite.visual.field.Field
 import org.kopi.galite.visual.field.Transformation.convertUpper
 import org.kopi.galite.visual.exceptions.InvalidValueException
@@ -42,7 +43,11 @@ class DomainTests {
   @Test
   fun simpleDomainWithLengthTest() {
     // Declaration of the domain with length
-    class StringTestType : Domain<String>(5)
+    class StringTestType : Domain<String>(5) {
+      override val values: DomainType = code {
+        this["cde1"] = "1"
+      }
+    }
 
     // Creating a field with the domain StringTestType
     val field = Field(StringTestType())
@@ -66,6 +71,9 @@ class DomainTests {
   fun domainWithCheckTest() {
     // Declaration of the domain with length
     class StringTestType(val param: String) : Domain<String>(5) {
+      override val values: DomainType = code {
+        this["cde1"] = "1"
+      }
       override val check = { value: String ->
         value.startsWith(param)
       }
@@ -94,6 +102,9 @@ class DomainTests {
   fun domainWithConvertUpperTest() {
     // Declaration of the domain with length
     class StringTestType : Domain<String>(5) {
+      override val values: DomainType = code {
+        this["cde1"] = "1"
+      }
       override val transformation = convertUpper()
     }
 
