@@ -24,16 +24,16 @@ import org.kopi.galite.visual.field.Field
  * Represents a report that contains fields [fields] and displays a table of [lines].
  */
 open class Report {
-  /** Report's fields */
+  /** Report's fields. */
   val fields = mutableListOf<Field<*>>()
-  /** Report's data lines */
-  private val lines = mutableListOf<MutableMap<Field<*>, Any>>()
+  /** Report's data lines. */
+  private val lines = mutableListOf<Line>()
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
    *
-   * @param domain  the domain of the field
-   * @param init    initialization method
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
    * @return a field.
    */
   fun <T: Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit) : Field<T> {
@@ -44,40 +44,27 @@ open class Report {
   }
 
   /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [Field].
-   *
-   * @param field the field
-   * @param value the field's value
-   */
-  operator fun <T: Comparable<T>> set(field: Field<T>, value: T) {
-    if(field in fields) {
-      lines.last().putIfAbsent(field, value)
-    }
-  }
-
-  /**
    * Adds a line to the report.
    *
-   * @param init initializes the line with values
+   * @param init initializes the line with values.
    */
-  fun add(init: Report.() -> Unit) {
-    val map = mutableMapOf<Field<*>, Any>()
-    lines.add(map)
-    init()
+  fun add(init: Line.() -> Unit) {
+    val line = Line(fields)
+    line.init()
+    lines.add(line)
   }
 
   /**
    * Returns line number [lineNumber].
    *
-   * @param lineNumber line's number
+   * @param lineNumber line's number.
    */
-  fun getLine(lineNumber: Int): MutableMap<Field<*>, Any> = lines[lineNumber]
+  fun getLine(lineNumber: Int): MutableMap<Field<*>, Any> = lines[lineNumber].reportLine
 
   /**
    * Returns lines of data for a specific [field].
    *
-   * @param field the field
+   * @param field the field.
    */
-  fun getLinesForField(field: Field<*>) = lines.map { it[field] }
+  fun getLinesForField(field: Field<*>) = lines.map { it.reportLine[field] }
 }
