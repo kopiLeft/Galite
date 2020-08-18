@@ -57,7 +57,7 @@ abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
   /**
    * Codes that this domain can take
    */
-  var domainCode = DomainCode<T>()
+  var domainCode = DomainCode<T>(this::class.java.simpleName)
 }
 
 /**
