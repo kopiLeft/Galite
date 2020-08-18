@@ -15,24 +15,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.kopi.galite.domain
 
-plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.3.72" apply false
-}
+/**
+ * Represents the codes that a domain can take
+ */
+class DomainCode<T : Comparable<T>> {
 
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
-
-  repositories {
-    jcenter()
+  /**
+   * Sets a mapping between the values that the domain can take
+   * and a corresponding text to be displayed in a [Field].
+   *
+   * @param text the text
+   * @param value the value
+   */
+  operator fun set(text: String, value: T) {
+    codes[text] = value
   }
 
-  dependencies {
-    "implementation"(kotlin("stdlib-jdk8"))
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-  }
+  /**
+   * Mapping of all values that a domain can take
+   */
+  val codes: MutableMap<String, T> = mutableMapOf()
 }

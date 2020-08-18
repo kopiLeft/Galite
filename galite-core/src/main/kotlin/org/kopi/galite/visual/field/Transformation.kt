@@ -15,24 +15,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.kopi.galite.visual.field
 
-plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.3.72" apply false
-}
+import org.kopi.galite.domain.Domain
 
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
+/**
+ * transformations that can be applied on a field
+ */
+object Transformation {
 
-  repositories {
-    jcenter()
-  }
+  /**
+   * Transforms values in capital letters.
+   */
+  fun Domain<String>.convertUpper(): TransfomationType = TransfomationType.CONVERT_UPPER
 
-  dependencies {
-    "implementation"(kotlin("stdlib-jdk8"))
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+  /**
+   * Transformation types
+   */
+  enum class TransfomationType {
+    CONVERT_UPPER
   }
 }

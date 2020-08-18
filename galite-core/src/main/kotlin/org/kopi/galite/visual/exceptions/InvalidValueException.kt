@@ -15,24 +15,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.kopi.galite.visual.exceptions
 
-plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.3.72" apply false
-}
-
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
-
-  repositories {
-    jcenter()
-  }
-
-  dependencies {
-    "implementation"(kotlin("stdlib-jdk8"))
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-  }
+/**
+ * Thrown to indicate that an invalid value has been passed to a field.
+ *
+ * @param value to pass
+ * @param label the field's label
+ *
+ */
+class InvalidValueException(value: Comparable<*>, label: String) : RuntimeException() {
+  override val message = "invalid value $value for the field $label"
 }
