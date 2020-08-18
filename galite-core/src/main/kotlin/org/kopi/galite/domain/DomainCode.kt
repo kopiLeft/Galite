@@ -20,7 +20,7 @@ package org.kopi.galite.domain
 /**
  * Represents the codes that a domain can take
  */
-class DomainCode<T : Comparable<T>> {
+class DomainCode<T : Comparable<T>>(private val name: String) {
 
   /**
    * Sets a mapping between the values that the domain can take
@@ -30,6 +30,9 @@ class DomainCode<T : Comparable<T>> {
    * @param value the value
    */
   operator fun set(text: String, value: T) {
+    if(text in codes.keys) {
+      throw RuntimeException("$text already exists in domain $name")
+    }
     codes[text] = value
   }
 

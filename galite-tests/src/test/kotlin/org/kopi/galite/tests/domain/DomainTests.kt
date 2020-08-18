@@ -141,6 +141,8 @@ class DomainTests {
 
   /**
    * Tests Domain of a type code with redundant code.
+   *
+   * Fails if there is a redundant code
    */
   @Test
   fun domainRedundantCodeTest() {
@@ -153,13 +155,9 @@ class DomainTests {
       }
     }
 
-    // Creating a field with the domain IntTestType
-    val field = Field(IntTestType())
-
-    // test code values
-    val codes = field.getCodes()
-    assertEquals(2, codes!!.size)
-    assertEquals(7, codes["cde1"])
-    assertEquals(2, codes["cde2"])
+    // Creating the domain IntTestType
+    assertFailsWith<RuntimeException> {
+      IntTestType()
+    }
   }
 }
