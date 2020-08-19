@@ -1,4 +1,4 @@
-package org.galite
+package org.kopi.galite
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

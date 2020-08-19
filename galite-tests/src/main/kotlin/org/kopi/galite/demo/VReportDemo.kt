@@ -1,11 +1,13 @@
-package org.kopi.galite.tests.visual.report
+package org.kopi.galite.demo
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.router.Route
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.visual.report.Report
 import org.kopi.galite.visual.report.VReport
 
-class VReportDemo: VerticalLayout() {
+@Route("ReportDemo")
+class VReportDemo : VerticalLayout() {
   init {
     var report = SimpleReport()
     add(VReport(report))
@@ -33,6 +35,7 @@ class VReportDemo: VerticalLayout() {
       }
     }
   }
+
   class StringTestType : Domain<String>(5) {
     override val values = code {
       this["cde1"] = "test1"

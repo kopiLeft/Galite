@@ -36,6 +36,13 @@ dependencies {
         .forEach { group -> exclude(group = group) }
   }
 
+  implementation("org.seleniumhq.selenium:selenium-java:3.141.59")
+  implementation("io.github.bonigarcia:webdrivermanager:4.0.0"){
+    exclude("org.jsoup","jsoup")
+  }
+  implementation("io.github.sukgu:automation:0.0.13")
+
+
 }
 
 tasks {
