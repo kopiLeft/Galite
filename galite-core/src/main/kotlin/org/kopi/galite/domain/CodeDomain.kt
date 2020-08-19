@@ -15,13 +15,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-plugins {
-  kotlin("jvm") apply true
-}
+package org.kopi.galite.domain
 
-val exposedVersion = "0.26.2"
+/**
+ * Represents a domain of type code
+ */
+class CodeDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
 
-dependencies {
-  // Exposed dependencies
-  api("org.jetbrains.exposed", "exposed-core", exposedVersion)
+  /**
+   * Sets a mapping between the values that the domain can take
+   * and a corresponding text to be displayed in a field.
+   *
+   * @param text the text
+   * @param value the value
+   */
+  operator fun set(text: String, value: T) {
+    if(text in codes.keys) {
+      throw RuntimeException("$text already exists in domain $name")
+    }
+    codes[text] = value
+  }
+
+  /**
+   * Mapping of all values that a domain can take
+   */
+  val codes: MutableMap<String, T> = mutableMapOf()
+
+  override val type = this
 }

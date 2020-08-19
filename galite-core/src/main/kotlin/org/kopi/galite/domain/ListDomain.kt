@@ -17,27 +17,53 @@
 
 package org.kopi.galite.domain
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Query
+
 /**
- * Represents the codes that a domain can take
+ * Represents a domain of type list
  */
-class DomainCode<T : Comparable<T>>(private val name: String) {
+class ListDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
+  var query: Query? = null
 
   /**
    * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [Field].
+   * and a corresponding text to be displayed in a field.
    *
    * @param text the text
    * @param value the value
    */
-  operator fun set(text: String, value: T) {
-    if(text in codes.keys) {
+  operator fun <V: Comparable<V>> set(text: String, value: Column<V>) {
+    if(text in list.keys) {
       throw RuntimeException("$text already exists in domain $name")
     }
-    codes[text] = value
+    list[text] = value
   }
 
   /**
    * Mapping of all values that a domain can take
    */
-  val codes: MutableMap<String, T> = mutableMapOf()
+  val list: MutableMap<String, Any> = mutableMapOf()
+
+  /**
+   * Transforms values in capital letters.
+   */
+  fun Domain<String>.convertUpper() {
+    convertUpper = true
+  }
+
+  /**
+   * Applies a transformation on the value.
+   *
+   * @param value passed value
+   * @return value after transformation
+   */
+  override fun applyConvertUpper(value: String): String? = when {
+    !convertUpper -> value
+    convertUpper -> value.toUpperCase()
+    else -> null
+  }
+
+  override val type = this
+  var convertUpper = false
 }

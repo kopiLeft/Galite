@@ -19,9 +19,7 @@ package org.kopi.galite.tests.domain
 
 import org.junit.Test
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.domain.DomainType
 import org.kopi.galite.visual.field.Field
-import org.kopi.galite.visual.field.Transformation.convertUpper
 import org.kopi.galite.visual.exceptions.InvalidValueException
 
 import kotlin.test.assertEquals
@@ -30,9 +28,9 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
- * Contains tests of domain creation and manipulation
+ * Contains tests of code-domain creation and manipulation
  */
-class DomainTests {
+class CodeDomainTests {
 
   /**
    * Tests the creation of a simple domain with length
@@ -44,7 +42,7 @@ class DomainTests {
   fun simpleDomainWithLengthTest() {
     // Declaration of the domain with length
     class StringTestType : Domain<String>(5) {
-      override val values: DomainType = code {
+      override val type = code {
         this["cde1"] = "1"
       }
     }
@@ -71,7 +69,7 @@ class DomainTests {
   fun domainWithCheckTest() {
     // Declaration of the domain with length
     class StringTestType(val param: String) : Domain<String>(5) {
-      override val values: DomainType = code {
+      override val type = code {
         this["cde1"] = "1"
       }
       override val check = { value: String ->
@@ -93,50 +91,26 @@ class DomainTests {
   }
 
   /**
-   * Tests the creation of a domain with check
-   *
-   * succeed if the is converted to uppercase.
-   * fails otherwise.
-   */
-  @Test
-  fun domainWithConvertUpperTest() {
-    // Declaration of the domain with length
-    class StringTestType : Domain<String>(5) {
-      override val values: DomainType = code {
-        this["cde1"] = "1"
-      }
-      override val transformation = convertUpper()
-    }
-
-    // Creating a field with the domain StringTestType
-    val field = Field(StringTestType())
-
-    // test converted value
-    val convertedToUpper = field.applyTransformation("Abcdef")
-    assertEquals("ABCDEF", convertedToUpper)
-  }
-
-  /**
    * Tests the creation of a domain of a type code.
    */
   @Test
   fun domainCodeTest() {
     // Declaration of the domain with codes
     class IntTestType : Domain<Long>(5) {
-      override val values = code {
-        this["cde1"] = 1
-        this["cde2"] = 2
+      override val type = code {
+        this["cde1"] = 1L
+        this["cde2"] = 2L
       }
     }
 
-    // Creating a field with the domain IntTestType
-    val field = Field(IntTestType())
+    // Creating an instance of the domain IntTestType
+    val domain = IntTestType()
 
     // test code values
-    val codes = field.getCodes()
-    assertEquals(2, codes!!.size)
-    assertEquals(1, codes["cde1"])
-    assertEquals(2, codes["cde2"])
+    val codes = domain.getValues()
+    assertEquals(2, codes.size)
+    assertEquals(1L, codes["cde1"])
+    assertEquals(2L, codes["cde2"])
   }
 
   /**
@@ -148,10 +122,10 @@ class DomainTests {
   fun domainRedundantCodeTest() {
     // Declaration of the domain with codes
     class IntTestType : Domain<Long>(5) {
-      override val values = code {
-        this["cde1"] = 1
-        this["cde2"] = 2
-        this["cde1"] = 7
+      override val type = code {
+        this["cde1"] = 1L
+        this["cde2"] = 2L
+        this["cde1"] = 7L
       }
     }
 

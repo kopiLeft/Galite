@@ -62,22 +62,9 @@ class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
   }
 
   /**
-   * Applies a transformation on the value.
-   *
-   * @param value passed value
-   * @return value after transformation
+   * returns list of values that can this field get.
    */
-  fun applyTransformation(value: T): Any? = when {
-    domain == null -> value
-    domain.transformation == null -> value
-    domain.transformation == Transformation.TransfomationType.CONVERT_UPPER -> (value as String).toUpperCase()
-    else -> null
-  }
-
-  /**
-   * returns list of code values that can this field get.
-   */
-  fun getCodes(): MutableMap<String, T>? {
-    return domain?.domainCode?.codes
+  fun getValues(): MutableMap<String, *>? {
+    return domain?.getValues()
   }
 }
