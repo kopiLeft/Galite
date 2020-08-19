@@ -15,17 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
-
-import org.kopi.galite.visual.addons.common.Window
+package org.kopi.galite.visual.common
 
 /**
- * Visual class for a report.
+ * Represents the set of colors to use with measures in charts.
  */
-class VReport : Window() {
-  init {
-
-  }
-
-  private var table: Table? = null
+enum class Color(val color: String) {
+  BLUE("blue"),
+  GREEN("green"),
+  RED("red"),
+  YELLOW("yellow"),
+  BLACK("black"),
+  WHITE("white")
 }

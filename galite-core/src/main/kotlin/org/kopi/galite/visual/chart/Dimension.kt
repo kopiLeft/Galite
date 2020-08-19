@@ -15,17 +15,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
+package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.addons.common.Window
+import org.kopi.galite.visual.field.Field
 
 /**
- * Visual class for a report.
+ * Represents a one dimension that contains measures [measureList] to use in chart
  */
-class VReport : Window() {
+open class Dimension<T : Comparable<T>> : Field<T>() {
   init {
-
+    /**
+     * Dimension's label
+     */
+    var name: String = "No label"
   }
 
-  private var table: Table? = null
+  /**
+   * Dimension values
+   */
+  val values = mutableListOf<DimensionValue<T>>()
+
+  /**
+   * Add a dimension value
+   * @param value
+   */
+  fun add(dimensionValue: DimensionValue<T>): Boolean {
+    return values.add(dimensionValue)
+  }
 }

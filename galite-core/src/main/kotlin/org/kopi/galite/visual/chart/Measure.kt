@@ -15,17 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
+package org.kopi.galite.visual.chart
 
-import org.kopi.galite.visual.addons.common.Window
+import org.kopi.galite.visual.common.Color
+import org.kopi.galite.visual.field.Field
 
 /**
- * Visual class for a report.
+ * Represents a measure for dimensions
  */
-class VReport : Window() {
+open class Measure<T> : Field<T>() where T : Comparable<T>, T : Number {
   init {
+    /**Measure's label with default value */
+    var label: String = "No Label"
 
+    /**Measure's color in chart */
+    val color: Color
   }
-
-  private var table: Table? = null
 }

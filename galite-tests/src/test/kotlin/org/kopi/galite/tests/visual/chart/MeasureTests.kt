@@ -15,17 +15,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
+package org.kopi.galite.tests.visual.chart
 
-import org.kopi.galite.visual.addons.common.Window
+import org.junit.Test
+import org.kopi.galite.visual.chart.Measure
+
+class MeasureTests {
+
+  /**
+   * Test measure class
+   */
+  class TestMeasure(number: Number) : Measure<Int>() {
+    init {
+      val label = "measure 1 "
+    }
+  }
+}
 
 /**
- * Visual class for a report.
+ * Test number random value
  */
-class VReport : Window() {
-  init {
-
-  }
-
-  private var table: Table? = null
+object TestNumber {
+  var number = (0..10).random()
 }
