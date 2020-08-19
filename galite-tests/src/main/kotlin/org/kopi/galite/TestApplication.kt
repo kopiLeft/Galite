@@ -19,14 +19,9 @@ package org.galite
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.report.Report
-import org.kopi.galite.visual.report.VReport
-
 
 @Route
 class TestApplication : VerticalLayout() {
-  init {
-  }
+
 }
 
