@@ -60,37 +60,6 @@ class CodeDomainTests {
   }
 
   /**
-   * Tests the creation of a domain with check
-   *
-   * succeed if the value does respect the check method.
-   * fails otherwise.
-   */
-  @Test
-  fun domainWithCheckTest() {
-    // Declaration of the domain with length
-    class StringTestType(val param: String) : Domain<String>(5) {
-      override val type = code {
-        this["cde1"] = "1"
-      }
-      override val check = { value: String ->
-        value.startsWith(param)
-      }
-    }
-
-    // Creating a field with the domain StringTestType
-    val field = Field(StringTestType("A"))
-
-    // test with a valid value
-    val checkValid = field.checkValue("Abcdef")
-    assertTrue(checkValid)
-
-    // test with an invalid value
-    assertFailsWith<InvalidValueException> {
-      field.checkValue("abcdef")
-    }
-  }
-
-  /**
    * Tests the creation of a domain of a type code.
    */
   @Test
@@ -134,4 +103,53 @@ class CodeDomainTests {
       IntTestType()
     }
   }
+
+  /**
+   * Tests applying convertUpper on Code Domain
+   *
+   * must fails with UnsupportedOperationException because convertUpper
+   * is used only with List Domain
+   */
+  @Test
+  fun applyConvertUpperOnCodeDomainTest() {
+    // Declaration of the domain with length
+    class StringTestType() : Domain<String>(5) {
+      override val type = code {
+        this["cde1"] = "1"
+      }
+    }
+
+    // Creating an instance of the domain StringTestType
+    val domain = StringTestType()
+
+    // test converted value
+    assertFailsWith<UnsupportedOperationException> {
+      val convertedToUpper = domain.applyConvertUpper("Abcdef")
+    }
+  }
+
+  /**
+   * Tests making check on Code Domain
+   *
+   * must fails with UnsupportedOperationException because convertUpper
+   * is used only with List Domain
+   */
+  @Test
+  fun applyConvertCheckOnCodeDomainTest() {
+    // Declaration of the domain with length
+    class StringTestType : Domain<String>(5) {
+      override val type = code {
+        this["cde1"] = "1"
+      }
+    }
+
+    // Creating a field with the domain StringTestType
+    val field = Field(StringTestType())
+
+    // test check
+    assertFailsWith<UnsupportedOperationException> {
+      val checkValid = field.checkValue("Abcdef")
+    }
+  }
+
 }

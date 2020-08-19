@@ -20,8 +20,15 @@ package org.kopi.galite.domain
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Query
 
+import org.kopi.galite.visual.exceptions.InvalidValueException
+
 /**
- * Represents a domain of type list
+ * Represents a list domain.
+ *
+ * The possible values are obtained from the result of a database query.
+ *
+ * It allows optionally to define a constraint that makes restrictions
+ * on the set of allowed values.
  */
 class ListDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
   var query: Query? = null
@@ -58,12 +65,28 @@ class ListDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
    * @param value passed value
    * @return value after transformation
    */
-  override fun applyConvertUpper(value: String): String? = when {
-    !convertUpper -> value
+  override fun applyConvertUpper(value: String): String = when {
     convertUpper -> value.toUpperCase()
-    else -> null
+    else -> value
   }
 
+  /**
+   * Checks if the value passed to the field respects the [domain.check] constraint
+   *
+   * @param value passed value
+   * @return  true if the domain is not defined or if the values if verified by the domain's constraint
+   * @throws InvalidValueException otherwise
+   */
+  fun checkValue(value: T): Boolean = when {
+    check == null || check!!.invoke(value) -> true
+    else -> false
+  }
+
+  /**
+   * Override it if you want to define a constraint that the domain values ​​must verify.
+   */
+  var check: ((value: T) -> Boolean)? = null
+
   override val type = this
-  var convertUpper = false
+  private var convertUpper = false
 }

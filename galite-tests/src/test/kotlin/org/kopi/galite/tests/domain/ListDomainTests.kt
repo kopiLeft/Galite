@@ -21,7 +21,11 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.junit.Test
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.visual.exceptions.InvalidValueException
+import org.kopi.galite.visual.field.Field
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 /**
  * Contains tests of list-domain creation and manipulation
@@ -79,6 +83,43 @@ class ListDomainTests {
     // test converted value
     val convertedToUpper = domain.applyConvertUpper("Abcdef")
     assertEquals("ABCDEF", convertedToUpper)
+  }
+
+  /**
+   * Tests the creation of a domain with check
+   *
+   * succeed if the value does respect the check method.
+   * fails with InvalidValueException otherwise.
+   */
+  @Test
+  fun domainWithCheckTest() {
+    // Declaration of the domain with length
+    class StringTestType(val param: String) : Domain<String>(5) {
+      override val type = list {
+        convertUpper()
+
+        check = {
+          it.startsWith(param)
+        }
+
+        query = TestTable.selectAll()
+
+        this["id"] =    TestTable.id
+        this["name"] =  TestTable.name
+      }
+    }
+
+    // Creating a field with the domain StringTestType
+    val field = Field(StringTestType("A"))
+
+    // test with a valid value
+    val checkValid = field.checkValue("Abcdef")
+    assertTrue(checkValid)
+
+    // test with an invalid value
+    assertFailsWith<InvalidValueException> {
+      field.checkValue("abcdef")
+    }
   }
 
   object TestTable : Table("TestTable") {
