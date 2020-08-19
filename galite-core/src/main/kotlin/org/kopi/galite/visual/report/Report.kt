@@ -81,11 +81,9 @@ open class Report {
    * @param field the field
    */
   fun getLinesForField(field: Field<*>) = lines.map { it[field] }
+
   /**
-   * Returns line number [lineNumber].
-   *
-   * @param lineNumber line's number
+   * Returns lines.
    */
   fun getLines() = lines
-
 }
