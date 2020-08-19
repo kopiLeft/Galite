@@ -22,7 +22,7 @@ import org.kopi.galite.visual.addons.common.Window
 /**
  * Visual class for a report.
  */
-class VReport: Window() {
+class VReport : Window() {
   init {
 
   }

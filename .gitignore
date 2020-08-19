@@ -31,3 +31,11 @@ hs_err_pid*
 # Gradle
 .gradle
 build
+
+#Vaadin
+**/target
+**/pnpm-lock.yaml
+**/pnpmfile.js
+**/tsconfig.json
+**/types.d.ts
+

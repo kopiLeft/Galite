@@ -17,4 +17,30 @@
 
 plugins {
   kotlin("jvm") apply true
+  id("io.spring.dependency-management") version "1.0.9.RELEASE"
+}
+
+val vaadinVersion = "16.0.0"
+
+repositories {
+  jcenter()
+  mavenCentral()
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
+
+dependencies {
+  api("com.vaadin:vaadin-core") {
+    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+        "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+        "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+        .forEach { group -> exclude(group = group) }
+  }
+}
+
+dependencyManagement {
+  imports {
+    mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
+  }
 }

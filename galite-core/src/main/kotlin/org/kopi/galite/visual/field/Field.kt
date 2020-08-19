@@ -31,6 +31,7 @@ class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
 
   /** Field's label */
   var label: String = ""
+
   /** Field's help that describes the expected value of an input field */
   var help: String = ""
 
