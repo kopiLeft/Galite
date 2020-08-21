@@ -24,11 +24,6 @@ import org.kopi.galite.visual.field.Field
  * Represents a measure for dimensions
  */
 open class Measure<T> : Field<T>() where T : Comparable<T>, T : Number {
-  init {
-    /**Measure's label with default value */
-    var label: String = "No Label"
-
-    /**Measure's color in chart */
-    val color: Color
-  }
+  /**Measure's color in chart */
+  lateinit var color: Color
 }

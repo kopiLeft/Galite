@@ -20,11 +20,8 @@ package org.kopi.galite.visual.common
 /**
  * Represents the set of colors to use with measures in charts.
  */
-enum class Color(val color: String) {
-  BLUE("blue"),
-  GREEN("green"),
-  RED("red"),
-  YELLOW("yellow"),
-  BLACK("black"),
-  WHITE("white")
+enum class Color(val ryb: Int) {
+  RED(1),
+  YELLOW(2),
+  BLUE(3)
 }

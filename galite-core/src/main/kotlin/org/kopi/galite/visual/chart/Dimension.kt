@@ -20,15 +20,9 @@ package org.kopi.galite.visual.chart
 import org.kopi.galite.visual.field.Field
 
 /**
- * Represents a one dimension that contains measures [measureList] to use in chart
+ * Represents a one dimension that contains measures [values] to use in chart
  */
 open class Dimension<T : Comparable<T>> : Field<T>() {
-  init {
-    /**
-     * Dimension's label
-     */
-    var name: String = "No label"
-  }
 
   /**
    * Dimension values
@@ -39,7 +33,10 @@ open class Dimension<T : Comparable<T>> : Field<T>() {
    * Add a dimension value
    * @param value
    */
-  fun add(dimensionValue: DimensionValue<T>): Boolean {
-    return values.add(dimensionValue)
+  fun add(value: T): DimensionValue<T>? {
+    val dimensionValue: DimensionValue<T> = DimensionValue<T>(value)
+    if (values.add(dimensionValue)) {
+      return dimensionValue
+    } else return null
   }
 }

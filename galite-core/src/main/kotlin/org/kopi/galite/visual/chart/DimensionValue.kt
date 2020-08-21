@@ -19,23 +19,27 @@ package org.kopi.galite.visual.chart
 
 import org.kopi.galite.visual.field.Field
 
+/**
+ * Represents the value of a dimension
+ */
 class DimensionValue<T : Comparable<T>>(val value: T) : Field<T>() {
 
   /**
-   * Measure list for Dimension
+   * Measures with corresponding values in a dimension value
    */
   var measureList = mutableMapOf<Measure<*>, Number>()
 
   /**
-   * Add a measure to dimension
+   * Add a measure with it's value to a dimension value
    * @param measure the measure to add
+   * @param measureValue the corresponding value
    */
   fun <V> addMeasure(measure: Measure<*>, measureValue: V) where V : Comparable<V>, V : Number {
-    measureList.put(measure, measureValue)
+    measureList.putIfAbsent(measure, measureValue)
   }
 
   /**
-   * Add list of measures to dimension
+   * Add list of measures and measure's values to a dimension
    * @param measures List of measures
    * @return true if list has been added
    */
@@ -48,7 +52,7 @@ class DimensionValue<T : Comparable<T>>(val value: T) : Field<T>() {
    * @return list of labels
    */
   fun getMeasureLabels(): List<String> {
-    var labelsList = mutableListOf("")
+    var labelsList = mutableListOf<String>()
     measureList.map {
       labelsList.add(it.key.label)
     }

@@ -19,22 +19,20 @@ package org.kopi.galite.tests.visual.chart
 
 import org.junit.Test
 import org.kopi.galite.visual.chart.Measure
+import org.kopi.galite.visual.common.Color
+import kotlin.test.assertEquals
 
 class MeasureTests {
 
   /**
    * Test measure class
    */
-  class TestMeasure(number: Number) : Measure<Int>() {
-    init {
-      val label = "measure 1 "
-    }
-  }
-}
+  @Test
+  fun testMeasure() {
+    val measure1 = Measure<Int>()
+    measure1.label = "measure 1"
+    measure1.color = Color.RED
 
-/**
- * Test number random value
- */
-object TestNumber {
-  var number = (0..10).random()
+    assertEquals(measure1.color.toString(), "RED")
+  }
 }
