@@ -18,3 +18,10 @@
 plugins {
   kotlin("jvm") apply true
 }
+
+val exposedVersion = "0.26.2"
+
+dependencies {
+  // Exposed dependencies
+  api("org.jetbrains.exposed", "exposed-core", exposedVersion)
+}

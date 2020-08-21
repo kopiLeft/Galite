@@ -76,13 +76,13 @@ class ReportTests {
   }
 
   class StringTestType : Domain<String>(5) {
-    override val values = code {
+    override val type = code {
       this["cde1"] = "test1"
     }
   }
 
   class LongTestType : Domain<Long>(5) {
-    override val values = code {
+    override val type = code {
       this["cde1"] = 1
     }
   }

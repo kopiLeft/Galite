@@ -18,13 +18,13 @@
 package org.kopi.galite.domain
 
 /**
- * Represents the codes that a domain can take
+ * Represents a code domain.
  */
-class DomainCode<T : Comparable<T>>(private val name: String) {
+class CodeDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
 
   /**
    * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [Field].
+   * and a corresponding text to be displayed in a field.
    *
    * @param text the text
    * @param value the value
@@ -40,4 +40,6 @@ class DomainCode<T : Comparable<T>>(private val name: String) {
    * Mapping of all values that a domain can take
    */
   val codes: MutableMap<String, T> = mutableMapOf()
+
+  override val type = this
 }
