@@ -15,17 +15,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
+package org.kopi.galite.tests.visual.chart
 
-import org.kopi.galite.visual.addons.common.Window
+import org.junit.Test
+import org.kopi.galite.visual.chart.Measure
+import org.kopi.galite.visual.common.Color
+import kotlin.test.assertEquals
 
-/**
- * Visual class for a report.
- */
-class VReport : Window() {
-  init {
+class MeasureTests {
 
+  /**
+   * Test measure class
+   */
+  @Test
+  fun testMeasure() {
+    val measure1 = Measure<Int>()
+    measure1.label = "measure 1"
+    measure1.color = Color.RED
+    assertEquals(measure1.color.toString(), "RED")
   }
-
-  private var table: Table? = null
 }
