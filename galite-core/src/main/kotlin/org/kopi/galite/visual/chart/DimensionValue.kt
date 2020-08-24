@@ -34,7 +34,7 @@ class DimensionValue<T : Comparable<T>>(val value: T) : Field<T>() {
    * @param measure the measure to add
    * @param measureValue the corresponding value
    */
-  fun <V> addMeasure(measure: Measure<*>, measureValue: V) where V : Comparable<V>, V : Number {
+  fun <V> addMeasure(measure: Measure<V>, measureValue: V) where V : Comparable<V>, V : Number {
     measureList.putIfAbsent(measure, measureValue)
   }
 
