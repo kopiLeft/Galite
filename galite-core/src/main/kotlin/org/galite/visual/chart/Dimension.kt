@@ -17,38 +17,39 @@
 
 package org.galite.visual.chart
 
-class Dimension<T: Comparable<T>>(size: Int? = null) : Column<T>(size) {
-    val values = mutableListOf<DimensionValue<T>>()
-    val measures = mutableListOf<Measure<*>>()
+class Dimension<T : Comparable<T>>(size: Int? = null) : Column<T>(size) {
+  val values = mutableListOf<DimensionValue<T>>()
+  val measures = mutableListOf<Measure<*>>()
 
-    fun add(value: T, measuresSetting: Dimension<T>.() -> Unit) {
-        val dimensionValue = DimensionValue(value, mutableMapOf())
-        values.add(dimensionValue)
-        this.measuresSetting()
+  fun add(value: T, measuresSetting: Dimension<T>.() -> Unit) {
+    val dimensionValue = DimensionValue(value, mutableMapOf())
+    values.add(dimensionValue)
+    this.measuresSetting()
+  }
+
+  operator fun <V : Comparable<V>> set(measure: Measure<V>, value: V) {
+    if (measure in measures) {
+      values.last().measures.putIfAbsent(measure, value)
     }
+  }
 
-    operator fun <V: Comparable<V>> set(measure: Measure<V>, value: V) {
-        if(measure in measures) {
-            values.last().measures.putIfAbsent(measure, value)
-        }
-    }
+  fun format(function: (T) -> String) {
+    TODO("Not yet implemented")
+  }
 
-    fun format(function: (T) -> String) {
-        TODO("Not yet implemented")
-    }
-    var format: String? = null
+  var format: String? = null
 
-    fun equals(other: Dimension<*>): Boolean {
-        if (this === other) return true
-        if (this.label != other.label) return false
-        TODO("Not yet implemented")
+  fun equals(other: Dimension<*>): Boolean {
+    if (this === other) return true
+    if (this.label != other.label) return false
+    TODO("Not yet implemented")
 
 
-        return true
-    }
+    return true
+  }
 
 }
 
-class DimensionValue<T: Comparable<T>>(val value: T, val measures: MutableMap<Measure<*>, Any>) {
+class DimensionValue<T : Comparable<T>>(val value: T, val measures: MutableMap<Measure<*>, Any>) {
 
 }

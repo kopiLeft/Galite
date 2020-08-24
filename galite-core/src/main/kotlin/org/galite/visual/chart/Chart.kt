@@ -23,33 +23,33 @@ import org.galite.domain.Domain
 import org.galite.visual.Window
 import org.vaadin.examples.form.menu.actorBar.menubar.Actor
 
-open class Chart(title :String, actors : List<Actor>, application : Application): Window(title,actors,application) {
-    var dimension: Dimension<*>? = null
-    val measures = mutableListOf<Measure<*>>()
+open class Chart(title: String, actors: List<Actor>, application: Application) : Window(title, actors, application) {
+  var dimension: Dimension<*>? = null
+  val measures = mutableListOf<Measure<*>>()
 
-    fun <T: Comparable<T>> dimension(domain: Domain<T>, function: Dimension<T>.() -> Unit):  Dimension<T> {
-        val dim = Dimension<T>(domain.size)
-        dim.measures.addAll(measures)
-        dim.function()
-        dimension = dim
-        return dim
-    }
+  fun <T : Comparable<T>> dimension(domain: Domain<T>, function: Dimension<T>.() -> Unit): Dimension<T> {
+    val dim = Dimension<T>(domain.size)
+    dim.measures.addAll(measures)
+    dim.function()
+    dimension = dim
+    return dim
+  }
 
-    fun <T: Comparable<T>> measure(domain: Domain<T>, function: Measure<T>.() -> Unit) : Measure<T> {
-        val measure = Measure<T>(domain.size)
-        measure.function()
-        this.measures.add(measure)
-        this.dimension?.measures?.add(measure)
-        return measure
-    }
+  fun <T : Comparable<T>> measure(domain: Domain<T>, function: Measure<T>.() -> Unit): Measure<T> {
+    val measure = Measure<T>(domain.size)
+    measure.function()
+    this.measures.add(measure)
+    this.dimension?.measures?.add(measure)
+    return measure
+  }
 
-    open fun setData() {}
+  open fun setData() {}
 }
 
 fun HasComponents.chart(chartType: ChartType, actors: List<Actor>, application: Application, function: Chart.() -> Unit): Chart {
-    val chart = ChartFactory.createChart(chartType, actors, application)
-    chart.function()
-    chart.setData()
-    return chart
+  val chart = ChartFactory.createChart(chartType, actors, application)
+  chart.function()
+  chart.setData()
+  return chart
 }
 

@@ -29,6 +29,7 @@ import org.galite.visual.report.Field
 import org.galite.visual.report.Report
 import org.galite.visual.report.report
 import org.vaadin.examples.form.menu.actorBar.menubar.Actor
+import org.vaadin.examples.form.menu.actorBar.menubar.ActorBar
 import org.vaadin.examples.form.menu.menubar.GMenuBar
 import java.util.*
 
@@ -69,17 +70,17 @@ class TestApplication: Application()  {
       }
     }
 
-    var actors2 = listOf(Actor("Project","Project","Quit","", Icon(VaadinIcon.USER)), Actor("Project","Project","Hilati","", Icon(VaadinIcon.USER)))
+    var actors2 = listOf(Actor("Project","Project","Quit","", Icon(VaadinIcon.USER)), Actor("CSV","Project","CSV","", Icon(VaadinIcon.USER)), Actor("PDF","Project","PDF","", Icon(VaadinIcon.USER)), Actor("XLSX","Project","XLSX","", Icon(VaadinIcon.USER)), Actor("Project","Project","Hilati","", Icon(VaadinIcon.USER)))
+    var actorBar = ActorBar(actors2)
     val addwind2 = Button("Add wind 2") { event -> addWindow(arc)}
     val but = Button("Disabled on click") { event -> removeWindow(arc)}
     add(but)
     add(addwind2)
 
 
-
     // Dynamic Report Demo
     var fields = listOf(Field("firstName", "", "First", "", ""), Field("lastName", "", "Last", "", ""))
-    val rapport = report(fields, "Dynamic report", actors, this){
+    val rapport = report(fields, "Dynamic report", actors2, this){
       val column1 = "firstName"
       val column2 = "lastName"
       val fakeBean: MutableMap<String, String> = HashMap()
@@ -87,11 +88,14 @@ class TestApplication: Application()  {
       fakeBean[column2] = "Tietäväinen"
       enableReordering()
       selectedRow()
-      addFiltre()
+      addFiltre(report.columns)
       addLigne(fakeBean)
       remplirTest()
       addCharts(this@TestApplication)
+      //exportAsExcel(actorBar,"csv")
     }
+    //rapport.exportAsExcel(actorBar,"csv")
+    rapport.exportAsExcel(actorBar,"xlsx")
     val addwind = Button("Add wind 1") { event -> addWindow(rapport)}
     add(addwind)
 

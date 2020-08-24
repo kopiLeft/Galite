@@ -6,12 +6,13 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import org.galite.base.Application
 import org.galite.visual.report.Field
 import org.galite.visual.report.Report
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
 import org.vaadin.examples.form.menu.actorBar.menubar.Actor
 import org.vaadin.examples.form.menu.menubar.GMenuBar
 import java.util.*
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
+import org.junit.Test
+import java.util.HashMap
 
 class ReportTests : Application(){
     var actors = listOf(Actor("Project","Project","Quit","", Icon(VaadinIcon.USER)), Actor("Project","Project","Hilati","", Icon(VaadinIcon.USER)))

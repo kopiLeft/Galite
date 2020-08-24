@@ -21,9 +21,9 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Query
 
 class DomainList {
-    var query: Query? = null
+  var query: Query? = null
 
-    fun <V: Comparable<V>> column(s: String, column: Column<V>, size: Int) {
-        TODO("Not yet implemented")
-    }
+  fun <V : Comparable<V>> column(s: String, column: Column<V>, size: Int) {
+    TODO("Not yet implemented")
+  }
 }

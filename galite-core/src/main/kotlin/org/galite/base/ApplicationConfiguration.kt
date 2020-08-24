@@ -18,22 +18,22 @@
 package org.galite.base
 
 abstract class ApplicationConfiguration {
-    
-    // --------------------------------------------------------------
-    //   Application Properties
-    // --------------------------------------------------------------
 
-    abstract val version: String?
+  // --------------------------------------------------------------
+  //   Application Properties
+  // --------------------------------------------------------------
 
-    abstract val applicationName: String?
-    
-    abstract val informationText: String?
-    
-    // --------------------------------------------------------------
-    //   Application Debugging
-    // --------------------------------------------------------------
+  abstract val version: String?
 
-    abstract val logFile: String?
+  abstract val applicationName: String?
 
-    val isDebugModeEnabled: Boolean = false
+  abstract val informationText: String?
+
+  // --------------------------------------------------------------
+  //   Application Debugging
+  // --------------------------------------------------------------
+
+  abstract val logFile: String?
+
+  val isDebugModeEnabled: Boolean = false
 }

@@ -17,21 +17,21 @@
 
 package org.galite.domain
 
-open class  Domain<T: Comparable<T>>(val size: Int? = null): Comparable<Domain<T>> {
-    open val check: ((value: T) -> Boolean)? = null
-    open val list: Unit?  = null
-    open val convertUpper = false
-    open val code: Unit? = null
+open class Domain<T : Comparable<T>>(val size: Int? = null) : Comparable<Domain<T>> {
+  open val check: ((value: T) -> Boolean)? = null
+  open val list: Unit? = null
+  open val convertUpper = false
+  open val code: Unit? = null
 
-    fun list(function: DomainList.() -> Unit) {
-        TODO("Not yet implemented")
-    }
+  fun list(function: DomainList.() -> Unit) {
+    TODO("Not yet implemented")
+  }
 
-    fun code(vararg data: Pair<String, T>) {
-        TODO("Not yet implemented")
-    }
+  fun code(vararg data: Pair<String, T>) {
+    TODO("Not yet implemented")
+  }
 
-    override fun compareTo(other: Domain<T>): Int {
-        TODO("Not yet implemented")
-    }
+  override fun compareTo(other: Domain<T>): Int {
+    TODO("Not yet implemented")
+  }
 }

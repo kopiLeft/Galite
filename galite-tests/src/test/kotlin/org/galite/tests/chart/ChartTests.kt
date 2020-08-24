@@ -25,11 +25,11 @@ import org.galite.domain.Domain
 import org.galite.exceptions.MissingMeasureException
 import org.galite.visual.chart.Chart
 import org.galite.visual.chart.Formatter
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.vaadin.examples.form.menu.actorBar.menubar.Actor
 import org.vaadin.examples.form.menu.menubar.GMenuBar
 import java.util.*
+import kotlin.test.assertEquals
 
 class ChartTests : Application() {
     var actors = listOf(Actor("Project","Project","Quit","", Icon(VaadinIcon.USER)), Actor("Project","Project","Hilati","", Icon(VaadinIcon.USER)))

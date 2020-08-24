@@ -29,65 +29,65 @@ import java.util.*
  * The entry point for all Galite applications.
  */
 @Route("")
-abstract class Application: VerticalLayout()  {
-    abstract var menus: GMenuBar
-    abstract var windows: LinkedList<Component>?
+abstract class Application : VerticalLayout() {
+  abstract var menus: GMenuBar
+  abstract var windows: LinkedList<Component>?
 
-    init {
-        gotoWelcomeView()
-        isPadding =false
-        if(UI.getCurrent() != null){
-            UI.getCurrent().getElement().getStyle().set("margin", "0");
-        }
-        setHeightFull()
-        style.set("background-color","#f2f2f2")
+  init {
+    gotoWelcomeView()
+    isPadding = false
+    if (UI.getCurrent() != null) {
+      UI.getCurrent().getElement().getStyle().set("margin", "0");
     }
+    setHeightFull()
+    style.set("background-color", "#f2f2f2")
+  }
 
-    fun onLogin() {
+  fun onLogin() {
 
+  }
+
+  fun startApplication() {
+
+  }
+
+  fun attachComponent(component: Component?) {
+
+  }
+
+  fun detachComponent(component: Component?) {
+
+  }
+
+  fun gotoWelcomeView() {
+
+  }
+
+  /**
+   * Adds a window to this main window.
+   * @param window The window to be added.
+   */
+  fun addWindow(window: Component) {
+    if (windows == null) {
+      windows = LinkedList<Component>()
     }
-
-    fun startApplication() {
-
+    if (windows!!.isNotEmpty()) {
+      remove(windows!!.last)
     }
+    windows!!.add(window)
+    add(window)
+  }
 
-    fun attachComponent(component: Component?) {
-
+  /**
+   * Removes the given window.
+   * @param window The window to be removed.
+   */
+  fun removeWindow(window: Component) {
+    windows!!.remove(window)
+    remove(window)
+    if (windows!!.isNotEmpty()) {
+      add(windows!!.last)
     }
-
-    fun detachComponent(component: Component?) {
-
-    }
-
-    fun gotoWelcomeView() {
-
-    }
-
-    /**
-     * Adds a window to this main window.
-     * @param window The window to be added.
-     */
-    fun addWindow(window: Component){
-        if (windows == null) {
-            windows = LinkedList<Component>()
-        }
-        if (windows!!.isNotEmpty()){
-            remove(windows!!.last)
-        }
-        windows!!.add(window)
-        add(window)
-    }
-
-    /**
-     * Removes the given window.
-     * @param window The window to be removed.
-     */
-    fun removeWindow(window: Component) {
-        windows!!.remove(window)
-        remove(window)
-        if (windows!!.isNotEmpty()){
-            add(windows!!.last)
-        }
-    }
+  }
 }
 

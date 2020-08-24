@@ -24,7 +24,7 @@ class ReportDemo: Application() {
         fakeBean[column2] = "Tietäväinen"
         enableReordering()
         selectedRow()
-        addFiltre()
+        addFiltre(report.columns)
         addLigne(fakeBean)
         remplirTest()
         addCharts(this@ReportDemo)

@@ -21,6 +21,6 @@ import org.galite.base.Application
 import org.galite.visual.Window
 import org.vaadin.examples.form.menu.actorBar.menubar.Actor
 
-class Form(title :String, actors : List<Actor>, application : Application): Window(title,actors,application) {
+class Form(title: String, actors: List<Actor>, application: Application) : Window(title, actors, application) {
 
 }

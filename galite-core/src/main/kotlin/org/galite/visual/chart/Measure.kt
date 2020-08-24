@@ -16,8 +16,9 @@
  */
 
 package org.galite.visual.chart
+
 import org.galite.visual.common.Color
 
-class Measure<T: Comparable<T>>(size: Int? = null) : Column<T>(size) {
-    var color: Color? = null
+class Measure<T : Comparable<T>>(size: Int? = null) : Column<T>(size) {
+  var color: Color? = null
 }

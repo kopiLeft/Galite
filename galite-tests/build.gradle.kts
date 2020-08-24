@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") apply true
     id("org.springframework.boot") version "2.2.4.RELEASE"
@@ -6,8 +8,11 @@ plugins {
 
 val vaadinVersion = "16.0.0"
 
+group = "com.example"
+
 repositories {
     mavenCentral()
+    maven { setUrl("https://dl.bintray.com/kotlin/kotlin-eap") }
 }
 
 dependencies {
@@ -22,14 +27,12 @@ dependencies {
     }
 
     testImplementation(kotlin("stdlib-jdk8"))
-    testImplementation("test-junit:4.13")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.1")
-
+    testImplementation(kotlin("test-junit"))
 
     // Automated Web Tests
     testImplementation("org.seleniumhq.selenium:selenium-java:3.141.59")
-    testImplementation("io.github.bonigarcia:webdrivermanager:4.0.0")
     testImplementation("io.github.sukgu:automation:0.0.13")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks {
@@ -49,4 +52,12 @@ dependencyManagement {
     imports {
         mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
     }
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }

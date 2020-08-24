@@ -26,7 +26,7 @@ import com.vaadin.flow.component.html.Input
 class InputText(input: String?) : Input(), KeyNotifier {
 
   init {
-      value = input
+    value = input
   }
 
   fun setSize(size: Int) {
