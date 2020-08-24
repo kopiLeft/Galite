@@ -24,7 +24,7 @@ import org.junit.Test
 import org.kopi.galite.TestBase
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.visual.report.Report
-import org.kopi.galite.visual.report.VReport
+import org.kopi.galite.visual.addons.report.VReport
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 

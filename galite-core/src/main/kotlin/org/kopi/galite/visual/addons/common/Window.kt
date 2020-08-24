@@ -17,9 +17,11 @@
 
 package org.kopi.galite.visual.addons.common
 
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+
 /**
  * Abstract class for all window components.
  */
-abstract class Window {
+abstract class Window : VerticalLayout() {
 
 }

@@ -20,6 +20,7 @@ package org.kopi.galite.tests.domain
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.DomainType
+import org.kopi.galite.tests.visual.report.VReportTests
 import org.kopi.galite.visual.exceptions.InvalidValueException
 import org.kopi.galite.visual.field.Field
 import org.kopi.galite.visual.field.Transformation.convertUpper

@@ -17,19 +17,25 @@
 
 plugins {
   kotlin("jvm") apply true
-  id("io.spring.dependency-management") version "1.0.9.RELEASE"
   id("org.springframework.boot") version "2.2.4.RELEASE"
 }
 
 val vaadinVersion = "16.0.0"
+
+repositories {
+  jcenter()
+  mavenCentral()
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
 
 dependencies {
   implementation(project(":galite-core"))
 
   implementation(kotlin("test-junit"))
 
-  implementation("com.vaadin:vaadin-spring-boot-starter") {
-    // Webjars are only needed when running in Vaadin 13 compatibility mode
+  implementation("com.vaadin:vaadin-core:$vaadinVersion") {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
         "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
         "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
@@ -48,11 +54,6 @@ dependencies {
 tasks {
   compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
-  }
-}
-
-dependencyManagement {
-  imports {
-    mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
+    source.buildDependencies
   }
 }
