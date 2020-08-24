@@ -27,7 +27,7 @@ open class Report {
   /** Report's fields */
   val fields = mutableListOf<Field<*>>()
   /** Report's data lines */
-  private val lines = mutableListOf<MutableMap<Field<*>, Any>>()
+  val lines = mutableListOf<MutableMap<Field<*>, Any>>()
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.

@@ -17,14 +17,15 @@
 
 package org.kopi.galite.tests.visual.report
 
+import com.vaadin.flow.component.grid.Grid.Column
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.Query
 import io.github.sukgu.Shadow
 import org.junit.Test
 import org.kopi.galite.TestBase
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.report.Report
 import org.kopi.galite.visual.addons.report.VReport
+import org.kopi.galite.visual.report.Report
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
@@ -47,10 +48,10 @@ class VReportTests : TestBase() {
     vreport.addColumns(report.fields)
     assertEquals(1, reportGrid.columns.size)
 
-    var testkey = reportGrid.columns.map { column -> column.key }.contains("field1")
+    var testkey = reportGrid.columns.map { column: Column<*> -> column.key }.contains("field1")
     assertEquals(true, testkey)
 
-    testkey = reportGrid.columns.map { column -> column.key }.contains("unrealfield")
+    testkey = reportGrid.columns.map { column: Column<*> -> column.key }.contains("unrealfield")
     assertEquals(false, testkey)
   }
 
@@ -62,9 +63,9 @@ class VReportTests : TestBase() {
     var report = Report()
     var vreport = VReport(report)
     var reportGrid = vreport.reportGrid
-    var dataProvider = reportGrid.dataProvider as ListDataProvider
+    var dataProvider = reportGrid.dataProvider as ListDataProvider<*>
 
-    assertEquals(0, dataProvider.size(Query()))
+    assertEquals(0, report.lines.size)
 
     val field = report.field(StringTestType()) {
       label = "field1"
@@ -72,12 +73,12 @@ class VReportTests : TestBase() {
     vreport.addColumns(report.fields)
 
     report.add {
-      this[field] = "val1"
+      lines.last().putIfAbsent(field, "val1")
     }
     report.add {
-      this[field] = "val2"
+      lines.last().putIfAbsent(field, "val2")
     }
-    assertEquals(2, dataProvider.size(Query()))
+    assertEquals(2, report.lines.size)
   }
 
   /**
@@ -109,8 +110,8 @@ class VReportTests : TestBase() {
   }
 
   class StringTestType : Domain<String>(5) {
-    override val values = code {
-      this["cde1"] = "test1"
+    override val type = code {
+      this["cde1"] = "1"
     }
   }
 }

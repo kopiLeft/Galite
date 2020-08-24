@@ -19,17 +19,7 @@ package org.kopi.galite.tests.domain
 
 import org.junit.Test
 import org.kopi.galite.domain.Domain
-<<<<<<< HEAD:galite-tests/src/test/kotlin/org/kopi/galite/tests/domain/DomainTests.kt
-import org.kopi.galite.domain.DomainType
-import org.kopi.galite.tests.visual.report.VReportTests
-import org.kopi.galite.visual.exceptions.InvalidValueException
 import org.kopi.galite.visual.field.Field
-import org.kopi.galite.visual.field.Transformation.convertUpper
-=======
-import org.kopi.galite.visual.field.Field
-import org.kopi.galite.visual.exceptions.InvalidValueException
-
->>>>>>> 912be0575a6af0a4541cf5f3c6e4de4bac74c9bc:galite-tests/src/test/kotlin/org/kopi/galite/tests/domain/CodeDomainTests.kt
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
