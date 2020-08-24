@@ -1,0 +1,8 @@
+:host([theme~="module-bar-theme"]) [part="menu-bar-button"]
+{
+    padding-bottom: 13%;
+    padding-top: 9%;
+    border-right: 1px solid #f2f2f2;
+    margin: 0;
+    background-color: white
+}

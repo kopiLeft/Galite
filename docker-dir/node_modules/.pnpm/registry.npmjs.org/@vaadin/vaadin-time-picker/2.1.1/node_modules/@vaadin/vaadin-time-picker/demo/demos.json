@@ -1,0 +1,35 @@
+{
+  "name": "Vaadin Time Picker",
+  "pages": [
+    {
+      "name": "Basic Examples",
+      "url": "time-picker-basic-demos",
+      "src": "time-picker-basic-demos.js",
+      "meta": {
+        "title": "vaadin-time-picker Basic Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Advanced Usage",
+      "url": "time-picker-advanced-demos",
+      "src": "time-picker-advanced-demos.js",
+      "meta": {
+        "title": "vaadin-time-picker Advanced Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Styling",
+      "url": "time-picker-styling-demos",
+      "src": "time-picker-styling-demos.js",
+      "meta": {
+        "title": "vaadin-time-picker Styling Examples",
+        "description": "",
+        "image": ""
+      }
+    }
+  ]
+}

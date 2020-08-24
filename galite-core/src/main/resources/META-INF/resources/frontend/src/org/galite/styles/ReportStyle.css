@@ -1,0 +1,21 @@
+[part~="header-cell"] {
+    background-color: #f2f2f2;
+}
+[part~="header-cell"]:hover {
+    background-color: white!important;
+}
+
+[part~="cell"] {
+    border-right: 2px solid var(--lumo-contrast-20pct);
+    color: black;
+}
+
+vaadin-grid {
+    margin: 0;
+}
+
+[part~="body-cell"]:hover {
+    background-color: #009bd4!important;
+}
+
+
