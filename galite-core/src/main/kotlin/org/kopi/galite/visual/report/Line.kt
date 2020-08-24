@@ -15,26 +15,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.domain
+package org.kopi.galite.visual.report
+
+import org.kopi.galite.visual.field.Field
 
 /**
- * Represents the codes that a domain can take
+ * A data line of a [Report].
+ *
+ * @param reportFields the fields that exists in the report.
  */
-class DomainCode<T : Comparable<T>> {
+class Line(private val reportFields: MutableList<Field<*>>) {
+  /** A report data line */
+  val reportLine = mutableMapOf<Field<*>, Any>()
 
   /**
    * Sets a mapping between the values that the domain can take
    * and a corresponding text to be displayed in a [Field].
    *
-   * @param text the text
-   * @param value the value
+   * @param field the field.
+   * @param value the field's value.
    */
-  operator fun set(text: String, value: T) {
-    codes[text] = value
+  operator fun <T: Comparable<T>> set(field: Field<T>, value: T) {
+    if(field in reportFields) {
+      reportLine.putIfAbsent(field, value)
+    }
   }
-
-  /**
-   * Mapping of all values that a domain can take
-   */
-  val codes: MutableMap<String, T> = mutableMapOf()
 }
