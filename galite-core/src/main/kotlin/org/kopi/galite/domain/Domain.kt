@@ -17,53 +17,74 @@
 
 package org.kopi.galite.domain
 
-import org.kopi.galite.visual.field.Transformation
-
 /**
- * A domain is used to specify the type of values that a [Field] can hold. It allow to specify
- * the set of values that a [Field] can hold. You can also do some checks on these values.
+ * A domain is a data type with predefined list of allowed values.
  *
- * @param length the maximum length of the value that can be passed
+ * @param length the maximum length of the value that can be passed.
  */
 abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
 
   /**
    * Allows to define the possible codes that the domain can take
    *
-   * @param init
+   * @param init used to initialize the code domain
    */
-  fun code(init: DomainCode<T>.() -> Unit): DomainType {
-    domainCode.init()
-    return DomainType.CODE
+  fun code(init: CodeDomain<T>.() -> Unit): CodeDomain<T> {
+    val codeDomain = CodeDomain<T>(this::class.java.simpleName)
+    codeDomain.init()
+    return codeDomain
   }
 
   /**
-   * Override it if you want to define a constraint that the domain values ​​must verify.
-   */
-  open val check: ((value: T) -> Boolean)? = null
-
-  /**
-   * Allows to define the values that the domain can take.
-   */
-  abstract val values: DomainType
-
-  /**
-   * Override it if you want to apply transformation on values.
+   * Allows to define the possible codes that the domain can take
    *
-   * You can use [Transformation.convertUpper] to apply convert to uppercase transformation
+   * @param init used to initialize the list domain
    */
-  open val transformation: Transformation.TransfomationType? = null
+  fun list(init: ListDomain<T>.() -> Unit): ListDomain<T> {
+    val listDomain = ListDomain<T>(this::class.java.simpleName)
+    listDomain.init()
+    return listDomain
+  }
 
   /**
-   * Codes that this domain can take
+   * returns list of code values that can this field get.
    */
-  var domainCode = DomainCode<T>()
-}
+  fun getValues(): MutableMap<String, *> {
+    return if (isCodeDomain()) {
+      (type as CodeDomain<T>).codes
+    } else if (isListDomain()) {
+      (type as ListDomain<T>).list
+    } else {
+      throw Exception("Unsupported domain type")
+    }
+  }
 
-/**
- * Defines the domain types
- */
-enum class DomainType {
-  LIST,
-  CODE
+  /**
+   * Converts domain value to uppercase.
+   *
+   * @param value domain's value.
+   */
+  open fun applyConvertUpper(value: String): String {
+    if (!isListDomain()) {
+      throw UnsupportedOperationException("ConvertUpper is an unsupported " +
+              "operation on current domain type")
+    }
+
+    return (type as ListDomain<T>).applyConvertUpper(value)
+  }
+
+  /**
+   * returns true if this domain is a code domain, false otherwise
+   */
+  fun isCodeDomain(): Boolean = type is CodeDomain<T>
+
+  /**
+   * returns true if this domain is a list domain, false otherwise
+   */
+  fun isListDomain(): Boolean = type is ListDomain<T>
+
+  /**
+   * The type of this domain.
+   */
+  abstract val type: Domain<T>
 }

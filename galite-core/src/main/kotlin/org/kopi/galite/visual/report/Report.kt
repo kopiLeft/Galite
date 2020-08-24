@@ -26,7 +26,6 @@ import org.kopi.galite.visual.field.Field
 open class Report {
   /** Report's fields */
   val fields = mutableListOf<Field<*>>()
-
   /** Report's data lines */
   private val lines = mutableListOf<MutableMap<Field<*>, Any>>()
 
@@ -37,24 +36,11 @@ open class Report {
    * @param init    initialization method
    * @return a field.
    */
-  fun <T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
+  fun <T: Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit) : Field<T> {
     val field = Field(domain)
     field.init()
     fields.add(field)
     return field
-  }
-
-  /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [Field].
-   *
-   * @param field the field
-   * @param value the field's value
-   */
-  operator fun <T : Comparable<T>> set(field: Field<T>, value: T) {
-    if (field in fields) {
-      lines.last().putIfAbsent(field, value)
-    }
   }
 
   /**
@@ -81,9 +67,4 @@ open class Report {
    * @param field the field
    */
   fun getLinesForField(field: Field<*>) = lines.map { it[field] }
-
-  /**
-   * Returns lines.
-   */
-  fun getLines() = lines
 }

@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.field
 
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.visual.exceptions.InvalidValueException
 
 /**
@@ -49,36 +50,25 @@ class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
   }
 
   /**
-   * Checks if the value passed to the field respects the [domain.check] constraint
+   * Checks if the value passed to the field respects the check constraint
    *
    * @param value passed value
-   * @return  true if the domain is not defined or if the values if verified by the domain's constraint
+   * @return  true if the domain is not defined or if the values if verified by
+   * the domain's constraint
    * @throws InvalidValueException otherwise
    */
   fun checkValue(value: T): Boolean = when {
     domain == null -> true
-    domain.check == null -> true
-    domain.check!!.invoke(value) -> true
+    domain.type is ListDomain && (domain.type as ListDomain).checkValue(value) -> true
+    domain.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
+            "by this domain type")
     else -> throw InvalidValueException(value, label)
   }
 
   /**
-   * Applies a transformation on the value.
-   *
-   * @param value passed value
-   * @return value after transformation
+   * returns list of values that can this field get.
    */
-  fun applyTransformation(value: T): Any? = when {
-    domain == null -> value
-    domain.transformation == null -> value
-    domain.transformation == Transformation.TransfomationType.CONVERT_UPPER -> (value as String).toUpperCase()
-    else -> null
-  }
-
-  /**
-   * returns list of code values that can this field get.
-   */
-  fun getCodes(): MutableMap<String, T>? {
-    return domain?.domainCode?.codes
+  fun getValues(): MutableMap<String, *>? {
+    return domain?.getValues()
   }
 }
