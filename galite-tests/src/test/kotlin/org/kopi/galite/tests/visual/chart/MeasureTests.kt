@@ -32,7 +32,6 @@ class MeasureTests {
     val measure1 = Measure<Int>()
     measure1.label = "measure 1"
     measure1.color = Color.RED
-
     assertEquals(measure1.color.toString(), "RED")
   }
 }

@@ -63,11 +63,7 @@ class DimensionValue<T : Comparable<T>>(val value: T) : Field<T>() {
    * Get list of measure values
    * @return list of values
    */
-  fun getMeasureValues(): List<Number> {
-    var valuesList = mutableListOf<Number>()
-    measureList.map {
-      valuesList.add(it.value)
-    }
-    return valuesList
+  fun getMeasureValues(): List<Number> = measureList.map {
+    it.value
   }
 }
