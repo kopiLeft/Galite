@@ -15,18 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.chart
 
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.common.Color
-import org.kopi.galite.visual.field.Field
+package org.kopi.galite.visual.exceptions
+
+import org.kopi.galite.visual.chart.Measure
+
+import java.lang.IllegalArgumentException
 
 /**
- * Represents a measure used to store numeric values in chart.
+ * Thrown to indicate that a [measure] value has not been provided to a dimension.
  *
- * @param domain dimension domain.
+ * @param measure the measure
+ * @param dimension the the dimension
+ *
  */
-open class Measure<T>(domain: Domain<T>? = null) : Field<T>(domain) where T : Comparable<T>, T : Number {
-  /**Measure's color in chart */
-  lateinit var color: Color
+class MissingMeasureException(measure: Measure<*>, dimension: Comparable<*>) : IllegalArgumentException() {
+    override val message = "Missing measure ${measure.label} for the dimension $dimension"
 }

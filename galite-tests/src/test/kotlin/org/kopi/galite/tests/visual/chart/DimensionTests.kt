@@ -19,11 +19,9 @@ package org.kopi.galite.tests.visual.chart
 
 import org.junit.Test
 import org.kopi.galite.visual.chart.Dimension
-import org.kopi.galite.visual.chart.DimensionValue
 import org.kopi.galite.visual.chart.Measure
 import org.kopi.galite.visual.common.Color
 import java.time.Month
-import java.time.Year
 import kotlin.test.assertEquals
 
 class DimensionTests {
@@ -44,12 +42,13 @@ class DimensionTests {
     val measure3 = Measure<Double>()
     measure3.label = "measure 3"
     measure3.color = Color.YELLOW
-    val dimensionValue1 = monthDimension.add(Month.JANUARY)
-    val dimensionValue2 = monthDimension.add(Month.DECEMBER)
-
-    dimensionValue1?.addMeasureList(mutableMapOf(measure1 to 55.22, measure2 to 44.22))
-    dimensionValue1?.addMeasure(measure3, 10.01)
-    dimensionValue2?.addMeasureList(mutableMapOf(measure1 to 22.22, measure2 to 11.22))
+    monthDimension.add(Month.JANUARY) {
+      this.addMeasureList(mutableMapOf(measure1 to 55.22, measure2 to 44.22))
+      this.addMeasure(measure3, 10.01)
+    }
+    monthDimension.add(Month.DECEMBER) {
+      this.addMeasureList(mutableMapOf(measure1 to 22.22, measure2 to 11.22))
+    }
 
     assertEquals(monthDimension.values[0].measureList[measure1], 55.22)
     assertEquals(monthDimension.values[0].measureList[measure2], 44.22)
@@ -73,8 +72,9 @@ class DimensionTests {
     val measure1 = Measure<Int>()
     val measure2 = Measure<Int>()
 
-    val dimensionValue1 = intDimension.add((0..10).random())
-    dimensionValue1?.addMeasureList(mutableMapOf(measure1 to 50, measure2 to 40))
+    intDimension.add((0..10).random()) {
+      this.addMeasureList(mutableMapOf(measure1 to 50, measure2 to 40))
+    }
 
     assertEquals(intDimension.values[0].measureList[measure1], 50)
     assertEquals(intDimension.values[0].measureList[measure2], 40)

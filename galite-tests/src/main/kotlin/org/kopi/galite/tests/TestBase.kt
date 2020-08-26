@@ -15,24 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.field
+package org.kopi.galite.tests
 
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.visual.chart.Chart
 
 /**
- * transformations that can be applied on a field
+ * TestBase class for all tests.
  */
-object Transformation {
+open class TestBase {
 
   /**
-   * Transforms values in capital letters.
+   * Tests operation on a chart.
    */
-  fun Domain<String>.convertUpper(): TransfomationType = TransfomationType.CONVERT_UPPER
-
-  /**
-   * Transformation types
-   */
-  enum class TransfomationType {
-    CONVERT_UPPER
+  fun withChart(chartInit: Chart.() -> Unit) {
+    val chart = Chart("test")
+    chart.chartInit()
   }
 }

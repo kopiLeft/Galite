@@ -17,26 +17,31 @@
 
 package org.kopi.galite.visual.chart
 
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.visual.field.Field
 
 /**
- * Represents a one dimension that contains measures [values] to use in chart
+ * Represents a one dimension that contains measures [values] to use in chart.
+ *
+ * @param domain dimension domain.
  */
-open class Dimension<T : Comparable<T>> : Field<T>() {
+open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Field<T>(domain) {
 
   /**
    * Dimension values
    */
-  val values = mutableListOf<DimensionValue<T>>()
+  val values = mutableListOf<DimensionData<T>>()
 
   /**
    * Add a dimension value
-   * @param value
+   *
+   * @param value the dimension value
    */
-  fun add(value: T): DimensionValue<T>? {
-    val dimensionValue: DimensionValue<T> = DimensionValue<T>(value)
-    if (values.add(dimensionValue)) {
-      return dimensionValue
-    } else return null
+  fun add(value: T, init: (DimensionData<T>.() -> Unit)? = null) {
+    val dimensionValue: DimensionData<T> = DimensionData<T>(value)
+    if (init != null) {
+      dimensionValue.init()
+    }
+    values.add(dimensionValue)
   }
 }
