@@ -25,9 +25,9 @@ import org.kopi.galite.visual.exceptions.MissingMeasureException
 object Formatter {
 
   /**
-   * Converts the value of a dimension to the string format used by the [chart].
+   * Converts the value passed to a [chart] dimension to the string format known by visual chart.
    *
-   * @param chart
+   * @param chart the chart
    */
   fun encode(chart: Chart) = buildString {
     append("[[")

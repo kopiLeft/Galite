@@ -23,12 +23,12 @@ import org.kopi.galite.visual.chart.Measure
 import java.lang.IllegalArgumentException
 
 /**
- * Thrown to indicate that a [measure] value has not been provided to a dimension.
+ * Thrown to indicate that a [Measure] value has not been provided to a dimension.
  *
- * @param measure the measure
- * @param dimension the the dimension
+ * @param measure        the measure
+ * @param dimensionValue the the dimension value
  *
  */
-class MissingMeasureException(measure: Measure<*>, dimension: Comparable<*>) : IllegalArgumentException() {
-    override val message = "Missing measure ${measure.label} for the dimension $dimension"
+class MissingMeasureException(measure: Measure<*>, dimensionValue: Comparable<*>) : IllegalArgumentException() {
+  override val message = "Missing measure ${measure.label} for the dimension $dimensionValue"
 }
