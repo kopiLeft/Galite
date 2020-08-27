@@ -17,16 +17,22 @@
 
 plugins {
   kotlin("jvm") apply true
+  id("org.springframework.boot") version "2.2.2.RELEASE"
 }
+
+val vaadinVersion = "16.0.0"
 
 dependencies {
   implementation(project(":galite-core"))
-
   implementation(kotlin("test-junit"))
+  implementation("com.vaadin", "vaadin-core", vaadinVersion)
+  implementation("com.vaadin", "vaadin-spring-boot-starter", vaadinVersion)
+  implementation("org.springframework.boot", "spring-boot-devtools", "2.2.0.RELEASE")
+  testImplementation("org.seleniumhq.selenium", "selenium-java", "3.141.59")
+  testImplementation("io.github.bonigarcia:webdrivermanager:4.0.0")
+  testImplementation("io.github.sukgu:automation:0.0.13")
 }
 
-tasks {
-  compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-  }
-}
+
+
+
