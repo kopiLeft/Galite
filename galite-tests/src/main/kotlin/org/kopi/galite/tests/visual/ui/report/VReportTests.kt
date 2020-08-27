@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.galite
+package org.kopi.galite.tests.visual.ui.report
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
@@ -30,11 +30,14 @@ class VReportTests : VerticalLayout() {
   init {
     val report = SimpleReport()
     val vreport = VReport(report)
-    val vl = VerticalLayout()
-    vl.add(vreport)
-    add(vl)
+    val verticalLayout = VerticalLayout()
+    verticalLayout.add(vreport)
+    add(verticalLayout)
   }
 
+  /**
+   * Simple report with two fields
+   */
   class SimpleReport : Report() {
     val field1 = field(StringTestType()) {
       label = "field1"
@@ -55,12 +58,18 @@ class VReportTests : VerticalLayout() {
     }
   }
 
+  /**
+   * String type Domain
+   */
   class StringTestType : Domain<String>(5) {
     override val type = code {
       this["cde1"] = "test1"
     }
   }
 
+  /**
+   * Long type Domain
+   */
   class LongTestType : Domain<Long>(5) {
     override val type = code {
       this["cde1"] = 1
