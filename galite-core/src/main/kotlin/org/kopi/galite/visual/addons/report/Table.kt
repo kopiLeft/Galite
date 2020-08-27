@@ -32,10 +32,10 @@ class Table() : Grid<Line>() {
   fun fillTable(report: Report) {
     setItems(report.lines.map { it })
 
-    report.fields.forEach { col ->
+    report.fields.forEach { field ->
       addColumn {
-        it.reportLine[col]
-      }.setHeader(col.label)
+        it.reportLine[field]
+      }.setHeader(field.label).setSortable(true)
     }
   }
 
