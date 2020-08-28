@@ -17,7 +17,7 @@
 
 plugins {
   kotlin("jvm") apply true
-  id("org.springframework.boot") version "2.2.2.RELEASE"
+  id("org.springframework.boot") version "2.3.3.RELEASE"
 }
 
 val vaadinVersion = "16.0.0"
@@ -27,14 +27,21 @@ dependencies {
 
   implementation(kotlin("test-junit"))
 
-  implementation("com.vaadin", "vaadin-core", vaadinVersion)
+  implementation("com.vaadin", "vaadin-core", vaadinVersion) {
+    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+            .forEach { group -> exclude(group = group) }
+  }
   implementation("com.vaadin", "vaadin-spring-boot-starter", vaadinVersion) {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
             "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
-  implementation("org.springframework.boot", "spring-boot-devtools", "2.2.0.RELEASE")
+  implementation("org.springframework.boot", "spring-boot-devtools", "2.3.3.RELEASE")
+
+  // UI tests dependencies .
   implementation("org.seleniumhq.selenium", "selenium-java", "3.141.59")
   implementation("io.github.bonigarcia:webdrivermanager:4.0.0") {
     exclude("org.jsoup", "jsoup")
