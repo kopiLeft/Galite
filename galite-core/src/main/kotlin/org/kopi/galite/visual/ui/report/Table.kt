@@ -15,20 +15,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
+package org.kopi.galite.visual.ui.report
 
-import org.kopi.galite.visual.addons.common.Window
+import com.vaadin.flow.component.grid.Grid
+import org.kopi.galite.visual.report.Line
 import org.kopi.galite.visual.report.Report
 
 /**
- * Visual class for a report.
+ * Data table for of a report.
  */
-class VReport(val report: Report) : Window() {
-  /**Report's data table */
-  private val table = Table()
-
+class Table() : TreeGrid<Line>() {
   init {
-    table.fillTable(report)
-    add(table)
+    isColumnReorderingAllowed = true
+  }
+
+  /**
+   * Fill tree table with data from report
+   * @param report report that provides data
+   */
+  fun fillTable(report: Report) {
+    setItems(report.lines.map { it }, report.lines.map { it.subLines })
+
+    addHierarchyColumn {
+      it.reportLine[report.fields[0]]
+    }.setHeader(report.fields[0].label)
+
+    report.fields.filter { field -> !field.equals(report.fields[0]) }
+            .forEach { field ->
+              addColumn {
+                it.reportLine[field]
+              }.setHeader(field.label).setSortable(true)
+            }
   }
 }
+

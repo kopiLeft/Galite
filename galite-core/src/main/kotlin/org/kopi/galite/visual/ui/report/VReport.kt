@@ -15,32 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
+package org.kopi.galite.visual.ui.report
 
-import com.vaadin.flow.component.grid.Grid
-import org.kopi.galite.visual.report.Line
+import org.kopi.galite.visual.addons.common.Window
 import org.kopi.galite.visual.report.Report
 
 /**
- * Data table for of a report.
+ * Visual class for a report.
  */
-class Table() : Grid<Line>() {
+class VReport(val report: Report) : Window() {
+  /**Report's data table */
+  private val table = Table()
+
   init {
-    isColumnReorderingAllowed = true
+    table.fillTable(report)
+    add(table)
   }
-
-  /**
-   * Fill table with data from report
-   * @param report report that provides data
-   */
-  fun fillTable(report: Report) {
-    setItems(report.lines.map { it })
-
-    report.fields.forEach { field ->
-      addColumn {
-        it.reportLine[field]
-      }.setHeader(field.label).setSortable(true)
-    }
-  }
-
 }

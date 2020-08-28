@@ -28,6 +28,18 @@ class Line(private val reportFields: MutableList<Field<*>>) {
   /** A report data line */
   val reportLine = mutableMapOf<Field<*>, Any>()
 
+  /** List of sub lines or children lines */
+  lateinit var subLines : MutableList<Line>
+
+  /**
+   * Add a sub line to the line list for grouping
+   *
+   * @param line the line to add
+   */
+  fun <T:Line> addLine(line : Line){
+    subLines.add(line)
+  }
+
   /**
    * Sets a mapping between the values that the domain can take
    * and a corresponding text to be displayed in a [Field].

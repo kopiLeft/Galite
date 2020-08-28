@@ -20,7 +20,7 @@ plugins {
   id("org.springframework.boot") version "2.3.3.RELEASE"
 }
 
-val vaadinVersion = "16.0.0"
+val vaadinVersion = "17.0.0.rc1"
 
 dependencies {
   implementation(project(":galite-core"))
