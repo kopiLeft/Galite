@@ -25,7 +25,7 @@ import org.kopi.galite.visual.report.Report
  */
 class VReport(val report: Report) : Window() {
   /**Report's data table */
-  var table = Table()
+  private val table = Table()
 
   init {
     table.fillTable(report)

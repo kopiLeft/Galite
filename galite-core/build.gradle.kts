@@ -20,7 +20,7 @@ plugins {
 }
 
 val exposedVersion = "0.27.1"
-val vaadinVersion = "17.0.0.rc1"
+val vaadinVersion = "16.0.0"
 
 dependencies {
   // Exposed dependencies

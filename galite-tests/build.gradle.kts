@@ -20,11 +20,13 @@ plugins {
   id("org.springframework.boot") version "2.2.2.RELEASE"
 }
 
-val vaadinVersion = "17.0.0.rc1"
+val vaadinVersion = "16.0.0"
 
 dependencies {
   implementation(project(":galite-core"))
+
   implementation(kotlin("test-junit"))
+
   implementation("com.vaadin", "vaadin-core", vaadinVersion)
   implementation("com.vaadin", "vaadin-spring-boot-starter", vaadinVersion) {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
@@ -40,6 +42,8 @@ dependencies {
   implementation("io.github.sukgu:automation:0.0.13")
 }
 
-
-
-
+tasks {
+  compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+  }
+}
