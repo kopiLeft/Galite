@@ -31,13 +31,13 @@ object Formatter {
    */
   fun encode(chart: Chart) = buildString {
     append("[[")
-    append(chart.dimension?.label.quoteIfNecessary())
+    append(chart.dimension.label.quoteIfNecessary())
     chart.measures.forEach {
       append(",")
       append(it.label.quoteIfNecessary())
     }
     append("]")
-    chart.dimension?.values?.forEach { dimensionValue ->
+    chart.dimension.values.forEach { dimensionValue ->
       append(",")
       append("[")
       append(dimensionValue.value.quoteIfNecessary())

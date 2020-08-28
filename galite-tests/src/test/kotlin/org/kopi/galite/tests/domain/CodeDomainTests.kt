@@ -124,7 +124,7 @@ class CodeDomainTests {
 
     // test converted value
     assertFailsWith<UnsupportedOperationException> {
-      val convertedToUpper = domain.applyConvertUpper("Abcdef")
+      domain.applyConvertUpper("Abcdef")
     }
   }
 
@@ -148,7 +148,7 @@ class CodeDomainTests {
 
     // test check
     assertFailsWith<UnsupportedOperationException> {
-      val checkValid = field.checkValue("Abcdef")
+      field.checkValue("Abcdef")
     }
   }
 

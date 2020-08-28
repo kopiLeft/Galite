@@ -26,7 +26,7 @@ import org.kopi.galite.domain.Domain
  */
 open class Chart(val name: String) {
     /** The chart's dimension */
-    var dimension: Dimension<*>? = null
+    lateinit var dimension: Dimension<*>
 
     /** The chart's measures */
     val measures = mutableListOf<Measure<*>>()

@@ -36,30 +36,19 @@ class DimensionTests {
     val measure1 = Measure<Double>()
     measure1.label = "measure 1"
     measure1.color = Color.RED
-    val measure2 = Measure<Double>()
-    measure2.label = "measure 2"
-    measure2.color = Color.BLUE
-    val measure3 = Measure<Double>()
-    measure3.label = "measure 3"
-    measure3.color = Color.YELLOW
     monthDimension.add(Month.JANUARY) {
-      this.addMeasureList(mutableMapOf(measure1 to 55.22, measure2 to 44.22))
-      this.addMeasure(measure3, 10.01)
+      this[measure1] = 10.01
     }
     monthDimension.add(Month.DECEMBER) {
-      this.addMeasureList(mutableMapOf(measure1 to 22.22, measure2 to 11.22))
+      this[measure1] = 22.22
     }
 
-    assertEquals(monthDimension.values[0].measureList[measure1], 55.22)
-    assertEquals(monthDimension.values[0].measureList[measure2], 44.22)
-    assertEquals(monthDimension.values[0].measureList[measure3], 10.01)
     assertEquals(monthDimension.values[1].measureList[measure1], 22.22)
-    assertEquals(monthDimension.values[1].measureList[measure2], 11.22)
 
-    assertEquals(monthDimension.values[0].getMeasureLabels(), listOf("measure 1", "measure 2", "measure 3"))
-    assertEquals(monthDimension.values[0].getMeasureValues(), listOf(55.22, 44.22, 10.01))
-    assertEquals(monthDimension.values[1].getMeasureLabels(), listOf("measure 1", "measure 2"))
-    assertEquals(monthDimension.values[1].getMeasureValues(), listOf(22.22, 11.22))
+    assertEquals(monthDimension.values[0].getMeasureLabels(), listOf("measure 1"))
+    assertEquals(monthDimension.values[0].getMeasureValues(), listOf(10.01))
+    assertEquals(monthDimension.values[1].getMeasureLabels(), listOf("measure 1"))
+    assertEquals(monthDimension.values[1].getMeasureValues(), listOf(22.22))
   }
 
   /**
@@ -73,7 +62,8 @@ class DimensionTests {
     val measure2 = Measure<Int>()
 
     intDimension.add((0..10).random()) {
-      this.addMeasureList(mutableMapOf(measure1 to 50, measure2 to 40))
+      this[measure1] = 50
+      this[measure2] = 40
     }
 
     assertEquals(intDimension.values[0].measureList[measure1], 50)
