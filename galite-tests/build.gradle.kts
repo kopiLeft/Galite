@@ -17,12 +17,35 @@
 
 plugins {
   kotlin("jvm") apply true
+  id("org.springframework.boot") version "2.3.3.RELEASE"
 }
+
+val vaadinVersion = "16.0.0"
 
 dependencies {
   implementation(project(":galite-core"))
 
   implementation(kotlin("test-junit"))
+
+  implementation("com.vaadin", "vaadin-core", vaadinVersion) {
+    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+            .forEach { group -> exclude(group = group) }
+  }
+  implementation("com.vaadin", "vaadin-spring-boot-starter", vaadinVersion) {
+    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+            .forEach { group -> exclude(group = group) }
+  }
+
+  // UI tests dependencies .
+  implementation("org.seleniumhq.selenium", "selenium-java", "3.141.59")
+  implementation("io.github.bonigarcia:webdrivermanager:4.0.0") {
+    exclude("org.jsoup", "jsoup")
+  }
+  implementation("io.github.sukgu:automation:0.0.13")
 }
 
 tasks {

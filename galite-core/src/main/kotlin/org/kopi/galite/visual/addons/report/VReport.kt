@@ -18,14 +18,17 @@
 package org.kopi.galite.visual.addons.report
 
 import org.kopi.galite.visual.addons.common.Window
+import org.kopi.galite.visual.report.Report
 
 /**
  * Visual class for a report.
  */
-class VReport : Window() {
+class VReport(val report: Report) : Window() {
+  /**Report's data table */
+  private val table = Table()
+
   init {
-
+    table.fillTable(report)
+    add(table)
   }
-
-  private var table: Table? = null
 }

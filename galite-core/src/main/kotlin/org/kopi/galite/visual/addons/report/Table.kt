@@ -17,9 +17,30 @@
 
 package org.kopi.galite.visual.addons.report
 
+import com.vaadin.flow.component.grid.Grid
+import org.kopi.galite.visual.report.Line
+import org.kopi.galite.visual.report.Report
+
 /**
  * Data table for of a report.
  */
-class Table {
+class Table() : Grid<Line>() {
+  init {
+    isColumnReorderingAllowed = true
+  }
+
+  /**
+   * Fill table with data from report
+   * @param report report that provides data
+   */
+  fun fillTable(report: Report) {
+    setItems(report.lines.map { it })
+
+    report.fields.forEach { field ->
+      addColumn {
+        it.reportLine[field]
+      }.setHeader(field.label).setSortable(true)
+    }
+  }
 
 }

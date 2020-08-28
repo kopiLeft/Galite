@@ -19,9 +19,18 @@ plugins {
   kotlin("jvm") apply true
 }
 
-val exposedVersion = "0.26.2"
+val exposedVersion = "0.27.1"
+val vaadinVersion = "16.0.0"
 
 dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
+
+  // Vaadin dependencies
+  implementation("com.vaadin", "vaadin-core", vaadinVersion) {
+    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+            .forEach { group -> exclude(group = group) }
+  }
 }
