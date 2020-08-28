@@ -22,7 +22,7 @@ import org.kopi.galite.visual.field.Field
 /**
  * Represents the value of a dimension
  */
-class DimensionValue<T : Comparable<T>>(val value: T) : Field<T>() {
+class DimensionData<T : Comparable<T>>(val value: T) : Field<T>() {
 
   /**
    * Measures with corresponding values in a dimension value
@@ -31,20 +31,12 @@ class DimensionValue<T : Comparable<T>>(val value: T) : Field<T>() {
 
   /**
    * Add a measure with it's value to a dimension value
+   *
    * @param measure the measure to add
    * @param measureValue the corresponding value
    */
-  fun <V> addMeasure(measure: Measure<V>, measureValue: V) where V : Comparable<V>, V : Number {
+  operator fun <V> set(measure: Measure<V>, measureValue: V) where V : Comparable<V>, V : Number {
     measureList.putIfAbsent(measure, measureValue)
-  }
-
-  /**
-   * Add list of measures and measure's values to a dimension
-   * @param measures List of measures
-   * @return true if list has been added
-   */
-  fun <V> addMeasureList(measures: MutableMap<Measure<V>, V>) where V : Comparable<V>, V : Number {
-    measureList.putAll(measures)
   }
 
   /**

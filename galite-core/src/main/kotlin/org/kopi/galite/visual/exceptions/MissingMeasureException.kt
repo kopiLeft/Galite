@@ -15,24 +15,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.field
+package org.kopi.galite.visual.exceptions
 
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.visual.chart.Measure
+
+import java.lang.IllegalArgumentException
 
 /**
- * transformations that can be applied on a field
+ * Thrown to indicate that a [Measure] value has not been provided to a dimension.
+ *
+ * @param measure        the measure
+ * @param dimensionValue the the dimension value
+ *
  */
-object Transformation {
-
-  /**
-   * Transforms values in capital letters.
-   */
-  fun Domain<String>.convertUpper(): TransfomationType = TransfomationType.CONVERT_UPPER
-
-  /**
-   * Transformation types
-   */
-  enum class TransfomationType {
-    CONVERT_UPPER
-  }
+class MissingMeasureException(measure: Measure<*>, dimensionValue: Comparable<*>) : IllegalArgumentException() {
+  override val message = "Missing measure ${measure.label} for the dimension $dimensionValue"
 }
