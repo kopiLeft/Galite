@@ -39,7 +39,6 @@ dependencies {
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
-  implementation("org.springframework.boot", "spring-boot-devtools", "2.3.3.RELEASE")
 
   // UI tests dependencies .
   implementation("org.seleniumhq.selenium", "selenium-java", "3.141.59")

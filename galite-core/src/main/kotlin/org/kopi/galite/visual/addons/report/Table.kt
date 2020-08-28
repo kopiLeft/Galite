@@ -25,6 +25,10 @@ import org.kopi.galite.visual.report.Report
  * Data table for of a report.
  */
 class Table() : Grid<Line>() {
+  init {
+    isColumnReorderingAllowed = true
+  }
+
   /**
    * Fill table with data from report
    * @param report report that provides data
