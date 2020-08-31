@@ -38,7 +38,7 @@ class VTable() : Grid<ReportRow>() {
 
     report.fields.forEach { field ->
       addColumn {
-        it.reportRow[field]
+        it.getValueOf(field)
       }.setHeader(field.label).setSortable(true)
     }
   }

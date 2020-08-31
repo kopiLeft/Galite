@@ -21,7 +21,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
 
 /**
- * Represents a report that contains fields [fields] and displays a table of [rows].
+ * Represents a report that contains fields [fields] and displays a table of [reportRows].
  */
 open class Report {
   /** Report's fields. */
@@ -60,12 +60,12 @@ open class Report {
    *
    * @param rowNumber row's number.
    */
-  fun getRow(rowNumber: Int): MutableMap<Field<*>, Any> = reportRows[rowNumber].reportRow
+  fun getRow(rowNumber: Int): MutableMap<Field<*>, Any> = reportRows[rowNumber].data
 
   /**
    * Returns rows of data for a specific [field].
    *
    * @param field the field.
    */
-  fun getRowsForField(field: Field<*>) = reportRows.map { it.reportRow[field] }
+  fun getRowsForField(field: Field<*>) = reportRows.map { it.data[field] }
 }
