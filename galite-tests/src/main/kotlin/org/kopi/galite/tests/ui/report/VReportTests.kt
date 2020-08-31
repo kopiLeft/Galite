@@ -15,45 +15,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.visual.report
+package org.kopi.galite.tests.ui.report
 
-import org.junit.Test
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.router.Route
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.report.Report
-import kotlin.test.assertEquals
+import org.kopi.galite.report.Report
+import org.kopi.galite.ui.report.VReport
 
-class ReportTests {
 
-  /**
-   * Tests that fields has been registered in the report.
-   */
-  @Test
-  fun reportFieldsTest() {
+@Route("VReport")
+class VReportTests : VerticalLayout() {
+
+  init {
     val report = SimpleReport()
-
-    assertEquals(report.fields[0], report.field1)
-    assertEquals(report.fields[1], report.field2)
+    val vreport = VReport(report)
+    val verticalLayout = VerticalLayout()
+    verticalLayout.add(vreport)
+    add(verticalLayout)
   }
 
   /**
-   * Tests that fields has been registered in the report.
-   */
-  @Test
-  fun reportDataTest() {
-    val report = SimpleReport()
-
-    val lines = report.getLinesForField(report.field1)
-    assertEquals(listOf("test1", "test2"), lines)
-
-    val firstLine = report.getLine(0)
-    assertEquals(mapOf(report.field1 to "test1", report.field2 to 64L), firstLine)
-
-    val secondLine = report.getLine(1)
-    assertEquals(mapOf(report.field1 to "test2", report.field2 to 32L), secondLine)
-  }
-
-  /**
-   * Simple Report with two fields.
+   * Simple report with two fields
    */
   class SimpleReport : Report() {
     val field1 = field(StringTestType()) {
@@ -75,16 +58,21 @@ class ReportTests {
     }
   }
 
+  /**
+   * String type Domain
+   */
   class StringTestType : Domain<String>(5) {
     override val type = code {
       this["cde1"] = "test1"
     }
   }
 
+  /**
+   * Long type Domain
+   */
   class LongTestType : Domain<Long>(5) {
     override val type = code {
       this["cde1"] = 1
     }
   }
 }
-

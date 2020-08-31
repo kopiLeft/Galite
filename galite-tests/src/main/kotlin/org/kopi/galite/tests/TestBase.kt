@@ -17,7 +17,7 @@
 
 package org.kopi.galite.tests
 
-import org.kopi.galite.visual.chart.Chart
+import org.kopi.galite.chart.Chart
 
 /**
  * TestBase class for all tests.

@@ -15,28 +15,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.visual.ui.report
+package org.kopi.galite.tests.report
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.router.Route
+import org.junit.Test
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.addons.report.VReport
-import org.kopi.galite.visual.report.Report
+import org.kopi.galite.report.Report
+import kotlin.test.assertEquals
 
+class ReportTests {
 
-@Route("VReport")
-class VReportTests : VerticalLayout() {
-
-  init {
+  /**
+   * Tests that fields has been registered in the report.
+   */
+  @Test
+  fun reportFieldsTest() {
     val report = SimpleReport()
-    val vreport = VReport(report)
-    val verticalLayout = VerticalLayout()
-    verticalLayout.add(vreport)
-    add(verticalLayout)
+
+    assertEquals(report.fields[0], report.field1)
+    assertEquals(report.fields[1], report.field2)
   }
 
   /**
-   * Simple report with two fields
+   * Tests that fields has been registered in the report.
+   */
+  @Test
+  fun reportDataTest() {
+    val report = SimpleReport()
+
+    val rows = report.getRowsForField(report.field1)
+    assertEquals(listOf("test1", "test2"), rows)
+
+    val firstRow = report.getRow(0)
+    assertEquals(mapOf(report.field1 to "test1", report.field2 to 64L), firstRow)
+
+    val secondRow = report.getRow(1)
+    assertEquals(mapOf(report.field1 to "test2", report.field2 to 32L), secondRow)
+  }
+
+  /**
+   * Simple Report with two fields.
    */
   class SimpleReport : Report() {
     val field1 = field(StringTestType()) {
@@ -58,21 +75,16 @@ class VReportTests : VerticalLayout() {
     }
   }
 
-  /**
-   * String type Domain
-   */
   class StringTestType : Domain<String>(5) {
     override val type = code {
       this["cde1"] = "test1"
     }
   }
 
-  /**
-   * Long type Domain
-   */
   class LongTestType : Domain<Long>(5) {
     override val type = code {
       this["cde1"] = 1
     }
   }
 }
+

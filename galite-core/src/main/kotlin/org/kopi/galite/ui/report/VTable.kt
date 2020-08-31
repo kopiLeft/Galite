@@ -15,16 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
+package org.kopi.galite.ui.report
 
 import com.vaadin.flow.component.grid.Grid
-import org.kopi.galite.visual.report.Line
-import org.kopi.galite.visual.report.Report
+import org.kopi.galite.report.ReportRow
+import org.kopi.galite.report.Report
 
 /**
  * Data table for of a report.
  */
-class Table() : Grid<Line>() {
+class VTable() : Grid<ReportRow>() {
   init {
     isColumnReorderingAllowed = true
   }
@@ -34,11 +34,11 @@ class Table() : Grid<Line>() {
    * @param report report that provides data
    */
   fun fillTable(report: Report) {
-    setItems(report.lines.map { it })
+    setItems(report.reportRows.map { it })
 
     report.fields.forEach { field ->
       addColumn {
-        it.reportLine[field]
+        it.getValueOf(field)
       }.setHeader(field.label).setSortable(true)
     }
   }

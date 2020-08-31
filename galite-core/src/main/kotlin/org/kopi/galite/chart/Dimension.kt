@@ -15,15 +15,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.exceptions
+package org.kopi.galite.chart
+
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.field.Field
 
 /**
- * Thrown to indicate that an invalid value has been passed to a field.
+ * Represents a one dimension that contains measures [values] to use in chart.
  *
- * @param value to pass
- * @param label the field's label
- *
+ * @param domain dimension domain.
  */
-class InvalidValueException(value: Comparable<*>, label: String) : RuntimeException() {
-  override val message = "invalid value $value for the field $label"
+open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Field<T>(domain) {
+
+  /**
+   * Dimension values
+   */
+  val values = mutableListOf<DimensionData<T>>()
+
+  /**
+   * Add a dimension value
+   *
+   * @param value the dimension value
+   */
+  fun add(value: T, init: (DimensionData<T>.() -> Unit)? = null) {
+    val dimensionValue: DimensionData<T> = DimensionData<T>(value)
+    if (init != null) {
+      dimensionValue.init()
+    }
+    values.add(dimensionValue)
+  }
 }

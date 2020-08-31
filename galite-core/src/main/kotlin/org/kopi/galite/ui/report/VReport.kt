@@ -15,29 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.report
+package org.kopi.galite.ui.report
 
-import org.kopi.galite.visual.field.Field
+import org.kopi.galite.ui.common.Window
+import org.kopi.galite.report.Report
 
 /**
- * A data line of a [Report].
- *
- * @param reportFields the fields that exists in the report.
+ * Visual class for a report.
  */
-class Line(private val reportFields: MutableList<Field<*>>) {
-  /** A report data line */
-  val reportLine = mutableMapOf<Field<*>, Any>()
+class VReport(val report: Report) : Window() {
+  /**Report's data table */
+  private val table = VTable()
 
-  /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [Field].
-   *
-   * @param field the field.
-   * @param value the field's value.
-   */
-  operator fun <T: Comparable<T>> set(field: Field<T>, value: T) {
-    if(field in reportFields) {
-      reportLine.putIfAbsent(field, value)
-    }
+  init {
+    table.fillTable(report)
+    add(table)
   }
 }

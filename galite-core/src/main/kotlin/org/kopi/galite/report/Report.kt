@@ -15,20 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.report
+package org.kopi.galite.report
 
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.field.Field
+import org.kopi.galite.field.Field
 
 /**
- * Represents a report that contains fields [fields] and displays a table of [lines].
+ * Represents a report that contains fields [fields] and displays a table of [reportRows].
  */
 open class Report {
   /** Report's fields. */
   val fields = mutableListOf<Field<*>>()
 
-  /** Report's data lines. */
-  val lines = mutableListOf<Line>()
+  /** Report's data rows. */
+  val reportRows = mutableListOf<ReportRow>()
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
@@ -45,27 +45,27 @@ open class Report {
   }
 
   /**
-   * Adds a line to the report.
+   * Adds a row to the report.
    *
-   * @param init initializes the line with values.
+   * @param init initializes the row with values.
    */
-  fun add(init: Line.() -> Unit) {
-    val line = Line(fields)
-    line.init()
-    lines.add(line)
+  fun add(init: ReportRow.() -> Unit) {
+    val row = ReportRow(fields)
+    row.init()
+    reportRows.add(row)
   }
 
   /**
-   * Returns line number [lineNumber].
+   * Returns the row's data.
    *
-   * @param lineNumber line's number.
+   * @param rowNumber the index of the desired row.
    */
-  fun getLine(lineNumber: Int): MutableMap<Field<*>, Any> = lines[lineNumber].reportLine
+  fun getRow(rowNumber: Int): MutableMap<Field<*>, Any> = reportRows[rowNumber].data
 
   /**
-   * Returns lines of data for a specific [field].
+   * Returns rows of data for a specific [field].
    *
    * @param field the field.
    */
-  fun getLinesForField(field: Field<*>) = lines.map { it.reportLine[field] }
+  fun getRowsForField(field: Field<*>) = reportRows.map { it.data[field] }
 }

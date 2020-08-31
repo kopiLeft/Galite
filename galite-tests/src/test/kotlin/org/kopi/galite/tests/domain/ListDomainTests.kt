@@ -21,8 +21,8 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.junit.Test
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.exceptions.InvalidValueException
-import org.kopi.galite.visual.field.Field
+import org.kopi.galite.exceptions.InvalidValueException
+import org.kopi.galite.field.Field
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue

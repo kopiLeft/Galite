@@ -20,7 +20,7 @@ package org.kopi.galite.domain
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Query
 
-import org.kopi.galite.visual.exceptions.InvalidValueException
+import org.kopi.galite.exceptions.InvalidValueException
 
 /**
  * Represents a list domain.

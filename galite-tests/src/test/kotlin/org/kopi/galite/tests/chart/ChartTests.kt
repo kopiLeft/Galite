@@ -15,14 +15,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.visual.chart
+package org.kopi.galite.tests.chart
 
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 
 import org.kopi.galite.tests.TestBase
-import org.kopi.galite.visual.chart.Formatter
-import org.kopi.galite.visual.exceptions.MissingMeasureException
+import org.kopi.galite.chart.Formatter
+import org.kopi.galite.exceptions.MissingMeasureException
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
