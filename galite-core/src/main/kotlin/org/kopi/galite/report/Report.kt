@@ -56,9 +56,9 @@ open class Report {
   }
 
   /**
-   * Returns row number [rowNumber].
+   * Returns the row's data.
    *
-   * @param rowNumber row's number.
+   * @param rowNumber the index of the desired row.
    */
   fun getRow(rowNumber: Int): MutableMap<Field<*>, Any> = reportRows[rowNumber].data
 

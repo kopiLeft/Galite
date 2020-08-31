@@ -29,10 +29,10 @@ class ReportRow(private val reportFields: MutableList<Field<*>>) {
   val data = mutableMapOf<Field<*>, Any>()
 
   /**
-   * Returns row of data for a specific [field].
+   * Returns data value for a specific [field].
    *
    * @param field the field.
-   * @return        the object to be displayed
+   * @return  data value for a specific [field].
    */
   fun getValueOf(field: Field<*>) = data[field]
 
