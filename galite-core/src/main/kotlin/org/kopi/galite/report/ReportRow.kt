@@ -15,33 +15,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.chart
+package org.kopi.galite.report
 
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.field.Field
+import org.kopi.galite.field.Field
 
 /**
- * Represents a one dimension that contains measures [values] to use in chart.
+ * Represents a data row of a [Report].
  *
- * @param domain dimension domain.
+ * @param reportFields the fields that exists in the report.
  */
-open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Field<T>(domain) {
+class ReportRow(private val reportFields: MutableList<Field<*>>) {
+  /** A report data row */
+  val reportRow = mutableMapOf<Field<*>, Any>()
 
   /**
-   * Dimension values
-   */
-  val values = mutableListOf<DimensionData<T>>()
-
-  /**
-   * Add a dimension value
+   * Sets a mapping between the values that the domain can take
+   * and a corresponding text to be displayed in a [Field].
    *
-   * @param value the dimension value
+   * @param field the field.
+   * @param value the field's value.
    */
-  fun add(value: T, init: (DimensionData<T>.() -> Unit)? = null) {
-    val dimensionValue: DimensionData<T> = DimensionData<T>(value)
-    if (init != null) {
-      dimensionValue.init()
+  operator fun <T: Comparable<T>> set(field: Field<T>, value: T) {
+    if(field in reportFields) {
+      reportRow.putIfAbsent(field, value)
     }
-    values.add(dimensionValue)
   }
 }

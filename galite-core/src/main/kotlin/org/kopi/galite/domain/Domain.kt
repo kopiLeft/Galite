@@ -76,12 +76,12 @@ abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
   /**
    * returns true if this domain is a code domain, false otherwise
    */
-  fun isCodeDomain(): Boolean = type is CodeDomain<T>
+  private fun isCodeDomain(): Boolean = type is CodeDomain<T>
 
   /**
    * returns true if this domain is a list domain, false otherwise
    */
-  fun isListDomain(): Boolean = type is ListDomain<T>
+  private fun isListDomain(): Boolean = type is ListDomain<T>
 
   /**
    * The type of this domain.

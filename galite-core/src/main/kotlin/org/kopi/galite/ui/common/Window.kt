@@ -15,15 +15,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.exceptions
+package org.kopi.galite.ui.common
+
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
- * Thrown to indicate that an invalid value has been passed to a field.
- *
- * @param value to pass
- * @param label the field's label
- *
+ * Abstract class for all window components.
  */
-class InvalidValueException(value: Comparable<*>, label: String) : RuntimeException() {
-  override val message = "invalid value $value for the field $label"
+abstract class Window : VerticalLayout() {
+
 }

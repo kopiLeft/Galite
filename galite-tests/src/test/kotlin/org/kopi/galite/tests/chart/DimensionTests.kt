@@ -15,12 +15,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.visual.chart
+package org.kopi.galite.tests.chart
 
 import org.junit.Test
-import org.kopi.galite.visual.chart.Dimension
-import org.kopi.galite.visual.chart.Measure
-import org.kopi.galite.visual.common.Color
+import org.kopi.galite.chart.Dimension
+import org.kopi.galite.chart.Measure
+import org.kopi.galite.visual.Color
 import java.time.Month
 import kotlin.test.assertEquals
 

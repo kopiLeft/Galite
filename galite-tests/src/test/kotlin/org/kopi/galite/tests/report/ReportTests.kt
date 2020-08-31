@@ -15,11 +15,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.visual.report
+package org.kopi.galite.tests.report
 
 import org.junit.Test
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.report.Report
+import org.kopi.galite.report.Report
 import kotlin.test.assertEquals
 
 class ReportTests {
@@ -42,14 +42,14 @@ class ReportTests {
   fun reportDataTest() {
     val report = SimpleReport()
 
-    val lines = report.getLinesForField(report.field1)
-    assertEquals(listOf("test1", "test2"), lines)
+    val rows = report.getRowsForField(report.field1)
+    assertEquals(listOf("test1", "test2"), rows)
 
-    val firstLine = report.getLine(0)
-    assertEquals(mapOf(report.field1 to "test1", report.field2 to 64L), firstLine)
+    val firstRow = report.getRow(0)
+    assertEquals(mapOf(report.field1 to "test1", report.field2 to 64L), firstRow)
 
-    val secondLine = report.getLine(1)
-    assertEquals(mapOf(report.field1 to "test2", report.field2 to 32L), secondLine)
+    val secondRow = report.getRow(1)
+    assertEquals(mapOf(report.field1 to "test2", report.field2 to 32L), secondRow)
   }
 
   /**

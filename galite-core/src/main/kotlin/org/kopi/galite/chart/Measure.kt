@@ -15,13 +15,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.common
+package org.kopi.galite.chart
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.visual.Color
+import org.kopi.galite.field.Field
 
 /**
- * Abstract class for all window components.
+ * Represents a measure used to store numeric values in chart.
+ *
+ * @param domain dimension domain.
  */
-abstract class Window : VerticalLayout() {
-
+open class Measure<T>(domain: Domain<T>? = null) : Field<T>(domain) where T : Comparable<T>, T : Number {
+  /**Measure's color in chart */
+  lateinit var color: Color
 }

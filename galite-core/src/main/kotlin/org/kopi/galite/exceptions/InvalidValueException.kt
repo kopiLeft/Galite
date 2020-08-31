@@ -15,20 +15,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.addons.report
-
-import org.kopi.galite.visual.addons.common.Window
-import org.kopi.galite.visual.report.Report
+package org.kopi.galite.exceptions
 
 /**
- * Visual class for a report.
+ * Thrown to indicate that an invalid value has been passed to a field.
+ *
+ * @param value to pass
+ * @param label the field's label
+ *
  */
-class VReport(val report: Report) : Window() {
-  /**Report's data table */
-  private val table = Table()
-
-  init {
-    table.fillTable(report)
-    add(table)
-  }
+class InvalidValueException(value: Comparable<*>, label: String) : RuntimeException() {
+  override val message = "invalid value $value for the field $label"
 }

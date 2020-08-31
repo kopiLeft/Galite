@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.common
+package org.kopi.galite.visual
 
 /**
  * Represents the set of default colors to use with measures in charts.

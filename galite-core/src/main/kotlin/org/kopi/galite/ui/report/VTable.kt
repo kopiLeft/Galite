@@ -15,19 +15,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual.exceptions
+package org.kopi.galite.ui.report
 
-import org.kopi.galite.visual.chart.Measure
-
-import java.lang.IllegalArgumentException
+import com.vaadin.flow.component.grid.Grid
+import org.kopi.galite.report.ReportRow
+import org.kopi.galite.report.Report
 
 /**
- * Thrown to indicate that a [Measure] value has not been provided to a dimension.
- *
- * @param measure        the measure
- * @param dimensionValue the the dimension value
- *
+ * Data table for of a report.
  */
-class MissingMeasureException(measure: Measure<*>, dimensionValue: Comparable<*>) : IllegalArgumentException() {
-  override val message = "Missing measure ${measure.label} for the dimension $dimensionValue"
+class VTable() : Grid<ReportRow>() {
+  init {
+    isColumnReorderingAllowed = true
+  }
+
+  /**
+   * Fill table with data from report
+   * @param report report that provides data
+   */
+  fun fillTable(report: Report) {
+    setItems(report.reportRows.map { it })
+
+    report.fields.forEach { field ->
+      addColumn {
+        it.reportRow[field]
+      }.setHeader(field.label).setSortable(true)
+    }
+  }
+
 }

@@ -20,8 +20,8 @@ package org.kopi.galite.tests.visual.ui.report
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.addons.report.VReport
-import org.kopi.galite.visual.report.Report
+import org.kopi.galite.report.Report
+import org.kopi.galite.ui.report.VReport
 
 
 @Route("VReport")

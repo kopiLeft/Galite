@@ -15,23 +15,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.visual.chart
+package org.kopi.galite.chart
 
-import org.junit.Test
-import org.kopi.galite.visual.chart.Measure
-import org.kopi.galite.visual.common.Color
-import kotlin.test.assertEquals
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.field.Field
 
-class MeasureTests {
+/**
+ * Represents a one dimension that contains measures [values] to use in chart.
+ *
+ * @param domain dimension domain.
+ */
+open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Field<T>(domain) {
 
   /**
-   * Test measure class
+   * Dimension values
    */
-  @Test
-  fun testMeasure() {
-    val measure1 = Measure<Int>()
-    measure1.label = "measure 1"
-    measure1.color = Color.RED
-    assertEquals(measure1.color.toString(), "RED")
+  val values = mutableListOf<DimensionData<T>>()
+
+  /**
+   * Add a dimension value
+   *
+   * @param value the dimension value
+   */
+  fun add(value: T, init: (DimensionData<T>.() -> Unit)? = null) {
+    val dimensionValue: DimensionData<T> = DimensionData<T>(value)
+    if (init != null) {
+      dimensionValue.init()
+    }
+    values.add(dimensionValue)
   }
 }
