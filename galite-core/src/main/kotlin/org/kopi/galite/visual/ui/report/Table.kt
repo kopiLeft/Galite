@@ -18,6 +18,7 @@
 package org.kopi.galite.visual.ui.report
 
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.treegrid.TreeGrid
 import org.kopi.galite.visual.report.Line
 import org.kopi.galite.visual.report.Report
 
@@ -34,7 +35,7 @@ class Table() : TreeGrid<Line>() {
    * @param report report that provides data
    */
   fun fillTable(report: Report) {
-    setItems(report.lines.map { it }, report.lines.map { it.subLines })
+    setItems(report.lines.map { it }, Line::subLines)
 
     addHierarchyColumn {
       it.reportLine[report.fields[0]]

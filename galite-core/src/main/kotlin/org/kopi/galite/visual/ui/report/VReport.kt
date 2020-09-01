@@ -17,7 +17,7 @@
 
 package org.kopi.galite.visual.ui.report
 
-import org.kopi.galite.visual.addons.common.Window
+import org.kopi.galite.visual.ui.common.Window
 import org.kopi.galite.visual.report.Report
 
 /**

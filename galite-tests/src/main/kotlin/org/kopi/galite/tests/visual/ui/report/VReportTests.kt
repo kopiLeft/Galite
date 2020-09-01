@@ -20,7 +20,7 @@ package org.kopi.galite.tests.visual.ui.report
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.addons.report.VReport
+import org.kopi.galite.visual.ui.report.VReport
 import org.kopi.galite.visual.report.Report
 
 
@@ -41,6 +41,7 @@ class VReportTests : VerticalLayout() {
   class SimpleReport : Report() {
     val field1 = field(StringTestType()) {
       label = "field1"
+      group = field2
     }
     val field2 = field(LongTestType()) {
       label = "field2"
