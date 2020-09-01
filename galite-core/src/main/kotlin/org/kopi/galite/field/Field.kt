@@ -34,6 +34,8 @@ open class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
   var label: String = ""
   /** Field's help that describes the expected value of an input field */
   var help: String = ""
+  /** Field that groups this field */
+  var group: Field<*>? = null
 
   /**
    * Checks if the value passed to the field doesn't exceed the length of the field's domain
