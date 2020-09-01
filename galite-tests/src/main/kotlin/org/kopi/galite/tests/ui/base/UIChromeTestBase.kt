@@ -28,7 +28,6 @@ open class UIChromeTestBase : UITestBase() {
   override val driver = ChromeDriver()
 
   override fun setupTest() {
-
     WebDriverManager.chromedriver().setup()
     super.setupTest()
   }
