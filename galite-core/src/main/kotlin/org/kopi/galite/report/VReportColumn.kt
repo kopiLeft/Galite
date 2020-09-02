@@ -18,6 +18,8 @@
 
 package org.kopi.galite.report
 
+import org.kopi.galite.util.LineBreaker
+
 abstract class VReportColumn {
 
   val ident: String? = null
@@ -57,4 +59,28 @@ abstract class VReportColumn {
   fun isHidden(): Boolean {
     return (options and Constants.CLO_HIDDEN) > 0
   }
+
+  open fun format(o: Any?): String? {
+    return if (this.folded || o == null) {
+      ""
+    } else if (format != null) {
+      format.format(o)
+    } else if (height == 1) {
+      val str = o.toString()
+      val strLength = str.length
+      if (strLength <= width) str else str.substring(0, width)
+    } else {
+      o.toString()
+    }
+  }
+
+  open fun formatWithLineBreaker(o: Any?): String? {
+    return LineBreaker.modelToText(format(o), width)
+  }
+
+  // ----------------------------------------------------------------------
+  // LOCALIZATION : NOT IMPLEMENTED YET
+  // ----------------------------------------------------------------------
+
 }
+

@@ -18,9 +18,8 @@
 
 package org.kopi.galite.report
 
-abstract class VReportRow(reportData: Array<Any>) {
+abstract class VReportRow(val data: Array<Any?>) {
 
-  protected var data: Array<Any> = reportData
   private var visible: Boolean = false
 
   private val serialVersionUID = 857795567573130287L
@@ -31,7 +30,7 @@ abstract class VReportRow(reportData: Array<Any>) {
    * @param        column                the index of the column
    * @return        the object to be displayed
    */
-  fun getValueAt(column: Int): Any = data[column]
+  fun getValueAt(column: Int): Any? = data[column]
 
   /**
    * Sets data at column of certain index
@@ -55,9 +54,8 @@ abstract class VReportRow(reportData: Array<Any>) {
    *
    */
   fun compareTo(other: VReportRow, position: Int, column: VReportColumn): Int {
-    val data: Any = data[position]
-    val rowData: Any = other.data[position]
-
+    val data: Any? = data[position]
+    val rowData: Any? = other.data[position]
 
     // check for nulls: define null less than everything
     return if (data == null && rowData == null) {
@@ -70,4 +68,13 @@ abstract class VReportRow(reportData: Array<Any>) {
       column.compareTo(data, rowData)
     }
   }
+
+  /**
+   * Return the level of the node in the grouping tree, starting with 0 at
+   * the base rows (leafs).
+   *
+   * @return        the level of the node in the grouping tree
+   */
+  abstract fun getLevel(): Int
 }
+
