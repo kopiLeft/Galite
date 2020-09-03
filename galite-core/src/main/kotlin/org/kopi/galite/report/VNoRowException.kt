@@ -16,46 +16,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.exceptions
+package org.kopi.galite.report
+
+import org.kopi.galite.visual.VRuntimeException
 
 /**
- * An InconsistencyException indicates that an inconsistent internal state has
- * been discovered, usually due to incorrect program logic.
+ * This class represents exceptions occuring during execution process.
  */
-class InconsistencyException : RuntimeException {
-
+class VNoRowException : VRuntimeException {
   /**
-   * Constructs am InconsistencyException with no specified detail message.
-   */
-  constructor() : super() {
-  }
-
-  /**
-   * Constructs am InconsistencyException with the specified detail message.
+   * Constructs an exception with a message.
    *
-   * @param        message                the detail message
+   * @param        message                the associated message
    */
   constructor(message: String?) : super(message) {
+
   }
 
   /**
-   * Constructs am InconsistencyException with the specified detail message.
-   *
-   * @param        message                the detail message
+   * Constructs an exception with no message.
    */
-  constructor(e: Throwable?) : super(e) {
-  }
+  constructor() : this(null) {
 
-  /**
-   * Constructs am InconsistencyException with the specified detail message.
-   *
-   * @param        message                the detail message
-   */
-  constructor(message: String?, e: Throwable?) : super(message, e) {
   }
 
   /**
    * Comment for `serialVersionUID`
    */
-  private val serialVersionUID = -5494569374304974143L
+  private val serialVersionUID = -5435963954463379807L
+
 }

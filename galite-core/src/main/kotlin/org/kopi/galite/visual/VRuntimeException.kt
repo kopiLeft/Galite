@@ -16,46 +16,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.exceptions
+package org.kopi.galite.visual
 
-/**
- * An InconsistencyException indicates that an inconsistent internal state has
- * been discovered, usually due to incorrect program logic.
- */
-class InconsistencyException : RuntimeException {
-
+open class VRuntimeException : RuntimeException {
   /**
-   * Constructs am InconsistencyException with no specified detail message.
+   * Constructs an exception with no message.
    */
   constructor() : super() {
   }
 
   /**
-   * Constructs am InconsistencyException with the specified detail message.
+   * Constructs an exception with a message.
    *
-   * @param        message                the detail message
+   * @param        message                the associated message
    */
   constructor(message: String?) : super(message) {
   }
 
+
   /**
-   * Constructs am InconsistencyException with the specified detail message.
+   * Constructs an exception with an other exception.
    *
-   * @param        message                the detail message
+   * @param        exc                the exception
    */
-  constructor(e: Throwable?) : super(e) {
+  constructor(exc: Throwable?) : super(exc) {
   }
 
   /**
-   * Constructs am InconsistencyException with the specified detail message.
+   * Constructs an exception with an other exception.
    *
-   * @param        message                the detail message
+   * @param        exc                the exception
    */
-  constructor(message: String?, e: Throwable?) : super(message, e) {
+  constructor(msg: String?, exc: Throwable?) : super(msg, exc) {
   }
 
+  // ---------------------------------------------------------------------
+  // DATA MEMBERS
+  // ---------------------------------------------------------------------
   /**
    * Comment for `serialVersionUID`
    */
-  private val serialVersionUID = -5494569374304974143L
+  private val serialVersionUID = -5068537789034913647L
 }

@@ -18,7 +18,8 @@
 
 package org.kopi.galite.report
 
-import com.sun.source.tree.ExpressionTree
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VExecFailedException
 import org.kopi.util.base.Utils
 import java.io.Serializable
 import java.util.*
@@ -118,7 +119,7 @@ class MReport : Serializable {
       }
       rows[i] = VBaseRow(data)
     }
-    baseRows = rows
+    baseRows = rows as Array<VReportRow?>
   }
 
   fun initializeAfterRemovingColumn(position: Int) {
@@ -174,7 +175,8 @@ class MReport : Serializable {
       data[accessiblecolumns.size - 1] = null
       rows[i] = VBaseRow(data)
     }
-    baseRows = rows
+    baseRows = rows as Array<VReportRow?>
+    //code commented in kopi
     //createTree();
   }
 
@@ -198,8 +200,10 @@ class MReport : Serializable {
     }
   }
 
-  @Throws(VExecFailedException::class)
+  //Needs many other classes like localization ..
+  /*@Throws(VExecFailedException::class)
   fun computeDataForColumn(column: Int, columnIndexes: IntArray, formula: String?) {
+    //shoud have been imported from com.graphbuilder.math.Expression
     val x: Expression
     x = try {
       ExpressionTree.parse(formula)
@@ -261,13 +265,13 @@ class MReport : Serializable {
       for (j in paramColumns.indices) {
         when (functions[j]) {
           NONE -> vm.setValue(params[j],
-                  if (baseRows[i].getValueAt(paramColumns[j]) == null) 0 else  // !!! wael 20070622 : use 0 unstead of null values.
-                    (baseRows[i].getValueAt(paramColumns[j]) as NotNullFixed).floatValue())
+                  if (baseRows[i]?.getValueAt(paramColumns[j]) == null) 0 else  // !!! wael 20070622 : use 0 unstead of null values.
+                    (baseRows[i]?.getValueAt(paramColumns[j]) as NotNullFixed).floatValue())
           MAX -> {
             var max: Float
             var tmp: Float
             // init max
-            max = if (baseRows[0].getValueAt(paramColumns[j]) == null) 0 else (baseRows[0].getValueAt(paramColumns[j]) as NotNullFixed).floatValue().toFloat()
+            max = if (baseRows[0]?.getValueAt(paramColumns[j]) == null) 0 else (baseRows[0].getValueAt(paramColumns[j]) as NotNullFixed).floatValue().toFloat()
             // calculate max value.
             var k = 1
             while (k < baseRows.size) {
@@ -331,7 +335,7 @@ class MReport : Serializable {
         throw VExecFailedException(MessageCode.getMessage("VIS-00066"))
       }
     }
-  }
+  }*/
 
   /**
    * Add a row to the list of rows defined by the user
@@ -347,10 +351,12 @@ class MReport : Serializable {
     var columnCount = columns.size
     // build accessible columns
     if (userRows!!.size == 0) {
-      throw VNoRowException(MessageCode.getMessage("VIS-00015"))
+      // Drop usage until implementation of ApplicationContext and Localization
+      //throw VNoRowException(MessageCode.getMessageWithNullParams("VIS-00015"))
+      throw Exception("Exception in MReport due to lack of Exception Implementation")
     }
     createAccessibleTab()
-    baseRows = Utils.toArray(userRows, VBaseRow::class.java) as Array<VBaseRow?>
+    baseRows = userRows as Array<VReportRow?>
     userRows = null
 
     // build working tables

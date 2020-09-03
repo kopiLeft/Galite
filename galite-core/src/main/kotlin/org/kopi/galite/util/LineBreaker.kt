@@ -42,7 +42,7 @@ class LineBreaker : Utils() {
      * @param        fixed        is it a fixed text ?
      */
     fun textToModel(source: String, col: Int, lin: Int, fixed: Boolean): String? {
-      val target = StringBuffer()
+      val target = StringBuilder()
       val length = source.length
       var start = 0
       var lines = 0
@@ -80,15 +80,15 @@ class LineBreaker : Utils() {
      */
     fun modelToText(source: String?, col: Int): String? {
       return if (source != null) {
-        val target = StringBuffer()
+        val target = StringBuilder()
         val length = source.length
-        var start = 0
-        while (start < length) {
+        for (start in 0 until length step col) {
           val line = source.substring(start, Math.min(start + col, length))
           var last = -1
           var i = line.length - 1
           while (last == -1 && i >= 0) {
-            if (!Character.isWhitespace(line[i])) {
+            if (!line[i].isWhitespace()) {
+
               last = i
             }
             --i
@@ -99,7 +99,6 @@ class LineBreaker : Utils() {
           if (last != -1) {
             target.append(line.substring(0, last + 1))
           }
-          start += col
         }
         target.toString()
       } else {
@@ -108,34 +107,31 @@ class LineBreaker : Utils() {
     }
 
     fun addBreakForWidth(source: String?, width: Int): String {
-      var source = source
+      var source = source.orEmpty()
       val boundary: BreakIterator
       var start: Int
       var length: Int
-      val buffer: StringBuffer
-      if (source == null) {
-        source = ""
-      }
+
       boundary = BreakIterator.getLineInstance()
       boundary.setText(source)
       start = boundary.first()
       length = 0
-      buffer = StringBuffer(source.length)
-      var end = boundary.next()
-      while (end != BreakIterator.DONE) {
-        length += end - start
-        if (length > width) {
-          length = end - start
-          buffer.append("\n")
+      return buildString(source.length) {
+        var end = boundary.next()
+        while (end != BreakIterator.DONE) {
+          length += end - start
+          if (length > width) {
+            length = end - start
+            append("\n")
+          }
+          append(source.substring(start, end))
+          if (source.substring(start, end).endsWith("\n")) {
+            length = 0
+          }
+          start = end
+          end = boundary.next()
         }
-        buffer.append(source.substring(start, end))
-        if (source.substring(start, end).endsWith("\n")) {
-          length = 0
-        }
-        start = end
-        end = boundary.next()
       }
-      return buffer.toString()
     }
 
     /**

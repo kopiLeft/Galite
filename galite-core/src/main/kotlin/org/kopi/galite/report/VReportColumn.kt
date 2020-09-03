@@ -20,27 +20,58 @@ package org.kopi.galite.report
 
 import org.kopi.galite.util.LineBreaker
 
-abstract class VReportColumn {
+open abstract class VReportColumn {
 
-  val ident: String? = null
-  var label: String? = null
-  val help: String? = null
-  val options = 0
-  val align = 0
-
-  /** reference to grouped column or -1*/
-  val groups = 0
-
-  /**sum function or -1*/
-  val function: VCalculateColumn? = null
-  val format: VCellFormat? = null
-  val visible = false
-  val folded = false
+  var ident: String?
+  var label: String? = ""
+  val help: String? = ""
+  var options: Int
+  var align: Int
+  var groups: Int
+  var function: VCalculateColumn
+  var format: VCellFormat
+  var visible = false
+  var folded = false
   var addedAtRuntime = false
   var userDefinedLabel = false
   lateinit var styles: Array<ColumnStyle>
-  protected var width = 0
-  protected var height = 0
+    get() {
+      return if (styles == null) {
+        val style = ColumnStyle()
+        style.fontName = 0
+        style.background = Constants.CLR_WHITE
+        style.foreground = Constants.CLR_BLACK
+        arrayOf(style)
+      } else {
+        styles
+      }
+    }
+  var width = 0
+  var height = 0
+
+  constructor(ident: String?,
+              options: Int,
+              align: Int,
+              groups: Int,
+              function: VCalculateColumn,
+              width: Int,
+              height: Int,
+              format: VCellFormat?) {
+    this.ident = ident
+    this.options = options
+    this.align = align
+    this.groups = groups
+    this.function = function
+    this.width = width
+    this.height = height
+    this.format = format!!
+    visible = true
+    folded = false
+    addedAtRuntime = false
+    userDefinedLabel = false
+
+  }
+
 
   /**
    * Compare two objects of type Any
