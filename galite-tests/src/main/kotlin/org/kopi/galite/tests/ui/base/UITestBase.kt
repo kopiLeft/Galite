@@ -70,10 +70,10 @@ abstract class UITestBase : TestBase() {
    * @param tag web element tag.
    * @return all elements with the tag [tag] or null if no element was found.
    */
-  fun findElementsByTag(tag: String = "*"): WebElement? {
+  fun findElementsByTag(tag: String = "*"): MutableList<WebElement>? {
     val shadow = Shadow(driver)
 
-    return shadow.findElement(buildSelector(tag = tag))
+    return shadow.findElements(buildSelector(tag = tag))
   }
 
   /**
