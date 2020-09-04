@@ -18,7 +18,6 @@
 package org.kopi.galite.tests
 
 import org.kopi.galite.chart.Chart
-
 import kotlin.test.assertEquals
 
 /**
@@ -34,27 +33,23 @@ open class TestBase {
     chart.chartInit()
   }
 
-  fun <T> assertCollectionEquals(expected: Collection<T>, actual: Collection<T>) {
-    assertEquals(expected.size, actual.size, "Count mismatch between collections")
+  // ----------------------------------------------------------------------
+  // Testing extension methods
+  // ----------------------------------------------------------------------
+
+  fun <T> assertCollectionsEquals(expected: Collection<T>, actual: Collection<T>) {
+    assertEquals(expected.size, actual.size, "Size mismatch between the collections")
 
     expected.forEachIndexed { index, expectedElement ->
       assertEquals(expectedElement, actual.elementAt(index))
     }
   }
 
-  fun <T> assertArrayEquals(expected: Array<T>, actual: Array<T>) {
-    assertEquals(expected.size, actual.size, "Count mismatch between arrays")
+  fun <T> assertArraysEquals(expected: Array<T>, actual: Array<T>) {
+    assertEquals(expected.size, actual.size, "Size mismatch between the arrays")
 
     expected.forEachIndexed { index, expectedElement ->
       assertEquals(expectedElement, actual.elementAt(index))
-    }
-  }
-
-  fun assertBytesEquals(expected: ByteArray, actual: ByteArray) {
-    if(expected.size != actual.size) throw Exception("size mismatch between byteArrays")
-
-    expected.forEachIndexed { index, byte ->
-      assertEquals(byte , actual[index])
     }
   }
 }

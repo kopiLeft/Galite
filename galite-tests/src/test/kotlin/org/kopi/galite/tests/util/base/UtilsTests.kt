@@ -70,31 +70,31 @@ class UtilsTests: TestBase() {
   fun splitQualifiedNameTest() {
     // case 1
     var split = utils.splitQualifiedName("abc/def/ghi")
-    assertArrayEquals(arrayOf("abc/def", "ghi"), split)
+    assertArraysEquals(arrayOf("abc/def", "ghi"), split)
 
     // case 2
     split = utils.splitQualifiedName("ghi")
-    assertArrayEquals(arrayOf("", "ghi"), split)
+    assertArraysEquals(arrayOf("", "ghi"), split)
 
     // case 3
     split = utils.splitQualifiedName("")
-    assertArrayEquals(arrayOf("", ""), split)
+    assertArraysEquals(arrayOf("", ""), split)
 
     // case 4
     split = utils.splitQualifiedName("/def")
-    assertArrayEquals(arrayOf("", "def"), split)
+    assertArraysEquals(arrayOf("", "def"), split)
 
     // case 5
     split = utils.splitQualifiedName("def/")
-    assertArrayEquals(arrayOf("def", ""), split)
+    assertArraysEquals(arrayOf("def", ""), split)
 
     // case 6
     split = utils.splitQualifiedName("/")
-    assertArrayEquals(arrayOf("", ""), split)
+    assertArraysEquals(arrayOf("", ""), split)
 
     // case 7
     split = utils.splitQualifiedName("//")
-    assertArrayEquals(arrayOf("/", ""), split)
+    assertArraysEquals(arrayOf("/", ""), split)
   }
 
   /**
