@@ -15,24 +15,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.kopi.galite.tests.report
 
-plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.4.0" apply false
-}
+import org.junit.Test
+import org.kopi.galite.report.VBaseRow
+import org.kopi.galite.tests.TestBase
+import kotlin.test.assertEquals
 
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
+class VBaseRowTests : TestBase() {
 
-  repositories {
-    jcenter()
-  }
+  val intData: Array<Any?> = arrayOf(1, 2, 3, 4)
 
-  dependencies {
-    "implementation"(kotlin("stdlib-jdk8"))
-  }
+  @Test
+  fun vBaseRowIntTest() {
+    /**Base row containing integer data*/
+    val vBaseRowIntTest: VBaseRow = VBaseRow(intData)
 
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    assertEquals(0, vBaseRowIntTest.getLevel())
+    assertEquals(1, vBaseRowIntTest.getValueAt(0))
+
+    vBaseRowIntTest.setValueAt(0, 5)
+    assertEquals(5, vBaseRowIntTest.getValueAt(0))
+
+    val cloneData = vBaseRowIntTest.cloneArray()
+    assertArraysEquals(vBaseRowIntTest , cloneData)
   }
 }

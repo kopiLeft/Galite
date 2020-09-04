@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,24 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.kopi.galite.report
 
-plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.4.0" apply false
-}
+open abstract class VReportColumn {
 
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
-
-  repositories {
-    jcenter()
-  }
-
-  dependencies {
-    "implementation"(kotlin("stdlib-jdk8"))
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-  }
+  /**
+   * Compare two objects of type Any
+   *
+   * @param        object1        the first operand of the comparison
+   * @param        object2        the second operand of the comparison
+   * @return        -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  abstract fun compareTo(object1: Any?, object2: Any?): Int
 }

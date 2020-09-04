@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,24 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.kopi.galite.report
 
-plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.4.0" apply false
-}
+open class VBaseRow(data: Array<Any?>) : VReportRow(data) {
 
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
+  /**
+   * Return the level of the node. For base rows it is always 0
+   */
+  override fun getLevel(): Int = 0
 
-  repositories {
-    jcenter()
-  }
-
-  dependencies {
-    "implementation"(kotlin("stdlib-jdk8"))
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-  }
 }
