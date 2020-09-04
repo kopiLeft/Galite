@@ -2,10 +2,10 @@ package org.kopi.galite.tests.report
 
 import org.junit.Test
 import org.kopi.galite.report.VBaseRow
-import org.kopi.galite.report.VReportRow
+import org.kopi.galite.test.TestBase
 import kotlin.test.assertEquals
 
-class VBaseRowTests : TestBase {
+class VBaseRowTests : TestBase() {
 
   val intData: Array<Any?> = arrayOf(1, 2, 3, 4)
 
@@ -24,4 +24,3 @@ class VBaseRowTests : TestBase {
     assertArraysEquals(vBaseRowIntTest , cloneData)
   }
 }
-

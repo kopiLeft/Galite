@@ -20,9 +20,7 @@ package org.kopi.galite.report
 
 abstract class VReportRow(val data: Array<Any?>) {
 
-  var visible: Boolean = false
-
-  private val serialVersionUID = 857795567573130287L
+  var visible = false
 
   /**
    * Return the object at column
@@ -56,14 +54,14 @@ abstract class VReportRow(val data: Array<Any?>) {
    * @return
    */
   fun compareTo(other: VReportRow, position: Int, column: VReportColumn): Int {
-    val data: Any? = data[position]
-    val rowData: Any? = other.data[position]
+    val data = data[position]
+    val rowData = other.data[position]
 
     // check for nulls: define null less than everything
     return when {
-      (data == null && rowData == null) -> 0
-      (data == null) -> -1
-      (rowData == null) -> 1
+      data == null && rowData == null -> 0
+      data == null -> -1
+      rowData == null -> 1
       else -> column.compareTo(data, rowData)
     }
   }
@@ -76,4 +74,3 @@ abstract class VReportRow(val data: Array<Any?>) {
    */
   abstract fun getLevel(): Int
 }
-

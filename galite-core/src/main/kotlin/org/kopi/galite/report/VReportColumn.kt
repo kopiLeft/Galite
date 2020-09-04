@@ -18,8 +18,6 @@
 
 package org.kopi.galite.report
 
-import org.kopi.galite.util.LineBreaker
-
 open abstract class VReportColumn {
 
   /**

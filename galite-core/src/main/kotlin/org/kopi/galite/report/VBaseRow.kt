@@ -20,8 +20,6 @@ package org.kopi.galite.report
 
 open class VBaseRow(data: Array<Any?>) : VReportRow(data) {
 
-  private val serialVersionUID = 1493773347534405802L
-
   /**
    * Return the level of the node. For base rows it is always 0
    */
