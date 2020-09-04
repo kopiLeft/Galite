@@ -60,14 +60,11 @@ abstract class VReportRow(val data: Array<Any?>) {
     val rowData: Any? = other.data[position]
 
     // check for nulls: define null less than everything
-    return if (data == null && rowData == null) {
-      0
-    } else if (data == null) {
-      -1
-    } else if (rowData == null) {
-      1
-    } else {
-      column.compareTo(data, rowData)
+    return when {
+      (data == null && rowData == null) -> 0
+      (data == null) -> -1
+      (rowData == null) -> 1
+      else -> column.compareTo(data, rowData)
     }
   }
 
@@ -79,3 +76,4 @@ abstract class VReportRow(val data: Array<Any?>) {
    */
   abstract fun getLevel(): Int
 }
+
