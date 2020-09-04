@@ -18,6 +18,7 @@
 package org.kopi.galite.tests
 
 import org.kopi.galite.chart.Chart
+import kotlin.test.assertEquals
 
 /**
  * TestBase class for all tests.
@@ -30,5 +31,25 @@ open class TestBase {
   fun withChart(chartInit: Chart.() -> Unit) {
     val chart = Chart("test")
     chart.chartInit()
+  }
+
+  // ----------------------------------------------------------------------
+  // Testing extension methods
+  // ----------------------------------------------------------------------
+
+  fun <T> assertCollectionsEquals(expected: Collection<T>, actual: Collection<T>) {
+    assertEquals(expected.size, actual.size, "Size mismatch between the collections")
+
+    expected.forEachIndexed { index, expectedElement ->
+      assertEquals(expectedElement, actual.elementAt(index))
+    }
+  }
+
+  fun <T> assertArraysEquals(expected: Array<T>, actual: Array<T>) {
+    assertEquals(expected.size, actual.size, "Size mismatch between the arrays")
+
+    expected.forEachIndexed { index, expectedElement ->
+      assertEquals(expectedElement, actual.elementAt(index))
+    }
   }
 }
