@@ -16,10 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.util
 
-import java.util.EventListener
+/**
+ * Filters characters according to a conversion table
+ */
+open class Filter {
+  /**
+   * Empty Filter. This is the default implementation.
+   */
+  fun convert(c: Char): Char = c
 
-interface ModelCloseListener : EventListener {
-  fun modelClosed(type: Int)
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  protected lateinit var conversionTable: CharArray
 }
