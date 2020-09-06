@@ -38,6 +38,6 @@ class VBaseRowTests : TestBase() {
     assertEquals(5, vBaseRowIntTest.getValueAt(0))
 
     val cloneData = vBaseRowIntTest.cloneArray()
-    assertArraysEquals(vBaseRowIntTest , cloneData)
+    assertArraysEquals(vBaseRowIntTest.data , cloneData)
   }
 }

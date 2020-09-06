@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,11 +18,9 @@
 
 package org.kopi.galite.report
 
-open class VBaseRow(data: Array<Any?>) : VReportRow(data) {
-
+class VBaseRow(data: Array<Any?>) : VReportRow(data) {
   /**
    * Return the level of the node. For base rows it is always 0
    */
   override fun getLevel(): Int = 0
-
 }

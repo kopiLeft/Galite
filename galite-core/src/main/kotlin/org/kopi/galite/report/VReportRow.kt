@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,15 @@
 package org.kopi.galite.report
 
 abstract class VReportRow(val data: Array<Any?>) {
-
   var visible = false
+
+  /**
+   * Return the level of the node in the grouping tree, starting with 0 at
+   * the base rows (leafs).
+   *
+   * @return        the level of the node in the grouping tree
+   */
+  abstract fun getLevel(): Int
 
   /**
    * Return the object at column
@@ -43,7 +50,7 @@ abstract class VReportRow(val data: Array<Any?>) {
   /**
    * Clone Array's objects
    */
-  fun cloneArray() = data.clone() as Array<Any?>
+  fun cloneArray() = data.clone()
 
   /**
    * Compare two VReportRows within specified column
@@ -65,12 +72,4 @@ abstract class VReportRow(val data: Array<Any?>) {
       else -> column.compareTo(data, rowData)
     }
   }
-
-  /**
-   * Return the level of the node in the grouping tree, starting with 0 at
-   * the base rows (leafs).
-   *
-   * @return        the level of the node in the grouping tree
-   */
-  abstract fun getLevel(): Int
 }

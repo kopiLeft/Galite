@@ -23,7 +23,6 @@ package org.kopi.galite.util.base
  * been discovered, usually due to incorrect program logic.
  */
 class InconsistencyException : RuntimeException {
-
   /**
    * Constructs am InconsistencyException with no specified detail message.
    */
