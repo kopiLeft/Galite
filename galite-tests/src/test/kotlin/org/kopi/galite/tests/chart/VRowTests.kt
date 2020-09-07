@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,30 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.domain
+package org.kopi.galite.tests.chart
 
-/**
- * Represents a code domain.
- */
-class CodeDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
+import org.junit.Test
+import org.kopi.galite.chart.VRow
+import org.kopi.galite.tests.TestBase
+import kotlin.test.assertEquals
+
+class VRowTests : TestBase() {
   /**
-   * Mapping of all values that a domain can take
+   * Tests data in measures and dimensions
    */
-  val codes: MutableMap<String, T> = mutableMapOf()
-
-  override val type = this
-
-  /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a field.
-   *
-   * @param text the text
-   * @param value the value
-   */
-  operator fun set(text: String, value: T) {
-    if (text in codes.keys) {
-      throw RuntimeException("$text already exists in domain $name")
-    }
-    codes[text] = value
+  @Test
+  fun dataTest() {
+    assertEquals(2, vRow.getDimensionsCount())
+    assertEquals(4, vRow.getMeasuresCount())
+    assertEquals("Tunis", vRow.getDimensionAt(0))
+    assertEquals("Bizerte", vRow.getDimensionAt(1))
+    assertEquals(20, vRow.getMeasureAt(3))
   }
+
+  private val vRow = VRow(arrayOf("Tunis", "Bizerte"), arrayOf(1, 6, 9, 20))
 }

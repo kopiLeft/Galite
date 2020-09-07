@@ -23,7 +23,6 @@ import org.kopi.galite.exceptions.MissingMeasureException
  * Chart data formatter utility.
  */
 object Formatter {
-
   /**
    * Converts the value passed to a [chart] dimension to the string format known by visual chart.
    *

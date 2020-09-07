@@ -41,7 +41,7 @@ open class Utils {
    * @exception        RuntimeException        the entire token reference
    */
   @Deprecated("Use the verify with the error message",
-              ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
+          ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
   fun verify(expression: Boolean) {
     if (!expression) {
       throw InconsistencyException()
@@ -67,9 +67,8 @@ open class Utils {
    * into two strings:
    * "java/lang/System" and "out"
    */
-  fun splitQualifiedName(name: String, separator: Char): Array<String>
-          = arrayOf(name.substringBeforeLast(separator, ""),
-                    name.substringAfterLast(separator))
+  fun splitQualifiedName(name: String, separator: Char): Array<String> = arrayOf(name.substringBeforeLast(separator, ""),
+          name.substringAfterLast(separator))
 
   /**
    * Splits a string like:
@@ -89,7 +88,6 @@ open class Utils {
    * - the specified string is null
    * - a specified index is beyond the limits of the input string
    */
-  fun substring(baseString: String?, beginIndex: Int, endIndex: Int): String
-    = baseString?.substring(beginIndex.coerceAtMost(baseString.length),
+  fun substring(baseString: String?, beginIndex: Int, endIndex: Int): String = baseString?.substring(beginIndex.coerceAtMost(baseString.length),
           endIndex.coerceAtMost(baseString.length)).orEmpty()
 }
