@@ -58,6 +58,6 @@ interface Constants {
     // ---------------------------------------------------------------------
     // Resource Dir
     // ---------------------------------------------------------------------
-    const val RESOURCE_DIR = "util"
+    const val RESOURCE_DIR = "org/kopi/galite/util"
   }
 }

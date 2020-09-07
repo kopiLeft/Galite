@@ -191,7 +191,7 @@ interface VConstants : Constants {
     //
     // ---------------------------------------------------------------------
     const val EMPTY_TEXT = ""
-    const val RESOURCE_DIR = "util"
+    const val RESOURCE_DIR = "org/kopi/galite/util"
 
     // ---------------------------------------------------------------------
     // IMAGE DOCUMENT EXTENSIONS
