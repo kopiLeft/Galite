@@ -16,17 +16,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual
 
-abstract class VReportColumn {
+import java.util.EventListener
+
+interface MessageListener : EventListener {
   /**
-   * Compare two objects
-   *
-   * @param        object1        the first operand of the comparison
-   * @param        object2        the second operand of the comparison
-   * @return        -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * Displays a notice.
    */
-  abstract fun compareTo(object1: Any?, object2: Any?): Int
+  fun notice(message: String)
+
+  /**
+   * Displays an error message.
+   */
+  fun error(message: String)
+
+  /**
+   * Displays a warning message.
+   */
+  fun warn(message: String)
+
+  /**
+   * Displays an ask dialog box
+   */
+  fun ask(message: String, yesIsDefault: Boolean): Int
+
+  companion object {
+    const val AWR_YES = 1
+    const val AWR_NO = 2
+    const val AWR_UNDEF = 3
+  }
 }

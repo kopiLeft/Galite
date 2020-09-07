@@ -16,17 +16,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.util
 
-abstract class VReportColumn {
+/**
+ * FaxException
+ */
+class FaxException : Exception {
   /**
-   * Compare two objects
+   * Constructs an exception with a message.
    *
-   * @param        object1        the first operand of the comparison
-   * @param        object2        the second operand of the comparison
-   * @return        -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * @param        message                the associated message
    */
-  abstract fun compareTo(object1: Any?, object2: Any?): Int
+  constructor(message: String) : super(message) {}
+
+  /**
+   * Constructs a new exception with the specified detail message and cause.
+   *
+   * @param        message                the associated message
+   * @param     cause           the cause  (null value permited
+   */
+  constructor(message: String, cause: Throwable) : super(message, cause) {}
+
+  /**
+   * Constructs a new exception with the specified detail message and cause.
+   *
+   * @param     cause           the cause  (null value permited
+   */
+  constructor(cause: Throwable) : super(cause) {}
 }

@@ -34,6 +34,15 @@ class ListDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
   var query: Query? = null
 
   /**
+   * Override it if you want to define a constraint that the domain values ​​must verify.
+   */
+  var check: ((value: T) -> Boolean)? = null
+
+  override val type = this
+
+  private var convertUpper = false
+
+  /**
    * Sets a mapping between the values that the domain can take
    * and a corresponding text to be displayed in a field.
    *
@@ -81,12 +90,4 @@ class ListDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
     check == null || check!!.invoke(value) -> true
     else -> false
   }
-
-  /**
-   * Override it if you want to define a constraint that the domain values ​​must verify.
-   */
-  var check: ((value: T) -> Boolean)? = null
-
-  override val type = this
-  private var convertUpper = false
 }

@@ -18,15 +18,20 @@
 
 package org.kopi.galite.report
 
-abstract class VReportColumn {
+import java.io.Serializable
+import java.util.EventListener
+
+/**
+ * `TableModelListener` defines the interface for an object that listens
+ * to changes in [MReport] content.
+ *
+ * @see javax.swing.table.TableModel
+ */
+interface ReportListener : EventListener, Serializable {
   /**
-   * Compare two objects
-   *
-   * @param        object1        the first operand of the comparison
-   * @param        object2        the second operand of the comparison
-   * @return        -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * This fine grain notification tells listeners that
+   * the report model has changed and the display should
+   * update it self
    */
-  abstract fun compareTo(object1: Any?, object2: Any?): Int
+  fun contentChanged()
 }

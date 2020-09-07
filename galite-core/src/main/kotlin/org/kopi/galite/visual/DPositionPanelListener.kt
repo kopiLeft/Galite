@@ -16,17 +16,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual
 
-abstract class VReportColumn {
+interface DPositionPanelListener {
   /**
-   * Compare two objects
-   *
-   * @param        object1        the first operand of the comparison
-   * @param        object2        the second operand of the comparison
-   * @return        -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * Requests to go to the next position.
    */
-  abstract fun compareTo(object1: Any?, object2: Any?): Int
+  fun gotoNextPosition()
+
+  /**
+   * Requests to go to the previous position.
+   */
+  fun gotoPrevPosition()
+
+  /**
+   * Requests to go to the last position.
+   */
+  fun gotoLastPosition()
+
+  /**
+   * Requests to go to the last position.
+   */
+  fun gotoFirstPosition()
+
+  /**
+   * Requests to go to the specified position.
+   */
+  fun gotoPosition(posno: Int)
 }

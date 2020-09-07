@@ -16,17 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.visual
 
-abstract class VReportColumn {
-  /**
-   * Compare two objects
-   *
-   * @param        object1        the first operand of the comparison
-   * @param        object2        the second operand of the comparison
-   * @return        -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
-   */
-  abstract fun compareTo(object1: Any?, object2: Any?): Int
+interface UserConfiguration {
+  val previewMode: Int
+  val previewScreen: Int
+  val mailSignature: String?
+
+  companion object {
+    const val PRM_OPT = 1
+    const val PRM_OPT_WIDHT = 2
+    const val PRM_OPT_HEIGHT = 3
+    const val PRS_FULLSCREEN = 1
+    const val PRS_DEFAULT = 2
+  }
 }

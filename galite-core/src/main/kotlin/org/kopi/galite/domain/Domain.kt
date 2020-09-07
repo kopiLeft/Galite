@@ -23,6 +23,10 @@ package org.kopi.galite.domain
  * @param length the maximum length of the value that can be passed.
  */
 abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
+  /**
+   * The type of this domain.
+   */
+  abstract val type: Domain<T>
 
   /**
    * Allows to define the possible codes that the domain can take
@@ -82,9 +86,4 @@ abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
    * returns true if this domain is a list domain, false otherwise
    */
   private fun isListDomain(): Boolean = type is ListDomain<T>
-
-  /**
-   * The type of this domain.
-   */
-  abstract val type: Domain<T>
 }
