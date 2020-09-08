@@ -31,7 +31,7 @@ class DimensionTests {
    * corresponding values and labels to a dimension with Month type
    */
   @Test
-  fun monthDimentionTest() {
+  fun monthDimensionTest() {
     val monthDimension = Dimension<Month>()
     val measure1 = Measure<Double>()
     measure1.label = "measure 1"
