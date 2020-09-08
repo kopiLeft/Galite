@@ -22,7 +22,7 @@ import java.io.Serializable
 
 /**
  * `UComponent` is the top-level interface that is and must be implemented
- * by all kopi visual components.
+ * by all visual components.
  */
 interface UComponent : Serializable {
 

@@ -22,7 +22,7 @@ import org.kopi.galite.base.UComponent
 
 /**
  * `ULabel` is the top-level interface that must be implemented
- * by all kopi labels
+ * by all labels
  */
 interface ULabel : UComponent {
   /**
