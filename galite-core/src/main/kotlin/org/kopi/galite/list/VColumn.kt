@@ -16,18 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.list
 
-interface UserConfiguration {
-  fun getPreviewMode(): Int
-  fun getPreviewScreen(): Int
-  fun getMailSignature(): String
+import java.io.Serializable
 
-  companion object {
-    const val PRM_OPT = 1
-    const val PRM_OPT_WIDHT = 2
-    const val PRM_OPT_HEIGHT = 3
-    const val PRS_FULLSCREEN = 1
-    const val PRS_DEFAULT = 2
+class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean) : Serializable {
+
+  /**
+   * Returns the position of the table in the array of tables
+   * of the field's block
+   */
+  fun getTable(): Int {
+    return pos
+  }
+
+  /**
+   * Returns the qualified name of the column (i.e. with correlation)
+   */
+  fun getQualifiedName(): String? {
+    return "T$pos.$name"
   }
 }
