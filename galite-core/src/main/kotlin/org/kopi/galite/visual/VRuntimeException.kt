@@ -44,7 +44,7 @@ class VRuntimeException : RuntimeException {
    *
    * @param        exc                the exception
    */
-  constructor(msg: String, exc: Throwable) : super(msg, exc)
+  constructor(msg: String?, exc: Throwable) : super(msg, exc)
 
   /**
    * Constructs an exception with no message.

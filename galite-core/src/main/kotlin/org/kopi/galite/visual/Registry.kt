@@ -18,16 +18,11 @@
 
 package org.kopi.galite.visual
 
-import java.util.*
+import java.util.Hashtable
 
-class Registry(domain: String, var parents: Array<Registry>?) {
+class Registry(val domain: String, private var parents: Array<Registry>?) {
 
-  var domain: String? = domain
   var dependencies = Hashtable<String, String>()
-
-  companion object {
-    val VISUAL_KOPI_DOMAIN = "VIS"
-  }
 
   init {
     dependencies.put(VISUAL_KOPI_DOMAIN, "org.kopi.galite.resource" + ".Messages")
@@ -51,7 +46,7 @@ class Registry(domain: String, var parents: Array<Registry>?) {
     }
     if (parents != null) {
       parents!!.forEach {
-        it!!.buildDependencies(dependencies)
+        it.buildDependencies(dependencies)
       }
     }
   }
@@ -61,7 +56,11 @@ class Registry(domain: String, var parents: Array<Registry>?) {
    *
    * @param     key             a 3 upper-case letter registry identifier.
    */
-  fun getMessageSource(key: String?): String? {
+  fun getMessageSource(key: String): String? {
     return dependencies[key]
+  }
+
+  companion object {
+    val VISUAL_KOPI_DOMAIN = "VIS"
   }
 }

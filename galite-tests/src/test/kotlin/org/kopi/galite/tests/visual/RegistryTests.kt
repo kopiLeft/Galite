@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,18 +15,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.tests.visual
 
-import javax.swing.SwingConstants
+import org.junit.Test
+import org.kopi.galite.visual.Registry
+import kotlin.test.assertEquals
 
-import org.kopi.galite.visual.Constants
+class RegistryTests {
+  val registry1 = Registry("firstDomaineName", null)
+  val registry2 = Registry("secondDomaineName", null)
+  val testRegistry = Registry("mainDomain", arrayOf(registry1, registry2))
 
-interface VConstants : Constants {
-  companion object {
-    const val ALG_DEFAULT = SwingConstants.LEFT
-    const val ALG_LEFT = SwingConstants.LEFT
-    const val ALG_CENTER = SwingConstants.CENTER
-    const val ALG_RIGHT = SwingConstants.RIGHT
-    const val EMPTY_TEXT = ""
+  @Test
+  fun registryTest() {
+    testRegistry.buildDependencies()
+    assertEquals("org.kopi.galite.visual.Messages", testRegistry.dependencies["mainDomain"])
+    assertEquals("org.kopi.galite.resource.Messages", testRegistry.dependencies["VIS"])
+    assertEquals(true, testRegistry.dependencies.containsKey("firstDomaineName"))
+    assertEquals(true, testRegistry.dependencies.containsKey("secondDomaineName"))
   }
 }

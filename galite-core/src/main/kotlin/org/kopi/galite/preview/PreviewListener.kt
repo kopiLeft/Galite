@@ -30,8 +30,8 @@ interface PreviewListener : EventListener, Serializable {
   fun zoomFit(type: Int)
 
   companion object {
-    val FIT_BOTH = UserConfiguration.PRM_OPT
-    val FIT_HEIGHT = UserConfiguration.PRM_OPT_HEIGHT
-    val FIT_WIDTH = UserConfiguration.PRM_OPT_WIDHT
+    const val FIT_BOTH = UserConfiguration.PRM_OPT
+    const val FIT_HEIGHT = UserConfiguration.PRM_OPT_HEIGHT
+    const val FIT_WIDTH = UserConfiguration.PRM_OPT_WIDHT
   }
 }

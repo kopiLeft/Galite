@@ -20,7 +20,7 @@ package org.kopi.galite.list
 
 import java.io.Serializable
 
-interface ObjectFormater : Serializable {
+interface ObjectFormatter : Serializable {
   /**
    * Returns the column alignment
    */
@@ -29,5 +29,5 @@ interface ObjectFormater : Serializable {
   /**
    * Returns a representation of value
    */
-  fun formatObject(value: Any?): Any?
+  fun formatObject(value: Any): Any
 }

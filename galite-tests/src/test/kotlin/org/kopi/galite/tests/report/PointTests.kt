@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,26 +15,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.tests.report
 
-import java.io.Serializable
+import org.junit.Test
+import org.kopi.galite.report.Point
+import kotlin.test.assertEquals
 
-/**
- * @param pos position of associated table
- * @param name column name
- * @param key column key of table
- * @param nullable true if column is nullable
- */
-class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean) : Serializable {
+class PointTests {
+  val origin = Point()
+  val customPoint = Point(4, 5)
+  val customPoint2 = Point(4, 5)
 
-  /**
-   * Returns the position of the table in the array of tables
-   * of the field's block
-   */
-  fun getTable(): Int = pos
 
-  /**
-   * Returns the qualified name of the column (i.e. with correlation)
-   */
-  fun getQualifiedName(): String = "T$pos.$name"
+  @Test
+  fun testOriginPoint() {
+    assertEquals(0, origin.x)
+    assertEquals(0, origin.y)
+    assertEquals(false, origin.equals(customPoint))
+  }
+
+  @Test
+  fun testCustomPoint() {
+    assertEquals(4, customPoint.x)
+    assertEquals(5, customPoint.y)
+    assertEquals(false, customPoint.equals(origin))
+  }
 }

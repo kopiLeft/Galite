@@ -31,7 +31,7 @@ class LineBreaker : Utils() {
      * @param        col        the width of the text
      * @param        lin        number of lines
      */
-    fun textToModel(source: String, col: Int, lin: Int): String? {
+    fun textToModel(source: String, col: Int, lin: Int): String {
       return textToModel(source, col, lin, false)
     }
 
@@ -42,27 +42,28 @@ class LineBreaker : Utils() {
      * @param        col        the width of the text
      * @param        fixed        is it a fixed text ?
      */
-    fun textToModel(source: String, col: Int, lin: Int, fixed: Boolean): String? {
-      val target = StringBuilder()
+    fun textToModel(source: String,
+                    col: Int,
+                    lin: Int,
+                    fixed: Boolean): String = buildString {
       val length = source.length
       var start = 0
       var lines = 0
       while (start < length && lines < lin) {
-        var index: Int
-        index = source.indexOf('\n', start)
+        val index = source.indexOf('\n', start)
         if (index == -1) {
-          target.append(source.substring(start, length))
+          append(source.substring(start, length))
           start = length
         } else {
-          target.append(source.substring(start, index))
+          append(source.substring(start, index))
           if (fixed) {
             for (i in index - start until col) {
-              target.append(' ')
+              append(' ')
             }
           } else {
             var i = (index - start) % col
             while (i != 0 && i < col) {
-              target.append(' ')
+              append(' ')
               i++
             }
           }
@@ -70,7 +71,6 @@ class LineBreaker : Utils() {
           lines++
         }
       }
-      return target.toString()
     }
 
     /**
@@ -79,9 +79,8 @@ class LineBreaker : Utils() {
      * @param        source                the source text with white space
      * @param        col                the width of the text area
      */
-    fun modelToText(source: String?, col: Int): String? {
+    fun modelToText(source: String?, col: Int): String? = buildString {
       return if (source != null) {
-        val target = StringBuilder()
         val length = source.length
         for (start in 0 until length step col) {
           val line = source.substring(start, Math.min(start + col, length))
@@ -95,13 +94,13 @@ class LineBreaker : Utils() {
             --i
           }
           if (start != 0) {
-            target.append('\n')
+            append('\n')
           }
           if (last != -1) {
-            target.append(line.substring(0, last + 1))
+            append(line.substring(0, last + 1))
           }
         }
-        target.toString()
+        toString()
       } else {
         ""
       }
@@ -109,14 +108,11 @@ class LineBreaker : Utils() {
 
     fun addBreakForWidth(sourceText: String?, width: Int): String {
       val source = sourceText.orEmpty()
-      val boundary: BreakIterator
-      var start: Int
-      var length: Int
-
-      boundary = BreakIterator.getLineInstance()
+      val boundary = BreakIterator.getLineInstance()
       boundary.setText(source)
-      start = boundary.first()
-      length = 0
+      var start = boundary.first()
+      var length = 0
+
       return buildString(source.length) {
         var end = boundary.next()
         while (end != BreakIterator.DONE) {
@@ -140,7 +136,7 @@ class LineBreaker : Utils() {
      * represents a single line fitting the specified width (except if a
      * single word is longer than the specified width.
      */
-    fun splitForWidth(source: String?, width: Int): Array<String?>? {
+    fun splitForWidth(source: String?, width: Int): Array<String?> {
       return addBreakForWidth(source, width).split("\n".toRegex()).toTypedArray()
     }
   }

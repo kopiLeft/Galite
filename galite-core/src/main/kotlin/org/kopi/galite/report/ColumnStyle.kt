@@ -36,7 +36,7 @@ class ColumnStyle {
    *
    * @return        color	The color to become this component's background color.
    */
-  fun getBackground(): Color? = when (background) {
+  fun getBackground(): Color = when (background) {
     Constants.CLR_WHITE -> Color.white
     Constants.CLR_BLACK -> Color.black
     Constants.CLR_RED -> Color.red
@@ -57,7 +57,7 @@ class ColumnStyle {
    *
    * @return        color	The color to become this component's foreground color.
    */
-  fun getForeground(): Color? = when (foreground) {
+  fun getForeground(): Color = when (foreground) {
     Constants.CLR_WHITE -> Color.white
     Constants.CLR_BLACK -> Color.black
     Constants.CLR_RED -> Color.red
@@ -78,9 +78,8 @@ class ColumnStyle {
    *
    * @return        font	The font to become this component's font.
    */
-  fun getFont(): Font? {
-    val font: String
-    font = when (fontName) {
+  fun getFont(): Font {
+    val font = when (fontName) {
       0 -> org.kopi.galite.visual.Constants.FNT_FIXED_WIDTH
       1 -> "Helvetica"
       2 -> "Geneva"
