@@ -26,29 +26,29 @@ import java.io.Writer
  *
  * Construct a new LatexPrintWriter. This object translate special chars into latex syntax
  *
- * @param w the writer to filter
+ * @param writer the writer to filter
  */
-class LatexPrintWriter(w: Writer?) : PrintWriter(w) {
+class LatexPrintWriter(writer: Writer) : PrintWriter(writer) {
   /**
-   * check that line number match, else print enough '\n'
-   * @param p the buffered printwriter on which we write code
+   * Prints a string and terminates the current line by writing the line separator string.
+   * @param src The string to print.
    */
-  fun uncheckedPrintln(src: String?) {
+  fun uncheckedPrintln(src: String) {
     super.print(src)
     super.println()
   }
 
   /**
-   * check that line number match, else print enough '\n'
-   * @param p the buffered printwriter on which we write code
+   * Prints a string.
+   * @param src The string to print.
    */
-  fun uncheckedPrint(src: String?) {
+  fun uncheckedPrint(src: String) {
     super.print(src)
   }
 
   /**
-   * check that line number match, else print enough '\n'
-   * @param p the buffered printwriter on which we write code
+   * Prints an item. it adds the 'item' keyword to [src] and writes the line separator to the end.
+   * @param src The string to print.
    */
   fun printItem(src: String) {
     super.print("\\item[")
@@ -58,8 +58,8 @@ class LatexPrintWriter(w: Writer?) : PrintWriter(w) {
   }
 
   /**
-   * check that line number match, else print enough '\n'
-   * @param p the buffered printwriter on which we write code
+   * Prints an item. it adds the 'item' keyword to [src] and writes the line separator to the end.
+   * @param src The string to print.
    */
   override fun println(src: String) {
     print(src)
@@ -67,8 +67,8 @@ class LatexPrintWriter(w: Writer?) : PrintWriter(w) {
   }
 
   /**
-   * check that line number match, else print enough '\n'
-   * @param p the buffered printwriter on which we write code
+   * prints the string. It converts the string inorder to escape special characters.
+   * @param src The string to print.
    */
   override fun print(src: String) {
     super.print(convert(src))

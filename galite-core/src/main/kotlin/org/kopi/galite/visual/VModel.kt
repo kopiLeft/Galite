@@ -35,11 +35,11 @@ interface VModel : Serializable {
    * Sets the model display.
    * @param display The model display.
    */
-  fun setDisplay(display: UComponent?)
+  fun setDisplay(display: UComponent)
 
   /**
    * Returns the model display.
    * @return The model display
    */
-  fun getDisplay(): UComponent?
+  fun getDisplay(): UComponent
 }

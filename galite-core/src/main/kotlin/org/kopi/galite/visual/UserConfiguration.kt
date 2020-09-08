@@ -21,7 +21,7 @@ package org.kopi.galite.visual
 interface UserConfiguration {
   val previewMode: Int
   val previewScreen: Int
-  val mailSignature: String?
+  val mailSignature: String
 
   companion object {
     const val PRM_OPT = 1

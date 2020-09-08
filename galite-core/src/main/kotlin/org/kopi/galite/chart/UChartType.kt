@@ -45,7 +45,7 @@ interface UChartType : Serializable, UComponent {
    * @param options The print options.
    * @throws IOException I/O errors.
    */
-  fun exportToPDF(destination: OutputStream?, options: VPrintOptions?)
+  fun exportToPDF(destination: OutputStream, options: VPrintOptions)
 
   /**
    * Exports the chart type to the PNG format.
@@ -55,7 +55,7 @@ interface UChartType : Serializable, UComponent {
    * @param height The image height.
    * @throws IOException I/O errors.
    */
-  fun exportToPNG(destination: OutputStream?, width: Int, height: Int)
+  fun exportToPNG(destination: OutputStream, width: Int, height: Int)
 
   /**
    * Exports the chart type to the JPEG format.
@@ -65,5 +65,5 @@ interface UChartType : Serializable, UComponent {
    * @param height The image height.
    * @throws IOException I/O errors.
    */
-  fun exportToJPEG(destination: OutputStream?, width: Int, height: Int)
+  fun exportToJPEG(destination: OutputStream, width: Int, height: Int)
 }
