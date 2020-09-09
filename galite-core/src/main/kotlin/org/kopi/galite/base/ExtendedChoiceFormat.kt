@@ -36,16 +36,13 @@ open class ExtendedChoiceFormat : ChoiceFormat {
    * (non-Javadoc)
    * @see java.text.NumberFormat#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
    */
-    override fun format(argument:Any, toAppendTo:StringBuffer, pos:FieldPosition):StringBuffer {
+    override fun format(argument: Any, toAppendTo: StringBuffer, pos: FieldPosition): StringBuffer {
         // a null test is performed before :
         // false --> 0
         // true --> 1
-        return if (argument is Boolean || hasNotNullMarker && !(argument is Number))
-        {
+        return if (argument is Boolean || hasNotNullMarker && !(argument is Number)) {
             formatObject(argument, toAppendTo, pos)
-        }
-        else
-        {
+        } else {
             // default behavior so number instances should pass here including fixed values
             super.format(argument, toAppendTo, pos)
         }
@@ -60,17 +57,13 @@ open class ExtendedChoiceFormat : ChoiceFormat {
      */
 
 
-    private fun formatObject(argument:Any, toAppendTo:StringBuffer, pos:FieldPosition):StringBuffer {
-        return if (argument is Boolean)
-        {
-            super.format(toNumeric((argument )), toAppendTo, pos)
-        }
-        else
-        {
+    private fun formatObject(argument: Any, toAppendTo: StringBuffer, pos: FieldPosition): StringBuffer {
+        return if (argument is Boolean) {
+            super.format(toNumeric((argument)), toAppendTo, pos)
+        } else {
             super.format(toNumeric(argument !== ExtendedMessageFormat.NULL_REPRESENTATION), toAppendTo, pos)
         }
     }
-
 
     /**
      * Transforms the given boolean value to a numeric value.

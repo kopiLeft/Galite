@@ -1,4 +1,5 @@
 package org.kopi.galite.base
+
 import org.kopi.galite.util.base.InconsistencyException
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -16,6 +17,7 @@ import java.util.ArrayList
 import java.util.Date
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+
 /**
  * loading of image
  * usage:
@@ -33,26 +35,27 @@ class Utils {
          * Compress a file in a byte[]
          */
 
-        fun compress(file: File):ByteArray {
+        fun compress(file: File): ByteArray {
             val baos = ByteArrayOutputStream()
             val output = GZIPOutputStream(baos)
             val input = FileInputStream(file)
             val buffer = ByteArray(10 * 1024)
-            val length=input.read(buffer)
-            while (length != -1)
-            {
+            val length = input.read(buffer)
+            while (length != -1) {
                 output.write(buffer, 0, length)
             }
             output.close()
             return baos.toByteArray()
         }
+
         /**
          * Decompress a byte array
          */
 
-        fun decompress(b:ByteArray): InputStream {
+        fun decompress(b: ByteArray): InputStream {
             return GZIPInputStream(ByteArrayInputStream(b))
         }
+
         /**
          * Creates a temporary file in the default temporary directory. The
          * filename will look like this : prefixXXXX.extension
@@ -63,71 +66,72 @@ class Utils {
          * @param deleteOnExit if the file has to be deleted at the end of the program.
          * @return an empty temp file on the local machine
          */
-        fun getTempFile(prefix:String,
-                                      extension:String?,
-                                      deleteOnExit:Boolean = true):File {
+        fun getTempFile(prefix: String,
+                        extension: String?,
+                        deleteOnExit: Boolean = true): File {
             var extension = extension
-            if (extension == null)
-            {
+            if (extension == null) {
                 extension = "tmp"
             }
-            val file:File = File.createTempFile(prefix, ".$extension")
-            if (deleteOnExit)
-            {
+            val file: File = File.createTempFile(prefix, ".$extension")
+            if (deleteOnExit) {
                 file.deleteOnExit()
             }
             return file
         }
+
         /**
          * return file from classpath or jar file
          * @param file must be an fully qualified file from resource directory
          * path separator is "/"
          * @return a File or null if not found
          */
-        fun getFile(file:String): InputStream? {
+        fun getFile(file: String): InputStream? {
             var `is` = getDefaultFile(file)
-            if (`is` == null)
-            {
+            if (`is` == null) {
                 `is` = getApplicationFile(file)
             }
-            if (`is` == null)
-            {
+            if (`is` == null) {
                 System.err.println("Utils ==> cant load: $file")
             }
             return `is`
         }
+
         /**
          * return file from classpath or jar file
          * @param img must be an file from resource directory
          * path separator is "/"
          * @return an fileIcon or null if not found
          */
-        private fun getDefaultFile(img:String): InputStream? {
+        private fun getDefaultFile(img: String): InputStream? {
             return getFileFromResource(img, RESOURCE_DIR)
         }
+
         /**
          * return image from classpath or jar file
          * @param img must be an image from resource directory
          * path separator is "/"
          * @return an imageIcon or null if not found
          */
-        private fun getApplicationFile(img:String): InputStream? {
+        private fun getApplicationFile(img: String): InputStream? {
             return getFileFromResource(img, APPLICATION_DIR)
         }
+
         /**
          * return an URL from the resources
          */
-         fun getURLFromResource(name:String, directory:String? = RESOURCE_DIR):URL? {
+        fun getURLFromResource(name: String, directory: String? = RESOURCE_DIR): URL? {
             // taoufik 2005-07-20: Java Web Start needs to get the class loader based on
             // the current class.
             if (directory == null) {
-                return  null
-            } else return  Utils::class.java!!.classLoader.getResource("$directory/$name")
+                return null
+            } else return Utils::class.java.classLoader.getResource("$directory/$name")
         }
+
         /**
          * return file from resources or null if not found
          */
-        private fun getFileFromResource(name:String, directory:String?):InputStream? {
+        private fun getFileFromResource(name: String, directory: String?): InputStream? {
             return if (directory == null) {
                 null
             } else {
@@ -136,96 +140,91 @@ class Utils {
                 Utils::class.java.classLoader.getResourceAsStream("$directory/$name")
             }
         }
-        fun log(mod:String, text:String) {
+
+        fun log(mod: String, text: String) {
             System.err.println(mod + "\t" + text)
             // Utils.getTempFile creates a new file kopiXXX.log but we want
             // to use always the same file.
-            val filename:String = System.getProperty("java.io.tmpdir") + File.separator + "kopi.log"
-            try
-            {
-                val writer:PrintWriter = PrintWriter(FileWriter(filename, true))
+            val filename: String = System.getProperty("java.io.tmpdir") + File.separator + "kopi.log"
+            try {
+                val writer: PrintWriter = PrintWriter(FileWriter(filename, true))
                 writer.println()
                 writer.println()
                 writer.println(Date().toString() + "\t" + mod + "\t" + text + " ")
-                if (writer.checkError())
-                {
+                if (writer.checkError()) {
                     writer.close()
                     throw IOException("error while writing")
                 }
                 writer.close()
-            }
-            catch (e:IOException) {
+            } catch (e: IOException) {
                 // can't write error:
                 System.err.println("Can't write in file: $filename")
                 System.err.println(": " + e.message)
             }
         }
-        fun convertUTF(str:String):ByteArray {
-            try
-            {
+
+        fun convertUTF(str: String): ByteArray {
+            try {
                 return str.toByteArray(charset("UTF-8"))
-            }
-            catch (e:UnsupportedEncodingException) {
+            } catch (e: UnsupportedEncodingException) {
                 throw InconsistencyException(e)
             }
         }
-        fun convertUTF(bytes:ByteArray):String {
-            try
-            {
+
+        fun convertUTF(bytes: ByteArray): String {
+            try {
                 return String(bytes, Charset.forName("UTF-8"))
-            }
-            catch (e:UnsupportedEncodingException) {
+            } catch (e: UnsupportedEncodingException) {
                 throw InconsistencyException(e)
             }
         }
+
         /**
          * Returns the version of this build
          */
-        val version:Array<String>
+        val version: Array<String>
             get() {
-                try
-                {
+                try {
                     val list = ArrayList<String>()
-                    val `in`:DataInputStream = DataInputStream(Utils::class.java.getClassLoader().getResourceAsStream(APPLICATION_DIR + "/version"))
-                    while (`in`.available() != 0)
-                    {
+                    val `in`: DataInputStream = DataInputStream(Utils::class.java.classLoader.getResourceAsStream(APPLICATION_DIR + "/version"))
+                    while (`in`.available() != 0) {
                         list.add(`in`.readLine())
                     }
                     `in`.close()
                     return list.toArray<String>(arrayOfNulls<String>(list.size)) as Array<String>
-                }
-                catch (e:Exception) {
+                } catch (e: Exception) {
                     System.err.println("Error while reading version informations.\n$e")
                 }
                 return DEFAULT_VERSION
             }
+
         /**
          * 2003.08.14; jdk 1.4.1; Wischeffekt, Speicherverbrauch
          * Ab jdk 1.4.2 gibt es auch die option -XX:MinHeapFreeRatio=0
          */
         fun freeMemory() {
-            if (allowExplicitGcCall == null)
-            {
+            if (allowExplicitGcCall == null) {
                 allowExplicitGcCall = if (System.getProperty("visualKopi.allowExplicitGcCall") != null) {
                     java.lang.Boolean.TRUE
                 } else {
                     java.lang.Boolean.FALSE
                 }
             }
-            if (allowExplicitGcCall as Boolean)
-            {
+            if (allowExplicitGcCall as Boolean) {
                 System.gc()
             }
         }
+
         // ----------------------------------------------------------------------
         // PRIVATE DATA
         // ----------------------------------------------------------------------
         val APPLICATION_DIR = "resources"
         val RESOURCE_DIR = "org/kopi/vkopi/lib/resource"
         private val DEFAULT_VERSION = arrayOf<String>("No version information available.", "Copyright 1990-2019 kopiRight Managed Solutions GmbH. All rights reserved.")
-        private var allowExplicitGcCall:Boolean? = true
+        private var allowExplicitGcCall: Boolean? = true
     }
-}/**
+}
+/**
  * <p>Creates a temporary file in the default temporary directory.
  * The filename will look like this : prefixXXXX.extension</p>
  * <p>Please note that this file will be deleted at the shutdown of
@@ -235,6 +234,7 @@ class Utils {
  * @param extension the extension of the temp file (can be null. in
  * this case default is "tmp")
  * @return an empty temp file on the local machine
- *//**
+ */
+/**
  * return an URL from the default resource directory
  */

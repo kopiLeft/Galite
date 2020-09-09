@@ -4,10 +4,7 @@ import org.junit.Test
 import org.kopi.galite.base.ExtendedMessageFormat
 import org.kopi.galite.tests.TestBase
 import java.util.Locale
-
-
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 class ExtendedMessageFormatTests : TestBase() {
     /**
