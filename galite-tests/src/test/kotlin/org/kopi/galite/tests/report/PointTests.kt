@@ -30,13 +30,13 @@ class PointTests {
   fun testOriginPoint() {
     assertEquals(0, origin.x)
     assertEquals(0, origin.y)
-    assertEquals(false, origin.equals(customPoint))
+    assertEquals(false, origin == customPoint)
   }
 
   @Test
   fun testCustomPoint() {
     assertEquals(4, customPoint.x)
     assertEquals(5, customPoint.y)
-    assertEquals(false, customPoint.equals(origin))
+    assertEquals(false, customPoint == origin)
   }
 }
