@@ -30,7 +30,7 @@ import org.kopi.galite.exceptions.InvalidValueException
  * It allows optionally to define a constraint that makes restrictions
  * on the set of allowed values.
  */
-class ListDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
+class ListDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
   var query: Query? = null
 
   /**
@@ -49,8 +49,8 @@ class ListDomain<T : Comparable<T>>(private val name: String): Domain<T>() {
    * @param text the text
    * @param value the value
    */
-  operator fun <V: Comparable<V>> set(text: String, value: Column<V>) {
-    if(text in list.keys) {
+  operator fun <V : Comparable<V>> set(text: String, value: Column<V>) {
+    if (text in list.keys) {
       throw RuntimeException("$text already exists in domain $name")
     }
     list[text] = value

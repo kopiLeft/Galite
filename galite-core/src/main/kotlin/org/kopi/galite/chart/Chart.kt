@@ -25,35 +25,35 @@ import org.kopi.galite.domain.Domain
  * @param name the name of the chart. It represents the title
  */
 open class Chart(val name: String) {
-    /** The chart's dimension */
-    lateinit var dimension: Dimension<*>
+  /** The chart's dimension */
+  lateinit var dimension: Dimension<*>
 
-    /** The chart's measures */
-    val measures = mutableListOf<Measure<*>>()
+  /** The chart's measures */
+  val measures = mutableListOf<Measure<*>>()
 
-    /**
-     * Creates a chart dimension, with the specified [domain], used to store values of type [T] and measures values.
-     *
-     * @param domain the dimension domain.
-     * @param init   used to initialize the domain with measures values.
-     */
-    fun <T: Comparable<T>> dimension(domain: Domain<T>, init: Dimension<T>.() -> Unit):  Dimension<T> {
-        val chartDimension = Dimension(domain)
-        chartDimension.init()
-        dimension = chartDimension
-        return chartDimension
-    }
+  /**
+   * Creates a chart dimension, with the specified [domain], used to store values of type [T] and measures values.
+   *
+   * @param domain the dimension domain.
+   * @param init   used to initialize the domain with measures values.
+   */
+  fun <T : Comparable<T>> dimension(domain: Domain<T>, init: Dimension<T>.() -> Unit): Dimension<T> {
+    val chartDimension = Dimension(domain)
+    chartDimension.init()
+    dimension = chartDimension
+    return chartDimension
+  }
 
-    /**
-     * Creates a chart measure, with the specified [domain], used to store values of measure values.
-     *
-     * @param domain the dimension domain.
-     * @param init   used to initialize the measure.
-     */
-    fun <T> measure(domain: Domain<T>, init: Measure<T>.() -> Unit) : Measure<T> where T: Comparable<T>, T: Number {
-        val chartMeasure = Measure(domain)
-        chartMeasure.init()
-        this.measures.add(chartMeasure)
-        return chartMeasure
-    }
+  /**
+   * Creates a chart measure, with the specified [domain], used to store values of measure values.
+   *
+   * @param domain the dimension domain.
+   * @param init   used to initialize the measure.
+   */
+  fun <T> measure(domain: Domain<T>, init: Measure<T>.() -> Unit): Measure<T> where T : Comparable<T>, T : Number {
+    val chartMeasure = Measure(domain)
+    chartMeasure.init()
+    this.measures.add(chartMeasure)
+    return chartMeasure
+  }
 }

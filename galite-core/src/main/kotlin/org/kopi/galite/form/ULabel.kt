@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,30 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.domain
+package org.kopi.galite.form
+
+import org.kopi.galite.base.UComponent
 
 /**
- * Represents a code domain.
+ * `ULabel` is the top-level interface that must be implemented
+ * by all labels
  */
-class CodeDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
+interface ULabel : UComponent {
   /**
-   * Mapping of all values that a domain can take
+   * Initializes the `ULabel`
+   * @param text The label text.
+   * @param help The label tooltip.
    */
-  val codes: MutableMap<String, T> = mutableMapOf()
-
-  override val type = this
-
-  /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a field.
-   *
-   * @param text the text
-   * @param value the value
-   */
-  operator fun set(text: String, value: T) {
-    if (text in codes.keys) {
-      throw RuntimeException("$text already exists in domain $name")
-    }
-    codes[text] = value
-  }
+  fun init(text: String, help: String)
 }

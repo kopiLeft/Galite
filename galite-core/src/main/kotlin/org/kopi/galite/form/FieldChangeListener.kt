@@ -16,38 +16,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.form
 
-/**
- * This class is a package redefinition of RuntimeException that remaind
- * of a stack of exception
- * Warning: Throwing such an exception will always generate a FATAL ERROR
- * and will close the current form.
- */
-open class VRuntimeException : RuntimeException {
+import java.io.Serializable
+import java.util.EventListener
+
+interface FieldChangeListener : EventListener, Serializable {
   /**
-   * Constructs an exception with a message.
+   * Fired when the field label is changed.
+   */
+  fun labelChanged()
+
+  /**
+   * Fires when the field search operator is changed.
+   */
+  fun searchOperatorChanged()
+
+  /**
+   * Fired when field value is changed.
+   * @param r The current record.
+   */
+  fun valueChanged(r: Int)
+
+  /**
+   * Fired when a field access is changed.
+   * @param r The current record.
+   */
+  fun accessChanged(r: Int)
+
+  /**
+   * Fired when the color properties of a field are changed.
    *
-   * @param        message                the associated message
-   */
-  constructor(message: String) : super(message)
-
-  /**
-   * Constructs an exception with an other exception.
    *
-   * @param        exc                the exception
+   * Setting both the background and the foreground colors to
+   * `null` will lead to reset the field color properties.
+   * @param r The current record.
    */
-  constructor(exc: Throwable) : super(exc)
-
-  /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
-   */
-  constructor(msg: String?, exc: Throwable) : super(msg, exc)
-
-  /**
-   * Constructs an exception with no message.
-   */
-  constructor() : super()
+  fun colorChanged(r: Int)
 }

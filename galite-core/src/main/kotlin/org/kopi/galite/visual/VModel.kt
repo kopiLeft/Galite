@@ -18,36 +18,28 @@
 
 package org.kopi.galite.visual
 
+import org.kopi.galite.base.UComponent
+
+import java.io.Serializable
+
 /**
- * This class is a package redefinition of RuntimeException that remaind
- * of a stack of exception
- * Warning: Throwing such an exception will always generate a FATAL ERROR
- * and will close the current form.
+ * `VModel` is the top level interface that all model classes should implement.
+ * This interface is used in [UIFactory] to create model displays.
+ *
+ * @see UIFactory
+ *
+ * @see WindowBuilder
  */
-open class VRuntimeException : RuntimeException {
+interface VModel : Serializable {
   /**
-   * Constructs an exception with a message.
-   *
-   * @param        message                the associated message
+   * Sets the model display.
+   * @param display The model display.
    */
-  constructor(message: String) : super(message)
+  fun setDisplay(display: UComponent)
 
   /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
+   * Returns the model display.
+   * @return The model display
    */
-  constructor(exc: Throwable) : super(exc)
-
-  /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
-   */
-  constructor(msg: String?, exc: Throwable) : super(msg, exc)
-
-  /**
-   * Constructs an exception with no message.
-   */
-  constructor() : super()
+  fun getDisplay(): UComponent
 }

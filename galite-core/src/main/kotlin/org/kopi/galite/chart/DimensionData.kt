@@ -44,7 +44,7 @@ class DimensionData<T : Comparable<T>>(val value: T) : Field<T>() {
    * @return list of labels
    */
   fun getMeasureLabels(): List<String> {
-    var labelsList = mutableListOf<String>()
+    val labelsList = mutableListOf<String>()
     measureList.map {
       labelsList.add(it.key.label)
     }

@@ -16,38 +16,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.chart
+
+import org.kopi.galite.visual.VRuntimeException
 
 /**
- * This class is a package redefinition of RuntimeException that remaind
- * of a stack of exception
- * Warning: Throwing such an exception will always generate a FATAL ERROR
- * and will close the current form.
+ * Visual exception thrown when a chart did not contain any values
+ * to be displayed. This will notify the user that no data was found
+ * for the chart content.
  */
-open class VRuntimeException : RuntimeException {
+class VNoChartRowException : VRuntimeException {
   /**
-   * Constructs an exception with a message.
-   *
-   * @param        message                the associated message
+   * Creates a new no row exception.
+   */
+  constructor() : super()
+
+  /**
+   * Creates a new no row exception.
+   * @param message The exception message.
    */
   constructor(message: String) : super(message)
 
   /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
+   * Creates a new no row exception.
+   * @param exec The exception cause.
    */
   constructor(exc: Throwable) : super(exc)
 
   /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
+   * Creates a new no row exception.
+   * @param msg The exception message.
+   * @param exc The exception cause.
    */
-  constructor(msg: String?, exc: Throwable) : super(msg, exc)
-
-  /**
-   * Constructs an exception with no message.
-   */
-  constructor() : super()
+  constructor(msg: String, exc: Throwable) : super(msg, exc)
 }

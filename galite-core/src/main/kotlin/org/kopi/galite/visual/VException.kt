@@ -19,7 +19,7 @@
 package org.kopi.galite.visual
 
 /**
- * This class is the root of all visual kopi exception
+ * This class is the root of all visual exception
  * According to type and message, this exception will be handled
  * in different part of the action processing. For instance, VFieldException
  * will be handled by VForm that will display an error message if the message

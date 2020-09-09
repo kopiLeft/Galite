@@ -23,5 +23,5 @@ package org.kopi.galite.visual
  *
  * @param events the event mask for this trigger.
  * @param trigger the identifier of this trigger.
-*/
+ */
 class VTrigger(val events: Int, val trigger: Int)

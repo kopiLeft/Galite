@@ -37,7 +37,7 @@ open class Report {
    * @param init    initialization method.
    * @return a field.
    */
-  fun <T: Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
+  fun <T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
     val field = Field(domain)
     field.init()
     fields.add(field)
