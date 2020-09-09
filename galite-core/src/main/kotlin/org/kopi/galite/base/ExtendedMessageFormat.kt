@@ -162,7 +162,7 @@ class ExtendedMessageFormat : MessageFormat {
                 next(pos)
                 continue
             }
-            if ((c == START_FMT || c == END_FE) && result.length > 0) {
+            if ((c == START_FMT || c == END_FE) && result.isNotEmpty()) {
                 try {
                     return ArgumentInfo(result.toString().toInt(), hasNotNullMarker)
                 } catch (e: NumberFormatException) { // NOPMD

@@ -1,10 +1,12 @@
 package org.kopi.galite.base
+
 import java.io.Serializable
+
 /**
- * {@code UComponent} is the top-level interface that is and must be implemented
- * by all kopi visual components.
+ * [UComponent] is the top-level interface that is and must be implemented
+ * by all visual components.
  */
-interface UComponent:Serializable {
+interface UComponent : Serializable {
     /**
      * Tests whether the component is enabled or not. A user can not interact
      * with disabled components. Disabled components are rendered in a style
@@ -16,10 +18,10 @@ interface UComponent:Serializable {
      * Enables or disables the component. The user can not interact disabled
      * components, which are shown with a style that indicates the status,
      * usually shaded in light gray color. Components are enabled by default.
-     * @param enabled a boolean value specifying if the component should be enabled or not.
-     * @see #isEnabled()
+     * @param [enabled] a boolean value specifying if the component should be enabled or not.
+     * @see [isEnabled]
      */
-    var isEnabled:Boolean
+    var isEnabled: Boolean
     /**
      * Tests the <i>visibility</i> property of the component.
      *
@@ -55,7 +57,7 @@ interface UComponent:Serializable {
      *
      * @param visible the boolean value specifying if the component should be
      * visible after the call or not.
-     * @see #isVisible()
+     * @see [isVisible]
      */
-    var isVisible:Boolean
+    var isVisible: Boolean
 }

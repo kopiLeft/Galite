@@ -3,14 +3,15 @@ package org.kopi.galite.tests.base
 import org.junit.Test
 import org.kopi.galite.base.ExtendedMessageFormat
 import org.kopi.galite.tests.TestBase
-import java.util.*
+import java.util.Locale
+
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class ExtendedMessageFormatTests :TestBase(){
+class ExtendedMessageFormatTests : TestBase() {
     /**
-     * this test does...
+     * this test returns a formatted message after applying the regular expression
      */
     @Test
     fun formatMessageTest() {

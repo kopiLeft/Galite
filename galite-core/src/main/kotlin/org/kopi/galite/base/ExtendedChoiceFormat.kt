@@ -40,14 +40,14 @@ open class ExtendedChoiceFormat : ChoiceFormat {
         // a null test is performed before :
         // false --> 0
         // true --> 1
-        if (argument is Boolean || hasNotNullMarker && !(argument is Number))
+        return if (argument is Boolean || hasNotNullMarker && !(argument is Number))
         {
-            return formatObject(argument, toAppendTo, pos)
+            formatObject(argument, toAppendTo, pos)
         }
         else
         {
             // default behavior so number instances should pass here including fixed values
-            return super.format(argument, toAppendTo, pos)
+            super.format(argument, toAppendTo, pos)
         }
     }
 
@@ -59,6 +59,7 @@ open class ExtendedChoiceFormat : ChoiceFormat {
      * @return The formatted string.
      */
 
+
     private fun formatObject(argument:Any, toAppendTo:StringBuffer, pos:FieldPosition):StringBuffer {
         return if (argument is Boolean)
         {
@@ -66,7 +67,7 @@ open class ExtendedChoiceFormat : ChoiceFormat {
         }
         else
         {
-            super.format(toNumeric(argument != null && argument !== ExtendedMessageFormat.NULL_REPRESENTATION), toAppendTo, pos)
+            super.format(toNumeric(argument !== ExtendedMessageFormat.NULL_REPRESENTATION), toAppendTo, pos)
         }
     }
 
