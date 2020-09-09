@@ -16,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.list
 
-interface UserConfiguration {
-  fun getPreviewMode(): Int
-  fun getPreviewScreen(): Int
-  fun getMailSignature(): String
+import javax.swing.SwingConstants
 
+import org.kopi.galite.visual.Constants
+
+interface VConstants : Constants {
   companion object {
-    const val PRM_OPT = 1
-    const val PRM_OPT_WIDHT = 2
-    const val PRM_OPT_HEIGHT = 3
-    const val PRS_FULLSCREEN = 1
-    const val PRS_DEFAULT = 2
+    const val ALG_DEFAULT = SwingConstants.LEFT
+    const val ALG_LEFT = SwingConstants.LEFT
+    const val ALG_CENTER = SwingConstants.CENTER
+    const val ALG_RIGHT = SwingConstants.RIGHT
+    const val EMPTY_TEXT = ""
   }
 }

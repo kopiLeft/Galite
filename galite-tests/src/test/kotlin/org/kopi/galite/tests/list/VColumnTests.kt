@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,18 +15,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.tests.list
 
-interface UserConfiguration {
-  fun getPreviewMode(): Int
-  fun getPreviewScreen(): Int
-  fun getMailSignature(): String
+import org.junit.Test
+import org.kopi.galite.list.VColumn
+import kotlin.test.assertEquals
 
-  companion object {
-    const val PRM_OPT = 1
-    const val PRM_OPT_WIDHT = 2
-    const val PRM_OPT_HEIGHT = 3
-    const val PRS_FULLSCREEN = 1
-    const val PRS_DEFAULT = 2
+class VColumnTests {
+  @Test
+  fun vColumnTest() {
+    var vcolumn = VColumn(2, "testName", false, true)
+
+    assertEquals(2, vcolumn.getTable())
+    assertEquals("T2.testName", vcolumn.getQualifiedName())
   }
 }

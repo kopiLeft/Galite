@@ -16,18 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.report
 
-interface UserConfiguration {
-  fun getPreviewMode(): Int
-  fun getPreviewScreen(): Int
-  fun getMailSignature(): String
-
-  companion object {
-    const val PRM_OPT = 1
-    const val PRM_OPT_WIDHT = 2
-    const val PRM_OPT_HEIGHT = 3
-    const val PRS_FULLSCREEN = 1
-    const val PRS_DEFAULT = 2
+open class VCellFormat {
+  /**
+   *   Return a formatted string of the Object
+   * @return the value formatted
+   */
+  open fun format(value: Any?): String? {
+    return value?.toString() ?: ""
   }
 }

@@ -16,18 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.report
 
-interface UserConfiguration {
-  fun getPreviewMode(): Int
-  fun getPreviewScreen(): Int
-  fun getMailSignature(): String
+import java.io.Serializable
 
-  companion object {
-    const val PRM_OPT = 1
-    const val PRM_OPT_WIDHT = 2
-    const val PRM_OPT_HEIGHT = 3
-    const val PRS_FULLSCREEN = 1
-    const val PRS_DEFAULT = 2
-  }
+/**
+ * A point representing a location in `(x,y)` coordinate space,
+ * specified in integer precision.
+ */
+data class Point(val x: Int = 0, val y: Int = 0) : Serializable {
+
+  /**
+   * Returns a string representation of this point and its location
+   * in the `(x,y)` coordinate space. This method is
+   * intended to be used only for debugging purposes, and the content
+   * and format of the returned string may vary between implementations.
+   * The returned string may be empty but may not be `null`.
+   *
+   * @return  a string representation of this point
+   */
+  override fun toString() = javaClass.name + "[x=" + x + ",y=" + y + "]"
 }
+

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,8 @@ class InconsistencyException : RuntimeException {
   /**
    * Constructs am InconsistencyException with no specified detail message.
    */
-  @Deprecated("Use the constructor with the message or build it with the exception which cause this case.", ReplaceWith("InconsistencyException(message = errorMessage)"))
+  @Deprecated("Use the constructor with the message or build it with the exception which cause this case.",
+          ReplaceWith("InconsistencyException(message = errorMessage)"))
   constructor() : super()
 
   /**

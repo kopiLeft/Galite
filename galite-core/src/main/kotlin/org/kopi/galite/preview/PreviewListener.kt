@@ -16,18 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.preview
 
-interface UserConfiguration {
-  fun getPreviewMode(): Int
-  fun getPreviewScreen(): Int
-  fun getMailSignature(): String
+import java.io.Serializable
+
+import java.util.EventListener
+
+import org.kopi.galite.visual.UserConfiguration
+
+interface PreviewListener : EventListener, Serializable {
+  fun pageChanged(current: Int)
+  fun zoomChanged()
+  fun zoomFit(type: Int)
 
   companion object {
-    const val PRM_OPT = 1
-    const val PRM_OPT_WIDHT = 2
-    const val PRM_OPT_HEIGHT = 3
-    const val PRS_FULLSCREEN = 1
-    const val PRS_DEFAULT = 2
+    const val FIT_BOTH = UserConfiguration.PRM_OPT
+    const val FIT_HEIGHT = UserConfiguration.PRM_OPT_HEIGHT
+    const val FIT_WIDTH = UserConfiguration.PRM_OPT_WIDHT
   }
 }

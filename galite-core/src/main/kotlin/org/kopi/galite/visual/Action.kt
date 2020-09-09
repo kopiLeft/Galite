@@ -18,36 +18,28 @@
 
 package org.kopi.galite.visual
 
-/**
- * This class is a package redefinition of RuntimeException that remaind
- * of a stack of exception
- * Warning: Throwing such an exception will always generate a FATAL ERROR
- * and will close the current form.
- */
-class VRuntimeException : RuntimeException {
-  /**
-   * Constructs an exception with a message.
-   *
-   * @param        message                the associated message
-   */
-  constructor(message: String) : super(message)
+import kotlinx.coroutines.Runnable
+
+abstract class Action(val name: String) : Runnable {
+
+  abstract fun execute()
+
+  override fun run() {
+    try {
+      execute()
+    } catch (e: VException) {
+      throw e.message.let { VRuntimeException(it, e) }
+    }
+  }
 
   /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
+   * Returns `true` if this action can be cancelled in an action queue context.
+   * This means that the action can be removed from an action queue when performing
+   * a clear operation. By default, all actions can be cancelled.
+   * @return `true` if this action can be cancelled in an action queue context.
    */
-  constructor(exc: Throwable) : super(exc)
+  open fun isCancellable(): Boolean = true
 
-  /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
-   */
-  constructor(msg: String?, exc: Throwable) : super(msg, exc)
-
-  /**
-   * Constructs an exception with no message.
-   */
-  constructor() : super()
+  override fun toString(): String = super.toString() + " " + name
 }
+

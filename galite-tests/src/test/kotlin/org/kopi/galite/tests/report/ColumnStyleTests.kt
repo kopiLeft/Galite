@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,18 +15,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.tests.report
 
-interface UserConfiguration {
-  fun getPreviewMode(): Int
-  fun getPreviewScreen(): Int
-  fun getMailSignature(): String
+import org.junit.Test
+import org.kopi.galite.report.ColumnStyle
+import java.awt.Color
+import kotlin.test.assertEquals
 
-  companion object {
-    const val PRM_OPT = 1
-    const val PRM_OPT_WIDHT = 2
-    const val PRM_OPT_HEIGHT = 3
-    const val PRS_FULLSCREEN = 1
-    const val PRS_DEFAULT = 2
+class ColumnStyleTests {
+
+  var columnStyle = ColumnStyle()
+
+  @Test
+  fun getForegroundTest() {
+    columnStyle.foreground = 2
+    assertEquals(Color.red, columnStyle.getForeground())
+  }
+
+  @Test
+  fun getBackgroundTest() {
+    columnStyle.background = 1
+    assertEquals(Color.black, columnStyle.getBackground())
+  }
+
+  @Test
+  fun getFontNameTest() {
+    columnStyle.fontName = 3
+    assertEquals("Courier", columnStyle.getFont().name)
+  }
+
+  @Test
+  fun getFontTest() {
+    columnStyle.fontStyle = 1
+    assertEquals(1, columnStyle.getFont().style)
   }
 }

@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,18 +15,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.tests.visual
 
-interface UserConfiguration {
-  fun getPreviewMode(): Int
-  fun getPreviewScreen(): Int
-  fun getMailSignature(): String
+import org.junit.Test
+import org.kopi.galite.visual.Registry
+import kotlin.test.assertEquals
 
-  companion object {
-    const val PRM_OPT = 1
-    const val PRM_OPT_WIDHT = 2
-    const val PRM_OPT_HEIGHT = 3
-    const val PRS_FULLSCREEN = 1
-    const val PRS_DEFAULT = 2
+class RegistryTests {
+  val registry1 = Registry("firstDomaineName", null)
+  val registry2 = Registry("secondDomaineName", null)
+  val testRegistry = Registry("mainDomain", arrayOf(registry1, registry2))
+
+  @Test
+  fun registryTest() {
+    testRegistry.buildDependencies()
+    assertEquals("org.kopi.galite.visual.Messages", testRegistry.dependencies["mainDomain"])
+    assertEquals("org.kopi.galite.resource.Messages", testRegistry.dependencies["VIS"])
+    assertEquals(true, testRegistry.dependencies.containsKey("firstDomaineName"))
+    assertEquals(true, testRegistry.dependencies.containsKey("secondDomaineName"))
   }
 }
