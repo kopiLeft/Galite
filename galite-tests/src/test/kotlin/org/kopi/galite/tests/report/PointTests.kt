@@ -26,7 +26,6 @@ class PointTests {
   val customPoint = Point(4, 5)
   val customPoint2 = Point(4, 5)
 
-
   @Test
   fun testOriginPoint() {
     assertEquals(0, origin.x)

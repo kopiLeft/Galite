@@ -72,7 +72,6 @@ class ColumnStyle {
     )
   }
 
-
   /**
    * Gets the font of this component.
    *

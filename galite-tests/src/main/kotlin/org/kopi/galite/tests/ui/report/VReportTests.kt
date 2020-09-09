@@ -23,7 +23,6 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
 import org.kopi.galite.ui.report.VReport
 
-
 @Route("VReport")
 class VReportTests : VerticalLayout() {
 
