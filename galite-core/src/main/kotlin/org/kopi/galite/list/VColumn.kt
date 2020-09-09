@@ -21,6 +21,8 @@ package org.kopi.galite.list
 import java.io.Serializable
 
 /**
+ * Represents a column
+ *
  * @param pos position of associated table
  * @param name column name
  * @param key column key of table
