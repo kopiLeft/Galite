@@ -79,32 +79,29 @@ class LineBreaker : Utils() {
      * @param        source                the source text with white space
      * @param        col                the width of the text area
      */
-    fun modelToText(source: String, col: Int): String = buildString {
-      return if (source != null) {
-        val length = source.length
-        for (start in 0 until length step col) {
-          val line = source.substring(start, Math.min(start + col, length))
-          var last = -1
-          var i = line.length - 1
-          while (last == -1 && i >= 0) {
-            if (!line[i].isWhitespace()) {
-
-              last = i
+    fun modelToText(source: String, col: Int): String =
+            if (source != null) buildString {
+              val length = source.length
+              for (start in 0 until length step col) {
+                val line = source.substring(start, Math.min(start + col, length))
+                var last = -1
+                var i = line.length - 1
+                while (last == -1 && i >= 0) {
+                  if (!line[i].isWhitespace()) {
+                    last = i
+                  }
+                  --i
+                }
+                if (start != 0) {
+                  append('\n')
+                }
+                if (last != -1) {
+                  append(line.substring(0, last + 1))
+                }
+              }
+            } else {
+              ""
             }
-            --i
-          }
-          if (start != 0) {
-            append('\n')
-          }
-          if (last != -1) {
-            append(line.substring(0, last + 1))
-          }
-        }
-        toString()
-      } else {
-        ""
-      }
-    }
 
     fun addBreakForWidth(sourceText: String?, width: Int): String {
       val source = sourceText.orEmpty()

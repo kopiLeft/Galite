@@ -48,7 +48,7 @@ class LineBreakerTests : TestBase() {
 
   @Test
   fun splitForWidthTest() {
-    assertArraysEquals(arrayOf("", "This", "text", "contains", "carriage", "return."), LineBreaker.splitForWidth(sourceWithoutCarriage, 4))
+    assertArraysEquals(arrayOf("", "This ", "text ", "contains ", "carriage ", "return."), LineBreaker.splitForWidth(sourceWithoutCarriage, 4))
   }
 }
 
