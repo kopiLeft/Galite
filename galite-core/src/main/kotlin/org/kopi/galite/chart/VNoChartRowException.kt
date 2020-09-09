@@ -29,24 +29,24 @@ class VNoChartRowException : VRuntimeException {
   /**
    * Creates a new no row exception.
    */
-  constructor() : super() {}
+  constructor() : super()
 
   /**
    * Creates a new no row exception.
    * @param message The exception message.
    */
-  constructor(message: String) : super(message) {}
+  constructor(message: String) : super(message)
 
   /**
    * Creates a new no row exception.
    * @param exec The exception cause.
    */
-  constructor(exc: Throwable) : super(exc) {}
+  constructor(exc: Throwable) : super(exc)
 
   /**
    * Creates a new no row exception.
    * @param msg The exception message.
    * @param exc The exception cause.
    */
-  constructor(msg: String, exc: Throwable) : super(msg, exc) {}
+  constructor(msg: String, exc: Throwable) : super(msg, exc)
 }

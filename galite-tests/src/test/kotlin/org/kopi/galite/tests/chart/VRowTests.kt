@@ -19,8 +19,10 @@
 package org.kopi.galite.tests.chart
 
 import org.junit.Test
+
 import org.kopi.galite.chart.VRow
 import org.kopi.galite.tests.TestBase
+
 import kotlin.test.assertEquals
 
 class VRowTests : TestBase() {

@@ -18,6 +18,7 @@
 
 package org.kopi.galite.chart
 
+import org.kopi.galite.util.PPaperType
 import java.io.Serializable
 
 /**
@@ -36,13 +37,13 @@ import java.io.Serializable
  * @param imageWidth   The image width to be used when exporting as image format.
  * @param imageHeight  The image height to be used when exporting as image format.
  */
-class VPrintOptions(var papertype: Int = PPaperType.PPT_A4.code,
-                    var paperlayout: String = "Landscape",
-                    var topmargin: Int = 30,
-                    var bottommargin: Int = 30,
-                    var leftmargin: Int = 30,
-                    var rightmargin: Int = 30,
-                    var headermargin: Int = 5,
-                    var footermargin: Int = 10,
-                    var imageWidth: Int = 900,
-                    var imageHeight: Int = 500) : Serializable
+class VPrintOptions(val papertype: Int = PPaperType.PPT_A4.code,
+                    val paperlayout: String = "Landscape",
+                    val topmargin: Int = 30,
+                    val bottommargin: Int = 30,
+                    val leftmargin: Int = 30,
+                    val rightmargin: Int = 30,
+                    val headermargin: Int = 5,
+                    val footermargin: Int = 10,
+                    val imageWidth: Int = 900,
+                    val imageHeight: Int = 500) : Serializable

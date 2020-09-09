@@ -44,7 +44,6 @@ interface UComponent : Serializable {
    */
   fun setEnabled(enabled: Boolean)
 
-
   /**
    * Tests the *visibility* property of the component.
    *

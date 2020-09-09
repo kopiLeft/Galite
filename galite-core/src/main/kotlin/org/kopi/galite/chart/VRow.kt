@@ -28,9 +28,6 @@ import java.io.Serializable
  * @param measures The measures values.
  */
 class VRow(private val dimensions: Array<Any>, private val measures: Array<Any>) : Serializable {
-  // --------------------------------------------------------------------
-  // ACCESSORS
-  // --------------------------------------------------------------------
   /**
    * Returns the dimensions value of the given index.
    * @param index The desired index.

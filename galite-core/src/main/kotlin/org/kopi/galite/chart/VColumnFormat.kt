@@ -24,9 +24,6 @@ import java.io.Serializable
  * Column format
  */
 class VColumnFormat : Serializable {
-  //---------------------------------------------------------------------
-  // IMPLEMENTATION
-  //---------------------------------------------------------------------
   /**
    * Returns the formatted value of the object.
    *
