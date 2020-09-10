@@ -64,13 +64,13 @@ abstract class WindowController : Serializable {
    * wait until the view is closed.
    * @param model The [UWindow] model.
    */
-  abstract fun doModal(model: VWindow?): Boolean
+  abstract fun doModal(model: VWindow): Boolean
 
   /**
    * Shows the [UWindow] without blocking the executing thread.
    * @param model The [UWindow] model.
    */
-  abstract fun doNotModal(model: VWindow?)
+  abstract fun doNotModal(model: VWindow)
 
   //------------------------------------------------------------------
   // DATA MEMBERS

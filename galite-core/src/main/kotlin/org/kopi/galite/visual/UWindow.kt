@@ -35,7 +35,7 @@ interface UWindow : UComponent, VActionListener, ModelCloseListener, WaitDialogL
    * Returns the [VWindow] model of this UI component.
    * @return the `UWindow` model.
    */
-  val model: VWindow?
+  val model: VWindow
 
   /**
    * Sets the `UWindow` title.
