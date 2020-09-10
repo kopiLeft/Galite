@@ -15,15 +15,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual
+package org.kopi.galite.form
 
-import java.util.EventListener
+class VFieldUI {
 
-
-interface VActionListener : EventListener {
-  /**
-   * Performs the appropriate action asynchronously.
-   * @param [action] represents the action to be performed
-   */
-  fun performAsyncAction(action: Action?)
 }

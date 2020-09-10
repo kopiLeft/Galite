@@ -15,15 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual
+package org.kopi.galite.form
 
-import java.util.EventListener
+import java.io.Serializable
 
 
-interface VActionListener : EventListener {
+/**
+ * `FieldHandler` handles all events on a kopi field.
+ */
+interface FieldHandler : FieldListener, FieldChangeListener, Serializable {
   /**
-   * Performs the appropriate action asynchronously.
-   * @param [action] represents the action to be performed
+   * Returns the field row controller.
+   * @return The [VFieldUI] row controller.
    */
-  fun performAsyncAction(action: Action?)
+  val rowController: VFieldUI?
 }
