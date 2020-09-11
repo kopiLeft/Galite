@@ -237,4 +237,5 @@ class Utils : org.kopi.galite.util.base.Utils() {
     private val DEFAULT_VERSION = arrayOf<String>("No version information available.", "Copyright 1990-2019 kopiRight Managed Solutions GmbH. All rights reserved.")
     private var allowExplicitGcCall: Boolean? = true
   }
+
 }
