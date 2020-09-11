@@ -69,5 +69,4 @@ interface Image : Serializable {
     const val SCALE_REPLICATE = 8
     const val SCALE_AREA_AVERAGING = 16
   }
-
 }

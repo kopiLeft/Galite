@@ -95,5 +95,4 @@ class ExtendedChoiceFormat : ChoiceFormat {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private val hasNotNullMarker: Boolean
-
 }

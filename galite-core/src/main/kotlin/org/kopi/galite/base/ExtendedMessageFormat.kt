@@ -399,5 +399,5 @@ class ExtendedMessageFormat : MessageFormat {
     /*package*/
     val NULL_REPRESENTATION = Any()
   }
-
 }
+

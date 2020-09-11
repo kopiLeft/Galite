@@ -240,5 +240,4 @@ class Utils : org.kopi.galite.util.base.Utils() {
     )
     private var allowExplicitGcCall: Boolean? = true
   }
-
 }
