@@ -63,10 +63,11 @@ interface Image : Serializable {
     //-----------------------------------------------------
     // SCALING CONSTANTS
     //-----------------------------------------------------
-    val SCALE_DEFAULT = 1
-    val SCALE_FAST = 2
-    val SCALE_SMOOTH = 4
-    val SCALE_REPLICATE = 8
-    val SCALE_AREA_AVERAGING = 16
+    const val SCALE_DEFAULT = 1
+    const val SCALE_FAST = 2
+    const val SCALE_SMOOTH = 4
+    const val SCALE_REPLICATE = 8
+    const val SCALE_AREA_AVERAGING = 16
   }
+
 }

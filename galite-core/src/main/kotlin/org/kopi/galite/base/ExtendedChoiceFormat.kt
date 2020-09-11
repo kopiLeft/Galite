@@ -67,6 +67,7 @@ class ExtendedChoiceFormat : ChoiceFormat {
 
   /**
    * Formats any kind of non numeric object. Only null test is performed and transformed to {0, 1} condition.
+   *
    * @param argument The argument to be formatted.
    * @param toAppendTo The resulting string buffer.
    * @param pos The field position.
@@ -74,9 +75,9 @@ class ExtendedChoiceFormat : ChoiceFormat {
    */
   private fun formatObject(argument: Any, toAppendTo: StringBuffer, pos: FieldPosition): StringBuffer {
     return if (argument is Boolean) {
-      super.format(argument.toNumeric(), toAppendTo, pos)
+      super.format(argument.toNumeric().toLong(), toAppendTo, pos)
     } else {
-      super.format((argument !== ExtendedMessageFormat.NULL_REPRESENTATION).toNumeric(), toAppendTo, pos)
+      super.format((argument !== ExtendedMessageFormat.NULL_REPRESENTATION).toNumeric().toLong(), toAppendTo, pos)
     }
   }
 
@@ -84,6 +85,9 @@ class ExtendedChoiceFormat : ChoiceFormat {
    * Transforms the given boolean value to a numeric value.
    * The translation is done in a way that 0 is equivalent to false
    * and 1 is equivalent to true.
+   *
+   * @receiver The boolean value.
+   * @return The equivalent numeric value.
    */
   fun Boolean.toNumeric() = if (this) 1 else 0
 
@@ -91,4 +95,5 @@ class ExtendedChoiceFormat : ChoiceFormat {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private val hasNotNullMarker: Boolean
+
 }

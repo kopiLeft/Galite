@@ -47,7 +47,7 @@ import java.util.zip.GZIPOutputStream
  * Utils.getApplicationImage("name");
  *
  */
-class Utils {
+class Utils : org.kopi.galite.util.base.Utils() {
   companion object {
 
     /**
@@ -196,8 +196,8 @@ class Utils {
     /**
      * Returns the version of this build
      */
-    val version: Array<String>
-      get() {
+    fun getVersion(): Array<String>
+       {
         try {
           val list = ArrayList<String>()
           val data = DataInputStream(Utils::class.java.classLoader.getResourceAsStream(APPLICATION_DIR + "/version"))
@@ -224,7 +224,7 @@ class Utils {
           java.lang.Boolean.FALSE
         }
       }
-      if (allowExplicitGcCall as Boolean) {
+      if (allowExplicitGcCall == true) {
         System.gc()
       }
     }
@@ -232,8 +232,8 @@ class Utils {
     // ----------------------------------------------------------------------
     // PRIVATE DATA
     // ----------------------------------------------------------------------
-    val APPLICATION_DIR = "resources"
-    val RESOURCE_DIR = "org/kopi/vkopi/lib/resource"
+    const val APPLICATION_DIR = "resources"
+    const val RESOURCE_DIR = "org/kopi/vkopi/lib/resource"
     private val DEFAULT_VERSION = arrayOf<String>("No version information available.", "Copyright 1990-2019 kopiRight Managed Solutions GmbH. All rights reserved.")
     private var allowExplicitGcCall: Boolean? = true
   }
