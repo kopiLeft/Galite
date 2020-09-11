@@ -309,16 +309,16 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Returns the format description of the given description.
-   * @param descrption The searched format description.
+   * @param description The searched format description.
    * @param descriptions The list of available format descriptions.
    * @return The format description if found or null if not.
    */
-  private fun getChoiceFormatDescription(descrption: String, descriptions: List<FormatDescription>): FormatDescription? {
+  private fun getChoiceFormatDescription(description: String, descriptions: List<FormatDescription>): FormatDescription? {
     for (fdescription in descriptions) {
       if (fdescription.description == null || !fdescription.description.contains("choice")) {
         continue
       }
-      if (toChoicePattern(fdescription) == descrption) {
+      if (toChoicePattern(fdescription) == description) {
         return fdescription
       }
     }

@@ -165,7 +165,7 @@ class Utils : org.kopi.galite.util.base.Utils() {
         val writer: PrintWriter = PrintWriter(FileWriter(filename, true))
         writer.println()
         writer.println()
-        writer.println(Date().toString() + "\t" + mod + "\t" + text + " ")
+        writer.println(Date().toString() + "\t" + mod + "\t" + text + "   ")
         if (writer.checkError()) {
           writer.close()
           throw IOException("error while writing")
@@ -205,7 +205,7 @@ class Utils : org.kopi.galite.util.base.Utils() {
             list.add(data.readLine())
           }
           data.close()
-          return list.toArray<String>(arrayOfNulls<String>(list.size)) as Array<String>
+          return list.toTypedArray()
         } catch (e: Exception) {
           System.err.println("Error while reading version informations.\n$e")
         }
@@ -234,7 +234,10 @@ class Utils : org.kopi.galite.util.base.Utils() {
     // ----------------------------------------------------------------------
     const val APPLICATION_DIR = "resources"
     const val RESOURCE_DIR = "org/kopi/vkopi/lib/resource"
-    private val DEFAULT_VERSION = arrayOf<String>("No version information available.", "Copyright 1990-2019 kopiRight Managed Solutions GmbH. All rights reserved.")
+    private val DEFAULT_VERSION = arrayOf(
+            "No version information available.",
+            "Copyright 1990-2019 kopiRight Managed Solutions GmbH. All rights reserved."
+    )
     private var allowExplicitGcCall: Boolean? = true
   }
 
