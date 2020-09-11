@@ -58,9 +58,10 @@ class Utils : org.kopi.galite.util.base.Utils() {
       val output = GZIPOutputStream(baos)
       val input = FileInputStream(file)
       val buffer = ByteArray(10 * 1024)
-      val length = input.read(buffer)
+      var length = input.read(buffer)
       while (length != -1) {
         output.write(buffer, 0, length)
+        length = input.read(buffer)
       }
       output.close()
       return baos.toByteArray()
@@ -81,6 +82,7 @@ class Utils : org.kopi.galite.util.base.Utils() {
      *
      * @param prefix the prefix of the temp file
      * @param extension the extension of the temp file (can be null. in
+     * @param deleteOnExit if the file has to be deleted at the end of the program.
      * this case default is "tmp")
      * @return an empty temp file on the local machine
      */
@@ -102,14 +104,14 @@ class Utils : org.kopi.galite.util.base.Utils() {
      * @return a File or null if not found
      */
     fun getFile(file: String): InputStream? {
-      var filetofind = getDefaultFile(file)
-      if (filetofind == null) {
-        filetofind = getApplicationFile(file)
+      var fileToFind = getDefaultFile(file)
+      if (fileToFind == null) {
+        fileToFind = getApplicationFile(file)
       }
-      if (filetofind == null) {
+      if (fileToFind == null) {
         System.err.println("Utils ==> cant load: $file")
       }
-      return filetofind
+      return fileToFind
     }
 
     /**
@@ -136,17 +138,17 @@ class Utils : org.kopi.galite.util.base.Utils() {
      * return an URL from the resources
      */
     fun getURLFromResource(name: String, directory: String? = RESOURCE_DIR): URL? {
+      return if (directory == null) {
+        null
+      } else Utils::class.java.classLoader.getResource("$directory/$name")
       // Java Web Start needs to get the class loader based on
       // the current class.
-      if (directory == null) {
-        return null
-      } else return Utils::class.java.classLoader.getResource("$directory/$name")
     }
 
     /**
      * return file from resources or null if not found
      */
-    private fun getFileFromResource(name: String, directory: String?): InputStream? {
+    fun getFileFromResource(name: String, directory: String?): InputStream? {
       return if (directory == null) {
         null
       } else {
@@ -196,21 +198,20 @@ class Utils : org.kopi.galite.util.base.Utils() {
     /**
      * Returns the version of this build
      */
-    fun getVersion(): Array<String>
-       {
-        try {
-          val list = ArrayList<String>()
-          val data = DataInputStream(Utils::class.java.classLoader.getResourceAsStream(APPLICATION_DIR + "/version"))
-          while (data.available() != 0) {
-            list.add(data.readLine())
-          }
-          data.close()
-          return list.toTypedArray()
-        } catch (e: Exception) {
-          System.err.println("Error while reading version informations.\n$e")
+    fun getVersion(): Array<String> {
+      try {
+        val list = ArrayList<String>()
+        val data = DataInputStream(Utils::class.java.classLoader.getResourceAsStream(APPLICATION_DIR + "/version"))
+        while (data.available() != 0) {
+          list.add(data.readLine())
         }
-        return DEFAULT_VERSION
+        data.close()
+        return list.toTypedArray()
+      } catch (e: Exception) {
+        System.err.println("Error while reading version informations.\n$e")
       }
+      return DEFAULT_VERSION
+    }
 
     /**
      * 2003.08.14; jdk 1.4.1; Wischeffekt, Speicherverbrauch
