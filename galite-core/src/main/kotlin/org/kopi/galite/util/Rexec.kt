@@ -19,12 +19,9 @@ package org.kopi.galite.util
 
 import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.LineNumberReader
 import java.io.OutputStream
 import java.net.Socket
 import java.net.UnknownHostException
-import kotlin.system.exitProcess
 
 /**
  * Remote execution client
@@ -34,7 +31,7 @@ import kotlin.system.exitProcess
  */
 class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT) {
   /**
-   *
+   *  This function is used to establish the connection on a socket
    */
   fun open(user: String, pass: String, command: String): Boolean {
     setUser(user, pass)
@@ -50,17 +47,15 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
   }
 
   /**
-   *
+   * This function is used to run a certain command
+   * establishing a connection on a socket
    */
   fun run(command: String): Boolean {
-    socket = try {
-      Socket(host, port)
-    } catch (e: UnknownHostException) {
-      e.printStackTrace()
-      return false // !!! raise an exception
+    try {
+      socket = Socket(host, port)
     } catch (e: IOException) {
       e.printStackTrace()
-      return false // !!! raise an exception
+      return false    // !!! raise an exception
     }
     return try {
       val output = socket?.getOutputStream()
@@ -80,7 +75,7 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
   }
 
   /**
-   *
+   * This function is used to close the connection on the socket
    */
   fun close() {
     try {
@@ -102,12 +97,12 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
   }
 
   /**
-   *
+   * returns an input stream for the given socket
    */
   fun getInputStream(): InputStream? = socket?.getInputStream()
 
   /**
-   *
+   * returns an output stream for the given socket
    */
   private fun getOutputStream(): OutputStream? = socket?.getOutputStream()
 

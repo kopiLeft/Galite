@@ -31,6 +31,5 @@ class VDataSeries(val dimension: VDimensionData) : Serializable {
    */
   fun getMeasures() = measures.toTypedArray()
 
-  /*package*/
   val measures: List<VMeasureData> = listOf()
 }

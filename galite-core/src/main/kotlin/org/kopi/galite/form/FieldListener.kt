@@ -40,8 +40,8 @@ interface FieldListener : EventListener, Serializable {
   /**
    * Returns the current [UField] display.
    * @return The current [UField] display.
-   */ // please do not use!
-  val currentDisplay: UField
+   */
+  fun getCurrentDisplay() : UField
 
   /**
    * Display a field error.
