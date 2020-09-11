@@ -15,24 +15,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-plugins {
-  kotlin("jvm") apply true
-}
+package org.kopi.galite.l10n
 
-val exposedVersion = "0.27.1"
-val vaadinVersion = "17.0.0"
-val jdomVersion = "2.0.5"
+import org.jdom2.Element
 
-dependencies {
-  // Exposed dependencies
-  api("org.jetbrains.exposed", "exposed-core", exposedVersion)
+/**
+ * Implements a field localizer.
+ */
+class FieldLocalizer(manager: LocalizationManager, private val self: Element) : Localizer(manager) {
+    // ----------------------------------------------------------------------
+    // ACCESSORS
+    // ----------------------------------------------------------------------
+    /**
+     * Returns the value of the label attribute.
+     */
+    val label: String
+        get() = self.getAttributeValue("label")
 
-  // Vaadin dependencies
-  implementation("com.vaadin", "vaadin-core", vaadinVersion) {
-    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
-            .forEach { group -> exclude(group = group) }
-  }
-  implementation("org.jdom", "jdom2", jdomVersion)
+    /**
+     * Returns the value of the help attribute.
+     */
+    val help: String
+        get() = self.getAttributeValue("help")
 }
