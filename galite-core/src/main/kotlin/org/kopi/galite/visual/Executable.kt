@@ -18,36 +18,22 @@
 
 package org.kopi.galite.visual
 
+import org.kopi.galite.base.DBContext
+
 /**
- * This class is a package redefinition of RuntimeException that remaind
- * of a stack of exception
- * Warning: Throwing such an exception will always generate a FATAL ERROR
- * and will close the current form.
+ * An interface for stand alone apps that can be executed from the
+ * Menu tree.
  */
-open class VRuntimeException : RuntimeException {
+interface Executable {
   /**
-   * Constructs an exception with a message.
-   *
-   * @param        message                the associated message
+   * MenuTree sets the context of new executable to the default connection
    */
-  constructor(message: String?) : super(message)
+  fun setDBContext(context: DBContext)
 
   /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
+   * The start method called every time the user launch this app from menu
+   * it should be not modal
+   * @exception        VException        an exception may be raised by your app
    */
-  constructor(exc: Throwable?) : super(exc)
-
-  /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
-   */
-  constructor(msg: String?, exc: Throwable?) : super(msg, exc)
-
-  /**
-   * Constructs an exception with no message.
-   */
-  constructor() : super()
+  fun doNotModal()
 }
