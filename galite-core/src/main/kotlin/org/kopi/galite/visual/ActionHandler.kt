@@ -22,10 +22,11 @@ package org.kopi.galite.visual
  * by the kopi action mechanism
  */
 interface ActionHandler {
+
   /**
    * Performs a void trigger
    *
-   * @param  [VKT_Type]    the number of the trigger
+   * @param  VKT_Type   the number of the trigger
    */
   fun executeVoidTrigger(VKT_Type: Int)
 
@@ -33,8 +34,8 @@ interface ActionHandler {
    * Performs the appropriate action asynchronously.
    * You can use this method to perform any operation out of the UI event process
    *
-   * @param    [action]        the action to perform.
-   * @param    [block]        This action should block the UI thread ?
+   * @param    action        the action to perform.
+   * @param    block       This action should block the UI thread ?
    */
   fun performAction(action: Action, block: Boolean)
 
@@ -42,7 +43,7 @@ interface ActionHandler {
    * Performs the appropriate action asynchronously.
    * You can use this method to perform any operation out of the UI event process
    *
-   * @param    [action]   represents the action to perform.
+   * @param  action  represents the action to perform.
    */
-  fun performAsyncAction(action: Action?)
+  fun performAsyncAction(action: Action)
 }

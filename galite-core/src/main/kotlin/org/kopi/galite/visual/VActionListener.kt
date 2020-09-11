@@ -19,11 +19,10 @@ package org.kopi.galite.visual
 
 import java.util.EventListener
 
-
 interface VActionListener : EventListener {
   /**
    * Performs the appropriate action asynchronously.
-   * @param [action] represents the action to be performed
+   * @param action represents the action to be performed
    */
-  fun performAsyncAction(action: Action?)
+  fun performAsyncAction(action: Action)
 }

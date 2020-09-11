@@ -26,7 +26,6 @@ import java.net.Socket
 import java.net.UnknownHostException
 import kotlin.system.exitProcess
 
-
 /**
  * Remote execution client
  *
@@ -45,7 +44,7 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
   /**
    * Sets the user
    */
-  private fun setUser(user: String, pass: String?) {
+  fun setUser(user: String, pass: String) {
     this.user = user
     this.pass = pass
   }
@@ -121,24 +120,24 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
     // ----------------------------------------------------------------------
     // TEST java org.kopi.vkopi.lib.util.Rexec host user passwd cmd
     // ----------------------------------------------------------------------
-    fun main(args: Array<String>) {
-      System.err.println("USAGE:Rexec server user pass command")
-      val rexec = Rexec(args[0])
-      if (!rexec.open(args[1], args[2], args[3])) {
-        System.err.println("Error")
-        exitProcess(1)
-      }
-      val data = LineNumberReader(InputStreamReader(rexec.getInputStream()))
-      while (true) {
-        val line = data.readLine() ?: break
-        println("--> $line")
-      }
-      rexec.close()
-    }
+    /* fun main(args: Array<String>) {
+       System.err.println("USAGE:Rexec server user pass command")
+       val rexec = Rexec(args[0])
+       if (!rexec.open(args[1], args[2], args[3])) {
+         System.err.println("Error")
+         exitProcess(1)
+       }
+       val data = LineNumberReader(InputStreamReader(rexec.getInputStream()))
+       while (true) {
+         val line = data.readLine() ?: break
+         println("--> $line")
+       }
+       rexec.close()
+     }*/
 
     // ----------------------------------------------------------------------
     // DATA MEMBERS
     // ----------------------------------------------------------------------
-    private const val STANDARD_EXEC_PORT = 512 // exec/tcp
+    const val STANDARD_EXEC_PORT = 512 // exec/tcp
   }
 }

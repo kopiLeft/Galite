@@ -32,7 +32,7 @@ class NotImplementedException : RuntimeException {
   /**
    * Constructs am NotImplementedException with the specified detail message.
    *
-   * @param    [message] represents the detail message
+   * @param  message represents the detail message
    */
-  constructor(message: String?) : super(message)
+  constructor(message: String) : super(message)
 }

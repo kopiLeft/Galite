@@ -21,8 +21,8 @@ import org.kopi.galite.visual.VException
 import java.io.Serializable
 import java.util.EventListener
 
-
 interface FieldListener : EventListener, Serializable {
+
   /**
    * Updates the field model.
    * @throws VException Update operation may fail.
@@ -31,23 +31,23 @@ interface FieldListener : EventListener, Serializable {
 
   /**
    * Returns the displayed value in the field.
-   * @param [trim] Should be the text be trim ?
+   * @param trim Should be the text be trim ?
    * @return The displayed value in the field.
    * @throws VException May fail when retrieving value.
    */
-  fun getDisplayedValue(trim: Boolean): Any?
+  fun getDisplayedValue(trim: Boolean): Any
 
   /**
    * Returns the current [UField] display.
    * @return The current [UField] display.
    */ // please do not use!
-  val currentDisplay: UField?
+  val currentDisplay: UField
 
   /**
    * Display a field error.
    * @param message The error to be displayed.
    */
-  fun fieldError(message: String?)
+  fun fieldError(message: String)
 
   /**
    * Requests the focus on this field.
