@@ -21,75 +21,79 @@ package org.kopi.galite.base
 import java.sql.Connection
 
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.statements.api.ExposedConnection
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 class DBContext {
 
   /**
    * Create a connection with Exposed. Connects to database and logs on.
    *
-   * @param     driverName            The class name of the JDBC driver to register.
+   * @param     driverName      the class name of the JDBC driver to register.
    * @param     url             the URL of the database to connect to
    * @param     user            the name of the database user
    * @param     password        the password of the database user
    * @param     lookupUserId    lookup user id in table KOPI_USERS ?
    * @param     schema          the current database schema
-   * @return    a new exposed connection
    */
-  fun createConnection(driverName: String,
-                       url: String,
-                       user: String,
-                       password: String,
-                       lookupUserId: Boolean,
-                       schema: String?): ExposedConnection<*> {
-    Database.connect(url = url, driver = driverName, user = user, password = password)
-    connections.add(TransactionManager.current().connection)
-    return TransactionManager.current().connection
+  fun createConnection(
+    driverName: String,
+    url: String,
+    user: String,
+    password: String,
+    lookupUserId: Boolean, // TODO
+    schema: String? // TODO
+  ): Database {
+    val database = Database.connect(url = url, driver = driverName, user = user, password = password)
+    connections.add(database)
+    return database
   }
 
   /**
    * Creates a connection from JDBC Connection
    *
-   * @param     connection                the JDBC connection
+   * @param     connection      the JDBC connection
    * @param     lookupUserId    lookup user id in table KOPI_USERS ?
    * @param     schema          the current database schema
    */
-  fun createConnection(connection: Connection,
-                       lookupUserId: Boolean,
-                       schema: String?): ExposedConnection<*> {
-    Database.connect({connection})
-    connections.add(TransactionManager.current().connection)
-    return TransactionManager.current().connection
+  fun createConnection(
+    connection: Connection,
+    lookupUserId: Boolean, // TODO
+    schema: String? // TODO
+  ): Database {
+    val database = Database.connect({connection})
+    connections.add(database)
+    return database
   }
 
   /**
    * Connects to database and logs on.
    *
-   * @param     driverName            The class name of the JDBC driver to register.
+   * @param     driverName      the class name of the JDBC driver to register.
    * @param     url             the URL of the database to connect to
    * @param     user            the name of the database user
-   * @param     password            the password of the database user
-   * @return    a new exposed connection
+   * @param     password        the password of the database user
    */
-  fun createConnection(driverName: String,
-                       url: String,
-                       user: String,
-                       password: String): ExposedConnection<*> {
-    return createConnection(driverName, url, user, password, true, null)
+  fun createConnection(
+    driverName: String,
+    url: String,
+    user: String,
+    password: String
+  ): Database {
+    val database = createConnection(driverName, url, user, password, true, null)
+    connections.add(database)
+    return database
   }
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   /** All connections currently opened */
-  var connections = arrayListOf<ExposedConnection<*>>()
+  var connections = arrayListOf<Database>()
     private set
 
   /**
-   * The underlying default JDBC connection.
+   * The underlying default connection.
    */
-  var defaultConnection: ExposedConnection<*>? = null
+  var defaultConnection: Database? = null
 
   /**
    * If there is a transaction started
