@@ -49,6 +49,9 @@ class ExtendedChoiceFormat : ChoiceFormat {
   // ----------------------------------------------------------------------
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
+  /*
+ * @see java.text.NumberFormat
+ */
   override fun format(argument: Any, toAppendTo: StringBuffer, pos: FieldPosition): StringBuffer {
     // a null test is performed before :
     // false --> 0

@@ -77,8 +77,7 @@ class ExtendedMessageFormat : MessageFormat {
   }
 
   /*
- * (non-Javadoc)
- * @see java.text.MessageFormat#applyPattern(java.lang.String)
+ * @see java.text.MessageFormat
  */
   override fun applyPattern(pattern: String) {
     val descriptions: MutableList<FormatDescription>
