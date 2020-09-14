@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -53,9 +54,9 @@ object Utils {
         val childs: List<Element> = parent.getChildren(type)
 
         when {
-            childs.isEmpty() -> throw InconsistencyException(parent.document.baseURI.toString() + ": "
+            childs.isEmpty() -> throw InconsistencyException(parent.document.baseURI + ": "
                                                              + type + " not found")
-            childs.size > 1 -> throw InconsistencyException(parent.document.baseURI.toString() + ": "
+            childs.size > 1 -> throw InconsistencyException(parent.document.baseURI + ": "
                                                             + type + " not unique")
             else -> return childs[0]
         }

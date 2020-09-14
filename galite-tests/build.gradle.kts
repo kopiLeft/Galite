@@ -21,6 +21,7 @@ plugins {
 }
 
 val vaadinVersion = "17.0.0"
+val jdomVersion = "2.0.5"
 
 dependencies {
   implementation(project(":galite-core"))
@@ -46,6 +47,7 @@ dependencies {
     exclude("org.jsoup", "jsoup")
   }
   implementation("io.github.sukgu:automation:0.0.13")
+  implementation("org.jdom", "jdom2", jdomVersion)
 }
 
 tasks {

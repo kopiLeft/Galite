@@ -17,6 +17,7 @@
 
 package org.kopi.galite.tests.visual
 
+import org.joda.time.Weeks
 import org.junit.Test
 import org.kopi.galite.visual.Registry
 import kotlin.test.assertEquals
@@ -33,5 +34,6 @@ class RegistryTests {
     assertEquals("org.kopi.galite.resource.Messages", testRegistry.dependencies["VIS"])
     assertEquals(true, testRegistry.dependencies.containsKey("firstDomaineName"))
     assertEquals(true, testRegistry.dependencies.containsKey("secondDomaineName"))
+    val a: Weeks
   }
 }
