@@ -71,7 +71,7 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
       output.write(0)
       output.write(command.toByteArray())
       output.write(0)
-      socket!!.getInputStream()?.read() == 0
+      socket!!.getInputStream().read() == 0
     } catch (e: IOException) {
       e.printStackTrace()
       false // !!! raise an exception
@@ -91,7 +91,7 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
       e.printStackTrace()
     }
     try {
-      socket?.close()
+      socket!!.close()
     } catch (e: IOException) {
       e.printStackTrace()
       // !!! raise an exception
@@ -103,7 +103,7 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
   /**
    * returns an input stream for the given socket
    */
-  fun getInputStream(): InputStream= socket!!.getInputStream()
+  fun getInputStream(): InputStream = socket!!.getInputStream()
 
   /**
    * returns an output stream for the given socket

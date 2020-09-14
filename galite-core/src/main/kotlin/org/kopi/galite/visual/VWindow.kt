@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual;
+package org.kopi.galite.visual
 
-public abstract class VWindow {
-  public int getType() {
+abstract class VWindow {
+  fun getType(): Int {
     return Constants.MDL_UNKOWN;
   }
 }
