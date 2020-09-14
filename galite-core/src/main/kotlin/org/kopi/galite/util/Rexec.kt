@@ -26,8 +26,8 @@ import java.net.UnknownHostException
 /**
  * Remote execution client
  *
- * @param host represents the first characteristic of the client's remote execution
- * @param port represents the second characteristic of the client's remote execution
+ * @param host specifies one or more hostnames
+ * @param port identifies one or more computer systems running database servers.
  */
 class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT) {
   /**
@@ -51,12 +51,16 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
    * establishing a connection on a socket
    */
   fun run(command: String): Boolean {
-    try {
-      socket = Socket(host, port)
+    socket = try {
+      Socket(host, port)
+    } catch (e: UnknownHostException) {
+      e.printStackTrace()
+      return false // !!! raise an exception
     } catch (e: IOException) {
       e.printStackTrace()
-      return false    // !!! raise an exception
+      return false // !!! raise an exception
     }
+
     return try {
       val output = socket?.getOutputStream()
       output?.write("0".toByteArray()) // no socket for stderr
@@ -113,26 +117,8 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
 
   companion object {
     // ----------------------------------------------------------------------
-    // TEST java org.kopi.vkopi.lib.util.Rexec host user passwd cmd
-    // ----------------------------------------------------------------------
-    /* fun main(args: Array<String>) {
-       System.err.println("USAGE:Rexec server user pass command")
-       val rexec = Rexec(args[0])
-       if (!rexec.open(args[1], args[2], args[3])) {
-         System.err.println("Error")
-         exitProcess(1)
-       }
-       val data = LineNumberReader(InputStreamReader(rexec.getInputStream()))
-       while (true) {
-         val line = data.readLine() ?: break
-         println("--> $line")
-       }
-       rexec.close()
-     }*/
-
-    // ----------------------------------------------------------------------
     // DATA MEMBERS
     // ----------------------------------------------------------------------
-    const val STANDARD_EXEC_PORT = 512 // exec/tcp
+    private const val STANDARD_EXEC_PORT = 512 // exec/tcp
   }
 }

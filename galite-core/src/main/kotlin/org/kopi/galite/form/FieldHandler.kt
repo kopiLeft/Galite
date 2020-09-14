@@ -20,12 +20,12 @@ package org.kopi.galite.form
 import java.io.Serializable
 
 /**
- * `FieldHandler` handles all events on a kopi field.
+ * `FieldHandler` handles all events on a field.
  */
 interface FieldHandler : FieldListener, FieldChangeListener, Serializable {
   /**
    * Returns the field row controller.
    * @return the [VFieldUI] row controller.
    */
-  val rowController: VFieldUI
+  fun getRowController() : VFieldUI
 }
