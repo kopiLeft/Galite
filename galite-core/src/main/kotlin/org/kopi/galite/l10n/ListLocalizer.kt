@@ -16,18 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.l10n
 
-import java.io.Serializable
+class ListLocalizer {
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
-
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
+    fun getColumnTitle(column : String) : String { return column }
 }
