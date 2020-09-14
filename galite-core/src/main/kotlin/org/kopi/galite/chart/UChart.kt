@@ -16,19 +16,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.chart
+
+import org.kopi.galite.visual.UWindow
 
 /**
- * Filters characters according to a conversion table
+ * The `UChart` is the view part of a chart component.
+ * A chart is a separate window where we can display a chart
+ * component like pie chart, bar chart, column chart and line chart.
  */
-open class Filter {
+interface UChart : UWindow {
   /**
-   * Empty Filter. This is the default implementation.
+   * Redisplays the chart content.
    */
-  open fun convert(char: Char): Char = char
+  fun refresh()
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  /**
+   * Builds the chart display.
+   */
+  fun build()
+
+  /**
+   * Fired when the chart type has been changed.
+   */
+  fun typeChanged()
+
+  /**
+   * The chart type.
+   */
+  var type: UChartType
 }
