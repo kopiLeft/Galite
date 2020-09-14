@@ -62,16 +62,16 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
     }
 
     return try {
-      val output = socket?.getOutputStream()
-      output?.write("0".toByteArray()) // no socket for stderr
-      output?.write(0)
-      output?.write(user?.toByteArray()) // !!! at most 16 chars
-      output?.write(0)
-      output?.write(pass?.toByteArray()) // !!! at most 16 chars
-      output?.write(0)
-      output?.write(command.toByteArray())
-      output?.write(0)
-      socket?.getInputStream()?.read() == 0
+      val output = socket!!.getOutputStream()
+      output.write("0".toByteArray()) // no socket for stderr
+      output.write(0)
+      output.write(user!!.toByteArray()) // !!! at most 16 chars
+      output.write(0)
+      output.write(pass!!.toByteArray()) // !!! at most 16 chars
+      output.write(0)
+      output.write(command.toByteArray())
+      output.write(0)
+      socket!!.getInputStream()?.read() == 0
     } catch (e: IOException) {
       e.printStackTrace()
       false // !!! raise an exception
