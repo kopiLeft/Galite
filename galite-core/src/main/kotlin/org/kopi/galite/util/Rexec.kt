@@ -83,9 +83,9 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
    */
   fun close() {
     try {
-      getOutputStream()?.flush()
+      getOutputStream().flush()
       Thread.sleep(250) // !!!!
-      getOutputStream()?.close()
+      getOutputStream().close()
     } catch (e: Exception) {
       // Already close
       e.printStackTrace()
@@ -103,12 +103,12 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
   /**
    * returns an input stream for the given socket
    */
-  fun getInputStream(): InputStream? = socket?.getInputStream()
+  fun getInputStream(): InputStream= socket!!.getInputStream()
 
   /**
    * returns an output stream for the given socket
    */
-  private fun getOutputStream(): OutputStream? = socket?.getOutputStream()
+  private fun getOutputStream(): OutputStream = socket!!.getOutputStream()
 
 
   private var socket: Socket? = null
