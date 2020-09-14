@@ -18,36 +18,20 @@
 
 package org.kopi.galite.visual
 
+import java.io.Serializable
+
 /**
- * This class is a package redefinition of RuntimeException that remaind
- * of a stack of exception
- * Warning: Throwing such an exception will always generate a FATAL ERROR
- * and will close the current form.
+ * `WindowBuilder` is responsible for creating [UWindow]
+ * according to a given window model.
+ *
+ * `WindowBuilder` should be registered using [WindowController.registerWindowBuilder]
+ * @see WindowController.registerWindowBuilder
  */
-open class VRuntimeException : RuntimeException {
+interface WindowBuilder : Serializable {
   /**
-   * Constructs an exception with a message.
-   *
-   * @param        message                the associated message
+   * Creates the [UWindow] for a given window model
+   * @param model The window model
+   * @return The created [UWindow]
    */
-  constructor(message: String?) : super(message)
-
-  /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
-   */
-  constructor(exc: Throwable?) : super(exc)
-
-  /**
-   * Constructs an exception with an other exception.
-   *
-   * @param        exc                the exception
-   */
-  constructor(msg: String?, exc: Throwable?) : super(msg, exc)
-
-  /**
-   * Constructs an exception with no message.
-   */
-  constructor() : super()
+  fun createWindow(model: VWindow): UWindow
 }
