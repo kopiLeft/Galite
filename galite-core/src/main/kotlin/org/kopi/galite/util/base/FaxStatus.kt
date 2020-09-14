@@ -57,14 +57,14 @@ class FaxStatus {
               pages: String,
               dials: String,
               text: String) {
-    this.id = if (id.compareTo("") == 0) null else id
-    this.tag = if (tag.compareTo("") == 0) null else tag
-    this.user = if (user.compareTo("") == 0) null else user
-    this.dialNo = if (dialNo.compareTo("") == 0) null else dialNo
-    this.state = if (state.compareTo("") == 0) null else state
-    this.pages = if (pages.compareTo("") == 0) null else pages
-    this.text = if (text.compareTo("") == 0) null else text
-    this.dials = if (dials.compareTo("") == 0) null else dials
+    this.id = if (id.isEmpty()) null else id
+    this.tag = if (tag.isEmpty()) null else tag
+    this.user = if (user.isEmpty()) null else user
+    this.dialNo = if (dialNo.isEmpty()) null else dialNo
+    this.state = if (state.isEmpty()) null else state
+    this.pages = if (pages.isEmpty()) null else pages
+    this.text = if (text.isEmpty()) null else text
+    this.dials = if (dials.isEmpty()) null else dials
   }
 
   // ----------------------------------------------------------------------
@@ -76,12 +76,12 @@ class FaxStatus {
               pages: String,
               duration: String,
               text: String) {
-    this.filename = if (filename.compareTo("") == 0) null else filename
-    this.incomingtime = if (incomingtime.compareTo("") == 0) null else incomingtime
-    this.sender = if (sender.compareTo("") == 0) null else sender
-    this.pages = if (pages.compareTo("") == 0) null else pages
-    this.duration = if (duration.compareTo("") == 0) null else duration
-    this.text = if (text.compareTo("") == 0) null else text
+    this.filename = if (filename.isEmpty()) null else filename
+    this.incomingtime = if (incomingtime.isEmpty()) null else incomingtime
+    this.sender = if (sender.isEmpty()) null else sender
+    this.pages = if (pages.isEmpty()) null else pages
+    this.duration = if (duration.isEmpty()) null else duration
+    this.text = if (text.isEmpty()) null else text
   }
 
   // ----------------------------------------------------------------------
@@ -120,7 +120,7 @@ class FaxStatus {
   // ----------------------------------------------------------------------
   val isSent: Boolean
     get() = if (state!!.compareTo("D") == 0) {
-      (text == null || text!!.compareTo("") == 0)
+      (text.isNullOrEmpty())
     } else {
       false
     }
