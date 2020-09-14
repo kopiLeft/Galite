@@ -26,8 +26,8 @@ import java.net.UnknownHostException
 /**
  * Remote execution client
  *
- * @param host specifies one or more hostnames
- * @param port identifies one or more computer systems running database servers.
+ * @param host specifies the host name
+ * @param port identifies the port number.
  */
 class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT) {
   /**
