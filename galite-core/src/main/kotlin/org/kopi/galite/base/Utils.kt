@@ -237,7 +237,8 @@ class Utils : org.kopi.galite.util.base.Utils() {
     const val RESOURCE_DIR = "org/kopi/vkopi/lib/resource"
     private val DEFAULT_VERSION = arrayOf(
             "No version information available.",
-            "Copyright 1990-2019 kopiRight Managed Solutions GmbH. All rights reserved."
+            "Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN",
+            "Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT"
     )
     private var allowExplicitGcCall: Boolean? = true
   }
