@@ -47,8 +47,7 @@ import java.util.zip.GZIPOutputStream
  * Utils.getApplicationImage("name");
  *
  */
-class Utils : org.kopi.galite.util.base.Utils() {
-  companion object {
+object Utils : org.kopi.galite.util.base.Utils() {
 
     /**
      * Compress a file in a byte[]
@@ -75,10 +74,11 @@ class Utils : org.kopi.galite.util.base.Utils() {
     }
 
     /**
-     * <p>Creates a temporary file in the default temporary directory.
-     * The filename will look like this : prefixXXXX.extension</p>
-     * <p>Please note that this file will be deleted at the shutdown of
-     * the program. </p>
+     * Creates a temporary file in the default temporary directory.
+     * The filename will look like this : prefixXXXX.extension
+     *
+     * Please note that this file will be deleted at the shutdown of
+     * the program.
      *
      * @param prefix the prefix of the temp file
      * @param extension the extension of the temp file (can be null. in
@@ -116,21 +116,23 @@ class Utils : org.kopi.galite.util.base.Utils() {
 
     /**
      * return file from classpath or jar file
+     *
      * @param img must be an file from resource directory
      * path separator is "/"
      * @return an fileIcon or null if not found
      */
-    private fun getDefaultFile(img: String): InputStream? {
+     fun getDefaultFile(img: String): InputStream? {
       return getFileFromResource(img, RESOURCE_DIR)
     }
 
     /**
      * return image from classpath or jar file
+     *
      * @param img must be an image from resource directory
      * path separator is "/"
      * @return an imageIcon or null if not found
      */
-    private fun getApplicationFile(img: String): InputStream? {
+     fun getApplicationFile(img: String): InputStream? {
       return getFileFromResource(img, APPLICATION_DIR)
     }
 
@@ -140,9 +142,11 @@ class Utils : org.kopi.galite.util.base.Utils() {
     fun getURLFromResource(name: String, directory: String? = RESOURCE_DIR): URL? {
       return if (directory == null) {
         null
-      } else Utils::class.java.classLoader.getResource("$directory/$name")
-      // Java Web Start needs to get the class loader based on
-      // the current class.
+      } else {
+        // Java Web Start needs to get the class loader based on
+        // the current class.
+        Utils::class.java.classLoader.getResource("$directory/$name")
+      }
     }
 
     /**
@@ -213,17 +217,9 @@ class Utils : org.kopi.galite.util.base.Utils() {
       return DEFAULT_VERSION
     }
 
-    /**
-     * 2003.08.14; jdk 1.4.1; Wischeffekt, Speicherverbrauch
-     * Ab jdk 1.4.2 gibt es auch die option -XX:MinHeapFreeRatio=0
-     */
     fun freeMemory() {
       if (allowExplicitGcCall == null) {
-        allowExplicitGcCall = if (System.getProperty("visualKopi.allowExplicitGcCall") != null) {
-          java.lang.Boolean.TRUE
-        } else {
-          java.lang.Boolean.FALSE
-        }
+        allowExplicitGcCall = System.getProperty("visual.allowExplicitGcCall") != null
       }
       if (allowExplicitGcCall == true) {
         System.gc()
@@ -240,6 +236,6 @@ class Utils : org.kopi.galite.util.base.Utils() {
             "Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN. All rights reserved.",
             "Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT. All rights reserved."
     )
-    private var allowExplicitGcCall: Boolean? = true
-  }
+    private var allowExplicitGcCall: Boolean? = null
+
 }

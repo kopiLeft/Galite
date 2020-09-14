@@ -22,10 +22,25 @@ import java.text.ChoiceFormat
 import java.text.Format
 import java.text.MessageFormat
 import java.text.ParsePosition
-import java.util.ArrayList
 import java.util.Arrays
 import java.util.Locale
 
+/**
+ * An extended implementation of the message format that allows to
+ * handle a specific syntax of choice format :
+ *
+ * {argument-number <b>?</b>, choice, 0#<b>null case</b> | 1#<b>not null case</b>}
+ *
+ * The question marks says if the argument should be tested on null value. If yes
+ * the {@link ExtendedChoiceFormat} implementation guarantees to return 1 when the
+ * object is not null and 0 if the object is null.
+ *
+ * The parse strategy was copied from the org.apache.commons.text.ExtendedMessageFormat.
+ * The implementation was adapted to our needs.
+ *
+ * It is safer to call new {@link #formatMessage(String, Object[])} method instead of calling
+ * {@link #format(Object)} method. behavior is not ensured.
+ */
 class ExtendedMessageFormat : MessageFormat {
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
@@ -76,16 +91,15 @@ class ExtendedMessageFormat : MessageFormat {
     return newObjects
   }
 
-  /*
- * @see java.text.MessageFormat
- */
+  /**
+   * @see java.text.MessageFormat
+   */
   override fun applyPattern(pattern: String) {
-    val descriptions: MutableList<FormatDescription>
-    descriptions = ArrayList()
-    val customPattern: StringBuilder = StringBuilder(pattern.length)
-    val position: ParsePosition = ParsePosition(0)
-    val patternChars: CharArray = pattern.toCharArray()
-    var fmtCount: Int = 0
+    val descriptions = arrayListOf<FormatDescription>()
+    val customPattern = StringBuilder(pattern.length)
+    val position = ParsePosition(0)
+    val patternChars = pattern.toCharArray()
+    var fmtCount = 0
     while (position.index < pattern.length) {
       when (patternChars[position.index]) {
         QUOTE -> appendQuotedString(pattern, position, customPattern)
@@ -131,7 +145,7 @@ class ExtendedMessageFormat : MessageFormat {
     for (i in formats.indices) {
       if (formats[i] is ChoiceFormat) {
         var description: FormatDescription?
-        var pattern: String = (formats[i] as ChoiceFormat).toPattern()
+        val pattern: String = (formats[i] as ChoiceFormat).toPattern()
         description = getChoiceFormatDescription(pattern, formatDescriptions)
         // use extended choice format instead
         newFormats[i] = ExtendedChoiceFormat(pattern, description?.info?.hasNotNullMarker ?: false)
@@ -208,7 +222,7 @@ class ExtendedMessageFormat : MessageFormat {
     val start: Int = pos.index
     seekNonWs(pattern, pos)
     val text: Int = pos.index
-    var depth: Int = 1
+    var depth = 1
     while (pos.index < pattern.length) {
       when (pattern[pos.index]) {
         START_FE -> {
@@ -231,6 +245,7 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Consume whitespace from the current parse position.
+   *
    * @param pattern String to read
    * @param pos current position
    */
@@ -245,6 +260,7 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Convenience method to advance parse position by 1.
+   *
    * @param pos ParsePosition
    * @return `pos`
    */
@@ -256,6 +272,7 @@ class ExtendedMessageFormat : MessageFormat {
   /**
    * Consume a quoted string, adding it to `appendTo` if
    * specified.
+   *
    * @param pattern pattern to parse
    * @param pos current parse position
    * @param appendTo optional StringBuilder to append
@@ -287,6 +304,7 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Consume quoted string only.
+   *
    * @param pattern pattern to parse
    * @param pos current parse position
    */
@@ -296,6 +314,7 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Returns whether or not the given character matches with whitespace.
+   *
    * @param buffer  the text content to match against, do not change
    * @param pos  the starting position for the match, valid for buffer
    * @return the number of matching characters, zero for no match
@@ -308,6 +327,7 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Returns the format description of the given description.
+   *
    * @param description The searched format description.
    * @param descriptions The list of available format descriptions.
    * @return The format description if found or null if not.
@@ -326,6 +346,7 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Converts the given choice format description to a choice pattern.
+   *
    * @param fdescription The choice format description.
    * @return The choice pattern.
    */
@@ -399,4 +420,3 @@ class ExtendedMessageFormat : MessageFormat {
     val NULL_REPRESENTATION = Any()
   }
 }
-
