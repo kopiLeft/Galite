@@ -28,34 +28,34 @@ import kotlin.test.assertFailsWith
 
 class FormLocalizerTests {
 
-    @Test
-    fun formLocalizer() {
-        val root = Element("form")
-        val document = Document(root)
-        val page =  Element("page")
+  @Test
+  fun formLocalizer() {
+    val root = Element("form")
+    val document = Document(root)
+    val page = Element("page")
 
-        root.setAttribute("title", "title")
-        page.setAttribute("ident", "Id$1")
-        page.setAttribute("title", "titleOfPage-1")
-        root.addContent(page)
+    root.setAttribute("title", "title")
+    page.setAttribute("ident", "Id$1")
+    page.setAttribute("title", "titleOfPage-1")
+    root.addContent(page)
 
-        //case 1
-        var formLocalizer = FormLocalizer(document)
+    //case 1
+    var formLocalizer = FormLocalizer(document)
 
-        assertEquals("title", formLocalizer.title)
-        assertEquals("titleOfPage-1", formLocalizer.getPage(1))
+    assertEquals("title", formLocalizer.getTitle())
+    assertEquals("titleOfPage-1", formLocalizer.getPage(1))
 
-        //case 2
-        var exception = assertFailsWith<InconsistencyException> {
-            document.rootElement.name = "test"
-            formLocalizer = FormLocalizer(document)
-        }
-        assertEquals("bad root element [Element: <test/>]", exception.message)
-
-        //case 3
-         exception = assertFailsWith<InconsistencyException> {
-             println(formLocalizer.getPage(2))
-         }
-        assertEquals("page 2 not found", exception.message)
+    //case 2
+    var exception = assertFailsWith<InconsistencyException> {
+      document.rootElement.name = "test"
+      formLocalizer = FormLocalizer(document)
     }
+    assertEquals("bad root element [Element: <test/>]", exception.message)
+
+    //case 3
+    exception = assertFailsWith<InconsistencyException> {
+      println(formLocalizer.getPage(2))
+    }
+    assertEquals("page 2 not found", exception.message)
+  }
 }

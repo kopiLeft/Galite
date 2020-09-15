@@ -24,44 +24,40 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements an actor localizer.
+ *
+ * @param             document        the document containing the actor localization
+ * @param             ident           the identifier of the actor localization
  */
 class ActorLocalizer(document: Document, ident: String) {
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the value of the label attribute.
-     */
-    val label: String
-        get() = self.getAttributeValue("label")
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the value of the label attribute.
+   */
+  fun getLabel(): String = self.getAttributeValue("label")
 
-    /**
-     * Returns the value of the help attribute.
-     */
-    val help: String
-        get() = self.getAttributeValue("help")
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String = self.getAttributeValue("help")
 
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private val self: Element
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val self: Element
 
-    // ----------------------------------------------------------------------
-    // CONSTRUCTOR
-    // ----------------------------------------------------------------------
-    /**
-     * Constructor
-     *
-     * @param             document        the document containing the actor localization
-     * @param             ident           the identifier of the actor localization
-     */
-    init {
-        val root: Element = document.rootElement
-        val names = listOf ("form", "insert")
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
 
-        if (root.name !in names) {
-            throw InconsistencyException("bad root element $root")
-        }
-        self = Utils.lookupChild(root, "actor", "ident", ident)
+  init {
+    val root: Element = document.rootElement
+    val names = listOf("form", "insert")
+
+    if (root.name !in names) {
+      throw InconsistencyException("bad root element $root")
     }
+    self = Utils.lookupChild(root, "actor", "ident", ident)
+  }
 }

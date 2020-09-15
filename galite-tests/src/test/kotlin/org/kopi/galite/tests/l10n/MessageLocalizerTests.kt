@@ -28,32 +28,32 @@ import kotlin.test.assertFailsWith
 
 class MessageLocalizerTests {
 
-    @Test
-    fun messageLocalizerTests() {
-        val root = Element("messages")
-        val document = Document(root)
-        val message =  Element("message")
+  @Test
+  fun messageLocalizerTests() {
+    val root = Element("messages")
+    val document = Document(root)
+    val message = Element("message")
 
-        message.setAttribute("ident", "ident")
-        message.setAttribute("text", "text")
-        root.addContent(message);
+    message.setAttribute("ident", "ident")
+    message.setAttribute("text", "text")
+    root.addContent(message);
 
-        //case 1
-        var messageLocalizer = MessageLocalizer(document, "ident")
+    //case 1
+    var messageLocalizer = MessageLocalizer(document, "ident")
 
-        assertEquals("text", messageLocalizer.text)
+    assertEquals("text", messageLocalizer.getText())
 
-        //case 2
-        var exception = assertFailsWith<InconsistencyException> {
-            messageLocalizer = MessageLocalizer(document, "identError")
-        }
-        assertEquals("null: message ident = identError not found", exception.message)
-
-        //case 3
-        document.rootElement.name = "test"
-        exception = assertFailsWith<InconsistencyException> {
-            messageLocalizer = MessageLocalizer(document, "ident")
-        }
-        assertEquals("bad root element [Element: <test/>]", exception.message)
+    //case 2
+    var exception = assertFailsWith<InconsistencyException> {
+      messageLocalizer = MessageLocalizer(document, "identError")
     }
+    assertEquals("null: message ident = identError not found", exception.message)
+
+    //case 3
+    document.rootElement.name = "test"
+    exception = assertFailsWith<InconsistencyException> {
+      messageLocalizer = MessageLocalizer(document, "ident")
+    }
+    assertEquals("bad root element [Element: <test/>]", exception.message)
+  }
 }

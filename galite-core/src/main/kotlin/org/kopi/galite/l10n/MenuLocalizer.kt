@@ -24,38 +24,33 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a menu localizer.
+ * @param             document        the document containing the menu localization
+ * @param             ident           the identifier of the menu localization
  */
 class MenuLocalizer(document: Document, ident: String) {
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the value of the label attribute.
-     */
-    val label: String
-        get() = self.getAttributeValue("label")
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the value of the label attribute.
+   */
+  fun getLabel(): String = self.getAttributeValue("label")
 
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private val self: Element
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val self: Element
 
-    // ----------------------------------------------------------------------
-    // CONSTRUCTOR
-    // ----------------------------------------------------------------------
-    /**
-     * Constructor
-     *
-     * @param             document        the document containing the menu localization
-     * @param             ident           the identifier of the menu localization
-     */
-    init {
-        val root: Element = document.rootElement
-        val names = listOf ("form", "insert")
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    val root: Element = document.rootElement
+    val names = listOf("form", "insert")
 
-        if (root.name !in names) {
-            throw InconsistencyException("bad root element $root")
-        }
-        self = Utils.lookupChild(root, "menu", "ident", ident)
+    if (root.name !in names) {
+      throw InconsistencyException("bad root element $root")
     }
+    self = Utils.lookupChild(root, "menu", "ident", ident)
+  }
 }

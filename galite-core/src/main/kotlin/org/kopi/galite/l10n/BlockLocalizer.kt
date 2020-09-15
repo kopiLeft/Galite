@@ -24,67 +24,61 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a block localizer.
+ * @param             manager         the manager to use for localization
+ * @param             document        the document containing the block localization
+ * @param             ident           the identifier of the block
  */
 class BlockLocalizer(manager: LocalizationManager,
                      document: Document,
                      ident: String) : Localizer(manager) {
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the value of the title attribute.
-     */
-    val title: String
-        get() = self.getAttributeValue("title")
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the value of the title attribute.
+   */
+  fun getTitle(): String = self.getAttributeValue("title")
 
-    /**
-     * Returns the value of the help attribute.
-     */
-    val help: String
-        get() = self.getAttributeValue("help")
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String = self.getAttributeValue("help")
 
-    /**
-     * Returns the message for the specified index.
-     *
-     * @param             ident           the identifier of the index
-     */
-    fun getIndexMessage(ident: String): String {
-        val e: Element = Utils.lookupChild(self, "index", "ident", ident)
-        return e.getAttributeValue("message")
+  /**
+   * Returns the message for the specified index.
+   *
+   * @param             ident           the identifier of the index
+   */
+  fun getIndexMessage(ident: String): String {
+    val e: Element = Utils.lookupChild(self, "index", "ident", ident)
+    return e.getAttributeValue("message")
+  }
+
+  /**
+   * Constructs a field localizer for the given field.
+   *
+   * @param             ident           the identifier of the field
+   */
+  fun getFieldLocalizer(ident: String): FieldLocalizer {
+    return FieldLocalizer(manager,
+            Utils.lookupChild(self, "field", "ident", ident))
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val self: Element
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    val root: Element = document.rootElement
+    val names = listOf("form", "blockinsert")
+
+    if (root.name !in names) {
+      throw InconsistencyException("bad root element $root")
     }
-
-    /**
-     * Constructs a field localizer for the given field.
-     *
-     * @param             ident           the identifier of the field
-     */
-    fun getFieldLocalizer(ident: String): FieldLocalizer {
-        return FieldLocalizer(manager,
-                              Utils.lookupChild(self, "field", "ident", ident))
-    }
-
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private val self: Element
-
-    // ----------------------------------------------------------------------
-    // CONSTRUCTOR
-    // ----------------------------------------------------------------------
-    /**
-     * Constructor
-     *
-     * @param             manager         the manager to use for localization
-     * @param             document        the document containing the block localization
-     * @param             ident           the identifier of the block
-     */
-    init {
-        val root: Element = document.rootElement
-        val names = listOf ("form", "blockinsert")
-
-        if (root.name !in names) {
-            throw InconsistencyException("bad root element $root")
-        }
-        self = Utils.lookupChild(root, "block", "name", ident)
-    }
+    self = Utils.lookupChild(root, "block", "name", ident)
+  }
 }

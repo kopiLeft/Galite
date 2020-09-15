@@ -28,34 +28,34 @@ import kotlin.test.assertFailsWith
 
 class ModuleLocalizerTests {
 
-    @Test
-    fun moduleLocalizerTests() {
-        val root = Element("modules")
-        val document = Document(root)
-        val module =  Element("module")
+  @Test
+  fun moduleLocalizerTests() {
+    val root = Element("modules")
+    val document = Document(root)
+    val module = Element("module")
 
-        module.setAttribute("ident", "ident")
-        module.setAttribute("label", "label")
-        module.setAttribute("help", "help")
-        root.addContent(module);
+    module.setAttribute("ident", "ident")
+    module.setAttribute("label", "label")
+    module.setAttribute("help", "help")
+    root.addContent(module);
 
-        //case 1
-        var moduleLocalizer = ModuleLocalizer(document, "ident")
+    //case 1
+    var moduleLocalizer = ModuleLocalizer(document, "ident")
 
-        assertEquals("label", moduleLocalizer.label)
-        assertEquals("help", moduleLocalizer.help)
+    assertEquals("label", moduleLocalizer.getLabel())
+    assertEquals("help", moduleLocalizer.getHelp())
 
-        //case 2
-        var exception = assertFailsWith<InconsistencyException> {
-            moduleLocalizer = ModuleLocalizer(document, "identError")
-        }
-        assertEquals("null: module ident = identError not found", exception.message)
-
-        //case 3
-        document.rootElement.name = "test"
-        exception = assertFailsWith<InconsistencyException> {
-            moduleLocalizer = ModuleLocalizer(document, "ident")
-        }
-        assertEquals("bad root element [Element: <test/>]", exception.message)
+    //case 2
+    var exception = assertFailsWith<InconsistencyException> {
+      moduleLocalizer = ModuleLocalizer(document, "identError")
     }
+    assertEquals("null: module ident = identError not found", exception.message)
+
+    //case 3
+    document.rootElement.name = "test"
+    exception = assertFailsWith<InconsistencyException> {
+      moduleLocalizer = ModuleLocalizer(document, "ident")
+    }
+    assertEquals("bad root element [Element: <test/>]", exception.message)
+  }
 }

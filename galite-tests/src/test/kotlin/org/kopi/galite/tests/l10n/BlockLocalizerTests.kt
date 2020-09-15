@@ -30,47 +30,47 @@ import org.kopi.galite.util.base.InconsistencyException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class BlockLocalizerTests: TestBase() {
+class BlockLocalizerTests : TestBase() {
 
-    @Test
-    fun blockLocalizer() {
-        val root = Element("form")
-        val document = Document(root)
-        val block =  Element("block")
-        val field =  Element("field")
+  @Test
+  fun blockLocalizer() {
+    val root = Element("form")
+    val document = Document(root)
+    val block = Element("block")
+    val field = Element("field")
 
-        block.setAttribute("name", "ident")
-        block.setAttribute("title", "title")
-        block.setAttribute("help", "help")
-        root.addContent(block);
+    block.setAttribute("name", "ident")
+    block.setAttribute("title", "title")
+    block.setAttribute("help", "help")
+    root.addContent(block);
 
-        field.setAttribute("ident", "ident")
-        field.setAttribute("label", "label")
-        field.setAttribute("help", "help")
-        block.addContent(field);
+    field.setAttribute("ident", "ident")
+    field.setAttribute("label", "label")
+    field.setAttribute("help", "help")
+    block.addContent(field);
 
-        //case 1
-        var locale = Locale ("fr", "FR")
-        var localizationManager = LocalizationManager(locale, locale)
-        var blockLocalizer = BlockLocalizer(localizationManager, document, "ident")
+    //case 1
+    var locale = Locale("fr", "FR")
+    var localizationManager = LocalizationManager(locale, locale)
+    var blockLocalizer = BlockLocalizer(localizationManager, document, "ident")
 
-        assertEquals("title", blockLocalizer.title)
-        assertEquals("help", blockLocalizer.help)
-        assertEquals("label", blockLocalizer.getFieldLocalizer("ident").label)
-        assertEquals("help", blockLocalizer.getFieldLocalizer("ident").help)
+    assertEquals("title", blockLocalizer.getTitle())
+    assertEquals("help", blockLocalizer.getHelp())
+    assertEquals("label", blockLocalizer.getFieldLocalizer("ident").getLabel())
+    assertEquals("help", blockLocalizer.getFieldLocalizer("ident").getHelp())
 
-        //case 2
+    //case 2
 
-        var exception = assertFailsWith<InconsistencyException> {
-            blockLocalizer = BlockLocalizer(localizationManager, document, "identError")
-        }
-       assertEquals("null: block name = identError not found", exception.message)
-
-        //case 3
-        document.rootElement.name = "test"
-        exception = assertFailsWith<InconsistencyException> {
-            blockLocalizer = BlockLocalizer(localizationManager, document, "ident")
-        }
-        assertEquals("bad root element [Element: <test/>]", exception.message)
+    var exception = assertFailsWith<InconsistencyException> {
+      blockLocalizer = BlockLocalizer(localizationManager, document, "identError")
     }
+    assertEquals("null: block name = identError not found", exception.message)
+
+    //case 3
+    document.rootElement.name = "test"
+    exception = assertFailsWith<InconsistencyException> {
+      blockLocalizer = BlockLocalizer(localizationManager, document, "ident")
+    }
+    assertEquals("bad root element [Element: <test/>]", exception.message)
+  }
 }

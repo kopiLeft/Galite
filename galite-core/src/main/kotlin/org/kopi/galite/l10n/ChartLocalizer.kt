@@ -22,48 +22,45 @@ import org.jdom2.Document
 import org.jdom2.Element
 import org.kopi.galite.util.base.InconsistencyException
 
+/**
+ * @param             manager         the manager to use for localization
+ * @param             document        the document containing the report localization
+ */
 class ChartLocalizer(manager: LocalizationManager, document: Document) : Localizer(manager) {
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the value of the title attribute.
-     */
-    val title: String
-        get() = root.getAttributeValue("title")
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the value of the title attribute.
+   */
+  fun getTitle(): String = root.getAttributeValue("title")
 
-    /**
-     * Returns the value of the help attribute.
-     */
-    val help: String
-        get() = root.getAttributeValue("help")
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String = root.getAttributeValue("help")
 
-    /**
-     * Constructs a field localizer for the given field.
-     *
-     * @param             ident           the identifier of the field
-     */
-    fun getFieldLocalizer(ident: String): FieldLocalizer {
-        return FieldLocalizer(manager, Utils.lookupChild(root, "field", "ident", ident))
+  /**
+   * Constructs a field localizer for the given field.
+   *
+   * @param             ident           the identifier of the field
+   */
+  fun getFieldLocalizer(ident: String): FieldLocalizer {
+    return FieldLocalizer(manager, Utils.lookupChild(root, "field", "ident", ident))
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val root: Element = document.rootElement
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+
+  init {
+    if (root.name != "chart") {
+      throw InconsistencyException("bad root element $root")
     }
-
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private val root: Element = document.rootElement
-
-    // ----------------------------------------------------------------------
-    // CONSTRUCTOR
-    // ----------------------------------------------------------------------
-    /**
-     * Constructor
-     *
-     * @param             manager         the manager to use for localization
-     * @param             document        the document containing the report localization
-     */
-    init {
-        if (root.name != "chart") {
-            throw InconsistencyException("bad root element $root")
-        }
-    }
+  }
 }

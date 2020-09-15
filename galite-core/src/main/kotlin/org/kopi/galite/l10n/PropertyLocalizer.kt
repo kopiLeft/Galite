@@ -26,57 +26,56 @@ import org.kopi.galite.util.base.InconsistencyException
  * Implements a Property localizer.
  */
 class PropertyLocalizer {
-    // ----------------------------------------------------------------------
-    // CONSTRUCTOR
-    // ----------------------------------------------------------------------
-    /**
-     * Constructor
-     *
-     * @param             document        the document containing the properties localization
-     * @param             ident           the identifier of the menu localization
-     */
-    constructor(document: Document, ident: String) {
-        root = document.rootElement
-        if (root.name != "properties") {
-            throw InconsistencyException("bad root element $root")
-        }
-        self = Utils.lookupChild(root, "property", "key", ident)
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  /**
+   * Constructor
+   *
+   * @param             document        the document containing the properties localization
+   * @param             ident           the identifier of the menu localization
+   */
+  constructor(document: Document, ident: String) {
+    root = document.rootElement
+    if (root.name != "properties") {
+      throw InconsistencyException("bad root element $root")
     }
+    self = Utils.lookupChild(root, "property", "key", ident)
+  }
 
-    /**
-     * Constructor
-     *
-     * @param             document        the document containing the properties localization
-     */
-    constructor(document: Document) {
-        root = document.rootElement
+  /**
+   * Constructor
+   *
+   * @param             document        the document containing the properties localization
+   */
+  constructor(document: Document) {
+    root = document.rootElement
 
-        if (root.name != "properties") {
-            throw InconsistencyException("bad root element $root")
-        }
+    if (root.name != "properties") {
+      throw InconsistencyException("bad root element $root")
     }
+  }
 
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the value of the label attribute.
-     */
-    val value: String
-        get() = self.getAttributeValue("value")
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the value of the label attribute.
+   */
+  fun getValue(): String = self.getAttributeValue("value")
 
-    /**
-     * Returns the value of the label attribute.
-     */
-    fun getValue(ident: String): String {
-        self = Utils.lookupChild(root, "property", "key", ident)
+  /**
+   * Returns the value of the label attribute.
+   */
+  fun getValue(ident: String): String {
+    self = Utils.lookupChild(root, "property", "key", ident)
 
-        return self.getAttributeValue("value")
-    }
+    return self.getAttributeValue("value")
+  }
 
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private var root: Element
-    private lateinit var self: Element
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var root: Element
+  private lateinit var self: Element
 }

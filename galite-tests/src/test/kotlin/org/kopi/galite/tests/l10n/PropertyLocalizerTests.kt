@@ -28,34 +28,34 @@ import kotlin.test.assertFailsWith
 
 class PropertyLocalizerTests {
 
-    @Test
-    fun propertyLocalizerTests() {
-        val root = Element("properties")
-        val document = Document(root)
-        val property =  Element("property")
+  @Test
+  fun propertyLocalizerTests() {
+    val root = Element("properties")
+    val document = Document(root)
+    val property = Element("property")
 
-        property.setAttribute("key", "ident")
-        property.setAttribute("value", "value")
-        property.setAttribute("help", "help")
-        root.addContent(property);
+    property.setAttribute("key", "ident")
+    property.setAttribute("value", "value")
+    property.setAttribute("help", "help")
+    root.addContent(property);
 
-        //case 1
-        var propertyLocalizer = PropertyLocalizer(document, "ident")
+    //case 1
+    var propertyLocalizer = PropertyLocalizer(document, "ident")
 
-        assertEquals("value", propertyLocalizer.value)
+    assertEquals("value", propertyLocalizer.getValue())
 
 
-        //case 2
-        var exception = assertFailsWith<InconsistencyException> {
-            propertyLocalizer = PropertyLocalizer(document, "identError")
-        }
-        assertEquals("null: property key = identError not found", exception.message)
-
-        //case 3
-        document.rootElement.name = "test"
-        exception = assertFailsWith<InconsistencyException> {
-            propertyLocalizer = PropertyLocalizer(document, "ident")
-        }
-        assertEquals("bad root element [Element: <test/>]", exception.message)
+    //case 2
+    var exception = assertFailsWith<InconsistencyException> {
+      propertyLocalizer = PropertyLocalizer(document, "identError")
     }
+    assertEquals("null: property key = identError not found", exception.message)
+
+    //case 3
+    document.rootElement.name = "test"
+    exception = assertFailsWith<InconsistencyException> {
+      propertyLocalizer = PropertyLocalizer(document, "ident")
+    }
+    assertEquals("bad root element [Element: <test/>]", exception.message)
+  }
 }

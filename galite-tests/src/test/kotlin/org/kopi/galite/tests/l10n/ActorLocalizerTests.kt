@@ -29,36 +29,36 @@ import org.kopi.galite.util.base.InconsistencyException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class ActorLocalizerTests: TestBase() {
+class ActorLocalizerTests : TestBase() {
 
-    @Test
-    fun actorLocalizerTests() {
-        val root = Element("form")
-        val document = Document(root)
-        val actor =  Element("actor")
+  @Test
+  fun actorLocalizerTests() {
+    val root = Element("form")
+    val document = Document(root)
+    val actor = Element("actor")
 
-        actor.setAttribute("ident", "ident")
-        actor.setAttribute("label", "label")
-        actor.setAttribute("help", "help")
-        root.addContent(actor);
+    actor.setAttribute("ident", "ident")
+    actor.setAttribute("label", "label")
+    actor.setAttribute("help", "help")
+    root.addContent(actor);
 
-        //case 1
-        var actorLocalizer = ActorLocalizer(document, "ident")
+    //case 1
+    var actorLocalizer = ActorLocalizer(document, "ident")
 
-        assertEquals("label", actorLocalizer.label)
-        assertEquals("help", actorLocalizer.help)
+    assertEquals("label", actorLocalizer.getLabel())
+    assertEquals("help", actorLocalizer.getHelp())
 
-        //case 2
-        var exception = assertFailsWith<InconsistencyException> {
-            actorLocalizer = ActorLocalizer(document, "identError")
-        }
-        assertEquals("null: actor ident = identError not found", exception.message)
-
-        //case 3
-        document.rootElement.name = "test"
-        exception = assertFailsWith<InconsistencyException> {
-            actorLocalizer = ActorLocalizer(document, "ident")
-        }
-        assertEquals("bad root element [Element: <test/>]", exception.message)
+    //case 2
+    var exception = assertFailsWith<InconsistencyException> {
+      actorLocalizer = ActorLocalizer(document, "identError")
     }
+    assertEquals("null: actor ident = identError not found", exception.message)
+
+    //case 3
+    document.rootElement.name = "test"
+    exception = assertFailsWith<InconsistencyException> {
+      actorLocalizer = ActorLocalizer(document, "ident")
+    }
+    assertEquals("bad root element [Element: <test/>]", exception.message)
+  }
 }

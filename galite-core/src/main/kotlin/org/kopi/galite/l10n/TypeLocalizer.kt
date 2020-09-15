@@ -24,46 +24,42 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a type localizer.
+ * @param             manager         the manager to use for localization
+ * @param             document        the document containing the type localization
+ * @param             ident           the identifier of the type
  */
 class TypeLocalizer(manager: LocalizationManager,
                     document: Document,
                     ident: String) : Localizer(manager) {
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the title of the specified item.
-     */
-    fun getCodeLabel(column: String): String {
-        val e: Element = Utils.lookupChild(self, "codedesc", "ident", column)
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the title of the specified item.
+   */
+  fun getCodeLabel(column: String): String {
+    val e: Element = Utils.lookupChild(self, "codedesc", "ident", column)
 
-        return e.getAttributeValue("label")
+    return e.getAttributeValue("label")
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val self: Element
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    val type: Element
+    val root: Element = document.rootElement
+    val names = listOf("form", "report", "blockinsert", "insert")
+
+    if (root.name !in names) {
+      throw InconsistencyException("bad root element $root")
     }
-
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private val self: Element
-
-    // ----------------------------------------------------------------------
-    // CONSTRUCTOR
-    // ----------------------------------------------------------------------
-    /**
-     * Constructor
-     *
-     * @param             manager         the manager to use for localization
-     * @param             document        the document containing the type localization
-     * @param             ident           the identifier of the type
-     */
-    init {
-        val type: Element
-        val root: Element = document.rootElement
-        val names = listOf ("form", "report", "blockinsert", "insert")
-
-        if (root.name !in names) {
-            throw InconsistencyException("bad root element $root")
-        }
-        type = Utils.lookupChild(root, "type", "ident", ident)
-        self = Utils.lookupChild(type, "code")
-    }
+    type = Utils.lookupChild(root, "type", "ident", ident)
+    self = Utils.lookupChild(type, "code")
+  }
 }

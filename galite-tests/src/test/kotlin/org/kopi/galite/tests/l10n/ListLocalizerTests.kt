@@ -31,45 +31,45 @@ import kotlin.test.assertFailsWith
 
 class ListLocalizerTests {
 
-    @Test
-    fun listLocalizerTests() {
-        val root = Element("form")
-        val document = Document(root)
-        val type =  Element("type")
-        val list =  Element("list")
-        val listdesc =  Element("listdesc")
+  @Test
+  fun listLocalizerTests() {
+    val root = Element("form")
+    val document = Document(root)
+    val type = Element("type")
+    val list = Element("list")
+    val listdesc = Element("listdesc")
 
-        type.setAttribute("ident", "ident")
-        list.setAttribute("ident", "ident")
-        list.setAttribute("ident2", "ident2")
-        listdesc.setAttribute("column", "column")
-        listdesc.setAttribute("title", "title")
-        root.addContent(type)
-        type.addContent(list)
-        list.addContent(listdesc)
+    type.setAttribute("ident", "ident")
+    list.setAttribute("ident", "ident")
+    list.setAttribute("ident2", "ident2")
+    listdesc.setAttribute("column", "column")
+    listdesc.setAttribute("title", "title")
+    root.addContent(type)
+    type.addContent(list)
+    list.addContent(listdesc)
 
-        //case 1
-        var locale = Locale ("fr", "FR")
-        var localizationManager = LocalizationManager(locale, locale)
-        var listLocalizer = ListLocalizer(localizationManager, document, "ident")
+    //case 1
+    var locale = Locale("fr", "FR")
+    var localizationManager = LocalizationManager(locale, locale)
+    var listLocalizer = ListLocalizer(localizationManager, document, "ident")
 
-        assertEquals("title", listLocalizer.getColumnTitle("column"))
+    assertEquals("title", listLocalizer.getColumnTitle("column"))
 
-        //case 2
-        var exception = assertFailsWith<InconsistencyException> {
-            type.removeContent(list);
-            listLocalizer = ListLocalizer(localizationManager, document, "ident")
-        }
-        assertEquals("null: list not found", exception.message)
-
-        //case 3
-        exception = assertFailsWith<InconsistencyException> {
-            type.addContent(list)
-            val list2 =  Element("list")
-
-            type.addContent(list2);
-            listLocalizer = ListLocalizer(localizationManager, document, "ident")
-        }
-        assertEquals("null: list not unique", exception.message)
+    //case 2
+    var exception = assertFailsWith<InconsistencyException> {
+      type.removeContent(list);
+      listLocalizer = ListLocalizer(localizationManager, document, "ident")
     }
+    assertEquals("null: list not found", exception.message)
+
+    //case 3
+    exception = assertFailsWith<InconsistencyException> {
+      type.addContent(list)
+      val list2 = Element("list")
+
+      type.addContent(list2);
+      listLocalizer = ListLocalizer(localizationManager, document, "ident")
+    }
+    assertEquals("null: list not unique", exception.message)
+  }
 }

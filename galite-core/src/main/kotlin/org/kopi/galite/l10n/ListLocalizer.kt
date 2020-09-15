@@ -24,44 +24,36 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a list localizer.
+ * @param             column          the identifier of the column
+ * @param             manager         the manager to use for localization
+ * @param             document        the document containing the list localization
+ * @param             ident           the identifier of the list
  */
 class ListLocalizer(manager: LocalizationManager,
                     document: Document,
                     ident: String) : Localizer(manager) {
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the title of the specified item.
-     *
-     * @param             column          the identifier of the column
-     */
-    fun getColumnTitle(column: String): String = Utils.lookupChild(self, "listdesc", "column", column).getAttributeValue("title")
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  fun getColumnTitle(column: String): String = Utils.lookupChild(self, "listdesc", "column", column).getAttributeValue("title")
 
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private val self: Element
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val self: Element
 
-    // ----------------------------------------------------------------------
-    // CONSTRUCTOR
-    // ----------------------------------------------------------------------
-    /**
-     * Constructor
-     *
-     * @param             manager         the manager to use for localization
-     * @param             document        the document containing the list localization
-     * @param             ident           the identifier of the list
-     */
-    init {
-        val type: Element
-        val root: Element = document.rootElement
-        val names = listOf ("form", "report", "blockinsert", "insert")
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    val type: Element
+    val root: Element = document.rootElement
+    val names = listOf("form", "report", "blockinsert", "insert")
 
-        if (root.name !in names) {
-            throw InconsistencyException("bad root element $root")
-        }
-        type = Utils.lookupChild(root, "type", "ident", ident)
-        self = Utils.lookupChild(type, "list")
+    if (root.name !in names) {
+      throw InconsistencyException("bad root element $root")
     }
+    type = Utils.lookupChild(root, "type", "ident", ident)
+    self = Utils.lookupChild(type, "list")
+  }
 }

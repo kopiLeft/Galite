@@ -24,18 +24,16 @@ import org.jdom2.Element
  * Implements a field localizer.
  */
 class FieldLocalizer(manager: LocalizationManager, private val self: Element) : Localizer(manager) {
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the value of the label attribute.
-     */
-    val label: String
-        get() = self.getAttributeValue("label")
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the value of the label attribute.
+   */
+  fun getLabel(): String = self.getAttributeValue("label")
 
-    /**
-     * Returns the value of the help attribute.
-     */
-    val help: String
-        get() = self.getAttributeValue("help")
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String = self.getAttributeValue("help")
 }

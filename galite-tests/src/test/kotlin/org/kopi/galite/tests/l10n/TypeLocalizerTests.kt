@@ -31,45 +31,45 @@ import kotlin.test.assertFailsWith
 
 class TypeLocalizerTests {
 
-    @Test
-    fun listLocalizerTests() {
-        val root = Element("form")
-        val document = Document(root)
-        val type =  Element("type")
-        val code =  Element("code")
-        val codedesc =  Element("codedesc")
+  @Test
+  fun listLocalizerTests() {
+    val root = Element("form")
+    val document = Document(root)
+    val type = Element("type")
+    val code = Element("code")
+    val codedesc = Element("codedesc")
 
-        type.setAttribute("ident", "ident")
-        code.setAttribute("ident", "ident")
-        code.setAttribute("ident2", "ident2")
-        codedesc.setAttribute("ident", "ident")
-        codedesc.setAttribute("label", "label")
-        root.addContent(type)
-        type.addContent(code)
-        code.addContent(codedesc)
+    type.setAttribute("ident", "ident")
+    code.setAttribute("ident", "ident")
+    code.setAttribute("ident2", "ident2")
+    codedesc.setAttribute("ident", "ident")
+    codedesc.setAttribute("label", "label")
+    root.addContent(type)
+    type.addContent(code)
+    code.addContent(codedesc)
 
-        //case 1
-        var locale = Locale ("fr", "FR")
-        var localizationManager = LocalizationManager(locale, locale)
-        var typeLocalizer = TypeLocalizer(localizationManager, document, "ident")
+    //case 1
+    var locale = Locale("fr", "FR")
+    var localizationManager = LocalizationManager(locale, locale)
+    var typeLocalizer = TypeLocalizer(localizationManager, document, "ident")
 
-        assertEquals("label", typeLocalizer.getCodeLabel("ident"))
+    assertEquals("label", typeLocalizer.getCodeLabel("ident"))
 
-        //case 2
-        var exception = assertFailsWith<InconsistencyException> {
-            type.removeContent(code);
-            typeLocalizer = TypeLocalizer(localizationManager, document, "ident")
-        }
-        assertEquals("null: code not found", exception.message)
-
-        //case 3
-        exception = assertFailsWith<InconsistencyException> {
-            type.addContent(code)
-            val code2 =  Element("code")
-
-            type.addContent(code2);
-            typeLocalizer = TypeLocalizer(localizationManager, document, "ident")
-        }
-        assertEquals("null: code not unique", exception.message)
+    //case 2
+    var exception = assertFailsWith<InconsistencyException> {
+      type.removeContent(code);
+      typeLocalizer = TypeLocalizer(localizationManager, document, "ident")
     }
+    assertEquals("null: code not found", exception.message)
+
+    //case 3
+    exception = assertFailsWith<InconsistencyException> {
+      type.addContent(code)
+      val code2 = Element("code")
+
+      type.addContent(code2);
+      typeLocalizer = TypeLocalizer(localizationManager, document, "ident")
+    }
+    assertEquals("null: code not unique", exception.message)
+  }
 }

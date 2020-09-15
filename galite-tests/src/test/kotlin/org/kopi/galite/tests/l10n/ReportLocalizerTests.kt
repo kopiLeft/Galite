@@ -31,34 +31,34 @@ import kotlin.test.assertFailsWith
 
 class ReportLocalizerTests {
 
-    @Test
-    fun reportLocalizerTests() {
-        val root = Element("report")
-        val document = Document(root)
-        val field =  Element("field")
+  @Test
+  fun reportLocalizerTests() {
+    val root = Element("report")
+    val document = Document(root)
+    val field = Element("field")
 
-        field.setAttribute("ident", "ident")
-        root.setAttribute("title", "title")
-        root.setAttribute("help", "help")
-        field.setAttribute("label", "label")
-        field.setAttribute("help", "help")
-        root.addContent(field);
+    field.setAttribute("ident", "ident")
+    root.setAttribute("title", "title")
+    root.setAttribute("help", "help")
+    field.setAttribute("label", "label")
+    field.setAttribute("help", "help")
+    root.addContent(field);
 
-        //case 1
-        var locale = Locale ("fr", "FR")
-        var localizationManager = LocalizationManager(locale, locale)
-        var reportLocalizer = ReportLocalizer(localizationManager, document)
+    //case 1
+    var locale = Locale("fr", "FR")
+    var localizationManager = LocalizationManager(locale, locale)
+    var reportLocalizer = ReportLocalizer(localizationManager, document)
 
-        assertEquals("title", reportLocalizer.title)
-        assertEquals("help", reportLocalizer.help)
-        assertEquals("label",reportLocalizer.getFieldLocalizer("ident").label)
-        assertEquals("help",reportLocalizer.getFieldLocalizer("ident").help)
+    assertEquals("title", reportLocalizer.getTitle())
+    assertEquals("help", reportLocalizer.getHelp())
+    assertEquals("label", reportLocalizer.getFieldLocalizer("ident").getLabel())
+    assertEquals("help", reportLocalizer.getFieldLocalizer("ident").getHelp())
 
-        //case 2
-        document.rootElement.name = "test"
-        var exception = assertFailsWith<InconsistencyException> {
-            reportLocalizer = ReportLocalizer(localizationManager, document)
-        }
-        assertEquals("bad root element [Element: <test/>]", exception.message)
+    //case 2
+    document.rootElement.name = "test"
+    var exception = assertFailsWith<InconsistencyException> {
+      reportLocalizer = ReportLocalizer(localizationManager, document)
     }
+    assertEquals("bad root element [Element: <test/>]", exception.message)
+  }
 }

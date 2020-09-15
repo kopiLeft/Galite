@@ -25,48 +25,43 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a form localizer.
+ * @param             document        the document containing the form localization
  */
 class FormLocalizer(document: Document) {
-    // ----------------------------------------------------------------------
-    // ACCESSORS
-    // ----------------------------------------------------------------------
-    /**
-     * Returns the value of the title attribute.
-     */
-    val title: String
-        get() = root.getAttributeValue("title")
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the value of the title attribute.
+   */
+  fun getTitle(): String = root.getAttributeValue("title")
 
-    /**
-     * Returns the value of the page child.
-     *
-     * @param             position                the position of the page
-     */
-    fun getPage(position: Int): String {
-        val pages: List<Element> = root.getChildren("page")
-        pages.forEach {
-            if (it.getAttributeValue("ident") == "Id$$position") {
-                return it.getAttributeValue("title")
-            }
-        }
-        throw InconsistencyException("page $position not found")
+  /**
+   * Returns the value of the page child.
+   *
+   * @param             position                the position of the page
+   */
+  fun getPage(position: Int): String {
+    val pages: List<Element> = root.getChildren("page")
+    pages.forEach {
+      if (it.getAttributeValue("ident") == "Id$$position") {
+        return it.getAttributeValue("title")
+      }
     }
+    throw InconsistencyException("page $position not found")
+  }
 
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private val root: Element = document.rootElement
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val root: Element = document.rootElement
 
-    // ----------------------------------------------------------------------
-    // CONSTRUCTOR
-    // ----------------------------------------------------------------------
-    /**
-     * Constructor
-     *
-     * @param             document        the document containing the form localization
-     */
-    init {
-        if (root.name != "form") {
-            throw InconsistencyException("bad root element $root")
-        }
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    if (root.name != "form") {
+      throw InconsistencyException("bad root element $root")
     }
+  }
 }

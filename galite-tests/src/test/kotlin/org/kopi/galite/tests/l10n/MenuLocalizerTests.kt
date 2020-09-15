@@ -28,32 +28,32 @@ import kotlin.test.assertFailsWith
 
 class MenuLocalizerTests {
 
-    @Test
-    fun menuLocalizerTests() {
-        val root = Element("form")
-        val document = Document(root)
-        val menu =  Element("menu")
+  @Test
+  fun menuLocalizerTests() {
+    val root = Element("form")
+    val document = Document(root)
+    val menu = Element("menu")
 
-        menu.setAttribute("ident", "ident")
-        menu.setAttribute("label", "label")
-        root.addContent(menu);
+    menu.setAttribute("ident", "ident")
+    menu.setAttribute("label", "label")
+    root.addContent(menu);
 
-        //case 1
-        var menuLocalizer = MenuLocalizer(document, "ident")
+    //case 1
+    var menuLocalizer = MenuLocalizer(document, "ident")
 
-        assertEquals("label", menuLocalizer.label)
+    assertEquals("label", menuLocalizer.getLabel())
 
-        //case 2
-        var exception = assertFailsWith<InconsistencyException> {
-            menuLocalizer = MenuLocalizer(document, "identError")
-        }
-        assertEquals("null: menu ident = identError not found", exception.message)
-
-        //case 3
-        document.rootElement.name = "test"
-        exception = assertFailsWith<InconsistencyException> {
-            menuLocalizer = MenuLocalizer(document, "ident")
-        }
-        assertEquals("bad root element [Element: <test/>]", exception.message)
+    //case 2
+    var exception = assertFailsWith<InconsistencyException> {
+      menuLocalizer = MenuLocalizer(document, "identError")
     }
+    assertEquals("null: menu ident = identError not found", exception.message)
+
+    //case 3
+    document.rootElement.name = "test"
+    exception = assertFailsWith<InconsistencyException> {
+      menuLocalizer = MenuLocalizer(document, "ident")
+    }
+    assertEquals("bad root element [Element: <test/>]", exception.message)
+  }
 }
