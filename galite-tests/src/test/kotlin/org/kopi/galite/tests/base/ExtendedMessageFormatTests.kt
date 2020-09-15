@@ -29,10 +29,10 @@ class ExtendedMessageFormatTests : TestBase() {
      */
     @Test
     fun formatMessageTest() {
-        val formattedString = extendedMessageFormat.formatMessage(arrayOf("applications"))
+        val formattedString = extendedMessageFormat.formatMessage(arrayOf(7))
 
-        assertEquals("applications", formattedString)
+        assertEquals("Number: 7.", formattedString)
     }
 
-    private val extendedMessageFormat = ExtendedMessageFormat("^\\d+(\\.\\d+)?", Locale.CHINA)
+    private val extendedMessageFormat = ExtendedMessageFormat("Number: {0,number,integer}.", Locale.US)
 }

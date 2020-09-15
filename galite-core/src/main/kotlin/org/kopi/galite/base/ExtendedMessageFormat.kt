@@ -60,7 +60,7 @@ class ExtendedMessageFormat : MessageFormat {
    * @exception IllegalArgumentException if the Format cannot format the given
    * object
    */
-  fun formatMessage(obj: Array<Any?>?): String = format(toNullRepresentation(obj))
+  fun formatMessage(obj: Array<Any?>): String = format(toNullRepresentation(obj))
           .toString()
           .replace("null".toRegex(), "")
 
@@ -382,7 +382,7 @@ class ExtendedMessageFormat : MessageFormat {
      * is not of the type expected by the format element(s)
      * that use it.
      */
-    fun formatMessage(pattern: String, arguments: Array<Any?>?): String {
+    fun formatMessage(pattern: String, arguments: Array<Any?>): String {
       val temp = ExtendedMessageFormat(pattern)
       return temp.formatMessage(arguments)
     }
