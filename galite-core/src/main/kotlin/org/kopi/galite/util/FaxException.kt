@@ -21,7 +21,7 @@ package org.kopi.galite.util
 /**
  * FaxException
  */
-class FaxException : Exception {
+open class FaxException : Exception {
   /**
    * Constructs an exception with a message.
    *
