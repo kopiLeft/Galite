@@ -15,24 +15,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.form
 
-package org.kopi.galite.util.base
+class VFieldUI {
 
-/**
- * This exception is thrown when an unimplemented operation or feature
- * is requested.
- */
-class NotImplementedException : RuntimeException {
-
-  /**
-   * Constructs am NotImplementedException with no specified detail message.
-   */
-  constructor() : super()
-
-  /**
-   * Constructs am NotImplementedException with the specified detail message.
-   *
-   * @param  message represents the detail message
-   */
-  constructor(message: String) : super(message)
 }

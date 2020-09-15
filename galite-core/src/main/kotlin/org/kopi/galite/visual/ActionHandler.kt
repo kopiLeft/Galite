@@ -15,24 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
-package org.kopi.galite.util.base
+package org.kopi.galite.visual
 
 /**
- * This exception is thrown when an unimplemented operation or feature
- * is requested.
+ * Child of this class represents objects than can be executed asynchronously
+ * by the kopi action mechanism
  */
-class NotImplementedException : RuntimeException {
+interface ActionHandler {
 
   /**
-   * Constructs am NotImplementedException with no specified detail message.
-   */
-  constructor() : super()
-
-  /**
-   * Constructs am NotImplementedException with the specified detail message.
+   * Performs a void trigger
    *
-   * @param  message represents the detail message
+   * @param  VKT_Type   the number of the trigger
    */
-  constructor(message: String) : super(message)
+  fun executeVoidTrigger(VKT_Type: Int)
+
+  /**
+   * Performs the appropriate action asynchronously.
+   * You can use this method to perform any operation out of the UI event process
+   *
+   * @param  action  represents the action to perform.
+   */
+  fun performAsyncAction(action: Action)
 }

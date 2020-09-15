@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,23 +15,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util.base
+package org.kopi.galite.tests.base
 
-/**
- * This exception is thrown when an unimplemented operation or feature
- * is requested.
- */
-class NotImplementedException : RuntimeException {
+import org.junit.Test
+import org.kopi.galite.base.ExtendedMessageFormat
+import org.kopi.galite.tests.TestBase
+import java.util.Locale
+import kotlin.test.assertEquals
 
-  /**
-   * Constructs am NotImplementedException with no specified detail message.
-   */
-  constructor() : super()
+class ExtendedMessageFormatTests : TestBase() {
+    /**
+     * this test returns a formatted message after applying the regular expression
+     */
+    @Test
+    fun formatMessageTest() {
+        val formattedString = extendedMessageFormat.formatMessage(arrayOf(7))
 
-  /**
-   * Constructs am NotImplementedException with the specified detail message.
-   *
-   * @param  message represents the detail message
-   */
-  constructor(message: String) : super(message)
+        assertEquals("Number: 7.", formattedString)
+    }
+
+    private val extendedMessageFormat = ExtendedMessageFormat("Number: {0,number,integer}.", Locale.US)
 }
