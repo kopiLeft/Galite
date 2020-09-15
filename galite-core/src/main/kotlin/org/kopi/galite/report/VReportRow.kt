@@ -18,7 +18,9 @@
 
 package org.kopi.galite.report
 
-abstract class VReportRow(val data: Array<Any?>) {
+import javax.swing.tree.DefaultMutableTreeNode
+
+abstract class VReportRow(val data: Array<Any?>): DefaultMutableTreeNode() {
   var visible = false
 
   /**
@@ -27,7 +29,7 @@ abstract class VReportRow(val data: Array<Any?>) {
    *
    * @return        the level of the node in the grouping tree
    */
-  abstract fun getLevel(): Int
+  abstract override fun getLevel(): Int
 
   /**
    * Return the object at column
@@ -43,7 +45,7 @@ abstract class VReportRow(val data: Array<Any?>) {
    * @param        column                the index of the column
    * @param        value                the value for the column
    */
-  fun setValueAt(column: Int, value: Any) {
+  open fun setValueAt(column: Int, value: Any) {
     data[column] = value
   }
 
