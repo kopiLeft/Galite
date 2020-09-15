@@ -21,6 +21,7 @@ plugins {
 
 val exposedVersion = "0.27.1"
 val vaadinVersion = "17.0.0"
+val itextVersion = "2.1.5"
 
 dependencies {
   // Exposed dependencies
@@ -35,5 +36,5 @@ dependencies {
   }
 
   //Itext dependency
-  implementation("com.lowagie", "itext", "2.1.5")
+  implementation("com.lowagie", "itext", itextVersion)
 }

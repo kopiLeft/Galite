@@ -41,18 +41,6 @@ abstract class UIFactory {
   abstract fun createView(model: VModel): UComponent
 
   companion object {
-    private var uiFactory: UIFactory
-      /**
-       * Returns the `UIFactory` instance.
-       */
-      get() = uiFactory
-      /**
-       * Sets the `UIFactory` instance.
-       * @param factory The UI factory
-       */
-      set(factory) {
-        assert(factory != null) { "UIFactory cannot be null" }
-        uiFactory = factory
-      }
+    private lateinit var uiFactory: UIFactory
   }
 }

@@ -16,14 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util.base
+package org.kopi.galite.util
 
 /*
-* ----------------------------------------------------------------------
-* FAX STATUS
-* A CLASS FOR HANDLING THE STATUS OF HYLAFAX ENTRIES RETURNED BY VARIOUS
-* QUEUES
-* ----------------------------------------------------------------------
+* A class for handling the status of HYLAFAX entries returned by various queues
 */
 class FaxStatus {
   // ----------------------------------------------------------------------

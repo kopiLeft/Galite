@@ -21,4 +21,8 @@ package org.kopi.galite.util
 /**
  * Information about a print job
  */
-class PrintInformation(val title: String, val landscape: Boolean, val width: Int, val height: Int, val numberOfPages: Int)
+class PrintInformation(val title: String,
+                       val landscape: Boolean,
+                       val width: Int,
+                       val height: Int,
+                       val numberOfPages: Int)

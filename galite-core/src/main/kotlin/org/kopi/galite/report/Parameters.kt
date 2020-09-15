@@ -33,10 +33,10 @@ class Parameters(color: Color) : Serializable {
   /**Returns the size of the font*/
   val font = Font(Constants.FNT_FIXED_WIDTH, Font.PLAIN, 12)
   private val bgcolors: Array<Color?> = arrayOfNulls(10)
-  private val fgcolors = Array<Color?>(10) { Color(0, 0, 0) }
-  val reverseColor = Color(255 - color.red, 255 - color.green, 255 - color.blue)
+  private val fgcolors = Array(10) { Color(0, 0, 0) }
 
   init {
+    val reverseColor = Color(255 - color.red, 255 - color.green, 255 - color.blue)
     for (i in bgcolors.indices) {
       bgcolors[i] = Color(255 - i * reverseColor.red / 17,
               255 - i * reverseColor.green / 17,
