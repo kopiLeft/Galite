@@ -28,7 +28,7 @@ import kotlin.math.abs
 
 class PixelConsumer(picture: Image) : ImageConsumer {
   override fun imageComplete(status: Int) {
-    // TBR: bug as STATICIMAGEDONE is sent twice before and a break at this
+    // bug - STATICIMAGEDONE is sent twice before and a break at this
     // time leads to incomplete images.
     isComplete = status == ImageConsumer.IMAGEERROR
   }
