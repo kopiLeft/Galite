@@ -18,9 +18,10 @@
 
 package org.kopi.galite.util
 
-/*
-* A class for handling the status of HYLAFAX entries returned by various queues
-*/
+/**
+ * A class for handling the status of HYLAFAX entries returned by various queues
+ *
+ */
 class FaxStatus {
   // ----------------------------------------------------------------------
   // DATA MEMBERS FOR OUTGOING FAXES
@@ -80,40 +81,39 @@ class FaxStatus {
     this.text = if (text.isEmpty()) null else text
   }
 
-  // ----------------------------------------------------------------------
-  // RETURNS THE ID (DATABASE ID) INSIDE THE TAG
-  // THE ID IS A NUMBER SO STRIP THEREFORE ANY OTHER LEADING CHARACTERS
-  // IF NO ID IS FOUND RETURN -1
-  // ----------------------------------------------------------------------
-  val tagId: Int
-    get() {
-      var startpos = 0
-      var id = -1
-      if (tag == null) {
-        return -1
-      }
-      startpos = tag!!.indexOfFirst { it >= '0' && it <= '9' }
-
-      id = try {
-        Integer.valueOf(tag!!.substring(startpos)).toInt()
-      } catch (e: Exception) {
-        return -1
-      }
-      return id
+  /**
+   * Returns the ID (Database ID) inside the tag
+   * The ID is a number so strip therefore any other leading characters
+   * If no ID is found Return -1
+   */
+  fun getTagId(): Int {
+    var startpos = 0
+    var id = -1
+    if (tag == null) {
+      return -1
     }
+    startpos = tag!!.indexOfFirst { it >= '0' && it <= '9' }
 
-  // ----------------------------------------------------------------------
-  // RETURNS TRUE IF TAG STARTS WITH TAGSTR
-  // ----------------------------------------------------------------------
+    id = try {
+      Integer.valueOf(tag!!.substring(startpos)).toInt()
+    } catch (e: Exception) {
+      return -1
+    }
+    return id
+  }
+
+  /**
+   * Returns True if tag starts with tagstr
+   */
   fun isTagged(tagstr: String): Boolean {
     return if (tag == null) {
       false
     } else (tag!!.startsWith((tagstr)))
   }
 
-  // ----------------------------------------------------------------------
-  // RETURNS TRUE IF HAS BEEN SENT
-  // ----------------------------------------------------------------------
+  /**
+   * Returns true if has been sent
+   */
   val isSent: Boolean
     get() = if (state!!.compareTo("D") == 0) {
       (text.isNullOrEmpty())

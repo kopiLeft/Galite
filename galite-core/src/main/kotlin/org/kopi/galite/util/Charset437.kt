@@ -29,7 +29,7 @@ import java.nio.charset.CoderResult
  * Charset used to convert from UTF-16 to IBM437
  */
 class Charset437 : Charset("437", null) {
-  override operator fun contains(csd: Charset?): Boolean = false
+  override operator fun contains(csd: Charset): Boolean = false
 
   override fun newDecoder(): CharsetDecoder = Decoder437(this)
 

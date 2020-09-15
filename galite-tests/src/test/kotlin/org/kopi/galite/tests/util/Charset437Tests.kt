@@ -26,48 +26,37 @@ import java.nio.charset.Charset
 import kotlin.test.assertEquals
 
 class Charset437Tests {
-  var testChar: Charset437 = Charset437()
-  var utf16 = Charset.forName("UTF-16")
-  var ibm437 = Charset.forName("IBM437")
-  var testEncoder: Encoder437 = testChar.newEncoder() as Encoder437
+  val testChar: Charset437 = Charset437()
+  val ibm437 = Charset.forName("IBM437")
+  val testEncoder: Encoder437 = testChar.newEncoder() as Encoder437
 
   @Test
   fun encodeLoopTest1() {
-    val testString = "c"
-    var input: CharBuffer = CharBuffer.wrap(testString)
-    var testByteBuffer = testEncoder.encode(input)
-    var byteBuff: ByteBuffer = ByteBuffer.wrap(testString.toByteArray(ibm437))
+    val testString = "test"
+    val input: CharBuffer = CharBuffer.wrap(testString)
+    val testByteBuffer = testEncoder.encode(input)
+    val byteBuff: ByteBuffer = ByteBuffer.wrap(testString.toByteArray(ibm437))
 
-    assertEquals(true, testByteBuffer.equals(byteBuff))
+    assertEquals(testByteBuffer, byteBuff)
   }
 
   @Test
   fun encodeLoopTest2() {
-    val testString = "test"
-    var input: CharBuffer = CharBuffer.wrap(testString)
-    var testByteBuffer = testEncoder.encode(input)
-    var byteBuff: ByteBuffer = ByteBuffer.wrap(testString.toByteArray(ibm437))
+    val testString = "règlement"
+    val input: CharBuffer = CharBuffer.wrap(testString)
+    val testByteBuffer = testEncoder.encode(input)
+    val byteBuff: ByteBuffer = ByteBuffer.wrap(testString.toByteArray(ibm437))
 
-    assertEquals(true, testByteBuffer.equals(byteBuff))
+    assertEquals(testByteBuffer, byteBuff)
   }
 
   @Test
   fun encodeLoopTest3() {
-    val testString = "règlement"
-    var input: CharBuffer = CharBuffer.wrap(testString)
-    var testByteBuffer = testEncoder.encode(input)
-    var byteBuff: ByteBuffer = ByteBuffer.wrap(testString.toByteArray(ibm437))
-
-    assertEquals(true, testByteBuffer.equals(byteBuff))
-  }
-
-  @Test
-  fun encodeLoopTest4() {
     val testString = "?!&"
-    var input: CharBuffer = CharBuffer.wrap(testString)
-    var testByteBuffer = testEncoder.encode(input)
-    var byteBuff: ByteBuffer = ByteBuffer.wrap(testString.toByteArray(ibm437))
+    val input: CharBuffer = CharBuffer.wrap(testString)
+    val testByteBuffer = testEncoder.encode(input)
+    val byteBuff: ByteBuffer = ByteBuffer.wrap(testString.toByteArray(ibm437))
 
-    assertEquals(true, testByteBuffer.equals(byteBuff))
+    assertEquals(testByteBuffer, byteBuff)
   }
 }
