@@ -24,15 +24,13 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a report localizer.
+ *
+ * @param             manager         the manager to use for localization
+ * @param             document        the document containing the report localization
  */
 class ReportLocalizer(manager: LocalizationManager, document: Document) : Localizer(manager) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   /**
    * Returns the value of the title attribute.
-   * @param             manager         the manager to use for localization
-   * @param             document        the document containing the report localization
    */
   fun getTitle(): String = root.getAttributeValue("title")
 

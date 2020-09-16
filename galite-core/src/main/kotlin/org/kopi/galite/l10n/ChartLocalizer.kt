@@ -23,13 +23,12 @@ import org.jdom2.Element
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
+ * Implements a Chart localizer.
+ *
  * @param             manager         the manager to use for localization
  * @param             document        the document containing the report localization
  */
 class ChartLocalizer(manager: LocalizationManager, document: Document) : Localizer(manager) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   /**
    * Returns the value of the title attribute.
    */

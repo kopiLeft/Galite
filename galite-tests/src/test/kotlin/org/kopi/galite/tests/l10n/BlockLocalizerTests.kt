@@ -50,8 +50,8 @@ class BlockLocalizerTests : TestBase() {
     block.addContent(field);
 
     //case 1
-    var locale = Locale("fr", "FR")
-    var localizationManager = LocalizationManager(locale, locale)
+    val locale = Locale("fr", "FR")
+    val localizationManager = LocalizationManager(locale, locale)
     var blockLocalizer = BlockLocalizer(localizationManager, document, "ident")
 
     assertEquals("title", blockLocalizer.getTitle())
@@ -60,7 +60,6 @@ class BlockLocalizerTests : TestBase() {
     assertEquals("help", blockLocalizer.getFieldLocalizer("ident").getHelp())
 
     //case 2
-
     var exception = assertFailsWith<InconsistencyException> {
       blockLocalizer = BlockLocalizer(localizationManager, document, "identError")
     }

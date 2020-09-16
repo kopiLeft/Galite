@@ -24,6 +24,7 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a block localizer.
+ *
  * @param             manager         the manager to use for localization
  * @param             document        the document containing the block localization
  * @param             ident           the identifier of the block
@@ -31,9 +32,6 @@ import org.kopi.galite.util.base.InconsistencyException
 class BlockLocalizer(manager: LocalizationManager,
                      document: Document,
                      ident: String) : Localizer(manager) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   /**
    * Returns the value of the title attribute.
    */

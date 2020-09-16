@@ -25,12 +25,10 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a form localizer.
+ *
  * @param             document        the document containing the form localization
  */
 class FormLocalizer(document: Document) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   /**
    * Returns the value of the title attribute.
    */

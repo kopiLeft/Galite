@@ -24,13 +24,11 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements an actor localizer.
+ *
  * @param             document        the document containing the actor localization
  * @param             ident           the identifier of the actor localization
  */
 class ModuleLocalizer(document: Document, ident: String) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   /**
    * Returns the value of the label attribute.
    */

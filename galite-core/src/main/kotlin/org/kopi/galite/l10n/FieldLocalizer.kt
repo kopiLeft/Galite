@@ -24,9 +24,6 @@ import org.jdom2.Element
  * Implements a field localizer.
  */
 class FieldLocalizer(manager: LocalizationManager, private val self: Element) : Localizer(manager) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   /**
    * Returns the value of the label attribute.
    */

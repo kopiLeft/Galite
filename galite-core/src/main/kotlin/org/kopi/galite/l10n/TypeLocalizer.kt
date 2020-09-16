@@ -24,6 +24,7 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a type localizer.
+ *
  * @param             manager         the manager to use for localization
  * @param             document        the document containing the type localization
  * @param             ident           the identifier of the type
@@ -31,9 +32,7 @@ import org.kopi.galite.util.base.InconsistencyException
 class TypeLocalizer(manager: LocalizationManager,
                     document: Document,
                     ident: String) : Localizer(manager) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
+
   /**
    * Returns the title of the specified item.
    */

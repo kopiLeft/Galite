@@ -20,5 +20,7 @@ package org.kopi.galite.l10n
 
 /**
  * Implements a localizer.
+ *
+ * @param             manager         the manager to use for localization
  */
-open class Localizer(var manager: LocalizationManager)
+open class Localizer(val manager: LocalizationManager)

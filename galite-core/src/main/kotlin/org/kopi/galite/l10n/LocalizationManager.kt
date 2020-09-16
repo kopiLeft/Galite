@@ -23,16 +23,15 @@ import java.util.Hashtable
 
 import org.jdom2.Document
 import org.jdom2.input.SAXBuilder
-
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a localization manager.
+ *
+ * @param     locale          the locale used for localization management
+ * @param     defaultLocale   the default locale used when there is no file in [locale]
  */
 class LocalizationManager(private val locale: Locale, private val defaultLocale: Locale) {
-  // ----------------------------------------------------------------------
-  // FILE HANDLING
-  // ----------------------------------------------------------------------
   /**
    * Constructs a form localizer using the specified source.
    *
@@ -40,6 +39,13 @@ class LocalizationManager(private val locale: Locale, private val defaultLocale:
    */
   fun getFormLocalizer(source: String): FormLocalizer {
     return FormLocalizer(getDocument(source))
+  }
+
+  /**
+   * Returns the locale managed by this class.
+   */
+  fun getLocale(): Locale {
+    return locale
   }
 
   /**
@@ -149,19 +155,16 @@ class LocalizationManager(private val locale: Locale, private val defaultLocale:
     return PropertyLocalizer(getDocument(source))
   }
 
-  // ----------------------------------------------------------------------
-  // FILE HANDLING
-  // ----------------------------------------------------------------------
   /**
    * Returns the document manging the given source.
    *
-   * @param     source          the source qualied name
+   * @param     source          the source qualified name
    */
   private fun getDocument(source: String): Document {
     if (!documents.containsKey(source)) {
       documents[source] = loadDocument(source)
     }
-    return documents[source]!!
+    return documents[source] ?: throw InconsistencyException("Cannot find document for $source")
   }
 
   /**

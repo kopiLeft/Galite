@@ -29,9 +29,6 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param             ident           the identifier of the actor localization
  */
 class ActorLocalizer(document: Document, ident: String) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   /**
    * Returns the value of the label attribute.
    */

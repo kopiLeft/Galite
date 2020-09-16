@@ -47,8 +47,8 @@ class ChartLocalizerTests : TestBase() {
     root.addContent(field);
 
     //case 1
-    var locale = Locale("fr", "FR")
-    var localizationManager = LocalizationManager(locale, locale)
+    val locale = Locale("fr", "FR")
+    val localizationManager = LocalizationManager(locale, locale)
     var chartLocalizer = ChartLocalizer(localizationManager, document)
 
     assertEquals("title", chartLocalizer.getTitle())

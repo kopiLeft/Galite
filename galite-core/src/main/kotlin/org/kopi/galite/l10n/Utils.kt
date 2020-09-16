@@ -19,7 +19,6 @@
 package org.kopi.galite.l10n
 
 import org.jdom2.Element
-
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -36,11 +35,11 @@ object Utils {
                   type: String,
                   attribute: String,
                   value: String): Element {
-    val childs = parent.getChildren(type)
+    val children = parent.getChildren(type)
 
-    for (child in childs) {
-      if (child.getAttributeValue(attribute) != null && child.getAttributeValue(attribute) == value) {
-        return child
+    children.forEach {element ->
+      if (element.getAttributeValue(attribute) != null && element.getAttributeValue(attribute) == value) {
+        return element
       }
     }
     throw InconsistencyException((if (parent.document == null) "<filename not set>" else parent.document.baseURI)

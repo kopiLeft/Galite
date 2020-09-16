@@ -49,8 +49,8 @@ class ListLocalizerTests {
     list.addContent(listdesc)
 
     //case 1
-    var locale = Locale("fr", "FR")
-    var localizationManager = LocalizationManager(locale, locale)
+    val locale = Locale("fr", "FR")
+    val localizationManager = LocalizationManager(locale, locale)
     var listLocalizer = ListLocalizer(localizationManager, document, "ident")
 
     assertEquals("title", listLocalizer.getColumnTitle("column"))

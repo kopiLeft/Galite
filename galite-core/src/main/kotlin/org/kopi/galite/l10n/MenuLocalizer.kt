@@ -24,13 +24,11 @@ import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Implements a menu localizer.
+ *
  * @param             document        the document containing the menu localization
  * @param             ident           the identifier of the menu localization
  */
 class MenuLocalizer(document: Document, ident: String) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   /**
    * Returns the value of the label attribute.
    */
