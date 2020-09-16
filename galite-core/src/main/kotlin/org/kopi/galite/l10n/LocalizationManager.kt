@@ -31,7 +31,7 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param     locale          the locale used for localization management
  * @param     defaultLocale   the default locale used when there is no file in [locale]
  */
-class LocalizationManager(private val locale: Locale, private val defaultLocale: Locale) {
+class LocalizationManager(val locale: Locale, private val defaultLocale: Locale) {
   /**
    * Constructs a form localizer using the specified source.
    *
@@ -39,13 +39,6 @@ class LocalizationManager(private val locale: Locale, private val defaultLocale:
    */
   fun getFormLocalizer(source: String): FormLocalizer {
     return FormLocalizer(getDocument(source))
-  }
-
-  /**
-   * Returns the locale managed by this class.
-   */
-  fun getLocale(): Locale {
-    return locale
   }
 
   /**
