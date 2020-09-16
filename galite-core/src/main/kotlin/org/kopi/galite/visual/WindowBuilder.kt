@@ -16,19 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual
+
+import java.io.Serializable
 
 /**
- * Filters characters according to a conversion table
+ * `WindowBuilder` is responsible for creating [UWindow]
+ * according to a given window model.
+ *
+ * `WindowBuilder` should be registered using [WindowController.registerWindowBuilder]
+ * @see WindowController.registerWindowBuilder
  */
-open class Filter {
+interface WindowBuilder : Serializable {
   /**
-   * Empty Filter. This is the default implementation.
+   * Creates the [UWindow] for a given window model
+   * @param model The window model
+   * @return The created [UWindow]
    */
-  open fun convert(char: Char): Char = char
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  fun createWindow(model: VWindow): UWindow
 }

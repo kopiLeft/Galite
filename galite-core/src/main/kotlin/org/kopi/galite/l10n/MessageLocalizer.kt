@@ -16,19 +16,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.l10n
+
+import org.jdom2.Document
+import org.jdom2.Element
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
- * Filters characters according to a conversion table
+ * Implements an actor localizer.
+ *
+ * @param     document        the document containing the actor localization
+ * @param     ident           the identifier of the actor localization
  */
-open class Filter {
+class MessageLocalizer(document: Document, ident: String) {
   /**
-   * Empty Filter. This is the default implementation.
+   * Returns the value of the text attribute.
    */
-  open fun convert(char: Char): Char = char
+  fun getText(): String = self.getAttributeValue("text")
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  private val self: Element
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    val root: Element = document.rootElement
+    val names = listOf("messages", "form", "report", "chart")
+
+    if (root.name !in names) {
+      throw InconsistencyException("bad root element $root")
+    }
+    self = Utils.lookupChild(root, "message", "ident", ident)
+  }
 }

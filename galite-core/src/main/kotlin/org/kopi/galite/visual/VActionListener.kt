@@ -16,19 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual
 
-/**
- * Filters characters according to a conversion table
- */
-open class Filter {
+import java.util.EventListener
+
+interface VActionListener : EventListener {
   /**
-   * Empty Filter. This is the default implementation.
+   * Performs the appropriate action asynchronously.
+   * @param action The [Action] to be performed
    */
-  open fun convert(char: Char): Char = char
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  fun performAsyncAction(action: Action)
 }

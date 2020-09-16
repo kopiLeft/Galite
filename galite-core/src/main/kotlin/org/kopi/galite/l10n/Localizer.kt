@@ -16,19 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.l10n
 
 /**
- * Filters characters according to a conversion table
+ * Implements a localizer.
+ *
+ * @param             manager         the manager to use for localization
  */
-open class Filter {
-  /**
-   * Empty Filter. This is the default implementation.
-   */
-  open fun convert(char: Char): Char = char
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
-}
+open class Localizer(val manager: LocalizationManager)

@@ -16,19 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual
+
+import org.kopi.galite.base.DBContext
 
 /**
- * Filters characters according to a conversion table
+ * An interface for stand alone apps that can be executed from the
+ * Menu tree.
  */
-open class Filter {
+interface Executable {
   /**
-   * Empty Filter. This is the default implementation.
+   * MenuTree sets the context of new executable to the default connection
    */
-  open fun convert(char: Char): Char = char
+  fun setDBContext(context: DBContext)
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  /**
+   * The start method called every time the user launch this app from menu
+   * it should be not modal
+   * @exception        VException        an exception may be raised by your app
+   */
+  fun doNotModal()
 }

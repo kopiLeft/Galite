@@ -15,20 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.form
 
-package org.kopi.galite.util
+import java.io.Serializable
 
 /**
- * Filters characters according to a conversion table
+ * `FieldHandler` handles all events on a field.
  */
-open class Filter {
+interface FieldHandler : FieldListener, FieldChangeListener, Serializable {
   /**
-   * Empty Filter. This is the default implementation.
+   * Returns the field row controller.
+   * @return the [VFieldUI] row controller.
    */
-  open fun convert(char: Char): Char = char
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  fun getRowController() : VFieldUI
 }
