@@ -20,25 +20,22 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.base.Image
 
-class Item(private var id: Int,
-           private var parent: Int,
-           private var name: String,
-           private var localisedName: String,
-           private var description: String,
-           private var selected: Boolean,
-           private var defaultItem: Boolean,
-           icon: String,
-           private var originalName: String) : Comparable<Item> {
+class Item(var id: Int,
+           var parent: Int,
+           var name: String,
+           var localisedName: String?,
+           var description: String?,
+           var selected: Boolean,
+           var defaultItem: Boolean,
+           icon: String?,
+           var originalName: String) : Comparable<Item> {
 
-  private lateinit var icon: Image
-  private lateinit var smallIcon: Image
-  private var childCount = 0
-  private lateinit var children: Array<Item>
-  private var level = 0
+  lateinit var icon: Image
+  lateinit var smallIcon: Image
+  var childCount = 0
+  lateinit var children: Array<Item>
+  var level = 0
 
-  // ---------------------------------------------------------------------
-  // CONSTUCTOR
-  // ---------------------------------------------------------------------
   init {
     this.id = id
     this.parent = parent

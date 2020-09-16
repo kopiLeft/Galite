@@ -41,12 +41,12 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
    * use with care, do only read from the file, not not manipulate
    */
   // properties
-  private var title: String = ""
-  private lateinit var media: String
-  private var documentType = 0
-  private var dataType: Int
-  private var numberCopy: Int
-  private var numberOfPages: Int
+  var title: String = ""
+  lateinit var media: String
+  var documentType = 0
+  var dataType: Int
+  var numberCopy: Int
+  var numberOfPages: Int
 
   init {
     this.datafile = datafile
@@ -55,8 +55,7 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
     numberCopy = 1
     numberOfPages = -1
     dataType = DAT_PS
-    // if the jvm is stopped before the objects are
-    // finalized the file must be deleted!
+    /* if the jvm is stopped before the objects are finalized the file must be deleted!*/
     if (delete) {
       datafile.deleteOnExit()
     }
@@ -130,15 +129,6 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
     return PrintJob(file, delete, format)
   }
 
-  /**
-   * Kind of data to print (pdf, ps)
-   *
-   * @return A number representing the document type.
-   */
-  fun getDataType(): Int {
-    return dataType
-  }
-
   companion object {
     private fun writeToFile(dataStream: InputStream): File {
       val tempFile: File = Utils.getTempFile("kopi", "pdf")
@@ -157,24 +147,24 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
       output.close()
     }
 
-    var DAT_PDF = 1
-    var DAT_PS = 2
+    val DAT_PDF = 1
+    val DAT_PS = 2
 
     // A5, A4, A3, Letter and Legal page format (portrait)
-    var FORMAT_A5 = PageSize.A5
-    var FORMAT_A4 = PageSize.A4
-    var FORMAT_A3 = PageSize.A3
-    var FORMAT_LETTER = PageSize.LETTER
-    var FORMAT_LEGAL = PageSize.LEGAL
+    val FORMAT_A5 = PageSize.A5
+    val FORMAT_A4 = PageSize.A4
+    val FORMAT_A3 = PageSize.A3
+    val FORMAT_LETTER = PageSize.LETTER
+    val FORMAT_LEGAL = PageSize.LEGAL
 
     // A5, A4, A3, Letter and Legal page format (landscape)
-    var FORMAT_A5_R = Rectangle(PageSize.A5.rotate().width, PageSize.A5.rotate().height)
-    var FORMAT_A4_R = Rectangle(PageSize.A4.rotate().width, PageSize.A4.rotate().height)
-    var FORMAT_A3_R = Rectangle(PageSize.A3.rotate().width, PageSize.A3.rotate().height)
-    var FORMAT_LETTER_R = Rectangle(PageSize.LETTER.rotate().width, PageSize.LETTER.rotate().height)
-    var FORMAT_LEGAL_R = Rectangle(PageSize.LEGAL.rotate().width, PageSize.LEGAL.rotate().height)
+    val FORMAT_A5_R = Rectangle(PageSize.A5.rotate().width, PageSize.A5.rotate().height)
+    val FORMAT_A4_R = Rectangle(PageSize.A4.rotate().width, PageSize.A4.rotate().height)
+    val FORMAT_A3_R = Rectangle(PageSize.A3.rotate().width, PageSize.A3.rotate().height)
+    val FORMAT_LETTER_R = Rectangle(PageSize.LETTER.rotate().width, PageSize.LETTER.rotate().height)
+    val FORMAT_LEGAL_R = Rectangle(PageSize.LEGAL.rotate().width, PageSize.LEGAL.rotate().height)
 
     // Raw format (Used for label printers)
-    var FORMAT_RAW = Rectangle(-1F, -1F)
+    val FORMAT_RAW = Rectangle(-1F, -1F)
   }
 }
