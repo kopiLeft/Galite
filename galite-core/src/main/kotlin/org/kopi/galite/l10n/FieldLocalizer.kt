@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,25 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-plugins {
-  kotlin("jvm") apply true
-}
+package org.kopi.galite.l10n
 
-val exposedVersion = "0.27.1"
-val vaadinVersion = "17.0.0"
-val jdomVersion = "2.0.5"
+import org.jdom2.Element
 
-dependencies {
-  // Exposed dependencies
-  api("org.jetbrains.exposed", "exposed-core", exposedVersion)
+/**
+ * Implements a field localizer.
+ */
+class FieldLocalizer(manager: LocalizationManager, private val self: Element) : Localizer(manager) {
+  /**
+   * Returns the value of the label attribute.
+   */
+  fun getLabel(): String = self.getAttributeValue("label")
 
-  // Vaadin dependencies
-  implementation("com.vaadin", "vaadin-core", vaadinVersion) {
-    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
-            .forEach { group -> exclude(group = group) }
-  }
-
-  implementation("org.jdom", "jdom2", jdomVersion)
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String = self.getAttributeValue("help")
 }
