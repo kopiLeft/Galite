@@ -1,8 +1,8 @@
 package org.kopi.galite.util
 
-import java.io.IOException
 import java.io.InputStream
-
+import org.kopi.galite.util.lpr.LpR
+import org.kopi.galite.util.lpr.LpdException
 class LpRPrinter  : Printer {
   /**
    * Creates a printer that send file to an lpd server
@@ -125,13 +125,13 @@ class LpRPrinter  : Printer {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private val name: String? = null
+  private var name: String? = null
 
-  private val serverHost: String? = null
-  private val port = 0
-  private val proxyHost: String? = null
-  private val queue: String? = null
-  private val user: String? = null
+  private var serverHost: String? = null
+  private var port = 0
+  private var proxyHost: String? = null
+  private var queue: String? = null
+  private var user: String? = null
 
 
   private var tray = 0

@@ -1,5 +1,6 @@
 package org.kopi.galite.util
 
+import org.kopi.galite.util.ipp.IPPClient
 import org.kopi.util.ipp.IPPClient
 import java.io.IOException
 

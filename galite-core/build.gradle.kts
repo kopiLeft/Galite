@@ -22,6 +22,7 @@ plugins {
 val exposedVersion = "0.27.1"
 val vaadinVersion = "17.0.0"
 val hylafaxVersion = "1.0.3"
+val itextlowagieVersion ="2.1.5"
 
 dependencies {
   // Exposed dependencies
@@ -37,4 +38,7 @@ dependencies {
 
   // Hylafax dependencies
   implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", hylafaxVersion)
+
+  // LowagieText dependencies
+  implementation("com.lowagie", "itext", itextlowagieVersion)
 }
