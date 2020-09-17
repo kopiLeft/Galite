@@ -34,18 +34,11 @@ open class VChartType protected constructor(val ordinal: Int, val name: String) 
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------
 
-  // --------------------------------------------------------------------
-  // IMPLEMENTATIONS
-  // --------------------------------------------------------------------
-
   override fun setDisplay(display: UComponent) {
     assert(display is UChartType) { "The display should be a chart type view" }
     this.display = display as UChartType
   }
 
-  /**
-   * @Override
-   */
   override fun getDisplay(): UComponent = display
 
   /**
