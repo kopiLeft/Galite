@@ -39,7 +39,7 @@ class Charset437 : Charset("437", null) {
 /**
  * Decoder not implemented.
  */
-class Decoder437(cs: Charset) : CharsetDecoder(cs, 1F, 1f) {
+class Decoder437(cs: Charset) : CharsetDecoder(cs, 1f, 1f) {
   // ----------------------------------------------------------------------
   // DECODING
   // ----------------------------------------------------------------------

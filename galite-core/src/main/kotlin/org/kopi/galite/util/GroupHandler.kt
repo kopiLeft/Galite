@@ -26,8 +26,8 @@ import java.util.Vector
  * Local printer
  */
 abstract class GroupHandler {
-  var key: Any? = null
-  val elems = Vector<Any>()
+  private var key: Any? = null
+  private val elems = Vector<Any>()
 
   fun add(key: Any?, value: Any) {
     if (key == null) {

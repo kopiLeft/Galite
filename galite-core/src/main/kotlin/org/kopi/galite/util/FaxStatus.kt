@@ -114,10 +114,9 @@ class FaxStatus {
   /**
    * Returns true if has been sent
    */
-  val isSent: Boolean
-    get() = if (state!!.compareTo("D") == 0) {
-      (text.isNullOrEmpty())
-    } else {
-      false
-    }
+  fun isSent(): Boolean = if (state!!.compareTo("D") == 0) {
+    (text.isNullOrEmpty())
+  } else {
+    false
+  }
 }
