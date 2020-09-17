@@ -18,30 +18,19 @@
 
 package org.kopi.galite.list
 
-import kotlin.math.max
+import org.kopi.galite.visual.ImageHandler
 
-open abstract class VCodeColumn(title: String, column: String, protected var names: Array<String>,
-                                sortAscending: Boolean) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {
+class VImageColumn(title: String, column: String, sortAscending: Boolean) :
+        VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {
 
   /**
    * Returns a string representation of value
    */
   override fun formatObject(value: Any?): Any {
-    return if (value == null) VConstants.EMPTY_TEXT else names[getObjectIndex(value)]
+    return if (value == null) VConstants.EMPTY_TEXT else (ImageHandler.getImageHandler().getImage(value as ByteArray) as Any)
   }
 
-  /**
-   * Returns the index.of given object
-   */
-  protected abstract fun getObjectIndex(value: Any): Int
-
-  companion object {
-    private fun getMaxWidth(names: Array<String>): Int {
-      var res = 0
-      for (i in names.indices) {
-        res = max(names[i].length, res)
-      }
-      return res
-    }
+  override fun getDataType(): Class<*> {
+    return ByteArray::class.java
   }
 }

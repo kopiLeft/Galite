@@ -18,15 +18,15 @@
 package org.kopi.galite.tests.list
 
 import org.junit.Test
-import org.kopi.galite.list.VColumn
+import org.kopi.galite.list.VColorColumn
+
 import kotlin.test.assertEquals
 
-class VColumnTests {
+class VColorColumnTests {
   @Test
-  fun vColumnTest() {
-    var vcolumn = VColumn(2, "testName", key = false, nullable = true)
+  fun vColorColumnTests() {
+    val vColorColumn = VColorColumn("title", "column", true)
 
-    assertEquals(2, vcolumn.getTable())
-    assertEquals("T2.testName", vcolumn.getQualifiedName())
+    assertEquals("java.awt.Color", vColorColumn.getDataType().typeName)
   }
 }

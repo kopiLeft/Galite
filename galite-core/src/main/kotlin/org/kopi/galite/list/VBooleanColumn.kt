@@ -18,30 +18,32 @@
 
 package org.kopi.galite.list
 
+import org.kopi.galite.visual.VlibProperties
 import kotlin.math.max
 
-open abstract class VCodeColumn(title: String, column: String, protected var names: Array<String>,
-                                sortAscending: Boolean) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {
+class VBooleanColumn(title: String, column: String, sortAscending: Boolean) :
+        VListColumn(title, column, VConstants.ALG_LEFT, max(trueRep.length, falseRep.length), sortAscending) {
+
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
 
   /**
    * Returns a string representation of value
    */
   override fun formatObject(value: Any?): Any {
-    return if (value == null) VConstants.EMPTY_TEXT else names[getObjectIndex(value)]
+    return if (value == null) VConstants.EMPTY_TEXT else if ((value as Boolean)) trueRep else falseRep
   }
 
-  /**
-   * Returns the index.of given object
-   */
-  protected abstract fun getObjectIndex(value: Any): Int
+  override fun getDataType(): Class<*> {
+    return Boolean::class.java
+  }
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
   companion object {
-    private fun getMaxWidth(names: Array<String>): Int {
-      var res = 0
-      for (i in names.indices) {
-        res = max(names[i].length, res)
-      }
-      return res
-    }
+    private val trueRep: String = VlibProperties.getString("true")
+    private val falseRep: String = VlibProperties.getString("false")
   }
 }

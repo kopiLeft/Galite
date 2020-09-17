@@ -16,32 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.tests.list
 
-import kotlin.math.max
+import org.junit.Test
+import org.kopi.galite.list.VTextColumn
 
-open abstract class VCodeColumn(title: String, column: String, protected var names: Array<String>,
-                                sortAscending: Boolean) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {
+import kotlin.test.assertEquals
 
-  /**
-   * Returns a string representation of value
-   */
-  override fun formatObject(value: Any?): Any {
-    return if (value == null) VConstants.EMPTY_TEXT else names[getObjectIndex(value)]
-  }
+class VTextColumnTests {
+  @Test
+  fun vTextColumnTests() {
+    val vTextColumnTests = VTextColumn ("title", "column", 1, 2, true)
 
-  /**
-   * Returns the index.of given object
-   */
-  protected abstract fun getObjectIndex(value: Any): Int
-
-  companion object {
-    private fun getMaxWidth(names: Array<String>): Int {
-      var res = 0
-      for (i in names.indices) {
-        res = max(names[i].length, res)
-      }
-      return res
-    }
+    assertEquals("", vTextColumnTests.formatObject(null))
+    assertEquals("java.lang.String", vTextColumnTests.getDataType().typeName)
   }
 }

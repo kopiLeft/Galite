@@ -18,15 +18,17 @@
 package org.kopi.galite.tests.list
 
 import org.junit.Test
-import org.kopi.galite.list.VColumn
+import org.kopi.galite.list.VBooleanCodeColumn
+
 import kotlin.test.assertEquals
 
-class VColumnTests {
+class VBooleanCodeColumnTests {
   @Test
-  fun vColumnTest() {
-    var vcolumn = VColumn(2, "testName", key = false, nullable = true)
+  fun vBooleanCodeColumnTest() {
+    val names : Array<String>  = arrayOf("green", "red", "blue")
+    val codes : Array<Boolean>  = arrayOf(true, false)
+    val vBooleanCodeColumn = VBooleanCodeColumn ("title", "column", names, codes, true)
 
-    assertEquals(2, vcolumn.getTable())
-    assertEquals("T2.testName", vcolumn.getQualifiedName())
+    assertEquals("boolean", vBooleanCodeColumn.getDataType().typeName)
   }
 }

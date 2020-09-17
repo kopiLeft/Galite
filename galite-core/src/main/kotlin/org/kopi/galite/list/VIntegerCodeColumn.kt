@@ -20,13 +20,12 @@ package org.kopi.galite.list
 
 import org.kopi.galite.util.base.InconsistencyException
 
-class VBooleanCodeColumn : VCodeColumn {
+class VIntegerCodeColumn : VCodeColumn {
 
   /**
    * Constructs a list column.
-   *
    */
-  constructor(title: String, column: String, names: Array<String>, codes: Array<Boolean>,
+  constructor(title: String, column: String, names: Array<String>, codes: Array<Int>,
               sortAscending: Boolean) : super(title, column, names, sortAscending) {
     this.codes = codes
   }
@@ -35,8 +34,8 @@ class VBooleanCodeColumn : VCodeColumn {
    * Constructs a list column.
    *
    */
-  constructor(title: String, column: String, names: Array<String>, codes: BooleanArray, sortAscending: Boolean) :
-          this(title, column, names, makeObjectArray(codes), sortAscending)
+  constructor(title: String, column: String, names: Array<String>, codes: IntArray,
+              sortAscending: Boolean) : this(title, column, names, makeObjectArray(codes), sortAscending)
 
   /**
    * Returns the index.of given object
@@ -47,22 +46,22 @@ class VBooleanCodeColumn : VCodeColumn {
         return i
       }
     }
-    throw InconsistencyException("bad code value $value")
+    throw InconsistencyException("bad code value " + value as Int)
   }
 
   override fun getDataType(): Class<*> {
-    return Boolean::class.java
+    return Int::class.java
   }
 
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
   companion object {
-    private fun makeObjectArray(input: BooleanArray): Array<Boolean> = input.toTypedArray()
+    private fun makeObjectArray(input: IntArray): Array<Int> = input.toTypedArray()
   }
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  private val codes: Array<Boolean> // code array
+  private val codes: Array<Int> // code array
 }
