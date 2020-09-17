@@ -1,6 +1,21 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.util.ipp
-
-import java.util.*
 
 class IPPAttribute {
 
@@ -14,41 +29,41 @@ class IPPAttribute {
   }
 
 
-  constructor(`is`: IPPInputStream, groupTag: Int) {
+  constructor(iPPInputStream: IPPInputStream, groupTag: Int) {
     var read: Byte
     var n: Int
     var endAttribute = false
     this.groupTag = groupTag
-       this.valueTag = `is`.readByte().toInt() // value-tag
-    n = `is`.readShort().toInt() // name-length
-    this.name = `is`.readString(n) // name
+    this.valueTag = iPPInputStream.readByte().toInt() // value-tag
+    n = iPPInputStream.readShort().toInt() // name-length
+    this.name = iPPInputStream.readString(n) // name
     while (!endAttribute) {
       when (valueTag) {
-        IPPConstants.TAG_INTEGER, IPPConstants.TAG_ENUM -> values.add(IntegerValue(`is`))
-        IPPConstants.TAG_BOOLEAN -> values.add(BooleanValue(`is`))
-        IPPConstants.TAG_TEXT, IPPConstants.TAG_NAME, IPPConstants.TAG_KEYWORD, IPPConstants.TAG_STRING, IPPConstants.TAG_URI, IPPConstants.TAG_URISCHEME, IPPConstants.TAG_CHARSET, IPPConstants.TAG_LANGUAGE, IPPConstants.TAG_MIMETYPE -> values!!.add(StringValue(`is`))
-        IPPConstants.TAG_DATE -> values.add(DateValue(`is`))
-        IPPConstants.TAG_RESOLUTION -> values.add(ResolutionValue(`is`))
-        IPPConstants.TAG_RANGE -> values.add(RangeValue(`is`))
+        IPPConstants.TAG_INTEGER, IPPConstants.TAG_ENUM -> values.add(IntegerValue(iPPInputStream))
+        IPPConstants.TAG_BOOLEAN -> values.add(BooleanValue(iPPInputStream))
+        IPPConstants.TAG_TEXT, IPPConstants.TAG_NAME, IPPConstants.TAG_KEYWORD, IPPConstants.TAG_STRING, IPPConstants.TAG_URI, IPPConstants.TAG_URISCHEME, IPPConstants.TAG_CHARSET, IPPConstants.TAG_LANGUAGE, IPPConstants.TAG_MIMETYPE -> values.add(StringValue(iPPInputStream))
+        IPPConstants.TAG_DATE -> values.add(DateValue(iPPInputStream))
+        IPPConstants.TAG_RESOLUTION -> values.add(ResolutionValue(iPPInputStream))
+        IPPConstants.TAG_RANGE -> values.add(RangeValue(iPPInputStream))
         IPPConstants.TAG_TEXTLANG, IPPConstants.TAG_NAMELANG -> {
-          values.add(LangValue(`is`))
-          n = `is`.readShort().toInt()
-          `is`.readString(n)
+          values.add(LangValue(iPPInputStream))
+          n = iPPInputStream.readShort().toInt()
+          iPPInputStream.readString(n)
         }
         else -> {
-          n = `is`.readShort().toInt()
-          `is`.readString(n)
+          n = iPPInputStream.readShort().toInt()
+          iPPInputStream.readString(n)
         }
       }
-      read = `is`.peekByte()
+      read = iPPInputStream.peekByte()
       if (read < IPPConstants.TAG_UNSUPPORTED_VALUE) {
         endAttribute = true
       } else {
-        val nameLengthNextAttribute: Short = `is`.peekShortAfterFirstByte()
+        val nameLengthNextAttribute: Short = iPPInputStream.peekShortAfterFirstByte()
         if (nameLengthNextAttribute.toInt() == 0) {
           //additional-value
-          `is`.readByte() // value-tag
-          `is`.readShort() // name-length
+          iPPInputStream.readByte() // value-tag
+          iPPInputStream.readShort() // name-length
         } else {
           endAttribute = true
         }
@@ -68,7 +83,7 @@ class IPPAttribute {
   }
 
   fun getValues(): Iterator<*>? {
-    return values!!.iterator()
+    return values.iterator()
   }
 
   fun getGroup(): Int {
@@ -76,13 +91,13 @@ class IPPAttribute {
   }
 
   fun addValue(value: IPPValue) {
-    values!!.add(value)
+    values.add(value)
   }
 
   fun getSize(lastGroup: Int): Int {
     var size = 0
     var firstValue = true
-    val vals: Iterator<*> = values!!.iterator()
+    val vals: Iterator<*> = values.iterator()
     var value: IPPValue
 
     // if it is a new group, adding a group tag
@@ -104,7 +119,7 @@ class IPPAttribute {
 
   fun write(os: IPPOutputStream, lastGroup: Int) {
     var firstValue = true
-    val vals: Iterator<*> = values!!.iterator()
+    val vals: Iterator<*> = values.iterator()
     var value: IPPValue
 
     // if it is a new group, adding a group tag
@@ -126,7 +141,7 @@ class IPPAttribute {
   }
 
   fun dump() {
-    val vals: Iterator<*> = values!!.iterator()
+    val vals: Iterator<*> = values.iterator()
     var value: IPPValue
     println("")
     println("Group Tag : $groupTag")
@@ -140,7 +155,7 @@ class IPPAttribute {
   }
 
   fun simpleDump() {
-    val vals: Iterator<*> = values!!.iterator()
+    val vals: Iterator<*> = values.iterator()
     var value: IPPValue
     print("$name = ")
     while (vals.hasNext()) {

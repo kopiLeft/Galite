@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,17 +13,18 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * $Id: AWTToPS.java 34997 2016-12-01 09:51:43Z hacheni $
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.kopi.galite.util
 
-
-import java.awt.*
+import java.awt.Graphics
+import java.awt.Rectangle
+import java.awt.Color
+import java.awt.Shape
+import java.awt.Image
+import java.awt.Font
+import java.awt.FontMetrics
 import java.awt.image.ImageObserver
-import java.io.OutputStream
-import java.io.PrintStream
 import java.text.AttributedCharacterIterator
 
 /**

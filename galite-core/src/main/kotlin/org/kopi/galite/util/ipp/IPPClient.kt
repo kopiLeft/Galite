@@ -1,14 +1,27 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.util.ipp
 
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.io.InputStream
 import java.net.URL
-import java.util.ArrayList
-import java.util.LinkedList
 
-
-class IPPClient(val hostname: String, val port: Short,val printer: String,val user: String) {
+class IPPClient(val hostname: String, val port: Short, val printer: String, val user: String) {
 
   fun print(file: InputStream, nbCopies: Int, attributes: Array<String>?) {
     val mediaAttributes = arrayListOf<String>()
@@ -103,7 +116,7 @@ class IPPClient(val hostname: String, val port: Short,val printer: String,val us
     // see description above
     for (i in 0 until nbCopies) {
       var resp: IPP
-      var httpConnection = IPPHttpConnection(
+      val httpConnection = IPPHttpConnection(
               URL("http://$hostname:$port/printers/$printer"))
       httpConnection.sendRequest(req)
       resp = httpConnection.receiveResponse()
@@ -118,7 +131,7 @@ class IPPClient(val hostname: String, val port: Short,val printer: String,val us
 
   val mediaTypes: List<*>
     get() {
-      val media= arrayListOf<String>()
+      val media = arrayListOf<String>()
       val properties: IPP = printerAttributes
       val attributes: Iterator<*> = properties.getAttributes()
       while (attributes.hasNext()) {
@@ -128,7 +141,7 @@ class IPPClient(val hostname: String, val port: Short,val printer: String,val us
           while (values!!.hasNext()) {
             val value: IPPValue = values.next() as IPPValue
             if (value is StringValue) {
-              media.add((value as StringValue).value)
+              media.add((value).value)
             }
           }
         }
@@ -141,12 +154,12 @@ class IPPClient(val hostname: String, val port: Short,val printer: String,val us
   // --------------------------------------------------------------------
 
   private val printerAttributes: IPP
-    private get() {
+    get() {
       val req = IPP()
-      val httpConnection= IPPHttpConnection(
+      val httpConnection = IPPHttpConnection(
               URL("http://$hostname:$port/printers/$printer"))
       req.setRequest(1, IPPConstants.OPS_GET_PRINTER_ATTRIBUTES)
-      var att= IPPAttribute(IPPConstants.TAG_OPERATION,
+      var att = IPPAttribute(IPPConstants.TAG_OPERATION,
               IPPConstants.TAG_CHARSET,
               "attributes-charset")
       att.addValue(StringValue("iso-8859-1"))
@@ -171,5 +184,4 @@ class IPPClient(val hostname: String, val port: Short,val printer: String,val us
       httpConnection.sendRequest(req)
       return httpConnection.receiveResponse()
     }
-
 }

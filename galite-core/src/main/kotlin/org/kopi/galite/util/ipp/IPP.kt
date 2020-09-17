@@ -1,5 +1,21 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.util.ipp
-
 
 class IPP {
   // --------------------------------------------------------------------
@@ -10,30 +26,30 @@ class IPP {
     data = ByteArray(0)
   }
 
-  fun setData(data: ByteArray?) {
-    this.data = data!!
+  fun setData(data: ByteArray) {
+    this.data = data
   }
 
-  constructor(`is`: IPPInputStream) {
+  constructor(iPPInputStream: IPPInputStream) {
     var endAttributes = false
     var groupTag: Int = IPPConstants.TAG_ZERO
     var read: Byte
-    header = IPPHeader(`is`)
+    header = IPPHeader(iPPInputStream)
     data = ByteArray(0)
     while (!endAttributes) {
-      read = `is`.peekByte()
+      read = iPPInputStream.peekByte()
       if (read.toInt() == IPPConstants.TAG_END) {
-        `is`.readByte()
+        iPPInputStream.readByte()
         endAttributes = true
       } else if (read < IPPConstants.TAG_UNSUPPORTED_VALUE) {
         // it is a new group tag
-        groupTag = `is`.readByte().toInt()
+        groupTag = iPPInputStream.readByte().toInt()
       } else {
         // new attribute
-        attributes.add(IPPAttribute(`is`, groupTag))
+        attributes.add(IPPAttribute(iPPInputStream, groupTag))
       }
     }
-    data = `is`.readArray()!!
+    data = iPPInputStream.readArray()!!
   }
 
   // --------------------------------------------------------------------
@@ -113,6 +129,7 @@ class IPP {
   private var header: IPPHeader
   private var attributes = mutableListOf<IPPAttribute>()
   private var data: ByteArray
+
   companion object {
     const val DEBUG = false
   }

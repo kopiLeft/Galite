@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,13 +13,9 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * $Id: StringValue.java 34961 2016-11-04 17:20:49Z hacheni $
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.kopi.galite.util.ipp
-
-import java.io.IOException
 
 class StringValue : IPPValue {
   // --------------------------------------------------------------------
@@ -28,9 +25,9 @@ class StringValue : IPPValue {
     this.value = value
   }
 
-  constructor(`is`: IPPInputStream) {
-    val n = `is`.readShort().toInt() //value-length
-    value = `is`.readString(n)!! //value
+  constructor(inputStream: IPPInputStream) {
+    val n = inputStream.readShort().toInt() //value-length
+    value = inputStream.readString(n)!! //value
   }// value-length + value
 
   // --------------------------------------------------------------------

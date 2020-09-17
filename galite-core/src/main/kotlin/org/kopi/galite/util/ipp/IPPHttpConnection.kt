@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,14 +13,16 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * $Id: IPPHttpConnection.java 34997 2016-12-01 09:51:43Z hacheni $
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.kopi.galite.util.ipp
 
-
-import java.io.*
+import java.io.InputStream
+import java.io.BufferedInputStream
+import java.io.OutputStream
+import java.io.BufferedOutputStream
+import java.io.DataInputStream
+import java.io.DataOutputStream
 import java.net.Socket
 import java.net.URL
 
@@ -37,23 +40,19 @@ class IPPHttpConnection(// -----------------------------------------------------
   }
 
   fun receiveResponse(): IPP {
-    val httpRequest = IPPHttp(IPPInputStream(`is`))
+    val httpRequest = IPPHttp(IPPInputStream(inputStream))
     return httpRequest.iPP
   }
 
-  private val connection: Socket
+  private val connection: Socket = Socket(url.host, url.port)
   private val os: OutputStream
-  private val `is`: InputStream
+  private val inputStream: InputStream
 
   // --------------------------------------------------------------------
   // CONSTRUCTORS
   // --------------------------------------------------------------------
   init {
-    if (IPP.DEBUG) {
-      println("printURL : $url")
-    }
-    connection = Socket(url.host, url.port)
     os = BufferedOutputStream(DataOutputStream(connection.getOutputStream()))
-    `is` = BufferedInputStream(DataInputStream(connection.getInputStream()))
+    inputStream = BufferedInputStream(DataInputStream(connection.getInputStream()))
   }
 }

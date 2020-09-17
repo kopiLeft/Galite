@@ -1,9 +1,23 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.util
 
 import org.kopi.galite.util.ipp.IPPClient
-import org.kopi.util.ipp.IPPClient
-import java.io.IOException
-
 
 /**
  * IPP printer
@@ -18,7 +32,8 @@ class IPPPrinter
  * @param user the name of the printer user
  * @param attributesForMedia a list of String[2] with the correpondance
  * between media and IPP attributes for this printer.
- */(name: String?,
+ */
+(name: String?,
     private val host: String,
     private val port: Int,
     private val printer: String,
@@ -33,7 +48,7 @@ class IPPPrinter
   val mediaTypes: List<*>
     get() {
       val client = IPPClient(host, port.toShort(), printer, user)
-      return client.getMediaTypes()
+      return client.mediaTypes
     }
 
   /**
@@ -65,12 +80,8 @@ class IPPPrinter
     fun print(printData: PrintJob): String {
     val ippClient = IPPClient(host, port.toShort(), printer, user)
     ippClient.print(printData.getInputStream(),
-            printData.getNumberOfCopies(),
-            if (printData.getMedia() == null) null else getAttributes(printData.getMedia()))
+            printData.numberCopy,
+            getAttributes(printData.media))
     return "IPP Print"
   }
-
-  // --------------------------------------------------------------------
-  // CONSTRUCTOR
-  // --------------------------------------------------------------------
 }

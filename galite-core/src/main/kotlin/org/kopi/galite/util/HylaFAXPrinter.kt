@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.util
 
 import org.kopi.galite.util.base.InconsistencyException
@@ -5,12 +22,13 @@ import java.awt.Dimension
 import java.io.IOException
 import java.io.InputStream
 import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
 
 import gnu.hylafax.HylaFAXClient
 import gnu.hylafax.HylaFAXClientProtocol
 import gnu.hylafax.Job
+import gnu.hylafax.Pagesize
+import gnu.hylafax.Pagesize.a4
+
 import gnu.inet.ftp.FtpClientProtocol
 import gnu.inet.ftp.ServerResponseException
 
@@ -45,7 +63,7 @@ class HylaFAXPrinter
     // fax client
     val faxClient = HylaFAXClient()
     try {
-      faxClient.setDebug(false) // no debug messages
+      faxClient.debug = false // no debug messages
       faxClient.open(faxHost) // name of host
       faxClient.user(user) // hyla fax user
       // necessary for pdf documents to keep the correct file size
@@ -58,9 +76,9 @@ class HylaFAXPrinter
 
       // put attachments to server
       if (attachments != null) {
-        val attachmentInterator = attachments.iterator()
-        while (attachmentInterator.hasNext()) {
-          val dataSource = attachmentInterator.next() as InputStream
+        val attachmentIterator = attachments.iterator()
+        while (attachmentIterator.hasNext()) {
+          val dataSource = attachmentIterator.next() as InputStream
 
           // put data to the hylafax server
           documents.add(faxClient.putTemporary(dataSource))
@@ -79,7 +97,7 @@ class HylaFAXPrinter
       job.priority = Job.PRIORITY_NORMAL
       job.dialstring = number
       job.verticalResolution = Job.RESOLUTION_MEDIUM
-      job.pageDimension = Job.Pagesize.get("a4") as Dimension
+      job.pageDimension = Pagesize(a4)
       job.notifyType = HylaFAXClientProtocol.NOTIFY_NONE
       job.chopThreshold = 3
 
@@ -105,5 +123,5 @@ class HylaFAXPrinter
     }
     return "NYI"
   }
-
 }
+

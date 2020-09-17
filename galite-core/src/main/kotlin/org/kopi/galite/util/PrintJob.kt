@@ -24,16 +24,13 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
    */
   // properties
   private var title: String = ""
-  private lateinit var media: String
+  lateinit var media: String
   private var documentType = 0
   private var dataType: Int
-  private var numberCopy: Int
+  var numberCopy: Int
   private var numberOfPages: Int
 
   init {
-    this.datafile = datafile
-    this.delete = delete
-    this.format = format
     numberCopy = 1
     numberOfPages = -1
     dataType = DAT_PS
@@ -62,14 +59,16 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
    * getOutputStream has to be closed before calling getInputStream
    * use with care, know waht you do!
    */
-  val outputStream: OutputStream
-    get() = FileOutputStream(datafile)
+  fun getOutputStream(): OutputStream {
+    return FileOutputStream(datafile)
+  }
 
   /**
    * getOutputStream has to be closed before calling getInputStream
    */
-  val inputStream: InputStream
-    get() = FileInputStream(datafile)
+  fun getInputStream(): InputStream {
+    return FileInputStream(datafile)
+  }
 
   /**
    * use getInputStream because in creates the stream if necessary
@@ -82,7 +81,7 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
       /**
        * use getInputStream because in creates the stream if necessary
        */
-      val data: InputStream = inputStream
+      val data: InputStream = getInputStream()
       val output: ByteArrayOutputStream = ByteArrayOutputStream()
       while (data.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
@@ -91,7 +90,7 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
     }
 
   fun writeDataToFile(file: File) {
-    writeToFile(inputStream, file)
+    writeToFile(getInputStream(), file)
   }
 
   fun setPrintInformation(title: String, format: Rectangle, numberOfPages: Int) {

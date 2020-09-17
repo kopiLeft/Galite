@@ -1,8 +1,25 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.util
 
 import java.io.InputStream
 import org.kopi.galite.util.lpr.LpR
-import org.kopi.galite.util.lpr.LpdException
+
 class LpRPrinter  : Printer {
   /**
    * Creates a printer that send file to an lpd server
@@ -29,39 +46,6 @@ class LpRPrinter  : Printer {
     return name
   }
 
-  // ----------------------------------------------------------------------
-  // PRINT OPTIONS
-  // ----------------------------------------------------------------------
-
-//   /**
-//    * Sets the number of copy to print
-//    */
-//   public void setNumberOfCopies(int number) {
-//     this.numberOfCopies = number;
-//   }
-
-//   /**
-//    * Gets the number of copy to print
-//    */
-//   public int getNumberOfCopies() {
-//     return numberOfCopies;
-//   }
-
-  // ----------------------------------------------------------------------
-  // PRINT OPTIONS
-  // ----------------------------------------------------------------------
-  //   /**
-  //    * Sets the number of copy to print
-  //    */
-  //   public void setNumberOfCopies(int number) {
-  //     this.numberOfCopies = number;
-  //   }
-  //   /**
-  //    * Gets the number of copy to print
-  //    */
-  //   public int getNumberOfCopies() {
-  //     return numberOfCopies;
-  //   }
   /**
    * Sets the tray to use
    */
@@ -83,58 +67,37 @@ class LpRPrinter  : Printer {
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
   // ----------------------------------------------------------------------
-  fun print(data: PrintJob): String {
-    val lpr = LprImpl(data)
-    return lpr.print()
+  override fun print(data: PrintJob?): String? {
+    TODO()
   }
 
-  private class LprImpl internal constructor(data: PrintJob) : LpR(serverHost, port, proxyHost, queue, user) {
+  private inner class LprImpl internal constructor(data: PrintJob) : LpR(serverHost, port, proxyHost, queue, user) {
     fun print(): String {
-      try {
-        if (data.getTitle() != null) {
-          setTitle(data.getTitle())
-        }
-        print(data.getInputStream(), null)
-        close()
-      } catch (e: LpdException) {
-        throw PrintException(e.getMessage(), PrintException.EXC_UNKNOWN)
-      }
-      return "not yet implemented"
+      TODO()
     }
 
-    protected fun readFully(input : InputStream): ByteArray  {
+     fun readFully(input : InputStream): ByteArray  {
       val size = input.available()
       val data = ByteArray(size)
-      var count: Int
-      count = 0
+      var count: Int = 0
       while (count < size) {
         count += input.read(data, count, size - count)
       }
       input.close()
       return data
     }
-
-    private val data: PrintJob
-
-    init {
-      setPrintBurst(false)
-      this.data = data
-    }
+    private val data: PrintJob = TODO()
   }
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private var name: String? = null
-
   private var serverHost: String? = null
   private var port = 0
   private var proxyHost: String? = null
   private var queue: String? = null
   private var user: String? = null
-
-
   private var tray = 0
   private var paperFormat: String? = null
-
 }

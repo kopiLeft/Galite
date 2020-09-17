@@ -120,7 +120,5 @@ class PropertyManager
   companion object {
     private val resources = Hashtable<String, Any>()
   }
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR
-  // ----------------------------------------------------------------------
 }
+

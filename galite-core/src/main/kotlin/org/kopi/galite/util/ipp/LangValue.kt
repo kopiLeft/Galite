@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,42 +13,38 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * $Id: LangValue.java 34961 2016-11-04 17:20:49Z hacheni $
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.kopi.galite.util.ipp
-
-import java.io.IOException
 
 class LangValue : IPPValue {
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
-  constructor(charset: String?, value: String) {
+  constructor(charset: String, value: String) {
     this.charset = charset
     this.value = value
   }
 
-  constructor(`is`: IPPInputStream) {
+  constructor(inputStream: IPPInputStream) {
     var n: Int
-    `is`.readShort() //value-length
-    n = `is`.readShort().toInt()
-    charset = `is`.readString(n)
-    n = `is`.readShort().toInt()
-    value = `is`.readString(n)!!
+    inputStream.readShort() //value-length
+    n = inputStream.readShort().toInt()
+    charset = inputStream.readString(n).toString()
+    n = inputStream.readShort().toInt()
+    value = inputStream.readString(n)!!
   }
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
   override val size: Int
-    get() = 6 + charset!!.length + value.length
+    get() = 6 + charset.length + value.length
 
   override fun write(os: IPPOutputStream) {
-    os.writeShort(4 + value.length + charset!!.length)
-    os.writeShort(charset!!.length)
-    os.writeString(charset!!)
+    os.writeShort(4 + value.length + charset.length)
+    os.writeShort(charset.length)
+    os.writeString(charset)
     os.writeShort(value.length)
     os.writeString(value)
   }
@@ -63,6 +60,6 @@ class LangValue : IPPValue {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  private var charset: String?
+  private var charset: String
   private var value: String
 }
