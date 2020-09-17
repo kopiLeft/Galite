@@ -16,19 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.form
 
-/**
- * Filters characters according to a conversion table
- */
-open class Filter {
+import java.awt.LayoutManager2
+
+interface LayoutManager : LayoutManager2 {
   /**
-   * Empty Filter. This is the default implementation.
+   * get Column Pos, returns the pos of a column
    */
-  open fun convert(char: Char): Char = char
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  fun getColumnPos(x: Int): Int
 }

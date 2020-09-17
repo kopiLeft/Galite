@@ -19,16 +19,10 @@
 package org.kopi.galite.util
 
 /**
- * Filters characters according to a conversion table
+ * Information about a print job
  */
-open class Filter {
-  /**
-   * Empty Filter. This is the default implementation.
-   */
-  open fun convert(char: Char): Char = char
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
-}
+class PrintInformation(val title: String,
+                       val landscape: Boolean,
+                       val width: Int,
+                       val height: Int,
+                       val numberOfPages: Int)

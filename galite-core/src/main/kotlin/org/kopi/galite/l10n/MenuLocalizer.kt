@@ -16,19 +16,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.l10n
+
+import org.jdom2.Document
+import org.jdom2.Element
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
- * Filters characters according to a conversion table
+ * Implements a menu localizer.
+ *
+ * @param             document        the document containing the menu localization
+ * @param             ident           the identifier of the menu localization
  */
-open class Filter {
+class MenuLocalizer(document: Document, ident: String) {
   /**
-   * Empty Filter. This is the default implementation.
+   * Returns the value of the label attribute.
    */
-  open fun convert(char: Char): Char = char
+  fun getLabel(): String = self.getAttributeValue("label")
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  private val self: Element
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
+  init {
+    val root: Element = document.rootElement
+    val names = listOf("form", "insert")
+
+    if (root.name !in names) {
+      throw InconsistencyException("bad root element $root")
+    }
+    self = Utils.lookupChild(root, "menu", "ident", ident)
+  }
 }

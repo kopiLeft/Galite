@@ -21,8 +21,6 @@ plugins {
 
 val exposedVersion = "0.27.1"
 val vaadinVersion = "17.0.0"
-val hylafaxVersion = "1.0.0"
-val itextlowagieVersion ="2.1.5"
 
 dependencies {
   // Exposed dependencies
@@ -35,10 +33,4 @@ dependencies {
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
-
-  // Hylafax dependencies
-  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", hylafaxVersion)
-
-  // LowagieText dependencies
-  implementation("com.lowagie", "itext", itextlowagieVersion)
 }
