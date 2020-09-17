@@ -15,21 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.chart
 
-import java.io.Serializable
+import org.kopi.galite.print.Printable
+import org.kopi.galite.visual.VWindow
 
-/**
- * A chart data series includes a dimension and its measures.
- *
- * @param dimension represents the dimension of the data series
- */
-class VDataSeries(val dimension: VDimensionData) : Serializable {
-
-  /**
-   * @return the measures
-   */
-  fun getMeasures() : Array<VMeasureData> = measures.toTypedArray()
-
-  val measures = mutableListOf<VMeasureData>()
+abstract class VChart : VWindow(), CConstants, Printable {
+  fun getMeasure(column: Int): VMeasure {
+    TODO()
+  }
+  fun getDimension(column: Int): VDimension {
+    TODO()
+  }
+  internal fun getRows(): Array<VRow> {
+    TODO()
+  }
 }
