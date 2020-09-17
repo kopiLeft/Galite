@@ -39,7 +39,7 @@ dependencies {
 
   // Itext dependency
   implementation("com.lowagie", "itext", itextVersion)
-
+  
   // Jdom dependency
   implementation("org.jdom", "jdom2", jdomVersion)
 
