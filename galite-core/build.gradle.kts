@@ -22,6 +22,7 @@ plugins {
 val exposedVersion = "0.27.1"
 val vaadinVersion = "17.0.0"
 val itextVersion = "2.1.5"
+val jdomVersion = "2.0.5"
 
 dependencies {
   // Exposed dependencies
@@ -35,6 +36,9 @@ dependencies {
             .forEach { group -> exclude(group = group) }
   }
 
-  //Itext dependency
+  // Itext dependency
   implementation("com.lowagie", "itext", itextVersion)
+  
+  // Jdom dependency
+  implementation("org.jdom", "jdom2", jdomVersion)
 }

@@ -30,21 +30,21 @@ open class VRuntimeException : RuntimeException {
    *
    * @param        message                the associated message
    */
-  constructor(message: String) : super(message)
+  constructor(message: String?) : super(message)
 
   /**
    * Constructs an exception with an other exception.
    *
    * @param        exc                the exception
    */
-  constructor(exc: Throwable) : super(exc)
+  constructor(exc: Throwable?) : super(exc)
 
   /**
    * Constructs an exception with an other exception.
    *
    * @param        exc                the exception
    */
-  constructor(msg: String?, exc: Throwable) : super(msg, exc)
+  constructor(msg: String?, exc: Throwable?) : super(msg, exc)
 
   /**
    * Constructs an exception with no message.

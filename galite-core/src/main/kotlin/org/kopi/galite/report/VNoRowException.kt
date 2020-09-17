@@ -16,19 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.report
+
+import org.kopi.galite.visual.VRuntimeException
 
 /**
- * Filters characters according to a conversion table
+ * This class represents exceptions occurring during execution process.
+ *
+ * @param message the associated message. It's optional
  */
-open class Filter {
-  /**
-   * Empty Filter. This is the default implementation.
-   */
-  open fun convert(char: Char): Char = char
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
-}
+class VNoRowException(message: String? = null) : VRuntimeException(message)

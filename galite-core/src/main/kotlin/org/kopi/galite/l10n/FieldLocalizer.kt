@@ -16,19 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.l10n
+
+import org.jdom2.Element
 
 /**
- * Filters characters according to a conversion table
+ * Implements a field localizer.
  */
-open class Filter {
+class FieldLocalizer(manager: LocalizationManager, private val self: Element) : Localizer(manager) {
   /**
-   * Empty Filter. This is the default implementation.
+   * Returns the value of the label attribute.
    */
-  open fun convert(char: Char): Char = char
+  fun getLabel(): String = self.getAttributeValue("label")
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  /**
+   * Returns the value of the help attribute.
+   */
+  fun getHelp(): String = self.getAttributeValue("help")
 }

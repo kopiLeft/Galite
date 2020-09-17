@@ -24,8 +24,8 @@ package org.kopi.galite.visual
  * in different part of the action processing. For instance, VFieldException
  * will be handled by VForm that will display an error message if the message
  * is not null and it will put the focus on the caller field
- * Warning: All exceptions occuring in commands that do not herit from VException
- * (or SQLException in proteced statement) will generate a FATAL ERROR and close
+ * Warning: All exceptions occurring in commands that do not inherit from VException
+ * (or SQLException in protected statement) will generate a FATAL ERROR and close
  * the current form
  */
 abstract class VException : Exception {
@@ -39,20 +39,20 @@ abstract class VException : Exception {
    *
    * @param        message                the associated message
    */
-  constructor(message: String) : super(message)
+  constructor(message: String?) : super(message)
 
   /**
    * Constructs a new exception with the specified cause and a detail message
    *
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted
    */
-  constructor(cause: Throwable) : super(cause)
+  constructor(cause: Throwable?) : super(cause)
 
   /**
    * Constructs a new exception with the specified detail message and cause.
    *
    * @param     message         the associated message
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted
    */
-  constructor(message: String, cause: Throwable) : super(message, cause)
+  constructor(message: String?, cause: Throwable?) : super(message, cause)
 }
