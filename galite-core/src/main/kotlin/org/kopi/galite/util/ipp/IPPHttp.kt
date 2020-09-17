@@ -21,7 +21,7 @@ class IPPHttp {
   // --------------------------------------------------------------------
   // CONSTRUCTORS
   // --------------------------------------------------------------------
-  constructor(printerName: String?, request: IPP) {
+  constructor(printerName: String, request: IPP) {
     ippHeader = IPPHttpHeader(printerName, request.size)
     iPP = request
   }
