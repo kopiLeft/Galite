@@ -21,8 +21,9 @@ plugins {
 
 val exposedVersion = "0.27.1"
 val vaadinVersion = "17.0.0"
+val itextVersion = "2.1.5"
+val jdomVersion = "2.0.5"
 val hylafaxVersion = "1.0.0"
-val itextlowagieVersion ="2.1.5"
 
 dependencies {
   // Exposed dependencies
@@ -36,9 +37,12 @@ dependencies {
             .forEach { group -> exclude(group = group) }
   }
 
+  // Itext dependency
+  implementation("com.lowagie", "itext", itextVersion)
+
+  // Jdom dependency
+  implementation("org.jdom", "jdom2", jdomVersion)
+
   // Hylafax dependencies
   implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", hylafaxVersion)
-
-  // LowagieText dependencies
-  implementation("com.lowagie", "itext", itextlowagieVersion)
 }

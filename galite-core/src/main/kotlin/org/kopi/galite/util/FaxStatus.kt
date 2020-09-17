@@ -1,173 +1,28 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 package org.kopi.galite.util
 
+/**
+ * A class for handling the status of HYLAFAX entries returned by various queues
+ *
+ */
 class FaxStatus {
-
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR FOR OUTGOING FAXES
-  // ----------------------------------------------------------------------
-  constructor(id: String,
-                tag: String,
-                user: String,
-                dialNo: String,
-                state: String,
-                pages: String,
-                dials: String,
-                text: String) {
-    this.id = if (id.compareTo("") == 0) null else id
-    this.tag = if (tag.compareTo("") == 0) null else tag
-    this.user = if (user.compareTo("") == 0) null else user
-    this.dialNo = if (dialNo.compareTo("") == 0) null else dialNo
-    this.state = if (state.compareTo("") == 0) null else state
-    this.pages = if (pages.compareTo("") == 0) null else pages
-    this.text = if (text.compareTo("") == 0) null else text
-    this.dials = if (dials.compareTo("") == 0) null else dials
-    // not used
-    /*
-    if (isSent()) {		// TRY TO GATHER THE SEND TIME
-      this.sendtime = Fax.readSendtime(id);
-    }*/
-  }
-
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR FOR INCOMING FAXES
-  // ----------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR FOR INCOMING FAXES
-  // ----------------------------------------------------------------------
-  fun FaxStatus(filename: String,
-                incomingtime: String,
-                sender: String,
-                pages: String,
-                duration: String,
-                text: String) {
-    this.filename = if (filename.compareTo("") == 0) null else filename
-    this.incomingtime = if (incomingtime.compareTo("") == 0) null else incomingtime
-    this.sender = if (sender.compareTo("") == 0) null else sender
-    this.pages = if (pages.compareTo("") == 0) null else pages
-    this.duration = if (duration.compareTo("") == 0) null else duration
-    this.text = if (text.compareTo("") == 0) null else text
-  }
-
-  // ----------------------------------------------------------------------
-  // RETURNS THE ID (DATABASE ID) INSIDE THE TAG
-  // THE ID IS A NUMBER SO STRIP THEREFORE ANY OTHER LEADING CHARACTERS
-  // IF NO ID IS FOUND RETURN -1
-  // ----------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------
-  // RETURNS THE ID (DATABASE ID) INSIDE THE TAG
-  // THE ID IS A NUMBER SO STRIP THEREFORE ANY OTHER LEADING CHARACTERS
-  // IF NO ID IS FOUND RETURN -1
-  // ----------------------------------------------------------------------
-  fun getTagId(): Int {
-    var startpos = 0
-    if (tag == null) {
-      return -1
-    }
-    for (i in 0 until tag!!.length) {
-      val b = tag!![i]
-      if (b >= '0' && b <= '9') {
-        startpos = i
-        break
-      }
-    }
-    var id = -1
-    id = try {
-      Integer.valueOf(tag!!.substring(startpos)).toInt()
-    } catch (e: Exception) {
-      return -1
-    }
-    return id
-  }
-
-  // ----------------------------------------------------------------------
-  // RETURNS TRUE IF TAG STARTS WITH TAGSTR
-  // ----------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------
-  // RETURNS TRUE IF TAG STARTS WITH TAGSTR
-  // ----------------------------------------------------------------------
-  fun isTagged(tagstr: String?): Boolean {
-    return if (tag == null) {
-      false
-    } else tag!!.startsWith(tagstr!!)
-  }
-
-  // ----------------------------------------------------------------------
-  // RETURNS TRUE IF HAS BEEN SENT
-  // ----------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------
-  // RETURNS TRUE IF HAS BEEN SENT
-  // ----------------------------------------------------------------------
-  fun isSent(): Boolean {
-    return if (state!!.compareTo("D") == 0) {
-      text == null || text!!.compareTo("") == 0
-    } else {
-      false
-    }
-  }
-
-  // ----------------------------------------------------------------------
-  // SIMPLE ACCESSORS
-  // ----------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------
-  // SIMPLE ACCESSORS
-  // ----------------------------------------------------------------------
-  fun getId(): String? {
-    return id
-  }
-
-  fun getTag(): String? {
-    return tag
-  }
-
-  fun getUser(): String? {
-    return user
-  }
-
-  fun getDialNo(): String? {
-    return dialNo
-  }
-
-  fun getDials(): String? {
-    return dials
-  }
-
-  fun getState(): String? {
-    return state
-  }
-
-  fun getPages(): String? {
-    return pages
-  }
-
-  fun getText(): String? {
-    return text
-  }
-
-  fun getFilename(): String? {
-    return filename
-  }
-
-  fun getIncomingtime(): String? {
-    return incomingtime
-  }
-
-  fun getSender(): String? {
-    return sender
-  }
-
-  fun getDuration(): String? {
-    return duration
-  }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS FOR OUTGOING FAXES
-  // ----------------------------------------------------------------------
-
   // ----------------------------------------------------------------------
   // DATA MEMBERS FOR OUTGOING FAXES
   // ----------------------------------------------------------------------
@@ -185,10 +40,83 @@ class FaxStatus {
   // ----------------------------------------------------------------------
   // DATA MEMBERS FOR BOTH IN/OUT FAXES
   // ----------------------------------------------------------------------
+  private var pages: String?
+  private var text: String?
 
   // ----------------------------------------------------------------------
-  // DATA MEMBERS FOR BOTH IN/OUT FAXES
+  // CONSTRUCTOR FOR OUTGOING FAXES
   // ----------------------------------------------------------------------
-  private var pages: String? = null
-  private var text: String? = null
+  constructor(id: String,
+              tag: String,
+              user: String,
+              dialNo: String,
+              state: String,
+              pages: String,
+              dials: String,
+              text: String) {
+    this.id = if (id.isEmpty()) null else id
+    this.tag = if (tag.isEmpty()) null else tag
+    this.user = if (user.isEmpty()) null else user
+    this.dialNo = if (dialNo.isEmpty()) null else dialNo
+    this.state = if (state.isEmpty()) null else state
+    this.pages = if (pages.isEmpty()) null else pages
+    this.text = if (text.isEmpty()) null else text
+    this.dials = if (dials.isEmpty()) null else dials
+  }
+
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR FOR INCOMING FAXES
+  // ----------------------------------------------------------------------
+  constructor(filename: String,
+              incomingtime: String,
+              sender: String,
+              pages: String,
+              duration: String,
+              text: String) {
+    this.filename = if (filename.isEmpty()) null else filename
+    this.incomingtime = if (incomingtime.isEmpty()) null else incomingtime
+    this.sender = if (sender.isEmpty()) null else sender
+    this.pages = if (pages.isEmpty()) null else pages
+    this.duration = if (duration.isEmpty()) null else duration
+    this.text = if (text.isEmpty()) null else text
+  }
+
+  /**
+   * Returns the ID (Database ID) inside the tag
+   * The ID is a number so strip therefore any other leading characters
+   * If no ID is found Return -1
+   */
+  fun getTagId(): Int {
+    var startpos = 0
+    var id = -1
+    if (tag == null) {
+      return -1
+    }
+    startpos = tag!!.indexOfFirst { it >= '0' && it <= '9' }
+
+    id = try {
+      Integer.valueOf(tag!!.substring(startpos)).toInt()
+    } catch (e: Exception) {
+      return -1
+    }
+    return id
+  }
+
+  /**
+   * Returns True if tag starts with tagstr
+   */
+  fun isTagged(tagstr: String): Boolean {
+    return if (tag == null) {
+      false
+    } else (tag!!.startsWith((tagstr)))
+  }
+
+  /**
+   * Returns true if has been sent
+   */
+  fun isSent(): Boolean = if (state!!.compareTo("D") == 0) {
+    (text.isNullOrEmpty())
+  } else {
+    false
+  }
 }

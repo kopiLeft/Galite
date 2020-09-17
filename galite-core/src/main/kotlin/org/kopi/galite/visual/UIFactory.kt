@@ -16,19 +16,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.visual
+
+import org.kopi.galite.base.UComponent
 
 /**
- * Filters characters according to a conversion table
+ * `UIFactory` is visual components factory for model classes.
+ *
+ * This class is used whenever a visual component is needed to be built
+ * from a given model.
+ *
+ * Implementations should ensure the creations of visual components of all kopi
+ * model
+ * @see VModel
+ *
+ * @see UComponent
  */
-open class Filter {
+abstract class UIFactory {
   /**
-   * Empty Filter. This is the default implementation.
+   * Creates the [UComponent] that corresponds to the given model.
+   * @param model The view model.
+   * @throws IllegalArgumentException When the model has no UI correspondence.
    */
-  open fun convert(char: Char): Char = char
+  abstract fun createView(model: VModel): UComponent
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected lateinit var conversionTable: CharArray
+  companion object {
+    private lateinit var uiFactory: UIFactory
+  }
 }
