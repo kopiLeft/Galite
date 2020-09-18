@@ -16,18 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.visual
 
-import java.io.Serializable
+class Message {
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
-
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
+  // ----------------------------------------------------------------------
+  // STATIC METHODS
+  // ----------------------------------------------------------------------
+  companion object {
+    /**
+     * Returns a message (convenience routine).
+     *
+     * @param     ident             the message ident
+     * @return    the requested message
+     */
+    fun getMessage(ident: String): String {
+      return ident
+    }
+  }
 }

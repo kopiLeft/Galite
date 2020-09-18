@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,18 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.tests.list
 
-import java.io.Serializable
+import org.junit.Test
+import org.kopi.galite.list.VBooleanCodeColumn
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
+import kotlin.test.assertEquals
 
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
+class VBooleanCodeColumnTests {
+  @Test
+  fun vBooleanCodeColumnTest() {
+    val names : Array<String>  = arrayOf("green", "red", "blue")
+    val codes : Array<Boolean>  = arrayOf(true, false)
+    val vBooleanCodeColumn = VBooleanCodeColumn ("title", "column", names, codes, true)
+
+    assertEquals("boolean", vBooleanCodeColumn.getDataType().typeName)
+  }
 }

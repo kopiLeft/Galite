@@ -18,16 +18,19 @@
 
 package org.kopi.galite.list
 
-import java.io.Serializable
+import org.kopi.galite.visual.ImageHandler
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
+class VImageColumn(title: String, column: String, sortAscending: Boolean) :
+        VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {
 
   /**
-   * Returns a representation of value
+   * Returns a string representation of value
    */
-  fun formatObject(value: Any?): Any
+  override fun formatObject(value: Any?): Any {
+    return if (value == null) VConstants.EMPTY_TEXT else (ImageHandler.getImageHandler().getImage(value as ByteArray) as Any)
+  }
+
+  override fun getDataType(): Class<*> {
+    return ByteArray::class.java
+  }
 }

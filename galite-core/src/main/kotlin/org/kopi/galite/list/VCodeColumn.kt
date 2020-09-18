@@ -18,16 +18,30 @@
 
 package org.kopi.galite.list
 
-import java.io.Serializable
+import kotlin.math.max
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
+open abstract class VCodeColumn(title: String, column: String, protected var names: Array<String>,
+                                sortAscending: Boolean) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {
 
   /**
-   * Returns a representation of value
+   * Returns a string representation of value
    */
-  fun formatObject(value: Any?): Any
+  override fun formatObject(value: Any?): Any {
+    return if (value == null) VConstants.EMPTY_TEXT else names[getObjectIndex(value)]
+  }
+
+  /**
+   * Returns the index.of given object
+   */
+  protected abstract fun getObjectIndex(value: Any): Int
+
+  companion object {
+    private fun getMaxWidth(names: Array<String>): Int {
+      var res = 0
+      for (i in names.indices) {
+        res = max(names[i].length, res)
+      }
+      return res
+    }
+  }
 }

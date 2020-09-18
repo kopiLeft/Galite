@@ -16,18 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.tests.list
 
-import java.io.Serializable
+import org.junit.Test
+import org.kopi.galite.list.VTextColumn
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
+import kotlin.test.assertEquals
 
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
+class VTextColumnTests {
+  @Test
+  fun vTextColumnTests() {
+    val vTextColumnTests = VTextColumn ("title", "column", 1, 2, true)
+
+    assertEquals("", vTextColumnTests.formatObject(null))
+    assertEquals("java.lang.String", vTextColumnTests.getDataType().typeName)
+  }
 }

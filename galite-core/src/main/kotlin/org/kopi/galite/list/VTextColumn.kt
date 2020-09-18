@@ -18,16 +18,23 @@
 
 package org.kopi.galite.list
 
-import java.io.Serializable
+import org.kopi.galite.visual.Message
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
+
+class VTextColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
+        VListColumn(title, column, align, Message.getMessage("text-type").length, sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
 
   /**
-   * Returns a representation of value
+   * Returns a string representation of value
    */
-  fun formatObject(value: Any?): Any
+  override fun formatObject(value: Any?): Any {
+    return if (value == null) VConstants.EMPTY_TEXT else Message.getMessage("text-type")
+  }
+
+  override fun getDataType(): Class<*> {
+    return String::class.java
+  }
 }

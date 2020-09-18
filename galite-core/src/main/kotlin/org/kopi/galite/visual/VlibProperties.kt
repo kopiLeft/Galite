@@ -16,18 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.visual
 
-import java.io.Serializable
+class VlibProperties {
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
+    companion object {
+        fun getString (value : String) : String {return value}
+    }
 
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
 }

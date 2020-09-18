@@ -18,16 +18,28 @@
 
 package org.kopi.galite.list
 
-import java.io.Serializable
-
-interface ObjectFormatter : Serializable {
+class VStringColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
+        VListColumn(title, column, align, width, sortAscending) {
   /**
-   * Returns the column alignment
+   * Returns a string representation of value
    */
-  fun getAlign(): Int
+  override fun formatObject(value: Any?): Any {
+    if (value == null) {
+      return VConstants.EMPTY_TEXT
+    }
+    var str = value as String
+    val strLength = str.length
+    val width: Int = getWidth()
+    if (strLength > width) {
+      str = str.substring(0, width) + "..." + str.substring(width)
+    }
+    return str
+  }
 
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  override fun getDataType(): Class<*> {
+    return String::class.java
+  }
 }

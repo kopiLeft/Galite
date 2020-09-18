@@ -18,16 +18,10 @@
 
 package org.kopi.galite.list
 
-import java.io.Serializable
+class VIntegerColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
+        VListColumn(title, column, align, width, sortAscending) {
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
-
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
+  override fun getDataType(): Class<*> {
+    return Int::class.java
+  }
 }

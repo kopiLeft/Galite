@@ -18,16 +18,19 @@
 
 package org.kopi.galite.list
 
-import java.io.Serializable
+import java.awt.Color
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
+/**
+ * laurent :<br></br>
+ * NOTICE : This class was copied from VImageColumn and was not test
+ */
+class VColorColumn(title: String, column: String, sortAscending: Boolean) :
+        VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {
 
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  override fun getDataType(): Class<*> {
+    return Color::class.java
+  }
 }

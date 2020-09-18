@@ -16,18 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.tests.list
 
-import java.io.Serializable
+import org.junit.Test
+import org.kopi.galite.list.VStringCodeColumn
 
-interface ObjectFormatter : Serializable {
-  /**
-   * Returns the column alignment
-   */
-  fun getAlign(): Int
+import kotlin.test.assertEquals
 
-  /**
-   * Returns a representation of value
-   */
-  fun formatObject(value: Any?): Any
+class VStringCodeColumnTests {
+  @Test
+  fun vStringCodeColumnTests() {
+    val names : Array<String>  = arrayOf("green", "red", "blue")
+    val codes : Array<String>  = arrayOf("code1", "code2")
+    val vStringCodeColumnTests = VStringCodeColumn ("title", "column", names, codes, true)
+
+    assertEquals("java.lang.String", vStringCodeColumnTests.getDataType().typeName)
+  }
 }
