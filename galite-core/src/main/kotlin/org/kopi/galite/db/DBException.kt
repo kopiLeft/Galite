@@ -26,18 +26,15 @@ import java.sql.SQLException
  * @param     query                   the sql query which generated the exception
  * @param     sQLException            the original SQLException
  */
-abstract class DBException
-(
-        query: String?,
-        val sQLException: SQLException
-) : SQLException(
-        sQLException.message + if (query != null) {
-          "\n---- BEGIN QUERY TRACE ----\n$query\n----  END QUERY TRACE   ----"
-        } else {
-          ""
-        },
-        sQLException.sqlState,
-        sQLException.errorCode
+abstract class DBException(query: String?, val sQLException: SQLException) : SQLException(
+  sQLException.message +
+          if (query != null) {
+            "\n---- BEGIN QUERY TRACE ----\n$query\n----  END QUERY TRACE   ----"
+          } else {
+            ""
+          },
+  sQLException.sqlState,
+  sQLException.errorCode
 ) {
   /**
    * Constructor
