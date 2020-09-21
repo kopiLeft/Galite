@@ -27,7 +27,7 @@ class PreviewPrinter(name: String, var command: String) : AbstractPrinter(name) 
 
   constructor(command: String) : this("PreviewPrinter", command)
 
-  constructor(command: String, previewFile: File?) : this("PreviewPrinter", command)
+  constructor(command: String, previewFile: File) : this("PreviewPrinter", command)
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM

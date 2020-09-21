@@ -35,7 +35,6 @@ interface Printer {
   /**
    * Prints a Printjob
    */
-  @Throws(IOException::class, PrintException::class)
   fun print(data: PrintJob): String
   // ----------------------------------------------------------------------
   // PRINT OPTIONS

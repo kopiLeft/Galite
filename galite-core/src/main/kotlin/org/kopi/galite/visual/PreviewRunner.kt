@@ -27,6 +27,5 @@ interface PreviewRunner {
   /**
    * Launch document preview
    */
-  @Throws(IOException::class, PrintException::class)
   fun run(data: PrintJob, command: String)
 }

@@ -133,7 +133,7 @@ interface UItemTree : UWindow {
      * Returns the items of the tree as an array, returns null if there is no items
      * @return an array that contain the items of the tree
      */
-    val items: Array<Any?>
+    val items: Array<Item>
 
     /**
      * Returns the root item

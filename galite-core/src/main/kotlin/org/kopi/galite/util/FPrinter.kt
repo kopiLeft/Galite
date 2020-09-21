@@ -24,7 +24,7 @@ import java.io.File
  * File printer
  */
 class FPrinter(name: String, filename: String) : AbstractPrinter(name) {
-  private val file: File = File(filename)
+  private val file = File(filename)
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM

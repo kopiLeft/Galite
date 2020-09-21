@@ -35,7 +35,7 @@ class RootItem(id: Int, name: String) {
    * @param isSuperUser Is the connected user is a super user ?
    */
   fun createTree(items: Array<Item>) {
-    this.root = createTree(items, rootItem)
+    this.rootNode = createTree(items, rootItem)
   }
 
   /**
@@ -51,10 +51,9 @@ class RootItem(id: Int, name: String) {
     var childsCount = 0
     for (i in items.indices) {
       if (items[i].parent === root.id) {
-        var node: DefaultMutableTreeNode?
         childsCount++
         items[i].level = root.level + 1
-        node = createTree(items, items[i])
+        val node: DefaultMutableTreeNode? = createTree(items, items[i])
         if (node != null) {
           if (self == null) {
             self = DefaultMutableTreeNode(root)
@@ -77,7 +76,7 @@ class RootItem(id: Int, name: String) {
    * @return True if this root item does not contain any item.
    */
   val isEmpty: Boolean
-    get() = this.root == null
+    get() = this.rootNode == null
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -104,6 +103,6 @@ class RootItem(id: Int, name: String) {
   /**
    * Return the root node
    */
-  var root: TreeNode? = null
+  var rootNode: TreeNode? = null
     private set
 }
