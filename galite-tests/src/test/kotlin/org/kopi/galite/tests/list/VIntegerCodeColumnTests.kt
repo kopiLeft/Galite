@@ -29,6 +29,6 @@ class VIntegerCodeColumnTests {
     val codes : Array<Int>  = arrayOf(1, 2, 3)
     val vIntegerCodeColumn = VIntegerCodeColumn ("title", "column", names, codes, true)
 
-    assertEquals("int", vIntegerCodeColumn.getDataType().typeName)
+    assertEquals(Integer::class, vIntegerCodeColumn.getDataType())
   }
 }

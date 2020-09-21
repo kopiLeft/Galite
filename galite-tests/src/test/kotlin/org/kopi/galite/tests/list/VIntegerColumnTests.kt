@@ -28,6 +28,6 @@ class VIntegerColumnTests {
   fun vIntegerColumnTests() {
     val vIntegerColumn = VIntegerColumn ("title", "column", 1, 2, true)
 
-    assertEquals("int", vIntegerColumn.getDataType().typeName)
+    assertEquals(Integer::class, vIntegerColumn.getDataType())
   }
 }

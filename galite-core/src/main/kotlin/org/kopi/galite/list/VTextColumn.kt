@@ -20,6 +20,8 @@ package org.kopi.galite.list
 
 import org.kopi.galite.visual.Message
 
+import kotlin.reflect.KClass
+
 
 class VTextColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
         VListColumn(title, column, align, Message.getMessage("text-type").length, sortAscending) {
@@ -34,7 +36,7 @@ class VTextColumn (title: String, column: String, align: Int, width: Int, sortAs
     return if (value == null) VConstants.EMPTY_TEXT else Message.getMessage("text-type")
   }
 
-  override fun getDataType(): Class<*> {
-    return String::class.java
+  override fun getDataType(): KClass<*> {
+    return String::class
   }
 }

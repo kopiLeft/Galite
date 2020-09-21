@@ -19,9 +19,8 @@
 package org.kopi.galite.visual
 
 class VlibProperties {
-
     companion object {
-        fun getString (value : String) : String {return value}
+        fun getString (value : String) : String {
+            TODO()}
     }
-
 }

@@ -20,17 +20,18 @@ package org.kopi.galite.list
 
 import java.awt.Color
 
+import kotlin.reflect.KClass
+
 /**
  * laurent :<br></br>
  * NOTICE : This class was copied from VImageColumn and was not test
  */
 class VColorColumn(title: String, column: String, sortAscending: Boolean) :
         VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {
-
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-  override fun getDataType(): Class<*> {
-    return Color::class.java
+  override fun getDataType(): KClass<*> {
+    return Color::class
   }
 }

@@ -20,49 +20,25 @@ package org.kopi.galite.list
 
 import org.kopi.galite.util.base.InconsistencyException
 
-class VBooleanCodeColumn : VCodeColumn {
+import kotlin.reflect.KClass
 
-  /**
-   * Constructs a list column.
-   *
-   */
-  constructor(title: String, column: String, names: Array<String>, codes: Array<Boolean>,
-              sortAscending: Boolean) : super(title, column, names, sortAscending) {
-    this.codes = codes
-  }
-
-  /**
-   * Constructs a list column.
-   *
-   */
-  constructor(title: String, column: String, names: Array<String>, codes: BooleanArray, sortAscending: Boolean) :
-          this(title, column, names, makeObjectArray(codes), sortAscending)
-
-  /**
-   * Returns the index.of given object
-   */
-  override fun getObjectIndex(value: Any): Int {
-    for (i in codes.indices) {
-      if (value == codes[i]) {
-        return i
-      }
-    }
-    throw InconsistencyException("bad code value $value")
-  }
-
-  override fun getDataType(): Class<*> {
-    return Boolean::class.java
-  }
-
+class VBooleanCodeColumn(
+  title: String,
+  column: String,
+  names: Array<String>,
+  private val codes: Array<Boolean>,
+  sortAscending: Boolean
+) : VCodeColumn(title, column, names, sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-  companion object {
-    private fun makeObjectArray(input: BooleanArray): Array<Boolean> = input.toTypedArray()
-  }
+  /**
+   * Returns the index.of given object
+   */
+  override fun getObjectIndex(value: Any): Int = codes.indexOfFirst { it == value }.takeUnless { it == -1 }
+  ?: throw InconsistencyException("bad code value $value")
 
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private val codes: Array<Boolean> // code array
+  override fun getDataType(): KClass<*> {
+    return Boolean::class
+  }
 }

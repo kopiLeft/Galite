@@ -20,44 +20,21 @@ package org.kopi.galite.list
 
 import org.kopi.galite.l10n.ListLocalizer
 
-open abstract class VListColumn(private var title: String, private val column: String, private val align: Int, private val width: Int,
-                                private val isSortAscending: Boolean) : VConstants, ObjectFormatter {
+import kotlin.reflect.KClass
 
-  /**
-   * Returns the column title
-   */
-  open fun getTitle(): String {
-    return title
-  }
-
-  /**
-   * Returns the column's database column name
-   */
-  open fun getColumn(): String {
-    return column
-  }
-
+abstract class VListColumn(
+  var title: String,
+  val column: String,
+  private val align: Int,
+  val width: Int,
+  val isSortAscending: Boolean
+) : VConstants, ObjectFormatter {
   /**
    * Returns the column alignment
    */
   override fun getAlign(): Int {
     return align;
   }
-
-  /**
-   * Returns the column width in characters
-   */
-  open fun getWidth(): Int {
-    return width
-  }
-
-  /**
-   * Returns the column width in characters
-   */
-  open fun isSortAscending(): Boolean {
-    return isSortAscending
-  }
-
 
   /**
    * Returns a representation of value
@@ -70,7 +47,7 @@ open abstract class VListColumn(private var title: String, private val column: S
    * Returns the data type provided by this list.
    * @return The data type provided by this list.
    */
-  abstract fun getDataType(): Class<*>
+  abstract fun getDataType(): KClass<*>
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
@@ -82,5 +59,4 @@ open abstract class VListColumn(private var title: String, private val column: S
   fun localize(loc: ListLocalizer) {
     title = loc.getColumnTitle(column)
   }
-
 }

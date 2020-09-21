@@ -19,10 +19,8 @@
 package org.kopi.galite.tests.list
 
 import org.junit.Test
-import org.kopi.galite.list.VImageColumn
-import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VStringColumn
-import org.mozilla.javascript.ScriptRuntime.getObjectIndex
+
 import kotlin.test.assertEquals
 
 class VStringColumnTests {
@@ -33,6 +31,7 @@ class VStringColumnTests {
 
     assertEquals("", vStringColumn.formatObject(null))
     assertEquals("St...ring", vStringColumn.formatObject("String"))
-    assertEquals("java.lang.String", vStringColumn.getDataType().typeName)
+    println("----->" +vStringColumn.getDataType())
+    assertEquals(String::class, vStringColumn.getDataType())
   }
 }

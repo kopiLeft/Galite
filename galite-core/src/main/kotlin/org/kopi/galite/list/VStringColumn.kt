@@ -18,6 +18,8 @@
 
 package org.kopi.galite.list
 
+import kotlin.reflect.KClass
+
 class VStringColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
         VListColumn(title, column, align, width, sortAscending) {
   /**
@@ -29,7 +31,7 @@ class VStringColumn (title: String, column: String, align: Int, width: Int, sort
     }
     var str = value as String
     val strLength = str.length
-    val width: Int = getWidth()
+    val width: Int = width
     if (strLength > width) {
       str = str.substring(0, width) + "..." + str.substring(width)
     }
@@ -39,7 +41,7 @@ class VStringColumn (title: String, column: String, align: Int, width: Int, sort
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-  override fun getDataType(): Class<*> {
-    return String::class.java
+  override fun getDataType(): KClass<*> {
+    return String::class
   }
 }

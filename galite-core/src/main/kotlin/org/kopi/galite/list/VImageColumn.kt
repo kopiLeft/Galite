@@ -20,17 +20,19 @@ package org.kopi.galite.list
 
 import org.kopi.galite.visual.ImageHandler
 
+import kotlin.reflect.KClass
+
 class VImageColumn(title: String, column: String, sortAscending: Boolean) :
         VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {
-
   /**
    * Returns a string representation of value
    */
-  override fun formatObject(value: Any?): Any {
-    return if (value == null) VConstants.EMPTY_TEXT else (ImageHandler.getImageHandler().getImage(value as ByteArray) as Any)
+  override fun formatObject(value: Any?): Any = when (value) {
+    null -> VConstants.EMPTY_TEXT
+    else -> ImageHandler.getImageHandler().getImage(value as ByteArray)
   }
-
-  override fun getDataType(): Class<*> {
-    return ByteArray::class.java
+  
+  override fun getDataType(): KClass<*> {
+    return ByteArray::class
   }
 }

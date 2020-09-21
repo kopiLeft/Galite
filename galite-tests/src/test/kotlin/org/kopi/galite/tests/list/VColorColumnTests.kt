@@ -17,6 +17,8 @@
 
 package org.kopi.galite.tests.list
 
+import java.awt.Color
+
 import org.junit.Test
 import org.kopi.galite.list.VColorColumn
 
@@ -27,6 +29,6 @@ class VColorColumnTests {
   fun vColorColumnTests() {
     val vColorColumn = VColorColumn("title", "column", true)
 
-    assertEquals("java.awt.Color", vColorColumn.getDataType().typeName)
+    assertEquals(Color::class, vColorColumn.getDataType())
   }
 }

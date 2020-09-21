@@ -18,10 +18,12 @@
 
 package org.kopi.galite.list
 
+import kotlin.reflect.KClass
+
 class VIntegerColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
         VListColumn(title, column, align, width, sortAscending) {
 
-  override fun getDataType(): Class<*> {
-    return Int::class.java
+  override fun getDataType(): KClass<*> {
+    return Integer::class
   }
 }

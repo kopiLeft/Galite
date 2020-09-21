@@ -20,7 +20,6 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.base.Image
 
-
 abstract class ImageHandler {
   //------------------------------------------------------------------
   // ABSTRACT METHODS
@@ -57,4 +56,3 @@ abstract class ImageHandler {
     fun getImageHandler() :  ImageHandler =  imageHandler;
   }
 }
-

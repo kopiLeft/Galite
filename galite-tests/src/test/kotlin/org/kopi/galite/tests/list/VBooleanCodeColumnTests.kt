@@ -29,6 +29,6 @@ class VBooleanCodeColumnTests {
     val codes : Array<Boolean>  = arrayOf(true, false)
     val vBooleanCodeColumn = VBooleanCodeColumn ("title", "column", names, codes, true)
 
-    assertEquals("boolean", vBooleanCodeColumn.getDataType().typeName)
+    assertEquals(Boolean::class, vBooleanCodeColumn.getDataType())
   }
 }

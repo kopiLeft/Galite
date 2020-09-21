@@ -28,6 +28,6 @@ class VImageColumnTests {
     val vImageColumn = VImageColumn("title", "column", true)
 
     assertEquals("", vImageColumn.formatObject(null))
-    assertEquals("byte[]", vImageColumn.getDataType().typeName)
+    assertEquals(ByteArray::class, vImageColumn.getDataType())
   }
 }

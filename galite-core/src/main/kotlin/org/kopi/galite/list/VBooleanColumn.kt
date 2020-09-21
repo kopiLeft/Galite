@@ -19,11 +19,12 @@
 package org.kopi.galite.list
 
 import org.kopi.galite.visual.VlibProperties
+
 import kotlin.math.max
+import kotlin.reflect.KClass
 
 class VBooleanColumn(title: String, column: String, sortAscending: Boolean) :
         VListColumn(title, column, VConstants.ALG_LEFT, max(trueRep.length, falseRep.length), sortAscending) {
-
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
@@ -31,12 +32,14 @@ class VBooleanColumn(title: String, column: String, sortAscending: Boolean) :
   /**
    * Returns a string representation of value
    */
-  override fun formatObject(value: Any?): Any {
-    return if (value == null) VConstants.EMPTY_TEXT else if ((value as Boolean)) trueRep else falseRep
+  override fun formatObject(value: Any?): Any = when {
+    value == null -> VConstants.EMPTY_TEXT
+    value as Boolean -> trueRep
+    else -> falseRep
   }
 
-  override fun getDataType(): Class<*> {
-    return Boolean::class.java
+  override fun getDataType(): KClass<*> {
+    return Boolean::class
   }
 
   // --------------------------------------------------------------------

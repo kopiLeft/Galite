@@ -28,6 +28,6 @@ class VBooleanColumnTests {
     val vBooleanColumn = VBooleanColumn ("title", "column", true)
 
     assertEquals("", vBooleanColumn.formatObject(null))
-    assertEquals("boolean", vBooleanColumn.getDataType().typeName)
+    assertEquals(Boolean::class, vBooleanColumn.getDataType())
   }
 }

@@ -30,6 +30,6 @@ class VStringCodeColumnTests {
     val codes : Array<String>  = arrayOf("code1", "code2")
     val vStringCodeColumnTests = VStringCodeColumn ("title", "column", names, codes, true)
 
-    assertEquals("java.lang.String", vStringCodeColumnTests.getDataType().typeName)
+    assertEquals(String::class, vStringCodeColumnTests.getDataType())
   }
 }

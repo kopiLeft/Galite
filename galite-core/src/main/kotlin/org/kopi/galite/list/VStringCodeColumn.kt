@@ -20,23 +20,25 @@ package org.kopi.galite.list
 
 import org.kopi.galite.util.base.InconsistencyException
 
-open class VStringCodeColumn(title: String, column: String, names: Array<String>,
-                             private val codes: Array<String>, sortAscending: Boolean) : VCodeColumn(title, column, names, sortAscending) {
+import kotlin.reflect.KClass
+
+open class VStringCodeColumn(
+  title: String,
+  column: String,
+  names: Array<String>,
+  private val codes: Array<String>,
+  sortAscending: Boolean
+) : VCodeColumn(title, column, names, sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-
   /**
-   * Returns the index.of given object
+   * Returns the indexOf given object
    */
-  public override fun getObjectIndex(value: Any): Int {
-    for (i in codes.indices) {
-      if (value == codes[i]) {
-        return i
-      }
-    }
-    throw InconsistencyException("bad code value $value")
-  }
+  public override fun getObjectIndex(value: Any): Int = codes.indexOfFirst { it == value }
+          .takeUnless { it == -1 } ?: throw InconsistencyException("bad code value $value")
 
-  override fun getDataType(): Class<*> = String::class.java
+  override fun getDataType(): KClass<*> {
+    return String::class
+  }
 }

@@ -20,48 +20,22 @@ package org.kopi.galite.list
 
 import org.kopi.galite.util.base.InconsistencyException
 
-class VIntegerCodeColumn : VCodeColumn {
+import kotlin.reflect.KClass
 
-  /**
-   * Constructs a list column.
-   */
-  constructor(title: String, column: String, names: Array<String>, codes: Array<Int>,
-              sortAscending: Boolean) : super(title, column, names, sortAscending) {
-    this.codes = codes
-  }
-
-  /**
-   * Constructs a list column.
-   *
-   */
-  constructor(title: String, column: String, names: Array<String>, codes: IntArray,
-              sortAscending: Boolean) : this(title, column, names, makeObjectArray(codes), sortAscending)
-
+class VIntegerCodeColumn(
+  title: String,
+  column: String,
+  names: Array<String>,
+  private val codes: Array<Int>,
+  sortAscending: Boolean
+) : VCodeColumn(title, column, names, sortAscending) {
   /**
    * Returns the index.of given object
    */
-  override fun getObjectIndex(value: Any): Int {
-    for (i in codes.indices) {
-      if (value == codes[i]) {
-        return i
-      }
-    }
-    throw InconsistencyException("bad code value " + value as Int)
-  }
+  override fun getObjectIndex(value: Any): Int = codes.indexOfFirst { it == value }
+          .takeUnless { it == -1 } ?: throw InconsistencyException("bad code value $value")
 
-  override fun getDataType(): Class<*> {
-    return Int::class.java
+  override fun getDataType(): KClass<*> {
+    return Integer::class
   }
-
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  companion object {
-    private fun makeObjectArray(input: IntArray): Array<Int> = input.toTypedArray()
-  }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private val codes: Array<Int> // code array
 }

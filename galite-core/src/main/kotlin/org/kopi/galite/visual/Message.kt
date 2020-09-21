@@ -19,7 +19,6 @@
 package org.kopi.galite.visual
 
 class Message {
-
   // ----------------------------------------------------------------------
   // STATIC METHODS
   // ----------------------------------------------------------------------
@@ -31,7 +30,7 @@ class Message {
      * @return    the requested message
      */
     fun getMessage(ident: String): String {
-      return ident
+      TODO()
     }
   }
 }
