@@ -30,6 +30,7 @@ import java.util.Locale
  * The `Application` should give a way how to login to the application.
  */
 interface Application : MessageListener {
+
   /**
    * Logins to the application.
    * @param database The database URL.
@@ -145,5 +146,5 @@ interface Application : MessageListener {
    * Returns the application configuration instance.
    * @return The application configuration instance.
    */
-   var applicationConfiguration: ApplicationConfiguration?
+   var applicationConfiguration: ApplicationConfiguration
 }
