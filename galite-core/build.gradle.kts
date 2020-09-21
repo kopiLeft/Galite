@@ -27,8 +27,6 @@ val jdomVersion = "2.0.5"
 dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
-  api("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
-  implementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", "0.8.4")
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core", vaadinVersion) {

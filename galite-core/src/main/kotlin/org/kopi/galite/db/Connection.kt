@@ -27,23 +27,31 @@ import java.sql.Connection
  * JDBC connection, driver and user.
  */
 class Connection {
+
+  val dBContext: DBContext
+  val uRL: String
+  val userName: String
+  val password: String?
+  var dbConnection: Database? = null
+  val user: Int = 0
+
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
   /**
    * Creates a connection from JDBC Connection
    *
-   * @param        ctxt                the database context
-   * @param        connection                the JDBC connection
-   * @param     lookupUserId    lookup user id in table of Users ?
+   * @param     ctxt                the database context
+   * @param     connection          the JDBC connection
+   * @param     lookupUserId        lookup user id in table of Users ?
    */
   constructor(ctxt: DBContext,
               connection: Connection,
               lookupUserId: Boolean = true, // TODO
               schema: String? = null) { // TODO
-    dBContext = ctxt
     val database = Database.connect({ connection })
-    conn = database
+    dBContext = ctxt
+    dbConnection = database
     uRL = database.url
     userName = connection.metaData.userName
     password = null // already authenticated
@@ -67,9 +75,9 @@ class Connection {
               password: String,
               lookupUserId: Boolean = true, // TODO
               schema: String? = null) { // TODO
-    dBContext = ctxt
     val database = Database.connect(url = url, driver = driver, user = username, password = password)
-    conn = database
+    dBContext = ctxt
+    dbConnection = database
     uRL = url
     userName = username
     this.password = password
@@ -89,10 +97,6 @@ class Connection {
     return user
   }
 
-  // ----------------------------------------------------------------------
-  // PRIVATE METHODS
-  // ----------------------------------------------------------------------
-
   /**
    * Retrieves the user ID of the current user
    */
@@ -100,18 +104,11 @@ class Connection {
     TODO()
   }
 
-  private val dBContext: DBContext
-  private var uRL: String
-  val userName: String
-  val password: String?
-  private var conn: Database? = null
-  private var user: Int = 0
-
   companion object {
-    // -1 ... not yet determined
+    // -1 not yet determined
     private const val USERID_TO_DETERMINE = -1
 
-    // -2 ... do not lookup user ID
+    // -2 do not lookup user ID
     private const val USERID_NO_LOOKUP = -2
   }
 }
