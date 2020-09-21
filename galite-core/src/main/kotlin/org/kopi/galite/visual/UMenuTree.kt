@@ -30,14 +30,14 @@ interface UMenuTree : UWindow {
    *
    * @return a [UTree]
    */
-  val tree: UTree?
+  val tree: UTree
 
   /**
    * Returns The favorites panel
    *
    * @return a [UBookmarkPanel]
    */
-  val bookmark: UBookmarkPanel?
+  val bookmark: UBookmarkPanel
 
   /**
    * This method launches the selected form in the menu tree and throws
@@ -47,7 +47,6 @@ interface UMenuTree : UWindow {
    *
    * @throws VException
    */
-  @Throws(VException::class)
   fun launchSelectedForm()
 
   /**
@@ -78,7 +77,7 @@ interface UMenuTree : UWindow {
    * Shows the application information
    * @param message The message to be shown as application information
    */
-  fun showApplicationInformation(message: String?)
+  fun showApplicationInformation(message: String)
 
   /**
    * `UTree` is the top-level interface representing a visible tree
@@ -116,7 +115,7 @@ interface UMenuTree : UWindow {
      * @return false if any of the nodes in the node's path are collapsed,
      * true if all nodes in the path are expanded
      */
-    fun isExpanded(path: Any?): Boolean
+    fun isExpanded(path: Any): Boolean
 
     /**
      * Returns true if the value identified by path is currently collapsed,
@@ -127,7 +126,7 @@ interface UMenuTree : UWindow {
      * @return true if any of the nodes in the node's path are collapsed,
      * false if all nodes in the path are expanded
      */
-    fun isCollapsed(path: Any?): Boolean
+    fun isCollapsed(path: Any): Boolean
   }
 
   /**
