@@ -19,7 +19,6 @@
 package org.kopi.galite.db
 
 import org.jetbrains.exposed.sql.Database
-import java.util.Vector
 
 /**
  * The database context
@@ -48,7 +47,7 @@ class DBContext(var defaultConnection: Connection) {
   ): Database {
     val database = Database.connect(url = url, driver = driverName, user = user, password = password)
     val connection = Connection(this, url = url, driver = driverName, username = user, password = password, schema = schema)
-    connections.add(connection)
+    connections = connection
     return database
   }
 
@@ -71,6 +70,6 @@ class DBContext(var defaultConnection: Connection) {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   /** All connections currently opened */
-  var connections = Vector<Connection>()
+  var connections: Connection? = null
     private set
 }
