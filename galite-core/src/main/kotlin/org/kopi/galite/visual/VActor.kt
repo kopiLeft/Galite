@@ -19,28 +19,40 @@
 package org.kopi.galite.visual
 
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.l10n.LocalizationManager
 
 /**
- * `UIFactory` is visual components factory for model classes.
- *
- * This class is used whenever a visual component is needed to be built
- * from a given model.
- *
- * Implementations should ensure the creations of visual components of all kopi
- * model
- * @see VModel
- *
- * @see UComponent
+ * Represents an actor.
  */
-abstract class UIFactory {
-  /**
-   * Creates the [UComponent] that corresponds to the given model.
-   * @param model The view model.
-   * @throws IllegalArgumentException When the model has no UI correspondence.
-   */
-  abstract fun createView(model: VModel): UComponent
+class VActor(
+        var menuIdent: String,
+        private val menuSource: String,
+        var actorIdent: String,
+        private val actorSource: String,
+        var iconName: String?,
+        val acceleratorKey: Int,
+        val acceleratorModifier: Int) : VModel {
 
-  companion object {
-    lateinit var uiFactory: UIFactory
+  override fun setDisplay(display: UComponent) {
+    TODO("Not yet implemented")
   }
+
+  override fun getDisplay(): UComponent {
+    TODO("Not yet implemented")
+  }
+
+  fun setEnabled(enabled: Boolean) {
+    TODO()
+  }
+
+  fun localize(manager: LocalizationManager) {
+    TODO()
+  }
+
+  fun isEnabled(): Boolean {
+    TODO()
+  }
+
+  var number: Int? = null
+  var handler: ActionHandler? = null
 }

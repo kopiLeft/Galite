@@ -21,26 +21,20 @@ package org.kopi.galite.visual
 import org.kopi.galite.base.UComponent
 
 /**
- * `UIFactory` is visual components factory for model classes.
- *
- * This class is used whenever a visual component is needed to be built
- * from a given model.
- *
- * Implementations should ensure the creations of visual components of all kopi
- * model
- * @see VModel
- *
- * @see UComponent
+ * `UActor` is the top level interface that all visual actor components
+ * should implement. It is the visual component of [VActor]
  */
-abstract class UIFactory {
-  /**
-   * Creates the [UComponent] that corresponds to the given model.
-   * @param model The view model.
-   * @throws IllegalArgumentException When the model has no UI correspondence.
-   */
-  abstract fun createView(model: VModel): UComponent
+interface UActor : UComponent {
 
-  companion object {
-    lateinit var uiFactory: UIFactory
-  }
+  /**
+   * Sets the actor model.
+   * @param model The actor model.
+   */
+  fun setModel(model: VActor)
+
+  /**
+   * Returns the actor model.
+   * @return The actor model.
+   */
+  fun getModel(): VActor
 }

@@ -18,29 +18,8 @@
 
 package org.kopi.galite.visual
 
-import org.kopi.galite.base.UComponent
-
-/**
- * `UIFactory` is visual components factory for model classes.
- *
- * This class is used whenever a visual component is needed to be built
- * from a given model.
- *
- * Implementations should ensure the creations of visual components of all kopi
- * model
- * @see VModel
- *
- * @see UComponent
- */
-abstract class UIFactory {
-  /**
-   * Creates the [UComponent] that corresponds to the given model.
-   * @param model The view model.
-   * @throws IllegalArgumentException When the model has no UI correspondence.
-   */
-  abstract fun createView(model: VModel): UComponent
-
-  companion object {
-    lateinit var uiFactory: UIFactory
+object MessageCode {
+  fun getMessage(key: String): String {
+    TODO()
   }
 }

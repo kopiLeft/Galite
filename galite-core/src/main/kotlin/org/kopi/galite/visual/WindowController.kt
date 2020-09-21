@@ -81,10 +81,6 @@ abstract class WindowController : Serializable {
     /**
      * The `WindowController` instance.
      */
-    var windowController: WindowController? = null
-      set(controller) {
-        assert(controller != null) { "WindowController cannot be null" }
-        field = controller
-      }
+    lateinit var windowController: WindowController
   }
 }
