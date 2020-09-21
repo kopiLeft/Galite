@@ -36,19 +36,20 @@ import java.io.ByteArrayOutputStream
  * A Printer creates a PrintTask from a PrintJob
  */
 class PrintJob(var datafile: File?, var delete: Boolean, var format: Rectangle) {
-  /**
-   * use with care, do only read from the file, not not manipulate
-   */
+
+  constructor(format: Rectangle) : this(Utils.getTempFile("galite", "pdf"), true, format)
+  constructor(data: ByteArray, format: Rectangle) : this(writeToFile(ByteArrayInputStream(data)), true, format)
+  constructor(dataStream: InputStream, format: Rectangle) : this(writeToFile(dataStream), true, format)
+
   // properties
   var title: String = ""
   lateinit var media: String
   var documentType = 0
   var dataType: Int
-  var numberCopy: Int
+  var numberCopy: Int = 1
   var numberOfPages: Int
 
   init {
-    numberCopy = 1
     numberOfPages = -1
     dataType = DAT_PS
     /* if the jvm is stopped before the objects are finalized the file must be deleted!*/
@@ -56,10 +57,6 @@ class PrintJob(var datafile: File?, var delete: Boolean, var format: Rectangle) 
       datafile!!.deleteOnExit()
     }
   }
-
-  constructor(format: Rectangle) : this(Utils.getTempFile("kopi", "pdf"), true, format)
-  constructor(data: ByteArray, format: Rectangle) : this(writeToFile(ByteArrayInputStream(data)), true, format)
-  constructor(dataStream: InputStream, format: Rectangle) : this(writeToFile(dataStream), true, format)
 
   protected fun finalize() {
     if (delete && datafile != null) {
@@ -72,28 +69,25 @@ class PrintJob(var datafile: File?, var delete: Boolean, var format: Rectangle) 
   }
 
   /**
-   * getOutputStream has to be closed before calling getInputStream
-   * use with care, know waht you do!
+   * OutputStream has to be closed before using inputStream
+   * use with care, know what you do!
    */
   val outputStream: OutputStream
     get() = FileOutputStream(datafile)
 
   /**
-   * getOutputStream has to be closed before calling getInputStream
+   * outputStream has to be closed before using inputStream
    */
   val inputStream: InputStream
     get() = FileInputStream(datafile)
 
-  /**
-   * use getInputStream because in creates the stream if necessary
-   */
   val bytes: ByteArray
     get() {
       val buffer = ByteArray(1024)
       var length: Int
 
       /**
-       * use getInputStream because in creates the stream if necessary
+       * use inputStream because it creates the stream if necessary
        */
       val data: InputStream = inputStream
       val output: ByteArrayOutputStream = ByteArrayOutputStream()
@@ -127,15 +121,15 @@ class PrintJob(var datafile: File?, var delete: Boolean, var format: Rectangle) 
 
   companion object {
     private fun writeToFile(dataStream: InputStream): File {
-      val tempFile: File = Utils.getTempFile("kopi", "pdf")
+      val tempFile: File = Utils.getTempFile("galite", "pdf")
       writeToFile(dataStream, tempFile)
       return tempFile
     }
 
-    private fun writeToFile(dataStream: InputStream, outputfile: File) {
+    private fun writeToFile(dataStream: InputStream, outputFile: File) {
       val buffer = ByteArray(1024)
       var length: Int
-      val output: OutputStream = FileOutputStream(outputfile)
+      val output: OutputStream = FileOutputStream(outputFile)
       while (dataStream.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
       }

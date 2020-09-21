@@ -35,7 +35,7 @@ import java.util.Locale
 import java.util.Date
 
 /**
- * `ApplicationContext` is a kopi application context that contains the
+ * `ApplicationContext` is a galite application context that contains the
  * running [Application] instance in the context thread. The `ApplicationContext`
  * handles all shared applications components.
  */
@@ -62,9 +62,11 @@ abstract class ApplicationContext {
   abstract val isWebApplicationContext: Boolean
 
   companion object {
+
     //-----------------------------------------------------------
     // ACCESSORS
     //-----------------------------------------------------------
+
     /**
      * Returns the `ApplicationContext` instance.
      * @return The `ApplicationContext` instance.
@@ -81,9 +83,11 @@ abstract class ApplicationContext {
       assert(context != null) { "The ApplicationContext cannot be null" }
       applicationContext = context
     }
+
     //-----------------------------------------------------------
     // UTILS
     //-----------------------------------------------------------
+
     /**
      * Returns the default configuration of the Application
      */
@@ -140,9 +144,11 @@ abstract class ApplicationContext {
     fun displayError(parent: UComponent, message: String) {
       applicationContext!!.application.displayError(parent, message)
     }
+
     // ---------------------------------------------------------------------
     // SEND A BUG REPORT
     // ---------------------------------------------------------------------
+
     /**
      * Reports a trouble at execution time.
      *
@@ -203,11 +209,10 @@ abstract class ApplicationContext {
           false
         }
         if (smtpServer != null && sendMail) {
-          val recipient: String?
-          recipient = try {
+          val recipient: String = try {
             defaults!!.debugMailRecipient
           } catch (e: PropertyException) {
-            "fehler@kopiright.com"
+            "fehler@kopileft.com" //TODO
           }
           val cc: String? = try {
             defaults!!.getStringFor("debugging.mail.cc")
@@ -222,7 +227,7 @@ abstract class ApplicationContext {
           val sender: String = try {
             defaults!!.getStringFor("debugging.mail.sender").toString()
           } catch (e: PropertyException) {
-            "kopi@kopiright.com"
+            "galite@kopileft.com" //TODO
           }
           val buffer = StringWriter()
           val writer = PrintWriter(buffer)
@@ -296,7 +301,7 @@ abstract class ApplicationContext {
                   recipient,
                   cc,
                   bcc,
-                  "[KOPI ERROR] $applicationName$failureID",
+                  "[GALITE ERROR] $applicationName$failureID",
                   buffer.toString(),
                   sender)
         }

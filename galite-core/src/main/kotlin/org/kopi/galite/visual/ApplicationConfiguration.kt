@@ -44,9 +44,11 @@ abstract class ApplicationConfiguration {
    * Returns the information text about this application
    */
   abstract val informationText: String
+
   // --------------------------------------------------------------
   //   Application Debugging
   // --------------------------------------------------------------
+
   /**
    * Property debug.logfile
    * Returns the failure file to add errors
@@ -75,6 +77,7 @@ abstract class ApplicationConfiguration {
    * Returns the debug mode (that you can change dynamically)
    */
   abstract fun debugMessageInTransaction(): Boolean
+
   // --------------------------------------------------------------
   //   Application Properties
   // --------------------------------------------------------------
@@ -94,16 +97,20 @@ abstract class ApplicationConfiguration {
    * Returns a RExec command handler
    */
   abstract val rExec: Rexec
+
   // --------------------------------------------------------------
   //   Spell checking
   // --------------------------------------------------------------
+
   /**
-   * Gets the url of the Dicionary Server e.g. c:/aspell
+   * Returns the Dictionary Server e.g. c:/aspell
    */
   abstract val dictionaryServer: String
+
   // --------------------------------------------------------------
   //   Basic Methods
   // --------------------------------------------------------------
+
   /**
    * Reads the value of the property
    *
@@ -116,7 +123,7 @@ abstract class ApplicationConfiguration {
   abstract fun getIntFor(key: String): Int// no more languages definied// no languages
 
   /**
-   * Gets options for a language
+   * returns options for a language
    */
   val dictionaryLanguages: Array<Language>
     get() {
@@ -135,8 +142,9 @@ abstract class ApplicationConfiguration {
       return langs.toTypedArray()
     }
 
-  inner class Language(//name of the language
-          val language: String, // options
+   class Language(//name of the language
+          val language: String,
+           // options
           val options: String)
 
   /**
@@ -167,11 +175,14 @@ abstract class ApplicationConfiguration {
     get() = null
 
   //---------------------------------------------------------------------
-  // Window size
+  // Window width
   //---------------------------------------------------------------------
   val defaultModalWindowWidth: Int
     get() = 0
 
+  //---------------------------------------------------------------------
+  // Window height
+  //---------------------------------------------------------------------
   val defaultModalWindowHeight: Int
     get() = 0
 

@@ -20,19 +20,21 @@ package org.kopi.galite.util
 import java.awt.PrintJob
 
 interface Printer {
+
   /**
    * Unique name of the printer in the database which is chosen by the user
    */
   fun getPrinterName(): String
 
   /**
-   * Prints a Printjob
+   * Prints a PrintJob
    */
   fun print(data: PrintJob): String
 
   // ----------------------------------------------------------------------
   // PRINT OPTIONS
   // ----------------------------------------------------------------------
+
   /**
    * Sets the tray to use
    */

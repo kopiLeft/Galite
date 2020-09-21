@@ -133,29 +133,17 @@ interface Application : MessageListener {
    * Returns the print manager of the application instance.
    * @return The print manager of the application instance.
    */
-  /**
-   * Sets the print manager to the application.
-   * @param printManager The print manager instance.
-   */
-  var printManager: PrintManager
+   var printManager: PrintManager
 
   /**
    * Returns the printer manger of the application.
    * @return The printer manger of the application.
    */
-  /**
-   * Sets the printer manager of the application instance.
-   * @param printerManager The printer manager.
-   */
-  var printerManager: PrinterManager
+   var printerManager: PrinterManager
 
   /**
    * Returns the application configuration instance.
    * @return The application configuration instance.
    */
-  /**
-   * Sets the application configuration.
-   * @param applicationConfiguration The application configuration instance.
-   */
-  var applicationConfiguration: ApplicationConfiguration?
+   var applicationConfiguration: ApplicationConfiguration?
 }
