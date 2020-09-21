@@ -18,8 +18,6 @@
 
 package org.kopi.galite.db
 
-import org.jetbrains.exposed.sql.Database
-
 /**
  * The database context
  *
@@ -28,7 +26,7 @@ import org.jetbrains.exposed.sql.Database
 class DBContext(var defaultConnection: Connection) {
 
   /**
-   * Create a connection with Exposed. Connects to database and logs on.
+   * Create a connection. Connects to database and logs on.
    *
    * @param     driverName      the class name of the JDBC driver to register.
    * @param     url             the URL of the database to connect to
@@ -44,11 +42,15 @@ class DBContext(var defaultConnection: Connection) {
     password: String,
     lookupUserId: Boolean = true, // TODO
     schema: String? = null // TODO
-  ): Database {
-    val database = Database.connect(url = url, driver = driverName, user = user, password = password)
-    val connection = Connection(this, url = url, driver = driverName, username = user, password = password, schema = schema)
-    connections = connection
-    return database
+  ): Connection {
+    val connection = Connection(url = url,
+                                driver = driverName,
+                                username = user,
+                                password = password,
+                                lookupUserId = lookupUserId,
+                                schema = schema)
+    this.connection = connection
+    return connection
   }
 
   /**
@@ -62,14 +64,18 @@ class DBContext(var defaultConnection: Connection) {
     connection: java.sql.Connection,
     lookupUserId: Boolean, // TODO
     schema: String? // TODO
-  ): Database {
-    return Database.connect({ connection })
+  ): Connection {
+    val connection = Connection(connection = connection,
+            lookupUserId = lookupUserId,
+            schema = schema)
+    this.connection = connection
+    return connection
   }
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   /** Connection currently opened */
-  var connections: Connection? = null
+  var connection: Connection? = null
     private set
 }

@@ -28,7 +28,6 @@ import java.sql.Connection
  */
 class Connection {
 
-  val dBContext: DBContext
   val uRL: String
   val userName: String
   val password: String?
@@ -39,18 +38,15 @@ class Connection {
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
   /**
-   * Creates a connection from JDBC Connection
+   * Creates a connection with Exposed from JDBC Connection
    *
-   * @param     ctxt                the database context
    * @param     connection          the JDBC connection
    * @param     lookupUserId        lookup user id in table of Users ?
    */
-  constructor(ctxt: DBContext,
-              connection: Connection,
+  constructor(connection: Connection,
               lookupUserId: Boolean = true, // TODO
               schema: String? = null) { // TODO
     val database = Database.connect({ connection })
-    dBContext = ctxt
     dbConnection = database
     uRL = database.url
     userName = connection.metaData.userName
@@ -59,24 +55,21 @@ class Connection {
   }
 
   /**
-   * Creates a connection and opens it.
+   * Creates a connection with Exposed and opens it.
    *
-   * @param        ctxt                the database context
    * @param        url                the URL of the database to connect to
    * @param        user                the name of the database user
    * @param        pass                the password of the database user
    * @param     lookupUserId    lookup user id in table of users ?
    * @param     schema          the database schema to set as current schema
    */
-  constructor(ctxt: DBContext,
-              url: String,
+  constructor(url: String,
               driver: String,
               username: String,
               password: String,
               lookupUserId: Boolean = true, // TODO
               schema: String? = null) { // TODO
     val database = Database.connect(url = url, driver = driver, user = username, password = password)
-    dBContext = ctxt
     dbConnection = database
     uRL = url
     userName = username
