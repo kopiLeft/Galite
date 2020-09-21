@@ -25,6 +25,6 @@ import java.io.Serializable
  * @param     name    the dimension name.
  * @param     value   the dimension value.
  */
-class VDimensionData(val name: String, val value: Comparable<*>) : Serializable {
+class VDimensionData(val name: String?, val value: Comparable<*>) : Serializable {
 
 }
