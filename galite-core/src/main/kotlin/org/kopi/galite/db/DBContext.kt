@@ -69,7 +69,7 @@ class DBContext(var defaultConnection: Connection) {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  /** All connections currently opened */
+  /** Connection currently opened */
   var connections: Connection? = null
     private set
 }
