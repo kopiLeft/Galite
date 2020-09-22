@@ -18,7 +18,7 @@
 package org.kopi.galite.util
 
 import org.kopi.galite.util.base.InconsistencyException
-import java.awt.Dimension
+
 import java.io.IOException
 import java.io.InputStream
 import java.util.ArrayList
@@ -28,7 +28,6 @@ import gnu.hylafax.HylaFAXClientProtocol
 import gnu.hylafax.Job
 import gnu.hylafax.Pagesize
 import gnu.hylafax.Pagesize.a4
-
 import gnu.inet.ftp.FtpClientProtocol
 import gnu.inet.ftp.ServerResponseException
 
@@ -36,26 +35,23 @@ import gnu.inet.ftp.ServerResponseException
 /**
  * Fax printer
  */
-class HylaFAXPrinter
 /**
  * Constructs a fax printer
- */(// ----------------------------------------------------------------------
-        // DATA MEMBERS
-        // ----------------------------------------------------------------------
-        private val faxHost: String,
-        /**
-         * Gets the phone number
-         */
-        val number: String,
-        private val user: String,
-        private val attachments: List<*>?) : AbstractPrinter("FaxPrinter $number"), CachePrinter {
+ */
+class HylaFAXPrinter(private val faxHost: String,
+                     /**
+                      * Gets the phone number
+                      */
+                     val number: String,
+                     private val user: String,
+                     private val attachments: List<*>?) : AbstractPrinter("FaxPrinter $number"), Printer {
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
   // ----------------------------------------------------------------------
   /**
    * Print a file and return the output of the command
    */
-  fun print(printdata: PrintJob): String {
+  override fun print(printdata: PrintJob?): String {
     // get down to business, send the FAX already
 
     // List with names of temporary files on the server side
@@ -72,16 +68,12 @@ class HylaFAXPrinter
       faxClient.tzone(HylaFAXClientProtocol.TZONE_LOCAL)
 
       // add fax document
-      documents.add(faxClient.putTemporary(printdata.getInputStream()))
+      documents.add(faxClient.putTemporary(printdata!!.getInputStream()))
 
       // put attachments to server
-      if (attachments != null) {
-        val attachmentIterator = attachments.iterator()
-        while (attachmentIterator.hasNext()) {
-          val dataSource = attachmentIterator.next() as InputStream
-
-          // put data to the hylafax server
-          documents.add(faxClient.putTemporary(dataSource))
+      attachments?.let {
+        attachments.forEach {
+          documents.add(faxClient.putTemporary(it as InputStream))
         }
       }
       // all file to send are at the server
@@ -103,9 +95,7 @@ class HylaFAXPrinter
 
       // add documents to the job
       val docIterator = documents.iterator()
-      while (docIterator.hasNext()) {
-        job.addDocument(docIterator.next() as String?)
-      }
+      documents.forEach { job.addDocument(it as String) }
       faxClient.submit(job) // submit the job to the scheduler
     } catch (e: ServerResponseException) {
       throw InconsistencyException("Can't send fax job", e)
@@ -123,5 +113,16 @@ class HylaFAXPrinter
     }
     return "NYI"
   }
-}
 
+  override fun selectTray(tray: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setPaperFormat(paperFormat: String?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getPrinterName(): String? {
+    TODO("Not yet implemented")
+  }
+}

@@ -24,39 +24,16 @@ import java.io.OutputStream
 /**
  * A class that simplifies file writing
  */
-class PlatformFileWriter {
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR
-  // ----------------------------------------------------------------------
+class PlatformFileWriter(val dataStream: OutputStream,
+                         val encoding: String,
+                         val lineSeparator: String) {
+
   /**
    * Sets the number of copy to print
    */
   constructor(file: File,
               encoding: String,
-              lineSeparator: String) {
-    this.encoding = encoding
-    this.lineSeparator = lineSeparator
-    dataStream = FileOutputStream(file)
-  }
-
-  /**
-   * Sets the number of copy to print
-   */
-  constructor(stream: OutputStream,
-              encoding: String,
-              lineSeparator: String) {
-    this.encoding = encoding
-    this.lineSeparator = lineSeparator
-    dataStream = stream
-  }
-
-  /**
-   * Sets the number of copy to print
-   */
-  constructor(fileName: String,
-              encoding: String,
-              lineSeparator: String) : this(File(fileName), encoding, lineSeparator) {
-  }
+              lineSeparator: String) : this(FileOutputStream(file), encoding, lineSeparator)
 
   /**
    * Writes a string to the file
@@ -91,11 +68,4 @@ class PlatformFileWriter {
     dataStream.flush()
     dataStream.close()
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private val encoding: String
-  private val lineSeparator: String
-  private val dataStream: OutputStream
 }

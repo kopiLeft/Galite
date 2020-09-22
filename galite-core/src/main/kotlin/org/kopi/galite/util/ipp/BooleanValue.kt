@@ -17,18 +17,11 @@
  */
 package org.kopi.galite.util.ipp
 
-class BooleanValue : IPPValue {
-  // --------------------------------------------------------------------
-  // CONSTRUCTOR
-  // --------------------------------------------------------------------
-  constructor(value: Boolean) {
-    this.value = value
-  }
+class BooleanValue(var value: Boolean) : IPPValue() {
 
-  constructor(iPPInputStream: IPPInputStream) {
+  constructor(iPPInputStream: IPPInputStream) : this((iPPInputStream.readByte()).toInt() != 0) {
     iPPInputStream.readShort() // value-length
-    value = (iPPInputStream.readByte()).toInt() != 0 // value
-  }// value-length + value
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
@@ -48,9 +41,4 @@ class BooleanValue : IPPValue {
   override fun toString(): String {
     return value.toString() + ""
   }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private var value: Boolean
 }

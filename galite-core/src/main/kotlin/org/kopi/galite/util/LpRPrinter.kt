@@ -20,25 +20,18 @@ package org.kopi.galite.util
 import java.io.InputStream
 import org.kopi.galite.util.lpr.LpR
 
-class LpRPrinter  : Printer {
-  /**
-   * Creates a printer that send file to an lpd server
-   */
-  fun LpRPrinter(name: String?,
-                 serverHost: String?,
-                 port: Int,
-                 proxyHost: String?,
-                 queue: String?,
-                 user: String?) {
-    this.name = name
-    this.serverHost = serverHost
-    this.port = port
-    this.proxyHost = proxyHost
-    this.queue = queue
-    this.user = user
+/**
+ * Creates a printer that send file to an lpd server
+ */
+class LpRPrinter(val name: String,
+                 val serverHost: String,
+                 val port: Int,
+                 val proxyHost: String,
+                 val queue: String,
+                 val user: String) : Printer {
 
-    //    setNumberOfCopies(1);
-    selectTray(1) // Standard tray (see common/MAKEDB/dbSchema)
+  init {
+    selectTray(1)
     setPaperFormat(null)
   }
 
@@ -63,10 +56,6 @@ class LpRPrinter  : Printer {
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
   // ----------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------
-  // PRINTING WITH AN INPUTSTREAM
-  // ----------------------------------------------------------------------
   override fun print(data: PrintJob?): String? {
     TODO()
   }
@@ -76,7 +65,7 @@ class LpRPrinter  : Printer {
       TODO()
     }
 
-     fun readFully(input : InputStream): ByteArray  {
+    fun readFully(input: InputStream): ByteArray {
       val size = input.available()
       val data = ByteArray(size)
       var count: Int = 0
@@ -86,18 +75,13 @@ class LpRPrinter  : Printer {
       input.close()
       return data
     }
+
     private val data: PrintJob = TODO()
   }
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var name: String? = null
-  private var serverHost: String? = null
-  private var port = 0
-  private var proxyHost: String? = null
-  private var queue: String? = null
-  private var user: String? = null
   private var tray = 0
   private var paperFormat: String? = null
 }

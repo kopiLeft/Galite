@@ -28,17 +28,11 @@ import java.util.StringTokenizer
  * On a properties' file we can define the "parent" property which contains
  * one or a space separated list of parents.
  */
-class PropertyManager
 /**
  * Constructor
  * @param file               the properties file name
- */(// ----------------------------------------------------------------------
-        // DEBUGGING ACCESSORS
-        // ----------------------------------------------------------------------
-        // ----------------------------------------------------------------------
-        // DATA MEMBERS
-        // ----------------------------------------------------------------------
-        val resourecsFileName: String) {
+ */
+class PropertyManager(val file: String) {
   /**
    * Gets a string for the given key from the resource bundle of this property manager
    * or one of its parents.
@@ -46,7 +40,7 @@ class PropertyManager
    * @return                   the string for the given key
    */
   fun getString(key: String): String? {
-    return getString(resourecsFileName, ArrayList(), key)
+    return getString(file, ArrayList(), key)
   }
 
   /**
@@ -59,16 +53,16 @@ class PropertyManager
    */
   fun getString(resourceName: String?, visitedResources: ArrayList<String>, key: String): String? {
     var resource: ResourceBundle?
-    if (resourceName == null) {
-      return null
-    } else if (resources.containsKey(resourceName)) {
-      resource = if (resources[resourceName] is ResourceBundle) {
-        resources[resourceName] as ResourceBundle?
-      } else {
-        return null
+    when {
+      resourceName == null -> return null
+      resources.containsKey(resourceName) -> {
+        resource = if (resources[resourceName] is ResourceBundle) {
+          resources[resourceName] as ResourceBundle?
+        } else {
+          return null
+        }
       }
-    } else {
-      try {
+      else -> try {
         // create a new bundle and store it on the table
         // to avoid creating a new one for each lookup
         resource = ResourceBundle.getBundle(resourceName)
@@ -79,41 +73,42 @@ class PropertyManager
         resource = null
       }
     }
-    return if (resource == null) {
-      null
-    } else {
-      var value = try {
-        resource.getString(key)
-      } catch (e: Exception) {
-        null
-      }
-      if (value != null) {
-        return value
-      } else {
-        // lookup on parents resources
-        var p: String?
-
-        // mark the current resource as visited
-        visitedResources.add(resourceName)
-        val st: StringTokenizer = try {
-          StringTokenizer(resource.getString("parent"))
+    return when (resource) {
+      null -> null
+      else -> {
+        var value = try {
+          resource.getString(key)
         } catch (e: Exception) {
-          return null
+          null
         }
-        while (value == null && st.hasMoreTokens()) {
-          p = st.nextToken()
+        if (value != null) {
+          return value
+        } else {
+          // lookup on parents resources
+          var p: String?
 
-          // check this resource (p) if not already visited
-          if (!visitedResources.contains(p)) {
-            value = try {
-              getString(p, visitedResources, key)
-            } catch (e: Exception) {
-              null
+          // mark the current resource as visited
+          visitedResources.add(resourceName)
+          val st: StringTokenizer = try {
+            StringTokenizer(resource.getString("parent"))
+          } catch (e: Exception) {
+            return null
+          }
+          while (value == null && st.hasMoreTokens()) {
+            p = st.nextToken()
+
+            // check this resource (p) if not already visited
+            if (!visitedResources.contains(p)) {
+              value = try {
+                getString(p, visitedResources, key)
+              } catch (e: Exception) {
+                null
+              }
             }
           }
         }
+        value
       }
-      value
     }
   }
 
@@ -121,4 +116,3 @@ class PropertyManager
     private val resources = Hashtable<String, Any>()
   }
 }
-

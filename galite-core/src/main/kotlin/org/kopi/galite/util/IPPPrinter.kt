@@ -22,7 +22,6 @@ import org.kopi.galite.util.ipp.IPPClient
 /**
  * IPP printer
  */
-class IPPPrinter
 /**
  * Construct an IPP Printer
  *
@@ -33,15 +32,12 @@ class IPPPrinter
  * @param attributesForMedia a list of String[2] with the correpondance
  * between media and IPP attributes for this printer.
  */
-(name: String?,
-    private val host: String,
-    private val port: Int,
-    private val printer: String,
-        // ----------------------------------------------------------------------
-        // DATA MEMBERS
-        // ----------------------------------------------------------------------
-    private val user: String,
-    private val attributesForMedia: List<*>) : AbstractPrinter(name!!), CachePrinter {
+class IPPPrinter(name: String,
+                 private val host: String,
+                 private val port: Int,
+                 private val printer: String,
+                 private val user: String,
+                 private val attributesForMedia: List<*>) : AbstractPrinter(name), Printer {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
@@ -61,14 +57,12 @@ class IPPPrinter
     return if (media == null) {
       null
     } else {
-      val it = attributesForMedia.iterator()
-      while (it.hasNext()) {
-        val att = it.next() as Array<String?>
-        if (att.size == 2 && att[0] == media) {
-          return if (att[1] == null) null else att[1]!!.split(" ").toTypedArray()
-        }
+      val att = attributesForMedia.map { it as Array<String?> }.firstOrNull { it.size == 2 && it[0] == media }
+      return when {
+        att == null -> null
+        att[1] == null -> null
+        else -> att[1]!!.split(" ").toTypedArray()
       }
-      null
     }
   }
   // ----------------------------------------------------------------------
@@ -77,11 +71,23 @@ class IPPPrinter
   /**
    * Print a file and return the output of the command
    */
-    fun print(printData: PrintJob): String {
+  override fun print(printData: PrintJob?): String {
     val ippClient = IPPClient(host, port.toShort(), printer, user)
-    ippClient.print(printData.getInputStream(),
-            printData.numberCopy,
+    ippClient.print(printData!!.getInputStream(),
+            printData!!.numberCopy,
             getAttributes(printData.media))
     return "IPP Print"
+  }
+
+  override fun getPrinterName(): String? {
+    TODO("Not yet implemented")
+  }
+
+  override fun selectTray(tray: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setPaperFormat(paperFormat: String?) {
+    TODO("Not yet implemented")
   }
 }
