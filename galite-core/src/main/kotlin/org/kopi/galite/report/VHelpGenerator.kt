@@ -80,7 +80,8 @@ class VHelpGenerator : VHelpGenerator() {
       p.println("</TABLE>")
       p.println("<BR>")
       p.println("<ADDRESS>")
-      p.println("<I>kopiRight Managed Solutions GmbH</I><BR>")
+      p.println("<I>kopiLeft Services SARL, Tunis TN</I><BR>")
+      p.println("<I>kopiRight Managed Solutions GmbH, Wien AT</I><BR>")
       val version = Utils.getVersion()
       for (i in version.indices) {
         p.println("<I>" + version[i] + "</I><BR>")
