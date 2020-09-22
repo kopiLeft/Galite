@@ -32,15 +32,16 @@ import org.kopi.galite.l10n.TypeLocalizer
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
  */
-abstract class VCodeColumn(ident: String,
-                           private val type: String,
-                           private val source: String,
-                           options: Int, align: Int,
-                           groups: Int, function: VCalculateColumn,
-                           width: Int,
-                           format: VCellFormat?,
-                           private val idents: Array<String>)
-  : VReportColumn(ident, options, align, groups, function, width, 1, format) {
+abstract class VCodeColumn(
+  ident: String,
+  private val type: String,
+  private val source: String,
+  options: Int, align: Int,
+  groups: Int, function: VCalculateColumn,
+  width: Int,
+  format: VCellFormat?,
+  private val idents: Array<String>
+) : VReportColumn(ident, options, align, groups, function, width, 1, format) {
   /**
    * Compares two objects.
    *
@@ -56,7 +57,6 @@ abstract class VCodeColumn(ident: String,
    * Return a string representation.
    */
   override fun format(o: Any?): String = if (folded || o == null) "" else format?.format(o)?: if (names != null) names[getIndex(o)]!! else idents[getIndex(o)]
-
 
   /**
    * Get the index of the value.

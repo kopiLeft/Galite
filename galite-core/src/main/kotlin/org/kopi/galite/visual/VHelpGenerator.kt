@@ -22,9 +22,8 @@ import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 import java.io.PrintWriter
 
-
 /**
- * This class implements a Kopi pretty printer
+ * This class implements a pretty printer
  */
 open class VHelpGenerator {
   /**
@@ -54,11 +53,11 @@ open class VHelpGenerator {
    */
   fun helpOnCommands(commands: Array<VCommand>) {
     if (commands.size > 0) {
-      p!!.println("<TABLE valign=\"top\">")
+      p.println("<TABLE valign=\"top\">")
       for (i in commands.indices) {
         commands[i].helpOnCommand(this)
       }
-      p!!.println("</TABLE>")
+      p.println("</TABLE>")
     }
   }
 
@@ -71,37 +70,35 @@ open class VHelpGenerator {
                     accKey: Int,
                     accMod: Int,
                     help: String?) {
-    //p.println("<DT>");
-    p!!.println("<TR><TD>")
+    p.println("<TR><TD>")
     if (icon != null) {
       addButton("$icon.png")
     } else {
-      p!!.println("&nbsp;")
+      p.println("&nbsp;")
     }
-    p!!.println("</TD><TD>")
+    p.println("</TD><TD>")
     if (accMod != 0) {
       if (accMod == InputEvent.SHIFT_MASK) {
-        p!!.print("Shift-")
+        p.print("Shift-")
       }
     }
-    p!!.println(keyToName(accKey))
-    p!!.println("</TD><TD><STRONG>$menu:$item:</STRONG></TD><TD>")
-    //p.println("<DD>");
+    p.println(keyToName(accKey))
+    p.println("</TD><TD><STRONG>$menu:$item:</STRONG></TD><TD>")
     if (help != null) {
-      p!!.println(help)
+      p.println(help)
     } else {
-      p!!.println("no help")
+      p.println("no help")
     }
-    p!!.println("</TD></TR>")
+    p.println("</TD></TR>")
   }
 
   /**
    * Add an image
    */
   private fun addImage(name: String, border: Int) {
-    p!!.print("<img src=\"" + ImageHandler.imageHandler!!.getURL(name))
-    p!!.print("\" BORDER =\"$border")
-    p!!.println("\" alt=\"$name\">")
+    p.print("<img src=\"" + ImageHandler.imageHandler!!.getURL(name))
+    p.print("\" BORDER =\"$border")
+    p.println("\" alt=\"$name\">")
   }
 
   /**

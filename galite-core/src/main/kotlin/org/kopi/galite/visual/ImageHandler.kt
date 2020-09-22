@@ -20,7 +20,6 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.base.Image
 
-
 abstract class ImageHandler {
   //------------------------------------------------------------------
   // ABSTRACT METHODS
@@ -30,25 +29,23 @@ abstract class ImageHandler {
    * @param image The image name.
    * @return The [Image] having the `image` name.
    */
-  abstract fun getImage(image: String?): Image?
+  abstract fun getImage(image: String): Image
 
   /**
    * Returns the [Image] having the `image` content.
    * @param image The image content.
    * @return The [Image] having the `image` content.
    */
-  abstract fun getImage(image: ByteArray?): Image?
+  abstract fun getImage(image: ByteArray): Image
 
   /**
    * Returns the URL of a given image name.
    * @param image The image name.
    * @return The URL of the image.
    */
-  abstract fun getURL(image: String?): String?
+  abstract fun getURL(image: String): String
 
   companion object {
-
-
     var imageHandler: ImageHandler? = null
       set(handler) {
         assert(handler != null) { "ImageHandler cannot be null" }
