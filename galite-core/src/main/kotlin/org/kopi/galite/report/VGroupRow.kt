@@ -25,6 +25,7 @@ package org.kopi.galite.report
  * @param level the grouping row level
  */
 class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
+  // TODO()
 
   /**
    * Sets data row
@@ -49,19 +50,7 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
    * @param level level to test
    */
   fun isUnfolded(level: Int): Boolean {
-    for (i in 0 until getChildCount()) {
-      val child = getChildAt(i) as VReportRow
-      if (child.level > level) {
-        if ((child as VGroupRow).isUnfolded(level)) {
-          return true
-        }
-      } else {
-        if (child.visible) {
-          return true
-        }
-      }
-    }
-    return false
+    TODO()
   }
 
   /**
@@ -70,13 +59,7 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
    * @param level level to be set visible
    */
   fun setChildNodesVisible(level: Int) {
-    for (i in 0 until getChildCount()) {
-      val child = getChildAt(i) as VReportRow
-      child.visible = true
-      if (getLevel() > level + 1) {
-        (child as VGroupRow).setChildNodesVisible(level)
-      }
-    }
+    TODO()
   }
 
   /**
@@ -85,29 +68,10 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
    * @param level level to be set visible
    */
   fun setChildNodesInvisible(level: Int) {
-    for (i in 0 until childCount) {
-      val child = getChildAt(i) as VReportRow
-      when {
-        child.getLevel() > level ->
-          (child as VGroupRow).setChildNodesInvisible(level)
-        child is VGroupRow ->
-        child.setChildNodesInvisible()
-        else -> child.visible = false
-      }
-    }
+   TODO()
   }
 
   private fun setChildNodesInvisible() {
-    visible = false
-    if (getLevel() > 0) {
-      for (i in 0 until childCount) {
-        val row = getChildAt(i) as VReportRow
-        if (row is VGroupRow) {
-          row.setChildNodesInvisible()
-        } else {
-          row.visible = false
-        }
-      }
-    }
+    TODO()
   }
 }
