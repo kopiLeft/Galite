@@ -18,8 +18,6 @@
 
 package org.kopi.galite.visual
 
-import kotlin.jvm.Throws
-
 open class VCommand(private var mode: Int, protected val handler: ActionHandler,
                     protected val actor: VActor?, protected val trigger: Int, private val item: String) {
 
@@ -85,7 +83,6 @@ open class VCommand(private var mode: Int, protected val handler: ActionHandler,
     }
   }
 
-  @Throws(VException::class)
   fun performBasicAction() {
     with(actor!!) {
       setNumber(trigger)
@@ -98,7 +95,7 @@ open class VCommand(private var mode: Int, protected val handler: ActionHandler,
    * Returns the actor
    */
   fun getKey(): Int {
-    return actor!!.acceleratorKey ?: 0
+    return actor?.acceleratorKey ?: 0
   }
 
   // ----------------------------------------------------------------------

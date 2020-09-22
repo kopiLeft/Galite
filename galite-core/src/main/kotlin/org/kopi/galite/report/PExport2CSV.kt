@@ -27,11 +27,11 @@ import java.io.Writer
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.report.UReport.UTable
 
-open class PExport2CSV (table: UTable, model: MReport, pconfig: PConfig, title: String) : PExport(table, model, pconfig, title), Constants {
+class PExport2CSV (table: UTable, model: MReport, pconfig: PConfig, title: String) : PExport(table, model, pconfig, title), Constants {
 
-  override fun export(out: OutputStream) {
+  override fun export(stream: OutputStream) {
     try {
-      writer = BufferedWriter(OutputStreamWriter(out, "UTF-8"))
+      writer = BufferedWriter(OutputStreamWriter(stream, "UTF-8"))
       exportData()
       (writer as BufferedWriter).flush()
       (writer as BufferedWriter).close()

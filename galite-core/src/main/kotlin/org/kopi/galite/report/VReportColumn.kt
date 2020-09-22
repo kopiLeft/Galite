@@ -35,14 +35,14 @@ import org.kopi.galite.util.LineBreaker
  * @param    format        format of the cells
  */
 abstract class VReportColumn(
-  private val ident: String,
-  val options: Int,
-  val align: Int,
-  groups: Int,
-  val function: VCalculateColumn,
-  var width: Int,
-  var height: Int,
-  protected var format: VCellFormat?) {
+        private val ident: String,
+        val options: Int,
+        val align: Int,
+        groups: Int,
+        val function: VCalculateColumn,
+        var width: Int,
+        var height: Int,
+        protected var format: VCellFormat?) {
 
   /**
    * Returns the column label
@@ -56,6 +56,13 @@ abstract class VReportColumn(
    */
   open fun isHidden(): Boolean {
     return options and Constants.CLO_HIDDEN > 0
+  }
+
+  /**
+   * Returns the width of cells in this column in characters
+   */
+  open fun getPrintedWidth(): Double {
+    return width.toDouble()
   }
 
   open fun format(o: Any?): String {
@@ -117,7 +124,9 @@ abstract class VReportColumn(
    *
    * @param     loc         the caller localizer
    */
-  protected open fun localize(loc: FieldLocalizer) {}
+  protected open fun localize(loc: FieldLocalizer) {
+    // by default nothing to do
+  }
 
    fun getStyles(): Array<ColumnStyle> {
     return if (styles == null) {

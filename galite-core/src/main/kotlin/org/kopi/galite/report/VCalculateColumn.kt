@@ -27,12 +27,12 @@ abstract class VCalculateColumn {
   /**
    * Evaluates nodes
    */
-  fun evalNode(row: VReportRow?, column: Int): Any? {
+  fun evalNode(row: VReportRow, column: Int): Any? {
     return null
   }
 
   /**
    * Add calculated data into the report row
    */
-  abstract fun calculate(tree: VGroupRow?, column: Int)
+  abstract fun calculate(tree: VGroupRow, column: Int)
 }
