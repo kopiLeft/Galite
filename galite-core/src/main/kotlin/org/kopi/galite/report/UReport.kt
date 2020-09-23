@@ -18,91 +18,10 @@
 
 package org.kopi.galite.report
 
-import org.kopi.galite.visual.UWindow
-
-/**
- * `UReport` is the top-level interface that must be implemented
- * by all kopi dynamic reports. It is the visual component of the [VReport] model.
- */
-interface UReport : UWindow, ReportListener {
-  /**
-   * Builds the report;
-   */
-  fun build()
-
-  /**
-   * Redisplay the report
-   */
-  fun redisplay()
-
-  /**
-   * Fired when report columns has moved.
-   * @param pos The new columns positions
-   */
-  fun columnMoved(pos: IntArray)
-
-  /**
-   * Removes a column having the position `position`
-   * @param position The column position
-   */
-  fun removeColumn(position: Int)
-
-  /**
-   * Adds a column at the position `position`
-   * @param position The column position
-   */
-  fun addColumn(position: Int)
-
-  /**
-   * Adds a column at the end of the report
-   */
-  fun addColumn()
-
-  /**
-   * Returns the report table.
-   */
-  val table: UTable
-
-  /**
-   * Reset columns width
-   */
-  fun resetWidth()
-
-  /**
-   * Returns the selected column
-   */
-  val selectedColumn: Int
-
-  /**
-   * Returns the coordinate of the selected cell
-   * The index of the column is relative to the model
-   */
-  val selectedCell: Point
-
-  /**
-   * Sets the column label.
-   * @param column The column number.
-   * @param label The column label
-   */
-  fun setColumnLabel(column: Int, label: String)
-
-  /**
-   * `UTable` is a report table ensuring conversion between
-   * visible indexes and model indexes
-   */
-  interface UTable {
-    /**
-     * Maps the index of the column in the view at
-     * `viewColumnIndex` to the index of the column
-     * in the table model.
-     */
-    fun convertColumnIndexToModel(viewColumnIndex: Int): Int
-
-    /**
-     * Maps the index of the column in the table model at
-     * `modelColumnIndex` to the index of the column
-     * in the view.
-     */
-    fun convertColumnIndexToView(modelColumnIndex: Int): Int
+class UReport {
+  // TODO()
+  public interface UTable {
+    abstract fun convertColumnIndexToModel(j: Int): Int
+// TODO ()
   }
 }

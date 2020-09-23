@@ -18,57 +18,6 @@
 
 package org.kopi.galite.report
 
-import java.io.BufferedWriter
-import java.io.IOException
-import java.io.OutputStream
-import java.io.OutputStreamWriter
-import java.io.Writer
+class PExport2CSV {
 
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.report.UReport.UTable
-
-class PExport2CSV (table: UTable, model: MReport, pconfig: PConfig, title: String) : PExport(table, model, pconfig, title), Constants {
-
-  override fun export(stream: OutputStream) {
-    try {
-      writer = BufferedWriter(OutputStreamWriter(stream, "UTF-8"))
-      exportData()
-      (writer as BufferedWriter).flush()
-      (writer as BufferedWriter).close()
-    } catch (e: IOException) {
-      throw InconsistencyException(e)
-    }
-  }
-
-  override fun startGroup(subTitle: String) {}
-  override fun exportHeader(data: Array<String>) {
-    writeData(data)
-  }
-
-  override fun exportRow(level: Int, data: Array<String>, orig: Array<Any>, alignments: IntArray) {
-    writeData(data)
-  }
-
-  private fun writeData(data: Array<String>) {
-    try {
-      var first = true
-      for (i in data.indices) {
-        if (!first) {
-          writer.write("\t")
-        }
-        if (data[i] != null) {
-          writer.write(data[i])
-        }
-        first = false
-      }
-      writer.write("\n")
-    } catch (e: IOException) {
-      throw InconsistencyException(e)
-    }
-  }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  private lateinit var writer: Writer
 }
