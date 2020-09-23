@@ -27,5 +27,5 @@ interface FieldHandler : FieldListener, FieldChangeListener, Serializable {
    * Returns the field row controller.
    * @return the [VFieldUI] row controller.
    */
-  fun getRowController(): VFieldUI
+  fun getRowController() : VFieldUI
 }

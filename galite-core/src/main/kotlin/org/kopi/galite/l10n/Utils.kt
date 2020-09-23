@@ -37,7 +37,7 @@ object Utils {
                   value: String): Element {
     val children = parent.getChildren(type)
 
-    children.forEach { element ->
+    children.forEach {element ->
       if (element.getAttributeValue(attribute) != null && element.getAttributeValue(attribute) == value) {
         return element
       }

@@ -19,7 +19,6 @@
 package org.kopi.galite.report
 
 abstract class VReportColumn {
-//TODO()
   /**
    * Compare two objects
    *
@@ -30,11 +29,4 @@ abstract class VReportColumn {
    * 0 if the two operands are equal
    */
   abstract fun compareTo(object1: Any?, object2: Any?): Int
-  abstract fun isVisible(): Boolean
-  abstract fun isFolded(): Any
-  abstract fun formatColumn(pExport: PExport, index: Int)
-  abstract fun getLabel(): String
-  abstract fun format(valueAt: Any?): String?
-  abstract fun formatWithLineBreaker(valueAt: Any?): String?
-  abstract fun getAlign(): Int
 }

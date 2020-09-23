@@ -41,7 +41,7 @@ interface FieldListener : EventListener, Serializable {
    * Returns the current [UField] display.
    * @return The current [UField] display.
    */
-  fun getCurrentDisplay(): UField // please do not use!
+  fun getCurrentDisplay() : UField // please do not use!
 
   /**
    * Display a field error.

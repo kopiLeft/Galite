@@ -110,10 +110,10 @@ class VColor : Serializable {
   override fun hashCode(): Int = rGB
 
   override fun equals(obj: Any?): Boolean =
-          obj is VColor && obj.rGB == rGB
+    obj is VColor && obj.rGB == rGB
 
   override fun toString(): String =
-          javaClass.name + "[r=" + red + ",g=" + green + ",b=" + blue + "]"
+    javaClass.name + "[r=" + red + ",g=" + green + ",b=" + blue + "]"
 
   /**
    * Returns the red component in the range 0-255 in the default sRGB space.

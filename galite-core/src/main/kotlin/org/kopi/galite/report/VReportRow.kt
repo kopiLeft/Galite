@@ -20,7 +20,7 @@ package org.kopi.galite.report
 
 import javax.swing.tree.DefaultMutableTreeNode
 
-abstract class VReportRow(val data: Array<Any?>) : DefaultMutableTreeNode() {
+abstract class VReportRow(val data: Array<Any?>): DefaultMutableTreeNode() {
   var visible = false
 
   /**
