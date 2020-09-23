@@ -25,7 +25,7 @@ import org.kopi.galite.base.UComponent
  * by all windows. It is the visual component of the [VWindow] model.
  */
 interface UWindow : UComponent, VActionListener, ModelCloseListener, WaitDialogListener,
-        WaitInfoListener, ProgressDialogListener, FileProductionListener {
+          WaitInfoListener, ProgressDialogListener, FileProductionListener {
   /**
    * Starts the window view
    */

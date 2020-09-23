@@ -29,7 +29,7 @@ class VDataSeries(val dimension: VDimensionData) : Serializable {
   /**
    * @return the measures
    */
-  fun getMeasures(): Array<VMeasureData> = measures.toTypedArray()
+  fun getMeasures() : Array<VMeasureData> = measures.toTypedArray()
 
   val measures = mutableListOf<VMeasureData>()
 }
