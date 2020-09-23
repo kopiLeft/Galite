@@ -15,7 +15,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.report
 
 import org.kopi.galite.report.UReport.UTable
@@ -25,16 +24,11 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.io.Serializable
 
-
 abstract class PExport(val table: UTable,
                        val model: MReport,
                        val printConfig: PConfig,
                        var title: String,
-                       tonerSaveMode: Boolean) : Serializable {
-  /**
-   * Constructor
-   */
-  constructor(table: UTable, model: MReport, printConfig: PConfig, title: String) : this(table, model, printConfig, title, false) {}
+                       val tonerSaveMode: Boolean = false) : Serializable {
 
   fun formatColumns() {
     var index = 0
@@ -216,7 +210,6 @@ abstract class PExport(val table: UTable,
     private set
   private var minLevel = 0
   private val parameters = Parameters(Color.blue)
-  val tonerSaveMode = tonerSaveMode
 
   init {
     firstVisibleColumn = -1
