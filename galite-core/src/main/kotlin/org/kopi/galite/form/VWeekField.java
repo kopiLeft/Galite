@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.form;
 
-public class VWeekField  {
+public class VWeekField {
 }

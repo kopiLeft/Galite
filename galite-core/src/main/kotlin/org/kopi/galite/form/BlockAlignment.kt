@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.form
 
-class BlockAlignment{
+class BlockAlignment {
 }

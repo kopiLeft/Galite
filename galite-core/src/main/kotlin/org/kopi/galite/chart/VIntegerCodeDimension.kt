@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.chart
 
-class VIntegerCodeDimension{
+class VIntegerCodeDimension {
 }

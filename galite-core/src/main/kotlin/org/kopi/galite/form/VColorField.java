@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.form;
 
-public class VColorField  {
+public class VColorField {
 }

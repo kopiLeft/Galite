@@ -18,5 +18,5 @@
 
 package org.kopi.galite.form;
 
-public abstract class VImportedBlock  {
+public abstract class VImportedBlock {
 }

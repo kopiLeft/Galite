@@ -17,6 +17,6 @@
  */
 package org.kopi.galite.form;
 
-public interface UListDialog  {
+public interface UListDialog {
 
 }

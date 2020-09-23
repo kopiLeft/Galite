@@ -18,5 +18,5 @@
 
 package org.kopi.galite.form;
 
-public interface UChartLabel  {
+public interface UChartLabel {
 }

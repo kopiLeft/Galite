@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.chart
 
-class VFixnumMeasure{
+class VFixnumMeasure {
 }

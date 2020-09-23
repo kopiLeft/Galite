@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.chart
 
-class VIntegerCodeMeasure{
+class VIntegerCodeMeasure {
 }

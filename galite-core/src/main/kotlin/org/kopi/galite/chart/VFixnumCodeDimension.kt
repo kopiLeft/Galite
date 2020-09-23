@@ -18,5 +18,5 @@
 
 package org.kopi.galite.chart
 
-class VFixnumCodeDimension{
+class VFixnumCodeDimension {
 }

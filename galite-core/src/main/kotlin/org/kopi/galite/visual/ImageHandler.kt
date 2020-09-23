@@ -17,6 +17,6 @@
  */
 package org.kopi.galite.visual
 
-abstract class ImageHandler{
+abstract class ImageHandler {
 
 }

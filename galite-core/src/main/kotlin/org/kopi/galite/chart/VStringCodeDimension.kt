@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.chart
 
-class VStringCodeDimension{
+class VStringCodeDimension {
 }

@@ -18,5 +18,5 @@
 
 package org.kopi.galite.form;
 
-public class VFixnumCodeField{
+public class VFixnumCodeField {
 }

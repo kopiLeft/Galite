@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.form;
 
-public interface UTextField  {
+public interface UTextField {
 }

@@ -18,6 +18,6 @@
 
 package org.kopi.galite.form;
 
-public interface UBlock  {
+public interface UBlock {
 
 }

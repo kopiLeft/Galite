@@ -20,4 +20,4 @@ package org.kopi.galite.form;
 
 public class VDocGenerator {
 
- }
+}

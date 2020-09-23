@@ -19,9 +19,9 @@
 package org.kopi.galite.report
 
 class UReport {
-// TODO()
-public interface UTable {
-  abstract fun convertColumnIndexToModel(j: Int): Int
+  // TODO()
+  public interface UTable {
+    abstract fun convertColumnIndexToModel(j: Int): Int
 // TODO ()
-}
+  }
 }

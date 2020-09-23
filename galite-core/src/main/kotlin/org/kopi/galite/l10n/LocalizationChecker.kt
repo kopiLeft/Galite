@@ -17,6 +17,6 @@
  */
 package org.kopi.galite.l10n
 
-class LocalizationChecker{
+class LocalizationChecker {
 
 }

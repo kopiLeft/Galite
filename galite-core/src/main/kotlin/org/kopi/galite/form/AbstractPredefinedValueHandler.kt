@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.form
 
-abstract class AbstractPredefinedValueHandler{
+abstract class AbstractPredefinedValueHandler {
 }

@@ -17,6 +17,6 @@
  */
 package org.kopi.galite.util
 
-class HylaFAXPrinter{
+class HylaFAXPrinter {
 
 }

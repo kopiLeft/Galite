@@ -18,6 +18,6 @@
  */
 package org.kopi.galite.preview
 
-class VPreviewWindow  {
+class VPreviewWindow {
 
 }

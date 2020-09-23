@@ -60,9 +60,9 @@ class PixelConsumer(picture: Image) : ImageConsumer {
     val x2 = x1 + w
     val y2 = y1 + h
     var sy = off
-    for(y in y1 until y2) {
+    for (y in y1 until y2) {
       var sx = sy
-      for(x in x1 until x2) {
+      for (x in x1 until x2) {
         transparent[x][y] = model.getAlpha(abs(pixels[sx].toInt())) > 0
         pixelTable[x][y] = model.getRGB(abs(pixels[sx++].toInt()))
       }
@@ -83,9 +83,9 @@ class PixelConsumer(picture: Image) : ImageConsumer {
     val x2: Int = x1 + w
     val y2: Int = y1 + h
     var sy: Int = off
-    for(y in y1 until y2) {
+    for (y in y1 until y2) {
       var sx = sy
-      for(x in x1 until x2) {
+      for (x in x1 until x2) {
         transparent[x][y] = false
         pixelTable[x][y] = model.getRGB(pixels[sx++])
       }
@@ -126,7 +126,8 @@ class PixelConsumer(picture: Image) : ImageConsumer {
     while (t > 0 && !isComplete) {
       try {
         Thread.sleep(10)
-      } catch (ignored: Throwable) {}
+      } catch (ignored: Throwable) {
+      }
       t -= 10
     }
   }

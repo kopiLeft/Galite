@@ -18,6 +18,6 @@
 
 package org.kopi.galite.form;
 
-public class VActorField  {
+public class VActorField {
 
 }

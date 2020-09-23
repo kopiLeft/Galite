@@ -18,5 +18,5 @@
 
 package org.kopi.galite.form;
 
-public interface VDictionary  {
+public interface VDictionary {
 }

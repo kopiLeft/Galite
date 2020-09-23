@@ -18,5 +18,5 @@
 
 package org.kopi.galite.chart
 
-abstract class VCodeDimension{
+abstract class VCodeDimension {
 }

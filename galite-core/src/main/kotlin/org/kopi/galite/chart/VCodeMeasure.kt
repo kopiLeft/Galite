@@ -18,5 +18,5 @@
 
 package org.kopi.galite.chart
 
-abstract class VCodeMeasure{
+abstract class VCodeMeasure {
 }

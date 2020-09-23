@@ -21,7 +21,7 @@ package org.kopi.galite.report
 class MReport {
   //TODO
 
-  fun getAccessibleColumnCount():Int {
+  fun getAccessibleColumnCount(): Int {
     TODO()
   }
 
@@ -37,10 +37,10 @@ class MReport {
   }
 
   fun getDisplayLevels(reverseOrder: Any): Byte {
- TODO()
+    TODO()
   }
 
   fun getReverseOrder(visibleColumn: Int): Any {
-  TODO()
+    TODO()
   }
 }

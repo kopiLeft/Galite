@@ -18,5 +18,5 @@
 
 package org.kopi.galite.form;
 
-public interface UMultiBlock  {
+public interface UMultiBlock {
 }

@@ -17,5 +17,5 @@
  */
 package org.kopi.galite.cross
 
-class VDynamicReport{
+class VDynamicReport {
 }

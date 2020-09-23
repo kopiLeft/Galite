@@ -18,6 +18,6 @@
 
 package org.kopi.galite.chart
 
-class VChartCommand{
+class VChartCommand {
 
 }
