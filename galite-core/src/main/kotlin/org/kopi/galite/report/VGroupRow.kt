@@ -91,7 +91,7 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
         child.getLevel() > level ->
           (child as VGroupRow).setChildNodesInvisible(level)
         child is VGroupRow ->
-        child.setChildNodesInvisible()
+          child.setChildNodesInvisible()
         else -> child.visible = false
       }
     }

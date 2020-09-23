@@ -66,7 +66,7 @@ open class VChartType protected constructor(val ordinal: Int, val name: String) 
    */
   internal fun createDimensionData(chart: VChart, row: VRow): VDimensionData =
           VDimensionData(chart.getDimension(0).label,
-                         chart.getDimension(0).format(row.getDimensionAt(0)))
+                  chart.getDimension(0).format(row.getDimensionAt(0)))
 
   /**
    * Fills the measure data for the given data series.
