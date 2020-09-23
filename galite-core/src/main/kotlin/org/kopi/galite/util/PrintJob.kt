@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.util
 
 import com.lowagie.text.PageSize
@@ -46,8 +63,8 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
   constructor(dataStream: InputStream, format: Rectangle) : this(writeToFile(dataStream), true, format)
 
   protected fun finalize() {
-    if (delete && datafile != null) {
-      datafile!!.delete()
+    if (delete) {
+      datafile.delete()
     }
   }
 
@@ -100,11 +117,11 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
   }
 
   fun getWidth(): Int {
-    return format.width as Int
+    return format.width.toInt()
   }
 
   fun getHeight(): Int {
-    return format.height as Int
+    return format.height.toInt()
   }
 
   fun createFromThis(file: File, delete: Boolean): PrintJob {
@@ -122,15 +139,15 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
 
   companion object {
     private fun writeToFile(dataStream: InputStream): File {
-      val tempFile: File = Utils.getTempFile("kopi", "pdf")
+      val tempFile: File = Utils.getTempFile("galite", "pdf")
       writeToFile(dataStream, tempFile)
       return tempFile
     }
 
-    private fun writeToFile(dataStream: InputStream, outputfile: File) {
+    private fun writeToFile(dataStream: InputStream, outputFile: File) {
       val buffer = ByteArray(1024)
       var length: Int
-      val output: OutputStream = FileOutputStream(outputfile)
+      val output: OutputStream = FileOutputStream(outputFile)
       while (dataStream.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
       }

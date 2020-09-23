@@ -20,27 +20,14 @@ package org.kopi.galite.util.ipp
 import java.io.OutputStream
 import java.nio.charset.Charset
 
-class IPPOutputStream// --------------------------------------------------------------------
-// CONSTRUCTORS
-// --------------------------------------------------------------------
-(private var os: OutputStream) {
+class IPPOutputStream(private var os: OutputStream) {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
 
-// --------------------------------------------------------------------
-// ACCESSORS
-// --------------------------------------------------------------------
-
-  // open fun writeByte(b: Int): Unit {
-// os?.write((b.and(0xff)))
-//}
   fun writeByte(b: Int) {
     os.write((b and 0xff))
   }
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
 
   fun writeShort(s: Int) {
     os.write(s and 0xff00 shr 8)

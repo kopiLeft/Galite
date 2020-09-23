@@ -23,30 +23,27 @@ import java.io.IOException
 import java.io.InputStream
 import kotlin.experimental.or
 
-class IPPInputStream// --------------------------------------------------------------------
-// CONSTRUCTORS
-// --------------------------------------------------------------------
-(inputStream: InputStream) {
+class IPPInputStream(var inputStream: InputStream) {
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
   fun peekByte(): Byte {
     verify()
-    inputStream!!.mark(1)
+    inputStream.mark(1)
     val read: Int = read()
-    inputStream!!.reset()
+    inputStream.reset()
     return read.toByte()
   }
 
   fun peekShortAfterFirstByte(): Short {
     var i = 0
     verify()
-    inputStream!!.mark(3)
+    inputStream.mark(3)
     read()
     i = i or (read() shl 8)
     i = i or read()
-    inputStream!!.reset()
+    inputStream.reset()
     return i.toShort()
   }
 
@@ -72,7 +69,7 @@ class IPPInputStream// ---------------------------------------------------------
 
   fun readString(length: Int): String? {
     val buf = ByteArray(length)
-    val nread = inputStream!!.read(buf, 0, length)
+    val nread = inputStream.read(buf, 0, length)
     if (nread != length) {
       throw IOException("Error reading socket: unexpected end of transmission")
     }
@@ -98,7 +95,7 @@ class IPPInputStream// ---------------------------------------------------------
     val buf = ByteArray(1024)
     val outputStream = ByteArrayOutputStream()
     var nread = 0
-    while (inputStream!!.read(buf).also { nread = it } > 0) {
+    while (inputStream.read(buf).also { nread = it } > 0) {
       outputStream.write(buf, 0, nread)
     }
     return outputStream.toByteArray()
@@ -108,12 +105,8 @@ class IPPInputStream// ---------------------------------------------------------
   // PRIVATE METHODS
   // --------------------------------------------------------------------
 
-  // --------------------------------------------------------------------
-  // PRIVATE METHODS
-  // --------------------------------------------------------------------
-
   private fun read(): Int {
-    val c = inputStream!!.read()
+    val c = inputStream.read()
     if (c == -1) {
       throw IOException("Error reading socket: unexpected end of transmission")
     }
@@ -121,17 +114,9 @@ class IPPInputStream// ---------------------------------------------------------
   }
 
   private fun verify() {
-    if (!inputStream!!.markSupported()) {
+    if (!inputStream.markSupported()) {
       throw InconsistencyException("Mark is not supported")
     }
   }
 
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private var inputStream: InputStream? = inputStream
 }

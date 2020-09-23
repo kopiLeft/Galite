@@ -19,18 +19,10 @@ package org.kopi.galite.util.ipp
 
 import java.io.IOException
 
-class IPPHttpHeader {
-  // --------------------------------------------------------------------
-  // CONSTRUCTOR
-  // --------------------------------------------------------------------
-  constructor(printerName: String, contentLength: Int) {
-    name = printerName
-    size = contentLength
-  }
+class IPPHttpHeader(val name: String? = null, val size: Int = 0) {
 
-  constructor(iPPInputStream: IPPInputStream) {
-    var line: String?
-    line = iPPInputStream.readLine()
+  constructor(iPPInputStream: IPPInputStream) : this() {
+    var line = iPPInputStream.readLine()
     if (line != null) {
       val lineFields = line.split(" ").toTypedArray()
       if (lineFields.size < 2 ||
@@ -58,9 +50,6 @@ class IPPHttpHeader {
     os.writeString("Content-length: $size\r\n")
     os.writeString("\r\n")
   }
-
-  private var name: String? = null
-  private var size = 0
 
   companion object {
     // --------------------------------------------------------------------

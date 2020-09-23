@@ -18,19 +18,6 @@
 package org.kopi.galite.util.ipp
 
 class IntegerValue : IPPValue {
-  // --------------------------------------------------------------------
-  // ACCESSORS
-  // --------------------------------------------------------------------
-  // value-length + value
-  override val size: Int
-    get() {
-      return 2 + 4
-    }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private var value = 0
 
   // --------------------------------------------------------------------
   // CONSTRUCTOR
@@ -44,6 +31,15 @@ class IntegerValue : IPPValue {
     value = iPPInputStream.readInteger() //value
   }
 
+  // --------------------------------------------------------------------
+  // ACCESSORS
+  // --------------------------------------------------------------------
+  // value-length + value
+  override val size: Int
+    get() {
+      return 2 + 4
+    }
+
   override fun write(os: IPPOutputStream) {
     os.writeShort(4)
     os.writeInteger(value)
@@ -54,4 +50,10 @@ class IntegerValue : IPPValue {
   }
 
   override fun toString(): String = value.toString()
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  private var value = 0
+
 }

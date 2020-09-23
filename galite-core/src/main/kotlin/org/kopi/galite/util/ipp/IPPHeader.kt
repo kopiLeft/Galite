@@ -17,16 +17,18 @@
  */
 package org.kopi.galite.util.ipp
 
-class IPPHeader {
+class IPPHeader(var majorVersion: Byte = 1,
+                var minorVersion: Byte = 1,
+                var operationID: Short = 0,
+                var requestID: Int = 0) {
   // --------------------------------------------------------------------
-  // CONSTRUCTORS
+  // CONSTRUCTOR
   // --------------------------------------------------------------------
-  constructor() {}
-  constructor(`is`: IPPInputStream) {
-    majorVersion = `is`.readByte()
-    minorVersion = `is`.readByte()
-    operationID = `is`.readShort()
-    requestID = `is`.readInteger()
+  constructor(inputStream: IPPInputStream) {
+    majorVersion = inputStream.readByte()
+    minorVersion = inputStream.readByte()
+    operationID = inputStream.readShort()
+    requestID = inputStream.readInteger()
   }
 
   // --------------------------------------------------------------------
@@ -54,53 +56,37 @@ class IPPHeader {
     println("Request ID : $requestID")
   }
 
-  fun setOperationID(operationID: Short) {
-    this.operationID = operationID
-  }
-
-  fun getOperationID(): Short {
-    return operationID
-  }
-
-  fun setRequestID(requestID: Int) {
-    this.requestID = requestID
-  }
-
-  fun getRequestID(): Int {
-    return requestID
-  }
-
-
   val isAnError: Boolean
     get() = operationID >= 0x400
 
-  val status: String?
-    get() {
-      val units: Int
-      if (operationID < 0x400) {
+  fun getStatus(): String? {
+    val units: Int
+    when {
+      operationID < 0x400 -> {
         units = operationID.toInt()
         if (units < IPPConstants.ERR_SUCCESSFUL.size) {
           return IPPConstants.ERR_SUCCESSFUL[units]
         }
-      } else if (operationID < 0x500) {
+      }
+      operationID < 0x500 -> {
         units = operationID - 0x400
         if (units < IPPConstants.ERR_CLIENT_ERROR.size) {
           return IPPConstants.ERR_CLIENT_ERROR[units]
         }
-      } else {
+      }
+      operationID < 0x500 -> {
+        units = operationID - 0x400
+        if (units < IPPConstants.ERR_CLIENT_ERROR.size) {
+          return IPPConstants.ERR_CLIENT_ERROR[units]
+        }
+      }
+      else -> {
         units = operationID - 0x400
         if (units < IPPConstants.ERR_SERVER_ERROR.size) {
           return IPPConstants.ERR_SERVER_ERROR[units]
         }
       }
-      return null
     }
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  private var majorVersion: Byte = 1
-  private var minorVersion: Byte = 1
-  private var operationID: Short = 0
-  private var requestID = 0
+    return null
+  }
 }

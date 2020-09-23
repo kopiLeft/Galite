@@ -26,10 +26,7 @@ import java.io.DataOutputStream
 import java.net.Socket
 import java.net.URL
 
-class IPPHttpConnection(// --------------------------------------------------------------------
-        // DATA MEMBERS
-        // --------------------------------------------------------------------
-        private val url: URL) {
+class IPPHttpConnection(private val url: URL) {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
@@ -44,13 +41,10 @@ class IPPHttpConnection(// -----------------------------------------------------
     return httpRequest.iPP
   }
 
-  private val connection: Socket = Socket(url.host, url.port)
-  private val os: OutputStream
-  private val inputStream: InputStream
+  val connection: Socket = Socket(url.host, url.port)
+  val os: OutputStream
+  val inputStream: InputStream
 
-  // --------------------------------------------------------------------
-  // CONSTRUCTORS
-  // --------------------------------------------------------------------
   init {
     os = BufferedOutputStream(DataOutputStream(connection.getOutputStream()))
     inputStream = BufferedInputStream(DataInputStream(connection.getInputStream()))

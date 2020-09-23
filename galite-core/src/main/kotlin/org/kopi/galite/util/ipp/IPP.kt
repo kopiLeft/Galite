@@ -17,36 +17,28 @@
  */
 package org.kopi.galite.util.ipp
 
-class IPP {
-  // --------------------------------------------------------------------
-  // CONSTRUCTOR
-  // --------------------------------------------------------------------
-  constructor() {
-    header = IPPHeader()
-    data = ByteArray(0)
-  }
+class IPP(val header: IPPHeader = IPPHeader(),
+          var data: ByteArray = ByteArray(0)) {
 
-  fun setData(data: ByteArray) {
-    this.data = data
-  }
-
-  constructor(iPPInputStream: IPPInputStream) {
+  constructor(iPPInputStream: IPPInputStream) : this() {
     var endAttributes = false
     var groupTag: Int = IPPConstants.TAG_ZERO
     var read: Byte
-    header = IPPHeader(iPPInputStream)
-    data = ByteArray(0)
     while (!endAttributes) {
       read = iPPInputStream.peekByte()
-      if (read.toInt() == IPPConstants.TAG_END) {
-        iPPInputStream.readByte()
-        endAttributes = true
-      } else if (read < IPPConstants.TAG_UNSUPPORTED_VALUE) {
-        // it is a new group tag
-        groupTag = iPPInputStream.readByte().toInt()
-      } else {
-        // new attribute
-        attributes.add(IPPAttribute(iPPInputStream, groupTag))
+      when {
+        read.toInt() == IPPConstants.TAG_END -> {
+          iPPInputStream.readByte()
+          endAttributes = true
+        }
+        read < IPPConstants.TAG_UNSUPPORTED_VALUE -> {
+          // it is a new group tag
+          groupTag = iPPInputStream.readByte().toInt()
+        }
+        else -> {
+          // new attribute
+          attributes.add(IPPAttribute(iPPInputStream, groupTag))
+        }
       }
     }
     data = iPPInputStream.readArray()!!
@@ -60,10 +52,6 @@ class IPP {
 
   val status: String?
     get() = header.status
-
-  fun getHeader(): IPPHeader {
-    return header
-  }
 
   fun getAttributes(): Iterator<*> {
     return attributes.iterator()
@@ -87,7 +75,7 @@ class IPP {
       while (atts.hasNext()) {
         val attribute = atts.next() as IPPAttribute
         size += attribute.getSize(lastGroup)
-        lastGroup = attribute.getGroup()
+        lastGroup = attribute.groupTag
       }
       return size + 1 + data.size // 1 for the TAG_END
     }
@@ -100,35 +88,25 @@ class IPP {
     while (atts.hasNext()) {
       val attribute = atts.next() as IPPAttribute
       attribute.write(os, lastGroup)
-      lastGroup = attribute.getGroup()
+      lastGroup = attribute.groupTag
     }
     os.writeByte(IPPConstants.TAG_END)
     os.writeArray(data)
   }
 
   fun dump() {
-    val atts: Iterator<*> = attributes.iterator()
-    header.dump()
-    while (atts.hasNext()) {
-      val attribute = atts.next() as IPPAttribute
-      attribute.dump()
-    }
+    attributes.forEach { it.dump() }
   }
 
   fun simpleDump() {
-    val atts: Iterator<*> = attributes.iterator()
-    while (atts.hasNext()) {
-      val attribute = atts.next() as IPPAttribute
-      attribute.simpleDump()
-    }
+    attributes.forEach { it.simpleDump() }
   }
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  private var header: IPPHeader
-  private var attributes = mutableListOf<IPPAttribute>()
-  private var data: ByteArray
+
+  val attributes = mutableListOf<IPPAttribute>()
 
   companion object {
     const val DEBUG = false

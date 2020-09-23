@@ -17,26 +17,17 @@
  */
 package org.kopi.galite.util.ipp
 
-class IPPAttribute {
+class IPPAttribute(var groupTag: Int, var valueTag: Int, var name: String) {
 
   // --------------------------------------------------------------------
 // CONSTRUCTORS
 // --------------------------------------------------------------------
-  constructor(groupTag: Int, valueTag: Int, name: String) {
-    this.groupTag = groupTag
-    this.valueTag = valueTag
-    this.name = name
-  }
-
-
-  constructor(iPPInputStream: IPPInputStream, groupTag: Int) {
+  constructor(iPPInputStream: IPPInputStream, groupTag: Int) : this(groupTag,
+          iPPInputStream.readByte().toInt(),
+          iPPInputStream.readString(iPPInputStream.readShort().toInt())!!) {
     var read: Byte
     var n: Int
     var endAttribute = false
-    this.groupTag = groupTag
-    this.valueTag = iPPInputStream.readByte().toInt() // value-tag
-    n = iPPInputStream.readShort().toInt() // name-length
-    this.name = iPPInputStream.readString(n) // name
     while (!endAttribute) {
       when (valueTag) {
         IPPConstants.TAG_INTEGER, IPPConstants.TAG_ENUM -> values.add(IntegerValue(iPPInputStream))
@@ -56,39 +47,29 @@ class IPPAttribute {
         }
       }
       read = iPPInputStream.peekByte()
-      if (read < IPPConstants.TAG_UNSUPPORTED_VALUE) {
-        endAttribute = true
-      } else {
-        val nameLengthNextAttribute: Short = iPPInputStream.peekShortAfterFirstByte()
-        if (nameLengthNextAttribute.toInt() == 0) {
-          //additional-value
-          iPPInputStream.readByte() // value-tag
-          iPPInputStream.readShort() // name-length
-        } else {
+      when {
+        read < IPPConstants.TAG_UNSUPPORTED_VALUE -> {
           endAttribute = true
+        }
+        else -> {
+          val nameLengthNextAttribute: Short = iPPInputStream.peekShortAfterFirstByte()
+          when {
+            nameLengthNextAttribute.toInt() == 0 -> {
+              //additional-value
+              iPPInputStream.readByte() // value-tag
+              iPPInputStream.readShort() // name-length
+            }
+            else -> {
+              endAttribute = true
+            }
+          }
         }
       }
     }
   }
-
-// --------------------------------------------------------------------
-// ACCESSORS
-// --------------------------------------------------------------------
-
   // --------------------------------------------------------------------
 // ACCESSORS
 // --------------------------------------------------------------------
-  fun getName(): String? {
-    return name
-  }
-
-  fun getValues(): Iterator<*>? {
-    return values.iterator()
-  }
-
-  fun getGroup(): Int {
-    return groupTag
-  }
 
   fun addValue(value: IPPValue) {
     values.add(value)
@@ -168,15 +149,8 @@ class IPPAttribute {
     println()
   }
 
-// --------------------------------------------------------------------
-// DATA MEMBERS
-// --------------------------------------------------------------------
-
   // --------------------------------------------------------------------
 // DATA MEMBERS
 // --------------------------------------------------------------------
-  private var groupTag = 0
-  private var valueTag = 0
-  private var name: String? = null
-  private var values = arrayListOf<Any>()
+  var values = arrayListOf<Any>()
 }
