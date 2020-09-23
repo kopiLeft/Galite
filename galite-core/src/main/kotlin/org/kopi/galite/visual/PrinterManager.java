@@ -15,31 +15,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.util
+package org.kopi.galite.visual;
 
-/**
- * FaxException
- */
-class FaxException : Exception {
-  /**
-   * Constructs an exception with a message.
-   *
-   * @param        message                the associated message
-   */
-  constructor(message: String) : super(message) {}
+public abstract class PrinterManager {
 
-  /**
-   * Constructs a new exception with the specified detail message and cause.
-   *
-   * @param        message                the associated message
-   * @param     cause           the cause  (null value permited
-   */
-  constructor(message: String, cause: Throwable) : super(message, cause) {}
-
-  /**
-   * Constructs a new exception with the specified detail message and cause.
-   *
-   * @param     cause           the cause  (null value permited
-   */
-  constructor(cause: Throwable) : super(cause) {}
 }
