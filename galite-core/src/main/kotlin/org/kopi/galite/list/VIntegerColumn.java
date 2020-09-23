@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form;
-public class VBlockDefaultOuterJoin {
+package org.kopi.galite.list;
+
+public class VIntegerColumn {
+
 }

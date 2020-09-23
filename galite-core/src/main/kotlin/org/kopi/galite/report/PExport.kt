@@ -28,13 +28,13 @@ import java.io.Serializable
 
 abstract class PExport(val table: UTable,
                        val model: MReport,
-                       var pConfig: PConfig,
+                       val printConfig: PConfig,
                        var title: String,
                        tonerSaveMode: Boolean) : Serializable {
   /**
    * Constructor
    */
-  constructor(table: UTable, model: MReport, pConfig: PConfig, title: String) : this(table, model, pConfig, title, false) {}
+  constructor(table: UTable, model: MReport, printConfig: PConfig, title: String) : this(table, model, printConfig, title, false) {}
 
   fun formatColumns() {
     var index = 0
@@ -170,7 +170,7 @@ abstract class PExport(val table: UTable,
     exportRow(row.level - minLevel, newrow, newrowOrig, alignments)
   }
 
-  fun export(file: File?) {
+  fun export(file: File) {
     try {
       export(FileOutputStream(file))
     } catch (e: Exception) {
@@ -209,20 +209,16 @@ abstract class PExport(val table: UTable,
     return tonerSaveMode
   }
 
-
-  var printConfig: PConfig
-    protected set
-  private var columnCount = 0
+  var columnCount = 0
+    private set
   private var firstVisibleColumn: Int
-  private val maxLevel: Int
+  var maxLevel: Int
+    private set
   private var minLevel = 0
-  private val parameters: Parameters
-  private val tonerSaveMode: Boolean
+  private val parameters = Parameters(Color.blue)
+  val tonerSaveMode = tonerSaveMode
 
   init {
-    printConfig = pConfig
-    this.tonerSaveMode = tonerSaveMode
-    parameters = Parameters(Color.blue)
     firstVisibleColumn = -1
     for (j in 0 until model.getAccessibleColumnCount()) {
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
@@ -234,7 +230,7 @@ abstract class PExport(val table: UTable,
         columnCount += 1
       }
     }
-    if (pConfig.groupFormfeed) {
+    if (printConfig.groupFormfeed) {
       // each group an own page:
       // first column is not shown because its the
       // same for all -> it is added to the "title"

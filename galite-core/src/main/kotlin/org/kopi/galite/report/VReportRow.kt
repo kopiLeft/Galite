@@ -74,5 +74,4 @@ abstract class VReportRow(val data: Array<Any?>): DefaultMutableTreeNode() {
       else -> column.compareTo(data, rowData)
     }
   }
-  //TODO()
 }
