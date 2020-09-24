@@ -59,7 +59,7 @@ class DBContext {
     lookupUserId: Boolean, // TODO
     schema: String? // TODO
   ): Database {
-    val database = Database.connect({connection})
+    val database = Database.connect({ connection })
     connections.add(database)
     return database
   }

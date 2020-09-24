@@ -18,23 +18,29 @@
 
 package org.kopi.galite.report
 
-//TODO()
 class MReport {
-  /**
-   * Return a column definition
-   *
-   * @param    column        the index of the desired column
-   * @return    the desired column
-   */
-  fun getModelColumn(column: Int): VReportColumn {
+  //TODO
+
+  fun getAccessibleColumnCount(): Int {
     TODO()
   }
+
+  fun getAccessibleColumn(visibleColumn: Int): VReportColumn {
+    TODO()
+  }
+
   /**
-   * Returns the number of model columns
-   *
-   * @return    the number or columns to display
+   * Return the tree used by the model
    */
-  fun getModelColumnCount(): Int {
+  fun getTree(): VGroupRow {
+    TODO()
+  }
+
+  fun getDisplayLevels(reverseOrder: Any): Byte {
+    TODO()
+  }
+
+  fun getReverseOrder(visibleColumn: Int): Any {
     TODO()
   }
 }
