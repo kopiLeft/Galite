@@ -25,7 +25,7 @@ class Registry(val domain: String, private var parents: Array<Registry>?) {
   var dependencies = Hashtable<String, String>()
 
   init {
-    dependencies.put(VISUAL_KOPI_DOMAIN, "org.kopi.galite.resource" + ".Messages")
+    dependencies[VISUAL_DOMAIN] = "org.kopi.galite.resource" + ".Messages"
   }
 
   /**
@@ -61,6 +61,6 @@ class Registry(val domain: String, private var parents: Array<Registry>?) {
   }
 
   companion object {
-    val VISUAL_KOPI_DOMAIN = "VIS"
+    const val VISUAL_DOMAIN = "VIS"
   }
 }

@@ -18,8 +18,8 @@
 
 package org.kopi.galite.visual
 
-class Message {
-  companion object {
-    fun getMessage(string: String): String = TODO()
+object Message {
+  fun getMessage(source: String?, ident: String, param: Any?): String {
+    TODO()
   }
 }

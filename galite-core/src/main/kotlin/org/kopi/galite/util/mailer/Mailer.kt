@@ -16,30 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.util.mailer
 
-import org.kopi.galite.base.UComponent
-
-import java.io.Serializable
-
-/**
- * `VModel` is the top level interface that all model classes should implement.
- * This interface is used in [UIFactory] to create model displays.
- *
- * @see UIFactory
- *
- * @see WindowBuilder
- */
-interface VModel : Serializable {
-  /**
-   * Sets the model display.
-   * @param display The model display.
-   */
-  fun setDisplay(display: UComponent)
-
-  /**
-   * Returns the model display.
-   * @return The model display
-   */
-  fun getDisplay(): UComponent?
+class Mailer {
+  // TODO
 }

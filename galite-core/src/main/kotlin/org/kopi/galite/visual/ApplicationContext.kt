@@ -18,17 +18,15 @@
 
 package org.kopi.galite.visual
 
-import java.util.*
+import org.kopi.galite.db.DBContext
 
 abstract class ApplicationContext {
-
+  abstract val application: Application
   companion object {
-    fun getDefaultLocale(): Locale = TODO()
+    fun getDBContext(): DBContext {
+      TODO()
+    }
+    fun getMenu(): VMenuTree = TODO()
+    lateinit var applicationContext: ApplicationContext
   }
-
-  //-----------------------------------------------------------
-  // DATA MEMBERS
-  //-----------------------------------------------------------
-  private val applicationContext: ApplicationContext = TODO()
-  var compt = 0
 }

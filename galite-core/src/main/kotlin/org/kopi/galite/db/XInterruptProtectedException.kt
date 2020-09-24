@@ -16,30 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
-
-import org.kopi.galite.base.UComponent
-
-import java.io.Serializable
+package org.kopi.galite.db
 
 /**
- * `VModel` is the top level interface that all model classes should implement.
- * This interface is used in [UIFactory] to create model displays.
- *
- * @see UIFactory
- *
- * @see WindowBuilder
+ * This exception interrupts an protected statement. All
+ * exceptions which should interrupt a protected statement must
+ * be subclasses of this exception.
  */
-interface VModel : Serializable {
-  /**
-   * Sets the model display.
-   * @param display The model display.
-   */
-  fun setDisplay(display: UComponent)
-
-  /**
-   * Returns the model display.
-   * @return The model display
-   */
-  fun getDisplay(): UComponent?
+class XInterruptProtectedException : Exception {
+  constructor() : super()
+  constructor(msg: String?) : super(msg)
+  constructor(msg: String?, cause: Throwable?) : super(msg, cause)
+  constructor(cause: Throwable?) : super(cause)
 }

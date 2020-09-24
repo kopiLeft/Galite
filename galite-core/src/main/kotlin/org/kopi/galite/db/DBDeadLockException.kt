@@ -16,30 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.db
 
-import org.kopi.galite.base.UComponent
+import java.sql.SQLException
 
-import java.io.Serializable
-
-/**
- * `VModel` is the top level interface that all model classes should implement.
- * This interface is used in [UIFactory] to create model displays.
- *
- * @see UIFactory
- *
- * @see WindowBuilder
- */
-interface VModel : Serializable {
+class DBDeadLockException : DBException {
+  // ----------------------------------------------------------------------
+  // CONSTRUCTORS
+  // ----------------------------------------------------------------------
   /**
-   * Sets the model display.
-   * @param display The model display.
+   * Constructor
+   *
+   * @param        original                the original SQLException
    */
-  fun setDisplay(display: UComponent)
+  constructor(original: SQLException) : super(original)
 
   /**
-   * Returns the model display.
-   * @return The model display
+   * Constructor
+   *
+   * @param     query                   the sql query which generated the exception
+   * @param     original                the original SQLException
    */
-  fun getDisplay(): UComponent?
+  constructor(query: String?, original: SQLException) : super(query, original)
 }

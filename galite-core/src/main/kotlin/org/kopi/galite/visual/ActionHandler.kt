@@ -19,7 +19,7 @@ package org.kopi.galite.visual
 
 /**
  * Child of this class represents objects than can be executed asynchronously
- * by the kopi action mechanism
+ * by the action mechanism
  */
 interface ActionHandler {
 
