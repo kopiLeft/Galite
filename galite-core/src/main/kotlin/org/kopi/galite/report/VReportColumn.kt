@@ -122,9 +122,9 @@ abstract class VReportColumn(
   /**
    * Localizes this field
    *
-   * @param     loc         the caller localizer
+   * @param     parentLocalizer         the caller localizer
    */
-  protected open fun localize(loc: FieldLocalizer) {
+  protected open fun localize(parentLocalizer: FieldLocalizer) {
     // by default nothing to do
   }
 

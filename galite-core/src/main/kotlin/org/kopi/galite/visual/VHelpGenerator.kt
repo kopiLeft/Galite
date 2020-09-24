@@ -53,11 +53,11 @@ open class VHelpGenerator {
    */
   fun helpOnCommands(commands: Array<VCommand>) {
     if (commands.isNotEmpty()) {
-      print?.println("<TABLE valign=\"top\">")
+      print.println("<TABLE valign=\"top\">")
       for (i in commands.indices) {
         commands[i].helpOnCommand(this)
       }
-      print?.println("</TABLE>")
+      print.println("</TABLE>")
     }
   }
 
@@ -70,35 +70,35 @@ open class VHelpGenerator {
                     accKey: Int,
                     accMod: Int,
                     help: String?) {
-    print?.println("<TR><TD>")
+    print.println("<TR><TD>")
     if (icon != null) {
       addButton("$icon.png")
     } else {
-      print?.println("&nbsp;")
+      print.println("&nbsp;")
     }
-    print?.println("</TD><TD>")
+    print.println("</TD><TD>")
     if (accMod != 0) {
       if (accMod == InputEvent.SHIFT_MASK) {
-        print?.print("Shift-")
+        print.print("Shift-")
       }
     }
-    print?.println(keyToName(accKey))
-    print?.println("</TD><TD><STRONG>$menu:$item:</STRONG></TD><TD>")
+    print.println(keyToName(accKey))
+    print.println("</TD><TD><STRONG>$menu:$item:</STRONG></TD><TD>")
     if (help != null) {
-      print?.println(help)
+      print.println(help)
     } else {
-      print?.println("no help")
+      print.println("no help")
     }
-    print?.println("</TD></TR>")
+    print.println("</TD></TR>")
   }
 
   /**
    * Add an image
    */
   private fun addImage(name: String, border: Int) {
-    print?.print("<img src=\"" + ImageHandler.imageHandler!!.getURL(name))
-    print?.print("\" BORDER =\"$border")
-    print?.println("\" alt=\"$name\">")
+    print.print("<img src=\"" + ImageHandler.imageHandler!!.getURL(name))
+    print.print("\" BORDER =\"$border")
+    print.println("\" alt=\"$name\">")
   }
 
   /**
@@ -118,5 +118,5 @@ open class VHelpGenerator {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  protected open var print: PrintWriter? = null
+  protected open lateinit var print: PrintWriter
 }
