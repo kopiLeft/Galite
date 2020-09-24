@@ -72,7 +72,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   @Deprecated("call method in display; model must not be refreshed")
   fun redisplay() {
-    (display as UReport).redisplay()
+    (getDisplay() as UReport).redisplay()
   }
 
   /**
@@ -80,7 +80,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   @Deprecated("call method in display; model must not be closed")
   fun close() {
-    display.closeWindow()
+    getDisplay().closeWindow()
   }
 
   override fun destroyModel() {
@@ -104,7 +104,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   protected fun build() {
     model.build()
     model.createTree()
-    (display as UReport).build()
+    (getDisplay() as UReport).build()
     built = true
 
     // all commands are by default enabled
@@ -131,7 +131,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   }
 
   fun columnMoved(pos: IntArray?) {
-    (display as UReport).columnMoved(pos)
+    (getDisplay() as UReport).columnMoved(pos)
   }
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -218,7 +218,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   override fun createPrintJob(): PrintJob {
     val exporter: PExport2PDF
     val printJob: PrintJob
-    exporter = PExport2PDF((display as UReport).table,
+    exporter = PExport2PDF((getDisplay() as UReport).table,
             model,
             printOptions,
             pageTitle,
@@ -242,7 +242,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       TYP_XLSX -> ".xlsx"
       else -> throw InconsistencyException("Export type unkown")
     }
-    val file: File = FileHandler.fileHandler.chooseFile(display,
+    val file: File = FileHandler.fileHandler.chooseFile(getDisplay(),
             ApplicationConfiguration.getConfiguration().getDefaultDirectory(),
             "report$ext")
     file?.let { export(it, type) }
@@ -258,14 +258,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     when (type) {
       TYP_CSV -> {
         extension = ".csv"
-        exporter = PExport2CSV((display as UReport).table,
+        exporter = PExport2CSV((getDisplay() as UReport).table,
                 model,
                 printOptions,
                 pageTitle)
       }
       TYP_PDF -> {
         extension = ".pdf"
-        exporter = PExport2PDF((display as UReport).table,
+        exporter = PExport2PDF((getDisplay() as UReport).table,
                 model,
                 printOptions,
                 pageTitle,
@@ -274,14 +274,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       }
       TYP_XLS -> {
         extension = ".xls"
-        exporter = PExport2XLS((display as UReport).table,
+        exporter = PExport2XLS((getDisplay() as UReport).table,
                 model,
                 printOptions,
                 pageTitle)
       }
       TYP_XLSX -> {
         extension = ".xlsx"
-        exporter = PExport2XLSX((display as UReport).table,
+        exporter = PExport2XLSX((getDisplay() as UReport).table,
                 model,
                 printOptions,
                 pageTitle)
@@ -351,7 +351,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     if (column != -1) {
       model.setColumnFolded(column, true)
     }
-    (display as UReport).resetWidth()
+    (getDisplay() as UReport).resetWidth()
     setMenu()
   }
 
@@ -360,7 +360,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     if (column != -1) {
       model.setColumnFolded(column, false)
     }
-    (display as UReport).resetWidth()
+    (getDisplay() as UReport).resetWidth()
     setMenu()
   }
 
@@ -461,7 +461,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
   // ----------------------------------------------------------------------
-  fun executeVoidTrigger(VKT_Type: Int) {}
+  override fun executeVoidTrigger(VKT_Type: Int) {}
 
   fun executeObjectTrigger(VKT_Type: Int): Any {
     throw InconsistencyException("SHOULD BE REDEFINED")
@@ -555,13 +555,13 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * Returns the selected column or -1 if no column is selected.
    */
   private val selectedColumn: Int
-    private get() = (display as UReport).selectedColumn
+    private get() = (getDisplay() as UReport).selectedColumn
 
   /**
    * Returns the selected cell or !!! ??? if no cell is selected.
    */
   private val selectedCell: Point
-    private get() = (display as UReport).selectedCell
+    private get() = (getDisplay() as UReport).selectedCell
 
   fun genHelp(): String? {
     val fileName: String

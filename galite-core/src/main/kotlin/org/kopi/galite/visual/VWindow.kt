@@ -19,10 +19,12 @@
 package org.kopi.galite.visual
 
 import org.kopi.galite.base.DBContext
+import org.kopi.galite.base.DBContextHandler
+import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
 import java.io.File
 
-abstract class VWindow {
+abstract class VWindow : Executable, ActionHandler, VModel {
   open fun getType(): Int {
     return Constants.MDL_UNKOWN;
   }
@@ -36,12 +38,17 @@ abstract class VWindow {
 
   fun setWaitInfo(message: String): Void = TODO()
 
-  protected var display: UWindow = TODO()
+
+  override fun getDisplay(): UWindow {
+    TODO()
+  }
+
 
   fun unsetWaitInfo(): Void = TODO()
 
   fun fireFileProduced(file: File?, name: String): Void = TODO()
 
   open fun setDBContext(context: DBContext?): Void = TODO()
+
 
 }
