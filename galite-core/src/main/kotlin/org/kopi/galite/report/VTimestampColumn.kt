@@ -15,6 +15,53 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-class VTimestampColumn 
+import org.kopi.galite.type.Timestamp
+
+/**
+ * Constructs a report column description
+ *
+ * @param     ident           The column ident
+ * @param     options         The column options as bitmap
+ * @param     align           The column alignment
+ * @param     groups          The index of the column grouped by this one or -1
+ * @param     function        An (optional) summation function
+ */
+class VTimestampColumn(ident: String,
+                       options: Int,
+                       align: Int,
+                       groups: Int,
+                       function: VCalculateColumn,
+                       width: Int,
+                       format: VCellFormat) : VReportColumn(ident,
+        options,
+        align,
+        groups,
+        function,
+        10 + 1 + 8,  // width, default timestamp format (date + space + time)
+        1,
+        format) {
+  /**
+   * Compares two objects.
+   *
+   * @param    o1    the first operand of the comparison
+   * @param    o2    the second operand of the comparison
+   * @return    -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  override fun compareTo(o1: Any, o2: Any): Int {
+    return (o1 as Timestamp).compareTo(o2 as Timestamp)
+  }
+
+  /**
+   * Returns the width of cells in this column in characters
+   */
+  override fun getPrintedWidth(): Double = width * 0.7
+
+  override fun formatColumn(exporter: PExport, index: Int) {
+    exporter.formatTimestampColumn(this, index)
+  }
+}

@@ -39,8 +39,8 @@ class VBooleanCodeColumn(ident: String,
                          width: Int,
                          format: VCellFormat,
                          names: Array<String>,
-                         private val codes : BooleanArray)
-    : VCodeColumn(ident, type, source, options, align, groups, function, width, format, names) {
+                         private val codes: BooleanArray)
+  : VCodeColumn(ident, type, source, options, align, groups, function, width, format, names) {
   override fun compareTo(o1: Any, o2: Any): Int {
     return if (o1 == o2) 0 else if (java.lang.Boolean.TRUE == o1) 1 else -1
   }

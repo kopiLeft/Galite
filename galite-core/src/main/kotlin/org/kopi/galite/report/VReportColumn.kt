@@ -128,7 +128,7 @@ abstract class VReportColumn(
     // by default nothing to do
   }
 
-   fun getStyles(): Array<ColumnStyle> {
+  fun getStyles(): Array<ColumnStyle> {
     return if (styles == null) {
       val style = ColumnStyle()
       style.fontName = 0

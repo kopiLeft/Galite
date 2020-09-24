@@ -17,4 +17,60 @@
  */
 package org.kopi.galite.report
 
-class VFixnumCodeColumn 
+
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.type.NotNullFixed
+
+
+class VFixnumCodeColumn(ident: String,
+                        type: String,
+                        source: String,
+                        options: Int,
+                        align: Int,
+                        groups: Int,
+                        function: VCalculateColumn,
+                        width: Int,
+                        format: VCellFormat,
+                        names: Array<String>,
+                        codes: Array<NotNullFixed>) : VCodeColumn(ident!!, type!!, source!!, options, align, groups, function!!, width, format, names) {
+  /**
+   * Get the index of the value.
+   */
+  override fun getIndex(`object`: Any): Int {
+    for (i in codes.indices) {
+      if (`object` == codes[i]) {
+        return i
+      }
+    }
+    throw InconsistencyException(">>>>$`object`")
+  }
+
+  /**
+   * Returns the width of cells in this column in characters
+   */
+  override fun getPrintedWidth(): Double = width * 0.7
+
+  override fun formatColumn(exporter: PExport, index: Int) {
+    exporter.formatFixedColumn(this, index)
+  }
+
+  /**
+   * Compares two objects.
+   *
+   * @param    o1    the first operand of the comparison
+   * @param    o2    the second operand of the comparison
+   * @return    -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  override fun compareTo(o1: Any, o2: Any): Int = (o1 as NotNullFixed)
+          .compareTo(o2 as NotNullFixed)
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  // array of internal representations
+  private val codes: Array<NotNullFixed> = codes
+
+}

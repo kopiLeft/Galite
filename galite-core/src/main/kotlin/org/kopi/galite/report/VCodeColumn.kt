@@ -33,14 +33,14 @@ import org.kopi.galite.l10n.TypeLocalizer
  * @param     function        An (optional) summation function
  */
 abstract class VCodeColumn(
-  ident: String,
-  private val type: String,
-  private val source: String,
-  options: Int, align: Int,
-  groups: Int, function: VCalculateColumn,
-  width: Int,
-  format: VCellFormat?,
-  private val idents: Array<String>
+        ident: String,
+        private val type: String,
+        private val source: String,
+        options: Int, align: Int,
+        groups: Int, function: VCalculateColumn,
+        width: Int,
+        format: VCellFormat?,
+        private val idents: Array<String>
 ) : VReportColumn(ident, options, align, groups, function, width, 1, format) {
   /**
    * Compares two objects.
@@ -51,7 +51,7 @@ abstract class VCodeColumn(
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-   abstract override fun compareTo(o1: Any, o2: Any): Int
+  abstract override fun compareTo(o1: Any, o2: Any): Int
 
   /**
    * Return a string representation.
@@ -59,9 +59,8 @@ abstract class VCodeColumn(
   override fun format(o: Any?): String {
     return if (folded || o == null) {
       ""
-    }
-    else {
-      format?.format(o)?: if (names != null) names!![getIndex(o)]!! else idents[getIndex(o)]
+    } else {
+      format?.format(o) ?: if (names != null) names!![getIndex(o)]!! else idents[getIndex(o)]
     }
   }
 

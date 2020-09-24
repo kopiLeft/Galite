@@ -19,5 +19,8 @@
 package org.kopi.galite.type
 
 class Month {
+  fun compareTo(other: Month): Int {
+    TODO()
+  }
 
 }
