@@ -17,4 +17,32 @@
  */
 package org.kopi.galite.report
 
-abstract class VReport 
+import org.kopi.galite.visual.Action
+
+abstract class VReport {
+  object TYP_PDF {
+
+  }
+
+  object TYP_XLSX {
+
+  }
+
+  object TYP_XLS {
+
+  }
+
+  object TYP_CSV {
+
+  }
+
+  abstract fun showHelp()
+  abstract fun unfoldSelectedColumn()
+  abstract fun foldSelectedColumn()
+  abstract fun sortSelectedColumn()
+  abstract fun unfoldSelection()
+  abstract fun foldSelection()
+  abstract fun export(typPdf: Any)
+  abstract fun close()
+  abstract fun performAsyncAction(action: Action)
+} 

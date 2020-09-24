@@ -101,7 +101,7 @@ open class VCommand(private var mode: Int, protected val handler: ActionHandler,
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
-  fun helpOnCommand(help: VHelpGenerator) {
+  open fun helpOnCommand(help: VHelpGenerator) {
     actor!!.helpOnCommand(help)
   }
 
