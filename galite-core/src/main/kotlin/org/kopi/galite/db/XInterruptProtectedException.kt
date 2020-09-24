@@ -16,31 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
-
-import org.kopi.galite.base.UComponent
+package org.kopi.galite.db
 
 /**
- * `UIFactory` is visual components factory for model classes.
- *
- * This class is used whenever a visual component is needed to be built
- * from a given model.
- *
- * Implementations should ensure the creations of visual components of all kopi
- * model
- * @see VModel
- *
- * @see UComponent
+ * This exception interrupts an protected statement. All
+ * exceptions which should interrupt a protected statement must
+ * be subclasses of this exception.
  */
-abstract class UIFactory {
-  /**
-   * Creates the [UComponent] that corresponds to the given model.
-   * @param model The view model.
-   * @throws IllegalArgumentException When the model has no UI correspondence.
-   */
-  abstract fun createView(model: VModel): UComponent
-
-  companion object {
-    lateinit var uiFactory: UIFactory
-  }
+class XInterruptProtectedException : Exception {
+  constructor() : super()
+  constructor(msg: String?) : super(msg)
+  constructor(msg: String?, cause: Throwable?) : super(msg, cause)
+  constructor(cause: Throwable?) : super(cause)
 }
