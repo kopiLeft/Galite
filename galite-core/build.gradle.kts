@@ -23,6 +23,9 @@ val exposedVersion = "0.27.1"
 val vaadinVersion = "17.0.0"
 val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
+val IbmVersion ="58.2"
+val graphbuilder ="1.02"
+
 
 dependencies {
   // Exposed dependencies
@@ -41,4 +44,10 @@ dependencies {
   
   // Jdom dependency
   implementation("org.jdom", "jdom2", jdomVersion)
+
+  // Ibm dependency
+  implementation("com.ibm.icu", "icu4j", IbmVersion)
+
+  // Graphbuilder dependency
+  implementation("com.github.virtuald", "curvesapi", graphbuilder)
 }
