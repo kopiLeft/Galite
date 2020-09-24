@@ -17,13 +17,11 @@
  */
 package org.kopi.galite.visual
 
+import org.kopi.galite.base.DBContext
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
-import org.kopi.galite.base.DBContext
-
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 /**
  * `Application` is the top level interface for all applications.
@@ -62,19 +60,19 @@ interface Application : MessageListener {
    * Returns `true` if no bug report is sent.
    * @return `true if no bug report is sent.`
    */
-  val isNobugReport: Boolean
+  fun isNoBugReport(): Boolean
 
   /**
    * Returns the start up time.
    * @return The start up time.
    */
-  val startupTime: Date?
+  fun getStartupTime(): Date?
 
   /**
    * Returns the application menu.
    * @return The application menu.
    */
-  val menu: VMenuTree
+  fun getMenu(): VMenuTree
 
   /**
    * Sets the application in help generating mode.
@@ -85,43 +83,43 @@ interface Application : MessageListener {
    * Returns `true` if the application in help generating  mode.
    * @return `true` if the application in help generating  mode.
    */
-  val isGeneratingHelp: Boolean
+  fun isGeneratingHelp(): Boolean
 
   /**
    * Returns the [DBContext] containing user connection information.
    * @return The [DBContext] containing user connection information.
    */
-  val dBContext: DBContext
+  fun getDBContext(): DBContext
 
   /**
    * Returns the connected user name.
    * @return The connected user name.
    */
-  val userName: String
+  fun getUserName(): String
 
   /**
    * Returns the connected user IP address.
    * @return The connected user IP address.
    */
-  val userIP: String
+  fun getUserIP(): String
 
   /**
    * Returns the application [Registry].
    * @return The application [Registry].
    */
-  val registry: Registry
+  fun getRegistry(): Registry
 
   /**
    * Returns the application default [Locale].
    * @return The application default [Locale].
    */
-  val defaultLocale: Locale
+  fun getDefaultLocale(): Locale
 
   /**
    * Returns the application [LocalizationManager].
    * @return The application [LocalizationManager].
    */
-  val localizationManager: LocalizationManager
+  fun getLocalizationManager(): LocalizationManager
 
   /**
    * Displays a message box when we are not in a model context.
@@ -134,17 +132,35 @@ interface Application : MessageListener {
    * Returns the print manager of the application instance.
    * @return The print manager of the application instance.
    */
-   var printManager: PrintManager
+  fun getPrintManager(): PrintManager
+
+  /**
+   * Sets the print manager to the application.
+   * @param printManager The print manager instance.
+   */
+  fun setPrintManager(printManager: PrintManager)
 
   /**
    * Returns the printer manger of the application.
    * @return The printer manger of the application.
    */
-   var printerManager: PrinterManager
+  fun getPrinterManager(): PrinterManager
+
+  /**
+   * Sets the printer manager of the application instance.
+   * @param printerManager The printer manager.
+   */
+  fun setPrinterManager(printerManager: PrinterManager)
 
   /**
    * Returns the application configuration instance.
    * @return The application configuration instance.
    */
-   var applicationConfiguration: ApplicationConfiguration
+  fun getApplicationConfiguration(): ApplicationConfiguration
+
+  /**
+   * Sets the application configuration.
+   * @param configuration The application configuration instance.
+   */
+  fun setApplicationConfiguration(configuration: ApplicationConfiguration)
 }

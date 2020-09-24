@@ -18,6 +18,7 @@
 package org.kopi.galite.visual
 
 import org.kopi.galite.util.Rexec
+
 import java.io.File
 
 /**
@@ -31,19 +32,19 @@ abstract class ApplicationConfiguration {
    * Property app.version
    * Returns the version of the application
    */
-  abstract val version: String
+  abstract fun getVersion(): String
 
   /**
    * Property app.name
    * Returns the application name
    */
-  abstract val applicationName: String
+  abstract fun getApplicationName(): String
 
   /**
    * Property app.comment
    * Returns the information text about this application
    */
-  abstract val informationText: String
+  abstract fun getInformationText(): String
 
   // --------------------------------------------------------------
   //   Application Debugging
@@ -53,13 +54,12 @@ abstract class ApplicationConfiguration {
    * Property debug.logfile
    * Returns the failure file to add errors
    */
-  abstract val logFile: String
+  abstract fun getLogFile(): String
 
   /**
    * Returns the debug mode (that you can change dynamically)
    */
-  val isDebugModeEnabled: Boolean
-    get() = false
+  fun isDebugModeEnabled(): Boolean = false
 
   /**
    * Property debug.mail.recipient
@@ -67,7 +67,7 @@ abstract class ApplicationConfiguration {
    *
    * For instance: failure.sys-admin@aHost.com
    */
-  abstract val debugMailRecipient: String
+  abstract fun getDebugMailRecipient(): String
 
   abstract fun mailErrors(): Boolean
 
@@ -85,18 +85,18 @@ abstract class ApplicationConfiguration {
    * Property smtp.server
    * Returns the name of the SMTP server to use
    */
-  abstract val sMTPServer: String
+  abstract fun getSMTPServer(): String
 
   /**
    * Property fax.server
    * Returns the name of the fax server to use.
    */
-  abstract val faxServer: String
+  abstract fun getFaxServer(): String
 
   /**
    * Returns a RExec command handler
    */
-  abstract val rExec: Rexec
+  abstract fun getRExec(): Rexec
 
   // --------------------------------------------------------------
   //   Spell checking
@@ -105,7 +105,7 @@ abstract class ApplicationConfiguration {
   /**
    * Returns the Dictionary Server e.g. c:/aspell
    */
-  abstract val dictionaryServer: String
+  abstract fun getDictionaryServer(): String
 
   // --------------------------------------------------------------
   //   Basic Methods
@@ -120,31 +120,30 @@ abstract class ApplicationConfiguration {
 
   abstract fun getBooleanFor(key: String): Boolean
 
-  abstract fun getIntFor(key: String): Int// no more languages definied// no languages
+  abstract fun getIntFor(key: String): Int // no more languages definied// no languages
 
   /**
    * returns options for a language
    */
-  val dictionaryLanguages: Array<Language>
-    get() {
-      // no languages
-      val langs = ArrayList<Language>()
-      var lang: String?
-      var i = 0
-      try {
-        while (getStringFor("aspell.$i.language").also { lang = it } != null) {
-          langs.add(Language(lang!!, getStringFor("aspell.$i.options")!!))
-          i++
-        }
-      } catch (e: PropertyException) {
-        // no more languages definied
+  fun getDictionaryLanguages(): Array<Language> {
+    // no languages
+    val langs = ArrayList<Language>()
+    var lang: String?
+    var i = 0
+    try {
+      while (getStringFor("aspell.$i.language").also { lang = it } != null) {
+        langs.add(Language(lang!!, getStringFor("aspell.$i.options")!!))
+        i++
       }
-      return langs.toTypedArray()
+    } catch (e: PropertyException) {
+      // no more languages defined
     }
+    return langs.toTypedArray()
+  }
 
-   class Language(//name of the language
+  class Language(//name of the language
           val language: String,
-           // options
+          // options
           val options: String)
 
   /**
@@ -152,39 +151,32 @@ abstract class ApplicationConfiguration {
    * Use the user.home property because the path
    * of the home directory is OS dependant.
    */
-  val defaultDirectory: File
-    get() = File(System.getProperty("user.home"))
+  fun getDefaultDirectory(): File = File(System.getProperty("user.home"))
 
   // --------------------------------------------------------------
   // Preview with acroread
   // --------------------------------------------------------------
-  fun useAcroread(): Boolean {
-    return false
-  }
+  fun useAcroread(): Boolean = false
 
   // --------------------------------------------------------------
   // Database Encoding
   // --------------------------------------------------------------
-  val isUnicodeDatabase: Boolean
-    get() = false
+  fun isUnicodeDatabase(): Boolean = false
 
   // ----------------------------------------------------------------------
   // User configuration
   // ----------------------------------------------------------------------
-  val userConfiguration: UserConfiguration?
-    get() = null
+  fun getUserConfiguration(): UserConfiguration? = null
 
   //---------------------------------------------------------------------
   // Window width
   //---------------------------------------------------------------------
-  val defaultModalWindowWidth: Int
-    get() = 0
+  fun getDefaultModalWindowWidth(): Int = 0
 
   //---------------------------------------------------------------------
   // Window height
   //---------------------------------------------------------------------
-  val defaultModalWindowHeight: Int
-    get() = 0
+  fun getDefaultModalWindowHeight(): Int = 0
 
   companion object {
 
@@ -197,19 +189,23 @@ abstract class ApplicationConfiguration {
      * A static instance that used to store an application configuration
      * when no application context is set
      */
-    var configuration: ApplicationConfiguration? = null
-      get() = if (ApplicationContext.getApplicationContext() != null) {
-        ApplicationContext.getApplicationContext()?.application!!.applicationConfiguration
+    private var configuration: ApplicationConfiguration? = null
+
+    fun getConfiguration(): ApplicationConfiguration? {
+      return if (ApplicationContext.getApplicationContext() != null) {
+        ApplicationContext.getApplicationContext()!!.getApplication().getApplicationConfiguration()
       } else {
-        field
+        configuration
       }
-      set(conf) {
-        assert(conf != null) { "configuration must not be null" }
-        if (ApplicationContext.getApplicationContext() != null) {
-          ApplicationContext.getApplicationContext()?.application!!.applicationConfiguration = conf
-        } else {
-          field = conf
-        }
+    }
+
+    fun setConfiguration(conf: ApplicationConfiguration?) {
+      assert(conf != null) { "configuration must not be null" }
+      if (ApplicationContext.getApplicationContext() != null) {
+        ApplicationContext.getApplicationContext()!!.getApplication().setApplicationConfiguration(conf!!)
+      } else {
+        configuration = conf
       }
+    }
   }
 }
