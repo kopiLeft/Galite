@@ -18,45 +18,54 @@
 
 package org.kopi.galite.visual
 
-class VCommand(private var mode: Int, handler: ActionHandler,
-               protected var actor: VActor?,
-               var trigger: Int,
-               private var item: String) {
+open class VCommand(private var mode: Int, protected val handler: ActionHandler,
+                    protected val actor: VActor?, protected val trigger: Int, private val item: String) {
+
   /**
    * Kill a command: this command will never been enabled again
    */
   fun kill() {
     killed = true
   }
-  /**
-   * Returns the actor
-   *///      actor.setSynchronous(false);
-  /**
-   * Returns the actor
-   */
-  var isEnabled: Boolean = actor != null && actor!!.isEnabled
 
   /**
-   * Returns the name has defined in source
+   * Returns the actor
    */
-  fun getIdent(): String {
-    return item
+  fun setEnabled(enabled: Boolean) {
+    if (this.actor != null && !killed) {
+      actor.setEnabled(enabled)
+      actor.setNumber(trigger)
+      actor.setHandler(handler)
+    }
   }
-
 
   /**
    * Returns true iff the command is active in given to mode.
    *
-   * @param        mode                the mode to test
+   * @param    mode        the mode to test
    */
   fun isActive(mode: Int): Boolean {
     return this.mode and (1 shl mode) != 0
   }
 
   /**
+   * Returns the actor
+   */
+  fun isEnabled(): Boolean {
+    return actor != null && actor.isEnabled()
+  }
+
+  /**
+   * Returns the name has defined in source
+   */
+  fun getIdent(): String {
+    return this.item
+  }
+
+  /**
    * Returns true iff the command is active in given to mode.
    *
-   * @param        b                set to be active
+   * @param    b            set to be active
    */
   fun setActive(b: Boolean) {
     mode = if (b) {
@@ -67,24 +76,26 @@ class VCommand(private var mode: Int, handler: ActionHandler,
   }
 
   fun performAction() {
-    actor?.number = trigger
-    actor!!.setHandler(handler)
-    //    actor.setSynchronous(false);
-    actor!!.performAction()
+    with(actor!!) {
+      setNumber(trigger)
+      setHandler(handler)
+      performAction()
+    }
   }
 
   fun performBasicAction() {
-    actor?.number = trigger
-    actor!!.setHandler(handler)
-    //    actor.setSynchronous(false);
-    actor!!.performBasicAction()
+    with(actor!!) {
+      setNumber(trigger)
+      setHandler(handler)
+      performBasicAction()
+    }
   }
 
   /**
-   *
+   * Returns the actor
    */
   fun getKey(): Int {
-    return if (actor != null) actor!!.acceleratorKey else 0
+    return actor?.acceleratorKey ?: 0
   }
 
   // ----------------------------------------------------------------------
@@ -94,11 +105,8 @@ class VCommand(private var mode: Int, handler: ActionHandler,
     actor!!.helpOnCommand(help)
   }
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
   private var killed = false
-  protected var handler: ActionHandler
-
-  init {
-    this.item = item
-    this.handler = handler
-  }
 }

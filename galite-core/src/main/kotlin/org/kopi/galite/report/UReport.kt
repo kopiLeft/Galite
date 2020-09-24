@@ -31,7 +31,7 @@ interface UReport : UWindow, ReportListener {
   fun build()
 
   /**
-   * Redisplays the report
+   * Redisplay the report
    */
   fun redisplay()
 
@@ -39,7 +39,7 @@ interface UReport : UWindow, ReportListener {
    * Fired when report columns has moved.
    * @param pos The new columns positions
    */
-  fun columnMoved(pos: IntArray?)
+  fun columnMoved(pos: IntArray)
 
   /**
    * Removes a column having the position `position`
@@ -84,7 +84,7 @@ interface UReport : UWindow, ReportListener {
    * @param column The column number.
    * @param label The column label
    */
-  fun setColumnLabel(column: Int, label: String?)
+  fun setColumnLabel(column: Int, label: String)
 
   /**
    * `UTable` is a report table ensuring conversion between
