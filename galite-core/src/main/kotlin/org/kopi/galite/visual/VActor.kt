@@ -25,9 +25,9 @@ import org.kopi.galite.l10n.LocalizationManager
  * Represents an actor.
  */
 class VActor(
-        var menuIdent: String,
+        val menuIdent: String,
         private val menuSource: String,
-        var actorIdent: String,
+        val actorIdent: String,
         private val actorSource: String,
         var iconName: String?,
         val acceleratorKey: Int,

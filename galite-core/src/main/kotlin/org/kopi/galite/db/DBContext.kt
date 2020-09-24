@@ -43,14 +43,13 @@ class DBContext(var defaultConnection: Connection) {
     lookupUserId: Boolean = true, // TODO
     schema: String? = null // TODO
   ): Connection {
-    val connection = Connection(url = url,
+    this.connection = Connection(url = url,
                                 driver = driverName,
-                                username = user,
+                                userName = user,
                                 password = password,
                                 lookupUserId = lookupUserId,
                                 schema = schema)
-    this.connection = connection
-    return connection
+    return this.connection
   }
 
   /**
@@ -65,17 +64,16 @@ class DBContext(var defaultConnection: Connection) {
     lookupUserId: Boolean, // TODO
     schema: String? // TODO
   ): Connection {
-    val connection = Connection(connection = connection,
+    this.connection = Connection(connection = connection,
             lookupUserId = lookupUserId,
             schema = schema)
-    this.connection = connection
-    return connection
+    return this.connection
   }
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   /** Connection currently opened */
-  var connection: Connection? = null
+  lateinit var connection: Connection
     private set
 }

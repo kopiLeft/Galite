@@ -20,19 +20,15 @@ package org.kopi.galite.db
 
 import org.jetbrains.exposed.sql.Database
 import org.kopi.galite.util.base.InconsistencyException
+
 import java.sql.Connection
+import kotlin.jvm.Throws
 
 /**
  * A connection maintain information about current context, underlying
  * JDBC connection, driver and user.
  */
 class Connection {
-
-  val uRL: String
-  val userName: String
-  val password: String?
-  var dbConnection: Database? = null
-  val user: Int = 0
 
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
@@ -46,9 +42,8 @@ class Connection {
   constructor(connection: Connection,
               lookupUserId: Boolean = true, // TODO
               schema: String? = null) { // TODO
-    val database = Database.connect({ connection })
-    dbConnection = database
-    uRL = database.url
+    dbConnection = Database.connect({ connection })
+    url = dbConnection.url
     userName = connection.metaData.userName
     password = null // already authenticated
     setUserID()
@@ -65,14 +60,13 @@ class Connection {
    */
   constructor(url: String,
               driver: String,
-              username: String,
+              userName: String,
               password: String,
               lookupUserId: Boolean = true, // TODO
               schema: String? = null) { // TODO
-    val database = Database.connect(url = url, driver = driver, user = username, password = password)
-    dbConnection = database
-    uRL = url
-    userName = username
+    dbConnection = Database.connect(url = url, driver = driver, user = userName, password = password)
+    this.url = url
+    this.userName = userName
     this.password = password
     setUserID()
   }
@@ -81,12 +75,11 @@ class Connection {
    * Returns the user ID
    */
   fun getUserID(): Int {
-    if (user == USERID_NO_LOOKUP) {
-      throw InconsistencyException("user id must not be queried")
+    when(user) {
+      USERID_NO_LOOKUP -> throw InconsistencyException("user id must not be queried")
+      USERID_TO_DETERMINE -> throw InconsistencyException("user id not yet determined")
     }
-    if (user == USERID_TO_DETERMINE) {
-      throw InconsistencyException("user id not yet determined")
-    }
+
     return user
   }
 
@@ -104,4 +97,14 @@ class Connection {
     // -2 do not lookup user ID
     private const val USERID_NO_LOOKUP = -2
   }
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+
+  val url: String
+  val userName: String
+  val password: String?
+  var dbConnection: Database
+  val user: Int = 0
 }

@@ -18,16 +18,18 @@
 
 package org.kopi.galite.visual
 
+import java.awt.Frame
+import java.awt.event.KeyEvent
+import java.io.File
+
+import javax.swing.event.EventListenerList
+
 import org.kopi.galite.base.Image
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.XInterruptProtectedException
 import org.kopi.galite.l10n.LocalizationManager
-import java.awt.Frame
-import java.awt.event.KeyEvent
-import java.io.File
-import javax.swing.event.EventListenerList
 
 /**
  * Creates a window
@@ -41,7 +43,6 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-
   private val modelListener = EventListenerList()
   private var extraTitle: String? = null
   private var display: UWindow? = null
@@ -73,36 +74,28 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * modal call to this form
    * @exception        VException        an exception may be raised by triggers
    */
-  fun doModal(frame: Frame): Boolean {
-    return WindowController.windowController.doModal(this)
-  }
+  fun doModal(frame: Frame): Boolean = WindowController.windowController.doModal(this)
 
   /**
    * doModal
    * modal call to this form
    * @exception        VException        an exception may be raised by triggers
    */
-  fun doModal(f: VWindow): Boolean {
-    return WindowController.windowController.doModal(this)
-  }
+  fun doModal(f: VWindow): Boolean = WindowController.windowController.doModal(this)
 
   /**
    * doModal
    * modal call to this form
    * @exception        VException        an exception may be raised by triggers
    */
-  fun doModal(): Boolean {
-    return WindowController.windowController.doModal(this)
-  }
+  fun doModal(): Boolean = WindowController.windowController.doModal(this)
 
   /**
    * doNotModal
    * no modal call to this form
    * @exception        VException        an exception may be raised by triggers
    */
-  override fun doNotModal() {
-    WindowController.windowController.doNotModal(this)
-  }
+  override fun doNotModal() = WindowController.windowController.doNotModal(this)
 
   // ----------------------------------------------------------------------
   // ACCESSORS
@@ -111,9 +104,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * Returns true if asynchronous operations can be performed
    * Override to change behavior
    */
-  fun allowAsynchronousOperation(): Boolean {
-    return true
-  }
+  fun allowAsynchronousOperation(): Boolean = true
 
   /**
    * Resets form to initial state
@@ -124,9 +115,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * Returns true if it is allowed to quit this model
    * (the form for this model)
    */
-  fun allowQuit(): Boolean {
-    return !inTransaction()
-  }
+  fun allowQuit(): Boolean = !inTransaction()
 
   /**
    * Destroy this class (break all references to help java to GC the form)
@@ -160,10 +149,10 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       i -= 2
     }
   }
+
   // ----------------------------------------------------------------------
   // INFORMATION HANDLING
   // ----------------------------------------------------------------------
-
   fun notice(message: String) {
     var send = false
     val listeners = modelListener.listenerList
@@ -334,6 +323,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     this.display = display as UWindow
     setTitle(title)
   }
+
   // ----------------------------------------------------------------------
   // UTILS
   // ----------------------------------------------------------------------
@@ -430,13 +420,9 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   // ----------------------------------------------------------------------
   fun getType(): Int = Constants.MDL_UNKOWN
 
-  fun enableCommands() {
-    f12.setEnabled(true)
-  }
+  fun enableCommands() = f12.setEnabled(true)
 
-  fun setCommandsEnabled(enable: Boolean) {
-    f12.setEnabled(enable)
-  }
+  fun setCommandsEnabled(enable: Boolean) = f12.setEnabled(enable)
 
   /**
    * Performs a void trigger
@@ -452,10 +438,10 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       }
     }
   }
+
   // ----------------------------------------------------------------------
   // IMPLEMENTATION OF DBContextHandler
   // ----------------------------------------------------------------------
-
   /**
    * Returns true if the exception allows a retry of the
    * transaction, false in the other case.
@@ -463,7 +449,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * @param reason the reason of the transaction failure
    * @return true if a retry is possible
    */
-  fun retryableAbort(reason: Exception?): Boolean {
+  fun retryableAbort(reason: Exception): Boolean {
     if (reason is DBDeadLockException) {
       return true
     }
@@ -503,7 +489,6 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING
   // ----------------------------------------------------------------------
-
   /**
    * Formats the message having the given identifier from the given source.
    *
@@ -592,6 +577,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun removeModelCloseListener(mcl: ModelCloseListener) {
     modelListener.remove(ModelCloseListener::class.java, mcl)
   }
+
   //--------------------------------------------------------------------
   // FILE PRODUCTION LISTENERS HANDLING
   // --------------------------------------------------------------------
