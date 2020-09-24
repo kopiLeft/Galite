@@ -53,6 +53,10 @@ class VActor(
     TODO()
   }
 
+  fun helpOnCommand(help: VHelpGenerator) {
+    TODO()
+  }
+
   var number: Int? = null
   var handler: ActionHandler? = null
 }
