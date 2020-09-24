@@ -108,7 +108,7 @@ abstract class FileHandler {
     /**
      * The description of this filter.
      */
-    override val description: String  = "All PDF files"
+    override val description: String = "All PDF files"
   }
 
   companion object {
