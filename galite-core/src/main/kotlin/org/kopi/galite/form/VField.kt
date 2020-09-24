@@ -17,4 +17,6 @@
  */
 package org.kopi.galite.form
 
-abstract class VField 
+abstract class VField {
+  fun getSearchCondition(): String? = TODO()
+}

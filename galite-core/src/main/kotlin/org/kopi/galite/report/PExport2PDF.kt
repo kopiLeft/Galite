@@ -21,8 +21,10 @@ package org.kopi.galite.report
 import com.lowagie.text.Document
 import com.lowagie.text.pdf.PdfPTable
 import org.kopi.galite.util.PrintJob
+import java.io.OutputStream
 
-class PExport2PDF(table: UReport.UTable?, model: MReport, printOptions: PConfig, pageTitle: String, firstPageHeader: String, b: Boolean) : PExport(), Constants {
+class PExport2PDF(table: UReport.UTable, model: MReport, printOptions: PConfig, pageTitle: String, firstPageHeader: String, b: Boolean) : PExport(table,
+        model, printOptions, pageTitle), Constants {
 
 
   fun PExport2PDF(table: UReport.UTable?, model: MReport?, pconfig: PConfig?,
@@ -47,4 +49,19 @@ class PExport2PDF(table: UReport.UTable?, model: MReport, printOptions: PConfig,
 
   private val BORDER_PADDING = 1
   private val BORDER_WIDTH = 1
+  override fun exportHeader(data: Array<String?>) {
+    TODO("Not yet implemented")
+  }
+
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun export(stream: OutputStream) {
+    TODO("Not yet implemented")
+  }
+
+  override fun startGroup(subTitle: String?) {
+    TODO("Not yet implemented")
+  }
 }

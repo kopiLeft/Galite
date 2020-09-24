@@ -218,7 +218,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   override fun createPrintJob(): PrintJob {
     val exporter: PExport2PDF
     val printJob: PrintJob
-    exporter = PExport2PDF((display as UReport).getTable(),
+    exporter = PExport2PDF((display as UReport).table,
             model,
             printOptions,
             pageTitle,
@@ -258,14 +258,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     when (type) {
       TYP_CSV -> {
         extension = ".csv"
-        exporter = PExport2CSV((display as UReport).getTable(),
+        exporter = PExport2CSV((display as UReport).table,
                 model,
                 printOptions,
                 pageTitle)
       }
       TYP_PDF -> {
         extension = ".pdf"
-        exporter = PExport2PDF((display as UReport).getTable(),
+        exporter = PExport2PDF((display as UReport).table,
                 model,
                 printOptions,
                 pageTitle,
@@ -274,14 +274,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       }
       TYP_XLS -> {
         extension = ".xls"
-        exporter = PExport2XLS((display as UReport).getTable(),
+        exporter = PExport2XLS((display as UReport).table,
                 model,
                 printOptions,
                 pageTitle)
       }
       TYP_XLSX -> {
         extension = ".xlsx"
-        exporter = PExport2XLSX((display as UReport).getTable(),
+        exporter = PExport2XLSX((display as UReport).table,
                 model,
                 printOptions,
                 pageTitle)
@@ -555,13 +555,13 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * Returns the selected column or -1 if no column is selected.
    */
   private val selectedColumn: Int
-    private get() = (display as UReport).getSelectedColumn()
+    private get() = (display as UReport).selectedColumn
 
   /**
    * Returns the selected cell or !!! ??? if no cell is selected.
    */
   private val selectedCell: Point
-    private get() = (display as UReport).getSelectedCell()
+    private get() = (display as UReport).selectedCell
 
   fun genHelp(): String? {
     val fileName: String

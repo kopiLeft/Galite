@@ -18,4 +18,11 @@
 
 package org.kopi.galite.visual
 
-open class VHelpGenerator
+open class VHelpGenerator {
+  fun helpOnCommand(menuName: String,
+                    menuItem: String,
+                    iconName: String?,
+                    acceleratorKey: Int,
+                    acceleratorModifier: Int,
+                    help: String?): Any = TODO()
+}

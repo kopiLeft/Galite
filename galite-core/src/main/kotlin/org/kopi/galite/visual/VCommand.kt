@@ -18,8 +18,6 @@
 
 package org.kopi.galite.visual
 
-import org.kopi.galite.chart.VHelpGenerator
-
 class VCommand(private var mode: Int, handler: ActionHandler,
                protected var actor: VActor?,
                var trigger: Int,
@@ -92,7 +90,7 @@ class VCommand(private var mode: Int, handler: ActionHandler,
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
-  fun helpOnCommand(help: VHelpGenerator?) {
+  fun helpOnCommand(help: VHelpGenerator) {
     actor!!.helpOnCommand(help)
   }
 

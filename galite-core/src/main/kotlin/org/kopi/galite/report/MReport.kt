@@ -27,6 +27,7 @@ class MReport {
 
   fun createTree(): Void = TODO()
 
+
   fun getModelColumnCount(): Int = TODO()
 
   fun setColumnFolded(column: Int, b: Boolean): Any = TODO()
@@ -40,6 +41,10 @@ class MReport {
   fun isRowLine(i: Int): Boolean = TODO()
 
   fun getAccessibleColumn(column: Int): VReportColumn = TODO()
+
+  fun getAccessibleColumnCount(): Int {
+    return accessiblecolumns.size
+  }
 
   fun unfoldingColumn(column: Int): Any = TODO()
 
@@ -56,6 +61,22 @@ class MReport {
   fun isRowFold(y: Int, x: Int): Boolean = TODO()
 
   fun isAddedAtRuntime(): Boolean = TODO()
+
+  fun getDisplayLevels(column: Int): Int {
+    return displayLevels[column]
+  }
+
+  fun getReverseOrder(column: Int): Int {
+    return reverseOrder[column]
+  }
+
+  fun getDisplayOrder(column: Int): Int {
+    return displayOrder[column]
+  }
+
+  fun getBaseRowCount(): Int {
+    return baseRows.size
+  }
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
@@ -68,10 +89,9 @@ class MReport {
   // array of visible or hide columns
   private val accessiblecolumns: Array<VReportColumn> = TODO()
 
-
   // Root is the root of the tree (which is our model to manipulate data)
-  private val root // root of grouping tree
-          : VGroupRow? = null
+  // root of grouping tree
+  val root: VGroupRow
 
   // Baserows contains data give by the request of the user
   // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows

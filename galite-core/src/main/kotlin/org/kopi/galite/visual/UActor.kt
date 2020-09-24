@@ -17,4 +17,21 @@
  */
 package org.kopi.galite.visual
 
-interface UActor 
+import org.kopi.galite.base.UComponent
+
+
+/**
+ * `UActor` is the top level interface that all visual actor components
+ * should implement. It is the visual component of [VActor]
+ */
+interface UActor : UComponent {
+  /**
+   * Returns the actor model.
+   * @return The actor model.
+   */
+  /**
+   * Sets the actor model.
+   * @param model The actor model.
+   */
+  var model: VActor?
+}

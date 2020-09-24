@@ -61,7 +61,7 @@ abstract class PExport(val table: UTable,
   }
 
   protected fun exportData() {
-    val group: VGroupRow = model.getTree()
+    val group: VGroupRow = model.root
     if (!printConfig.groupFormfeed) {
       startGroup(null)
       exportHeader()
@@ -164,7 +164,7 @@ abstract class PExport(val table: UTable,
     exportRow(row.level - minLevel, newrow, newrowOrig, alignments)
   }
 
-  fun export(file: File) {
+  fun export(file: File?) {
     try {
       export(FileOutputStream(file))
     } catch (e: Exception) {
@@ -229,6 +229,6 @@ abstract class PExport(val table: UTable,
       // same for all -> it is added to the "title"
       columnCount -= 1
     }
-    maxLevel = model.getTree().level
+    maxLevel = model.root.level
   }
 }

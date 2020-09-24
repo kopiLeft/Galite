@@ -18,5 +18,26 @@
 
 package org.kopi.galite.report
 
-class PExport2XLSX(table: UReport.UTable?, model: MReport, printOptions: PConfig, pageTitle: String) : PExport(), Constants {
+import java.io.OutputStream
+
+class PExport2XLSX(table: UReport.UTable,
+                   model: MReport,
+                   printOptions: PConfig,
+                   pageTitle: String) : PExport(table,
+        model, printOptions, pageTitle), Constants {
+  override fun exportHeader(data: Array<String?>) {
+    TODO("Not yet implemented")
+  }
+
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun export(stream: OutputStream) {
+    TODO("Not yet implemented")
+  }
+
+  override fun startGroup(subTitle: String?) {
+    TODO("Not yet implemented")
+  }
 }
