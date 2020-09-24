@@ -22,7 +22,6 @@ import org.jetbrains.exposed.sql.Database
 import org.kopi.galite.util.base.InconsistencyException
 
 import java.sql.Connection
-import kotlin.jvm.Throws
 
 /**
  * A connection maintain information about current context, underlying
