@@ -35,8 +35,7 @@ abstract class PExport(val table: UTable,
     for (j in 0 until model.getAccessibleColumnCount()) {
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
       val column: VReportColumn = model.getAccessibleColumn(visibleColumn)
-      if (column.isVisible() && column.isFolded() == false // if we have a new page for each group, we do not use the first
-              // visible column
+      if (column.visible && !column.folded // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || j != firstVisibleColumn)) {
         column.formatColumn(this, index)
         index += 1
@@ -50,8 +49,7 @@ abstract class PExport(val table: UTable,
     for (j in 0 until model.getAccessibleColumnCount()) {
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
       val column: VReportColumn = model.getAccessibleColumn(visibleColumn)
-      if (column.isVisible() && column.isFolded() == false // if we have a new page for each group, we do not use the first
-              // visible column
+      if (column.visible && !column.folded // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || j != firstVisibleColumn)) {
         data[index] = column.getLabel()
         index += 1
@@ -122,8 +120,7 @@ abstract class PExport(val table: UTable,
     for (i in 0 until model.getAccessibleColumnCount()) {
       val visibleColumn: Int = table.convertColumnIndexToModel(i)
       val column: VReportColumn = model.getAccessibleColumn(visibleColumn)
-      if (column.isFolded() == false && column.isVisible() // if we have a new page for each group, we do not use the first
-              // visible column
+      if (!column.folded && column.visible // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || i != firstVisibleColumn)) {
         if (row.level < model.getDisplayLevels(model.getReverseOrder(visibleColumn))) {
           newrow[index] = null
@@ -132,7 +129,7 @@ abstract class PExport(val table: UTable,
           newrow[index] = if (lineBreak) column.formatWithLineBreaker(row.getValueAt(visibleColumn)) else column.format(row.getValueAt(visibleColumn))
           newrowOrig[index] = row.getValueAt(visibleColumn)
         }
-        alignments[index] = column.getAlign()
+        alignments[index] = column.align
         index += 1
       }
     }
@@ -146,8 +143,7 @@ abstract class PExport(val table: UTable,
         for (i in 0 until model.getAccessibleColumnCount()) {
           val visibleColumn: Int = table.convertColumnIndexToModel(i)
           val column: VReportColumn = model.getAccessibleColumn(visibleColumn)
-          if (column.isFolded() == false && column.isVisible() // if we have a new page for each group, we do not use the first
-                  // visible column
+          if (!column.folded && column.visible // if we have a new page for each group, we do not use the first visible column
                   && (!printConfig.groupFormfeed || i != firstVisibleColumn)) {
             if (row.level < model.getDisplayLevels(model.getReverseOrder(visibleColumn)) &&
                     parent.level >= model.getDisplayLevels(model.getReverseOrder(visibleColumn))) {
@@ -173,16 +169,16 @@ abstract class PExport(val table: UTable,
   }
 
   protected abstract fun startGroup(subTitle: String?)
-  protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray?)
+  protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray)
   protected abstract fun exportHeader(data: Array<String?>)
   protected abstract fun export(stream: OutputStream)
-  protected fun formatStringColumn(column: VReportColumn, index: Int) {}
+  internal fun formatStringColumn(column: VReportColumn, index: Int) {}
   protected fun formatDateColumn(column: VReportColumn, index: Int) {}
   protected fun formatMonthColumn(column: VReportColumn, index: Int) {}
   protected fun formatWeekColumn(column: VReportColumn, index: Int) {}
   protected fun formatFixedColumn(column: VReportColumn, index: Int) {}
   protected fun formatIntegerColumn(column: VReportColumn, index: Int) {}
-  protected fun formatBooleanColumn(column: VReportColumn, index: Int) {}
+  internal fun formatBooleanColumn(column: VReportColumn, index: Int) {}
   protected fun formatTimeColumn(column: VReportColumn, index: Int) {}
   protected fun formatTimestampColumn(column: VReportColumn, index: Int) {}
 
@@ -216,7 +212,7 @@ abstract class PExport(val table: UTable,
     for (j in 0 until model.getAccessibleColumnCount()) {
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
       val column: VReportColumn = model.getAccessibleColumn(visibleColumn)
-      if (column.isVisible() && column.isFolded() == false) {
+      if (column.visible && !column.folded) {
         if (firstVisibleColumn == -1) {
           firstVisibleColumn = j
         }

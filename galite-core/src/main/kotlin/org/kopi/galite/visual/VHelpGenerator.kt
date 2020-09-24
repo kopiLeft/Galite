@@ -18,4 +18,105 @@
 
 package org.kopi.galite.visual
 
-open class VHelpGenerator
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
+import java.io.PrintWriter
+
+/**
+ * This class implements a pretty printer
+ */
+open class VHelpGenerator {
+  /**
+   * Key to name
+   */
+  fun keyToName(key: Int): String {
+    return when (key) {
+      KeyEvent.VK_F1 -> "F1"
+      KeyEvent.VK_F2 -> "F2"
+      KeyEvent.VK_F3 -> "F3"
+      KeyEvent.VK_F4 -> "F4"
+      KeyEvent.VK_F5 -> "F5"
+      KeyEvent.VK_F6 -> "F6"
+      KeyEvent.VK_F7 -> "F7"
+      KeyEvent.VK_F8 -> "F8"
+      KeyEvent.VK_F9 -> "F9"
+      KeyEvent.VK_F10 -> "F10"
+      KeyEvent.VK_F11 -> "F11"
+      KeyEvent.VK_F12 -> "F12"
+      KeyEvent.VK_ESCAPE -> "Esc"
+      else -> "?"
+    }
+  }
+
+  /**
+   * print commands
+   */
+  fun helpOnCommands(commands: Array<VCommand>) {
+    if (commands.isNotEmpty()) {
+      print.println("<TABLE valign=\"top\">")
+      for (i in commands.indices) {
+        commands[i].helpOnCommand(this)
+      }
+      print.println("</TABLE>")
+    }
+  }
+
+  /**
+   * print a command
+   */
+  fun helpOnCommand(menu: String,
+                    item: String,
+                    icon: String?,
+                    accKey: Int,
+                    accMod: Int,
+                    help: String?) {
+    print.println("<TR><TD>")
+    if (icon != null) {
+      addButton("$icon.png")
+    } else {
+      print.println("&nbsp;")
+    }
+    print.println("</TD><TD>")
+    if (accMod != 0) {
+      if (accMod == InputEvent.SHIFT_MASK) {
+        print.print("Shift-")
+      }
+    }
+    print.println(keyToName(accKey))
+    print.println("</TD><TD><STRONG>$menu:$item:</STRONG></TD><TD>")
+    if (help != null) {
+      print.println(help)
+    } else {
+      print.println("no help")
+    }
+    print.println("</TD></TR>")
+  }
+
+  /**
+   * Add an image
+   */
+  private fun addImage(name: String, border: Int) {
+    print.print("<img src=\"" + ImageHandler.imageHandler!!.getURL(name))
+    print.print("\" BORDER =\"$border")
+    print.println("\" alt=\"$name\">")
+  }
+
+  /**
+   * Add an image
+   */
+  fun addImage(name: String) {
+    addImage(name, 0)
+  }
+
+  /**
+   * Add a button
+   */
+  fun addButton(name: String) {
+    addImage(name, 1)
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  protected open lateinit var print: PrintWriter
+}
