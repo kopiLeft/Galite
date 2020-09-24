@@ -56,9 +56,14 @@ abstract class VCodeColumn(
   /**
    * Return a string representation.
    */
-  override fun format(o: Any?): String = if (folded || o == null) ""
-                                         else (format?.format(o)?: if (names != null) names!![getIndex(o)]
-                                                                   else idents[getIndex(o)])!!
+  override fun format(o: Any?): String {
+    return if (folded || o == null) {
+      ""
+    }
+    else {
+      format?.format(o)?: if (names != null) names!![getIndex(o)]!! else idents[getIndex(o)]
+    }
+  }
 
   /**
    * Get the index of the value.
