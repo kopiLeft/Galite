@@ -113,14 +113,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       for (i in commands!!.indices) {
         val command: VCommand = commands!![i]
         when {
-          command.getIdent().equals("Fold") -> cmdFold = command
-          command.getIdent().equals("Unfold") -> cmdUnfold = command
-          command.getIdent().equals("Sort") -> cmdSort = command
-          command.getIdent().equals("FoldColumn") -> cmdFoldColumn = command
-          command.getIdent().equals("UnfoldColumn") -> cmdUnfoldColumn = command
-          command.getIdent().equals("OpenLine") -> cmdOpenLine = command
-          command.getIdent().equals("ColumnInfo") -> cmdColumnInfo = command
-          command.getIdent().equals("EditColumnData") -> cmdEditColumn = command
+          command.getIdent() == "Fold" -> cmdFold = command
+          command.getIdent() == "Unfold" -> cmdUnfold = command
+          command.getIdent() == "Sort" -> cmdSort = command
+          command.getIdent() == "FoldColumn" -> cmdFoldColumn = command
+          command.getIdent() == "UnfoldColumn" -> cmdUnfoldColumn = command
+          command.getIdent() == "OpenLine" -> cmdOpenLine = command
+          command.getIdent() == "ColumnInfo" -> cmdColumnInfo = command
+          command.getIdent() == "EditColumnData" -> cmdEditColumn = command
           else -> {
             setCommandEnabled(commands!![i], model.getModelColumnCount() + i + 1, true)
           }
@@ -409,7 +409,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       var id = -1
       var i = 0
       while (i < model.getModelColumnCount() && idCol == -1) {
-        if (model.getModelColumn(i).getIdent().equals("ID")) {
+        if (model.getModelColumn(i).getIdent() == "ID") {
           idCol = i
         }
         i++
@@ -432,7 +432,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     var col = -1
     var i = 0
     while (i < model.getModelColumnCount() && col == -1) {
-      if (model.getModelColumn(i).getIdent().equals(key)) {
+      if (model.getModelColumn(i).getIdent() == key) {
         col = i
       }
       i++
