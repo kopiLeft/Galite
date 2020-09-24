@@ -25,9 +25,11 @@ abstract class VChart : VWindow(), CConstants, Printable {
   fun getMeasure(column: Int): VMeasure {
     TODO()
   }
+
   fun getDimension(column: Int): VDimension {
     TODO()
   }
+
   internal fun getRows(): Array<VRow> {
     TODO()
   }

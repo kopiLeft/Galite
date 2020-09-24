@@ -35,16 +35,21 @@ import org.kopi.galite.util.LineBreaker
  * @param    format        format of the cells
  */
 abstract class VReportColumn(
-        private val ident: String?,
+        private val ident: String,
         val options: Int,
         val align: Int,
-        val groups: Int,
-        val function: VCalculateColumn?,
+        groups: Int,
+        val function: VCalculateColumn,
         var width: Int,
         var height: Int,
         protected var format: VCellFormat?) {
 
-
+  /**
+   * Returns the column label
+   */
+  fun getLabel(): String {
+    return label ?: ""
+  }
 
   /**
    * Returns true if this Column is hidden
@@ -106,7 +111,7 @@ abstract class VReportColumn(
    */
   fun localize(parent: ReportLocalizer) {
     if (!isHidden() && ident != "") {
-      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
+      val loc: FieldLocalizer = parent.getFieldLocalizer(ident)
 
       label = loc.getLabel()
       help = loc.getHelp()
@@ -117,13 +122,13 @@ abstract class VReportColumn(
   /**
    * Localizes this field
    *
-   * @param     loc         the caller localizer
+   * @param     parentLocalizer         the caller localizer
    */
-  protected open fun localize(loc: FieldLocalizer) {
+  protected open fun localize(parentLocalizer: FieldLocalizer) {
     // by default nothing to do
   }
 
-  fun getStyles(): Array<ColumnStyle> {
+   fun getStyles(): Array<ColumnStyle> {
     return if (styles == null) {
       val style = ColumnStyle()
       style.fontName = 0
@@ -138,11 +143,7 @@ abstract class VReportColumn(
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  var label : String? = null
-    get() {
-      return label ?: ""
-    }
-
+  private var label: String? = null
   private var help: String? = null
   var visible: Boolean = true
   var folded: Boolean = false

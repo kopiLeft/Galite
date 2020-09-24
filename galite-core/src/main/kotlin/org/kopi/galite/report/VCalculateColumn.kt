@@ -20,19 +20,19 @@ package org.kopi.galite.report
 
 abstract class VCalculateColumn {
   /**
-   * Initialisation of the calculation
+   * Intialisation of the calculation
    */
   abstract fun init()
 
   /**
    * Evaluates nodes
    */
-  fun evalNode(row: VReportRow?, column: Int): Any? {
+  fun evalNode(row: VReportRow, column: Int): Any? {
     return null
   }
 
   /**
    * Add calculated data into the report row
    */
-  abstract fun calculate(tree: VGroupRow?, column: Int)
+  abstract fun calculate(tree: VGroupRow, column: Int)
 }
