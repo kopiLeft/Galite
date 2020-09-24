@@ -65,8 +65,8 @@ class DBContext(var defaultConnection: Connection) {
     schema: String? // TODO
   ): Connection {
     this.connection = Connection(connection = connection,
-            lookupUserId = lookupUserId,
-            schema = schema)
+                                 lookupUserId = lookupUserId,
+                                 schema = schema)
     return this.connection
   }
 

@@ -18,10 +18,10 @@
 
 package org.kopi.galite.db
 
+import java.sql.Connection
+
 import org.jetbrains.exposed.sql.Database
 import org.kopi.galite.util.base.InconsistencyException
-
-import java.sql.Connection
 
 /**
  * A connection maintain information about current context, underlying
@@ -37,6 +37,7 @@ class Connection {
    *
    * @param     connection          the JDBC connection
    * @param     lookupUserId        lookup user id in table of Users ?
+   * @param     schema              the database schema to set as current schema
    */
   constructor(connection: Connection,
               lookupUserId: Boolean = true, // TODO
@@ -51,11 +52,11 @@ class Connection {
   /**
    * Creates a connection with Exposed and opens it.
    *
-   * @param        url                the URL of the database to connect to
-   * @param        user                the name of the database user
-   * @param        pass                the password of the database user
-   * @param     lookupUserId    lookup user id in table of users ?
-   * @param     schema          the database schema to set as current schema
+   * @param        url             the URL of the database to connect to
+   * @param        user            the name of the database user
+   * @param        pass            the password of the database user
+   * @param        lookupUserId    lookup user id in table of users ?
+   * @param        schema          the database schema to set as current schema
    */
   constructor(url: String,
               driver: String,

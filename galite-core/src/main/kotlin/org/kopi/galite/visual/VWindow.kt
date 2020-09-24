@@ -230,9 +230,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     return false
   }
 
-  fun getTitle(): String {
-    return title + if (extraTitle != null) " $extraTitle" else ""
-  }
+  fun getTitle(): String = title + if (extraTitle != null) " $extraTitle" else ""
 
   /**
    * Sets a the text to be appended to the title.
@@ -261,10 +259,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     actors.addAll(actorDefs)
   }
 
-  fun getActor(at: Int): VActor {
-    // "+1" because of the f12-Actor
-    return actors[at + 1]
-  }
+  fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
 
   fun getActors(): ArrayList<VActor> {
     return actors
@@ -314,9 +309,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   //----------------------------------------------------------------------
   // VMODEL IMPLEMENTATION
   //----------------------------------------------------------------------
-  override fun getDisplay(): UWindow? {
-    return display
-  }
+  override fun getDisplay(): UWindow? = display
 
   override fun setDisplay(display: UComponent) {
     assert(display is UWindow) { "VWindow display should be instance of UWindow" }
@@ -461,30 +454,22 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    *
    * @return true, if the transaction should be retried.
    */
-  fun retryProtected(): Boolean {
-    return ask(MessageCode.getMessage("VIS-00039"))
-  }
+  fun retryProtected(): Boolean = ask(MessageCode.getMessage("VIS-00039"))
 
   /**
    * return wether this object handle a transaction at this time
    */
-  fun inTransaction(): Boolean {
-    return isProtected
-  }
+  fun inTransaction(): Boolean = isProtected
 
   /**
    * Returns the current user name
    */
-  open fun getUserName(): String? {
-    return dBContext.defaultConnection.userName
-  }
+  open fun getUserName(): String? = dBContext.defaultConnection.userName
 
   /**
    * Returns the user ID
    */
-  open fun getUserID(): Int {
-    return dBContext.defaultConnection.getUserID()
-  }
+  open fun getUserID(): Int = dBContext.defaultConnection.getUserID()
 
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING
@@ -496,9 +481,8 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * @param     param message parameter
    * @return    the requested message
    */
-  protected fun formatMessage(ident: String, param: Any? = null): String? {
-    return formatMessage(ident, param, null)
-  }
+  protected fun formatMessage(ident: String, param: Any? = null): String? =
+          formatMessage(ident, param, null)
 
   /**
    * Formats the message having the given identifier from the given source.
@@ -508,9 +492,8 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * @param     param1 the second message parameter
    * @return    the requested message
    */
-  protected fun formatMessage(ident: String, param1: Any?, param2: Any?): String? {
-    return formatMessage(ident, arrayOf(param1, param2))
-  }
+  protected fun formatMessage(ident: String, param1: Any?, param2: Any?): String? =
+          formatMessage(ident, arrayOf(param1, param2))
 
   /**
    * Formats the message having the given identifier from the given source.
@@ -530,53 +513,41 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   // ----------------------------------------------------------------------
   // Listener
   // ----------------------------------------------------------------------
-  fun addMessageListener(ml: MessageListener) {
-    modelListener.add(MessageListener::class.java, ml)
-  }
+  fun addMessageListener(ml: MessageListener) =
+          modelListener.add(MessageListener::class.java, ml)
 
-  fun removeMessageListener(ml: MessageListener) {
-    modelListener.remove(MessageListener::class.java, ml)
-  }
+  fun removeMessageListener(ml: MessageListener) =
+          modelListener.remove(MessageListener::class.java, ml)
 
-  fun addWaitInfoListener(wil: WaitInfoListener) {
-    modelListener.add(WaitInfoListener::class.java, wil)
-  }
+  fun addWaitInfoListener(wil: WaitInfoListener) =
+          modelListener.add(WaitInfoListener::class.java, wil)
 
-  fun removeWaitInfoListener(wil: WaitInfoListener) {
-    modelListener.remove(WaitInfoListener::class.java, wil)
-  }
+  fun removeWaitInfoListener(wil: WaitInfoListener) =
+          modelListener.remove(WaitInfoListener::class.java, wil)
 
-  fun addWaitDialogListener(wil: WaitDialogListener) {
-    modelListener.add(WaitDialogListener::class.java, wil)
-  }
+  fun addWaitDialogListener(wil: WaitDialogListener) =
+          modelListener.add(WaitDialogListener::class.java, wil)
 
-  fun removeWaitDialogListener(wil: WaitDialogListener) {
-    modelListener.remove(WaitDialogListener::class.java, wil)
-  }
+  fun removeWaitDialogListener(wil: WaitDialogListener) =
+          modelListener.remove(WaitDialogListener::class.java, wil)
 
-  fun addProgressDialogListener(wil: ProgressDialogListener) {
-    modelListener.add(ProgressDialogListener::class.java, wil)
-  }
+  fun addProgressDialogListener(wil: ProgressDialogListener) =
+          modelListener.add(ProgressDialogListener::class.java, wil)
 
-  fun removeProgressDialogListener(wil: ProgressDialogListener) {
-    modelListener.remove(ProgressDialogListener::class.java, wil)
-  }
+  fun removeProgressDialogListener(wil: ProgressDialogListener) =
+          modelListener.remove(ProgressDialogListener::class.java, wil)
 
-  fun addVActionListener(al: VActionListener) {
-    modelListener.add(VActionListener::class.java, al)
-  }
+  fun addVActionListener(al: VActionListener) =
+          modelListener.add(VActionListener::class.java, al)
 
-  fun removeVActionListener(al: VActionListener) {
-    modelListener.remove(VActionListener::class.java, al)
-  }
+  fun removeVActionListener(al: VActionListener) =
+          modelListener.remove(VActionListener::class.java, al)
 
-  fun addModelCloseListener(mcl: ModelCloseListener) {
-    modelListener.add(ModelCloseListener::class.java, mcl)
-  }
+  fun addModelCloseListener(mcl: ModelCloseListener) =
+          modelListener.add(ModelCloseListener::class.java, mcl)
 
-  fun removeModelCloseListener(mcl: ModelCloseListener) {
-    modelListener.remove(ModelCloseListener::class.java, mcl)
-  }
+  fun removeModelCloseListener(mcl: ModelCloseListener) =
+          modelListener.remove(ModelCloseListener::class.java, mcl)
 
   //--------------------------------------------------------------------
   // FILE PRODUCTION LISTENERS HANDLING
@@ -587,9 +558,8 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    *
    * @param l The FileProductionListener
    */
-  fun addFileProductionListener(l: FileProductionListener) {
-    listenerList.add(FileProductionListener::class.java, l)
-  }
+  fun addFileProductionListener(l: FileProductionListener) =
+          listenerList.add(FileProductionListener::class.java, l)
 
   /**
    * Removes a listener from the list that's notified each time a
@@ -597,9 +567,8 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    *
    * @param l The FileProductionListener
    */
-  fun removeReportListener(l: FileProductionListener) {
-    listenerList.remove(FileProductionListener::class.java, l)
-  }
+  fun removeReportListener(l: FileProductionListener) =
+          listenerList.remove(FileProductionListener::class.java, l)
   /**
    * Notifies all listeners that the report file is produced.
    */
