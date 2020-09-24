@@ -319,8 +319,8 @@ class MReport : Constants, Serializable {
    * @param    column        the index of the desired column
    * @return    the desired column
    */
-  fun getModelColumn(column: Int): VReportColumn? {
-    return columns[column]
+  fun getModelColumn(column: Int): VReportColumn {
+    return columns[column]!!
   }
 
   /**
@@ -593,7 +593,7 @@ class MReport : Constants, Serializable {
       val function: VCalculateColumn = columns[i]?.function!!
       if (function != null) {
         function.init()
-        function.calculate(root, i)
+        function.calculate(root!!, i)
       }
     }
   }
