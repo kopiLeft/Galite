@@ -18,8 +18,30 @@
 
 package org.kopi.galite.visual
 
+import org.kopi.galite.base.DBContext
+import org.kopi.galite.l10n.LocalizationManager
+import java.io.File
+
 abstract class VWindow {
-  fun getType(): Int {
+  open fun getType(): Int {
     return Constants.MDL_UNKOWN;
   }
+
+  /**
+   * Destroy this class (break all references to help java to GC the form)
+   */
+  open fun destroyModel() {}
+
+  fun localizeActors(manager: LocalizationManager?): Void = TODO()
+
+  fun setWaitInfo(message: String): Void = TODO()
+
+  protected var display: UWindow = TODO()
+
+  fun unsetWaitInfo(): Void = TODO()
+
+  fun fireFileProduced(file: File?, name: String): Void = TODO()
+
+  open fun setDBContext(context: DBContext?): Void = TODO()
+
 }

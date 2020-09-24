@@ -16,15 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual
 
-import org.kopi.galite.report.MReport
-import org.kopi.galite.visual.VCommand
+import java.io.File
 
-open class VHelpGenerator {
-  open fun helpOnColumn(label: String?, help: String?) {
-    TODO()
+abstract class ApplicationConfiguration {
+  companion object {
+    fun getConfiguration(): ApplicationConfiguration = TODO()
   }
 
-  fun helpOnReport(pageTitle: String, commands: Array<VCommand>?, model: MReport, help: String?): String = TODO()
+  fun getDefaultDirectory(): File = TODO()
+
 }

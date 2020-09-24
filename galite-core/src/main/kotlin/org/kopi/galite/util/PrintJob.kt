@@ -18,5 +18,7 @@
 
 package org.kopi.galite.util
 
-class PrintJob { // TODO
+class PrintJob {
+  fun setDocumentType(i: Int): Any = TODO()
+
 }

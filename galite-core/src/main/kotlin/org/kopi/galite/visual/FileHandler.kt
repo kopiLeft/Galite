@@ -112,7 +112,7 @@ abstract class FileHandler {
   }
 
   companion object {
-    var fileHandler: FileHandler? = null
+    var fileHandler: FileHandler = TODO()
       set(handler) {
         assert(handler != null) { "FileHandler cannot be null" }
         field = handler

@@ -16,15 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.report
 
-import org.kopi.galite.report.MReport
-import org.kopi.galite.visual.VCommand
+class PExport2CSV(table: UReport.UTable?, model: MReport, printOptions: PConfig, pageTitle: String) : PExport(), Constants {
 
-open class VHelpGenerator {
-  open fun helpOnColumn(label: String?, help: String?) {
-    TODO()
-  }
-
-  fun helpOnReport(pageTitle: String, commands: Array<VCommand>?, model: MReport, help: String?): String = TODO()
 }

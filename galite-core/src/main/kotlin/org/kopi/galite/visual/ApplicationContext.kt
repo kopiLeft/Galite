@@ -16,15 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.visual
 
-import org.kopi.galite.report.MReport
-import org.kopi.galite.visual.VCommand
+import java.util.*
 
-open class VHelpGenerator {
-  open fun helpOnColumn(label: String?, help: String?) {
-    TODO()
+abstract class ApplicationContext {
+
+  companion object {
+    fun getDefaultLocale(): Locale = TODO()
   }
 
-  fun helpOnReport(pageTitle: String, commands: Array<VCommand>?, model: MReport, help: String?): String = TODO()
+  //-----------------------------------------------------------
+  // DATA MEMBERS
+  //-----------------------------------------------------------
+  private val applicationContext: ApplicationContext = TODO()
+  var compt = 0
 }
