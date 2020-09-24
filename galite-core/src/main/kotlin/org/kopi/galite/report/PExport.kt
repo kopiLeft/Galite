@@ -165,7 +165,7 @@ abstract class PExport(val table: UTable,
   }
 
   protected abstract fun startGroup(subTitle: String?)
-  protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray?)
+  protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray)
   protected abstract fun exportHeader(data: Array<String?>)
   protected abstract fun export(stream: OutputStream)
   internal fun formatStringColumn(column: VReportColumn, index: Int) {}
@@ -174,7 +174,7 @@ abstract class PExport(val table: UTable,
   protected fun formatWeekColumn(column: VReportColumn, index: Int) {}
   protected fun formatFixedColumn(column: VReportColumn, index: Int) {}
   protected fun formatIntegerColumn(column: VReportColumn, index: Int) {}
-  protected fun formatBooleanColumn(column: VReportColumn, index: Int) {}
+  internal fun formatBooleanColumn(column: VReportColumn, index: Int) {}
   protected fun formatTimeColumn(column: VReportColumn, index: Int) {}
   protected fun formatTimestampColumn(column: VReportColumn, index: Int) {}
 

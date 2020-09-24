@@ -40,16 +40,16 @@ class PExport2CSV (table: UTable, model: MReport, pconfig: PConfig, title: Strin
     }
   }
 
-  override fun startGroup(subTitle: String) {}
-  override fun exportHeader(data: Array<String>) {
+  override fun startGroup(subTitle: String?) {}
+  override fun exportHeader(data: Array<String?>) {
     writeData(data)
   }
 
-  override fun exportRow(level: Int, data: Array<String>, orig: Array<Any>, alignments: IntArray) {
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
     writeData(data)
   }
 
-  private fun writeData(data: Array<String>) {
+  private fun writeData(data: Array<String?>) {
     try {
       var first = true
       for (i in data.indices) {
