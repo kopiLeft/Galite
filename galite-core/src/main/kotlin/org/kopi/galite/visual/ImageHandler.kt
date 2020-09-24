@@ -15,8 +15,41 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
-abstract class ImageHandler {
+import org.kopi.galite.base.Image
 
+abstract class ImageHandler {
+  //------------------------------------------------------------------
+  // ABSTRACT METHODS
+  //------------------------------------------------------------------
+  /**
+   * Returns the [Image] having the `image` name.
+   * @param image The image name.
+   * @return The [Image] having the `image` name.
+   */
+  abstract fun getImage(image: String): Image
+
+  /**
+   * Returns the [Image] having the `image` content.
+   * @param image The image content.
+   * @return The [Image] having the `image` content.
+   */
+  abstract fun getImage(image: ByteArray): Image
+
+  /**
+   * Returns the URL of a given image name.
+   * @param image The image name.
+   * @return The URL of the image.
+   */
+  abstract fun getURL(image: String): String
+
+  companion object {
+    var imageHandler: ImageHandler? = null
+      set(handler) {
+        assert(handler != null) { "ImageHandler cannot be null" }
+        field = handler
+      }
+  }
 }

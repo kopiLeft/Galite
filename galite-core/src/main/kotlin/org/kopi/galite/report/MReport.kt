@@ -43,4 +43,12 @@ class MReport {
   fun getReverseOrder(visibleColumn: Int): Any {
     TODO()
   }
+
+  fun getModelColumnCount(): Int {
+    TODO()
+  }
+
+  fun getModelColumn(column: Int): VReportColumn {
+    TODO()
+  }
 }
