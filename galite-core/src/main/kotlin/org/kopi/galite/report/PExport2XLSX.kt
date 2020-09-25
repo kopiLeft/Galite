@@ -29,7 +29,7 @@ class PExport2XLSX(table: UReport.UTable,
     TODO("Not yet implemented")
   }
 
-  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray?) {
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
     TODO("Not yet implemented")
   }
 

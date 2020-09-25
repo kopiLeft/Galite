@@ -19,6 +19,7 @@
 package org.kopi.galite.visual
 
 import org.kopi.galite.db.DBContext
+import java.util.*
 
 abstract class ApplicationContext {
   abstract val application: Application
@@ -26,7 +27,10 @@ abstract class ApplicationContext {
     fun getDBContext(): DBContext {
       TODO()
     }
+
     fun getMenu(): VMenuTree = TODO()
+
+    fun getDefaultLocale(): Locale = TODO()
     lateinit var applicationContext: ApplicationContext
   }
 }

@@ -22,4 +22,6 @@ object Message {
   fun getMessage(source: String?, ident: String, param: Any?): String {
     TODO()
   }
+
+  fun getMessage(string: String): String = TODO()
 }

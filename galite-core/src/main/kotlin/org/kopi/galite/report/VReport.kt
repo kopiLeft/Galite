@@ -57,7 +57,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     const val TYP_XLSX = 4
 
     init {
-      WindowController.windowController?.registerWindowBuilder(org.kopi.galite.visual.Constants.MDL_REPORT, object : WindowBuilder {
+      WindowController.windowController.registerWindowBuilder(org.kopi.galite.visual.Constants.MDL_REPORT, object : WindowBuilder {
         override fun createWindow(model: VWindow): UWindow {
           return UIFactory.uiFactory.createView(model) as UReport
         }
@@ -80,7 +80,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   @Deprecated("call method in display; model must not be closed")
   fun close() {
-    getDisplay().closeWindow()
+    getDisplay()?.closeWindow()
   }
 
   override fun destroyModel() {
@@ -130,7 +130,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     }
   }
 
-  fun columnMoved(pos: IntArray?) {
+  fun columnMoved(pos: IntArray) {
     (getDisplay() as UReport).columnMoved(pos)
   }
   // ----------------------------------------------------------------------
@@ -195,11 +195,11 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
         }
         enable = active
       }
-      command.isEnabled = enable
+      command.setEnabled(enable)
       activeCommands.addElement(command)
     } else {
       activeCommands.removeElement(command)
-      command.isEnabled = false
+      command.setEnabled(false)
     }
   }
 
@@ -207,7 +207,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * Enables/disables the actor.
    */
   fun setCommandEnabled(command: VCommand, enable: Boolean) {
-    command.isEnabled = enable
+    command.setEnabled(enable)
     if (enable) {
       activeCommands.addElement(command)
     } else {
@@ -251,7 +251,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Prints the report
    */
-  fun export(file: File?, type: Int = TYP_CSV) {
+  fun export(file: File, type: Int = TYP_CSV) {
     setWaitInfo(VlibProperties.getString("export-message"))
     val extension: String
     val exporter: PExport
@@ -409,7 +409,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       var id = -1
       var i = 0
       while (i < model.getModelColumnCount() && idCol == -1) {
-        if (model.getModelColumn(i).getIdent() == "ID") {
+        if (model.getModelColumn(i).ident == "ID") {
           idCol = i
         }
         i++
@@ -432,7 +432,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     var col = -1
     var i = 0
     while (i < model.getModelColumnCount() && col == -1) {
-      if (model.getModelColumn(i).getIdent() == key) {
+      if (model.getModelColumn(i).ident == key) {
         col = i
       }
       i++
@@ -545,7 +545,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       setCommandEnabled(cmdColumnInfo!!, column != -1)
     }
     if (cmdEditColumn != null) {
-      setCommandEnabled(cmdEditColumn!!, column != -1 && model.getAccessibleColumn(column).isAddedAtRuntime())
+      setCommandEnabled(cmdEditColumn!!, column != -1 && model.getAccessibleColumn(column).addedAtRuntime)
     }
   }
   // ----------------------------------------------------------------------
@@ -601,8 +601,9 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Set the source for this document
    */
-  protected lateinit var source: String
-    set
+  private lateinit var source: String
+  override fun getSource(): String? = null
+
   protected var model: MReport
   private var built = false
   private var pageTitle = ""
@@ -644,7 +645,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     printOptions = PConfig()
     activeCommands = Vector<VCommand>()
     if (ctxt != null) {
-      setDBContext(ctxt.dBContext)
+      dBContext = ctxt.dBContext
     }
     init()
 

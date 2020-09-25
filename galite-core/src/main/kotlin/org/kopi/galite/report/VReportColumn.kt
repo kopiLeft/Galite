@@ -35,7 +35,7 @@ import org.kopi.galite.util.LineBreaker
  * @param    format        format of the cells
  */
 abstract class VReportColumn(
-        private val ident: String,
+        val ident: String,
         val options: Int,
         val align: Int,
         groups: Int,

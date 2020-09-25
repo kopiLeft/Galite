@@ -18,6 +18,7 @@
 
 package org.kopi.galite.base
 
+import org.kopi.galite.db.DBContext
 import java.sql.SQLException
 
 /**

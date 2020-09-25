@@ -29,8 +29,8 @@ class VActor(var menuIdent: String,
              actorSource: String,
              iconName: String?,
              acceleratorKey: Int,
-             acceleratorModifier: Int,
-             display: UActor) : VModel {
+             acceleratorModifier: Int
+) : VModel {
   /**
    * Checks whether the actor is enabled.
    */
@@ -45,14 +45,7 @@ class VActor(var menuIdent: String,
       }
     }
 
-  /**
-   * Sets the handler for the actor.
-   */
-  fun setHandler(handler: ActionHandler?) {
-    this.handler = handler
-  }
-
-  private var display: UActor = display
+  private lateinit var display: UActor
 
   override fun getDisplay(): UComponent {
     return display
@@ -172,7 +165,7 @@ class VActor(var menuIdent: String,
    * Sets the number for the actor.
    */
   var number = 0
-  private var handler: ActionHandler? = null
+  var handler: ActionHandler? = null
   var iconName: String? = null
   protected lateinit var actorIdent: String
   var help: String? = null
