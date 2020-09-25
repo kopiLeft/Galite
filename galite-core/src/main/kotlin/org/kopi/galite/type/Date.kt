@@ -23,5 +23,9 @@ class Date {
     fun now(): Date = TODO()
   }
 
+  fun compareTo(other: Date): Int {
+    TODO()
+  }
+
   fun format(s: String): Any = TODO()
 }

@@ -19,4 +19,7 @@
 package org.kopi.galite.type
 
 class Timestamp {
+  fun compareTo(other: Timestamp): Int {
+    TODO()
+  }
 }

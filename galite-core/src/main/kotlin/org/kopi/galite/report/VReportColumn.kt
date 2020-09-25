@@ -23,7 +23,7 @@ import org.kopi.galite.l10n.ReportLocalizer
 import org.kopi.galite.util.LineBreaker
 
 /**
- * Constructs a report column description
+ * Represents a report column description
  *
  * @param    ident        The identifier of the field
  * @param    options        The column options as bitmap
@@ -34,15 +34,14 @@ import org.kopi.galite.util.LineBreaker
  * @param    height        The height of a cell in characters
  * @param    format        format of the cells
  */
-abstract class VReportColumn(
-        val ident: String,
-        val options: Int,
-        val align: Int,
-        groups: Int,
-        val function: VCalculateColumn,
-        var width: Int,
-        var height: Int,
-        protected var format: VCellFormat?) {
+abstract class VReportColumn(val ident: String,
+                             val options: Int,
+                             val align: Int,
+                             groups: Int,
+                             val function: VCalculateColumn,
+                             var width: Int,
+                             var height: Int,
+                             protected var format: VCellFormat?) {
 
   /**
    * Returns the column label
@@ -86,13 +85,13 @@ abstract class VReportColumn(
   /**
    * Compare two objects.
    *
-   * @param    o1    the first operand of the comparison
-   * @param    o2    the second operand of the comparison
+   * @param    object1    the first operand of the comparison
+   * @param    object2    the second operand of the comparison
    * @return    -1 if the first operand is smaller than the second
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  abstract fun compareTo(o1: Any, o2: Any): Int
+  abstract fun compareTo(object1: Any, object2: Any): Int
 
   open fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatStringColumn(this, index)
@@ -128,7 +127,7 @@ abstract class VReportColumn(
     // by default nothing to do
   }
 
-   fun getStyles(): Array<ColumnStyle> {
+  fun getStyles(): Array<ColumnStyle> {
     return if (styles == null) {
       val style = ColumnStyle()
       style.fontName = 0

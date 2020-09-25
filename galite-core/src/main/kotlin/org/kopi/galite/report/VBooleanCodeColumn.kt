@@ -21,7 +21,7 @@ package org.kopi.galite.report
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
- * Constructs a report column description
+ * Represents a report column description
  *
  * @param     ident           The column identifier
  * @param     options         The column options as bitmap
@@ -39,10 +39,20 @@ class VBooleanCodeColumn(ident: String,
                          width: Int,
                          format: VCellFormat,
                          names: Array<String>,
-                         private val codes : BooleanArray)
-    : VCodeColumn(ident, type, source, options, align, groups, function, width, format, names) {
-  override fun compareTo(o1: Any, o2: Any): Int {
-    return if (o1 == o2) 0 else if (java.lang.Boolean.TRUE == o1) 1 else -1
+                         private val codes: BooleanArray)
+      : VCodeColumn(ident,
+                    type,
+                    source,
+                    options,
+                    align,
+                    groups,
+                    function,
+                    width,
+                    format,
+                    names) {
+
+  override fun compareTo(object1: Any, object2: Any): Int {
+    return if (object1 == object2) 0 else if (java.lang.Boolean.TRUE == object1) 1 else -1
   }
 
   /**
