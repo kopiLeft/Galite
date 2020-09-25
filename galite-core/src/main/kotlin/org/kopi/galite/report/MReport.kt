@@ -52,8 +52,8 @@ class MReport : Constants, Serializable {
     var hiddenColumns = 0
 
     columns.forEach {
-      if (it!!.options and Constants.CLO_HIDDEN !== 0) {
-      hiddenColumns += 1
+      if (it!!.options and Constants.CLO_HIDDEN != 0) {
+        hiddenColumns += 1
       }
     }
     position += hiddenColumns
@@ -111,7 +111,7 @@ class MReport : Constants, Serializable {
     val cols = arrayOfNulls<VReportColumn>(columns.size + 1)
 
     // add the new column;
-    cols[columns.size] = VFixnumColumn(ident = null, options = 0, align = 4, groups = -1, function = null, digits = 15, maxScale = 7, format = null)
+    cols[columns.size] = VFixnumColumn(null, 0, 4, -1, null, 15, 7, null)
     cols[columns.size]?.label = label
     cols[columns.size]?.addedAtRuntime = true
     // copy the other columns.
@@ -124,6 +124,7 @@ class MReport : Constants, Serializable {
 
     baseRows.forEachIndexed { index, element ->
       val data = arrayOfNulls<Any>(getAccessibleColumnCount())
+
       for (j in 0 until getAccessibleColumnCount() - 1) {
         data[j] = element!!.getValueAt(j)
       }
@@ -156,7 +157,7 @@ class MReport : Constants, Serializable {
     val x: Expression = try {
       ExpressionTree.parse(formula)
     } catch (e: Exception) {
-      throw VExecFailedException(MessageCode.getMessage("VIS-00064", formula, "$e".trimIndent())) }
+      throw VExecFailedException(MessageCode.getMessage("VIS-00064", formula, "\n$e")) }
     val params: Array<String> = x.variableNames
     val paramColumns = IntArray(params.size)
     val functions = IntArray(params.size)
@@ -190,7 +191,9 @@ class MReport : Constants, Serializable {
             functions[i] = SUM
           }
           else -> {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00061", "${params[i]} \n", "Cx, maxCx, minCx, ovrCx, sumCx"))
+            throw VExecFailedException(MessageCode.getMessage("VIS-00061",
+                    "${params[i]}\n",
+                    "Cx, maxCx, minCx, ovrCx, sumCx"))
           }
         }
       } catch (e: NumberFormatException) {
@@ -209,8 +212,8 @@ class MReport : Constants, Serializable {
         throw VExecFailedException(MessageCode.getMessage("VIS-00063", params[i].substring(1)))
       }
     }
-    val vm = VarMap(false)
-    val fm: FuncMap? = null
+    val vm = VarMap(false /* case sensitive */)
+    val fm: FuncMap? = null   // no functions in expression
     var tmp: Float
 
     for (i in baseRows.indices) {
@@ -222,10 +225,12 @@ class MReport : Constants, Serializable {
           MAX -> {
             var max: Float
             // init max
-            max = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+            max = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F
+                  else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
             // calculate max value.
             baseRows.forEach {
-              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
+                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               if (tmp > max) {
                 max = tmp
               }
@@ -236,10 +241,12 @@ class MReport : Constants, Serializable {
             var min: Float
 
             // init max
-            min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+            min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F
+                  else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
             // calculate min value.
             baseRows.forEach  {
-              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
+                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               if (tmp < min) {
                 min = tmp
               }
@@ -250,7 +257,8 @@ class MReport : Constants, Serializable {
             var ovr: Float = 0f
             // calculate average.
             baseRows.forEach  {
-              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F else (it!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
+                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               ovr += tmp / baseRows.size
             }
             vm.setValue(params[j], ovr.toDouble())
@@ -259,7 +267,8 @@ class MReport : Constants, Serializable {
             var sum: Float = 0f
             // calculate sum.
             baseRows.forEach  {
-              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F else (it!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
+                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               sum += tmp
             }
             vm.setValue(params[j], sum.toDouble())
@@ -557,21 +566,23 @@ class MReport : Constants, Serializable {
     mergeSort(array, column, order, 0, array.size - 1, visibleRows)
   }
 
-  private fun mergeSort(array: Array<VReportRow?>, column: Int, order: Int, lo: Int, hi: Int, scratch: Array<VReportRow?>?) {
+  private fun mergeSort(array: Array<VReportRow?>, column: Int, order: Int, lo: Int,
+                        hi: Int, scratch: Array<VReportRow?>?) {
     // a one-element array is always sorted
     if (lo < hi) {
       val mid = (lo + hi) / 2
 
-      // split into 2 sublist and sort them
+      // split into 2 sublists and sort them
       mergeSort(array, column, order, lo, mid, scratch)
       mergeSort(array, column, order, mid + 1, hi, scratch)
 
-      // Merge sorted sublist
+      // Merge sorted sublists
       var t_lo = lo
       var t_hi = mid + 1
 
       for (k in lo..hi) {
-        if (t_lo > mid || t_hi <= hi && order * array[t_hi]!!.compareTo(array[t_lo]!!, column, getModelColumn(column)!!) < 0) {
+        if (t_lo > mid || t_hi <= hi && order * array[t_hi]!!.compareTo(array[t_lo]!!,
+                        column, getModelColumn(column)!!) < 0) {
           scratch!![k] = array[t_hi++]
         } else {
           scratch!![k] = array[t_lo++]
@@ -619,7 +630,7 @@ class MReport : Constants, Serializable {
       for (i in 0 until node.childCount) {
         val row = node.getChildAt(i) as VReportRow
 
-        if (row.level === 0) {
+        if (row.level == 0) {
           if (row.visible) {
             visibleRows!![pos++] = row
           }
@@ -806,7 +817,7 @@ class MReport : Constants, Serializable {
    */
   fun isRowLine(row: Int): Boolean {
     return if (visibleRows != null) {
-      row in 0 until maxRowCount && visibleRows!![row]?.level === 0
+      row in 0 until maxRowCount && visibleRows!![row]?.level == 0
     } else {
       false
     }
@@ -892,14 +903,14 @@ class MReport : Constants, Serializable {
     var accessiblecolumnCount = 0
 
     for (i in 0 until columnCount) {
-      if (columns[i]?.options!! and Constants.CLO_HIDDEN === 0) {
+      if (columns[i]?.options!! and Constants.CLO_HIDDEN == 0) {
         accessiblecolumnCount += 1
       }
     }
     accessiblecolumns = arrayOfNulls(accessiblecolumnCount)
     accessiblecolumnCount = 0
     for (i in 0 until columnCount) {
-      if (columns[i]?.options!! and Constants.CLO_HIDDEN === 0) {
+      if (columns[i]?.options!! and Constants.CLO_HIDDEN == 0) {
         accessiblecolumns[accessiblecolumnCount++] = columns[i]
       }
     }
@@ -948,7 +959,7 @@ class MReport : Constants, Serializable {
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === ReportListener::class.java) {
+      if (listeners[i] == ReportListener::class.java) {
         (listeners[i + 1] as ReportListener).contentChanged()
       }
       i -= 2
@@ -969,32 +980,22 @@ class MReport : Constants, Serializable {
   // Baserows contains data give by the request of the user
   // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
   // is changed when a column move or one or more row are folded
-  private var userRows: Vector<VBaseRow>?
-  lateinit var baseRows : Array<VReportRow?>
-  var visibleRows : Array<VReportRow?>? = null
+  private var userRows: Vector<VBaseRow>? = Vector(500)
+  lateinit var baseRows : Array<VReportRow?>    // array of base data rows
+  var visibleRows : Array<VReportRow?>? = null  // array of visible rows
   private var maxRowCount = 0
 
   // Sortedcolumn contain the index of the sorted column
   // sortingOrder store the type of sort of the sortedColumn : ascending or descending
-  private var sortedColumn = 0
-  private var sortingOrder = 0
+  private var sortedColumn = 0    // the table is sorted wrt. to this column
+  private var sortingOrder = 0    // 1: ascending, -1: descending
 
   // displayOrder contains index column model in display order
   // reverseOrder is calculate with displayOrder and contains index column display into model order
-  lateinit var displayOrder : IntArray
-  lateinit var reverseOrder : IntArray
+  lateinit var displayOrder : IntArray    // column mapping from display to model
+  lateinit var reverseOrder : IntArray    // column mapping from model to display
 
   // The displayLevels variable is a table which contains the level of each column
-  lateinit var displayLevels : IntArray
+  lateinit var displayLevels : IntArray   // column levels in display order
   protected var listenerList = EventListenerList() // List of listeners
-
-  // --------------------------------------------------------------------
-  // CONSTRUCTION
-  // --------------------------------------------------------------------
-  /**
-   * Constructs a new report instance
-   */
-  init {
-    userRows = Vector(500)
-  }
 }
