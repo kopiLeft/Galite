@@ -15,8 +15,35 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.report
 
-class VFixnumColumn {
-  fun getMaxScale(): Int = TODO()
+package org.kopi.galite.type
+
+import java.util.Locale
+
+/**
+ * This class is the super-class for Kopi types
+ */
+abstract class Type : Comparable<Any?> {
+  /**
+   * Compares two objects
+   */
+  abstract override fun equals(other: Any?): Boolean
+
+  /**
+   * Format the object depending on the current language
+   */
+  override fun toString(): String {
+    return toString(Locale.getDefault())
+  }
+
+  /**
+   * Format the object depending on the current language
+   * @param    locale    the current language
+   */
+  abstract fun toString(locale: Locale): String
+
+  /**
+   * Represents the value in sql
+   */
+  abstract fun toSql(): String
 }

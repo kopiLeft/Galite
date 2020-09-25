@@ -19,4 +19,11 @@
 package org.kopi.galite.type
 
 class Fixed {
+
+  /**
+   * Returns the fixed as a double
+   */
+   fun toDouble(): Double {
+    TODO()
+  }
 }

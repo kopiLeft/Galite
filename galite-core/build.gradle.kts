@@ -45,8 +45,8 @@ dependencies {
   implementation("org.jdom", "jdom2", jdomVersion)
 
   //Apache POI
-  implementation("org.apache.poi","poi",apachePoi)
+  implementation("org.apache.poi", "poi", apachePoi)
 
   // Apache OOxml
-  implementation("org.apache.poi","poi-ooxml",apacheOoxml)
+  implementation("org.apache.poi", "poi-ooxml", apacheOoxml)
 }

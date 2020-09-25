@@ -15,8 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.report
 
-class VFixnumColumn {
-  fun getMaxScale(): Int = TODO()
+package org.kopi.galite.type
+
+/**
+ * This class represents kopi month types
+ */
+class NotNullMonth : Month {
+  /**
+   * Constructs a Month with a year and a month in this year
+   */
+  constructor(year: Int, month: Int) : super(year, month) {}
+
+  /**
+   * Constructs a Month from a Date
+   */
+  constructor(date: Date) : super(date) {}
+
+  companion object {
+    fun castToNotNull(value: Month): NotNullMonth {
+      return value as NotNullMonth
+    }
+  }
 }
+

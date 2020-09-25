@@ -176,15 +176,15 @@ abstract class PExport(val table: UTable,
   protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray?)
   protected abstract fun exportHeader(data: Array<String?>)
   protected abstract fun export(stream: OutputStream)
-  protected fun formatStringColumn(column: VReportColumn, index: Int) {}
-  protected fun formatDateColumn(column: VReportColumn, index: Int) {}
-  protected fun formatMonthColumn(column: VReportColumn, index: Int) {}
-  protected fun formatWeekColumn(column: VReportColumn, index: Int) {}
-  protected fun formatFixedColumn(column: VReportColumn, index: Int) {}
-  protected fun formatIntegerColumn(column: VReportColumn, index: Int) {}
-  protected fun formatBooleanColumn(column: VReportColumn, index: Int) {}
-  protected fun formatTimeColumn(column: VReportColumn, index: Int) {}
-  protected fun formatTimestampColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatStringColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatDateColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatMonthColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatWeekColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatFixedColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatIntegerColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatBooleanColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatTimeColumn(column: VReportColumn, index: Int) {}
+  protected open fun formatTimestampColumn(column: VReportColumn, index: Int) {}
 
   fun getColumnLabel(column: Int): String {
     return model.getAccessibleColumn(table.convertColumnIndexToModel(column)).getLabel()

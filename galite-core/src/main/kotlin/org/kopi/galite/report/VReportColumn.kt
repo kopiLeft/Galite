@@ -37,4 +37,5 @@ abstract class VReportColumn {
   abstract fun format(valueAt: Any?): String?
   abstract fun formatWithLineBreaker(valueAt: Any?): String?
   abstract fun getAlign(): Int
+  open fun getWidth(): Int = TODO()
 }

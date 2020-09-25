@@ -17,4 +17,278 @@
  */
 package org.kopi.galite.report
 
-abstract class PExport2Excel 
+import org.apache.poi.ss.usermodel.*
+import org.apache.poi.ss.usermodel.CellType
+import java.awt.Color
+import java.io.OutputStream
+import java.util.Calendar
+import java.util.GregorianCalendar
+
+import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
+
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.report.UReport.UTable
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.type.Date
+import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
+import sun.security.util.ResourcesMgr.getString
+
+
+abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfig, title: String?) : PExport(table, model!!, pconfig, title!!), Constants {
+  override fun export(out: OutputStream) {
+    rowNumber = 0
+    sheetIndex = 0
+    try {
+      workbook = createWorkbook()
+      format = workbook!!.createDataFormat()
+      formatColumns()
+      exportData()
+      workbook!!.write(out)
+      out.close()
+    } catch (e: Exception) {
+      e.printStackTrace()
+    } finally {
+      if (workbook is SXSSFWorkbook) {
+        (workbook as SXSSFWorkbook).dispose()
+      }
+    }
+  }
+
+  override fun startGroup(subTitle: String?) {
+    var subTitle = subTitle
+    if (subTitle == null) {
+      subTitle = title
+    }
+
+    // Sheet name cannot be blank, greater than 31 chars,
+    // or contain any of /\*?[]
+    subTitle = subTitle.replace("/|\\\\|\\*|\\?|\\[|\\]".toRegex(), "")
+    if (subTitle.length > 31) {
+      subTitle = subTitle.substring(0, 28) + "..."
+    } else if (subTitle.length == 0) {
+      subTitle = " "
+    }
+    rowNumber = 0
+    sheet = try {
+      workbook!!.createSheet(subTitle)
+    } catch (e: IllegalArgumentException) {
+      workbook!!.createSheet("" + subTitle.hashCode())
+    }
+    for (i in 0 until columnCount) {
+      sheet!!.setColumnWidth(i, widths[i].toInt())
+    }
+
+    sheet?.repeatingColumns = CellRangeAddress.valueOf("0:" + (columnCount - 1))
+    sheet?.repeatingRows = CellRangeAddress.valueOf("0:0")
+
+    val footer = sheet!!.footer
+    val header = sheet!!.header
+    header.left = title.toString() + "  " + getColumnLabel(0) + " : " + subTitle
+
+    //!!!FIXME graf 20140622 - language specific
+    footer.left = title.toString() + " - " + VlibProperties.getString("print-page") + " &P / &N "
+    footer.right = Date.now().format("dd.MM.yyyy").toString() + " " + Time.now()!!.format("HH:mm")
+    sheetIndex += 1
+    val ps = sheet!!.printSetup
+    sheet!!.autobreaks = true
+    ps.fitWidth = 1.toShort()
+    ps.fitHeight = 999.toShort()
+    ps.landscape = pconfig.paperlayout.equals("Landscape")
+    ps.paperSize = PrintSetup.A4_PAPERSIZE /// !!! no always A4
+  }
+
+  override fun exportHeader(data: Array<String?>) {
+    val titlerow = sheet!!.createRow(0 )
+    var cellPos = 0
+    for (i in data.indices) {
+      titlerow.createCell(cellPos++).setCellValue(data[i])
+    }
+  }
+
+  protected override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray?) {
+    val row = sheet!!.createRow(rowNumber + 1)
+    val color = getBackgroundForLevel(level)
+    var cellPos = 0
+    for (j in data.indices) {
+      var cell: Cell = row.createCell(cellPos)
+      var cellStyle: CellStyle? = cellStyleCacheManager.getStyle(this,
+                                                 workbook!!,
+                                                 getAlignment(alignments!!, j),
+                                                 getDataFormat(j),
+                                                 color)
+      setCellValue(cell, j, data[j], orig[j])
+      cell.cellStyle = cellStyle
+      cellPos++
+    }
+    rowNumber += 1
+  }
+
+  protected fun setCellValue(cell: Cell, cellPos: Int, data: String?, orig: Any?) {
+    if (data != null && orig != null) {
+      if (datatype[cellPos] == CellType.STRING.code) {
+        cell.setCellValue(data.replace('\n', ' '))
+      } else {
+        if (orig is Fixed) {
+          cell.setCellValue((orig as Fixed).toDouble())
+        } else if (orig is Int) {
+          if (datatype[cellPos] == CellType.BOOLEAN.code) {
+            cell.setCellValue(if (orig.toDouble() == 1.0) true else false)
+          } else {
+            cell.setCellValue(orig.toDouble())
+          }
+        } else if (orig is Boolean) {
+          cell.setCellValue(orig)
+        } else if (orig is Date) {
+          setCellValue(cell, orig as Date)
+        } else if (orig is Timestamp
+                || orig is Timestamp) {
+          // date columns can be returned as a timestamp by the jdbc driver.
+          cell.setCellValue(data)
+          datatype[cellPos] = CellType.STRING.code
+        } else if (orig is Month) {
+          setCellValue(cell, (orig as Month).firstDay)
+        } else if (orig is Week) {
+          setCellValue(cell, (orig as Week).firstDay)
+        } else if (orig is String && orig == "") {
+          // myabe reportIdenticalValue Trigger used
+          // nothing
+        } else {
+          throw InconsistencyException("Type not supported: datatype=" + datatype[cellPos]
+                  + "  " + " CellNumber= " + cellPos
+                  + " " + orig.javaClass + " of " + orig)
+        }
+      }
+      cell.cellType = CellType.forInt(datatype[cellPos])
+    } else {
+      cell.cellType = CellType.BLANK
+    }
+  }
+
+  protected fun getAlignment(alignments: IntArray, cellPos: Int): Short {
+    return when (alignments[cellPos]) {
+      Constants.ALG_DEFAULT, Constants.ALG_LEFT -> HorizontalAlignment.LEFT.code
+      Constants.ALG_CENTER -> HorizontalAlignment.CENTER.code
+      Constants.ALG_RIGHT -> HorizontalAlignment.RIGHT.code
+      else -> throw InconsistencyException("Unkown alignment")
+    }
+  }
+
+  protected fun getDataFormat(cellPos: Int): Short {
+    return if (datatype[cellPos] != CellType.STRING.code) {
+      dataformats[cellPos]
+    } else {
+      -1
+    }
+  }
+
+  private fun computeColumnWidth(column: VReportColumn): Int {
+    return if (column.getLabel().length < column.getWidth()) column.getWidth() else column.getLabel().length + 2
+  }
+
+
+  override fun formatStringColumn(column: VReportColumn, index: Int) {
+    dataformats[index] = 0
+    datatype[index] = CellType.STRING.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  override fun formatWeekColumn(column: VReportColumn, index: Int) {
+    dataformats[index] = 0
+    datatype[index] = CellType.STRING.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  override fun formatDateColumn(column: VReportColumn, index: Int) {
+    dataformats[index] = format!!.getFormat("dd.mm.yyyy")
+    datatype[index] = CellType.NUMERIC.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  override fun formatMonthColumn(column: VReportColumn, index: Int) {
+    dataformats[index] = format!!.getFormat("mm.yyyy")
+    datatype[index] = CellType.NUMERIC.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  override fun formatFixedColumn(column: VReportColumn, index: Int) {
+    var fixnumFormat = "#,##0"
+    for (i in 0 until (column as VFixnumColumn).getMaxScale()) {
+      fixnumFormat += if (i == 0) ".0" else "0"
+    }
+    dataformats[index] = format!!.getFormat(fixnumFormat)
+    datatype[index] = CellType.NUMERIC.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  override fun formatIntegerColumn(column: VReportColumn, index: Int) {
+    dataformats[index] = format!!.getFormat("0")
+    datatype[index] = CellType.NUMERIC.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  override fun formatBooleanColumn(column: VReportColumn, index: Int) {
+    dataformats[index] = 0 // General type
+    datatype[index] = CellType.BOOLEAN.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  override fun formatTimeColumn(column: VReportColumn, index: Int) {
+    dataformats[index] = 0
+    datatype[index] = CellType.STRING.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  override fun formatTimestampColumn(column: VReportColumn, index: Int) {
+    dataformats[index] = 0
+    datatype[index] = CellType.STRING.code
+    widths[index] = (256 * computeColumnWidth(column)).toShort()
+  }
+
+  protected abstract fun createWorkbook(): Workbook?
+  abstract fun createFillForegroundColor(color: Color?): org.apache.poi.ss.usermodel.Color?
+
+  //-----------------------------------------------------------
+  // DATA MEMBERS
+  //-----------------------------------------------------------
+  private var rowNumber = 0
+  protected var workbook: Workbook? = null
+    private set
+  private var sheet: Sheet? = null
+  private var format: DataFormat? = null
+  private val datatype: IntArray
+  private val dataformats: ShortArray
+  private val widths: ShortArray
+  private var sheetIndex = 0
+
+  // cell style cache
+  private val cellStyleCacheManager: CellStyleCacheManager
+
+  companion object {
+    /**
+     * Set the value of the cell to the specified date value.
+     */
+    protected fun setCellValue(cell: Cell, value: Date) {
+      val cal = GregorianCalendar()
+      cal.clear()
+      cal[Calendar.YEAR] = value.year
+      cal[Calendar.MONTH] = value.month - 1
+      cal[Calendar.DAY_OF_MONTH] = value.day
+      cell.setCellValue(cal)
+    }
+  }
+
+  /**
+   * Constructor
+   */
+  init {
+    datatype = IntArray(columnCount)
+    dataformats = ShortArray(columnCount)
+    widths = ShortArray(columnCount)
+    cellStyleCacheManager = CellStyleCacheManager()
+  }
+}

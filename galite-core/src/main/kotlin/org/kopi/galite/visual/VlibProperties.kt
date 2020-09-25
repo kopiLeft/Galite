@@ -18,5 +18,18 @@
 package org.kopi.galite.visual
 
 class VlibProperties {
-  // TODO()
+
+  companion object {
+    /**
+     * Returns the value of the property for the given key.
+     *
+     * @param     key             the property key
+     * @return    the requested property value
+     */
+    fun getString(key: String?): String {
+      TODO()
+    }
+  }
+
+
 }
