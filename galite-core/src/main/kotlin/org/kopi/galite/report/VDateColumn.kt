@@ -21,15 +21,15 @@ package org.kopi.galite.report
 import org.kopi.galite.type.Date
 
 /**
- * Constructs a report column description
+ * Represents a report column description
  *
  * @param     ident           The column identifier
  * @param     options         The column options as bitmap
  * @param     align           The column alignment
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
- * @param     width
- * @param     format
+ * @param     width           The width of the cells
+ * @param     format          The format of the cells
  */
 class VDateColumn(ident: String,
                   options: Int,
@@ -37,14 +37,15 @@ class VDateColumn(ident: String,
                   groups: Int,
                   function: VCalculateColumn,
                   width: Int,
-                  format: VCellFormat?) : VReportColumn(ident,
-        options,
-        align,
-        groups,
-        function,
-        10,  // width, default date format
-        1,
-        format) {
+                  format: VCellFormat?)
+  : VReportColumn(ident,
+                  options,
+                  align,
+                  groups,
+                  function,
+                  10,  // width, default date format
+                  1,
+                  format) {
   /**
    * Compare two objects.
    *

@@ -20,7 +20,7 @@ package org.kopi.galite.report
 import org.kopi.galite.type.Month
 
 /**
- * Constructs a report column description
+ * Represents a report column description
  *
  * @param     ident           The column ident
  * @param     options         The column options as bitmap
@@ -45,14 +45,14 @@ class VMonthColumn(ident: String,
   /**
    * Compare two objects.
    *
-   * @param    o1    the first operand of the comparison
-   * @param    o2    the second operand of the comparison
+   * @param    object1    the first operand of the comparison
+   * @param    object2    the second operand of the comparison
    * @return    -1 if the first operand is smaller than the second
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(o1: Any, o2: Any): Int {
-    return (o1 as Month).compareTo(o2 as Month)
+  override fun compareTo(object1: Any, object2: Any): Int {
+    return (object1 as Month).compareTo(object2 as Month)
   }
 
   /**

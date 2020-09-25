@@ -15,12 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.report
 
+package org.kopi.galite.report
 
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.type.NotNullFixed
-
 
 class VFixnumCodeColumn(ident: String,
                         type: String,
@@ -32,17 +31,27 @@ class VFixnumCodeColumn(ident: String,
                         width: Int,
                         format: VCellFormat,
                         names: Array<String>,
-                        codes: Array<NotNullFixed>) : VCodeColumn(ident!!, type!!, source!!, options, align, groups, function!!, width, format, names) {
+                        codes: Array<NotNullFixed>)
+       : VCodeColumn(ident,
+                     type,
+                     source,
+                     options,
+                     align,
+                     groups,
+                     function,
+                     width,
+                     format,
+                     names) {
   /**
    * Get the index of the value.
    */
-  override fun getIndex(`object`: Any): Int {
+  override fun getIndex(o: Any): Int {
     for (i in codes.indices) {
-      if (`object` == codes[i]) {
+      if (o == codes[i]) {
         return i
       }
     }
-    throw InconsistencyException(">>>>$`object`")
+    throw InconsistencyException(">>>>$o")
   }
 
   /**
@@ -57,14 +66,14 @@ class VFixnumCodeColumn(ident: String,
   /**
    * Compares two objects.
    *
-   * @param    o1    the first operand of the comparison
-   * @param    o2    the second operand of the comparison
+   * @param    object1    the first operand of the comparison
+   * @param    object2    the second operand of the comparison
    * @return    -1 if the first operand is smaller than the second
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(o1: Any, o2: Any): Int = (o1 as NotNullFixed)
-          .compareTo(o2 as NotNullFixed)
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as NotNullFixed)
+          .compareTo(object2 as NotNullFixed)
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
