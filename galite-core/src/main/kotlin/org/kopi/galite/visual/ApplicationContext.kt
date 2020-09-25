@@ -151,12 +151,12 @@ abstract class ApplicationContext {
     fun reportTrouble(module: String,
                       place: String,
                       data: String,
-                      reason: Throwable?) {
+                      reason: Throwable) {
 
       when {
         applicationContext!!.getApplication().isNoBugReport() -> {
           println("notice: reporting trouble is disabled, no mail will be sent.")
-          System.err.println(reason!!.message)
+          System.err.println(reason.message)
           reason.printStackTrace(System.err)
         }
         else -> {
