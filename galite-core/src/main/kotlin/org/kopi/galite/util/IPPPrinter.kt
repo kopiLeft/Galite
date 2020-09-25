@@ -44,7 +44,7 @@ class IPPPrinter(name: String,
   val mediaTypes: List<*>
     get() {
       val client = IPPClient(host, port.toShort(), printer, user)
-      return client.mediaTypes
+      return client.getMediaTypes()
     }
 
   /**

@@ -31,19 +31,31 @@ private constructor(private val faxHost: String,
                      */
                     val number: String,
                     private val user: String,
-                    private val id: String) : AbstractPrinter("FaxPrinter $number"), CachePrinter {
+                    private val id: String) : AbstractPrinter("FaxPrinter $number"), Printer {
+
+  override fun getPrinterName(): String {
+    TODO("Not yet implemented")
+  }
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
   // ----------------------------------------------------------------------
   /**
    * Print a file and return the output of the command
    */
-  fun print(printdata: PrintJob): String {
+  override fun print(printdata: PrintJob): String {
     try {
       Fax.fax(faxHost, printdata.getInputStream(), user, number, id)
     } catch (e: Exception) {
       e.printStackTrace()
     }
     return "NYI"
+  }
+
+  override fun selectTray(tray: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setPaperFormat(paperFormat: String) {
+    TODO("Not yet implemented")
   }
 }

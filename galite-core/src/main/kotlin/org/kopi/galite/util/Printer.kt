@@ -21,12 +21,12 @@ interface Printer {
   /**
    * Unique name of the printer in the database which is chosen by the user
    */
-  fun getPrinterName(): String?
+  fun getPrinterName(): String
 
   /**
    * Prints a Printjob
    */
-  fun print(data: PrintJob?): String?
+  fun print(data: PrintJob): String
 
   // ----------------------------------------------------------------------
   // PRINT OPTIONS
@@ -39,5 +39,5 @@ interface Printer {
   /**
    * Sets the paper format
    */
-  fun setPaperFormat(paperFormat: String?)
+  fun setPaperFormat(paperFormat: String)
 }
