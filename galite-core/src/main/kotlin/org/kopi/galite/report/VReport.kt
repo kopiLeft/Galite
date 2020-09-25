@@ -18,6 +18,12 @@
 
 package org.kopi.galite.report
 
+import java.io.File
+import java.net.MalformedURLException
+import java.text.MessageFormat
+import java.util.Locale
+import java.util.Vector
+
 import org.kopi.galite.base.DBContextHandler
 import org.kopi.galite.chart.VHelpGenerator
 import org.kopi.galite.form.VConstants
@@ -44,11 +50,6 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
 
-import java.io.File
-import java.net.MalformedURLException
-import java.text.MessageFormat
-import java.util.*
-
 abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
   companion object {
     const val TYP_CSV = 1
@@ -71,17 +72,13 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * Redisplay the report after change in formating
    */
   @Deprecated("call method in display; model must not be refreshed")
-  fun redisplay() {
-    (getDisplay() as UReport).redisplay()
-  }
+  fun redisplay() = (getDisplay() as UReport).redisplay()
 
   /**
    * Close window
    */
   @Deprecated("call method in display; model must not be closed")
-  fun close() {
-    getDisplay()?.closeWindow()
-  }
+  fun close() = getDisplay().closeWindow()
 
   override fun destroyModel() {
     try {
@@ -125,7 +122,6 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
             setCommandEnabled(commands!![i], model.getModelColumnCount() + i + 1, true)
           }
         }
-
       }
     }
   }
@@ -158,15 +154,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   private fun localize(manager: LocalizationManager) {
     val loc: ReportLocalizer = manager.getReportLocalizer(source)
+
     setPageTitle(loc.getTitle())
     help = loc.getHelp()
-
     model.columns.forEach { it.localize(loc) }
   }
 
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------
@@ -184,14 +177,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     var enable = enable
     if (enable) {
       // we need to check if VKT_Triggers is initialized
-      // ex : org.kopi.vkopi.lib.cross.VDynamicReport
+      // ex : org.kopi.galite.cross.VDynamicReport
       if (VKT_Triggers != null && hasTrigger(Constants.TRG_CMDACCESS, index)) {
-        var active: Boolean
-        try {
-          active = (callTrigger(Constants.TRG_CMDACCESS, index) as Boolean)
+
+        var active: Boolean = try {
+          (callTrigger(Constants.TRG_CMDACCESS, index) as Boolean)
         } catch (e: VException) {
           // trigger call error ==> command is considered as active
-          active = true
+          true
         }
         enable = active
       }
@@ -216,21 +209,18 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   }
 
   override fun createPrintJob(): PrintJob {
-    val exporter: PExport2PDF
-    val printJob: PrintJob
-    exporter = PExport2PDF((getDisplay() as UReport).table,
+
+    val exporter: PExport2PDF = PExport2PDF((getDisplay() as UReport).table,
             model,
             printOptions,
             pageTitle,
             firstPageHeader,
             Message.getMessage("toner_save_mode") == "true")
-    printJob = exporter.export()
+    val printJob: PrintJob = exporter.export()
     printJob.setDocumentType(documentType)
     return printJob
   }
-  /**
-   * Prints the report
-   */
+
   /**
    * Prints the report
    */
@@ -240,7 +230,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       TYP_PDF -> ".pdf"
       TYP_XLS -> ".xls"
       TYP_XLSX -> ".xlsx"
-      else -> throw InconsistencyException("Export type unkown")
+      else -> throw InconsistencyException("Export type unknown")
     }
     val file: File = FileHandler.fileHandler.chooseFile(getDisplay(),
             ApplicationConfiguration.getConfiguration().getDefaultDirectory(),
@@ -286,7 +276,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
                 printOptions,
                 pageTitle)
       }
-      else -> throw InconsistencyException("Export type unkown")
+      else -> throw InconsistencyException("Export type unknown")
     }
     exporter.export(file)
     unsetWaitInfo()
@@ -298,6 +288,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   fun setPageTitle(title: String) {
     pageTitle = title
+    setTitle(title)
   }
 
   fun setPageTitleParams(param: Any) {
@@ -322,11 +313,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
   fun foldSelection() {
     val column = selectedColumn
+
     if (column != -1) {
       model.foldingColumn(column)
     } else {
       val (x, y) = selectedCell
-      if (y !== -1 && x !== -1) {
+      if (y != -1 && x != -1) {
         model.foldingRow(y, x)
       }
     }
@@ -335,11 +327,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
   fun unfoldSelection() {
     val column = selectedColumn
+
     if (column != -1) {
       model.unfoldingColumn(column)
     } else {
       val (x, y) = selectedCell
-      if (y !== -1 && x !== -1) {
+      if (y != -1 && x != -1) {
         model.unfoldingRow(y, x)
       }
     }
@@ -348,6 +341,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
   fun foldSelectedColumn() {
     val column = selectedColumn
+
     if (column != -1) {
       model.setColumnFolded(column, true)
     }
@@ -357,6 +351,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
   fun unfoldSelectedColumn() {
     val column = selectedColumn
+
     if (column != -1) {
       model.setColumnFolded(column, false)
     }
@@ -367,9 +362,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Sort the displayed tree wrt to a column
    */
-  fun sortSelectedColumn() {
-    model.sortColumn(selectedColumn)
-  }
+  fun sortSelectedColumn() = model.sortColumn(selectedColumn)
 
   /**
    * Sort the displayed tree wrt to a column
@@ -408,14 +401,15 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       var idCol = -1
       var id = -1
       var i = 0
+
       while (i < model.getModelColumnCount() && idCol == -1) {
         if (model.getModelColumn(i).ident == "ID") {
           idCol = i
         }
         i++
       }
-      if (idCol != -1 && selectedCell.y !== -1) {
-        id = (model.getRow(selectedCell.y).getValueAt(idCol) as Int).toInt()
+      if (idCol != -1 && selectedCell.y != -1) {
+        id = (model.getRow(selectedCell.y).getValueAt(idCol) as Int)
       }
       return if (id == -1) {
         throw VRuntimeException()
@@ -428,16 +422,17 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * Return the value of a field in the selected row
    * by passing its name(key)
    */
-  fun getValueOfField(key: Any?): Any? {
+  fun getValueOfField(key: Any): Any? {
     var col = -1
     var i = 0
+
     while (i < model.getModelColumnCount() && col == -1) {
       if (model.getModelColumn(i).ident == key) {
         col = i
       }
       i++
     }
-    return if (col != -1 && selectedCell.y !== -1) {
+    return if (col != -1 && selectedCell.y != -1) {
       model.getRow(selectedCell.y).getValueAt(col)
     } else null
   }
@@ -449,8 +444,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * requirements (value and search operator) of the field.
    */
   protected fun buildSQLCondition(column: String, field: VField): String {
-    val condition: String?
-    condition = field.getSearchCondition()
+    val condition: String? = field.getSearchCondition()
     return if (condition == null) {
       " TRUE = TRUE "
     } else {
@@ -463,17 +457,11 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   // ----------------------------------------------------------------------
   override fun executeVoidTrigger(VKT_Type: Int) {}
 
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    throw InconsistencyException("SHOULD BE REDEFINED")
-  }
+  fun executeObjectTrigger(VKT_Type: Int): Any = throw InconsistencyException("SHOULD BE REDEFINED")
 
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    throw InconsistencyException("SHOULD BE REDEFINED")
-  }
+  fun executeBooleanTrigger(VKT_Type: Int): Boolean = throw InconsistencyException("SHOULD BE REDEFINED")
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
-    throw InconsistencyException("SHOULD BE REDEFINED")
-  }
+  fun executeIntegerTrigger(VKT_Type: Int): Int = throw InconsistencyException("SHOULD BE REDEFINED")
 
   val documentType: Int
     get() = DOC_UNKNOWN
@@ -482,13 +470,11 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * overridden by forms to implement triggers
    * default triggers
    */
-  protected fun execTrigger(block: Any?, id: Int): Any? {
+  protected fun execTrigger(block: Any, id: Int): Any? {
     executeVoidTrigger(id)
     return null
   }
-  /**
-   * Calls trigger for given event, returns last trigger called 's value.
-   */
+
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
@@ -503,15 +489,11 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       else -> throw InconsistencyException("BAD TYPE" + Constants.TRG_TYPES[event])
     }
   }
+
   /**
    * Returns true iff there is trigger associated with given event.
    */
-  /**
-   * Returns true iff there is trigger associated with given event.
-   */
-  protected fun hasTrigger(event: Int, index: Int = 0): Boolean {
-    return VKT_Triggers!![index][event] != 0
-  }
+  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
 
   fun setMenu() {
     if (!built) {
@@ -521,8 +503,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     val column = selectedColumn
     val (x, y) = selectedCell
     val foldEnabled = column != -1 && !model.isColumnFold(column) ||
-            x !== -1 && y !== -1 && !model.isRowFold(y, x)
-    val unfoldEnabled = column != -1 || x !== -1 && y !== -1
+            x != -1 && y != -1 && !model.isRowFold(y, x)
+    val unfoldEnabled = column != -1 || x != -1 && y != -1
     if (cmdFold != null) {
       setCommandEnabled(cmdFold!!, foldEnabled)
     }
@@ -564,9 +546,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     private get() = (getDisplay() as UReport).selectedCell
 
   fun genHelp(): String? {
-    val fileName: String
     val surl = StringBuffer()
-    fileName = VHelpGenerator().helpOnReport(pageTitle,
+    val fileName: String = VHelpGenerator().helpOnReport(pageTitle,
             commands,
             model,
             help)
@@ -604,7 +585,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   private lateinit var source: String
   override fun getSource(): String? = null
 
-  protected var model: MReport
+  protected var model: MReport = MReport()
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
@@ -616,17 +597,13 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   protected var VKT_Triggers: Array<IntArray>? = null
   protected var commands: Array<VCommand>? = null
   private val activeCommands: Vector<VCommand>
-  /**
-   * sets the print options
-   */
+
   /**
    * sets the print options
    */
   // print configuration object
   var printOptions: PConfig
-  /**
-   * Get the media for this document
-   */
+
   /**
    * Set the media for this document
    */
@@ -634,14 +611,11 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
-  /**
-   * Constructor
-   */
+
   /**
    * Constructor
    */
   init {
-    model = MReport()
     printOptions = PConfig()
     activeCommands = Vector<VCommand>()
     if (ctxt != null) {

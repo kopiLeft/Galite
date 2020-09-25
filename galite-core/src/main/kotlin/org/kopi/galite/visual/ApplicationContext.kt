@@ -18,11 +18,13 @@
 
 package org.kopi.galite.visual
 
+import java.util.Locale
+
 import org.kopi.galite.db.DBContext
-import java.util.*
 
 abstract class ApplicationContext {
   abstract val application: Application
+
   companion object {
     fun getDBContext(): DBContext {
       TODO()
