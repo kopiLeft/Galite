@@ -18,53 +18,45 @@
 
 package org.kopi.galite.visual
 
-//TODO
-class VActor {
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.l10n.LocalizationManager
 
-  /**
-   * Enables/disables the actor.
-   */
+/**
+ * Represents an actor.
+ */
+class VActor(
+        val menuIdent: String,
+        private val menuSource: String,
+        val actorIdent: String,
+        private val actorSource: String,
+        var iconName: String?,
+        val acceleratorKey: Int,
+        val acceleratorModifier: Int) : VModel {
+
+  override fun setDisplay(display: UComponent) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getDisplay(): UComponent {
+    TODO("Not yet implemented")
+  }
+
   fun setEnabled(enabled: Boolean) {
-
+    TODO()
   }
 
-  /**
-   * Sets the number for the actor.
-   */
-  fun setNumber(number: Int) {
-
+  fun localize(manager: LocalizationManager) {
+    TODO()
   }
 
-  /**
-   * Sets the handler for the actor.
-   */
-  fun setHandler(handler: ActionHandler) {
-
-  }
-
-  /**
-   * Checks whether the actor is enabled.
-   */
   fun isEnabled(): Boolean {
-    return true;
-  }
-
-  fun performAction() {
-
-  }
-
-
-  fun performBasicAction() {
-
+    TODO()
   }
 
   fun helpOnCommand(help: VHelpGenerator) {
-
+    TODO()
   }
 
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  val acceleratorKey = 0
+  var number: Int? = null
+  var handler: ActionHandler? = null
 }

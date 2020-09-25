@@ -34,8 +34,8 @@ open class VCommand(private var mode: Int, protected val handler: ActionHandler,
   fun setEnabled(enabled: Boolean) {
     if (this.actor != null && !killed) {
       actor.setEnabled(enabled)
-      actor.setNumber(trigger)
-      actor.setHandler(handler)
+      actor.number = trigger
+      actor.handler = handler
     }
   }
 
@@ -77,16 +77,16 @@ open class VCommand(private var mode: Int, protected val handler: ActionHandler,
 
   fun performAction() {
     with(actor!!) {
-      setNumber(trigger)
-      setHandler(handler)
+      number = trigger
+      handler = handler
       performAction()
     }
   }
 
   fun performBasicAction() {
     with(actor!!) {
-      setNumber(trigger)
-      setHandler(handler)
+      number = trigger
+      handler = handler
       performBasicAction()
     }
   }
