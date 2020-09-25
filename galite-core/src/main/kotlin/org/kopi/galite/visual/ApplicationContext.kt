@@ -70,43 +70,43 @@ abstract class ApplicationContext {
     /**
      * Returns the default configuration of the Application
      */
-    fun getDefaults(): ApplicationConfiguration? = applicationContext!!.getApplication().getApplicationConfiguration()
+    fun getDefaults(): ApplicationConfiguration? = applicationContext.getApplication().getApplicationConfiguration()
 
     /**
      * Returns the [Application] menu.
      * @return The [Application] menu.
      */
-    fun getMenu(): VMenuTree = applicationContext!!.getApplication().getMenu()
+    fun getMenu(): VMenuTree = applicationContext.getApplication().getMenu()
 
     /**
      * Returns the [LocalizationManager] instance.
      * @return The [LocalizationManager] instance.
      */
-    fun getLocalizationManager(): LocalizationManager = applicationContext!!.getApplication().getLocalizationManager()
+    fun getLocalizationManager(): LocalizationManager = applicationContext.getApplication().getLocalizationManager()
 
     /**
      * Returns the default application [Locale].
      * @return The default application [Locale].
      */
-    fun getDefaultLocale(): Locale = applicationContext!!.getApplication().getDefaultLocale()
+    fun getDefaultLocale(): Locale = applicationContext.getApplication().getDefaultLocale()
 
     /**
      * Returns the application [Registry].
      * @return the application [Registry].
      */
-    fun getRegistry(): Registry = applicationContext!!.getApplication().getRegistry()
+    fun getRegistry(): Registry = applicationContext.getApplication().getRegistry()
 
     /**
      * Returns the application [DBContext].
      * @return The application [DBContext].
      */
-    fun getDBContext(): DBContext = applicationContext!!.getApplication().getDBContext()
+    fun getDBContext(): DBContext = applicationContext.getApplication().getDBContext()
 
     /**
      * Returns `true` if the [Application] should only generate help.
      * @return `true` if the [Application] should only generate help.
      */
-    fun isGeneratingHelp(): Boolean = applicationContext!!.getApplication().isGeneratingHelp()
+    fun isGeneratingHelp(): Boolean = applicationContext.getApplication().isGeneratingHelp()
 
     /**
      * Displays an error message outside a model context. This can happen when launching a module.
@@ -114,7 +114,7 @@ abstract class ApplicationContext {
      * @param message The message to be displayed.
      */
     fun displayError(parent: UComponent, message: String) {
-      applicationContext!!.getApplication().displayError(parent, message)
+      applicationContext.getApplication().displayError(parent, message)
     }
 
     // ---------------------------------------------------------------------
@@ -130,13 +130,13 @@ abstract class ApplicationContext {
     fun reportTrouble(module: String,
                       place: String,
                       data: String,
-                      reason: Throwable) {
+                      reason: Throwable?) {
 
       when {
-        applicationContext!!.getApplication().isNoBugReport() -> {
+        applicationContext.getApplication().isNoBugReport() -> {
           println("notice: reporting trouble is disabled, no mail will be sent.")
-          System.err.println(reason.message)
-          reason.printStackTrace(System.err)
+          System.err.println(reason!!.message)
+          reason!!.printStackTrace(System.err)
         }
         else -> {
           var revision: String? = null
@@ -215,7 +215,7 @@ abstract class ApplicationContext {
             writer.println("Version:             $version")
             writer.println("Release Date:        " + (releaseDate ?: "not available."))
             writer.println("Module:              $module")
-            writer.println("Started at:          " + applicationContext!!.getApplication().getStartupTime())
+            writer.println("Started at:          " + applicationContext.getApplication().getStartupTime())
             writer.println()
             writer.println("Architecture:        " + System.getProperty("os.arch", ""))
             writer.print("Operating System:    " + System.getProperty("os.name", "") + " ")
@@ -225,13 +225,13 @@ abstract class ApplicationContext {
             writer.println("Default Locale:      " + Locale.getDefault())
             writer.println("Default Encoding:    " + InputStreamReader(System.`in`).encoding)
             writer.println()
-            if (applicationContext!!.isWebApplicationContext()) {
-              writer.println("User-IP:             " + applicationContext!!.getApplication().getUserIP())
+            if (applicationContext.isWebApplicationContext()) {
+              writer.println("User-IP:             " + applicationContext.getApplication().getUserIP())
             }
             try {
-              writer.println("Kopi-User:           " + applicationContext!!.getApplication().getUserName())
+              writer.println("Galite-User:           " + applicationContext.getApplication().getUserName())
             } catch (e: Exception) {
-              writer.println("Kopi-User:           <not available>")
+              writer.println("Galite-User:           <not available>")
             }
             writer.println("System-User/Name:    " + System.getProperty("user.name", ""))
             writer.println("System-User/Home:    " + System.getProperty("user.home", ""))
@@ -255,19 +255,19 @@ abstract class ApplicationContext {
                     + "  used = " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()))
             writer.println()
             writer.println("Catched at:          $place")
-            if (reason != null) {
-              writer.println("Message:             " + reason.message)
+            failureID = if (reason != null) {
+              writer.println("Message:             " + reason!!.message)
               writer.println("Exception:           ")
-              reason.printStackTrace(writer)
-              failureID = try {
+              reason!!.printStackTrace(writer)
+              try {
                 val write: CharArrayWriter = CharArrayWriter()
-                reason.printStackTrace(PrintWriter(write))
+                reason!!.printStackTrace(PrintWriter(write))
                 " " + write.toString().hashCode()
               } catch (e: Exception) {
                 " " + e.message
               }
             } else {
-              failureID = " " // no information
+              " " // no information
             }
             writer.println()
             writer.println("Information:         $data")
@@ -286,12 +286,12 @@ abstract class ApplicationContext {
               writer.println()
               writer.println()
               try {
-                writer.println(applicationContext!!.getApplication().getUserName().toString() + ":" + Date())
+                writer.println(applicationContext.getApplication().getUserName().toString() + ":" + Date())
               } catch (e: Exception) {
                 writer.println("<user no available>" + ":" + Date())
               }
               writer.println(reason!!.message)
-              reason.printStackTrace(writer)
+              reason!!.printStackTrace(writer)
               if (writer.checkError()) {
                 throw IOException("error while writing")
               }
@@ -302,7 +302,7 @@ abstract class ApplicationContext {
             }
           }
           System.err.println(reason!!.message)
-          reason.printStackTrace(System.err)
+          reason!!.printStackTrace(System.err)
         }
       }
 
