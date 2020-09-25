@@ -18,4 +18,7 @@
 package org.kopi.galite.type
 
 class Week {
+  fun compareTo(other: Week): Int {
+    TODO()
+  }
 }
