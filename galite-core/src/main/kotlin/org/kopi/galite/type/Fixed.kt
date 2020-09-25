@@ -18,5 +18,11 @@
 
 package org.kopi.galite.type
 
-class Fixed {
+open class Fixed {
+  /**
+   * Comparisons
+   */
+  fun compareTo(other: Fixed): Int {
+    TODO()
+  }
 }
