@@ -192,8 +192,8 @@ abstract class ApplicationConfiguration {
     private var configuration: ApplicationConfiguration? = null
 
     fun getConfiguration(): ApplicationConfiguration? {
-      return if (ApplicationContext.getApplicationContext() != null) {
-        ApplicationContext.getApplicationContext()!!.getApplication().getApplicationConfiguration()
+      return if (ApplicationContext.applicationContext != null) {
+        ApplicationContext.applicationContext!!.getApplication().getApplicationConfiguration()
       } else {
         configuration
       }
@@ -201,8 +201,8 @@ abstract class ApplicationConfiguration {
 
     fun setConfiguration(conf: ApplicationConfiguration?) {
       assert(conf != null) { "configuration must not be null" }
-      if (ApplicationContext.getApplicationContext() != null) {
-        ApplicationContext.getApplicationContext()!!.getApplication().setApplicationConfiguration(conf!!)
+      if (ApplicationContext.applicationContext != null) {
+        ApplicationContext.applicationContext!!.getApplication().setApplicationConfiguration(conf!!)
       } else {
         configuration = conf
       }

@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.visual
 
-import org.kopi.galite.base.DBContext
+import org.kopi.galite.db.DBContext
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager

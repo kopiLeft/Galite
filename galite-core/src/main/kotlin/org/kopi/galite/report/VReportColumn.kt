@@ -18,15 +18,136 @@
 
 package org.kopi.galite.report
 
-abstract class VReportColumn {
+import org.kopi.galite.l10n.FieldLocalizer
+import org.kopi.galite.l10n.ReportLocalizer
+import org.kopi.galite.util.LineBreaker
+
+/**
+ * Constructs a report column description
+ *
+ * @param    ident        The identifier of the field
+ * @param    options        The column options as bitmap
+ * @param    align        The column alignment
+ * @param    groups        The index of the column grouped by this one or -1
+ * @param    function    An (optional) function
+ * @param    width        The width of a cell in characters
+ * @param    height        The height of a cell in characters
+ * @param    format        format of the cells
+ */
+abstract class VReportColumn(
+        private val ident: String,
+        val options: Int,
+        val align: Int,
+        groups: Int,
+        val function: VCalculateColumn,
+        var width: Int,
+        var height: Int,
+        protected var format: VCellFormat?) {
+
   /**
-   * Compare two objects
+   * Returns the column label
+   */
+  fun getLabel(): String {
+    return label ?: ""
+  }
+
+  /**
+   * Returns true if this Column is hidden
+   */
+  open fun isHidden(): Boolean {
+    return options and Constants.CLO_HIDDEN > 0
+  }
+
+  /**
+   * Returns the width of cells in this column in characters
+   */
+  open fun getPrintedWidth(): Double {
+    return width.toDouble()
+  }
+
+  open fun format(o: Any?): String {
+    return if (folded || o == null) {
+      ""
+    } else if (format != null) {
+      format!!.format(o)!!
+    } else if (height == 1) {
+      val str = o.toString()
+      val strLength = str.length
+      if (strLength <= width) str else str.substring(0, width)
+    } else {
+      o.toString()
+    }
+  }
+
+  fun formatWithLineBreaker(o: Any?): String {
+    return LineBreaker.modelToText(format(o), width)
+  }
+
+  /**
+   * Compare two objects.
    *
-   * @param        object1        the first operand of the comparison
-   * @param        object2        the second operand of the comparison
-   * @return        -1 if the first operand is smaller than the second
+   * @param    o1    the first operand of the comparison
+   * @param    o2    the second operand of the comparison
+   * @return    -1 if the first operand is smaller than the second
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  abstract fun compareTo(object1: Any?, object2: Any?): Int
+  abstract fun compareTo(o1: Any, o2: Any): Int
+
+  open fun formatColumn(exporter: PExport, index: Int) {
+    exporter.formatStringColumn(this, index)
+  }
+
+  fun helpOnColumn(help: VHelpGenerator) {
+    help.helpOnColumn(label, this.help)
+  }
+  // ----------------------------------------------------------------------
+  // LOCALIZATION
+  // ----------------------------------------------------------------------
+  /**
+   * Localizes this field
+   *
+   * @param     parent         the caller localizer
+   */
+  fun localize(parent: ReportLocalizer) {
+    if (!isHidden() && ident != "") {
+      val loc: FieldLocalizer = parent.getFieldLocalizer(ident)
+
+      label = loc.getLabel()
+      help = loc.getHelp()
+      localize(loc)
+    }
+  }
+
+  /**
+   * Localizes this field
+   *
+   * @param     parentLocalizer         the caller localizer
+   */
+  protected open fun localize(parentLocalizer: FieldLocalizer) {
+    // by default nothing to do
+  }
+
+   fun getStyles(): Array<ColumnStyle> {
+    return if (styles == null) {
+      val style = ColumnStyle()
+      style.fontName = 0
+      style.background = Constants.CLR_WHITE
+      style.foreground = Constants.CLR_BLACK
+      arrayOf(style)
+    } else {
+      styles!!
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private var label: String? = null
+  private var help: String? = null
+  var visible: Boolean = true
+  var folded: Boolean = false
+  var addedAtRuntime: Boolean = false
+  var userDefinedLabel: Boolean = false
+  private var styles: Array<ColumnStyle>? = null
 }

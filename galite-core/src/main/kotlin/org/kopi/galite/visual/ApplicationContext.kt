@@ -17,8 +17,8 @@
  */
 package org.kopi.galite.visual
 
-import org.kopi.galite.base.DBContext
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.DBContext
 import org.kopi.galite.base.Utils
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.mailer.Mailer
@@ -62,27 +62,6 @@ abstract class ApplicationContext {
   abstract fun isWebApplicationContext(): Boolean
 
   companion object {
-
-    //-----------------------------------------------------------
-    // ACCESSORS
-    //-----------------------------------------------------------
-
-    /**
-     * Returns the `ApplicationContext` instance.
-     * @return The `ApplicationContext` instance.
-     */
-    fun getApplicationContext(): ApplicationContext? {
-      return applicationContext
-    }
-
-    /**
-     * Sets the `ApplicationContext` instance.
-     * @param context The `ApplicationContext` instance.
-     */
-    fun setApplicationContext(context: ApplicationContext?) {
-      assert(context != null) { "The ApplicationContext cannot be null" }
-      applicationContext = context
-    }
 
     //-----------------------------------------------------------
     // UTILS
@@ -355,7 +334,10 @@ abstract class ApplicationContext {
     //-----------------------------------------------------------
     // DATA MEMBERS
     //-----------------------------------------------------------
-    private var applicationContext: ApplicationContext? = null
+    /**
+     * The `ApplicationContext` instance.
+     */
+    lateinit var applicationContext: ApplicationContext
     var compt = 0
   }
 }
