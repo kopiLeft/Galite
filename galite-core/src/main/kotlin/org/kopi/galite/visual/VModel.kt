@@ -41,5 +41,5 @@ interface VModel : Serializable {
    * Returns the model display.
    * @return The model display
    */
-  fun getDisplay(): UComponent
+  fun getDisplay(): UComponent?
 }

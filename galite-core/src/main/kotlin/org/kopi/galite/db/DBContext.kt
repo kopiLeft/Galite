@@ -15,22 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.base
 
-import java.sql.Connection
+package org.kopi.galite.db
 
-import org.jetbrains.exposed.sql.Database
-
-class DBContext {
+/**
+ * The database context
+ *
+ * @param defaultConnection The underlying default connection.
+ */
+class DBContext(var defaultConnection: Connection) {
 
   /**
-   * Create a connection with Exposed. Connects to database and logs on.
+   * Create a connection. Connects to database and logs on.
    *
    * @param     driverName      the class name of the JDBC driver to register.
    * @param     url             the URL of the database to connect to
    * @param     user            the name of the database user
    * @param     password        the password of the database user
-   * @param     lookupUserId    lookup user id in table KOPI_USERS ?
+   * @param     lookupUserId    lookup user id in table of users ?
    * @param     schema          the current database schema
    */
   fun createConnection(
@@ -38,65 +40,40 @@ class DBContext {
     url: String,
     user: String,
     password: String,
-    lookupUserId: Boolean, // TODO
-    schema: String? // TODO
-  ): Database {
-    val database = Database.connect(url = url, driver = driverName, user = user, password = password)
-    connections.add(database)
-    return database
+    lookupUserId: Boolean = true, // TODO
+    schema: String? = null // TODO
+  ): Connection {
+    this.connection = Connection(url = url,
+                                driver = driverName,
+                                userName = user,
+                                password = password,
+                                lookupUserId = lookupUserId,
+                                schema = schema)
+    return this.connection
   }
 
   /**
    * Creates a connection from JDBC Connection
    *
    * @param     connection      the JDBC connection
-   * @param     lookupUserId    lookup user id in table KOPI_USERS ?
+   * @param     lookupUserId    lookup user id in table of users ?
    * @param     schema          the current database schema
    */
   fun createConnection(
-    connection: Connection,
+    connection: java.sql.Connection,
     lookupUserId: Boolean, // TODO
     schema: String? // TODO
-  ): Database {
-    val database = Database.connect({connection})
-    connections.add(database)
-    return database
-  }
-
-  /**
-   * Connects to database and logs on.
-   *
-   * @param     driverName      the class name of the JDBC driver to register.
-   * @param     url             the URL of the database to connect to
-   * @param     user            the name of the database user
-   * @param     password        the password of the database user
-   */
-  fun createConnection(
-    driverName: String,
-    url: String,
-    user: String,
-    password: String
-  ): Database {
-    val database = createConnection(driverName, url, user, password, true, null)
-    connections.add(database)
-    return database
+  ): Connection {
+    this.connection = Connection(connection = connection,
+                                 lookupUserId = lookupUserId,
+                                 schema = schema)
+    return this.connection
   }
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  /** All connections currently opened */
-  var connections = arrayListOf<Database>()
-    private set
-
-  /**
-   * The underlying default connection.
-   */
-  var defaultConnection: Database? = null
-
-  /**
-   * If there is a transaction started
-   */
-  var isInTransaction = false
+  /** Connection currently opened */
+  lateinit var connection: Connection
     private set
 }

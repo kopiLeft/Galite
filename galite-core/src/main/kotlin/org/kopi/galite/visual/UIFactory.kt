@@ -41,6 +41,6 @@ abstract class UIFactory {
   abstract fun createView(model: VModel): UComponent
 
   companion object {
-    private lateinit var uiFactory: UIFactory
+    lateinit var uiFactory: UIFactory
   }
 }

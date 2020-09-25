@@ -108,7 +108,7 @@ class Rexec(private val host: String, private val port: Int = STANDARD_EXEC_PORT
   /**
    * returns an output stream for the given socket
    */
-  private fun getOutputStream(): OutputStream = socket!!.getOutputStream()
+  fun getOutputStream(): OutputStream = socket!!.getOutputStream()
 
 
   private var socket: Socket? = null
