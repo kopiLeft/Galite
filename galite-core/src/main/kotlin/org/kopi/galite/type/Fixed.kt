@@ -18,11 +18,87 @@
 
 package org.kopi.galite.type
 
-open class Fixed {
-  /**
-   * Comparisons
-   */
-  fun compareTo(other: Fixed): Int {
+import java.math.BigDecimal
+import java.math.BigInteger
+
+/**
+ * This class represents the fixed type
+ */
+open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
+  internal constructor(b: BigInteger?) : this(BigDecimal(b)) {}
+  internal constructor(b: BigInteger?, l: Int) : this(BigDecimal(b)) {}
+  internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale)) {}
+  internal constructor(d: Double) : this(BigDecimal(d)) {}
+  internal constructor(s: String?) : this(BigDecimal(s)) {}
+  // ----------------------------------------------------------------------
+  // DEFAULT OPERATIONS
+  // ----------------------------------------------------------------------
+  fun add(f: NotNullFixed): NotNullFixed {
     TODO()
+  }
+  fun divide(f: NotNullFixed): NotNullFixed {
+    TODO()
+  }
+  fun multiply(f: NotNullFixed): NotNullFixed {
+    TODO()
+  }
+  fun subtract(f: NotNullFixed): NotNullFixed {
+    TODO()
+  }
+  fun negate(): NotNullFixed {
+    TODO("Not yet implemented")
+  }
+  fun setScale(v: Int): NotNullFixed {
+    TODO("Not yet implemented")
+  }
+  fun setScale(v: Int, d: Int): NotNullFixed {
+    TODO("Not yet implemented")
+  }
+  fun getScale(): Int = TODO("Not yet implemented")
+
+  operator fun compareTo(other: Fixed): Int {
+    TODO("Not yet implemented")
+  }
+
+  override operator fun compareTo(other: Any?): Int {
+    TODO("Not yet implemented")
+  }
+  override fun equals(other: Any?): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun toByte(): Byte {
+    TODO("Not yet implemented")
+  }
+
+  override fun toChar(): Char {
+    TODO("Not yet implemented")
+  }
+
+  override fun toDouble(): Double {
+    TODO("Not yet implemented")
+  }
+
+  override fun toFloat(): Float {
+    TODO("Not yet implemented")
+  }
+
+  override fun toInt(): Int {
+    TODO("Not yet implemented")
+  }
+
+  override fun toLong(): Long {
+    TODO("Not yet implemented")
+  }
+
+  override fun toShort(): Short {
+    TODO("Not yet implemented")
+  }
+
+  private var value: BigDecimal? = null
+
+  /*package*/
+  init {
+    value = b
   }
 }

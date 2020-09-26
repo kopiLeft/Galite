@@ -15,6 +15,48 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-abstract class VCCDepthFirstCircuitN 
+abstract class VCCDepthFirstCircuitN : VCalculateColumn() {
+  /**
+   * Initialisation of the calculation
+   */
+  override fun init() {}
+
+  /**
+   * Evaluates nodes
+   */
+  override fun evalNode(row: VReportRow, column: Int): Any? {
+    return null
+  }
+
+  /**
+   * Evaluates leafs
+   */
+  fun evalLeaf(row: VReportRow?, column: Int): Any? {
+    return null
+  }
+
+  /**
+   * Add calculated data into the report row
+   */
+  override fun calculate(tree: VGroupRow, column: Int) {
+    if (tree.level > 1) {
+      val childCount: Int = tree.childCount
+      for (i in 0 until childCount) {
+        calculate(tree.getChildAt(i) as VGroupRow, column)
+      }
+    } else {
+      val childCount: Int = tree.childCount
+      for (i in 0 until childCount) {
+        val evaluatedObject = evalLeaf(tree.getChildAt(i) as VBaseRow,
+                column)
+        if (evaluatedObject != null) {
+          (tree.getChildAt(i) as VBaseRow).setValueAt(column, evaluatedObject)
+        }
+      }
+    }
+    tree.setValueAt(column, evalNode(tree, column))
+  }
+}
