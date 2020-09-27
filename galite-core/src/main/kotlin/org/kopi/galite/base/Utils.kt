@@ -41,7 +41,7 @@ import java.util.zip.GZIPOutputStream
  * usage:
  * To load image first in Application directory, then in default directory:
  * Utils.getImage("name");
- * To load default images (that appear in org.kopi.vkopi.lib.util/resources)
+ * To load default images (that appear in resources/org/kopi/galite)
  * Utils.getDefaultImage("name");
  * To load Application images (that appear in resources)
  * Utils.getApplicationImage("name");
