@@ -147,7 +147,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     val listeners = modelListener.listenerList
     var i = listeners.size - 2
     while (i >= 0) {
-      if (listeners[i] === VActionListener::class.java) {
+      if (listeners[i] == VActionListener::class.java) {
         (listeners[i + 1] as VActionListener).performAsyncAction(action)
       }
       i -= 2
@@ -161,7 +161,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     var send = false
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === MessageListener::class.java) {
+      if (listeners[i] == MessageListener::class.java) {
         (listeners[i + 1] as MessageListener).notice(message)
         send = true
       }
@@ -178,7 +178,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     var send = false
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === MessageListener::class.java) {
+      if (listeners[i] == MessageListener::class.java) {
         (listeners[i + 1] as MessageListener).error(message)
         send = true
       }
@@ -198,7 +198,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     var send = false
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === MessageListener::class.java) {
+      if (listeners[i] == MessageListener::class.java) {
         (listeners[i + 1] as MessageListener).warn(message)
         send = true
       }
@@ -218,7 +218,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     val listeners = modelListener.listenerList
     var i = listeners.size - 2
     while (i >= 0) {
-      if (listeners[i] === MessageListener::class.java) {
+      if (listeners[i] == MessageListener::class.java) {
         var value = (listeners[i + 1] as MessageListener).ask(message, yesIsDefault)
         when (value) {
           MessageListener.AWR_YES -> return true
@@ -304,7 +304,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun close(code: Int) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === ModelCloseListener::class.java) {
+      if (listeners[i] == ModelCloseListener::class.java) {
         (listeners[i + 1] as ModelCloseListener).modelClosed(code)
       }
     }
@@ -337,7 +337,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun setProgressDialog(message: String, currentJob: Int) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === ProgressDialogListener::class.java) {
+      if (listeners[i] == ProgressDialogListener::class.java) {
         (listeners[i + 1] as ProgressDialogListener).setProgressDialog(message, currentJob)
       }
     }
@@ -354,7 +354,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun unsetProgressDialog() {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === ProgressDialogListener::class.java) {
+      if (listeners[i] == ProgressDialogListener::class.java) {
         (listeners[i + 1] as ProgressDialogListener).unsetProgressDialog()
       }
     }
@@ -370,7 +370,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun setWaitDialog(message: String, maxtime: Int) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === WaitDialogListener::class.java) {
+      if (listeners[i] == WaitDialogListener::class.java) {
         (listeners[i + 1] as WaitDialogListener).setWaitDialog(message, maxtime)
       }
     }
@@ -382,7 +382,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun unsetWaitDialog() {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === WaitDialogListener::class.java) {
+      if (listeners[i] == WaitDialogListener::class.java) {
         (listeners[i + 1] as WaitDialogListener).unsetWaitDialog()
       }
     }
@@ -394,7 +394,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun setWaitInfo(message: String) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === WaitInfoListener::class.java) {
+      if (listeners[i] == WaitInfoListener::class.java) {
         (listeners[i + 1] as WaitInfoListener).setWaitInfo(message)
       }
     }
@@ -406,7 +406,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun unsetWaitInfo() {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === WaitInfoListener::class.java) {
+      if (listeners[i] == WaitInfoListener::class.java) {
         (listeners[i + 1] as WaitInfoListener).unsetWaitInfo()
       }
     }
@@ -589,7 +589,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun fireFileProduced(file: File, name: String = file.name) {
     val listeners = listenerList.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
-      if (listeners[i] === FileProductionListener::class.java) {
+      if (listeners[i] == FileProductionListener::class.java) {
         (listeners[i + 1] as FileProductionListener).fileProduced(file, name)
       }
     }
