@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual
 
+import java.util.Locale
+
 import org.kopi.galite.db.DBContext
 
 abstract class ApplicationContext {
@@ -27,6 +29,9 @@ abstract class ApplicationContext {
       TODO()
     }
     fun getMenu(): VMenuTree = TODO()
+    fun getDefaultLocale(): Locale {
+      TODO()
+    }
     lateinit var applicationContext: ApplicationContext
   }
 }

@@ -47,7 +47,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   private var extraTitle: String? = null
   private var display: UWindow? = null
   private var actors: ArrayList<VActor> = arrayListOf()
-  private var title: String? = null
+  protected var windowTitle: String? = null
   protected var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
@@ -109,7 +109,11 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Resets form to initial state
    */
-  abstract fun reset()
+  fun reset() {
+    // do nothing
+
+    // TODO set it abstract
+  }
 
   /**
    * Returns true if it is allowed to quit this model
@@ -230,22 +234,22 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     return false
   }
 
-  fun getTitle(): String = title + if (extraTitle != null) " $extraTitle" else ""
+  open fun getTitle(): String? = windowTitle + if (extraTitle != null) " $extraTitle" else ""
 
   /**
    * Sets a the text to be appended to the title.
    */
   fun appendToTitle(text: String) {
     extraTitle = text
-    display?.setTitle(getTitle())
+    display?.setTitle(getTitle()!!)
   }
 
   /**
    * change the title of this form
    */
   fun setTitle(title: String?) {
-    this.title = title
-    display?.setTitle(getTitle())
+    this.windowTitle = title
+    display?.setTitle(getTitle()!!)
   }
 
   /**
@@ -314,7 +318,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   override fun setDisplay(display: UComponent) {
     assert(display is UWindow) { "VWindow display should be instance of UWindow" }
     this.display = display as UWindow
-    setTitle(title)
+    setTitle(windowTitle)
   }
 
   // ----------------------------------------------------------------------
@@ -411,7 +415,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   // ----------------------------------------------------------------------
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
-  fun getType(): Int = Constants.MDL_UNKOWN
+  open fun getType(): Int = Constants.MDL_UNKOWN
 
   fun enableCommands() = f12.setEnabled(true)
 
@@ -508,6 +512,13 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     } else {
       null
     }
+  }
+
+  /**
+   * Try to handle an exception
+   */
+  fun fatalError(data: Any, line: String, reason: Throwable) {
+    TODO()
   }
 
   // ----------------------------------------------------------------------

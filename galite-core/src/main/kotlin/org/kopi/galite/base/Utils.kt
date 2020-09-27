@@ -230,7 +230,7 @@ object Utils : org.kopi.galite.util.base.Utils() {
   // PRIVATE DATA
   // ----------------------------------------------------------------------
   const val APPLICATION_DIR = "resources"
-  const val RESOURCE_DIR = "org/kopi/vkopi/lib/resource"
+  const val RESOURCE_DIR = "org/kopi/galite"
   private val DEFAULT_VERSION = arrayOf(
           "No version information available.",
           "Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN. All rights reserved.",

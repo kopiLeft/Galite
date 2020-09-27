@@ -18,5 +18,19 @@
 
 package org.kopi.galite.util
 
-class PrintJob { // TODO
+import java.io.File
+
+/**
+ * PPage/Report creates a PrintJob
+ *
+ * A Printer creates a PrintTask from a PrintJob
+ */
+class PrintJob(val dataFile: File) {
+  var numberOfPages: Int = -1
+  fun getWidth(): Int {
+    TODO()
+  }
+  fun getHeight(): Int {
+    TODO()
+  }
 }
