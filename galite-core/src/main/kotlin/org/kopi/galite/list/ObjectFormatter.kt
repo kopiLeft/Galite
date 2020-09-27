@@ -29,5 +29,5 @@ interface ObjectFormatter : Serializable {
   /**
    * Returns a representation of value
    */
-  fun formatObject(value: Any): Any
+  fun formatObject(value: Any?): Any
 }

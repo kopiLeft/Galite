@@ -17,4 +17,35 @@
  */
 package org.kopi.galite.list
 
-class VFixnumCodeColumn 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.type.Fixed
+import org.kopi.galite.util.base.InconsistencyException
+
+
+class VFixnumCodeColumn(title: String,
+                        column: String,
+                        names: Array<String>,
+                        private val codes: Array<Fixed>,
+                        sortAscending: Boolean)
+          : VCodeColumn(title,
+                        column,
+                        names,
+                        sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  /**
+   * Returns the index.of given object
+   */
+  override fun getObjectIndex(value: Any): Int {
+    codes.forEachIndexed { index, code ->
+      if (value == code) {
+        return index
+      }
+    }
+    throw InconsistencyException("bad code value " + value as Fixed)
+  }
+
+  override fun getDataType(): KClass<*> = Fixed::class
+}
