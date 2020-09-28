@@ -27,16 +27,12 @@ abstract class VCCDepthFirstCircuitN : VCalculateColumn() {
   /**
    * Evaluates nodes
    */
-  override fun evalNode(row: VReportRow, column: Int): Any? {
-    return null
-  }
+  override fun evalNode(row: VReportRow, column: Int): Any? =  null
 
   /**
    * Evaluates leafs
    */
-  fun evalLeaf(row: VReportRow?, column: Int): Any? {
-    return null
-  }
+  fun evalLeaf(row: VReportRow, column: Int): Any? =  null
 
   /**
    * Add calculated data into the report row
@@ -44,14 +40,16 @@ abstract class VCCDepthFirstCircuitN : VCalculateColumn() {
   override fun calculate(tree: VGroupRow, column: Int) {
     if (tree.level > 1) {
       val childCount: Int = tree.childCount
+
       for (i in 0 until childCount) {
         calculate(tree.getChildAt(i) as VGroupRow, column)
       }
     } else {
       val childCount: Int = tree.childCount
+
       for (i in 0 until childCount) {
-        val evaluatedObject = evalLeaf(tree.getChildAt(i) as VBaseRow,
-                column)
+        val evaluatedObject = evalLeaf(tree.getChildAt(i) as VBaseRow, column)
+
         if (evaluatedObject != null) {
           (tree.getChildAt(i) as VBaseRow).setValueAt(column, evaluatedObject)
         }

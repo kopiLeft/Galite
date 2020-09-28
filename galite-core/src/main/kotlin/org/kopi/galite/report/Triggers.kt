@@ -34,9 +34,11 @@ object Triggers {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
         var result = 0
+
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
           val value = child.getValueAt(column) as Int?
+
           if (value != null) {
             result += value
           }
@@ -53,21 +55,24 @@ object Triggers {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
+
         return if (row.level > 1) {
           // the value of a node is the sum of
           // other nodes (contain no leafs)
           var result = 0
+
           for (i in 0 until childCount) {
             val child = row.getChildAt(i) as VReportRow
             val value = child.getValueAt(column) as Int?
+
             if (value != null) {
               result += value
             }
           }
           result
         } else {
-          // the value is the number of the childs
-          // if the childs are leafs
+          // the value is the number of the children
+          // if the children are leafs
           childCount
         }
       }
@@ -82,9 +87,11 @@ object Triggers {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
         var result = NotNullFixed(0, 2)
+
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
           val value = child.getValueAt(column) as NotNullFixed?
+
           if (value != null) {
             result = result.add(value)
           }
@@ -103,9 +110,11 @@ object Triggers {
         val childCount = row.childCount
         var result = 0
         var valueFound = false
+
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
           val value = child.getValueAt(column) as Int?
+
           if (value != null) {
             valueFound = true
             result += value
@@ -125,9 +134,11 @@ object Triggers {
         val childCount = row.childCount
         var valueFound = false
         var result = NotNullFixed(0, 2)
+
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
           val value = child.getValueAt(column) as NotNullFixed?
+
           if (value != null) {
             valueFound = true
             result = result.add(value)
@@ -146,6 +157,7 @@ object Triggers {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
         val value = (row.getChildAt(0) as VReportRow).getValueAt(column)
+
         return if (value == null) {
           null
         } else {
@@ -169,9 +181,11 @@ object Triggers {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
         var result = 0
+
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
           val value = child.getValueAt(column) as Int?
+
           if (value != null) {
             result += value
           }
@@ -189,21 +203,24 @@ object Triggers {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
+
         return if (row.level > 1) {
           // the value of a node is the sum of
           // other nodes (contain no leafs)
           var result = 0
+
           for (i in 0 until childCount) {
             val child = row.getChildAt(i) as VReportRow
             val value = child.getValueAt(column) as Int?
+
             if (value != null) {
               result += value
             }
           }
           result
         } else {
-          // the value is the number of the childs
-          // if the childs are leafs
+          // the value is the number of the children
+          // if the children are leafs
           childCount
         }
       }
@@ -214,11 +231,13 @@ object Triggers {
       override fun calculate(tree: VGroupRow, column: Int) {
         if (tree.level > 1) {
           val childCount = tree.childCount
+
           for (i in 0 until childCount) {
             calculate(tree.getChildAt(i) as VGroupRow, column)
           }
         } else {
           val childCount = tree.childCount
+
           for (i in 0 until childCount) {
             // set leave to serial number
             (tree.getChildAt(i) as VBaseRow).setValueAt(column, i + 1)
@@ -238,9 +257,11 @@ object Triggers {
         val leafCount = row.leafCount
         var notNullLeafCount = 0.0
         var result = NotNullFixed(0, 2)
-        var leaf = row.getFirstLeaf() as VReportRow
+        var leaf = row.firstLeaf as VReportRow
+
         for (i in 0 until leafCount) {
           val value = leaf.getValueAt(column) as NotNullFixed?
+
           if (value != null) {
             result = result.add(value)
             notNullLeafCount++
