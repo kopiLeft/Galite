@@ -18,9 +18,55 @@
 
 package org.kopi.galite.visual
 
-abstract class PrinterManager {
+import org.kopi.galite.util.Printer
 
-  fun getPrinterManager() {
-    TODO()
+/**
+ *
+ */
+abstract class PrinterManager {
+  /**
+   * Returns a print for previewing document
+   */
+  abstract fun getPreviewPrinter(): Printer
+
+  /**
+   * Property print.server
+   * Returns the name of the print server to use. for printing
+   */
+  abstract fun getPrintServer(): String
+
+  /**
+   * Returns the preferred printer for the STANDARD_MEDIA
+   */
+  abstract fun getCurrentPrinter(): Printer
+
+  /**
+   * Returns the preferredPrinter for the specified media.
+   */
+  abstract fun getPreferredPrinter(media: String): Printer
+
+  /**
+   * Returns the currently selected printer for current user
+   */
+  abstract fun getPrinterByName(name: String): Printer
+
+  /**
+   * Returns a printer that support this kind of media or the default one if none
+   */
+  abstract fun getPrinterByMedia(media: String): Printer
+
+  /**
+   * Returns the default Printer for a kind of document
+   */
+  abstract fun getPrinterByDocumentType(documentType: String?): Printer?
+
+  companion object {
+    fun getPrinterManager(): PrinterManager? {
+      return ApplicationContext.getApplicationContext()!!.getApplication().getPrinterManager()
+    }
+
+    fun setPrinterManager(manager: PrinterManager?) {
+      ApplicationContext.getApplicationContext()!!.getApplication().setPrinterManager(manager)
+    }
   }
 }

@@ -18,5 +18,6 @@
 
 package org.kopi.galite.util
 
-class PrintJob { // TODO
+class PrintJob {
+// TODO
 }

@@ -19,6 +19,7 @@
 package org.kopi.galite.visual
 
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.report.VReportCommand
 
 import java.io.Serializable
 
@@ -42,4 +43,8 @@ interface VModel : Serializable {
    * @return The model display
    */
   fun getDisplay(): UComponent?
+  abstract fun setNumber(trigger: Int)
+  abstract fun setHandler(vReportCommand: VReportCommand)
+  abstract fun getNumber(): Int
+  abstract fun getActorIdent(): String
 }

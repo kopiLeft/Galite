@@ -19,14 +19,149 @@
 package org.kopi.galite.visual
 
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.util.base.InconsistencyException
+import java.util.*
 
+/**
+ * `ApplicationContext` is a kopi application context that contains the
+ * running [Application] instance in the context thread. The `ApplicationContext`
+ * handles all shared applications components.
+ */
 abstract class ApplicationContext {
-  abstract val application: Application
+  //-----------------------------------------------------------
+  // ABSTRACT METHODS
+  //-----------------------------------------------------------
+  /**
+   * Returns the **current** [Application] instance.
+   * @return The **current** [Application] instance.
+   */
+  abstract fun getApplication(): Application?
+
+  /**
+   * Returns the **current** [PreviewRunner] instance.
+   * @return The **current** [PreviewRunner] instance.
+   */
+  abstract fun getPreviewRunner(): PreviewRunner
+
+  /**
+   * Returns `true` if we are in a web application context.
+   * @return `true` if we are in a web application context.
+   */
+  abstract fun isWebApplicationContext(): Boolean
+
   companion object {
-    fun getDBContext(): DBContext {
+    //-----------------------------------------------------------
+    // ACCESSORS
+    //-----------------------------------------------------------
+    /**
+     * Returns the `ApplicationContext` instance.
+     * @return The `ApplicationContext` instance.
+     */
+    fun getApplicationContext(): ApplicationContext? {
+      return applicationContext
+    }
+
+    /**
+     * Sets the `ApplicationContext` instance.
+     * @param context The `ApplicationContext` instance.
+     */
+    fun setApplicationContext(context: ApplicationContext?) {
+      assert(context != null) { "The ApplicationContext cannot be null" }
+      applicationContext = context
+    }
+    //-----------------------------------------------------------
+    // UTILS
+    //-----------------------------------------------------------
+    /**
+     * Returns the default configuration of the Application
+     */
+    fun getDefaultd() {
       TODO()
     }
-    fun getMenu(): VMenuTree = TODO()
-    lateinit var applicationContext: ApplicationContext
+
+    /**
+     * Returns the [Application] menu.
+     * @return The [Application] menu.
+     */
+    fun getMenu() {
+      TODO()
+    }
+
+    /**
+     * Returns the [LocalizationManager] instance.
+     * @return The [LocalizationManager] instance.
+     */
+    fun getLocalizationManager(): LocalizationManager {
+      TODO()
+    }
+
+    /**
+     * Returns the default application [Locale].
+     * @return The default application [Locale].
+     */
+    fun getDefaultLocale() {
+      TODO()
+    }
+
+
+    /**
+     * Returns the application [Registry].
+     * @return the application [Registry].
+     */
+    fun getRegistry() {
+      TODO()
+    }
+
+    /**
+     * Returns the application [DBContext].
+     * @return The application [DBContext].
+     */
+    fun getDBContext() {
+      TODO()
+    }
+
+    /**
+     * Returns `true` if the [Application] should only generate help.
+     * @return `true` if the [Application] should only generate help.
+     */
+    fun isGeneratingHelp() {
+      TODO()
+    }
+
+    /**
+     * Displays an error message outside a model context. This can happen when launching a module.
+     * @param parent The parent component.
+     * @param message The message to be displayed.
+     */
+    fun displayError() {
+      TODO()
+    }
+    // ---------------------------------------------------------------------
+    // SEND A BUG REPORT
+    // ---------------------------------------------------------------------
+    /**
+     * Reports a trouble at execution time.
+     *
+     * @param     module          the module where the trouble was detected
+     * @param     reason          the exception that triggered the bug report
+     */
+    fun reportTrouble(s: String, s1: String, message: String, e: InconsistencyException) {
+      TODO()
+    }
+
+    /**
+     * Write the network interfaces.
+     * @param writer The Writer object.
+     */
+    private fun writeNetworkInterfaces() {
+      TODO()
+    }
+
+    //-----------------------------------------------------------
+    // DATA MEMBERS
+    //-----------------------------------------------------------
+    private var applicationContext: ApplicationContext? = null
+    var compt = 0
   }
 }

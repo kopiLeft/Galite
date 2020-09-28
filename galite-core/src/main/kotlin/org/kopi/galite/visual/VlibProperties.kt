@@ -23,7 +23,7 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.l10n.LocalizationManager
 
 import java.text.MessageFormat
-import java.util.*
+import java.util.Locale
 
 
 /**
@@ -34,6 +34,7 @@ object VlibProperties {
   // ----------------------------------------------------------------------
   // STATIC METHODS
   // ----------------------------------------------------------------------
+
   /**
    * Returns the value of the property for the given key.
    *
@@ -41,17 +42,6 @@ object VlibProperties {
    * @return    the requested property value
    */
   fun getString(key: String): String = getString(key, null)
-
-  /**
-   * Returns the value of the property for the given key.
-   *
-   * @param     key             the property key
-   * @param     param           property parameter
-   * @return    the requested property value
-   */
-  fun getString(key: String, param: Any?): String {
-    return getString(key, arrayOf(param))
-  }
 
   /**
    * Returns the value of the property for the given key.
@@ -65,20 +55,26 @@ object VlibProperties {
     return getString(key, arrayOf(param1, param2))
   }
 
-  fun getString(key: String, params: Array<Any>): String {
+  fun getString(key: String, params: Any?): String {
     val format: String
-    val manager: LocalizationManager? = if (ApplicationContext.getApplicationContext()!!.getApplication() != null) {
+    val manager: LocalizationManager = if (ApplicationContext.getApplicationContext()!!.getApplication() != null) {
       ApplicationContext.getLocalizationManager()
     } else {
       LocalizationManager(Locale.getDefault(), null)
     }
     return try {
       // Within a String, "''" represents a single quote in java.text.MessageFormat.
-      format = manager!!.getPropertyLocalizer(VLIB_PROPERTIES_RESOURCE_FILE, key).getValue().replace("'", "''")
-      MessageFormat.format(format, *params)
+      format = manager.getPropertyLocalizer(VLIB_PROPERTIES_RESOURCE_FILE, key).getValue().replace("'", "''")
+
+      if (params is Array<*>?) {
+        MessageFormat.format(format, *params)
+      } else {
+        MessageFormat.format(format, params)
+      }
+
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble("localize Property",
-              "org.kopi.vkopi.lib.visual.VlibProperties.getString(String key, Object[] params)",
+              "org.kopi.galite.visual.VlibProperties.getString(String key, Object[] params)",
               e.message!!,
               e)
       System.err.println("ERROR: " + e.message)

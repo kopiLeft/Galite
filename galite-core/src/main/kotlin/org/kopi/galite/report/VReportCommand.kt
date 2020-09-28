@@ -20,19 +20,18 @@ package org.kopi.galite.report
 
 
 import org.kopi.galite.print.DefaultPrintManager
+import org.kopi.galite.print.PrintManager
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
-import org.kopi.galite.print.PrintManager
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.PrinterManager
-import org.kopi.galite.visual.VException
 
-class VReportCommand(private val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.getNumber(), actor.getActorIdent()), ActionHandler {
+class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.getNumber(), actor.getActorIdent()), ActionHandler {
   /**
    * Returns the actor
    */
-  fun setEnabled(enabled: Boolean) {
+  override fun setEnabled(enabled: Boolean) {
     if (actor != null) {
       actor.setEnabled(enabled)
       actor.setNumber(trigger)
@@ -47,8 +46,7 @@ class VReportCommand(private val report: VReport, actor: VActor) : VCommand(0xFF
    * @param    action        the action to perform.
    * @param    block        This action should block the UI thread ?
    */
-  @Deprecated("use method performAsyncAction")
-  fun performAction(action: Action?, block: Boolean) {
+  fun performAction(action: Action, block: Boolean) {
     report.performAction(action, block)
     /*try {
       executeVoidTrigger(getTrigger());
@@ -81,11 +79,11 @@ class VReportCommand(private val report: VReport, actor: VActor) : VCommand(0xFF
     when (type) {
       Constants.CMD_QUIT -> report.close()
       Constants.CMD_PRINT -> {
-        val pm: PrintManager = DefaultPrintManager.getPrintManager()
+        val pm: PrintManager = DefaultPrintManager.getPrintManager()!!
         pm.print(report,
                 report,
                 1,
-                PrinterManager.getPrinterManager().getCurrentPrinter(),
+                PrinterManager.getPrinterManager()!!.getCurrentPrinter(),
                 null,
                 null)
       }

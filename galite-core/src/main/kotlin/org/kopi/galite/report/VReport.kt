@@ -18,23 +18,17 @@
 package org.kopi.galite.report
 
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VWindow
+import java.awt.print.Printable
 
-abstract class VReport {
-  object TYP_PDF {
+abstract class VReport : VWindow(), Printable {
+  object TYP_PDF
 
-  }
+  object TYP_XLSX
 
-  object TYP_XLSX {
+  object TYP_XLS
 
-  }
-
-  object TYP_XLS {
-
-  }
-
-  object TYP_CSV {
-
-  }
+  object TYP_CSV
 
   abstract fun showHelp()
   abstract fun unfoldSelectedColumn()
@@ -44,5 +38,6 @@ abstract class VReport {
   abstract fun foldSelection()
   abstract fun export(typPdf: Any)
   abstract fun close()
-  abstract fun performAsyncAction(action: Action)
+  abstract override fun performAsyncAction(action: Action)
+  abstract fun performAction(action: Action?, block: Boolean)
 } 
