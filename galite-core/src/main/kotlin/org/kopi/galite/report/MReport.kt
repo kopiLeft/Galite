@@ -18,6 +18,8 @@
 
 package org.kopi.galite.report
 
+import org.apache.commons.lang3.mutable.Mutable
+
 class MReport {
   //TODO
 
@@ -51,4 +53,17 @@ class MReport {
   fun getModelColumn(column: Int): VReportColumn {
     TODO()
   }
+
+  val firstProperty: String = ""
+  val secondProperty: String = ""
+  val thirdProperty: Int = 0
+
+  var baseRows: MutableCollection<VReportRow> = mutableListOf(
+          VReportRow("first example", 1543),
+          VReportRow("second example", 1564),
+          VReportRow("third example", 1571))
+
+  class VReportRow(val name: String, val year: Int)
+
 }
+

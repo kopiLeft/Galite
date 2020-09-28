@@ -18,15 +18,29 @@
 package org.kopi.galite.ui.report
 
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridVariant
+import org.kopi.galite.report.MReport
 import org.kopi.galite.report.ReportRow
 import org.kopi.galite.report.Report
 
 /**
  * Data table for of a report.
  */
-class VTable() : Grid<ReportRow>() {
+class VTable(val model: MReport) : Grid<ReportRow>() {
   init {
     isColumnReorderingAllowed = true
+    addThemeVariants(GridVariant.LUMO_NO_BORDER)
+  }
+
+  fun createGrid(): Grid<MReport.VReportRow> {
+    var grid = Grid<MReport.VReportRow>()
+    grid.setItems(model.baseRows)
+    model.baseRows.forEach { vReportRow ->
+      grid.addColumn {
+        it
+      }.setHeader("Column name")
+    }
+    return grid
   }
 
   /**
@@ -42,5 +56,4 @@ class VTable() : Grid<ReportRow>() {
       }.setHeader(field.label).setSortable(true)
     }
   }
-
 }
