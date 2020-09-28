@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
 import com.lowagie.text.PageSize
@@ -31,7 +32,7 @@ import java.io.FileInputStream
 import java.io.ByteArrayOutputStream
 
 /**
- * PPage/Report creates a PrintJob
+ * Page/Report creates a PrintJob
  *
  * A Printer creates a PrintTask from a PrintJob
  */
@@ -44,11 +45,10 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
   lateinit var media: String
   private var documentType = 0
   private var dataType: Int
-  var numberCopy: Int
+  var numberCopy: Int = 1
   private var numberOfPages: Int
 
   init {
-    numberCopy = 1
     numberOfPages = -1
     dataType = DAT_PS
     // if the jvm is stopped before the objects are

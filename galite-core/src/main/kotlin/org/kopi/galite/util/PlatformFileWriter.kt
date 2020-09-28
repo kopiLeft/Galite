@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
 import java.io.File
@@ -36,7 +37,7 @@ class PlatformFileWriter(val dataStream: OutputStream,
               lineSeparator: String) : this(FileOutputStream(file), encoding, lineSeparator)
 
   /**
-   * Writes a string to the file
+   * Write a string to the file
    */
   fun write(string: String?) {
     if (string != null) {
@@ -62,6 +63,7 @@ class PlatformFileWriter(val dataStream: OutputStream,
   // ----------------------------------------------------------------------
   // CLOSE
   // ----------------------------------------------------------------------
+
   /**
    * Close the file
    */

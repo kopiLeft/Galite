@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class IPPAttribute(var groupTag: Int, var valueTag: Int, var name: String) {
@@ -68,8 +69,8 @@ class IPPAttribute(var groupTag: Int, var valueTag: Int, var name: String) {
     }
   }
   // --------------------------------------------------------------------
-// ACCESSORS
-// --------------------------------------------------------------------
+  // ACCESSORS
+  // --------------------------------------------------------------------
 
   fun addValue(value: IPPValue) {
     values.add(value)
@@ -90,10 +91,10 @@ class IPPAttribute(var groupTag: Int, var valueTag: Int, var name: String) {
       size++ // value-tag
       size += 2 // name-length
       if (firstValue) {
-        size += name!!.length // name
+        size += name.length // name
         firstValue = false
       }
-      size += value.size
+      size += value.getSize()
     }
     return size
   }
@@ -111,8 +112,8 @@ class IPPAttribute(var groupTag: Int, var valueTag: Int, var name: String) {
       value = vals.next() as IPPValue
       os.writeByte(valueTag) // value-tag
       if (firstValue) {
-        os.writeShort(name!!.length) // name-length
-        os.writeString(name!!)
+        os.writeShort(name.length) // name-length
+        os.writeString(name)
         firstValue = false
       } else {
         os.writeShort(0) // name-length
@@ -122,7 +123,7 @@ class IPPAttribute(var groupTag: Int, var valueTag: Int, var name: String) {
   }
 
   fun dump() {
-    val vals: Iterator<*> = values.iterator()
+    val vals = values.iterator()
     var value: IPPValue
     println("")
     println("Group Tag : $groupTag")
@@ -150,7 +151,7 @@ class IPPAttribute(var groupTag: Int, var valueTag: Int, var name: String) {
   }
 
   // --------------------------------------------------------------------
-// DATA MEMBERS
-// --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
   var values = arrayListOf<Any>()
 }

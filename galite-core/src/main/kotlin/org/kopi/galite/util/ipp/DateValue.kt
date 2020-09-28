@@ -15,12 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class DateValue : IPPValue {
+
   // --------------------------------------------------------------------
-  // CONSTRUCTOR
+  // CONSTRUCTORS
   // --------------------------------------------------------------------
+
   constructor(value: ByteArray) {
     this.value = value
   }
@@ -31,13 +34,13 @@ class DateValue : IPPValue {
     for (i in 0..10) {
       value[i] = iPPInputStream.readByte()
     }
-  }// value-length + value
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  override val size: Int
-    get() = 2 + 11 // value-length + value
+
+  override fun getSize(): Int = 2 + 11 // value-length + value
 
   override fun write(os: IPPOutputStream) {
     os.writeShort(11)

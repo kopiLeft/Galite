@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
 import org.kopi.galite.util.base.InconsistencyException
@@ -31,17 +32,12 @@ import gnu.hylafax.Pagesize.a4
 import gnu.inet.ftp.FtpClientProtocol
 import gnu.inet.ftp.ServerResponseException
 
-
 /**
  * Fax printer
- */
-/**
+ *
  * Constructs a fax printer
  */
 class HylaFAXPrinter(private val faxHost: String,
-                     /**
-                      * Gets the phone number
-                      */
                      val number: String,
                      private val user: String,
                      private val attachments: List<*>?) : AbstractPrinter("FaxPrinter $number"), Printer {
@@ -51,7 +47,7 @@ class HylaFAXPrinter(private val faxHost: String,
   /**
    * Print a file and return the output of the command
    */
-  override fun print(printdata: PrintJob?): String {
+  override fun print(data: PrintJob): String {
     // get down to business, send the FAX already
 
     // List with names of temporary files on the server side
@@ -68,7 +64,7 @@ class HylaFAXPrinter(private val faxHost: String,
       faxClient.tzone(HylaFAXClientProtocol.TZONE_LOCAL)
 
       // add fax document
-      documents.add(faxClient.putTemporary(printdata!!.getInputStream()))
+      documents.add(faxClient.putTemporary(data.getInputStream()))
 
       // put attachments to server
       attachments?.let {
@@ -118,11 +114,12 @@ class HylaFAXPrinter(private val faxHost: String,
     TODO("Not yet implemented")
   }
 
-  override fun setPaperFormat(paperFormat: String?) {
+  override fun setPaperFormat(paperFormat: String) {
     TODO("Not yet implemented")
   }
 
-  override fun getPrinterName(): String? {
+  override fun getPrinterName(): String {
     TODO("Not yet implemented")
   }
+
 }

@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class IPP(val header: IPPHeader = IPPHeader(),
@@ -22,7 +23,7 @@ class IPP(val header: IPPHeader = IPPHeader(),
 
   constructor(iPPInputStream: IPPInputStream) : this() {
     var endAttributes = false
-    var groupTag: Int = IPPConstants.TAG_ZERO
+    var groupTag = IPPConstants.TAG_ZERO
     var read: Byte
     while (!endAttributes) {
       read = iPPInputStream.peekByte()
@@ -47,11 +48,10 @@ class IPP(val header: IPPHeader = IPPHeader(),
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  val isAnError: Boolean
-    get() = header.isAnError
 
-  val status: String?
-    get() = header.status
+  fun isAnError(): Boolean = header.isAnError
+
+  fun getStatus(): String? = header.getStatus()
 
   fun getAttributes(): Iterator<*> {
     return attributes.iterator()
@@ -62,15 +62,14 @@ class IPP(val header: IPPHeader = IPPHeader(),
   }
 
   fun setRequest(requestID: Int, operationID: Short) {
-    header.setRequestID(requestID)
-    header.setOperationID(operationID)
+    header.requestID = requestID
+    header.operationID = operationID
   }
 
   // 1 for the TAG_END
-  val size: Int
-    get() {
-      var size: Int = header.size
-      val atts: Iterator<*> = attributes.iterator()
+  fun getSize(): Int {
+      var size = header.size
+      val atts = attributes.iterator()
       var lastGroup = -1
       while (atts.hasNext()) {
         val attribute = atts.next() as IPPAttribute
@@ -82,7 +81,7 @@ class IPP(val header: IPPHeader = IPPHeader(),
 
 
   fun write(os: IPPOutputStream) {
-    val atts: Iterator<*> = attributes.iterator()
+    val atts = attributes.iterator()
     var lastGroup = -1
     header.write(os)
     while (atts.hasNext()) {

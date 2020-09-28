@@ -15,12 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class StringValue : IPPValue {
+
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
+
   constructor(value: String) {
     this.value = value
   }
@@ -28,13 +31,13 @@ class StringValue : IPPValue {
   constructor(inputStream: IPPInputStream) {
     val n = inputStream.readShort().toInt() //value-length
     value = inputStream.readString(n)!! //value
-  }// value-length + value
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  override val size: Int
-    get() = 2 + value.length // value-length + value
+
+  override fun getSize(): Int = 2 + value.length // value-length + value
 
   override fun write(os: IPPOutputStream) {
     os.writeShort(value.length)
@@ -52,6 +55,7 @@ class StringValue : IPPValue {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
+
   var value: String
     private set
 }

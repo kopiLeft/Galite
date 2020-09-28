@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class IPPHeader(var majorVersion: Byte = 1,
@@ -24,16 +25,15 @@ class IPPHeader(var majorVersion: Byte = 1,
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
-  constructor(inputStream: IPPInputStream) {
-    majorVersion = inputStream.readByte()
-    minorVersion = inputStream.readByte()
-    operationID = inputStream.readShort()
-    requestID = inputStream.readInteger()
-  }
+  constructor(inputStream: IPPInputStream) {majorVersion = inputStream.readByte()
+                                            minorVersion = inputStream.readByte()
+                                            operationID = inputStream.readShort()
+                                            requestID = inputStream.readInteger()}
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
+
   fun setVersion(major: Byte, minor: Byte) {
     majorVersion = major
     minorVersion = minor
@@ -46,8 +46,7 @@ class IPPHeader(var majorVersion: Byte = 1,
     os.writeInteger(requestID)
   }
 
-  val size: Int
-    get() = 8
+  fun getSize(): Int = 8
 
   fun dump() {
     println("Major version : $majorVersion")
@@ -56,8 +55,7 @@ class IPPHeader(var majorVersion: Byte = 1,
     println("Request ID : $requestID")
   }
 
-  val isAnError: Boolean
-    get() = operationID >= 0x400
+  fun isAnError(): Boolean = operationID >= 0x400
 
   fun getStatus(): String? {
     val units: Int

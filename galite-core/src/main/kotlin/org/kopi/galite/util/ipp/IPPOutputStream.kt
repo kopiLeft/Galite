@@ -15,12 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 import java.io.OutputStream
 import java.nio.charset.Charset
 
-class IPPOutputStream(private var os: OutputStream) {
+class IPPOutputStream(private val os: OutputStream) {
+
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------

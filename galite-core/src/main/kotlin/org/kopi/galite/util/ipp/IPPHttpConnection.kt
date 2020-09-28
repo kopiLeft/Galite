@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 import java.io.InputStream
@@ -27,9 +28,11 @@ import java.net.Socket
 import java.net.URL
 
 class IPPHttpConnection(private val url: URL) {
+
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
+
   fun sendRequest(request: IPP) {
     val httpRequest = IPPHttp(url.path, request)
     httpRequest.write(IPPOutputStream(os))

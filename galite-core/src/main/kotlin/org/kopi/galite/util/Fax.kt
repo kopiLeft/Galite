@@ -36,33 +36,33 @@ import java.util.Vector
 import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
 
+/**
+ * @deprecated  replaced by the class HylaFAXUtils
+ */
 class Fax(port: Int, host: String) {
+
   fun login(uname: String): Int {
     Utils.log("Fax", "login:$uname")
     print("USER $uname\n")
     clntOut.flush()
     val answer = check(readLine())
     if (answer == NEEDS_PASSWD) {
-      print("""
-  PASS 0
-  
-  """.trimIndent())
+      print("USER $uname\n")
       clntOut.flush()
     }
     return answer
   }
 
-
   fun endCon() {
-    print("""
-  QUIT
-  
-  """.trimIndent())
+    print("QUIT" + "\n")
     clntOut.flush()
+
     check(readLine())
-    clntIn.close()
-    clntOut.close()
-    clnt.close()
+    if (clnt != null) {
+      clntIn.close()
+      clntOut.close()
+      clnt.close()
+    }
   }
 
   fun sendBuffer(inputStream: InputStream): String {
@@ -77,20 +77,13 @@ class Fax(port: Int, host: String) {
       dos.write(buffer, 0, read)
     }
     dos.close()
-
     sndsrv = SendServ(baos.toByteArray(), debug)
-    val iaddr: ByteArray = getInetAddr()
+    val iaddr = getInetAddr()
     pstr = makePORT(iaddr, sndsrv.port)
-    print("""
-  TYPE I
-  
-  """.trimIndent()) // Binaer
+    print("TYPE I" + "\n")
     clntOut.flush()
     check(readLine())
-    print("""
-  MODE Z
-  
-  """.trimIndent()) // ZIP
+    print("MODE Z" + "\n") // ZIP
     //print("MODE S" + "\n"); // Stream
     clntOut.flush()
     check(readLine())
@@ -98,10 +91,7 @@ class Fax(port: Int, host: String) {
     System.err.println("PORT $pstr\n")
     clntOut.flush()
     check(readLine())
-    print("""
-  STOT
-  
-  """.trimIndent())
+    print("PORT $pstr\n")
     clntOut.flush()
     val line = readLine()
     check(line)
@@ -121,34 +111,30 @@ class Fax(port: Int, host: String) {
 
   fun getReceived(name: String): ByteArray {
     val pstr: String
-    val recsrv: RecvServ = RecvServ(debug)
-    val iaddr: ByteArray = getInetAddr()
+    val recsrv = RecvServ(debug)
+    val iaddr = getInetAddr()
     pstr = makePORT(iaddr, recsrv.port)
     if (debug) {
       println("Fax.getReceived: $pstr")
     }
-    print("""
-  TYPE I
-  
-  """.trimIndent())
+
+    print("TYPE I" + "\n")
     clntOut.flush()
     check(readLine())
-    print("""
-  MODE S
-  
-  """.trimIndent())
+
+    print("MODE S" + "\n")
     //print("MODE Z" + "\n");
     clntOut.flush()
     check(readLine())
-    print("""
-  CWD recvq
-  
-  """.trimIndent())
+
+    print("CWD recvq" + "\n")
     clntOut.flush()
     check(readLine())
+
     print("PORT $pstr\n")
     clntOut.flush()
     check(readLine())
+
     print("RETR $name\n")
     clntOut.flush()
     check(readLine())
@@ -158,23 +144,18 @@ class Fax(port: Int, host: String) {
       recsrv.join()
     } catch (e: InterruptedException) {
     }
-    print("""
-  CWD
-  
-  """.trimIndent())
+
+    print("CWD" + "\n")
     clntOut.flush()
     check(readLine())
+
     return recsrv.data
   }
 
   fun infoS(what: String): String {
     val pstr: String
-    val iaddr: ByteArray
-    val recsrv: RecvServ
-
-    // Thread erzeugen
-    recsrv = RecvServ(debug)
-    iaddr = getInetAddr()
+    val recsrv = RecvServ(debug)
+    val iaddr = getInetAddr()
     pstr = makePORT(iaddr, recsrv.port)
     print("PORT $pstr\n")
     clntOut.flush()
@@ -205,10 +186,7 @@ class Fax(port: Int, host: String) {
   fun command(what: String): String {
     val response = StringBuffer()
     var line: String
-    print("""
-  $what
-  
-  """.trimIndent())
+    print(what + "\n")
     clntOut.flush()
     val erg = check(readLine())
 
@@ -218,21 +196,17 @@ class Fax(port: Int, host: String) {
         if (check(line) == erg) {
           break
         }
-        response.append("""
-  $line
-  
-  """.trimIndent())
+        response.append(line + "\n")
       }
     }
     return response.toString()
   }
 
-  private fun setNewJob(jobNumber: String, jobUser: String, id: String) {
+  fun setNewJob(jobNumber: String, jobUser: String, id: String) {
     val number = checkNumber(jobNumber)
     val user = DEFAULT_USER
     Utils.log("Fax", "NEW JOB:$id / user: $user")
 
-    // Jobparameter einstellen
     command("JNEW")
     command("JPARM FROMUSER \"$user\"")
     command("JPARM LASTTIME 145959")
@@ -250,35 +224,40 @@ class Fax(port: Int, host: String) {
     command("JPARM CHOPTHRESHOLD 3")
   }
 
-  private fun checkNumber(number: String): String {
+  fun checkNumber(number: String): String {
     return buildString {
       number.filter { it in '0'..'9' }.forEach { append(it) }
     }
   }
 
-  private fun makePORT(iaddr: ByteArray, port: Int): String {
+  fun makePORT(iaddr: ByteArray, port: Int): String {
     val a = (port and 0xff).toByte()
     val b = (port and 0xff00 shr 8).toByte()
     return ((0xff and iaddr[0].toInt()).toString() + "," + (0xff and iaddr[1].toInt()) + "," +
             (0xff and iaddr[2].toInt()) + "," + (0xff and iaddr[3].toInt()) + "," +
-            (0xff and b.toInt()) + "," + (0xff and a.toInt())).toString()
+            (0xff and b.toInt()) + "," + (0xff and a.toInt()))
   }
 
-  private fun print(s: String) {
+  fun print(s: String) {
     if (verboseMode) {
       System.err.print("->$s")
     }
     clntOut.print(s)
   }
 
-  private fun readLine(): String = clntIn.readLine()
+  private fun readLine(): String {
+    val readLine = clntIn.readLine()
+    if (verboseMode) {
+      System.err.println(readLine)
+    }
+    return readLine
+  }
 
-  private fun check(str: String?): Int {
+  fun check(str: String?): Int {
     val message = StringBuffer()
     val rtc: Int
     if (str == null) {
-      throw PROTOException("Fax.check: empty Reply String!!!",
-              EMPTY_REPLY_STRING)
+      throw PROTOException("Fax.check: empty Reply String!!!", EMPTY_REPLY_STRING)
     }
     val delim: String = if (str[3] == '-') {
       "-"
@@ -301,9 +280,8 @@ class Fax(port: Int, host: String) {
     }
   }
 
-  private fun getInetAddr(): ByteArray {
-    return if (host == "localhost") {
-
+  fun getInetAddr(): ByteArray {
+    return if (host.equals("localhost", ignoreCase = true)) {
       byteArrayOf(127, 0, 0, 1)
     } else {
       InetAddress.getLocalHost().address
@@ -313,11 +291,11 @@ class Fax(port: Int, host: String) {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private val debug = false
-  private val clnt: Socket
-  private val clntIn: BufferedReader
-  private val clntOut: PrintWriter
-  private val host: String
+  val debug = false
+  val clnt: Socket
+  val clntIn: BufferedReader
+  val clntOut: PrintWriter
+  val host: String
   // ----------------------------------------------------------------------
   // INNER CLASSES
   // ----------------------------------------------------------------------
@@ -328,7 +306,7 @@ class Fax(port: Int, host: String) {
   }
 
   /**
-   * Mother class the send and receive thread workers.
+   * Mother class that sends and receives thread workers.
    */
   private abstract class BasicServ protected constructor(private val debug1: Boolean) : Thread() {
     protected fun debug(message: String?) {
@@ -357,8 +335,8 @@ class Fax(port: Int, host: String) {
   }
 
   /**
-   * Die Klasse RecServ ist abgeleitet von der Klasse BasicServ.
-   * Sie empfaengt Daten vom Protokoll Server
+   * The RecServ class is derived from the BasicServ class.
+   * It is receiving data from the protocol server
    */
   private class RecvServ(debug: Boolean) : BasicServ(debug) {
     // thread body
@@ -396,12 +374,12 @@ class Fax(port: Int, host: String) {
       val out: DataOutputStream
       try {
         debug("SendServ.run: \n" + "Build connection")
-        val srv_clnt = srv!!.accept()
+        val srvclnt = srv!!.accept()
         debug("SendServ.run: Create OutputStream")
-        out = DataOutputStream(srv_clnt.getOutputStream())
+        out = DataOutputStream(srvclnt.getOutputStream())
         out.write(buf, 0, buf.size)
         out.flush()
-        srv_clnt.close()
+        srvclnt.close()
         debug("SendServ.run: Sent Bytes=" + out.size())
         srv.close()
       } catch (e: IOException) {
@@ -420,11 +398,11 @@ class Fax(port: Int, host: String) {
      * Sends a fax
      */
     fun fax(host: String,
-            input: InputStream,
+            inputStream: InputStream,
             user: String,
             number: String,
             jobId: String) {
-      fax(HFAX_PORT, host, input, user, number, jobId)
+      fax(HFAX_PORT, host, inputStream, user, number, jobId)
     }
 
     /**
@@ -457,11 +435,11 @@ class Fax(port: Int, host: String) {
     fun readSendQueue(host: String, user: String): Vector<FaxStatus> = readQueue(host, user, "sendq")
 
     /*
-   * ----------------------------------------------------------------------
-   * READ THE DONE QUEUE
-   * RETURNS A VECTOR OF FAXSTATUS
-   * ----------------------------------------------------------------------
-   */
+    * ----------------------------------------------------------------------
+    * READ THE DONE QUEUE
+    * RETURNS A VECTOR OF FAXSTATUS
+    * ----------------------------------------------------------------------
+    */
     fun readDoneQueue(host: String, user: String): Vector<FaxStatus> = readQueue(host, user, "doneq")
 
     /*
@@ -495,10 +473,10 @@ class Fax(port: Int, host: String) {
     }
 
     /*
-   * ----------------------------------------------------------------------
-   * HANDLE THE SERVER AND MODEM STATE
-   * ----------------------------------------------------------------------
-   */
+    * ----------------------------------------------------------------------
+    * HANDLE THE SERVER AND MODEM STATE
+    * ----------------------------------------------------------------------
+    */
     fun readSendTime(jobId: String): String? = null
 
     /**
@@ -546,11 +524,11 @@ class Fax(port: Int, host: String) {
     }
 
     /*
-   * ----------------------------------------------------------------------
-   * HANDLE THE QUEUES --- ALL QUEUES ARE HANDLED BY THAT METHOD
-   * ----------------------------------------------------------------------
-   */
-    private fun getQueue(port: Int, host: String, user: String, qname: String): String {
+    * ----------------------------------------------------------------------
+    * HANDLE THE QUEUES --- ALL QUEUES ARE HANDLED BY THAT METHOD
+    * ----------------------------------------------------------------------
+    */
+    fun getQueue(port: Int, host: String, user: String, qname: String): String {
       val fax = Fax(port, host)
       val ret: String
       fax.login(user)
@@ -567,14 +545,15 @@ class Fax(port: Int, host: String) {
     // ----------------------------------------------------------------------
     // IMPLEMENTATION
     // ----------------------------------------------------------------------
+
     /*
-   * ----------------------------------------------------------------------
-   * READS ANY QUEUE
-   * RETURNS A VECTOR OF STRINGS
-   * ----------------------------------------------------------------------
-   */
-    private fun readQueue(host: String, user: String, qname: String): Vector<FaxStatus> {
-      val queue: Vector<FaxStatus> = Vector<FaxStatus>()
+    * ----------------------------------------------------------------------
+    * READS ANY QUEUE
+    * RETURNS A VECTOR OF STRINGS
+    * ----------------------------------------------------------------------
+    */
+    fun readQueue(host: String, user: String, qname: String): Vector<FaxStatus> {
+      val queue = Vector<FaxStatus>()
       try {
         val ret = getQueue(HFAX_PORT, host, user, qname)
         val token = StringTokenizer(ret, "\n")
@@ -667,9 +646,13 @@ class Fax(port: Int, host: String) {
     if (port == 0) {
       port = HFAX_PORT
     }
+    if (host == null) {
+      host = HFAX_HOST
+    }
     this.host = host
 
     clnt = Socket(host, port)
+
     clntIn = BufferedReader(InputStreamReader(clnt.getInputStream()))
     clntOut = PrintWriter(clnt.getOutputStream())
     check(readLine())

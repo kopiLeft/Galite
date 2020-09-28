@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class IntegerValue : IPPValue {
@@ -34,11 +35,8 @@ class IntegerValue : IPPValue {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  // value-length + value
-  override val size: Int
-    get() {
-      return 2 + 4
-    }
+
+  override fun getSize(): Int = 2 + 4 // value-length + value
 
   override fun write(os: IPPOutputStream) {
     os.writeShort(4)
@@ -55,5 +53,4 @@ class IntegerValue : IPPValue {
   // DATA MEMBERS
   // --------------------------------------------------------------------
   private var value = 0
-
 }

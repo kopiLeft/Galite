@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 import org.kopi.galite.util.base.InconsistencyException
@@ -28,6 +29,7 @@ class IPPInputStream(var inputStream: InputStream) {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
+
   fun peekByte(): Byte {
     verify()
     inputStream.mark(1)
@@ -38,7 +40,9 @@ class IPPInputStream(var inputStream: InputStream) {
 
   fun peekShortAfterFirstByte(): Short {
     var i = 0
+
     verify()
+
     inputStream.mark(3)
     read()
     i = i or (read() shl 8)
@@ -118,5 +122,4 @@ class IPPInputStream(var inputStream: InputStream) {
       throw InconsistencyException("Mark is not supported")
     }
   }
-
 }

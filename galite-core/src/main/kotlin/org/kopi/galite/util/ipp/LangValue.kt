@@ -15,12 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class LangValue : IPPValue {
+
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
+
   constructor(charset: String, value: String) {
     this.charset = charset
     this.value = value
@@ -38,8 +41,8 @@ class LangValue : IPPValue {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  override val size: Int
-    get() = 6 + charset.length + value.length
+
+  override fun getSize(): Int = 6 + charset.length + value.length
 
   override fun write(os: IPPOutputStream) {
     os.writeShort(4 + value.length + charset.length)
@@ -60,6 +63,7 @@ class LangValue : IPPValue {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  private var charset: String
-  private var value: String
+
+  private val charset: String
+  private val value: String
 }

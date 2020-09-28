@@ -15,19 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class BooleanValue(var value: Boolean) : IPPValue() {
 
   constructor(iPPInputStream: IPPInputStream) : this((iPPInputStream.readByte()).toInt() != 0) {
-    iPPInputStream.readShort() // value-length
+    iPPInputStream.readShort()
   }
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  override val size: Int
-    get() = 2 + 1 // value-length + value
+
+  override fun getSize(): Int = 2 + 1 // value-length + value
 
   override fun write(os: IPPOutputStream) {
     os.writeShort(1)

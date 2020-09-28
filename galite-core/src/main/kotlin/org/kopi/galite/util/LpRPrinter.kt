@@ -35,7 +35,7 @@ class LpRPrinter(val name: String,
     setPaperFormat(null)
   }
 
-  override fun getPrinterName(): String? {
+  override fun getPrinterName(): String {
     return name
   }
 
@@ -46,17 +46,15 @@ class LpRPrinter(val name: String,
     this.tray = tray
   }
 
-  /**
-   * Sets the paper format
-   */
   override fun setPaperFormat(paperFormat: String?) {
-    this.paperFormat = paperFormat
+    TODO("Not yet implemented")
   }
+
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
   // ----------------------------------------------------------------------
-  override fun print(data: PrintJob?): String? {
+  override fun print(data: PrintJob): String{
     TODO()
   }
 
@@ -82,6 +80,6 @@ class LpRPrinter(val name: String,
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var tray = 0
+  var tray = 0
   private var paperFormat: String? = null
 }

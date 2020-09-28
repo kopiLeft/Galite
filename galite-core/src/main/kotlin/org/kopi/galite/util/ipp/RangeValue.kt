@@ -15,12 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class RangeValue : IPPValue {
+
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
+
   constructor(lower: Int, upper: Int) {
     this.lower = lower
     this.upper = upper
@@ -30,13 +33,13 @@ class RangeValue : IPPValue {
     inputStream.readShort() //value-length
     lower = inputStream.readInteger()
     upper = inputStream.readInteger()
-  }// value-length + value
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  override val size: Int
-    get() = 2 + 8 // value-length + value
+
+  override fun getSize(): Int = 2 + 8 // value-length + value
 
   override fun write(os: IPPOutputStream) {
     os.writeShort(8)
@@ -55,6 +58,7 @@ class RangeValue : IPPValue {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
+
   private var lower: Int
   private var upper: Int
 }

@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
 import java.util.ArrayList
@@ -27,12 +28,11 @@ import java.util.StringTokenizer
  * This class is used to set a hierarchical structure for handling properties:
  * On a properties' file we can define the "parent" property which contains
  * one or a space separated list of parents.
- */
-/**
- * Constructor
+ *
  * @param file               the properties file name
  */
 class PropertyManager(val file: String) {
+
   /**
    * Gets a string for the given key from the resource bundle of this property manager
    * or one of its parents.

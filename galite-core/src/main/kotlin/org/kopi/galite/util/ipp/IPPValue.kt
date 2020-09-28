@@ -15,13 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 abstract class IPPValue {
+
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  abstract val size: Int
+
+  abstract fun getSize(): Int
 
   abstract fun write(os: IPPOutputStream)
 

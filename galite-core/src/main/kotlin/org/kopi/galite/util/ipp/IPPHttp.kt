@@ -15,14 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class IPPHttp {
+
   // --------------------------------------------------------------------
   // CONSTRUCTORS
   // --------------------------------------------------------------------
+
   constructor(printerName: String, request: IPP) {
-    ippHeader = IPPHttpHeader(printerName, request.size)
+    ippHeader = IPPHttpHeader(printerName, request.getSize())
     iPP = request
   }
 
@@ -34,6 +37,7 @@ class IPPHttp {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
+
   fun write(os: IPPOutputStream) {
     ippHeader.write(os)
     iPP.write(os)
@@ -42,6 +46,7 @@ class IPPHttp {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
+
   private var ippHeader: IPPHttpHeader
   var iPP: IPP
     private set

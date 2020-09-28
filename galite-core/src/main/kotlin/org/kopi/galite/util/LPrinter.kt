@@ -15,7 +15,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
+
+import java.io.OutputStream
 
 /**
  * Local printer
@@ -29,8 +32,11 @@ class LPrinter(name: String, var command: String) : AbstractPrinter(name) {
     val process = Runtime.getRuntime().exec(command)
     val data = printData.getInputStream()
     val buffer = ByteArray(1024)
-    val output = process.outputStream
+    val output: OutputStream
     var length: Int
+
+    output = process.outputStream
+
     while (data.read(buffer).also { length = it } != -1) {
       output.write(buffer, 0, length)
     }

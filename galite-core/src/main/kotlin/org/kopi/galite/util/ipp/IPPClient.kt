@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 import java.io.ByteArrayOutputStream
@@ -43,7 +44,7 @@ class IPPClient(val hostname: String, val port: Short, val printer: String, val 
    * the format is "attribute=value".
    * mediaAttributes are single value corresponding to a media.
    */
-  protected fun print(file: InputStream,
+   fun print(file: InputStream,
                       nbCopies: Int,
                       mediaAttributes: List<*>?,
                       optionalAttributes: List<*>?) {
@@ -114,7 +115,7 @@ class IPPClient(val hostname: String, val port: Short, val printer: String, val 
       val httpConnection = IPPHttpConnection(
               URL("http://$hostname:$port/printers/$printer"))
       httpConnection.sendRequest(req)
-      var resp = httpConnection.receiveResponse()
+      val resp = httpConnection.receiveResponse()
       resp.simpleDump()
     }
   }
@@ -143,7 +144,7 @@ class IPPClient(val hostname: String, val port: Short, val printer: String, val 
       }
     }
     return media
-  }//att.addValue(new StringValue("utf-8"));
+  }
 
   // --------------------------------------------------------------------
   // PRIVATE METHODS

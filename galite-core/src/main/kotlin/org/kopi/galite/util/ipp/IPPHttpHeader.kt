@@ -15,11 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 import java.io.IOException
 
 class IPPHttpHeader(val name: String? = null, val size: Int = 0) {
+
+  // --------------------------------------------------------------------
+  // CONSTRUCTOR
+  // --------------------------------------------------------------------
 
   constructor(iPPInputStream: IPPInputStream) : this() {
     var line = iPPInputStream.readLine()
@@ -40,13 +45,11 @@ class IPPHttpHeader(val name: String? = null, val size: Int = 0) {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
+
   fun write(os: IPPOutputStream) {
     os.writeString("POST $name HTTP/1.0\r\n")
     os.writeString("Content-type: application/ipp\r\n")
-    os.writeString("""
-  Host: localhost
-  
-  """.trimIndent())
+    os.writeString("Host: " + "localhost" + "\r\n")
     os.writeString("Content-length: $size\r\n")
     os.writeString("\r\n")
   }

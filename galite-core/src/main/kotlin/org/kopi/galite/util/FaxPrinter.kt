@@ -19,19 +19,12 @@ package org.kopi.galite.util
 
 /**
  * Fax printer
+ * * Constructs a fax printer
  */
-/**
- * Constructs a fax printer
- */
-// never used locally but must be implemented.
-class FaxPrinter
-private constructor(private val faxHost: String,
-                    /**
-                     * Gets the phone number
-                     */
-                    val number: String,
-                    private val user: String,
-                    private val id: String) : AbstractPrinter("FaxPrinter $number"), Printer {
+class FaxPrinter(val faxHost: String,
+                 val number: String,
+                 val user: String,
+                 val id: String) : AbstractPrinter("FaxPrinter $number"), Printer {
 
   override fun getPrinterName(): String {
     TODO("Not yet implemented")
@@ -42,9 +35,9 @@ private constructor(private val faxHost: String,
   /**
    * Print a file and return the output of the command
    */
-  override fun print(printdata: PrintJob): String {
+  override fun print(data: PrintJob): String {
     try {
-      Fax.fax(faxHost, printdata.getInputStream(), user, number, id)
+      Fax.fax(faxHost, data.getInputStream(), user, number, id)
     } catch (e: Exception) {
       e.printStackTrace()
     }

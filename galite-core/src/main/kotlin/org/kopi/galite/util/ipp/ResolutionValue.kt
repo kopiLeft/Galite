@@ -15,12 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util.ipp
 
 class ResolutionValue : IPPValue {
+
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
+
   constructor(units: Byte, xres: Int, yres: Int) {
     this.units = units
     this.xres = xres
@@ -32,13 +35,13 @@ class ResolutionValue : IPPValue {
     xres = inputStream.readInteger()
     yres = inputStream.readInteger()
     units = inputStream.readByte()
-  }// value-length + value
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  override val size: Int
-    get() = 2 + 9 // value-length + value
+
+  override fun getSize(): Int = 2 + 9 // value-length + value
 
   override fun write(os: IPPOutputStream) {
     os.writeShort(9)
@@ -56,7 +59,8 @@ class ResolutionValue : IPPValue {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  private var units: Byte
-  private var xres: Int
-  private var yres: Int
+
+  private val units: Byte
+  private val xres: Int
+  private val yres: Int
 }

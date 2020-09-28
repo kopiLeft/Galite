@@ -21,8 +21,7 @@ import org.kopi.galite.util.ipp.IPPClient
 
 /**
  * IPP printer
- */
-/**
+ *
  * Construct an IPP Printer
  *
  * @param host the IPP server host
@@ -33,16 +32,17 @@ import org.kopi.galite.util.ipp.IPPClient
  * between media and IPP attributes for this printer.
  */
 class IPPPrinter(name: String,
-                 private val host: String,
-                 private val port: Int,
-                 private val printer: String,
-                 private val user: String,
-                 private val attributesForMedia: List<*>) : AbstractPrinter(name), Printer {
+                 val host: String,
+                 val port: Int,
+                 val printer: String,
+                 val user: String,
+
+                 val attributesForMedia: List<*>) : AbstractPrinter(name), Printer {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
-  val mediaTypes: List<*>
-    get() {
+
+  fun getMediaTypes(): List<*>{
       val client = IPPClient(host, port.toShort(), printer, user)
       return client.getMediaTypes()
     }
@@ -71,15 +71,15 @@ class IPPPrinter(name: String,
   /**
    * Print a file and return the output of the command
    */
-  override fun print(printData: PrintJob?): String {
+  override fun print(data: PrintJob): String {
     val ippClient = IPPClient(host, port.toShort(), printer, user)
-    ippClient.print(printData!!.getInputStream(),
-            printData!!.numberCopy,
-            getAttributes(printData.media))
+    ippClient.print(data.getInputStream(),
+            data.numberCopy,
+            getAttributes(data.media))
     return "IPP Print"
   }
 
-  override fun getPrinterName(): String? {
+  override fun getPrinterName(): String {
     TODO("Not yet implemented")
   }
 
@@ -87,7 +87,7 @@ class IPPPrinter(name: String,
     TODO("Not yet implemented")
   }
 
-  override fun setPaperFormat(paperFormat: String?) {
+  override fun setPaperFormat(paperFormat: String) {
     TODO("Not yet implemented")
   }
 }
