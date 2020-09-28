@@ -16,9 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.base
+package org.kopi.galite.db
 
-import org.kopi.galite.db.DBContext
 import java.sql.SQLException
 
 /**
@@ -28,12 +27,14 @@ interface DBContextHandler {
   /**
    * Returns the database context for this object.
    */
+  fun getDBContext(): DBContext
+
   /**
    * Sets the database context for this object
    *
    * @param        context                a database context
    */
-  var dBContext: DBContext
+  fun setDBContext(context: DBContext)
 
   /**
    * Starts a protected transaction.
@@ -45,7 +46,6 @@ interface DBContextHandler {
   /**
    * Commits a protected transaction.
    */
-  @Throws(SQLException::class)
   fun commitProtected()
 
   /**

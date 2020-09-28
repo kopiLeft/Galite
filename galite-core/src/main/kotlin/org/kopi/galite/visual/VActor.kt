@@ -22,7 +22,7 @@ import org.kopi.galite.l10n.ActorLocalizer
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.l10n.MenuLocalizer
 
-class VActor(var menuIdent: String,
+class VActor(val menuIdent: String,
         // qualified name of menu's source file
              private var menuSource: String,
              actorIdent: String,

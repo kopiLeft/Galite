@@ -24,7 +24,7 @@ import java.text.MessageFormat
 import java.util.Locale
 import java.util.Vector
 
-import org.kopi.galite.base.DBContextHandler
+import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.chart.VHelpGenerator
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
@@ -619,7 +619,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     printOptions = PConfig()
     activeCommands = Vector<VCommand>()
     if (ctxt != null) {
-      dBContext = ctxt.dBContext
+      dBContext = ctxt.getDBContext()
     }
     init()
 
