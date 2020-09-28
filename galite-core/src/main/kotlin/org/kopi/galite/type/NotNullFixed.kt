@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
+ * License along with this library; if not, write timport java.math.BigIntegero the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
@@ -27,6 +27,7 @@ import com.ibm.icu.math.BigDecimal
  */
 class NotNullFixed : Fixed {
   constructor(b: BigDecimal) : super(b) {}
+  constructor (b: java.math.BigDecimal) : super(b) {}
   constructor(b: BigInteger) : super(b) {}
   constructor(b: BigInteger, l: Int) : super(b) {}
   constructor(value: Long, scale: Int) : super(value, scale) {}

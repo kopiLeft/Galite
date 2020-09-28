@@ -112,8 +112,8 @@ class MReport : Constants, Serializable {
 
     // add the new column;
     cols[columns.size] = VFixnumColumn(null, 0, 4, -1, null, 15, 7, null)
-    cols[columns.size]?.label = label
-    cols[columns.size]?.addedAtRuntime = true
+    cols[columns.size]!!.label = label
+    cols[columns.size]!!.addedAtRuntime = true
     // copy the other columns.
     columns.forEachIndexed { index, element ->
       cols[index] = element
@@ -328,18 +328,14 @@ class MReport : Constants, Serializable {
    * @param    column        the index of the desired column
    * @return    the desired column
    */
-  fun getModelColumn(column: Int): VReportColumn {
-    return columns[column]!!
-  }
+  fun getModelColumn(column: Int): VReportColumn = columns[column]!!
 
   /**
    * Returns the number of model columns
    *
    * @return    the number or columns to display
    */
-  fun getModelColumnCount(): Int {
-    return columns.size
-  }
+  fun getModelColumnCount(): Int = columns.size
 
   /**
    * Return a column definition
@@ -347,22 +343,16 @@ class MReport : Constants, Serializable {
    * @param    column        the index of the desired column
    * @return    the desired column
    */
-  fun getAccessibleColumn(column: Int): VReportColumn? {
-    return accessiblecolumns[column]
-  }
+  fun getAccessibleColumn(column: Int): VReportColumn? = accessiblecolumns[column]
 
-  fun getAccessibleColumns(): Array<VReportColumn?> {
-    return accessiblecolumns
-  }
+  fun getAccessibleColumns(): Array<VReportColumn?> = accessiblecolumns
 
   /**
    * Returns the number of columns visible or hide
    *
    * @return    the number or columns in the model
    */
-  fun getAccessibleColumnCount(): Int {
-    return accessiblecolumns.size
-  }
+  fun getAccessibleColumnCount(): Int = accessiblecolumns.size
 
   /**
    * Return a row definition
@@ -370,16 +360,12 @@ class MReport : Constants, Serializable {
    * @param    row        the index of the desired row
    * @return    the desired row
    */
-  fun getRow(row: Int): VReportRow? {
-    return visibleRows!![row]
-  }
+  fun getRow(row: Int): VReportRow? = visibleRows!![row]
 
   /**
    * Return the tree used by the model
    */
-  fun getTree(): VGroupRow? {
-    return root
-  }
+  fun getTree(): VGroupRow? = root
 
   // --------------------------------------------------------------------
   // GROUPING TREE
@@ -401,7 +387,7 @@ class MReport : Constants, Serializable {
     updateTableModel()
   }
 
-  /*
+  /**
    * Returns an array of grouping columns in displayed column order
    * For each column, the value is the column of the next (lower) level
    * grouping or -1 if the column has no further sub-grouping.
@@ -415,7 +401,7 @@ class MReport : Constants, Serializable {
 
     // retrieve the groups in original column order
     for (i in 0 until columnCount) {
-      defaultGroups[i] = accessiblecolumns[i]?.groups!!
+      defaultGroups[i] = accessiblecolumns[i]!!.groups
     }
 
     // reorder the groups in displayed column order
@@ -465,7 +451,7 @@ class MReport : Constants, Serializable {
     }
   }
 
-  /*
+  /**
    * Sort base rows wrt to each grouping column
    * Note: we assume that the sorting algorithm ist stable: we thus
    * can sort the complete table for each column, starting with the
@@ -499,7 +485,7 @@ class MReport : Constants, Serializable {
     }
   }
 
-  /*
+  /**
    * Build the grouping tree
    */
   private fun buildGroupingTree() {
@@ -555,7 +541,7 @@ class MReport : Constants, Serializable {
     }
   }
 
-  /*
+  /**
    * Sorts an array of rows wrt to given column using straight two-way merge sorting.
    *
    * @param	array		The array to sort
@@ -566,8 +552,12 @@ class MReport : Constants, Serializable {
     mergeSort(array, column, order, 0, array.size - 1, visibleRows)
   }
 
-  private fun mergeSort(array: Array<VReportRow?>, column: Int, order: Int, lo: Int,
-                        hi: Int, scratch: Array<VReportRow?>?) {
+  private fun mergeSort(array: Array<VReportRow?>,
+                        column: Int,
+                        order: Int,
+                        lo: Int,
+                        hi: Int,
+                        scratch: Array<VReportRow?>?) {
     // a one-element array is always sorted
     if (lo < hi) {
       val mid = (lo + hi) / 2
@@ -601,7 +591,8 @@ class MReport : Constants, Serializable {
    */
   fun calculateColumns() {
     for (i in columns.indices) {
-      val function: VCalculateColumn = columns[i]?.function!!
+      val function: VCalculateColumn? = columns[i]!!.function
+
       if (function != null) {
         function.init()
         function.calculate(root!!, i)
@@ -620,7 +611,8 @@ class MReport : Constants, Serializable {
   /**
    * add visible rows in a vector
    *
-   * @param VReportRow node to test
+   * @param     node        node to test.
+   * @param     pos         position of the node.
    */
   private fun addRowsInArray(node: VReportRow?, pos: Int): Int {
     var pos = pos
@@ -713,6 +705,7 @@ class MReport : Constants, Serializable {
   fun isColumnFold(column: Int): Boolean {
     return if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
+
       !root!!.isUnfolded(level)
     } else {
       false
@@ -726,6 +719,7 @@ class MReport : Constants, Serializable {
     return if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
       var currentRow = visibleRows!![row]
+
       while (currentRow!!.level < level) {
         currentRow = currentRow.parent as VReportRow
       }
@@ -763,7 +757,7 @@ class MReport : Constants, Serializable {
    * Folds the specified column
    */
   fun setColumnFolded(column: Int, fold: Boolean) {
-    accessiblecolumns[column]?.folded = fold
+    accessiblecolumns[column]!!.folded = fold
     fireContentChanged()
   }
 
@@ -771,7 +765,7 @@ class MReport : Constants, Serializable {
    * Folds the specified column
    */
   fun switchColumnFolding(column: Int) {
-    accessiblecolumns[column]?.folded = (!accessiblecolumns[column]?.folded!!)
+    accessiblecolumns[column]!!.folded = (!accessiblecolumns[column]!!.folded)
     fireContentChanged()
   }
 
@@ -817,7 +811,7 @@ class MReport : Constants, Serializable {
    */
   fun isRowLine(row: Int): Boolean {
     return if (visibleRows != null) {
-      row in 0 until maxRowCount && visibleRows!![row]?.level == 0
+      row in 0 until maxRowCount && visibleRows!![row]!!.level == 0
     } else {
       false
     }
@@ -830,8 +824,8 @@ class MReport : Constants, Serializable {
     displayOrder = newOrder
 
     // rebuild column mapping from model to display
-    for (i in displayOrder.indices) {
-      reverseOrder[displayOrder[i]] = i
+    displayOrder.forEachIndexed { index, element ->
+      reverseOrder[displayOrder[index]] = index
     }
     createTree()
   }
@@ -887,7 +881,7 @@ class MReport : Constants, Serializable {
    * @return    the name of the column
    */
   fun getColumnName(column: Int): String {
-    val label: String? = accessiblecolumns[column]?.label
+    val label: String? = accessiblecolumns[column]!!.label
 
     if (label == null || label.isEmpty()) {
       return ""
@@ -903,14 +897,14 @@ class MReport : Constants, Serializable {
     var accessiblecolumnCount = 0
 
     for (i in 0 until columnCount) {
-      if (columns[i]?.options!! and Constants.CLO_HIDDEN == 0) {
+      if (columns[i]!!.options and Constants.CLO_HIDDEN == 0) {
         accessiblecolumnCount += 1
       }
     }
     accessiblecolumns = arrayOfNulls(accessiblecolumnCount)
     accessiblecolumnCount = 0
     for (i in 0 until columnCount) {
-      if (columns[i]?.options!! and Constants.CLO_HIDDEN == 0) {
+      if (columns[i]!!.options and Constants.CLO_HIDDEN == 0) {
         accessiblecolumns[accessiblecolumnCount++] = columns[i]
       }
     }
@@ -941,7 +935,7 @@ class MReport : Constants, Serializable {
    *
    * @param l The ReportListener
    */
-  fun addReportListener(l: ReportListener?) = listenerList.add(ReportListener::class.java, l)
+  fun addReportListener(l: ReportListener) = listenerList.add(ReportListener::class.java, l)
 
   /**
    * Removes a listener from the list that's notified each time a
@@ -949,7 +943,7 @@ class MReport : Constants, Serializable {
    *
    * @param l The ReportListener
    */
-  fun removeReportListener(l: ReportListener?) = listenerList.remove(ReportListener::class.java, l)
+  fun removeReportListener(l: ReportListener) = listenerList.remove(ReportListener::class.java, l)
 
   /**
    * Notifies all listeners that the report model has changed.
@@ -971,18 +965,18 @@ class MReport : Constants, Serializable {
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
-  lateinit var columns : Array<VReportColumn?>
-  lateinit var accessiblecolumns : Array<VReportColumn?>
+  private lateinit var columns : Array<VReportColumn?>    // array of column definitions
+  private lateinit var accessiblecolumns : Array<VReportColumn?>    // array of visible or hide columns
 
   // Root is the root of the tree (which is our model to manipulate data)
-  private var root : VGroupRow? = null
+  private var root : VGroupRow? = null    // root of grouping tree
 
   // Baserows contains data give by the request of the user
   // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
   // is changed when a column move or one or more row are folded
   private var userRows: Vector<VBaseRow>? = Vector(500)
   lateinit var baseRows : Array<VReportRow?>    // array of base data rows
-  var visibleRows : Array<VReportRow?>? = null  // array of visible rows
+  private var visibleRows : Array<VReportRow?>? = null  // array of visible rows
   private var maxRowCount = 0
 
   // Sortedcolumn contain the index of the sorted column
@@ -992,10 +986,10 @@ class MReport : Constants, Serializable {
 
   // displayOrder contains index column model in display order
   // reverseOrder is calculate with displayOrder and contains index column display into model order
-  lateinit var displayOrder : IntArray    // column mapping from display to model
-  lateinit var reverseOrder : IntArray    // column mapping from model to display
+  private lateinit var displayOrder : IntArray    // column mapping from display to model
+  private lateinit var reverseOrder : IntArray    // column mapping from model to display
 
   // The displayLevels variable is a table which contains the level of each column
-  lateinit var displayLevels : IntArray   // column levels in display order
-  protected var listenerList = EventListenerList() // List of listeners
+  private lateinit var displayLevels : IntArray   // column levels in display order
+  private var listenerList = EventListenerList()  // List of listeners
 }

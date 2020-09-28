@@ -18,8 +18,8 @@
 
 package org.kopi.galite.type
 
-import java.math.BigInteger
 import java.util.Locale
+import java.math.BigInteger
 
 import com.ibm.icu.math.BigDecimal
 import com.ibm.icu.math.MathContext
@@ -28,6 +28,9 @@ import com.ibm.icu.math.MathContext
  * This class represents the fixed type
  */
 open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
+
+  /*package*/
+  internal constructor (b: java.math.BigDecimal?) : this(BigDecimal(b)) {}
 
   /*package*/
   internal constructor(b: BigInteger?) : this(BigDecimal(b)) {}
@@ -50,9 +53,9 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
    * add
    */
   fun add(f: NotNullFixed): NotNullFixed {
-    if (value!!.compareTo(BigDecimal.ZERO) === 0) {
+    if (value!!.compareTo(BigDecimal.ZERO) == 0) {
       return f
-    } else if ((f as Fixed).value?.compareTo(BigDecimal.ZERO) === 0) {
+    } else if ((f as Fixed).value?.compareTo(BigDecimal.ZERO) == 0) {
       return NotNullFixed(value!!)
     }
     return NotNullFixed(value!!.add((f as Fixed).value, MATH_CONTEXT))
@@ -76,9 +79,9 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
    * subtract
    */
   fun subtract(f: NotNullFixed): NotNullFixed {
-    if (value!!.compareTo(BigDecimal.ZERO) === 0) {
+    if (value!!.compareTo(BigDecimal.ZERO) == 0) {
       return NotNullFixed((f as Fixed).value!!.negate())
-    } else if ((f as Fixed).value!!.compareTo(BigDecimal.ZERO) === 0) {
+    } else if ((f as Fixed).value!!.compareTo(BigDecimal.ZERO) == 0) {
       return NotNullFixed(value!!)
     }
     return NotNullFixed(value!!.subtract((f as Fixed).value, MATH_CONTEXT))
@@ -252,7 +255,7 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   }
 
   private var value: BigDecimal? = null
-  var maxScale = -1
+  var maxScale = -1   // the max scale.
 
   companion object {
     /**
@@ -271,7 +274,7 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
     // ----------------------------------------------------------------------
     // CONSTANTS
     // ----------------------------------------------------------------------
-    val DEFAULT: NotNullFixed = NotNullFixed(0 as Double)
+    val DEFAULT: NotNullFixed = NotNullFixed(0.0)
   }
 
   /*package*/

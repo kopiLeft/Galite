@@ -25,9 +25,6 @@ import java.util.regex.Pattern
  */
 //TODO
 object MessageCode {
-  // ----------------------------------------------------------------------
-  // STATIC METHODS
-  // ----------------------------------------------------------------------
   /**
    * Returns a message (convenience routine).
    *
