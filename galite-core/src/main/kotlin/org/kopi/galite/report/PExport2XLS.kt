@@ -15,6 +15,45 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-class PExport2XLS 
+import java.awt.Color
+import java.util.Hashtable
+
+import org.apache.poi.hssf.usermodel.HSSFPalette
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.hssf.util.HSSFColor
+import org.apache.poi.ss.usermodel.Workbook
+import org.kopi.galite.report.UReport.UTable
+
+class PExport2XLS (table: UTable, model: MReport, pconfig: PConfig, title: String) : PExport2Excel(table, model, pconfig, title), Constants {
+
+  override fun createWorkbook(): Workbook {
+    val wb = HSSFWorkbook()
+
+    colorindex = 10
+    colorpalete = Hashtable()
+    palette = wb.customPalette
+    return wb
+  }
+
+  protected override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
+    var rowCol = colorpalete!![color]
+
+    if (rowCol == null) {
+      palette!!.setColorAtIndex(colorindex, color.red.toByte(), color.green.toByte(), color.blue.toByte())
+      rowCol = palette!!.getColor(colorindex)
+      colorindex++
+      colorpalete!![color] = rowCol
+    }
+    return rowCol
+  }
+
+  //-----------------------------------------------------------
+  // DATA MEMBERS
+  //-----------------------------------------------------------
+  private var palette: HSSFPalette? = null
+  private var colorindex: Short = 0
+  private var colorpalete: Hashtable<Color, HSSFColor?>? = null
+}

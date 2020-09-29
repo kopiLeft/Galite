@@ -18,5 +18,16 @@
 
 package org.kopi.galite.util
 
-class PrintJob { // TODO
+import java.io.File
+
+import com.lowagie.text.Rectangle
+
+class PrintJob(val datafile: File, private val delete: Boolean, var format: Rectangle) { // TODO
+
+  var dataType: Int = TODO()
+  var title: String = TODO()
+  var numberOfPages: Int = TODO()
+  companion object {
+    val DAT_PDF : Int = TODO()
+  }
 }

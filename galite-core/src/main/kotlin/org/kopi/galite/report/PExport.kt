@@ -15,14 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-import org.kopi.galite.report.UReport.UTable
 import java.awt.Color
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.io.Serializable
+
+import org.kopi.galite.report.UReport.UTable
 
 abstract class PExport(val table: UTable,
                        val model: MReport,
@@ -110,7 +112,7 @@ abstract class PExport(val table: UTable,
     }
   }
 
-  protected fun exportRow(row: VReportRow, tail: Boolean) {
+  protected open fun exportRow(row: VReportRow, tail: Boolean) {
     exportRow(row, tail, false)
   }
 
@@ -173,7 +175,7 @@ abstract class PExport(val table: UTable,
   }
 
   protected abstract fun startGroup(subTitle: String?)
-  protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray?)
+  protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray)
   protected abstract fun exportHeader(data: Array<String?>)
   protected abstract fun export(stream: OutputStream)
   protected open fun formatStringColumn(column: VReportColumn, index: Int) {}

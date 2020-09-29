@@ -15,15 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-import org.apache.poi.ss.usermodel.*
-import org.apache.poi.ss.usermodel.CellType
 import java.awt.Color
 import java.io.OutputStream
 import java.util.Calendar
 import java.util.GregorianCalendar
 
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.CellStyle
+import org.apache.poi.ss.usermodel.DataFormat
+import org.apache.poi.ss.usermodel.HorizontalAlignment
+import org.apache.poi.ss.usermodel.PrintSetup
+import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
 
@@ -36,10 +43,9 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
-import sun.security.util.ResourcesMgr.getString
 
+abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig: PConfig, title: String) : PExport(table, model, pconfig, title), Constants {
 
-abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfig, title: String?) : PExport(table, model!!, pconfig, title!!), Constants {
   override fun export(out: OutputStream) {
     rowNumber = 0
     sheetIndex = 0
@@ -61,6 +67,7 @@ abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfi
 
   override fun startGroup(subTitle: String?) {
     var subTitle = subTitle
+
     if (subTitle == null) {
       subTitle = title
     }
@@ -70,7 +77,7 @@ abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfi
     subTitle = subTitle.replace("/|\\\\|\\*|\\?|\\[|\\]".toRegex(), "")
     if (subTitle.length > 31) {
       subTitle = subTitle.substring(0, 28) + "..."
-    } else if (subTitle.length == 0) {
+    } else if (subTitle.isEmpty()) {
       subTitle = " "
     }
     rowNumber = 0
@@ -95,33 +102,37 @@ abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfi
     footer.right = Date.now().format("dd.MM.yyyy").toString() + " " + Time.now()!!.format("HH:mm")
     sheetIndex += 1
     val ps = sheet!!.printSetup
+
     sheet!!.autobreaks = true
     ps.fitWidth = 1.toShort()
     ps.fitHeight = 999.toShort()
-    ps.landscape = pconfig.paperlayout.equals("Landscape")
+    ps.landscape = pconfig.paperlayout == "Landscape"
     ps.paperSize = PrintSetup.A4_PAPERSIZE /// !!! no always A4
   }
 
   override fun exportHeader(data: Array<String?>) {
-    val titlerow = sheet!!.createRow(0 )
+    val titlerow = sheet!!.createRow(0)
     var cellPos = 0
-    for (i in data.indices) {
-      titlerow.createCell(cellPos++).setCellValue(data[i])
+
+    data.forEach {
+      titlerow.createCell(cellPos++).setCellValue(it)
     }
   }
 
-  protected override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray?) {
+  protected override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
     val row = sheet!!.createRow(rowNumber + 1)
     val color = getBackgroundForLevel(level)
     var cellPos = 0
-    for (j in data.indices) {
-      var cell: Cell = row.createCell(cellPos)
-      var cellStyle: CellStyle? = cellStyleCacheManager.getStyle(this,
-                                                 workbook!!,
-                                                 getAlignment(alignments!!, j),
-                                                 getDataFormat(j),
-                                                 color)
-      setCellValue(cell, j, data[j], orig[j])
+
+    data.forEachIndexed() { index, element ->
+      val cell: Cell = row.createCell(cellPos)
+      val cellStyle: CellStyle = cellStyleCacheManager.getStyle(this,
+                                                                workbook!!,
+                                                                getAlignment(alignments, index),
+                                                                getDataFormat(index),
+                                                                color)
+
+      setCellValue(cell, index, element, orig[index])
       cell.cellStyle = cellStyle
       cellPos++
     }
@@ -155,7 +166,7 @@ abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfi
         } else if (orig is Week) {
           setCellValue(cell, (orig as Week).firstDay)
         } else if (orig is String && orig == "") {
-          // myabe reportIdenticalValue Trigger used
+          // maybe reportIdenticalValue Trigger used
           // nothing
         } else {
           throw InconsistencyException("Type not supported: datatype=" + datatype[cellPos]
@@ -174,7 +185,7 @@ abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfi
       Constants.ALG_DEFAULT, Constants.ALG_LEFT -> HorizontalAlignment.LEFT.code
       Constants.ALG_CENTER -> HorizontalAlignment.CENTER.code
       Constants.ALG_RIGHT -> HorizontalAlignment.RIGHT.code
-      else -> throw InconsistencyException("Unkown alignment")
+      else -> throw InconsistencyException("Unknown alignment")
     }
   }
 
@@ -250,7 +261,7 @@ abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfi
   }
 
   protected abstract fun createWorkbook(): Workbook?
-  abstract fun createFillForegroundColor(color: Color?): org.apache.poi.ss.usermodel.Color?
+  protected abstract fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color?
 
   //-----------------------------------------------------------
   // DATA MEMBERS
@@ -260,13 +271,13 @@ abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfi
     private set
   private var sheet: Sheet? = null
   private var format: DataFormat? = null
-  private val datatype: IntArray
-  private val dataformats: ShortArray
-  private val widths: ShortArray
+  private val datatype: IntArray = IntArray(columnCount)
+  private val dataformats: ShortArray = ShortArray(columnCount)
+  private val widths: ShortArray = ShortArray(columnCount)
   private var sheetIndex = 0
 
   // cell style cache
-  private val cellStyleCacheManager: CellStyleCacheManager
+  private val cellStyleCacheManager: CellStyleCacheManager = CellStyleCacheManager()
 
   companion object {
     /**
@@ -280,15 +291,5 @@ abstract class PExport2Excel(table: UTable, model: MReport?, val pconfig: PConfi
       cal[Calendar.DAY_OF_MONTH] = value.day
       cell.setCellValue(cal)
     }
-  }
-
-  /**
-   * Constructor
-   */
-  init {
-    datatype = IntArray(columnCount)
-    dataformats = ShortArray(columnCount)
-    widths = ShortArray(columnCount)
-    cellStyleCacheManager = CellStyleCacheManager()
   }
 }
