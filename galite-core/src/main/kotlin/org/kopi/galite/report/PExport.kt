@@ -59,7 +59,7 @@ abstract class PExport(val table: UTable,
   }
 
   protected fun exportData() {
-    val group: VGroupRow = model.root
+    val group: VGroupRow = model.getTree()
     if (!printConfig.groupFormfeed) {
       startGroup(null)
       exportHeader()

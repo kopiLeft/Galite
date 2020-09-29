@@ -77,6 +77,9 @@ class MReport {
   fun getBaseRowCount(): Int {
     return baseRows.size
   }
+
+  fun getTree(): VGroupRow = root
+
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
