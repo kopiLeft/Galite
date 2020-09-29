@@ -18,17 +18,20 @@
 
 package org.kopi.galite.visual
 
-import org.kopi.galite.base.UComponent
+import java.util.Locale
+import java.util.Date
+
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
-import java.util.*
 
 /**
- * `Application` is the top level interface for all kopi applications.
+ * `Application` is the top level interface for all applications.
  * The `Application` should give a way how to login to the application.
  */
 interface Application : MessageListener {
+
   /**
    * Logins to the application.
    * @param database The database URL.
@@ -132,13 +135,13 @@ interface Application : MessageListener {
    * Returns the print manager of the application instance.
    * @return The print manager of the application instance.
    */
-  fun getPrintManager(): PrintManager?
+  fun getPrintManager(): PrintManager
 
   /**
    * Sets the print manager to the application.
    * @param printManager The print manager instance.
    */
-  fun setPrintManager(printCopies: PrintManager?)
+  fun setPrintManager(printManager: PrintManager)
 
   /**
    * Returns the printer manger of the application.
@@ -150,7 +153,7 @@ interface Application : MessageListener {
    * Sets the printer manager of the application instance.
    * @param printerManager The printer manager.
    */
-  fun setPrinterManager(manager: PrinterManager?)
+  fun setPrinterManager(printerManager: PrinterManager)
 
   /**
    * Returns the application configuration instance.
@@ -162,5 +165,5 @@ interface Application : MessageListener {
    * Sets the application configuration.
    * @param configuration The application configuration instance.
    */
-  fun setApplicationConfiguration(conf: ApplicationConfiguration?)
+  fun setApplicationConfiguration(configuration: ApplicationConfiguration)
 }
