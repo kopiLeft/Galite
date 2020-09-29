@@ -275,7 +275,7 @@ abstract class ApplicationContext {
                   bcc,
                   "[ERROR] $applicationName$failureID",
                   buffer.toString(),
-                  sender!!)
+                  sender)
         }
         if (logFile != null && writeLog) {
           try {
