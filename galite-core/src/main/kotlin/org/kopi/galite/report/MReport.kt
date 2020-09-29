@@ -111,7 +111,7 @@ class MReport : Constants, Serializable {
     val cols = arrayOfNulls<VReportColumn>(columns.size + 1)
 
     // add the new column;
-    cols[columns.size] = VFixnumColumn("", 0, 4, -1, null, 15, 7, null)
+    cols[columns.size] = VFixnumColumn(null, 0, 4, -1, null, 15, 7, null)
     cols[columns.size]!!.label = label
     cols[columns.size]!!.addedAtRuntime = true
     // copy the other columns.

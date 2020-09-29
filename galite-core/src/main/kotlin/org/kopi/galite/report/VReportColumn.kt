@@ -35,7 +35,7 @@ import org.kopi.galite.util.LineBreaker
  * @param    format        format of the cells
  */
 abstract class VReportColumn(
-        private val ident: String,
+        private val ident: String?,
         val options: Int,
         val align: Int,
         val groups: Int,
@@ -104,7 +104,7 @@ abstract class VReportColumn(
    */
   fun localize(parent: ReportLocalizer) {
     if (!isHidden() && ident != "") {
-      val loc: FieldLocalizer = parent.getFieldLocalizer(ident)
+      val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
 
       label = loc.getLabel()
       help = loc.getHelp()
