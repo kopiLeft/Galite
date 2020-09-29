@@ -170,7 +170,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       // use a 'default listener' that the message is
       // not lost (e.g .because this is happend in the
       // constructor)
-      ApplicationContext.applicationContext.application.notice(message)
+      ApplicationContext.applicationContext.getApplication().notice(message)
     }
   }
 
@@ -187,7 +187,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       // use a 'default listener' that the message is
       // not lost (e.g .because this is happened in the
       // constructor)
-      ApplicationContext.applicationContext.application.error(message)
+      ApplicationContext.applicationContext.getApplication().error(message)
     }
   }
 
@@ -207,7 +207,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       // use a 'default listener' that the message is
       // not lost (e.g .because this is happend in the
       // constructor)
-      ApplicationContext.applicationContext.application.warn(message)
+      ApplicationContext.applicationContext.getApplication().warn(message)
     }
   }
 

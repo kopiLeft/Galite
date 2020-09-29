@@ -205,14 +205,14 @@ object Utils : org.kopi.galite.util.base.Utils() {
   fun getVersion(): Array<String> {
     try {
       val list = ArrayList<String>()
-      val data = DataInputStream(Utils::class.java.classLoader.getResourceAsStream(APPLICATION_DIR + "/version"))
+      val data = DataInputStream(Utils::class.java.classLoader.getResourceAsStream("$APPLICATION_DIR/version")!!)
       while (data.available() != 0) {
         list.add(data.readLine())
       }
       data.close()
       return list.toTypedArray()
     } catch (e: Exception) {
-      System.err.println("Error while reading version informations.\n$e")
+      System.err.println("Error while reading version information.\n$e")
     }
     return DEFAULT_VERSION
   }
@@ -229,6 +229,7 @@ object Utils : org.kopi.galite.util.base.Utils() {
   // ----------------------------------------------------------------------
   // PRIVATE DATA
   // ----------------------------------------------------------------------
+
   const val APPLICATION_DIR = "resources"
   const val RESOURCE_DIR = "org/kopi/galite"
   private val DEFAULT_VERSION = arrayOf(
