@@ -22,7 +22,9 @@ import kotlin.reflect.KClass
 import org.kopi.galite.type.Fixed
 import org.kopi.galite.util.base.InconsistencyException
 
-
+/**
+ * Represents a list column.
+ */
 class VFixnumCodeColumn(title: String,
                         column: String,
                         names: Array<String>,

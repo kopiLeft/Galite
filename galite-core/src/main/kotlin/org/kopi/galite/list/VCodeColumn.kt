@@ -18,6 +18,9 @@
 
 package org.kopi.galite.list
 
+/**
+ * Represents a list column.
+ */
 abstract class VCodeColumn(
         title: String,
         column: String,

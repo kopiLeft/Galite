@@ -17,18 +17,18 @@
  */
 package org.kopi.galite.list
 
+import kotlin.reflect.KClass
 
 import org.kopi.galite.type.Week
-import kotlin.reflect.KClass
 
 /**
  * Represents a list column.
  */
-class VWeekColumn(title: String?,
-                  column: String?,
+class VWeekColumn(title: String,
+                  column: String,
                   sortAscending: Boolean)
-    : VListColumn(title!!,
-                  column!!,
+    : VListColumn(title,
+                  column,
                   VConstants.ALG_LEFT,
                   7,
                   sortAscending) {
