@@ -200,8 +200,8 @@ abstract class ApplicationContext {
           } catch (e: PropertyException) {
             null
           }
-          val sender: String? = try {
-            getDefaults().getStringFor("debugging.mail.sender")
+          val sender: String = try {
+            getDefaults().getStringFor("debugging.mail.sender")!!
           } catch (e: PropertyException) {
             TODO()
           }
