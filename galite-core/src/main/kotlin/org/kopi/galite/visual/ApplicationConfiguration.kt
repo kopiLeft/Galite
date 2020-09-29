@@ -119,7 +119,7 @@ abstract class ApplicationConfiguration {
    *
    * @return the property
    */
-  abstract fun getStringFor(key: String): String
+  abstract fun getStringFor(key: String): String?
 
   abstract fun getBooleanFor(key: String): Boolean
 
@@ -131,11 +131,11 @@ abstract class ApplicationConfiguration {
   fun getDictionaryLanguages(): Array<Language> {
     // no languages
     val langs = ArrayList<Language>()
-    var lang: String
+    var lang: String?
     var i = 0
     try {
       while (getStringFor("aspell.$i.language").also { lang = it } != null) {
-        langs.add(Language(lang, getStringFor("aspell.$i.options")))
+        langs.add(Language(lang!!, getStringFor("aspell.$i.options")!!))
         i++
       }
     } catch (e: PropertyException) {
