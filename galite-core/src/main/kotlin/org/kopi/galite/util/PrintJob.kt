@@ -18,11 +18,6 @@
 
 package org.kopi.galite.util
 
-import com.lowagie.text.PageSize
-import com.lowagie.text.Rectangle
-
-import org.kopi.galite.base.Utils
-
 import java.io.InputStream
 import java.io.File
 import java.io.ByteArrayInputStream
@@ -31,33 +26,24 @@ import java.io.FileOutputStream
 import java.io.FileInputStream
 import java.io.ByteArrayOutputStream
 
+import com.lowagie.text.PageSize
+import com.lowagie.text.Rectangle
+
+import org.kopi.galite.base.Utils
+
 /**
  * PPage/Report creates a PrintJob
  *
  * A Printer creates a PrintTask from a PrintJob
  */
-class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
+class PrintJob(val datafile: File?, private val delete: Boolean, var format: Rectangle) {
   /**
    * use with care, do only read from the file, not not manipulate
    */
-  // properties
-  var title: String = ""
-  lateinit var media: String
-  var documentType = 0
-  var dataType: Int
-  var numberCopy: Int
-  var numberOfPages: Int
-
   init {
-    this.datafile = datafile
-    this.delete = delete
-    this.format = format
-    numberCopy = 1
-    numberOfPages = -1
-    dataType = DAT_PS
     /* if the jvm is stopped before the objects are finalized the file must be deleted!*/
     if (delete) {
-      datafile.deleteOnExit()
+      datafile?.deleteOnExit()
     }
   }
 
@@ -67,7 +53,7 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
 
   protected fun finalize() {
     if (delete && datafile != null) {
-      datafile!!.delete()
+      datafile.delete()
     }
   }
 
@@ -76,20 +62,20 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
   }
 
   /**
-   * getOutputStream has to be closed before calling getInputStream
-   * use with care, know waht you do!
+   * outputStream has to be closed before calling getInputStream
+   * use with care, know what you do!
    */
   val outputStream: OutputStream
     get() = FileOutputStream(datafile)
 
   /**
-   * getOutputStream has to be closed before calling getInputStream
+   * outputStream has to be closed before calling inputStream
    */
   val inputStream: InputStream
     get() = FileInputStream(datafile)
 
   /**
-   * use getInputStream because in creates the stream if necessary
+   * use inputStream because in creates the stream if necessary
    */
   val bytes: ByteArray
     get() {
@@ -101,15 +87,14 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
        */
       val data: InputStream = inputStream
       val output: ByteArrayOutputStream = ByteArrayOutputStream()
+
       while (data.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
       }
       return output.toByteArray()
     }
 
-  fun writeDataToFile(file: File) {
-    writeToFile(inputStream, file)
-  }
+  fun writeDataToFile(file: File) = writeToFile(inputStream, file)
 
   fun setPrintInformation(title: String, format: Rectangle, numberOfPages: Int) {
     this.title = title
@@ -117,17 +102,11 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
     this.numberOfPages = numberOfPages
   }
 
-  fun getWidth(): Int {
-    return format.width as Int
-  }
+  fun getWidth(): Int = format.width.toInt()
 
-  fun getHeight(): Int {
-    return format.height as Int
-  }
+  fun getHeight(): Int = format.height.toInt()
 
-  fun createFromThis(file: File, delete: Boolean): PrintJob {
-    return PrintJob(file, delete, format)
-  }
+  fun createFromThis(file: File, delete: Boolean): PrintJob = PrintJob(file, delete, format)
 
   companion object {
     private fun writeToFile(dataStream: InputStream): File {
@@ -136,10 +115,11 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
       return tempFile
     }
 
-    private fun writeToFile(dataStream: InputStream, outputfile: File) {
+    private fun writeToFile(dataStream: InputStream, outputFile: File) {
       val buffer = ByteArray(1024)
       var length: Int
-      val output: OutputStream = FileOutputStream(outputfile)
+      val output: OutputStream = FileOutputStream(outputFile)
+
       while (dataStream.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
       }
@@ -167,4 +147,12 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
     // Raw format (Used for label printers)
     val FORMAT_RAW = Rectangle(-1F, -1F)
   }
+
+  // properties
+  var title: String = ""
+  lateinit var media: String
+  var documentType = 0
+  var dataType: Int = DAT_PS
+  var numberCopy = 1
+  var numberOfPages = -1
 }

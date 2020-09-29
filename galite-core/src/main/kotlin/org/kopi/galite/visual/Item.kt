@@ -20,7 +20,7 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.base.Image
 
-class Item(var id: Int,
+class Item(val id: Int,
            var parent: Int,
            var name: String,
            var localisedName: String?,
@@ -37,14 +37,6 @@ class Item(var id: Int,
   var level = 0
 
   init {
-    this.id = id
-    this.parent = parent
-    this.name = name
-    this.localisedName = localisedName
-    this.description = description
-    this.selected = selected
-    this.defaultItem = defaultItem
-    this.originalName = originalName
     if (icon != null) {
       this.icon = ImageHandler.imageHandler?.getImage(icon)
       smallIcon = ImageHandler.imageHandler?.getImage(icon)
@@ -57,8 +49,8 @@ class Item(var id: Int,
   /**
    * Sets the current item name
    */
-  fun getFormattedName(localiserd: Boolean): String? {
-    return if (localiserd && id != -1) {
+  fun getFormattedName(localised: Boolean): String? {
+    return if (localised && id != -1) {
       "[" + name + "]  " + if (localisedName != null) localisedName else "........"
     } else {
       name
@@ -83,7 +75,12 @@ class Item(var id: Int,
   // COMPARABLE IMPLEMENTATION
   // ---------------------------------------------------------------------
   override operator fun compareTo(item: Item): Int {
-    return if (id == item.id && parent == item.parent && name == item.name && localisedName == item.localisedName
-            && description == item.description && selected == item.selected && defaultItem == item.defaultItem) 1 else -1
+    return if (id == item.id
+            && parent == item.parent
+            && name == item.name
+            && localisedName == item.localisedName
+            && description == item.description
+            && selected == item.selected
+            && defaultItem == item.defaultItem) 1 else -1
   }
 }

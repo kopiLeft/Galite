@@ -18,8 +18,6 @@
 
 package org.kopi.galite.util
 
-import java.io.IOException
-
 /**
  * An interface that defines printer devices
  *

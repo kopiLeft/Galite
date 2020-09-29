@@ -23,20 +23,20 @@ import java.io.File
 /**
  * Local printer
  */
-class PreviewPrinter(name: String, var command: String) : AbstractPrinter(name) {
+class PreviewPrinter(name: String, var command: String) : AbstractPrinter(name), Printer {
 
   constructor(command: String) : this("PreviewPrinter", command)
 
   constructor(command: String, previewFile: File) : this("PreviewPrinter", command)
 
   // ----------------------------------------------------------------------
-  // PRINTING WITH AN INPUTSTREAM
+  // PRINTING WITH AN INPUT STREAM
   // ----------------------------------------------------------------------
   /**
    * Print a file and return the output of the command
    */
   override fun print(printData: PrintJob): String {
-    // execute in separte process
+    // execute in separate process
     val dataFile = File.createTempFile("kopiprinter", "ps")
 
     // file is used with an external program (and cache printer),

@@ -32,7 +32,6 @@ class RootItem(id: Int, name: String) {
   /**
    * Creates the item tree nodes for this root item.
    * @param items The accessible items for the connected user.
-   * @param isSuperUser Is the connected user is a super user ?
    */
   fun createTree(items: Array<Item>) {
     this.rootNode = createTree(items, rootItem)
@@ -42,23 +41,23 @@ class RootItem(id: Int, name: String) {
    * Creates the item tree for the given root item.
    * @param items The accessible items.
    * @param root The root item.
-   * @param force Should we force item accessibility ?
-   * @param isSuperUser Is the connected user is a super user ?
    * @return The local root tree node.
    */
   protected fun createTree(items: Array<Item>, root: Item): DefaultMutableTreeNode? {
     var self: DefaultMutableTreeNode? = null
     var childsCount = 0
-    for (i in items.indices) {
-      if (items[i].parent === root.id) {
+
+    items.forEach {
+      if (it.parent == root.id) {
         childsCount++
-        items[i].level = root.level + 1
-        val node: DefaultMutableTreeNode? = createTree(items, items[i])
+        it.level = root.level + 1
+        val node: DefaultMutableTreeNode? = createTree(items, it)
+
         if (node != null) {
           if (self == null) {
             self = DefaultMutableTreeNode(root)
           }
-          self.add(node)
+          self!!.add(node)
         }
       }
     }

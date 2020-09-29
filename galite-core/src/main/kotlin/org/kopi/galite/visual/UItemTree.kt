@@ -27,10 +27,9 @@ import org.kopi.galite.base.UComponent
 interface UItemTree : UWindow {
   /**
    * Returns The Tree instance
-   *
    * @return a [UTreeComponent]
    */
-  val tree: UTreeComponent
+  fun getTree(): UTreeComponent
 
   /**
    * Change item selection state
@@ -107,7 +106,7 @@ interface UItemTree : UWindow {
      * Returns the first row of the currently selected rows.
      * @return an integer that identifies the first row of currently selected rows
      */
-    val selectionRow: Int
+    fun getSelectionRow(): Int
 
     /**
      * Returns true if the node identified by the path is currently expanded,
@@ -133,12 +132,12 @@ interface UItemTree : UWindow {
      * Returns the items of the tree as an array, returns null if there is no items
      * @return an array that contain the items of the tree
      */
-    val items: Array<Item>
+    fun getItems(): Array<Item>
 
     /**
      * Returns the root item
      */
-    val rootItem: Item
+    fun getRootItem(): Item
 
     /**
      * Returns true if the item name done is unique in this tree

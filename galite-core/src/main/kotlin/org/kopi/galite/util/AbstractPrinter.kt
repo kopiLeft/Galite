@@ -29,14 +29,8 @@ import java.io.InputStreamReader
 /**
  * DefaultPrinter
  */
-abstract class AbstractPrinter protected constructor(val name: String,
-                                                     var numberCopy: Int = 1,
-                                                     var tray: Int = 1) : Printer {
-  private lateinit var paperFormat: String
-
-  override fun getPrinterName(): String {
-    return name
-  }
+abstract class AbstractPrinter protected constructor(private val name: String) : Printer {
+  override fun getPrinterName(): String = name
 
   override fun selectTray(tray: Int) {
     this.tray = tray
@@ -56,6 +50,7 @@ abstract class AbstractPrinter protected constructor(val name: String,
       val reader = BufferedReader(InputStreamReader(printdata.inputStream))
       var line: String
       var currentPage = -1
+
       while (reader.readLine().also { line = it } != null) {
         when {
           line == TOPRINTER_TRUE -> ous.write(TOPRINTER_FALSE)
@@ -85,7 +80,7 @@ abstract class AbstractPrinter protected constructor(val name: String,
       return when {
         buffer.isEmpty() -> -1
         else -> try {
-          buffer.toString().toInt()
+          buffer.toInt()
         } catch (e: NumberFormatException) {
           -1
         }
@@ -95,4 +90,8 @@ abstract class AbstractPrinter protected constructor(val name: String,
     protected const val TOPRINTER_TRUE = "/toprinter {true} def"
     protected const val TOPRINTER_FALSE = "/toprinter {false} def"
   }
+
+  var numberCopy: Int = 1
+  private var tray: Int = 1
+  private lateinit var paperFormat: String
 }
