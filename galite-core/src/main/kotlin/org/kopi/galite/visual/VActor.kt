@@ -20,6 +20,7 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.report.VReportCommand
 
 /**
  * Represents an actor.
@@ -27,7 +28,7 @@ import org.kopi.galite.l10n.LocalizationManager
 class VActor(
         val menuIdent: String,
         private val menuSource: String,
-        val actorIdent: String,
+        private val actorIdent: String,
         private val actorSource: String,
         var iconName: String?,
         val acceleratorKey: Int,
@@ -38,6 +39,22 @@ class VActor(
   }
 
   override fun getDisplay(): UComponent {
+    TODO("Not yet implemented")
+  }
+
+  override fun setNumber(trigger: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setHandler(vReportCommand: VReportCommand) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getNumber(): Int {
+    TODO("Not yet implemented")
+  }
+
+  override fun getActorIdent(): String {
     TODO("Not yet implemented")
   }
 

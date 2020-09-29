@@ -40,4 +40,5 @@ abstract class VReport : VWindow(), Printable {
   abstract fun close()
   abstract override fun performAsyncAction(action: Action)
   abstract fun performAction(action: Action?, block: Boolean)
+  abstract fun createPrintJob()
 } 

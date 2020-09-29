@@ -1,3 +1,21 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 package org.kopi.galite.print
 
 import org.kopi.galite.report.VReport
@@ -21,8 +39,8 @@ class DefaultPrintManager : PrintManager {
                      report: VReport,
                      copies: Int,
                      printer: Printer,
-                     fax: String?,
-                     mail: String?) {
+                     fax: String,
+                     mail: String) {
     try {
       report.createPrintJob()
     } catch (exc: PrintException) {
@@ -32,14 +50,15 @@ class DefaultPrintManager : PrintManager {
 
   companion object {
 
-    fun getPrintManager(): PrintManager? {
-      return if (ApplicationContext.getApplicationContext()!!.getApplication().getPrintManager() == null) {
+    fun getPrintManager(): PrintManager {
+      return if (ApplicationContext.applicationContext!!.getApplication()!!.getPrintManager() == null) {
         DefaultPrintManager()
-      } else ApplicationContext.getApplicationContext()!!.getApplication().getPrintManager()
+      } else ApplicationContext.applicationContext!!.getApplication()!!.getPrintManager()
     }
 
-    fun setPrintManager(printCopies: PrintManager?) {
-      ApplicationContext.getApplicationContext()!!.getApplication().setPrintManager(printCopies)
+    fun setPrintManager(printCopies: PrintManager) {
+      ApplicationContext.applicationContext!!.getApplication()!!.setPrintManager(printCopies)
     }
   }
+
 }

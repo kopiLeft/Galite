@@ -21,6 +21,7 @@ package org.kopi.galite.chart
 import java.io.Serializable
 
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.report.VReportCommand
 import org.kopi.galite.visual.VModel
 
 /**
@@ -40,6 +41,21 @@ open class VChartType protected constructor(val ordinal: Int, val name: String) 
   }
 
   override fun getDisplay(): UComponent = display
+  override fun setNumber(trigger: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setHandler(vReportCommand: VReportCommand) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getNumber(): Int {
+    TODO("Not yet implemented")
+  }
+
+  override fun getActorIdent(): String {
+    TODO("Not yet implemented")
+  }
 
   /**
    * Creates the data series objects from the chart model.
