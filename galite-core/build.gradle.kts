@@ -21,6 +21,10 @@ plugins {
 
 val exposedVersion = "0.27.1"
 val vaadinVersion = "17.0.0"
+val itextVersion = "2.1.5"
+val jdomVersion = "2.0.5"
+val apachePoi = "4.1.2"
+val apacheOoxml ="3.9"
 
 dependencies {
   // Exposed dependencies
@@ -33,4 +37,16 @@ dependencies {
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
+
+  // Itext dependency
+  implementation("com.lowagie", "itext", itextVersion)
+  
+  // Jdom dependency
+  implementation("org.jdom", "jdom2", jdomVersion)
+
+  //Apache POI
+  implementation("org.apache.poi","poi",apachePoi)
+
+  // Apache OOxml
+  implementation("org.apache.poi","poi-ooxml",apacheOoxml)
 }

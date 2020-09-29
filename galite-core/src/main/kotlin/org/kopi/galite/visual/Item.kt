@@ -30,8 +30,8 @@ class Item(var id: Int,
            icon: String?,
            var originalName: String) : Comparable<Item> {
 
-  lateinit var icon: Image
-  lateinit var smallIcon: Image
+  var icon: Image? = null
+  var smallIcon: Image? = null
   var childCount = 0
   lateinit var children: Array<Item>
   var level = 0
@@ -46,8 +46,8 @@ class Item(var id: Int,
     this.defaultItem = defaultItem
     this.originalName = originalName
     if (icon != null) {
-      this.icon = ImageHandler.imageHandler.getImage(icon)
-      smallIcon = ImageHandler.imageHandler.getImage(icon)
+      this.icon = ImageHandler.imageHandler?.getImage(icon)
+      smallIcon = ImageHandler.imageHandler?.getImage(icon)
       if (smallIcon == null) {
         smallIcon = smallIcon?.getScaledInstance(16, 16, Image.SCALE_SMOOTH)
       }
