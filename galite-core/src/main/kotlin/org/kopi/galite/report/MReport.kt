@@ -27,7 +27,6 @@ class MReport {
 
   fun createTree(): Void = TODO()
 
-
   fun getModelColumnCount(): Int = TODO()
 
   fun setColumnFolded(column: Int, b: Boolean): Any = TODO()
@@ -42,9 +41,7 @@ class MReport {
 
   fun getAccessibleColumn(column: Int): VReportColumn = TODO()
 
-  fun getAccessibleColumnCount(): Int {
-    return accessiblecolumns.size
-  }
+  fun getAccessibleColumnCount(): Int = TODO()
 
   fun unfoldingColumn(column: Int): Any = TODO()
 
@@ -62,23 +59,15 @@ class MReport {
 
   fun isAddedAtRuntime(): Boolean = TODO()
 
-  fun getDisplayLevels(column: Int): Int {
-    return displayLevels[column]
-  }
+  fun getDisplayLevels(column: Int): Int = TODO()
 
-  fun getReverseOrder(column: Int): Int {
-    return reverseOrder[column]
-  }
+  fun getReverseOrder(column: Int): Int = TODO()
 
-  fun getDisplayOrder(column: Int): Int {
-    return displayOrder[column]
-  }
+  fun getDisplayOrder(column: Int): Int = TODO()
 
-  fun getBaseRowCount(): Int {
-    return baseRows.size
-  }
+  fun getBaseRowCount(): Int = TODO()
 
-  fun getTree(): VGroupRow = root
+  fun getTree(): VGroupRow = TODO()
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
