@@ -18,13 +18,13 @@
 
 package org.kopi.galite.util
 
-import org.kopi.galite.base.Utils
-
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
 import java.io.InputStreamReader
+
+import org.kopi.galite.base.Utils
 
 /**
  * DefaultPrinter
