@@ -22,7 +22,7 @@ import org.kopi.galite.form.VFixnumField
 
 //TODO
 class VFixnumColumn(
-  ident: String?,
+  ident: String,
   options: Int,
   align: Int,
   groups: Int,

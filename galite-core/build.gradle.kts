@@ -25,7 +25,7 @@ val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
 val apachePoi = "4.1.2"
 val apacheOoxml ="3.9"
-val IbmVersion ="58.2"
+val ibmVersion ="58.2"
 val graphbuilder ="1.02"
 
 dependencies {
@@ -53,7 +53,7 @@ dependencies {
   implementation("org.apache.poi","poi-ooxml",apacheOoxml)
 
   // Ibm dependency
-  implementation("com.ibm.icu", "icu4j", IbmVersion)
+  implementation("com.ibm.icu", "icu4j", ibmVersion)
 
   // Graphbuilder dependency
   implementation("com.github.virtuald", "curvesapi", graphbuilder)
