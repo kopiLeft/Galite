@@ -200,17 +200,17 @@ abstract class ApplicationContext {
           } catch (e: PropertyException) {
             null
           }
-          val sender: String = try {
-            getDefaults().getStringFor("debugging.mail.sender").toString()
+          val sender: String? = try {
+            getDefaults().getStringFor("debugging.mail.sender")
           } catch (e: PropertyException) {
             TODO()
           }
           val buffer = StringWriter()
           val writer = PrintWriter(buffer)
           // failureID is added to the subject of the mail.
-          // similar error mail should have the smae id which makes the
+          // similar error mail should have the same id which makes the
           // easier to find duplicated messages.
-          val failureID: String? = null
+          val failureID: String
           writer.println("Application Name:    $applicationName")
           writer.println("SVN Version:         " + (revision ?: "no revision available."))
           writer.println("Version:             $version")
@@ -259,7 +259,7 @@ abstract class ApplicationContext {
           writer.println("Message:             " + reason.message)
           writer.println("Exception:           ")
           reason.printStackTrace(writer)
-          try {
+          failureID = try {
             val write: CharArrayWriter = CharArrayWriter()
             reason.printStackTrace(PrintWriter(write))
             " " + write.toString().hashCode()
@@ -275,7 +275,7 @@ abstract class ApplicationContext {
                   bcc,
                   "[ERROR] $applicationName$failureID",
                   buffer.toString(),
-                  sender)
+                  sender!!)
         }
         if (logFile != null && writeLog) {
           try {
