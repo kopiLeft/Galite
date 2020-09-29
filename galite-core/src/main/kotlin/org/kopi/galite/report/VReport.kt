@@ -138,13 +138,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * @param     locale  the locale to use
    */
   fun localize(locale: Locale) {
-    var manager: LocalizationManager?
+    val manager: LocalizationManager?
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
 
     // localizes the actors in VWindow
     super.localizeActors(manager)
     localize(manager)
-    manager = null
   }
 
   /**
@@ -180,7 +179,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       // ex : org.kopi.galite.cross.VDynamicReport
       if (VKT_Triggers != null && hasTrigger(Constants.TRG_CMDACCESS, index)) {
 
-        var active: Boolean = try {
+        val active: Boolean = try {
           (callTrigger(Constants.TRG_CMDACCESS, index) as Boolean)
         } catch (e: VException) {
           // trigger call error ==> command is considered as active
@@ -232,7 +231,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       TYP_XLSX -> ".xlsx"
       else -> throw InconsistencyException("Export type unknown")
     }
-    val file: File = FileHandler.fileHandler.chooseFile(getDisplay(),
+    val file: File? = FileHandler.fileHandler.chooseFile(getDisplay(),
             ApplicationConfiguration.getConfiguration().getDefaultDirectory(),
             "report$ext")
     file?.let { export(it, type) }
@@ -547,7 +546,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
   fun genHelp(): String? {
     val surl = StringBuffer()
-    val fileName: String = VHelpGenerator().helpOnReport(pageTitle,
+    val fileName: String? = VHelpGenerator().helpOnReport(pageTitle,
             commands,
             model,
             help)
@@ -593,7 +592,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   // ----------------------------------------------------------------------
   // HELP
   // ----------------------------------------------------------------------
-  var help: String? = null
+  var help: String = ""
   protected var VKT_Triggers: Array<IntArray>? = null
   protected var commands: Array<VCommand>? = null
   private val activeCommands: Vector<VCommand>
@@ -602,12 +601,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * sets the print options
    */
   // print configuration object
-  var printOptions: PConfig
+  var printOptions: PConfig = PConfig()
 
   /**
    * Set the media for this document
    */
-  var media: String? = null
+  lateinit var media: String
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
@@ -616,7 +615,6 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * Constructor
    */
   init {
-    printOptions = PConfig()
     activeCommands = Vector<VCommand>()
     if (ctxt != null) {
       dBContext = ctxt.getDBContext()

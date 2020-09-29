@@ -29,8 +29,7 @@ class VActor(val menuIdent: String,
              actorSource: String,
              iconName: String?,
              acceleratorKey: Int,
-             acceleratorModifier: Int
-) : VModel {
+             acceleratorModifier: Int) : VModel {
   /**
    * Checks whether the actor is enabled.
    */
@@ -38,16 +37,16 @@ class VActor(val menuIdent: String,
    * Enables/disables the actor.
    */
   var isEnabled: Boolean
-    get() = display != null && display.isEnabled()
+    get() = display != null && display!!.isEnabled()
     set(enabled) {
       if (display != null) {
-        display.setEnabled(enabled)
+        display?.setEnabled(enabled)
       }
     }
 
-  private lateinit var display: UActor
+  private var display: UActor? = null
 
-  override fun getDisplay(): UComponent {
+  override fun getDisplay(): UComponent? {
     return display
   }
 
@@ -130,8 +129,7 @@ class VActor(val menuIdent: String,
   // DEBUG
   // --------------------------------------------------------------------
   override fun toString(): String {
-    val buffer: StringBuffer
-    buffer = StringBuffer()
+    val buffer = StringBuffer()
     buffer.append("VActor[")
     buffer.append("menu=$menuName:$menuItem")
     if (iconName != null) {
@@ -165,8 +163,8 @@ class VActor(val menuIdent: String,
    * Sets the number for the actor.
    */
   var number = 0
-  var handler: ActionHandler? = null
+  lateinit var handler: ActionHandler
   var iconName: String? = null
   protected lateinit var actorIdent: String
-  var help: String? = null
+  lateinit var help: String
 }
