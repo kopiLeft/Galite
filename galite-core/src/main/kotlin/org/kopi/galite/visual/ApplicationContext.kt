@@ -15,13 +15,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.visual
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.base.Utils
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.mailer.Mailer
+package org.kopi.galite.visual
 
 import java.io.CharArrayWriter
 import java.io.StringWriter
@@ -34,15 +29,23 @@ import java.net.SocketException
 import java.util.Locale
 import java.util.Date
 
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.base.Utils
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.util.mailer.Mailer
+
 /**
- * `ApplicationContext` is a galite application context that contains the
+ * `ApplicationContext` is an application context that contains the
  * running [Application] instance in the context thread. The `ApplicationContext`
  * handles all shared applications components.
  */
 abstract class ApplicationContext {
+
   //-----------------------------------------------------------
   // ABSTRACT METHODS
   //-----------------------------------------------------------
+
   /**
    * Returns the **current** [Application] instance.
    * @return The **current** [Application] instance.
@@ -70,7 +73,7 @@ abstract class ApplicationContext {
     /**
      * Returns the default configuration of the Application
      */
-    fun getDefaults(): ApplicationConfiguration? = applicationContext.getApplication().getApplicationConfiguration()
+    fun getDefaults(): ApplicationConfiguration = applicationContext.getApplication().getApplicationConfiguration()
 
     /**
      * Returns the [Application] menu.
@@ -130,13 +133,13 @@ abstract class ApplicationContext {
     fun reportTrouble(module: String,
                       place: String,
                       data: String,
-                      reason: Throwable?) {
+                      reason: Throwable) {
 
       when {
         applicationContext.getApplication().isNoBugReport() -> {
           println("notice: reporting trouble is disabled, no mail will be sent.")
-          System.err.println(reason!!.message)
-          reason!!.printStackTrace(System.err)
+          System.err.println(reason.message)
+          reason.printStackTrace(System.err)
         }
         else -> {
           var revision: String? = null
@@ -149,60 +152,56 @@ abstract class ApplicationContext {
               releaseDate = it.substring(19)
             }
           }
-          if (getDefaults() == null) {
-            System.err.println("ERROR: No application configuration available")
-            return
-          }
           val applicationName: String = try {
-            getDefaults()!!.getApplicationName()
+            getDefaults().getApplicationName()
           } catch (e: PropertyException) {
             "application name not defined"
           }
           val version: String = try {
-            getDefaults()!!.getVersion()
+            getDefaults().getVersion()
           } catch (e: PropertyException) {
             "version not defined"
           }
           val smtpServer: String? = try {
-            getDefaults()!!.getSMTPServer()
+            getDefaults().getSMTPServer()
           } catch (e: PropertyException) {
             null
           }
           val logFile: String? = try {
-            getDefaults()!!.getLogFile()
+            getDefaults().getLogFile()
           } catch (e: PropertyException) {
             null
           }
           val sendMail: Boolean = try {
-            getDefaults()!!.mailErrors()
+            getDefaults().mailErrors()
           } catch (e: PropertyException) {
             false
           }
           val writeLog: Boolean = try {
-            getDefaults()!!.logErrors()
+            getDefaults().logErrors()
           } catch (e: PropertyException) {
             false
           }
           if (smtpServer != null && sendMail) {
             val recipient: String = try {
-              getDefaults()!!.getDebugMailRecipient()
+              getDefaults().getDebugMailRecipient()
             } catch (e: PropertyException) {
-              "fehler@kopileft.com" //TODO
+              TODO()
             }
             val cc: String? = try {
-              getDefaults()!!.getStringFor("debugging.mail.cc")
+              getDefaults().getStringFor("debugging.mail.cc")
             } catch (e: PropertyException) {
               null
             }
             val bcc: String? = try {
-              getDefaults()!!.getStringFor("debugging.mail.bcc")
+              getDefaults().getStringFor("debugging.mail.bcc")
             } catch (e: PropertyException) {
               null
             }
             val sender: String = try {
-              getDefaults()!!.getStringFor("debugging.mail.sender").toString()
+              getDefaults().getStringFor("debugging.mail.sender").toString()
             } catch (e: PropertyException) {
-              "galite@kopileft.com" //TODO
+              TODO()
             }
             val buffer = StringWriter()
             val writer = PrintWriter(buffer)
@@ -229,9 +228,9 @@ abstract class ApplicationContext {
               writer.println("User-IP:             " + applicationContext.getApplication().getUserIP())
             }
             try {
-              writer.println("Galite-User:           " + applicationContext.getApplication().getUserName())
+              writer.println("User_Name:           " + applicationContext.getApplication().getUserName())
             } catch (e: Exception) {
-              writer.println("Galite-User:           <not available>")
+              writer.println("User_Name:           <not available>")
             }
             writer.println("System-User/Name:    " + System.getProperty("user.name", ""))
             writer.println("System-User/Home:    " + System.getProperty("user.home", ""))
@@ -255,19 +254,17 @@ abstract class ApplicationContext {
                     + "  used = " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()))
             writer.println()
             writer.println("Catched at:          $place")
-            failureID = if (reason != null) {
-              writer.println("Message:             " + reason!!.message)
+            failureID = run {
+              writer.println("Message:             " + reason.message)
               writer.println("Exception:           ")
-              reason!!.printStackTrace(writer)
+              reason.printStackTrace(writer)
               try {
                 val write: CharArrayWriter = CharArrayWriter()
-                reason!!.printStackTrace(PrintWriter(write))
+                reason.printStackTrace(PrintWriter(write))
                 " " + write.toString().hashCode()
               } catch (e: Exception) {
                 " " + e.message
               }
-            } else {
-              " " // no information
             }
             writer.println()
             writer.println("Information:         $data")
@@ -276,7 +273,7 @@ abstract class ApplicationContext {
                     recipient,
                     cc,
                     bcc,
-                    "[GALITE ERROR] $applicationName$failureID",
+                    "[ERROR] $applicationName$failureID",
                     buffer.toString(),
                     sender)
           }
@@ -290,8 +287,8 @@ abstract class ApplicationContext {
               } catch (e: Exception) {
                 writer.println("<user no available>" + ":" + Date())
               }
-              writer.println(reason!!.message)
-              reason!!.printStackTrace(writer)
+              writer.println(reason.message)
+              reason.printStackTrace(writer)
               if (writer.checkError()) {
                 throw IOException("error while writing")
               }
@@ -301,11 +298,10 @@ abstract class ApplicationContext {
               System.err.println(": " + e.message)
             }
           }
-          System.err.println(reason!!.message)
-          reason!!.printStackTrace(System.err)
+          System.err.println(reason.message)
+          reason.printStackTrace(System.err)
         }
       }
-
     }
 
     /**
@@ -334,6 +330,7 @@ abstract class ApplicationContext {
     //-----------------------------------------------------------
     // DATA MEMBERS
     //-----------------------------------------------------------
+
     /**
      * The `ApplicationContext` instance.
      */

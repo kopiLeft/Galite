@@ -15,10 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
-import java.awt.PrintJob
-
+/**
+ * An interface that defines printer devices
+ *
+ * Such printers may be remote printers, local printers, print-to-file, fax
+ * mailer or whatever
+ */
 interface Printer {
 
   /**

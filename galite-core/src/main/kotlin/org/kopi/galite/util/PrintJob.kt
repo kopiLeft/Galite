@@ -15,12 +15,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
-
-import com.lowagie.text.PageSize
-import com.lowagie.text.Rectangle
-
-import org.kopi.galite.base.Utils
 
 import java.io.InputStream
 import java.io.File
@@ -30,12 +26,17 @@ import java.io.FileOutputStream
 import java.io.FileInputStream
 import java.io.ByteArrayOutputStream
 
+import com.lowagie.text.PageSize
+import com.lowagie.text.Rectangle
+
+import org.kopi.galite.base.Utils
+
 /**
  * PPage/Report creates a PrintJob
  *
  * A Printer creates a PrintTask from a PrintJob
  */
-class PrintJob(var datafile: File?, var delete: Boolean, var format: Rectangle) {
+class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
 
   constructor(format: Rectangle) : this(Utils.getTempFile("galite", "pdf"), true, format)
   constructor(data: ByteArray, format: Rectangle) : this(writeToFile(ByteArrayInputStream(data)), true, format)
@@ -45,22 +46,20 @@ class PrintJob(var datafile: File?, var delete: Boolean, var format: Rectangle) 
   var title: String = ""
   lateinit var media: String
   var documentType = 0
-  var dataType: Int
+  var dataType: Int = DAT_PS
   var numberCopy: Int = 1
-  var numberOfPages: Int
+  var numberOfPages: Int = -1
 
   init {
-    numberOfPages = -1
-    dataType = DAT_PS
     /* if the jvm is stopped before the objects are finalized the file must be deleted!*/
     if (delete) {
-      datafile!!.deleteOnExit()
+      datafile.deleteOnExit()
     }
   }
 
   protected fun finalize() {
     if (delete && datafile != null) {
-      datafile!!.delete()
+      datafile.delete()
     }
   }
 
@@ -72,24 +71,21 @@ class PrintJob(var datafile: File?, var delete: Boolean, var format: Rectangle) 
    * OutputStream has to be closed before using inputStream
    * use with care, know what you do!
    */
-  val outputStream: OutputStream
-    get() = FileOutputStream(datafile)
+  fun getOutputStream(): OutputStream = FileOutputStream(datafile)
 
   /**
    * outputStream has to be closed before using inputStream
    */
-  val inputStream: InputStream
-    get() = FileInputStream(datafile)
+  fun getInputStream(): InputStream = FileInputStream(datafile)
 
-  val bytes: ByteArray
-    get() {
+  fun getBytes(): ByteArray{
       val buffer = ByteArray(1024)
       var length: Int
 
       /**
        * use inputStream because it creates the stream if necessary
        */
-      val data: InputStream = inputStream
+      val data: InputStream = getInputStream()
       val output: ByteArrayOutputStream = ByteArrayOutputStream()
       while (data.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
@@ -98,7 +94,7 @@ class PrintJob(var datafile: File?, var delete: Boolean, var format: Rectangle) 
     }
 
   fun writeDataToFile(file: File) {
-    writeToFile(inputStream, file)
+    writeToFile(getInputStream(), file)
   }
 
   fun setPrintInformation(title: String, format: Rectangle, numberOfPages: Int) {

@@ -41,7 +41,7 @@ import java.util.zip.GZIPOutputStream
  * usage:
  * To load image first in Application directory, then in default directory:
  * Utils.getImage("name");
- * To load default images (that appear in org.kopi.galite.lib.util/resources)
+ * To load default images (that appear in that appear in resources/org/kopi/galite)
  * Utils.getDefaultImage("name");
  * To load Application images (that appear in resources)
  * Utils.getApplicationImage("name");
@@ -229,8 +229,9 @@ object Utils : org.kopi.galite.util.base.Utils() {
   // ----------------------------------------------------------------------
   // PRIVATE DATA
   // ----------------------------------------------------------------------
+
   const val APPLICATION_DIR = "resources"
-  const val RESOURCE_DIR = "org/kopi/galite/lib/resource"
+  const val RESOURCE_DIR = "org/kopi/galite"
   private val DEFAULT_VERSION = arrayOf(
           "No version information available.",
           "Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN. All rights reserved.",

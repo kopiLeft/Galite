@@ -15,13 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
+
+import java.util.Locale
+import java.util.Date
 
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
-import java.util.*
 
 /**
  * `Application` is the top level interface for all applications.
@@ -66,7 +69,7 @@ interface Application : MessageListener {
    * Returns the start up time.
    * @return The start up time.
    */
-  fun getStartupTime(): Date?
+  fun getStartupTime(): Date
 
   /**
    * Returns the application menu.

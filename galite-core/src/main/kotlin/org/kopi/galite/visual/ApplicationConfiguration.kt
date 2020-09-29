@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
 import org.kopi.galite.util.Rexec
@@ -25,6 +26,7 @@ import java.io.File
  * Manages Application configuration data
  */
 abstract class ApplicationConfiguration {
+
   // --------------------------------------------------------------
   //   Application Properties
   // --------------------------------------------------------------
@@ -81,6 +83,7 @@ abstract class ApplicationConfiguration {
   // --------------------------------------------------------------
   //   Application Properties
   // --------------------------------------------------------------
+
   /**
    * Property smtp.server
    * Returns the name of the SMTP server to use
@@ -103,7 +106,7 @@ abstract class ApplicationConfiguration {
   // --------------------------------------------------------------
 
   /**
-   * Returns the Dictionary Server e.g. c:/aspell
+   * Returns the url of the Dictionary Server e.g. c:/aspell
    */
   abstract fun getDictionaryServer(): String
 
@@ -120,7 +123,7 @@ abstract class ApplicationConfiguration {
 
   abstract fun getBooleanFor(key: String): Boolean
 
-  abstract fun getIntFor(key: String): Int // no more languages definied// no languages
+  abstract fun getIntFor(key: String): Int // no more languages defined // no languages
 
   /**
    * returns options for a language
@@ -141,10 +144,11 @@ abstract class ApplicationConfiguration {
     return langs.toTypedArray()
   }
 
-  class Language(//name of the language
-          val language: String,
-          // options
-          val options: String)
+  /** @param    language   represents the name of the language
+   *  @param    options    represents the language options
+   */
+  class Language(val language: String,
+                 val options: String)
 
   /**
    * Returns a directory on the local machine for file generation
@@ -193,16 +197,15 @@ abstract class ApplicationConfiguration {
 
     fun getConfiguration(): ApplicationConfiguration? {
       return if (ApplicationContext.applicationContext != null) {
-        ApplicationContext.applicationContext!!.getApplication().getApplicationConfiguration()
+        ApplicationContext.applicationContext.getApplication().getApplicationConfiguration()
       } else {
         configuration
       }
     }
 
-    fun setConfiguration(conf: ApplicationConfiguration?) {
-      assert(conf != null) { "configuration must not be null" }
+    fun setConfiguration(conf: ApplicationConfiguration) {
       if (ApplicationContext.applicationContext != null) {
-        ApplicationContext.applicationContext!!.getApplication().setApplicationConfiguration(conf!!)
+        ApplicationContext.applicationContext.getApplication().setApplicationConfiguration(conf)
       } else {
         configuration = conf
       }
