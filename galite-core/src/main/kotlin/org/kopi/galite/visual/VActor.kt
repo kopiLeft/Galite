@@ -44,8 +44,6 @@ class VActor(val menuIdent: String,
       }
     }
 
-  private var display: UActor? = null
-
   override fun getDisplay(): UComponent? {
     return display
   }
@@ -63,9 +61,9 @@ class VActor(val menuIdent: String,
   // ACTIONS HANDLING
   // ----------------------------------------------------------------------
   fun performAction() {
-    handler!!.performAsyncAction(object : Action("$menuItem in $menuName") {
+    handler.performAsyncAction(object : Action("$menuItem in $menuName") {
       override fun execute() {
-        handler!!.executeVoidTrigger(number)
+        handler.executeVoidTrigger(number)
       }
 
       // quit an reset action cannot be cancelled. They will be executed even if the action
@@ -74,9 +72,8 @@ class VActor(val menuIdent: String,
     })
   }
 
-  @Throws(VException::class)
   fun performBasicAction() {
-    handler!!.executeVoidTrigger(number)
+    handler.executeVoidTrigger(number)
   }
 
   // ----------------------------------------------------------------------
@@ -90,9 +87,13 @@ class VActor(val menuIdent: String,
     return if (obj !is VActor) {
       false
     } else {
-      val actor = obj
-      menuName == actor.menuName && menuItem == actor.menuItem && (iconName == null && actor.iconName == null
-              || iconName != null && actor.iconName != null && iconName == actor.iconName)
+      menuName == obj.menuName
+              && menuItem == obj.menuItem
+              && (iconName == null
+              && obj.iconName == null
+              || iconName != null
+              && obj.iconName != null
+              && iconName == obj.iconName)
     }
   }
   // ----------------------------------------------------------------------
@@ -104,10 +105,8 @@ class VActor(val menuIdent: String,
    * @param     manager         the manger to use for localization
    */
   fun localize(manager: LocalizationManager) {
-    val actorLoc: ActorLocalizer
-    val menuLoc: MenuLocalizer
-    menuLoc = manager.getMenuLocalizer(menuSource, menuIdent)
-    actorLoc = manager.getActorLocalizer(actorSource, actorIdent)
+    val menuLoc: MenuLocalizer = manager.getMenuLocalizer(menuSource, menuIdent)
+    val actorLoc: ActorLocalizer = manager.getActorLocalizer(actorSource, actorIdent)
     menuName = menuLoc.getLabel()
     menuItem = actorLoc.getLabel()
     help = actorLoc.getHelp()
@@ -153,6 +152,7 @@ class VActor(val menuIdent: String,
   val acceleratorModifier: Int = 0
   lateinit var menuName: String
   lateinit var menuItem: String
+  private var display: UActor? = null
 
   // qualified name of actor's source file
   private val actorSource: String = ""

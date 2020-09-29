@@ -209,14 +209,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
   override fun createPrintJob(): PrintJob {
 
-    val exporter: PExport2PDF = PExport2PDF((getDisplay() as UReport).table,
+    val exporter: PExport2PDF = PExport2PDF((getDisplay() as UReport).getTable(),
             model,
             printOptions,
             pageTitle,
             firstPageHeader,
             Message.getMessage("toner_save_mode") == "true")
     val printJob: PrintJob = exporter.export()
-    printJob.setDocumentType(documentType)
+    printJob.setDocumentType(getDocumentType())
     return printJob
   }
 
@@ -247,14 +247,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     when (type) {
       TYP_CSV -> {
         extension = ".csv"
-        exporter = PExport2CSV((getDisplay() as UReport).table,
+        exporter = PExport2CSV((getDisplay() as UReport).getTable(),
                 model,
                 printOptions,
                 pageTitle)
       }
       TYP_PDF -> {
         extension = ".pdf"
-        exporter = PExport2PDF((getDisplay() as UReport).table,
+        exporter = PExport2PDF((getDisplay() as UReport).getTable(),
                 model,
                 printOptions,
                 pageTitle,
@@ -263,14 +263,14 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       }
       TYP_XLS -> {
         extension = ".xls"
-        exporter = PExport2XLS((getDisplay() as UReport).table,
+        exporter = PExport2XLS((getDisplay() as UReport).getTable(),
                 model,
                 printOptions,
                 pageTitle)
       }
       TYP_XLSX -> {
         extension = ".xlsx"
-        exporter = PExport2XLSX((getDisplay() as UReport).table,
+        exporter = PExport2XLSX((getDisplay() as UReport).getTable(),
                 model,
                 printOptions,
                 pageTitle)
@@ -311,12 +311,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   }
 
   fun foldSelection() {
-    val column = selectedColumn
+    val column = getSelectedColumn()
 
     if (column != -1) {
       model.foldingColumn(column)
     } else {
-      val (x, y) = selectedCell
+      val (x, y) = getSelectedCell()
       if (y != -1 && x != -1) {
         model.foldingRow(y, x)
       }
@@ -325,12 +325,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   }
 
   fun unfoldSelection() {
-    val column = selectedColumn
+    val column = getSelectedColumn()
 
     if (column != -1) {
       model.unfoldingColumn(column)
     } else {
-      val (x, y) = selectedCell
+      val (x, y) = getSelectedCell()
       if (y != -1 && x != -1) {
         model.unfoldingRow(y, x)
       }
@@ -339,7 +339,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   }
 
   fun foldSelectedColumn() {
-    val column = selectedColumn
+    val column = getSelectedColumn()
 
     if (column != -1) {
       model.setColumnFolded(column, true)
@@ -349,7 +349,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   }
 
   fun unfoldSelectedColumn() {
-    val column = selectedColumn
+    val column = getSelectedColumn()
 
     if (column != -1) {
       model.setColumnFolded(column, false)
@@ -361,7 +361,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Sort the displayed tree wrt to a column
    */
-  fun sortSelectedColumn() = model.sortColumn(selectedColumn)
+  fun sortSelectedColumn() = model.sortColumn(getSelectedColumn())
 
   /**
    * Sort the displayed tree wrt to a column
@@ -407,8 +407,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
         }
         i++
       }
-      if (idCol != -1 && selectedCell.y != -1) {
-        id = (model.getRow(selectedCell.y).getValueAt(idCol) as Int)
+      if (idCol != -1 && getSelectedCell().y != -1) {
+        id = (model.getRow(getSelectedCell().y).getValueAt(idCol) as Int)
       }
       return if (id == -1) {
         throw VRuntimeException()
@@ -431,8 +431,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       }
       i++
     }
-    return if (col != -1 && selectedCell.y != -1) {
-      model.getRow(selectedCell.y).getValueAt(col)
+    return if (col != -1 && getSelectedCell().y != -1) {
+      model.getRow(getSelectedCell().y).getValueAt(col)
     } else null
   }
   // ----------------------------------------------------------------------
@@ -462,8 +462,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
   fun executeIntegerTrigger(VKT_Type: Int): Int = throw InconsistencyException("SHOULD BE REDEFINED")
 
-  val documentType: Int
-    get() = DOC_UNKNOWN
+  fun getDocumentType(): Int = DOC_UNKNOWN
 
   /**
    * overridden by forms to implement triggers
@@ -499,8 +498,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       // only when commands are displayed
       return
     }
-    val column = selectedColumn
-    val (x, y) = selectedCell
+    val column = getSelectedColumn()
+    val (x, y) = getSelectedCell()
     val foldEnabled = column != -1 && !model.isColumnFold(column) ||
             x != -1 && y != -1 && !model.isRowFold(y, x)
     val unfoldEnabled = column != -1 || x != -1 && y != -1
@@ -535,14 +534,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Returns the selected column or -1 if no column is selected.
    */
-  private val selectedColumn: Int
-    private get() = (getDisplay() as UReport).selectedColumn
+  private fun getSelectedColumn(): Int = (getDisplay() as UReport).getSelectedColumn()
 
   /**
    * Returns the selected cell or !!! ??? if no cell is selected.
    */
-  private val selectedCell: Point
-    private get() = (getDisplay() as UReport).selectedCell
+  private fun getSelectedCell(): Point = (getDisplay() as UReport).getSelectedCell()
 
   fun genHelp(): String? {
     val surl = StringBuffer()
