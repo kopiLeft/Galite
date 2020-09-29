@@ -18,9 +18,9 @@
 
 package org.kopi.galite.list
 
-import org.kopi.galite.util.base.InconsistencyException
-
 import kotlin.reflect.KClass
+
+import org.kopi.galite.util.base.InconsistencyException
 
 class VIntegerCodeColumn(
   title: String,

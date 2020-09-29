@@ -18,9 +18,9 @@
 
 package org.kopi.galite.list
 
-import org.kopi.galite.l10n.ListLocalizer
-
 import kotlin.reflect.KClass
+
+import org.kopi.galite.l10n.ListLocalizer
 
 abstract class VListColumn(
   var title: String,

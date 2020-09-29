@@ -18,8 +18,6 @@
 
 package org.kopi.galite.list
 
-import kotlin.math.max
-
 abstract class VCodeColumn(
   title: String,
   column: String,

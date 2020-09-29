@@ -18,19 +18,12 @@
 
 package org.kopi.galite.visual
 
-class Message {
-  // ----------------------------------------------------------------------
-  // STATIC METHODS
-  // ----------------------------------------------------------------------
-  companion object {
-    /**
-     * Returns a message (convenience routine).
-     *
-     * @param     ident             the message ident
-     * @return    the requested message
-     */
-    fun getMessage(ident: String): String {
-      TODO()
-    }
+object Message {
+  fun getMessage(source: String?, ident: String, param: Any?): String {
+    TODO()
+  }
+
+  fun getMessage(ident: String): String {
+    TODO()
   }
 }

@@ -46,13 +46,10 @@ abstract class ImageHandler {
   abstract fun getURL(image: String): String
 
   companion object {
-    private lateinit var imageHandler: ImageHandler
-
-    fun setImageHandler(handler : ImageHandler) {
+    var imageHandler: ImageHandler? = null
+      set(handler) {
         assert(handler != null) { "ImageHandler cannot be null" }
-      this.imageHandler = handler
+        field = handler
       }
-
-    fun getImageHandler() :  ImageHandler =  imageHandler;
   }
 }
