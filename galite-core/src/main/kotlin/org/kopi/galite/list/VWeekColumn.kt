@@ -17,4 +17,23 @@
  */
 package org.kopi.galite.list
 
-class VWeekColumn 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.type.Week
+
+/**
+ * Represents a list column.
+ */
+class VWeekColumn(title: String,
+                  column: String,
+                  sortAscending: Boolean)
+    : VListColumn(title,
+                  column,
+                  VConstants.ALG_LEFT,
+                  7,
+                  sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  override fun getDataType(): KClass<*> = Week::class
+}
