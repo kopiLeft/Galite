@@ -20,4 +20,8 @@ package org.kopi.galite.type
 
 class Date {
   //TODO
+
+  fun compareTo(other: Date): Int {
+    TODO()
+  }
 }

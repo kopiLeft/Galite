@@ -173,14 +173,14 @@ abstract class PExport(val table: UTable,
   protected abstract fun exportHeader(data: Array<String?>)
   protected abstract fun export(stream: OutputStream)
   internal fun formatStringColumn(column: VReportColumn, index: Int) {}
-  protected fun formatDateColumn(column: VReportColumn, index: Int) {}
-  protected fun formatMonthColumn(column: VReportColumn, index: Int) {}
-  protected fun formatWeekColumn(column: VReportColumn, index: Int) {}
-  protected fun formatFixedColumn(column: VReportColumn, index: Int) {}
+  internal fun formatDateColumn(column: VReportColumn, index: Int) {}
+  internal fun formatMonthColumn(column: VReportColumn, index: Int) {}
+  internal fun formatWeekColumn(column: VReportColumn, index: Int) {}
+  internal fun formatFixedColumn(column: VReportColumn, index: Int) {}
   protected fun formatIntegerColumn(column: VReportColumn, index: Int) {}
   internal fun formatBooleanColumn(column: VReportColumn, index: Int) {}
-  protected fun formatTimeColumn(column: VReportColumn, index: Int) {}
-  protected fun formatTimestampColumn(column: VReportColumn, index: Int) {}
+  internal fun formatTimeColumn(column: VReportColumn, index: Int) {}
+  internal fun formatTimestampColumn(column: VReportColumn, index: Int) {}
 
   fun getColumnLabel(column: Int): String {
     return model.getAccessibleColumn(table.convertColumnIndexToModel(column))!!.label!!
