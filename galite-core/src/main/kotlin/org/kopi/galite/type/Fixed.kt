@@ -45,12 +45,7 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
    * add
    */
   fun add(f: NotNullFixed): NotNullFixed {
-    if (value!!.compareTo(BigDecimal.ZERO) == 0) {
-      return f
-    } else if ((f as Fixed).value?.compareTo(BigDecimal.ZERO) == 0) {
-      return NotNullFixed(value!!)
-    }
-    return NotNullFixed(value!!.add((f as Fixed).value, MATH_CONTEXT))
+    TODO()
   }
 
   /**
@@ -64,7 +59,7 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
    * multiply
    */
   fun multiply(f: NotNullFixed): NotNullFixed {
-    return NotNullFixed(value!!.multiply((f as Fixed).value, MATH_CONTEXT))
+    TODO()
   }
 
   /**

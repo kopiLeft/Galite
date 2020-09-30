@@ -22,7 +22,7 @@ import java.math.BigInteger
 import java.math.BigDecimal
 
 /**
- * This class represents kopi fixed type
+ * This class represents the not null fixed type
  */
 class NotNullFixed : Fixed {
 
