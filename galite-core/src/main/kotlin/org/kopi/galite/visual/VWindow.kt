@@ -37,8 +37,7 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param dBContext The database context for this object.
  * if if is specified, it will create a window with a DB context
  */
-abstract class VWindow(override var dBContext: DBContext = ApplicationContext.getDBContext()
-) : Executable, ActionHandler, VModel {
+abstract class VWindow() : Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -464,12 +463,12 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Returns the current user name
    */
-  open fun getUserName(): String? = dBContext.defaultConnection.userName
+  open fun getUserName(): String? = TODO()
 
   /**
    * Returns the user ID
    */
-  open fun getUserID(): Int = dBContext.defaultConnection.getUserID()
+  open fun getUserID(): Int = TODO()
 
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING

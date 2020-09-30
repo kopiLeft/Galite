@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,20 +15,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.tests.ui.demo
 
-import org.kopi.galite.db.DBContext
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
-/**
- * An interface for stand alone apps that can be executed from the
- * Menu tree.
- */
-interface Executable {
+@SpringBootApplication
+open class Application : SpringBootServletInitializer()
 
-  /**
-   * The start method called every time the user launch this app from menu
-   * it should be not modal
-   * @exception        VException        an exception may be raised by your app
-   */
-  fun doNotModal()
+fun main(args: Array<String>) {
+  runApplication<Application>(*args)
 }

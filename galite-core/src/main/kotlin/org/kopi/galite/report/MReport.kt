@@ -65,7 +65,7 @@ class MReport : Constants, Serializable {
       cols[i] = columns[i + 1]
     }
     position -= hiddenColumns
-    columns = cols.clone()
+    columns = cols.toList()
     createAccessibleTab()
     val rows = arrayOfNulls<VBaseRow>(baseRows.size)
 
@@ -117,7 +117,7 @@ class MReport : Constants, Serializable {
     columns.forEachIndexed { index, element ->
       cols[index] = element
     }
-    columns = cols.clone()
+    columns = cols.toList()
     initializeAfterAddingColumn()
     val rows = arrayOfNulls<VBaseRow>(baseRows.size)
 
@@ -966,7 +966,7 @@ class MReport : Constants, Serializable {
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
-  lateinit var columns : Array<VReportColumn?>    // array of column definitions
+  lateinit var columns : List<VReportColumn?>    // array of column definitions
   lateinit var accessibleColumns : Array<VReportColumn?> // array of visible or hide columns
     private set
 

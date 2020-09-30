@@ -23,7 +23,7 @@ import org.kopi.galite.field.Field
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
  */
-open class Report {
+open class Report : VReport() {
   /** Report's fields. */
   val fields = mutableListOf<Field<*>>()
 
@@ -37,7 +37,7 @@ open class Report {
    * @param init    initialization method.
    * @return a field.
    */
-  fun <T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
+  fun <T : Comparable<T>> field(domain: Domain<T>? = null, init: Field<T>.() -> Unit): Field<T> {
     val field = Field(domain)
     field.init()
     fields.add(field)
@@ -68,4 +68,42 @@ open class Report {
    * @param field the field.
    */
   fun getRowsForField(field: Field<*>) = reportRows.map { it.data[field] }
+
+  // --------------------------------------------------------------------
+  // VISUAL REPORT IMPLEMENTATION
+  // --------------------------------------------------------------------
+
+  /**
+   * initializes the report
+   */
+  override fun init() {
+    // TODO
+    setSource("User")
+    reportRows.map {
+      add(it.data.values.toTypedArray())
+    }
+    super.model.columns = fields.map {
+      VStringColumn(it.label, 0, 0, -1, null, 32, 1, null)
+    }
+  }
+
+  /**
+   * Adds a row to the report.
+   *
+   * @param data the row data.
+   */
+  override fun add(data: Array<Any?>) {
+    val data = data.toMutableList()
+
+    data.add(null)
+
+    super.model.addLine(data.toTypedArray())
+  }
+
+  /**
+   * Resets the report.
+   */
+  override fun reset() {
+    // TODO
+  }
 }
