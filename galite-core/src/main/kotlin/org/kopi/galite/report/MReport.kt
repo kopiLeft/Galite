@@ -19,7 +19,6 @@
 package org.kopi.galite.report
 
 import java.io.Serializable
-import java.util.Vector
 
 import javax.swing.event.EventListenerList
 
@@ -264,7 +263,7 @@ class MReport : Constants, Serializable {
             vm.setValue(params[j], ovr.toDouble())
           }
           SUM -> {
-            var sum: Float = 0f
+            var sum = 0f
             // calculate sum.
             baseRows.forEach  {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
@@ -280,7 +279,7 @@ class MReport : Constants, Serializable {
       } catch (e: NumberFormatException) {
         // this exception occurs with INFINITE double values. (ex : division by ZERO)
         // return a null value (can not evaluate expression)
-        baseRows[i]!!.setValueAt(column, null as NotNullFixed)
+        baseRows[i]!!.setValueAt(column, null as NotNullFixed?)
       } catch (e: Exception) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00066"))
       }
@@ -291,7 +290,7 @@ class MReport : Constants, Serializable {
    * Add a row to the list of rows defined by the user
    */
   fun addLine(line: Array<Any?>) {
-    userRows!!.addElement(VBaseRow(line))
+    userRows!!.add(VBaseRow(line))
   }
 
   /**
@@ -933,7 +932,9 @@ class MReport : Constants, Serializable {
    *
    * @param l The ReportListener
    */
-  fun addReportListener(l: ReportListener) = listenerList.add(ReportListener::class.java, l)
+  fun addReportListener(l: ReportListener) {
+    listenerList.add(ReportListener::class.java, l)
+  }
 
   /**
    * Removes a listener from the list that's notified each time a
@@ -941,7 +942,9 @@ class MReport : Constants, Serializable {
    *
    * @param l The ReportListener
    */
-  fun removeReportListener(l: ReportListener) = listenerList.remove(ReportListener::class.java, l)
+  fun removeReportListener(l: ReportListener) {
+    listenerList.remove(ReportListener::class.java, l)
+  }
 
   /**
    * Notifies all listeners that the report model has changed.
@@ -964,7 +967,8 @@ class MReport : Constants, Serializable {
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
   private lateinit var columns : Array<VReportColumn?>    // array of column definitions
-  lateinit var accessibleColumns : Array<VReportColumn?>    // array of visible or hide columns
+  lateinit var accessibleColumns : Array<VReportColumn?> // array of visible or hide columns
+    private set
 
   // Root is the root of the tree (which is our model to manipulate data)
   private var root : VGroupRow? = null    // root of grouping tree
@@ -972,8 +976,8 @@ class MReport : Constants, Serializable {
   // Baserows contains data give by the request of the user
   // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
   // is changed when a column move or one or more row are folded
-  private var userRows: Vector<VBaseRow>? = Vector(500)
-  lateinit var baseRows : Array<VReportRow?>    // array of base data rows
+  private var userRows: ArrayList<VBaseRow>? = ArrayList(500)
+  private lateinit var baseRows : Array<VReportRow?>    // array of base data rows
   private var visibleRows : Array<VReportRow?>? = null  // array of visible rows
   private var maxRowCount = 0
 
@@ -989,5 +993,5 @@ class MReport : Constants, Serializable {
 
   // The displayLevels variable is a table which contains the level of each column
   private lateinit var displayLevels : IntArray   // column levels in display order
-  private var listenerList = EventListenerList()  // List of listeners
+  private val listenerList = EventListenerList()  // List of listeners
 }

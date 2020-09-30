@@ -19,7 +19,7 @@
 package org.kopi.galite.report
 
 /**
- * Constructs a report column description
+ * Represents a report column description
  *
  * @param     ident           The column identifier
  * @param     options         The column options as bitmap
@@ -28,13 +28,13 @@ package org.kopi.galite.report
  * @param     function        An (optional) summation function
  */
 class VSeparatorColumn(
-  ident: String,
-  options: Int,
-  align: Int,
-  groups: Int,
-  function: VCalculateColumn?,
-  width: Int,
-  format: VCellFormat,
+        ident: String,
+        options: Int,
+        align: Int,
+        groups: Int,
+        function: VCalculateColumn?,
+        width: Int,
+        format: VCellFormat,
 ) : VReportColumn("", 0, 0, 0, null, 1, 1, null) {
   /**
    * No text here
@@ -46,19 +46,20 @@ class VSeparatorColumn(
   /**
    * Compare two objects.
    *
-   * @param    o1    the first operand of the comparison
-   * @param    o2    the second operand of the comparison
+   * @param    object1    the first operand of the comparison
+   * @param    object2    the second operand of the comparison
    * @return    -1 if the first operand is smaller than the second
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(o1: Any, o2: Any): Int {
+  override fun compareTo(object1: Any, object2: Any): Int {
     return 0
   }
 
   /**
    * Returns the visibility of the column
    */
-  val isFolded: Boolean
-    get() = true
+  fun isFolded(): Boolean {
+    return true
+  }
 }

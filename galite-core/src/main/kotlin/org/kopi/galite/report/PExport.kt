@@ -34,7 +34,7 @@ abstract class PExport(val table: UTable,
     var index = 0
     for (j in 0 until model.getAccessibleColumnCount()) {
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
-      val column: VReportColumn = model.getAccessibleColumn(visibleColumn)!!
+      val column = model.getAccessibleColumn(firstVisibleColumn)!!
       if (column.visible && !column.folded // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || j != firstVisibleColumn)) {
         column.formatColumn(this, index)
@@ -183,7 +183,7 @@ abstract class PExport(val table: UTable,
   internal fun formatTimestampColumn(column: VReportColumn, index: Int) {}
 
   fun getColumnLabel(column: Int): String {
-    return model.getAccessibleColumn(table.convertColumnIndexToModel(column))!!.label!!
+    return model.getAccessibleColumn(table.convertColumnIndexToModel(column))!!.label
   }
 
   fun getBackgroundForLevel(level: Int): Color {
