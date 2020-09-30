@@ -34,8 +34,8 @@ abstract class PExport(val table: UTable,
     var index = 0
     for (j in 0 until model.getAccessibleColumnCount()) {
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
-      val column = model.getAccessibleColumn(firstVisibleColumn)!!
-      if (column.visible && !column.folded // if we have a new page for each group, we do not use the first visible column
+      val column = model.getAccessibleColumn(visibleColumn)
+      if (column!!.visible && !column.folded // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || j != firstVisibleColumn)) {
         column.formatColumn(this, index)
         index += 1
