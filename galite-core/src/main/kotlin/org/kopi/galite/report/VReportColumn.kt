@@ -139,7 +139,7 @@ abstract class VReportColumn(
   var label: String = ""
   private var help: String? = null
   var visible: Boolean = true
-  var folded: Boolean = false
+  open var folded: Boolean = false
   var addedAtRuntime: Boolean = false
   var userDefinedLabel: Boolean = false
   private var styles: Array<ColumnStyle>? = null

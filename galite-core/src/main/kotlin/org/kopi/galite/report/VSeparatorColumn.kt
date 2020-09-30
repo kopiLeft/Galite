@@ -28,13 +28,13 @@ package org.kopi.galite.report
  * @param     function        An (optional) summation function
  */
 class VSeparatorColumn(
-        ident: String,
-        options: Int,
-        align: Int,
-        groups: Int,
-        function: VCalculateColumn?,
-        width: Int,
-        format: VCellFormat,
+  ident: String,
+  options: Int,
+  align: Int,
+  groups: Int,
+  function: VCalculateColumn?,
+  width: Int,
+  format: VCellFormat,
 ) : VReportColumn("", 0, 0, 0, null, 1, 1, null) {
   /**
    * No text here
@@ -59,7 +59,6 @@ class VSeparatorColumn(
   /**
    * Returns the visibility of the column
    */
-  fun isFolded(): Boolean {
-    return true
-  }
+  override var folded: Boolean = false
+    get() = true
 }

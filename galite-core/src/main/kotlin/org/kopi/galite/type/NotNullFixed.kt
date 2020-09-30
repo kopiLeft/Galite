@@ -18,7 +18,32 @@
 
 package org.kopi.galite.type
 
+import java.math.BigInteger
+import java.math.BigDecimal
+
 /**
- * This class represents thr not null fixed type
+ * This class represents kopi fixed type
  */
-class NotNullFixed internal constructor(b: Double) : Fixed(b) {}
+class NotNullFixed : Fixed {
+
+  constructor (b: BigDecimal) : super(b) {}
+  constructor(b: BigInteger) : super(b) {}
+  constructor(b: BigInteger, l: Int) : super(b) {}
+  constructor(value: Long, scale: Int) : super(value, scale) {}
+  constructor(d: Double) : super(d) {}
+  constructor(s: String) : super(s) {}
+
+  /**
+   * Checks whether this object is equal to the specified object.
+   */
+  override fun equals(other: Any?): Boolean {
+    return (other is NotNullFixed
+            && super.equals(other))
+  }
+
+  companion object {
+    fun castToNotNull(value: Fixed?): NotNullFixed {
+      return value as NotNullFixed
+    }
+  }
+}
