@@ -160,7 +160,7 @@ abstract class PExport(val table: UTable,
     exportRow(row.level - minLevel, newrow, newrowOrig, alignments)
   }
 
-  fun export(file: File?) {
+  fun export(file: File) {
     try {
       export(FileOutputStream(file))
     } catch (e: Exception) {
@@ -225,6 +225,6 @@ abstract class PExport(val table: UTable,
       // same for all -> it is added to the "title"
       columnCount -= 1
     }
-    maxLevel = model.root.level
+    maxLevel = model.getTree().level
   }
 }

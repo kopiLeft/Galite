@@ -18,8 +18,6 @@
 
 package org.kopi.galite.db
 
-import java.sql.SQLException
-
 /**
  * Interface for object that executes transactions and query to databases.
  */

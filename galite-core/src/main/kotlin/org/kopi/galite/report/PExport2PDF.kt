@@ -26,14 +26,7 @@ import java.io.OutputStream
 class PExport2PDF(table: UReport.UTable, model: MReport, printOptions: PConfig, pageTitle: String, firstPageHeader: String, b: Boolean) : PExport(table,
         model, printOptions, pageTitle), Constants {
 
-
-  fun PExport2PDF(table: UReport.UTable?, model: MReport?, pconfig: PConfig?,
-                  title: String?, firstPageHeader: String, tonerSaveMode: Boolean) {
-    TODO()
-  }
-
   fun export(): PrintJob = TODO()
-
 
   private val datatable: PdfPTable? = null
   private val pages = 0

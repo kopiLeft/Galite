@@ -26,5 +26,5 @@ open class VHelpGenerator {
     TODO()
   }
 
-  fun helpOnReport(pageTitle: String, commands: Array<VCommand>?, model: MReport, help: String?): String = TODO()
+  fun helpOnReport(pageTitle: String, commands: Array<VCommand>?, model: MReport, help: String): String = TODO()
 }

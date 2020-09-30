@@ -18,14 +18,8 @@
 
 package org.kopi.galite.report
 
-import java.io.File
-import java.net.MalformedURLException
-import java.text.MessageFormat
-import java.util.Locale
-import java.util.Vector
-
-import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.chart.VHelpGenerator
+import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.l10n.LocalizationManager
@@ -49,6 +43,10 @@ import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
+import java.io.File
+import java.net.MalformedURLException
+import java.text.MessageFormat
+import java.util.*
 
 abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
   companion object {
@@ -69,16 +67,20 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   override fun getType() = org.kopi.galite.visual.Constants.MDL_REPORT
 
   /**
-   * Redisplay the report after change in formating
+   * Redisplay the report after change in formatting
    */
   @Deprecated("call method in display; model must not be refreshed")
-  fun redisplay() = (getDisplay() as UReport).redisplay()
+  fun redisplay() {
+    (getDisplay() as UReport).redisplay()
+  }
 
   /**
    * Close window
    */
   @Deprecated("call method in display; model must not be closed")
-  fun close() = getDisplay().closeWindow()
+  fun close() {
+    getDisplay().closeWindow()
+  }
 
   override fun destroyModel() {
     try {
@@ -107,8 +109,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     // all commands are by default enabled
     activeCommands.setSize(0)
     if (commands != null) {
-      for (i in commands!!.indices) {
-        val command: VCommand = commands!![i]
+      commands!!.forEachIndexed { i, vCommand ->
+        val command: VCommand = vCommand
         when {
           command.getIdent() == "Fold" -> cmdFold = command
           command.getIdent() == "Unfold" -> cmdUnfold = command
@@ -119,7 +121,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
           command.getIdent() == "ColumnInfo" -> cmdColumnInfo = command
           command.getIdent() == "EditColumnData" -> cmdEditColumn = command
           else -> {
-            setCommandEnabled(commands!![i], model.getModelColumnCount() + i + 1, true)
+            setCommandEnabled(vCommand, model.getModelColumnCount() + i + 1, true)
           }
         }
       }
@@ -138,12 +140,13 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * @param     locale  the locale to use
    */
   fun localize(locale: Locale) {
-    val manager: LocalizationManager?
+    var manager: LocalizationManager?
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
 
     // localizes the actors in VWindow
     super.localizeActors(manager)
     localize(manager)
+    manager = null
   }
 
   /**
@@ -174,6 +177,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   fun setCommandEnabled(command: VCommand, index: Int, enable: Boolean) {
     var enable = enable
+
     if (enable) {
       // we need to check if VKT_Triggers is initialized
       // ex : org.kopi.galite.cross.VDynamicReport
@@ -208,7 +212,6 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   }
 
   override fun createPrintJob(): PrintJob {
-
     val exporter: PExport2PDF = PExport2PDF((getDisplay() as UReport).getTable(),
             model,
             printOptions,
@@ -244,6 +247,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     setWaitInfo(VlibProperties.getString("export-message"))
     val extension: String
     val exporter: PExport
+
     when (type) {
       TYP_CSV -> {
         extension = ".csv"
@@ -361,7 +365,9 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Sort the displayed tree wrt to a column
    */
-  fun sortSelectedColumn() = model.sortColumn(getSelectedColumn())
+  fun sortSelectedColumn() {
+    model.sortColumn(getSelectedColumn())
+  }
 
   /**
    * Sort the displayed tree wrt to a column
@@ -444,6 +450,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   protected fun buildSQLCondition(column: String, field: VField): String {
     val condition: String? = field.getSearchCondition()
+
     return if (condition == null) {
       " TRUE = TRUE "
     } else {
@@ -500,9 +507,9 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     }
     val column = getSelectedColumn()
     val (x, y) = getSelectedCell()
-    val foldEnabled = column != -1 && !model.isColumnFold(column) ||
-            x != -1 && y != -1 && !model.isRowFold(y, x)
+    val foldEnabled = column != -1 && !model.isColumnFold(column) || x != -1 && y != -1 && !model.isRowFold(y, x)
     val unfoldEnabled = column != -1 || x != -1 && y != -1
+
     if (cmdFold != null) {
       setCommandEnabled(cmdFold!!, foldEnabled)
     }
@@ -547,6 +554,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
             commands,
             model,
             help)
+
     return if (fileName == null) {
       null
     } else {
@@ -592,7 +600,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   var help: String = ""
   protected var VKT_Triggers: Array<IntArray>? = null
   protected var commands: Array<VCommand>? = null
-  private val activeCommands: Vector<VCommand>
+  private val activeCommands = Vector<VCommand>()
 
   /**
    * sets the print options
@@ -612,7 +620,6 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * Constructor
    */
   init {
-    activeCommands = Vector<VCommand>()
     if (ctxt != null) {
       dBContext = ctxt.getDBContext()
     }
