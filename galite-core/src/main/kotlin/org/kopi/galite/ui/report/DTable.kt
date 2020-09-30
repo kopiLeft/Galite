@@ -35,7 +35,7 @@ import java.lang.reflect.Method
  *
  * @param model The table model.
  */
-class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventListener<ItemClickEvent<VTable>> {
+class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventListener<ItemClickEvent<ReportTable>> {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -94,7 +94,7 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
     TODO()
   }
 
-  override fun onComponentEvent(event: ItemClickEvent<VTable>?) {
+  override fun onComponentEvent(event: ItemClickEvent<ReportTable>?) {
     TODO("Not yet implemented")
   }
 

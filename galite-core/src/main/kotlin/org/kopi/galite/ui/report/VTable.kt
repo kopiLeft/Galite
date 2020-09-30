@@ -17,30 +17,114 @@
 
 package org.kopi.galite.ui.report
 
-import com.vaadin.flow.component.grid.Grid
-import org.kopi.galite.report.ReportRow
-import org.kopi.galite.report.Report
+import java.util.Optional
+
+import com.vaadin.flow.data.binder.PropertyDefinition
+import com.vaadin.flow.data.binder.PropertySet
+import com.vaadin.flow.data.binder.Setter
+import com.vaadin.flow.function.ValueProvider
+
+import org.kopi.galite.report.MReport
 
 /**
- * Data table for of a report.
+ * The `VTable` is a Vaadin [Grid] data container adapted
+ * to dynamic reports needs.
+ *
+ * @param model The table model.
  */
-class VTable() : Grid<ReportRow>() {
-  init {
-    isColumnReorderingAllowed = true
+class VTable(val model: MReport): PropertyDefinition<VTable, String> {
+
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+  fun getContainerPropertyIds(): Collection<*>? {
+    TODO()
+  }
+
+
+
+  fun getType(propertyId: Any?): Class<*>? {
+    TODO()
+  }
+
+
+  fun size(): Int {
+    TODO()
+  }
+
+  protected fun getAllItemIds(): List<Int>? {
+    TODO()
+  }
+
+
+  /**
+   * Returns the column name of a given column index.
+   * @param column The column index.
+   * @return The column name.
+   */
+  fun getColumnName(column: Int): String {
+    val label: String = model.accessibleColumns[column]!!.label
+    return if (label == null || label.isEmpty()) {
+      ""
+    } else label
   }
 
   /**
-   * Fill table with data from report
-   * @param report report that provides data
+   * Returns the column align.
+   * @param column The column index.
+   * @return The column align.
    */
-  fun fillTable(report: Report) {
-    setItems(report.reportRows.map { it })
-
-    report.fields.forEach { field ->
-      addColumn {
-        it.getValueOf(field)
-      }.setHeader(field.label).setSortable(true)
-    }
+  fun getColumnAlign(column: Int): Int {
+    TODO()
   }
 
+  /**
+   * Returns the column count.
+   * @return the column count.
+   */
+  fun getColumnCount(): Int {
+    return model.getColumnCount()
+  }
+
+  /**
+   * Builds a [List] if [Integer] IDs.
+   * @param length The ID list length.
+   * @return The IDs list.
+   */
+  private fun buildIds(length: Int): List<Int>? {
+    val ids: MutableList<Int> = ArrayList(length)
+    for (i in 0 until length) {
+      ids.add(i)
+    }
+    return ids
+  }
+
+  override fun getType(): Class<String> {
+    return String::class.java
+  }
+
+  override fun getGetter(): ValueProvider<VTable, String> = TableValueProvider()
+
+  override fun getSetter(): Optional<Setter<VTable, String>>? = null
+
+  override fun getPropertyHolderType(): Class<*> {
+    return String::class.java
+  }
+
+  override fun getName(): String = ""
+
+  override fun getCaption(): String =  ""
+
+  override fun getPropertySet(): PropertySet<VTable> {
+    TODO()
+  }
+
+  override fun getParent(): PropertyDefinition<VTable, *>? = null
+
+  class TableValueProvider : ValueProvider<VTable, String> {
+
+    override fun apply(source: VTable): String {
+      TODO()
+    }
+  }
 }

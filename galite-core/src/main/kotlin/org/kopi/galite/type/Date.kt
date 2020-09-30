@@ -19,9 +19,12 @@
 package org.kopi.galite.type
 
 class Date {
-  //TODO
-
+  companion object {
+    fun now(): Date = TODO()
+  }
   fun compareTo(other: Date): Int {
     TODO()
   }
+
+  fun format(s: String): Any = TODO()
 }

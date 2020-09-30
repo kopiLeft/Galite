@@ -19,7 +19,6 @@
 package org.kopi.galite.ui.visual
 
 import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.VUIFactory
 
 abstract class VApplication {
   companion object {

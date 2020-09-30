@@ -120,7 +120,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Destroy this class (break all references to help java to GC the form)
    */
-  fun destroyModel() {}
+  open fun destroyModel() {}
 
   /**
    * Informs model, that this action was executed on it.
@@ -137,7 +137,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * Returns the localization source of this window.
    * @return The localization source of this window.
    */
-  protected fun getSource(): String? = null
+  protected open fun getSource(): String? = null
 
   override fun performAsyncAction(action: Action) {
     val listeners = modelListener.listenerList
@@ -411,7 +411,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   // ----------------------------------------------------------------------
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
-  fun getType(): Int = Constants.MDL_UNKOWN
+  open fun getType(): Int = Constants.MDL_UNKOWN
 
   fun enableCommands() = f12.setEnabled(true)
 

@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,25 +15,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.ui.report
 
-import java.io.OutputStream
+import com.vaadin.flow.component.grid.Grid
+import org.kopi.galite.report.ReportRow
+import org.kopi.galite.report.Report
 
-class PExport2XLS(table: UReport.UTable, model: MReport, printOptions: PConfig, pageTitle: String) : PExport(table,
-        model, printOptions, pageTitle), Constants {
-  override fun exportHeader(data: Array<String?>) {
-    TODO("Not yet implemented")
+/**
+ * Data table for of a report.
+ */
+class ReportTable() : Grid<ReportRow>() {
+  init {
+    isColumnReorderingAllowed = true
   }
 
-  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
-    TODO("Not yet implemented")
+  /**
+   * Fill table with data from report
+   * @param report report that provides data
+   */
+  fun fillTable(report: Report) {
+    setItems(report.reportRows.map { it })
+
+    report.fields.forEach { field ->
+      addColumn {
+        it.getValueOf(field)
+      }.setHeader(field.label).setSortable(true)
+    }
   }
 
-  override fun export(stream: OutputStream) {
-    TODO("Not yet implemented")
-  }
-
-  override fun startGroup(subTitle: String?) {
-    TODO("Not yet implemented")
-  }
 }

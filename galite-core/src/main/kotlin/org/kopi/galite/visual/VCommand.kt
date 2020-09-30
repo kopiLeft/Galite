@@ -19,7 +19,7 @@
 package org.kopi.galite.visual
 
 open class VCommand(private var mode: Int, protected val handler: ActionHandler,
-                    protected val actor: VActor?, protected val trigger: Int, private val item: String) {
+                    protected val actor: VActor?, internal val trigger: Int, private val item: String) {
 
   /**
    * Kill a command: this command will never been enabled again

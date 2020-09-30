@@ -42,7 +42,7 @@ class VHelpGenerator : VHelpGenerator() {
   fun helpOnReport(name: String,
                    commands: Array<VCommand>,
                    model: MReport,
-                   help: String): String? {
+                   help: String?): String? {
     return try {
       val file: File = Utils.getTempFile(name.replace("[:\\\\/*\"?|<>']".toRegex(), " "), "htm")
       print = PrintWriter(BufferedWriter(OutputStreamWriter(FileOutputStream(file), "UTF-8")))

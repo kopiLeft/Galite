@@ -15,6 +15,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-class PExport2PDF 
+import org.kopi.galite.util.PrintJob
+import java.io.OutputStream
+
+class PExport2PDF(table: UReport.UTable, model: MReport, printOptions: PConfig, pageTitle: String, firstPageHeader: String, b: Boolean) : PExport(table,
+        model, printOptions, pageTitle), Constants {
+
+  fun export(): PrintJob = TODO()
+
+  override fun exportHeader(data: Array<String?>) {
+    TODO("Not yet implemented")
+  }
+
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
+    TODO("Not yet implemented")
+  }
+
+  override fun export(stream: OutputStream) {
+    TODO("Not yet implemented")
+  }
+
+  override fun startGroup(subTitle: String?) {
+    TODO("Not yet implemented")
+  }
+}

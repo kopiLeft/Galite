@@ -61,7 +61,7 @@ interface UReport : UWindow, ReportListener {
   /**
    * Returns the report table.
    */
-  val table: UTable
+  fun getTable(): UTable
 
   /**
    * Reset columns width
@@ -71,13 +71,13 @@ interface UReport : UWindow, ReportListener {
   /**
    * Returns the selected column
    */
-  val selectedColumn: Int
+  fun getSelectedColumn(): Int
 
   /**
    * Returns the coordinate of the selected cell
    * The index of the column is relative to the model
    */
-  val selectedCell: Point
+  fun getSelectedCell(): Point
 
   /**
    * Sets the column label.

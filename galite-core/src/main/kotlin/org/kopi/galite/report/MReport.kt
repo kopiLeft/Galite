@@ -296,7 +296,7 @@ class MReport : Constants, Serializable {
   /**
    * Build the base row table + intialisation
    */
-  protected fun build() {
+  internal fun build() {
     var columnCount = columns.size
 
     // build accessible columns
@@ -367,7 +367,7 @@ class MReport : Constants, Serializable {
   // --------------------------------------------------------------------
   // GROUPING TREE
   // --------------------------------------------------------------------
-  protected fun createTree() {
+  internal fun createTree() {
     // compute grouping columns in displayed column order
     computeGroupings()
 
@@ -966,7 +966,7 @@ class MReport : Constants, Serializable {
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
-  private lateinit var columns : Array<VReportColumn?>    // array of column definitions
+  lateinit var columns : Array<VReportColumn?>    // array of column definitions
   lateinit var accessibleColumns : Array<VReportColumn?> // array of visible or hide columns
     private set
 
