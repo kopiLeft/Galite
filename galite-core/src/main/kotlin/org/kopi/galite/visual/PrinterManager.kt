@@ -17,4 +17,6 @@
  */
 package org.kopi.galite.visual
 
-abstract class PrinterManager 
+class PrinterManager {
+// TODO()
+}

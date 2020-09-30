@@ -32,7 +32,7 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
    * @param        column                the index of the column
    * @param        value                the value for the column
    */
-  override fun setValueAt(column: Int, value: Any) {
+  override fun setValueAt(column: Int, value: Any?) {
     data[column] = value
   }
 

@@ -159,7 +159,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
     setPageTitle(loc.getTitle())
     help = loc.getHelp()
-    model.columns.forEach { it.localize(loc) }
+    model.columns.forEach { it?.localize(loc) }
   }
 
   // ----------------------------------------------------------------------
@@ -219,7 +219,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
             firstPageHeader,
             Message.getMessage("toner_save_mode") == "true")
     val printJob: PrintJob = exporter.export()
-    printJob.setDocumentType(getDocumentType())
+    printJob.documentType = getDocumentType()
     return printJob
   }
 
@@ -235,7 +235,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       else -> throw InconsistencyException("Export type unknown")
     }
     val file: File? = FileHandler.fileHandler.chooseFile(getDisplay(),
-            ApplicationConfiguration.getConfiguration().getDefaultDirectory(),
+            ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
             "report$ext")
     file?.let { export(it, type) }
   }
@@ -414,7 +414,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
         i++
       }
       if (idCol != -1 && getSelectedCell().y != -1) {
-        id = (model.getRow(getSelectedCell().y).getValueAt(idCol) as Int)
+        id = (model.getRow(getSelectedCell().y)?.getValueAt(idCol) as Int)
       }
       return if (id == -1) {
         throw VRuntimeException()
@@ -438,7 +438,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       i++
     }
     return if (col != -1 && getSelectedCell().y != -1) {
-      model.getRow(getSelectedCell().y).getValueAt(col)
+      model.getRow(getSelectedCell().y)?.getValueAt(col)
     } else null
   }
   // ----------------------------------------------------------------------
@@ -532,7 +532,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       setCommandEnabled(cmdColumnInfo!!, column != -1)
     }
     if (cmdEditColumn != null) {
-      setCommandEnabled(cmdEditColumn!!, column != -1 && model.getAccessibleColumn(column).addedAtRuntime)
+      setCommandEnabled(cmdEditColumn!!, column != -1 && model.getAccessibleColumn(column)!!.addedAtRuntime)
     }
   }
   // ----------------------------------------------------------------------

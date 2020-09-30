@@ -15,8 +15,38 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
+/**
+ * An interface that defines printer devices
+ *
+ * Such printers may be remote printers, local printers, print-to-file, fax
+ * mailer or whatever
+ */
 interface Printer {
 
+  /**
+   * Unique name of the printer in the database which is chosen by the user
+   */
+  fun getPrinterName(): String
+
+  /**
+   * Prints a PrintJob
+   */
+  fun print(data: PrintJob): String
+
+  // ----------------------------------------------------------------------
+  // PRINT OPTIONS
+  // ----------------------------------------------------------------------
+
+  /**
+   * Sets the tray to use
+   */
+  fun selectTray(tray: Int)
+
+  /**
+   * Sets the paper format
+   */
+  fun setPaperFormat(paperFormat: String)
 }
