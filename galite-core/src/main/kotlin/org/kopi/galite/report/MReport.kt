@@ -343,16 +343,14 @@ class MReport : Constants, Serializable {
    * @param    column        the index of the desired column
    * @return    the desired column
    */
-  fun getAccessibleColumn(column: Int): VReportColumn? = accessiblecolumns[column]
-
-  fun getAccessibleColumns(): Array<VReportColumn?> = accessiblecolumns
+  fun getAccessibleColumn(column: Int): VReportColumn? = accessibleColumns[column]
 
   /**
    * Returns the number of columns visible or hide
    *
    * @return    the number or columns in the model
    */
-  fun getAccessibleColumnCount(): Int = accessiblecolumns.size
+  fun getAccessibleColumnCount(): Int = accessibleColumns.size
 
   /**
    * Return a row definition
@@ -394,14 +392,14 @@ class MReport : Constants, Serializable {
    * The columns are given in displayed column order
    */
   private fun computeGroupings() {
-    val columnCount = accessiblecolumns.size
+    val columnCount = accessibleColumns.size
     val defaultGroups = IntArray(columnCount)
     val displayGroups = IntArray(columnCount)
     var separatorPos = Int.MAX_VALUE
 
     // retrieve the groups in original column order
     for (i in 0 until columnCount) {
-      defaultGroups[i] = accessiblecolumns[i]!!.groups
+      defaultGroups[i] = accessibleColumns[i]!!.groups
     }
 
     // reorder the groups in displayed column order
@@ -415,7 +413,7 @@ class MReport : Constants, Serializable {
 
     // retrieve separator
     for (i in 0 until columnCount) {
-      if (accessiblecolumns[displayOrder[i]] is VSeparatorColumn) {
+      if (accessibleColumns[displayOrder[i]] is VSeparatorColumn) {
         separatorPos = i
       }
     }
@@ -426,7 +424,7 @@ class MReport : Constants, Serializable {
       var i = 0
       while (i < displayGroups.size) {
         displayLevels[i] = level
-        if (accessiblecolumns[displayOrder[i]]!!.visible) {
+        if (accessibleColumns[displayOrder[i]]!!.visible) {
           if (displayGroups[i] == -1 || i == separatorPos) {
             while (i < displayGroups.size) {
               displayLevels[i] = level
@@ -473,7 +471,7 @@ class MReport : Constants, Serializable {
     }
     // sort in ascending order
     var i = column
-    while (!accessiblecolumns[i]!!.visible) {
+    while (!accessibleColumns[i]!!.visible) {
       i += 1
     }
     if (i >= 0) {
@@ -515,7 +513,7 @@ class MReport : Constants, Serializable {
       while (displayLevels[next] == displayLevels[start]) {
         next++
       }
-      while (!accessiblecolumns[start]!!.visible) {
+      while (!accessibleColumns[start]!!.visible) {
         // to get the first visible column of this level
         start++
       }
@@ -757,7 +755,7 @@ class MReport : Constants, Serializable {
    * Folds the specified column
    */
   fun setColumnFolded(column: Int, fold: Boolean) {
-    accessiblecolumns[column]!!.folded = fold
+    accessibleColumns[column]!!.folded = fold
     fireContentChanged()
   }
 
@@ -765,7 +763,7 @@ class MReport : Constants, Serializable {
    * Folds the specified column
    */
   fun switchColumnFolding(column: Int) {
-    accessiblecolumns[column]!!.folded = (!accessiblecolumns[column]!!.folded)
+    accessibleColumns[column]!!.folded = (!accessibleColumns[column]!!.folded)
     fireContentChanged()
   }
 
@@ -837,7 +835,7 @@ class MReport : Constants, Serializable {
    *
    * @return    the number or columns to display
    */
-  fun getColumnCount(): Int = accessiblecolumns.size
+  fun getColumnCount(): Int = accessibleColumns.size
 
   /**
    * Returns the number of records managed by the data source object.
@@ -881,12 +879,12 @@ class MReport : Constants, Serializable {
    * @return    the name of the column
    */
   fun getColumnName(column: Int): String {
-    val label: String? = accessiblecolumns[column]!!.label
+    val label: String? = accessibleColumns[column]!!.label
 
     if (label == null || label.isEmpty()) {
       return ""
     }
-    return if (accessiblecolumns[column]!!.folded) label.substring(0, 1) else label
+    return if (accessibleColumns[column]!!.folded) label.substring(0, 1) else label
   }
 
   /**
@@ -901,11 +899,11 @@ class MReport : Constants, Serializable {
         accessiblecolumnCount += 1
       }
     }
-    accessiblecolumns = arrayOfNulls(accessiblecolumnCount)
+    accessibleColumns = arrayOfNulls(accessiblecolumnCount)
     accessiblecolumnCount = 0
     for (i in 0 until columnCount) {
       if (columns[i]!!.options and Constants.CLO_HIDDEN == 0) {
-        accessiblecolumns[accessiblecolumnCount++] = columns[i]
+        accessibleColumns[accessiblecolumnCount++] = columns[i]
       }
     }
   }
@@ -966,7 +964,7 @@ class MReport : Constants, Serializable {
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
   private lateinit var columns : Array<VReportColumn?>    // array of column definitions
-  private lateinit var accessiblecolumns : Array<VReportColumn?>    // array of visible or hide columns
+  lateinit var accessibleColumns : Array<VReportColumn?>    // array of visible or hide columns
 
   // Root is the root of the tree (which is our model to manipulate data)
   private var root : VGroupRow? = null    // root of grouping tree
