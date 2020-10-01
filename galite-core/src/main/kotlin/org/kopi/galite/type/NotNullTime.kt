@@ -21,7 +21,7 @@ package org.kopi.galite.type
 import java.util.Calendar
 
 /**
- * This class represents kopi time types
+ * This class represents the time types
  */
 class NotNullTime : Time {
   constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds) {}

@@ -25,6 +25,7 @@ val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
 val apachePoi = "4.1.2"
 val apacheOoxml ="3.9"
+val graphbuilder ="1.02"
 
 dependencies {
   // Exposed dependencies
@@ -45,8 +46,11 @@ dependencies {
   implementation("org.jdom", "jdom2", jdomVersion)
 
   //Apache POI
-  implementation("org.apache.poi", "poi", apachePoi)
+  implementation("org.apache.poi","poi",apachePoi)
 
   // Apache OOxml
-  implementation("org.apache.poi", "poi-ooxml", apacheOoxml)
+  implementation("org.apache.poi","poi-ooxml",apacheOoxml)
+
+  // Graphbuilder dependency
+  implementation("com.github.virtuald", "curvesapi", graphbuilder)
 }

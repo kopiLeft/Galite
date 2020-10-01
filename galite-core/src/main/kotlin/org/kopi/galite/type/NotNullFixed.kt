@@ -12,30 +12,38 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
+ * License along with this library; if not, write timport java.math.BigIntegero the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 package org.kopi.galite.type
 
+import java.math.BigInteger
+import java.math.BigDecimal
+
 /**
- * This class represents the month types
+ * This class represents the not null fixed type
  */
-class NotNullMonth : Month {
-  /**
-   * Constructs a Month with a year and a month in this year
-   */
-  constructor(year: Int, month: Int) : super(year, month) {}
+class NotNullFixed : Fixed {
+
+  constructor (b: BigDecimal) : super(b) {}
+  constructor(b: BigInteger) : super(b) {}
+  constructor(b: BigInteger, l: Int) : super(b) {}
+  constructor(value: Long, scale: Int) : super(value, scale) {}
+  constructor(d: Double) : super(d) {}
+  constructor(s: String) : super(s) {}
 
   /**
-   * Constructs a Month from a Date
+   * Checks whether this object is equal to the specified object.
    */
-  constructor(date: Date) : super(date) {}
+  override fun equals(other: Any?): Boolean {
+    return (other is NotNullFixed
+            && super.equals(other))
+  }
 
   companion object {
-    fun castToNotNull(value: Month): NotNullMonth {
-      return value as NotNullMonth
+    fun castToNotNull(value: Fixed?): NotNullFixed {
+      return value as NotNullFixed
     }
   }
 }
-

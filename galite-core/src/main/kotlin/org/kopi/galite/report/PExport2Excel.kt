@@ -198,7 +198,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig:
   }
 
   private fun computeColumnWidth(column: VReportColumn): Int {
-    return if (column.getLabel().length < column.getWidth()) column.getWidth() else column.getLabel().length + 2
+    return if (column.label.length < column.width) column.width else column.label.length + 2
   }
 
 
@@ -261,7 +261,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig:
   }
 
   protected abstract fun createWorkbook(): Workbook?
-  protected abstract fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color?
+  abstract fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color?
 
   //-----------------------------------------------------------
   // DATA MEMBERS

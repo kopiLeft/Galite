@@ -19,7 +19,7 @@
 package org.kopi.galite.type
 
 /**
- * This class represents kopi week types
+ * This class represents the week types
  */
 class NotNullWeek : Week {
   /**

@@ -25,7 +25,7 @@ import java.util.GregorianCalendar
 import java.util.Locale
 
 /**
- * This class represents kopi time types
+ * This class represents the time types
  */
 open class Time : Type {
   /*package*/ /*package*/
@@ -144,7 +144,7 @@ open class Time : Type {
     get() = scalar / 60 % 60
 
   /**
-   * Returns the sconds past the minute represented by this object.
+   * Returns the seconds past the minute represented by this object.
    */
   val seconds: Int
     get() = scalar % 60
@@ -173,7 +173,7 @@ open class Time : Type {
    * Format the object depending on the current language
    * @param    locale    the current language
    */
-  override fun toString(locale: Locale?): String {
+  override fun toString(locale: Locale): String {
     val buffer = StringBuffer()
     val hours = scalar / 3600
     val minutes = scalar / 60 % 60

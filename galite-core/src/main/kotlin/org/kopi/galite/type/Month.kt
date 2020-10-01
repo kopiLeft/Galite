@@ -20,8 +20,9 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
-
+import java.util.Locale
+import java.util.GregorianCalendar
+import java.util.Calendar
 
 /**
  * This class represents month types
@@ -156,7 +157,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    * Format the object depending on the current language
    * @param    locale    the current language
    */
-  override fun toString(locale: Locale?): String {
+  override fun toString(locale: Locale): String {
     val buffer = StringBuffer()
     val year = scalar / 12
     val month = scalar % 12 + 1

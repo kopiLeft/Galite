@@ -17,4 +17,26 @@
  */
 package org.kopi.galite.list
 
-class VDateColumn 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.type.Date
+
+/**
+ * Represents a list column.
+ */
+class VDateColumn(title: String,
+                  column: String,
+                  sortAscending: Boolean)
+    : VListColumn(title,
+                  column,
+                  VConstants.ALG_LEFT,
+                  10,
+                  sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  val dataType: Class<*>
+    get() = Date::class.java
+
+  override fun getDataType(): KClass<*> = Date::class
+}

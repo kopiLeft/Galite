@@ -21,7 +21,7 @@ package org.kopi.galite.type
 import java.util.Locale
 
 /**
- * This class is the super-class for Kopi types
+ * This class is the super-class for types
  */
 abstract class Type : Comparable<Any?> {
   /**

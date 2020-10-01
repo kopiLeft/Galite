@@ -15,13 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.type
 
-import java.util.*
-
+import java.util.Calendar
+import java.util.Locale
+import java.util.GregorianCalendar
 
 /**
- * This class represents kopi week types
+ * This class represents the week types
  */
 open class Week : Type {
   /**

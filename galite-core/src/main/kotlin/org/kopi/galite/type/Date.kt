@@ -20,7 +20,9 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
+import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -28,15 +30,11 @@ import java.util.regex.Pattern
  * This class represents date types
  */
 open class Date : Type {
-  // ----------------------------------------------------------------------
-  // CONSTRUCTORS
-  // ----------------------------------------------------------------------
-  /*package*/
+
   internal constructor(year: Int, month: Int, day: Int) {
     scalar = gregorianToJulian(year, month, day)
   }
 
-  /*package*/
   internal constructor(date: java.sql.Date) {
     synchronized(calendar) {
       calendar.time = date
@@ -46,7 +44,6 @@ open class Date : Type {
     }
   }
 
-  /*package*/
   internal constructor(calendar: Calendar?) {
     if (calendar != null) {
       scalar = gregorianToJulian(calendar[Calendar.YEAR],
@@ -58,7 +55,6 @@ open class Date : Type {
   /**
    * Parses a date of format 'yyyy.MM.dd' or 'yyyy-MM-dd'
    */
-  /*package*/
   internal constructor(image: String) {
     val pattern: Pattern = Pattern.compile("(\\d\\d\\d\\d)[-.]{1}(\\d\\d?)[-.]{1}(\\d\\d?)")
     val matcher: Matcher = pattern.matcher(image)
@@ -115,7 +111,6 @@ open class Date : Type {
    * Constructs a Date from a scalar
    * DO NOT USE OUTSIDE OF THE LIBRARY
    */
-  /*package*/
   internal constructor(scalar: Int) {
     this.scalar = scalar
   }
@@ -210,7 +205,7 @@ open class Date : Type {
    * Format the object depending on the current language
    * @param    locale    the current language
    */
-  override fun toString(locale: Locale?): String {
+  override fun toString(locale: Locale): String {
     val buffer = StringBuffer()
     val gregorian = julianToGregorian(scalar)
 
@@ -309,7 +304,7 @@ open class Date : Type {
    * Gregorian calendar started on Sep. 14, 1752.
    * The corresponding function are not valid before that.
    */
-    /*
+    /**
    * Returns the julian day number of the date specified by year, month, day
    */
     private fun gregorianToJulian(y: Int, m: Int, d: Int): Int {
@@ -326,7 +321,7 @@ open class Date : Type {
       return (146097 * c shr 2) + (1461 * y shr 2) + (153 * m + 2) / 5 + d + 1721119
     }
 
-    /*
+    /**
    * Returns the date specified by a julian day number as year, month, day.
    */
     private fun julianToGregorian(julian: Int): IntArray {

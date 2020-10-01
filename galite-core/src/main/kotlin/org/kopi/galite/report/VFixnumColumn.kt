@@ -17,6 +17,38 @@
  */
 package org.kopi.galite.report
 
-class VFixnumColumn {
+import org.kopi.galite.form.VFixnumField
+
+//TODO
+class VFixnumColumn(
+  ident: String?,
+  options: Int,
+  align: Int,
+  groups: Int,
+  function: VCalculateColumn?,
+  digits: Int,
+  private var maxScale: Int,
+  format: VCellFormat?,
+) : VReportColumn(
+  ident,
+  options,
+  align,
+  groups,
+  function,
+  VFixnumField.computeWidth(digits, maxScale, null, null),
+  1,
+  format ?: VFixedFormat(maxScale, true)
+) {
+
+  private class VFixedFormat(private val maxScale: Int, private val exactScale: Boolean) : VCellFormat() {
+    override fun format(value: Any?): String {
+      TODO()
+    }
+  }
+
+  override fun compareTo(o1: Any, o2: Any): Int {
+    TODO("Not yet implemented")
+  }
+
   fun getMaxScale(): Int = TODO()
 }

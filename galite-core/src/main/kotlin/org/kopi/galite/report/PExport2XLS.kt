@@ -38,7 +38,7 @@ class PExport2XLS (table: UTable, model: MReport, pconfig: PConfig, title: Strin
     return wb
   }
 
-  protected override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
+  override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
     var rowCol = colorpalete!![color]
 
     if (rowCol == null) {

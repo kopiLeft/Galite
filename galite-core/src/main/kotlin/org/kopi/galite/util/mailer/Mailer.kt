@@ -15,25 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.list
+package org.kopi.galite.util.mailer
 
-import kotlin.reflect.KClass
-
-import org.kopi.galite.type.Week
-
-/**
- * Represents a list column.
- */
-class VWeekColumn(title: String,
-                  column: String,
-                  sortAscending: Boolean)
-    : VListColumn(title,
-                  column,
-                  VConstants.ALG_LEFT,
-                  7,
-                  sortAscending) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Week::class
+class Mailer {
+  companion object {
+    fun sendMail(mailHost : String,
+                 recipient : String,
+                 ccRecipient : String?,
+                 bccRecipient : String?,
+                 subject : String,
+                 body : String,
+                 sender : String) {
+      TODO()
+    }
+  }
 }

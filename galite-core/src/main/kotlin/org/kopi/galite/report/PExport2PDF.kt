@@ -356,55 +356,55 @@ class PExport2PDF(
 
   override fun formatStringColumn(column: VReportColumn, index: Int) {
     // maximum of length of title AND width of column
-    widths[index] = max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("X", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.getWidth())
+    widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+            Chunk("X", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
     widthSum += widths[index]
   }
 
   override fun formatWeekColumn(column: VReportColumn, index: Int) {
-    widths[index] = max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+    widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
             Chunk("00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatDateColumn(column: VReportColumn, index: Int) {
-    widths[index] = max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+    widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
             Chunk("00.00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatMonthColumn(column: VReportColumn, index: Int) {
-    widths[index] = 4 + max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+    widths[index] = 4 + max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
             Chunk("00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatFixedColumn(column: VReportColumn, index: Int) {
-    widths[index] = max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.getWidth())
+    widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+            Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
     widthSum += widths[index]
   }
 
   override fun formatIntegerColumn(column: VReportColumn, index: Int) {
-    widths[index] = max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.getWidth())
+    widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+            Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
     widthSum += widths[index]
   }
 
   override fun formatBooleanColumn(column: VReportColumn, index: Int) {
-    widths[index] = max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+    widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
             Chunk("false", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatTimeColumn(column: VReportColumn, index: Int) {
-    widths[index] = max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+    widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
             Chunk("00:00", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatTimestampColumn(column: VReportColumn, index: Int) {
-    widths[index] = max(Chunk(column.getLabel(), FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
+    widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
             Chunk("00.00.0000 00:00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }

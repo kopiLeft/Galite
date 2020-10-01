@@ -15,25 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.list
 
-import kotlin.reflect.KClass
+package org.kopi.galite.db
 
-import org.kopi.galite.type.Week
+import java.sql.SQLException
 
-/**
- * Represents a list column.
- */
-class VWeekColumn(title: String,
-                  column: String,
-                  sortAscending: Boolean)
-    : VListColumn(title,
-                  column,
-                  VConstants.ALG_LEFT,
-                  7,
-                  sortAscending) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Week::class
+class DBDeadLockException : DBException {
+  // ----------------------------------------------------------------------
+  // CONSTRUCTORS
+  // ----------------------------------------------------------------------
+  /**
+   * Constructor
+   *
+   * @param        original                the original SQLException
+   */
+  constructor(original: SQLException) : super(original)
+
+  /**
+   * Constructor
+   *
+   * @param     query                   the sql query which generated the exception
+   * @param     original                the original SQLException
+   */
+  constructor(query: String?, original: SQLException) : super(query, original)
 }

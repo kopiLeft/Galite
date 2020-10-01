@@ -15,25 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.list
 
-import kotlin.reflect.KClass
-
-import org.kopi.galite.type.Week
+package org.kopi.galite.db
 
 /**
- * Represents a list column.
+ * This exception interrupts an protected statement. All
+ * exceptions which should interrupt a protected statement must
+ * be subclasses of this exception.
  */
-class VWeekColumn(title: String,
-                  column: String,
-                  sortAscending: Boolean)
-    : VListColumn(title,
-                  column,
-                  VConstants.ALG_LEFT,
-                  7,
-                  sortAscending) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Week::class
+class XInterruptProtectedException : Exception {
+  constructor() : super()
+  constructor(msg: String?) : super(msg)
+  constructor(msg: String?, cause: Throwable?) : super(msg, cause)
+  constructor(cause: Throwable?) : super(cause)
 }
