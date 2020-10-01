@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
 import org.kopi.galite.visual.Action
@@ -22,23 +23,46 @@ import org.kopi.galite.visual.VWindow
 import java.awt.print.Printable
 
 abstract class VReport : VWindow(), Printable {
-  object TYP_PDF
 
-  object TYP_XLSX
+   object TYP_PDF
 
-  object TYP_XLS
+   object TYP_XLSX
 
-  object TYP_CSV
+   object TYP_XLS
 
-  abstract fun showHelp()
-  abstract fun unfoldSelectedColumn()
-  abstract fun foldSelectedColumn()
-  abstract fun sortSelectedColumn()
-  abstract fun unfoldSelection()
-  abstract fun foldSelection()
-  abstract fun export(typPdf: Any)
-  abstract fun close()
-  abstract override fun performAsyncAction(action: Action)
-  abstract fun performAction(action: Action?, block: Boolean)
-  abstract fun createPrintJob()
-} 
+   object TYP_CSV
+
+   fun showHelp() {
+     TODO()
+   }
+   fun unfoldSelectedColumn(){
+     TODO()
+   }
+   fun foldSelectedColumn(){
+     TODO()
+   }
+   fun sortSelectedColumn(){
+     TODO()
+   }
+   fun unfoldSelection(){
+     TODO()
+   }
+   fun foldSelection(){
+     TODO()
+   }
+   fun export(typPdf: Any){
+     TODO()
+   }
+   fun close(){
+     TODO()
+   }
+   override fun performAsyncAction(action: Action){
+     TODO()
+   }
+   fun performAction(action: Action, block: Boolean){
+     TODO()
+   }
+   fun createPrintJob(){
+     TODO()
+   }
+}

@@ -18,7 +18,6 @@
 
 package org.kopi.galite.print
 
-import org.kopi.galite.report.VReport
 import org.kopi.galite.util.PrintException
 import org.kopi.galite.util.Printer
 import org.kopi.galite.visual.ApplicationContext
@@ -36,11 +35,11 @@ class DefaultPrintManager : PrintManager {
    * @param    mail       an optional default mail address
    */
   override fun print(parent: VWindow,
-                     report: VReport,
+                     report: Printable,
                      copies: Int,
                      printer: Printer,
-                     fax: String,
-                     mail: String) {
+                     fax: String?,
+                     mail: String?) {
     try {
       report.createPrintJob()
     } catch (exc: PrintException) {
@@ -49,16 +48,12 @@ class DefaultPrintManager : PrintManager {
   }
 
   companion object {
-
     fun getPrintManager(): PrintManager {
-      return if (ApplicationContext.applicationContext!!.getApplication()!!.getPrintManager() == null) {
-        DefaultPrintManager()
-      } else ApplicationContext.applicationContext!!.getApplication()!!.getPrintManager()
+      return ApplicationContext.applicationContext!!.getApplication()!!.getPrintManager() ?: DefaultPrintManager()
     }
 
     fun setPrintManager(printCopies: PrintManager) {
       ApplicationContext.applicationContext!!.getApplication()!!.setPrintManager(printCopies)
     }
   }
-
-}
+ }

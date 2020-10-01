@@ -33,9 +33,9 @@ interface PrintManager {
    * @param    mail    an optional default mail address
    */
   fun print(parent: VWindow,
-            report: VReport,
+            report: Printable,
             copies: Int,
             printer: Printer,
-            fax: String,
-            mail: String)
+            fax: String?,
+            mail: String?)
 }

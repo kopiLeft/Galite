@@ -18,15 +18,96 @@
 
 package org.kopi.galite.report
 
-
 import org.kopi.galite.print.DefaultPrintManager
 import org.kopi.galite.print.PrintManager
+import org.kopi.galite.print.Printable
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.PrinterManager
 
-class VReportCommand{
-  //TODO()
+class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.getNumber(), actor.getActorIdent()), ActionHandler {
+  /**
+   * Returns the actor
+   */
+  override fun setEnabled(enabled: Boolean) {
+    if (actor != null) {
+      actor.setEnabled(enabled)
+      actor.setNumber(trigger)
+      actor.setHandler(this)
+    }
+  }
+
+  /**
+   * Performs the appropriate action asynchronously.
+   * You can use this method to perform any operation out of the UI event process
+   *
+   * @param    action        the action to perform.
+   * @param    block        This action should block the UI thread ?
+   */
+  fun performAction(action: Action, block: Boolean) {
+    report.performAction(action, block)
+    /*try {
+      executeVoidTrigger(getTrigger());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }*/
+  }
+
+  /**
+   * Performs the appropriate action asynchronously.
+   * You can use this method to perform any operation out of the UI event process
+   *
+   * @param    action        the action to perform.
+   */
+  override fun performAsyncAction(action: Action) {
+    report.performAsyncAction(action)
+    /*try {
+      executeVoidTrigger(getTrigger());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }*/
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    type    the number of the trigger
+   */
+  override fun executeVoidTrigger(type: Int) {
+    when (type) {
+      Constants.CMD_QUIT -> report.close()
+      Constants.CMD_PRINT -> {
+        val pm: PrintManager = DefaultPrintManager.getPrintManager()
+        pm.print(report,
+                report as Printable,
+                1,
+                PrinterManager.getPrinterManager().getCurrentPrinter(),
+                null,
+                null)
+      }
+      Constants.CMD_EXPORT_CSV -> report.export(VReport.TYP_CSV)
+      Constants.CMD_EXPORT_XLS -> report.export(VReport.TYP_XLS)
+      Constants.CMD_EXPORT_XLSX -> report.export(VReport.TYP_XLSX)
+      Constants.CMD_EXPORT_PDF -> report.export(VReport.TYP_PDF)
+      Constants.CMD_FOLD -> report.foldSelection()
+      Constants.CMD_UNFOLD -> report.unfoldSelection()
+      Constants.CMD_SORT -> report.sortSelectedColumn()
+      Constants.CMD_FOLD_COLUMN -> report.foldSelectedColumn()
+      Constants.CMD_UNFOLD_COLUMN -> report.unfoldSelectedColumn()
+      Constants.CMD_HELP -> report.showHelp()
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  override fun helpOnCommand(help: org.kopi.galite.visual.VHelpGenerator) {
+    if (actor == null) {
+      return
+    }
+    actor.helpOnCommand(help)
+  }
+
 }

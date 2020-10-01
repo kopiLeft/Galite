@@ -18,13 +18,10 @@
 
 package org.kopi.galite.visual
 
-
+import java.util.Locale
+import java.text.MessageFormat
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.l10n.LocalizationManager
-
-import java.text.MessageFormat
-import java.util.Locale
-
 
 /**
  * This class handles localized properties

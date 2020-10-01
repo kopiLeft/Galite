@@ -20,9 +20,6 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.util.Printer
 
-/**
- *
- */
 abstract class PrinterManager {
   /**
    * Returns a print for previewing document
@@ -58,14 +55,14 @@ abstract class PrinterManager {
   /**
    * Returns the default Printer for a kind of document
    */
-  abstract fun getPrinterByDocumentType(documentType: String?): Printer?
+  abstract fun getPrinterByDocumentType(documentType: String): Printer
 
   companion object {
     fun getPrinterManager(): PrinterManager {
       return ApplicationContext.applicationContext!!.getApplication()!!.getPrinterManager()
     }
 
-    fun setPrinterManager(manager: PrinterManager?) {
+    fun setPrinterManager(manager: PrinterManager) {
       ApplicationContext.applicationContext!!.getApplication()!!.setPrinterManager(manager!!)
     }
   }
