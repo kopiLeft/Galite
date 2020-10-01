@@ -66,6 +66,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     }
   }
 
+  override fun getSource(): String? = this.source
+
   override fun getType() = org.kopi.galite.visual.Constants.MDL_REPORT
 
   /**
@@ -589,8 +591,6 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * Set the source for this document
    */
   private lateinit var source: String
-  override fun getSource(): String? = null
-
   protected var model: MReport = MReport()
   private var built = false
   private var pageTitle = ""
