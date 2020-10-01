@@ -18,8 +18,6 @@
 
 package org.kopi.galite.visual
 
-class VlibProperties {
-  companion object {
+object VlibProperties {
     fun getString(string: String): String = TODO()
-  }
 }

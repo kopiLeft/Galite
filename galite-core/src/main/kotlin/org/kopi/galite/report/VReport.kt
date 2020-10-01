@@ -607,20 +607,13 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * sets the print options
    */
-  // print configuration object
   var printOptions: PConfig = PConfig()
 
   /**
    * Set the media for this document
    */
   lateinit var media: String
-  // ----------------------------------------------------------------------
-  // CONSTRUCTORS
-  // ----------------------------------------------------------------------
 
-  /**
-   * Constructor
-   */
   init {
     if (ctxt != null) {
       dBContext = ctxt.getDBContext()

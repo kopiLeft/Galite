@@ -30,10 +30,9 @@ class VActor(val menuIdent: String,
              iconName: String?,
              acceleratorKey: Int,
              acceleratorModifier: Int) : VModel {
+
   /**
    * Checks whether the actor is enabled.
-   */
-  /**
    * Enables/disables the actor.
    */
   var isEnabled: Boolean
@@ -156,11 +155,9 @@ class VActor(val menuIdent: String,
 
   // qualified name of actor's source file
   private val actorSource: String = ""
+
   /**
-   * get the number for the actor.
-   */
-  /**
-   * Sets the number for the actor.
+   * Sets and gets the number for the actor.
    */
   var number = 0
   lateinit var handler: ActionHandler
