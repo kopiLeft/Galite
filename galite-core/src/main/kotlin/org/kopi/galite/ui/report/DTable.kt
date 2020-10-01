@@ -83,7 +83,7 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
    * @return The table row count.
    */
   fun getRowCount(): Int {
-    TODO()
+    return model.model.getRowCount()
   }
 
   /**

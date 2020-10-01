@@ -40,7 +40,9 @@ class DReport(val report: VReport) : DWindow(report), UReport {
 
   override fun run() {
     report.initReport()
+    report.setMenu()
     table.focus()
+    setInfoTable()
   }
 
   override fun build() {
@@ -48,7 +50,7 @@ class DReport(val report: VReport) : DWindow(report), UReport {
     parameters = Parameters(Color(71, 184, 221))
     table = DTable(VTable(model))
     table.isColumnReorderingAllowed = true
-    //table.setItems(model.visibleRows!!.toList())
+    table.setItems(*model.getRows())
     repeat(model.getColumnCount()) { columnIndex ->
       table.addColumn {
         it.data[columnIndex]
@@ -110,7 +112,6 @@ class DReport(val report: VReport) : DWindow(report), UReport {
   }
 
   override fun contentChanged() {
-    TODO()
   }
 
   override fun columnMoved(pos: IntArray) {
@@ -124,11 +125,11 @@ class DReport(val report: VReport) : DWindow(report), UReport {
   }
 
   override fun getSelectedColumn(): Int {
-    TODO("Not yet implemented")
+    return table.selectedColumn
   }
 
   override fun getSelectedCell(): Point {
-    TODO("Not yet implemented")
+    return Point(table.selectedColumn, table.selectedRow)
   }
 
   override fun setColumnLabel(column: Int, label: String) {
@@ -178,7 +179,11 @@ class DReport(val report: VReport) : DWindow(report), UReport {
    * Display table informations in the footer of the table
    */
   private fun setInfoTable() {
-    TODO()
+    setStatisticsText(table.getRowCount()
+            .toString() + "/"
+            + model.getBaseRowCount()
+            + "/"
+            + model.getVisibleRowCount())
   }
 
   //---------------------------------------------------

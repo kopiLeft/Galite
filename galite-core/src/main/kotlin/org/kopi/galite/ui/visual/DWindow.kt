@@ -101,7 +101,7 @@ abstract class DWindow(private var model: VWindow) : Window(), UWindow {
    * @param text The statistics text.
    */
   fun setStatisticsText(text: String?) {
-    TODO()
+    //
   }
 
   //--------------------------------------------------------------

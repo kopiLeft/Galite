@@ -360,6 +360,11 @@ class MReport : Constants, Serializable {
   fun getRow(row: Int): VReportRow? = visibleRows!![row]
 
   /**
+   * Return all rows
+   */
+  fun getRows(): Array<VReportRow?> = visibleRows!!
+
+  /**
    * Return the tree used by the model
    */
   fun getTree(): VGroupRow? = root
