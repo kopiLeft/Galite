@@ -18,10 +18,12 @@
 
 package org.kopi.galite.report
 
+import java.io.OutputStream
+
 import com.lowagie.text.Document
 import com.lowagie.text.pdf.PdfPTable
+
 import org.kopi.galite.util.PrintJob
-import java.io.OutputStream
 
 class PExport2PDF(table: UReport.UTable, model: MReport, printOptions: PConfig, pageTitle: String, firstPageHeader: String, b: Boolean) : PExport(table,
         model, printOptions, pageTitle), Constants {

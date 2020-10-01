@@ -28,6 +28,7 @@ import com.graphbuilder.math.Expression
 import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
+
 import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException

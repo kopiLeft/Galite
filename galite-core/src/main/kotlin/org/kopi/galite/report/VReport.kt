@@ -18,6 +18,12 @@
 
 package org.kopi.galite.report
 
+import java.io.File
+import java.net.MalformedURLException
+import java.text.MessageFormat
+import java.util.Locale
+import java.util.Vector
+
 import org.kopi.galite.chart.VHelpGenerator
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.form.VConstants
@@ -43,10 +49,6 @@ import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
-import java.io.File
-import java.net.MalformedURLException
-import java.text.MessageFormat
-import java.util.*
 
 abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
   companion object {

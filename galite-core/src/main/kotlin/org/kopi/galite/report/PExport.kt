@@ -17,12 +17,13 @@
  */
 package org.kopi.galite.report
 
-import org.kopi.galite.report.UReport.UTable
 import java.awt.Color
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.io.Serializable
+
+import org.kopi.galite.report.UReport.UTable
 
 abstract class PExport(val table: UTable,
                        val model: MReport,
