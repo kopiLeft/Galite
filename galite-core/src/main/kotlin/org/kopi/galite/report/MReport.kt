@@ -18,6 +18,12 @@
 
 package org.kopi.galite.report
 
+import java.io.Serializable
+
+import javax.swing.event.EventListenerList
+
+import kotlin.math.max
+
 import com.graphbuilder.math.Expression
 import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
@@ -25,9 +31,6 @@ import com.graphbuilder.math.VarMap
 import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
-import java.io.Serializable
-import javax.swing.event.EventListenerList
-import kotlin.math.max
 
 class MReport : Constants, Serializable {
   fun computeColumnWidth(column: Int): Int {
