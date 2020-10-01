@@ -15,6 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-class VDateColumn 
+import org.kopi.galite.list.VConstants.Companion.ALG_LEFT
+import kotlin.reflect.KClass
+
+/**
+ * Represents a list column.
+ */
+class VDateColumn(title: String,
+                  column: String?,
+                  sortAscending: Boolean)
+  : VListColumn(title,
+                column!!,
+                ALG_LEFT,
+                10,
+                sortAscending) {
+
+  override fun getDataType(): KClass<*> {
+    TODO("Not yet implemented")
+  }
+}

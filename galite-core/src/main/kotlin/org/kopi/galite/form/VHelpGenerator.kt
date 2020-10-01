@@ -17,4 +17,8 @@
  */
 package org.kopi.galite.form
 
-class VHelpGenerator 
+class VHelpGenerator {
+  fun helpOnType(modeName: String, modeDesc: String, typeName: Any, typeInformation: Any, names: Array<String?>?) {
+
+  }
+}

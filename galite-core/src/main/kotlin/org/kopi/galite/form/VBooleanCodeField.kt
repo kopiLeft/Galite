@@ -15,6 +15,148 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VBooleanCodeField 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.base.Query
+import org.kopi.galite.list.VBooleanCodeColumn
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.util.base.InconsistencyException
+
+
+/**
+ *
+ * @param     ident           the identifier of the type in the source file
+ * @param     source          the qualified name of the source file defining the list
+ * @param     names           the names of the fields
+ * @param     codes           the codes of the fields
+ */
+open class VBooleanCodeField(ident: String,
+                             source: String,
+                             names: Array<String>,
+                             private var codes: Array<Boolean>)
+           : VCodeField(ident,
+                        source,
+                        names) {
+  /*
+   * ----------------------------------------------------------------------
+   * Interface Display
+   * ----------------------------------------------------------------------
+   */
+
+  /**
+   * Returns a list column for list.
+   */
+  override fun getListColumn(): VListColumn {
+    return VBooleanCodeColumn(getHeader(), null, getLabels(), codes, getPriority() >= 0)
+  }
+
+  /*
+   * ----------------------------------------------------------------------
+   * Interface bd/Triggers
+   * ----------------------------------------------------------------------
+   */
+
+  /**
+   * Sets the field value of given record to a boolean value.
+   */
+  fun setBoolean(r: Int, v: Boolean?) {
+    if (v == null) {
+      setCode(r, -1)
+    } else {
+      var code = -1 // cannot be null
+      var i = 0
+      while (code == -1 && i < codes.size) {
+        if (v == codes[i]) {
+          code = i
+        }
+        i++
+      }
+      if (code == -1) {
+        throw InconsistencyException("bad code value " + v + "field " + name)
+      }
+      setCode(r, code)
+    }
+  }
+
+  /**
+   * Sets the field value of given record.
+   * Warning:	This method will become inaccessible to galite users in next release
+   */
+  override fun setObject(r: Int, v: Any) {
+    setBoolean(r, v as Boolean)
+  }
+
+  /**
+   * Returns the specified tuple column as object of correct type for the field.
+   * @param    query        the query holding the tuple
+   * @param    column        the index of the column in the tuple
+   */
+  override fun retrieveQuery(query: Query, column: Int): Any? {
+    return if (query.isNull(column)) {
+      null
+    } else {
+      query.getBoolean(column)
+    }
+  }
+
+  override fun getCodes(): Array<Any> {
+   return codes as Array<Any>
+  }
+
+  /**
+   * Returns the field value of given record as a boolean value.
+   */
+  override fun getBoolean(r: Int): Boolean?{
+    return if (value[r] == -1) null else codes[value[r]]
+  }
+
+  /**
+   * Returns the field value of the current record as an object
+   */
+  override fun getObjectImpl(r: Int): Any? {
+    return getBoolean(r)
+  }
+
+  /**
+   * Returns the SQL representation of field value of given record.
+   */
+  override fun getSqlImpl(r: Int): String {
+    return if (value[r] == -1) {
+      "NULL"
+    } else {
+      if (codes[value[r]]) "{fn TRUE}" else "{fn FALSE}"
+    }
+  }
+
+  /**
+   * Returns the data type handled by this field.
+   */
+  override fun getDataType(): KClass<*> = Boolean::class
+
+  /*
+   * ----------------------------------------------------------------------
+   * FORMATTING VALUES WRT FIELD TYPE
+   * ----------------------------------------------------------------------
+   */
+
+  /**
+   * Returns a string representation of a boolean value wrt the field type.
+   */
+  override fun formatBoolean(value: Boolean): String {
+    var code = -1 // cannot be null
+    var i = 0
+    while (code == -1 && i < codes.size) {
+      if (value == codes[i]) {
+        code = i
+      }
+      i++
+    }
+    if (code == -1) {
+      throw InconsistencyException("bad code value " + value + "field " + name)
+    }
+    return formatCode(code)
+  }
+}

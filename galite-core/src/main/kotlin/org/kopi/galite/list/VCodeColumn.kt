@@ -15,6 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-abstract class VCodeColumn 
+import org.kopi.galite.list.VConstants.Companion.ALG_LEFT
+
+/**
+ * Represents a list column.
+ */
+abstract class VCodeColumn(title: String,
+                           column: String,
+                           names: Array<String>,
+                           sortAscending: Boolean)
+               : VListColumn(title,
+                                        column,
+                                        ALG_LEFT,
+                                        org.kopi.galite.list.VCodeColumn.getMaxWidth(names),
+                                        sortAscending) {
+companion object {
+  private fun getMaxWidth(names: Array<String>):Int
+  {
+    TODO()
+  }
+}
+}

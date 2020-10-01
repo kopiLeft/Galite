@@ -15,6 +15,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-class VBooleanColumn 
+import org.kopi.galite.list.VConstants.Companion.ALG_LEFT
+import kotlin.reflect.KClass
+
+/**
+ * Represents a list column.
+ */
+class VBooleanColumn(title: String,
+                     column: String?,
+                     sortAscending: Boolean)
+      : VListColumn(title,
+                    column!!,
+                    ALG_LEFT,
+                    Math.max(trueRep.length, falseRep.length),
+                    sortAscending) {
+
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+
+  /**
+   * Returns a string representation of value
+   */
+  override fun formatObject(value: Any?): Any {
+    return if (value == null) VConstants.EMPTY_TEXT else if ((value as Boolean)) trueRep else falseRep
+  }
+
+  override fun getDataType(): KClass<*> = Boolean::class
+
+  companion object {
+
+    // --------------------------------------------------------------------
+    // DATA MEMBERS
+    // --------------------------------------------------------------------
+
+    private val trueRep: String = org.kopi.galite.visual.VlibProperties.getString("true")
+    private val falseRep: String = org.kopi.galite.visual.VlibProperties.getString("false")
+  }
+}

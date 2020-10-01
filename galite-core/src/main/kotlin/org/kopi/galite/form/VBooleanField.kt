@@ -15,6 +15,49 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VBooleanField 
+import org.kopi.galite.list.VBooleanColumn
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.visual.VlibProperties
+
+class VBooleanField : VBooleanCodeField("boolean",
+                                         GENERAL_LOCALIZATION_RESOURCE,
+                                         booleanNames,
+                                         booleanCodes) {
+
+  /**
+   * return the name of this field
+   */
+  override fun getTypeInformation(): String = VlibProperties.getString("boolean-type-field")
+
+  /**
+   * return the name of this field
+   */
+  override fun getTypeName(): String = VlibProperties.getString("Boolean")
+
+  /**
+   * Returns a list column for list.
+   */
+  override fun getListColumn(): VListColumn = VBooleanColumn(getHeader(), null, getPriority() >= 0)
+
+  companion object {
+
+    /**
+     * return the text value
+     */
+    fun toText(o: Boolean): String {
+      return booleanNames[if (o) 0 else 1]
+    }
+
+    /*
+   * ----------------------------------------------------------------------
+   * DATA MEMBERS
+   * ----------------------------------------------------------------------
+   */
+    private const val GENERAL_LOCALIZATION_RESOURCE = "org/kopi/galite/General"
+    private val booleanNames = arrayOf("true", "false")
+    private val booleanCodes = arrayOf(java.lang.Boolean.TRUE, java.lang.Boolean.FALSE)
+  }
+}

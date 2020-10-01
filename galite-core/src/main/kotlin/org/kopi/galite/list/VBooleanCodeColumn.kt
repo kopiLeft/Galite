@@ -17,4 +17,21 @@
  */
 package org.kopi.galite.list
 
-class VBooleanCodeColumn 
+import kotlin.reflect.KClass
+
+/**
+ * Represents a list column.
+ */
+class VBooleanCodeColumn(title: String,
+                         column: String?,
+                         names: Array<String>,
+                         codes: Array<Boolean>,
+                         sortAscending: Boolean)
+    : VCodeColumn(title,
+                  column!!,
+                  names,
+                  sortAscending) {
+  override fun getDataType(): KClass<*> {
+    TODO("Not yet implemented")
+  }
+}
