@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
 import org.kopi.galite.base.UComponent
@@ -24,12 +25,12 @@ import org.kopi.galite.l10n.MenuLocalizer
 
 class VActor(val menuIdent: String,
         // qualified name of menu's source file
-             private var menuSource: String,
-             actorIdent: String,
-             actorSource: String,
-             iconName: String?,
-             acceleratorKey: Int,
-             acceleratorModifier: Int) : VModel {
+                   private var menuSource: String,
+                   val actorIdent: String,
+                   private val actorSource: String,
+                   val iconName: String?,
+                   val acceleratorKey: Int,
+                   val acceleratorModifier: Int) : VModel {
 
   /**
    * Checks whether the actor is enabled.
@@ -106,6 +107,7 @@ class VActor(val menuIdent: String,
   fun localize(manager: LocalizationManager) {
     val menuLoc: MenuLocalizer = manager.getMenuLocalizer(menuSource, menuIdent)
     val actorLoc: ActorLocalizer = manager.getActorLocalizer(actorSource, actorIdent)
+
     menuName = menuLoc.getLabel()
     menuItem = actorLoc.getLabel()
     help = actorLoc.getHelp()
@@ -128,6 +130,7 @@ class VActor(val menuIdent: String,
   // --------------------------------------------------------------------
   override fun toString(): String {
     val buffer = StringBuffer()
+
     buffer.append("VActor[")
     buffer.append("menu=$menuName:$menuItem")
     if (iconName != null) {
@@ -147,21 +150,14 @@ class VActor(val menuIdent: String,
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  val acceleratorKey: Int = 0
-  val acceleratorModifier: Int = 0
   lateinit var menuName: String
   lateinit var menuItem: String
   private var display: UActor? = null
-
-  // qualified name of actor's source file
-  private val actorSource: String = ""
 
   /**
    * Sets and gets the number for the actor.
    */
   var number = 0
   lateinit var handler: ActionHandler
-  var iconName: String? = null
-  protected lateinit var actorIdent: String
   lateinit var help: String
 }

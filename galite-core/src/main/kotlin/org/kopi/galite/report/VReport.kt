@@ -221,6 +221,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
             firstPageHeader,
             Message.getMessage("toner_save_mode") == "true")
     val printJob: PrintJob = exporter.export()
+
     printJob.documentType = getDocumentType()
     return printJob
   }
@@ -236,7 +237,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       TYP_XLSX -> ".xlsx"
       else -> throw InconsistencyException("Export type unknown")
     }
-    val file: File? = FileHandler.fileHandler.chooseFile(getDisplay(),
+    val file: File? = FileHandler.fileHandler?.chooseFile(getDisplay(),
             ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
             "report$ext")
     file?.let { export(it, type) }
@@ -610,7 +611,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Set the media for this document
    */
-  lateinit var media: String
+  var media: String? = null
 
   init {
     if (ctxt != null) {

@@ -22,7 +22,7 @@ import org.kopi.galite.visual.UWindow
 
 /**
  * `UReport` is the top-level interface that must be implemented
- * by all kopi dynamic reports. It is the visual component of the [VReport] model.
+ * by all dynamic reports. It is the visual component of the [VReport] model.
  */
 interface UReport : UWindow, ReportListener {
   /**

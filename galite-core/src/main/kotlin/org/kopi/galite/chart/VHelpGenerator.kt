@@ -18,13 +18,8 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.report.MReport
-import org.kopi.galite.visual.VCommand
-
 open class VHelpGenerator {
   open fun helpOnColumn(label: String?, help: String?) {
     TODO()
   }
-
-  fun helpOnReport(pageTitle: String, commands: Array<VCommand>?, model: MReport, help: String): String = TODO()
 }

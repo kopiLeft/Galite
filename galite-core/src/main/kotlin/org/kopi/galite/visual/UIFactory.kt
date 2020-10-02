@@ -38,7 +38,7 @@ abstract class UIFactory {
    * @param model The view model.
    * @throws IllegalArgumentException When the model has no UI correspondence.
    */
-  abstract fun createView(model: VWindow): UComponent
+  abstract fun createView(model: VModel): UComponent
 
   companion object {
     lateinit var uiFactory: UIFactory
