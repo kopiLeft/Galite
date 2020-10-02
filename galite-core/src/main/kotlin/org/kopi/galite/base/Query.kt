@@ -16,14 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.base
 
-object VlibProperties {
-  fun getString(key: String, arrayOf: Array<Any>): String {
+import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.NotNullFixed
+
+class Query {
+
+  fun isNull(column: Int): Boolean {
     TODO()
   }
 
-  fun getString(key: String): String {
+  fun getDate(pos: Int): NotNullDate {
+    TODO()
+  }
+
+  fun getFixed(pos: Int): NotNullFixed {
+    TODO()
+  }
+
+  fun getBoolean(column: Int): Boolean {
     TODO()
   }
 }

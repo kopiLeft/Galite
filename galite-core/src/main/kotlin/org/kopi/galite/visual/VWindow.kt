@@ -427,7 +427,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       try {
         ApplicationContext.getMenu().getDisplay().gotoShortcuts()
       } catch (npe: NullPointerException) {
-        throw VExecFailedException(VlibProperties.getString("shortcuts-not-available"))
+        throw VExecFailedException(VlibProperties.getString("shortcuts-not-available", arrayOf<Any?>(min, max)))
       }
     }
   }

@@ -25,13 +25,13 @@ import org.kopi.galite.type.Fixed
  * Represents a list column.
  */
 class VFixnumColumn(title: String,
-                    column: String,
+                    column: String?,
                     align: Int,
                     width: Int,
                     scale: Int,
                     sortAscending: Boolean)
       : VListColumn(title,
-                    column,
+                    column!!,
                     align,
                     width,
                     sortAscending) {
