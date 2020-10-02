@@ -15,6 +15,83 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VFixnumField 
+import org.kopi.galite.base.Query
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.list.VListColumn
+
+class VFixnumField(width: Int, height: Int) : VField(width, height) {
+
+  override fun checkText(s: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun checkType(rec: Int, s: Any) {
+    TODO("Not yet implemented")
+  }
+
+  override val dataType: Class<*>
+    get() = TODO("Not yet implemented")
+
+  override fun getListColumn(): VListColumn {
+    TODO("Not yet implemented")
+  }
+
+  override fun setNull(r: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setObject(r: Int, v: Any?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun retrieveQuery(query: Query, column: Int): Any {
+    TODO("Not yet implemented")
+  }
+
+  override fun isNullImpl(r: Int): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun getObjectImpl(r: Int): Any {
+    TODO("Not yet implemented")
+  }
+
+  override fun toText(o: Any?): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun toObject(s: String?): Any {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTextImpl(r: Int): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun getSqlImpl(r: Int): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun copyRecord(f: Int, t: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTypeInformation(): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTypeName(): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun setDisplay(display: UComponent) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getDisplay(): UComponent? {
+    TODO("Not yet implemented")
+  }
+}

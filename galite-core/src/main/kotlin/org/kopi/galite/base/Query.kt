@@ -16,15 +16,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.base
 
-import java.util.EventListener
+import org.kopi.galite.db.Connection
 
+class Query(defaultConnection: Connection) {
 
-interface VActionListener : EventListener {
-  /**
-   * Performs the appropriate action asynchronously.
-   * @param action The [Action] to be performed
-   */
-  open fun performAsyncAction(action: Action)
+  fun addString(value: String) {
+   TODO()
+  }
+
+  fun open(format: String)  {
+    TODO()
+  }
+
+  fun next() : Boolean {
+    TODO()
+  }
+
+  fun close() {
+    TODO()
+  }
+
+  fun getString(pos: Int): String? {
+    TODO()
+  }
+
+  fun getInt(pos: Int): Int {
+    TODO()
+  }
+
+  fun isNull(pos: Int): Boolean {
+    TODO()
+  }
+
+  fun getObject(pos: Int): Any {
+    TODO()
+  }
+
+  fun addInt(value: Int) {
+    TODO()
+  }
 }

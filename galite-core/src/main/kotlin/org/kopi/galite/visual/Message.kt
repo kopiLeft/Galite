@@ -19,7 +19,7 @@
 package org.kopi.galite.visual
 
 object Message {
-  fun getMessage(source: String?, ident: String, param: Any?): String {
-    TODO()
-  }
+  fun getMessage(source: String?, ident: String, param: Any?): String = TODO()
+
+  fun getMessage(ident: String?): String? = TODO()
 }

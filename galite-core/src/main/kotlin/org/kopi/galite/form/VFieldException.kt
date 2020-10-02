@@ -17,4 +17,15 @@
  */
 package org.kopi.galite.form
 
-class VFieldException 
+import org.kopi.galite.visual.VExecFailedException
+
+class VFieldException: VExecFailedException {
+
+  constructor(field: VField, message: String) {
+    TODO()
+  }
+
+  fun resetValue() {
+    TODO()
+    }
+}

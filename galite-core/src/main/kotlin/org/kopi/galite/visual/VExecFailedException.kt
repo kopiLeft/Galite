@@ -21,7 +21,7 @@ package org.kopi.galite.visual
 /**
  * This class represents exceptions occurring during execution process.
  */
-class VExecFailedException : VException {
+open class VExecFailedException : VException {
   /**
    * Constructs an exception with a message and origin.
    *

@@ -15,6 +15,32 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VHelpGenerator 
+import org.kopi.galite.visual.VCommand
+
+class VHelpGenerator {
+
+  fun helpOnField(
+          blockTitle: String,
+          pos: Int,
+          label: String?,
+          anchor: String?,
+          help: String?) {
+    TODO()
+  }
+
+ fun helpOnType(
+          modeName: String?,
+          modeDesc: String?,
+          typeName: String?,
+          typeDesc: String?,
+          names: Array<String?>?) {
+    TODO()
+ }
+
+  fun helpOnFieldCommand(commands: Array<VCommand>) {
+    TODO()
+  }
+}

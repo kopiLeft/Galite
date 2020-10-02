@@ -16,15 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.type
 
-import java.util.EventListener
+object Utils {
 
-
-interface VActionListener : EventListener {
-  /**
-   * Performs the appropriate action asynchronously.
-   * @param action The [Action] to be performed
-   */
-  open fun performAsyncAction(action: Action)
+  fun toSql(l: String): String = TODO()
 }

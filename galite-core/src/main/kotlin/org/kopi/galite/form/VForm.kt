@@ -15,6 +15,47 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-abstract class VForm 
+import java.sql.SQLException
+
+import org.kopi.galite.visual.VWindow
+
+abstract class VForm : VWindow() {
+  open fun getActiveBlock(): VBlock? {
+    TODO()
+  }
+
+  open fun setTextOnFieldLeave(): Boolean {
+    TODO()
+  }
+
+  open fun forceCheckList(): Boolean {
+    TODO()
+  }
+
+  override fun inTransaction(): Boolean {
+    TODO()
+  }
+
+  fun startProtected(message: String?) {
+    TODO()
+  }
+
+  open fun commitProtected() {
+    TODO()
+  }
+
+  open fun abortProtected(reason: SQLException) {
+    TODO()
+  }
+
+  open fun abortProtected(reason: Error) {
+    TODO()
+  }
+
+  open fun abortProtected(reason: RuntimeException) {
+    TODO()
+  }
+}

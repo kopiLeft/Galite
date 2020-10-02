@@ -15,6 +15,55 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-class VList 
+import org.kopi.galite.l10n.LocalizationManager
+
+class VList {
+  fun hasAutocomplete(): Boolean {
+    TODO()
+  }
+
+  fun getAutocompleteLength(): Int {
+    TODO()
+  }
+
+  fun getAutocompleteType(): Int {
+    TODO()
+  }
+
+  fun localize(manager: LocalizationManager) {
+    TODO()
+  }
+
+  fun getColumn(pos: Int): VListColumn {
+    TODO()
+  }
+
+  fun columnCount(): Int {
+    TODO()
+  }
+
+  fun getColumns(): Array<VListColumn> {
+    TODO()
+  }
+
+  fun getNewForm(): String? {
+    TODO()
+  }
+
+  fun getAction(): Int {
+    TODO()
+  }
+
+  fun getTable(): Int {
+    TODO()
+  }
+
+  companion object {
+    val AUTOCOMPLETE_NONE = 0
+    const val AUTOCOMPLETE_CONTAINS = 2
+    const val AUTOCOMPLETE_STARTSWITH = 1
+  }
+}

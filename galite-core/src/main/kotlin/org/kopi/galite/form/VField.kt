@@ -15,6 +15,2538 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-abstract class VField 
+import java.awt.Color
+import java.io.InputStream
+import java.sql.SQLException
+
+import javax.swing.event.EventListenerList
+
+import org.kopi.galite.base.Query
+import org.kopi.galite.l10n.BlockLocalizer
+import org.kopi.galite.l10n.FieldLocalizer
+import org.kopi.galite.list.VColumn
+import org.kopi.galite.list.VList
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Week
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Utils
+import org.kopi.galite.type.Date
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.VModel
+
+/**
+ * A field is a column in the the database (a list of rows)
+ * it provides an access to data both programmatically or via a UI
+ * (DForm)
+ */
+abstract class VField protected constructor(width: Int, height: Int) : VConstants, VModel {
+  /**
+   * Sets the dimensions
+   */
+  fun setDimension(width: Int, height: Int) {
+    this.width = width
+    this.height = height
+  }
+
+  /**
+   * set information on the field.
+   */
+  fun setInfo(
+          name: String,
+          index: Int,
+          posInArray: Int,
+          options: Int,
+          access: IntArray,
+          list: VList?,
+          columns: Array<VColumn?>?,
+          indices: Int,
+          priority: Int,
+          commands: Array<VCommand>,
+          pos: VPosition,
+          align: Int,
+          alias: VField,
+  ) {
+    this.name = name
+    this.index = index
+    this.posInArray = posInArray
+    this.options = options
+    this.access = access
+    this.list = list
+    this.columns = columns
+    if (columns == null) {
+      this.columns = arrayOfNulls<VColumn>(0)
+    }
+    this.indices = indices
+    this.priority = priority
+    this.align = align
+    if (this is VFixnumField || this is VIntegerField) {
+      // move it to compiler !!!
+      this.align = VConstants.ALG_RIGHT
+    }
+    position = pos
+    cmd = commands
+    this.alias = alias
+    alias?.addFieldChangeListener(object : FieldChangeListener {
+      override fun labelChanged() {}
+      override fun searchOperatorChanged() {}
+      override fun valueChanged(r: Int) {
+        fireValueChanged(r)
+      }
+
+      override fun accessChanged(r: Int) {}
+      override fun colorChanged(r: Int) {}
+    })
+
+  }
+  // ----------------------------------------------------------------------
+  // ACCESSORS
+  // ----------------------------------------------------------------------
+
+  fun fetchColumn(table: Int): Int {
+    if (columns != null) {
+      for (i in columns!!.indices) {
+        if (columns!![i]!!.getTable() == table) {
+          return i
+        }
+      }
+    }
+    return -1
+  }
+
+  /**
+   * The position of the label (left / top)
+   */
+  fun setLabelPos(pos: Int) {
+    fireLabelChanged()
+  }
+
+  open fun isNoEdit(): Boolean = options and VConstants.FDO_NOEDIT != 0
+
+  open fun isTransient(): Boolean = options and VConstants.FDO_TRANSIENT != 0
+
+  open fun noDetail(): Boolean = options and VConstants.FDO_NODETAIL != 0 || block!!.noDetail()
+
+  fun noChart(): Boolean = options and VConstants.FDO_NOCHART != 0 || block!!.noChart()
+
+  open fun isSortable(): Boolean = options and VConstants.FDO_SORT != 0
+
+  fun eraseOnLookup(): Boolean = options and VConstants.FDO_DO_NOT_ERASE_ON_LOOKUP == 0
+
+  /**
+   * Returns `true` if the field has the auto fill feature.
+   */
+  fun hasAutofill(): Boolean = list != null
+
+
+  /**
+   * Returns true if the field has an action trigger.
+   * @return True if the field has an action trigger.
+   */
+  fun hasAction(): Boolean = hasTrigger(VConstants.TRG_ACTION)
+
+  /**
+   * Returns `true` if the field has the auto complete feature.
+   */
+  fun hasAutocomplete(): Boolean = list != null && list!!.hasAutocomplete()
+
+
+  /**
+   * Returns the auto complete length.
+   * @return The auto complete length.
+   */
+  val autocompleteLength: Int
+    get() = if (list != null) list!!.getAutocompleteLength() else 0
+
+  /**
+   * Returns the auto complete type.
+   * @return The auto complete type.
+   */
+  val autocompleteType: Int
+    get() = if (list != null) list!!.getAutocompleteType() else VList.AUTOCOMPLETE_NONE
+
+  /**
+   * return true if this field implements "enumerateValue"
+   */
+  fun hasNextPreviousEntry(): Boolean = list != null
+
+  fun hasNullableCols(): Boolean {
+    for (i in columns!!.indices) {
+      if (columns!![i]!!.isNullable()) {
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
+   * Returns true if it is a numeric field.
+   */
+  val isNumeric: Boolean
+    get() = false
+
+  // ----------------------------------------------------------------------
+  // LOCALIZATION
+  // ----------------------------------------------------------------------
+  /**
+   * Localizes this field
+   *
+   * @param     parent         the caller localizer
+   */
+  fun localize(parent: BlockLocalizer) {
+    val loc = parent.getFieldLocalizer(name!!)
+
+    label = loc.getLabel()
+    toolTip = loc.getHelp()
+    if (list != null) {
+      list!!.localize(loc.manager)
+    }
+
+    // field type specific localizations
+    localize(loc)
+  }
+
+  /**
+   * Localizes this field
+   *
+   * @param     loc         the caller localizer
+   */
+  protected fun localize(loc: FieldLocalizer?) {
+    // by default nothing to do
+  }
+
+  // ----------------------------------------------------------------------
+  // PUBLIC COMMANDS
+  // ----------------------------------------------------------------------
+  // called if the in a chart the line changes, but it is still visible
+  fun updateText() {
+    if (changedUI) {
+      modelNeedUpdate()
+    }
+  }
+
+  /**
+   * Validate the field, ie: get the last displayed value, check it and check mustfill
+   */
+  fun validate() {
+    if (changed) {
+      if (changedUI) {
+        modelNeedUpdate()
+      }
+      callTrigger(VConstants.TRG_PREVAL)
+      if (!isNull(block!!.getActiveRecord())) {
+        callTrigger(VConstants.TRG_FORMAT)
+      }
+      checkList()
+      try {
+        if (!isNull(block!!.getActiveRecord())) {
+          callTrigger(VConstants.TRG_VALFLD)
+        }
+        callTrigger(VConstants.TRG_POSTCHG)
+      } catch (e: VFieldException) {
+        e.resetValue()
+        throw e
+      }
+      changed = false // !!! check
+      changedUI = false
+    }
+  }
+
+  /**
+   * Verify that text is valid (during typing)
+   *
+   * @param     s               the text to check
+   * @return    true if the text is valid
+   */
+  abstract fun checkText(s: String): Boolean
+
+  /**
+   * verify that value is valid (on exit)
+   *
+   * @param     rec             the concerned record.
+   * @param     s               the object to check
+   * @exception VException      an exception is raised if text is bad
+   */
+  abstract fun checkType(rec: Int, s: Any)
+
+  /**
+   * Returns the data type handled by this field.
+   * @return The data type handled by this field.
+   */
+  abstract val dataType: Class<*>
+
+  /**
+   * verify that value is valid (on exit)
+   *
+   * @param     s               the object to check
+   * @exception VException      an exception is raised if text is bad
+   */
+  fun checkType(s: Any) {
+    checkType(block!!.getActiveRecord(), s)
+  }
+
+  /**
+   * text has changed (key typed on a display)
+   */
+  fun onTextChange(text: String) {
+    changed = true
+    changedUI = true
+    autoLeave(text)
+  }
+
+  private fun autoLeave(check: String) {
+    assert(this == block!!.getActiveField()) { threadInfo() + "current field: " + block!!.getActiveField() }
+    if (!hasTrigger(VConstants.TRG_AUTOLEAVE)) {
+      return
+    }
+    var autoleave = false
+    try {
+      autoleave = (callTrigger(VConstants.TRG_AUTOLEAVE) as Boolean)
+    } catch (e: VException) {
+      throw InconsistencyException("autoleave can not throw a VException", e)
+    }
+    if (autoleave) {
+      val action: Action = object : Action("autoleave") {
+        override fun execute() {
+          block!!.getForm().getActiveBlock()!!.gotoNextField()
+        }
+      }
+      (display as UField).getBlockView().getFormView().performAsyncAction(action)
+    }
+  }
+  /**
+   * Return the display
+   */// not used
+  /**
+   * @Override
+   */
+  val display: UField?
+    get() {
+      var value: UField? = null
+
+      if (hasListener) {
+        val listeners = fieldListener!!.listenerList
+        var i = listeners.size - 2
+
+        while (i >= 0 && value == null) {
+          if (listeners[i] == FieldListener::class.java) {
+            value = (listeners[i + 1] as FieldListener).getCurrentDisplay()
+          }
+          i -= 2
+        }
+      }
+      return value
+    }
+
+  fun getType(): Int = MDL_FLD_TEXT
+
+
+  fun build() {
+    setAccess(access[VConstants.MOD_QUERY])
+  }
+
+  /**
+   * Display error
+   */
+  fun displayFieldError(message: String?) {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] == FieldListener::class.java) {
+          (listeners[i + 1] as FieldListener).fieldError(message!!)
+        }
+        i -= 2
+      }
+    }
+  }
+
+  /**
+   * Fill this field with an appropriate value according to present text
+   * and ask the user if there is multiple choice
+   * @exception VException      an exception may occur in gotoNextField
+   */
+  fun autofill() {
+    // programatic autofill => no UI
+    fillField(null) // no Handler
+  }
+
+  fun autofill(showDialog: Boolean, gotoNextField: Boolean) {
+    autofill()
+  }
+
+  /**
+   * Fill this field with an appropriate value according to present text
+   * and ask the user if there is multiple choice
+   * @exception VException      an exception may occur in gotoNextField
+   */
+  fun predefinedFill() {
+    if (hasListener) {
+      var filled = false
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0 && !filled) {
+        if (listeners[i] === FieldListener::class.java) {
+          filled = (listeners[i + 1] as FieldListener).predefinedFill()
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun fillField(handler: PredefinedValueHandler?): Boolean {
+    return handler?.selectDefaultValue() ?: false
+  }
+
+  // ----------------------------------------------------------------------
+  // PROTECTED ACCESSORS
+  // ----------------------------------------------------------------------
+  /**
+   * @return a list column for list
+   */
+  protected abstract fun getListColumn(): VListColumn
+
+  // ----------------------------------------------------------------------
+  // NAVIGATING
+  // ----------------------------------------------------------------------
+  /**
+   * enter a field
+   */
+  fun enter() {
+    assert(block === getForm().getActiveBlock()) { threadInfo() + "field : " + name + " block : " + block!!.getName() +
+            " active block : " + getForm().getActiveBlock()!!.getName() }
+    assert(block!!.getActiveRecord() != -1) { threadInfo() + "current record = " + block!!.getActiveRecord() }
+    assert(block!!.getActiveField() == null) { threadInfo() + "current field: " + block!!.getActiveField() }
+    block!!.setActiveField(this)
+    changed = false
+    fireEntered()
+    try {
+      callTrigger(VConstants.TRG_PREFLD)
+    } catch (e: VException) {
+      throw InconsistencyException(e)
+    }
+  }
+
+  /**
+   * when leaving field, if text is okay, set value in record
+   * @exception VException      an exception is raised if text is bad
+   */
+  fun leave(check: Boolean) {
+    assert(this === block!!.getActiveField()) { threadInfo() + "current field: " + block!!.getActiveField() }
+    try {
+      if (check && changed) {
+        if (changedUI && hasListener) {
+          checkType(getDisplayedValue(true)!!)
+        }
+        callTrigger(VConstants.TRG_PREVAL)
+        if (!isNull(block!!.getActiveRecord())) {
+          callTrigger(VConstants.TRG_FORMAT)
+        }
+        checkList()
+        try {
+          if (!isNull(block!!.getActiveRecord())) {
+            callTrigger(VConstants.TRG_VALFLD)
+          }
+          callTrigger(VConstants.TRG_POSTCHG)
+        } catch (e: VFieldException) {
+          e.resetValue()
+          throw e
+        }
+      } else if (getForm().setTextOnFieldLeave()) {
+        if (changed && changedUI && hasListener) {
+          checkType(getDisplayedValue(true)!!)
+        }
+      }
+    } catch (e: VException) {
+      throw e
+    }
+    changed = false
+    changedUI = false
+    callTrigger(VConstants.TRG_POSTFLD)
+    block!!.setActiveField(null)
+    fireLeaved()
+  }
+
+  /**
+   *
+   */
+  fun hasFocus(): Boolean {
+    return block!!.getActiveField() == this
+  }
+
+  /**
+   * Changes access dynamically, overriding mode access
+   */
+  fun setAccess(at: Int, value: Int) {
+    var value = value
+
+    if (getDefaultAccess() < value) {
+      // access can never be higher than the default
+      // access
+      value = getDefaultAccess()
+    }
+    if (value != dynAccess[at]) {
+      dynAccess[at] = value
+      fireAccessChanged(at)
+    }
+  }
+
+  fun setAccess(value: Int) {
+    for (i in 0 until block!!.getBufferSize()) {
+      setAccess(i, value)
+    }
+  }
+
+  /**
+   * Changes access dynamically, overriding mode access
+   */
+  fun setAccess(access: IntArray) {
+    assert(access.size == this.access.size) { threadInfo() + "new acces length: " + access.size + " old: " + this.access.size }
+    this.access = access
+  }
+
+  /**
+   * return access of this field in current mode
+   */
+  fun getDefaultAccess(): Int = access[block!!.getMode()]
+
+
+  fun getAccess(i: Int): Int {
+    return if (i == -1) {
+      getDefaultAccess()
+    } else {
+      if (isInternal()) {
+        VConstants.ACS_HIDDEN
+      } else {
+        dynAccess[i]
+      }
+    }
+  }
+
+  @Deprecated("use the method <code>updateAccess()<code> instead.")
+  fun getAccess() {
+    updateAccess(block!!.getActiveRecord())
+  }
+
+  @JvmOverloads
+  fun updateAccess(current: Int = block!!.getCurrentRecord()) {
+    if (isInternal()) {
+      // internal fields are always hidden
+      // there no need to update the field
+      // (also neccessary for performance)
+      return
+    }
+
+    val defaultAccess = getDefaultAccess()
+    var accessTemp = defaultAccess //dynAccess;
+
+    if (current != -1) {
+      if (!block!!.isRecordInsertAllowed(current)) {
+        accessTemp = VConstants.ACS_SKIPPED
+      } else if (hasTrigger(VConstants.TRG_FLDACCESS)) {
+        // evaluate ACCESS-Trigger
+        val oldRow: Int = block!!.getActiveRecord()
+        val old: VField = block!!.getActiveField()
+
+        // used by callTrigger
+        block!!.setActiveRecord(current)
+        try {
+          block!!.setActiveField(this)
+          accessTemp = (callTrigger(VConstants.TRG_FLDACCESS) as Int).toInt()
+          block!!.setActiveField(old)
+        } catch (e: Exception) {
+          e.printStackTrace()
+          block!!.setActiveField(old)
+        }
+        block!!.setActiveRecord(oldRow)
+      }
+    }
+    if (defaultAccess < accessTemp) {
+      accessTemp = defaultAccess
+    }
+    if (current == -1) {
+      setAccess(accessTemp)
+    } else {
+      setAccess(current, accessTemp)
+    }
+  }
+
+  fun updateModeAccess() {
+    // TOO SIMPLE (ACCESS TRIGGER IGNORED)
+    for (i in 0 until block!!.getBufferSize()) {
+      updateAccess(i)
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // RESET TO DEFAULT
+  // ----------------------------------------------------------------------
+  /**
+   * Sets default values
+   */
+  fun setDefault() {
+    if (isNull(block!!.getActiveRecord())) {
+      try {
+        callTrigger(VConstants.TRG_DEFAULT)
+      } catch (e: VException) {
+        throw InconsistencyException() // !!! NO, Just a VExc...
+      }
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // QUERY BUILD
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the number of database columns associated to the field.
+   * !!! change name
+   */
+  fun getColumnCount(): Int = columns!!.size
+
+  /**
+   * Returns the database column at given position.
+   */
+  fun getColumn(n: Int): VColumn? = columns!![n]
+
+
+  /**
+   * Returns the column name in the table with specified correlation.
+   * returns null if the field has no access to this table.
+   */
+  fun lookupColumn(corr: Int): String? {
+    for (i in 0 until getColumnCount()) {
+      if (corr == columns!![i]!!.getTable()) {
+        return columns!![i]!!.name
+      }
+    }
+    return null
+  }
+
+  /**
+   * Returns true if the column is a key of the table with specified correlation.
+   */
+  fun isLookupKey(corr: Int): Boolean {
+    for (i in 0 until getColumnCount()) {
+      if (corr == columns!![i]!!.getTable()) {
+        return columns!![i]!!.key
+      }
+    }
+    return false
+  }
+
+  /**
+   * Is the field part of given index ?
+   */
+  fun hasIndex(idx: Int): Boolean = indices and (1 shl idx) != 0
+
+
+  /**
+   * Returns the position in select results.
+   */
+  fun getPriority(): Int = priority
+
+  /**
+   * @return the type of search condition for this field.
+   *
+   * @see VConstants
+   */
+  fun getSearchType(): Int {
+    return if (isNull(block!!.getActiveRecord())) {
+      when {
+        getSearchOperator() == VConstants.SOP_EQ -> {
+          VConstants.STY_NO_COND
+        }
+        getSearchOperator() == VConstants.SOP_NE -> {
+          VConstants.STY_MANY
+        }
+        else -> {
+          VConstants.STY_EXACT
+        }
+      }
+    } else {
+      val buffer = getSql(block!!.getActiveRecord())
+
+      if (buffer.indexOf('*') == -1) {
+        if (getSearchOperator() == VConstants.SOP_EQ) VConstants.STY_EXACT else VConstants.STY_MANY
+      } else {
+        VConstants.STY_MANY
+      }
+    }
+  }
+
+  /**
+   * Returns the search conditions for this field.
+   */
+  fun getSearchCondition(): String? {
+    return if (isNull(block!!.getActiveRecord())) {
+      when {
+        getSearchOperator() == VConstants.SOP_EQ -> {
+          null
+        }
+        getSearchOperator() == VConstants.SOP_NE -> {
+          "IS NOT NULL"
+        }
+        else -> {
+          "IS NULL"
+        }
+      }
+    } else {
+      var operator: String = VConstants.OPERATOR_NAMES.get(getSearchOperator())
+      var operand = getSql(block!!.getActiveRecord())
+
+      if (operand.indexOf('*') == -1) {
+        // nothing to change: standard case
+      } else {
+        when (getSearchOperator()) {
+          VConstants.SOP_EQ -> {
+            operator = "LIKE "
+            operand = operand.replace('*', '%')
+          }
+          VConstants.SOP_NE -> {
+            operator = "NOT LIKE "
+            operand = operand.replace('*', '%')
+          }
+          VConstants.SOP_GE, VConstants.SOP_GT ->           // remove everything after at '*'
+            operand = operand.substring(0, operand.indexOf('*')) + "'"
+          VConstants.SOP_LE, VConstants.SOP_LT ->           // replace substring starting at '*' by highest (ascii) char
+            operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
+          else -> throw InconsistencyException()
+        }
+      }
+      when (options and VConstants.FDO_SEARCH_MASK) {
+        VConstants.FDO_SEARCH_NONE -> {
+        }
+        VConstants.FDO_SEARCH_UPPER -> operand = "{fn UPPER($operand)}"
+        VConstants.FDO_SEARCH_LOWER -> operand = "{fn LOWER($operand)}"
+        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+      }
+      "$operator $operand"
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // FORMATTING VALUES WRT FIELD TYPE
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the field label.
+   *
+   */
+  fun getHeader(): String = if (label == null) "" else label!!
+
+  /**
+   * Returns the position of this field in the array of fields or -1
+   * if this field is not in a multifield
+   */
+  fun getPosInArray(): Int = posInArray
+
+  // ----------------------------------------------------------------------
+  // MANAGING FIELD VALUES
+  // ----------------------------------------------------------------------
+  /**
+   * return the name of this field
+   */
+  fun getTypeOptions(): Int = 0
+
+  /**
+   * Sets the search operator for the field
+   * @see VConstants
+   */
+  fun setSearchOperator(value: Int) {
+    if (value >= VConstants.OPERATOR_NAMES.size) {
+      throw InconsistencyException("Value $value is not a valid operator")
+    }
+    if (searchOperator != value) {
+      searchOperator = value
+      fireSearchOperatorChanged()
+    }
+  }
+
+  /**
+   * @return the search operator for the field
+   * @see VConstants
+   */
+  fun getSearchOperator(): Int = searchOperator
+
+  /**
+   * Clears the field.
+   *
+   * @param     r       the recorde number.
+   */
+  fun clear(r: Int) {
+    setSearchOperator(VConstants.SOP_EQ)
+    setNull(r)
+    resetColor(r)
+  }
+
+  /**
+   * Sets the field value of the current record to a null value.
+   */
+  fun setNull() {
+    setNull(block!!.getCurrentRecord())
+  }
+
+  /**
+   * Sets the field value of the current record to a bigdecimal value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setFixed(v: Fixed) {
+    setFixed(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a boolean value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setBoolean(v: Boolean) {
+    setBoolean(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a date value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setDate(v: Date) {
+    setDate(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a month value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setMonth(v: Month) {
+    setMonth(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a int value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setInt(v: Int) {
+    setInt(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setObject(v: Any) {
+    setObject(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a string value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setString(v: String) {
+    setString(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of given record to a date value.
+   */
+  fun setImage(v: ByteArray) {
+    setImage(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a time value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setTime(v: Time) {
+    setTime(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a week value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setWeek(v: Week) {
+    setWeek(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a timestamp value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setTimestamp(v: Timestamp) {
+    setTimestamp(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of the current record to a color value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setColor(v: Color) {
+    setColor(block!!.getCurrentRecord(), v)
+  }
+
+  /**
+   * Sets the field value of given record to a null value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  abstract fun setNull(r: Int)
+
+  /**
+   * Sets the field value of given record to a bigdecimal value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setFixed(r: Int, v: Fixed) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a boolean value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setBoolean(r: Int, v: Boolean) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a date value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setDate(r: Int, v: Date) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a month value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setMonth(r: Int, v: Month) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a week value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setWeek(r: Int, v: Week) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a int value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setInt(r: Int, v: Int) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  abstract fun setObject(r: Int, v: Any?)
+
+  /**
+   * Sets the field value of given record to a string value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setString(r: Int, v: String) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a date value.
+   */
+  fun setImage(r: Int, v: ByteArray) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a time value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setTime(r: Int, v: Time) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a timestamp value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setTimestamp(r: Int, v: Timestamp) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of given record to a color value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun setColor(r: Int, v: Color) {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Sets the field value of the current record from a query tuple.
+   * @param     query           the query holding the tuple
+   * @param     column          the index of the column in the tuple
+   */
+  fun setQuery(query: Query, column: Int) {
+    setQuery(block!!.getCurrentRecord(), query, column)
+  }
+
+  /**
+   * Sets the field value of given record from a query tuple.
+   * @param     record          the index of the record
+   * @param     query           the query holding the tuple
+   * @param     column          the index of the column in the tuple
+   */
+  fun setQuery(record: Int, query: Query, column: Int) {
+    setObject(record, retrieveQuery(query, column))
+  }
+
+  /**
+   * Returns the specified tuple column as object of correct type for the field.
+   * @param     query           the query holding the tuple
+   * @param     column          the index of the column in the tuple
+   */
+  abstract fun retrieveQuery(query: Query, column: Int): Any
+
+  // ----------------------------------------------------------------------
+  // FIELD VALUE ACCESS
+  // ----------------------------------------------------------------------
+  /**
+   * Is the field value of the current record null ?
+   */
+  fun isNull(): Boolean = isNull(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as an object
+   */
+  fun getObject(): Any = getObject(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a bigdecimal value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getFixed(): Fixed = getFixed(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a boolean value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getBoolean(): Boolean = getBoolean(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a date value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getDate(): Date = getDate(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a int value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getInt(): Int = getInt(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of given record as a date value.
+   */
+  fun getImage(): ByteArray = getImage(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a month value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getMonth(): Month = getMonth(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a string value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getString(): String = getString(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a time value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getTime(): Time = getTime(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a week value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getWeek(): Week = getWeek(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a timestamp value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getTimestamp(): Timestamp = getTimestamp(block!!.getCurrentRecord())
+
+  /**
+   * Returns the field value of the current record as a time value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getColor(): Color = getColor(block!!.getCurrentRecord())
+
+  /**
+   * Returns the display representation of field value of the current record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getText(): String = getText(block!!.getCurrentRecord())
+
+  /**
+   * Returns the SQL representation of field value of the current record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getSql(): String = getSql(block!!.getCurrentRecord())
+
+  /**
+   * Is the field value of given record null ?
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun isNull(r: Int): Boolean {
+    if (alias != null) {
+      return alias!!.isNull(0)
+    }
+    return if (hasTrigger(VConstants.TRG_VALUE)) {
+      callSafeTrigger(VConstants.TRG_VALUE) == null
+    } else isNullImpl(r)
+  }
+
+  /**
+   * Is the field value of given record null ?
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  abstract fun isNullImpl(r: Int): Boolean
+
+  /**
+   * Returns the field value of the current record as an object
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getObject(r: Int): Any {
+    if (alias != null) {
+      return alias!!.getObject(0)
+    }
+    return if (hasTrigger(VConstants.TRG_VALUE)) {
+      callSafeTrigger(VConstants.TRG_VALUE)
+    } else getObjectImpl(r)
+  }
+
+  /**
+   * Returns the field value of the current record as an object
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  abstract fun getObjectImpl(r: Int): Any
+
+  /**
+   * Returns the field value of given record as a bigdecimal value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getFixed(r: Int): Fixed {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a boolean value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getBoolean(r: Int): Boolean {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a date value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getDate(r: Int): Date {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a month value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getMonth(r: Int): Month {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a week value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getWeek(r: Int): Week {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a int value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getInt(r: Int): Int {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a date value.
+   */
+  fun getImage(r: Int): ByteArray {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a string value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getString(r: Int): String {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a time value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getTime(r: Int): Time {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a timestamp value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getTimestamp(r: Int): Timestamp {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the field value of given record as a color value.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getColor(r: Int): Color {
+    throw InconsistencyException()
+  }
+
+  /**
+   * Returns the display representation of field value of given record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getText(r: Int): String {
+    if (alias != null) {
+      return alias!!.getText(0)
+    }
+    if (hasTrigger(VConstants.TRG_VALUE)) {
+      val value = callSafeTrigger(VConstants.TRG_VALUE)
+      val currentValue = getObjectImpl(r)
+      if (value != currentValue) {
+        // set Value only if necessary otherwise an endless loop
+        // alternative solution: do this check in setChanged
+        setObject(r, value)
+      }
+    }
+    return getTextImpl(r)
+  }
+
+  abstract fun toText(o: Any?): String
+
+  abstract fun toObject(s: String?): Any
+
+  /**
+   * Returns the display representation of field value of given record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  abstract fun getTextImpl(r: Int): String
+
+  /**
+   * Returns the SQL representation of field value of given record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getSql(r: Int): String {
+    if (alias != null) {
+      return alias!!.getSql(0)
+    }
+    if (hasTrigger(VConstants.TRG_VALUE)) {
+      setObject(r, callSafeTrigger(VConstants.TRG_VALUE))
+    }
+    return getSqlImpl(r)
+  }
+
+  /**
+   * Returns the SQL representation of field value of given record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  abstract fun getSqlImpl(r: Int): String
+
+  /**
+   * Returns the SQL representation of field value of given record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun hasLargeObject(r: Int): Boolean = false
+
+
+  /**
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun hasBinaryLargeObject(r: Int): Boolean {
+    throw InconsistencyException("NO LOB WITH THIS FIELD $this")
+  }
+
+  /**
+   * Returns the SQL representation of field value of given record.
+   * Warning:   This method will become inaccessible to users in next release
+   *
+   */
+  fun getLargeObject(r: Int): InputStream {
+    throw InconsistencyException("NO BLOB WITH THIS FIELD $this")
+  }
+  // ----------------------------------------------------------------------
+  // FOREGROUND AND BACKGROUND COLOR MANAGEMENT
+  // ----------------------------------------------------------------------
+  /**
+   * Sets the foreground and the background colors for the current record.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  fun setColor(foreground: VColor?, background: VColor?) {
+    setColor(block!!.getCurrentRecord(), foreground, background)
+  }
+
+  /**
+   * Sets the foreground and the background colors.
+   * @param r The record number.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  fun setColor(r: Int, foreground: VColor?, background: VColor?) {
+    var fireColorChanged: Boolean
+
+    fireColorChanged = false
+    if (this.foreground[r] == null && foreground != null
+            || this.foreground[r] != null && !(this.foreground[r]!! == foreground)) {
+      this.foreground[r] = foreground
+      fireColorChanged = true
+    }
+    if (this.background[r] == null && background != null
+            || this.background[r] != null && !(this.background[r]!! == foreground)) {
+      this.background[r] = background
+      fireColorChanged = true
+    }
+    if (fireColorChanged) {
+      fireColorChanged(r)
+    }
+  }
+
+  /**
+   * Resets the foreground and the background colors the current record.
+   */
+  fun resetColor(r: Int = block!!.getCurrentRecord()) {
+    setColor(r, null, null)
+  }
+
+  /**
+   * Update the foreground and the background colors.
+   * @param r The record number.
+   */
+  fun updateColor(r: Int) {
+    setColor(r, getForeground(r), getBackground(r))
+  }
+
+  fun getForeground(r: Int): VColor = foreground[r]!!
+
+  fun getBackground(r: Int): VColor = background[r]!!
+
+  // ----------------------------------------------------------------------
+  // DRAG AND DROP HANDLIN
+  // ----------------------------------------------------------------------
+  /**
+   * Call before a drop starts on this field.
+   * @throws VException Visual errors occurring.
+   */
+  fun onBeforeDrop() {
+    if (hasTrigger(VConstants.TRG_PREDROP)) {
+      callTrigger(VConstants.TRG_PREDROP)
+    }
+  }
+
+  /**
+   * Called after a drop ends on this field.
+   * @throws VException Visual errors occurring.
+   */
+  fun onAfterDrop() {
+    if (hasTrigger(VConstants.TRG_POSTDROP)) {
+      callTrigger(VConstants.TRG_POSTDROP)
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // UTILS
+  // ----------------------------------------------------------------------
+  /**
+   * Copies the fields value of a record to another
+   */
+  abstract fun copyRecord(f: Int, t: Int)
+
+  /**
+   * Returns the containing block.
+   */
+  fun getForm(): VForm = block!!.getForm()
+
+  /**
+   * Returns true if field is never displayed.
+   */
+  fun isInternal(): Boolean {
+    return access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
+  }
+
+  // ----------------------------------------------------------------------
+  // PROTECTED UTILS
+  // ----------------------------------------------------------------------
+  /**
+   * trails (backups) the record if called in a transaction and restore it
+   * if the transaction is aborted.
+   */
+  protected fun trail(r: Int) {
+    if (!isTransient() && !hasTrigger(VConstants.TRG_VALUE) && alias == null) {
+      block!!.trailRecord(r)
+    }
+  }
+
+  /**
+   * Marks the field changed, trails the record if necessary
+   */
+  protected fun setChanged(r: Int) {
+    if (!isTransient() && !hasTrigger(VConstants.TRG_VALUE) && alias == null) {
+      block!!.setRecordChanged(r, true)
+    } else {
+      block!!.updateAccess(r)
+    }
+    changed = true
+    changedUI = false
+    fireValueChanged(r)
+  }
+
+
+
+
+  /**
+   * Marks the field changed, trails the record if necessary
+   */
+  fun setChanged(changed: Boolean) {
+    if (changed && block!!.getActiveRecord() != -1) {
+      block!!.setRecordChanged(block!!.getActiveRecord(), true)
+    }
+    this.changed = changed
+  }
+
+  /**
+   * Checks that field value exists in list
+   */
+  private fun checkList() {
+    if (!getForm().forceCheckList()) {
+      // Oracle doesn't force the value to be in the list
+      return
+    }
+    val SELECT_IS_IN_LIST = " SELECT   1                                      " +
+            " FROM     $2                                     " +
+            " WHERE    $1 = $3"
+
+    val SELECT_MATCHING_STRINGS = " SELECT   $1                                     " +
+            " FROM     $2                                     " +
+            " WHERE    {fn SUBSTRING($1, 1, {fn LENGTH(#3)})} = #3    " +
+            " ORDER BY 1"
+
+    if (isNull(block!!.getActiveRecord())) {
+      return
+    }
+    if (list == null) {
+      return
+    }
+    val alreadyProtected: Boolean = getForm().inTransaction()
+    if (this !is VStringField) {
+      var exists: Boolean
+
+      try {
+        while (true) {
+          try {
+            if (!alreadyProtected) {
+              getForm().startProtected(null)
+            }
+            val query = Query(getForm().dBContext.defaultConnection)
+
+            query.addString(list!!.getColumn(0).column)
+            query.addString(evalListTable())
+            query.addString(getSql(block!!.getActiveRecord()))
+            query.open(SELECT_IS_IN_LIST)
+            exists = query.next()
+            query.close()
+            if (!alreadyProtected) {
+              getForm().commitProtected()
+            }
+            break
+          } catch (e: SQLException) {
+            if (!alreadyProtected) {
+              getForm().abortProtected(e)
+            } else {
+              throw e
+            }
+          } catch (error: Error) {
+            if (!alreadyProtected) {
+              getForm().abortProtected(error)
+            } else {
+              throw error
+            }
+          } catch (rte: RuntimeException) {
+            if (!alreadyProtected) {
+              getForm().abortProtected(rte)
+            } else {
+              throw rte
+            }
+          }
+        }
+      } catch (e: Throwable) {
+        throw VExecFailedException(e)
+      }
+      if (!exists) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
+      }
+      return
+    } else {
+      var query: Query
+      var count = 0
+      var result: String? = null
+      val fldbuf: String = getSql(block!!.getActiveRecord())
+
+      if (fldbuf.indexOf('*') > 0) {
+        return
+      }
+      try {
+        while (true) {
+          try {
+            if (!alreadyProtected) {
+              getForm().startProtected(null)
+            }
+            query = Query(getForm().dBContext.defaultConnection)
+            query.addString(list!!.getColumn(0).column)
+            query.addString(evalListTable())
+            query.addString(getString(block!!.getActiveRecord()))
+            query.open(SELECT_MATCHING_STRINGS)
+            if (!query.next()) {
+              count = 0
+            } else {
+              count = 1
+              result = query.getString(1)
+              if (query.next()) {
+                count = 2
+              }
+            }
+            query.close()
+            if (!alreadyProtected) {
+              getForm().commitProtected()
+            }
+            break
+          } catch (e: SQLException) {
+            if (!alreadyProtected) {
+              getForm().abortProtected(e)
+            } else {
+              throw e
+            }
+          } catch (error: Error) {
+            if (!alreadyProtected) {
+              getForm().abortProtected(error)
+            } else {
+              throw error
+            }
+          } catch (rte: RuntimeException) {
+            if (!alreadyProtected) {
+              getForm().abortProtected(rte)
+            } else {
+              throw rte
+            }
+          }
+        }
+      } catch (e: Throwable) {
+        throw VExecFailedException(e)
+      }
+      when (count) {
+        0 -> throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
+        1 -> {
+          if (result != getString(block!!.getActiveRecord())) {
+            setString(block!!.getActiveRecord(), result!!)
+          }
+          return
+        }
+        2 -> if (result == getString(block!!.getActiveRecord())) {
+          return
+        } else {
+          val qrybuf: String
+          var colbuf = ""
+          var i = 0
+
+          while (i < list!!.columnCount()) {
+            if (i != 0) {
+              colbuf += ", "
+            }
+            colbuf += list!!.getColumn(i).column
+            i++
+          }
+          qrybuf = " SELECT   " + colbuf +
+                  " FROM     " + evalListTable() +
+                  " WHERE    {fn SUBSTRING(" + list!!.getColumn(0).column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
+                  " ORDER BY 1"
+          result = displayQueryList(qrybuf, list!!.getColumns()) as String?
+          if (result == null) {
+            throw VExecFailedException() // no message to display
+          } else {
+            setString(block!!.getActiveRecord(), result)
+            return
+          }
+        }
+        else -> throw InconsistencyException(threadInfo() + "count = " + count)
+      }
+    }
+  }
+
+  /**
+   * Checks that field value exists in list
+   * !!! TRY TO MERGE WITH checkList ???
+   */
+  fun getListID(): Int {
+    val SELECT_IS_IN_LIST = " SELECT  ID                      " +
+            " FROM    $2                      " +
+            " WHERE   $1 = $3"
+    assert(!isNull(block!!.getActiveRecord())) { threadInfo() + " is null" }
+    assert(list != null) { threadInfo() + "list ist not null" }
+    var id = -1
+
+    try {
+      while (true) {
+        try {
+          getForm().startProtected(null)
+          val query = Query(getForm().dBContext.defaultConnection)
+          query.addString(list!!.getColumn(0).column)
+          query.addString(evalListTable())
+          query.addString(getSql(block!!.getActiveRecord()))
+          query.open(SELECT_IS_IN_LIST)
+          if (query.next()) {
+            id = query.getInt(1)
+          }
+          query.close()
+          getForm().commitProtected()
+          break
+        } catch (e: SQLException) {
+          getForm().abortProtected(e)
+        } catch (error: Error) {
+          getForm().abortProtected(error)
+        } catch (rte: RuntimeException) {
+          getForm().abortProtected(rte)
+        }
+      }
+    } catch (e: Throwable) {
+      throw VExecFailedException(e)
+    }
+    if (id == -1) {
+      throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
+    }
+    return id
+  }
+
+  private fun displayQueryList(queryText: String, columns: Array<VListColumn>): Any? {
+    val MAX_LINE_COUNT = 1024
+    val SKIP_FIRST_COLUMN = false
+    val SHOW_SINGLE_ENTRY: Boolean
+    val lines = Array(columns.size - if (SKIP_FIRST_COLUMN) 1 else 0) { arrayOfNulls<Any>(MAX_LINE_COUNT) }
+    var lineCount = 0
+
+    val newForm: VDictionary? = if (list!!.getNewForm() != null) {
+      // OLD SYNTAX
+      Module.getExecutable(list!!.getNewForm()) as VDictionary
+    } else if (list!!.getAction() != -1) {
+      // NEW SYNTAX
+      block!!.executeObjectTrigger(list!!.getAction()) as VDictionary?
+    } else {
+      null // should never happen.
+    }
+    SHOW_SINGLE_ENTRY = newForm != null
+    try {
+      while (true) {
+        try {
+          getForm().startProtected(Message.getMessage("searching_database"))
+          val query = Query(getForm().dBContext.defaultConnection)
+          query.open(queryText)
+          lineCount = 0
+          while (query.next() && lineCount < MAX_LINE_COUNT - 1) {
+            if (query.isNull(1)) {
+              continue
+            }
+            var i = 0
+            while (i < lines.size) {
+              lines[i][lineCount] = query.getObject(i + if (SKIP_FIRST_COLUMN) 2 else 1)
+              i += 1
+            }
+            lineCount += 1
+          }
+          query.close()
+          getForm().commitProtected()
+          break
+        } catch (e: SQLException) {
+          getForm().abortProtected(e)
+        } catch (error: Error) {
+          getForm().abortProtected(error)
+        } catch (rte: RuntimeException) {
+          getForm().abortProtected(rte)
+        }
+      }
+    } catch (e: Throwable) {
+      throw VRuntimeException(e)
+    }
+    return if (lineCount == 0 && (newForm == null || !isNull(block!!.getActiveRecord()))) {
+      throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
+    } else {
+      val selected: Int
+
+      selected = if (lineCount == 0 && newForm != null && isNull(block!!.getActiveRecord())) {
+        newForm.add(getForm())
+      } else {
+        if (lineCount == MAX_LINE_COUNT - 1) {
+          getForm().notice(MessageCode.getMessage("VIS-00028"))
+        }
+        if (lineCount == 1 && !SHOW_SINGLE_ENTRY) {
+          0
+        } else {
+          val ld = VListDialog(columns, lines, lineCount, newForm)
+          ld.selectFromDialog(getForm(), null, this)
+        }
+      }
+      if (selected == -1) {
+        throw VExecFailedException() // no message needed
+      } else if (selected >= lineCount) {
+        // new, retrieve it
+        var result: Any? = null
+
+        try {
+          while (true) {
+            try {
+              getForm().startProtected(null)
+              val SELECT_IS_IN_LIST = " SELECT   $1                   " +
+                      " FROM     $2                   " +
+                      " WHERE    $3 = " + selected
+              val query = Query(getForm().dBContext.defaultConnection)
+
+              query.addString(list!!.getColumn(0).column)
+              query.addString(evalListTable())
+              query.addString("ID")
+              query.open(SELECT_IS_IN_LIST)
+              query.next()
+              result = query.getObject(1)
+              query.close()
+              getForm().commitProtected()
+              break
+            } catch (e: SQLException) {
+              getForm().abortProtected(e)
+            } catch (error: Error) {
+              getForm().abortProtected(error)
+            } catch (rte: RuntimeException) {
+              getForm().abortProtected(rte)
+            }
+          }
+        } catch (e: Throwable) {
+          throw VRuntimeException(e)
+        }
+        result
+      } else {
+        lines[0][selected]
+      }
+    }
+  }
+
+  /**
+   * Checks that field value exists in list
+   */
+  protected fun selectFromList(gotoNextField: Boolean) {
+    val qrybuf = StringBuffer()
+
+    qrybuf.append("SELECT ")
+    for (i in 0 until list!!.columnCount()) {
+      if (i != 0) {
+        qrybuf.append(", ")
+      }
+      qrybuf.append(list!!.getColumn(i).column)
+    }
+    qrybuf.append(" FROM ")
+    qrybuf.append(evalListTable())
+    if (getSearchType() == VConstants.STY_MANY) {
+      qrybuf.append(" WHERE ")
+      when (options and VConstants.FDO_SEARCH_MASK) {
+        VConstants.FDO_SEARCH_NONE -> qrybuf.append(list!!.getColumn(0).column)
+        VConstants.FDO_SEARCH_UPPER -> {
+          qrybuf.append("{fn UPPER(")
+          qrybuf.append(list!!.getColumn(0).column)
+          qrybuf.append(")}")
+        }
+        VConstants.FDO_SEARCH_LOWER -> {
+          qrybuf.append("{fn LOWER(")
+          qrybuf.append(list!!.getColumn(0).column)
+          qrybuf.append(")}")
+        }
+        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+      }
+      qrybuf.append(" ")
+      qrybuf.append(getSearchCondition())
+    }
+    qrybuf.append(" ORDER BY 1")
+    val result = displayQueryList(qrybuf.toString(), list!!.getColumns())
+
+    if (result == null) {
+      throw VExecFailedException() // no message to display
+    } else {
+      setObject(block!!.getActiveRecord(), result)
+      if (gotoNextField) {
+        block!!.gotoNextField()
+      }
+    }
+  }
+
+  /**
+   * Checks that field value exists in list
+   */
+  protected fun enumerateValue(desc: Boolean) {
+    var value: Any? = null
+
+    val qrybuf: String = " SELECT " + list!!.getColumn(0).column +
+            " FROM " + evalListTable() +
+            (if (isNull(block!!.getActiveRecord())) "" else " WHERE " + list!!.getColumn(0).column +
+                    (if (desc) " > " else " < ").toString() + getSql(block!!.getActiveRecord())).toString() +
+            " ORDER BY 1" + if (desc) "" else " DESC"
+    while (true) {
+      try {
+        getForm().startProtected(null)
+        val query = Query(getForm().dBContext.defaultConnection)
+
+        query.open(qrybuf)
+        while (value == null && query.next()) {
+          value = query.getObject(1)
+        }
+        query.close()
+        getForm().commitProtected()
+        break
+      } catch (e: SQLException) {
+        try {
+          getForm().abortProtected(e)
+        } catch (abortEx: SQLException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (error: Error) {
+        try {
+          getForm().abortProtected(error)
+        } catch (abortEx: Error) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (rte: RuntimeException) {
+        try {
+          getForm().abortProtected(rte)
+        } catch (abortEx: RuntimeException) {
+          throw VExecFailedException(abortEx)
+        }
+      }
+    }
+    if (value == null) {
+      throw VExecFailedException() // no message to display
+    } else {
+      setObject(block!!.getActiveRecord(), value)
+    }
+  }
+
+  /**
+   * Returns the suggestion list of this field.
+   * @param query The field content to be taken into consideration when looking for suggestions.
+   * @return An object array that contains two arrays : The displayed values of the suggestions
+   * and the object values of the suggestions.
+   * @throws VException Visual exceptions related to database errors.
+   */
+  fun getSuggestions(query: String?): Array<Array<String>>? {
+    return if (query == null || autocompleteType == VList.AUTOCOMPLETE_NONE) {
+      null
+    } else {
+      val suggestions: MutableList<Array<String>>
+      val qrybuf: StringBuffer = StringBuffer()
+
+      suggestions = ArrayList()
+      qrybuf.append("SELECT ")
+      for (i in 0 until list!!.columnCount()) {
+        if (i != 0) {
+          qrybuf.append(", ")
+        }
+        qrybuf.append(list!!.getColumn(i).column)
+      }
+      qrybuf.append(" FROM ")
+      qrybuf.append(evalListTable())
+      qrybuf.append(" WHERE ")
+      qrybuf.append(" {fn LOWER(")
+      qrybuf.append(list!!.getColumn(0).column)
+      qrybuf.append(")}")
+      when (autocompleteType) {
+        VList.AUTOCOMPLETE_CONTAINS -> {
+          qrybuf.append(" LIKE ")
+          qrybuf.append(Utils.toSql("%" + query.toLowerCase() + "%"))
+        }
+        VList.AUTOCOMPLETE_STARTSWITH -> {
+          qrybuf.append(" LIKE ")
+          qrybuf.append(Utils.toSql(query.toLowerCase() + "%"))
+        }
+        else -> {
+          // default should never reached
+          qrybuf.append(" = ")
+          qrybuf.append(Utils.toSql(query))
+        }
+      }
+      qrybuf.append(" ORDER BY 1")
+      while (true) {
+        try {
+          getForm().startProtected(null)
+          val sqlQuery = Query(getForm().dBContext.defaultConnection)
+          sqlQuery.open(qrybuf.toString())
+          while (sqlQuery.next()) {
+            var columns: MutableList<String>
+            columns = ArrayList()
+            for (i in 0 until list!!.columnCount()) {
+              columns.add(list!!.getColumn(i).formatObject(sqlQuery.getObject(i + 1)) as String)
+            }
+            suggestions.add(columns.toTypedArray())
+          }
+          sqlQuery.close()
+          getForm().commitProtected()
+          break
+        } catch (e: SQLException) {
+          try {
+            getForm().abortProtected(e)
+          } catch (abortEx: SQLException) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (error: Error) {
+          try {
+            getForm().abortProtected(error)
+          } catch (abortEx: Error) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (rte: RuntimeException) {
+          try {
+            getForm().abortProtected(rte)
+          } catch (abortEx: RuntimeException) {
+            throw VExecFailedException(abortEx)
+          }
+        }
+      }
+      suggestions.toTypedArray()
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // IMPLEMENTATION
+  // ---------------------------------------------------------------------
+  /**
+   * Returns the list table.
+   */
+  private fun evalListTable(): String {
+    return try {
+      block!!.executeObjectTrigger(list!!.getTable()) as String
+    } catch (e: VException) {
+      throw InconsistencyException()
+    }
+  }
+
+  /**
+   * Calls trigger for given event.
+   */
+  fun callTrigger(event: Int): Any = block!!.callTrigger(event, index + 1)
+
+  /**
+   * Calls trigger for given event.
+   */
+  fun callProtectedTrigger(event: Int): Any = block!!.callProtectedTrigger(event, index + 1)
+
+  /**
+   * return if there is trigger associated with event
+   */
+  fun hasTrigger(event: Int): Boolean = block!!.hasTrigger(event, index + 1)
+
+  /**
+   * Calls trigger for given event.
+   */
+  private fun callSafeTrigger(event: Int): Any {
+    return try {
+      callTrigger(event)
+    } catch (ve: VException) {
+      throw VRuntimeException(ve)
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // F2
+  // ----------------------------------------------------------------------
+  /**
+   * // TRY TO MERGE WITH queryList !!!!
+   * !!!graf 030729: was ist das ???
+   */
+  fun setValueID(id: Int) {
+    var result: Any?
+    try {
+      while (true) {
+        try {
+          getForm().startProtected(null)
+          val query = Query(getForm().dBContext.defaultConnection)
+          query.addString(list!!.getColumn(0).column)
+          query.addString(evalListTable())
+          query.addString("ID")
+          query.addInt(id)
+          query.open("SELECT $1 FROM $2 WHERE $3 = #4")
+          result = if (query.next()) {
+            query.getObject(1)
+          } else {
+            null
+          }
+          query.close()
+          getForm().commitProtected()
+          break
+        } catch (e: SQLException) {
+          getForm().abortProtected(e)
+        } catch (error: Error) {
+          getForm().abortProtected(error)
+        } catch (rte: RuntimeException) {
+          getForm().abortProtected(rte)
+        }
+      }
+    } catch (e: Throwable) {
+      throw VRuntimeException(e)
+    }
+    setObject(block!!.getActiveRecord(), result)
+    changed = true // if you edit the value it's like if you change it
+  }
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  fun helpOnField(help: VHelpGenerator) {
+    var lab = label
+    if (lab != null) {
+      lab = lab.replace(' ', '_')
+      help.helpOnField(block!!.getTitle(),
+              block!!.getFieldPos(this),
+              label,
+              lab ?: name,
+              toolTip)
+      if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
+              || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
+              || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
+        helpOnType(help)
+        help.helpOnFieldCommand(cmd)
+      }
+    }
+  }
+
+  /**
+   * return the name of this field
+   */
+  abstract fun getTypeInformation(): String
+
+  /**
+   * return the name of this field
+   */
+  abstract fun getTypeName(): String
+
+  /**
+   *
+   */
+  protected fun helpOnType(help: VHelpGenerator) {
+    helpOnType(help, null)
+  }
+
+  /**
+   *
+   */
+  protected fun helpOnType(help: VHelpGenerator, names: Array<String?>?) {
+    val modeName: String?
+    val modeDesc: String?
+
+    if (access[VConstants.MOD_UPDATE] == VConstants.ACS_MUSTFILL
+            || access[VConstants.MOD_INSERT] == VConstants.ACS_MUSTFILL
+            || access[VConstants.MOD_QUERY] == VConstants.ACS_MUSTFILL) {
+      modeName = VlibProperties.getString("mustfill")
+      modeDesc = VlibProperties.getString("mustfill-long")
+    } else if (access[VConstants.MOD_UPDATE] == VConstants.ACS_MUSTFILL
+            || access[VConstants.MOD_INSERT] == VConstants.ACS_VISIT
+            || access[VConstants.MOD_QUERY] == VConstants.ACS_VISIT) {
+      modeName = VlibProperties.getString("visit")
+      modeDesc = VlibProperties.getString("visit-long")
+    } else if (access[VConstants.MOD_UPDATE] == VConstants.ACS_MUSTFILL
+            || access[VConstants.MOD_INSERT] == VConstants.ACS_SKIPPED
+            || access[VConstants.MOD_QUERY] == VConstants.ACS_SKIPPED) {
+      modeName = VlibProperties.getString("skipped")
+      modeDesc = VlibProperties.getString("skipped-long")
+    } else {
+      modeName = VlibProperties.getString("skipped")
+      modeDesc = VlibProperties.getString("skipped-long")
+    }
+    help.helpOnType(modeName,
+                    modeDesc,
+                    getTypeName(),
+                    getTypeInformation(),
+                    names)
+  }
+
+  /**
+   * prepare a snapshot
+   *
+   * @param     fieldPos        position of this field within block visible fields
+   */
+  fun prepareSnapshot(fieldPos: Int, active: Boolean) {
+    // !!! TO DO
+  }
+
+  override fun toString(): String {
+    val information = StringBuffer()
+    try {
+      information.append("\nFIELD ")
+      information.append(name)
+      information.append(" label: ")
+      information.append(label)
+      information.append("\n")
+      try {
+        val value = getObject(block!!.getActiveRecord())
+        if (value == null) {
+          information.append("    value: null")
+        } else {
+          information.append("    value: \"")
+          information.append(value)
+          information.append("\"")
+        }
+      } catch (e: Exception) {
+        information.append("value information exception ")
+      }
+      information.append("\n")
+      try {
+        information.append("    type name: ")
+        information.append(getTypeName())
+      } catch (e: Exception) {
+        information.append("type information exception")
+      }
+      information.append("\n")
+      information.append("    changed: ")
+      information.append(changed)
+      information.append("\n")
+    } catch (e: Exception) {
+      information.append("exception while retrieving field information\n")
+    }
+    return information.toString()
+  }
+
+  // ----------------------------------------------------------------------
+  // LISTENER
+  // ----------------------------------------------------------------------
+  fun addFieldListener(fl: FieldListener) {
+    if (!hasListener) {
+      hasListener = true
+      if (fieldListener == null) {
+        fieldListener = EventListenerList()
+      }
+    }
+    fieldListener!!.add(FieldListener::class.java, fl)
+  }
+
+  fun removeFieldListener(fl: FieldListener?) {
+    fieldListener!!.remove(FieldListener::class.java, fl)
+    if (fieldListener!!.listenerCount == 0) {
+      hasListener = false
+    }
+  }
+
+  fun addFieldChangeListener(fl: FieldChangeListener) {
+    if (!hasListener) {
+      hasListener = true
+      if (fieldListener == null) {
+        fieldListener = EventListenerList()
+      }
+    }
+    fieldListener!!.add(FieldChangeListener::class.java, fl)
+  }
+
+  fun removeFieldChangeListener(fl: FieldChangeListener) {
+    fieldListener!!.remove(FieldChangeListener::class.java, fl)
+    if (fieldListener!!.listenerCount == 0) {
+      hasListener = false
+    }
+  }
+
+  fun fireValueChanged(r: Int) {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] === FieldChangeListener::class.java) {
+          (listeners[i + 1] as FieldChangeListener).valueChanged(r)
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun fireSearchOperatorChanged() {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] === FieldChangeListener::class.java) {
+          (listeners[i + 1] as FieldChangeListener).searchOperatorChanged()
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun fireLabelChanged() {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] === FieldChangeListener::class.java) {
+          (listeners[i + 1] as FieldChangeListener).labelChanged()
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun fireAccessChanged(r: Int) {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] === FieldChangeListener::class.java) {
+          (listeners[i + 1] as FieldChangeListener).accessChanged(r)
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun fireColorChanged(r: Int) {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] === FieldChangeListener::class.java) {
+          (listeners[i + 1] as FieldChangeListener).colorChanged(r)
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun fireEntered() {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] === FieldListener::class.java) {
+          (listeners[i + 1] as FieldListener).enter()
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun fireLeaved() {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] === FieldListener::class.java) {
+          (listeners[i + 1] as FieldListener).leave()
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun requestFocus() {
+    if (hasListener) {
+      var consumed = false
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0 && !consumed) {
+        if (listeners[i] === FieldListener::class.java) {
+          consumed = (listeners[i + 1] as FieldListener).requestFocus()
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun getDisplayedValue(trim: Boolean): Any? {
+    var value: Any? = null
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0 && value == null) {
+        if (listeners[i] === FieldListener::class.java) {
+          value = (listeners[i + 1] as FieldListener).getDisplayedValue(trim)
+        }
+        i -= 2
+      }
+    }
+    return value
+  }
+
+  fun loadItem(item: Int) {
+    if (hasListener) {
+      var loaded = false
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0 && !loaded) {
+        if (listeners[i] === FieldListener::class.java) {
+          loaded = (listeners[i + 1] as FieldListener).loadItem(item)
+        }
+        i -= 2
+      }
+    }
+  }
+
+  fun modelNeedUpdate() {
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+
+      while (i >= 0) {
+        if (listeners[i] === FieldListener::class.java) {
+          (listeners[i + 1] as FieldListener).updateModel()
+        }
+        i -= 2
+      }
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // !!! Remove after merging the new MVC
+  // ----------------------------------------------------------------------
+
+  @Deprecated("")
+  inner class Compatible {
+    fun getDisplayedValue(trim: Boolean): Any? {
+      return this@VField.getDisplayedValue(trim)
+    }
+  }
+
+  @Deprecated("")
+  fun getUI(): Compatible {
+    return Compatible()
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  /**
+   * The width of a field is the max number of character needed to display
+   * any value
+   * @return    the width of this field
+   */
+  var width = 0// max # of chars per line
+    protected set
+
+  /**
+   * The height of a field is the max number of line needed to display
+   * any value
+   * @return    the width of this field
+   */
+  var height  = 0 // max # of lines
+    protected set
+
+  private lateinit var access : IntArray // access in each mode
+
+  private var priority = 0  // order in select results
+
+  private var indices = 0  // bitset of unique indices
+
+  /**
+   * The name of the field is the ident in the galite language
+   * @return    the name of this field
+   */
+  var name: String? = null    // field name (for dumps)
+    private set
+  var label : String? = null // field label
+    set(label) {
+      field = label
+      fireLabelChanged()
+    }
+
+  /**
+   * Returns the option of this field
+   */
+  /**
+   * For Oracle
+   */
+  var options = 0 // options
+
+
+  /**
+   * The tooltip of the field is a small sentence that describe usage of the field
+   * It is the first line of the field help
+   * @return    the help of this field
+   */
+  var toolTip : String? = null // help text
+    private set
+
+  private var index = 0 // The position in parent field array
+
+  /**
+   * Returns the alignment
+   */
+  var align = 0   // field alignment
+    private set
+
+  private var posInArray = 0   // position in array of fields
+
+  var list: VList? = null   // list
+    private set
+
+  /**
+   * Returns the containing block.
+   */
+  var block: VBlock? = null // containing block
+    set(block) {
+      field = block
+      dynAccess = IntArray(block!!.getBufferSize())
+      foreground = arrayOfNulls(block.getBufferSize())
+      background = arrayOfNulls(block.getBufferSize())
+      setAccess(-1)
+    }
+
+  private var columns: Array<VColumn?>? = null // columns in block's tables
+
+  //  private   VFieldUI        ui;             // The UI manager
+  private var alias: VField? = null // The alias field
+
+  // changed?
+   var changed = false // changed by user / changes are done in the model
+    private set
+
+  var changedUI = false // changed by user / changes are in the ui -> update model
+
+  // UPDATE model before doing anything
+  var border = 0
+
+  // dynamic data
+  private var searchOperator // search operator
+          = 0
+  private lateinit var dynAccess: IntArray // dynamic access
+
+  // ####
+  private var fieldListener: EventListenerList? = null
+
+  // if there is only the model and no gui
+  // all the job use less memory and are faster
+  private var hasListener = false
+  var position: VPosition? = null
+    private set
+  lateinit var cmd: Array<VCommand>
+  private lateinit var foreground: Array<VColor?> // foreground colors for this field.
+  private lateinit var background: Array<VColor?> // background colors for this field.
+
+  companion object {
+
+    /**
+     * @return a String with the current thread information for debugging
+     */
+    private fun threadInfo(): String {
+      return """
+     Thread: ${Thread.currentThread()}
+     
+     """.trimIndent()
+    }
+
+    const val MDL_FLD_COLOR = 1
+    const val MDL_FLD_IMAGE = 2
+    const val MDL_FLD_EDITOR = 3
+    const val MDL_FLD_TEXT = 4
+    const val MDL_FLD_ACTOR = 5
+  }
+
+  init {
+    setDimension(width, height)
+  }
+}
