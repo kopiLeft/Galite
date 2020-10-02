@@ -22,9 +22,7 @@ import java.io.File
 import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.util.Locale
-import java.util.Vector
 
-import org.kopi.galite.chart.VHelpGenerator
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
@@ -111,7 +109,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     built = true
 
     // all commands are by default enabled
-    activeCommands.setSize(0)
+    activeCommands.clear()
     if (commands != null) {
       commands!!.forEachIndexed { i, vCommand ->
         val command: VCommand = vCommand
@@ -196,9 +194,9 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
         enable = active
       }
       command.setEnabled(enable)
-      activeCommands.addElement(command)
+      activeCommands.add(command)
     } else {
-      activeCommands.removeElement(command)
+      activeCommands.remove(command)
       command.setEnabled(false)
     }
   }
@@ -209,9 +207,9 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   fun setCommandEnabled(command: VCommand, enable: Boolean) {
     command.setEnabled(enable)
     if (enable) {
-      activeCommands.addElement(command)
+      activeCommands.add(command)
     } else {
-      activeCommands.removeElement(command)
+      activeCommands.remove(command)
     }
   }
 
@@ -602,7 +600,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   var help: String = ""
   protected var VKT_Triggers: Array<IntArray>? = null
   protected var commands: Array<VCommand>? = null
-  private val activeCommands = Vector<VCommand>()
+  private val activeCommands = ArrayList<VCommand>()
 
   /**
    * sets the print options
