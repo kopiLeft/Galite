@@ -69,8 +69,6 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     }
   }
 
-  override fun getSource(): String? = this.source
-
   override fun getType() = org.kopi.galite.visual.Constants.MDL_REPORT
 
   /**
@@ -595,7 +593,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   private var cmdUnfoldColumn: VCommand? = null
   private var cmdColumnInfo: VCommand? = null
   private var cmdEditColumn: VCommand? = null
-  private lateinit var source: String // The source for this document
+  override lateinit var source: String // The source for this document
   protected var model: MReport = MReport()
   private var built = false
   private var pageTitle = ""

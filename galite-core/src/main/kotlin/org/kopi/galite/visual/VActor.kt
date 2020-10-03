@@ -60,7 +60,7 @@ class VActor(var menuIdent: String,
       /**
        * Returns `true` if this action can be cancelled in an action queue context.
        * This means that the action can be removed from an action queue when performing
-       * a clear operation. By default, all actions can be cancelled.
+       * a clear operation.
        *
        * quit a reset action cannot be cancelled. They will be executed even if the action
        * queue is cleared. Implementations should care about this.
