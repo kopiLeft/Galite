@@ -594,7 +594,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   private var cmdColumnInfo: VCommand? = null
   private var cmdEditColumn: VCommand? = null
   override lateinit var source: String // The source for this document
-  protected var model: MReport = MReport()
+  val model: MReport = MReport()
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
