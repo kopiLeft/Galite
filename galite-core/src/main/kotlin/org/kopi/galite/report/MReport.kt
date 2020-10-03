@@ -69,7 +69,7 @@ class MReport : Constants, Serializable {
     createAccessibleTab()
     val rows = arrayOfNulls<VBaseRow>(baseRows.size)
 
-    baseRows.forEachIndexed {  index, element ->
+    baseRows.forEachIndexed { index, element ->
       val data = arrayOfNulls<Any>(getAccessibleColumnCount())
 
       for (j in 0 until position) {
@@ -156,7 +156,8 @@ class MReport : Constants, Serializable {
     val x: Expression = try {
       ExpressionTree.parse(formula)
     } catch (e: Exception) {
-      throw VExecFailedException(MessageCode.getMessage("VIS-00064", formula, "\n$e")) }
+      throw VExecFailedException(MessageCode.getMessage("VIS-00064", formula, "\n$e"))
+    }
     val params: Array<String> = x.variableNames
     val paramColumns = IntArray(params.size)
     val functions = IntArray(params.size)
@@ -243,7 +244,7 @@ class MReport : Constants, Serializable {
             min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F
                   else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
             // calculate min value.
-            baseRows.forEach  {
+            baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
                     else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               if (tmp < min) {
@@ -255,7 +256,7 @@ class MReport : Constants, Serializable {
           OVR -> {
             var ovr: Float = 0f
             // calculate average.
-            baseRows.forEach  {
+            baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
                     else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               ovr += tmp / baseRows.size
@@ -265,7 +266,7 @@ class MReport : Constants, Serializable {
           SUM -> {
             var sum = 0f
             // calculate sum.
-            baseRows.forEach  {
+            baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
                     else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               sum += tmp
@@ -404,9 +405,15 @@ class MReport : Constants, Serializable {
     // reorder the groups in displayed column order
     for (i in 0 until columnCount) {
       when {
-        defaultGroups[displayOrder[i]] == -1 -> { displayGroups[i] = -1 }
-        defaultGroups[displayOrder[i]] >= reverseOrder.size -> { displayGroups[i] = reverseOrder.size }  // not shown
-        else -> { displayGroups[i] = reverseOrder[defaultGroups[displayOrder[i]]] }
+        defaultGroups[displayOrder[i]] == -1 -> {
+          displayGroups[i] = -1
+        }
+        defaultGroups[displayOrder[i]] >= reverseOrder.size -> {
+          displayGroups[i] = reverseOrder.size
+        }  // not shown
+        else -> {
+          displayGroups[i] = reverseOrder[defaultGroups[displayOrder[i]]]
+        }
       }
     }
 
@@ -966,19 +973,19 @@ class MReport : Constants, Serializable {
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
-  lateinit var columns : Array<VReportColumn?>    // array of column definitions
-  lateinit var accessibleColumns : Array<VReportColumn?> // array of visible or hide columns
+  lateinit var columns: Array<VReportColumn?>    // array of column definitions
+  lateinit var accessibleColumns: Array<VReportColumn?> // array of visible or hide columns
     private set
 
   // Root is the root of the tree (which is our model to manipulate data)
-  private var root : VGroupRow? = null    // root of grouping tree
+  private var root: VGroupRow? = null    // root of grouping tree
 
   // Baserows contains data give by the request of the user
   // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
   // is changed when a column move or one or more row are folded
   private var userRows: ArrayList<VBaseRow>? = ArrayList(500)
-  private lateinit var baseRows : Array<VReportRow?>    // array of base data rows
-  private var visibleRows : Array<VReportRow?>? = null  // array of visible rows
+  private lateinit var baseRows: Array<VReportRow?>    // array of base data rows
+  private var visibleRows: Array<VReportRow?>? = null  // array of visible rows
   private var maxRowCount = 0
 
   // Sortedcolumn contain the index of the sorted column
@@ -988,10 +995,10 @@ class MReport : Constants, Serializable {
 
   // displayOrder contains index column model in display order
   // reverseOrder is calculate with displayOrder and contains index column display into model order
-  private lateinit var displayOrder : IntArray    // column mapping from display to model
-  private lateinit var reverseOrder : IntArray    // column mapping from model to display
+  private lateinit var displayOrder: IntArray    // column mapping from display to model
+  private lateinit var reverseOrder: IntArray    // column mapping from model to display
 
   // The displayLevels variable is a table which contains the level of each column
-  private lateinit var displayLevels : IntArray   // column levels in display order
+  private lateinit var displayLevels: IntArray   // column levels in display order
   private val listenerList = EventListenerList()  // List of listeners
 }
