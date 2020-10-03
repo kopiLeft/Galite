@@ -37,14 +37,15 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param dBContext The database context for this object.
  * if if is specified, it will create a window with a DB context
  */
-abstract class VWindow() : Executable, ActionHandler, VModel {
+abstract class VWindow(override var dBContext: DBContext = ApplicationContext.getDBContext()
+) : Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private val modelListener = EventListenerList()
   private var extraTitle: String? = null
-  private var display: UWindow? = null
+  private lateinit var display: UWindow
   private var actors: ArrayList<VActor> = arrayListOf()
   private var title: String? = null
   protected var smallIcon: Image? = null
@@ -136,7 +137,7 @@ abstract class VWindow() : Executable, ActionHandler, VModel {
    * Returns the localization source of this window.
    * @return The localization source of this window.
    */
-  protected open fun getSource(): String? = null
+  open protected fun getSource(): String? = null
 
   override fun performAsyncAction(action: Action) {
     val listeners = modelListener.listenerList
@@ -236,7 +237,7 @@ abstract class VWindow() : Executable, ActionHandler, VModel {
    */
   fun appendToTitle(text: String) {
     extraTitle = text
-    display?.setTitle(getTitle())
+    display.setTitle(getTitle())
   }
 
   /**
@@ -244,7 +245,7 @@ abstract class VWindow() : Executable, ActionHandler, VModel {
    */
   fun setTitle(title: String?) {
     this.title = title
-    display?.setTitle(getTitle())
+    display.setTitle(getTitle())
   }
 
   /**
@@ -270,7 +271,7 @@ abstract class VWindow() : Executable, ActionHandler, VModel {
   fun setActorEnabled(position: Int, enabled: Boolean) {
     val actor: VActor = getActor(position)
     actor.handler = this
-    actor.setEnabled(enabled)
+    actor.isEnabled = enabled
   }
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -308,7 +309,7 @@ abstract class VWindow() : Executable, ActionHandler, VModel {
   //----------------------------------------------------------------------
   // VMODEL IMPLEMENTATION
   //----------------------------------------------------------------------
-  override fun getDisplay(): UWindow? = display
+  override fun getDisplay(): UWindow = display
 
   override fun setDisplay(display: UComponent) {
     assert(display is UWindow) { "VWindow display should be instance of UWindow" }
@@ -323,7 +324,7 @@ abstract class VWindow() : Executable, ActionHandler, VModel {
    * setInformationText
    */
   fun setInformationText(text: String) {
-    display?.setInformationText(text)
+    display.setInformationText(text)
   }
 
   /**
@@ -412,9 +413,13 @@ abstract class VWindow() : Executable, ActionHandler, VModel {
   // ----------------------------------------------------------------------
   open fun getType(): Int = Constants.MDL_UNKOWN
 
-  fun enableCommands() = f12.setEnabled(true)
+  fun enableCommands() {
+    f12.isEnabled = (true)
+  }
 
-  fun setCommandsEnabled(enable: Boolean) = f12.setEnabled(enable)
+  fun setCommandsEnabled(enable: Boolean) {
+    f12.isEnabled = enable
+  }
 
   /**
    * Performs a void trigger
@@ -463,12 +468,12 @@ abstract class VWindow() : Executable, ActionHandler, VModel {
   /**
    * Returns the current user name
    */
-  open fun getUserName(): String? = TODO()
+  open fun getUserName(): String? = dBContext.defaultConnection.userName
 
   /**
    * Returns the user ID
    */
-  open fun getUserID(): Int = TODO()
+  open fun getUserID(): Int = dBContext.defaultConnection.getUserID()
 
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING

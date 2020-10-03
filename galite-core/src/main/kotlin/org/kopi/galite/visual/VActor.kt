@@ -19,44 +19,145 @@
 package org.kopi.galite.visual
 
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.l10n.ActorLocalizer
 import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.l10n.MenuLocalizer
 
-/**
- * Represents an actor.
- */
-class VActor(
-        val menuIdent: String,
-        private val menuSource: String,
-        val actorIdent: String,
-        private val actorSource: String,
-        var iconName: String?,
-        val acceleratorKey: Int,
-        val acceleratorModifier: Int) : VModel {
+class VActor(val menuIdent: String,
+        // qualified name of menu's source file
+                   private var menuSource: String,
+                   val actorIdent: String,
+                   private val actorSource: String,
+                   val iconName: String?,
+                   val acceleratorKey: Int,
+                   val acceleratorModifier: Int) : VModel {
+
+  /**
+   * Checks whether the actor is enabled.
+   * Enables/disables the actor.
+   */
+  var isEnabled: Boolean
+    get() = display != null && display!!.isEnabled()
+    set(enabled) {
+      if (display != null) {
+        display?.setEnabled(enabled)
+      }
+    }
+
+  override fun getDisplay(): UComponent? {
+    return display
+  }
 
   override fun setDisplay(display: UComponent) {
-    TODO("Not yet implemented")
+    assert(display is UActor) { "VActor display should be UActor" }
+    this.display = display as UActor
   }
 
-  override fun getDisplay(): UComponent {
-    TODO("Not yet implemented")
+  fun setDisplay(display: UActor) {
+    this.display = display
   }
 
-  fun setEnabled(enabled: Boolean) {
-    TODO()
+  // ----------------------------------------------------------------------
+  // ACTIONS HANDLING
+  // ----------------------------------------------------------------------
+  fun performAction() {
+    handler.performAsyncAction(object : Action("$menuItem in $menuName") {
+      override fun execute() {
+        handler.executeVoidTrigger(number)
+      }
+
+      // quit an reset action cannot be cancelled. They will be executed even if the action
+      // queue is cleared. Implementations should care about this.
+      override fun isCancellable() = !("quit".equals(actorIdent, ignoreCase = true) || "break".equals(actorIdent, ignoreCase = true))
+    })
   }
 
+  fun performBasicAction() {
+    handler.executeVoidTrigger(number)
+  }
+
+  // ----------------------------------------------------------------------
+  // HASHCODE AND EQUALS REDEFINITION
+  // ----------------------------------------------------------------------
+  override fun hashCode(): Int {
+    return actorIdent.hashCode() * actorIdent.hashCode()
+  }
+
+  override fun equals(obj: Any?): Boolean {
+    return if (obj !is VActor) {
+      false
+    } else {
+      menuName == obj.menuName
+              && menuItem == obj.menuItem
+              && (iconName == null
+              && obj.iconName == null
+              || iconName != null
+              && obj.iconName != null
+              && iconName == obj.iconName)
+    }
+  }
+  // ----------------------------------------------------------------------
+  // LOCALIZATION
+  // ----------------------------------------------------------------------
+  /**
+   * Localizes this actor
+   *
+   * @param     manager         the manger to use for localization
+   */
   fun localize(manager: LocalizationManager) {
-    TODO()
+    val menuLoc: MenuLocalizer = manager.getMenuLocalizer(menuSource, menuIdent)
+    val actorLoc: ActorLocalizer = manager.getActorLocalizer(actorSource, actorIdent)
+
+    menuName = menuLoc.getLabel()
+    menuItem = actorLoc.getLabel()
+    help = actorLoc.getHelp()
   }
 
-  fun isEnabled(): Boolean {
-    TODO()
-  }
-
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
   fun helpOnCommand(help: VHelpGenerator) {
-    TODO()
+    help.helpOnCommand(menuName,
+            menuItem,
+            iconName,
+            acceleratorKey,
+            acceleratorModifier,
+            this.help)
   }
 
-  var number: Int? = null
-  var handler: ActionHandler? = null
+  // --------------------------------------------------------------------
+  // DEBUG
+  // --------------------------------------------------------------------
+  override fun toString(): String {
+    val buffer = StringBuffer()
+
+    buffer.append("VActor[")
+    buffer.append("menu=$menuName:$menuItem")
+    if (iconName != null) {
+      buffer.append(", ")
+      buffer.append("icon=$iconName")
+    }
+    if (acceleratorKey != 0) {
+      buffer.append(", ")
+      buffer.append("key=$acceleratorKey:$acceleratorModifier")
+    }
+    buffer.append(", ")
+    buffer.append("help=$help")
+    buffer.append("]")
+    return buffer.toString()
+  }
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  lateinit var menuName: String
+  lateinit var menuItem: String
+  private var display: UActor? = null
+
+  /**
+   * Sets and gets the number for the actor.
+   */
+  var number = 0
+  lateinit var handler: ActionHandler
+  lateinit var help: String
 }

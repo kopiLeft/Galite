@@ -18,21 +18,37 @@
 
 package org.kopi.galite.report
 
+import java.io.File
+import java.net.MalformedURLException
+import java.text.MessageFormat
+import java.util.Locale
+
+import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.l10n.ReportLocalizer
 import org.kopi.galite.print.Printable
+import org.kopi.galite.print.Printable.Companion.DOC_UNKNOWN
 import org.kopi.galite.type.Date
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
-import java.io.File
-import java.net.MalformedURLException
-import java.text.MessageFormat
-import java.util.*
+import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
 
-abstract class VReport protected constructor() : VWindow(), Constants, VConstants, Printable {
+abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
   companion object {
     const val TYP_CSV = 1
     const val TYP_PDF = 2
@@ -40,22 +56,33 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
     const val TYP_XLSX = 4
 
     init {
+      WindowController.windowController.registerWindowBuilder(org.kopi.galite.visual.Constants.MDL_REPORT, object : WindowBuilder {
+        override fun createWindow(model: VWindow): UWindow {
+          return UIFactory.uiFactory.createView(model) as UReport
+        }
+      })
     }
   }
+
+  override fun getSource(): String? = this.source
 
   override fun getType() = org.kopi.galite.visual.Constants.MDL_REPORT
 
   /**
-   * Redisplay the report after change in formating
+   * Redisplay the report after change in formatting
    */
   @Deprecated("call method in display; model must not be refreshed")
-  fun redisplay() = (getDisplay() as UReport).redisplay()
+  fun redisplay() {
+    (getDisplay() as UReport).redisplay()
+  }
 
   /**
    * Close window
    */
   @Deprecated("call method in display; model must not be closed")
-  fun close() = getDisplay()!!.closeWindow()
+  fun close() {
+    getDisplay().closeWindow()
+  }
 
   override fun destroyModel() {
     try {
@@ -76,18 +103,16 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
    * build everything after loading
    */
   protected fun build() {
-    init()
-    localize(ApplicationContext.getDefaultLocale())
     model.build()
     model.createTree()
     (getDisplay() as UReport).build()
     built = true
 
     // all commands are by default enabled
-    activeCommands.setSize(0)
+    activeCommands.clear()
     if (commands != null) {
-      for (i in commands!!.indices) {
-        val command: VCommand = commands!![i]
+      commands!!.forEachIndexed { i, vCommand ->
+        val command: VCommand = vCommand
         when {
           command.getIdent() == "Fold" -> cmdFold = command
           command.getIdent() == "Unfold" -> cmdUnfold = command
@@ -98,7 +123,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
           command.getIdent() == "ColumnInfo" -> cmdColumnInfo = command
           command.getIdent() == "EditColumnData" -> cmdEditColumn = command
           else -> {
-            setCommandEnabled(commands!![i], model.getModelColumnCount() + i + 1, true)
+            setCommandEnabled(vCommand, model.getModelColumnCount() + i + 1, true)
           }
         }
       }
@@ -116,12 +141,12 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
    *
    * @param     locale  the locale to use
    */
-  open fun localize(locale: Locale) {
+  fun localize(locale: Locale) {
     var manager: LocalizationManager?
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
 
     // localizes the actors in VWindow
-    //super.localizeActors(manager)
+    super.localizeActors(manager)
     localize(manager)
     manager = null
   }
@@ -136,15 +161,15 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
 
     setPageTitle(loc.getTitle())
     help = loc.getHelp()
-    model.columns.forEach { it!!.localize(loc) }
+    model.columns.forEach { it?.localize(loc) }
   }
 
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------
-  open fun initReport() {
+  fun initReport() {
     build()
-//    callTrigger(Constants.TRG_PREREPORT)
+    callTrigger(Constants.TRG_PREREPORT)
   }
   // ----------------------------------------------------------------------
   // INTERFACE (COMMANDS)
@@ -154,12 +179,13 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
    */
   fun setCommandEnabled(command: VCommand, index: Int, enable: Boolean) {
     var enable = enable
+
     if (enable) {
       // we need to check if VKT_Triggers is initialized
       // ex : org.kopi.galite.cross.VDynamicReport
       if (VKT_Triggers != null && hasTrigger(Constants.TRG_CMDACCESS, index)) {
 
-        var active: Boolean = try {
+        val active: Boolean = try {
           (callTrigger(Constants.TRG_CMDACCESS, index) as Boolean)
         } catch (e: VException) {
           // trigger call error ==> command is considered as active
@@ -168,9 +194,9 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
         enable = active
       }
       command.setEnabled(enable)
-      activeCommands.addElement(command)
+      activeCommands.add(command)
     } else {
-      activeCommands.removeElement(command)
+      activeCommands.remove(command)
       command.setEnabled(false)
     }
   }
@@ -181,14 +207,13 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
   fun setCommandEnabled(command: VCommand, enable: Boolean) {
     command.setEnabled(enable)
     if (enable) {
-      activeCommands.addElement(command)
+      activeCommands.add(command)
     } else {
-      activeCommands.removeElement(command)
+      activeCommands.remove(command)
     }
   }
 
   override fun createPrintJob(): PrintJob {
-
     val exporter: PExport2PDF = PExport2PDF((getDisplay() as UReport).getTable(),
             model,
             printOptions,
@@ -196,7 +221,8 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
             firstPageHeader,
             Message.getMessage("toner_save_mode") == "true")
     val printJob: PrintJob = exporter.export()
-    printJob.documentType = documentType
+
+    printJob.documentType = getDocumentType()
     return printJob
   }
 
@@ -211,7 +237,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
       TYP_XLSX -> ".xlsx"
       else -> throw InconsistencyException("Export type unknown")
     }
-    val file: File = FileHandler.fileHandler!!.chooseFile(getDisplay()!!,
+    val file: File? = FileHandler.fileHandler?.chooseFile(getDisplay(),
             ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
             "report$ext")
     file?.let { export(it, type) }
@@ -224,6 +250,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
     setWaitInfo(VlibProperties.getString("export-message"))
     val extension: String
     val exporter: PExport
+
     when (type) {
       TYP_CSV -> {
         extension = ".csv"
@@ -341,7 +368,9 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
   /**
    * Sort the displayed tree wrt to a column
    */
-  fun sortSelectedColumn() = model.sortColumn(getSelectedColumn())
+  fun sortSelectedColumn() {
+    model.sortColumn(getSelectedColumn())
+  }
 
   /**
    * Sort the displayed tree wrt to a column
@@ -370,7 +399,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
   /**
    * Adds a line.
    */
-  abstract fun add(data: Array<Any?>)
+  abstract fun add()
 
   /**
    * Returns the ID
@@ -388,7 +417,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
         i++
       }
       if (idCol != -1 && getSelectedCell().y != -1) {
-        id = (model.getRow(getSelectedCell().y)!!.getValueAt(idCol) as Int)
+        id = (model.getRow(getSelectedCell().y)?.getValueAt(idCol) as Int)
       }
       return if (id == -1) {
         throw VRuntimeException()
@@ -412,7 +441,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
       i++
     }
     return if (col != -1 && getSelectedCell().y != -1) {
-      model.getRow(getSelectedCell().y)!!.getValueAt(col)
+      model.getRow(getSelectedCell().y)?.getValueAt(col)
     } else null
   }
   // ----------------------------------------------------------------------
@@ -424,6 +453,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
    */
   protected fun buildSQLCondition(column: String, field: VField): String {
     val condition: String? = field.getSearchCondition()
+
     return if (condition == null) {
       " TRUE = TRUE "
     } else {
@@ -442,8 +472,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
 
   fun executeIntegerTrigger(VKT_Type: Int): Int = throw InconsistencyException("SHOULD BE REDEFINED")
 
-  val documentType: Int
-    get() = Printable.DOC_UNKNOWN
+  fun getDocumentType(): Int = DOC_UNKNOWN
 
   /**
    * overridden by forms to implement triggers
@@ -481,9 +510,9 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
     }
     val column = getSelectedColumn()
     val (x, y) = getSelectedCell()
-    val foldEnabled = column != -1 && !model.isColumnFold(column) ||
-            x != -1 && y != -1 && !model.isRowFold(y, x)
+    val foldEnabled = column != -1 && !model.isColumnFold(column) || x != -1 && y != -1 && !model.isRowFold(y, x)
     val unfoldEnabled = column != -1 || x != -1 && y != -1
+
     if (cmdFold != null) {
       setCommandEnabled(cmdFold!!, foldEnabled)
     }
@@ -515,23 +544,20 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
   /**
    * Returns the selected column or -1 if no column is selected.
    */
-  private fun getSelectedColumn(): Int {
-    return (getDisplay() as UReport?)!!.getSelectedColumn()
-  }
+  private fun getSelectedColumn(): Int = (getDisplay() as UReport).getSelectedColumn()
 
   /**
    * Returns the selected cell or !!! ??? if no cell is selected.
    */
-  private fun getSelectedCell(): Point {
-    return (getDisplay() as UReport?)!!.getSelectedCell()
-  }
+  private fun getSelectedCell(): Point = (getDisplay() as UReport).getSelectedCell()
 
   fun genHelp(): String? {
     val surl = StringBuffer()
     val fileName: String? = VHelpGenerator().helpOnReport(pageTitle,
-            commands!!,
+            commands,
             model,
             help)
+
     return if (fileName == null) {
       null
     } else {
@@ -564,16 +590,7 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
    * Set the source for this document
    */
   private lateinit var source: String
-  override fun getSource(): String? = null
-
-  /**
-   * Set the source for this document
-   */
-  open fun setSource(source: String) {
-    this.source = source
-  }
-
-  var model: MReport = MReport()
+  protected var model: MReport = MReport()
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
@@ -581,31 +598,28 @@ abstract class VReport protected constructor() : VWindow(), Constants, VConstant
   // ----------------------------------------------------------------------
   // HELP
   // ----------------------------------------------------------------------
-  var help: String? = null
+  var help: String = ""
   protected var VKT_Triggers: Array<IntArray>? = null
   protected var commands: Array<VCommand>? = null
-  private val activeCommands: Vector<VCommand>
+  private val activeCommands = ArrayList<VCommand>()
 
   /**
    * sets the print options
    */
-  // print configuration object
   var printOptions: PConfig = PConfig()
 
   /**
    * Set the media for this document
    */
   var media: String? = null
-  // ----------------------------------------------------------------------
-  // CONSTRUCTORS
-  // ----------------------------------------------------------------------
 
-  /**
-   * Constructor
-   */
   init {
-    activeCommands = Vector<VCommand>()
+    if (ctxt != null) {
+      dBContext = ctxt.getDBContext()
+    }
+    init()
 
     // localize the report using the default locale
+    localize(ApplicationContext.getDefaultLocale())
   }
 }

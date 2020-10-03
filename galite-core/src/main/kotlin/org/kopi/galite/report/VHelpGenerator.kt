@@ -40,7 +40,7 @@ class VHelpGenerator : VHelpGenerator() {
    * prints a compilation unit
    */
   fun helpOnReport(name: String,
-                   commands: Array<VCommand>,
+                   commands: Array<VCommand>?,
                    model: MReport,
                    help: String?): String? {
     return try {
@@ -60,7 +60,7 @@ class VHelpGenerator : VHelpGenerator() {
       if (help != null) {
         print.println("<P>$help</P>")
       }
-      helpOnCommands(commands)
+      helpOnCommands(commands!!)
       val columnCount: Int = model.getModelColumnCount()
       print.println("<TABLE border=\"0\" cellspacing=\"3\" cellpadding=\"2\">")
       print.println("<TR>")
