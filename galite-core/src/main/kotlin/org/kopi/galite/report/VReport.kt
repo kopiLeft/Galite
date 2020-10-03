@@ -33,22 +33,9 @@ import org.kopi.galite.print.Printable.Companion.DOC_UNKNOWN
 import org.kopi.galite.type.Date
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.ApplicationConfiguration
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VRuntimeException
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
+import org.kopi.galite.visual.*
 
-abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
+abstract class VReport protected constructor() : VWindow(), Constants, VConstants, Printable {
   companion object {
     const val TYP_CSV = 1
     const val TYP_PDF = 2
@@ -56,15 +43,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     const val TYP_XLSX = 4
 
     init {
-      WindowController.windowController.registerWindowBuilder(org.kopi.galite.visual.Constants.MDL_REPORT, object : WindowBuilder {
-        override fun createWindow(model: VWindow): UWindow {
-          return UIFactory.uiFactory.createView(model) as UReport
-        }
-      })
     }
   }
-
-  override fun getSource(): String? = this.source
 
   override fun getType() = org.kopi.galite.visual.Constants.MDL_REPORT
 
@@ -103,6 +83,12 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * build everything after loading
    */
   protected fun build() {
+    init()
+
+    // localize the report using the default locale
+    localize(ApplicationContext.getDefaultLocale())
+
+
     model.build()
     model.createTree()
     (getDisplay() as UReport).build()
@@ -399,7 +385,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Adds a line.
    */
-  abstract fun add()
+  abstract fun add(data: Array<Any?>)
 
   /**
    * Returns the ID
@@ -589,8 +575,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Set the source for this document
    */
-  private lateinit var source: String
-  protected var model: MReport = MReport()
+  override lateinit var source: String
+  val model: MReport = MReport()
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
@@ -598,7 +584,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   // ----------------------------------------------------------------------
   // HELP
   // ----------------------------------------------------------------------
-  var help: String = ""
+  var help: String? = null
   protected var VKT_Triggers: Array<IntArray>? = null
   protected var commands: Array<VCommand>? = null
   private val activeCommands = ArrayList<VCommand>()
@@ -614,12 +600,10 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   var media: String? = null
 
   init {
-    if (ctxt != null) {
-      dBContext = ctxt.getDBContext()
-    }
-    init()
 
-    // localize the report using the default locale
-    localize(ApplicationContext.getDefaultLocale())
+    setActors(arrayOf(
+            VActor("File", "ReportDefault", "Quit", "ReportDefault", "quit", 27, 0), VActor("File", "ReportDefault", "Print", "ReportDefault", "print", 117, 0), VActor("File", "ReportDefault", "PrintOptions", "ReportDefault", "border", 118, 1), VActor("File", "ReportDefault", "ExportCSV", "ReportDefault", "export", 119, 0), VActor("File", "ReportDefault", "ExportPDF", "ReportDefault", "export", 120, 0), VActor("File", "ReportDefault", "ExportXLSX", "ReportDefault", "export", 120, 1), VActor("Action", "ReportDefault", "Fold", "ReportDefault", "fold", 113, 0), VActor("Action", "ReportDefault", "Unfold", "ReportDefault", "unfold", 114, 0), VActor("Action", "ReportDefault", "Sort", "ReportDefault", "serialquery", 115, 0), VActor("Settings", "ReportDefault", "AddConfiguration", "ReportDefault", null, 0, 0),
+            VActor("Settings", "ReportDefault", "LoadConfiguration", "ReportDefault", "save", 0, 0), VActor("Settings", "ReportDefault", "RemoveConfiguration", "ReportDefault", null, 0, 0), VActor("Action", "ReportDefault", "ColumnInfo", "ReportDefault", "options", 0, 0), VActor("Help", "ReportDefault", "Help", "ReportDefault", "help", 112, 0), VActor("Action", "ReportDefault", "EditColumnData", "ReportDefault", "formula", 0, 0)
+    ))
   }
 }

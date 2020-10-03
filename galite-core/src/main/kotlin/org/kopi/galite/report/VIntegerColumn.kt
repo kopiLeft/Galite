@@ -15,6 +15,63 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.report
 
-class VIntegerColumn 
+package org.kopi.galite.report
+/**
+ * Represents a report column description
+ *
+ * @param     ident           The column ident
+ * @param     options         The column options as bitmap
+ * @param     align           The column alignment
+ * @param     groups          The index of the column grouped by this one or -1
+ * @param     function        An (optional) summation function
+ */
+
+class VIntegerColumn(ident: String?,
+                     options: Int,
+                     align: Int,
+                     groups: Int,
+                     function: VCalculateColumn?,
+                     width: Int,
+                     format: VCellFormat?)
+      : VReportColumn(ident,
+                      options,
+                      align,
+                      groups,
+                      function,
+                      width,
+                      1,
+                      format ?: VIntegerFormat()) {
+  /**
+   * Compare two objects.
+   *
+   * @param        o1        the first operand of the comparison
+   * @param        o2        the second operand of the comparison
+   * @return        -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  override fun compareTo(o1: Any, o2: Any): Int {
+    val v1 = (o1 as Int).toInt()
+    val v2 = (o2 as Int).toInt()
+    return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
+  }
+
+  /**
+   * Returns the width of cells in this column in characters
+   */
+  override fun getPrintedWidth(): Double {
+    return width * 0.7
+  }
+
+  override fun formatColumn(exporter: PExport, index: Int) {
+    exporter.formatIntegerColumn(this, index)
+  }
+
+  private class VIntegerFormat : VCellFormat() {
+    override fun format(value: Any?): String {
+      // don't do substring when value.length() > columnWidth
+      return value?.toString() ?: ""
+    }
+  }
+}

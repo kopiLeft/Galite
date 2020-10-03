@@ -18,6 +18,8 @@
 
 package org.kopi.galite.ui.visual
 
+import com.vaadin.flow.router.HasDynamicTitle
+
 import java.io.File
 
 import org.kopi.galite.ui.addons.Window;
@@ -34,7 +36,7 @@ import org.kopi.galite.visual.VWindow
  *
  * @param model The window model.
  */
-abstract class DWindow(private var model: VWindow) : Window(), UWindow {
+abstract class DWindow(private var model: VWindow) : Window(), UWindow, HasDynamicTitle {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -72,7 +74,13 @@ abstract class DWindow(private var model: VWindow) : Window(), UWindow {
    * @param actorDefs The [VActor] definitions.
    */
   private fun addActorsToGUI(actorDefs: Array<VActor>?) {
-    TODO()
+    if (actorDefs != null) {
+      for (i in actorDefs.indices) {
+        var actor: DActor?
+        actor = DActor(actorDefs[i])
+        addActor(actor)
+      }
+    }
   }
 
 
@@ -83,7 +91,7 @@ abstract class DWindow(private var model: VWindow) : Window(), UWindow {
   /**
    * Use [.closeWindow] or [.close] instead.
    */
-  @Deprecated("")
+  @Deprecated("", ReplaceWith("closeWindow()"))
   fun close() {
     closeWindow()
   }
@@ -225,8 +233,13 @@ abstract class DWindow(private var model: VWindow) : Window(), UWindow {
   var isUserAsked = false
     private set
 
+  override fun getPageTitle(): String {
+    return model.getTitle()
+  }
+
   init {
     createEditMenu()
+    addActorsToGUI(model.getActors().toTypedArray())
     // TODO
   }
 }

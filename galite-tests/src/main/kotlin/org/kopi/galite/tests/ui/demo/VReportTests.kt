@@ -163,20 +163,20 @@ class VReportTests : VerticalLayout() {
    */
   class SimpleReport : Report() {
     val field1 = field<String> {
-      label = "Pays"
+      label = "Nom"
     }
     val field2 = field<Int> {
-      label = "CodeDouanier"
+      label = "Age"
     }
 
     init {
       add {
-        this[field1] = "Tunis"
-        this[field2] = 123456789
+        this[field1] = "John"
+        this[field2] = 30
       }
       add {
-        this[field1] = "France"
-        this[field2] = 987654321
+        this[field1] = "Sophie"
+        this[field2] = 25
       }
     }
   }

@@ -18,18 +18,15 @@
 
 package org.kopi.galite.visual
 
-import java.awt.Frame
-import java.awt.event.KeyEvent
-import java.io.File
-
-import javax.swing.event.EventListenerList
-
 import org.kopi.galite.base.Image
 import org.kopi.galite.base.UComponent
-import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.XInterruptProtectedException
 import org.kopi.galite.l10n.LocalizationManager
+import java.awt.Frame
+import java.awt.event.KeyEvent
+import java.io.File
+import javax.swing.event.EventListenerList
 
 /**
  * Creates a window
@@ -37,8 +34,7 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param dBContext The database context for this object.
  * if if is specified, it will create a window with a DB context
  */
-abstract class VWindow(override var dBContext: DBContext = ApplicationContext.getDBContext()
-) : Executable, ActionHandler, VModel {
+abstract class VWindow() : Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -109,7 +105,11 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Resets form to initial state
    */
-  abstract fun reset()
+  open fun reset() {
+    // do nothing
+
+    // TODO ! make abstract
+  }
 
   /**
    * Returns true if it is allowed to quit this model
@@ -134,10 +134,15 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   }
 
   /**
-   * Returns the localization source of this window.
-   * @return The localization source of this window.
+   * The localization source of this window.
    */
-  open protected fun getSource(): String? = null
+  open val source: String? = null
+
+  @Deprecated("use method performAsynAction",
+              ReplaceWith("performAsyncAction(action)"))
+  override fun performAction(action: Action, block: Boolean) {
+    performAsyncAction(action)
+  }
 
   override fun performAsyncAction(action: Action) {
     val listeners = modelListener.listenerList
@@ -465,16 +470,6 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    */
   fun inTransaction(): Boolean = isProtected
 
-  /**
-   * Returns the current user name
-   */
-  open fun getUserName(): String? = dBContext.defaultConnection.userName
-
-  /**
-   * Returns the user ID
-   */
-  open fun getUserID(): Int = dBContext.defaultConnection.getUserID()
-
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING
   // ----------------------------------------------------------------------
@@ -507,8 +502,8 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * @return    the requested message
    */
   protected fun formatMessage(ident: String, params: Array<Any?>): String? {
-    return if (getSource() != null) {
-      Message.getMessage(getSource(), ident, params)
+    return if (source != null) {
+      Message.getMessage(source, ident, params)
     } else {
       null
     }

@@ -19,12 +19,20 @@
 package org.kopi.galite.ui.addons
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.kopi.galite.ui.visual.DActor
 
 /**
  * The window component.
  */
 open class Window : VerticalLayout() {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  val actors: MutableList<DActor> = mutableListOf()
+  private var content: Component = HorizontalLayout()
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -33,10 +41,14 @@ open class Window : VerticalLayout() {
    * Adds an actor to this window.
    * @param actor The actor to be added.
    */
-  fun addActor(actor: Actor) {
-    TODO()
+  fun addActor(actor: DActor) {
+    actors.add(actor)
+    (content as HorizontalLayout).add(actor)
   }
 
+  init {
+    add(content)
+  }
   fun replaceComponent(oldComponent: Component, newComponent: Component) {
     // component replacement are not supported for a window
   }
@@ -69,10 +81,4 @@ open class Window : VerticalLayout() {
     }
     return components.iterator()
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  val actors: List<Actor> = listOf()
-  private var content: Component? = null
 }

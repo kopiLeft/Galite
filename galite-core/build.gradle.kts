@@ -53,4 +53,6 @@ dependencies {
 
   // Graphbuilder dependency
   implementation("com.github.virtuald", "curvesapi", graphbuilder)
+
+  implementation("javax.servlet", "javax.servlet-api", "4.0.1")
 }

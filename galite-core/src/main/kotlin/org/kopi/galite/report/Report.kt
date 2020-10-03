@@ -19,6 +19,7 @@ package org.kopi.galite.report
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
+import org.kopi.galite.visual.VActor
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -78,7 +79,8 @@ open class Report : VReport() {
    */
   override fun init() {
     // TODO
-    setSource("User")
+    source = "User"
+    super.VKT_Triggers = arrayOf(intArrayOf(20))
     reportRows.map {
       add(it.data.values.toTypedArray())
     }

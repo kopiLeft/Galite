@@ -18,6 +18,11 @@
 plugins {
   kotlin("jvm") apply true
   id("org.springframework.boot") version "2.3.3.RELEASE"
+  id("com.vaadin") version "0.17.0.0"
+}
+
+vaadin {
+  pnpmEnable = true
 }
 
 val vaadinVersion = "17.0.0"
