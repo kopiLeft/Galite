@@ -37,4 +37,14 @@ interface ActionHandler {
    * @param  action  represents the action to perform.
    */
   fun performAsyncAction(action: Action)
+
+  /**
+   * Performs the appropriate action asynchronously.
+   * You can use this method to perform any operation out of the UI event process
+   *
+   * @param        action                the action to perform.
+   * @param        block                This action should block the UI thread ?
+   */
+  @Deprecated("use method performAsyncAction")
+  fun performAction(action: Action, block: Boolean)
 }

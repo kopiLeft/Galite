@@ -12,20 +12,21 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
+ * License along with this library; if not, write timport java.math.BigIntegero the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 package org.kopi.galite.type
 
-import java.math.BigDecimal
 import java.math.BigInteger
+import java.math.BigDecimal
 
 /**
- * This class represents kopi fixed type
+ * This class represents the not null fixed type
  */
 class NotNullFixed : Fixed {
-  constructor(b: BigDecimal) : super(b) {}
+
+  constructor (b: BigDecimal) : super(b) {}
   constructor(b: BigInteger) : super(b) {}
   constructor(b: BigInteger, l: Int) : super(b) {}
   constructor(value: Long, scale: Int) : super(value, scale) {}
@@ -36,12 +37,13 @@ class NotNullFixed : Fixed {
    * Checks whether this object is equal to the specified object.
    */
   override fun equals(other: Any?): Boolean {
-    TODO("Not yet implemented")
+    return (other is NotNullFixed
+            && super.equals(other))
   }
 
   companion object {
-    fun castToNotNull(value: Fixed): NotNullFixed {
-      TODO("Not yet implemented")
+    fun castToNotNull(value: Fixed?): NotNullFixed {
+      return value as NotNullFixed
     }
   }
 }

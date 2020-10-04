@@ -45,7 +45,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   // ----------------------------------------------------------------------
   private val modelListener = EventListenerList()
   private var extraTitle: String? = null
-  private var display: UWindow? = null
+  private lateinit var display: UWindow
   private var actors: ArrayList<VActor> = arrayListOf()
   private var title: String? = null
   protected var smallIcon: Image? = null
@@ -120,7 +120,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Destroy this class (break all references to help java to GC the form)
    */
-  fun destroyModel() {}
+  open fun destroyModel() {}
 
   /**
    * Informs model, that this action was executed on it.
@@ -137,7 +137,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * Returns the localization source of this window.
    * @return The localization source of this window.
    */
-  protected fun getSource(): String? = null
+  open protected fun getSource(): String? = null
 
   override fun performAsyncAction(action: Action) {
     val listeners = modelListener.listenerList
@@ -166,7 +166,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       // use a 'default listener' that the message is
       // not lost (e.g .because this is happend in the
       // constructor)
-      ApplicationContext.applicationContext.application.notice(message)
+      ApplicationContext.applicationContext.getApplication().notice(message)
     }
   }
 
@@ -183,7 +183,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       // use a 'default listener' that the message is
       // not lost (e.g .because this is happened in the
       // constructor)
-      ApplicationContext.applicationContext.application.error(message)
+      ApplicationContext.applicationContext.getApplication().error(message)
     }
   }
 
@@ -203,7 +203,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
       // use a 'default listener' that the message is
       // not lost (e.g .because this is happend in the
       // constructor)
-      ApplicationContext.applicationContext.application.warn(message)
+      ApplicationContext.applicationContext.getApplication().warn(message)
     }
   }
 
@@ -237,7 +237,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    */
   fun appendToTitle(text: String) {
     extraTitle = text
-    display?.setTitle(getTitle())
+    display.setTitle(getTitle())
   }
 
   /**
@@ -245,7 +245,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    */
   fun setTitle(title: String?) {
     this.title = title
-    display?.setTitle(getTitle())
+    display.setTitle(getTitle())
   }
 
   /**
@@ -271,7 +271,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun setActorEnabled(position: Int, enabled: Boolean) {
     val actor: VActor = getActor(position)
     actor.handler = this
-    actor.setEnabled(enabled)
+    actor.isEnabled = enabled
   }
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -309,7 +309,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   //----------------------------------------------------------------------
   // VMODEL IMPLEMENTATION
   //----------------------------------------------------------------------
-  override fun getDisplay(): UWindow? = display
+  override fun getDisplay(): UWindow = display
 
   override fun setDisplay(display: UComponent) {
     assert(display is UWindow) { "VWindow display should be instance of UWindow" }
@@ -324,7 +324,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * setInformationText
    */
   fun setInformationText(text: String) {
-    display?.setInformationText(text)
+    display.setInformationText(text)
   }
 
   /**
@@ -411,11 +411,15 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   // ----------------------------------------------------------------------
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
-  fun getType(): Int = Constants.MDL_UNKOWN
+  open fun getType(): Int = Constants.MDL_UNKOWN
 
-  fun enableCommands() = f12.setEnabled(true)
+  fun enableCommands() {
+    f12.isEnabled = (true)
+  }
 
-  fun setCommandsEnabled(enable: Boolean) = f12.setEnabled(enable)
+  fun setCommandsEnabled(enable: Boolean) {
+    f12.isEnabled = enable
+  }
 
   /**
    * Performs a void trigger
