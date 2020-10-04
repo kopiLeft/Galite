@@ -189,7 +189,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       if (VKT_Triggers != null && hasTrigger(Constants.TRG_CMDACCESS, index)) {
 
         val active: Boolean = try {
-          (callTrigger(Constants.TRG_CMDACCESS, index) as Boolean)
+          callTrigger(Constants.TRG_CMDACCESS, index) as Boolean
         } catch (e: VException) {
           // trigger call error ==> command is considered as active
           true
@@ -209,6 +209,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   fun setCommandEnabled(command: VCommand, enable: Boolean) {
     command.setEnabled(enable)
+
     if (enable) {
       activeCommands.add(command)
     } else {
