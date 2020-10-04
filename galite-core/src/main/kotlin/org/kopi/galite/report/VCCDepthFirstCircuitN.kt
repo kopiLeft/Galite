@@ -27,12 +27,12 @@ abstract class VCCDepthFirstCircuitN : VCalculateColumn() {
   /**
    * Evaluates nodes
    */
-  override fun evalNode(row: VReportRow, column: Int): Any? =  null
+  override fun evalNode(row: VReportRow, column: Int): Any? = null
 
   /**
    * Evaluates leafs
    */
-  fun evalLeaf(row: VReportRow, column: Int): Any? =  null
+  fun evalLeaf(row: VReportRow, column: Int): Any? = null
 
   /**
    * Add calculated data into the report row

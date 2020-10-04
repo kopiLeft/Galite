@@ -163,6 +163,7 @@ object Triggers {
         } else {
           for (i in 1 until childCount) {
             val child = row.getChildAt(i) as VReportRow
+
             if (value != child.getValueAt(column)) {
               return null
             }
