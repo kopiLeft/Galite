@@ -18,23 +18,18 @@
 
 package org.kopi.galite.chart
 
-import java.io.Serializable
+import org.kopi.galite.type.Date
 
 /**
- * A chart data series includes a dimension and its measures.
- *
- * @param dimension The dimension data for this data series
+ * Represents a date chart column.
+ * @param ident The column identifier.
+ * @param format The date format to be used to format the date value.
  */
-class VDataSeries(val dimension: VDimensionData) : Serializable {
-
-  /**
-   * @return the measures
-   */
-  fun getMeasures(): Array<VMeasureData> = measures.toTypedArray()
-
-  //---------------------------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------------------------
-
-  val measures = mutableListOf<VMeasureData>()
+class VDateDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+  public override fun toString(value: Any?): String =
+          when (value) {
+            null ->     CConstants.EMPTY_TEXT
+            is Date ->  value.toString()
+            else ->     value.toString()
+          }
 }

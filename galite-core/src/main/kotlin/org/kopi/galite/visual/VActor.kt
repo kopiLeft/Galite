@@ -23,14 +23,14 @@ import org.kopi.galite.l10n.ActorLocalizer
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.l10n.MenuLocalizer
 
-class VActor(val menuIdent: String,
+open class VActor(val menuIdent: String,
         // qualified name of menu's source file
-                   private var menuSource: String,
-                   val actorIdent: String,
-                   private val actorSource: String,
-                   val iconName: String?,
-                   val acceleratorKey: Int,
-                   val acceleratorModifier: Int) : VModel {
+                  private var menuSource: String?,
+                  val actorIdent: String,
+                  private val actorSource: String?,
+                  var iconName: String?,
+                  val acceleratorKey: Int,
+                  val acceleratorModifier: Int) : VModel {
 
   /**
    * Checks whether the actor is enabled.
