@@ -32,7 +32,7 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param acceleratorModifier The modifier accelerator key
  */
 class VActor(var menuIdent: String,
-             private val menuSource: String,
+             private val menuSource: String?,
              val actorIdent: String,
              private val actorSource: String,
              var iconName: String?,
