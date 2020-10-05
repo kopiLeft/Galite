@@ -16,37 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.util.lpr
 
-/**
- * An interface that defines printer devices
- *
- * Such printers may be remote printers, local printers, print-to-file, fax
- * mailer or whatever
- */
-interface Printer {
+import java.io.InputStream
 
-  /**
-   * Unique name of the printer in the database which is chosen by the user
-   */
-  fun getPrinterName(): String
+open class LpR(serverHost: String,
+               port: Int,
+               proxyHost: String,
+               queue: String,
+               user: String) {
+  fun close() {
+    TODO()
+  }
 
-  /**
-   * Prints a PrintJob
-   */
-  fun print(data: PrintJob): String
-
-  // ----------------------------------------------------------------------
-  // PRINT OPTIONS
-  // ----------------------------------------------------------------------
+  open fun print(inputStream: InputStream, document: String?) {
+    TODO()
+  }
 
   /**
-   * Sets the tray to use
+   * Sets if the burst page is printed
    */
-  fun selectTray(tray: Int)
-
-  /**
-   * Sets the paper format
-   */
-  fun setPaperFormat(paperFormat: String?)
+  open fun setPrintBurst(printBurst: Boolean) {
+    TODO()
+  }
 }

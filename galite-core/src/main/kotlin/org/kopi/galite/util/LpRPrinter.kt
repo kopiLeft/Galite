@@ -15,8 +15,96 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
-class LpRPrinter {
+import java.io.InputStream
 
+import org.kopi.galite.util.lpr.LpR
+import org.kopi.galite.util.lpr.LpdException
+
+/**
+ * Remote execution client
+ *
+ * Creates a printer that send file to an lpd server
+ */
+class LpRPrinter(private val name: String,
+                 private val serverHost: String,
+                 private val port: Int,
+                 private val proxyHost: String,
+                 private val queue: String,
+                 private val user: String) : Printer {
+
+  override fun getPrinterName(): String {
+    return name
+  }
+
+  /**
+   * Sets the tray to use
+   */
+  override fun selectTray(tray: Int) {
+    this.tray = tray
+  }
+
+  /**
+   * Sets the paper format
+   */
+  override fun setPaperFormat(paperFormat: String?) {
+    this.paperFormat = paperFormat
+  }
+
+  // ----------------------------------------------------------------------
+  // PRINTING WITH AN INPUTSTREAM
+  // ----------------------------------------------------------------------
+
+  override fun print(data: PrintJob): String {
+    val lpr = LprImpl(data)
+    return lpr.print()
+  }
+
+  private inner class LprImpl(data: PrintJob) : LpR(serverHost,
+                                                    port,
+                                                    proxyHost,
+                                                    queue,
+                                                    user) {
+    fun print(): String {
+      try {
+        if (data.title != null) {
+          data.title = data.title
+        }
+        print(data.getInputStream(), null)
+        close()
+      } catch (e: LpdException) {
+        throw PrintException(e.message!!, PrintException.EXC_UNKNOWN)
+      }
+      return "not yet implemented"
+    }
+
+    protected fun readFully(inputStream: InputStream): ByteArray {
+      val size = inputStream.available()
+      val data = ByteArray(size)
+      var count = 0
+      while (count < size) {
+        count += inputStream.read(data, count, size - count)
+      }
+      inputStream.close()
+      return data
+    }
+
+    private val data: PrintJob
+
+    init {
+      setPrintBurst(false)
+      this.data = data
+    }
+  }
+
+  private var tray = 0
+  private var paperFormat: String? = null
+
+  init {
+    //    setNumberOfCopies(1);
+    selectTray(1) // Standard tray (see common/MAKEDB/dbSchema)
+    setPaperFormat(null)
+  }
 }

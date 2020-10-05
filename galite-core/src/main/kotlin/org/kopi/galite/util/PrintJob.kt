@@ -43,8 +43,8 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
   constructor(dataStream: InputStream, format: Rectangle) : this(writeToFile(dataStream), true, format)
 
   // properties
-  var title: String = ""
-  lateinit var media: String
+  var title: String? = ""
+  var media: String? = null
   var documentType = 0
   var dataType: Int = DAT_PS
   var numberCopy: Int = 1

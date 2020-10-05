@@ -15,8 +15,86 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
-class IPPPrinter {
+import org.kopi.galite.util.ipp.IPPClient
 
+/**
+ * IPP printer
+ *
+ * Represents an IPP Printer
+ *
+ * @param host the IPP server host
+ * @param port the IPP server port
+ *
+ * @param printer the name of the IPP printer
+ * @param user the name of the printer user
+ * @param attributesForMedia a list of String[2] with the correspondence
+ * between media and IPP attributes for this printer.
+ */
+class IPPPrinter(name: String,
+                private val host: String,
+                private val port: Int,
+                private val printer: String,
+                private val user: String,
+                private val attributesForMedia: List<*>)
+      : AbstractPrinter(name), Printer {
+
+  // --------------------------------------------------------------------
+  // ACCESSORS
+  // --------------------------------------------------------------------
+
+  fun getMediaTypes(): List<*>{
+      val client = IPPClient(host, port.toShort(), printer, user)
+      return client.getMediaTypes()
+    }
+
+  /**
+   * Set a given media for the printer.
+   * Choose de attributes associated with this attribute for this printer.
+   *
+   * @return true if the attribute is supported by this printer.
+   */
+  private fun getAttributes(media: String?): Array<String>? {
+    return if (media == null) {
+      null
+    } else {
+      val it = attributesForMedia.iterator()
+      while (it.hasNext()) {
+        val att = it.next() as Array<String?>
+        if (att.size == 2 && att[0] == media) {
+          return if (att[1] == null) null else att[1]!!.split(" ").toTypedArray()
+        }
+      }
+      null
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // PRINTING WITH AN INPUTSTREAM
+  // ----------------------------------------------------------------------
+
+  /**
+   * Print a file and return the output of the command
+   */
+  override fun print(data: PrintJob): String {
+    val ippClient = IPPClient(host, port.toShort(), printer, user)
+    ippClient.print(data.getInputStream(),
+            data.numberCopy,
+            if (data.media == null) null else getAttributes(data.media))
+    return "IPP Print"
+  }
+
+  override fun selectTray(tray: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setPaperFormat(paperFormat: String?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getPrinterName(): String {
+    TODO("Not yet implemented")
+  }
 }
