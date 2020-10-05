@@ -40,11 +40,12 @@ class VList(val ident: String,
             val source: String,
             val newForm: String,
             val columns: Array<VListColumn>,
-            val table: Int =0,
+            val table: Int = 0,
             val action: Int = 0,
-            val autocompleteType: Int =0,
-            val autocompleteLength: Int=0,
-            val hasShortcut: Boolean)  : VConstants, Serializable {
+            val autocompleteType: Int = 0,
+            val autocompleteLength: Int = 0,
+            val hasShortcut: Boolean)
+  : VConstants, Serializable {
 
 
   /**
@@ -80,9 +81,9 @@ class VList(val ident: String,
     }
   }
 
-companion object{
-  val AUTOCOMPLETE_NONE = 0
-  val AUTOCOMPLETE_STARTSWITH = 1
-  val AUTOCOMPLETE_CONTAINS = 2
-}
+  companion object {
+    val AUTOCOMPLETE_NONE = 0
+    val AUTOCOMPLETE_STARTSWITH = 1
+    val AUTOCOMPLETE_CONTAINS = 2
+  }
 }

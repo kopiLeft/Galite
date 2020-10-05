@@ -18,10 +18,11 @@
 
 package org.kopi.galite.form
 
+import kotlin.reflect.KClass
+
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VlibProperties
-import kotlin.reflect.KClass
 
 /**
  * An actor field is a special field that does not handle
@@ -37,91 +38,39 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
 
-  /**
-   * @Override
-   */
   override fun checkText(s: String): Boolean = true
 
-  /**
-   * @Override
-   */
   override fun checkType(rec: Int, s: Any) {
   }
 
-  /**
-   * @Override
-   */
   override fun getDataType(): KClass<*> = Unit::class
 
-  /**
-   * @Override
-   */
   override fun getListColumn(): VListColumn? = null
 
-  /**
-   * @Override
-   */
   override fun setNull(r: Int) {}
 
-  /**
-   * @Override
-   */
   override fun setObject(r: Int, v: Any) {
-    TODO()
   }
 
-  /**
-   * @Override
-   */
   override fun retrieveQuery(query: Query, column: Int): Any? = null
 
-  /**
-   * @Override
-   */
   override fun isNullImpl(r: Int): Boolean = false
 
-  /**
-   * @Override
-   */
   override fun getObjectImpl(r: Int): Any? = null
 
-  /**
-   * @Override
-   */
   override fun toText(o: Any): String? = null
 
-  /**
-   * @Override
-   */
   override fun toObject(s: String): Any? = null
 
-  /**
-   * @Override
-   */
   override fun getTextImpl(r: Int): String? = null
 
-  /**
-   * @Override
-   */
   override fun getSqlImpl(r: Int): String? = null
 
-  /**
-   * @Override
-   */
   override fun copyRecord(f: Int, t: Int) {}
 
-  /**
-   * @Override
-   */
   override fun getTypeInformation(): String = VlibProperties.getString("actor-type-field")
 
-  /**
-   * @Override
-   */
   override fun getTypeName(): String = VlibProperties.getString("Actor")
 
-  /**
-   * @Override
-   */
   override fun getType(): Int = MDL_FLD_ACTOR
 }

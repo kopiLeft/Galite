@@ -18,16 +18,16 @@
 
 package org.kopi.galite.list
 
-import org.kopi.galite.l10n.ListLocalizer
 import kotlin.reflect.KClass
 
+import org.kopi.galite.l10n.ListLocalizer
 
 abstract class VListColumn(var title: String,
                            val column: String,
                            private val align: Int,
                            val width: Int,
                            val isSortAscending: Boolean)
-  : VConstants, ObjectFormatter {
+               : VConstants, ObjectFormatter {
 
   override fun getAlign(): Int {
     return align

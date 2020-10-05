@@ -20,6 +20,8 @@ package org.kopi.galite.form
 
 import java.util.StringTokenizer
 
+import kotlin.reflect.KClass
+
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
@@ -28,8 +30,6 @@ import org.kopi.galite.type.NotNullDate
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
-
-import kotlin.reflect.KClass
 
 class VDateField : VField(10, 1) {
 
@@ -49,16 +49,12 @@ class VDateField : VField(10, 1) {
   /**
    * return the name of this field
    */
-  override fun getTypeInformation(): String {
-    return VlibProperties.getString("date-type-field")
-  }
+  override fun getTypeInformation(): String = VlibProperties.getString("date-type-field")
 
   /**
    * return the name of this field
    */
-  override fun getTypeName(): String {
-    return VlibProperties.getString("Date")
-  }
+  override fun getTypeName(): String = VlibProperties.getString("Date")
 
   fun isNumeric(): Boolean = true
 
@@ -94,6 +90,7 @@ class VDateField : VField(10, 1) {
    */
   override fun checkType(rec: Int, o: Any) {
     val s = o as String
+
     if (s == "") {
       setNull(rec)
     } else {
@@ -106,10 +103,12 @@ class VDateField : VField(10, 1) {
     var month = 0
     var year = -2
     val tokens = StringTokenizer(s, "/.#")
+
     if (!tokens.hasMoreTokens()) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
     }
     day = stringToInt(tokens.nextToken())
+
     if (tokens.hasMoreTokens()) {
       month = stringToInt(tokens.nextToken())
     }
@@ -293,6 +292,7 @@ class VDateField : VField(10, 1) {
    */
   override fun copyRecord(f: Int, t: Int) {
     val oldValue = value[t]
+
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
@@ -318,9 +318,7 @@ class VDateField : VField(10, 1) {
   /**
    * Returns a string representation of a date value wrt the field type.
    */
-  fun formatDate(value: Date): String {
-    return Companion.toText(value)
-  }
+  fun formatDate(value: Date): String = Companion.toText(value)
 
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
@@ -338,51 +336,22 @@ class VDateField : VField(10, 1) {
     }
   }
 
-  private fun isLeapYear(year: Int): Boolean {
-    return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
-  }
+  private fun isLeapYear(year: Int): Boolean = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
 
-  private fun isDateChar(c: Char): Boolean {
-    return c in '0'..'9' || c == '.' || c == '/'
-  }
-  // REPLACED BY fillField
-  //   /**
-  //    * autofill
-  //    * @exception	org.kopi.galite.visual.VException	an exception may occur in gotoNextField
-  //    */
-  //   public void autofill(boolean showDialog, boolean gotoNextField) throws VException {
-  //     if (list != null) {
-  //       super.autofill(showDialog, gotoNextField);
-  //     } else {
-  //       boolean force = false;
-  //       try {
-  // 	String	text = (String)getDisplayedValue();
-  // 	checkType(text);
-  // 	force = text == null || getText() == null || getText().equals("") || (!text.equals(getText()));
-  //       } catch (Exception e) {
-  // 	force = true;
-  //       }
-  //       if (!showDialog || force) {
-  // 	setDate(Date.now());
-  //       } else {
-  // 	setDate(DateChooser.getDate(getForm().getDisplay(), getDisplay(), getDate()));
-  //       }
-  //       if (gotoNextField) {
-  // 	getBlock().gotoNextField();
-  //       }
-  //     }
-  //   }
+  private fun isDateChar(c: Char): Boolean = c in '0'..'9' || c == '.' || c == '/'
 
   /**
    * autofill
    * @exception    org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
-  override fun fillField(handler: PredefinedValueHandler): Boolean {
-    val record: Int = block.activeRecord
+  override fun fillField(handler: PredefinedValueHandler?): Boolean {
+    val record = block.activeRecord
+
     return if (list != null) {
       super.fillField(handler)
     } else {
       var force = false
+
       force = try {
         val oldText = getDisplayedValue(true) as String
         checkType(oldText)
@@ -410,6 +379,7 @@ class VDateField : VField(10, 1) {
    */
   override fun enumerateValue(desc: Boolean) {
     val record = block.activeRecord
+
     when {
       list != null -> {
         super.enumerateValue(desc)

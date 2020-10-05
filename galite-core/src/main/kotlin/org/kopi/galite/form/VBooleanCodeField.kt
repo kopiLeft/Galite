@@ -33,13 +33,30 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param     names           the names of the fields
  * @param     codes           the codes of the fields
  */
-open class VBooleanCodeField(ident: String,
-                             source: String,
-                             names: Array<String>,
-                             private var codes: Array<Boolean>)
-           : VCodeField(ident,
-                        source,
-                        names) {
+open class VBooleanCodeField : VCodeField {
+
+  constructor (
+          ident: String,
+          source: String,
+          names: Array<String>,
+          codes: Array<Boolean?>,
+  ) : super(ident, source, names){
+
+    this.codes = codes
+  }
+
+  constructor(
+          ident: String,
+          source: String,
+          names: Array<String>,
+          codes: BooleanArray,
+  ) : super(ident, source, names){
+
+    this.codes = arrayOfNulls(codes.size)
+    for (i in codes.indices) {
+      this.codes[i] = codes[i]
+    }
+  }
   /*
    * ----------------------------------------------------------------------
    * Interface Display
@@ -50,7 +67,7 @@ open class VBooleanCodeField(ident: String,
    * Returns a list column for list.
    */
   override fun getListColumn(): VListColumn {
-    return VBooleanCodeColumn(getHeader(), null, getLabels(), codes, getPriority() >= 0)
+    return VBooleanCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
   }
 
   /*
@@ -75,7 +92,7 @@ open class VBooleanCodeField(ident: String,
         i++
       }
       if (code == -1) {
-        throw InconsistencyException("bad code value " + v + "field " + name)
+        throw InconsistencyException("bad code value $v field $name")
       }
       setCode(r, code)
     }
@@ -116,9 +133,7 @@ open class VBooleanCodeField(ident: String,
   /**
    * Returns the field value of the current record as an object
    */
-  override fun getObjectImpl(r: Int): Any? {
-    return getBoolean(r)
-  }
+  override fun getObjectImpl(r: Int): Any? = getBoolean(r)
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -127,7 +142,7 @@ open class VBooleanCodeField(ident: String,
     return if (value[r] == -1) {
       "NULL"
     } else {
-      if (codes[value[r]]) "{fn TRUE}" else "{fn FALSE}"
+      if (codes[value[r]]!!) "{fn TRUE}" else "{fn FALSE}"
     }
   }
 
@@ -155,8 +170,9 @@ open class VBooleanCodeField(ident: String,
       i++
     }
     if (code == -1) {
-      throw InconsistencyException("bad code value " + value + "field " + name)
+      throw InconsistencyException("bad code value $value field $name")
     }
     return formatCode(code)
   }
+  private var codes : Array<Boolean?>
 }

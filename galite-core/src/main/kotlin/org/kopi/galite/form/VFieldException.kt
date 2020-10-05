@@ -28,23 +28,9 @@ import org.kopi.galite.visual.VExecFailedException
  * @param    newValue    the new value for the field
  */
 class VFieldException(val field: VField,
-                      message: String?,
-                      private val newValue: Any?)
+                      message: String? = null,
+                      private val newValue: Any? = null)
   : VExecFailedException(message) {
-  /**
-   * Constructs an exception with no message.
-   *
-   * @param    field        the field that has not a correct value
-   */
-  constructor(field: VField) : this(field, null, null) {}
-
-  /**
-   * Constructs an exception with a message.
-   *
-   * @param    field        the field that has not a correct value
-   * @param    message        the associated message
-   */
-  constructor(field: VField, message: String?) : this(field, message, null) {}
 
   /**
    * Returns the field where the error occure

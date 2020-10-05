@@ -18,8 +18,9 @@
 
 package org.kopi.galite.list
 
-import org.kopi.galite.list.VConstants.Companion.ALG_LEFT
 import kotlin.reflect.KClass
+
+import org.kopi.galite.list.VConstants.Companion.ALG_LEFT
 
 /**
  * Represents a list column.

@@ -20,12 +20,10 @@ package org.kopi.galite.form
 
 import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VList
-import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
-
 
 /**
  *
@@ -34,9 +32,9 @@ import org.kopi.galite.visual.VlibProperties
  * @param     idents          an array of identifiers identifying each code value
  */
 abstract class VCodeField(val type: String,
-                          open val source: String,
+                          val source: String,
                           val idents: Array<String>)
-               : VField(1, 1) {
+  : VField(1, 1) {
 
   /**
    *
@@ -77,14 +75,6 @@ abstract class VCodeField(val type: String,
     super.helpOnType(help, if (this is VBooleanField) null else labels)
   }
 
-
-  /**
-   * return the name of this field
-   */
-  fun getLabels(): Array<String> {
-    return labels
-  }
-
   /*
    * ----------------------------------------------------------------------
    * Interface Display
@@ -96,6 +86,7 @@ abstract class VCodeField(val type: String,
    */
   override fun checkText(s: String): Boolean {
     val s = s.toLowerCase()
+
     for (i in labels.indices) {
       if (labels[i].toLowerCase().startsWith(s)) {
         return true
@@ -106,10 +97,11 @@ abstract class VCodeField(val type: String,
 
   /**
    * verify that value is valid (on exit)
-   * @exception	org.kopi.galite.visual.VException	an exception is raised if text is bad
+   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, o: Any) {
     var s = o as String
+
     if (s == "") {
       setNull(rec)
     } else {
@@ -119,8 +111,10 @@ abstract class VCodeField(val type: String,
        * -2:  two (or more) matches: cannot choose
        */
       var found = -1
+
       s = s.toLowerCase()
       var i = 0
+
       while (found != -2 && i < labels.size) {
         if (labels[i].toLowerCase().startsWith(s)) {
           if (labels[i].toLowerCase() == s) {
@@ -145,6 +139,7 @@ abstract class VCodeField(val type: String,
           var count: Int = 0
           run {
             var i = 0
+
             while (i < labels.size) {
               if (labels[i].toLowerCase().startsWith(s)) {
                 count++
@@ -155,6 +150,7 @@ abstract class VCodeField(val type: String,
           codes = arrayOfNulls(count)
           selectedToModel = IntArray(count)
           var j = 0
+
           while (i < labels.size) {
             if (labels[i].toLowerCase().startsWith(s)) {
               codes[j] = codes[i]
@@ -163,7 +159,7 @@ abstract class VCodeField(val type: String,
             }
             i++
           }
-          listDialog = VListDialog(arrayOf<VListColumn>(getListColumn()!!), arrayOf(codes))
+          listDialog = VListDialog(arrayOf(getListColumn()!!), arrayOf(codes))
           selected = listDialog.selectFromDialog(getForm(), null, this)
           if (selected != -1) {
             setCode(rec, selectedToModel[selected])
@@ -176,10 +172,11 @@ abstract class VCodeField(val type: String,
     }
   }
 
-  override fun fillField(handler: PredefinedValueHandler): Boolean {
+  override fun fillField(handler: PredefinedValueHandler?): Boolean {
     if (handler != null) {
-      val selected= handler.selectFromList(arrayOf<VListColumn>(getListColumn()!!), arrayOf(getCodes()),
+      val selected = handler.selectFromList(arrayOf(getListColumn()!!), arrayOf(getCodes()),
               labels)
+
       if (selected != null) {
         /*
          * -1:  no match
@@ -188,6 +185,7 @@ abstract class VCodeField(val type: String,
          */
         var found = -1
         var i = 0
+
         while (found != -2 && i < labels.size) {
           if (labels[i] == selected) {
             found = if (found == -1) {
@@ -209,17 +207,17 @@ abstract class VCodeField(val type: String,
   /**
    * return true if this field implements "enumerateValue"
    */
-  fun hasNextPreviousEntry(): Boolean {
-    return true
-  }
+  fun hasNextPreviousEntry(): Boolean = true
 
   /**
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
     var desc = desc
+
     desc = if (!getListColumn()!!.isSortAscending) desc else !desc
     var pos = value[block.activeRecord]
+
     if (pos == -1 && desc) {
       pos = labels.size
     }
@@ -250,7 +248,7 @@ abstract class VCodeField(val type: String,
   // ----------------------------------------------------------------------
 
   /**
-   * Returns the array of getCodes().
+   * Returns the array of codes.
    */
   abstract fun getCodes(): Array<Any>
 
@@ -314,7 +312,7 @@ abstract class VCodeField(val type: String,
     throw InconsistencyException()
   }
 
-  override fun toText(o: Any): String? {
+  override fun toText(o: Any): String {
     for (i in getCodes().indices) {
       if (getCodes()[i] == o) {
         return labels[i]
@@ -335,9 +333,8 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String {
-    return if (value[r] == -1) "" else labels[value[r]]
-  }
+  override fun getTextImpl(r: Int): String = if (value[r] == -1) ""
+  else labels[value[r]]
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -349,6 +346,7 @@ abstract class VCodeField(val type: String,
    */
   override fun copyRecord(f: Int, t: Int) {
     val oldValue: Int = value[t]
+
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
@@ -402,6 +400,7 @@ abstract class VCodeField(val type: String,
    */
   protected fun localize(parent: FieldLocalizer) {
     val loc = parent.manager.getTypeLocalizer(source, type)
+
     for (i in labels.indices) {
       labels[i] = loc.getCodeLabel(idents[i])
     }
@@ -412,11 +411,12 @@ abstract class VCodeField(val type: String,
   /**
    * represents the name of this field
    */
-  private lateinit var labels: Array<String>
+  lateinit var labels: Array<String>
+    private set
 
   // dynamic data
-  protected lateinit var value // -1: null
-          : IntArray
+  protected lateinit var value: IntArray // -1: null
+
 
   companion object {
     // --------------------------------------------------------------------
@@ -424,6 +424,7 @@ abstract class VCodeField(val type: String,
     // --------------------------------------------------------------------
     private fun getMaxWidth(labels: Array<String>): Int {
       var res = 0
+
       for (i in labels.indices) {
         res = Math.max(labels[i].length, res)
       }
