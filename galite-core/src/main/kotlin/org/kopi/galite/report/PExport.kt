@@ -177,7 +177,7 @@ abstract class PExport(val table: UTable,
   internal fun formatMonthColumn(column: VReportColumn, index: Int) {}
   internal fun formatWeekColumn(column: VReportColumn, index: Int) {}
   internal fun formatFixedColumn(column: VReportColumn, index: Int) {}
-  protected fun formatIntegerColumn(column: VReportColumn, index: Int) {}
+  fun formatIntegerColumn(column: VReportColumn, index: Int) {}
   internal fun formatBooleanColumn(column: VReportColumn, index: Int) {}
   internal fun formatTimeColumn(column: VReportColumn, index: Int) {}
   internal fun formatTimestampColumn(column: VReportColumn, index: Int) {}

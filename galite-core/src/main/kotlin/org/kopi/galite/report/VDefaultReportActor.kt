@@ -17,4 +17,35 @@
  */
 package org.kopi.galite.report
 
-class VDefaultReportActor 
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VlibProperties
+
+class VDefaultReportActor(menuIdent: String,
+                          actorIdent: String,
+                          iconName: String,
+                          acceleratorKey: Int,
+                          acceleratorModifier: Int)
+      : VActor(menuIdent,
+              null,
+               actorIdent,
+              null,
+              null,
+               acceleratorKey,
+               acceleratorModifier) {
+
+  // ----------------------------------------------------------------------
+  // LOCALIZATION
+  // ----------------------------------------------------------------------
+
+  private fun localize() {
+    menuName = VlibProperties.getString(menuIdent)
+    menuItem = VlibProperties.getString(actorIdent)
+    help = VlibProperties.getString("$actorIdent-help")
+  }
+
+  init {
+    this.iconName = iconName
+    localize()
+  }
+}
+

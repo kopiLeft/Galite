@@ -15,6 +15,49 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-class VStringColumn 
+/**
+ * Represents a report column description
+ *
+ * @param     ident           The column ident
+ * @param     options         The column options as bitmap
+ * @param     align           The column alignment
+ * @param     groups          The index of the column grouped by this one or -1
+ * @param     function        An (optional) summation function
+ */
+class VStringColumn(ident: String,
+                    options: Int,
+                    align: Int,
+                    groups: Int,
+                    function: VCalculateColumn,
+                    width: Int,
+                    height: Int,
+                       format: VCellFormat)
+     : VReportColumn(ident,
+                     options,
+                     align,
+                     groups,
+                     function,
+                     width,
+                     height,
+                     format) {
+
+   /**
+   * Compare two objects.
+   *
+   * @param    o1    the first operand of the comparison
+   * @param    o2    the second operand of the comparison
+   * @return    -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  override fun compareTo(o1: Any, o2: Any): Int {
+    return (o1 as String).compareTo((o2 as String?)!!)
+  }
+
+  override fun formatColumn(exporter: PExport, index: Int) {
+    exporter.formatStringColumn(this, index)
+  }
+}

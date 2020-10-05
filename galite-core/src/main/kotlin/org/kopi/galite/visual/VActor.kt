@@ -24,11 +24,11 @@ import org.kopi.galite.l10n.LocalizationManager
 /**
  * Represents an actor.
  */
-class VActor(
+open class VActor(
         val menuIdent: String,
-        private val menuSource: String,
+        private val menuSource: String?,
         val actorIdent: String,
-        private val actorSource: String,
+        private val actorSource: String?,
         var iconName: String?,
         val acceleratorKey: Int,
         val acceleratorModifier: Int) : VModel {
@@ -59,4 +59,15 @@ class VActor(
 
   var number: Int? = null
   var handler: ActionHandler? = null
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  var menuName: String? = null
+  var menuItem: String? = null
+
+  private val display: UActor? = null
+  var help: String? = null
+
 }
