@@ -16,14 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.tests.list
 
-import kotlin.reflect.KClass
+import org.junit.Test
+import org.kopi.galite.list.VStringColumn
 
-class VIntegerColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
-        VListColumn(title, column, align, width, sortAscending) {
+import kotlin.test.assertEquals
 
-  override fun getDataType(): KClass<*> {
-    return Integer::class
+class VStringColumnTests {
+
+  @Test
+  fun vStringColumnTests() {
+    val vStringColumn = VStringColumn("title", "column", 1, 2, true)
+
+    assertEquals("", vStringColumn.formatObject(null))
+    assertEquals("St...ring", vStringColumn.formatObject("String"))
+    assertEquals(String::class, vStringColumn.getDataType())
   }
 }
