@@ -15,25 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.list
 
-import kotlin.reflect.KClass
+package org.kopi.galite.print
 
-import org.kopi.galite.type.Week
+import org.kopi.galite.util.Printer
+import org.kopi.galite.visual.VWindow
 
-/**
- * Represents a list column.
- */
-class VWeekColumn(title: String,
-                  column: String,
-                  sortAscending: Boolean)
-    : VListColumn(title,
-                  column,
-                  VConstants.ALG_LEFT,
-                  7,
-                  sortAscending) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Week::class
+interface PrintManager {
+  /**
+   * Handle printing
+   * @param    parent    the form that initiate the printing process
+   * @param    report    the report to print
+   * @param     copies  the number of copies to print
+   * @param    printer    an optional default printer
+   * @param    fax    an optional default fax number
+   * @param    mail    an optional default mail address
+   */
+  fun print(parent: VWindow,
+            report: Printable,
+            copies: Int,
+            printer: Printer,
+            fax: String,
+            mail: String)
 }

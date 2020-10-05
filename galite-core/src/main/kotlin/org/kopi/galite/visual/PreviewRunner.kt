@@ -17,4 +17,6 @@
  */
 package org.kopi.galite.visual
 
-interface PreviewRunner 
+class PreviewRunner {
+//TODO()
+}

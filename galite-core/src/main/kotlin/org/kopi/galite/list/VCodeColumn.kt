@@ -18,24 +18,29 @@
 
 package org.kopi.galite.list
 
-import org.kopi.galite.list.VConstants.Companion.ALG_LEFT
-
 /**
  * Represents a list column.
  */
-abstract class VCodeColumn(title: String,
-                           column: String,
-                           names: Array<String>,
-                           sortAscending: Boolean)
-               : VListColumn(title,
-                                        column,
-                                        ALG_LEFT,
-                                        org.kopi.galite.list.VCodeColumn.getMaxWidth(names),
-                                        sortAscending) {
-companion object {
-  private fun getMaxWidth(names: Array<String>):Int
-  {
-    TODO()
+abstract class VCodeColumn(
+        title: String,
+        column: String,
+        protected var names: Array<String>,
+        sortAscending: Boolean
+) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {
+  /**
+   * Returns a string representation of value
+   */
+  override fun formatObject(value: Any?): Any = when (value) {
+    null -> VConstants.EMPTY_TEXT
+    else -> names[getObjectIndex(value)]
   }
-}
+
+  /**
+   * Returns the indexOf given object
+   */
+  protected abstract fun getObjectIndex(value: Any): Int
+
+  companion object {
+    private fun getMaxWidth(names: Array<String>): Int = names.maxByOrNull { it.length }?.length ?: 0
+  }
 }

@@ -17,4 +17,24 @@
  */
 package org.kopi.galite.list
 
-class VMonthColumn 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.type.Month
+
+/**
+ * Represents a list column.
+ */
+class VMonthColumn(title: String,
+                   column: String,
+                   sortAscending:
+                   Boolean)
+      : VListColumn(title,
+                    column,
+                    VConstants.ALG_LEFT,
+                    7,
+                    sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  override fun getDataType(): KClass<*> = Month::class
+}
