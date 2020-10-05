@@ -19,7 +19,5 @@
 package org.kopi.galite.visual
 
 object VlibProperties {
-  fun getString(key: String): String {
-    TODO()
-  }
+    fun getString(string: String): String = TODO()
 }
