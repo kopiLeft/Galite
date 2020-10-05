@@ -39,7 +39,7 @@ class VFixnumColumn(ident: String,
                     groups: Int,
                     function: VCalculateColumn,
                     digits: Int,
-                    private var maxScale: Int,
+                    maxScale: Int,
                     format: VCellFormat?)
   : VReportColumn(ident,
                   options,
@@ -89,10 +89,6 @@ class VFixnumColumn(ident: String,
     exporter.formatFixedColumn(this, index)
   }
 
-  fun getMaxScale(): Int {
-    return maxScale
-  }
-
   /*
    * Sets display scale to maxScale
    * all values will be set to the same scale
@@ -116,5 +112,7 @@ class VFixnumColumn(ident: String,
   // DATA MEMBERS
   // --------------------------------------------------------------------
   var formula: String? = null
+  var maxScale: Int=0
+    private set
 
 }
