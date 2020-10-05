@@ -67,7 +67,7 @@ class LocalizationManager(val locale: Locale, private val defaultLocale: Locale)
    * @param     source          the source qualified name
    * @param     name            the identifier of the menu
    */
-  fun getMenuLocalizer(source: String, name: String): MenuLocalizer {
+  fun getMenuLocalizer(source: String?, name: String): MenuLocalizer {
     return MenuLocalizer(getDocument(source), name)
   }
 
@@ -153,7 +153,7 @@ class LocalizationManager(val locale: Locale, private val defaultLocale: Locale)
    *
    * @param     source          the source qualified name
    */
-  private fun getDocument(source: String): Document {
+  private fun getDocument(source: String?): Document {
     if (!documents.containsKey(source)) {
       documents[source] = loadDocument(source)
     }
@@ -165,12 +165,12 @@ class LocalizationManager(val locale: Locale, private val defaultLocale: Locale)
    *
    * @param     source          the qualified name of the document.
    */
-  private fun loadDocument(source: String): Document {
+  private fun loadDocument(source: String?): Document {
     var fileName: String
     var document: Document
-    val builder: SAXBuilder = SAXBuilder()
+    val builder = SAXBuilder()
 
-    fileName = source.replace('.', '/') + "-" + locale.toString() + ".xml"
+    fileName = source!!.replace('.', '/') + "-" + locale.toString() + ".xml"
     try {
       document = builder.build(LocalizationManager::class.java.classLoader.getResourceAsStream(fileName))
     } catch (localeException: Exception) {
