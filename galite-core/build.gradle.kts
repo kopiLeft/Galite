@@ -26,6 +26,7 @@ val jdomVersion = "2.0.5"
 val apachePoi = "4.1.2"
 val apacheOoxml ="3.9"
 val graphbuilder ="1.02"
+val ibmVersion ="58.2"
 
 dependencies {
   // Exposed dependencies
@@ -53,4 +54,7 @@ dependencies {
 
   // Graphbuilder dependency
   implementation("com.github.virtuald", "curvesapi", graphbuilder)
+
+  // Ibm dependency
+  implementation("com.ibm.icu", "icu4j", ibmVersion)
 }

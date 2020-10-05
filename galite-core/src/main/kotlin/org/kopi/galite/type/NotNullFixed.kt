@@ -19,14 +19,15 @@
 package org.kopi.galite.type
 
 import java.math.BigInteger
-import java.math.BigDecimal
+
+import com.ibm.icu.math.BigDecimal
 
 /**
- * This class represents the not null fixed type
+ * This class represents kopi fixed type
  */
 class NotNullFixed : Fixed {
-
-  constructor (b: BigDecimal) : super(b) {}
+  constructor(b: BigDecimal) : super(b) {}
+  constructor (b: java.math.BigDecimal) : super(b) {}
   constructor(b: BigInteger) : super(b) {}
   constructor(b: BigInteger, l: Int) : super(b) {}
   constructor(value: Long, scale: Int) : super(value, scale) {}

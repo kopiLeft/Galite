@@ -20,23 +20,31 @@ package org.kopi.galite.type
 
 import java.util.Locale
 import java.math.BigInteger
-import java.math.BigDecimal
-import java.math.MathContext
 
+import com.ibm.icu.math.BigDecimal
+import com.ibm.icu.math.MathContext
 
 /**
  * This class represents the fixed type
  */
 open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
 
+  /*package*/
+  internal constructor (b: java.math.BigDecimal?) : this(BigDecimal(b)) {}
+
+  /*package*/
   internal constructor(b: BigInteger?) : this(BigDecimal(b)) {}
 
+  /*package*/
   internal constructor(b: BigInteger?, l: Int) : this(BigDecimal(b)) {}
 
+  /*package*/
   internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale)) {}
 
+  /*package*/
   internal constructor(d: Double) : this(BigDecimal(d)) {}
 
+  /*package*/
   internal constructor(s: String?) : this(BigDecimal(s)) {}
   // ----------------------------------------------------------------------
   // DEFAULT OPERATIONS
@@ -45,21 +53,26 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
    * add
    */
   fun add(f: NotNullFixed): NotNullFixed {
-    TODO()
+    if (value!!.compareTo(BigDecimal.ZERO) == 0) {
+      return f
+    } else if ((f as Fixed).value?.compareTo(BigDecimal.ZERO) == 0) {
+      return NotNullFixed(value!!)
+    }
+    return NotNullFixed(value!!.add((f as Fixed).value, MATH_CONTEXT))
   }
 
   /**
    * divide
    */
   fun divide(f: NotNullFixed): NotNullFixed {
-    TODO()
+    return NotNullFixed(value!!.divide((f as Fixed).value, DIV_CONTEXT).plus(MATH_CONTEXT))
   }
 
   /**
    * multiply
    */
   fun multiply(f: NotNullFixed): NotNullFixed {
-    TODO()
+    return NotNullFixed(value!!.multiply((f as Fixed).value, MATH_CONTEXT))
   }
 
   /**
@@ -255,8 +268,8 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
     // ----------------------------------------------------------------------
     // DATA MEMBERS
     // ----------------------------------------------------------------------
-    private val MATH_CONTEXT: MathContext = TODO()
-    private val DIV_CONTEXT: Any = TODO()
+    private val MATH_CONTEXT: MathContext = MathContext(0, MathContext.PLAIN)
+    private val DIV_CONTEXT: MathContext = MathContext(30, MathContext.SCIENTIFIC, false, MathContext.ROUND_HALF_UP)
 
     // ----------------------------------------------------------------------
     // CONSTANTS
@@ -264,7 +277,6 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
     val DEFAULT: NotNullFixed = NotNullFixed(0.0)
   }
 
-  /*package*/
   init {
     value = b
   }
