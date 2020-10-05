@@ -23,7 +23,7 @@ import java.io.Serializable
 /**
  * A chart data series includes a dimension and its measures.
  *
- * @param dimension The dimension data for this data series
+ * @param dimension the dimension data for this data series
  */
 class VDataSeries(val dimension: VDimensionData) : Serializable {
 

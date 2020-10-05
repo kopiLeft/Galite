@@ -48,6 +48,7 @@ abstract class VCodeDimension(ident: String,
    * @return The index.of given object
    */
   protected abstract fun getIndex(value: Any?): Int
+
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
