@@ -47,7 +47,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   private var extraTitle: String? = null
   private var display: UWindow? = null
   private var actors: ArrayList<VActor> = arrayListOf()
-  protected var windowTitle: String? = null
+  protected lateinit var windowTitle: String
   protected var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
@@ -146,12 +146,11 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
 
   override fun performAsyncAction(action: Action) {
     val listeners = modelListener.listenerList
-    var i = listeners.size - 2
-    while (i >= 0) {
+
+    for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] == VActionListener::class.java) {
         (listeners[i + 1] as VActionListener).performAsyncAction(action)
       }
-      i -= 2
     }
   }
 
@@ -217,10 +216,11 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    */
   fun ask(message: String, yesIsDefault: Boolean = false): Boolean {
     val listeners = modelListener.listenerList
-    var i = listeners.size - 2
-    while (i >= 0) {
+
+    for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] == MessageListener::class.java) {
-        var value = (listeners[i + 1] as MessageListener).ask(message, yesIsDefault)
+        val value = (listeners[i + 1] as MessageListener).ask(message, yesIsDefault)
+
         when (value) {
           MessageListener.AWR_YES -> return true
           MessageListener.AWR_NO -> return false
@@ -230,27 +230,26 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
           }
         }
       }
-      i -= 2
     }
     return false
   }
 
-  open fun getTitle(): String? = windowTitle + if (extraTitle != null) " $extraTitle" else ""
+  open fun getTitle(): String = windowTitle + if (extraTitle != null) " $extraTitle" else ""
 
   /**
    * Sets a the text to be appended to the title.
    */
   fun appendToTitle(text: String) {
     extraTitle = text
-    display?.setTitle(getTitle()!!)
+    display?.setTitle(getTitle())
   }
 
   /**
    * change the title of this form
    */
-  fun setTitle(title: String?) {
+  fun setTitle(title: String) {
     this.windowTitle = title
-    display?.setTitle(getTitle()!!)
+    display?.setTitle(getTitle())
   }
 
   /**

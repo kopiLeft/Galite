@@ -281,7 +281,7 @@ class VPreviewWindow : VWindow() {
     return "$imageFile$current.JPG"
   }
 
-  override fun getTitle(): String? {
+  override fun getTitle(): String {
     return windowTitle
   }
 
