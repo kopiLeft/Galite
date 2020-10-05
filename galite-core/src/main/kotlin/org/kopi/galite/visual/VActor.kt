@@ -31,10 +31,10 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param acceleratorKey      the accelerator key description
  * @param acceleratorModifier The modifier accelerator key
  */
-class VActor(var menuIdent: String,
+open class VActor(var menuIdent: String,
              private val menuSource: String?,
              val actorIdent: String,
-             private val actorSource: String,
+             private val actorSource: String?,
              var iconName: String?,
              val acceleratorKey: Int,
              val acceleratorModifier: Int) : VModel {
