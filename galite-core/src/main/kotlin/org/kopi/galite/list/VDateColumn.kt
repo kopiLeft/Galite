@@ -32,11 +32,9 @@ class VDateColumn(title: String,
                   VConstants.ALG_LEFT,
                   10,
                   sortAscending) {
+
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-  val dataType: Class<*>
-    get() = Date::class.java
-
   override fun getDataType(): KClass<*> = Date::class
 }
