@@ -31,7 +31,6 @@ class VStringColumnTests {
 
     assertEquals("", vStringColumn.formatObject(null))
     assertEquals("St...ring", vStringColumn.formatObject("String"))
-    println("----->" +vStringColumn.getDataType())
     assertEquals(String::class, vStringColumn.getDataType())
   }
 }

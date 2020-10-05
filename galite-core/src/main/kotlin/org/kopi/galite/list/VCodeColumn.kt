@@ -21,7 +21,7 @@ package org.kopi.galite.list
 abstract class VCodeColumn(
   title: String,
   column: String,
-  protected var names: Array<String>,
+  protected val names: Array<String>,
   sortAscending: Boolean
 ) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {
   /**

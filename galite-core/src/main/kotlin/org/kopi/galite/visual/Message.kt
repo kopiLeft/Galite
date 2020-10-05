@@ -23,7 +23,5 @@ object Message {
     TODO()
   }
 
-  fun getMessage(ident: String): String {
-    TODO()
-  }
+  fun getMessage(string: String): String = TODO()
 }

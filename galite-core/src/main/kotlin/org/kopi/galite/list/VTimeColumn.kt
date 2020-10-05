@@ -17,4 +17,23 @@
  */
 package org.kopi.galite.list
 
-class VTimeColumn 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.type.Time
+
+/**
+ * Represents a list column.
+ */
+class VTimeColumn(title: String,
+                  column: String,
+                  sortAscending: Boolean)
+    : VListColumn(title,
+                  column,
+                  VConstants.ALG_LEFT,
+                  5,
+                  sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  override fun getDataType(): KClass<*> = Time::class
+}
