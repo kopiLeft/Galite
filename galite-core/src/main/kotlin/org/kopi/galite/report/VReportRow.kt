@@ -45,7 +45,7 @@ abstract class VReportRow(val data: Array<Any?>) : DefaultMutableTreeNode() {
    * @param        column                the index of the column
    * @param        value                the value for the column
    */
-  open fun setValueAt(column: Int, value: Any) {
+  open fun setValueAt(column: Int, value: Any?) {
     data[column] = value
   }
 
