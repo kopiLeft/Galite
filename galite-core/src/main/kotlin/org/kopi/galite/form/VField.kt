@@ -207,6 +207,8 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
+  fun getSearchCondition(): String? = TODO()
+
   companion object {
     const val MDL_FLD_COLOR = 1
     const val MDL_FLD_IMAGE = 2

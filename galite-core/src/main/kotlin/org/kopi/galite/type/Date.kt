@@ -74,6 +74,7 @@ open class Date {
   open fun getDay(): Int {
     TODO()
   }
+  fun format(s: String): Any = TODO()
 
   companion object {
 

@@ -33,6 +33,10 @@ class VBooleanCodeColumn(title: String,
                   names,
                   sortAscending) {
 
+  override fun getObjectIndex(value: Any): Int {
+    TODO("Not yet implemented")
+  }
+
   override fun getDataType(): KClass<*> {
     TODO("Not yet implemented")
   }
