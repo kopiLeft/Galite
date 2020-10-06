@@ -17,5 +17,43 @@
  */
 package org.kopi.galite.chart
 
-class VIntegerCodeMeasure {
+import org.kopi.galite.visual.VColor
+
+/**
+ * Represents an Integer code measure.
+ *
+ * @param ident The measure identifier.
+ * @param color The color to be used.
+ * @param type The localization type.
+ * @param source The localization source.
+ * @param idents The codes identifiers.
+ * @param codes The integer codes.
+ */
+class VIntegerCodeMeasure(ident: String,
+                          color: VColor,
+                          type: String,
+                          source: String,
+                          idents: Array<String>,
+                          private val codes: IntArray)
+  : VCodeMeasure(ident, color, type, source, idents) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // --------------------------------------------------------------------
+  override fun getIndex(value: Any?): Int {
+    codes.forEachIndexed { index, code ->
+      if ((value as Int).toInt() == code) {
+        return index
+      }
+    }
+    return -1
+  }
+
+  override fun toNumber(value: Any?): Number? {
+    codes.forEach { code ->
+      if ((value as Int).toInt() == code) {
+        return code
+      }
+    }
+    return null
+  }
 }
