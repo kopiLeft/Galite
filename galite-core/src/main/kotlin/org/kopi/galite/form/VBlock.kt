@@ -18,16 +18,9 @@
 
 package org.kopi.galite.form
 
-import java.util.Vector
-import javax.swing.event.EventListenerList
-
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VCommand
-
 abstract class VBlock {
-   var bufferSize // max number of buffered records
-          = 0
-    // dynamic data
-  var activeRecord // current record
-          = 0
-  }
+  var bufferSize = 0 // max number of buffered records
+
+  // dynamic data
+  var activeRecord = 0 // current record
+}

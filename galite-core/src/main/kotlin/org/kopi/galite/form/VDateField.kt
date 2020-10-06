@@ -227,6 +227,7 @@ class VDateField : VField(10, 1) {
     var month = 0
     var year = -2
     val tokens = StringTokenizer(s, "/.#")
+
     if (!tokens.hasMoreTokens()) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
     }

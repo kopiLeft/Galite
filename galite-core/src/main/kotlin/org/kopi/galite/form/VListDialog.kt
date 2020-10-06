@@ -21,8 +21,5 @@ package org.kopi.galite.form
 import org.kopi.galite.list.VListColumn
 
 class VListDialog(arrayOf: Array<VListColumn>, arrayOf1: Array<Array<Any?>>) {
-  fun selectFromDialog(form: Any, nothing: Nothing?, vCodeField: VCodeField): Int
-    {
-      TODO()
-    }
+  fun selectFromDialog(form: Any, nothing: Nothing?, vCodeField: VCodeField): Int = TODO()
 }

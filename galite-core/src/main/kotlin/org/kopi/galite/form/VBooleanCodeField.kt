@@ -40,7 +40,7 @@ open class VBooleanCodeField : VCodeField {
           source: String,
           names: Array<String>,
           codes: Array<Boolean?>,
-  ) : super(ident, source, names){
+  ) : super(ident, source, names) {
     this.codes = codes
   }
 
@@ -49,7 +49,7 @@ open class VBooleanCodeField : VCodeField {
           source: String,
           names: Array<String>,
           codes: BooleanArray,
-  ) : super(ident, source, names){
+  ) : super(ident, source, names) {
     this.codes = arrayOfNulls(codes.size)
     for (i in codes.indices) {
       this.codes[i] = codes[i]
@@ -117,16 +117,12 @@ open class VBooleanCodeField : VCodeField {
     }
   }
 
-  override fun getCodes(): Array<Any> {
-   return codes as Array<Any>
-  }
+  override fun getCodes(): Array<Any> = codes as Array<Any>
 
   /**
    * Returns the field value of given record as a boolean value.
    */
-  override fun getBoolean(r: Int): Boolean?{
-    return if (value[r] == -1) null else codes[value[r]]
-  }
+  override fun getBoolean(r: Int): Boolean? = if (value[r] == -1) null else codes[value[r]]
 
   /**
    * Returns the field value of the current record as an object
@@ -172,5 +168,6 @@ open class VBooleanCodeField : VCodeField {
     }
     return formatCode(code)
   }
-  private var codes : Array<Boolean?>
+
+  private var codes: Array<Boolean?>
 }
