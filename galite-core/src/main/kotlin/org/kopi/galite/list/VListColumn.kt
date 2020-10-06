@@ -24,7 +24,7 @@ import org.kopi.galite.l10n.ListLocalizer
 
 abstract class VListColumn(
   var title: String,
-  val column: String,
+  val column: String?,
   private val align: Int,
   val width: Int,
   val isSortAscending: Boolean
@@ -60,6 +60,6 @@ abstract class VListColumn(
    * @param     loc
    */
   fun localize(loc: ListLocalizer) {
-    title = loc.getColumnTitle(column)
+    title = loc.getColumnTitle(column!!)
   }
 }
