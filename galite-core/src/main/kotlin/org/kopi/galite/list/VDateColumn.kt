@@ -29,7 +29,7 @@ class VDateColumn(title: String,
                   column: String?,
                   sortAscending: Boolean)
     : VListColumn(title,
-                  column!!,
+                  column,
                   VConstants.ALG_LEFT,
                   10,
                   sortAscending) {
