@@ -17,4 +17,35 @@
  */
 package org.kopi.galite.visual
 
-class RootMenu 
+import org.kopi.galite.l10n.LocalizationManager
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreeNode
+
+class RootMenu(id: Int, name: String?) {
+  fun createTree(modules: Array<Module>, isSuperUser: Boolean) {
+    TODO()
+  }
+  protected fun createTree(modules: Array<Module>,
+                           root: Module?,
+                           force: Boolean,
+                           isSuperUser: Boolean): DefaultMutableTreeNode? {
+    TODO()
+  }
+  fun localize(manager: LocalizationManager?) {
+    TODO()
+  }
+  fun getId(): Int {
+    TODO()
+  }
+  fun getRoot(): TreeNode? {
+    TODO()
+  }
+  fun isEmpty(): Boolean {
+    TODO()
+  }
+  private val rootModule: java.lang.Module? = null
+  private val rootNode: TreeNode? = null
+  companion object {
+    const val ROOT_MENU_LOCALIZATION_RESOURCE = "org/kopi/vkopi/lib/resource/RootMenu"
+  }
+}

@@ -110,7 +110,11 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Resets form to initial state
    */
-  abstract fun reset()
+  fun reset() {
+    // do nothing
+
+    // TODO set it abstract
+  }
 
   /**
    * Returns true if it is allowed to quit this model
@@ -132,6 +136,12 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun executedAction(action: Action) {
     // overrriden in VForm
     // nothing to do here
+  }
+
+  @Deprecated("use method performAsynAction",
+          ReplaceWith("performAsyncAction(action)"))
+  override fun performAction(action: Action, block: Boolean) {
+    performAsyncAction(action)
   }
 
   override fun performAsyncAction(action: Action) {
@@ -238,7 +248,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * change the title of this form
    */
-  fun setTitle(title: String?) {
+  open fun setTitle(title: String?) {
     this.title = title
     display.setTitle(getTitle())
   }
@@ -254,7 +264,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     actors.addAll(actorDefs)
   }
 
-  fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
+  open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
 
   fun getActors(): ArrayList<VActor> {
     return actors
@@ -263,7 +273,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Enables/disables the actor.
    */
-  fun setActorEnabled(position: Int, enabled: Boolean) {
+  open fun setActorEnabled(position: Int, enabled: Boolean) {
     val actor: VActor = getActor(position)
     actor.handler = this
     actor.isEnabled = enabled
