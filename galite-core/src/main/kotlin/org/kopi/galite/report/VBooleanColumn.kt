@@ -71,7 +71,7 @@ class VBooleanColumn(ident: String?,
     // --------------------------------------------------------------------
     // DATA MEMBERS
     // --------------------------------------------------------------------
-    private val trueRep: String = VlibProperties.getString("true")
-    private val falseRep: String = VlibProperties.getString("false")
+    private val trueRep  = VlibProperties.getString("true")
+    private val falseRep = VlibProperties.getString("false")
   }
 }
