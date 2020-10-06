@@ -25,12 +25,12 @@ class NotNullMonth : Month {
   /**
    * Constructs a Month with a year and a month in this year
    */
-  constructor(year: Int, month: Int) : super(year, month) {}
+  constructor(year: Int, month: Int) : super(year, month)
 
   /**
    * Constructs a Month from a Date
    */
-  constructor(date: Date) : super(date) {}
+  constructor(date: Date) : super(date)
 
   companion object {
     fun castToNotNull(value: Month): NotNullMonth {

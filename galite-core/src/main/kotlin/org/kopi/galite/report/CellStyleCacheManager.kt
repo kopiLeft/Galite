@@ -63,6 +63,7 @@ class CellStyleCacheManager : Serializable {
     val key = StyleKey(alignment, dataFormat, color)
     if (!stylesCache.containsKey(key)) {
       val style: CellStyle = wb.createCellStyle()
+
       style.verticalAlignment = VerticalAlignment.TOP
       style.borderBottom = BorderStyle.THIN
       style.bottomBorderColor = IndexedColors.BLACK.getIndex()
@@ -74,7 +75,7 @@ class CellStyleCacheManager : Serializable {
       style.topBorderColor = IndexedColors.BLACK.getIndex()
       style.fillPattern = FillPatternType.SOLID_FOREGROUND
       style.wrapText = true
-      style.alignment = HorizontalAlignment.forInt(alignment as Int)
+      style.alignment = HorizontalAlignment.forInt(alignment.toInt())
       if (dataFormat.toInt() != -1) {
         style.dataFormat = dataFormat
       }
@@ -91,21 +92,16 @@ class CellStyleCacheManager : Serializable {
   //---------------------------------------------------
   // INNER CLASSES
   //---------------------------------------------------
-  /*package*/
   internal class StyleKey(private val alignment: Short, private val dataFormat: Short, private val color: Color) {
 
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun equals(obj: Any?): Boolean {
-      return if (obj is StyleKey) {
-        alignment == obj.alignment && dataFormat == obj.dataFormat && color == obj.color
-      } else super.equals(obj)
-    }
+    override fun equals(value: Any?): Boolean = if (value is StyleKey) {
+        alignment == value.alignment && dataFormat == value.dataFormat && color == value.color
+      } else super.equals(value)
 
-    override fun hashCode(): Int {
-      return alignment + dataFormat + color.hashCode()
-    }
+    override fun hashCode(): Int = alignment + dataFormat + color.hashCode()
   }
 
   //---------------------------------------------------

@@ -41,13 +41,13 @@ class PExport2XLS (table: UTable, model: MReport, pconfig: PConfig, title: Strin
   override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
     var rowCol = colorpalete!![color]
 
-    if (rowCol == null) {
+    return rowCol ?: run {
       palette!!.setColorAtIndex(colorindex, color.red.toByte(), color.green.toByte(), color.blue.toByte())
       rowCol = palette!!.getColor(colorindex)
       colorindex++
       colorpalete!![color] = rowCol
+      return rowCol
     }
-    return rowCol
   }
 
   //-----------------------------------------------------------

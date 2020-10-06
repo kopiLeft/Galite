@@ -17,6 +17,7 @@
  */
 
 package org.kopi.galite.report
+
 import java.awt.Color
 import java.io.File
 import java.io.FileInputStream
@@ -56,9 +57,7 @@ class PExport2PDF(
         private val firstPageHeader: String,
         tonerSaveMode: Boolean,
 ) : PExport(table, model, pconfig, title, tonerSaveMode), Constants {
-  /**
-   * Constructor
-   */
+
   constructor(table: UTable, model: MReport, pconfig: PConfig, title: String, firstPageHeader: String)
           : this(table, model, pconfig, title, firstPageHeader, false) {}
 
@@ -95,7 +94,7 @@ class PExport2PDF(
       val firstPageHead = createFirstPageHeader()
       val foot = createFooter(0, 0)
 
-      if (firstPageHeader != null && firstPageHeader != "") {
+      if (firstPageHeader != "") {
         firstPageHead.totalWidth = paperSize.width - pconfig.leftmargin - pconfig.rightmargin
       }
       head.totalWidth = paperSize.width - pconfig.leftmargin - pconfig.rightmargin
@@ -137,7 +136,7 @@ class PExport2PDF(
         }
       }
       document.open()
-      if (firstPageHeader != null && firstPageHeader != "") {
+      if (firstPageHeader != "") {
         try {
           val page = document.pageSize
 
@@ -259,29 +258,29 @@ class PExport2PDF(
     datatable!!.headerRows = 1
   }
 
-  protected override fun exportRow(row: VReportRow, tail: Boolean) {
+  override fun exportRow(row: VReportRow, tail: Boolean) {
     exportRow((row), tail, true)
   }
 
-  protected override  fun exportRow(level: Int, strings: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
+  override  fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
     var cell = 0
 
     datatable!!.defaultCell.borderWidth = BORDER_WIDTH.toFloat()
     datatable!!.defaultCell.backgroundColor = Color.white
-    strings.forEachIndexed { index, element ->
+    data.forEachIndexed { index, element ->
       if (element != null) {
         datatable!!.addCell(createCell(element,
                             scale,
                             Color.black,
                             getBackgroundForLevel(level),
-                            alignments[index],
+                            alignment[index],
                             true))
       } else {
         datatable!!.addCell(createCell(" ",
                                         scale,
                                         Color.black,
                                         getBackgroundForLevel(level),
-                                        alignments[index],
+                                        alignment[index],
                                         true))
       }
       cell += 1

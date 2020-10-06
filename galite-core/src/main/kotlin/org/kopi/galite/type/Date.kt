@@ -68,22 +68,12 @@ open class Date : Type {
   }
 
   /**
-   * Formats the date according to the given format using the default
-   * locale
-   *
-   * @param     format  the format. see SimpleDateFormat
-   */
-  open fun format(format: String): String {
-    return format(format, Locale.getDefault())
-  }
-
-  /**
    * Formats the date according to the given format and locale
    *
    * @param     format  the format. see SimpleDateFormat
    * @param     locale  the locale to use
    */
-  open fun format(format: String, locale: Locale): String {
+  open fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
 
     cal[Calendar.YEAR] = year
@@ -138,8 +128,7 @@ open class Date : Type {
   /**
    * Returns the day number (starts at 1, ends at 7)
    */
-  val weekday: Int
-    get() {
+   fun getweekday() : Int {
       synchronized(calendar) {
         val gregorian = julianToGregorian(scalar)
 
@@ -206,38 +195,38 @@ open class Date : Type {
    * @param    locale    the current language
    */
   override fun toString(locale: Locale): String {
-    val buffer = StringBuffer()
     val gregorian = julianToGregorian(scalar)
 
     // !!! taoufik 20061010
     // LOCALIZATION NOT HANDLED
-    buffer.append(gregorian[2] / 10)
-    buffer.append(gregorian[2] % 10)
-    buffer.append('.')
-    buffer.append(gregorian[1] / 10)
-    buffer.append(gregorian[1] % 10)
-    buffer.append('.')
-    buffer.append(gregorian[0])
-    return buffer.toString()
+    return buildString {
+      append(gregorian[2] / 10)
+      append(gregorian[2] % 10)
+      append('.')
+      append(gregorian[1] / 10)
+      append(gregorian[1] % 10)
+      append('.')
+      append(gregorian[0])
+    }
   }
 
   /**
    * Represents the value in sql
    */
   override fun toSql(): String {
-    val buffer = StringBuffer()
     val gregorian = julianToGregorian(scalar)
 
-    buffer.append("{d '")
-    buffer.append(gregorian[0])
-    buffer.append('-')
-    buffer.append(gregorian[1] / 10)
-    buffer.append(gregorian[1] % 10)
-    buffer.append('-')
-    buffer.append(gregorian[2] / 10)
-    buffer.append(gregorian[2] % 10)
-    buffer.append("'}")
-    return buffer.toString()
+    return buildString {
+      append("{d '")
+      append(gregorian[0])
+      append('-')
+      append(gregorian[1] / 10)
+      append(gregorian[1] % 10)
+      append('-')
+      append(gregorian[2] / 10)
+      append(gregorian[2] % 10)
+      append("'}")
+    }
   }
 
   // --------------------------------------------------------------------

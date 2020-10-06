@@ -18,9 +18,7 @@
 
 package org.kopi.galite.type
 
-import java.util.Calendar
-import java.util.Locale
-import java.util.GregorianCalendar
+import java.util.*
 
 /**
  * This class represents the week types
@@ -31,7 +29,6 @@ open class Week : Type {
    * @param    year        the year
    * @param    week        the week of year (1 .. 53)
    */
-  /*package*/
   internal constructor(year: Int, week: Int) {
     scalar = year * 53 + week - 1
   }
@@ -39,7 +36,6 @@ open class Week : Type {
   /**
    * Constructs a Week from a Date
    */
-  /*package*/
   internal constructor(date: Date) {
     scalar = iso8601(date.year, date.month, date.day)
   }
@@ -50,6 +46,7 @@ open class Week : Type {
   fun copy(): NotNullWeek {
     return NotNullWeek(scalar / 53, scalar % 53 + 1)
   }
+
   // ----------------------------------------------------------------------
   // IN PLACE OPERATIONS
   // ----------------------------------------------------------------------
@@ -59,6 +56,7 @@ open class Week : Type {
   fun addTo(weeks: Int) {
     scalar += weeks
   }
+
   // ----------------------------------------------------------------------
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------
@@ -74,7 +72,7 @@ open class Week : Type {
    * @returns the number of weeks between two Weeks
    */
   fun subtract(other: Week?): Int? {
-    return if (other == null) null else subtract(other as NotNullWeek?)
+    return if (other == null) null else subtract(other as NotNullWeek)
   }
 
   /**
@@ -84,6 +82,7 @@ open class Week : Type {
   fun subtract(other: NotNullWeek): Int {
     return scalar - (other as Week).scalar
   }
+
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
   // ----------------------------------------------------------------------
@@ -122,17 +121,18 @@ open class Week : Type {
    * @param    weekday        the day of week (monday = 1, sunday = 7)
    */
   fun getDate(weekday: Int): NotNullDate {
-    var year: Int
-    var month: Int
-    var day: Int
-    synchronized(calendar!!) {
-      calendar!!.clear()
-      calendar!![Calendar.YEAR] = scalar / 53
-      calendar!![Calendar.WEEK_OF_YEAR] = scalar % 53 + 1
-      calendar!![Calendar.DAY_OF_WEEK] = weekday % 7 + 1 // Calendar.MONDAY = 2
-      year = calendar!![Calendar.YEAR]
-      month = calendar!![Calendar.MONTH] + 1
-      day = calendar!![Calendar.DAY_OF_MONTH]
+    val year: Int
+    val month: Int
+    val day: Int
+
+    synchronized(calendar) {
+      calendar.clear()
+      calendar[Calendar.YEAR] = scalar / 53
+      calendar[Calendar.WEEK_OF_YEAR] = scalar % 53 + 1
+      calendar[Calendar.DAY_OF_WEEK] = weekday % 7 + 1 // Calendar.MONDAY = 2
+      year = calendar[Calendar.YEAR]
+      month = calendar[Calendar.MONTH] + 1
+      day = calendar[Calendar.DAY_OF_MONTH]
     }
     return NotNullDate(year, month, day)
   }
@@ -140,21 +140,25 @@ open class Week : Type {
   /**
    * Returns the first day of this week.
    */
-  val firstDay: NotNullDate
-    get() = getDate(1)
+  open fun getFirstDay(): NotNullDate {
+    return getDate(1)
+  }
 
   /**
    * Returns the last day of this week.
    */
-  val lastDay: NotNullDate
-    get() = getDate(7)
+  open fun getLastDay(): NotNullDate {
+    return getDate(7)
+  }
 
   /**
    * Transforms this week into a date (the first day of the week)
    */
-  @get:Deprecated("")
-  val date: NotNullDate
-    get() = getDate(1)
+  @Deprecated("")
+  open fun getDate(): NotNullDate {
+    return getDate(1)
+  }
+
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
   // ----------------------------------------------------------------------
@@ -192,6 +196,7 @@ open class Week : Type {
       val now = Calendar.getInstance()
       return NotNullWeek(now[Calendar.YEAR], now[Calendar.WEEK_OF_YEAR])
     }
+
     // --------------------------------------------------------------------
     // IMPLEMENTATION
     // --------------------------------------------------------------------
@@ -204,59 +209,23 @@ open class Week : Type {
      * @return    year * 53 + (week - 1)
      */
     private fun iso8601(year: Int, month: Int, day: Int): Int {
-      // 2. Find if Y is LeapYear
-      //    if (Y % 4 = 0  and  Y % 100 != 0) or Y % 400 = 0
-      //       then
-      //          Y is LeapYear
-      //       else
-      //          Y is not LeapYear
       val leapYear = isLeapYear(year)
-
       // 3. Find if Y-1 is LeapYear
       val leapYear_m_1 = isLeapYear(year - 1)
-
-      // 4. Find the DayOfYearNumber for Y M D
-      //    Mnth[1] = 0    Mnth[4] = 90    Mnth[7] = 181   Mnth[10] = 273
-      //    Mnth[2] = 31   Mnth[5] = 120   Mnth[8] = 212   Mnth[11] = 304
-      //    Mnth[3] = 59   Mnth[6] = 151   Mnth[9] = 243   Mnth[12] = 334
-      //    DayOfYearNumber = D + Mnth[M]
-      //    if Y is LeapYear and M > 2
-      //       then
-      //          DayOfYearNumber += 1
       var dayOfYearNumber = day + DAYS_BEFORE_MONTH[month - 1]
+
       if (leapYear && month > 2) {
         dayOfYearNumber += 1
       }
-
-      // 5. Find the Jan1Weekday for Y (Monday=1, Sunday=7)
-      //    YY = (Y-1) % 100
-      //    C = (Y-1) - YY
-      //    G = YY + YY/4
-      //    Jan1Weekday = 1 + (((((C / 100) % 4) x 5) + G) % 7)
       val yy = (year - 1) % 100
       val c = year - 1 - yy
       val g = yy + yy / 4
       val jan1Weekday = 1 + (c / 100 % 4 * 5 + g) % 7
-
-      // 6. Find the Weekday for Y M D
-      //    H = DayOfYearNumber + (Jan1Weekday - 1)
-      //    Weekday = 1 + ((H -1) % 7)
       val h = dayOfYearNumber + (jan1Weekday - 1)
       val weekday = 1 + (h - 1) % 7
-
-      // 7. Find if Y M D falls in YearNumber Y-1, WeekNumber 52 or 53
-      //    if DayOfYearNumber <= (8-Jan1Weekday) and Jan1Weekday > 4
-      //       then
-      //          YearNumber = Y - 1
-      //          if Jan1Weekday = 5 or (Jan1Weekday = 6 and Y-1 is LeapYear)
-      //             then
-      //                WeekNumber = 53
-      //             else
-      //                WeekNumber = 52
-      //       else
-      //          YearNumber = Y
       var yearNumber: Int
       var weekNumber: Int
+
       if (dayOfYearNumber <= 8 - jan1Weekday && jan1Weekday > 4) {
         yearNumber = year - 1
         weekNumber = if (jan1Weekday == 5 || jan1Weekday == 6 && leapYear_m_1) 53 else 52
@@ -264,47 +233,20 @@ open class Week : Type {
         yearNumber = year
         weekNumber = -10000000
       }
-
-      // 8. Find if Y M D falls in YearNumber Y+1, WeekNumber 1
-      //    if Y is LeapYear
-      //       then
-      //          I = 366
-      //       else
-      //          I = 365
-      //     if (I - DayOfYearNumber) < (4 - Weekday)
-      //        then
-      //           YearNumber = Y + 1
-      //           WeekNumber = 1
-      //        else
-      //           YearNumber = Y
       val i = if (leapYear) 366 else 365
+
       if (i - dayOfYearNumber < 4 - weekday) {
         yearNumber = year + 1
         weekNumber = 1
-      } /*else {
-      yearNumber = year;
-    }*/
-
-      // 9. Find if Y M D falls in YearNumber Y, WeekNumber 1 through 53
-      //    if YearNumber = Y
-      //       then
-      //          J = DayOfYearNumber + (7 - Weekday) + (Jan1Weekday -1)
-      //          WeekNumber = J / 7
-      //          if Jan1Weekday > 4
-      //                WeekNumber -= 1
+      }
       if (yearNumber == year) {
         val j = dayOfYearNumber + (7 - weekday) + (jan1Weekday - 1)
+
         weekNumber = j / 7
         if (jan1Weekday > 4) {
           weekNumber -= 1
         }
       }
-
-      // 10. Output ISO Week Date:
-      //    if WeekNumber < 10
-      //       then
-      //          WeekNumber = "0" & WeekNumber  (WeekNumber requires 2 digits)
-      //    YearNumber - WeekNumber - Weekday    (Optional: "W" & WeekNumber)
       return yearNumber * 53 + weekNumber - 1
     }
 
@@ -319,7 +261,7 @@ open class Week : Type {
     // DATA MEMBERS
     // --------------------------------------------------------------------
     private val DAYS_BEFORE_MONTH = intArrayOf(0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334)
-    private var calendar: GregorianCalendar? = null
+    private var calendar: GregorianCalendar = GregorianCalendar()
 
     // --------------------------------------------------------------------
     // CONSTANTS
@@ -327,9 +269,8 @@ open class Week : Type {
     val DEFAULT: NotNullWeek = NotNullWeek(0, 0)
 
     init {
-      calendar = GregorianCalendar()
-      calendar!!.firstDayOfWeek = Calendar.MONDAY
-      calendar!!.minimalDaysInFirstWeek = 4
+      calendar.firstDayOfWeek = Calendar.MONDAY
+      calendar.minimalDaysInFirstWeek = 4
     }
   }
 

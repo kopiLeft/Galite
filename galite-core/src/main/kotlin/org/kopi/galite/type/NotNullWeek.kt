@@ -25,12 +25,12 @@ class NotNullWeek : Week {
   /**
    * Constructs a Week with a year and a week in this year.
    */
-  constructor(year: Int, week: Int) : super(year, week) {}
+  constructor(year: Int, week: Int) : super(year, week)
 
   /**
    * Constructs a Week from a Date.
    */
-  constructor(date: Date) : super(date) {}
+  constructor(date: Date) : super(date)
 
   companion object {
     fun castToNotNull(value: Week): NotNullWeek {

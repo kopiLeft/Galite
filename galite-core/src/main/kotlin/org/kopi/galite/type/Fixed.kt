@@ -23,7 +23,6 @@ import java.math.BigInteger
 import java.math.BigDecimal
 import java.math.MathContext
 
-
 /**
  * This class represents the fixed type
  */
@@ -44,23 +43,17 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   /**
    * add
    */
-  fun add(f: NotNullFixed): NotNullFixed {
-    TODO()
-  }
+  fun add(f: NotNullFixed): NotNullFixed = TODO()
 
   /**
    * divide
    */
-  fun divide(f: NotNullFixed): NotNullFixed {
-    TODO()
-  }
+  fun divide(f: NotNullFixed): NotNullFixed = TODO()
 
   /**
    * multiply
    */
-  fun multiply(f: NotNullFixed): NotNullFixed {
-    TODO()
-  }
+  fun multiply(f: NotNullFixed): NotNullFixed = TODO()
 
   /**
    * subtract
@@ -77,25 +70,21 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   /**
    * Unary minus
    */
-  fun negate(): NotNullFixed {
-    return NotNullFixed(value!!.negate())
-  }
+  fun negate(): NotNullFixed = NotNullFixed(value!!.negate())
+
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
   // ----------------------------------------------------------------------
   /**
    * setScale
    */
-  fun setScale(v: Int): NotNullFixed {
-    return NotNullFixed(value!!.setScale(v, BigDecimal.ROUND_HALF_UP))
-  }
+  fun setScale(v: Int): NotNullFixed = NotNullFixed(value!!.setScale(v, BigDecimal.ROUND_HALF_UP))
 
   /**
    * setScale
    */
-  fun setScale(v: Int, d: Int): NotNullFixed {
-    return NotNullFixed(value!!.setScale(v, d))
-  }
+  fun setScale(v: Int, d: Int): NotNullFixed = NotNullFixed(value!!.setScale(v, d))
+
 
   /**
    * getScale
@@ -106,13 +95,12 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   /**
    * Comparisons
    */
-  operator fun compareTo(other: Fixed): Int {
-    return value!!.compareTo(other.value)
-  }
+  operator fun compareTo(other: Fixed): Int = value!!.compareTo(other.value)
 
   override operator fun compareTo(other: Any?): Int {
     return compareTo(other as Fixed)
   }
+
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
   // ----------------------------------------------------------------------
@@ -120,16 +108,13 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
    * Compares two objects
    */
   override fun equals(other: Any?): Boolean {
-    return other is Fixed &&
-            value!!.equals(other.value)
+    return other is Fixed && value!! == other.value
   }
 
   /**
    * Format the object depending on the current language
    */
-  override fun toString(): String {
-    return toString(Locale.GERMAN) // !!!
-  }
+  override fun toString(): String = toString(Locale.GERMAN)
 
   /**
    * Format the object depending on the current language
@@ -185,9 +170,7 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   /**
    * Represents the value in sql
    */
-  fun toSql(): String {
-    return value.toString()
-  }
+  fun toSql(): String = value.toString()
 
   // ----------------------------------------------------------------------
   // IMPLEMENTATION OF NUMBER
@@ -195,51 +178,37 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   /**
    * Returns the fixed as a byte
    */
-  override fun toByte(): Byte {
-    return value!!.toByte()
-  }
+  override fun toByte(): Byte = value!!.toByte()
 
   /**
    * Returns the fixed as a char
    */
-  override fun toChar(): Char {
-    return value!!.toChar()
-  }
+  override fun toChar(): Char = value!!.toChar()
 
   /**
    * Returns the fixed as a double
    */
-  override fun toDouble(): Double {
-    return value!!.toDouble()
-  }
+  override fun toDouble(): Double = value!!.toDouble()
 
   /**
    * Returns the fixed as a float
    */
-  override fun toFloat(): Float {
-    return value!!.toFloat()
-  }
+  override fun toFloat(): Float = value!!.toFloat()
 
   /**
    * Returns the fixed as a int
    */
-  override fun toInt(): Int {
-    return value!!.toInt()
-  }
+  override fun toInt(): Int = value!!.toInt()
 
   /**
    * Returns the fixed as a long
    */
-  override fun toLong(): Long {
-    return value!!.toLong()
-  }
+  override fun toLong(): Long = value!!.toLong()
 
   /**
    * Returns the fixed as a short
    */
-  override fun toShort(): Short {
-    return value!!.toShort()
-  }
+  override fun toShort(): Short = value!!.toShort()
 
   private var value: BigDecimal? = null
   var maxScale = -1   // the max scale.
@@ -248,9 +217,7 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
     /**
      * Parse the String arguments and return the corresponding value
      */
-    fun valueOf(value: String): NotNullFixed {
-      return NotNullFixed(value)
-    }
+    fun valueOf(value: String): NotNullFixed = NotNullFixed(value)
 
     // ----------------------------------------------------------------------
     // DATA MEMBERS
@@ -264,7 +231,6 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
     val DEFAULT: NotNullFixed = NotNullFixed(0.0)
   }
 
-  /*package*/
   init {
     value = b
   }

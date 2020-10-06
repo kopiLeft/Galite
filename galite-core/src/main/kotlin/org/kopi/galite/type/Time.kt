@@ -28,13 +28,10 @@ import java.util.Locale
  * This class represents the time types
  */
 open class Time : Type {
-  /*package*/ /*package*/
-  @JvmOverloads
   internal constructor(hours: Int, minutes: Int, seconds: Int = 0) {
     scalar = (hours * 3600 + minutes * 60 + seconds) % (3600 * 24)
   }
 
-  /*package*/
   internal constructor(time: java.sql.Time) {
     var hours: Int
     var minutes: Int
@@ -49,10 +46,8 @@ open class Time : Type {
     scalar = (hours * 3600 + minutes * 60 + seconds) % (3600 * 24)
   }
 
-  /*package*/
-  internal constructor(image: String) : this(java.sql.Time.valueOf(image)) {}
+  internal constructor(image: String) : this(java.sql.Time.valueOf(image))
 
-  /*package*/
   internal constructor(calendar: Calendar?) {
     if (calendar != null) {
       val hours: Int = calendar[Calendar.HOUR_OF_DAY]
@@ -69,7 +64,6 @@ open class Time : Type {
    * @param     format  the format. see SimpleDateFormat
    * @param     locale  the locale to use
    */
-  @JvmOverloads
   fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
 
@@ -91,6 +85,7 @@ open class Time : Type {
     calendar[Calendar.SECOND] = seconds
     return calendar
   }
+
   // ----------------------------------------------------------------------
   // COMPILER METHODS - DO NOT USE OUTSIDE OF THE LIBRARY
   // ----------------------------------------------------------------------
@@ -98,7 +93,6 @@ open class Time : Type {
    * Constructs a time from a scalar
    * DO NOT USE OUTSIDE OF THE LIBRARY
    */
-  /*package*/
   internal constructor(scalar: Int) {
     this.scalar = scalar % (3600 * 24)
   }
@@ -109,6 +103,7 @@ open class Time : Type {
   fun add(seconds: Int): NotNullTime {
     return NotNullTime(scalar + seconds)
   }
+
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
   // ----------------------------------------------------------------------
@@ -150,15 +145,15 @@ open class Time : Type {
     get() = scalar % 60
 
   // !!! TO BE REMOVED
-  val sqlTime: java.sql.Time
-    get() {
-      synchronized(calendar) {
-        calendar[Calendar.HOUR_OF_DAY] = scalar / 3600
-        calendar[Calendar.MINUTE] = scalar / 60 % 60
-        calendar[Calendar.SECOND] = scalar % 60
-        return java.sql.Time(calendar.time.time)
-      }
+  fun getSqlTime() : java.sql.Time {
+    synchronized(calendar) {
+      calendar[Calendar.HOUR_OF_DAY] = scalar / 3600
+      calendar[Calendar.MINUTE] = scalar / 60 % 60
+      calendar[Calendar.SECOND] = scalar % 60
+      return java.sql.Time(calendar.time.time)
     }
+  }
+
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
   // ----------------------------------------------------------------------
@@ -174,38 +169,38 @@ open class Time : Type {
    * @param    locale    the current language
    */
   override fun toString(locale: Locale): String {
-    val buffer = StringBuffer()
     val hours = scalar / 3600
     val minutes = scalar / 60 % 60
 
-    buffer.append(hours / 10)
-    buffer.append(hours % 10)
-    buffer.append(':')
-    buffer.append(minutes / 10)
-    buffer.append(minutes % 10)
-    return buffer.toString()
+    return buildString {
+      append(hours / 10)
+      append(hours % 10)
+      append(':')
+      append(minutes / 10)
+      append(minutes % 10)
+    }
   }
 
   /**
    * Represents the value in sql
    */
   override fun toSql(): String {
-    val buffer = StringBuffer()
     val hours = scalar / 3600
     val minutes = scalar / 60 % 60
     val seconds = scalar % 60
 
-    buffer.append("{t '")
-    buffer.append(hours / 10)
-    buffer.append(hours % 10)
-    buffer.append(':')
-    buffer.append(minutes / 10)
-    buffer.append(minutes % 10)
-    buffer.append(':')
-    buffer.append(seconds / 10)
-    buffer.append(seconds % 10)
-    buffer.append("'}")
-    return buffer.toString()
+    return buildString {
+      append("{t '")
+      append(hours / 10)
+      append(hours % 10)
+      append(':')
+      append(minutes / 10)
+      append(minutes % 10)
+      append(':')
+      append(seconds / 10)
+      append(seconds % 10)
+      append("'}")
+    }
   }
 
   /**
@@ -257,9 +252,6 @@ open class Time : Type {
               cal[Calendar.SECOND])
     }
 
-    // --------------------------------------------------------------------
-    // DATA MEMBERS
-    // --------------------------------------------------------------------
     private val calendar = GregorianCalendar()
 
     // --------------------------------------------------------------------
