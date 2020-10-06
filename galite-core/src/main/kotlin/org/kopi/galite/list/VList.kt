@@ -20,33 +20,51 @@ package org.kopi.galite.list
 
 import java.io.Serializable
 
+import org.kopi.galite.form.VForm
 import org.kopi.galite.l10n.ListLocalizer
 import org.kopi.galite.l10n.LocalizationManager
 
 /**
  * Represents a list
  *
- * @param     ident           the identifier of the list type
- * @param     source          the qualified name of the source file defining the list
- * @param     newForm
- * @param     columns
- * @param     table
- * @param     action
- * @param     autocompleteType
- * @param     autocompleteLength
- * @param     hasShortcut
+ * @param     ident             the identifier of the list type
+ * @param     source            the qualified name of the source file defining the list
+ * @param     newForm           the new form name
+ * @param     columns           the list columns
+ * @param     table             the trigger ID for the evaluation of the table
+ * @param     action              the list action
+ * @param     autocompleteType    the auto complete type.
+ * @param     autocompleteLength  the auto complete length.
+ * @param     hasShortcut         the new form name
  * */
-class VList(val ident: String,
-            val source: String,
-            val newForm: String,
+class VList(private val ident: String,
+            private val source: String,
+            val newForm: String?,
             val columns: Array<VListColumn>,
-            val table: Int = 0,
-            val action: Int = 0,
-            val autocompleteType: Int = 0,
-            val autocompleteLength: Int = 0,
-            val hasShortcut: Boolean)
-  : VConstants, Serializable {
+            val table: Int,
+            val action: Int,
+            val autocompleteType: Int,
+            val autocompleteLength: Int,
+            val hasShortcut: Boolean) : VConstants, Serializable {
 
+  constructor(ident: String,
+              source: String,
+              columns: Array<VListColumn>,
+              table: Int,
+              action: Int,
+              autocompleteType: Int,
+              autocompleteLength: Int,
+              newForm: Class<VForm>?,
+              hasShortcut: Boolean)
+       : this(ident,
+              source,
+              newForm?.name,
+              columns,
+              table,
+              action,
+              autocompleteType,
+              autocompleteLength,
+              hasShortcut)
 
   /**
    * Returns the number of columns.
@@ -58,8 +76,8 @@ class VList(val ident: String,
   /**
    * Returns the column at index.
    */
-  fun getColumn(pos: Int): VListColumn? {
-    return columns.get(pos)
+  fun getColumn(pos: Int): VListColumn {
+    return columns[pos]
   }
 
   /**
