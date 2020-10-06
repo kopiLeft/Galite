@@ -25,7 +25,7 @@ import org.kopi.galite.type.Date
  * Represents a list column.
  */
 class VDateColumn(title: String,
-                  column: String,
+                  column: String?,
                   sortAscending: Boolean)
     : VListColumn(title,
                   column,
