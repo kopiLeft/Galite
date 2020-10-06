@@ -18,5 +18,33 @@
 
 package org.kopi.galite.chart
 
-class VDefaultChartActor {
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VlibProperties
+
+class VDefaultChartActor(menuIdent: String,
+                         actorIdent: String,
+                         iconName: String,
+                         acceleratorKey: Int,
+                         acceleratorModifier: Int)
+                : VActor(menuIdent,
+                         null,
+                         actorIdent,
+                         null,
+                         null,
+                         acceleratorKey,
+                         acceleratorModifier) {
+
+  init {
+    this.iconName = iconName
+    localize()
+  }
+
+  // ----------------------------------------------------------------------
+  // LOCALIZATION
+  // ----------------------------------------------------------------------
+  private fun localize() {
+    menuName = VlibProperties.getString(menuIdent)
+    menuItem = VlibProperties.getString(actorIdent)
+    help = VlibProperties.getString("$actorIdent-help")
+  }
 }

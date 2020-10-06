@@ -16,25 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.chart
+package org.kopi.galite.tests.list
 
-import java.io.Serializable
+import org.junit.Test
+import org.kopi.galite.list.VStringColumn
 
-/**
- * A chart data series includes a dimension and its measures.
- *
- * @param dimension the dimension data for this data series
- */
-class VDataSeries(val dimension: VDimensionData) : Serializable {
+import kotlin.test.assertEquals
 
-  /**
-   * @return the measures
-   */
-  fun getMeasures(): Array<VMeasureData> = measures.toTypedArray()
+class VStringColumnTests {
 
-  //---------------------------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------------------------
+  @Test
+  fun vStringColumnTests() {
+    val vStringColumn = VStringColumn("title", "column", 1, 2, true)
 
-  val measures = mutableListOf<VMeasureData>()
+    assertEquals("", vStringColumn.formatObject(null))
+    assertEquals("St...ring", vStringColumn.formatObject("String"))
+    assertEquals(String::class, vStringColumn.getDataType())
+  }
 }

@@ -18,5 +18,36 @@
 
 package org.kopi.galite.chart
 
-class VBooleanCodeDimension {
+import org.kopi.galite.util.base.InconsistencyException
+
+/**
+ * Represents a boolean code column.
+ *
+ * @param ident     The column identifier.
+ * @param format    The column format.
+ * @param type      The column type.
+ * @param source    The column localization source.
+ * @param idents    The column displayed labels.
+ * @param codes     The boolean codes.
+ */
+class VBooleanCodeDimension(ident: String,
+                            format: VColumnFormat,
+                            type: String,
+                            source: String,
+                            idents: Array<String>,
+                            private val codes: BooleanArray)
+           : VCodeDimension(ident, format, type, source, idents) {
+
+  init {
+    if (codes.size > 2) {
+      throw InconsistencyException()
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // ----------------------------------------------------------------------
+  protected override fun getIndex(value: Any?): Int {
+    return if ((value as Boolean) == codes[0]) 0 else 1
+  }
 }

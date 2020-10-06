@@ -52,6 +52,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
+  open val source: String? = null // The localization source of this window.
 
   init {
     f12 = VActor("File",
@@ -132,12 +133,6 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     // overrriden in VForm
     // nothing to do here
   }
-
-  /**
-   * Returns the localization source of this window.
-   * @return The localization source of this window.
-   */
-  open protected fun getSource(): String? = null
 
   override fun performAsyncAction(action: Action) {
     val listeners = modelListener.listenerList
@@ -507,8 +502,8 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    * @return    the requested message
    */
   protected fun formatMessage(ident: String, params: Array<Any?>): String? {
-    return if (getSource() != null) {
-      Message.getMessage(getSource(), ident, params)
+    return if (source != null) {
+      Message.getMessage(source, ident, params)
     } else {
       null
     }
