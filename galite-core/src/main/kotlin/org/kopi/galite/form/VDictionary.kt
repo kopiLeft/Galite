@@ -17,4 +17,10 @@
  */
 package org.kopi.galite.form
 
-interface VDictionary 
+import org.kopi.galite.visual.VWindow
+
+interface VDictionary {
+  fun add(parent: VWindow):Int
+  fun edit(form: VForm, value: Int): Int = TODO()
+  fun search(form: VForm): Int = TODO()
+}

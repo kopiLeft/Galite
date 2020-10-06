@@ -15,17 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form
 
-import org.kopi.galite.visual.VWindow
+package org.kopi.galite.type
 
-abstract class VForm : VConstants, VWindow() {
-
-
+class Utils {
   companion object {
-    const val CMD_NEWITEM = -2
-    const val CMD_EDITITEM = -3
-    const val CMD_EDITITEM_S = -4
-    const val CMD_AUTOFILL = -5
+    fun trimString(input: String): String = TODO()
+    fun trailString(input: String): String = TODO()
   }
 }

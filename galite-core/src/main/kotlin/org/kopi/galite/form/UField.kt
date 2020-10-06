@@ -17,6 +17,6 @@
  */
 package org.kopi.galite.form
 
-class UField {
-
+interface UField {
+  fun getObject(): Any = TODO()
 }

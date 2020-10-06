@@ -15,7 +15,31 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-abstract class AbstractPredefinedValueHandler {
+import org.kopi.galite.list.VListColumn
+
+abstract class AbstractPredefinedValueHandler(private val model: VFieldUI,
+                                              protected var form: VForm,
+                                              protected var field: VField)
+               : PredefinedValueHandler {
+
+
+  fun selectDefaultValue(): Boolean {
+    return model.fillField()
+  }
+
+  fun selectFromList(list: Array<VListColumn>,
+                     values: Array<Array<Any>>,
+                     predefinedValues: Array<String>): String? {
+    val selected: Int
+    val listDialog = VListDialog(list, values)
+    selected = listDialog.selectFromDialog(form, field)
+    return if (selected != -1) {
+      predefinedValues[selected]
+    } else {
+      null
+    }
+  }
 }

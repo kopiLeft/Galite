@@ -18,6 +18,20 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.list.VList
+
 abstract class VField {
   fun getSearchCondition(): String? = TODO()
+  fun isChanged(): Boolean = TODO()
+  fun hasFocus(): Boolean = TODO()
+  fun checkType(displayedValue: Any) { TODO() }
+  fun checkType(rec: Int, s: Any) { TODO() }
+  open fun getHeight() : Int = TODO()
+  fun getList(): VList? = TODO()
+  fun getBlock() : VBlock = TODO()
+    fun getForm():VForm = TODO()
+  fun isNull(r:Int):Boolean =TODO()
+  fun getListID(): Int =TODO()
+  fun setNull(activeRecord: Int){TODO()}
+   fun setValueID(id: Int){TODO()}
 }

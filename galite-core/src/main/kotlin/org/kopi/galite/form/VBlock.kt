@@ -17,4 +17,11 @@
  */
 package org.kopi.galite.form
 
-abstract class VBlock 
+abstract class VBlock {
+  fun getActiveRecord(): Int = TODO()
+   fun gotoNextField(){
+     TODO()
+   }
+  fun executeObjectTrigger (VKT_Type:Int?): Any = TODO()
+  fun isChart(): Boolean = TODO()
+}
