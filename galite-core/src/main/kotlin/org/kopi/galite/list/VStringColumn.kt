@@ -15,6 +15,33 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-class VStringColumn 
+import kotlin.reflect.KClass
+
+class VStringColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
+        VListColumn(title, column, align, width, sortAscending) {
+  /**
+   * Returns a string representation of value
+   */
+  override fun formatObject(value: Any?): Any {
+    if (value == null) {
+      return VConstants.EMPTY_TEXT
+    }
+    var str = value as String
+    val strLength = str.length
+    val width: Int = width
+    if (strLength > width) {
+      str = str.substring(0, width) + "..." + str.substring(width)
+    }
+    return str
+  }
+
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  override fun getDataType(): KClass<*> {
+    return String::class
+  }
+}

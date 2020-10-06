@@ -15,6 +15,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-class VBooleanCodeColumn 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.util.base.InconsistencyException
+
+class VBooleanCodeColumn(
+        title: String,
+        column: String?,
+        names: Array<String>,
+        private val codes: Array<Boolean?>,
+        sortAscending: Boolean
+) : VCodeColumn(title, column, names, sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  /**
+   * Returns the index.of given object
+   */
+  override fun getObjectIndex(value: Any): Int = codes.indexOfFirst { it == value }.takeUnless { it == -1 }
+  ?: throw InconsistencyException("bad code value $value")
+
+  override fun getDataType(): KClass<*> {
+    return Boolean::class
+  }
+}

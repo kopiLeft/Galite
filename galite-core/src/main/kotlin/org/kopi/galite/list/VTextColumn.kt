@@ -15,6 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-class VTextColumn 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.visual.Message
+
+class VTextColumn (title: String, column: String, align: Int, width: Int, sortAscending: Boolean) :
+        VListColumn(title, column, align, Message.getMessage("text-type").length, sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+
+  /**
+   * Returns a string representation of value
+   */
+  override fun formatObject(value: Any?): Any {
+    return if (value == null) VConstants.EMPTY_TEXT else Message.getMessage("text-type")
+  }
+
+  override fun getDataType(): KClass<*> {
+    return String::class
+  }
+}

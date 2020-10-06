@@ -16,13 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.chart
+
+import org.kopi.galite.type.Date
 
 /**
- * This is a marker interface to handle actor fields differently in
- * the display creation. In fact actor fields defines a label inside
- * and does not need to put a ULabel object besides. We will use this
- * marker interface to exclude the field label object when the field display
- * is an instance of a UActorField.
+ * Represents a date chart column.
+ * @param ident The column identifier.
+ * @param format The date format to be used to format the date value.
  */
-interface UActorField : UTextField
+class VDateDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+  public override fun toString(value: Any?): String =
+          when (value) {
+            null ->     CConstants.EMPTY_TEXT
+            is Date ->  value.toString()
+            else ->     value.toString()
+          }
+}

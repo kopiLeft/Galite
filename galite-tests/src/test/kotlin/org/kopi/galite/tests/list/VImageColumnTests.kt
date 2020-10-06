@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,13 +15,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.tests.list
 
-/**
- * This is a marker interface to handle actor fields differently in
- * the display creation. In fact actor fields defines a label inside
- * and does not need to put a ULabel object besides. We will use this
- * marker interface to exclude the field label object when the field display
- * is an instance of a UActorField.
- */
-interface UActorField : UTextField
+import org.junit.Test
+import org.kopi.galite.list.VImageColumn
+
+import kotlin.test.assertEquals
+
+class VImageColumnTests {
+  @Test
+  fun vColorColumnTests() {
+    val vImageColumn = VImageColumn("title", "column", true)
+
+    assertEquals("", vImageColumn.formatObject(null))
+    assertEquals(ByteArray::class, vImageColumn.getDataType())
+  }
+}

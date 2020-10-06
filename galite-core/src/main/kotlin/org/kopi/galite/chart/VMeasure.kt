@@ -32,5 +32,5 @@ abstract class VMeasure protected constructor(ident: String, var color: VColor) 
    * @param value
    * @return
    */
-  internal abstract fun toNumber(value: Any?): Number
+  internal abstract fun toNumber(value: Any?): Number?
 }
