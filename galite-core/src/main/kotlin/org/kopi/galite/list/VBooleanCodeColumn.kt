@@ -20,24 +20,25 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
-/**
- * Represents a list column.
- */
-class VBooleanCodeColumn(title: String,
-                         column: String?,
-                         names: Array<String>,
-                         codes: Array<Boolean?>,
-                         sortAscending: Boolean)
-    : VCodeColumn(title,
-                  column!!,
-                  names,
-                  sortAscending) {
+import org.kopi.galite.util.base.InconsistencyException
 
-  override fun getObjectIndex(value: Any): Int {
-    TODO("Not yet implemented")
-  }
+class VBooleanCodeColumn(
+  title: String,
+  column: String,
+  names: Array<String>,
+  private val codes: Array<Boolean>,
+  sortAscending: Boolean
+) : VCodeColumn(title, column, names, sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  /**
+   * Returns the index.of given object
+   */
+  override fun getObjectIndex(value: Any): Int = codes.indexOfFirst { it == value }.takeUnless { it == -1 }
+  ?: throw InconsistencyException("bad code value $value")
 
   override fun getDataType(): KClass<*> {
-    TODO("Not yet implemented")
+    return Boolean::class
   }
 }

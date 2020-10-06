@@ -57,7 +57,7 @@ class LocalizationManager(val locale: Locale, private val defaultLocale: Locale)
    * @param     source          the source qualified name
    * @param     name            the identifier of the actor
    */
-  fun getActorLocalizer(source: String, name: String): ActorLocalizer {
+  fun getActorLocalizer(source: String?, name: String): ActorLocalizer {
     return ActorLocalizer(getDocument(source), name)
   }
 

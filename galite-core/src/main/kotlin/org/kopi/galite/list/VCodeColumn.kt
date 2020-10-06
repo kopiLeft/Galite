@@ -18,14 +18,11 @@
 
 package org.kopi.galite.list
 
-/**
- * Represents a list column.
- */
 abstract class VCodeColumn(
-        title: String,
-        column: String,
-        protected var names: Array<String>,
-        sortAscending: Boolean
+  title: String,
+  column: String,
+  protected val names: Array<String>,
+  sortAscending: Boolean
 ) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {
   /**
    * Returns a string representation of value
