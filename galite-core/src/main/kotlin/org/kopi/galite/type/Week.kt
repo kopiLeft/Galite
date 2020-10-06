@@ -18,7 +18,9 @@
 
 package org.kopi.galite.type
 
-import java.util.*
+import java.util.Locale
+import java.util.GregorianCalendar
+import java.util.Calendar
 
 /**
  * This class represents the week types
@@ -71,9 +73,7 @@ open class Week : Type {
    * subtract
    * @returns the number of weeks between two Weeks
    */
-  fun subtract(other: Week?): Int? {
-    return if (other == null) null else subtract(other as NotNullWeek)
-  }
+  fun subtract(other: Week?): Int?  = other ?.let { subtract(other as NotNullWeek) }
 
   /**
    * subtract
