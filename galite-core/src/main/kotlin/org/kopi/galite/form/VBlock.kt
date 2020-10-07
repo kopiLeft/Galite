@@ -35,7 +35,9 @@ abstract class VBlock {
     TODO()
   }
 
-  inner class OrderModel {}
+  inner class OrderModel {
+    //TODO()
+  }
   companion object {
     // record info flags
     protected val RCI_FETCHED = 0x00000001
@@ -53,70 +55,94 @@ abstract class VBlock {
   protected var ignoreAccessChange = false
 
   // static (compiled) data
-  protected var form // enclosing form
-          : VForm? = null
+  // enclosing form
+  protected var form : VForm? = null
 
-  var bufferSize // max number of buffered records
-          = 0
-  protected var fetchSize // max number of buffered IDs
-          = 0
-  protected var displaySize // max number of displayed records
-          = 0
-  protected var page // page number
-          = 0
+  // max number of buffered records
+  var bufferSize = 0
 
-  protected var source // qualified name of source file
-          : String? = null
-  protected var name // block name
-          : String? = null
-  protected var shortcut // block short name
-          : String? = null
-  protected var title // block title
-          : String? = null
+  // max number of buffered IDs
+  protected var fetchSize  = 0
+
+  // max number of displayed records
+  protected var displaySize  = 0
+
+  // page number
+  protected var page = 0
+
+  // qualified name of source file
+  protected var source : String? = null
+
+  // block name
+  protected var name   : String? = null
+
+  // block short name
+  protected var shortcut  : String? = null
+
+  // block title
+    protected var title   : String? = null
+
+  // the help on this block
   protected var align: BlockAlignment? = null
-  protected var help // the help on this block
-          : String? = null
-  protected lateinit var tables // names of database tables
-          : Array<String>
-  protected var options // block options
-          = 0
-  protected lateinit var access // access flags for each mode
-          : IntArray
-  protected lateinit var indices // error messages for violated indices
-          : Array<String>
 
-  protected lateinit var commands // commands
-          : Array<VCommand>
-  protected lateinit var actors // actors to send to form (move to block import)
-          : Array<VActor>
-  protected lateinit var fields // fields
-          : Array<VField>
+    protected var help  : String? = null
+
+  // names of database tables
+  protected lateinit var tables : Array<String>
+
+  // block options
+  protected var options = 0
+
+  // access flags for each mode
+  protected lateinit var access : IntArray
+
+  // error messages for violated indices
+  protected lateinit var indices: Array<String>
+
+  // commands
+  protected lateinit var commands : Array<VCommand>
+
+  // actors to send to form (move to block import)
+  protected lateinit var actors  : Array<VActor>
+
+  // fields
+  protected lateinit var fields : Array<VField>
+
   protected lateinit var VKT_Triggers: Array<IntArray>
 
   // dynamic data
-  var activeRecord // current record
-          = 0
+  // current record
+  var activeRecord = 0
+
   protected var activeField: VField? = null
+
   protected var detailMode = false
-  protected var recordCount // number of active records
-          = 0
-  protected var activeCommands // commands currently active
-          : Vector<VCommand>? = null
+
+  // number of active records
+  protected var recordCount  = 0
+
+  // commands currently active
+  protected var activeCommands : Vector<VCommand>? = null
 
   var currentRecord = 0
 
-  protected var mode // current mode
-          = 0
-  protected lateinit var recordInfo // status vector for records
-          : IntArray
-  protected lateinit var fetchBuffer // holds Id's of fetched records
-          : IntArray
-  protected var fetchCount // # of fetched records
-          = 0
-  protected var fetchPosition // position of current record
-          = 0
+  // current mode
+  protected var mode = 0
+
+  // status vector for records
+  protected lateinit var recordInfo : IntArray
+
+  // holds Id's of fetched records
+  protected lateinit var fetchBuffer : IntArray
+
+  // # of fetched records
+  protected var fetchCount  = 0
+
+  // position of current record
+  protected var fetchPosition = 0
 
   protected var blockListener: EventListenerList? = null
+  
   protected var orderModel: org.kopi.galite.form.VBlock.OrderModel? = null
 
   protected var border = 0

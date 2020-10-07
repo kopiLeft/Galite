@@ -18,26 +18,12 @@
 
 package org.kopi.galite.type
 
-import java.util.*
+import java.util.Calendar
 
 /**
- * This class represents kopi date types
+ * This class represents date types
  */
 class NotNullDate : Date {
   constructor(year: Int, month: Int, day: Int) : super(year, month, day) {}
-  constructor(date: java.sql.Date) : super(date) {}
-  constructor(image: String) : super(image) {}
-  constructor(calendar: Calendar) : super(calendar) {}
-
-  /**
-   * Constructs a Date from a scalar representation.
-   * DO NOT USE OUTSIDE OF THE LIBRARY
-   */
-  constructor(scalar: Int) : super(scalar) {}
-
-  companion object {
-    fun castToNotNull(value: Date?): NotNullDate? {
-      return value as NotNullDate?
-    }
-  }
+  //TODO()
 }

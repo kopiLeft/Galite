@@ -23,19 +23,11 @@ import org.kopi.galite.type.NotNullFixed
 
 class Query {
 
-  fun isNull(column: Int): Boolean {
-    TODO()
-  }
+  fun isNull(column: Int): Boolean = TODO()
 
-  fun getDate(pos: Int): NotNullDate {
-    TODO()
-  }
+  fun getDate(pos: Int): NotNullDate = TODO()
 
-  fun getFixed(pos: Int): NotNullFixed {
-    TODO()
-  }
+  fun getFixed(pos: Int): NotNullFixed = TODO()
 
-  fun getBoolean(column: Int): Boolean {
-    TODO()
-  }
+  fun getBoolean(column: Int): Boolean = TODO()
 }

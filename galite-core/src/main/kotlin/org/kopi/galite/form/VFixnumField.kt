@@ -19,7 +19,9 @@
 package org.kopi.galite.form
 
 import java.math.BigInteger
+
 import kotlin.reflect.KClass
+
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VFixnumColumn
 import org.kopi.galite.list.VListColumn
@@ -29,16 +31,16 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
 
-class VFixnumField(digits: Int,
-                   maxScale: Int,
-                   fraction: Boolean,
+class VFixnumField(private val digits: Int,
+                   private var maxScale: Int,
+                   val fraction: Boolean,
                    var minval: Fixed?,
                    var maxval: Fixed?)
   : VField(computeWidth(digits,
-        maxScale,
-        minval,
-        maxval),
-        1) {
+                        maxScale,
+                        minval,
+                        maxval),
+                        1) {
   /*
    * ----------------------------------------------------------------------
    * Constructor / build
@@ -56,8 +58,8 @@ class VFixnumField(digits: Int,
           : this(digits,
           maxScale,
           fraction,
-          if (minval == null) null else NotNullFixed(minval),
-          if (maxval == null) null else NotNullFixed(maxval)) {
+          minval?.let { NotNullFixed(it) },
+          maxval?.let { NotNullFixed(it) }) {
   }
 
   /**
@@ -68,10 +70,11 @@ class VFixnumField(digits: Int,
     super.build()
     value = arrayOfNulls(size)
     currentScale = IntArray(size)
+
     for (i in 0 until size) {
       currentScale[i] = maxScale
     }
-  }// comma
+  }
 
   /**
    * return the name of this field
@@ -80,11 +83,12 @@ class VFixnumField(digits: Int,
     var min: Fixed? = minval
     var max: Fixed? = maxval
     var nines: Long = 1
+
     if (min == null) {
-      min = NotNullFixed(Int.MIN_VALUE as BigInteger)
+      min = NotNullFixed(Int.MIN_VALUE.toBigInteger() )
     }
     if (max == null) {
-      max = NotNullFixed(Int.MAX_VALUE as BigInteger)
+      max = NotNullFixed(Int.MAX_VALUE.toBigInteger() )
     }
     for (i in width downTo 2) {
       // comma
@@ -93,9 +97,9 @@ class VFixnumField(digits: Int,
       }
     }
 
-    var big: Fixed = NotNullFixed((nines - 1) as BigInteger)
+    var big: Fixed = NotNullFixed((nines - 1).toBigInteger() )
     big = big.setScale(height)
-    var mbig: Fixed = NotNullFixed(-(nines / 10 - 1) as BigInteger)
+    var mbig: Fixed = NotNullFixed(-(nines / 10 - 1).toBigInteger() )
     mbig = mbig.setScale(height)
 
     max = if (max > big) max else big
@@ -136,9 +140,9 @@ class VFixnumField(digits: Int,
       return false
     }
     for (i in s.indices) {
-      if (!(((s[i] in '0'..'9')
-                      || (s[i] == '.') || (s[i] == '-') || (s[i] == ' '
-                      ) || (s[i] == ',') || (s[i] == '/')))) {
+      if (!((s[i] in '0'..'9')
+          || (s[i] == '.') || (s[i] == '-') || (s[i] == ' ')
+          || (s[i] == ',') || (s[i] == '/'))) {
         return false
       }
     }
@@ -152,6 +156,7 @@ class VFixnumField(digits: Int,
   override fun checkType(rec: Int, o: Any) {
     val s: String = o as String
     val scale: Int = currentScale[rec]
+
     if ((s == "")) {
       setNull(rec)
     } else {
@@ -203,7 +208,7 @@ class VFixnumField(digits: Int,
                       && block.isRecordFilled(i)
                       && (!exclude || i != block.activeRecord))) {
         if (sum == null) {
-          sum = NotNullFixed(0 as BigInteger)
+          sum = NotNullFixed(0.toBigInteger())
         }
         sum = sum.add(getFixed(i) as NotNullFixed)
       }
@@ -220,7 +225,7 @@ class VFixnumField(digits: Int,
    */
   fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed {
     val sum = computeSum(exclude)
-    return if (sum == null) coalesceValue else sum as NotNullFixed
+    return sum?.let { sum as NotNullFixed } ?: coalesceValue
   }
 
   /**
@@ -251,7 +256,6 @@ class VFixnumField(digits: Int,
   fun getScale(record: Int): Int {
     return currentScale[record]
   }
-
 
   /**
    * Returns the current scale for the current record.
@@ -291,18 +295,23 @@ class VFixnumField(digits: Int,
    * @param     scale           the scale value.
    */
   fun setMaxScale(scale: Int) {
-    // dynamic maxScale musn't exceed the maxScale defined in the field declaration (fieldMaxScale).
+    // dynamic maxScale mustn't exceed the maxScale defined in the field declaration (fieldMaxScale).
     if (scale > fieldMaxScale) {
-      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale.toString(), fieldMaxScale.toString()))
+      throw InconsistencyException(MessageCode.getMessage("VIS-00060",
+                                                           scale.toString(),
+                                                           fieldMaxScale.toString()))
     }
     maxScale = scale
+
     if (minval!!.scale > maxScale) {
       minval = minval!!.setScale(maxScale)
     }
+
     if (maxval!!.scale > maxScale) {
       maxval = maxval!!.setScale(maxScale)
     }
-    //records scale must be <= maxscale
+
+    //records scale must be <= maxScale
     for (i in currentScale.indices) {
       if (currentScale[i] > maxScale) {
         currentScale[i] = maxScale
@@ -484,27 +493,29 @@ class VFixnumField(digits: Int,
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if ((t < block.bufferSize
+    if (t < block.bufferSize
                     && (((oldValue != null && value[t] == null)
                     || (oldValue == null && value[t] != null)
-                    || (oldValue != null && oldValue != value[t]))))) {
+                    || (oldValue != null && oldValue != value[t])))) {
       fireValueChanged(t)
     }
   }
+
   /*
    * ----------------------------------------------------------------------
    * FORMATTING VALUES WRT FIELD TYPE
    * ----------------------------------------------------------------------
    */
+
   /**
-   * Returns a string representation of a bigdecimal value wrt the field type.
+   * Returns a string representation of a big decimal value wrt the field type.
    */
-  fun formatFixed(value: org.kopi.galite.type.Fixed): String {
+  fun formatFixed(value: Fixed): String {
     return toText(value.setScale(currentScale[block.activeRecord]))
   }
 
   /**
-   * Returns the string represention in human-readable format.
+   * Returns the string representation in human-readable format.
    */
   fun toText(v: Fixed): String {
     return if (!fraction) {
@@ -515,95 +526,59 @@ class VFixnumField(digits: Int,
   }
 
   private fun toFraction(str: String): String {
-    var dot: Int
+    val dot: Int
+
     if ((str.indexOf(',').also { dot = it }) == -1) {
       return str
     }
     val precomma = str.substring(0, dot)
     val fract = Integer.valueOf(str.substring(dot + 1, str.length)).toInt()
+
     when {
-      fract * 64 % 1000000 != 0 -> {
-        return str
-      }
-      fract == 0 -> {
-        return precomma
-      }
+      fract * 64 % 1000000 != 0 -> return str
+      fract == 0 -> return precomma
       else -> {
-        var num: Int
         var den = 64
-        num = (fract * den) / 1000000
+        var num = (fract * den) / 1000000
         while (num % 2 == 0) {
           num /= 2
           den /= 2
         }
-        when {
-          precomma == "0" -> {
-            return "$num/$den"
-          }
-          precomma == "-0" -> {
-            return "-$num/$den"
-          }
-          else -> {
-            return "$precomma $num/$den"
-          }
+        return when (precomma) {
+          "0" ->  "$num/$den"
+          "-0" -> "-$num/$den"
+          else -> "$precomma $num/$den"
         }
       }
     }
   }
 
   private fun checkCriticalValue() {
-    if (criticalMinValue != null) {
-      if (value[0] != null && value[0]!! < criticalMinValue!!) {
-        setHasCriticalValue(true)
-        return
-      }
-    }
-    if (criticalMaxValue != null) {
-      if (value[0] != null && value[0]!!.compareTo(criticalMaxValue!!) > 0) {
-        setHasCriticalValue(true)
-        return
-      }
+    if (value[0] != null
+            && (criticalMinValue != null
+                    && value[0]!! < criticalMinValue!! || criticalMaxValue != null
+                    && value[0]!! > criticalMaxValue!!)) {
+      setHasCriticalValue(true)
+      return
     }
     setHasCriticalValue(false)
   }
 
   private fun setHasCriticalValue(critical: Boolean) {
-    if (getDisplay() != null) {
-      (getDisplay() as UTextField).setHasCriticalValue(critical)
-    }
+    getDisplay()?.let { (it as UTextField).setHasCriticalValue(critical) }
   }
 
-  /**
-   * Returns `true` if its is a fraction field.
-   * @return `true` if its is a fraction field.
-   */
   /*
      * ----------------------------------------------------------------------
      * DATA MEMBERS
      * ----------------------------------------------------------------------
      */
 
-  // static (compiled) data
-  val fraction // display as fraction
-          : Boolean
-  private val digits: Int
-
-  /**
-   * Represents the max permitted value.
-   * @return The max permitted value.
-   */
   // dynamic data
   private var fieldMaxScale = 0
 
-  /**
-   * Represents the maximum scale to be used for this field.
-   * @return The maximum scale to be used for this field.
-   */
-  var maxScale: Int = 0
-    private set
-
-  private lateinit var currentScale // number of digits after dot
-          : IntArray
+  // number of digits after dot
+  private lateinit var currentScale : IntArray
 
   private lateinit var value: Array<Fixed?>
 
@@ -612,11 +587,7 @@ class VFixnumField(digits: Int,
   protected var criticalMaxValue: Fixed? = null
 
   companion object {
-    /*
-   * ----------------------------------------------------------------------
-   * PRIVATE METHODS
-   * ----------------------------------------------------------------------
-   */
+
     /**
      * Parses the string argument as a fixed number in human-readable format.
      */
@@ -799,7 +770,7 @@ class VFixnumField(digits: Int,
     }
 
     /**
-     * Calculaes the upper bound of a fixnum field : FIXNUM(digits, scale)
+     * Calculates the upper bound of a fixnum field : FIXNUM(digits, scale)
      *
      * @param     digits          the number of total digits.
      * @param     scale           the number of digits representing the fractional part.
@@ -866,12 +837,8 @@ class VFixnumField(digits: Int,
    * Constructor
    */
   init {
-    fieldMaxScale = maxScale
-    this.maxScale = maxScale
     minval = minval?.setScale(fieldMaxScale) ?: calculateUpperBound(digits, fieldMaxScale).negate()
     maxval = maxval?.setScale(fieldMaxScale) ?: calculateUpperBound(digits, fieldMaxScale)
-    this.digits = digits
-    this.fraction = fraction
     criticalMinValue = minval
     criticalMaxValue = maxval
   }
