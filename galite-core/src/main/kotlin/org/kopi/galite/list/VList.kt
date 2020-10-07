@@ -89,7 +89,7 @@ class VList(private val ident: String,
   fun localize(manager: LocalizationManager) {
     val loc: ListLocalizer = manager.getListLocalizer(source, ident)
     for (i in columns.indices) {
-      columns.get(i).localize(loc)
+      columns[i].localize(loc)
     }
   }
 
