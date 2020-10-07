@@ -177,7 +177,7 @@ class VDateField : VField(10, 1) {
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to kopi users in next release
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     setDate(r, v as Date?)
   }
 

@@ -67,7 +67,7 @@ abstract class VField(val width: Int, val height: Int) {
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
    */
-  open fun setObject(r: Int, v: Any) {
+  open fun setObject(r: Int, v: Any?) {
     TODO()
   }
 

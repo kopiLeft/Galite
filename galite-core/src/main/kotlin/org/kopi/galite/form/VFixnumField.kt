@@ -379,7 +379,7 @@ class VFixnumField(private val digits: Int,
    * Warning:   This method will become inaccessible to kopi users in next release
    * @kopi      inaccessible
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     // !!! HACK for Oracle
     if (v != null && (v is Int)) {
       setFixed(r, NotNullFixed(v as BigInteger))
