@@ -44,6 +44,6 @@ class RootMenu(id: Int, name: String?) {
     TODO()
   }
   companion object {
-    const val ROOT_MENU_LOCALIZATION_RESOURCE = "org/kopi/vkopi/lib/resource/RootMenu"
+    const val ROOT_MENU_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/RootMenu"
   }
 }
