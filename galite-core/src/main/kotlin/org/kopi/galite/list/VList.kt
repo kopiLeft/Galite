@@ -69,23 +69,17 @@ class VList(private val ident: String,
   /**
    * Returns the number of columns.
    */
-  fun columnCount(): Int {
-    return columns.size
-  }
+  fun columnCount(): Int = columns.size
 
   /**
    * Returns the column at index.
    */
-  fun getColumn(pos: Int): VListColumn {
-    return columns[pos]
-  }
+  fun getColumn(pos: Int): VListColumn = columns[pos]
 
   /**
    * Returns `true` if the list has auto complete support.
    */
-  fun hasAutocomplete(): Boolean {
-    return autocompleteLength >= 0 && autocompleteType > AUTOCOMPLETE_NONE
-  }
+  fun hasAutocomplete(): Boolean = autocompleteLength >= 0 && autocompleteType > AUTOCOMPLETE_NONE
 
   /**
    * Localize this object.
