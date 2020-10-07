@@ -18,5 +18,50 @@
 
 package org.kopi.galite.chart
 
-class VFixnumCodeMeasure {
+import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VColor
+
+/**
+ * Represents a code decimal measure.
+ *
+ * @param ident The measure identifier.
+ * @param color The measure color.
+ * @param type The measure type.
+ * @param source The localization source.
+ * @param idents The code identifiers.
+ * @param codes The decimal codes.
+ */
+class VFixnumCodeMeasure(ident: String,
+                         color: VColor,
+                         type: String,
+                         source: String,
+                         idents: Array<String>,
+                         private val codes: Array<NotNullFixed>)
+          : VCodeMeasure(ident,
+                         color,
+                         type,
+                         source,
+                         idents) {
+
+  // --------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // --------------------------------------------------------------------
+  override fun getIndex(value: Any?): Int {
+    codes.forEachIndexed { index, code ->
+      if (value == code) {
+        return index
+      }
+    }
+    throw InconsistencyException("Object not found $value, $ident")
+  }
+
+  override fun toNumber(value: Any?): Number? {
+    codes.forEach { code ->
+      if (value == code) {
+        return code
+      }
+    }
+    return null
+  }
 }

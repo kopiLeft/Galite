@@ -29,6 +29,7 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 
+
 abstract class VField(val width: Int, val height: Int) {
 
   // ----------------------------------------------------------------------
@@ -42,7 +43,23 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
+  open fun isNull(r: Int): Boolean {
+    TODO()
+  }
+
+  open fun autofill() {
+    TODO()
+  }
+
+  open fun getText(r: Int): String {
+    TODO()
+  }
+
   open fun build() {
+    TODO()
+  }
+
+  open fun enumerateValue(desc: Boolean) {
     TODO()
   }
 
@@ -54,7 +71,7 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun toText(o: Any?): String? {
+  open fun toText(o: Any): String? {
     TODO()
   }
 
@@ -68,6 +85,14 @@ abstract class VField(val width: Int, val height: Int) {
   protected open fun helpOnType(help: VHelpGenerator, names: Array<String>?) {
     TODO()
   }
+
+  /**
+   *
+   */
+  protected open fun helpOnType(help: VHelpGenerator) {
+    helpOnType(help, null)
+  }
+
   fun getPriority(): Int {
     TODO()
   }
@@ -79,7 +104,23 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun fillField(handler: PredefinedValueHandler): Boolean {
+  open fun hasAutocomplete(): Boolean {
+    TODO()
+  }
+
+  open fun getAutocompleteLength(): Int {
+    TODO()
+  }
+
+  open fun getAutocompleteType(): Int {
+    TODO()
+  }
+
+  open fun hasAutofill(): Boolean {
+    TODO()
+  }
+
+  open fun fillField(handler: PredefinedValueHandler?): Boolean {
     TODO()
   }
 
@@ -87,11 +128,25 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
+  open fun clear(r: Int) {
+    TODO()
+  }
+
+  open fun getDisplay(): UField = TODO()
+
   open fun checkType(rec: Int, s: Any) {
     TODO()
   }
 
+  open fun checkType(s: Any) {
+    TODO()
+  }
+
   open fun getObject(r: Int): Any {
+    TODO()
+  }
+
+  fun setDimension(width: Int, height: Int) {
     TODO()
   }
 
@@ -123,11 +178,11 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun getDisplay(): UField? {
+  open fun getObjectImpl(r: Int): Any? {
     TODO()
   }
 
-  open fun getObjectImpl(r: Int): Any? {
+  open fun getType(): Int {
     TODO()
   }
 
@@ -155,9 +210,11 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun clear(r: Int) {
+  fun getForm(): VForm {
     TODO()
   }
+
+  fun getSearchCondition(): String? = TODO()
 
   companion object {
     const val MDL_FLD_COLOR = 1
@@ -168,66 +225,53 @@ abstract class VField(val width: Int, val height: Int) {
   }
 
   lateinit var block: VBlock
-
-  // access in each mode
-  private val access : IntArray
+  private val access // access in each mode
+          : IntArray
     get() {
       TODO()
     }
+  private val priority // order in select results
+          = 0
+  private val indices // bitset of unique indices
+          = 0
+  val name // field name (for dumps)
+          : String? = null
+  private val label // field label
+          : String? = null
+  private val options // options
+          = 0
+  private val help // help text
+          : String? = null
+  private val index // The position in parent field array
+          = 0
+  val align // field alignment
+          = 0
+  private val posInArray // position in array of fields
+          = 0
 
-  // order in select results
-  private val priority = 0
+  lateinit var list: VList // list
 
-  // bitset of unique indices
-  private val indices = 0
+  lateinit var columns // columns in block's tables
+          : Array<VColumn>
 
-  // field name (for dumps)
-  val name : String? = null
+  //  private   VFieldUI        ui;             // The UI manager
+  lateinit var alias // The alias field
+          : VField
 
-   // field label
-  private val label : String? = null
-
-  // options
-  private val options = 0
-
-   // help text
-  private val help : String? = null
-
-  // The position in parent field array
-  private val index = 0
-
-  // field alignment
-  val align = 0
-
-  // position in array of fields
-  private val posInArray = 0
-
-  // list
-  lateinit var list: VList
-
-  // columns in block's tables
-  lateinit var columns : Array<VColumn>
-
-  //  private   VFieldUI        ui;
-  // The UI manager
-  // The alias field
-  lateinit var alias : VField
-
-  // changed by user / changes are done in the model
-  private val changed = false
-
-  // changed by user / changes are in the ui -> update model
-  val changedUI = false
+  // changed?
+  private val changed // changed by user / changes are done in the model
+          = false
+  val changedUI // changed by user / changes are in the ui -> update model
+          = false
 
   // UPDATE model before doing anything
   private val border = 0
 
   // dynamic data
-  // search operator
-  private val searchOperator = 0
-
-  // dynamic access
-  private val dynAccess : IntArray = TODO()
+  private val searchOperator // search operator
+          = 0
+  private val dynAccess // dynamic access
+          : IntArray = TODO()
 
   // ####
   private val fieldListener: EventListenerList? = null
@@ -239,9 +283,9 @@ abstract class VField(val width: Int, val height: Int) {
   private val pos: VPosition? = null
   private val cmd: Array<VCommand>
 
-  // foreground colors for this field.
-  private val foreground : Array<VColor>
+  private val foreground // foreground colors for this field.
+          : Array<VColor>
+  private val background // background colors for this field.
+          : Array<VColor>
 
-  // background colors for this field.
-  private val background : Array<VColor>
 }

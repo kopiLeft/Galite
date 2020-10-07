@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 package org.kopi.galite.form
 
 import java.util.Vector
@@ -142,7 +141,7 @@ abstract class VBlock {
   protected var fetchPosition = 0
 
   protected var blockListener: EventListenerList? = null
-  
+
   protected var orderModel: org.kopi.galite.form.VBlock.OrderModel? = null
 
   protected var border = 0

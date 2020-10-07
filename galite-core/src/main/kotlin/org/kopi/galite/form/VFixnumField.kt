@@ -423,7 +423,7 @@ class VFixnumField(private val digits: Int,
     return value[r]
   }
 
-  override fun toText(o: Any?): String {
+  override fun toText(o: Any): String {
     if (o == null) {
       return ""
     }
@@ -565,7 +565,7 @@ class VFixnumField(private val digits: Int,
   }
 
   private fun setHasCriticalValue(critical: Boolean) {
-    getDisplay()?.let { (it as UTextField).setHasCriticalValue(critical) }
+    getDisplay().let { (it as UTextField).setHasCriticalValue(critical) }
   }
 
   /*

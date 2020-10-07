@@ -16,25 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.chart
 
-import java.io.OutputStream
+import org.kopi.galite.type.Date
 
-class PExport2XLS(table: UReport.UTable, model: MReport, printOptions: PConfig, pageTitle: String) : PExport(table,
-        model, printOptions, pageTitle), Constants {
-  override fun exportHeader(data: Array<String?>) {
-    TODO("Not yet implemented")
-  }
-
-  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
-    TODO("Not yet implemented")
-  }
-
-  override fun export(stream: OutputStream) {
-    TODO("Not yet implemented")
-  }
-
-  override fun startGroup(subTitle: String?) {
-    TODO("Not yet implemented")
-  }
+/**
+ * Represents a date chart column.
+ * @param ident The column identifier.
+ * @param format The date format to be used to format the date value.
+ */
+class VDateDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+  public override fun toString(value: Any?): String =
+          when (value) {
+            null ->     CConstants.EMPTY_TEXT
+            is Date ->  value.toString()
+            else ->     value.toString()
+          }
 }
