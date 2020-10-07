@@ -39,14 +39,15 @@ import org.jetbrains.exposed.sql.transactions.transaction
  *
  * @param ctxt          the context where to look for application
  * @param isSuperUser   is it a super user ? it sets the accessibility of the module
- * @param userName      the user name. represents the user loaded with this menu tree instance.
+ * @param menuTreeUser  the user name. represents the user loaded with this menu tree instance.
+ * @param groupName     the group name
  * @param loadFavorites should load favorites ?
  */
 class VMenuTree(ctxt: DBContext,
-                var isSuperUser: Boolean,
-                val menuTreeUser: String?,
-                private val groupName: String?,
-                loadFavorites: Boolean) : VWindow(ctxt) {
+                var isSuperUser: Boolean = false,
+                val menuTreeUser: String? = null,
+                private val groupName: String? = null,
+                loadFavorites: Boolean = true) : VWindow(ctxt) {
 
   companion object {
     private const val SELECT_MODULES = "" // TODO
@@ -111,19 +112,6 @@ class VMenuTree(ctxt: DBContext,
     localizeRootMenus(ApplicationContext.getDefaultLocale())
   }
 
-  /**
-   * Constructs a new instance of VMenuTree.
-   * @param ctxt the context where to look for application
-   */
-  constructor(ctxt: DBContext) : this(ctxt, false, null, true) {}
-
-
-  constructor(ctxt: DBContext,
-              isSuperUser: Boolean,
-              userName: String?,
-              loadFavorites: Boolean)
-          : this(ctxt, isSuperUser, userName, null, loadFavorites)
-
   // ----------------------------------------------------------------------
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
@@ -134,6 +122,7 @@ class VMenuTree(ctxt: DBContext,
    */
   fun localizeActors(locale: Locale) {
     var manager: LocalizationManager?
+
     manager = LocalizationManager(locale, Locale.getDefault())
     try {
       super.localizeActors(manager) // localizes the actors in VWindow
@@ -192,6 +181,7 @@ class VMenuTree(ctxt: DBContext,
    */
   override fun executeVoidTrigger(key: Int) {
     val currentDisplay = getDisplay()
+
     when (key) {
       CMD_QUIT -> currentDisplay.closeWindow()
       CMD_OPEN -> currentDisplay.launchSelectedForm()
@@ -212,10 +202,12 @@ class VMenuTree(ctxt: DBContext,
       CMD_INFORMATION -> {
         val versionArray = Utils.getVersion()
         var version = ""
+
         versionArray.forEach {
           version += "\n" + it
         }
         val informationText: String
+
         informationText = try {
           ApplicationContext.getDefaults().getInformationText()
         } catch (e: PropertyException) {
@@ -251,6 +243,7 @@ class VMenuTree(ctxt: DBContext,
    */
   protected fun localizeModules(locale: Locale) {
     var manager: LocalizationManager?
+
     manager = LocalizationManager(locale, Locale.getDefault())
 
     // localizes the modules
@@ -289,13 +282,13 @@ class VMenuTree(ctxt: DBContext,
    */
   private fun createTopLevelTree() {
     root = DefaultMutableTreeNode(Module(0,
-            0,
-            VlibProperties.getString("PROGRAM"),
-            VlibProperties.getString("program"),
-            null,
-            Module.ACS_PARENT,
-            Int.MAX_VALUE,
-            null))
+                                         0,
+                                         VlibProperties.getString("PROGRAM"),
+                                         VlibProperties.getString("program"),
+                                         null,
+                                         Module.ACS_PARENT,
+                                         Int.MAX_VALUE,
+                                         null))
     for (menu in ROOT_MENUS) {
       if (!menu.isEmpty()) {
         (root as DefaultMutableTreeNode).add(menu.getRoot() as DefaultMutableTreeNode)
@@ -327,8 +320,7 @@ class VMenuTree(ctxt: DBContext,
   }
 
   private fun findModuleById(modules: List<Module>, id: Int): Module? {
-    for (i in modules.indices) {
-      val module = modules[i]
+    modules.forEach { module ->
       if (module.id == id) {
         return module
       }
@@ -365,6 +357,7 @@ class VMenuTree(ctxt: DBContext,
     if (!isSuperUser) {
       // walk downwards because we remove elements
       val iterator = localModules.listIterator(localModules.size - 1)
+
       while (iterator.hasPrevious()) {
         val module = iterator.previous()
 
@@ -388,12 +381,12 @@ class VMenuTree(ctxt: DBContext,
    */
   protected fun addLogoutModule(localModules: MutableList<Module>) {
     val logout = Module(Int.MAX_VALUE,
-            USER_MENU,
-            "logout",
-            RootMenu.ROOT_MENU_LOCALIZATION_RESOURCE,
-            LogoutModule::class.java.name,
-            Module.ACS_TRUE, Int.MIN_VALUE,
-            null)
+                        USER_MENU,
+                        "logout",
+                        RootMenu.ROOT_MENU_LOCALIZATION_RESOURCE,
+                        LogoutModule::class.java.name,
+                        Module.ACS_TRUE, Int.MIN_VALUE,
+                        null)
     items.add(logout)
     localModules.add(logout)
   }
@@ -420,13 +413,11 @@ class VMenuTree(ctxt: DBContext,
     setInformationText(s)
   }
 
-  fun getModules(): MutableList<Module> {
-    return items
-  }
+  fun getModules(): MutableList<Module> = items
 
   fun getModule(executable: Executable): Module? {
     items.forEach { item ->
-      if (item.`object` != null && item.`object` == executable.javaClass.name) {
+      if (item.objectName != null && item.objectName == executable.javaClass.name) {
         return item
       }
     }
@@ -439,9 +430,7 @@ class VMenuTree(ctxt: DBContext,
    */
   fun getRoots(): List<RootMenu> = listOf(*ROOT_MENUS)
 
-  fun getShortcutsID(): List<Int> {
-    return shortcutsID
-  }
+  fun getShortcutsID(): List<Int> = shortcutsID
 
   override fun getType(): Int = Constants.MDL_MENU_TREE
 

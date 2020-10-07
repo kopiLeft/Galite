@@ -33,8 +33,6 @@ class VHelpViewer : VWindow() {
     private const val HELPVIEWER_LOCALIZATION_RESOURCE = "org/kopi/vkopi/lib/resource/HelpViewer"
 
     const val CMD_QUIT = 0
-    //   private static final int	CMD_TOP		= 1;
-    //   private static final int	CMD_INDEX	= 2;
 
     init {
       WindowController.windowController.registerWindowBuilder(Constants.MDL_HELP, object : WindowBuilder {
@@ -100,9 +98,6 @@ class VHelpViewer : VWindow() {
   // ---------------------------------------------------------------------
   var url: URL? = null
 
-  /**
-   * Construct a new Editor
-   */
   init {
     setTitle(VlibProperties.getString("help_viewer"))
     setActors(arrayOf(

@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
 import org.kopi.galite.base.Image
@@ -25,7 +26,7 @@ class Module(
         val parent: Int,
         shortname: String,
         source: String,
-        val `object`: String?,
+        val objectName: String?,
         var accessibility: Int,
         priority: Int,
         icon: String?) : Comparable<Module?> {
@@ -49,8 +50,6 @@ class Module(
     private set
   var help: String? = null
     private set
-  private val icon: Image? = null
-  private var smallIcon: Image? = null
 
   companion object {
     const val ACS_PARENT = 0
