@@ -18,6 +18,8 @@
 
 package org.kopi.galite.form
 
+import kotlin.reflect.KClass
+
 import org.kopi.galite.base.Query
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VListColumn
@@ -32,7 +34,7 @@ class VFixnumField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override val dataType: Class<*>
+  override val dataType: KClass<*>
     get() = TODO("Not yet implemented")
 
   override fun getListColumn(): VListColumn {
@@ -88,10 +90,6 @@ class VFixnumField(width: Int, height: Int) : VField(width, height) {
   }
 
   override fun setDisplay(display: UComponent) {
-    TODO("Not yet implemented")
-  }
-
-  override fun getDisplay(): UComponent? {
     TODO("Not yet implemented")
   }
 }

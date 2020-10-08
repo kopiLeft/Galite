@@ -18,7 +18,9 @@
 
 package org.kopi.galite.form
 
-interface PredefinedValueHandler {
+import java.io.Serializable
+
+interface PredefinedValueHandler : Serializable {
 
   fun selectDefaultValue(): Boolean
 }

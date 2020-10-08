@@ -36,7 +36,7 @@ class VBlock {
     TODO()
   }
 
-  fun getActiveField(): VField {
+  fun getActiveField(): VField? {
     TODO()
   }
 

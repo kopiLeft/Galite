@@ -26,5 +26,5 @@ interface VActionListener : EventListener {
    * Performs the appropriate action asynchronously.
    * @param action The [Action] to be performed
    */
-  open fun performAsyncAction(action: Action)
+  fun performAsyncAction(action: Action)
 }

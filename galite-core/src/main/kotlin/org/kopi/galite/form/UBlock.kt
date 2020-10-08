@@ -18,7 +18,9 @@
 
 package org.kopi.galite.form
 
-interface UBlock {
+import org.kopi.galite.base.UComponent
+
+interface UBlock : UComponent, BlockListener {
 
   fun getFormView(): UForm
 }

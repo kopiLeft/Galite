@@ -18,9 +18,13 @@
 
 package org.kopi.galite.visual
 
-class Module {
+class Module : Comparable<Module>{
 
   companion object {
     fun getExecutable(object1: String?): Executable = TODO()
+  }
+
+  override fun compareTo(other: Module): Int {
+    TODO("Not yet implemented")
   }
 }

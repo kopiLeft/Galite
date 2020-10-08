@@ -22,13 +22,12 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.l10n.ListLocalizer
 
-
 abstract class VListColumn(
         var title: String,
         val column: String,
         private val align: Int,
         val width: Int,
-        val isSortAscending: Boolean,
+        val isSortAscending: Boolean
 ) : VConstants, ObjectFormatter {
   /**
    * Returns the column alignment

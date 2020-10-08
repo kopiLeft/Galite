@@ -24,7 +24,10 @@ import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
+import kotlin.reflect.KClass
+
 import org.kopi.galite.base.Query
+import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VColumn
@@ -170,35 +173,31 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the auto complete length.
    * @return The auto complete length.
    */
-  val autocompleteLength: Int
-    get() = if (list != null) list!!.getAutocompleteLength() else 0
+  open fun getAutocompleteLength(): Int {
+    return if (list != null) list!!.getAutocompleteLength() else 0
+  }
 
   /**
    * Returns the auto complete type.
    * @return The auto complete type.
    */
-  val autocompleteType: Int
-    get() = if (list != null) list!!.getAutocompleteType() else VList.AUTOCOMPLETE_NONE
+  open fun getAutocompleteType(): Int {
+    return if (list != null) list!!.getAutocompleteType() else VList.AUTOCOMPLETE_NONE
+  }
 
   /**
    * return true if this field implements "enumerateValue"
    */
   fun hasNextPreviousEntry(): Boolean = list != null
 
-  fun hasNullableCols(): Boolean {
-    for (i in columns!!.indices) {
-      if (columns!![i]!!.isNullable()) {
-        return true
-      }
-    }
-    return false
-  }
+  fun hasNullableCols(): Boolean = columns!!.find { it!!.isNullable() } != null
 
   /**
    * Returns true if it is a numeric field.
    */
-  val isNumeric: Boolean
-    get() = false
+  open fun isNumeric(): Boolean {
+    return false
+  }
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -214,7 +213,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     label = loc.getLabel()
     toolTip = loc.getHelp()
     if (list != null) {
-      list!!.localize(loc.manager)
+      list?.localize(loc.manager)
     }
 
     // field type specific localizations
@@ -288,7 +287,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the data type handled by this field.
    * @return The data type handled by this field.
    */
-  abstract val dataType: Class<*>
+  abstract val dataType: KClass<*>
 
   /**
    * verify that value is valid (on exit)
@@ -306,10 +305,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun onTextChange(text: String) {
     changed = true
     changedUI = true
-    autoLeave(text)
+    autoLeave()
   }
 
-  private fun autoLeave(check: String) {
+  private fun autoLeave() {
     assert(this == block!!.getActiveField()) { threadInfo() + "current field: " + block!!.getActiveField() }
     if (!hasTrigger(VConstants.TRG_AUTOLEAVE)) {
       return
@@ -326,32 +325,32 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           block!!.getForm().getActiveBlock()!!.gotoNextField()
         }
       }
-      (display as UField).getBlockView().getFormView().performAsyncAction(action)
+      (getDisplay() as UField).getBlockView().getFormView().performAsyncAction(action)
     }
   }
+
+
+  override fun setDisplay(display: UComponent) {
+    // not used
+  }
+
   /**
    * Return the display
-   */// not used
-  /**
-   * @Override
    */
-  val display: UField?
-    get() {
-      var value: UField? = null
-
-      if (hasListener) {
-        val listeners = fieldListener!!.listenerList
-        var i = listeners.size - 2
-
-        while (i >= 0 && value == null) {
-          if (listeners[i] == FieldListener::class.java) {
-            value = (listeners[i + 1] as FieldListener).getCurrentDisplay()
-          }
-          i -= 2
+  override fun getDisplay(): UField? {
+    var value: UField? = null
+    if (hasListener) {
+      val listeners = fieldListener!!.listenerList
+      var i = listeners.size - 2
+      while (i >= 0 && value == null) {
+        if (listeners[i] === FieldListener::class.java) {
+          value = (listeners[i + 1] as FieldListener).getCurrentDisplay()
         }
+        i -= 2
       }
-      return value
     }
+    return value
+  }
 
   fun getType(): Int = MDL_FLD_TEXT
 
@@ -484,12 +483,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     fireLeaved()
   }
 
-  /**
-   *
-   */
-  fun hasFocus(): Boolean {
-    return block!!.getActiveField() == this
-  }
+  fun hasFocus(): Boolean = block!!.getActiveField() == this
 
   /**
    * Changes access dynamically, overriding mode access
@@ -498,8 +492,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     var value = value
 
     if (getDefaultAccess() < value) {
-      // access can never be higher than the default
-      // access
+      // access can never be higher than the default access
       value = getDefaultAccess()
     }
     if (value != dynAccess[at]) {
@@ -518,7 +511,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Changes access dynamically, overriding mode access
    */
   fun setAccess(access: IntArray) {
-    assert(access.size == this.access.size) { threadInfo() + "new acces length: " + access.size + " old: " + this.access.size }
+    assert(access.size == this.access.size) { threadInfo() + "new access length: " + access.size + " old: " + this.access.size }
     this.access = access
   }
 
@@ -526,7 +519,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * return access of this field in current mode
    */
   fun getDefaultAccess(): Int = access[block!!.getMode()]
-
 
   fun getAccess(i: Int): Int {
     return if (i == -1) {
@@ -545,12 +537,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     updateAccess(block!!.getActiveRecord())
   }
 
-  @JvmOverloads
   fun updateAccess(current: Int = block!!.getCurrentRecord()) {
     if (isInternal()) {
       // internal fields are always hidden
       // there no need to update the field
-      // (also neccessary for performance)
+      // (also necessary for performance)
       return
     }
 
@@ -563,7 +554,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       } else if (hasTrigger(VConstants.TRG_FLDACCESS)) {
         // evaluate ACCESS-Trigger
         val oldRow: Int = block!!.getActiveRecord()
-        val old: VField = block!!.getActiveField()
+        val old: VField = block!!.getActiveField()!!
 
         // used by callTrigger
         block!!.setActiveRecord(current)
@@ -630,32 +621,16 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the column name in the table with specified correlation.
    * returns null if the field has no access to this table.
    */
-  fun lookupColumn(corr: Int): String? {
-    for (i in 0 until getColumnCount()) {
-      if (corr == columns!![i]!!.getTable()) {
-        return columns!![i]!!.name
-      }
-    }
-    return null
-  }
-
+  fun lookupColumn(corr: Int): String? = columns!!.find { corr == it!!.getTable() }?.name
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Int): Boolean {
-    for (i in 0 until getColumnCount()) {
-      if (corr == columns!![i]!!.getTable()) {
-        return columns!![i]!!.key
-      }
-    }
-    return false
-  }
+  fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable()}?.key ?: false
 
   /**
    * Is the field part of given index ?
    */
   fun hasIndex(idx: Int): Boolean = indices and (1 shl idx) != 0
-
 
   /**
    * Returns the position in select results.
@@ -669,16 +644,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun getSearchType(): Int {
     return if (isNull(block!!.getActiveRecord())) {
-      when {
-        getSearchOperator() == VConstants.SOP_EQ -> {
-          VConstants.STY_NO_COND
-        }
-        getSearchOperator() == VConstants.SOP_NE -> {
-          VConstants.STY_MANY
-        }
-        else -> {
-          VConstants.STY_EXACT
-        }
+      when(getSearchOperator()) {
+        VConstants.SOP_EQ -> VConstants.STY_NO_COND
+        VConstants.SOP_NE -> VConstants.STY_MANY
+        else -> VConstants.STY_EXACT
       }
     } else {
       val buffer = getSql(block!!.getActiveRecord())
@@ -696,19 +665,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun getSearchCondition(): String? {
     return if (isNull(block!!.getActiveRecord())) {
-      when {
-        getSearchOperator() == VConstants.SOP_EQ -> {
-          null
-        }
-        getSearchOperator() == VConstants.SOP_NE -> {
-          "IS NOT NULL"
-        }
-        else -> {
-          "IS NULL"
-        }
+      when(getSearchOperator()) {
+        VConstants.SOP_EQ -> null
+        VConstants.SOP_NE -> "IS NOT NULL"
+        else -> "IS NULL"
       }
     } else {
-      var operator: String = VConstants.OPERATOR_NAMES.get(getSearchOperator())
+      var operator: String = VConstants.OPERATOR_NAMES[getSearchOperator()]
       var operand = getSql(block!!.getActiveRecord())
 
       if (operand.indexOf('*') == -1) {
@@ -748,13 +711,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the field label.
    *
    */
-  fun getHeader(): String = if (label == null) "" else label!!
-
-  /**
-   * Returns the position of this field in the array of fields or -1
-   * if this field is not in a multifield
-   */
-  fun getPosInArray(): Int = posInArray
+  fun getHeader(): String = label ?: ""
 
   // ----------------------------------------------------------------------
   // MANAGING FIELD VALUES
@@ -1152,14 +1109,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun isNull(r: Int): Boolean {
-    if (alias != null) {
-      return alias!!.isNull(0)
-    }
-    return if (hasTrigger(VConstants.TRG_VALUE)) {
-      callSafeTrigger(VConstants.TRG_VALUE) == null
-    } else isNullImpl(r)
-  }
+  fun isNull(r: Int): Boolean  = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+    callSafeTrigger(VConstants.TRG_VALUE) == null
+  } else isNullImpl(r)
 
   /**
    * Is the field value of given record null ?
@@ -1173,14 +1125,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getObject(r: Int): Any {
-    if (alias != null) {
-      return alias!!.getObject(0)
-    }
-    return if (hasTrigger(VConstants.TRG_VALUE)) {
-      callSafeTrigger(VConstants.TRG_VALUE)
-    } else getObjectImpl(r)
-  }
+  fun getObject(r: Int): Any = alias?.getObject(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+    callSafeTrigger(VConstants.TRG_VALUE)
+  } else getObjectImpl(r)
 
   /**
    * Returns the field value of the current record as an object
@@ -1347,7 +1294,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun hasLargeObject(r: Int): Boolean = false
 
-
   /**
    * Warning:   This method will become inaccessible to users in next release
    *
@@ -1492,9 +1438,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     fireValueChanged(r)
   }
 
-
-
-
   /**
    * Marks the field changed, trails the record if necessary
    */
@@ -1538,14 +1481,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (!alreadyProtected) {
               getForm().startProtected(null)
             }
-            val query = Query(getForm().dBContext.defaultConnection)
-
-            query.addString(list!!.getColumn(0).column)
-            query.addString(evalListTable())
-            query.addString(getSql(block!!.getActiveRecord()))
-            query.open(SELECT_IS_IN_LIST)
-            exists = query.next()
-            query.close()
+            Query(getForm().dBContext.defaultConnection).let {
+              it.addString(list!!.getColumn(0).column)
+              it.addString(evalListTable())
+              it.addString(getSql(block!!.getActiveRecord()))
+              it.open(SELECT_IS_IN_LIST)
+              exists = it.next()
+              it.close()
+            }
             if (!alreadyProtected) {
               getForm().commitProtected()
             }
@@ -1578,7 +1521,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
       return
     } else {
-      var query: Query
       var count = 0
       var result: String? = null
       val fldbuf: String = getSql(block!!.getActiveRecord())
@@ -1592,21 +1534,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (!alreadyProtected) {
               getForm().startProtected(null)
             }
-            query = Query(getForm().dBContext.defaultConnection)
-            query.addString(list!!.getColumn(0).column)
-            query.addString(evalListTable())
-            query.addString(getString(block!!.getActiveRecord()))
-            query.open(SELECT_MATCHING_STRINGS)
-            if (!query.next()) {
-              count = 0
-            } else {
-              count = 1
-              result = query.getString(1)
-              if (query.next()) {
-                count = 2
+            Query(getForm().dBContext.defaultConnection).let {
+              it.addString(list!!.getColumn(0).column)
+              it.addString(evalListTable())
+              it.addString(getString(block!!.getActiveRecord()))
+              it.open(SELECT_MATCHING_STRINGS)
+              if (!it.next()) {
+                count = 0
+              } else {
+                count = 1
+                result = it.getString(1)
+                if (it.next()) {
+                  count = 2
+                }
               }
+              it.close()
             }
-            query.close()
             if (!alreadyProtected) {
               getForm().commitProtected()
             }
@@ -1664,7 +1607,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           if (result == null) {
             throw VExecFailedException() // no message to display
           } else {
-            setString(block!!.getActiveRecord(), result)
+            setString(block!!.getActiveRecord(), result!!)
             return
           }
         }
@@ -1689,15 +1632,16 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().startProtected(null)
-          val query = Query(getForm().dBContext.defaultConnection)
-          query.addString(list!!.getColumn(0).column)
-          query.addString(evalListTable())
-          query.addString(getSql(block!!.getActiveRecord()))
-          query.open(SELECT_IS_IN_LIST)
-          if (query.next()) {
-            id = query.getInt(1)
+          Query(getForm().dBContext.defaultConnection).let {
+            it.addString(list!!.getColumn(0).column)
+            it.addString(evalListTable())
+            it.addString(getSql(block!!.getActiveRecord()))
+            it.open(SELECT_IS_IN_LIST)
+            if (it.next()) {
+              id = it.getInt(1)
+            }
+            it.close()
           }
-          query.close()
           getForm().commitProtected()
           break
         } catch (e: SQLException) {
@@ -1724,35 +1668,41 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     val lines = Array(columns.size - if (SKIP_FIRST_COLUMN) 1 else 0) { arrayOfNulls<Any>(MAX_LINE_COUNT) }
     var lineCount = 0
 
-    val newForm: VDictionary? = if (list!!.getNewForm() != null) {
-      // OLD SYNTAX
-      Module.getExecutable(list!!.getNewForm()) as VDictionary
-    } else if (list!!.getAction() != -1) {
-      // NEW SYNTAX
-      block!!.executeObjectTrigger(list!!.getAction()) as VDictionary?
-    } else {
-      null // should never happen.
+    val newForm: VDictionary? = when {
+      list!!.getNewForm() != null -> {
+        // OLD SYNTAX
+        Module.getExecutable(list!!.getNewForm()) as VDictionary
+      }
+      list!!.getAction() != -1 -> {
+        // NEW SYNTAX
+        block!!.executeObjectTrigger(list!!.getAction()) as VDictionary?
+      }
+      else -> {
+        null // should never happen.
+      }
     }
+
     SHOW_SINGLE_ENTRY = newForm != null
     try {
       while (true) {
         try {
           getForm().startProtected(Message.getMessage("searching_database"))
-          val query = Query(getForm().dBContext.defaultConnection)
-          query.open(queryText)
-          lineCount = 0
-          while (query.next() && lineCount < MAX_LINE_COUNT - 1) {
-            if (query.isNull(1)) {
-              continue
+          Query(getForm().dBContext.defaultConnection).let {
+            it.open(queryText)
+            lineCount = 0
+            while (it.next() && lineCount < MAX_LINE_COUNT - 1) {
+              if (it.isNull(1)) {
+                continue
+              }
+              var i = 0
+              while (i < lines.size) {
+                lines[i][lineCount] = it.getObject(i + if (SKIP_FIRST_COLUMN) 2 else 1)
+                i += 1
+              }
+              lineCount += 1
             }
-            var i = 0
-            while (i < lines.size) {
-              lines[i][lineCount] = query.getObject(i + if (SKIP_FIRST_COLUMN) 2 else 1)
-              i += 1
-            }
-            lineCount += 1
+            it.close()
           }
-          query.close()
           getForm().commitProtected()
           break
         } catch (e: SQLException) {
@@ -1797,15 +1747,16 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               val SELECT_IS_IN_LIST = " SELECT   $1                   " +
                       " FROM     $2                   " +
                       " WHERE    $3 = " + selected
-              val query = Query(getForm().dBContext.defaultConnection)
 
-              query.addString(list!!.getColumn(0).column)
-              query.addString(evalListTable())
-              query.addString("ID")
-              query.open(SELECT_IS_IN_LIST)
-              query.next()
-              result = query.getObject(1)
-              query.close()
+              Query(getForm().dBContext.defaultConnection).let {
+                it.addString(list!!.getColumn(0).column)
+                it.addString(evalListTable())
+                it.addString("ID")
+                it.open(SELECT_IS_IN_LIST)
+                it.next()
+                result = it.getObject(1)
+                it.close()
+              }
               getForm().commitProtected()
               break
             } catch (e: SQLException) {
@@ -1830,37 +1781,37 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   protected fun selectFromList(gotoNextField: Boolean) {
-    val qrybuf = StringBuffer()
-
-    qrybuf.append("SELECT ")
-    for (i in 0 until list!!.columnCount()) {
-      if (i != 0) {
-        qrybuf.append(", ")
-      }
-      qrybuf.append(list!!.getColumn(i).column)
-    }
-    qrybuf.append(" FROM ")
-    qrybuf.append(evalListTable())
-    if (getSearchType() == VConstants.STY_MANY) {
-      qrybuf.append(" WHERE ")
-      when (options and VConstants.FDO_SEARCH_MASK) {
-        VConstants.FDO_SEARCH_NONE -> qrybuf.append(list!!.getColumn(0).column)
-        VConstants.FDO_SEARCH_UPPER -> {
-          qrybuf.append("{fn UPPER(")
-          qrybuf.append(list!!.getColumn(0).column)
-          qrybuf.append(")}")
+    val qrybuf =  buildString{
+      append("SELECT ")
+      for (i in 0 until list!!.columnCount()) {
+        if (i != 0) {
+          append(", ")
         }
-        VConstants.FDO_SEARCH_LOWER -> {
-          qrybuf.append("{fn LOWER(")
-          qrybuf.append(list!!.getColumn(0).column)
-          qrybuf.append(")}")
-        }
-        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+        append(list!!.getColumn(i).column)
       }
-      qrybuf.append(" ")
-      qrybuf.append(getSearchCondition())
+      append(" FROM ")
+      append(evalListTable())
+      if (getSearchType() == VConstants.STY_MANY) {
+        append(" WHERE ")
+        when (options and VConstants.FDO_SEARCH_MASK) {
+          VConstants.FDO_SEARCH_NONE -> append(list!!.getColumn(0).column)
+          VConstants.FDO_SEARCH_UPPER -> {
+            append("{fn UPPER(")
+            append(list!!.getColumn(0).column)
+            append(")}")
+          }
+          VConstants.FDO_SEARCH_LOWER -> {
+            append("{fn LOWER(")
+            append(list!!.getColumn(0).column)
+            append(")}")
+          }
+          else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+        }
+        append(" ")
+        append(getSearchCondition())
+      }
+      append(" ORDER BY 1")
     }
-    qrybuf.append(" ORDER BY 1")
     val result = displayQueryList(qrybuf.toString(), list!!.getColumns())
 
     if (result == null) {
@@ -1887,13 +1838,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     while (true) {
       try {
         getForm().startProtected(null)
-        val query = Query(getForm().dBContext.defaultConnection)
-
-        query.open(qrybuf)
-        while (value == null && query.next()) {
-          value = query.getObject(1)
+        Query(getForm().dBContext.defaultConnection).let {
+          it.open(qrybuf)
+          while (value == null && it.next()) {
+            value = it.getObject(1)
+          }
+          it.close()
         }
-        query.close()
         getForm().commitProtected()
         break
       } catch (e: SQLException) {
@@ -1931,56 +1882,59 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @throws VException Visual exceptions related to database errors.
    */
   fun getSuggestions(query: String?): Array<Array<String>>? {
-    return if (query == null || autocompleteType == VList.AUTOCOMPLETE_NONE) {
+    return if (query == null || getAutocompleteType() == VList.AUTOCOMPLETE_NONE) {
       null
     } else {
       val suggestions: MutableList<Array<String>>
-      val qrybuf: StringBuffer = StringBuffer()
-
       suggestions = ArrayList()
-      qrybuf.append("SELECT ")
-      for (i in 0 until list!!.columnCount()) {
-        if (i != 0) {
-          qrybuf.append(", ")
+
+      val qrybuf = buildString {
+        append("SELECT ")
+        for (i in 0 until list!!.columnCount()) {
+          if (i != 0) {
+            append(", ")
+          }
+          append(list!!.getColumn(i).column)
         }
-        qrybuf.append(list!!.getColumn(i).column)
-      }
-      qrybuf.append(" FROM ")
-      qrybuf.append(evalListTable())
-      qrybuf.append(" WHERE ")
-      qrybuf.append(" {fn LOWER(")
-      qrybuf.append(list!!.getColumn(0).column)
-      qrybuf.append(")}")
-      when (autocompleteType) {
-        VList.AUTOCOMPLETE_CONTAINS -> {
-          qrybuf.append(" LIKE ")
-          qrybuf.append(Utils.toSql("%" + query.toLowerCase() + "%"))
+        append(" FROM ")
+        append(evalListTable())
+        append(" WHERE ")
+        append(" {fn LOWER(")
+        append(list!!.getColumn(0).column)
+        append(")}")
+        when (getAutocompleteType()) {
+          VList.AUTOCOMPLETE_CONTAINS -> {
+            append(" LIKE ")
+            append(Utils.toSql("%" + query.toLowerCase() + "%"))
+          }
+          VList.AUTOCOMPLETE_STARTSWITH -> {
+            append(" LIKE ")
+            append(Utils.toSql(query.toLowerCase() + "%"))
+          }
+          else -> {
+            // default should never reached
+            append(" = ")
+            append(Utils.toSql(query))
+          }
         }
-        VList.AUTOCOMPLETE_STARTSWITH -> {
-          qrybuf.append(" LIKE ")
-          qrybuf.append(Utils.toSql(query.toLowerCase() + "%"))
+          append(" ORDER BY 1")
         }
-        else -> {
-          // default should never reached
-          qrybuf.append(" = ")
-          qrybuf.append(Utils.toSql(query))
-        }
-      }
-      qrybuf.append(" ORDER BY 1")
       while (true) {
         try {
           getForm().startProtected(null)
-          val sqlQuery = Query(getForm().dBContext.defaultConnection)
-          sqlQuery.open(qrybuf.toString())
-          while (sqlQuery.next()) {
-            var columns: MutableList<String>
-            columns = ArrayList()
-            for (i in 0 until list!!.columnCount()) {
-              columns.add(list!!.getColumn(i).formatObject(sqlQuery.getObject(i + 1)) as String)
+
+          Query(getForm().dBContext.defaultConnection).let {
+            it.open(qrybuf)
+            while (it.next()) {
+              var columns: MutableList<String>
+              columns = ArrayList()
+              for (i in 0 until list!!.columnCount()) {
+                columns.add(list!!.getColumn(i).formatObject(it.getObject(i + 1)) as String)
+              }
+              suggestions.add(columns.toTypedArray())
             }
-            suggestions.add(columns.toTypedArray())
+            it.close()
           }
-          sqlQuery.close()
           getForm().commitProtected()
           break
         } catch (e: SQLException) {
@@ -2060,18 +2014,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().startProtected(null)
-          val query = Query(getForm().dBContext.defaultConnection)
-          query.addString(list!!.getColumn(0).column)
-          query.addString(evalListTable())
-          query.addString("ID")
-          query.addInt(id)
-          query.open("SELECT $1 FROM $2 WHERE $3 = #4")
-          result = if (query.next()) {
-            query.getObject(1)
-          } else {
-            null
+          Query(getForm().dBContext.defaultConnection).let {
+            it.addString(list!!.getColumn(0).column)
+            it.addString(evalListTable())
+            it.addString("ID")
+            it.addInt(id)
+            it.open("SELECT $1 FROM $2 WHERE $3 = #4")
+            result = if (it.next()) {
+              it.getObject(1)
+            } else {
+              null
+            }
+            it.close()
           }
-          query.close()
           getForm().commitProtected()
           break
         } catch (e: SQLException) {
@@ -2154,10 +2109,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-                    modeDesc,
-                    getTypeName(),
-                    getTypeInformation(),
-                    names)
+            modeDesc,
+            getTypeName(),
+            getTypeInformation(),
+            names)
   }
 
   /**
@@ -2170,40 +2125,41 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   override fun toString(): String {
-    val information = StringBuffer()
-    try {
-      information.append("\nFIELD ")
-      information.append(name)
-      information.append(" label: ")
-      information.append(label)
-      information.append("\n")
+
+    return buildString {
       try {
-        val value = getObject(block!!.getActiveRecord())
-        if (value == null) {
-          information.append("    value: null")
-        } else {
-          information.append("    value: \"")
-          information.append(value)
-          information.append("\"")
+        append("\nFIELD ")
+        append(name)
+        append(" label: ")
+        append(label)
+        append("\n")
+        try {
+          val value = getObject(block!!.getActiveRecord())
+          if (value == null) {
+            append("    value: null")
+          } else {
+            append("    value: \"")
+            append(value)
+            append("\"")
+          }
+        } catch (e: Exception) {
+          append("value information exception ")
         }
+        append("\n")
+        try {
+          append("    type name: ")
+          append(getTypeName())
+        } catch (e: Exception) {
+          append("type information exception")
+        }
+        append("\n")
+        append("    changed: ")
+        append(changed)
+        append("\n")
       } catch (e: Exception) {
-        information.append("value information exception ")
+        append("exception while retrieving field information\n")
       }
-      information.append("\n")
-      try {
-        information.append("    type name: ")
-        information.append(getTypeName())
-      } catch (e: Exception) {
-        information.append("type information exception")
-      }
-      information.append("\n")
-      information.append("    changed: ")
-      information.append(changed)
-      information.append("\n")
-    } catch (e: Exception) {
-      information.append("exception while retrieving field information\n")
     }
-    return information.toString()
   }
 
   // ----------------------------------------------------------------------
@@ -2457,9 +2413,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the option of this field
    */
-  /**
-   * For Oracle
-   */
   var options = 0 // options
 
 
@@ -2479,7 +2432,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   var align = 0   // field alignment
     private set
 
-  private var posInArray = 0   // position in array of fields
+  var posInArray = 0   // position in array of fields
+    private set
 
   var list: VList? = null   // list
     private set

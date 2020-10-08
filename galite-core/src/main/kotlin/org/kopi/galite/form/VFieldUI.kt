@@ -18,11 +18,18 @@
 
 package org.kopi.galite.form
 
+import java.io.Serializable
+
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
 
-class VFieldUI {
+class VFieldUI  : VConstants, ActionHandler, Serializable {
 
-  fun performAsyncAction(action: Action) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun performAsyncAction(action: Action) {
     TODO()
   }
 }
