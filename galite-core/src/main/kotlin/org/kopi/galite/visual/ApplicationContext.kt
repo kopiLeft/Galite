@@ -73,43 +73,43 @@ abstract class ApplicationContext {
     /**
      * Returns the default configuration of the Application
      */
-    fun getDefaults(): ApplicationConfiguration = applicationContext.getApplication().getApplicationConfiguration()
+    fun getDefaults(): ApplicationConfiguration = applicationContext.getApplication().applicationConfiguration
 
     /**
      * Returns the [Application] menu.
      * @return The [Application] menu.
      */
-    fun getMenu(): VMenuTree = applicationContext.getApplication().getMenu()
+    fun getMenu(): VMenuTree? = applicationContext.getApplication().menu
 
     /**
      * Returns the [LocalizationManager] instance.
      * @return The [LocalizationManager] instance.
      */
-    fun getLocalizationManager(): LocalizationManager = applicationContext.getApplication().getLocalizationManager()
+    fun getLocalizationManager(): LocalizationManager? = applicationContext.getApplication().localizationManager
 
     /**
      * Returns the default application [Locale].
      * @return The default application [Locale].
      */
-    fun getDefaultLocale(): Locale = applicationContext.getApplication().getDefaultLocale()
+    fun getDefaultLocale(): Locale? = applicationContext.getApplication().defaultLocale
 
     /**
      * Returns the application [Registry].
      * @return the application [Registry].
      */
-    fun getRegistry(): Registry = applicationContext.getApplication().getRegistry()
+    fun getRegistry(): Registry = applicationContext.getApplication().registry
 
     /**
      * Returns the application [DBContext].
      * @return The application [DBContext].
      */
-    fun getDBContext(): DBContext = applicationContext.getApplication().getDBContext()
+    fun getDBContext(): DBContext? = applicationContext.getApplication().dBContext
 
     /**
      * Returns `true` if the [Application] should only generate help.
      * @return `true` if the [Application] should only generate help.
      */
-    fun isGeneratingHelp(): Boolean = applicationContext.getApplication().isGeneratingHelp()
+    fun isGeneratingHelp(): Boolean = applicationContext.getApplication().isGeneratingHelp
 
     /**
      * Displays an error message outside a model context. This can happen when launching a module.
@@ -135,7 +135,7 @@ abstract class ApplicationContext {
                       data: String,
                       reason: Throwable) {
 
-      if (applicationContext.getApplication().isNoBugReport()) {
+      if (applicationContext.getApplication().isNoBugReport) {
         println("notice: reporting trouble is disabled, no mail will be sent.")
         System.err.println(reason.message)
         reason.printStackTrace(System.err)
@@ -216,7 +216,7 @@ abstract class ApplicationContext {
           writer.println("Version:             $version")
           writer.println("Release Date:        " + (releaseDate ?: "not available."))
           writer.println("Module:              $module")
-          writer.println("Started at:          " + applicationContext.getApplication().getStartupTime())
+          writer.println("Started at:          " + applicationContext.getApplication().startupTime)
           writer.println()
           writer.println("Architecture:        " + System.getProperty("os.arch", ""))
           writer.print("Operating System:    " + System.getProperty("os.name", "") + " ")
@@ -227,10 +227,10 @@ abstract class ApplicationContext {
           writer.println("Default Encoding:    " + InputStreamReader(System.`in`).encoding)
           writer.println()
           if (applicationContext.isWebApplicationContext()) {
-            writer.println("User-IP:             " + applicationContext.getApplication().getUserIP())
+            writer.println("User-IP:             " + applicationContext.getApplication().userIP)
           }
           try {
-            writer.println("User-Name:           " + applicationContext.getApplication().getUserName())
+            writer.println("User-Name:           " + applicationContext.getApplication().userName)
           } catch (e: Exception) {
             writer.println("User-Name:           <not available>")
           }
@@ -283,7 +283,7 @@ abstract class ApplicationContext {
             writer.println()
             writer.println()
             try {
-              writer.println(applicationContext.getApplication().getUserName().toString() + ":" + Date())
+              writer.println(applicationContext.getApplication().userName + ":" + Date())
             } catch (e: Exception) {
               writer.println("<user no available>" + ":" + Date())
             }

@@ -16,24 +16,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.ui.visual
 
-import org.kopi.galite.db.DBContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.UWindow
+import java.io.File
 
-/**
- * An interface for stand alone apps that can be executed from the
- * Menu tree.
- */
-interface Executable {
-  /**
-   * MenuTree sets the context of new executable to the default connection
-   */
-  var dBContext: DBContext?
+class VFileHandler : FileHandler() {
+  override fun chooseFile(window: UWindow, defaultName: String): File {
+    TODO("Not yet implemented")
+  }
 
-  /**
-   * The start method called every time the user launch this app from menu
-   * it should be not modal
-   * @exception        VException        an exception may be raised by your app
-   */
-  fun doNotModal()
+  override fun chooseFile(window: UWindow, dir: File, defaultName: String): File {
+    TODO("Not yet implemented")
+  }
+
+  override fun openFile(window: UWindow, defaultName: String): File {
+    TODO("Not yet implemented")
+  }
+
+  override fun openFile(window: UWindow, filter: FileFilter): File {
+    TODO("Not yet implemented")
+  }
+
+  override fun openFile(window: UWindow, dir: File, defaultName: String): File {
+    TODO("Not yet implemented")
+  }
+
 }
