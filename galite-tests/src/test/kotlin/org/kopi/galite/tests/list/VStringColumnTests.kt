@@ -16,8 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.tests.list
 
-object VlibProperties {
-    fun getString(string: String): String = TODO()
+import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.list.VStringColumn
+
+class VStringColumnTests {
+
+  @Test
+  fun vStringColumnTests() {
+    val vStringColumn = VStringColumn("title", "column", 1, 2, true)
+
+    assertEquals("", vStringColumn.formatObject(null))
+    assertEquals("St...ring", vStringColumn.formatObject("String"))
+    assertEquals(String::class, vStringColumn.getDataType())
+  }
 }

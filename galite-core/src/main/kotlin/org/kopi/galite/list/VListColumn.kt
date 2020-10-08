@@ -23,12 +23,13 @@ import kotlin.reflect.KClass
 import org.kopi.galite.l10n.ListLocalizer
 
 abstract class VListColumn(
-        var title: String,
-        val column: String,
-        private val align: Int,
-        val width: Int,
-        val isSortAscending: Boolean
+  var title: String,
+  val column: String?,
+  private val align: Int,
+  val width: Int,
+  val isSortAscending: Boolean
 ) : VConstants, ObjectFormatter {
+
   /**
    * Returns the column alignment
    */
@@ -49,16 +50,16 @@ abstract class VListColumn(
    */
   abstract fun getDataType(): KClass<*>
 
-
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
+
   /**
    * Localize this object.
    *
    * @param     loc
    */
   fun localize(loc: ListLocalizer) {
-    title = loc.getColumnTitle(column)
+    title = loc.getColumnTitle(column!!)
   }
 }

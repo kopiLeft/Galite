@@ -18,9 +18,19 @@
 
 package org.kopi.galite.base
 
+import java.sql.SQLException
+
 import org.kopi.galite.db.Connection
+import org.kopi.galite.type.NotNullDate
 
 class Query(defaultConnection: Connection) {
+
+  fun getBoolean(pos: Int): Boolean = TODO()
+
+  @Throws(SQLException::class)
+  fun getDate(pos: Int): NotNullDate? {
+    TODO()
+  }
 
   fun addString(value: String) {
    TODO()

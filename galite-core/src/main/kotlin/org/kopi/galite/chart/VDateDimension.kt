@@ -16,8 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.chart
 
-object VlibProperties {
-    fun getString(string: String): String = TODO()
+import org.kopi.galite.type.Date
+
+/**
+ * Represents a date chart column.
+ * @param ident The column identifier.
+ * @param format The date format to be used to format the date value.
+ */
+class VDateDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+  public override fun toString(value: Any?): String =
+          when (value) {
+            null ->     CConstants.EMPTY_TEXT
+            is Date ->  value.toString()
+            else ->     value.toString()
+          }
 }

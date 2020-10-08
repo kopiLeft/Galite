@@ -18,5 +18,48 @@
 
 package org.kopi.galite.chart
 
-abstract class VCodeMeasure {
+import org.kopi.galite.l10n.FieldLocalizer
+import org.kopi.galite.visual.VColor
+
+/**
+ * Represents a code measure column.
+ * @param ident   The column identifier.
+ * @param color   The measure color.
+ * @param type    The measure type.
+ * @param source  The type localization source.
+ * @param idents  The string representations.
+ */
+abstract class VCodeMeasure protected constructor(ident: String,
+                                                  color: VColor,
+                                                  private val type: String,
+                                                  private val source: String,
+                                                  private val idents: Array<String>) : VMeasure(ident, color) {
+  // ----------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // ----------------------------------------------------------------------
+  fun toString(value: Any?): String? {
+    return if (names != null) names!![getIndex(value)] else idents[getIndex(value)]
+  }
+
+  // ----------------------------------------------------------------------
+  // ABSTRACT METHODS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the index.of given object
+   * @return The index.of given object
+   */
+  protected abstract fun getIndex(value: Any?): Int
+
+  // ----------------------------------------------------------------------
+  // LOCALIZATION
+  // ----------------------------------------------------------------------
+  protected override fun localize(parent: FieldLocalizer) {
+    val loc = parent.manager.getTypeLocalizer(source, type)
+    names = arrayOfNulls(idents.size)
+    for (i in names!!.indices) {
+      names!![i] = loc.getCodeLabel(idents[i])
+    }
+  }
+
+  protected var names: Array<String?>? = null // array of external representations
 }

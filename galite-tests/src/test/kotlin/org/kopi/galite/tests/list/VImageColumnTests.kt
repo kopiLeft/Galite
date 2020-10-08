@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,8 +15,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.tests.list
 
-object VlibProperties {
-    fun getString(string: String): String = TODO()
+import org.junit.Test
+import org.kopi.galite.list.VImageColumn
+
+import kotlin.test.assertEquals
+
+class VImageColumnTests {
+  @Test
+  fun vColorColumnTests() {
+    val vImageColumn = VImageColumn("title", "column", true)
+
+    assertEquals("", vImageColumn.formatObject(null))
+    assertEquals(ByteArray::class, vImageColumn.getDataType())
+  }
 }

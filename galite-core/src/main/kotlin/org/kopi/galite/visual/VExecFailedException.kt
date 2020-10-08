@@ -35,7 +35,7 @@ open class VExecFailedException : VException {
    *
    * @param        message                the associated message
    */
-  constructor(message: String) : super(message)
+  constructor(message: String?) : super(message)
 
   /**
    * Constructs an exception with no message.

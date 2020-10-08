@@ -18,9 +18,21 @@
 
 package org.kopi.galite.form
 
+import java.awt.Color
 import java.io.Serializable
+
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.type.Date
 
 interface PredefinedValueHandler : Serializable {
 
   fun selectDefaultValue(): Boolean
+
+  fun selectFromList(list: Array<VListColumn>, values: Array<Any>, predefinedValues: Array<String>): String
+
+  fun selectColor(color: Color): Color
+
+  fun selectDate(date: Date): Date
+
+  fun selectImage(): ByteArray
 }

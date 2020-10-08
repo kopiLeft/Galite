@@ -15,17 +15,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
 import org.kopi.galite.visual.VExecFailedException
 
-class VFieldException: VExecFailedException {
+/**
+ * Represents an exception with a message.
+ *
+ * @param    field        the field that has not a correct value
+ * @param    message        the associated message
+ * @param    newValue    the new value for the field
+ */
+class VFieldException(val field: VField,
+                      message: String? = null,
+                      private val newValue: Any? = null)
+  : VExecFailedException(message) {
 
-  constructor(field: VField, message: String) {
-    TODO()
-  }
-
+  /**
+   * Returns the field where the error occure
+   */
   fun resetValue() {
-    TODO()
+    if (newValue != null) {
+      field.setObject(field.block!!.activeRecord, newValue)
     }
+  }
 }

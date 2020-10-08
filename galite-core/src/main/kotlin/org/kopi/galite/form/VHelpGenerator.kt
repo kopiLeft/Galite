@@ -36,7 +36,7 @@ class VHelpGenerator {
           modeDesc: String?,
           typeName: String?,
           typeDesc: String?,
-          names: Array<String?>?) {
+          names: Array<String>?) {
     TODO()
  }
 

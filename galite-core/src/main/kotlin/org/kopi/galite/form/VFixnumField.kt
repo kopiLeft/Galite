@@ -15,16 +15,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
 import kotlin.reflect.KClass
 
 import org.kopi.galite.base.Query
-import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VListColumn
+import org.kopi.galite.type.Fixed
 
 class VFixnumField(width: Int, height: Int) : VField(width, height) {
+
+  companion object {
+    /**
+     * Computes the the width of a fixnum field : FIXNUM(digits, scale)
+     *
+     * @param     digits          the number of total digits.
+     * @param     scale           the number of digits representing the fractional part.
+     * @param     minVal          the minimal value the fixnum field can get.
+     * @param     maxVal          the maximal value the fixnum field can get.
+     */
+    fun computeWidth(digits: Int, scale: Int, minVal: Fixed?, maxVal: Fixed?): Int {
+      TODO()
+    }
+  }
 
   override fun checkText(s: String): Boolean {
     TODO("Not yet implemented")
@@ -34,10 +47,11 @@ class VFixnumField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override val dataType: KClass<*>
-    get() = TODO("Not yet implemented")
+  override fun getDataType(): KClass<*> {
+    TODO("Not yet implemented")
+  }
 
-  override fun getListColumn(): VListColumn {
+  override fun getListColumn(): VListColumn? {
     TODO("Not yet implemented")
   }
 
@@ -49,7 +63,7 @@ class VFixnumField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun retrieveQuery(query: Query, column: Int): Any {
+  override fun retrieveQuery(query: Query, column: Int): Any? {
     TODO("Not yet implemented")
   }
 
@@ -57,23 +71,23 @@ class VFixnumField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun getObjectImpl(r: Int): Any {
+  override fun getObjectImpl(r: Int): Any? {
     TODO("Not yet implemented")
   }
 
-  override fun toText(o: Any?): String {
+  override fun toText(o: Any): String? {
     TODO("Not yet implemented")
   }
 
-  override fun toObject(s: String?): Any {
+  override fun toObject(s: String): Any? {
     TODO("Not yet implemented")
   }
 
-  override fun getTextImpl(r: Int): String {
+  override fun getTextImpl(r: Int?): String? {
     TODO("Not yet implemented")
   }
 
-  override fun getSqlImpl(r: Int): String {
+  override fun getSqlImpl(r: Int?): String? {
     TODO("Not yet implemented")
   }
 
@@ -89,7 +103,5 @@ class VFixnumField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun setDisplay(display: UComponent) {
-    TODO("Not yet implemented")
-  }
+
 }

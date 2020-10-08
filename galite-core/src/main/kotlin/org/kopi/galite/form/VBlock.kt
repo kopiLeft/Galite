@@ -15,14 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
 class VBlock {
-
-  fun getBufferSize(): Int {
-    TODO()
-  }
 
   fun noDetail(): Boolean {
     TODO()
@@ -32,9 +27,6 @@ class VBlock {
     TODO()
   }
 
-  fun getActiveRecord(): Int {
-    TODO()
-  }
 
   fun getActiveField(): VField? {
     TODO()
@@ -68,9 +60,6 @@ class VBlock {
     TODO()
   }
 
-  fun setActiveRecord(rec: Int) {
-    TODO()
-  }
 
   internal fun trailRecord(rec: Int) {
     TODO()
@@ -107,4 +96,9 @@ class VBlock {
   fun getFieldPos(field: VField): Int {
     TODO()
   }
+
+  var bufferSize = 0 // max number of buffered records
+
+  // dynamic data
+  var activeRecord = 0 // current record
 }

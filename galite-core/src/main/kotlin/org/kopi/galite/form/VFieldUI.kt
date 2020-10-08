@@ -32,4 +32,8 @@ class VFieldUI  : VConstants, ActionHandler, Serializable {
   override fun performAsyncAction(action: Action) {
     TODO()
   }
+
+  override fun performAction(action: Action, block: Boolean) {
+    TODO("Not yet implemented")
+  }
 }

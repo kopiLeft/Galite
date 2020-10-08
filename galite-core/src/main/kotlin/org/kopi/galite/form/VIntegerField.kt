@@ -21,11 +21,9 @@ package org.kopi.galite.form
 import kotlin.reflect.KClass
 
 import org.kopi.galite.base.Query
-import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VListColumn
 
 class VIntegerField(width: Int, height: Int) : VField(width, height) {
-
   override fun checkText(s: String): Boolean {
     TODO("Not yet implemented")
   }
@@ -34,10 +32,11 @@ class VIntegerField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override val dataType: KClass<*>
-    get() = TODO("Not yet implemented")
+  override fun getDataType(): KClass<*> {
+    TODO("Not yet implemented")
+  }
 
-  override fun getListColumn(): VListColumn {
+  override fun getListColumn(): VListColumn? {
     TODO("Not yet implemented")
   }
 
@@ -49,7 +48,7 @@ class VIntegerField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun retrieveQuery(query: Query, column: Int): Any {
+  override fun retrieveQuery(query: Query, column: Int): Any? {
     TODO("Not yet implemented")
   }
 
@@ -57,23 +56,23 @@ class VIntegerField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun getObjectImpl(r: Int): Any {
+  override fun getObjectImpl(r: Int): Any? {
     TODO("Not yet implemented")
   }
 
-  override fun toText(o: Any?): String {
+  override fun toText(o: Any): String? {
     TODO("Not yet implemented")
   }
 
-  override fun toObject(s: String?): Any {
+  override fun toObject(s: String): Any? {
     TODO("Not yet implemented")
   }
 
-  override fun getTextImpl(r: Int): String {
+  override fun getTextImpl(r: Int?): String? {
     TODO("Not yet implemented")
   }
 
-  override fun getSqlImpl(r: Int): String {
+  override fun getSqlImpl(r: Int?): String? {
     TODO("Not yet implemented")
   }
 
@@ -89,7 +88,4 @@ class VIntegerField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun setDisplay(display: UComponent) {
-    TODO("Not yet implemented")
-  }
 }
