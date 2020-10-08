@@ -19,4 +19,5 @@ package org.kopi.galite.visual
 
 class Item {
 
+  fun getId(): Int = TODO()
 }

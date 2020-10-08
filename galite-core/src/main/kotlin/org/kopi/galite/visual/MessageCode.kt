@@ -31,13 +31,11 @@ object MessageCode {
    * @param     key             the message key
    * @return    the requested message
    */
-  fun getMessage(key: String): String {
-    return getMessage(key, null)
-  }
+  fun getMessage(key: String): String = getMessage(key, null)
 
-  fun getMessage(key: String, withKey: Boolean): String {
-    return getMessage(key, null, withKey)
-  }
+
+  fun getMessage(key: String, withKey: Boolean): String = getMessage(key, null, withKey)
+
 
   /**
    * Returns a message (convenience routine).
@@ -46,13 +44,9 @@ object MessageCode {
    * @param     param           a message parameter
    * @return    the requested message
    */
-  fun getMessage(key: String, param: Any): String {
-    TODO()
-  }
+  fun getMessage(key: String, param: Any?): String = TODO()
 
-  fun getMessage(key: String, param: Any, withKey: Boolean): String {
-    TODO()
-  }
+  fun getMessage(key: String, param: Any, withKey: Boolean): String = TODO()
 
   /**
    * Returns a message (convenience routine).
@@ -62,17 +56,9 @@ object MessageCode {
    * @param     param1          the second message parameter
    * @return    the requested message
    */
-  fun getMessage(key: String, param1: Any, param2: Any): String {
-    TODO()
-  }
+  fun getMessage(key: String, param1: Any, param2: Any): String = TODO()
 
-  fun getMessage(key: String, param1: Any, param2: Any, withKey: Boolean): String {
-    TODO()
-  }
-
-  fun getMessage(key: String, params: Array<Any>?): String {
-    return getMessage(key, params, true)
-  }
+  fun getMessage(key: String, param1: Any, param2: Any, withKey: Boolean): String = TODO()
 
   /**
    * Returns a message (convenience routine).
@@ -84,9 +70,7 @@ object MessageCode {
    * @param     params          the array of message parameters
    * @return    the requested message
    */
-  fun getMessage(key: String, params: Array<Any>?, withKey: Boolean): String {
-    TODO()
-  }
+  fun getMessage(key: String, params: Array<Any>?, withKey: Boolean): String = TODO()
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS

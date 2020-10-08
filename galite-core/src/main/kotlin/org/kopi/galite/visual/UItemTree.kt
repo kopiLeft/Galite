@@ -15,6 +15,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
-interface UItemTree 
+import org.kopi.galite.base.UComponent
+
+//TODO
+interface UItemTree : UWindow {
+
+  fun setSelectedItem()
+
+  fun addItem()
+
+  fun removeSelectedItem()
+
+  fun editSelectedItem()
+
+  fun getTree(): UTreeComponent
+
+  fun setDefaultItem()
+
+  fun localiseSelectedItem()
+
+  fun setTree()
+
+  interface UTreeComponent : UComponent {
+
+    fun getSelectionRow(): Int
+
+    fun collapseRow(row: Int)
+
+    fun expandRow(row: Int)
+
+    fun isCollapsed(path: Any): Boolean
+
+    fun isUnique(name: String): Boolean
+
+    fun getItems(): Array<Item>
+
+    fun getRootItem(): Item
+  }
+}

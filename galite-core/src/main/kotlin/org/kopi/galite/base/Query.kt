@@ -18,19 +18,44 @@
 
 package org.kopi.galite.base
 
+import org.kopi.galite.db.Connection
 import org.kopi.galite.type.NotNullDate
 
-class Query {
+class Query(conn: Connection) {
 
-  fun isNull(column: Int): Boolean {
+  fun addString(value: String?) {
     TODO()
   }
 
-  fun getDate(pos: Int): NotNullDate {
+   fun next(): Boolean {
     TODO()
   }
 
-  fun getBoolean(column: Int): Boolean {
+  fun getString(pos: Int): String {
     TODO()
   }
+
+  fun addInt(value: Int) {
+    TODO()
+  }
+
+  fun run(format: String?): Int = TODO()
+
+  fun delete(format: String?): Int= TODO()
+
+  fun getInt(pos: Int): Int = TODO()
+
+  fun close() {
+    TODO()
+  }
+
+  fun open(format: String) {
+    TODO()
+  }
+
+  fun isNull(column: Int): Boolean = TODO()
+
+  fun getDate(pos: Int): NotNullDate = TODO()
+
+  fun getBoolean(column: Int): Boolean = TODO()
 }

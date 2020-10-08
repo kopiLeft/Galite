@@ -36,19 +36,19 @@ class DBContext(var defaultConnection: Connection) {
    * @param     schema          the current database schema
    */
   fun createConnection(
-    driverName: String,
-    url: String,
-    user: String,
-    password: String,
-    lookupUserId: Boolean = true, // TODO
-    schema: String? = null // TODO
+          driverName: String,
+          url: String,
+          user: String,
+          password: String,
+          lookupUserId: Boolean = true, // TODO
+          schema: String? = null // TODO
   ): Connection {
     this.connection = Connection(url = url,
-                                driver = driverName,
-                                userName = user,
-                                password = password,
-                                lookupUserId = lookupUserId,
-                                schema = schema)
+            driver = driverName,
+            userName = user,
+            password = password,
+            lookupUserId = lookupUserId,
+            schema = schema)
     return this.connection
   }
 
@@ -60,14 +60,19 @@ class DBContext(var defaultConnection: Connection) {
    * @param     schema          the current database schema
    */
   fun createConnection(
-    connection: java.sql.Connection,
-    lookupUserId: Boolean, // TODO
-    schema: String? // TODO
+          connection: java.sql.Connection,
+          lookupUserId: Boolean, // TODO
+          schema: String? // TODO
   ): Connection {
     this.connection = Connection(connection = connection,
-                                 lookupUserId = lookupUserId,
-                                 schema = schema)
+            lookupUserId = lookupUserId,
+            schema = schema)
     return this.connection
+  }
+
+
+  fun abortWork() {
+    TODO()
   }
 
   // ----------------------------------------------------------------------

@@ -21,7 +21,6 @@ package org.kopi.galite.visual
 import java.awt.Frame
 import java.awt.event.KeyEvent
 import java.io.File
-
 import javax.swing.event.EventListenerList
 
 import org.kopi.galite.base.Image
@@ -110,8 +109,13 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Resets form to initial state
    */
-  abstract fun reset()
+   fun reset() {}
 
+
+  @Deprecated("use method performAsynAction")
+  override fun performAction(action: Action, block: Boolean) {
+    performAsyncAction(action)
+  }
   /**
    * Returns true if it is allowed to quit this model
    * (the form for this model)
@@ -137,6 +141,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   override fun performAsyncAction(action: Action) {
     val listeners = modelListener.listenerList
     var i = listeners.size - 2
+
     while (i >= 0) {
       if (listeners[i] === VActionListener::class.java) {
         (listeners[i + 1] as VActionListener).performAsyncAction(action)
@@ -151,6 +156,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun notice(message: String) {
     var send = false
     val listeners = modelListener.listenerList
+
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] === MessageListener::class.java) {
         (listeners[i + 1] as MessageListener).notice(message)
@@ -159,8 +165,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     }
     if (!send) {
       // use a 'default listener' that the message is
-      // not lost (e.g .because this is happend in the
-      // constructor)
+      // not lost (e.g .because this is happened in the constructor)
       ApplicationContext.applicationContext.getApplication().notice(message)
     }
   }
@@ -168,6 +173,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun error(message: String) {
     var send = false
     val listeners = modelListener.listenerList
+
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] === MessageListener::class.java) {
         (listeners[i + 1] as MessageListener).error(message)
@@ -176,8 +182,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     }
     if (!send) {
       // use a 'default listener' that the message is
-      // not lost (e.g .because this is happened in the
-      // constructor)
+      // not lost (e.g .because this is happened in the constructor)
       ApplicationContext.applicationContext.getApplication().error(message)
     }
   }
@@ -188,6 +193,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun warn(message: String) {
     var send = false
     val listeners = modelListener.listenerList
+
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] === MessageListener::class.java) {
         (listeners[i + 1] as MessageListener).warn(message)
@@ -196,8 +202,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     }
     if (!send) {
       // use a 'default listener' that the message is
-      // not lost (e.g .because this is happend in the
-      // constructor)
+      // not lost (e.g .because this is happened in the constructor)
       ApplicationContext.applicationContext.getApplication().warn(message)
     }
   }
@@ -208,6 +213,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   fun ask(message: String, yesIsDefault: Boolean = false): Boolean {
     val listeners = modelListener.listenerList
     var i = listeners.size - 2
+
     while (i >= 0) {
       if (listeners[i] === MessageListener::class.java) {
         var value = (listeners[i + 1] as MessageListener).ask(message, yesIsDefault)
@@ -254,7 +260,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     actors.addAll(actorDefs)
   }
 
-  fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
+  open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
 
   fun getActors(): ArrayList<VActor> {
     return actors
@@ -263,8 +269,9 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Enables/disables the actor.
    */
-  fun setActorEnabled(position: Int, enabled: Boolean) {
+  open fun setActorEnabled(position: Int, enabled: Boolean) {
     val actor: VActor = getActor(position)
+
     actor.handler = this
     actor.isEnabled = enabled
   }
@@ -294,6 +301,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    */
   fun close(code: Int) {
     val listeners = modelListener.listenerList
+
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] === ModelCloseListener::class.java) {
         (listeners[i + 1] as ModelCloseListener).modelClosed(code)

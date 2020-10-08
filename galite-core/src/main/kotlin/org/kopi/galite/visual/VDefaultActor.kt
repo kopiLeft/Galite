@@ -15,6 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
-class VDefaultActor 
+class VDefaultActor(
+        val code: Int,
+        menuIdent: String,
+        menuSource: String,
+        actorIdent: String,
+        actorSource: String,
+        iconName: String,
+        acceleratorKey: Int,
+        acceleratorModifier: Int
+) : VActor(menuIdent, menuSource, actorIdent, actorSource, iconName, acceleratorKey, acceleratorModifier)

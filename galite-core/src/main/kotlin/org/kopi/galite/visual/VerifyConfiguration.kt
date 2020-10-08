@@ -15,6 +15,78 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
-class VerifyConfiguration 
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.net.InetAddress
+import java.net.UnknownHostException
+
+import org.kopi.galite.util.mailer.Mailer
+
+class VerifyConfiguration private constructor() {
+
+  fun verifyConfiguration(smtpServer: String, failureRecipient: String, applicationName: String) {
+    val buffer = StringWriter()
+    val writer = PrintWriter(buffer)
+    var configurationError = false
+    var hostname: String
+
+    // get Hostname
+    try {
+      val inetAdress = InetAddress.getLocalHost()
+
+      hostname = inetAdress.canonicalHostName
+      writer.println(formatMessage("Getting hostname ", false))
+    } catch (e: UnknownHostException) {
+      hostname = "unknown"
+      writer.println(formatMessage("Getting hostname ", true))
+      e.printStackTrace(writer)
+      writer.println()
+      configurationError = true
+    }
+
+    // check that -ea is on
+    var isAssertOn: Boolean
+
+    assert(true.also { isAssertOn = it })
+    writer.println(formatMessage("java called with option -ea", !isAssertOn))
+    configurationError = configurationError || !isAssertOn
+
+    if (configurationError) {
+      Mailer.sendMail(smtpServer,
+                      failureRecipient,  // recipient
+                      null,  // cc
+                      null,  // bcc
+                      "[KOPI CONFIGURATION] "
+                              + applicationName
+                              + " "
+                              + System.getProperty("user.name", "")
+                              + "@"
+                              + hostname,
+                      buffer.toString(),
+                      "kopi@kopiright.com")
+    }
+  }
+
+  companion object {
+    private fun formatMessage(message: String, fail: Boolean): String {
+      val result: String = if (message.length >= 70) {
+        message.substring(0, 70)
+      } else {
+        message + STR_BASIC.substring(0, 70 - message.length)
+      }
+      return if (fail) {
+        result + STR_FAILED
+      } else {
+        result + STR_OK
+      }
+    }
+
+    val verifyConfiguration = VerifyConfiguration()
+    private const val STR_BASIC = "   ........................................................................"
+    private const val STR_OK = " [OK]"
+    private const val STR_FAILED = " [FAILED]"
+  }
+}
