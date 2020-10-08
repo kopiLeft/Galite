@@ -22,7 +22,8 @@ import java.util.StringTokenizer
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
+import org.kopi.galite.db.Utils
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
@@ -285,7 +286,7 @@ class VDateField : VField(10, 1) {
    */
   override fun getSqlImpl(r: Int): String {
     return if (value[r] == null) "NULL"
-    else org.kopi.galite.type.Utils.toSql(value[r]!!)
+    else Utils.toSql(value[r]!!)
   }
 
   /**

@@ -17,4 +17,6 @@
  */
 package org.kopi.galite.form
 
-class VDocGenerator 
+class VDocGenerator(p: LatexPrintWriter) : VHelpGenerator() {
+
+}

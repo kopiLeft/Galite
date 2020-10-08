@@ -18,5 +18,15 @@
 
 package org.kopi.galite.form
 
-class VHelpGenerator {
+import org.kopi.galite.visual.VCommand
+
+open class VHelpGenerator {
+  fun helpOnForm(name: String,
+                 commands: Array<VCommand>,
+                 blocks: Array<VBlock>,
+                 title: String,
+                 help: String,
+                 code: String): String? {
+    TODO()
+  }
 }

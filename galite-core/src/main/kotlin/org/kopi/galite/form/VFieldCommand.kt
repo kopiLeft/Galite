@@ -15,6 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VFieldCommand 
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.VCommand
+import java.io.Serializable
+
+class VFieldCommand(form: VForm, type: Int)
+  : VCommand(0xFFFF, null, null, type, "Standard $type"), ActionHandler, Serializable {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun performAsyncAction(action: Action) {
+    TODO("Not yet implemented")
+  }
+
+  override fun performAction(action: Action, block: Boolean) {
+    TODO("Not yet implemented")
+  }
+
+}

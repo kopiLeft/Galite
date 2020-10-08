@@ -37,7 +37,7 @@ class LocalizationManager(val locale: Locale, private val defaultLocale: Locale)
    *
    * @param     source          the source qualified name
    */
-  fun getFormLocalizer(source: String): FormLocalizer {
+  fun getFormLocalizer(source: String?): FormLocalizer {
     return FormLocalizer(getDocument(source))
   }
 

@@ -22,7 +22,7 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
@@ -227,10 +227,9 @@ abstract class VField(val width: Int, val height: Int) {
           = 0
   private val indices // bitset of unique indices
           = 0
-  val name // field name (for dumps)
-          : String? = null
-  private val label // field label
-          : String? = null
+  lateinit var name // field name (for dumps)
+          : String
+  val label: String? = null // field label
   private val options // options
           = 0
   private val help // help text
