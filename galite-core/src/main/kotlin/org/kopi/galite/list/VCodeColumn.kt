@@ -15,6 +15,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-abstract class VCodeColumn 
+abstract class VCodeColumn(
+  title: String,
+  column: String?,
+  protected val names: Array<String>,
+  sortAscending: Boolean
+) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {
+  /**
+   * Returns a string representation of value
+   */
+  override fun formatObject(value: Any?): Any = when (value) {
+    null -> VConstants.EMPTY_TEXT
+    else -> names[getObjectIndex(value)]
+  }
+
+  /**
+   * Returns the indexOf given object
+   */
+  protected abstract fun getObjectIndex(value: Any): Int
+
+  companion object {
+    private fun getMaxWidth(names: Array<String>): Int = names.maxByOrNull { it.length }?.length ?: 0
+  }
+}

@@ -15,25 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.list
 
-import kotlin.reflect.KClass
+package org.kopi.galite.chart
 
-import org.kopi.galite.type.Week
+import org.kopi.galite.type.Date
 
 /**
- * Represents a list column.
+ * Represents a date chart column.
+ * @param ident The column identifier.
+ * @param format The date format to be used to format the date value.
  */
-class VWeekColumn(title: String,
-                  column: String,
-                  sortAscending: Boolean)
-    : VListColumn(title,
-                  column,
-                  VConstants.ALG_LEFT,
-                  7,
-                  sortAscending) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Week::class
+class VDateDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+  public override fun toString(value: Any?): String =
+          when (value) {
+            null ->     CConstants.EMPTY_TEXT
+            is Date ->  value.toString()
+            else ->     value.toString()
+          }
 }

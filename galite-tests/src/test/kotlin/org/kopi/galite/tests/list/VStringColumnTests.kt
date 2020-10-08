@@ -15,25 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.list
 
-import kotlin.reflect.KClass
+package org.kopi.galite.tests.list
 
-import org.kopi.galite.type.Week
+import org.junit.Test
+import org.kopi.galite.list.VStringColumn
 
-/**
- * Represents a list column.
- */
-class VWeekColumn(title: String,
-                  column: String,
-                  sortAscending: Boolean)
-    : VListColumn(title,
-                  column,
-                  VConstants.ALG_LEFT,
-                  7,
-                  sortAscending) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Week::class
+import kotlin.test.assertEquals
+
+class VStringColumnTests {
+
+  @Test
+  fun vStringColumnTests() {
+    val vStringColumn = VStringColumn("title", "column", 1, 2, true)
+
+    assertEquals("", vStringColumn.formatObject(null))
+    assertEquals("St...ring", vStringColumn.formatObject("String"))
+    assertEquals(String::class, vStringColumn.getDataType())
+  }
 }

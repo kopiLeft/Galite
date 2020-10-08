@@ -15,25 +15,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.list
 
-import kotlin.reflect.KClass
+package org.kopi.galite.type
 
-import org.kopi.galite.type.Week
+import java.util.*
 
 /**
- * Represents a list column.
+ * This class represents kopi date types
  */
-class VWeekColumn(title: String,
-                  column: String,
-                  sortAscending: Boolean)
-    : VListColumn(title,
-                  column,
-                  VConstants.ALG_LEFT,
-                  7,
-                  sortAscending) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Week::class
+class NotNullDate : Date {
+  constructor(year: Int, month: Int, day: Int) : super(year, month, day) {}
+  constructor(date: java.sql.Date) : super(date) {}
+  constructor(image: String) : super(image) {}
+  constructor(calendar: Calendar) : super(calendar) {}
+
+  /**
+   * Constructs a Date from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
+   */
+  constructor(scalar: Int) : super(scalar) {}
+
+  companion object {
+    fun castToNotNull(value: Date?): NotNullDate? {
+      return value as NotNullDate?
+    }
+  }
 }

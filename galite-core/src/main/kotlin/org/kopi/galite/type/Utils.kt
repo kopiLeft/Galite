@@ -15,25 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.list
 
-import kotlin.reflect.KClass
+package org.kopi.galite.type
 
-import org.kopi.galite.type.Week
+object Utils {
 
-/**
- * Represents a list column.
- */
-class VWeekColumn(title: String,
-                  column: String,
-                  sortAscending: Boolean)
-    : VListColumn(title,
-                  column,
-                  VConstants.ALG_LEFT,
-                  7,
-                  sortAscending) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Week::class
+  fun toSql(d: Date): String {
+    TODO()
+  }
 }

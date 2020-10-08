@@ -17,4 +17,26 @@
  */
 package org.kopi.galite.list
 
-class VFixnumColumn 
+import kotlin.reflect.KClass
+
+import org.kopi.galite.type.Fixed
+
+/**
+ * Represents a list column.
+ */
+class VFixnumColumn(title: String,
+                    column: String,
+                    align: Int,
+                    width: Int,
+                    scale: Int,
+                    sortAscending: Boolean)
+      : VListColumn(title,
+                    column,
+                    align,
+                    width,
+                    sortAscending) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  override fun getDataType(): KClass<*> = Fixed::class
+}
