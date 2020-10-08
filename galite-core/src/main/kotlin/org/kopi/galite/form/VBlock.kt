@@ -19,14 +19,16 @@
 package org.kopi.galite.form
 
 abstract class VBlock {
-   fun getForm(): VForm =TODO()
+  fun getForm(): VForm = TODO()
 
-  fun fetchLookup(fld : VField) {TODO()}
+  fun fetchLookup(fld: VField) {
+    TODO()
+  }
 
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
   var activeRecord = 0 // current record
-  fun getMode() : Int = TODO()
+  fun getMode(): Int = TODO()
   interface OrderListener
 }
