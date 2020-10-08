@@ -17,4 +17,7 @@
  */
 package org.kopi.galite.form
 
-abstract class VForm 
+abstract class VForm {
+  fun isChanged(): Boolean = TODO()
+  fun getBlock(i: Int): VBlock =TODO()
+}

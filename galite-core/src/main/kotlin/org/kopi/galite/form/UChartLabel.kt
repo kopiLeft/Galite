@@ -15,6 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-interface UChartLabel 
+/**
+ * `UChartLabel` is the top-level interface that must be implemented
+ * by all chart labels. Chart labels are marked by a sort indication to
+ * enable [VField] sorting.
+ */
+interface UChartLabel : ULabel, VBlock.OrderListener {
+
+  /**
+   * The [VField] related to this label can be sorted.
+   * This method is triggered when field sort mode has changed
+   * in order to change `UChartLabel` behavior.
+   */
+  fun repaint()
+}
