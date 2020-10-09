@@ -15,8 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
-class FPrinter {
+import java.io.File
 
+/**
+ * File printer
+ */
+class FPrinter(name: String, filename: String) : AbstractPrinter(name) {
+  private val file = File(filename)
+
+  // ----------------------------------------------------------------------
+  // PRINTING WITH AN INPUT STREAM
+  // ----------------------------------------------------------------------
+  /**
+   * Print a file and return the output of the command
+   */
+  override fun print(printdata: PrintJob): String {
+    printdata.writeDataToFile(file)
+    return "NYI"
+  }
 }
