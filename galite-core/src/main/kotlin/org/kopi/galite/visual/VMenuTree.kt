@@ -394,7 +394,7 @@ class VMenuTree(ctxt: DBContext,
   /**
    * Sets the title of the frame
    */
-  override fun setTitle(s: String?) {
+  override fun setTitle(s: String) {
     if (s != null) {
       if (s.contains(VlibProperties.getString("program_menu"))) {
         super.setTitle(s)
