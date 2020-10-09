@@ -58,7 +58,7 @@ class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
   }
 
   protected fun finalize() {
-    if (delete && dataFile != null) {
+    if (delete) {
       dataFile.delete()
     }
   }

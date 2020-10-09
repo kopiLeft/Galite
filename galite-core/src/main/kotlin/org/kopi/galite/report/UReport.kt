@@ -61,7 +61,7 @@ interface UReport : UWindow, ReportListener {
   /**
    * Returns the report table.
    */
-  fun getTable(): UTable?
+  fun getTable(): UTable
 
   /**
    * Reset columns width

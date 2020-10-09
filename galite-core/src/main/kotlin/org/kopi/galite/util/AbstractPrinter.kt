@@ -47,7 +47,7 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
       val ous = BufferedWriter(FileWriter(tempfile))
 
       /* READ HEADER */
-      val reader = BufferedReader(InputStreamReader(printdata.inputStream))
+      val reader = BufferedReader(InputStreamReader(printdata.getInputStream()))
       var line: String
       var currentPage = -1
 
