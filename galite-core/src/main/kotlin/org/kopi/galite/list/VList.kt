@@ -15,6 +15,87 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-class VList 
+import java.io.Serializable
+
+import org.kopi.galite.form.VForm
+import org.kopi.galite.l10n.ListLocalizer
+import org.kopi.galite.l10n.LocalizationManager
+
+/**
+ * Represents a list
+ *
+ * @param     ident             the identifier of the list type
+ * @param     source            the qualified name of the source file defining the list
+ * @param     newForm           the new form name
+ * @param     columns           the list columns
+ * @param     table             the trigger ID for the evaluation of the table
+ * @param     action              the list action
+ * @param     autocompleteType    the auto complete type.
+ * @param     autocompleteLength  the auto complete length.
+ * @param     hasShortcut         the new form name
+ * */
+class VList(private val ident: String,
+            private val source: String,
+            val newForm: String?,
+            val columns: Array<VListColumn>,
+            val table: Int,
+            val action: Int,
+            val autocompleteType: Int,
+            val autocompleteLength: Int,
+            val hasShortcut: Boolean) : VConstants, Serializable {
+
+  constructor(ident: String,
+              source: String,
+              columns: Array<VListColumn>,
+              table: Int,
+              action: Int,
+              autocompleteType: Int,
+              autocompleteLength: Int,
+              newForm: Class<VForm>?,
+              hasShortcut: Boolean)
+       : this(ident,
+              source,
+              newForm?.name,
+              columns,
+              table,
+              action,
+              autocompleteType,
+              autocompleteLength,
+              hasShortcut)
+
+  /**
+   * Returns the number of columns.
+   */
+  fun columnCount(): Int = columns.size
+
+  /**
+   * Returns the column at index.
+   */
+  fun getColumn(pos: Int): VListColumn = columns[pos]
+
+  /**
+   * Returns `true` if the list has auto complete support.
+   */
+  fun hasAutocomplete(): Boolean = autocompleteLength >= 0 && autocompleteType > AUTOCOMPLETE_NONE
+
+  /**
+   * Localize this object.
+   *
+   * @param     manager
+   */
+  fun localize(manager: LocalizationManager) {
+    val loc: ListLocalizer = manager.getListLocalizer(source, ident)
+    columns.forEach { column ->
+      column.localize(loc)
+    }
+  }
+
+  companion object {
+    val AUTOCOMPLETE_NONE = 0
+    val AUTOCOMPLETE_STARTSWITH = 1
+    val AUTOCOMPLETE_CONTAINS = 2
+  }
+}

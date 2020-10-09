@@ -27,9 +27,7 @@ abstract class VCalculateColumn {
   /**
    * Evaluates nodes
    */
-  fun evalNode(row: VReportRow, column: Int): Any? {
-    return null
-  }
+  open fun evalNode(row: VReportRow, column: Int): Any? = null
 
   /**
    * Add calculated data into the report row

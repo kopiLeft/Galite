@@ -186,8 +186,8 @@ class VMenuTree(ctxt: DBContext,
       CMD_QUIT -> currentDisplay.closeWindow()
       CMD_OPEN -> currentDisplay.launchSelectedForm()
       CMD_SHOW -> {
-        currentDisplay.bookmark.show()
-        currentDisplay.bookmark.toFront()
+        currentDisplay.getBookmark().show()
+        currentDisplay.getBookmark().toFront()
       }
       CMD_ADD -> {
         currentDisplay.addSelectedElement()
@@ -197,8 +197,8 @@ class VMenuTree(ctxt: DBContext,
         currentDisplay.removeSelectedElement()
         currentDisplay.setMenu()
       }
-      CMD_FOLD -> currentDisplay.tree.collapseRow(currentDisplay.tree.selectionRow)
-      CMD_UNFOLD -> currentDisplay.tree.expandRow(currentDisplay.tree.selectionRow)
+      CMD_FOLD -> currentDisplay.getTree().collapseRow(currentDisplay.getTree().selectionRow)
+      CMD_UNFOLD -> currentDisplay.getTree().expandRow(currentDisplay.getTree().selectionRow)
       CMD_INFORMATION -> {
         val versionArray = Utils.getVersion()
         var version = ""
