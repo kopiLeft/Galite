@@ -19,6 +19,8 @@
 package org.kopi.galite.base
 
 import org.kopi.galite.type.NotNullDate
+import java.sql.Blob
+import java.sql.SQLException
 
 class Query {
 
@@ -31,6 +33,14 @@ class Query {
   }
 
   fun getBoolean(column: Int): Boolean {
+    TODO()
+  }
+
+  fun getString(pos: Int): String {
+    TODO()
+  }
+
+  fun getBlob(pos: Int): Blob? {
     TODO()
   }
 }

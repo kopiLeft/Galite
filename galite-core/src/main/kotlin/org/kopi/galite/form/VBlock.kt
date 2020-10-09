@@ -18,9 +18,15 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.db.DBContext
+
 abstract class VBlock {
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
   var activeRecord = 0 // current record
+
+  open fun getDBContext(): DBContext {
+   TODO()
+  }
 }

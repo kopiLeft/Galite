@@ -23,4 +23,8 @@ object Utils {
   fun toSql(d: Date): String {
     TODO()
   }
+
+  fun toSql(l: String): String {
+    TODO()
+  }
 }

@@ -18,19 +18,18 @@
 
 package org.kopi.galite.form
 
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VWindow
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 
-abstract class VField(val width: Int, val height: Int) {
+abstract class VField(val width: Int, val height: Int) : VWindow() {
 
   // ----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE
@@ -66,11 +65,11 @@ abstract class VField(val width: Int, val height: Int) {
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
    */
-  open fun setObject(r: Int, v: Any) {
+  open fun setObject(r: Int, v: Any?) {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
@@ -127,7 +126,7 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun checkType(rec: Int, s: Any) {
+  open fun checkType(rec: Int, s: Any?) {
     TODO()
   }
 
@@ -175,7 +174,7 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun getType(): Int {
+  override fun getType(): Int {
     TODO()
   }
 
@@ -237,7 +236,7 @@ abstract class VField(val width: Int, val height: Int) {
           : String? = null
   private val index // The position in parent field array
           = 0
-  private val align // field alignment
+  val align // field alignment
           = 0
   private val posInArray // position in array of fields
           = 0

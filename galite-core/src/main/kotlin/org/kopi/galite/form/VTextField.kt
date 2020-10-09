@@ -17,4 +17,4 @@
  */
 package org.kopi.galite.form
 
-class VTextField 
+class VTextField

@@ -37,7 +37,7 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param dBContext The database context for this object.
  * if if is specified, it will create a window with a DB context
  */
-abstract class VWindow(override var dBContext: DBContext = ApplicationContext.getDBContext()
+abstract class VWindow(override open var dBContext: DBContext = ApplicationContext.getDBContext()
 ) : Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------

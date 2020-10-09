@@ -18,6 +18,13 @@
 
 package org.kopi.galite.visual
 
+import java.text.MessageFormat
+import java.util.*
+
 object VlibProperties {
     fun getString(string: String): String = TODO()
+
+    fun getString(key: String, params: Array<Any>): String {
+       TODO()
+    }
 }
