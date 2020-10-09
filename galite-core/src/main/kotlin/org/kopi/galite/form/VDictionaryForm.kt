@@ -15,6 +15,47 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-abstract class VDictionaryForm 
+import org.kopi.galite.visual.VException
+
+class VDictionaryForm : VForm(), VDictionary {
+  fun isRecursiveQuery(): Boolean = TODO()
+  override fun reset() {
+    TODO()
+  }
+
+  fun isNewRecord(): Boolean {
+    TODO()
+  }
+
+  fun setMenuQuery(b: Boolean) {
+    TODO()
+  }
+
+  fun saveFilledField(){
+    TODO()
+  }
+  override fun startProtected(message: String){
+    TODO()
+  }
+  override fun commitProtected(){
+    TODO()
+  }
+  override fun abortProtected(e: VException){
+    TODO()
+  }
+  override fun abortProtected(e: Error){
+    TODO()
+  }
+  override fun abortProtected(e: RuntimeException){
+    TODO()
+  }
+  fun interruptRecursiveQuery(){
+    TODO()
+  }
+  fun isMenuQuery(): Boolean{
+    TODO()
+  }
+}

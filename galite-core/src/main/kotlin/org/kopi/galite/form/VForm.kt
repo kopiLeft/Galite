@@ -17,4 +17,65 @@
  */
 package org.kopi.galite.form
 
-abstract class VForm 
+import java.sql.SQLException
+
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VWindow
+
+open class VForm : VWindow() {
+  fun isChanged(): Boolean = TODO()
+
+  fun ask(s: String): Boolean = TODO()
+
+  override fun reset(): Unit = TODO()
+
+  override fun close(code: Int): Unit = TODO()
+
+  open fun startProtected(message: String) {
+    TODO()
+  }
+
+  open fun commitProtected() {
+    TODO()
+  }
+
+  open fun abortProtected(interrupt: Boolean) {
+    TODO()
+  }
+
+  open fun abortProtected(reason: SQLException) {
+    TODO()
+  }
+
+  open fun abortProtected(reason: Error) {
+    TODO()
+  }
+
+  open fun abortProtected(reason: RuntimeException) {
+    TODO()
+  }
+
+  open fun abortProtected(reason: VException) {
+    TODO()
+  }
+
+  fun getBlockCount(): Int {
+    TODO()
+  }
+
+  fun getBlock(i: Int) : VBlock {
+    TODO()
+  }
+
+  fun gotoBlock(block: VBlock?) {
+    TODO()
+  }
+
+  fun getActiveBlock(): VBlock? {
+    TODO()
+  }
+
+  fun setFieldSearchOperator(searchOperator: Any) {
+    TODO()
+  }
+}

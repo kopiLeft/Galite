@@ -18,7 +18,129 @@
 
 package org.kopi.galite.form
 
-abstract class VBlock {
+
+class VBlock {
+  fun noChart(): Boolean {
+    TODO()
+  }
+
+  fun showHideFilter() {
+    TODO()
+  }
+
+  fun isMulti(): Boolean {
+    TODO()
+  }
+
+  fun getDisplay(): Any {
+    TODO()
+  }
+
+  fun isChanged(): Boolean {
+    TODO()
+  }
+
+  fun getForm(): VForm {
+    TODO()
+  }
+
+  fun clear() {
+    TODO()
+  }
+
+  fun setMode(modQuery: Int) {
+    TODO()
+  }
+
+  fun getActiveField(): VField? {
+    TODO()
+  }
+
+  fun gotoFirstField() {
+    TODO()
+  }
+
+  fun validate() {
+    TODO()
+  }
+
+  fun singleMenuQuery(b: Boolean): Any {
+    TODO()
+  }
+
+  fun fetchRecord(id: Unit) {
+    TODO()
+  }
+
+  fun fetchRecord(id: Int) {
+    TODO()
+  }
+
+  fun load() {
+    TODO()
+  }
+
+  fun getMode(): Int {
+    TODO()
+  }
+
+  fun getName(): Any {
+    TODO()
+  }
+
+  fun isRecordChanged(i: Int): Boolean {
+    TODO()
+  }
+
+  fun setDefault() {
+    TODO()
+  }
+
+  fun setRecordFetched(i: Int, b: Boolean) {
+    TODO()
+  }
+
+  fun setRecordChanged(i: Int, changed: Boolean) {
+    TODO()
+  }
+
+  fun gotoFirstUnfilledField() {
+    TODO()
+  }
+
+  fun save() {
+    TODO()
+  }
+
+  fun fetchNextRecord(i: Int) {
+    TODO()
+  }
+
+  fun delete() {
+    TODO()
+  }
+
+  fun leaveRecord(b: Boolean) {
+    TODO()
+  }
+
+  fun insertEmptyRecord(recno: Int) {
+    TODO()
+  }
+
+  fun gotoRecord(recno: Int) {
+    TODO()
+  }
+
+  fun getTitle(): String? {
+    TODO()
+  }
+
+  fun isAccessible(): Boolean {
+    TODO()
+  }
+
+
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data

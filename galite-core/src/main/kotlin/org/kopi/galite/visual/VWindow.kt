@@ -110,7 +110,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Resets form to initial state
    */
-  fun reset() {
+  open fun reset() {
     // do nothing
 
     // TODO set it abstract
@@ -301,7 +301,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Inform close linstener that this model was closed
    */
-  fun close(code: Int) {
+  open fun close(code: Int) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] == ModelCloseListener::class.java) {

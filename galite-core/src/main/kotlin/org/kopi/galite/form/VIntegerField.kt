@@ -15,6 +15,31 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VIntegerField 
+class VIntegerField(width: Int, height: Int) : VField(width, height) {
+  fun requestFocus() {
+    TODO("Not yet implemented")
+  }
+
+  fun validate() {
+    TODO("Not yet implemented")
+  }
+
+  override fun isNull(r: Int): Boolean {
+    TODO()
+  }
+
+  override fun setSearchOperator(v: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getSearchOperator(): Any {
+    TODO("Not yet implemented")
+  }
+
+  fun setInt(r: Int, i: Int) {
+    TODO()
+  }
+}

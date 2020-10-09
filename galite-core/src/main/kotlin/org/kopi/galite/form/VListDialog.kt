@@ -18,8 +18,40 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VListColumn
+import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.VWindow
 
-class VListDialog(arrayOf: Array<VListColumn>, arrayOf1: Array<Array<Any?>>) {
-  fun selectFromDialog(form: Any, nothing: Nothing?, vCodeField: VCodeField): Int = TODO()
+class VListDialog : VModel {
+  /**
+   * Creates a dialog with specified data and title bar.
+   */
+  constructor(list: Array<VListColumn?>?, data: Array<Array<Any?>>)
+
+  /**
+   * Creates a dialog with specified data and title bar.
+   */
+  constructor(title: String,
+              data: Array<String?>,
+              rows: Int)
+
+  /**
+   * Creates a dialog with specified data and title bar.
+   */
+  constructor(title: String, data: Array<String>)
+
+
+  fun selectFromDialog(form: Any, nothing: Nothing?, vCodeField: VCodeField?): Int = TODO()
+  override fun setDisplay(display: UComponent) {
+    TODO("Not yet implemented")
+  }
+
+  fun selectFromDialog(window: VWindow?, field: VField?): Int {
+    TODO()
+  }
+
+  override fun getDisplay(): UComponent? {
+    TODO("Not yet implemented")
+  }
 }

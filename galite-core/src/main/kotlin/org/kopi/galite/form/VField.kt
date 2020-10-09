@@ -18,17 +18,14 @@
 
 package org.kopi.galite.form
 
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
-
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 abstract class VField(val width: Int, val height: Int) {
 
@@ -209,6 +206,19 @@ abstract class VField(val width: Int, val height: Int) {
 
   fun getSearchCondition(): String? = TODO()
 
+  open fun setSearchOperator(v: Int) {
+    TODO()
+  }
+
+  open fun getSearchOperator(): Any {
+    TODO()
+  }
+
+  open fun getInt(r: Int): Int {
+    TODO()
+  }
+
+
   companion object {
     const val MDL_FLD_COLOR = 1
     const val MDL_FLD_IMAGE = 2
@@ -280,5 +290,4 @@ abstract class VField(val width: Int, val height: Int) {
           : Array<VColor>
   private val background // background colors for this field.
           : Array<VColor>
-
 }

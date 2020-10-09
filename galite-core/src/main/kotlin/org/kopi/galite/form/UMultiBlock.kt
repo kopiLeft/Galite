@@ -17,4 +17,8 @@
  */
 package org.kopi.galite.form
 
-interface UMultiBlock 
+interface UMultiBlock {
+   fun switchView(i: Int) {
+     TODO()
+   }
+}
