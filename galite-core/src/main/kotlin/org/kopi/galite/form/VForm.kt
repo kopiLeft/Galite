@@ -17,4 +17,21 @@
  */
 package org.kopi.galite.form
 
-abstract class VForm 
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VActor
+
+abstract class VForm {
+  fun performAsyncAction(action: Action) {
+    TODO()
+  }
+
+  fun getDefaultActor(trigger: Any): VActor = TODO()
+  fun getActiveBlock() : VBlock =TODO()
+
+  companion object {
+    const val CMD_NEWITEM = -2
+    const val CMD_EDITITEM = -3
+    const val CMD_EDITITEM_S = -4
+    const val CMD_AUTOFILL = -5
+  }
+}

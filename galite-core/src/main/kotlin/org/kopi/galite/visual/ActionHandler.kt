@@ -45,6 +45,6 @@ interface ActionHandler {
    * @param        action                the action to perform.
    * @param        block                This action should block the UI thread ?
    */
-  @Deprecated("use method performAsyncAction")
   fun performAction(action: Action, block: Boolean)
+
 }

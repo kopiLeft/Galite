@@ -21,6 +21,7 @@ package org.kopi.galite.form
 import kotlin.reflect.KClass
 
 import org.kopi.galite.base.Query
+import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VlibProperties
 
@@ -32,11 +33,7 @@ import org.kopi.galite.visual.VlibProperties
  *
  * This class creates a new actor field instance.
  */
-class VActorField(width: Int, height: Int) : VField(1, 1) {
-
-  // ----------------------------------------------------------------------
-  // IMPLEMENTATION
-  // ----------------------------------------------------------------------
+ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun checkText(s: String): Boolean = true
 
