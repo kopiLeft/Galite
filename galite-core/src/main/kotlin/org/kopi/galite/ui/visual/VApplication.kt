@@ -53,7 +53,6 @@ import com.vaadin.flow.router.Route
 @Route("")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application {
   init {
-    checkAlternateLocale() // needs to do this to ensure that we start with a valid locale;
     // registry and locale initialization
     initialize()
     gotoWelcomeView()
@@ -149,9 +148,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val userName: String
   get() = dBContext!!.defaultConnection.userName
 
-  override val defaultLocale: Locale? = null
+  override var defaultLocale: Locale? = null
 
-  override val localizationManager: LocalizationManager? = null
+  override var localizationManager: LocalizationManager? = null
 
   override fun displayError(parent: UComponent, message: String) {
     error(message)
@@ -211,16 +210,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   fun removeWindow(window: Component) {
 
-  }
-
-  /**
-   * Checks the existence of the application locale.
-   * @exception VRuntimeException When no alternate locale is defined.
-   */
-  protected fun checkAlternateLocale() {
-    if (alternateLocale == null) {
-      throw VRuntimeException("An alternate locale should be provided with the application")
-    }
   }
 
   /**
