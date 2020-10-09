@@ -206,6 +206,9 @@ abstract class VField(val width: Int, val height: Int) {
   fun getForm(): VForm {
     TODO()
   }
+  open fun helpOnField(help: VHelpGenerator) {
+    TODO()
+  }
 
   fun getSearchCondition(): String? = TODO()
 
@@ -229,7 +232,7 @@ abstract class VField(val width: Int, val height: Int) {
           = 0
   val name // field name (for dumps)
           : String? = null
-  private val label // field label
+  val label // field label
           : String? = null
   private val options // options
           = 0
