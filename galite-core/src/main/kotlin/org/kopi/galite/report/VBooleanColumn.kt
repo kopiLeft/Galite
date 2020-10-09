@@ -47,14 +47,14 @@ class VBooleanColumn(ident: String?,
   /**
    * Compare two objects.
    *
-   * @param        o1        the first operand of the comparison
-   * @param        o2        the second operand of the comparison
+   * @param        object1        the first operand of the comparison
+   * @param        object2        the second operand of the comparison
    * @return        -1 if the first operand is smaller than the second
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(o1: Any, o2: Any): Int {
-    return if (o1 == o2) 0 else if (true == o1) 1 else -1
+  override fun compareTo(object1: Any, object2: Any): Int {
+    return if (object1 == object2) 0 else if (true == object1) 1 else -1
   }
 
   private class VBooleanFormat : VCellFormat() {
