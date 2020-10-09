@@ -31,7 +31,7 @@ class VFixnumColumn(title: String,
                     scale: Int,
                     sortAscending: Boolean)
       : VListColumn(title,
-                    column!!,
+                    column,
                     align,
                     width,
                     sortAscending) {

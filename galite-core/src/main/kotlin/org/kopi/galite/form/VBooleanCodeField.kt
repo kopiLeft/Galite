@@ -101,7 +101,7 @@ open class VBooleanCodeField : VCodeField {
    * Warning:	This method will become inaccessible to galite users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setBoolean(r, v as Boolean)
+    setBoolean(r, v as Boolean?)
   }
 
   /**

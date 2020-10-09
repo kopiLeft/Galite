@@ -28,8 +28,8 @@ import org.kopi.galite.visual.VExecFailedException
  * @param    newValue    the new value for the field
  */
 class VFieldException(val field: VField,
-                      message: String?,
-                      private val newValue: Any?)
+                      message: String? = null,
+                      private val newValue: Any? = null)
   : VExecFailedException(message) {
   /**
    * Constructs an exception with no message.
