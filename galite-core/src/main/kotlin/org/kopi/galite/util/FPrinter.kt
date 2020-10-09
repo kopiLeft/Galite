@@ -32,8 +32,8 @@ class FPrinter(name: String, filename: String) : AbstractPrinter(name) {
   /**
    * Print a file and return the output of the command
    */
-  override fun print(data: PrintJob): String {
-    data.writeDataToFile(file)
+  override fun print(printdata: PrintJob): String {
+    printdata.writeDataToFile(file)
     return "NYI"
   }
 }

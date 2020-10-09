@@ -84,7 +84,7 @@ interface UReport : UWindow, ReportListener {
    * @param column The column number.
    * @param label The column label
    */
-  fun setColumnLabel(column: Int, label: String?)
+  fun setColumnLabel(column: Int, label: String)
 
   /**
    * `UTable` is a report table ensuring conversion between
