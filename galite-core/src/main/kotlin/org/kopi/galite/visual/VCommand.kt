@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual
 
-open class VCommand(private var mode: Int, protected val handler: ActionHandler,
+open class VCommand(private var mode: Int, protected val handler: ActionHandler?,
                     protected val actor: VActor?,internal val trigger: Int, private val item: String) {
 
   /**
@@ -31,7 +31,7 @@ open class VCommand(private var mode: Int, protected val handler: ActionHandler,
   /**
    * Returns the actor
    */
-  fun setEnabled(enabled: Boolean) {
+  open fun setEnabled(enabled: Boolean) {
     if (this.actor != null && !killed) {
       actor.isEnabled = enabled
       actor.number = trigger
@@ -101,7 +101,7 @@ open class VCommand(private var mode: Int, protected val handler: ActionHandler,
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
-  fun helpOnCommand(help: VHelpGenerator) {
+  open fun helpOnCommand(help: VHelpGenerator) {
     actor!!.helpOnCommand(help)
   }
 

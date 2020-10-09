@@ -18,8 +18,17 @@
 
 package org.kopi.galite.chart
 
+import org.kopi.galite.visual.VCommand
+
 open class VHelpGenerator {
   open fun helpOnColumn(label: String?, help: String?) {
+    TODO()
+  }
+
+  open fun helpOnChart(name: String,
+                       commands: Array<VCommand>?,
+                       columns: Array<VColumn?>?,
+                       help: String?): String? {
     TODO()
   }
 }

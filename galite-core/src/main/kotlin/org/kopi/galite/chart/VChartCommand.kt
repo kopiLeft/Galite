@@ -18,6 +18,41 @@
 
 package org.kopi.galite.chart
 
-class VChartCommand {
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
 
+class VChartCommand(private val chart: VChart, actor: VActor)
+  : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
+
+  override fun setEnabled(enabled: Boolean) {
+    if (actor != null) {
+      actor.isEnabled =   enabled
+      actor.number = trigger
+      actor.handler = this
+    }
+  }
+
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    // TODO
+  }
+
+  override fun performAction(action: Action, block: Boolean) {
+    chart.performAction(action, block)
+  }
+
+  override fun performAsyncAction(action: Action) {
+    chart.performAsyncAction(action)
+  }
+
+  // --------------------------------------------------------------------
+  // HELP HANDLING
+  // --------------------------------------------------------------------
+  override fun helpOnCommand(help: org.kopi.galite.visual.VHelpGenerator) {
+    if (actor == null) {
+      return
+    }
+    actor.helpOnCommand(help)
+  }
 }
