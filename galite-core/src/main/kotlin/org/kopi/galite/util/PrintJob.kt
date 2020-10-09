@@ -36,65 +36,66 @@ import org.kopi.galite.base.Utils
  *
  * A Printer creates a PrintTask from a PrintJob
  */
-class PrintJob(val datafile: File?, private val delete: Boolean, var format: Rectangle) {
-  /**
-   * use with care, do only read from the file, not not manipulate
-   */
-  init {
-    /* if the jvm is stopped before the objects are finalized the file must be deleted!*/
-    if (delete) {
-      datafile?.deleteOnExit()
-    }
-  }
+class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
 
-  constructor(format: Rectangle) : this(Utils.getTempFile("kopi", "pdf"), true, format)
+  constructor(format: Rectangle) : this(Utils.getTempFile("galite", "pdf"), true, format)
   constructor(data: ByteArray, format: Rectangle) : this(writeToFile(ByteArrayInputStream(data)), true, format)
   constructor(dataStream: InputStream, format: Rectangle) : this(writeToFile(dataStream), true, format)
 
+  // properties
+  var title: String = ""
+  lateinit var media: String
+  var documentType = 0
+  var dataType: Int = DAT_PS
+  var numberCopy: Int = 1
+  var numberOfPages: Int = -1
+
+  init {
+    /* if the jvm is stopped before the objects are finalized the file must be deleted!*/
+    if (delete) {
+      dataFile.deleteOnExit()
+    }
+  }
+
   protected fun finalize() {
-    if (delete && datafile != null) {
-      datafile.delete()
+    if (delete && dataFile != null) {
+      dataFile.delete()
     }
   }
 
   override fun toString(): String {
-    return "PrintJob (" + delete + ") " + datafile + "  " + super.toString()
+    return "PrintJob (" + delete + ") " + dataFile + "  " + super.toString()
   }
 
   /**
-   * outputStream has to be closed before calling getInputStream
+   * OutputStream has to be closed before using inputStream
    * use with care, know what you do!
    */
-  val outputStream: OutputStream
-    get() = FileOutputStream(datafile)
+  fun getOutputStream(): OutputStream = FileOutputStream(dataFile)
 
   /**
-   * outputStream has to be closed before calling inputStream
+   * outputStream has to be closed before using inputStream
    */
-  val inputStream: InputStream
-    get() = FileInputStream(datafile)
+  fun getInputStream(): InputStream = FileInputStream(dataFile)
 
-  /**
-   * use inputStream because in creates the stream if necessary
-   */
-  val bytes: ByteArray
-    get() {
+  fun getBytes(): ByteArray{
       val buffer = ByteArray(1024)
       var length: Int
 
       /**
-       * use getInputStream because in creates the stream if necessary
+       * use inputStream because it creates the stream if necessary
        */
-      val data: InputStream = inputStream
+      val data: InputStream = getInputStream()
       val output: ByteArrayOutputStream = ByteArrayOutputStream()
-
       while (data.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
       }
       return output.toByteArray()
     }
 
-  fun writeDataToFile(file: File) = writeToFile(inputStream, file)
+  fun writeDataToFile(file: File) {
+    writeToFile(getInputStream(), file)
+  }
 
   fun setPrintInformation(title: String, format: Rectangle, numberOfPages: Int) {
     this.title = title
@@ -102,15 +103,21 @@ class PrintJob(val datafile: File?, private val delete: Boolean, var format: Rec
     this.numberOfPages = numberOfPages
   }
 
-  fun getWidth(): Int = format.width.toInt()
+  fun getWidth(): Int {
+    return format.width.toInt()
+  }
 
-  fun getHeight(): Int = format.height.toInt()
+  fun getHeight(): Int {
+    return format.height.toInt()
+  }
 
-  fun createFromThis(file: File, delete: Boolean): PrintJob = PrintJob(file, delete, format)
+  fun createFromThis(file: File, delete: Boolean): PrintJob {
+    return PrintJob(file, delete, format)
+  }
 
   companion object {
     private fun writeToFile(dataStream: InputStream): File {
-      val tempFile: File = Utils.getTempFile("kopi", "pdf")
+      val tempFile: File = Utils.getTempFile("galite", "pdf")
       writeToFile(dataStream, tempFile)
       return tempFile
     }
@@ -119,7 +126,6 @@ class PrintJob(val datafile: File?, private val delete: Boolean, var format: Rec
       val buffer = ByteArray(1024)
       var length: Int
       val output: OutputStream = FileOutputStream(outputFile)
-
       while (dataStream.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
       }
@@ -147,12 +153,4 @@ class PrintJob(val datafile: File?, private val delete: Boolean, var format: Rec
     // Raw format (Used for label printers)
     val FORMAT_RAW = Rectangle(-1F, -1F)
   }
-
-  // properties
-  var title: String = ""
-  lateinit var media: String
-  var documentType = 0
-  var dataType: Int = DAT_PS
-  var numberCopy = 1
-  var numberOfPages = -1
 }
