@@ -23,25 +23,26 @@ import java.util.Date
 import java.util.Locale
 
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
+import org.kopi.galite.ui.base.StylesInjector
 import org.kopi.galite.visual.Application
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.PrinterManager
 import org.kopi.galite.visual.Registry
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.WindowController
-import org.kopi.galite.db.DBContext
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.router.Route
-import org.kopi.galite.ui.base.StylesInjector
 
 
 /**
@@ -117,7 +118,19 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @see .login
    */
   private fun connectToDatabase(username: String, password: String) {
-
+    dBContext = login(getInitParameter("database")!!,
+            getInitParameter("driver")!!,
+            username,
+            password,
+            getInitParameter("schema")!!)
+    // check if context is created
+    // check if context is created
+    if (dBContext == null) {
+      throw SQLException(MessageCode.getMessage("VIS-00054"))
+    } else {
+      // set query trace level
+      setTraceLevel()
+    }
   }
 
   // --------------------------------------------------
