@@ -40,9 +40,6 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
   // FIELDHANDLER IMPLEMENTATION
   // ----------------------------------------------------------------------
 
-  /**
-   *
-   */
   override fun getRowController(): VFieldUI {
     return rowController
   }
@@ -51,25 +48,19 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
   // FIELDLISTENER IMPLEMENTATION
   // ----------------------------------------------------------------------
 
-  /**
-   *
-   */
   override fun updateModel() {
     if (getModel().isChanged() && getModel().hasFocus()) {
       getModel().checkType(getDisplayedValue(true))
     }
   }
 
-  /**
-   *
-   */
   override fun getDisplayedValue(trim: Boolean): Any {
     return when (val field = getCurrentDisplay()) {
       null -> {
         "" // having null pointer exception when display is not defined
       }
       is UTextField -> {
-        val text: String = (field as UTextField).getText()
+        val text: String = (field).getText()
 
         if (!trim) {
           text
@@ -85,72 +76,66 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     }
   }
 
-  /**
-   *
-   */
-  override fun getCurrentDisplay(): UField = rowController.getDisplay()
+  override fun getCurrentDisplay(): UField? = rowController.getDisplay()
 
-  /**
-   *
-   */
   override fun fieldError(message: String) {
     rowController.displayFieldError(message)
-  }
 
-  /**
-   *
-   */
-  override fun requestFocus(): Boolean {
-    rowController.transferFocus(getCurrentDisplay())
-    return true
-  }
+    fun requestFocus(): Boolean {
+      rowController.transferFocus(getCurrentDisplay()!!)
+      return true
+    }
 
-  /**
-   *
-   */
-  override fun loadItem(mode: Int): Boolean {
-    var mode = mode
-    var id = -1
-    val dictionary: VDictionary = (if (getModel().getList() != null && getModel().getList()!!.getNewForm() != null) {
-      // OLD SYNTAX
-      Module.getExecutable(getModel().getList()!!.getNewForm()) as VDictionary?
-    } else if (getModel().getList() != null && getModel().getList()!!.getAction() != -1) {
-      // NEW SYNTAX
-      getModel().getBlock().executeObjectTrigger(getModel().getList()!!.getAction()) as VDictionary
-    } else {
-      null
-    })
-            ?: return false
-    if (mode == VForm.CMD_NEWITEM) {
-      id = dictionary.add(getModel().getForm())
-    } else if (mode == VForm.CMD_EDITITEM) {
-      try {
-        updateModel()
-        if (!getModel().isNull(rowController.getBlock().getActiveRecord())) {
-          val value: Int = getModel().getListID()
-          if (value != -1) {
-            id = dictionary.edit(getModel().getForm(), value)
-          } else {
-            mode = VForm.CMD_EDITITEM_S
-          }
-        } else {
-          mode = VForm.CMD_EDITITEM_S
+    fun loadItem(mode: Int): Boolean {
+      var mode = mode
+      var id = -1
+      val dictionary: VDictionary = (if (getModel().getList() != null && getModel().getList()!!.getNewForm() != null) {
+        // OLD SYNTAX
+        Module.getExecutable(getModel().getList()!!.getNewForm()) as VDictionary?
+      } else if (getModel().getList() != null && getModel().getList()!!.getAction() != -1) {
+        // NEW SYNTAX
+        getModel().getBlock().executeObjectTrigger(getModel().getList()!!.getAction()) as VDictionary
+      } else {
+        null
+      })
+              ?: return false
+
+      when (mode) {
+        VForm.CMD_NEWITEM -> {
+          id = dictionary.add(getModel().getForm())
         }
-      } catch (e: VException) {
-        mode = VForm.CMD_EDITITEM_S
+        else -> {
+          if (mode == VForm.CMD_EDITITEM) {
+            try {
+              updateModel()
+              if (!getModel().isNull(rowController.getBlock().getActiveRecord())) {
+                val value: Int = getModel().getListID()
+                if (value != -1) {
+                  id = dictionary.edit(getModel().getForm(), value)
+                } else {
+                  mode = VForm.CMD_EDITITEM_S
+                }
+              } else {
+                mode = VForm.CMD_EDITITEM_S
+              }
+            } catch (e: VException) {
+              mode = VForm.CMD_EDITITEM_S
+            }
+          }
+          if (mode == VForm.CMD_EDITITEM_S) {
+            id = dictionary.search(getModel().getForm())
+          }
+          if (id == -1) {
+            if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
+              getModel().setNull(rowController.getBlock().getActiveRecord())
+            }
+            throw VExecFailedException() // no message needed
+          }
+        }
       }
+      getModel().setValueID(id)
+      getModel().getBlock().gotoNextField()
+      return true
     }
-    if (mode == VForm.CMD_EDITITEM_S) {
-      id = dictionary.search(getModel().getForm())
-    }
-    if (id == -1) {
-      if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
-        getModel().setNull(rowController.getBlock().getActiveRecord())
-      }
-      throw VExecFailedException() // no message needed
-    }
-    getModel().setValueID(id)
-    getModel().getBlock().gotoNextField()
-    return true
   }
 }

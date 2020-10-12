@@ -20,7 +20,7 @@ package org.kopi.galite.visual
 
 open class Module {
   companion object {
-    fun getExecutable(object1 :String?):Executable = TODO()
+    fun getExecutable(data :String?):Executable = TODO()
   }
 }
 
