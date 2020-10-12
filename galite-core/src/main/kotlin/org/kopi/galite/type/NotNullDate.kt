@@ -16,25 +16,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
+package org.kopi.galite.type
 
-import java.io.OutputStream
+import java.util.*
 
-class PExport2XLS(table: UReport.UTable, model: MReport, printOptions: PConfig, pageTitle: String) : PExport(table,
-        model, printOptions, pageTitle), Constants {
-  override fun exportHeader(data: Array<String?>) {
-    TODO("Not yet implemented")
-  }
+/**
+ * This class represents kopi date types
+ */
+class NotNullDate : Date {
+  constructor(year: Int, month: Int, day: Int) : super(year, month, day) {}
+  constructor(date: java.sql.Date) : super(date) {}
+  constructor(image: String) : super(image) {}
+  constructor(calendar: Calendar) : super(calendar) {}
 
-  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
-    TODO("Not yet implemented")
-  }
+  /**
+   * Constructs a Date from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
+   */
+  constructor(scalar: Int) : super(scalar) {}
 
-  override fun export(stream: OutputStream) {
-    TODO("Not yet implemented")
-  }
-
-  override fun startGroup(subTitle: String?) {
-    TODO("Not yet implemented")
+  companion object {
+    fun castToNotNull(value: Date?): NotNullDate? {
+      return value as NotNullDate?
+    }
   }
 }

@@ -53,52 +53,52 @@ open class VHelpGenerator {
    */
   fun helpOnCommands(commands: Array<VCommand>) {
     if (commands.isNotEmpty()) {
-      print.println("<TABLE valign=\"top\">")
+      printer.println("<TABLE valign=\"top\">")
       for (i in commands.indices) {
         commands[i].helpOnCommand(this)
       }
-      print.println("</TABLE>")
+      printer.println("</TABLE>")
     }
   }
 
   /**
    * print a command
    */
-  fun helpOnCommand(menu: String,
-                    item: String,
-                    icon: String?,
-                    accKey: Int,
-                    accMod: Int,
-                    help: String?) {
-    print.println("<TR><TD>")
+  open fun helpOnCommand(menu: String,
+                         item: String,
+                         icon: String?,
+                         accKey: Int,
+                         accMod: Int,
+                         help: String?) {
+    printer.println("<TR><TD>")
     if (icon != null) {
       addButton("$icon.png")
     } else {
-      print.println("&nbsp;")
+      printer.println("&nbsp;")
     }
-    print.println("</TD><TD>")
+    printer.println("</TD><TD>")
     if (accMod != 0) {
       if (accMod == InputEvent.SHIFT_MASK) {
-        print.print("Shift-")
+        printer.print("Shift-")
       }
     }
-    print.println(keyToName(accKey))
-    print.println("</TD><TD><STRONG>$menu:$item:</STRONG></TD><TD>")
+    printer.println(keyToName(accKey))
+    printer.println("</TD><TD><STRONG>$menu:$item:</STRONG></TD><TD>")
     if (help != null) {
-      print.println(help)
+      printer.println(help)
     } else {
-      print.println("no help")
+      printer.println("no help")
     }
-    print.println("</TD></TR>")
+    printer.println("</TD></TR>")
   }
 
   /**
    * Add an image
    */
   private fun addImage(name: String, border: Int) {
-    print.print("<img src=\"" + ImageHandler.imageHandler!!.getURL(name))
-    print.print("\" BORDER =\"$border")
-    print.println("\" alt=\"$name\">")
+    printer.print("<img src=\"" + ImageHandler.imageHandler!!.getURL(name))
+    printer.print("\" BORDER =\"$border")
+    printer.println("\" alt=\"$name\">")
   }
 
   /**
@@ -118,5 +118,5 @@ open class VHelpGenerator {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  protected open lateinit var print: PrintWriter
+  protected open lateinit var printer: PrintWriter
 }

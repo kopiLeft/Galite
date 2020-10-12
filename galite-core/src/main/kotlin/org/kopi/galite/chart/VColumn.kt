@@ -61,7 +61,7 @@ abstract class VColumn internal constructor(var ident: String) : Serializable {
    *
    * @param     loc         the caller localizer
    */
-  protected fun localize(loc: FieldLocalizer) {
+  protected open fun localize(loc: FieldLocalizer) {
     // by default nothing to do
   }
 

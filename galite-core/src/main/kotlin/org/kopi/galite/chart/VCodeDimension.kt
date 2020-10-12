@@ -18,5 +18,46 @@
 
 package org.kopi.galite.chart
 
-abstract class VCodeDimension {
+import org.kopi.galite.l10n.FieldLocalizer
+
+/**
+ * Creates a chart code column.
+ * @param ident   The column identifier.
+ * @param format  The dimension format.
+ * @param type    The column type.
+ * @param source  The column localization source.
+ * @param idents  The columns displayed labels.
+ */
+abstract class VCodeDimension(ident: String,
+                              format: VColumnFormat,
+                              private val type: String,
+                              private val source: String,
+                              private val idents: Array<String>) : VDimension(ident, format) {
+  // ----------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // ----------------------------------------------------------------------
+  override fun toString(value: Any?): String {
+    return if (names != null) names!![getIndex(value)]!! else idents[getIndex(value)]
+  }
+
+  // ----------------------------------------------------------------------
+  // ABSTRACT METHODS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the index.of given object
+   * @return The index.of given object
+   */
+  protected abstract fun getIndex(value: Any?): Int
+
+  // ----------------------------------------------------------------------
+  // LOCALIZATION
+  // ----------------------------------------------------------------------
+  override fun localize(parent: FieldLocalizer) {
+    val loc = parent.manager.getTypeLocalizer(source, type)
+    names = arrayOfNulls(idents.size)
+    for (i in names!!.indices) {
+      names!![i] = loc.getCodeLabel(idents[i])
+    }
+  }
+  protected var names: Array<String?>? = null // array of external representations
 }

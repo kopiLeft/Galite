@@ -27,15 +27,15 @@ import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.PrinterManager
 
-class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.getNumber(), actor.getActorIdent()), ActionHandler {
+class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
   /**
    * Returns the actor
    */
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {
-      actor.setEnabled(enabled)
-      actor.setNumber(trigger)
-      actor.setHandler(this)
+      actor.isEnabled = enabled
+      actor.number = trigger
+      actor.handler = this
     }
   }
 
@@ -46,7 +46,7 @@ class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null
    * @param    action        the action to perform.
    * @param    block        This action should block the UI thread ?
    */
-  fun performAction(action: Action, block: Boolean) {
+  override fun performAction(action: Action, block: Boolean) {
     report.performAction(action, block)
     /*try {
       executeVoidTrigger(getTrigger());

@@ -15,6 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VFixnumField 
+import org.kopi.galite.type.Fixed
+
+//TODO
+class VFixnumField {
+
+  companion object {
+    /**
+     * Computes the the width of a fixnum field : FIXNUM(digits, scale)
+     *
+     * @param     digits          the number of total digits.
+     * @param     scale           the number of digits representing the fractional part.
+     * @param     minVal          the minimal value the fixnum field can get.
+     * @param     maxVal          the maximal value the fixnum field can get.
+     */
+    fun computeWidth(digits: Int, scale: Int, minVal: Fixed?, maxVal: Fixed?): Int {
+      TODO()
+    }
+  }
+}

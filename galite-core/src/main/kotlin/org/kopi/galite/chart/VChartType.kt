@@ -41,21 +41,6 @@ open class VChartType protected constructor(val ordinal: Int, val name: String) 
   }
 
   override fun getDisplay(): UComponent = display
-  override fun setNumber(trigger: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setHandler(vReportCommand: VReportCommand) {
-    TODO("Not yet implemented")
-  }
-
-  override fun getNumber(): Int {
-    TODO("Not yet implemented")
-  }
-
-  override fun getActorIdent(): String {
-    TODO("Not yet implemented")
-  }
 
   /**
    * Creates the data series objects from the chart model.

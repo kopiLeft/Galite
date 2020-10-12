@@ -15,6 +15,50 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-class VSeparatorColumn 
+/**
+ * Represents a report column description
+ *
+ * @param     ident           The column identifier
+ * @param     options         The column options as bitmap
+ * @param     align           The column alignment
+ * @param     groups          The index of the column grouped by this one or -1
+ * @param     function        An (optional) summation function
+ */
+class VSeparatorColumn(
+  ident: String,
+  options: Int,
+  align: Int,
+  groups: Int,
+  function: VCalculateColumn?,
+  width: Int,
+  format: VCellFormat,
+) : VReportColumn("", 0, 0, 0, null, 1, 1, null) {
+  /**
+   * No text here
+   */
+  override fun format(o: Any?): String {
+    return ""
+  }
+
+  /**
+   * Compare two objects.
+   *
+   * @param    object1    the first operand of the comparison
+   * @param    object2    the second operand of the comparison
+   * @return    -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  override fun compareTo(object1: Any, object2: Any): Int {
+    return 0
+  }
+
+  /**
+   * Returns the visibility of the column
+   */
+  override var folded: Boolean = false
+    get() = true
+}
