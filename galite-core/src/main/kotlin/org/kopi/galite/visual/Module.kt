@@ -18,7 +18,6 @@
 
 package org.kopi.galite.visual
 
-import org.kopi.galite.base.Image
 import org.kopi.galite.l10n.LocalizationManager
 
 class Module(
