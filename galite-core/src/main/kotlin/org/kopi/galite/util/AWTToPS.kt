@@ -953,16 +953,15 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
                    observer: ImageObserver, bgcolor: Color?): Boolean {
     // This class fetches the pixels in its constructor.
     val pc = PixelConsumer(img)
-    run {
-      var i = 0
-      while (i < 10000 && !pc.isComplete) {
-        try {
-          Thread.sleep(1)
-        } catch (e: Throwable) {
-          // ignore it
-        }
-        i++
+    var i = 0
+
+    while (i < 10000 && !pc.isComplete) {
+      try {
+        Thread.sleep(1)
+      } catch (e: Throwable) {
+        // ignore it
       }
+      i++
     }
     val imgWidth = img.getWidth(observer)
     val imgHeight = img.getHeight(observer)
