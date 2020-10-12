@@ -25,4 +25,11 @@ abstract class VBlock {
   var activeRecord = 0 // current record
 
   lateinit var activeField : VField
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
 }
