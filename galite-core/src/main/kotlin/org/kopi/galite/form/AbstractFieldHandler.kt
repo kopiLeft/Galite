@@ -49,7 +49,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
   // ----------------------------------------------------------------------
 
   override fun updateModel() {
-    if (getModel().isChanged() && getModel().hasFocus()) {
+    if (getModel().changed && getModel().hasFocus()) {
       getModel().checkType(getDisplayedValue(true))
     }
   }
@@ -64,7 +64,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
 
         if (!trim) {
           text
-        } else if (getModel().getHeight() == 1) {
+        } else if (getModel().height == 1) {
           Utils.trimString(text)
         } else {
           Utils.trailString(text)
@@ -89,12 +89,12 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     fun loadItem(mode: Int): Boolean {
       var mode = mode
       var id = -1
-      val dictionary: VDictionary = (if (getModel().getList() != null && getModel().getList()!!.getNewForm() != null) {
+      val dictionary: VDictionary = (if (getModel().list != null && getModel().list.newForm != null) {
         // OLD SYNTAX
-        Module.getExecutable(getModel().getList()!!.getNewForm()) as VDictionary?
-      } else if (getModel().getList() != null && getModel().getList()!!.getAction() != -1) {
+        Module.getExecutable(getModel().list.newForm) as VDictionary?
+      } else if (getModel().list != null && getModel().list.action != -1) {
         // NEW SYNTAX
-        getModel().getBlock().executeObjectTrigger(getModel().getList()!!.getAction()) as VDictionary
+        getModel().block.executeObjectTrigger(getModel().list!!.action) as VDictionary
       } else {
         null
       })
@@ -134,7 +134,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
         }
       }
       getModel().setValueID(id)
-      getModel().getBlock().gotoNextField()
+      getModel().block.gotoNextField()
       return true
     }
   }

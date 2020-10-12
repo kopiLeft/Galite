@@ -15,13 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
 abstract class VBlock {
   fun getActiveRecord(): Int = TODO()
-   fun gotoNextField(){
-     TODO()
-   }
-  fun executeObjectTrigger (VKT_Type:Int?): Any = TODO()
+  fun gotoNextField() {
+    TODO()
+  }
+
+  fun executeObjectTrigger(VKT_Type: Int?): Any = TODO()
   fun isChart(): Boolean = TODO()
+  var bufferSize = 0 // max number of buffered records
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
 }

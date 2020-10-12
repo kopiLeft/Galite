@@ -23,11 +23,11 @@ import kotlin.reflect.KClass
 import org.kopi.galite.util.base.InconsistencyException
 
 class VBooleanCodeColumn(
-  title: String,
-  column: String,
-  names: Array<String>,
-  private val codes: Array<Boolean>,
-  sortAscending: Boolean
+        title: String,
+        column: String?,
+        names: Array<String>,
+        private val codes: Array<Boolean?>,
+        sortAscending: Boolean
 ) : VCodeColumn(title, column, names, sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION

@@ -15,10 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
 import org.kopi.galite.list.VListColumn
+import org.kopi.galite.visual.VWindow
 
-class VListDialog(list: Array<VListColumn>, values: Array<Array<Any>>) {
-  fun selectFromDialog(form: VForm, field: VField): Int = TODO()
+class VListDialog(list: Array<VListColumn>, values: Array<Array<Any?>>?) {
+  fun selectFromDialog(form: VForm, field: VField?): Int = TODO()
+  fun selectFromDialog(form: VForm?, window: VWindow?, field: VField?): Int {
+   TODO()
+  }
+
 }
