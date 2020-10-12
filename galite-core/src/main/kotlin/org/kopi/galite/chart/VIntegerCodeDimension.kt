@@ -40,11 +40,11 @@ class VIntegerCodeDimension(ident: String,
   // --------------------------------------------------------------------
   override fun getIndex(value: Any?): Int {
     if (fastIndex != -1) {
-      return (value as Int).toInt() - fastIndex
+      return (value as? Int)!!.toInt() - fastIndex
     }
 
     codes.forEachIndexed { index, code ->
-      if ((value as Int).toInt() == code) {
+      if ((value as? Int) == code) {
         return index
       }
     }

@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.chart
 
 import org.kopi.galite.visual.VColor
@@ -41,7 +42,7 @@ class VIntegerCodeMeasure(ident: String,
   // --------------------------------------------------------------------
   override fun getIndex(value: Any?): Int {
     codes.forEachIndexed { index, code ->
-      if ((value as Int).toInt() == code) {
+      if ((value as? Int) == code) {
         return index
       }
     }
@@ -50,7 +51,7 @@ class VIntegerCodeMeasure(ident: String,
 
   override fun toNumber(value: Any?): Number? {
     codes.forEach { code ->
-      if ((value as Int).toInt() == code) {
+      if ((value as? Int) == code) {
         return code
       }
     }
