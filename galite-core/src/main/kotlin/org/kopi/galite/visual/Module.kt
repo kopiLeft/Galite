@@ -115,7 +115,7 @@ class Module(val id: Int,
   private var smallIcon: Image? = null
 
   companion object {
-    fun getKopiExecutable(value: String): Executable {
+    fun getExecutable(value: String): Executable {
       return try {
         Class.forName(value).newInstance() as Executable
       } catch (iae: IllegalAccessException) {
@@ -136,7 +136,7 @@ class Module(val id: Int,
           System.gc()
           Thread.yield()
         }
-        val form: Executable = getKopiExecutable(value)
+        val form: Executable = getExecutable(value)
 
         if (form is VWindow) {
           form.smallIcon = icon
