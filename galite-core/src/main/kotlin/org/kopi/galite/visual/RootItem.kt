@@ -18,13 +18,90 @@
 
 package org.kopi.galite.visual
 
+import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
+/**
+ * A root item must provide its ID and name. The root tree node
+ * of this item should be provided for further uses.
+ */
 class RootItem(id: Int, name: String) {
-
+  // ---------------------------------------------------------------------
+  // IMPLEMENTATION
+  // ---------------------------------------------------------------------
+  /**
+   * Creates the item tree nodes for this root item.
+   * @param items The accessible items for the connected user.
+   */
   fun createTree(items: Array<Item>) {
-    TODO()
+    this.rootNode = createTree(items, rootItem)
   }
 
-  fun getRoot(): TreeNode? = TODO()
+  /**
+   * Creates the item tree for the given root item.
+   * @param items The accessible items.
+   * @param root The root item.
+   * @return The local root tree node.
+   */
+  protected fun createTree(items: Array<Item>, root: Item): DefaultMutableTreeNode? {
+    var self: DefaultMutableTreeNode? = null
+    var childsCount = 0
+
+    items.forEach {
+      if (it.parent == root.id) {
+        childsCount++
+        it.level = root.level + 1
+        val node: DefaultMutableTreeNode? = createTree(items, it)
+
+        if (node != null) {
+          if (self == null) {
+            self = DefaultMutableTreeNode(root)
+          }
+          self!!.add(node)
+        }
+      }
+    }
+    return if (childsCount == 0) {
+      DefaultMutableTreeNode(root)
+    } else {
+      self
+    }
+  }
+  // ---------------------------------------------------------------------
+  // ACCESSORS
+  // ---------------------------------------------------------------------
+  /**
+   * Returns true if this root item does not contain any item.
+   * @return True if this root item does not contain any item.
+   */
+  val isEmpty: Boolean
+    get() = this.rootNode == null
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  /**
+   * Creates a root item from its ID and name.
+   * @param id The root item ID.
+   * @param name The root item name.
+   */
+  private val rootItem: Item = Item(id,
+          0,
+          name,
+          null,
+          null,
+          false,
+          false,
+          null,
+          name)
+
+  init {
+    rootItem.level = 0
+  }
+
+  /**
+   * Return the root node
+   */
+  var rootNode: TreeNode? = null
+    private set
 }

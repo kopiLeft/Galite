@@ -18,13 +18,12 @@
 
 package org.kopi.galite.visual
 
-class VDefaultActor(
-        val code: Int,
-        menuIdent: String,
-        menuSource: String,
-        actorIdent: String,
-        actorSource: String,
-        iconName: String,
-        acceleratorKey: Int,
-        acceleratorModifier: Int
+class VDefaultActor(val code: Int,
+                    menuIdent: String,
+                    menuSource: String,
+                    actorIdent: String,
+                    actorSource: String,
+                    iconName: String,
+                    acceleratorKey: Int,
+                    acceleratorModifier: Int
 ) : VActor(menuIdent, menuSource, actorIdent, actorSource, iconName, acceleratorKey, acceleratorModifier)

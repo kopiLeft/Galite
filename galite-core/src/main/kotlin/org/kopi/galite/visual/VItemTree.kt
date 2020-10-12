@@ -206,7 +206,7 @@ class VItemTree(rootName: String?,
   private fun createTree() {
     rootItem = RootItem(-1, rootName)
     rootItem!!.createTree(items)
-    root = rootItem!!.getRoot()
+    root = rootItem!!.rootNode
   }
 
   /**
@@ -225,8 +225,8 @@ class VItemTree(rootName: String?,
   private fun initMaxId() {
     maxId = -1
     for (i in items.indices) {
-      if (maxId < items[i].getId()) {
-        maxId = items[i].getId()
+      if (maxId < items[i].id) {
+        maxId = items[i].id
       }
     }
   }

@@ -15,9 +15,72 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
-class Item {
+import org.kopi.galite.base.Image
 
-  fun getId(): Int = TODO()
+class Item(val id: Int,
+           var parent: Int,
+           var name: String,
+           var localisedName: String?,
+           var description: String?,
+           var selected: Boolean,
+           var defaultItem: Boolean,
+           icon: String?,
+           var originalName: String) : Comparable<Item> {
+
+  var icon: Image? = null
+  var smallIcon: Image? = null
+  var childCount = 0
+  lateinit var children: Array<Item>
+  var level = 0
+
+  init {
+    if (icon != null) {
+      this.icon = ImageHandler.imageHandler?.getImage(icon)
+      smallIcon = ImageHandler.imageHandler?.getImage(icon)
+      if (smallIcon == null) {
+        smallIcon = smallIcon?.getScaledInstance(16, 16, Image.SCALE_SMOOTH)
+      }
+    }
+  }
+
+  /**
+   * Sets the current item name
+   */
+  fun getFormattedName(localised: Boolean): String? {
+    return if (localised && id != -1) {
+      "[" + name + "]  " + if (localisedName != null) localisedName else "........"
+    } else {
+      name
+    }
+  }
+
+  /**
+   * Return the name
+   */
+  override fun toString(): String {
+    return name
+  }
+
+  /**
+   * Decrement the item level
+   */
+  fun decrementLevel() {
+    level--
+  }
+
+  // ---------------------------------------------------------------------
+  // COMPARABLE IMPLEMENTATION
+  // ---------------------------------------------------------------------
+  override operator fun compareTo(item: Item): Int {
+    return if (id == item.id
+            && parent == item.parent
+            && name == item.name
+            && localisedName == item.localisedName
+            && description == item.description
+            && selected == item.selected
+            && defaultItem == item.defaultItem) 1 else -1
+  }
 }
