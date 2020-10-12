@@ -18,9 +18,10 @@
 
 package org.kopi.galite.ui.visual
 
+import java.io.File
+
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.UWindow
-import java.io.File
 
 class VFileHandler : FileHandler() {
   override fun chooseFile(window: UWindow, defaultName: String): File {

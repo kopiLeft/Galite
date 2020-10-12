@@ -37,7 +37,6 @@ import org.kopi.galite.visual.PrinterManager
 import org.kopi.galite.visual.Registry
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -89,8 +88,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun allowQuit(): Boolean =
-          if (getInitParameter("allowQuit") == null) true
-          else java.lang.Boolean.parseBoolean(getInitParameter("allowQuit"))
+          getInitParameter("allowQuit") == null ||
+                  java.lang.Boolean.parseBoolean(getInitParameter("allowQuit"))
 
   override lateinit var applicationConfiguration: ApplicationConfiguration
 
@@ -123,7 +122,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
             password,
             getInitParameter("schema")!!)
     // check if context is created
-    // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
     } else {
@@ -132,9 +130,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     }
   }
 
-  // --------------------------------------------------
-  // ACCESSORS
-  // --------------------------------------------------
   override val isNoBugReport: Boolean
     get() = java.lang.Boolean.parseBoolean(getInitParameter("nobugreport"))
 
