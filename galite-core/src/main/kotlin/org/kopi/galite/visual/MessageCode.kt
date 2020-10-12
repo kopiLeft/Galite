@@ -64,10 +64,8 @@ object MessageCode {
       throw InconsistencyException("No Registry set for this application.")
     }
     val src = ApplicationContext.getRegistry().getMessageSource(domain)
-    if (src == null) {
-      throw InconsistencyException("No message source found for module '"
-              + domain + "'")
-    }
+            ?: throw InconsistencyException("No message source found for module '"
+                    + domain + "'")
     return try {
       val manager = LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
 
