@@ -116,5 +116,5 @@ class VHelpGenerator : VHelpGenerator() {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  protected override lateinit var printer: PrintWriter
+  override lateinit var printer: PrintWriter
 }

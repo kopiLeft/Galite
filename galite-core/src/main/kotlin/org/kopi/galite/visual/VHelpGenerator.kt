@@ -64,12 +64,12 @@ open class VHelpGenerator {
   /**
    * print a command
    */
-  fun helpOnCommand(menu: String,
-                    item: String,
-                    icon: String?,
-                    accKey: Int,
-                    accMod: Int,
-                    help: String?) {
+  open fun helpOnCommand(menu: String,
+                         item: String,
+                         icon: String?,
+                         accKey: Int,
+                         accMod: Int,
+                         help: String?) {
     printer.println("<TR><TD>")
     if (icon != null) {
       addButton("$icon.png")

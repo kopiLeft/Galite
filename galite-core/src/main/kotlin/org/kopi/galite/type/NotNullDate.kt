@@ -16,13 +16,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.type
+
+import java.util.*
 
 /**
- * This is a marker interface to handle actor fields differently in
- * the display creation. In fact actor fields defines a label inside
- * and does not need to put a ULabel object besides. We will use this
- * marker interface to exclude the field label object when the field display
- * is an instance of a UActorField.
+ * This class represents kopi date types
  */
-interface UActorField : UTextField
+class NotNullDate : Date {
+  constructor(year: Int, month: Int, day: Int) : super(year, month, day) {}
+  constructor(date: java.sql.Date) : super(date) {}
+  constructor(image: String) : super(image) {}
+  constructor(calendar: Calendar) : super(calendar) {}
+
+  /**
+   * Constructs a Date from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
+   */
+  constructor(scalar: Int) : super(scalar) {}
+
+  companion object {
+    fun castToNotNull(value: Date?): NotNullDate? {
+      return value as NotNullDate?
+    }
+  }
+}

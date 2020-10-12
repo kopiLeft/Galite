@@ -16,13 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.base
 
-/**
- * This is a marker interface to handle actor fields differently in
- * the display creation. In fact actor fields defines a label inside
- * and does not need to put a ULabel object besides. We will use this
- * marker interface to exclude the field label object when the field display
- * is an instance of a UActorField.
- */
-interface UActorField : UTextField
+import org.kopi.galite.type.NotNullDate
+
+class Query {
+
+  fun isNull(column: Int): Boolean {
+    TODO()
+  }
+
+  fun getDate(pos: Int): NotNullDate {
+    TODO()
+  }
+
+  fun getBoolean(column: Int): Boolean {
+    TODO()
+  }
+}

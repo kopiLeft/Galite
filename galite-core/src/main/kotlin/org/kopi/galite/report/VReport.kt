@@ -84,7 +84,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   @Deprecated("call method in display; model must not be closed")
   fun close() {
-    getDisplay().closeWindow()
+    getDisplay()!!.closeWindow()
   }
 
   override fun destroyModel() {
@@ -241,7 +241,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       TYP_XLSX -> ".xlsx"
       else -> throw InconsistencyException("Export type unknown")
     }
-    val file: File? = FileHandler.fileHandler?.chooseFile(getDisplay(),
+    val file: File? = FileHandler.fileHandler?.chooseFile(getDisplay()!!,
             ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
             "report$ext")
     file?.let { export(it, type) }
