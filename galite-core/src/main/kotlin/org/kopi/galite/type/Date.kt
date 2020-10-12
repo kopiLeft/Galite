@@ -18,14 +18,68 @@
 
 package org.kopi.galite.type
 
-class Date {
-  companion object {
-    fun now(): Date = TODO()
+import java.util.Calendar
+
+open class Date {
+
+  constructor(year: Int, month: Int, day: Int) {
+    TODO()
+  }
+
+  constructor(scalar: Int) {
+    TODO()
   }
 
   fun compareTo(other: Date): Int {
     TODO()
   }
 
+  constructor(date: java.sql.Date) {
+    TODO()
+  }
+
+  constructor(image: String) {
+    TODO()
+  }
+
+  // ----------------------------------------------------------------------
+  // ARITHMETIC OPERATIONS
+  // ----------------------------------------------------------------------
+  open fun add(days: Int): NotNullDate {
+    TODO()
+  }
+
+  /*package*/
+  constructor(calendar: Calendar) {
+    TODO()
+  }
+
+  /**
+   * Returns the month number (starts at 1, ends at 12)
+   */
+  open fun getMonth(): Int {
+    TODO()
+  }
+
+  /**
+   * Returns the year of the month (by example 1999 or may be 2000 one year after)
+   */
+  open fun getYear(): Int {
+    TODO()
+  }
+
+  /**
+   * Returns the day number (starts at 1, ends at 31)
+   */
+  open fun getDay(): Int {
+    TODO()
+  }
   fun format(s: String): Any = TODO()
+
+  companion object {
+
+    open fun now(): NotNullDate {
+      TODO()
+    }
+  }
 }

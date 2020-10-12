@@ -23,7 +23,7 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.VlibProperties
 
-class VBooleanColumn(title: String, column: String, sortAscending: Boolean) :
+class VBooleanColumn(title: String, column: String?, sortAscending: Boolean) :
         VListColumn(title, column, VConstants.ALG_LEFT, max(trueRep.length, falseRep.length), sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION
