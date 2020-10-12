@@ -66,7 +66,7 @@ class VMenuTree(ctxt: DBContext,
   override fun executeVoidTrigger(key: Int) {
     TODO()
   }
-  override fun setTitle(s: String) {
+  override fun setTitle(s: String?) {
     TODO()
   }
   fun getModule(executable: Executable): Module? {
