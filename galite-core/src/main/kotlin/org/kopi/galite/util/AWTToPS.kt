@@ -44,7 +44,7 @@ import org.kopi.galite.util.base.NotImplementedException
 class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
   constructor(stream: OutputStream, clone: Boolean) : this(PrintStream(stream), clone)
 
-  constructor(stream: OutputStream) : this(stream, false) {}
+  constructor(stream: OutputStream) : this(stream, false)
 
   fun setBoundingBox(x: Int, y: Int, width: Int, height: Int) {
     stream.println("%%BoundingBox: $x $y $width $height")
@@ -81,9 +81,10 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    */
   override fun create(x: Int, y: Int, width: Int, height: Int): Graphics {
     val graphics = create()
-    graphics.translate(x, y)
-    graphics.clipRect(0, 0, width, height)
-    return graphics
+    return graphics.apply {
+      translate(x, y)
+      clipRect(0, 0, width, height)
+    }
   }
 
   /**
@@ -113,9 +114,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * Gets the current color.
    * @see setColor
    */
-  override fun getColor(): Color {
-    return clr
-  }
+  override fun getColor(): Color = clr
 
   /**
    * Gets the current color.
@@ -143,12 +142,14 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
       if (clr.red != lastRed
               || clr.green != lastGreen
               || clr.blue != lastBlue) {
-        stream.print(clr.red.also { lastRed = it } / 255.0)
-        stream.print(" ")
-        stream.print(clr.green.also { lastGreen = it } / 255.0)
-        stream.print(" ")
-        stream.print(clr.blue.also { lastBlue = it } / 255.0)
-        stream.println(" setrgbcolor")
+        with(stream) {
+          print(clr.red.also { lastRed = it } / 255.0)
+          print(" ")
+          print(clr.green.also { lastGreen = it } / 255.0)
+          print(" ")
+          print(clr.blue.also { lastBlue = it } / 255.0)
+          println(" setrgbcolor")
+        }
       }
     }
   }
@@ -187,38 +188,43 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see drawBytes
    * @see drawChars
    */
-  override fun setFont(font: Font) {
+  override fun setFont(font: Font?) {
     if (font != null) {
       this.font = font
       val javaName = font.name.toLowerCase()
       val javaStyle = font.style
       var psName: String
-      if (javaName == "symbol") {
-        psName = "Symbol"
-      } else if (javaName.startsWith("times")) {
-        psName = "Times-"
-        when (javaStyle) {
-          Font.PLAIN -> psName += "Roman"
-          Font.BOLD -> psName += "Bold"
-          Font.ITALIC -> psName += "Italic"
-          Font.ITALIC + Font.BOLD -> psName += "BoldItalic"
-        }
-      } else {
-        psName = if (javaName == "helvetica") "Helvetica" else "Courier"
-        when (javaStyle) {
-          Font.PLAIN -> {
+      when {
+        javaName == "symbol" -> psName = "Symbol"
+        javaName.startsWith("times") -> {
+          psName = "Times-"
+          when (javaStyle) {
+            Font.PLAIN -> psName += "Roman"
+            Font.BOLD -> psName += "Bold"
+            Font.ITALIC -> psName += "Italic"
+            Font.ITALIC + Font.BOLD -> psName += "BoldItalic"
           }
-          Font.BOLD -> psName += "-Bold"
-          Font.ITALIC -> psName += "-Oblique"
-          Font.ITALIC + Font.BOLD -> psName += "-BoldOblique"
+        }
+        else -> {
+          psName = if (javaName == "helvetica") "Helvetica" else "Courier"
+          when (javaStyle) {
+            Font.PLAIN -> {
+            }
+            Font.BOLD -> psName += "-Bold"
+            Font.ITALIC -> psName += "-Oblique"
+            Font.ITALIC + Font.BOLD -> psName += "-BoldOblique"
+          }
         }
       }
+
       if (psName != oldName || font.size != oldSize) {
         oldSize = font.size
         oldName = psName
-        stream.println("/$psName findfont")
-        stream.print(font.size)
-        stream.println(" scalefont setfont")
+        with(stream) {
+          println("/$psName findfont")
+          print(font.size)
+          println(" scalefont setfont")
+        }
       }
     }
   }
@@ -237,9 +243,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see getFont
    * @see getFontMetrics
    */
-  override fun getFontMetrics(font: Font): FontMetrics {
-    return toolkit.getFontMetrics(font)
-  }
+  override fun getFontMetrics(font: Font): FontMetrics = toolkit.getFontMetrics(font)
 
   /**
    * Returns the bounding rectangle of the current clipping area.
@@ -549,9 +553,11 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
   override fun drawString(str: String, x: Int, y: Int) {
     val y = swapCoord(y)
     emitMoveto(x, y)
-    stream.print("(")
-    stream.print(str)
-    stream.println(") show stroke")
+    with(stream) {
+      print("(")
+      print(str)
+      println(") show stroke")
+    }
   }
 
   /**
@@ -915,6 +921,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
 
   private fun doArc(x: Int, y: Int, width: Int, height: Int, startAngle: Int, arcAngle: Int, fill: Boolean) {
     val y = swapCoord(y)
+
     stream.println("gsave")
 
     // cx, cy is the center of the arc
@@ -1154,9 +1161,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     stream.println("]")
     stream.println("{currentfile " + ((pc.dimensions!!.width + 7) / 8).toString() + " string readhexstring pop}")
     stream.println(" image")
-    /*
-    stream.print("{<");
-*/
+
     // array to hold a line of pixel data
     val sb = CharArray(charsPerRow + 1)
     var b: Byte = 3
@@ -1194,9 +1199,7 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
       stream.print(s)
     }
 
-/*
-    stream.println(">} image");
-*/stream.println("\ngrestore")
+    stream.println("\ngrestore")
     return true
   }
 
