@@ -25,6 +25,14 @@ abstract class VBlock {
   var bufferSize = 0 // max number of buffered records
   // dynamic data
   var activeRecord = 0 // current record
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
+
   internal var activeField: VField? = null
   internal var source // qualified name of source file
           : String? = null
