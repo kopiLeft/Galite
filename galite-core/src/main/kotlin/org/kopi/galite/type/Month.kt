@@ -140,7 +140,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean = other is Month && scalar == other.scalar
+  override fun equals(other: Any?): Boolean = other is Month? && scalar == other!!.scalar
 
   /**
    * Format the object depending on the current language
