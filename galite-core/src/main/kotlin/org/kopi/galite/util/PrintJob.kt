@@ -36,7 +36,7 @@ import org.kopi.galite.base.Utils
  *
  * A Printer creates a PrintTask from a PrintJob
  */
-class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
+class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
 
   constructor(format: Rectangle) : this(Utils.getTempFile("galite", "pdf"), true, format)
   constructor(data: ByteArray, format: Rectangle) : this(writeToFile(ByteArrayInputStream(data)), true, format)
@@ -53,30 +53,30 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
   init {
     /* if the jvm is stopped before the objects are finalized the file must be deleted!*/
     if (delete) {
-      datafile.deleteOnExit()
+      dataFile.deleteOnExit()
     }
   }
 
   protected fun finalize() {
-    if (delete && datafile != null) {
-      datafile.delete()
+    if (delete && dataFile != null) {
+      dataFile.delete()
     }
   }
 
   override fun toString(): String {
-    return "PrintJob (" + delete + ") " + datafile + "  " + super.toString()
+    return "PrintJob (" + delete + ") " + dataFile + "  " + super.toString()
   }
 
   /**
    * OutputStream has to be closed before using inputStream
    * use with care, know what you do!
    */
-  fun getOutputStream(): OutputStream = FileOutputStream(datafile)
+  fun getOutputStream(): OutputStream = FileOutputStream(dataFile)
 
   /**
    * outputStream has to be closed before using inputStream
    */
-  fun getInputStream(): InputStream = FileInputStream(datafile)
+  fun getInputStream(): InputStream = FileInputStream(dataFile)
 
   fun getBytes(): ByteArray{
       val buffer = ByteArray(1024)

@@ -19,11 +19,12 @@
 package org.kopi.galite.form
 
 import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VHelpGenerator
 
-class VHelpGenerator {
+open class VHelpGenerator : VHelpGenerator() {
 
-  fun helpOnField(
-          blockTitle: String,
+  open fun helpOnField(
+          blockTitle: String?,
           pos: Int,
           label: String?,
           anchor: String?,
@@ -31,16 +32,16 @@ class VHelpGenerator {
     TODO()
   }
 
- fun helpOnType(
-          modeName: String?,
-          modeDesc: String?,
-          typeName: String?,
-          typeDesc: String?,
+ open fun helpOnType(
+          modeName: String,
+          modeDesc: String,
+          typeName: String,
+          typeDesc: String,
           names: Array<String>?) {
     TODO()
  }
 
-  fun helpOnFieldCommand(commands: Array<VCommand>) {
+  open fun helpOnFieldCommand(commands: Array<VCommand>?) {
     TODO()
   }
 }
