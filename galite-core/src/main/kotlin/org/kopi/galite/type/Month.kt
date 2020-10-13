@@ -39,7 +39,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    *
    * @param     format  the format.
    * @param     locale  the Locale to use.
-   * @see SimpleDateFo
+   * @see 	    SimpleDateFormat
    */
   fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
