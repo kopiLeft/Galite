@@ -15,8 +15,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
-class Module {
+import org.kopi.galite.l10n.LocalizationManager
 
+class Module(
+        val id: Int,
+        val parent: Int,
+        shortname: String,
+        source: String,
+        val objectName: String?,
+        var accessibility: Int,
+        priority: Int,
+        icon: String?) : Comparable<Module?> {
+  // ---------------------------------------------------------------------
+  // LOCALIZATION
+  // ---------------------------------------------------------------------
+  /**
+   * Localize this module
+   *
+   * @param     manager         the manger to use for localization
+   */
+  fun localize(manager: LocalizationManager) {
+    TODO()
+  }
+
+  override operator fun compareTo(module: Module?): Int {
+    TODO()
+  }
+
+  var description: String? = null
+    private set
+  var help: String? = null
+    private set
+
+  companion object {
+    const val ACS_PARENT = 0
+    const val ACS_TRUE = 1
+    const val ACS_FALSE = 2
+  }
 }
