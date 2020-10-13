@@ -19,6 +19,7 @@
 package org.kopi.galite.form
 
 abstract class VBlock {
+
   fun getForm(): VForm = TODO()
 
   fun fetchLookup(fld: VField) {
@@ -29,6 +30,15 @@ abstract class VBlock {
 
   // dynamic data
   var activeRecord = 0 // current record
+
   fun getMode(): Int = TODO()
+
   interface OrderListener
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
 }
