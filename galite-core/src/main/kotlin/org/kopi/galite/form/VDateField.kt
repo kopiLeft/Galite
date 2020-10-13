@@ -211,13 +211,9 @@ class VDateField : VField(10, 1) {
   /**
    * Returns the field value of the current record as an object
    */
-  override fun getObjectImpl(r: Int): Any {
-    return value[r]!!
-  }
+  override fun getObjectImpl(r: Int): Any = value[r]!!
 
-  override fun toText(o: Any): String {
-    return if (o == null) "" else Companion.toText(o as Date)
-  }
+  override fun toText(o: Any?): String = if (o == null) "" else Companion.toText(o as Date)
 
   override fun toObject(s: String): Any? {
     if (s == "") {

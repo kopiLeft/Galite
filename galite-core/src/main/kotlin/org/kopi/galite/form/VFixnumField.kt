@@ -18,10 +18,6 @@
 
 package org.kopi.galite.form
 
-import java.math.BigInteger
-
-import kotlin.reflect.KClass
-
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VFixnumColumn
 import org.kopi.galite.list.VListColumn
@@ -30,12 +26,15 @@ import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
+import java.math.BigInteger
+import kotlin.math.max
+import kotlin.reflect.KClass
 
 class VFixnumField(private val digits: Int,
-                   private var maxScale: Int,
+                    maxScale: Int,
                    val fraction: Boolean,
-                   var minval: Fixed?,
-                   var maxval: Fixed?)
+                   minval: Fixed?,
+                   maxval: Fixed?)
   : VField(computeWidth(digits,
                         maxScale,
                         minval,
@@ -67,6 +66,7 @@ class VFixnumField(private val digits: Int,
    */
   override fun build() {
     val size = 2 * block.bufferSize
+
     super.build()
     value = arrayOfNulls(size)
     currentScale = IntArray(size)
@@ -83,28 +83,24 @@ class VFixnumField(private val digits: Int,
     var min: Fixed? = minval
     var max: Fixed? = maxval
     var nines: Long = 1
-
     if (min == null) {
-      min = NotNullFixed(Int.MIN_VALUE.toBigInteger() )
+      min = NotNullFixed(Int.MIN_VALUE.toDouble())
     }
     if (max == null) {
-      max = NotNullFixed(Int.MAX_VALUE.toBigInteger() )
+      max = NotNullFixed(Int.MAX_VALUE.toDouble())
     }
     for (i in width downTo 2) {
-      // comma
       if (i % 3 != 0) {
         nines *= 10
       }
     }
-
-    var big: Fixed = NotNullFixed((nines - 1).toBigInteger() )
+    var big: Fixed = NotNullFixed((nines - 1).toDouble())
     big = big.setScale(height)
-    var mbig: Fixed = NotNullFixed(-(nines / 10 - 1).toBigInteger() )
+    var mbig: Fixed = NotNullFixed(-(nines / 10 - 1).toDouble())
     mbig = mbig.setScale(height)
-
     max = if (max > big) max else big
     min = if (min < mbig) min else mbig
-    return VlibProperties.getString("fixed-type-field", arrayOf<Any>(min, max))
+    return VlibProperties.getString("fixed-type-field", arrayOf(min, max))
   }
 
   /**
@@ -125,12 +121,12 @@ class VFixnumField(private val digits: Int,
    */
   override fun getListColumn(): VListColumn {
     return VFixnumColumn(getHeader(),
-            null,
-            align,
-            width,
-            maxScale,
-            getPriority() >= 0)
-  }
+                         null,
+                         align,
+                         width,
+                         maxScale,
+                         getPriority() >= 0)
+   }
 
   /**
    * verify that text is valid (during typing)
@@ -139,10 +135,10 @@ class VFixnumField(private val digits: Int,
     if (s.length > width) {
       return false
     }
-    for (i in s.indices) {
-      if (!((s[i] in '0'..'9')
-          || (s[i] == '.') || (s[i] == '-') || (s[i] == ' ')
-          || (s[i] == ',') || (s[i] == '/'))) {
+   s.indices.forEach {
+      if (!((s[it] in '0'..'9')
+          || (s[it] == '.') || (s[it] == '-') || (s[it] == ' ')
+          || (s[it] == ',') || (s[it] == '/'))) {
         return false
       }
     }
@@ -168,15 +164,15 @@ class VFixnumField(private val digits: Int,
       }
       if (v != null) {
         if (v.scale > scale) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf<Any>(scale) as Array<Any>?))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf<Any>(scale) as? Array<Any>))
         }
         if (minval != null && v.compareTo(minval!!) == -1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minval!!) as Array<Any>?))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minval!!) as? Array<Any>))
         }
         if (maxval != null && v.compareTo(maxval!!) == 1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval!!) as Array<Any>?))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval!!) as? Array<Any>))
         }
-        if (toText(v.setScale(fieldMaxScale)).length > width) {
+        if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
         }
       }
@@ -203,12 +199,13 @@ class VFixnumField(private val digits: Int,
    */
   fun computeSum(exclude: Boolean): Fixed? {
     var sum: Fixed? = null
+
     for (i in 0 until block.bufferSize) {
       if ((!isNullImpl(i)
-                      && block.isRecordFilled(i)
-                      && (!exclude || i != block.activeRecord))) {
+           && block.isRecordFilled(i)
+           && (!exclude || i != block.activeRecord))) {
         if (sum == null) {
-          sum = NotNullFixed(0.toBigInteger())
+          sum = NotNullFixed(0.toDouble())
         }
         sum = sum.add(getFixed(i) as NotNullFixed)
       }
@@ -223,19 +220,14 @@ class VFixnumField(private val digits: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed {
-    val sum = computeSum(exclude)
-    return sum?.let { sum as NotNullFixed } ?: coalesceValue
-  }
+  fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed = computeSum(exclude)?.let { computeSum(exclude) as NotNullFixed } ?: coalesceValue
 
   /**
    * Returns the sum of the field values of all records.
    *
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(): Fixed? {
-    return computeSum(false)
-  }
+  fun computeSum(): Fixed? = computeSum(false)
 
   /**
    * Returns the sum of every filled records in block
@@ -243,9 +235,7 @@ class VFixnumField(private val digits: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(coalesceValue: NotNullFixed): NotNullFixed {
-    return computeSum(false, coalesceValue)
-  }
+  fun computeSum(coalesceValue: NotNullFixed): NotNullFixed = computeSum(false, coalesceValue)
 
   /**
    * Returns the current scale for the specified record.
@@ -253,18 +243,14 @@ class VFixnumField(private val digits: Int,
    * @param     record          the record value.
    * @return    the scale value.
    */
-  fun getScale(record: Int): Int {
-    return currentScale[record]
-  }
+  fun getScale(record: Int): Int = currentScale[record]
 
   /**
    * Returns the current scale for the current record.
    *
    * @return    the scale value.
    */
-  fun getScale(): Int {
-    return getScale(block.activeRecord)
-  }
+  fun getScale(): Int = getScale(block.activeRecord)
 
   /**
    * Sets the scale value for the specified record.
@@ -274,7 +260,7 @@ class VFixnumField(private val digits: Int,
    */
   fun setScale(record: Int, scale: Int) {
     if (scale > fieldMaxScale) {
-      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale.toString(), fieldMaxScale.toString()))
+      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale.toString(), maxScale.toString()))
     }
     currentScale[record] = scale
   }
@@ -312,9 +298,9 @@ class VFixnumField(private val digits: Int,
     }
 
     //records scale must be <= maxScale
-    for (i in currentScale.indices) {
-      if (currentScale[i] > maxScale) {
-        currentScale[i] = maxScale
+    currentScale.forEach {
+      if (currentScale[it] > maxScale) {
+        currentScale[it] = maxScale
       }
     }
   }
@@ -326,8 +312,8 @@ class VFixnumField(private val digits: Int,
    */
   override fun clear(r: Int) {
     super.clear(r)
-    for (i in currentScale.indices) {
-      currentScale[i] = maxScale
+    currentScale.forEach {
+      currentScale[it] = maxScale
     }
   }
 
@@ -350,9 +336,10 @@ class VFixnumField(private val digits: Int,
   fun setFixed(r: Int, v: Fixed?) {
     // trails (backup) the record if necessary
     var v: Fixed? = v
+
     if ((changedUI
-                    || (value[r] == null && v != null)
-                    || (value[r] != null && value[r]!! != v))) {
+         || (value[r] == null && v != null)
+         || (value[r] != null && value[r]!! != v))) {
       trail(r)
       if (v != null) {
         if (v.scale != currentScale[r]) {
@@ -377,7 +364,6 @@ class VFixnumField(private val digits: Int,
    * Sets the field value of given record.
    *
    * Warning:   This method will become inaccessible to kopi users in next release
-   * @kopi      inaccessible
    */
   override fun setObject(r: Int, v: Any?) {
     // !!! HACK for Oracle
@@ -405,25 +391,19 @@ class VFixnumField(private val digits: Int,
   /**
    * Is the field value of given record null ?
    */
-  override fun isNullImpl(r: Int): Boolean {
-    return value[r] == null
-  }
+  override fun isNullImpl(r: Int): Boolean = value[r] == null
 
   /**
    * Returns the field value of given record as a Fixed value.
    */
-  fun getFixed(r: Int): Fixed {
-    return getObject(r) as Fixed
-  }
+  fun getFixed(r: Int): Fixed = getObject(r) as Fixed
 
   /**
    * Returns the field value of the current record as an object
    */
-  override fun getObjectImpl(r: Int): Any? {
-    return value[r]
-  }
+  override fun getObjectImpl(r: Int): Any ? = value[r]
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     if (o == null) {
       return ""
     }
@@ -432,10 +412,12 @@ class VFixnumField(private val digits: Int,
 
   override fun toObject(s: String): Any? {
     val scale: Int = currentScale[0]
+
     if ((s == "")) {
       return null
     } else {
       val v: Fixed?
+
       try {
         v = scanFixed(s)
       } catch (e: NumberFormatException) {
@@ -451,7 +433,7 @@ class VFixnumField(private val digits: Int,
         if (maxval != null && v.compareTo(maxval!!) == 1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval!!) as Array<Any>?))
         }
-        if (toText(v.setScale(fieldMaxScale)).length > width) {
+        if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
         }
       }
@@ -471,7 +453,7 @@ class VFixnumField(private val digits: Int,
     // append spaces until the max scale is reached to make commas aligned.
     // append an extra space to replace the missing comma if the current scale is zero.
     if (block.isMulti()) {
-      for (i in (if (currentScale[r] == 0) -1 else currentScale[r]) until fieldMaxScale) {
+      for (i in (if (currentScale[r] == 0) -1 else currentScale[r]) until maxScale) {
         res += " "
       }
     }
@@ -490,13 +472,14 @@ class VFixnumField(private val digits: Int,
    */
   override fun copyRecord(f: Int, t: Int) {
     val oldValue = value[t]
+
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block.bufferSize
-                    && (((oldValue != null && value[t] == null)
-                    || (oldValue == null && value[t] != null)
-                    || (oldValue != null && oldValue != value[t])))) {
+        && (((oldValue != null && value[t] == null)
+        || (oldValue == null && value[t] != null)
+        || (oldValue != null && oldValue != value[t])))) {
       fireValueChanged(t)
     }
   }
@@ -540,6 +523,7 @@ class VFixnumField(private val digits: Int,
       else -> {
         var den = 64
         var num = (fract * den) / 1000000
+
         while (num % 2 == 0) {
           num /= 2
           den /= 2
@@ -554,12 +538,17 @@ class VFixnumField(private val digits: Int,
   }
 
   private fun checkCriticalValue() {
-    if (value[0] != null
-            && (criticalMinValue != null
-                    && value[0]!! < criticalMinValue!! || criticalMaxValue != null
-                    && value[0]!! > criticalMaxValue!!)) {
-      setHasCriticalValue(true)
-      return
+    if (criticalMinValue != null) {
+      if (value[0] != null && value[0]!! < criticalMinValue!!) {
+        setHasCriticalValue(true)
+        return
+      }
+    }
+    if (criticalMaxValue != null) {
+      if (value[0] != null && value[0]!! > criticalMaxValue!!) {
+        setHasCriticalValue(true)
+        return
+      }
     }
     setHasCriticalValue(false)
   }
@@ -575,10 +564,18 @@ class VFixnumField(private val digits: Int,
      */
 
   // dynamic data
-  private var fieldMaxScale = 0
+  private var fieldMaxScale = maxScale
+
+  var minval: Fixed? = minval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale).negate()
+    private set
+  var maxval: Fixed? = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
+    private set
 
   // number of digits after dot
   private lateinit var currentScale : IntArray
+
+  var maxScale : Int = maxScale
+    private set
 
   private lateinit var value: Array<Fixed?>
 
@@ -598,6 +595,7 @@ class VFixnumField(private val digits: Int,
       var value: Long = 0
       var num: Long = 0
       var den: Long = 0
+
       if ((str == "")) {
         return null
       }
@@ -777,6 +775,7 @@ class VFixnumField(private val digits: Int,
      */
     fun calculateUpperBound(digits: Int, scale: Int): NotNullFixed {
       val asciiBound: CharArray
+
       if (scale == 0) {
         asciiBound = CharArray(digits)
         for (i in 0 until digits) {
@@ -803,6 +802,7 @@ class VFixnumField(private val digits: Int,
     fun computeWidth(digits: Int, scale: Int, minVal: Fixed?, maxVal: Fixed?): Int {
       var upperBound: Fixed
       var lowerBound: Fixed
+
       upperBound = calculateUpperBound(digits, scale)
       lowerBound = upperBound.negate()
       if (minVal != null && minVal > lowerBound) {
@@ -811,7 +811,7 @@ class VFixnumField(private val digits: Int,
       if (maxVal != null && maxVal < upperBound) {
         upperBound = maxVal.setScale(scale)
       }
-      return Math.max(upperBound.toString().length, lowerBound.toString().length)
+      return max(upperBound.toString().length, lowerBound.toString().length)
     }
 
     /**
@@ -831,15 +831,5 @@ class VFixnumField(private val digits: Int,
         width - 1 - ((width - scale - 1) / 4)
       }
     }
-  }
-
-  /**
-   * Constructor
-   */
-  init {
-    minval = minval?.setScale(fieldMaxScale) ?: calculateUpperBound(digits, fieldMaxScale).negate()
-    maxval = maxval?.setScale(fieldMaxScale) ?: calculateUpperBound(digits, fieldMaxScale)
-    criticalMinValue = minval
-    criticalMaxValue = maxval
   }
 }

@@ -71,7 +71,7 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
