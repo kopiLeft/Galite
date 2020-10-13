@@ -153,7 +153,7 @@ open class Week : Type {
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean = other is Week && scalar == other.scalar
+  override fun equals(other: Any?): Boolean = other is Week? && scalar == other?.scalar
 
   /**
    * Format the object depending on the current language

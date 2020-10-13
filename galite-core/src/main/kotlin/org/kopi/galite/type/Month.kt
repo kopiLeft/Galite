@@ -39,6 +39,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    *
    * @param     format  the format.
    * @param     locale  the Locale to use.
+   * @see SimpleDateFo
    */
   fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
@@ -140,7 +141,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean = other is Month? && scalar == other!!.scalar
+  override fun equals(other: Any?): Boolean = other is Month? && scalar == other?.scalar
 
   /**
    * Format the object depending on the current language

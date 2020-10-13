@@ -158,7 +158,7 @@ open class Date : Type {
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean = other is Date && scalar == other.scalar
+  override fun equals(other: Any?): Boolean = other is Date? && scalar == other?.scalar
 
   /**
    * Compares to another date.
@@ -175,7 +175,7 @@ open class Date : Type {
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any?): Int = compareTo(other as Date)
+  override operator fun compareTo(other: Any?): Int = compareTo(other as? Date)
 
   /**
    * Format the object depending on the current language
@@ -297,7 +297,7 @@ open class Date : Type {
     }
 
     /**
-     * Returns the gregorian day number of the date specified by year, month, day
+     * Returns the date specified by a julian day number as year, month, day.
      */
     private fun julianToGregorian(julian: Int): IntArray {
       var y: Int

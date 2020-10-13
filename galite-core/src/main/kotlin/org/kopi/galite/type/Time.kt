@@ -198,7 +198,7 @@ open class Time : Type {
   /**
    * Sets the base value for this object
    */
-  var scalar = 0
+  internal var scalar = 0
 
   companion object {
     /**
