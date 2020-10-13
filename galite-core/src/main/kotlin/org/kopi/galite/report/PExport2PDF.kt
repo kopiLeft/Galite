@@ -52,7 +52,7 @@ import org.kopi.galite.type.Time
 class PExport2PDF(
         table: UTable,
         model: MReport,
-        override val printConfig: PConfig,
+        printConfig: PConfig,
         title: String,
         private val firstPageHeader: String,
         tonerSaveMode: Boolean = false,

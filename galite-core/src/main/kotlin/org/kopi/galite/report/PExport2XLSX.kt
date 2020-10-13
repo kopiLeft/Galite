@@ -27,7 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 import org.kopi.galite.report.UReport.UTable
 
-class PExport2XLSX (table: UTable, model: MReport, pconfig: PConfig, title: String) : PExport2Excel(table, model, pconfig, title), Constants {
+class PExport2XLSX (table: UTable, model: MReport, printConfig: PConfig, title: String) : PExport2Excel(table, model, printConfig, title), Constants {
 
   override fun createWorkbook(): Workbook {
     return SXSSFWorkbook(XSSFWorkbook(), 10000, false)

@@ -44,7 +44,7 @@ import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
 
-abstract class PExport2Excel(table: UTable, model: MReport, override val printConfig: PConfig, title: String)
+abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig, title: String)
   : PExport(table, model, printConfig, title), Constants {
 
   override fun export(stream: OutputStream) {
@@ -227,7 +227,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, override val printCo
 
   override fun formatFixedColumn(column: VReportColumn, index: Int) {
     var fixnumFormat = "#,##0"
-    for (i in 0 until (column as VFixnumColumn).getMaxScale()) {
+    for (i in 0 until (column as VFixnumColumn).maxScale) {
       fixnumFormat += if (i == 0) ".0" else "0"
     }
     dataformats[index] = format!!.getFormat(fixnumFormat)

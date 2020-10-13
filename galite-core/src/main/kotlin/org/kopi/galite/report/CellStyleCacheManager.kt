@@ -90,7 +90,7 @@ class CellStyleCacheManager : Serializable {
   }
 
   //---------------------------------------------------
-  // INNER CLASS
+  // INNER CLASSES
   //---------------------------------------------------
   inner class StyleKey(private val alignment: Short, private val dataFormat: Short, private val color: Color) {
 

@@ -28,7 +28,7 @@ import org.kopi.galite.report.UReport.UTable
 
 abstract class PExport(val table: UTable,
                        val model: MReport,
-                       open val printConfig: PConfig,
+                       val printConfig: PConfig,
                        var title: String,
                        val tonerSaveMode: Boolean = false) : Serializable {
 

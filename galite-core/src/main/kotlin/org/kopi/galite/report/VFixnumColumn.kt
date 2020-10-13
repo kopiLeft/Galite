@@ -28,7 +28,7 @@ class VFixnumColumn(
         groups: Int,
         function: VCalculateColumn?,
         digits: Int,
-        private var maxScale: Int,
+        var maxScale: Int,
         format: VCellFormat?,
 ) : VReportColumn(
         ident,
