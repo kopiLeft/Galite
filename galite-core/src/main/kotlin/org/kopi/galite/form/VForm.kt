@@ -25,7 +25,8 @@ abstract class VForm {
     TODO()
   }
 
-  fun getDefaultActor(trigger: Any): VActor = TODO()
+  fun getDefaultActor(type : Int) : VActor =TODO()
+
   fun getActiveBlock() : VBlock =TODO()
 
   companion object {

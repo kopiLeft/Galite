@@ -31,8 +31,7 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VlibProperties
 
 class VColorField(width: Int,
-                  height: Int)
-  : VField(1, 1) {
+                  height: Int) : VField(1, 1) {
 
   /**
    *
@@ -80,17 +79,6 @@ class VColorField(width: Int,
   override fun checkType(rec: Int, s: Any) {}
 
   override fun getType(): Int = MDL_FLD_COLOR
-  // ---------------------------------------------------------------------
-  // PROTECTED UTILS
-  // ---------------------------------------------------------------------
-
-  // MOVED TO VFIELDUI
-//   /**
-//    * Create a display widget for this field
-//    */
-//   protected DField createDisplay(DLabel label) {
-//     return new DColorField(getUI(), label, getAlign(), 0);
-//   }
 
   // ---------------------------------------------------------------------
   // INTERFACE BD/TRIGGERS
@@ -170,14 +158,14 @@ class VColorField(width: Int,
   }
 
   override fun toObject(s: String): Any {
-    throw InconsistencyException("UNEXPECTD GET TEXT")
+    throw InconsistencyException("UNEXPECTED GET TEXT")
   }
 
   /**
    * Returns the display representation of field value of given record.
    */
   override fun getTextImpl(r: Int): String {
-    throw InconsistencyException("UNEXPECTD GET TEXT")
+    throw InconsistencyException("UNEXPECTED GET TEXT")
   }
 
   /**
@@ -212,9 +200,7 @@ class VColorField(width: Int,
    * Warning:	This method will become inaccessible to users in next release
    */
   fun getLargeObject(r: Int): InputStream? {
-    return if (value[r] == null) {
-      null
-    } else {
+    return value[r]?.let {
       ByteArrayInputStream(getObjectImpl(r) as ByteArray?)
     }
   }
@@ -240,13 +226,11 @@ class VColorField(width: Int,
    * @exception   VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
-    return if (handler != null) {
+    return handler?.let {
       setColor(block.activeRecord,
               handler.selectColor(getColor(block.activeRecord)))
       true
-    } else {
-      false
-    }
+    } ?: false
   }
 
   /**

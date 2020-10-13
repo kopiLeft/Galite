@@ -35,10 +35,12 @@ open class VCommand(private var mode: Int,
    * Returns the actor
    */
   open fun setEnabled(enabled: Boolean) {
-    if (this.actor != null && !killed) {
-      actor!!.isEnabled = enabled
-      actor!!.number = trigger
-      actor!!.handler = handler
+    this.actor?.let {
+      if (!killed) {
+        it.isEnabled = enabled
+        it.number = trigger
+        it.handler = handler
+      }
     }
   }
 

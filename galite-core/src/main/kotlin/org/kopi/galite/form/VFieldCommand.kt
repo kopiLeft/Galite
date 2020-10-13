@@ -18,12 +18,11 @@
 
 package org.kopi.galite.form
 
-import org.kopi.galite.visual.Action
 import java.io.Serializable
 
+import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.VCommand
-
 
 class VFieldCommand (private val form: VForm,
                      type: Int)
@@ -31,8 +30,8 @@ class VFieldCommand (private val form: VForm,
                   null,
                   null,
                   type,
-                  "Standard $type")
-        ,ActionHandler, Serializable {
+                  "Standard $type"),ActionHandler, Serializable {
+
   /**
    * Returns the actor
    */
@@ -44,7 +43,6 @@ class VFieldCommand (private val form: VForm,
     actor!!.isEnabled = enabled
     actor!!.number=trigger
     actor!!.handler=handler
-    //    actor.setSynchronous(!isAsynchronous());
   }
 
   /**
@@ -54,6 +52,7 @@ class VFieldCommand (private val form: VForm,
    * @param    action        the action to perform.
    * @param    block        This action should block the UI thread ?
    */
+  @Deprecated("use method performAsyncAction")
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -73,20 +72,17 @@ class VFieldCommand (private val form: VForm,
    *
    * @param    type    the number of the trigger
    */
-  override fun executeVoidTrigger(type: Int) {
-    when (type) {
-      VForm.CMD_AUTOFILL ->       //      form.getActiveBlock().getActiveField().autofill(true, true);
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    when (VKT_Type) {
+      VForm.CMD_AUTOFILL ->
         form.getActiveBlock().activeField.predefinedFill()
-      VForm.CMD_EDITITEM, VForm.CMD_EDITITEM_S ->       //      form.getActiveBlock().getActiveField().getUI().loadItem(VForm.CMD_EDITITEM);
+      VForm.CMD_EDITITEM, VForm.CMD_EDITITEM_S ->
         form.getActiveBlock().activeField.loadItem(VForm.CMD_EDITITEM)
-      VForm.CMD_NEWITEM ->       //      form.getActiveBlock().getActiveField().getUI().loadItem(VForm.CMD_NEWITEM);
+      VForm.CMD_NEWITEM ->
         form.getActiveBlock().activeField.loadItem(VForm.CMD_EDITITEM)
     }
   }
 
-  /**
-   *
-   */
   override fun getKey(): Int{
       if (actor == null) {
         handler = this
@@ -98,6 +94,7 @@ class VFieldCommand (private val form: VForm,
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
+
   override fun helpOnCommand(help:org.kopi.galite.visual.VHelpGenerator) {
     if (actor == null) {
       handler = this
@@ -108,5 +105,4 @@ class VFieldCommand (private val form: VForm,
     }
     actor!!.helpOnCommand(help)
   }
-
 }
