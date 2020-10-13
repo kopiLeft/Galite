@@ -24,4 +24,3 @@ open class Alignment(x: Int,
                      height: Int,
                      alignRight: Boolean) {
 }
-

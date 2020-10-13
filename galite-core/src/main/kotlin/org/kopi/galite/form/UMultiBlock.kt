@@ -27,6 +27,7 @@ import org.kopi.galite.base.UComponent
  * to switch between the two layouts.
  */
 interface UMultiBlock : UBlock {
+
   /**
    * Switches view between list and detail mode.
    * @param row The selected record.

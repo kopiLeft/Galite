@@ -27,7 +27,7 @@ interface UTextField : UField {
   /**
    * Represents the text field content.
    */
-  val text: String
+  fun getText(): String
 
   /**
    * Sets if the field has a critical value.

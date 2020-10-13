@@ -25,6 +25,7 @@ import org.kopi.galite.visual.UWindow
  * `UListDialog` is the top level interface for all list dialogs ui components.
  */
 interface UListDialog : UComponent {
+
   /**
    * Shows The `UListDialog` with a window and a field reference.
    * @param window The caller [UWindow]

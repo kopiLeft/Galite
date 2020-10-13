@@ -18,8 +18,6 @@
 
 package org.kopi.galite.form
 
-import org.kopi.galite.form.VConstants.Companion.MOD_QUERY
-
 /**
  * This class implements predefined triggers
  */
@@ -50,9 +48,7 @@ object Triggers : VConstants {
   /**
    * Returns true iff first block of form is not in query mode
    */
-  fun mainBlockInsertable(b: VBlock): Boolean {
-    return b.getForm().getBlock(0).getMode() != MOD_QUERY
-  }
+  fun mainBlockInsertable(b: VBlock): Boolean = b.getForm().getBlock(0).getMode() != VConstants.MOD_QUERY
 
   /*
    * ----------------------------------------------------------------------

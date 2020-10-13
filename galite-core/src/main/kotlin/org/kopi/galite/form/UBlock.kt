@@ -30,13 +30,13 @@ interface UBlock : UComponent, BlockListener {
    * Returns the block model
    * @return The [VBlock] of this `UBlock`
    */
-  val model: VBlock
+  fun getModel(): VBlock
 
   /**
    * Returns the form view of the block
    * @return The [UForm] of this block.
    */
-  val formView: UForm
+  fun getFormView(): UForm
 
   /**
    * Returns the displayed line for a record.
@@ -49,7 +49,7 @@ interface UBlock : UComponent, BlockListener {
    * Returns the displayed line for the active record.
    * @return The displayed line for the active record.
    */
-  val displayLine: Int
+  fun getDisplayLine(): Int
 
   /**
    * Returns the record number from display of a given line.
