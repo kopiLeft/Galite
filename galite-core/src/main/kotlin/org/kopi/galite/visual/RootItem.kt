@@ -24,8 +24,32 @@ import javax.swing.tree.TreeNode
 /**
  * A root item must provide its ID and name. The root tree node
  * of this item should be provided for further uses.
+ *
+ * @param id The root item ID.
+ * @param name The root item name.
  */
 class RootItem(id: Int, name: String) {
+
+  private val rootItem: Item = Item(id,
+                                    0,
+                                    name,
+                                    null,
+                                    null,
+                                    false,
+                                    false,
+                                    null,
+                                    name)
+
+  /**
+   * The root node
+   */
+  var root: TreeNode? = null
+    private set
+
+  init {
+    rootItem.level = 0
+  }
+
   // ---------------------------------------------------------------------
   // IMPLEMENTATION
   // ---------------------------------------------------------------------
@@ -34,7 +58,7 @@ class RootItem(id: Int, name: String) {
    * @param items The accessible items for the connected user.
    */
   fun createTree(items: Array<Item>) {
-    this.rootNode = createTree(items, rootItem)
+    this.root = createTree(items, rootItem)
   }
 
   /**
@@ -67,41 +91,10 @@ class RootItem(id: Int, name: String) {
       self
     }
   }
-  // ---------------------------------------------------------------------
-  // ACCESSORS
-  // ---------------------------------------------------------------------
+
   /**
    * Returns true if this root item does not contain any item.
-   * @return True if this root item does not contain any item.
    */
   val isEmpty: Boolean
-    get() = this.rootNode == null
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  /**
-   * Creates a root item from its ID and name.
-   * @param id The root item ID.
-   * @param name The root item name.
-   */
-  private val rootItem: Item = Item(id,
-          0,
-          name,
-          null,
-          null,
-          false,
-          false,
-          null,
-          name)
-
-  init {
-    rootItem.level = 0
-  }
-
-  /**
-   * Return the root node
-   */
-  var rootNode: TreeNode? = null
-    private set
+    get() = this.root == null
 }
