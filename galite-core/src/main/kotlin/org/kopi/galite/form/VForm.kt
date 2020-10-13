@@ -480,6 +480,7 @@ abstract class VForm : VWindow, VConstants {
 
   fun fireCurrentBlockChanged(oldBlock: VBlock?, newBlock: VBlock?) {
     val listeners = formListener.listenerList
+
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] === FormListener::class.java) {
         (listeners[i + 1] as FormListener).currentBlockChanged(oldBlock, newBlock)
@@ -493,6 +494,7 @@ abstract class VForm : VWindow, VConstants {
    */
   fun setFieldSearchOperator(op: Int) {
     val listeners = formListener.listenerList
+
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] === FormListener::class.java) {
         (listeners[i + 1] as FormListener).setFieldSearchOperator(op)
@@ -698,41 +700,39 @@ abstract class VForm : VWindow, VConstants {
     }
   }
 
-  override fun toString(): String {
-    val information = StringBuffer()
+  override fun toString(): String = buildString {
     try {
-      information.append("\n===========================================================\nFORM: ")
-      information.append(super.toString())
-      information.append(" ")
-      information.append(getName())
-      information.append("\n")
+      append("\n===========================================================\nFORM: ")
+      append(super.toString())
+      append(" ")
+      append(getName())
+      append("\n")
 
-      information.append("activeBlock: ")
+      append("activeBlock: ")
       if (activeBlock == null) {
-        information.append("null")
+        append("null")
       } else {
-        information.append(activeBlock!!.name)
+        append(activeBlock!!.name)
       }
-      information.append("\n")
+      append("\n")
 
       // support better message
       if (blocks != null) {
         for (i in blocks.indices) {
           val block: VBlock = blocks!![i]
           if (block != null) {
-            information.append(blocks!![i].toString())
+            append(blocks!![i].toString())
           } else {
-            information.append("Block ")
-            information.append(i)
-            information.append(" is null \n")
+            append("Block ")
+            append(i)
+            append(" is null \n")
           }
         }
       }
     } catch (e: Exception) {
-      information.append("exception while retrieving form information. \n")
+      append("exception while retrieving form information. \n")
     }
-    information.append("===========================================================\n")
-    return information.toString()
+    append("===========================================================\n")
   }
 
   fun printFormScreen(): PrintJob {
