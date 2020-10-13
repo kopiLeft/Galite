@@ -15,8 +15,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
-class PreviewPrinter {
+import java.io.File
 
+/**
+ * Local printer
+ */
+class PreviewPrinter(name: String, var command: String) : AbstractPrinter(name), Printer {
+
+  constructor(command: String) : this("PreviewPrinter", command)
+
+  constructor(command: String, previewFile: File) : this("PreviewPrinter", command)
+
+  // ----------------------------------------------------------------------
+  // PRINTING WITH AN INPUT STREAM
+  // ----------------------------------------------------------------------
+  /**
+   * Print a file and return the output of the command
+   */
+  override fun print(printData: PrintJob): String {
+    // execute in separate process
+    val dataFile = File.createTempFile("kopiprinter", "ps")
+
+    // file is used with an external program (and cache printer),
+    // do not delete it
+    printData.writeDataToFile(dataFile)
+    Runtime.getRuntime().exec("$command $dataFile")
+    return "NYI"
+  }
 }

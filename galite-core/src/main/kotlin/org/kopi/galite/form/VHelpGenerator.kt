@@ -18,5 +18,7 @@
 
 package org.kopi.galite.form
 
-class VHelpGenerator {
+import org.kopi.galite.visual.VHelpGenerator
+
+open class VHelpGenerator : VHelpGenerator() {
 }

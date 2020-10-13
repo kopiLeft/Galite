@@ -247,7 +247,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * change the title of this form
    */
-  fun setTitle(title: String) {
+  open fun setTitle(title: String) {
     this.windowTitle = title
     display?.setTitle(getTitle())
   }
@@ -263,7 +263,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
     actors.addAll(actorDefs)
   }
 
-  fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
+  open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
 
   fun getActors(): ArrayList<VActor> {
     return actors
@@ -272,7 +272,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Enables/disables the actor.
    */
-  fun setActorEnabled(position: Int, enabled: Boolean) {
+  open fun setActorEnabled(position: Int, enabled: Boolean) {
     val actor: VActor = getActor(position)
     actor.handler = this
     actor.isEnabled = enabled
@@ -512,7 +512,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    */
   protected fun formatMessage(ident: String, params: Array<Any?>): String? {
     return if (source != null) {
-      Message.getMessage(source, ident, params)
+      Message.getMessage(source!!, ident, params)
     } else {
       null
     }
