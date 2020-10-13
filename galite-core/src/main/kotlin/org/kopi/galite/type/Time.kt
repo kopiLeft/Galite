@@ -86,12 +86,8 @@ open class Time : Type {
     return calendar
   }
 
-  // ----------------------------------------------------------------------
-  // COMPILER METHODS - DO NOT USE OUTSIDE OF THE LIBRARY
-  // ----------------------------------------------------------------------
   /**
    * Constructs a time from a scalar
-   * DO NOT USE OUTSIDE OF THE LIBRARY
    */
   internal constructor(scalar: Int) {
     this.scalar = scalar % (3600 * 24)
@@ -122,9 +118,7 @@ open class Time : Type {
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any?): Int {
-    return compareTo(other as Time)
-  }
+  override operator fun compareTo(other: Any?): Int = compareTo(other as? Time)
 
   /**
    * Returns the hour represented by this object.
@@ -160,9 +154,7 @@ open class Time : Type {
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean {
-    return other is Time && other.scalar == scalar
-  }
+  override fun equals(other: Any?): Boolean = other is Time && other.scalar == scalar
 
   /**
    * Format the object depending on the current language
@@ -205,7 +197,6 @@ open class Time : Type {
 
   /**
    * Sets the base value for this object
-   * DO NOT USE OUTSIDE OF THE LIBRARY
    */
   var scalar = 0
 
@@ -227,9 +218,7 @@ open class Time : Type {
      * @param     input   the time parse
      * @param     format  the format of the date
      */
-    fun parse(input: String, format: String): NotNullTime {
-      return parse(input, format, Locale.getDefault())
-    }
+    fun parse(input: String, format: String): NotNullTime = parse(input, format, Locale.getDefault())
 
     /**
      * Parse the string to build the corresponding time using the

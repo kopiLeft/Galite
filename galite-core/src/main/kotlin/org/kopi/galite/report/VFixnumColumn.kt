@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
 import org.kopi.galite.form.VFixnumField
@@ -38,13 +39,15 @@ class VFixnumColumn(
         VFixnumField.computeWidth(digits, maxScale, null, null),
         1,
         format ?: VFixedFormat(maxScale, true)
-  ) {
+) {
 
   private class VFixedFormat(private val maxScale: Int, private val exactScale: Boolean) : VCellFormat() {
-    override fun format(value: Any?): String = TODO()
+    override fun format(value: Any?): String {
+      TODO()
+    }
   }
 
-  override fun compareTo(object1: Any, object2: Any): Int = TODO()
-
-  fun getMaxScale(): Int = TODO()
+  override fun compareTo(o1: Any, o2: Any): Int {
+    TODO("Not yet implemented")
+  }
 }

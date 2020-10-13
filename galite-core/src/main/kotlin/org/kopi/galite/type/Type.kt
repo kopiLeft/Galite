@@ -32,9 +32,7 @@ abstract class Type : Comparable<Any?> {
   /**
    * Format the object depending on the current language
    */
-  override fun toString(): String {
-    return toString(Locale.getDefault())
-  }
+  override fun toString(): String = toString(Locale.getDefault())
 
   /**
    * Format the object depending on the current language

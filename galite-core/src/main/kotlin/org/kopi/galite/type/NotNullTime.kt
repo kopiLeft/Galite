@@ -37,8 +37,6 @@ class NotNullTime : Time {
   constructor(scalar: Int) : super(scalar)
 
   companion object {
-    fun castToNotNull(value: Time): NotNullTime {
-      return value as NotNullTime
-    }
+    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
   }
 }

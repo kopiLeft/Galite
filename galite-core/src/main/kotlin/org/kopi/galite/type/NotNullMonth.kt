@@ -33,9 +33,7 @@ class NotNullMonth : Month {
   constructor(date: Date) : super(date)
 
   companion object {
-    fun castToNotNull(value: Month): NotNullMonth {
-      return value as NotNullMonth
-    }
+    fun castToNotNull(value: Month): NotNullMonth = value as NotNullMonth
   }
 }
 

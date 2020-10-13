@@ -36,8 +36,6 @@ class NotNullDate : Date {
   constructor(scalar: Int) : super(scalar)
 
   companion object {
-    fun castToNotNull(value: Date): NotNullDate {
-      return value as NotNullDate
-    }
+    fun castToNotNull(value: Date): NotNullDate = value as NotNullDate
   }
 }

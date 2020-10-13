@@ -52,19 +52,16 @@ import org.kopi.galite.type.Time
 class PExport2PDF(
         table: UTable,
         model: MReport,
-        protected val pconfig: PConfig,
+        override val printConfig: PConfig,
         title: String,
         private val firstPageHeader: String,
-        tonerSaveMode: Boolean,
-) : PExport(table, model, pconfig, title, tonerSaveMode), Constants {
-
-  constructor(table: UTable, model: MReport, pconfig: PConfig, title: String, firstPageHeader: String)
-          : this(table, model, pconfig, title, firstPageHeader, false) {}
+        tonerSaveMode: Boolean = false,
+) : PExport(table, model, printConfig, title, tonerSaveMode), Constants {
 
   fun export(): PrintJob {
     try {
       val printJob: PrintJob
-      val file: File = Utils.getTempFile("kopi", "pdf")
+      val file: File = Utils.getTempFile("galite", "pdf")
 
       export(file)
       val page: Rectangle = document.pageSize
@@ -81,10 +78,10 @@ class PExport2PDF(
 
   override fun export(out: OutputStream) {
     try {
-      val paper: PPaperType = PPaperType.getPaperTypeFromCode(pconfig.papertype)
+      val paper: PPaperType = PPaperType.getPaperTypeFromCode(printConfig.papertype)
       val paperSize: Rectangle
 
-      paperSize = if (pconfig.paperlayout == "Landscape") {
+      paperSize = if (printConfig.paperlayout == "Landscape") {
         Rectangle(paper.height.toFloat(), paper.width.toFloat())
       } else {
         Rectangle(paper.width.toFloat(), paper.height.toFloat())
@@ -94,25 +91,20 @@ class PExport2PDF(
       val firstPageHead = createFirstPageHeader()
       val foot = createFooter(0, 0)
 
-      if (firstPageHeader != "") {
-        firstPageHead.totalWidth = paperSize.width - pconfig.leftmargin - pconfig.rightmargin
+      if (firstPageHeader != null && firstPageHeader != "") {
+        firstPageHead.totalWidth = paperSize.width - printConfig.leftmargin - printConfig.rightmargin
       }
-      head.totalWidth = paperSize.width - pconfig.leftmargin - pconfig.rightmargin
+      head.totalWidth = paperSize.width - printConfig.leftmargin - printConfig.rightmargin
       document = Document(paperSize,
-              pconfig.leftmargin.toFloat(),
-              pconfig.rightmargin.toFloat(),
-              pconfig.topmargin + head.totalHeight + pconfig.headermargin + firstPageHead.totalHeight,
-              pconfig.bottommargin + foot.totalHeight + pconfig.footermargin + 2)
+              printConfig.leftmargin.toFloat(),
+              printConfig.rightmargin.toFloat(),
+              printConfig.topmargin + head.totalHeight + printConfig.headermargin + firstPageHead.totalHeight,
+              printConfig.bottommargin + foot.totalHeight + printConfig.footermargin + 2)
       // 2 to be sure to print the border
-      if (pconfig.reportScale == PConfig.MIN_REPORT_SCALE) {
+      if (printConfig.reportScale == PConfig.MIN_REPORT_SCALE) {
         scale = getScale(PConfig.MIN_REPORT_SCALE, PConfig.MAX_REPORT_SCALE, 0.1)
-        //!!! hacheni 20170104 : commented to force scale calculation when the scale is not
-        //                       mentioned by the print options. This is needed when the page
-        //                       layout is changed in the print options or the number of visible
-        //                       columns are changed in the report view.
-        //pconfig.reportScale = scale;
       } else {
-        scale = pconfig.reportScale
+        scale = printConfig.reportScale
         formatColumns()
       }
       val tempFile: File = Utils.getTempFile("kopiexport", "pdf")
@@ -128,7 +120,7 @@ class PExport2PDF(
             head.writeSelectedRows(0,
                                    -1,
                                    document.leftMargin(),
-                                   (page.height - document.topMargin()) + head.totalHeight + pconfig.headermargin,
+                                   (page.height - document.topMargin()) + head.totalHeight + printConfig.headermargin,
                                    writer.directContent)
           } catch (e: Exception) {
             throw ExceptionConverter(e)
@@ -136,14 +128,14 @@ class PExport2PDF(
         }
       }
       document.open()
-      if (firstPageHeader != "") {
+      if (firstPageHeader != null && firstPageHeader != "") {
         try {
           val page = document.pageSize
 
           firstPageHead.writeSelectedRows(0,
                                           -1,
                                           document.leftMargin(),
-                                          page.height - document.topMargin() + head.totalHeight + pconfig.headermargin + firstPageHead.totalHeight,
+                                          page.height - document.topMargin() + head.totalHeight + printConfig.headermargin + firstPageHead.totalHeight,
                                           writer.directContent)
           document.setMargins(document.leftMargin(),
                               document.rightMargin(),
@@ -175,7 +167,7 @@ class PExport2PDF(
         val cb = stamper.getOverContent(i)
 
         foot.totalWidth = page.width - document.leftMargin() - document.rightMargin()
-        foot.writeSelectedRows(0, -1, document.leftMargin(), pconfig.bottommargin + foot.totalHeight, cb)
+        foot.writeSelectedRows(0, -1, document.leftMargin(), printConfig.bottommargin + foot.totalHeight, cb)
       }
       stamper.close()
     } catch (e: Exception) {
@@ -197,7 +189,8 @@ class PExport2PDF(
   private fun createHeader(): PdfPTable {
     val head = PdfPTable(1)
 
-    head.addCell(createCell(if ((currentSubtitle == null)) title else title + "  " + getColumnLabel(0) + " : " + currentSubtitle, 14.0,
+    head.addCell(createCell(if ((currentSubtitle == null)) title
+                                else title + "  " + getColumnLabel(0) + " : " + currentSubtitle, 14.0,
                             Color.black,
                             Color.white,
                             Constants.ALG_LEFT,
@@ -211,7 +204,7 @@ class PExport2PDF(
 
     foot.addCell(createCell(title + " - " + VlibProperties.getString("print-page") + " " + page + "/" + allPages,
             7.0, Color.black, Color.white, Constants.ALG_LEFT, false))
-    foot.addCell(createCell(Date.now().format("dd.MM.yyyy").toString() + " " + Time.now().format("HH:mm"), 7.0,
+    foot.addCell(createCell(Date.now().format("dd.MM.yyyy") + " " + Time.now().format("HH:mm"), 7.0,
                             Color.black,
                             Color.white,
                             Constants.ALG_RIGHT,
@@ -259,10 +252,10 @@ class PExport2PDF(
   }
 
   override fun exportRow(row: VReportRow, tail: Boolean) {
-    exportRow((row), tail, true)
+    exportRow(row, tail, true)
   }
 
-  override  fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
+  override  fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
     var cell = 0
 
     datatable!!.defaultCell.borderWidth = BORDER_WIDTH.toFloat()
@@ -273,14 +266,14 @@ class PExport2PDF(
                             scale,
                             Color.black,
                             getBackgroundForLevel(level),
-                            alignment[index],
+                            alignments[index],
                             true))
       } else {
         datatable!!.addCell(createCell(" ",
                                         scale,
                                         Color.black,
                                         getBackgroundForLevel(level),
-                                        alignment[index],
+                                        alignments[index],
                                         true))
       }
       cell += 1
@@ -317,9 +310,9 @@ class PExport2PDF(
   private fun getScale(min: Double, max: Double, precision: Double): Double {
     val width: Int
     // setting format parameters
-    val paper: PPaperType = PPaperType.getPaperTypeFromCode(pconfig.papertype)
+    val paper: PPaperType = PPaperType.getPaperTypeFromCode(printConfig.papertype)
 
-    width = if (pconfig.paperlayout == "Landscape") {
+    width = if (printConfig.paperlayout == "Landscape") {
       paper.height
     } else {
       paper.width
@@ -330,7 +323,7 @@ class PExport2PDF(
     formatColumns()
     val widthSumMax: Double = widthSum + (columnCount * 2 * BORDER_PADDING) + (columnCount * 1)
 
-    if ((widthSumMax <= (width - document.leftMargin() - document.rightMargin() - (2 * pconfig.border)))) {
+    if ((widthSumMax <= (width - document.leftMargin() - document.rightMargin() - (2 * printConfig.border)))) {
       return max
     }
     if (max - min <= precision) {
@@ -345,8 +338,8 @@ class PExport2PDF(
     scale = (min + (max - min) / 2)
     formatColumns()
     widthSum += (columnCount * 2 * BORDER_PADDING) + (columnCount * 1)
-    return if ((widthSumMin <= (width - document.leftMargin() - document.rightMargin() - (2 * pconfig.border))
-                    && widthSum >= (width - document.leftMargin() - document.rightMargin() - (2 * pconfig.border)))) {
+    return if ((widthSumMin <= (width - document.leftMargin() - document.rightMargin() - (2 * printConfig.border))
+                    && widthSum >= (width - document.leftMargin() - document.rightMargin() - (2 * printConfig.border)))) {
       getScale(min, min + (max - min) / 2, precision)
     } else {
       getScale(max - (max - min) / 2, max, precision)

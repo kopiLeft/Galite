@@ -45,9 +45,7 @@ open class Week : Type {
   /**
    * Clones this object.
    */
-  fun copy(): NotNullWeek {
-    return NotNullWeek(scalar / 53, scalar % 53 + 1)
-  }
+  fun copy(): NotNullWeek = NotNullWeek(scalar / 53, scalar % 53 + 1)
 
   // ----------------------------------------------------------------------
   // IN PLACE OPERATIONS
@@ -65,23 +63,19 @@ open class Week : Type {
   /**
    * Returns a Week with the specified number of weeks added to this Week.
    */
-  fun add(weeks: Int): NotNullWeek {
-    return NotNullWeek((scalar + weeks) / 53, (scalar + weeks) % 53 + 1)
-  }
+  fun add(weeks: Int): NotNullWeek = NotNullWeek((scalar + weeks) / 53, (scalar + weeks) % 53 + 1)
 
   /**
    * subtract
    * @returns the number of weeks between two Weeks
    */
-  fun subtract(other: Week?): Int?  = other ?.let { subtract(other as NotNullWeek) }
+  fun subtract(other: Week?): Int?  = other ?.let { subtract(other as? NotNullWeek) }
 
   /**
    * subtract
    * @returns the number of weeks between two Weeks
    */
-  fun subtract(other: NotNullWeek): Int {
-    return scalar - (other as Week).scalar
-  }
+  fun subtract(other: NotNullWeek): Int = scalar - (other as Week).scalar
 
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
@@ -100,9 +94,9 @@ open class Week : Type {
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any?): Int {
-    return compareTo(other as Week)
-  }// week to start at 1
+  override operator fun compareTo(other: Any?): Int =
+          compareTo(other as? Week)
+          // week to start at 1
 
   /**
    * Returns the week number (starts at 1, ends at 53)
@@ -140,24 +134,18 @@ open class Week : Type {
   /**
    * Returns the first day of this week.
    */
-  open fun getFirstDay(): NotNullDate {
-    return getDate(1)
-  }
+  open fun getFirstDay(): NotNullDate = getDate(1)
 
   /**
    * Returns the last day of this week.
    */
-  open fun getLastDay(): NotNullDate {
-    return getDate(7)
-  }
+  open fun getLastDay(): NotNullDate = getDate(7)
 
   /**
    * Transforms this week into a date (the first day of the week)
    */
   @Deprecated("")
-  open fun getDate(): NotNullDate {
-    return getDate(1)
-  }
+  open fun getDate(): NotNullDate = getDate(1)
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
@@ -165,9 +153,7 @@ open class Week : Type {
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean {
-    return other is Week && scalar == other.scalar
-  }
+  override fun equals(other: Any?): Boolean = other is Week && scalar == other.scalar
 
   /**
    * Format the object depending on the current language
@@ -253,9 +239,7 @@ open class Week : Type {
     /**
      * Returns true iff the specified year is a leap year.
      */
-    private fun isLeapYear(year: Int): Boolean {
-      return year % 4 == 0 && year % 100 != 0 || year % 400 == 0
-    }
+    private fun isLeapYear(year: Int): Boolean = year % 4 == 0 && year % 100 != 0 || year % 400 == 0
 
     // --------------------------------------------------------------------
     // DATA MEMBERS

@@ -44,8 +44,8 @@ import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
 
-abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig: PConfig, title: String)
-  : PExport(table, model, pconfig, title), Constants {
+abstract class PExport2Excel(table: UTable, model: MReport, override val printConfig: PConfig, title: String)
+  : PExport(table, model, printConfig, title), Constants {
 
   override fun export(stream: OutputStream) {
     rowNumber = 0
@@ -96,18 +96,17 @@ abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig:
 
     val footer = sheet!!.footer
     val header = sheet!!.header
-    header.left = title.toString() + "  " + getColumnLabel(0) + " : " + subTitle
+    header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
 
-    //!!!FIXME graf 20140622 - language specific
-    footer.left = title.toString() + " - " + VlibProperties.getString("print-page") + " &P / &N "
-    footer.right = Date.now().format("dd.MM.yyyy").toString() + " " + Time.now().format("HH:mm")
+    footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
+    footer.right = Date.now().format("dd.MM.yyyy") + " " + Time.now().format("HH:mm")
     sheetIndex += 1
     val ps = sheet!!.printSetup
 
     sheet!!.autobreaks = true
     ps.fitWidth = 1.toShort()
     ps.fitHeight = 999.toShort()
-    ps.landscape = pconfig.paperlayout == "Landscape"
+    ps.landscape = printConfig.paperlayout == "Landscape"
     ps.paperSize = PrintSetup.A4_PAPERSIZE /// !!! no always A4
   }
 
@@ -120,7 +119,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig:
     }
   }
 
-  protected override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
+  protected override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
     val row = sheet!!.createRow(rowNumber + 1)
     val color = getBackgroundForLevel(level)
     var cellPos = 0
@@ -129,7 +128,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig:
       val cell: Cell = row.createCell(cellPos)
       val cellStyle: CellStyle = cellStyleCacheManager.getStyle(this,
                                                                 workbook!!,
-                                                                getAlignment(alignment, index),
+                                                                getAlignment(alignments, index),
                                                                 getDataFormat(index),
                                                                 color)
 
@@ -146,7 +145,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig:
         cell.setCellValue(data.replace('\n', ' '))
       } else {
         if (orig is Fixed) {
-          cell.setCellValue((orig).toDouble())
+          cell.setCellValue(orig.toDouble())
         } else if (orig is Int) {
           if (datatype[cellPos] == CellType.BOOLEAN.code) {
             cell.setCellValue(orig.toDouble() == 1.0)
@@ -163,9 +162,9 @@ abstract class PExport2Excel(table: UTable, model: MReport, private val pconfig:
           cell.setCellValue(data)
           datatype[cellPos] = CellType.STRING.code
         } else if (orig is Month) {
-          setCellValue(cell, (orig).getFirstDay())
+          setCellValue(cell, orig.getFirstDay())
         } else if (orig is Week) {
-          setCellValue(cell, (orig).getFirstDay())
+          setCellValue(cell, orig.getFirstDay())
         } else if (orig is String && orig.isBlank()) {
           // maybe reportIdenticalValue Trigger used
           // nothing

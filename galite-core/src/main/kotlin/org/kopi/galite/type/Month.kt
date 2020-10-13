@@ -37,7 +37,8 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    * Formats the month according to the given format using the default
    * Locale
    *
-   * @param     format  the format. see SimpleDateFormat
+   * @param     format  the format.
+   * @param     locale  the Locale to use.
    */
   fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
@@ -77,7 +78,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    * subtract
    * @returns the number of month between two Months
    */
-  fun subtract(other: Month?): Int? = other ?.let { subtract(other as NotNullMonth)  }
+  fun subtract(other: Month?): Int? = other ?.let { subtract(other as? NotNullMonth)  }
 
   /**
    * subtract
@@ -103,44 +104,35 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any?): Int = compareTo(other as Month)
+  override operator fun compareTo(other: Any?): Int = compareTo(other as? Month)
 
   /**
    * Returns the year of the month (by example 1999 or may be 2000 on year after)
    */
-  open fun getYear(): Int {
-    return scalar / 12
-  }
+  open fun getYear(): Int = scalar / 12
 
   /**
    * Returns the month number (starts at 1, ends at 12)
    */
-  open fun getMonth(): Int {
-    return scalar % 12 + 1 // month to start at 1
-  }
+  open fun getMonth(): Int = scalar % 12 + 1 // month to start at 1
 
   /**
    * Returns the first day of this month.
    */
-  open fun getFirstDay(): NotNullDate {
-    return NotNullDate(scalar / 12, scalar % 12 + 1, 1)
-  }
+  open fun getFirstDay(): NotNullDate = NotNullDate(scalar / 12, scalar % 12 + 1, 1)
 
   /**
    * Returns the last day of this month.
    */
-  open fun getLastDay(): NotNullDate {
-    // this is the first day of the next month - 1 day.
-    return NotNullDate((scalar + 1) / 12, (scalar + 1) % 12 + 1, 1).add(-1)
-  }
+  open fun getLastDay(): NotNullDate =
+          // this is the first day of the next month - 1 day.
+          NotNullDate((scalar + 1) / 12, (scalar + 1) % 12 + 1, 1).add(-1)
 
   /**
    * Transforms this month in a date (the first day of the month)
    */
   @Deprecated("")
-  open fun getDate(): NotNullDate {
-    return getFirstDay()
-  }
+  open fun getDate(): NotNullDate = getFirstDay()
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
@@ -197,9 +189,8 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
      * @param     input   the date to parse
      * @param     format  the format of the date
      */
-    fun parse(input: String, format: String): NotNullMonth {
-      return parse(input, format, Locale.getDefault())
-    }
+    fun parse(input: String, format: String): NotNullMonth = parse(input, format, Locale.getDefault())
+
 
     /**
      * Parse the string to build the corresponding month using the given

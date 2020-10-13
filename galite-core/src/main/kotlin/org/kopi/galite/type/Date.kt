@@ -94,9 +94,7 @@ open class Date : Type {
     calendar[Calendar.DAY_OF_MONTH] = day
     return calendar
   }
-  // ----------------------------------------------------------------------
-  // COMPILER METHODS - DO NOT USE OUTSIDE OF THE LIBRARY
-  // ----------------------------------------------------------------------
+
   /**
    * Constructs a Date from a scalar
    * DO NOT USE OUTSIDE OF THE LIBRARY
@@ -104,9 +102,7 @@ open class Date : Type {
   internal constructor(scalar: Int) {
     this.scalar = scalar
   }
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
+
   /**
    * Returns the year of the month (by example 1999 or may be 2000 one year after)
    */
@@ -144,32 +140,25 @@ open class Date : Type {
   /**
    * Returns a Date with the specified number of days added to this Date.
    */
-  fun add(days: Int): NotNullDate {
-    return NotNullDate(scalar + days)
-  }
+  fun add(days: Int): NotNullDate = NotNullDate(scalar + days)
 
   /**
    * Returns the number of days between two dates.
    */
-  fun subtract(other: Date?): Int? {
-    return if (other == null) null else subtract(other as NotNullDate)
-  }
+  fun subtract(other: Date?): Int? = if (other == null) null else subtract(other as NotNullDate)
 
   /**
    * Returns the number of days between two dates.
    */
-  fun subtract(other: NotNullDate): Int {
-    return scalar - (other as Date).scalar
-  }
+  fun subtract(other: NotNullDate): Int = scalar - (other as Date).scalar
+
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
   // ----------------------------------------------------------------------
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean {
-    return other is Date && scalar == other.scalar
-  }
+  override fun equals(other: Any?): Boolean = other is Date && scalar == other.scalar
 
   /**
    * Compares to another date.
@@ -186,9 +175,7 @@ open class Date : Type {
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any?): Int {
-    return compareTo(other as Date)
-  }
+  override operator fun compareTo(other: Any?): Int = compareTo(other as Date)
 
   /**
    * Format the object depending on the current language
@@ -197,8 +184,6 @@ open class Date : Type {
   override fun toString(locale: Locale): String {
     val gregorian = julianToGregorian(scalar)
 
-    // !!! taoufik 20061010
-    // LOCALIZATION NOT HANDLED
     return buildString {
       append(gregorian[2] / 10)
       append(gregorian[2] % 10)
@@ -232,6 +217,9 @@ open class Date : Type {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
+  /**
+   * the base value for this object
+   */
   var scalar = 0
 
   companion object {
@@ -253,9 +241,7 @@ open class Date : Type {
      * @param     input   the date to parse
      * @param     format  the format of the date
      */
-    fun parse(input: String, format: String): NotNullDate {
-      return parse(input, format, Locale.getDefault())
-    }
+    fun parse(input: String, format: String): NotNullDate = parse(input, format, Locale.getDefault())
 
     /**
      * Parse the string to build the corresponding date
@@ -264,10 +250,9 @@ open class Date : Type {
      * @param     format  the format of the date
      * @param     locale  the Locale to use
      */
-    fun parse(
-      input: String,
-      format: String,
-      locale: Locale,
+    fun parse(input: String,
+              format: String,
+              locale: Locale,
     ): NotNullDate {
       val cal = GregorianCalendar()
 
@@ -285,17 +270,18 @@ open class Date : Type {
     // --------------------------------------------------------------------
     // JULIAN DATES
     // --------------------------------------------------------------------
-    /*
-   * NOTE:
-   * Gregorian calendar dates are converted to the corresponding Julian
-   * day number according to Algorithm 199 from
-   * Communications of the ACM, Volume 6, No. 8, (Aug. 1963), p. 444.
-   * Gregorian calendar started on Sep. 14, 1752.
-   * The corresponding function are not valid before that.
-   */
     /**
-   * Returns the julian day number of the date specified by year, month, day
-   */
+     * NOTE:
+     *      Gregorian calendar dates are converted to the corresponding Julian
+     *      day number according to Algorithm 199 from
+     *      Communications of the ACM, Volume 6, No. 8, (Aug. 1963), p. 444.
+     *      Gregorian calendar started on Sep. 14, 1752.
+     *      The corresponding function are not valid before that.
+     */
+
+    /**
+     * Returns the julian day number of the date specified by year, month, day
+     */
     private fun gregorianToJulian(y: Int, m: Int, d: Int): Int {
       var y = y
       var m = m
@@ -311,8 +297,8 @@ open class Date : Type {
     }
 
     /**
-   * Returns the date specified by a julian day number as year, month, day.
-   */
+     * Returns the gregorian day number of the date specified by year, month, day
+     */
     private fun julianToGregorian(julian: Int): IntArray {
       var y: Int
       var m: Int
