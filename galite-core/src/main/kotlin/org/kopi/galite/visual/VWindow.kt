@@ -512,7 +512,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    */
   protected fun formatMessage(ident: String, params: Array<Any?>): String? {
     return if (source != null) {
-      Message.getMessage(source, ident, params)
+      Message.getMessage(source!!, ident, params)
     } else {
       null
     }
