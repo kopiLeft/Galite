@@ -48,7 +48,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   private var extraTitle: String? = null
   private var display: UWindow? = null
   private var actors: ArrayList<VActor> = arrayListOf()
-  protected var windowTitle: String? = null
+  protected lateinit var windowTitle: String
   protected var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
@@ -253,7 +253,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * change the title of this form
    */
-  open fun setTitle(title: String?) {
+  open fun setTitle(title: String) {
     this.windowTitle = title
     display?.setTitle(getTitle())
   }
@@ -518,7 +518,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    */
   protected fun formatMessage(ident: String, params: Array<Any?>): String? {
     return if (source != null) {
-      Message.getMessage(source, ident, params)
+      Message.getMessage(source!!, ident, params)
     } else {
       null
     }

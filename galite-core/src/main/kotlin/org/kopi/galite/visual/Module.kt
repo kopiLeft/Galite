@@ -49,4 +49,10 @@ class Module(
     private set
   lateinit var help: String
     private set
+
+  companion object {
+    const val ACS_PARENT = 0
+    const val ACS_TRUE = 1
+    const val ACS_FALSE = 2
+  }
 }

@@ -122,12 +122,12 @@ class VDateField : VField(10, 1) {
     when {
       month == 0 -> {
         val now: NotNullDate = Date.now()
-        month = now.getMonth()
-        year = now.getYear()
+        month = now.month
+        year = now.year
       }
       year == -2 -> {
         val now: NotNullDate = Date.now()
-        year = now.getYear()
+        year = now.year
       }
       year < 50 -> {
         year += 2000
@@ -245,12 +245,12 @@ class VDateField : VField(10, 1) {
     when {
       month == 0 -> {
         val now: NotNullDate = Date.now()
-        month = now.getMonth()
-        year = now.getYear()
+        month = now.month
+        year = now.year
       }
       year == -2 -> {
         val now: NotNullDate = Date.now()
-        year = now.getYear()
+        year = now.year
       }
       year < 50 -> {
         year += 2000
