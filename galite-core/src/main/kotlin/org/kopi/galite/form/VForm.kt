@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
 import java.sql.SQLException
@@ -23,6 +24,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VWindow
 
 open class VForm : VWindow() {
+
   fun isChanged(): Boolean = TODO()
 
   fun ask(s: String): Boolean = TODO()

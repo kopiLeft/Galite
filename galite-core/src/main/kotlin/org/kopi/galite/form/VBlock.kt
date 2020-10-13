@@ -84,7 +84,7 @@ class VBlock {
     TODO()
   }
 
-  fun getName(): Any {
+  fun getName(): String {
     TODO()
   }
 

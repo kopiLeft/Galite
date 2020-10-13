@@ -47,18 +47,10 @@ object Commands : VConstants {
    * Aborts current processing, closes form.
    * @exception        VException        an exception may occur in form.close()
    */
-  fun quitForm(form: VForm, code: Int) {
+  fun quitForm(form: VForm, code: Int = VWindow.CDE_QUIT) {
     if (!form.isChanged() || form.ask(Message.getMessage("confirm_quit"))) {
       form.close(code)
     }
-  }
-
-  /**
-   * Aborts current processing, closes form.
-   * @exception        VException        an exception may occur in form.close()
-   */
-  fun quitForm(form: VForm) {
-    quitForm(form, VWindow.CDE_QUIT)
   }
 
   /*
@@ -101,10 +93,9 @@ object Commands : VConstants {
   private fun gotoFieldIfNoActive(lastBlock: VBlock) {
     // it is possible that (for example) the load method is
     // overridden and it include now a gotoBlock(..)
-    val activeBlock: VBlock?
     val form: VForm = lastBlock.getForm()
+    val activeBlock = form.getActiveBlock()
 
-    activeBlock = form.getActiveBlock()
     if (activeBlock == null) {
       form.gotoBlock(lastBlock)
     } else {
@@ -120,14 +111,17 @@ object Commands : VConstants {
    */
   fun menuQuery(b: VBlock) {
     val form: VForm = b.getForm()
-    var id: Int
+
 
     Utils.freeMemory()
     b.validate()
     if (form is VDictionaryForm) {
       form.setMenuQuery(true)
     }
-    if (b.singleMenuQuery(false).also { id = it as Int } != -1) {
+
+    val id: Int = b.singleMenuQuery(false) as Int
+
+    if (id != -1) {
       while (true) {
         try {
           form.startProtected(Message.getMessage("loading_record"))
@@ -175,12 +169,14 @@ object Commands : VConstants {
    */
   fun recursiveQuery(b: VBlock) {
     val form = b.getForm() as VDictionaryForm
-    var id: Int
 
     Utils.freeMemory()
     b.validate()
     form.saveFilledField()
-    if (b.singleMenuQuery(false).also { id = it as Int } != -1) {
+
+    val id : Int = b.singleMenuQuery(false) as Int
+
+    if (id != -1) {
       while (true) {
         try {
           form.startProtected(Message.getMessage("loading_record"))
@@ -232,10 +228,12 @@ object Commands : VConstants {
    */
   fun queryMove(b: VBlock) {
     val form: VForm = b.getForm()
-    var id: Int
 
     b.validate()
-    if (b.singleMenuQuery(false).also { id = it as Int } != -1) {
+
+    val id: Int = b.singleMenuQuery(false) as Int
+
+    if (id != -1) {
       try {
         while (true) {
           try {
@@ -275,6 +273,7 @@ object Commands : VConstants {
 
       // goto next block
       var i = 0
+
       while (i < form.getBlockCount() - 1) {
         if (b === form.getBlock(i)) {
           form.gotoBlock(form.getBlock(i + 1))
@@ -350,7 +349,7 @@ object Commands : VConstants {
   fun insertMode(b: VBlock) {
     assert(!b.isMulti()) { "The command InsertMode can be used only with a single block." }
     assert(b.getMode() != VConstants.MOD_INSERT) {
-      "The block " + b.getName().toString() + " is already in INSERT mode."
+      "The block " + b.getName() + " is already in INSERT mode."
     }
 
     if (b.getMode() == VConstants.MOD_UPDATE
@@ -447,11 +446,11 @@ object Commands : VConstants {
     val mode: Int = b.getMode()
 
     if (form is VDictionaryForm) {
-      if ((form as VDictionaryForm).isNewRecord()) {
+      if ((form).isNewRecord()) {
         form.close(VWindow.CDE_VALIDATE)
         return
-      } else if ((form as VDictionaryForm).isRecursiveQuery() ||
-              (form as VDictionaryForm).isMenuQuery()) {
+      } else if ((form).isRecursiveQuery() ||
+              (form).isMenuQuery()) {
         form.reset()
         return
       }
@@ -471,10 +470,7 @@ object Commands : VConstants {
         try {
           b.fetchNextRecord(1)
           return
-        } catch (e: VException) {
-          // ignore it
-          //e.printStackTrace();
-        }
+        } catch (e: VException) {}
         b.clear()
         b.setMode(VConstants.MOD_QUERY)
         return
@@ -489,6 +485,7 @@ object Commands : VConstants {
    */
   fun deleteBlock(b: VBlock) {
     val form: VForm = b.getForm()
+
     if (!form.ask(Message.getMessage("confirm_delete"))) {
       return
     }
@@ -575,11 +572,6 @@ object Commands : VConstants {
       throw VExecFailedException(MessageCode.getMessage("VIS-00028"))
     } finally {
       b.gotoRecord(recno)
-      // REPLACED BY gotoRecord because enterRecord, does not enter any field.
-      //      b.enterRecord(recno);
-      // REPLACED BY fireBlockChanged()
-      // which is done in enterRecord
-      //b.getDisplay().refresh(true);
     }
   }
 
@@ -588,8 +580,9 @@ object Commands : VConstants {
    */
   fun setSearchOperator(b: VBlock) {
     val f: VField? = b.getActiveField()
+
     if (f != null) {
-      val v: Int = VListDialog(VlibProperties.getString("search_operator"), arrayOf<String>(
+      val v: Int = VListDialog(VlibProperties.getString("search_operator"), arrayOf(
               VlibProperties.getString("operator_eq"),
               VlibProperties.getString("operator_lt"),
               VlibProperties.getString("operator_gt"),
@@ -624,7 +617,7 @@ object Commands : VConstants {
         continue
       }
       blockTable[otherBlocks] = b.getForm().getBlock(i)
-      titleTable[otherBlocks] = blockTable[otherBlocks]?.getTitle()
+      titleTable[otherBlocks] = blockTable[otherBlocks]!!.getTitle()
       otherBlocks += 1
     }
     val sel: Int
@@ -653,35 +646,31 @@ object Commands : VConstants {
    */
   fun increment(field: VField) {
     if (field is VIntegerField) {
-      val f = field as VIntegerField
-      val r: Int = f.block.activeRecord
+      val r: Int = field.block.activeRecord
 
-      //      f.getUI().transferFocus(f.getDisplay());
-      f.requestFocus()
-      f.validate()
-      if (f.isNull(r)) {
-        f.setInt(r, 1)
+      field.requestFocus()
+      field.validate()
+      if (field.isNull(r)) {
+        field.setInt(r, 1)
       } else {
-        f.setInt(r, f.getInt(r) + 1)
+        field.setInt(r, field.getInt(r) + 1)
       }
     }
   }
 
   /**
-   * Increment the value of the field
+   * Decrement the value of the field
    */
   fun decrement(field: VField?) {
     if (field is VIntegerField) {
-      val f = field
-      val r: Int = f.block.activeRecord
+      val r: Int = field.block.activeRecord
 
-      // f.getUI().transferFocus(f.getDisplay());
-      f.requestFocus()
-      f.validate()
-      if (f.isNull(r)) {
-        f.setInt(r, 1)
+      field.requestFocus()
+      field.validate()
+      if (field.isNull(r)) {
+        field.setInt(r, 1)
       } else {
-        f.setInt(r, f.getInt(r) - 1)
+        field.setInt(r, field.getInt(r) - 1)
       }
     }
   }
