@@ -301,7 +301,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the field value of given record as a int value.
    */
-  fun getInt(r: Int): Int {
+  open fun getInt(r: Int): Int? {
     throw InconsistencyException()
   }
 
@@ -312,7 +312,7 @@ abstract class VCodeField(val type: String,
     throw InconsistencyException()
   }
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     for (i in getCodes().indices) {
       if (getCodes()[i] == o) {
         return labels[i]
@@ -385,7 +385,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns a string representation of a int value wrt the field type.
    */
-  protected fun formatInt(value: Int): String {
+  protected open fun formatInt(value: Int): String {
     throw InconsistencyException()
   }
 

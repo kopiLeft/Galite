@@ -70,7 +70,7 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
@@ -212,6 +212,8 @@ abstract class VField(val width: Int, val height: Int) {
 
   fun getSearchCondition(): String? = TODO()
 
+  fun getDisplay() : UField? = TODO()
+
   companion object {
     const val MDL_FLD_COLOR = 1
     const val MDL_FLD_IMAGE = 2
@@ -240,7 +242,7 @@ abstract class VField(val width: Int, val height: Int) {
           : String? = null
   private val index // The position in parent field array
           = 0
-  private val align // field alignment
+  val align // field alignment
           = 0
   private val posInArray // position in array of fields
           = 0

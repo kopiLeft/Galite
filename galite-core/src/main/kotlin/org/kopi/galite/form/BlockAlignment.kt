@@ -15,7 +15,46 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class BlockAlignment {
+import java.io.Serializable
+
+/**
+ * A class to specify alignment in Layout
+ * Creates a new `BlockAlignment` instance.
+ *
+ * @param          ori          Represents the original block to be aligned with.
+ * @param          targets      Represents the alignment targets.
+ */
+class BlockAlignment(var ori : VBlock?,
+                     var targets: IntArray)
+  : Serializable {
+
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+
+  fun isChart(): Boolean = ori != null && ori!!.isChart()
+
+  fun isAligned(x: Int): Boolean {
+    var x = x
+    x--
+    return x >= 0 && x < targets.size && targets[x] != -1
+  }
+  fun getBlock():VBlock {
+    TODO()
+  }
+  fun getTargetAt(x: Int): Int {
+    return if (x < 0 || x >= targets.size) {
+      -1
+    } else {
+      targets[x]
+    }
+  }
+
+  companion object {
+    const val ALG_LEFT = false
+    const val ALG_RIGHT = true
+  }
 }

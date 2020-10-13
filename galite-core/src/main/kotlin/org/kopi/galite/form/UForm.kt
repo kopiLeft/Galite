@@ -17,4 +17,8 @@
  */
 package org.kopi.galite.form
 
-interface UForm 
+interface UForm {
+  fun getBlockView (block : VBlock) : UBlock? {
+    TODO()
+  }
+}

@@ -18,12 +18,15 @@
 
 package org.kopi.galite.form
 
-abstract class VBlock {
+import org.kopi.galite.visual.VActor
+
+abstract class VBlock(form: VForm) {
 
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
-  var activeRecord = 0 // current record
+  // current record
+  var activeRecord = 0
 
   // ----------------------------------------------------------------------
   // HELP HANDLING
@@ -31,4 +34,11 @@ abstract class VBlock {
   open fun helpOnBlock(help: VHelpGenerator) {
     TODO()
   }
+
+  abstract fun isChart(): Boolean
+
+  fun isRecordFilled(rec:Int):Boolean =TODO()
+
+  open var actors: Array<VActor>? = null
+    internal set
 }

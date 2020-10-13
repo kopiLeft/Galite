@@ -17,4 +17,8 @@
  */
 package org.kopi.galite.form
 
-interface UBlock 
+interface UBlock {
+  fun getColumnPos(x: Int): Int {
+    TODO()
+  }
+}

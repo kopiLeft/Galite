@@ -17,4 +17,8 @@
  */
 package org.kopi.galite.form
 
-interface UTextField 
+interface UTextField {
+  fun setHasCriticalValue(critical: Boolean) {
+    TODO()
+  }
+}

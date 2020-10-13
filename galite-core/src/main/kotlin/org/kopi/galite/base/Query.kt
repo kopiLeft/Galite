@@ -33,4 +33,8 @@ class Query {
   fun getBoolean(column: Int): Boolean {
     TODO()
   }
+
+  fun getInt(column: Int): Int {
+  TODO()
+  }
 }
