@@ -54,6 +54,7 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VCommand
 
 /**
+ * Creates a new chart model.
  * The `VChart` is a window containing a chart inside.
  * The chart can have any type. The standard implementation will
  * provide **five** chart types :
@@ -65,9 +66,7 @@ import org.kopi.galite.visual.VCommand
  *  * Pie chart;
  *
  * Other chart implementations can be provided by extending this class.
- */
-/**
- * Creates a new chart model.
+ *
  * @param context The database context handler.
  * @throws VException Visual errors.
  */
@@ -132,8 +131,8 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   override fun createPrintJob(): PrintJob {
     return try {
       val printJob: PrintJob
-      val file: File = Utils.getTempFile("kopi", "pdf")
-      val paper: PPaperType = PPaperType.getPaperTypeFromCode(printOptions.papertype)
+      val file = Utils.getTempFile("galite", "pdf")
+      val paper = PPaperType.getPaperTypeFromCode(printOptions.papertype)
 
      val page = if (printOptions.paperlayout == "Landscape") {
         Rectangle(paper.height.toFloat(), paper.width.toFloat())
@@ -156,13 +155,9 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Returns the document type.
    * @return The document type.
    */
-  open fun getDocumentType(): Int {
-    return Printable.DOC_UNKNOWN
-  }
+  open fun getDocumentType(): Int = Printable.DOC_UNKNOWN
 
-  override fun getType(): Int {
-    return Constants.MDL_CHART
-  }
+  override fun getType(): Int = Constants.MDL_CHART
 
   /**
    * Sets the chart menu. This will enable and disable
@@ -247,17 +242,13 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Returns `true` is the chart has a fixed type.
    * @return `true` is the chart has a fixed type.
    */
-  fun hasFixedType(): Boolean {
-    return hasTrigger(CConstants.TRG_CHARTTYPE)
-  }
+  fun hasFixedType(): Boolean = hasTrigger(CConstants.TRG_CHARTTYPE)
 
   /**
    * Returns the chart fixed type.
    * @return The chart fixed type.
    */
-  open fun getFixedType(): VChartType? {
-    return callTrigger(CConstants.TRG_CHARTTYPE) as VChartType?
-  }
+  open fun getFixedType(): VChartType? = callTrigger(CConstants.TRG_CHARTTYPE) as VChartType?
 
   /**
    * Refreshes the chart display.
@@ -302,7 +293,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Prints the report
    */
   fun export(type: Int = TYP_PNG) {
-    val ext: String = when (type) {
+    val ext = when (type) {
       TYP_PNG -> ".png"
       TYP_PDF -> ".pdf"
       TYP_JPEG -> ".jpeg"
@@ -387,9 +378,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Returns the column count.
    * @return The column count.
    */
-  protected open fun getColumnCount(): Int {
-    return dimensions.size + measures.size
-  }
+  protected open fun getColumnCount(): Int = dimensions.size + measures.size
 
   // ----------------------------------------------------------------------
   // COMMANDS
@@ -476,25 +465,19 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   /**
    * Returns true iff there is trigger associated with given event.
    */
-  internal fun hasTrigger(event: Int, index: Int = 0): Boolean {
-    return VKT_Triggers!![index][event] != 0
-  }
+  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
 
   /**
    * Returns the dimension column.
    * @return The dimension column.
    */
-  fun getMeasure(column: Int): VMeasure {
-    return measures[column]
-  }
+  fun getMeasure(column: Int): VMeasure = measures[column]
 
   /**
    * Returns the dimension column.
    * @return The dimension column.
    */
-  fun getDimension(column: Int): VDimension {
-    return dimensions[column]
-  }
+  fun getDimension(column: Int): VDimension = dimensions[column]
 
   /**
    * Sets the title
@@ -533,9 +516,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Returns the chart rows.
    * @return The chart rows.
    */
-  protected fun getRows(): Array<VRow> {
-    return rows.toTypedArray()
-  }
+  protected fun getRows(): Array<VRow> = rows.toTypedArray()
 
   /**
    * Returns the chart columns.
