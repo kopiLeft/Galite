@@ -19,11 +19,12 @@
 package org.kopi.galite.form
 
 abstract class VBlock {
-
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
   var activeRecord = 0 // current record
+
+  var activeField : VField? = null
 
   // ----------------------------------------------------------------------
   // HELP HANDLING
