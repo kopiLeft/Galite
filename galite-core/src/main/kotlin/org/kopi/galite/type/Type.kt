@@ -16,11 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.type
 
-object VlibProperties {
+import java.util.Locale
 
-    fun getString(string: String): String = TODO()
+/**
+ * This class is the super-class for types
+ */
+abstract class Type : Comparable<Any?> {
+  /**
+   * Compares two objects
+   */
+  abstract override fun equals(other: Any?): Boolean
 
-    fun getString(key: String, params: Array<Any>): String = TODO()
+  /**
+   * Format the object depending on the current language
+   */
+  override fun toString(): String = toString(Locale.getDefault())
+
+  /**
+   * Format the object depending on the current language
+   * @param    locale    the current language
+   */
+  abstract fun toString(locale: Locale): String
+
+  /**
+   * Represents the value in sql
+   */
+  abstract fun toSql(): String
 }

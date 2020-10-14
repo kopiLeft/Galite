@@ -29,4 +29,13 @@ abstract class VBlock {
   open fun getDBContext(): DBContext {
    TODO()
   }
+
+  var activeField : VField? = null
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
 }

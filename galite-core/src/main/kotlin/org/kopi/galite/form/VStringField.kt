@@ -25,12 +25,12 @@ import org.kopi.galite.list.VStringColumn
 import org.kopi.galite.util.LineBreaker
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 
 open class VStringField(width: Int, height: Int, private val visibleHeight: Int, val typeOptions: Int, styled: Boolean)
   : VField(width, height) {
 
-  constructor(width: Int, height: Int, convert: Int, styled: Boolean) : this(width, height, 0, convert, styled) {}
+  constructor(width: Int, height: Int, convert: Int, styled: Boolean) : this(width, height, 0, convert, styled)
 
   /**
    * just after loading, construct record
@@ -78,8 +78,8 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    * verify that text is valid (during typing)
    */
   override fun checkText(s: String): Boolean {
-    var end = 0
-    end = textToModel(s, width, Int.MAX_VALUE).length
+    val end = textToModel(s, width, Int.MAX_VALUE).length
+
     return end <= width * height
   }
 
@@ -192,7 +192,6 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
   }
 
   override fun toText(o: Any?): String {
-    // TODO Auto-generated method stub
     return if (o == null) "" else (o as String?)!!
   }
 

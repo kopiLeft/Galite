@@ -16,11 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.type
 
-object VlibProperties {
+import java.util.Calendar
 
-    fun getString(string: String): String = TODO()
+/**
+ * This class represents the time types
+ */
+class NotNullTime : Time {
+  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
+  constructor(hours: Int, minutes: Int) : super(hours, minutes)
+  constructor(time: java.sql.Time) : super(time)
+  constructor(image: String) : super(image)
+  constructor(calendar: Calendar) : super(calendar)
 
-    fun getString(key: String, params: Array<Any>): String = TODO()
+  /**
+   * Constructs a time from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
+   */
+  constructor(scalar: Int) : super(scalar)
+
+  companion object {
+    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
+  }
 }

@@ -23,7 +23,7 @@ import kotlin.reflect.KClass
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VStringCodeColumn
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 
 /**
  *
@@ -38,19 +38,17 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
    * Interface Display
    * ----------------------------------------------------------------------
    */
+
   /**
    * return a list column for list
    */
-  override fun getListColumn(): VListColumn {
-    return VStringCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
-  }
+  override fun getListColumn(): VListColumn =
+          VStringCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
 
   /**
    * Returns the array of codes.
    */
-  override fun getCodes(): Array<Any> {
-    return arrayOf(codes)
-  }
+  override fun getCodes(): Array<Any> = arrayOf(codes)
 
   /*
    * ----------------------------------------------------------------------
@@ -95,37 +93,27 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
    * @param    query        the query holding the tuple
    * @param    column        the index of the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any {
-    return query.getString(column)
-  }
+  override fun retrieveQuery(query: Query, column: Int): Any = query.getString(column)
 
   /**
    * Returns the field value of given record as a int value.
    */
-  override fun getString(r: Int): String {
-    return getObject(r) as String
-  }
+  override fun getString(r: Int): String = getObject(r) as String
 
   /**
    * Returns the field value of the current record as an object
    */
-  override fun getObjectImpl(r: Int): Any? {
-    return if (value[r] == -1) null else codes[value[r]]
-  }
+  override fun getObjectImpl(r: Int): Any? = if (value[r] == -1) null else codes[value[r]]
 
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    return if (value[r] == -1) "NULL" else org.kopi.galite.type.Utils.toSql(codes[value[r]])
-  }
+  override fun getSqlImpl(r: Int): String = if (value[r] == -1) "NULL" else org.kopi.galite.type.Utils.toSql(codes[value[r]])
 
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> {
-    return String::class
-  }
+  override fun getDataType(): KClass<*> = String::class
 
   /*
    * ----------------------------------------------------------------------

@@ -32,7 +32,7 @@ import org.kopi.galite.visual.VlibProperties
  * @param     idents          an array of identifiers identifying each code value
  */
 abstract class VCodeField(val type: String,
-                          override val source: String,
+                          val source: String,
                           val idents: Array<String>)
   : VField(1, 1) {
 

@@ -16,11 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.type
 
-object VlibProperties {
+/**
+ * This class represents the week types
+ */
+class NotNullWeek : Week {
+  /**
+   * Constructs a Week with a year and a week in this year.
+   */
+  constructor(year: Int, week: Int) : super(year, week)
 
-    fun getString(string: String): String = TODO()
+  /**
+   * Constructs a Week from a Date.
+   */
+  constructor(date: Date) : super(date)
 
-    fun getString(key: String, params: Array<Any>): String = TODO()
+  companion object {
+    fun castToNotNull(value: Week): NotNullWeek {
+      return value as NotNullWeek
+    }
+  }
 }

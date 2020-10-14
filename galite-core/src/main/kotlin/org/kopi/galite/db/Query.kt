@@ -16,11 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.db
 
-object VlibProperties {
+import java.sql.Blob
 
-    fun getString(string: String): String = TODO()
+import org.kopi.galite.type.NotNullDate
 
-    fun getString(key: String, params: Array<Any>): String = TODO()
+class Query {
+
+  fun isNull(column: Int): Boolean = TODO()
+
+  fun getDate(pos: Int): NotNullDate = TODO()
+
+  fun getBoolean(column: Int): Boolean = TODO()
+
+  fun getString(pos: Int): String = TODO()
+
+  fun getBlob(pos: Int): Blob? = TODO()
+
+  fun getObject(pos:Int):Any = TODO()
 }
