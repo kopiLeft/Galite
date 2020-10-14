@@ -20,7 +20,7 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 
 object VDatabaseUtils {
 

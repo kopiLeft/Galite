@@ -16,29 +16,47 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.db
 
-import java.awt.Color
+import org.kopi.galite.type.NotNullDate
 
-import kotlin.reflect.KClass
+class Query(conn: Connection) {
 
-/**
- * laurent :<br></br>
- * NOTICE : This class was copied from VImageColumn and was not test
- */
-class VColorColumn(title: String,
-                   column: String?,
-                   sortAscending: Boolean)
-      :VListColumn(title,
-                   column,
-                   VConstants.ALG_LEFT,
-                   7,
-                   sortAscending) {
-
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> {
-    return Color::class
+  fun addString(value: String?) {
+    TODO()
   }
+
+  fun next(): Boolean {
+    TODO()
+  }
+
+  fun getString(pos: Int): String {
+    TODO()
+  }
+
+  fun addInt(value: Int) {
+    TODO()
+  }
+
+  fun run(format: String?): Int = TODO()
+
+  fun delete(format: String?): Int= TODO()
+
+  fun getInt(pos: Int): Int = TODO()
+
+  fun close() {
+    TODO()
+  }
+
+  fun open(format: String) {
+    TODO()
+  }
+
+  fun isNull(column: Int): Boolean = TODO()
+
+  fun getDate(pos: Int): NotNullDate = TODO()
+
+  fun getBoolean(column: Int): Boolean = TODO()
+
+  fun getObject(pos:Int):Any =TODO()
 }

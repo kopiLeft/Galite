@@ -18,35 +18,17 @@
 
 package org.kopi.galite.visual
 
+import java.util.Locale
 import java.util.regex.Pattern
+
+import org.kopi.galite.base.ExtendedMessageFormat
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * This class handles localized messages.
  */
-//TODO
 object MessageCode {
-  /**
-   * Returns a message (convenience routine).
-   *
-   * @param     key             the message key
-   * @return    the requested message
-   */
-  fun getMessage(key: String): String = getMessage(key, null)
-
-
-  fun getMessage(key: String, withKey: Boolean): String = getMessage(key, null, withKey)
-
-
-  /**
-   * Returns a message (convenience routine).
-   *
-   * @param     key             the message key
-   * @param     param           a message parameter
-   * @return    the requested message
-   */
-  fun getMessage(key: String, param: Any?): String = TODO()
-
-  fun getMessage(key: String, param: Any, withKey: Boolean): String = TODO()
 
   /**
    * Returns a message (convenience routine).
@@ -56,9 +38,8 @@ object MessageCode {
    * @param     param1          the second message parameter
    * @return    the requested message
    */
-  fun getMessage(key: String, param1: Any, param2: Any): String = TODO()
-
-  fun getMessage(key: String, param1: Any, param2: Any, withKey: Boolean): String = TODO()
+  fun getMessage(key: String, param1: Any, param2: Any): String =
+          getMessage(key = key, params = arrayOf(param1, param2))
 
   /**
    * Returns a message (convenience routine).
@@ -70,7 +51,37 @@ object MessageCode {
    * @param     params          the array of message parameters
    * @return    the requested message
    */
-  fun getMessage(key: String, params: Array<Any>?, withKey: Boolean): String = TODO()
+  @Suppress("UNCHECKED_CAST")
+  fun getMessage(key: String, params: Any? = null, withKey: Boolean = true): String {
+    val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
+
+    if (!keyPattern.matcher(key).matches()) {
+      throw InconsistencyException("Malformed message key '$key'")
+    }
+    val domain = key.substring(0, 3)
+    val ident = key.substring(4, 9)
+    if (ApplicationContext.getRegistry() == null) {
+      throw InconsistencyException("No Registry set for this application.")
+    }
+    val src = ApplicationContext.getRegistry().getMessageSource(domain)
+            ?: throw InconsistencyException("No message source found for module '"
+                    + domain + "'")
+    return try {
+      val manager = LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
+
+      // Within a String, "''" represents a single quote in java.text.MessageFormat.
+      val format = manager.getMessageLocalizer(src, ident).getText().replace("'", "''")
+      val messageFormat = ExtendedMessageFormat(format, ApplicationContext.getDefaultLocale())
+      (if (withKey) "$key: " else "") + messageFormat.formatMessage(params)
+    } catch (e: InconsistencyException) {
+      ApplicationContext.reportTrouble("localize MessageCode",
+              "org.kopi.galite.visual.MessageCode.getMessage(String key, Object[] params, boolean withKey)",
+              e.message,
+              e)
+      System.err.println("ERROR: " + e.message)
+      "$key: message for !$key! not found!"
+    }
+  }
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
