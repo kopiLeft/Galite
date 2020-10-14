@@ -31,7 +31,7 @@ import kotlin.math.max
 import kotlin.reflect.KClass
 
 class VFixnumField(private val digits: Int,
-                    maxScale: Int,
+                   maxScale: Int,
                    val fraction: Boolean,
                    minval: Fixed?,
                    maxval: Fixed?)
@@ -55,10 +55,10 @@ class VFixnumField(private val digits: Int,
               maxval: String?,
               fraction: Boolean)
           : this(digits,
-          maxScale,
-          fraction,
-          minval?.let { NotNullFixed(it) },
-          maxval?.let { NotNullFixed(it) }) {
+                 maxScale,
+                 fraction,
+                 minval?.let { NotNullFixed(it) },
+                 maxval?.let { NotNullFixed(it) }) {
   }
 
   /**
@@ -83,6 +83,7 @@ class VFixnumField(private val digits: Int,
     var min: Fixed? = minval
     var max: Fixed? = maxval
     var nines: Long = 1
+
     if (min == null) {
       min = NotNullFixed(Int.MIN_VALUE.toDouble())
     }
@@ -95,8 +96,10 @@ class VFixnumField(private val digits: Int,
       }
     }
     var big: Fixed = NotNullFixed((nines - 1).toDouble())
+
     big = big.setScale(height)
     var mbig: Fixed = NotNullFixed(-(nines / 10 - 1).toDouble())
+
     mbig = mbig.setScale(height)
     max = if (max > big) max else big
     min = if (min < mbig) min else mbig
@@ -135,10 +138,10 @@ class VFixnumField(private val digits: Int,
     if (s.length > width) {
       return false
     }
-   s.indices.forEach {
-      if (!((s[it] in '0'..'9')
-          || (s[it] == '.') || (s[it] == '-') || (s[it] == ' ')
-          || (s[it] == ',') || (s[it] == '/'))) {
+   s.forEach {
+      if (!((it in '0'..'9')
+          || (it == '.') || (it == '-') || (it == ' ')
+          || (it == ',') || (it == '/'))) {
         return false
       }
     }
@@ -183,9 +186,7 @@ class VFixnumField(private val digits: Int,
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> {
-    return Fixed::class
-  }
+  override fun getDataType(): KClass<*> = Fixed::class
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
@@ -205,7 +206,7 @@ class VFixnumField(private val digits: Int,
            && block.isRecordFilled(i)
            && (!exclude || i != block.activeRecord))) {
         if (sum == null) {
-          sum = NotNullFixed(0.toDouble())
+          sum = NotNullFixed(0.0)
         }
         sum = sum.add(getFixed(i) as NotNullFixed)
       }
@@ -220,7 +221,8 @@ class VFixnumField(private val digits: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed = computeSum(exclude)?.let { computeSum(exclude) as NotNullFixed } ?: coalesceValue
+  fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed
+          = computeSum(exclude)?.let { computeSum(exclude) as NotNullFixed } ?: coalesceValue
 
   /**
    * Returns the sum of the field values of all records.
@@ -260,7 +262,7 @@ class VFixnumField(private val digits: Int,
    */
   fun setScale(record: Int, scale: Int) {
     if (scale > fieldMaxScale) {
-      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale.toString(), maxScale.toString()))
+      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale.toString(), maxScale))
     }
     currentScale[record] = scale
   }
@@ -282,10 +284,10 @@ class VFixnumField(private val digits: Int,
    */
   fun setMaxScale(scale: Int) {
     // dynamic maxScale mustn't exceed the maxScale defined in the field declaration (fieldMaxScale).
-    if (scale > fieldMaxScale) {
+    if (scale > maxScale) {
       throw InconsistencyException(MessageCode.getMessage("VIS-00060",
                                                            scale.toString(),
-                                                           fieldMaxScale.toString()))
+                                                           fieldMaxScale))
     }
     maxScale = scale
 
@@ -298,9 +300,9 @@ class VFixnumField(private val digits: Int,
     }
 
     //records scale must be <= maxScale
-    currentScale.forEach {
-      if (currentScale[it] > maxScale) {
-        currentScale[it] = maxScale
+    for (i in currentScale.indices) {
+      if (currentScale[i] > maxScale) {
+        currentScale[i] = maxScale
       }
     }
   }
@@ -312,8 +314,9 @@ class VFixnumField(private val digits: Int,
    */
   override fun clear(r: Int) {
     super.clear(r)
-    currentScale.forEach {
-      currentScale[it] = maxScale
+
+    for (i in currentScale.indices) {
+      currentScale[i] = maxScale
     }
   }
 
@@ -579,9 +582,9 @@ class VFixnumField(private val digits: Int,
 
   private lateinit var value: Array<Fixed?>
 
-  protected var criticalMinValue: Fixed? = null
+  protected var criticalMinValue: Fixed? = minval
 
-  protected var criticalMaxValue: Fixed? = null
+  protected var criticalMaxValue: Fixed? = maxval
 
   companion object {
 
@@ -826,8 +829,6 @@ class VFixnumField(private val digits: Int,
       } else if (width == scale || width == scale + 1) {
         scale
       } else {
-        // decimal = width - scale - 1
-        // digits = decimal - decimal/4 + scale
         width - 1 - ((width - scale - 1) / 4)
       }
     }
