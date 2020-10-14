@@ -95,6 +95,5 @@ class RootItem(id: Int, name: String) {
   /**
    * Returns true if this root item does not contain any item.
    */
-  val isEmpty: Boolean
-    get() = this.root == null
+  val isEmpty: Boolean get() = this.root == null
 }

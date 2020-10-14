@@ -78,7 +78,7 @@ class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
   val outputStream: OutputStream get() = FileOutputStream(dataFile)
 
   /**
-   * outputStream has to be closed before using getInputStream
+   * outputStream has to be closed before using inputStream
    */
   val inputStream: InputStream get() = FileInputStream(dataFile)
 
