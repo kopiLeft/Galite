@@ -22,7 +22,6 @@ import org.kopi.galite.visual.VWindow
 
 abstract class VForm : VConstants, VWindow() {
 
-
   companion object {
     const val CMD_NEWITEM = -2
     const val CMD_EDITITEM = -3

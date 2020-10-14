@@ -40,9 +40,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
   // FIELDHANDLER IMPLEMENTATION
   // ----------------------------------------------------------------------
 
-  override fun getRowController(): VFieldUI {
-    return rowController
-  }
+  override fun getRowController(): VFieldUI = rowController
 
   // ----------------------------------------------------------------------
   // FIELDLISTENER IMPLEMENTATION
@@ -60,7 +58,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
         "" // having null pointer exception when display is not defined
       }
       is UTextField -> {
-        val text: String = (field).getText()
+        val text: String = field.getText()
 
         if (!trim) {
           text
@@ -89,10 +87,10 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     fun loadItem(mode: Int): Boolean {
       var mode = mode
       var id = -1
-      val dictionary: VDictionary = (if (getModel().list != null && getModel().list.newForm != null) {
+      val dictionary = (if (getModel().list != null && getModel().list!!.newForm != null) {
         // OLD SYNTAX
-        Module.getExecutable(getModel().list.newForm) as VDictionary?
-      } else if (getModel().list != null && getModel().list.action != -1) {
+        Module.getExecutable(getModel().list!!.newForm) as VDictionary
+      } else if (getModel().list != null && getModel().list!!.action != -1) {
         // NEW SYNTAX
         getModel().block.executeObjectTrigger(getModel().list!!.action) as VDictionary
       } else {

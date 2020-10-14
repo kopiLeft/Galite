@@ -253,7 +253,7 @@ abstract class VField(val width: Int, val height: Int) {
   private val posInArray // position in array of fields
           = 0
 
-  lateinit var list: VList // list
+  var list: VList ? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>
@@ -291,5 +291,4 @@ abstract class VField(val width: Int, val height: Int) {
           : Array<VColor>
   private val background // background colors for this field.
           : Array<VColor>
-
 }

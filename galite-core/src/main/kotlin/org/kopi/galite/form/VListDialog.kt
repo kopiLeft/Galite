@@ -26,5 +26,4 @@ class VListDialog(list: Array<VListColumn>, values: Array<Array<Any?>>?) {
   fun selectFromDialog(form: VForm?, window: VWindow?, field: VField?): Int {
    TODO()
   }
-
 }
