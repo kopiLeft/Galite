@@ -16,20 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.base
+package org.kopi.galite.type
 
-import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.NotNullFixed
+/**
+ * This class represents the month types
+ */
+class NotNullMonth : Month {
+  /**
+   * Constructs a Month with a year and a month in this year
+   */
+  constructor(year: Int, month: Int) : super(year, month)
 
-class Query {
+  /**
+   * Constructs a Month from a Date
+   */
+  constructor(date: Date) : super(date)
 
-  fun isNull(column: Int): Boolean = TODO()
-
-  fun getDate(pos: Int): NotNullDate = TODO()
-
-  fun getBoolean(column: Int): Boolean =  TODO()
-
-  fun getObject(pos:Int):Any =TODO()
-
-  fun getFixed(pos: Int): NotNullFixed = TODO()
+  companion object {
+    fun castToNotNull(value: Month): NotNullMonth = value as NotNullMonth
+  }
 }
+

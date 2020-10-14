@@ -79,12 +79,12 @@ abstract class VBlock {
   protected var shortcut  : String? = null
 
   // block title
-    protected var title   : String? = null
+  protected var title   : String? = null
 
   // the help on this block
   protected var align: BlockAlignment? = null
 
-    protected var help  : String? = null
+  protected var help  : String? = null
 
   // names of database tables
   protected lateinit var tables : Array<String>
@@ -113,7 +113,7 @@ abstract class VBlock {
   // current record
   var activeRecord = 0
 
-  protected var activeField: VField? = null
+  internal var activeField: VField? = null
 
   protected var detailMode = false
 
@@ -152,4 +152,11 @@ abstract class VBlock {
   private val isFilterVisible = false
 
   protected var dropListMap: HashMap<*, *>? = null
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
 }

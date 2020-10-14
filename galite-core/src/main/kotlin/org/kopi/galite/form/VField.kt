@@ -23,19 +23,20 @@ import javax.swing.event.EventListenerList
 import kotlin.reflect.KClass
 
 import org.kopi.galite.base.Query
+import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VModel
 
 
-abstract class VField(val width: Int, val height: Int) {
+abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   // ----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE
   // ----------------------------------------------------------------------
-
   /**
    * Returns the field label.
    */
@@ -43,9 +44,15 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
+  open fun predefinedFill(): Any {
+    TODO()
+  }
+
   open fun isNull(r: Int): Boolean {
     TODO()
   }
+
+  open fun loadItem(item: Int): Any = TODO()
 
   open fun autofill() {
     TODO()
@@ -128,11 +135,11 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
-  open fun clear(r: Int) {
+  override fun setDisplay(display: UComponent) {
     TODO()
   }
 
-  open fun getDisplay(): UField = TODO()
+  override fun getDisplay(): UField = TODO()
 
   open fun checkType(rec: Int, s: Any) {
     TODO()
@@ -213,6 +220,13 @@ abstract class VField(val width: Int, val height: Int) {
   fun getForm(): VForm {
     TODO()
   }
+  open fun helpOnField(help: VHelpGenerator) {
+    TODO()
+  }
+
+  open fun clear(r: Int) {
+    TODO()
+  }
 
   fun getSearchCondition(): String? = TODO()
 
@@ -236,7 +250,7 @@ abstract class VField(val width: Int, val height: Int) {
           = 0
   val name // field name (for dumps)
           : String? = null
-  private val label // field label
+  val label // field label
           : String? = null
   private val options // options
           = 0

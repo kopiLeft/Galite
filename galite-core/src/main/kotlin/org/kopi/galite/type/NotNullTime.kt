@@ -16,20 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.base
+package org.kopi.galite.type
 
-import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.NotNullFixed
+import java.util.Calendar
 
-class Query {
+/**
+ * This class represents the time types
+ */
+class NotNullTime : Time {
+  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
+  constructor(hours: Int, minutes: Int) : super(hours, minutes)
+  constructor(time: java.sql.Time) : super(time)
+  constructor(image: String) : super(image)
+  constructor(calendar: Calendar) : super(calendar)
 
-  fun isNull(column: Int): Boolean = TODO()
+  /**
+   * Constructs a time from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
+   */
+  constructor(scalar: Int) : super(scalar)
 
-  fun getDate(pos: Int): NotNullDate = TODO()
-
-  fun getBoolean(column: Int): Boolean =  TODO()
-
-  fun getObject(pos:Int):Any =TODO()
-
-  fun getFixed(pos: Int): NotNullFixed = TODO()
+  companion object {
+    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
+  }
 }

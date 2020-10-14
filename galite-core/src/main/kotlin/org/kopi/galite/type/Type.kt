@@ -16,20 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.base
+package org.kopi.galite.type
 
-import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.NotNullFixed
+import java.util.Locale
 
-class Query {
+/**
+ * This class is the super-class for types
+ */
+abstract class Type : Comparable<Any?> {
+  /**
+   * Compares two objects
+   */
+  abstract override fun equals(other: Any?): Boolean
 
-  fun isNull(column: Int): Boolean = TODO()
+  /**
+   * Format the object depending on the current language
+   */
+  override fun toString(): String = toString(Locale.getDefault())
 
-  fun getDate(pos: Int): NotNullDate = TODO()
+  /**
+   * Format the object depending on the current language
+   * @param    locale    the current language
+   */
+  abstract fun toString(locale: Locale): String
 
-  fun getBoolean(column: Int): Boolean =  TODO()
-
-  fun getObject(pos:Int):Any =TODO()
-
-  fun getFixed(pos: Int): NotNullFixed = TODO()
+  /**
+   * Represents the value in sql
+   */
+  abstract fun toSql(): String
 }
