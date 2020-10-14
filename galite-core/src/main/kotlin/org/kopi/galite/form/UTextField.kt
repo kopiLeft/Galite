@@ -18,6 +18,36 @@
 
 package org.kopi.galite.form
 
-interface UTextField  {
-  open fun setHasCriticalValue(b :Boolean) : Any = TODO()
+/**
+ * `UTextField` is the top-level interface that must be implemented
+ * by all text fields.
+ */
+interface UTextField : UField {
+
+  /**
+   * Returns the text field content.
+   * @return The text field content.
+   */
+  fun getText(): String
+
+  /**
+   * Sets if the field has a critical value.
+   * @param b The critical value state.
+   */
+  fun setHasCriticalValue(b: Boolean)
+
+  /**
+   * Adds selection focus listener
+   */
+  fun addSelectionFocusListener()
+
+  /**
+   * Removes selection focus Listener
+   */
+  fun removeSelectionFocusListener()
+
+  /**
+   * Disables / Enables the selection after the update operation.
+   */
+  fun setSelectionAfterUpdateDisabled(disable: Boolean)
 }

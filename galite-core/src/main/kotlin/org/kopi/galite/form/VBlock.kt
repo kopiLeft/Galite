@@ -37,6 +37,13 @@ abstract class VBlock {
   inner class OrderModel {
     //TODO()
   }
+
+  fun getForm(): VForm = TODO()
+
+  fun fetchLookup(fld: VField) {
+    TODO()
+  }
+
   companion object {
     // record info flags
     protected val RCI_FETCHED = 0x00000001
@@ -52,10 +59,6 @@ abstract class VBlock {
   // prevent that the access of a field is updated
   // (performance in big charts)
   protected var ignoreAccessChange = false
-
-  // static (compiled) data
-  // enclosing form
-  protected var form : VForm? = null
 
   // max number of buffered records
   var bufferSize = 0
@@ -125,9 +128,6 @@ abstract class VBlock {
 
   var currentRecord = 0
 
-  // current mode
-  protected var mode = 0
-
   // status vector for records
   protected lateinit var recordInfo : IntArray
 
@@ -152,6 +152,10 @@ abstract class VBlock {
   private val isFilterVisible = false
 
   protected var dropListMap: HashMap<*, *>? = null
+
+  fun getMode(): Int = TODO()
+
+  interface OrderListener
 
   // ----------------------------------------------------------------------
   // HELP HANDLING
