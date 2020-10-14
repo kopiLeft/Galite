@@ -27,6 +27,10 @@ abstract class VForm : VConstants,VWindow(){
 
   fun getActiveBlock() : VBlock =TODO()
 
+  fun isChanged(): Boolean = TODO()
+
+  fun getBlock(i: Int): VBlock = TODO()
+
   companion object {
     const val CMD_NEWITEM = -2
     const val CMD_EDITITEM = -3
