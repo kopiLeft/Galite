@@ -18,23 +18,42 @@
 
 package org.kopi.galite.report
 
-import java.io.OutputStream
+import java.awt.Color
+import java.util.Hashtable
 
-class PExport2XLS(table: UReport.UTable, model: MReport, printOptions: PConfig, pageTitle: String) : PExport(table,
-        model, printOptions, pageTitle), Constants {
-  override fun exportHeader(data: Array<String?>) {
-    TODO("Not yet implemented")
+import org.apache.poi.hssf.usermodel.HSSFPalette
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.hssf.util.HSSFColor
+import org.apache.poi.ss.usermodel.Workbook
+import org.kopi.galite.report.UReport.UTable
+
+class PExport2XLS (table: UTable, model: MReport, printConfig: PConfig, title: String) : PExport2Excel(table, model, printConfig, title), Constants {
+
+  override fun createWorkbook(): Workbook {
+    val wb = HSSFWorkbook()
+
+    colorindex = 10
+    colorpalete = Hashtable()
+    palette = wb.customPalette
+    return wb
   }
 
-  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
-    TODO("Not yet implemented")
+  override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
+    var rowCol = colorpalete!![color]
+
+    return rowCol ?: run {
+      palette!!.setColorAtIndex(colorindex, color.red.toByte(), color.green.toByte(), color.blue.toByte())
+      rowCol = palette!!.getColor(colorindex)
+      colorindex++
+      colorpalete!![color] = rowCol
+      return rowCol
+    }
   }
 
-  override fun export(stream: OutputStream) {
-    TODO("Not yet implemented")
-  }
-
-  override fun startGroup(subTitle: String?) {
-    TODO("Not yet implemented")
-  }
+  //-----------------------------------------------------------
+  // DATA MEMBERS
+  //-----------------------------------------------------------
+  private var palette: HSSFPalette? = null
+  private var colorindex: Short = 0
+  private var colorpalete: Hashtable<Color, HSSFColor?>? = null
 }

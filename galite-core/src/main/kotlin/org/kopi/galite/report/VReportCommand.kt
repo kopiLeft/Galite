@@ -33,9 +33,9 @@ class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null
    */
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {
-      actor.isEnabled = enabled
-      actor.number = trigger
-      actor.handler = this
+      actor!!.isEnabled = enabled
+      actor!!.number = trigger
+      actor!!.handler = this
     }
   }
 
@@ -107,7 +107,7 @@ class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null
     if (actor == null) {
       return
     }
-    actor.helpOnCommand(help)
+    actor!!.helpOnCommand(help)
   }
 
 }

@@ -58,12 +58,13 @@ abstract class PrinterManager {
   abstract fun getPrinterByDocumentType(documentType: String): Printer
 
   companion object {
+
     fun getPrinterManager(): PrinterManager {
-      return ApplicationContext.applicationContext!!.getApplication()!!.getPrinterManager()
+      return ApplicationContext.applicationContext.getApplication().getPrinterManager()
     }
 
     fun setPrinterManager(manager: PrinterManager) {
-      ApplicationContext.applicationContext!!.getApplication()!!.setPrinterManager(manager!!)
+      ApplicationContext.applicationContext.getApplication().setPrinterManager(manager)
     }
   }
 }
