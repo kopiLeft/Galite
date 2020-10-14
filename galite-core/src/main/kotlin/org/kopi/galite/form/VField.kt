@@ -78,7 +78,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
@@ -259,7 +259,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   private val posInArray // position in array of fields
           = 0
 
-  lateinit var list: VList // list
+  var list: VList? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>

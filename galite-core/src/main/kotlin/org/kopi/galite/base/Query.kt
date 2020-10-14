@@ -19,6 +19,7 @@
 package org.kopi.galite.base
 
 import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.NotNullTime
 
 class Query {
 
@@ -34,5 +35,7 @@ class Query {
     TODO()
   }
 
-  fun getObject(pos:Int):Any =TODO()
+  fun getObject(pos: Int): Any = TODO()
+
+  fun getTime(pos: Int): NotNullTime = TODO()
 }

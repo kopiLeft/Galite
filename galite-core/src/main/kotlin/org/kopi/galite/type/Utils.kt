@@ -20,7 +20,7 @@ package org.kopi.galite.type
 
 object Utils {
 
-  fun toSql(d: Date): String {
-    TODO()
-  }
+  fun toSql(d: Date): String = TODO()
+
+  fun toSql(t: Time?): String = TODO()
 }
