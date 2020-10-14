@@ -80,7 +80,7 @@ open class VCommand(private var mode: Int,
     }
   }
 
-  open fun performAction() {
+  fun performAction() {
     with(actor!!) {
       number = trigger
       handler = handler

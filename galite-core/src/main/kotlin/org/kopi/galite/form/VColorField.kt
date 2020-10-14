@@ -30,12 +30,8 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VlibProperties
 
-class VColorField(width: Int,
-                  height: Int) : VField(1, 1) {
+class VColorField(width: Int, height: Int) : VField(1, 1) {
 
-  /**
-   *
-   */
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -223,7 +219,7 @@ class VColorField(width: Int,
 
   /**
    * autofill
-   * @exception   VException    an exception may occur in gotoNextField
+   * @exception   org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return handler?.let {

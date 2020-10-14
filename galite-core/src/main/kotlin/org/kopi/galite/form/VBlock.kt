@@ -24,7 +24,7 @@ abstract class VBlock {
   // dynamic data
   var activeRecord = 0 // current record
 
-  lateinit var activeField : VField
+  var activeField : VField? = null
 
   // ----------------------------------------------------------------------
   // HELP HANDLING

@@ -23,6 +23,7 @@ import java.io.Serializable
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VHelpGenerator
 
 class VFieldCommand (private val form: VForm,
                      type: Int)
@@ -52,7 +53,7 @@ class VFieldCommand (private val form: VForm,
    * @param    action        the action to perform.
    * @param    block        This action should block the UI thread ?
    */
-  @Deprecated("use method performAsyncAction")
+  @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -72,14 +73,14 @@ class VFieldCommand (private val form: VForm,
    *
    * @param    type    the number of the trigger
    */
-  override fun executeVoidTrigger(VKT_Type: Int) {
-    when (VKT_Type) {
+  override fun executeVoidTrigger(type: Int) {
+    when (type) {
       VForm.CMD_AUTOFILL ->
-        form.getActiveBlock().activeField.predefinedFill()
+        form.getActiveBlock().activeField!!.predefinedFill()
       VForm.CMD_EDITITEM, VForm.CMD_EDITITEM_S ->
-        form.getActiveBlock().activeField.loadItem(VForm.CMD_EDITITEM)
+        form.getActiveBlock().activeField!!.loadItem(VForm.CMD_EDITITEM)
       VForm.CMD_NEWITEM ->
-        form.getActiveBlock().activeField.loadItem(VForm.CMD_EDITITEM)
+        form.getActiveBlock().activeField!!.loadItem(VForm.CMD_EDITITEM)
     }
   }
 
@@ -95,7 +96,7 @@ class VFieldCommand (private val form: VForm,
   // HELP HANDLING
   // ----------------------------------------------------------------------
 
-  override fun helpOnCommand(help:org.kopi.galite.visual.VHelpGenerator) {
+  override fun helpOnCommand(help:VHelpGenerator) {
     if (actor == null) {
       handler = this
       actor = form.getDefaultActor(trigger)

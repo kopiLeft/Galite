@@ -17,13 +17,10 @@
  */
 package org.kopi.galite.form
 
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VWindow
 
-abstract class VForm {
-  fun performAsyncAction(action: Action) {
-    TODO()
-  }
+abstract class VForm : VWindow() {
 
   fun getDefaultActor(type : Int) : VActor =TODO()
 
