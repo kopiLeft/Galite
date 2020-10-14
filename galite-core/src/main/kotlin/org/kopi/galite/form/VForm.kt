@@ -21,11 +21,11 @@ package org.kopi.galite.form
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VWindow
 
-abstract class VForm : VConstants,VWindow(){
+abstract class VForm : VConstants, VWindow() {
 
-  fun getDefaultActor(type : Int) : VActor =TODO()
+  fun getDefaultActor(type: Int): VActor = TODO()
 
-  fun getActiveBlock() : VBlock =TODO()
+  fun getActiveBlock(): VBlock = TODO()
 
   fun isChanged(): Boolean = TODO()
 
