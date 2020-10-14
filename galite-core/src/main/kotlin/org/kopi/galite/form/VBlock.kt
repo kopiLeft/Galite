@@ -33,6 +33,10 @@ abstract class VBlock {
 
   var activeField : VField? = null
 
+  fun getMode(): Int = TODO()
+
+  interface OrderListener
+
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
