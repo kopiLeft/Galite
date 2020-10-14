@@ -18,6 +18,11 @@
 
 package org.kopi.galite.form
 
+import java.math.BigInteger
+
+import kotlin.math.max
+import kotlin.reflect.KClass
+
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VFixnumColumn
 import org.kopi.galite.list.VListColumn
@@ -26,9 +31,6 @@ import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
-import java.math.BigInteger
-import kotlin.math.max
-import kotlin.reflect.KClass
 
 class VFixnumField(private val digits: Int,
                    maxScale: Int,
@@ -261,8 +263,8 @@ class VFixnumField(private val digits: Int,
    * @param     record          the record value.
    */
   fun setScale(record: Int, scale: Int) {
-    if (scale > fieldMaxScale) {
-      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale.toString(), maxScale))
+    if (scale > maxScale) {
+      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale, maxScale))
     }
     currentScale[record] = scale
   }
@@ -284,9 +286,9 @@ class VFixnumField(private val digits: Int,
    */
   fun setMaxScale(scale: Int) {
     // dynamic maxScale mustn't exceed the maxScale defined in the field declaration (fieldMaxScale).
-    if (scale > maxScale) {
+    if (scale > fieldMaxScale) {
       throw InconsistencyException(MessageCode.getMessage("VIS-00060",
-                                                           scale.toString(),
+                                                           scale,
                                                            fieldMaxScale))
     }
     maxScale = scale
