@@ -24,6 +24,7 @@ import org.kopi.galite.visual.Constants
 
 interface VConstants : Constants {
   companion object {
+
     // ---------------------------------------------------------------------
     // ACCESS
     // ---------------------------------------------------------------------

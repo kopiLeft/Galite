@@ -31,9 +31,7 @@ abstract class VBlock {
   // dynamic data
   var activeRecord = 0 // current record
 
-  fun getMode(): Int = TODO()
-
-  interface OrderListener
+  var activeField : VField? = null
 
   // ----------------------------------------------------------------------
   // HELP HANDLING
