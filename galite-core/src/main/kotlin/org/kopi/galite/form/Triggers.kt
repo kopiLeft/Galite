@@ -59,7 +59,7 @@ object Triggers : VConstants {
   /**
    * Fetches fields of lookup table with key current field.
    * This trigger is normally called as POSTCHG
-   * @exception   VException    an exception may occur if
+   * @exception   org.kopi.galite.visual.VException    an exception may occur if
    * next record was deleted by tierce
    */
   fun fetchLookup(f: VField) {

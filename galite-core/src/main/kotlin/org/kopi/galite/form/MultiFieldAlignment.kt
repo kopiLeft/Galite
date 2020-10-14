@@ -26,8 +26,8 @@ class MultiFieldAlignment(x: Int,
                           width: Int,
                           height: Int,
                           alignRight: Boolean)
-       :Alignment(x,
-                  y,
-                  width,
-                  height,
-                  alignRight)
+                :Alignment(x,
+                           y,
+                           width,
+                           height,
+                           alignRight)

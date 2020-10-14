@@ -18,12 +18,14 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.form.VBlock.OrderListener
+
 /**
  * `UChartLabel` is the top-level interface that must be implemented
  * by all chart labels. Chart labels are marked by a sort indication to
  * enable [VField] sorting.
  */
-interface UChartLabel : ULabel, VBlock.OrderListener {
+interface UChartLabel : ULabel, OrderListener {
 
   /**
    * The [VField] related to this label can be sorted.

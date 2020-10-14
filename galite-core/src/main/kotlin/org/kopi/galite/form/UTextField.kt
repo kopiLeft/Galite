@@ -25,7 +25,8 @@ package org.kopi.galite.form
 interface UTextField : UField {
 
   /**
-   * Represents the text field content.
+   * Returns the text field content.
+   * @return The text field content.
    */
   fun getText(): String
 

@@ -29,7 +29,8 @@ abstract class VBlock {
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
-  var activeRecord = 0 // current record
+  // current record
+  var activeRecord = 0
 
   var activeField : VField? = null
 
