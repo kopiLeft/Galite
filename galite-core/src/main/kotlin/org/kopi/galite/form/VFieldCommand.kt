@@ -25,13 +25,13 @@ import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VHelpGenerator
 
-class VFieldCommand (private val form: VForm,
-                     type: Int)
-      : VCommand(0xFFFF,
-                  null,
-                  null,
-                  type,
-                  "Standard $type"),ActionHandler, Serializable {
+class VFieldCommand(private val form: VForm,
+                    type: Int)
+  : VCommand(0xFFFF,
+        null,
+        null,
+        type,
+        "Standard $type"), ActionHandler, Serializable {
 
   /**
    * Returns the actor
@@ -42,8 +42,8 @@ class VFieldCommand (private val form: VForm,
       actor = form.getDefaultActor(trigger)
     }
     actor!!.isEnabled = enabled
-    actor!!.number=trigger
-    actor!!.handler=handler
+    actor!!.number = trigger
+    actor!!.handler = handler
   }
 
   /**
@@ -84,19 +84,19 @@ class VFieldCommand (private val form: VForm,
     }
   }
 
-  override fun getKey(): Int{
-      if (actor == null) {
-        handler = this
-        actor = form.getDefaultActor(trigger)
-      }
-      return super.getKey()
+  override fun getKey(): Int {
+    if (actor == null) {
+      handler = this
+      actor = form.getDefaultActor(trigger)
     }
+    return super.getKey()
+  }
 
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
 
-  override fun helpOnCommand(help:VHelpGenerator) {
+  override fun helpOnCommand(help: VHelpGenerator) {
     if (actor == null) {
       handler = this
       actor = form.getDefaultActor(trigger)
