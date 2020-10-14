@@ -636,7 +636,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    * @see VConstants
    */
-  fun getSearchType(): Int {
+  open fun getSearchType(): Int {
     return if (isNull(block!!.activeRecord)) {
       when(getSearchOperator()) {
         VConstants.SOP_EQ -> VConstants.STY_NO_COND
@@ -855,7 +855,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setColor(v: Color) {
+  fun setColor(v: Color?) {
     setColor(block!!.getCurrentRecord(), v)
   }
 
@@ -966,7 +966,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setColor(r: Int, v: Color) {
+  open fun setColor(r: Int, v: Color?) {
     throw InconsistencyException()
   }
 
@@ -1286,7 +1286,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun hasLargeObject(r: Int): Boolean = false
+  open fun hasLargeObject(r: Int): Boolean = false
 
   /**
    * Warning:   This method will become inaccessible to users in next release
@@ -1301,7 +1301,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getLargeObject(r: Int): InputStream {
+  open fun getLargeObject(r: Int): InputStream? {
     throw InconsistencyException("NO BLOB WITH THIS FIELD $this")
   }
   // ----------------------------------------------------------------------

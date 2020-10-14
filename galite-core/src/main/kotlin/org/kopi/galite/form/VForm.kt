@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.visual.VActor
 import java.sql.SQLException
 
 import org.kopi.galite.visual.VWindow
@@ -57,5 +58,14 @@ abstract class VForm : VWindow() {
 
   open fun abortProtected(reason: RuntimeException) {
     TODO()
+  }
+
+  fun getDefaultActor(type : Int) : VActor =TODO()
+
+  companion object {
+    const val CMD_NEWITEM = -2
+    const val CMD_EDITITEM = -3
+    const val CMD_EDITITEM_S = -4
+    const val CMD_AUTOFILL = -5
   }
 }

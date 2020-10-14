@@ -12,33 +12,31 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write timport java.math.BigIntegero the Free Software
+ * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 package org.kopi.galite.type
 
-import java.math.BigInteger
-import java.math.BigDecimal
+import java.util.Calendar
 
 /**
- * This class represents the not null fixed type
+ * This class represents the time types
  */
-class NotNullFixed : Fixed {
-
-  constructor (b: BigDecimal) : super(b) {}
-  constructor(b: BigInteger) : super(b) {}
-  constructor(b: BigInteger, l: Int) : super(b) {}
-  constructor(value: Long, scale: Int) : super(value, scale) {}
-  constructor(d: Double) : super(d) {}
-  constructor(s: String) : super(s) {}
+class NotNullTime : Time {
+  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
+  constructor(hours: Int, minutes: Int) : super(hours, minutes)
+  constructor(time: java.sql.Time) : super(time)
+  constructor(image: String) : super(image)
+  constructor(calendar: Calendar) : super(calendar)
 
   /**
-   * Checks whether this object is equal to the specified object.
+   * Constructs a time from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
    */
-  override fun equals(other: Any?): Boolean = (other is NotNullFixed? && super.equals(other))
+  constructor(scalar: Int) : super(scalar)
 
   companion object {
-    fun castToNotNull(value: Fixed?): NotNullFixed? = value as? NotNullFixed
+    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
   }
 }

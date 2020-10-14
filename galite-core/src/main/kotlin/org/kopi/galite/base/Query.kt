@@ -60,11 +60,13 @@ class Query(defaultConnection: Connection) {
     TODO()
   }
 
-  fun getObject(pos: Int): Any {
+  fun getObject(pos: Int?): Any {
     TODO()
   }
 
   fun addInt(value: Int) {
     TODO()
   }
+
+  fun getObject(pos:Int):Any =TODO()
 }
