@@ -28,10 +28,10 @@ import org.kopi.galite.visual.VHelpGenerator
 class VFieldCommand(private val form: VForm,
                     type: Int)
   : VCommand(0xFFFF,
-        null,
-        null,
-        type,
-        "Standard $type"), ActionHandler, Serializable {
+             null,
+             null,
+             type,
+             "Standard $type"), ActionHandler, Serializable {
 
   /**
    * Returns the actor
