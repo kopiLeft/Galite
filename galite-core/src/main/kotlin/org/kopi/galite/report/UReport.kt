@@ -31,7 +31,7 @@ interface UReport : UWindow, ReportListener {
   fun build()
 
   /**
-   * Redisplay the report
+   * Redisplays the report
    */
   fun redisplay()
 

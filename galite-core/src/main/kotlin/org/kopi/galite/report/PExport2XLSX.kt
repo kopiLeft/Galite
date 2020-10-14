@@ -18,26 +18,22 @@
 
 package org.kopi.galite.report
 
-import java.io.OutputStream
+import java.awt.Color
 
-class PExport2XLSX(table: UReport.UTable,
-                   model: MReport,
-                   printOptions: PConfig,
-                   pageTitle: String) : PExport(table,
-        model, printOptions, pageTitle), Constants {
-  override fun exportHeader(data: Array<String?>) {
-    TODO("Not yet implemented")
+import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
+import org.apache.poi.xssf.usermodel.XSSFColor
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+
+import org.kopi.galite.report.UReport.UTable
+
+class PExport2XLSX (table: UTable, model: MReport, printConfig: PConfig, title: String) : PExport2Excel(table, model, printConfig, title), Constants {
+
+  override fun createWorkbook(): Workbook {
+    return SXSSFWorkbook(XSSFWorkbook(), 10000, false)
   }
 
-  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray) {
-    TODO("Not yet implemented")
-  }
-
-  override fun export(stream: OutputStream) {
-    TODO("Not yet implemented")
-  }
-
-  override fun startGroup(subTitle: String?) {
-    TODO("Not yet implemented")
+  override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
+    return XSSFColor(color)
   }
 }

@@ -516,7 +516,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Returns the chart rows.
    * @return The chart rows.
    */
-  protected fun getRows(): Array<VRow> = rows.toTypedArray()
+  internal fun getRows(): Array<VRow> = rows.toTypedArray()
 
   /**
    * Returns the chart columns.

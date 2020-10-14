@@ -23,4 +23,13 @@ abstract class VBlock {
 
   // dynamic data
   var activeRecord = 0 // current record
+
+  var activeField : VField? = null
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
 }

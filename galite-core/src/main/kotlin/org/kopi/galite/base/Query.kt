@@ -33,4 +33,6 @@ class Query {
   fun getBoolean(column: Int): Boolean {
     TODO()
   }
+
+  fun getObject(pos:Int):Any =TODO()
 }
