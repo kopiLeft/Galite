@@ -16,28 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.type
 
-import org.kopi.galite.visual.VExecFailedException
+import java.util.Calendar
 
 /**
- * Represents an exception with a message.
- *
- * @param    field        the field that has not a correct value
- * @param    message        the associated message
- * @param    newValue    the new value for the field
+ * This class represents the time types
  */
-class VFieldException(val field: VField,
-                      message: String? = null,
-                      private val newValue: Any? = null)
-  : VExecFailedException(message) {
+class NotNullTime : Time {
+  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
+  constructor(hours: Int, minutes: Int) : super(hours, minutes)
+  constructor(time: java.sql.Time) : super(time)
+  constructor(image: String) : super(image)
+  constructor(calendar: Calendar) : super(calendar)
 
   /**
-   * Returns the field where the error occure
+   * Constructs a time from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
    */
-  fun resetValue() {
-    if (newValue != null) {
-      field.setObject(field.block.activeRecord, newValue)
-    }
+  constructor(scalar: Int) : super(scalar)
+
+  companion object {
+    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
   }
 }

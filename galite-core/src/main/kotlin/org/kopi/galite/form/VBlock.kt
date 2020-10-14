@@ -19,14 +19,26 @@
 package org.kopi.galite.form
 
 abstract class VBlock {
-  fun getActiveRecord(): Int = TODO()
+
+  var bufferSize = 0 // max number of buffered records
+
+  // dynamic data
+  var activeRecord = 0 // current record
+
+  var activeField: VField? = null
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+
   fun gotoNextField() {
     TODO()
   }
 
   fun executeObjectTrigger(VKT_Type: Int?): Any = TODO()
+
   fun isChart(): Boolean = TODO()
-  var bufferSize = 0 // max number of buffered records
+
   open fun helpOnBlock(help: VHelpGenerator) {
     TODO()
   }

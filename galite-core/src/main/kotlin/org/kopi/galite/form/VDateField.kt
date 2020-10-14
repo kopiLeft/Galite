@@ -122,12 +122,12 @@ class VDateField : VField(10, 1) {
     when {
       month == 0 -> {
         val now: NotNullDate = Date.now()
-        month = now.getMonth()
-        year = now.getYear()
+        month = now.month
+        year = now.year
       }
       year == -2 -> {
         val now: NotNullDate = Date.now()
-        year = now.getYear()
+        year = now.year
       }
       year < 50 -> {
         year += 2000
@@ -245,12 +245,12 @@ class VDateField : VField(10, 1) {
     when {
       month == 0 -> {
         val now: NotNullDate = Date.now()
-        month = now.getMonth()
-        year = now.getYear()
+        month = now.month
+        year = now.year
       }
       year == -2 -> {
         val now: NotNullDate = Date.now()
-        year = now.getYear()
+        year = now.year
       }
       year < 50 -> {
         year += 2000
@@ -347,7 +347,7 @@ class VDateField : VField(10, 1) {
    * @exception    org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
-    val record = block.getActiveRecord()
+    val record = block.activeRecord
 
     return if (list != null) {
       super.fillField(handler)
@@ -357,7 +357,7 @@ class VDateField : VField(10, 1) {
       force = try {
         val oldText = getDisplayedValue(true) as String
         checkType(oldText)
-        val newText = getText(block.getActiveRecord())
+        val newText = getText(block.activeRecord)
         oldText == null || newText == null || newText == "" || oldText != newText
       } catch (e: Exception) {
         true
@@ -380,7 +380,7 @@ class VDateField : VField(10, 1) {
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
-    val record = block.getActiveRecord()
+    val record = block.activeRecord
 
     when {
       list != null -> {

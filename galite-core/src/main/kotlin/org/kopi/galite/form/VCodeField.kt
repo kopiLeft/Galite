@@ -197,7 +197,7 @@ abstract class VCodeField(val type: String,
           i++
         }
         assert(found >= 0)
-        setCode(block.getActiveRecord(), found)
+        setCode(block.activeRecord, found)
         return true
       }
     }
@@ -216,7 +216,7 @@ abstract class VCodeField(val type: String,
     var desc = desc
 
     desc = if (!getListColumn()!!.isSortAscending) desc else !desc
-    var pos = value[block.getActiveRecord()]
+    var pos = value[block.activeRecord]
 
     if (pos == -1 && desc) {
       pos = labels.size
@@ -225,7 +225,7 @@ abstract class VCodeField(val type: String,
     if (pos < 0 || pos >= labels.size) {
       throw VExecFailedException() // no message to display
     } else {
-      setCode(block.getActiveRecord(), pos)
+      setCode(block.activeRecord, pos)
     }
   }
 

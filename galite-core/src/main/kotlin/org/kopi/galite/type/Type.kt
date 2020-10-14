@@ -16,28 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.type
 
-import org.kopi.galite.visual.VExecFailedException
+import java.util.Locale
 
 /**
- * Represents an exception with a message.
- *
- * @param    field        the field that has not a correct value
- * @param    message        the associated message
- * @param    newValue    the new value for the field
+ * This class is the super-class for types
  */
-class VFieldException(val field: VField,
-                      message: String? = null,
-                      private val newValue: Any? = null)
-  : VExecFailedException(message) {
+abstract class Type : Comparable<Any?> {
+  /**
+   * Compares two objects
+   */
+  abstract override fun equals(other: Any?): Boolean
 
   /**
-   * Returns the field where the error occure
+   * Format the object depending on the current language
    */
-  fun resetValue() {
-    if (newValue != null) {
-      field.setObject(field.block.activeRecord, newValue)
-    }
-  }
+  override fun toString(): String = toString(Locale.getDefault())
+
+  /**
+   * Format the object depending on the current language
+   * @param    locale    the current language
+   */
+  abstract fun toString(locale: Locale): String
+
+  /**
+   * Represents the value in sql
+   */
+  abstract fun toSql(): String
 }

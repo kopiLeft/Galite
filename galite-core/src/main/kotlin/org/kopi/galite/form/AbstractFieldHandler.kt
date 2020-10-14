@@ -58,7 +58,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
         "" // having null pointer exception when display is not defined
       }
       is UTextField -> {
-        val text: String = field.getText()
+        val text = field.getText()
 
         if (!trim) {
           text
@@ -106,7 +106,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
           if (mode == VForm.CMD_EDITITEM) {
             try {
               updateModel()
-              if (!getModel().isNull(rowController.getBlock().getActiveRecord())) {
+              if (!getModel().isNull(rowController.getBlock().activeRecord)) {
                 val value: Int = getModel().getListID()
                 if (value != -1) {
                   id = dictionary.edit(getModel().getForm(), value)
@@ -125,7 +125,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
           }
           if (id == -1) {
             if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
-              getModel().setNull(rowController.getBlock().getActiveRecord())
+              getModel().setNull(rowController.getBlock().activeRecord)
             }
             throw VExecFailedException() // no message needed
           }
