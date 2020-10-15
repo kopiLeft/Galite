@@ -18,9 +18,24 @@
 
 package org.kopi.galite.form
 
-open class Alignment(x: Int,
-                     y: Int,
-                     width: Int,
-                     height: Int,
-                     alignRight: Boolean) {
+import java.io.Serializable
+
+/**
+ * A class to specify alignment in Layout
+ *
+ * @param          x               position in x
+ * @param          y               position in y
+ * @param          width           number of column
+ * @param          height          number of lines
+ * @param          alignRight      position in alignRight
+ * @param          useAll          use the whole possible width of the column
+ */
+open class Alignment(var x: Int,
+                     var y: Int,
+                     var width: Int,
+                     var height: Int,
+                     var alignRight: Boolean,
+                     var useAll: Boolean = false) : Serializable {
+  var ALG_LEFT = false
+  var ALG_RIGHT = true
 }
