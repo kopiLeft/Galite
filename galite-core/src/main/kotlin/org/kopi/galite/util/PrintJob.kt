@@ -35,58 +35,61 @@ import org.kopi.galite.base.Utils
  * PPage/Report creates a PrintJob
  *
  * A Printer creates a PrintTask from a PrintJob
+ *
+ * @param dataFile the data file. use with care, do only read from the file, not not manipulate
+ * @param delete   delete [dataFile] on exist or not?
  */
-class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
+class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
 
   constructor(format: Rectangle) : this(Utils.getTempFile("galite", "pdf"), true, format)
   constructor(data: ByteArray, format: Rectangle) : this(writeToFile(ByteArrayInputStream(data)), true, format)
   constructor(dataStream: InputStream, format: Rectangle) : this(writeToFile(dataStream), true, format)
 
   // properties
-  var title: String? = ""
-  var media: String? = null
-  var documentType = 0
-  var dataType: Int = DAT_PS
-  var numberCopy: Int = 1
-  var numberOfPages: Int = -1
+  var title: String? = null
+  var media: String? = null     // the media for this document
+  var documentType = 0  // Kind of document to print (Proposal, Bill, ...). A number representing the document type.
+  var dataType = DAT_PS // Kind of data to print (pdf, ps). A number representing the document type.
+  var numberOfCopies = 1
+  var numberOfPages = -1
 
   init {
-    /* if the jvm is stopped before the objects are finalized the file must be deleted!*/
+    // if the jvm is stopped before the objects are
+    // finalized the file must be deleted!
     if (delete) {
-      datafile.deleteOnExit()
+      dataFile.deleteOnExit()
     }
   }
 
   protected fun finalize() {
-    if (delete && datafile != null) {
-      datafile.delete()
+    if (delete && dataFile != null) {
+      dataFile.delete()
     }
   }
 
   override fun toString(): String {
-    return "PrintJob (" + delete + ") " + datafile + "  " + super.toString()
+    return "PrintJob (" + delete + ") " + dataFile + "  " + super.toString()
   }
 
   /**
-   * OutputStream has to be closed before using inputStream
+   * outputStream has to be closed before using inputStream
    * use with care, know what you do!
    */
-  fun getOutputStream(): OutputStream = FileOutputStream(datafile)
+  val outputStream: OutputStream get() = FileOutputStream(dataFile)
 
   /**
    * outputStream has to be closed before using inputStream
    */
-  fun getInputStream(): InputStream = FileInputStream(datafile)
+  val inputStream: InputStream get() = FileInputStream(dataFile)
 
   fun getBytes(): ByteArray{
       val buffer = ByteArray(1024)
       var length: Int
 
-      /**
-       * use inputStream because it creates the stream if necessary
-       */
-      val data: InputStream = getInputStream()
-      val output: ByteArrayOutputStream = ByteArrayOutputStream()
+      // use getInputStream because in creates
+      // the stream if necessary
+      val data = inputStream
+      val output = ByteArrayOutputStream()
       while (data.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
       }
@@ -94,7 +97,7 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
     }
 
   fun writeDataToFile(file: File) {
-    writeToFile(getInputStream(), file)
+    writeToFile(inputStream, file)
   }
 
   fun setPrintInformation(title: String, format: Rectangle, numberOfPages: Int) {
@@ -125,7 +128,7 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
     private fun writeToFile(dataStream: InputStream, outputFile: File) {
       val buffer = ByteArray(1024)
       var length: Int
-      val output: OutputStream = FileOutputStream(outputFile)
+      val output = FileOutputStream(outputFile)
       while (dataStream.read(buffer).also { length = it } != -1) {
         output.write(buffer, 0, length)
       }
@@ -133,8 +136,8 @@ class PrintJob(var datafile: File, var delete: Boolean, var format: Rectangle) {
       output.close()
     }
 
-    val DAT_PDF = 1
-    val DAT_PS = 2
+    const val DAT_PDF = 1
+    const val DAT_PS = 2
 
     // A5, A4, A3, Letter and Legal page format (portrait)
     val FORMAT_A5 = PageSize.A5

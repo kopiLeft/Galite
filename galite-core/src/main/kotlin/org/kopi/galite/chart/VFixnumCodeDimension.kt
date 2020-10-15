@@ -18,5 +18,41 @@
 
 package org.kopi.galite.chart
 
-class VFixnumCodeDimension {
+import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.util.base.InconsistencyException
+
+/**
+ * Represents a fixed code chart column.
+ *
+ * @param ident         The column identifier.
+ * @param isDimension   Is it a dimension column ?
+ * @param type          The column type.
+ * @param source        The column localization source.
+ * @param idents        The column labels.
+ * @param codes         The column codes.
+ */
+class VFixnumCodeDimension(ident: String,
+                           isDimension: Boolean,
+                           format: VColumnFormat,
+                           type: String,
+                           source: String,
+                           idents: Array<String>,
+                           private val codes: Array<NotNullFixed>)
+          : VCodeDimension(ident,
+                           format,
+                           type,
+                           source,
+                           idents) {
+
+  // --------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // --------------------------------------------------------------------
+  override fun getIndex(value: Any?): Int {
+    codes.forEachIndexed { index, code ->
+      if (value == code) {
+        return index
+      }
+    }
+    throw InconsistencyException("Object not found $value, $ident")
+  }
 }

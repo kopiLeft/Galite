@@ -48,6 +48,11 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
 
+/**
+ * Represents a report model.
+ *
+ * @param ctxt Database context handler
+ */
 abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
   companion object {
     const val TYP_CSV = 1
@@ -64,8 +69,6 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     }
   }
 
-  override fun getSource(): String? = this.source
-
   override fun getType() = org.kopi.galite.visual.Constants.MDL_REPORT
 
   /**
@@ -81,7 +84,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   @Deprecated("call method in display; model must not be closed")
   fun close() {
-    getDisplay().closeWindow()
+    getDisplay()!!.closeWindow()
   }
 
   override fun destroyModel() {
@@ -186,7 +189,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       if (VKT_Triggers != null && hasTrigger(Constants.TRG_CMDACCESS, index)) {
 
         val active: Boolean = try {
-          (callTrigger(Constants.TRG_CMDACCESS, index) as Boolean)
+          callTrigger(Constants.TRG_CMDACCESS, index) as Boolean
         } catch (e: VException) {
           // trigger call error ==> command is considered as active
           true
@@ -206,6 +209,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   fun setCommandEnabled(command: VCommand, enable: Boolean) {
     command.setEnabled(enable)
+
     if (enable) {
       activeCommands.add(command)
     } else {
@@ -237,7 +241,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
       TYP_XLSX -> ".xlsx"
       else -> throw InconsistencyException("Export type unknown")
     }
-    val file: File? = FileHandler.fileHandler?.chooseFile(getDisplay(),
+    val file: File? = FileHandler.fileHandler?.chooseFile(getDisplay()!!,
             ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
             "report$ext")
     file?.let { export(it, type) }
@@ -404,8 +408,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Returns the ID
    */
-  val valueOfFieldId: Int
-    get() {
+  fun getValueOfFieldId(): Int {
       var idCol = -1
       var id = -1
       var i = 0
@@ -551,6 +554,10 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    */
   private fun getSelectedCell(): Point = (getDisplay() as UReport).getSelectedCell()
 
+  // ----------------------------------------------------------------------
+  // HELP
+  // ----------------------------------------------------------------------
+
   fun genHelp(): String? {
     val surl = StringBuffer()
     val fileName: String? = VHelpGenerator().helpOnReport(pageTitle,
@@ -574,6 +581,8 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
     VHelpViewer().showHelp(genHelp())
   }
 
+  var help: String? = null
+
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
@@ -585,33 +594,16 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   private var cmdUnfoldColumn: VCommand? = null
   private var cmdColumnInfo: VCommand? = null
   private var cmdEditColumn: VCommand? = null
-
-  /**
-   * Set the source for this document
-   */
-  private lateinit var source: String
-  protected var model: MReport = MReport()
+  override lateinit var source: String // The source for this document
+  val model: MReport = MReport()
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
-
-  // ----------------------------------------------------------------------
-  // HELP
-  // ----------------------------------------------------------------------
-  var help: String = ""
   protected var VKT_Triggers: Array<IntArray>? = null
   protected var commands: Array<VCommand>? = null
   private val activeCommands = ArrayList<VCommand>()
-
-  /**
-   * sets the print options
-   */
-  var printOptions: PConfig = PConfig()
-
-  /**
-   * Set the media for this document
-   */
-  var media: String? = null
+  var printOptions: PConfig = PConfig() // The print options
+  var media: String? = null             // The media for this document
 
   init {
     if (ctxt != null) {

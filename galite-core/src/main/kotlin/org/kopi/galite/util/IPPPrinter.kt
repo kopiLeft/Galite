@@ -80,8 +80,8 @@ class IPPPrinter(name: String,
   override fun print(data: PrintJob): String {
     val ippClient = IPPClient(host, port.toShort(), printer, user)
 
-    ippClient.print(data.getInputStream(),
-                    data.numberCopy,
+    ippClient.print(data.inputStream,
+                    data.numberOfCopies,
                     if (data.media == null) null else getAttributes(data.media))
     return "IPP Print"
   }

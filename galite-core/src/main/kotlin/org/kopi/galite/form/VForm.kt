@@ -15,6 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-abstract class VForm 
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VWindow
+
+abstract class VForm : VWindow(){
+
+  fun getDefaultActor(type : Int) : VActor =TODO()
+
+  fun getActiveBlock() : VBlock =TODO()
+
+  fun isChanged(): Boolean = TODO()
+
+  fun getBlock(i: Int): VBlock = TODO()
+
+  companion object {
+    const val CMD_NEWITEM = -2
+    const val CMD_EDITITEM = -3
+    const val CMD_EDITITEM_S = -4
+    const val CMD_AUTOFILL = -5
+  }
+}

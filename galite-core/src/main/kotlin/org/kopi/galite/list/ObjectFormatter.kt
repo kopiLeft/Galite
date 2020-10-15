@@ -21,6 +21,7 @@ package org.kopi.galite.list
 import java.io.Serializable
 
 interface ObjectFormatter : Serializable {
+
   /**
    * Returns the column alignment
    */

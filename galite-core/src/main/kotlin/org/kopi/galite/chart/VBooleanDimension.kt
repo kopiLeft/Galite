@@ -18,5 +18,28 @@
 
 package org.kopi.galite.chart
 
-class VBooleanDimension {
+import java.lang.Boolean
+
+import org.kopi.galite.visual.VlibProperties
+
+/**
+ * Represents a boolean chart column.
+ * @param ident         The column identifier.
+ * @param format        The dimension format.
+ */
+class VBooleanDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // --------------------------------------------------------------------
+  override fun toString(value: Any?): String {
+    return if (value == null) "" else if (Boolean.TRUE == value) trueRep else falseRep
+  }
+
+  companion object {
+    // --------------------------------------------------------------------
+    // DATA MEMBERS
+    // --------------------------------------------------------------------
+    private val trueRep: String =  VlibProperties.getString("true")
+    private val falseRep: String = VlibProperties.getString("false")
+  }
 }

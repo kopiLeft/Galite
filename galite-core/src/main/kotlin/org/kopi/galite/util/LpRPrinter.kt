@@ -72,7 +72,7 @@ class LpRPrinter(private val name: String,
         if (data.title != null) {
           setTitle(data.title!!)
         }
-        print(data.getInputStream(), null)
+        print(data.inputStream, null)
         close()
       } catch (e: LpdException) {
         throw PrintException(e.message!!, PrintException.EXC_UNKNOWN)

@@ -132,7 +132,7 @@ abstract class ApplicationContext {
      */
     fun reportTrouble(module: String,
                       place: String,
-                      data: String,
+                      data: String?,
                       reason: Throwable) {
 
       if (applicationContext.getApplication().isNoBugReport()) {

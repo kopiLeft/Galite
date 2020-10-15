@@ -15,6 +15,33 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-abstract class VBlock 
+abstract class VBlock {
+
+  fun getForm(): VForm = TODO()
+
+  fun fetchLookup(fld: VField) {
+    TODO()
+  }
+
+  var bufferSize = 0 // max number of buffered records
+
+  // dynamic data
+  // current record
+  var activeRecord = 0
+
+  var activeField : VField? = null
+
+  fun getMode(): Int = TODO()
+
+  interface OrderListener
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
+}

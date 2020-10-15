@@ -15,6 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-interface UActorField 
+/**
+ * This is a marker interface to handle actor fields differently in
+ * the display creation. In fact actor fields defines a label inside
+ * and does not need to put a ULabel object besides. We will use this
+ * marker interface to exclude the field label object when the field display
+ * is an instance of a UActorField.
+ */
+interface UActorField : UTextField

@@ -32,22 +32,28 @@ import org.kopi.galite.base.Utils
 abstract class AbstractPrinter protected constructor(private val name: String) : Printer {
   override fun getPrinterName(): String = name
 
+  /**
+   * Sets the tray to use
+   */
   override fun selectTray(tray: Int) {
     this.tray = tray
   }
 
+  /**
+   * Sets the paper format
+   */
   override fun setPaperFormat(paperFormat: String?) {
     this.paperFormat = paperFormat
   }
 
   companion object {
     fun convertToGhostscript(printdata: PrintJob): PrintJob {
-      val tempfile= Utils.getTempFile("kopigsconv", "PS")
+      val tempfile: File = Utils.getTempFile("kopigsconv", "PS")
       val gsJob: PrintJob = printdata.createFromThis(tempfile, true)
       val ous = BufferedWriter(FileWriter(tempfile))
 
       /* READ HEADER */
-      val reader = BufferedReader(InputStreamReader(printdata.getInputStream()))
+      val reader = BufferedReader(InputStreamReader(printdata.inputStream))
       var line: String
       var currentPage = -1
 
@@ -77,13 +83,11 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
                 .forEach { append(it) }
       }
 
-      return when {
-        buffer.isEmpty() -> -1
-        else -> try {
-          buffer.toInt()
-        } catch (e: NumberFormatException) {
-          -1
-        }
+      return if (buffer.isEmpty()) -1
+      else try {
+        buffer.toInt()
+      } catch (e: NumberFormatException) {
+        -1
       }
     }
 
@@ -91,7 +95,7 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
     protected const val TOPRINTER_FALSE = "/toprinter {false} def"
   }
 
-  var numberCopy: Int = 1
+  var numberOfCopies = 1 // the number of copy to print
   private var tray: Int = 1
   private var paperFormat: String? = null
 }
