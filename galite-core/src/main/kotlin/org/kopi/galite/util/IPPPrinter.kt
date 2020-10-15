@@ -34,19 +34,16 @@ import org.kopi.galite.util.ipp.IPPClient
  * between media and IPP attributes for this printer.
  */
 class IPPPrinter(name: String,
-                private val host: String,
-                private val port: Int,
-                private val printer: String,
-                private val user: String,
-                private val attributesForMedia: List<*>)
+                 private val host: String,
+                 private val port: Int,
+                 private val printer: String,
+                 private val user: String,
+                 private val attributesForMedia: List<*>)
       : AbstractPrinter(name), Printer {
-
-  // --------------------------------------------------------------------
-  // ACCESSORS
-  // --------------------------------------------------------------------
 
   fun getMediaTypes(): List<*>{
       val client = IPPClient(host, port.toShort(), printer, user)
+
       return client.getMediaTypes()
     }
 
@@ -61,8 +58,10 @@ class IPPPrinter(name: String,
       null
     } else {
       val it = attributesForMedia.iterator()
+
       while (it.hasNext()) {
         val att = it.next() as Array<String?>
+
         if (att.size == 2 && att[0] == media) {
           return if (att[1] == null) null else att[1]!!.split(" ").toTypedArray()
         }
@@ -80,21 +79,10 @@ class IPPPrinter(name: String,
    */
   override fun print(data: PrintJob): String {
     val ippClient = IPPClient(host, port.toShort(), printer, user)
+
     ippClient.print(data.getInputStream(),
-            data.numberCopy,
-            if (data.media == null) null else getAttributes(data.media))
+                    data.numberCopy,
+                    if (data.media == null) null else getAttributes(data.media))
     return "IPP Print"
-  }
-
-  override fun selectTray(tray: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setPaperFormat(paperFormat: String?) {
-    TODO("Not yet implemented")
-  }
-
-  override fun getPrinterName(): String {
-    TODO("Not yet implemented")
   }
 }

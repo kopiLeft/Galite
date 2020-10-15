@@ -25,6 +25,7 @@ open class LpR(serverHost: String,
                proxyHost: String,
                queue: String,
                user: String) {
+
   fun close() {
     TODO()
   }
@@ -37,6 +38,10 @@ open class LpR(serverHost: String,
    * Sets if the burst page is printed
    */
   open fun setPrintBurst(printBurst: Boolean) {
+    TODO()
+  }
+
+  fun setTitle(title: String) {
     TODO()
   }
 }

@@ -35,9 +35,12 @@ class LpRPrinter(private val name: String,
                  private val queue: String,
                  private val user: String) : Printer {
 
-  override fun getPrinterName(): String {
-    return name
+  init {
+    selectTray(1) // Standard tray (see common/MAKEDB/dbSchema)
+    setPaperFormat(null)
   }
+
+  override fun getPrinterName(): String = name
 
   /**
    * Sets the tray to use
@@ -57,20 +60,17 @@ class LpRPrinter(private val name: String,
   // PRINTING WITH AN INPUTSTREAM
   // ----------------------------------------------------------------------
 
-  override fun print(data: PrintJob): String {
-    val lpr = LprImpl(data)
-    return lpr.print()
-  }
+  override fun print(data: PrintJob): String = LprImpl(data).print()
 
-  private inner class LprImpl(data: PrintJob) : LpR(serverHost,
-                                                    port,
-                                                    proxyHost,
-                                                    queue,
-                                                    user) {
+  private inner class LprImpl(private val data: PrintJob) : LpR(serverHost,
+                                                                port,
+                                                                proxyHost,
+                                                                queue,
+                                                                user) {
     fun print(): String {
       try {
         if (data.title != null) {
-          data.title = data.title
+          setTitle(data.title!!)
         }
         print(data.getInputStream(), null)
         close()
@@ -84,6 +84,7 @@ class LpRPrinter(private val name: String,
       val size = inputStream.available()
       val data = ByteArray(size)
       var count = 0
+
       while (count < size) {
         count += inputStream.read(data, count, size - count)
       }
@@ -91,20 +92,12 @@ class LpRPrinter(private val name: String,
       return data
     }
 
-    private val data: PrintJob
-
     init {
       setPrintBurst(false)
-      this.data = data
     }
   }
 
   private var tray = 0
   private var paperFormat: String? = null
 
-  init {
-    //    setNumberOfCopies(1);
-    selectTray(1) // Standard tray (see common/MAKEDB/dbSchema)
-    setPaperFormat(null)
-  }
 }

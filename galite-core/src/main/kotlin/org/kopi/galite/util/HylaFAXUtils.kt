@@ -20,15 +20,14 @@ package org.kopi.galite.util
 
 import java.io.IOException
 import java.net.ConnectException
-import java.util.Vector
+import java.util.ArrayList
 import java.util.StringTokenizer
-
-import org.kopi.galite.base.Utils
 
 import gnu.hylafax.HylaFAXClient
 import gnu.hylafax.HylaFAXClientProtocol
 import gnu.inet.ftp.ServerResponseException
 
+import org.kopi.galite.base.Utils
 
 object HylaFAXUtils {
 
@@ -39,40 +38,38 @@ object HylaFAXUtils {
   /*
    * ----------------------------------------------------------------------
    * READ THE SEND QUEUE
-   * RETURNS A VECTOR OF STRINGS
+   * RETURNS A ArrayList OF STRINGS
    * ----------------------------------------------------------------------
    */
-  fun readSendQueue(host: String, port: Int, user: String, password: String): Vector<FaxStatus> {
-    return readQueue(host, port, user, password, "sendq")
-  }
+  fun readSendQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus>
+    = readQueue(host, port, user, password, "sendq")
 
   /*
    * ----------------------------------------------------------------------
    * READ THE DONE QUEUE
-   * RETURNS A VECTOR OF FAXSTATUS
+   * RETURNS A ArrayList OF FAXSTATUS
    * ----------------------------------------------------------------------
    */
-  fun readDoneQueue(host: String, port: Int, user: String, password: String): Vector<FaxStatus> {
-    return readQueue(host, port, user, password, "doneq")
-  }
+  fun readDoneQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus>
+    = readQueue(host, port, user, password, "doneq")
 
   /*
    * ----------------------------------------------------------------------
    * READ THE RECEIVE QUEUE
-   * RETURNS A VECTOR OF FAXSTATUS
+   * RETURNS A ArrayList OF FAXSTATUS
    * ----------------------------------------------------------------------
    */
-  fun readRecQueue(host: String, port: Int, user: String, password: String): Vector<FaxStatus> {
-    return readQueue(host, port, user, password, "recvq")
-  }
+  fun readRecQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus>
+    = readQueue(host, port, user, password, "recvq")
 
   /*
    * ----------------------------------------------------------------------
    * HANDLE THE SERVER AND MODEM STATE
    * ----------------------------------------------------------------------
    */
-  fun readServerStatus(host: String, port: Int, user: String, password: String): Vector<String> {
-    val status: Vector<String>
+  fun readServerStatus(host: String, port: Int, user: String, password: String): ArrayList<String> {
+    val status: ArrayList<String>
+
     try {
       status = getQueue(host, port, user, password, "status")
       Utils.log("Fax", "READ STATE : host $host / user $user")
@@ -102,6 +99,7 @@ object HylaFAXUtils {
               job: Long) {
     try {
       val faxClient = HylaFAXClient()
+
       faxClient.open(host)
       if (faxClient.user(user)) {
         // need password
@@ -127,6 +125,7 @@ object HylaFAXUtils {
                 job: Long) {
     try {
       val faxClient = HylaFAXClient()
+
       faxClient.open(host)
       if (faxClient.user(user)) {
         // need password
@@ -147,9 +146,10 @@ object HylaFAXUtils {
    * HANDLE THE QUEUES --- ALL QUEUES ARE HANDLED BY THAT METHOD
    * ----------------------------------------------------------------------
    */
-  private fun getQueue(host: String, port: Int, user: String, password: String, qname: String): Vector<String> {
-    val entries: Vector<String>
+  private fun getQueue(host: String, port: Int, user: String, password: String, qname: String): ArrayList<String> {
+    val entries: ArrayList<String>
     val faxClient = HylaFAXClient()
+
     faxClient.open(host)
     if (faxClient.user(user)) {
       // need password
@@ -159,7 +159,7 @@ object HylaFAXUtils {
     faxClient.rcvfmt("%f| %t| %s| %p| %h| %e")
     faxClient.jobfmt("%j| %J| %o| %e| %a| %P| %D| %.25s")
     faxClient.mdmfmt("Modem %m (%n): %s")
-    entries = faxClient.getList(qname) as Vector<String>
+    entries = faxClient.getList(qname) as ArrayList<String>
     faxClient.quit()
     return entries
   }
@@ -167,34 +167,36 @@ object HylaFAXUtils {
   /*
    * ----------------------------------------------------------------------
    * READS ANY QUEUE
-   * RETURNS A VECTOR OF STRINGS
+   * RETURNS A ArrayList OF STRINGS
    * ----------------------------------------------------------------------
    */
-  private fun readQueue(host: String, port: Int, user: String, password: String, qname: String): Vector<FaxStatus> {
-    val queue = Vector<FaxStatus>()
+  private fun readQueue(host: String, port: Int, user: String, password: String, qname: String): ArrayList<FaxStatus> {
+    val queue = ArrayList<FaxStatus>()
+
     try {
       val result = getQueue(host, port, user, password, qname)
+
       Utils.log("Fax", "READ $qname : host $host / user $user")
-      for (i in result.indices) {
+     result.forEach{element ->
         try {
-          val str = result.elementAt(i)
-          val process = StringTokenizer(str, "|")
+          val process = StringTokenizer(element, "|")
+
           if (qname != "recvq") {
-            queue.addElement(FaxStatus(process.nextToken().trim { it <= ' ' },  // ID
-                    process.nextToken().trim { it <= ' ' },  // TAG
-                    process.nextToken().trim { it <= ' ' },  // USER
-                    process.nextToken().trim { it <= ' ' },  // DIALNO
-                    process.nextToken().trim { it <= ' ' },  // STATE OF CODE
-                    process.nextToken().trim { it <= ' ' },  // PAGES
-                    process.nextToken().trim { it <= ' ' },  // DIALS
-                    process.nextToken().trim { it <= ' ' })) // STATE OF TEXT
+            queue.add(FaxStatus(process.nextToken().trim { it <= ' ' },  // ID
+                                process.nextToken().trim(),  // TAG
+                                process.nextToken().trim(),  // USER
+                                process.nextToken().trim(),  // DIALNO
+                                process.nextToken().trim(),  // STATE OF CODE
+                                process.nextToken().trim(),  // PAGES
+                                process.nextToken().trim(),  // DIALS
+                                process.nextToken().trim())) // STATE OF TEXT
           } else {
-            queue.addElement(FaxStatus(process.nextToken().trim { it <= ' ' },  // FILENAME %f
-                    process.nextToken().trim { it <= ' ' },  // TIME IN %t
-                    process.nextToken().trim { it <= ' ' },  // SENDER %s
-                    process.nextToken().trim { it <= ' ' },  // PAGES %p
-                    process.nextToken().trim { it <= ' ' },  // DURATION %h
-                    process.nextToken().trim { it <= ' ' })) // ERROR TEXT %e
+            queue.add(FaxStatus(process.nextToken().trim(),  // FILENAME %f
+                                process.nextToken().trim(),  // TIME IN %t
+                                process.nextToken().trim(),  // SENDER %s
+                                process.nextToken().trim(),  // PAGES %p
+                                process.nextToken().trim(),  // DURATION %h
+                                process.nextToken().trim())) // ERROR TEXT %e
           }
         } catch (e: Exception) {
           throw FaxException(e.message!!, e)
