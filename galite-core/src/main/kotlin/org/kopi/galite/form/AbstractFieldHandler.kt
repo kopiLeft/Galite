@@ -102,28 +102,23 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
       }
     }) ?: return false
 
-    when (mode) {
-      VForm.CMD_NEWITEM -> {
-        id = dictionary.add(getModel().getForm())
-      }
-      else -> {
-        if (mode == VForm.CMD_EDITITEM) {
-          try {
-            updateModel()
-            if (!getModel().isNull(rowController.getBlock().activeRecord)) {
-              val value: Int = getModel().getListID()
-              if (value != -1) {
-                id = dictionary.edit(getModel().getForm(), value)
-              } else {
-                mode = VForm.CMD_EDITITEM_S
-              }
-            } else {
-              mode = VForm.CMD_EDITITEM_S
-            }
-          } catch (e: VException) {
+    if (mode == VForm.CMD_NEWITEM) {
+      id = dictionary.add(getModel().getForm())
+    } else if (mode == VForm.CMD_EDITITEM) {
+      try {
+        updateModel()
+        if (!getModel().isNull(rowController.getBlock().activeRecord)) {
+          val value: Int = getModel().getListID()
+          if (value != -1) {
+            id = dictionary.edit(getModel().getForm(), value)
+          } else {
             mode = VForm.CMD_EDITITEM_S
           }
+        } else {
+          mode = VForm.CMD_EDITITEM_S
         }
+      } catch (e: VException) {
+        mode = VForm.CMD_EDITITEM_S
       }
     }
     if (mode == VForm.CMD_EDITITEM_S) {
