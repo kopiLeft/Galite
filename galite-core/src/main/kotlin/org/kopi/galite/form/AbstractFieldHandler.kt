@@ -80,60 +80,63 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     rowController.displayFieldError(message)
   }
 
-    override fun requestFocus(): Boolean {
-      rowController.transferFocus(getCurrentDisplay()!!)
-      return true
-    }
+  override fun requestFocus(): Boolean {
+    rowController.transferFocus(getCurrentDisplay()!!)
+    return true
+  }
 
-    override fun loadItem(mode: Int): Boolean {
-      var mode = mode
-      var id = -1
-      val dictionary = (if (getModel().list != null && getModel().list!!.newForm != null) {
+  override fun loadItem(mode: Int): Boolean {
+    var mode = mode
+    var id = -1
+    val dictionary = (when {
+      getModel().list != null && getModel().list!!.newForm != null -> {
         // OLD SYNTAX
         Module.getExecutable(getModel().list!!.newForm) as VDictionary
-      } else if (getModel().list != null && getModel().list!!.action != -1) {
+      }
+      getModel().list != null && getModel().list!!.action != -1 -> {
         // NEW SYNTAX
         getModel().block.executeObjectTrigger(getModel().list!!.action) as VDictionary
-      } else {
+      }
+      else -> {
         null
-      })
-              ?: return false
+      }
+    }) ?: return false
 
-      when (mode) {
-        VForm.CMD_NEWITEM -> {
-          id = dictionary.add(getModel().getForm())
-        }
-        else -> {
-          if (mode == VForm.CMD_EDITITEM) {
-            try {
-              updateModel()
-              if (!getModel().isNull(rowController.getBlock().activeRecord)) {
-                val value: Int = getModel().getListID()
-                if (value != -1) {
-                  id = dictionary.edit(getModel().getForm(), value)
-                } else {
-                  mode = VForm.CMD_EDITITEM_S
-                }
+    when (mode) {
+      VForm.CMD_NEWITEM -> {
+        id = dictionary.add(getModel().getForm())
+      }
+      else -> {
+        if (mode == VForm.CMD_EDITITEM) {
+          try {
+            updateModel()
+            if (!getModel().isNull(rowController.getBlock().activeRecord)) {
+              val value: Int = getModel().getListID()
+              if (value != -1) {
+                id = dictionary.edit(getModel().getForm(), value)
               } else {
                 mode = VForm.CMD_EDITITEM_S
               }
-            } catch (e: VException) {
+            } else {
               mode = VForm.CMD_EDITITEM_S
             }
-          }
-          if (mode == VForm.CMD_EDITITEM_S) {
-            id = dictionary.search(getModel().getForm())
-          }
-          if (id == -1) {
-            if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
-              getModel().setNull(rowController.getBlock().activeRecord)
-            }
-            throw VExecFailedException() // no message needed
+          } catch (e: VException) {
+            mode = VForm.CMD_EDITITEM_S
           }
         }
+        if (mode == VForm.CMD_EDITITEM_S) {
+          id = dictionary.search(getModel().getForm())
+        }
+        if (id == -1) {
+          if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
+            getModel().setNull(rowController.getBlock().activeRecord)
+          }
+          throw VExecFailedException() // no message needed
+        }
       }
-      getModel().setValueID(id)
-      getModel().block.gotoNextField()
-      return true
     }
+    getModel().setValueID(id)
+    getModel().block.gotoNextField()
+    return true
+  }
 }

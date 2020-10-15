@@ -21,8 +21,8 @@ package org.kopi.galite.form
 import org.kopi.galite.list.VListColumn
 
 abstract class AbstractPredefinedValueHandler(private val model: VFieldUI,
-                                              protected var form: VForm,
-                                              protected var field: VField)
+                                              protected val form: VForm,
+                                              protected val field: VField)
   : PredefinedValueHandler {
 
 

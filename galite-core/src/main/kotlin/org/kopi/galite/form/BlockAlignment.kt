@@ -24,7 +24,7 @@ import java.io.Serializable
  * A class to specify alignment in Layout
  * Creates a new `BlockAlignment` instance.
  *
- * @param          block          Represents the blockginal block to be aligned with.
+ * @param          block          Represents the original block block to be aligned with.
  * @param          targets      Represents the alignment targets.
  */
 class BlockAlignment(val block: VBlock?,
