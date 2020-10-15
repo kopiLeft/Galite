@@ -72,8 +72,8 @@ object VlibProperties {
 
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble("localize Property",
-              "org.kopi.galite.visual.VlibProperties.getString(String key, Object[] params)",
-              e.message!!,
+              "org.kopi.galite.visual.VlibProperties.getString(key: String, params: Any?)",
+              e.message,
               e)
       System.err.println("ERROR: " + e.message)
       "!$key!"
