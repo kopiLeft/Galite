@@ -31,8 +31,8 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
   // ----------------------------------------------------------------------
 
   /**
-   * Returns the row controller field getModel().
-   * @return The row controller field getModel().
+   * Returns the row controller field model.
+   * @return The row controller field model.
    */
   fun getModel(): VField = rowController.getModel()
 
@@ -78,13 +78,14 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
 
   override fun fieldError(message: String) {
     rowController.displayFieldError(message)
+  }
 
-    fun requestFocus(): Boolean {
+    override fun requestFocus(): Boolean {
       rowController.transferFocus(getCurrentDisplay()!!)
       return true
     }
 
-    fun loadItem(mode: Int): Boolean {
+    override fun loadItem(mode: Int): Boolean {
       var mode = mode
       var id = -1
       val dictionary = (if (getModel().list != null && getModel().list!!.newForm != null) {
@@ -135,5 +136,4 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
       getModel().block.gotoNextField()
       return true
     }
-  }
 }
