@@ -124,16 +124,16 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
             mode = VForm.CMD_EDITITEM_S
           }
         }
-        if (mode == VForm.CMD_EDITITEM_S) {
-          id = dictionary.search(getModel().getForm())
-        }
-        if (id == -1) {
-          if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
-            getModel().setNull(rowController.getBlock().activeRecord)
-          }
-          throw VExecFailedException() // no message needed
-        }
       }
+    }
+    if (mode == VForm.CMD_EDITITEM_S) {
+      id = dictionary.search(getModel().getForm())
+    }
+    if (id == -1) {
+      if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
+        getModel().setNull(rowController.getBlock().activeRecord)
+      }
+      throw VExecFailedException() // no message needed
     }
     getModel().setValueID(id)
     getModel().block.gotoNextField()
