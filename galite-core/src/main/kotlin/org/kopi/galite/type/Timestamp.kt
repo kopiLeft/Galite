@@ -18,8 +18,15 @@
 
 package org.kopi.galite.type
 
-class Timestamp {
+open class Timestamp {
   fun compareTo(other: Timestamp): Int {
     TODO()
+  }
+
+  fun add(millis: Long): NotNullTimestamp = TODO()
+
+  companion object {
+    fun now(): NotNullTimestamp = TODO()
+    fun parse(input: String, format: String): NotNullTimestamp = TODO()
   }
 }

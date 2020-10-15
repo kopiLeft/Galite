@@ -312,7 +312,7 @@ abstract class VCodeField(val type: String,
     throw InconsistencyException()
   }
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     for (i in getCodes().indices) {
       if (getCodes()[i] == o) {
         return labels[i]

@@ -25,7 +25,7 @@ import org.kopi.galite.type.Timestamp
  * Represents a list column.
  */
 class VTimestampColumn(title: String,
-                       column: String,
+                       column: String?,
                        sortAscending: Boolean)
           : VListColumn(title,
                         column,

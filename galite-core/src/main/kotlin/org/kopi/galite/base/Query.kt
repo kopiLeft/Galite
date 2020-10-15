@@ -19,12 +19,16 @@
 package org.kopi.galite.base
 
 import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.NotNullTimestamp
+import org.kopi.galite.type.NotNullWeek
 
 class Query {
 
   fun isNull(column: Int): Boolean {
     TODO()
   }
+
+  fun getWeek(pos: Int): NotNullWeek = TODO()
 
   fun getDate(pos: Int): NotNullDate {
     TODO()
@@ -34,5 +38,7 @@ class Query {
     TODO()
   }
 
-  fun getObject(pos:Int):Any =TODO()
+  fun getObject(pos: Int): Any = TODO()
+
+  fun getTimestamp(pos: Int): NotNullTimestamp = TODO()
 }

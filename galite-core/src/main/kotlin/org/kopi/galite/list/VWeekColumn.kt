@@ -25,7 +25,7 @@ import org.kopi.galite.type.Week
  * Represents a list column.
  */
 class VWeekColumn(title: String,
-                  column: String,
+                  column: String?,
                   sortAscending: Boolean)
     : VListColumn(title,
                   column,

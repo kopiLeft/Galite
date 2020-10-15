@@ -58,7 +58,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun getText(r: Int): String {
+  open fun getText(r: Int): String? {
     TODO()
   }
 
@@ -78,7 +78,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
@@ -131,7 +131,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun getDisplayedValue(trim: Boolean): Any {
+  open fun getDisplayedValue(trim: Boolean): Any? {
     TODO()
   }
 
@@ -145,13 +145,15 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun checkType(s: Any) {
+  open fun checkType(s: Any?) {
     TODO()
   }
 
   open fun getObject(r: Int): Any {
     TODO()
   }
+
+  fun getObject(): Any = TODO()
 
   fun setDimension(width: Int, height: Int) {
     TODO()
@@ -229,11 +231,11 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   fun hasFocus(): Boolean = TODO()
 
-   fun getListID(): Int = TODO()
+  fun getListID(): Int = TODO()
 
-   fun setValueID(id: Int) {
-     TODO()
-   }
+  fun setValueID(id: Int) {
+    TODO()
+  }
 
   companion object {
     const val MDL_FLD_COLOR = 1
@@ -268,7 +270,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   private val posInArray // position in array of fields
           = 0
 
-  var list: VList ? = null // list
+  var list: VList? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>

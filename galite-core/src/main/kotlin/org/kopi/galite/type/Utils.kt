@@ -23,6 +23,8 @@ class Utils {
     fun trimString(input: String): String = TODO()
     fun trailString(input: String): String = TODO()
     fun toSql(date: Date): String = TODO()
+    fun toSql(t: Timestamp?): String = TODO()
+    fun toSql(t: Week?): String = TODO()
   }
 }
 
