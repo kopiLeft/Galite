@@ -19,6 +19,8 @@
 package org.kopi.galite.base
 
 import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.NotNullMonth
+import java.sql.SQLException
 
 class Query {
 
@@ -34,5 +36,9 @@ class Query {
     TODO()
   }
 
-  fun getObject(pos:Int):Any =TODO()
+  fun getObject(pos:Int):Any = TODO()
+
+  fun getMonth(pos: Int): NotNullMonth {
+    TODO()
+  }
 }

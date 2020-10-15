@@ -31,7 +31,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VModel
 
-
 abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   // ----------------------------------------------------------------------
@@ -66,7 +65,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun enumerateValue(desc: Boolean) {
+  open protected fun enumerateValue(desc: Boolean) {
     TODO()
   }
 
@@ -74,11 +73,11 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
    */
-  open fun setObject(r: Int, v: Any) {
+  open fun setObject(r: Int, v: Any?) {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String {
     TODO()
   }
 
@@ -157,7 +156,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun getListColumn(): VListColumn? {
+  open protected fun getListColumn(): VListColumn? {
     TODO()
   }
 
@@ -259,7 +258,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   private val posInArray // position in array of fields
           = 0
 
-  lateinit var list: VList // list
+  var list: VList? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>
