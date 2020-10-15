@@ -20,15 +20,14 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.l10n.LocalizationManager
 
-class Module(
-        val id: Int,
-        val parent: Int,
-        shortname: String,
-        source: String,
-        val objectName: String?,
-        var accessibility: Int,
-        priority: Int,
-        icon: String?) : Comparable<Module?> {
+class Module(val id: Int,
+             val parent: Int,
+             shortname: String,
+             source: String,
+             val objectName: String?,
+             var accessibility: Int,
+             priority: Int,
+             icon: String?) : Comparable<Module?> {
   // ---------------------------------------------------------------------
   // LOCALIZATION
   // ---------------------------------------------------------------------
@@ -51,8 +50,11 @@ class Module(
     private set
 
   companion object {
+    fun getExecutable(data :String?):Executable = TODO()
+
     const val ACS_PARENT = 0
     const val ACS_TRUE = 1
     const val ACS_FALSE = 2
   }
 }
+

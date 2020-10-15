@@ -220,11 +220,20 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   fun getForm(): VForm {
     TODO()
   }
+
   open fun helpOnField(help: VHelpGenerator) {
     TODO()
   }
 
   fun getSearchCondition(): String? = TODO()
+
+  fun hasFocus(): Boolean = TODO()
+
+   fun getListID(): Int = TODO()
+
+   fun setValueID(id: Int) {
+     TODO()
+   }
 
   companion object {
     const val MDL_FLD_COLOR = 1
@@ -259,7 +268,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   private val posInArray // position in array of fields
           = 0
 
-  lateinit var list: VList // list
+  var list: VList ? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>
@@ -269,7 +278,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           : VField
 
   // changed?
-  private val changed // changed by user / changes are done in the model
+  val changed // changed by user / changes are done in the model
           = false
   val changedUI // changed by user / changes are in the ui -> update model
           = false
@@ -297,5 +306,4 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           : Array<VColor>
   private val background // background colors for this field.
           : Array<VColor>
-
 }

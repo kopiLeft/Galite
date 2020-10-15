@@ -207,7 +207,7 @@ class VItemTree(rootName: String?,
   private fun createTree() {
     rootItem = RootItem(-1, rootName)
     rootItem!!.createTree(items)
-    root = rootItem!!.rootNode
+    root = rootItem!!.root
   }
 
   /**
