@@ -197,7 +197,7 @@ abstract class ApplicationConfiguration {
 
     fun getConfiguration(): ApplicationConfiguration? {
       return if (ApplicationContext.applicationContext != null) {
-        ApplicationContext.applicationContext!!.getApplication()?.getApplicationConfiguration()
+        ApplicationContext.applicationContext.getApplication().getApplicationConfiguration()
       } else {
         configuration
       }
@@ -205,7 +205,7 @@ abstract class ApplicationConfiguration {
 
     fun setConfiguration(conf: ApplicationConfiguration) {
       if (ApplicationContext.applicationContext != null) {
-        ApplicationContext.applicationContext!!.getApplication()?.setApplicationConfiguration(conf)
+        ApplicationContext.applicationContext.getApplication().setApplicationConfiguration(conf)
       } else {
         configuration = conf
       }

@@ -21,7 +21,6 @@ package org.kopi.galite.chart
 import java.io.Serializable
 
 import org.kopi.galite.base.UComponent
-import org.kopi.galite.report.VReportCommand
 import org.kopi.galite.visual.VModel
 
 /**

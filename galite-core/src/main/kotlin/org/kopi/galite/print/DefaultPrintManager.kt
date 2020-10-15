@@ -43,17 +43,17 @@ class DefaultPrintManager : PrintManager {
     try {
       report.createPrintJob()
     } catch (exc: PrintException) {
-      throw VExecFailedException(exc.message!!)
+      throw VExecFailedException(exc.message)
     }
   }
 
   companion object {
     fun getPrintManager(): PrintManager {
-      return ApplicationContext.applicationContext!!.getApplication()!!.getPrintManager() ?: DefaultPrintManager()
+      return ApplicationContext.applicationContext.getApplication().getPrintManager() ?: DefaultPrintManager()
     }
 
     fun setPrintManager(printCopies: PrintManager) {
-      ApplicationContext.applicationContext!!.getApplication()!!.setPrintManager(printCopies)
+      ApplicationContext.applicationContext.getApplication().setPrintManager(printCopies)
     }
   }
- }
+}

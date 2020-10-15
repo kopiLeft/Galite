@@ -20,7 +20,6 @@ package org.kopi.galite.print
 
 import org.kopi.galite.util.Printer
 import org.kopi.galite.visual.VWindow
-import org.kopi.galite.report.VReport
 
 interface PrintManager {
   /**

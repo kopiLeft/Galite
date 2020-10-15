@@ -55,7 +55,7 @@ object VlibProperties {
 
   fun getString(key: String, params: Any?): String {
     val format: String
-    val manager: LocalizationManager = if (ApplicationContext.applicationContext!!.getApplication() != null) {
+    val manager: LocalizationManager = if (ApplicationContext.applicationContext.getApplication() != null) {
       ApplicationContext.getLocalizationManager()
     } else {
       LocalizationManager(Locale.getDefault(), null)

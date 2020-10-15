@@ -34,6 +34,7 @@ import org.kopi.galite.db.DBContext
 import org.kopi.galite.base.Utils
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.mailer.Mailer
+
 /**
  * `ApplicationContext` is an application context that contains the
  * running [Application] instance in the context thread. The `ApplicationContext`

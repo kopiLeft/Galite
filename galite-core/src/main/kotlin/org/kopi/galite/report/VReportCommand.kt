@@ -20,12 +20,12 @@ package org.kopi.galite.report
 
 import org.kopi.galite.print.DefaultPrintManager
 import org.kopi.galite.print.PrintManager
-import org.kopi.galite.print.Printable
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.PrinterManager
+import org.kopi.galite.visual.VHelpGenerator
 
 class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
   /**
@@ -46,6 +46,7 @@ class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null
    * @param    action        the action to perform.
    * @param    block        This action should block the UI thread ?
    */
+  @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action, block)"))
   override fun performAction(action: Action, block: Boolean) {
     report.performAction(action, block)
     /*try {
@@ -81,11 +82,11 @@ class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null
       Constants.CMD_PRINT -> {
         val pm: PrintManager = DefaultPrintManager.getPrintManager()
         pm.print(report,
-                report as Printable,
-                1,
-                PrinterManager.getPrinterManager().getCurrentPrinter(),
-                null,
-                null)
+                 report,
+                 1,
+                 PrinterManager.getPrinterManager().getCurrentPrinter(),
+                 null,
+                 null)
       }
       Constants.CMD_EXPORT_CSV -> report.export(VReport.TYP_CSV)
       Constants.CMD_EXPORT_XLS -> report.export(VReport.TYP_XLS)
@@ -103,7 +104,7 @@ class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
-  override fun helpOnCommand(help: org.kopi.galite.visual.VHelpGenerator) {
+  override fun helpOnCommand(help: VHelpGenerator) {
     if (actor == null) {
       return
     }

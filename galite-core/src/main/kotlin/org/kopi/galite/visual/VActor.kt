@@ -91,9 +91,9 @@ open class VActor(var menuIdent: String,
       menuName == obj.menuName
               && menuItem == obj.menuItem
               && ((iconName == null && obj.iconName == null)
-              || (iconName != null
-              && obj.iconName != null
-              && iconName == obj.iconName))
+                   || (iconName != null
+                       && obj.iconName != null
+                       && iconName == obj.iconName))
     }
   }
 
@@ -118,11 +118,11 @@ open class VActor(var menuIdent: String,
   // ----------------------------------------------------------------------
   fun helpOnCommand(help: VHelpGenerator) {
     help.helpOnCommand(menuName,
-            menuItem,
-            iconName,
-            acceleratorKey,
-            acceleratorModifier,
-            this.help)
+                       menuItem,
+                       iconName,
+                       acceleratorKey,
+                       acceleratorModifier,
+                       this.help)
   }
 
   // --------------------------------------------------------------------
