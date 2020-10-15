@@ -24,23 +24,22 @@ import java.util.Locale
 import javax.swing.tree.TreeNode
 
 import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.indices
 import kotlin.system.exitProcess
 
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
- * Presents a new instance of VItemTree.
+ * Represents a new instance of VItemTree.
+ *
  * @param rootName the rot item name
  * @param items the items list
  * @param isInsertMode enable Add and Remove items
  * @param selectionType item selection mode :
- * 1 : no edit
- * 2 : Single selection
- * 3 : Multi selection
- * 4 : Multi selection with default value
+ *            1 : no edit
+ *            2 : Single selection
+ *            3 : Multi selection
+ *            4 : Multi selection with default value
  * @param isLocalised if true, enable item localisation
  * @param itemTreeManager the tree save manager
  * @param isRemoveDescendantsAllowed if true, remove item descendants when removig item
@@ -52,7 +51,7 @@ class VItemTree(rootName: String?,
                 private val items: Array<Item>,
                 val depth: Int,
                 val isInsertMode: Boolean,
-                private var selectionType: Int,
+                private val selectionType: Int,
                 val isLocalised: Boolean,
                 private val itemTreeManager: ItemTreeManager,
                 val isRemoveDescendantsAllowed: Boolean,
@@ -103,9 +102,9 @@ class VItemTree(rootName: String?,
       super.localizeActors(manager) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble("ItemTree Actor localization",
-              "ItemTreeModel.localize",
-              e.message!!,
-              e)
+                                       "ItemTreeModel.localize",
+                                       e.message,
+                                       e)
       exitProcess(1)
     }
     manager = null
@@ -115,7 +114,7 @@ class VItemTree(rootName: String?,
    * Enables or disable the given actor
    */
   override fun setActorEnabled(actor: Int, enabled: Boolean) {
-    actors!![actor].handler = this
+    actors[actor].handler = this
     actors[actor].isEnabled = enabled
   }
 
@@ -123,7 +122,7 @@ class VItemTree(rootName: String?,
    * Returns the actor having the given number.
    */
   override fun getActor(number: Int): VActor {
-    return actors!![number]
+    return actors[number]
   }
 
   /**
@@ -135,13 +134,13 @@ class VItemTree(rootName: String?,
                           icon: String,
                           key: Int,
                           modifier: Int) {
-    actors!![number] = VActor(menu,
-                              MENU_LOCALIZATION_RESOURCE,
-                              item,
-                              MENU_LOCALIZATION_RESOURCE,
-                              icon,
-                              key,
-                              modifier)
+    actors[number] = VActor(menu,
+                            MENU_LOCALIZATION_RESOURCE,
+                            item,
+                            MENU_LOCALIZATION_RESOURCE,
+                            icon,
+                            key,
+                            modifier)
     actors[number].number= number
   }
 
@@ -186,7 +185,9 @@ class VItemTree(rootName: String?,
         itemTreeManager.save()
         unsetWaitInfo()
         isChanged = false
-        currentDisplay.setTree()
+        if (currentDisplay != null) {
+          currentDisplay.setTree();
+        }
       }
       else -> super.executeVoidTrigger(key)
     }
@@ -231,9 +232,6 @@ class VItemTree(rootName: String?,
     }
   }
 
-  // --------------------------------------------------------------------
-  // ACCESSORS
-  // --------------------------------------------------------------------
   override fun getType(): Int = Constants.MDL_ITEM_TREE
 
   override fun getDisplay(): UItemTree = super.getDisplay() as UItemTree
@@ -246,34 +244,32 @@ class VItemTree(rootName: String?,
 
   fun isMultiSelectionDefaultValue(): Boolean = selectionType == MULTI_SELECTION_DEFAULT_VALUE
 
-
-  val nextId: Int
-    get() {
-      maxId++
-      return maxId
-    }
+  fun getNextId(): Int {
+    maxId++
+    return maxId
+  }
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
   /**
    * Returns the root Item of this tree.
-   * @return The root node of this tree.
+   * @return the root Item of this tree.
    */
   var root: TreeNode? = null
     private set
   private var rootItem: RootItem? = null
-  private val actors: Array<VActor>? = null
+  private val actors= arrayOf<VActor>()
   private var maxId = 0
   private val rootName: String = rootName ?: "Items"
 
   /**
-   * Set model changed
+   * Returns true if the model is changed
    */
   var isChanged: Boolean = false
 
   /**
-   * Return the removed items list
+   * Return list contain removed items of this tree.
    */
   val removedItems: List<Item> = ArrayList()
 
@@ -289,7 +285,7 @@ class VItemTree(rootName: String?,
     createActor(CMD_DEFAULT, "Edit", "Default", "top", 0, 0)
     createActor(CMD_LOCALISE, "Edit", "Localise", "bold", 0, 0)
     createActor(CMD_SAVE, "Edit", "Save", "save", 0, 0)
-    setActors(actors!!)
+    setActors(actors)
     localizeActors(ApplicationContext.getDefaultLocale())
     createTree()
     if (isInsertMode) {

@@ -66,7 +66,7 @@ class VerifyConfiguration private constructor() {
                               + "@"
                               + hostname,
                       buffer.toString(),
-                      "kopi@kopiright.com")
+                      TODO())
     }
   }
 

@@ -86,14 +86,14 @@ class RootItem(id: Int, name: String) {
    * @param name The root item name.
    */
   private val rootItem: Item = Item(id,
-          0,
-          name,
-          null,
-          null,
-          false,
-          false,
-          null,
-          name)
+                                    0,
+                                    name,
+                                    null,
+                                    null,
+                                    false,
+                                    false,
+                                    null,
+                                    name)
 
   init {
     rootItem.level = 0
