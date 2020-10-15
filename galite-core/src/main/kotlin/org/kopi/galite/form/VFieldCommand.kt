@@ -18,23 +18,92 @@
 
 package org.kopi.galite.form
 
+import java.io.Serializable
+
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.VCommand
-import java.io.Serializable
+import org.kopi.galite.visual.VHelpGenerator
 
-class VFieldCommand(form: VForm, type: Int)
-  : VCommand(0xFFFF, null, null, type, "Standard $type"), ActionHandler, Serializable {
-  override fun executeVoidTrigger(VKT_Type: Int) {
-    TODO("Not yet implemented")
+class VFieldCommand(private val form: VForm,
+                    type: Int)
+  : VCommand(0xFFFF,
+             null,
+             null,
+             type,
+             "Standard $type"), ActionHandler, Serializable {
+
+  /**
+   * Returns the actor
+   */
+  override fun setEnabled(enabled: Boolean) {
+    if (actor == null) {
+      handler = this
+      actor = form.getDefaultActor(trigger)
+    }
+    actor!!.isEnabled = enabled
+    actor!!.number = trigger
+    actor!!.handler = handler
   }
 
-  override fun performAsyncAction(action: Action) {
-    TODO("Not yet implemented")
-  }
-
+  /**
+   * Performs the appropriate action asynchronously.
+   * You can use this method to perform any operation out of the UI event process
+   *
+   * @param    action        the action to perform.
+   * @param    block        This action should block the UI thread ?
+   */
+  @Deprecated("use method performAsyncAction", ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
-    TODO("Not yet implemented")
+    form.performAsyncAction(action)
   }
 
+  /**
+   * Performs the appropriate action asynchronously.
+   * You can use this method to perform any operation out of the UI event process
+   *
+   * @param    action        the action to perform.
+   */
+  override fun performAsyncAction(action: Action) {
+    form.performAsyncAction(action)
+  }
+
+  /**
+   * Performs a void trigger
+   *
+   * @param    type    the number of the trigger
+   */
+  override fun executeVoidTrigger(type: Int) {
+    when (type) {
+      VForm.CMD_AUTOFILL ->
+        form.getActiveBlock()!!.activeField!!.predefinedFill()
+      VForm.CMD_EDITITEM, VForm.CMD_EDITITEM_S ->
+        form.getActiveBlock()!!.activeField!!.loadItem(VForm.CMD_EDITITEM)
+      VForm.CMD_NEWITEM ->
+        form.getActiveBlock()!!.activeField!!.loadItem(VForm.CMD_EDITITEM)
+    }
+  }
+
+  override fun getKey(): Int {
+    if (actor == null) {
+      handler = this
+      actor = form.getDefaultActor(trigger)
+    }
+    return super.getKey()
+  }
+
+  // ----------------------------------------------------------------------
+  // HELP HANDLING
+  // ----------------------------------------------------------------------
+
+  override fun helpOnCommand(help: VHelpGenerator) {
+    if (actor == null) {
+      handler = this
+      actor = form.getDefaultActor(trigger)
+    }
+    if (actor == null) {
+      return
+    }
+    actor!!.helpOnCommand(help)
+  }
 }

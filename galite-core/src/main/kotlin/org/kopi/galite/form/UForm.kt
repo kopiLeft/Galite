@@ -20,13 +20,13 @@ package org.kopi.galite.form
 
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VException
 
 /**
  * `UForm` is the top-level interface that must be implemented
- * by all kopi forms. It is the visual component of the [VForm] model.
+ * by all forms. It is the visual component of the [VForm] model.
  */
 interface UForm : UWindow, FormListener {
+
   /**
    * Returns the block view of a given [UBlock] model.
    * @param block the [VBlock] model.
@@ -50,7 +50,7 @@ interface UForm : UWindow, FormListener {
    * Returns the Debug throwable info
    * @return The [Throwable] debug info.
    */
-  val runtimeDebugInfo: Throwable
+  fun getRuntimeDebugInfo(): Throwable
 
   /**
    * Show document preview

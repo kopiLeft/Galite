@@ -22,9 +22,22 @@ import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.VActor
 
 abstract class VBlock {
+
+  fun getForm(): VForm = TODO()
+
+  fun fetchLookup(fld: VField) {
+    TODO()
+  }
+
   var bufferSize = 0 // max number of buffered records
+
   // dynamic data
-  var activeRecord = 0 // current record
+  // current record
+  var activeRecord = 0
+
+  fun getMode(): Int = TODO()
+
+  interface OrderListener
 
   // ----------------------------------------------------------------------
   // HELP HANDLING

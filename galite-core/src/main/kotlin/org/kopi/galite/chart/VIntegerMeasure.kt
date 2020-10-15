@@ -15,7 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.chart
 
-class VIntegerMeasure {
+import org.kopi.galite.visual.VColor
+
+/**
+ * Represents an integer measure.
+ *
+ * @param ident The measure identifier.
+ * @param color The color to be used for the measure.
+ */
+class VIntegerMeasure(ident: String, color: VColor) : VMeasure(ident, color) {
+  override fun toNumber(value: Any?): Number? {
+    return when(value) {
+      null -> null
+      is Int -> value
+      is Number -> value.toInt()
+      else -> null
+    }
+  }
 }
