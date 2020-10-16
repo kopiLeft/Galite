@@ -36,10 +36,10 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param items the items list
  * @param isInsertMode enable Add and Remove items
  * @param selectionType item selection mode :
- *            1 : no edit
- *            2 : Single selection
- *            3 : Multi selection
- *            4 : Multi selection with default value
+ *        1 : no edit
+ *        2 : Single selection
+ *        3 : Multi selection
+ *        4 : Multi selection with default value
  * @param isLocalised if true, enable item localisation
  * @param itemTreeManager the tree save manager
  * @param isRemoveDescendantsAllowed if true, remove item descendants when removig item
@@ -253,8 +253,7 @@ class VItemTree(rootName: String?,
   // DATA MEMBERS
   // --------------------------------------------------------------------
   /**
-   * Returns the root Item of this tree.
-   * @return the root Item of this tree.
+   * The root Item of this tree.
    */
   var root: TreeNode? = null
     private set
@@ -269,7 +268,7 @@ class VItemTree(rootName: String?,
   var isChanged: Boolean = false
 
   /**
-   * Return list contain removed items of this tree.
+   * The removed items list.
    */
   val removedItems: List<Item> = ArrayList()
 

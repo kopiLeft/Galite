@@ -21,7 +21,7 @@ package org.kopi.galite.visual
 /**
  * Represents an VDefaultActor model.
  *
- * @param     code          the code of this default command
+ * @param code                the code of this default command
  * @param menuIdent           the qualified name of menu source file which this actor belongs to
  * @param menuSource          the menu source qualified name
  * @param actorIdent          the qualified name of actor's source file
