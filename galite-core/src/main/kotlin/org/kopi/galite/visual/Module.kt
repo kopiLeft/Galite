@@ -24,11 +24,23 @@ import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.l10n.ModuleLocalizer
 import org.kopi.galite.util.base.InconsistencyException
 
+/**
+ * Represents an Module.
+ *
+ * @param id                  the ident of the module
+ * @param parent              the ident of the parent of the current module
+ * @param shortname           the shortname
+ * @param source              the source
+ * @param objectName          the name of the object which are linked with the module
+ * @param access              the access of the current user
+ * @param priority            the priority
+ * @param icon                the mnemonic
+ */
 class Module(val id: Int,
              val parent: Int,
              private val shortname: String,
              private val source: String,
-             value: String?,
+             objectName: String?,
              var access: Int,
              private var priority: Int,
              icon: String?)
@@ -44,7 +56,7 @@ class Module(val id: Int,
    * @param    context        the context where to look for application
    */
   fun run(context: DBContext) {
-    startForm(context, value, description, getSmallIcon())
+    startForm(context, objectName, description, getSmallIcon())
   }
 
   /**
@@ -97,7 +109,7 @@ class Module(val id: Int,
    * this object is the name of the class to be executed when this module
    * is called.
    */
-  var value : String
+  var objectName : String
     private set
 
   /**
@@ -107,17 +119,20 @@ class Module(val id: Int,
     private set
 
   /**
-   * return the help stirng
+   * return the help
    */
   lateinit var help: String
     private set
 
+  /**
+   * return the mnemonic
+   */
   private var smallIcon: Image? = null
 
   companion object {
-    fun getExecutable(value: String): Executable {
+    fun getExecutable(objectName: String): Executable {
       return try {
-        Class.forName(value).newInstance() as Executable
+        Class.forName(objectName).newInstance() as Executable
       } catch (iae: IllegalAccessException) {
         throw VRuntimeException(iae)
       } catch (ie: InstantiationException) {
@@ -128,7 +143,7 @@ class Module(val id: Int,
     }
 
     fun startForm(ctxt: DBContext,
-                  value: String,
+                  objectName: String,
                   description: String,
                   icon: Image? = null): Executable? {
       return try {
@@ -136,7 +151,7 @@ class Module(val id: Int,
           System.gc()
           Thread.yield()
         }
-        val form: Executable = getExecutable(value)
+        val form: Executable = getExecutable(objectName)
 
         if (form is VWindow) {
           form.smallIcon = icon
@@ -166,13 +181,13 @@ class Module(val id: Int,
   }
 
   init {
-    this.value = value!!
+    this.objectName = objectName!!
     //!!! graf 2006.01.30: temporary work-around
     //!!! remove as soon as all modules have been
     //!!! renamed to "com.kopiright." at every
     //!!! customer installation.
-    if (this.value.startsWith("at.dms.")) {
-      this.value = "com.kopiright." + this.value.substring("at.dms.".length)
+    if (this.objectName.startsWith("at.dms.")) {
+      this.objectName = "com.kopiright." + this.objectName.substring("at.dms.".length)
     }
     //!!! graf 2006.01.30: end
     if (icon != null) {
