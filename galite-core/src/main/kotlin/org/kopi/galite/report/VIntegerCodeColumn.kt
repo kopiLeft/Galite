@@ -58,9 +58,7 @@ class VIntegerCodeColumn : VCodeColumn {
                   names) {
     this.codes = IntArray(codes.size)
     throw InconsistencyException()
-    //for (int i = 0; i < codes.length; i++) // !!! what about null value
-    //    this.codes[i] = codes[i].intValue();
-  }
+   }
 
   /**
    * Constructs a report column description
@@ -111,10 +109,10 @@ class VIntegerCodeColumn : VCodeColumn {
    */
   override fun getIndex(value : Any): Int {
     if (fastIndex != -1) {
-      return (value as Int).toInt() - fastIndex
+      return (value as Int) - fastIndex
     }
     for (i in codes.indices) {
-      if ((value as Int).toInt() == codes[i]) {
+      if ((value as Int) == codes[i]) {
         return i
       }
     }
@@ -124,9 +122,7 @@ class VIntegerCodeColumn : VCodeColumn {
   /**
    * Returns the width of cells in this column in characters
    */
-  override fun getPrintedWidth(): Double {
-    return width * 0.7
-  }
+  override fun getPrintedWidth(): Double = width * 0.7
 
   override fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatStringColumn(this, index)
@@ -137,20 +133,17 @@ class VIntegerCodeColumn : VCodeColumn {
    *
    * @param    object1    the first operand of the comparison
    * @param    object2    the second operand of the comparison
-   * @return    -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * @return              -1 if the first operand is smaller than the second
+   *           1 if the second operand if smaller than the first
+   *           0 if the two operands are equal
    */
   override fun compareTo(object1: Any, object2: Any): Int {
-    val v1 = (object1 as Int).toInt()
-    val v2 = (object2 as Int).toInt()
+    val v1 = (object1 as Int)
+    val v2 = (object2 as Int)
+
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
   private var fastIndex = -1 // if array = {fastIndex, fastIndex + 1, ...}
-  private lateinit var codes // array of internal representations
-          : IntArray
+  private lateinit var codes : IntArray // array of internal representations
 }

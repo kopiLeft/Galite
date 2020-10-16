@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
 import org.kopi.galite.visual.VActor
@@ -26,12 +27,17 @@ class VDefaultReportActor(menuIdent: String,
                           acceleratorKey: Int,
                           acceleratorModifier: Int)
       : VActor(menuIdent,
-              null,
+               null,
                actorIdent,
-              null,
-              null,
+               null,
+               null,
                acceleratorKey,
                acceleratorModifier) {
+
+  init {
+    this.iconName = iconName
+    localize()
+  }
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -42,10 +48,4 @@ class VDefaultReportActor(menuIdent: String,
     menuItem = VlibProperties.getString(actorIdent)
     help = VlibProperties.getString("$actorIdent-help")
   }
-
-  init {
-    this.iconName = iconName
-    localize()
-  }
 }
-

@@ -34,7 +34,7 @@ class VStringColumn(ident: String,
                     function: VCalculateColumn,
                     width: Int,
                     height: Int,
-                       format: VCellFormat)
+                    format: VCellFormat)
      : VReportColumn(ident,
                      options,
                      align,
@@ -47,15 +47,13 @@ class VStringColumn(ident: String,
    /**
    * Compare two objects.
    *
-   * @param    o1    the first operand of the comparison
-   * @param    o2    the second operand of the comparison
-   * @return    -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * @param    object1    the first operand of the comparison
+   * @param    object2    the second operand of the comparison
+   * @return         -1 if the first operand is smaller than the second
+   *           1 if the second operand if smaller than the first
+   *           0 if the two operands are equal
    */
-  override fun compareTo(o1: Any, o2: Any): Int {
-    return (o1 as String).compareTo((o2 as String?)!!)
-  }
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as String).compareTo((object2 as String))
 
   override fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatStringColumn(this, index)

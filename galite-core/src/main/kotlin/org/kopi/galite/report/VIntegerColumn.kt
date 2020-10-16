@@ -33,7 +33,7 @@ class VIntegerColumn(ident: String,
                      groups: Int,
                      function: VCalculateColumn,
                      width: Int,
-                     format: VCellFormat)
+                     format: VCellFormat?)
       : VReportColumn(ident,
                       options,
                       align,
@@ -46,24 +46,23 @@ class VIntegerColumn(ident: String,
   /**
    * Compare two objects.
    *
-   * @param    o1    the first operand of the comparison
-   * @param    o2    the second operand of the comparison
-   * @return    -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * @param    object1    the first operand of the comparison
+   * @param    object2    the second operand of the comparison
+   * @return              -1 if the first operand is smaller than the second
+   *           1 if the second operand if smaller than the first
+   *           0 if the two operands are equal
    */
-  override fun compareTo(o1: Any, o2: Any): Int {
-    val v1 = (o1 as Int).toInt()
-    val v2 = (o2 as Int).toInt()
+  override fun compareTo(object1: Any, object2: Any): Int {
+    val v1 = (object1 as Int)
+    val v2 = (object2 as Int)
+
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
   /**
    * Returns the width of cells in this column in characters
    */
-  override fun getPrintedWidth(): Double {
-    return width * 0.7
-  }
+  override fun getPrintedWidth(): Double = width * 0.7
 
   override fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatIntegerColumn(this, index)

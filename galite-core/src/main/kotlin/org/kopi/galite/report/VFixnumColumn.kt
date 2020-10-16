@@ -33,41 +33,40 @@ import org.kopi.galite.type.NotNullFixed
  * @param     maxScale        The maximum of scale
  * @param     format          The format of the cells
  */
-class VFixnumColumn(ident: String,
+class VFixnumColumn(ident: String?,
                     options: Int,
                     align: Int,
                     groups: Int,
-                    function: VCalculateColumn,
+                    function: VCalculateColumn?,
                     digits: Int,
                     maxScale: Int,
                     format: VCellFormat?)
-  : VReportColumn(ident,
-                  options,
-                  align,
-                  groups,
-                  function,
-                  VFixnumField.computeWidth(digits, maxScale, null, null),
-        1,
-        format ?: VFixedFormat(maxScale, true)) {
-  /**
+      : VReportColumn(ident,
+                      options,
+                      align,
+                      groups,
+                      function,
+                      VFixnumField.computeWidth(digits, maxScale, null, null),
+                      1,
+                      format ?: VFixedFormat(maxScale, true)) {
+      /**
    * Compare two objects.
    *
    * @param    object1    the first operand of the comparison
    * @param    object2    the second operand of the comparison
-   * @return    -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * @return              -1 if the first operand is smaller than the second
+   *           1 if the second operand if smaller than the first
+   *           0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int {
-    return (object1 as NotNullFixed).compareTo(object2 as NotNullFixed?)
-  }
+      override fun compareTo(object1: Any, object2: Any): Int =
+              (object1 as NotNullFixed).compareTo(object2 as NotNullFixed)
 
   /**
    * Returns the width of cells in this column in characters
    */
   override fun getPrintedWidth(): Double = width * 0.7
 
-  /*
+  /**
    * sets all column values to the same scale
    */
   private class VFixedFormat(private val maxScale: Int, private val exactScale: Boolean) : VCellFormat() {
@@ -77,42 +76,37 @@ class VFixnumColumn(ident: String,
         ""
       } else (value as? Int)?.toString()
               ?: if (value is NotNullFixed) {
-                if ((value as NotNullFixed).scale > maxScale || exactScale) (value as NotNullFixed).setScale(maxScale).toString() else value.toString()
+                if ((value).scale > maxScale || exactScale) (value).setScale(maxScale).toString() else value.toString()
               } else {
                 throw InconsistencyException("bad type for $value")
               }
     }
-
   }
 
   override fun formatColumn(exporter: PExport, index: Int) {
     exporter.formatFixedColumn(this, index)
   }
 
-  /*
+  /**
    * Sets display scale to maxScale
    * all values will be set to the same scale
    */
   fun setDisplayScale(scale: Int) {
-    format=VFixedFormat(scale, true)
+    format = VFixedFormat(scale, true)
     maxScale = scale
   }
 
-  /*
+  /**
    * Sets maxScale
    * all values with scale superior than maxScale will have
    * maxScale as scale, and the other values will keep their scale.
    */
   fun setMaxScale(scale: Int) {
-    format=VFixedFormat(scale, false)
+    format = VFixedFormat(scale, false)
     maxScale = scale
   }
 
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-  var formula: String? = null
-  var maxScale: Int=0
+  var formula = null
+  var maxScale = 0
     private set
-
 }
