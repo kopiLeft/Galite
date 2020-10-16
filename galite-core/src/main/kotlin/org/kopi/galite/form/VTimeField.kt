@@ -18,7 +18,7 @@
 
 package org.kopi.galite.form
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimeColumn
 import org.kopi.galite.type.NotNullTime

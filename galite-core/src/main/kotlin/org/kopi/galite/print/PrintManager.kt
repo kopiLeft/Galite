@@ -35,6 +35,6 @@ interface PrintManager {
             report: Printable,
             copies: Int,
             printer: Printer,
-            fax: String,
-            mail: String)
+            fax: String?,
+            mail: String?)
 }
