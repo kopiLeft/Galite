@@ -160,6 +160,15 @@ abstract class VBlock {
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
+
+  fun gotoNextField() {
+    TODO()
+  }
+
+  fun executeObjectTrigger(VKT_Type: Int?): Any = TODO()
+
+  fun isChart(): Boolean = TODO()
+
   open fun helpOnBlock(help: VHelpGenerator) {
     TODO()
   }
