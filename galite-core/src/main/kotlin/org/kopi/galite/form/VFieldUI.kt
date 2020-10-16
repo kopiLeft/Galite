@@ -177,18 +177,17 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
       if (localCommands != null) {
         for (i in localCommands.indices) {
           if (localCommands[i].isActive(getBlock().getMode())) {
-            var active: Boolean
-            if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS, getBlock().fields.size + getBlock().commands.size + i + 1)) {
+            val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS, getBlock().fields.size + getBlock().commands.size + i + 1)) {
               try {
-                active = (getBlock().callTrigger(VConstants.TRG_CMDACCESS, getBlock().fields.size + getBlock().commands.size + i + 1) as Boolean)
+                (getBlock().callTrigger(VConstants.TRG_CMDACCESS, getBlock().fields.size + getBlock().commands.size + i + 1) as Boolean)
               } catch (e: VException) {
                 // consider that the command is active of any error occurs
-                active = true
+                true
               }
             } else {
               // if no access trigger is associated with the command
               // we consider it as active command
-              active = true
+              true
             }
             if (active) {
               activeCommands.add(localCommands[i])
@@ -719,17 +718,13 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
       chartPos = pos.chartPos
     }
     val cmd = model.getCommand()
-    var i = 0
-    while (cmd != null && i < cmd.size) {
-      val commandText: String = cmd[i].getIdent()
-      if (commandText == "Increment") {
-        incrementCommand = cmd[i]
-      } else if (commandText == "Decrement") {
-        decrementCommand = cmd[i]
-      } else if (commandText == "Autofill" && !model.hasAutofill()) {
-        autofillCommand = cmd[i]
+    cmd?.forEach {
+      val commandText = it.getIdent()
+      when {
+        commandText == "Increment" -> incrementCommand = it
+        commandText == "Decrement" -> decrementCommand = it
+        commandText == "Autofill" && !model.hasAutofill() -> autofillCommand = it
       }
-      i++
     }
     hasAutofill = model.hasAutofill() && !hasAutofillCommand()
     commands = cmd
