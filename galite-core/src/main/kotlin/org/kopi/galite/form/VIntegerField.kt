@@ -65,9 +65,7 @@ class VIntegerField(width: Int,
   /**
    * return the name of this field
    */
-  override fun getTypeName(): String {
-    return VlibProperties.getString("Long")
-  }
+  override fun getTypeName(): String = VlibProperties.getString("Long")
 
   fun isNumeric(): Boolean = true
 
@@ -78,13 +76,11 @@ class VIntegerField(width: Int,
   /**
    * return a list column for list
    */
-  override fun getListColumn(): VListColumn {
-    return VIntegerColumn(getHeader(),
-            null,
-            align,
-            width,
-            getPriority() >= 0)
-  }
+  override fun getListColumn(): VListColumn = VIntegerColumn(getHeader(),
+                                                             null,
+                                                             align,
+                                                             width,
+                                                             getPriority() >= 0)
 
   /**
    * verify that text is valid (during typing)
@@ -127,6 +123,7 @@ class VIntegerField(width: Int,
       setInt(rec, v)
     }
   }
+
   // ----------------------------------------------------------------------
   // Interface bd/Triggers
   // ----------------------------------------------------------------------
@@ -144,16 +141,16 @@ class VIntegerField(width: Int,
   fun setInt(r: Int, v: Int?) {
     var v = v
     if (changedUI
-            || value[r] == null && v != null
-            || value[r] != null && value[r] != v) {
+        || value[r] == null && v != null
+        || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary
       trail(r)
       if (v == null) {
         value[r] = null
       } else {
-        if (v.toInt() < minval) {
+        if (v < minval) {
           v = minval
-        } else if (v.toInt() > maxval) {
+        } else if (v > maxval) {
           v = maxval
         }
         value[r] = v
@@ -166,10 +163,10 @@ class VIntegerField(width: Int,
 
   /**
    * Sets the field value of given record.
-   * Warning:	This method will become inaccessible to kopi users in next release
+   * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any) {
-    setInt(r, v as Int?)
+    setInt(r, v as? Int)
   }
 
   /**
@@ -201,7 +198,7 @@ class VIntegerField(width: Int,
   override fun getObjectImpl(r: Int): Any? = value[r]
 
   override fun toText(o: Any?): String {
-    return if (o == null) "" else (o as Int?).toString()
+    return o?.toString() ?: ""
   }
 
   override fun toObject(s: String): Any? {
@@ -245,9 +242,9 @@ class VIntegerField(width: Int,
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block.bufferSize
-            && (oldValue != null && value[t] == null
-                    || oldValue == null && value[t] != null
-                    || oldValue != null && oldValue != value[t])) {
+        && (oldValue != null && value[t] == null
+            || oldValue == null && value[t] != null
+            || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -277,7 +274,7 @@ class VIntegerField(width: Int,
         if (sum == null) {
           sum = 0
         }
-        sum = sum.toInt() + getInt(i)
+        sum += getInt(i)
       }
     }
     return sum
@@ -292,6 +289,7 @@ class VIntegerField(width: Int,
    */
   fun computeSum(exclude: Boolean, coalesceValue: Int): Int {
     val sum = computeSum(exclude)
+
     return sum ?: coalesceValue
   }
 
@@ -307,6 +305,7 @@ class VIntegerField(width: Int,
    */
   fun getCoalesceSum(coalesceValue: Int): Int {
     val sum = computeSum()
+
     return sum ?: coalesceValue
   }
 
@@ -324,6 +323,7 @@ class VIntegerField(width: Int,
    * */
   fun getSum(): Int {
     val sum = computeSum()
+
       return sum ?: 0
     }
 
@@ -334,23 +334,13 @@ class VIntegerField(width: Int,
   /**
    * Returns a string representation of a int value wrt the field type.
    */
-  protected fun formatInt(value: Int): String {
-    return value.toString()
-  }
+  protected fun formatInt(value: Int): String = value.toString()
 
   fun setCriticalMinValue(criticalMinValue: Int) {
     this.criticalMinValue = criticalMinValue
   }
 
   fun setCriticalMaxValue(criticalMaxValue: Int) {
-    this.criticalMaxValue = criticalMaxValue
-  }
-
-  fun setCriticalMinValue(criticalMinValue: Int?) {
-    this.criticalMinValue = criticalMinValue
-  }
-
-  fun setCriticalMaxValue(criticalMaxValue: Int?) {
     this.criticalMaxValue = criticalMaxValue
   }
 

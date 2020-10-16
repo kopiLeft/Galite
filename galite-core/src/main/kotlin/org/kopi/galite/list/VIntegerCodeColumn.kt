@@ -22,13 +22,12 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.util.base.InconsistencyException
 
-class VIntegerCodeColumn(
-        title: String,
-        column: String?,
-        names: Array<String>,
-        private val codes: Array<Int?>,
-        sortAscending: Boolean
-) : VCodeColumn(title, column, names, sortAscending) {
+class VIntegerCodeColumn(title: String,
+                         column: String?,
+                         names: Array<String>,
+                         private val codes: Array<Int?>,
+                         sortAscending: Boolean)
+  : VCodeColumn(title, column, names, sortAscending) {
   /**
    * Returns the index.of given object
    */

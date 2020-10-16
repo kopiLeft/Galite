@@ -47,6 +47,7 @@ class ViewBlockAlignment(var formView: UForm,
         return 0
       }
       val pos = if (isChart()) target else target * 2 + 1
+
       return view.getColumnPos(pos)
     }
     return 0

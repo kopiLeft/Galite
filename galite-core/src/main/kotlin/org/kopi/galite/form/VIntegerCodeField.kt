@@ -26,7 +26,6 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Utils
 import org.kopi.galite.util.base.InconsistencyException
 
-
 /**
  *
  * @param     ident           the identifier of the type in the source file
@@ -48,8 +47,8 @@ class VIntegerCodeField : VCodeField {
               names: Array<String>,
               codes: IntArray) : super(ident, source, names) {
     this.codes = arrayOfNulls(codes.size)
-    codes.indices.forEach() {
-      this.codes[it] = codes[it]
+    codes.forEachIndexed { element, i ->
+      this.codes[i] = element
     }
   }
   // ----------------------------------------------------------------------
@@ -81,22 +80,21 @@ class VIntegerCodeField : VCodeField {
       var i = 0
 
       while (code == -1 && i < codes.size) {
-        if (v.toInt() == codes[i]!!.toInt()) {
+        if (v == codes[i]) {
           code = i
         }
         i++
       }
       if (code == -1) {
-        throw InconsistencyException("bad code value " + v + "field " + name)
+        throw InconsistencyException("bad code value $v field $name")
       }
-
       setCode(r, code)
     }
   }
 
   /**
    * Sets the field value of given record.
-   * Warning:	This method will become inaccessible to kopi users in next release
+   * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any) {
     setInt(r, v as Int)
@@ -147,15 +145,14 @@ class VIntegerCodeField : VCodeField {
     var i = 0
 
     while (code == -1 && i < codes.size) {
-      if (value == codes[i]!!.toInt()) {
+      if (value == codes[i]) {
         code = i
       }
       i++
     }
     if (code == -1) {
-      throw InconsistencyException("bad code value " + value + "field " + name)
+      throw InconsistencyException("bad code value $value field $name")
     }
-
     return formatCode(code)
   }
 
@@ -164,6 +161,5 @@ class VIntegerCodeField : VCodeField {
   // ----------------------------------------------------------------------
 
   // dynamic data
-  // code array
-  private val codes: Array<Int?>
+  private val codes: Array<Int?>    // code array
 }
