@@ -16,36 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.type
 
-import org.kopi.galite.base.Image
-
-abstract class ImageHandler {
-  //------------------------------------------------------------------
-  // ABSTRACT METHODS
-  //------------------------------------------------------------------
+/**
+ * This class represents the week types
+ */
+class NotNullWeek : Week {
   /**
-   * Returns the [Image] having the `image` name.
-   * @param image The image name.
-   * @return The [Image] having the `image` name.
+   * Constructs a Week with a year and a week in this year.
    */
-  abstract fun getImage(image: String): Image
+  constructor(year: Int, week: Int) : super(year, week)
 
   /**
-   * Returns the [Image] having the `image` content.
-   * @param image The image content.
-   * @return The [Image] having the `image` content.
+   * Constructs a Week from a Date.
    */
-  abstract fun getImage(image: ByteArray): Image
-
-  /**
-   * Returns the URL of a given image name.
-   * @param image The image name.
-   * @return The URL of the image.
-   */
-  abstract fun getURL(image: String): String
+  constructor(date: Date) : super(date)
 
   companion object {
-    lateinit var imageHandler: ImageHandler
+    fun castToNotNull(value: Week): NotNullWeek {
+      return value as NotNullWeek
+    }
   }
 }

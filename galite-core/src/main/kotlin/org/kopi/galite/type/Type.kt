@@ -16,44 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.type
 
-import org.kopi.galite.util.PrintJob
-import org.kopi.galite.visual.UWindow
+import java.util.Locale
 
 /**
- * `UForm` is the top-level interface that must be implemented
- * by all forms. It is the visual component of the [VForm] model.
+ * This class is the super-class for types
  */
-interface UForm : UWindow, FormListener {
+abstract class Type : Comparable<Any?> {
+  /**
+   * Compares two objects
+   */
+  abstract override fun equals(other: Any?): Boolean
 
   /**
-   * Returns the block view of a given [UBlock] model.
-   * @param block the [VBlock] model.
-   * @return The [UBlock] view.
+   * Format the object depending on the current language
    */
-  fun getBlockView(block: VBlock): UBlock
+  override fun toString(): String = toString(Locale.getDefault())
 
   /**
-   * Returns the print job of the form view.
-   * @return The [PrintJob] of this `UForm`
-   * @throws VException operation may fail
+   * Format the object depending on the current language
+   * @param    locale    the current language
    */
-  fun printForm(): PrintJob
+  abstract fun toString(locale: Locale): String
 
   /**
-   * Prepares the snapshot.
+   * Represents the value in sql
    */
-  fun printSnapshot()
-
-  /**
-   * Returns the Debug throwable info
-   * @return The [Throwable] debug info.
-   */
-  fun getRuntimeDebugInfo(): Throwable
-
-  /**
-   * Show document preview
-   */
-  fun launchDocumentPreview(file: String)
+  abstract fun toSql(): String
 }

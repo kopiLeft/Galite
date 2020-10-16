@@ -16,25 +16,47 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.print
+package org.kopi.galite.db
 
-import org.kopi.galite.util.Printer
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.type.NotNullDate
 
-interface PrintManager {
-  /**
-   * Handle printing
-   * @param    parent    the form that initiate the printing process
-   * @param    report    the report to print
-   * @param     copies  the number of copies to print
-   * @param    printer    an optional default printer
-   * @param    fax    an optional default fax number
-   * @param    mail    an optional default mail address
-   */
-  fun print(parent: VWindow,
-            report: Printable,
-            copies: Int,
-            printer: Printer,
-            fax: String?,
-            mail: String?)
+class Query(conn: Connection) {
+
+  fun addString(value: String?) {
+    TODO()
+  }
+
+  fun next(): Boolean {
+    TODO()
+  }
+
+  fun getString(pos: Int): String {
+    TODO()
+  }
+
+  fun addInt(value: Int) {
+    TODO()
+  }
+
+  fun run(format: String?): Int = TODO()
+
+  fun delete(format: String?): Int= TODO()
+
+  fun getInt(pos: Int): Int = TODO()
+
+  fun close() {
+    TODO()
+  }
+
+  fun open(format: String) {
+    TODO()
+  }
+
+  fun isNull(column: Int): Boolean = TODO()
+
+  fun getDate(pos: Int): NotNullDate = TODO()
+
+  fun getBoolean(column: Int): Boolean = TODO()
+
+  fun getObject(pos:Int):Any =TODO()
 }

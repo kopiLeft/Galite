@@ -15,7 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.chart
 
-class VStringDimension {
+/**
+ * Represents a string chart column.
+ *
+ * @param ident The column identifier.
+ * @param format The dimension format ?
+ */
+class VStringDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // --------------------------------------------------------------------
+  override fun toString(value: Any?): String {
+    return value?.toString() ?: CConstants.EMPTY_TEXT
+  }
 }

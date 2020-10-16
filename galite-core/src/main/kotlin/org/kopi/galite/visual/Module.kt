@@ -59,9 +59,6 @@ class Module(val id: Int,
     startForm(context, objectName, description, getSmallIcon())
   }
 
-  /**
-   *
-   */
   override fun toString(): String = shortname
 
   // ---------------------------------------------------------------------
@@ -164,10 +161,12 @@ class Module(val id: Int,
         throw v
       } catch (t: Throwable) {
         ApplicationContext.reportTrouble("Form loading",
-                                         "Module.startForm(DBContext ctxt, String object, String description, ImageIcon icon)",
-                                         t.message!!,
+                                         "Module.startForm(DBContext ctxt, " +
+                                                 "String object, String description, ImageIcon icon)",
+                                         t.message,
                                          t)
-        ApplicationContext.displayError(ApplicationContext.getMenu().getDisplay(), MessageCode.getMessage("VIS-00041"))
+        ApplicationContext.displayError(ApplicationContext.getMenu().getDisplay(),
+                MessageCode.getMessage("VIS-00041"))
         null
       }
     }
@@ -182,17 +181,9 @@ class Module(val id: Int,
 
   init {
     this.objectName = objectName!!
-    //!!! graf 2006.01.30: temporary work-around
-    //!!! remove as soon as all modules have been
-    //!!! renamed to "com.kopiright." at every
-    //!!! customer installation.
-    if (this.objectName.startsWith("at.dms.")) {
-      this.objectName = "com.kopiright." + this.objectName.substring("at.dms.".length)
-    }
-    //!!! graf 2006.01.30: end
     if (icon != null) {
-      this.icon = ImageHandler.imageHandler!!.getImage(icon)
-      smallIcon = ImageHandler.imageHandler!!.getImage(icon)
+      this.icon = ImageHandler.imageHandler.getImage(icon)
+      smallIcon = ImageHandler.imageHandler.getImage(icon)
       if (smallIcon == null) {
         smallIcon = smallIcon!!.getScaledInstance(16, 16, Image.SCALE_SMOOTH)
       }

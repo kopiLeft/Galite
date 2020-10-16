@@ -18,10 +18,9 @@
 
 package org.kopi.galite.visual
 
+import org.kopi.galite.l10n.LocalizationManager
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
-
-import org.kopi.galite.l10n.LocalizationManager
 
 /**
  * Present a root menu from its ID and name.
@@ -56,7 +55,7 @@ class RootMenu(id: Int, name: String) {
     if (root.access == Module.ACS_TRUE || isSuperUser) {
       force = true
     }
-    return if (root.value != null) {
+    return if (root.objectName != null) {
       if (force) DefaultMutableTreeNode(root) else null
     } else {
       var self: DefaultMutableTreeNode? = null
@@ -97,8 +96,9 @@ class RootMenu(id: Int, name: String) {
    * Returns true if this root menu does not contain any module.
    * @return True if this root menu does not contain any module.
    */
-  val isEmpty: Boolean
-    get() = this.root == null
+  open fun isEmpty(): Boolean {
+    return root == null
+  }
 
   private val rootModule: Module
 
@@ -114,11 +114,11 @@ class RootMenu(id: Int, name: String) {
 
   init {
     rootModule = Module(id,
-                        0,
-                        name,
-                        ROOT_MENU_LOCALIZATION_RESOURCE,
-                        null,
-                        Module.ACS_PARENT, Int.MAX_VALUE,
-                        null)
+            0,
+            name,
+            ROOT_MENU_LOCALIZATION_RESOURCE,
+            null,
+            Module.ACS_PARENT, Int.MAX_VALUE,
+            null)
   }
 }

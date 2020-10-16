@@ -16,25 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.print
+package org.kopi.galite.type
 
-import org.kopi.galite.util.Printer
-import org.kopi.galite.visual.VWindow
+import java.util.Calendar
 
-interface PrintManager {
+/**
+ * This class represents the time types
+ */
+class NotNullTime : Time {
+  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
+  constructor(hours: Int, minutes: Int) : super(hours, minutes)
+  constructor(time: java.sql.Time) : super(time)
+  constructor(image: String) : super(image)
+  constructor(calendar: Calendar) : super(calendar)
+
   /**
-   * Handle printing
-   * @param    parent    the form that initiate the printing process
-   * @param    report    the report to print
-   * @param     copies  the number of copies to print
-   * @param    printer    an optional default printer
-   * @param    fax    an optional default fax number
-   * @param    mail    an optional default mail address
+   * Constructs a time from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
    */
-  fun print(parent: VWindow,
-            report: Printable,
-            copies: Int,
-            printer: Printer,
-            fax: String?,
-            mail: String?)
+  constructor(scalar: Int) : super(scalar)
+
+  companion object {
+    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
+  }
 }

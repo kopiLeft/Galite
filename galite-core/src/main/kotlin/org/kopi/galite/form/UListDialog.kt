@@ -15,6 +15,31 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-interface UListDialog 
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.visual.UWindow
+
+/**
+ * `UListDialog` is the top level interface for all list dialogs ui components.
+ */
+interface UListDialog : UComponent {
+
+  /**
+   * Shows The `UListDialog` with a window and a field reference.
+   * @param window The caller [UWindow]
+   * @param field The [UField] reference.
+   * @param showSingleEntry Show the `UListDialog` when it contains only a single entry ?
+   * @return The selected element id.
+   */
+  fun selectFromDialog(window: UWindow, field: UField, showSingleEntry: Boolean): Int
+
+  /**
+   * Shows The `UListDialog` with a window reference.
+   * @param window The reference [UWindow].
+   * @param showSingleEntry Show the `UListDialog` when it contains only a single entry ?
+   * @return The selected element id.
+   */
+  fun selectFromDialog(window: UWindow, showSingleEntry: Boolean): Int
+}

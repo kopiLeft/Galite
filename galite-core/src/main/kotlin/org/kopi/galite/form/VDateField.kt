@@ -22,11 +22,12 @@ import java.util.StringTokenizer
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -121,12 +122,12 @@ class VDateField : VField(10, 1) {
     when {
       month == 0 -> {
         val now: NotNullDate = Date.now()
-        month = now.getMonth()
-        year = now.getYear()
+        month = now.month
+        year = now.year
       }
       year == -2 -> {
         val now: NotNullDate = Date.now()
-        year = now.getYear()
+        year = now.year
       }
       year < 50 -> {
         year += 2000
@@ -244,12 +245,12 @@ class VDateField : VField(10, 1) {
     when {
       month == 0 -> {
         val now: NotNullDate = Date.now()
-        month = now.getMonth()
-        year = now.getYear()
+        month = now.month
+        year = now.year
       }
       year == -2 -> {
         val now: NotNullDate = Date.now()
-        year = now.getYear()
+        year = now.year
       }
       year < 50 -> {
         year += 2000
@@ -285,7 +286,7 @@ class VDateField : VField(10, 1) {
    */
   override fun getSqlImpl(r: Int): String {
     return if (value[r] == null) "NULL"
-    else org.kopi.galite.type.Utils.toSql(value[r]!!)
+    else Utils.toSql(value[r]!!)
   }
 
   /**
