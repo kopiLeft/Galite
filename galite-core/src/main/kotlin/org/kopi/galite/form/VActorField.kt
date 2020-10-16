@@ -56,7 +56,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun getObjectImpl(r: Int): Any? = null
 
-  override fun toText(o: Any): String? = null
+  override fun toText(o: Any?): String? = null
 
   override fun toObject(s: String): Any? = null
 

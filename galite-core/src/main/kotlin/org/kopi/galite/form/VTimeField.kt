@@ -18,8 +18,6 @@
 
 package org.kopi.galite.form
 
-import kotlin.reflect.KClass
-
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimeColumn
@@ -29,6 +27,7 @@ import org.kopi.galite.type.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
+import kotlin.reflect.KClass
 
 /**
  * !!! NEED COMMENTS
@@ -61,7 +60,7 @@ class VTimeField : VField(5, 1) {
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls<Time>(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block.bufferSize)
   }
 
   fun isNumeric(): Boolean = true
@@ -103,6 +102,7 @@ class VTimeField : VField(5, 1) {
       val buffer = o + '\u0000'
       var bp = 0
       var state = 1
+
       while (state > 0) {
         when (state) {
           1 -> when {
@@ -110,7 +110,7 @@ class VTimeField : VField(5, 1) {
               hours = buffer[bp] - '0'
               state = 2
             }
-            buffer[bp] == '\u0000' -> {
+            buffer[bp] == '\u0000'-> {
               state = 0
             }
             else -> {
@@ -247,7 +247,7 @@ class VTimeField : VField(5, 1) {
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String? = if (o == null) "" else (o as Time).toString()
+  override fun toText(o: Any?): String = if (o == null) "" else (o as Time).toString()
 
   override fun toObject(s: String): Any? {
     return if (s == "") {
@@ -258,9 +258,10 @@ class VTimeField : VField(5, 1) {
       val buffer = s + '\u0000'
       var bp = 0
       var state = 1
+
       while (state > 0) {
         when (state) {
-          1 -> when {
+          1 -> when { /* The first hours' digit */
             buffer[bp] in '0'..'9' -> {
               hours = buffer[bp] - '0'
               state = 2
@@ -272,7 +273,7 @@ class VTimeField : VField(5, 1) {
               state = -1
             }
           }
-          2 -> when {
+          2 -> when { /* The second hours' digit */
             buffer[bp] in '0'..'9' -> {
               hours = 10 * hours + (buffer[bp] - '0')
               state = 3
@@ -287,7 +288,7 @@ class VTimeField : VField(5, 1) {
               state = -1
             }
           }
-          3 -> state = when {
+          3 -> state = when { /* The point between hours and minutes */
             buffer[bp] == ':' -> {
               4
             }
@@ -298,7 +299,7 @@ class VTimeField : VField(5, 1) {
               -1
             }
           }
-          4 -> when {
+          4 -> when {  /* The first minutes' digit */
             buffer[bp] in '0'..'9' ->{
               minutes = buffer[bp] - '0'
               state = 5
@@ -310,13 +311,13 @@ class VTimeField : VField(5, 1) {
               state = -1
             }
           }
-          5 -> if (buffer[bp] in '0'..'9') {
+          5 -> if (buffer[bp] in '0'..'9') { /* The second minutes' digit */
             minutes = 10 * minutes + (buffer[bp] - '0')
             state = 6
           } else {
             state = -1
           }
-          6 -> state = if (buffer[bp] == '\u0000') {
+          6 -> state = if (buffer[bp] == '\u0000') { /* The end */
             0
           } else {
             -1
@@ -352,7 +353,7 @@ class VTimeField : VField(5, 1) {
    * Copies the value of a record to another
    */
   override fun copyRecord(f: Int, t: Int) {
-    val oldValue: Time? = value[t]
+    val oldValue = value[t]
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
@@ -373,7 +374,7 @@ class VTimeField : VField(5, 1) {
   // PRIVATE METHODS
   // ----------------------------------------------------------------------
 
-  private fun isTime(h: Int, m: Int): Boolean = h in 0..23 && m >= 0 && m < 60
+  private fun isTime(h: Int, m: Int): Boolean = h in 0..23 && m in 0..59
 
   private fun isTimeChar(c: Char): Boolean = c in '0'..'9' || c == ':'
 
@@ -391,6 +392,7 @@ class VTimeField : VField(5, 1) {
    */
   override fun enumerateValue(desc: Boolean) {
     val record = block.activeRecord
+
     when {
       list != null -> {
         super.enumerateValue(desc)
@@ -411,8 +413,5 @@ class VTimeField : VField(5, 1) {
     }
   }
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
   private lateinit var value: Array<Time?>
 }
