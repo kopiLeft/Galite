@@ -19,20 +19,23 @@
 package org.kopi.galite.base
 
 import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.NotNullFixed
+import java.sql.Blob
+import java.sql.SQLException
 
 class Query {
 
-  fun isNull(column: Int): Boolean {
-    TODO()
-  }
+  fun isNull(column: Int): Boolean = TODO()
 
-  fun getDate(pos: Int): NotNullDate {
-    TODO()
-  }
+  fun getDate(pos: Int): NotNullDate = TODO()
 
-  fun getBoolean(column: Int): Boolean {
-    TODO()
-  }
+  fun getBoolean(column: Int): Boolean = TODO()
 
-  fun getObject(pos:Int):Any =TODO()
+  fun getObject(pos: Int): Any = TODO()
+
+  fun getFixed(pos: Int): NotNullFixed = TODO()
+
+  fun getByteArray(pos: Int): ByteArray = TODO()
+
+  fun getBlob(pos: Int): Blob? = TODO()
 }

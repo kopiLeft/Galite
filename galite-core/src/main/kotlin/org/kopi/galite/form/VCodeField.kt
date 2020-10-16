@@ -285,7 +285,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the field value of given record as a bigdecimal value.
    */
-  fun getFixed(r: Int): org.kopi.galite.type.Fixed {
+  open fun getFixed(r: Int): org.kopi.galite.type.Fixed {
     throw InconsistencyException()
   }
 
@@ -371,7 +371,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  protected fun formatFixed(value: org.kopi.galite.type.Fixed): String {
+  protected open fun formatFixed(value: org.kopi.galite.type.Fixed): String {
     throw InconsistencyException()
   }
 

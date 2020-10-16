@@ -17,4 +17,163 @@
  */
 package org.kopi.galite.form
 
-class VFixnumCodeField 
+import org.kopi.galite.base.Query
+import org.kopi.galite.list.VFixnumCodeColumn
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.util.base.InconsistencyException
+import java.sql.SQLException
+import kotlin.reflect.KClass
+
+/**
+ * Constructor
+ *
+ * @param     ident           the identifier of the type in the source file
+ * @param     source          the qualified name of the source file defining the list
+ */
+open class VFixnumCodeField(ident: String,
+                       source: String,
+                       names: Array<String>,
+                       private val codes: Array<Fixed>) : VCodeField(ident, source, names) {
+
+  /**
+   * return a list column for list
+   */
+  override fun getListColumn(): VListColumn {
+    return VFixnumCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
+  }
+
+  /**
+   * Returns the array of codes.
+   */
+  override fun getCodes(): Array<Any> = codes as Array<Any>
+
+  // ----------------------------------------------------------------------
+  // FIELD VALUE ACCESS
+  // ----------------------------------------------------------------------
+  /**
+   * Returns the sum of the field values of all records.
+   *
+   * @param     exclude         exclude the current record
+   * @return    the sum of the field values, null if none is filled.
+   */
+  fun computeSum(exclude: Boolean): Fixed? {
+    var sum: Fixed? = null
+
+    for (i in 0 until block.bufferSize) {
+      if (block.isRecordFilled(i)
+              && !isNull(i)
+              && (!exclude || i != block.activeRecord)) {
+        if (sum == null) {
+          sum = NotNullFixed(0.0)
+        }
+        sum = sum.add(getFixed(i) as NotNullFixed)
+      }
+    }
+    return sum
+  }
+
+  /**
+   * Returns the sum of the field values of all records.
+   *
+   * @return    the sum of the field values, null if none is filled.
+   */
+  fun computeSum(): Fixed? = computeSum(false)
+
+  /**
+   * Returns the sum of every filled records in block.
+   */
+  open fun getSum(): NotNullFixed? {
+    val sum: Fixed? = computeSum()
+
+    return if (sum == null) NotNullFixed(0.0) else sum as NotNullFixed?
+  }
+
+  /**
+   * Sets the field value of given record to a fixed value.
+   */
+  fun setFixed(r: Int, v: Fixed?) {
+    if (v == null) {
+      setCode(r, -1)
+    } else {
+      var code = -1 // cannot be null
+      var i = 0
+      while (code == -1 && i < codes.size) {
+        if (v == codes[i]) {
+          code = i
+        }
+        i++
+      }
+      if (code == -1) {
+        throw InconsistencyException("bad code value $v field $name")
+      }
+      setCode(r, code)
+    }
+  }
+
+  /**
+   * Sets the field value of given record.
+   * Warning:	This method will become inaccessible to users in next release
+   */
+  override fun setObject(r: Int, v: Any) {
+    setFixed(r, v as Fixed?)
+  }
+
+  /**
+   * Returns the specified tuple column as object of correct type for the field.
+   * @param    query        the query holding the tuple
+   * @param    column        the index of the column in the tuple
+   */
+  override fun retrieveQuery(query: Query, column: Int): Any? {
+    return if (query.isNull(column)) {
+      null
+    } else {
+      query.getFixed(column)
+    }
+  }
+
+  /**
+   * Returns the field value of given record as a int value.
+   */
+  override fun getFixed(r: Int): Fixed = getObject(r) as Fixed
+
+  /**
+   * Returns the field value of the current record as an object
+   */
+  override fun getObjectImpl(r: Int): Any? = if (value[r] == -1) null else codes[value[r]]
+
+  /**
+   * Returns the SQL representation of field value of given record.
+   */
+  override fun getSqlImpl(r: Int): String = if (value[r] == -1) "NULL" else codes[value[r]].toSql()
+
+  /**
+   * Returns the data type handled by this field.
+   */
+  override fun getDataType(): KClass<*> = Fixed::class
+
+  /*
+   * ----------------------------------------------------------------------
+   * FORMATTING VALUES WRT FIELD TYPE
+   * ----------------------------------------------------------------------
+   */
+  /**
+   * Returns a string representation of a bigdecimal value wrt the field type.
+   */
+  override fun formatFixed(value: Fixed): String {
+    var code = -1 // cannot be null
+    var i = 0
+
+    while (code == -1 && i < codes.size) {
+      if (value == codes[i]) {
+        code = i
+      }
+      i++
+    }
+    if (code == -1) {
+      throw InconsistencyException("bad code value $value field $name")
+    }
+    return formatCode(code)
+  }
+}

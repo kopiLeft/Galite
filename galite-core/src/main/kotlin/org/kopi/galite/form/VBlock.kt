@@ -18,11 +18,24 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.db.DBContext
+
 abstract class VBlock {
 
   fun getForm(): VForm = TODO()
 
   fun fetchLookup(fld: VField) {
+    TODO()
+  }
+
+  /**
+   * Returns true iff the record is filled
+   */
+  open fun isRecordFilled(rec: Int): Boolean {
+    TODO()
+  }
+
+  open fun getDBContext(): DBContext {
     TODO()
   }
 
