@@ -69,7 +69,28 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   open fun enumerateValue(desc: Boolean) {
     TODO()
   }
+  fun getAccess(i: Int): Int {
+    TODO()
+  }
 
+  fun hasAction(): Boolean {
+    TODO()
+  }
+  open fun callTrigger(event: Int): Any? {
+    TODO()
+  }
+  internal fun selectFromList(gotoNextField: Boolean) {
+    TODO()
+  }
+  open fun hasNextPreviousEntry(): Boolean {
+    return list != null
+  }
+  open fun isSortable(): Boolean {
+    TODO()
+  }
+  fun isInternal(): Boolean {
+    TODO()
+  }
   /**
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
@@ -224,7 +245,13 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   open fun helpOnField(help: VHelpGenerator) {
     TODO()
   }
+  fun noChart(): Boolean {
+    TODO()
+  }
 
+  fun noDetail(): Boolean {
+    TODO()
+  }
   fun getSearchCondition(): String? = TODO()
 
   fun hasFocus(): Boolean = TODO()
@@ -235,6 +262,29 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
      TODO()
    }
 
+  // ----------------------------------------------------------------------
+  // LISTENER
+  // ----------------------------------------------------------------------
+  open fun addFieldListener(fl: FieldListener?) {
+    TODO()
+  }
+
+  open fun removeFieldListener(fl: FieldListener?) {
+    TODO()
+  }
+
+  open fun addFieldChangeListener(fl: FieldChangeListener?) {
+    TODO()
+  }
+
+  val position: VPosition? = null
+
+  open fun getToolTip(): String {
+    TODO()
+  }
+  open fun getCommand(): Array<VCommand>? {
+    TODO()
+  }
   companion object {
     const val MDL_FLD_COLOR = 1
     const val MDL_FLD_IMAGE = 2
@@ -255,15 +305,15 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           = 0
   val name // field name (for dumps)
           : String? = null
-  val label // field label
-          : String? = null
+  lateinit var label
+          : String // field label
   private val options // options
           = 0
   private val help // help text
           : String? = null
   private val index // The position in parent field array
           = 0
-  private val align // field alignment
+  val align // field alignment
           = 0
   private val posInArray // position in array of fields
           = 0
@@ -293,11 +343,11 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           : IntArray = TODO()
 
   // ####
-  private val fieldListener: EventListenerList? = null
+  private var fieldListener: EventListenerList? = null
 
   // if there is only the model and no gui
   // all the job use less memory and are faster
-  private val hasListener = false
+  private var hasListener = false
 
   private val pos: VPosition? = null
   private val cmd: Array<VCommand>

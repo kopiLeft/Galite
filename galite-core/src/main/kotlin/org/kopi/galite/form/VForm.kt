@@ -30,6 +30,13 @@ abstract class VForm : VConstants, VWindow() {
   fun isChanged(): Boolean = TODO()
 
   fun getBlock(i: Int): VBlock = TODO()
+  open fun gotoBlock(target: VBlock) {
+    TODO()
+  }
+  val cmdAutofill = VFieldCommand(this, CMD_AUTOFILL)
+  val cmdEditItem_S = VFieldCommand(this, CMD_EDITITEM_S)
+  val cmdEditItem = VFieldCommand(this, CMD_EDITITEM)
+  val cmdNewItem = VFieldCommand(this, CMD_NEWITEM)
 
   companion object {
     const val CMD_NEWITEM = -2

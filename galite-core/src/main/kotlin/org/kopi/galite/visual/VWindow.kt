@@ -174,7 +174,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     }
   }
 
-  fun error(message: String) {
+  fun error(message: String?) {
     var send = false
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {

@@ -34,7 +34,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
    * Returns the row controller field model.
    * @return The row controller field model.
    */
-  fun getModel(): VField = rowController.getModel()
+  fun getModel(): VField = rowController.model
 
   //-----------------------------------------------------------------------
   // FIELDHANDLER IMPLEMENTATION
@@ -74,7 +74,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     }
   }
 
-  override fun getCurrentDisplay(): UField? = rowController.getDisplay()
+  override fun getCurrentDisplay(): UField? = rowController.display
 
   override fun fieldError(message: String) {
     rowController.displayFieldError(message)

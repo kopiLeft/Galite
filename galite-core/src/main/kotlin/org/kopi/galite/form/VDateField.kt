@@ -374,7 +374,7 @@ class VDateField : VField(10, 1) {
   /**
    * return true if this field implements "enumerateValue"
    */
-  fun hasNextPreviousEntry(): Boolean = true
+  override fun hasNextPreviousEntry(): Boolean = true
 
   /**
    * Checks that field value exists in list

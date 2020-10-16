@@ -207,7 +207,7 @@ abstract class VCodeField(val type: String,
   /**
    * return true if this field implements "enumerateValue"
    */
-  fun hasNextPreviousEntry(): Boolean = true
+  override fun hasNextPreviousEntry(): Boolean = true
 
   /**
    * Checks that field value exists in list

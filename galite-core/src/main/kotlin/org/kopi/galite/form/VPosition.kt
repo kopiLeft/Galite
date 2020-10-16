@@ -17,4 +17,11 @@
  */
 package org.kopi.galite.form
 
-class VPosition 
+import java.io.Serializable
+
+class VPosition(val line: Int,
+                val lineEnd: Int,
+                val column: Int,
+                val columnEnd: Int = -1,
+                val chartPos: Int = -1)
+  : VConstants, Serializable
