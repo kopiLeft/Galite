@@ -16,13 +16,47 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.type
+package org.kopi.galite.db
 
-class Utils {
-  companion object {
-    fun trimString(input: String): String = TODO()
-    fun trailString(input: String): String = TODO()
-    fun toSql(date: Date): String = TODO()
-    fun toSql(d: Int?): String = TODO()
+import org.kopi.galite.type.NotNullDate
+
+class Query(conn: Connection) {
+
+  fun addString(value: String?) {
+    TODO()
   }
+
+  fun next(): Boolean {
+    TODO()
+  }
+
+  fun getString(pos: Int): String {
+    TODO()
+  }
+
+  fun addInt(value: Int) {
+    TODO()
+  }
+
+  fun run(format: String?): Int = TODO()
+
+  fun delete(format: String?): Int= TODO()
+
+  fun getInt(pos: Int): Int = TODO()
+
+  fun close() {
+    TODO()
+  }
+
+  fun open(format: String) {
+    TODO()
+  }
+
+  fun isNull(column: Int): Boolean = TODO()
+
+  fun getDate(pos: Int): NotNullDate = TODO()
+
+  fun getBoolean(column: Int): Boolean = TODO()
+
+  fun getObject(pos:Int):Any =TODO()
 }

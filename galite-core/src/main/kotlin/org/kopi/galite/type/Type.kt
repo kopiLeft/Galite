@@ -18,11 +18,30 @@
 
 package org.kopi.galite.type
 
-class Utils {
-  companion object {
-    fun trimString(input: String): String = TODO()
-    fun trailString(input: String): String = TODO()
-    fun toSql(date: Date): String = TODO()
-    fun toSql(d: Int?): String = TODO()
-  }
+import java.util.Locale
+
+/**
+ * This class is the super-class for types
+ */
+abstract class Type : Comparable<Any?> {
+  /**
+   * Compares two objects
+   */
+  abstract override fun equals(other: Any?): Boolean
+
+  /**
+   * Format the object depending on the current language
+   */
+  override fun toString(): String = toString(Locale.getDefault())
+
+  /**
+   * Format the object depending on the current language
+   * @param    locale    the current language
+   */
+  abstract fun toString(locale: Locale): String
+
+  /**
+   * Represents the value in sql
+   */
+  abstract fun toSql(): String
 }

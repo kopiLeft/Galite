@@ -40,7 +40,7 @@ class ViewBlockAlignment(var formView: UForm,
 
     x-- // we want to align middle
     target = align.getTargetAt(x)
-    val view: UBlock? = formView.getBlockView(align.getBlock())
+    val view: UBlock? = formView.getBlockView(align.block!!)
 
     if (target != -1) {
       if (view == null) {
@@ -57,7 +57,7 @@ class ViewBlockAlignment(var formView: UForm,
     var x = x
     x-- // we want to align middle
     val target = align.getTargetAt(x)
-    val view= formView.getBlockView(align.getBlock())
+    val view = formView.getBlockView(align.block!!)
 
     return if (target != -1) {
       view?.getColumnPos(target * 2) ?: 0

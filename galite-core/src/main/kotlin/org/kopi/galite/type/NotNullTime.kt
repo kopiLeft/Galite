@@ -18,11 +18,25 @@
 
 package org.kopi.galite.type
 
-class Utils {
+import java.util.Calendar
+
+/**
+ * This class represents the time types
+ */
+class NotNullTime : Time {
+  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
+  constructor(hours: Int, minutes: Int) : super(hours, minutes)
+  constructor(time: java.sql.Time) : super(time)
+  constructor(image: String) : super(image)
+  constructor(calendar: Calendar) : super(calendar)
+
+  /**
+   * Constructs a time from a scalar representation.
+   * DO NOT USE OUTSIDE OF THE LIBRARY
+   */
+  constructor(scalar: Int) : super(scalar)
+
   companion object {
-    fun trimString(input: String): String = TODO()
-    fun trailString(input: String): String = TODO()
-    fun toSql(date: Date): String = TODO()
-    fun toSql(d: Int?): String = TODO()
+    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
   }
 }

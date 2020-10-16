@@ -22,7 +22,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VIntegerColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Utils

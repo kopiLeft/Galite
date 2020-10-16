@@ -22,21 +22,39 @@ import org.kopi.galite.visual.VActor
 
 abstract class VBlock(form: VForm) {
 
+  fun getForm(): VForm = TODO()
+
+  fun fetchLookup(fld: VField) {
+    TODO()
+  }
+
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
   // current record
   var activeRecord = 0
 
+  var activeField: VField? = null
+
+  fun getMode(): Int = TODO()
+
+  interface OrderListener
+
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
-  open fun helpOnBlock(help: VHelpGenerator) {
+
+  fun gotoNextField() {
     TODO()
   }
 
-  abstract fun isChart(): Boolean
+  fun executeObjectTrigger(VKT_Type: Int?): Any = TODO()
 
+  fun isChart(): Boolean = TODO()
+
+  open fun helpOnBlock(help: VHelpGenerator) {
+    TODO()
+  }
   fun isRecordFilled(rec:Int):Boolean =TODO()
 
   open var actors: Array<VActor>? = null

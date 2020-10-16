@@ -22,15 +22,17 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
+import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VModel
 
 
-abstract class VField(val width: Int, val height: Int) {
+abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   // ----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE
@@ -42,9 +44,15 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
+  open fun predefinedFill(): Any {
+    TODO()
+  }
+
   open fun isNull(r: Int): Boolean {
     TODO()
   }
+
+  open fun loadItem(item: Int): Any = TODO()
 
   open fun autofill() {
     TODO()
@@ -127,6 +135,12 @@ abstract class VField(val width: Int, val height: Int) {
     TODO()
   }
 
+  override fun setDisplay(display: UComponent) {
+    TODO()
+  }
+
+  override fun getDisplay(): UField = TODO()
+
   open fun checkType(rec: Int, s: Any) {
     TODO()
   }
@@ -206,13 +220,20 @@ abstract class VField(val width: Int, val height: Int) {
   fun getForm(): VForm {
     TODO()
   }
+
   open fun helpOnField(help: VHelpGenerator) {
     TODO()
   }
 
   fun getSearchCondition(): String? = TODO()
 
-  fun getDisplay() : UField? = TODO()
+  fun hasFocus(): Boolean = TODO()
+
+   fun getListID(): Int = TODO()
+
+   fun setValueID(id: Int) {
+     TODO()
+   }
 
   companion object {
     const val MDL_FLD_COLOR = 1
@@ -247,7 +268,7 @@ abstract class VField(val width: Int, val height: Int) {
   private val posInArray // position in array of fields
           = 0
 
-  lateinit var list: VList // list
+  var list: VList ? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>
@@ -257,7 +278,7 @@ abstract class VField(val width: Int, val height: Int) {
           : VField
 
   // changed?
-  private val changed // changed by user / changes are done in the model
+  val changed // changed by user / changes are done in the model
           = false
   val changedUI // changed by user / changes are in the ui -> update model
           = false

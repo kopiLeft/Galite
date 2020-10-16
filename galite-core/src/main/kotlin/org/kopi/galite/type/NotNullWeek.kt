@@ -18,11 +18,23 @@
 
 package org.kopi.galite.type
 
-class Utils {
+/**
+ * This class represents the week types
+ */
+class NotNullWeek : Week {
+  /**
+   * Constructs a Week with a year and a week in this year.
+   */
+  constructor(year: Int, week: Int) : super(year, week)
+
+  /**
+   * Constructs a Week from a Date.
+   */
+  constructor(date: Date) : super(date)
+
   companion object {
-    fun trimString(input: String): String = TODO()
-    fun trailString(input: String): String = TODO()
-    fun toSql(date: Date): String = TODO()
-    fun toSql(d: Int?): String = TODO()
+    fun castToNotNull(value: Week): NotNullWeek {
+      return value as NotNullWeek
+    }
   }
 }

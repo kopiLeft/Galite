@@ -24,27 +24,21 @@ import java.io.Serializable
  * A class to specify alignment in Layout
  * Creates a new `BlockAlignment` instance.
  *
- * @param          ori          Represents the original block to be aligned with.
+ * @param          block          Represents the original block block to be aligned with.
  * @param          targets      Represents the alignment targets.
  */
-class BlockAlignment(var ori : VBlock?,
-                     var targets: IntArray)
+class BlockAlignment(val block: VBlock?,
+                     val targets: IntArray)
   : Serializable {
 
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-
-  fun isChart(): Boolean = ori != null && ori!!.isChart()
+  fun isChart(): Boolean = block != null && block.isChart()
 
   fun isAligned(x: Int): Boolean {
     var x = x
     x--
     return x >= 0 && x < targets.size && targets[x] != -1
   }
-  fun getBlock():VBlock {
-    TODO()
-  }
+
   fun getTargetAt(x: Int): Int {
     return if (x < 0 || x >= targets.size) {
       -1

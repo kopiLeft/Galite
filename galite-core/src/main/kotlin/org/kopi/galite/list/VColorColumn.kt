@@ -26,8 +26,15 @@ import kotlin.reflect.KClass
  * laurent :<br></br>
  * NOTICE : This class was copied from VImageColumn and was not test
  */
-class VColorColumn(title: String, column: String, sortAscending: Boolean) :
-        VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {
+class VColorColumn(title: String,
+                   column: String?,
+                   sortAscending: Boolean)
+      :VListColumn(title,
+                   column,
+                   VConstants.ALG_LEFT,
+                   7,
+                   sortAscending) {
+
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
