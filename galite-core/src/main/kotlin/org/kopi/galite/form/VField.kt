@@ -22,7 +22,7 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
