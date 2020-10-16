@@ -31,7 +31,7 @@ class NotNullFixed : Fixed {
   constructor(b: BigInteger, l: Int) : super(b) {}
   constructor(value: Long, scale: Int) : super(value, scale) {}
   constructor(d: Double) : super(d) {}
-  constructor(s: String) : super(s) {}
+  constructor(s: String?) : super(s) {}
 
   /**
    * Checks whether this object is equal to the specified object.

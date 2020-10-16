@@ -18,8 +18,6 @@
 
 package org.kopi.galite.form
 
-import java.math.BigInteger
-
 import kotlin.math.max
 import kotlin.reflect.KClass
 
@@ -32,6 +30,15 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
 
+/**
+ *
+ * @param    digits      The digits after dot
+ * @param    maxScale    The maximum scale to be used for this field
+ * @param    fraction    is true if its is a fraction field
+ * @param    minval      The min permitted value
+ * @param    maxval      The max permitted value
+ *
+ */
 class VFixnumField(private val digits: Int,
                    maxScale: Int,
                    val fraction: Boolean,
@@ -41,7 +48,7 @@ class VFixnumField(private val digits: Int,
                         maxScale,
                         minval,
                         maxval),
-                        1) {
+           1) {
   /*
    * ----------------------------------------------------------------------
    * Constructor / build
@@ -59,8 +66,8 @@ class VFixnumField(private val digits: Int,
           : this(digits,
                  maxScale,
                  fraction,
-                 minval?.let { NotNullFixed(it) },
-                 maxval?.let { NotNullFixed(it) }) {
+                 NotNullFixed(minval),
+                 NotNullFixed(maxval)) {
   }
 
   /**
@@ -82,8 +89,8 @@ class VFixnumField(private val digits: Int,
    * return the name of this field
    */
   override fun getTypeInformation(): String {
-    var min: Fixed? = minval
-    var max: Fixed? = maxval
+    var min = minval
+    var max = maxval
     var nines: Long = 1
 
     if (min == null) {
@@ -131,7 +138,7 @@ class VFixnumField(private val digits: Int,
                          width,
                          maxScale,
                          getPriority() >= 0)
-   }
+  }
 
   /**
    * verify that text is valid (during typing)
@@ -140,10 +147,10 @@ class VFixnumField(private val digits: Int,
     if (s.length > width) {
       return false
     }
-   s.forEach {
+    s.forEach {
       if (!((it in '0'..'9')
-          || (it == '.') || (it == '-') || (it == ' ')
-          || (it == ',') || (it == '/'))) {
+                      || (it == '.') || (it == '-') || (it == ' ')
+                      || (it == ',') || (it == '/'))) {
         return false
       }
     }
@@ -169,13 +176,13 @@ class VFixnumField(private val digits: Int,
       }
       if (v != null) {
         if (v.scale > scale) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf<Any>(scale) as? Array<Any>))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale) as? Array<Any>))
         }
-        if (minval != null && v.compareTo(minval!!) == -1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minval!!) as? Array<Any>))
+        if (minval != null && v.compareTo(minval) == -1) {
+          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval) as? Array<Any>))
         }
-        if (maxval != null && v.compareTo(maxval!!) == 1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval!!) as? Array<Any>))
+        if (maxval != null && v.compareTo(maxval) == 1) {
+          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval) as? Array<Any>))
         }
         if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
@@ -205,8 +212,8 @@ class VFixnumField(private val digits: Int,
 
     for (i in 0 until block.bufferSize) {
       if ((!isNullImpl(i)
-           && block.isRecordFilled(i)
-           && (!exclude || i != block.activeRecord))) {
+                      && block.isRecordFilled(i)
+                      && (!exclude || i != block.activeRecord))) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }
@@ -223,8 +230,8 @@ class VFixnumField(private val digits: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed
-          = computeSum(exclude)?.let { computeSum(exclude) as NotNullFixed } ?: coalesceValue
+  fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed =
+          computeSum(exclude)?.let { computeSum(exclude) as? NotNullFixed } ?: coalesceValue
 
   /**
    * Returns the sum of the field values of all records.
@@ -264,7 +271,7 @@ class VFixnumField(private val digits: Int,
    */
   fun setScale(record: Int, scale: Int) {
     if (scale > maxScale) {
-      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale, maxScale))
+      throw InconsistencyException(MessageCode.getMessage("VIS-00060", scale.toString(), maxScale.toString()))
     }
     currentScale[record] = scale
   }
@@ -274,45 +281,14 @@ class VFixnumField(private val digits: Int,
    *
    * @param     scale           the scale value.
    */
-  fun setScale(scale:Int)
-  {
+  fun setScale(scale: Int) {
     setScale(block.currentRecord, scale)
-  }
-
-  /**
-   * Sets the maxScale value for the current record.
-   *
-   * @param     scale           the scale value.
-   */
-  fun setMaxScale(scale: Int) {
-    // dynamic maxScale mustn't exceed the maxScale defined in the field declaration (fieldMaxScale).
-    if (scale > fieldMaxScale) {
-      throw InconsistencyException(MessageCode.getMessage("VIS-00060",
-                                                           scale,
-                                                           fieldMaxScale))
-    }
-    maxScale = scale
-
-    if (minval!!.scale > maxScale) {
-      minval = minval!!.setScale(maxScale)
-    }
-
-    if (maxval!!.scale > maxScale) {
-      maxval = maxval!!.setScale(maxScale)
-    }
-
-    //records scale must be <= maxScale
-    for (i in currentScale.indices) {
-      if (currentScale[i] > maxScale) {
-        currentScale[i] = maxScale
-      }
-    }
   }
 
   /**
    * Clears the field.
    *
-   * @param     r       the recorde number.
+   * @param     r       the record number.
    */
   override fun clear(r: Int) {
     super.clear(r)
@@ -340,19 +316,19 @@ class VFixnumField(private val digits: Int,
    */
   fun setFixed(r: Int, v: Fixed?) {
     // trails (backup) the record if necessary
-    var v: Fixed? = v
+    var v = v
 
     if ((changedUI
          || (value[r] == null && v != null)
-         || (value[r] != null && value[r]!! != v))) {
+         || (value[r] != null && value[r] != v))) {
       trail(r)
       if (v != null) {
         if (v.scale != currentScale[r]) {
           v = v.setScale(currentScale[r])
         }
-        if (minval != null && v.compareTo(minval!!) == -1) {
+        if (minval != null && v.compareTo(minval) == -1) {
           v = minval
-        } else if (maxval != null && v.compareTo(maxval!!) == 1) {
+        } else if (maxval != null && v.compareTo(maxval) == 1) {
           v = maxval
         }
       }
@@ -373,7 +349,7 @@ class VFixnumField(private val digits: Int,
   override fun setObject(r: Int, v: Any?) {
     // !!! HACK for Oracle
     if (v != null && (v is Int)) {
-      setFixed(r, NotNullFixed(v as BigInteger))
+      setFixed(r, NotNullFixed(v.toDouble()))
     } else {
       setFixed(r, v as Fixed?)
     }
@@ -406,7 +382,7 @@ class VFixnumField(private val digits: Int,
   /**
    * Returns the field value of the current record as an object
    */
-  override fun getObjectImpl(r: Int): Any ? = value[r]
+  override fun getObjectImpl(r: Int): Any? = value[r]
 
   override fun toText(o: Any?): String {
     if (o == null) {
@@ -430,13 +406,13 @@ class VFixnumField(private val digits: Int,
       }
       if (v != null) {
         if (v.scale > scale) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf<Any>(scale) as Array<Any>?))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale) as Array<Any>?))
         }
-        if (minval != null && v.compareTo(minval!!) == -1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minval!!) as Array<Any>?))
+        if (minval != null && v.compareTo(minval) == -1) {
+          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval) as Array<Any>?))
         }
-        if (maxval != null && v.compareTo(maxval!!) == 1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval!!) as Array<Any>?))
+        if (maxval != null && v.compareTo(maxval) == 1) {
+          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval) as Array<Any>?))
         }
         if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
@@ -483,8 +459,8 @@ class VFixnumField(private val digits: Int,
     // only when the value has really changed.
     if (t < block.bufferSize
         && (((oldValue != null && value[t] == null)
-        || (oldValue == null && value[t] != null)
-        || (oldValue != null && oldValue != value[t])))) {
+              || (oldValue == null && value[t] != null)
+              || (oldValue != null && oldValue != value[t])))) {
       fireValueChanged(t)
     }
   }
@@ -534,7 +510,7 @@ class VFixnumField(private val digits: Int,
           den /= 2
         }
         return when (precomma) {
-          "0" ->  "$num/$den"
+          "0" -> "$num/$den"
           "-0" -> "-$num/$den"
           else -> "$precomma $num/$den"
         }
@@ -563,30 +539,57 @@ class VFixnumField(private val digits: Int,
   }
 
   /*
-     * ----------------------------------------------------------------------
-     * DATA MEMBERS
-     * ----------------------------------------------------------------------
-     */
+   * ----------------------------------------------------------------------
+   * DATA MEMBERS
+   * ----------------------------------------------------------------------
+   */
 
-  // dynamic data
   private var fieldMaxScale = maxScale
 
-  var minval: Fixed? = minval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale).negate()
+  // dynamic data
+  var minval: Fixed = minval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale).negate()
     private set
-  var maxval: Fixed? = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
+  var maxval: Fixed = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
     private set
 
   // number of digits after dot
-  private lateinit var currentScale : IntArray
+  private lateinit var currentScale: IntArray
 
-  var maxScale : Int = maxScale
-    private set
+
+  /**
+   * The maxScale value for the current record.
+   */
+  var maxScale: Int = maxScale
+    set(scale) {
+      // dynamic maxScale mustn't exceed the maxScale defined in the field declaration (fieldMaxScale).
+      if (scale > fieldMaxScale) {
+        throw InconsistencyException(MessageCode.getMessage("VIS-00060",
+                                                            scale,
+                                                            fieldMaxScale.toString()))
+      }
+      field = scale
+
+      if (minval.scale > field) {
+        minval = minval.setScale(field)
+      }
+
+      if (maxval.scale > field) {
+        maxval = maxval.setScale(field)
+      }
+
+      //records scale must be <= maxScale
+      for (i in currentScale.indices) {
+        if (currentScale[i] > field) {
+          currentScale[i] = field
+        }
+      }
+    }
 
   private lateinit var value: Array<Fixed?>
 
-  protected var criticalMinValue: Fixed? = minval
+  protected var criticalMinValue= minval
 
-  protected var criticalMaxValue: Fixed? = maxval
+  protected var criticalMaxValue = maxval
 
   companion object {
 
@@ -594,9 +597,9 @@ class VFixnumField(private val digits: Int,
      * Parses the string argument as a fixed number in human-readable format.
      */
     private fun scanFixed(str: String): Fixed? {
-      var negative: Boolean = false
-      var state: Int = 0
-      var scale: Int = 0
+      var negative = false
+      var state = 0
+      var scale = 0
       var value: Long = 0
       var num: Long = 0
       var den: Long = 0
@@ -805,11 +808,8 @@ class VFixnumField(private val digits: Int,
      * @param     maxVal          the maximal value the fixnum field can get.
      */
     fun computeWidth(digits: Int, scale: Int, minVal: Fixed?, maxVal: Fixed?): Int {
-      var upperBound: Fixed
-      var lowerBound: Fixed
-
-      upperBound = calculateUpperBound(digits, scale)
-      lowerBound = upperBound.negate()
+      var upperBound = calculateUpperBound(digits, scale)
+      var lowerBound = upperBound.negate()
       if (minVal != null && minVal > lowerBound) {
         lowerBound = minVal.setScale(scale)
       }
@@ -826,12 +826,16 @@ class VFixnumField(private val digits: Int,
      * @param     scale           the number of digits representing the fractional part.
      */
     fun computeDigits(width: Int, scale: Int): Int {
-      return if (scale == 0) {
-        width - width / 4
-      } else if (width == scale || width == scale + 1) {
-        scale
-      } else {
-        width - 1 - ((width - scale - 1) / 4)
+      return when {
+        scale == 0 -> {
+          width - width / 4
+        }
+        width == scale || width == scale + 1 -> {
+          scale
+        }
+        else -> {
+          width - 1 - ((width - scale - 1) / 4)
+        }
       }
     }
   }
