@@ -66,8 +66,8 @@ class VFixnumField(private val digits: Int,
           : this(digits,
                  maxScale,
                  fraction,
-                 NotNullFixed(minval),
-                 NotNullFixed(maxval)) {
+                 minval?.let { NotNullFixed(it) },
+                 maxval?.let { NotNullFixed(it) }) {
   }
 
   /**
@@ -149,8 +149,8 @@ class VFixnumField(private val digits: Int,
     }
     s.forEach {
       if (!((it in '0'..'9')
-                      || (it == '.') || (it == '-') || (it == ' ')
-                      || (it == ',') || (it == '/'))) {
+             || (it == '.') || (it == '-') || (it == ' ')
+             || (it == ',') || (it == '/'))) {
         return false
       }
     }
@@ -212,8 +212,8 @@ class VFixnumField(private val digits: Int,
 
     for (i in 0 until block.bufferSize) {
       if ((!isNullImpl(i)
-                      && block.isRecordFilled(i)
-                      && (!exclude || i != block.activeRecord))) {
+           && block.isRecordFilled(i)
+           && (!exclude || i != block.activeRecord))) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }
