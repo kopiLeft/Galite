@@ -18,9 +18,9 @@
 
 package org.kopi.galite.visual
 
-
 import java.util.Locale
 import java.text.MessageFormat
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.l10n.LocalizationManager
 
@@ -55,7 +55,7 @@ object VlibProperties {
 
   fun getString(key: String, params: Any?): String {
     val format: String
-    val manager: LocalizationManager = if (ApplicationContext.applicationContext!!.getApplication() != null) {
+    val manager: LocalizationManager = if (ApplicationContext.applicationContext.getApplication() != null) {
       ApplicationContext.getLocalizationManager()
     } else {
       LocalizationManager(Locale.getDefault(), null)
@@ -72,8 +72,8 @@ object VlibProperties {
 
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble("localize Property",
-              "org.kopi.galite.visual.VlibProperties.getString(String key, Object[] params)",
-              e.message!!,
+              "org.kopi.galite.visual.VlibProperties.getString(key: String, params: Any?)",
+              e.message,
               e)
       System.err.println("ERROR: " + e.message)
       "!$key!"
@@ -83,5 +83,5 @@ object VlibProperties {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private const val VLIB_PROPERTIES_RESOURCE_FILE = "resource/org/kopi/galite/VlibProperties"
+  private const val VLIB_PROPERTIES_RESOURCE_FILE = "org/kopi/galite/lib/resource/VlibProperties"
 }

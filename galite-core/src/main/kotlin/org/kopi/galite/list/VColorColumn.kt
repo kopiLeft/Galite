@@ -15,6 +15,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
-class VColorColumn 
+import java.awt.Color
+
+import kotlin.reflect.KClass
+
+/**
+ * laurent :<br></br>
+ * NOTICE : This class was copied from VImageColumn and was not test
+ */
+class VColorColumn(title: String,
+                   column: String?,
+                   sortAscending: Boolean)
+      :VListColumn(title,
+                   column,
+                   VConstants.ALG_LEFT,
+                   7,
+                   sortAscending) {
+
+  // --------------------------------------------------------------------
+  // IMPLEMENTATION
+  // --------------------------------------------------------------------
+  override fun getDataType(): KClass<*> {
+    return Color::class
+  }
+}

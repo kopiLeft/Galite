@@ -15,6 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.report
 
-class PExport2XLSX 
+import java.awt.Color
+
+import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
+import org.apache.poi.xssf.usermodel.XSSFColor
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+
+import org.kopi.galite.report.UReport.UTable
+
+class PExport2XLSX (table: UTable, model: MReport, printConfig: PConfig, title: String) : PExport2Excel(table, model, printConfig, title), Constants {
+
+  override fun createWorkbook(): Workbook {
+    return SXSSFWorkbook(XSSFWorkbook(), 10000, false)
+  }
+
+  override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
+    return XSSFColor(color)
+  }
+}

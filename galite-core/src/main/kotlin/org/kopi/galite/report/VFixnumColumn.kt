@@ -41,15 +41,15 @@ class VFixnumColumn(ident: String?,
                     digits: Int,
                     maxScale: Int,
                     format: VCellFormat?)
-      : VReportColumn(ident,
-                      options,
-                      align,
-                      groups,
-                      function,
-                      VFixnumField.computeWidth(digits, maxScale, null, null),
-                      1,
-                      format ?: VFixedFormat(maxScale, true)) {
-      /**
+  : VReportColumn(ident,
+        options,
+        align,
+        groups,
+        function,
+        VFixnumField.computeWidth(digits, maxScale, null, null),
+        1,
+        format ?: VFixedFormat(maxScale, true)) {
+  /**
    * Compare two objects.
    *
    * @param    object1    the first operand of the comparison
@@ -58,8 +58,8 @@ class VFixnumColumn(ident: String?,
    *           1 if the second operand if smaller than the first
    *           0 if the two operands are equal
    */
-      override fun compareTo(object1: Any, object2: Any): Int =
-              (object1 as NotNullFixed).compareTo(object2 as NotNullFixed)
+  override fun compareTo(object1: Any, object2: Any): Int =
+          (object1 as NotNullFixed).compareTo(object2 as NotNullFixed)
 
   /**
    * Returns the width of cells in this column in characters

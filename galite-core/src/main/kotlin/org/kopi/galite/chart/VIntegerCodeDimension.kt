@@ -15,7 +15,57 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.chart
 
-class VIntegerCodeDimension {
+/**
+ * Represents an integer code chart column.
+ *
+ * @param ident The column identifier.
+ * @param format The dimension format
+ * @param type the column type.
+ * @param source The column localization source.
+ * @param idents The columns labels.
+ * @param codes The column codes.
+ */
+class VIntegerCodeDimension(ident: String,
+                            format: VColumnFormat,
+                            type: String,
+                            source: String,
+                            idents: Array<String>,
+                            private val codes: IntArray)
+  : VCodeDimension(ident, format, type, source, idents) {
+  // --------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // --------------------------------------------------------------------
+  override fun getIndex(value: Any?): Int {
+    if (fastIndex != -1) {
+      return (value as? Int)!!.toInt() - fastIndex
+    }
+
+    codes.forEachIndexed { index, code ->
+      if ((value as? Int) == code) {
+        return index
+      }
+    }
+    return -1
+  }
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+  private var fastIndex = -1 // if array = {fastIndex, fastIndex + 1, ...}
+
+  // --------------------------------------------------------------------
+  // CONSTRUCTOR
+  // --------------------------------------------------------------------
+  init {
+    fastIndex = codes[0]
+    for (i in 1 until codes.size) {
+      if (codes[i] != fastIndex + i) {
+        fastIndex = -1
+        break
+      }
+    }
+  }
 }
