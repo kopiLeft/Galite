@@ -23,11 +23,31 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
 /**
- * Present a root menu from its ID and name.
+ * A root menu must provide its ID and name. The root tree node
+ * of this menu should be provided for further uses.
+ *
  * @param id The root menu ID.
  * @param name The root menu name.
  */
 class RootMenu(id: Int, name: String) {
+
+  private val rootModule: Module
+
+  init {
+    rootModule = Module(id,
+            0,
+            name,
+            ROOT_MENU_LOCALIZATION_RESOURCE,
+            null,
+            Module.ACS_PARENT, Int.MAX_VALUE,
+            null)
+  }
+
+  /**
+   * return the menu tree
+   */
+  var root: TreeNode? = null
+    private set
 
   /**
    * Creates the module tree nodes for this root menu.
@@ -52,7 +72,7 @@ class RootMenu(id: Int, name: String) {
                            isSuperUser: Boolean): DefaultMutableTreeNode? {
     var force = force
 
-    if (root.access == Module.ACS_TRUE || isSuperUser) {
+    if (root.accessibility == Module.ACS_TRUE || isSuperUser) {
       force = true
     }
     return if (root.objectName != null) {
@@ -89,8 +109,9 @@ class RootMenu(id: Int, name: String) {
   /**
    * return the identifier of the menu
    */
-  val id: Int
-    get() = rootModule.id
+  open fun getId(): Int {
+    return rootModule.id
+  }
 
   /**
    * Returns true if this root menu does not contain any module.
@@ -99,26 +120,7 @@ class RootMenu(id: Int, name: String) {
   open fun isEmpty(): Boolean {
     return root == null
   }
-
-  private val rootModule: Module
-
-  /**
-   * return the menu tree
-   */
-  var root: TreeNode? = null
-    private set
-
   companion object {
     const val ROOT_MENU_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/RootMenu"
-  }
-
-  init {
-    rootModule = Module(id,
-            0,
-            name,
-            ROOT_MENU_LOCALIZATION_RESOURCE,
-            null,
-            Module.ACS_PARENT, Int.MAX_VALUE,
-            null)
   }
 }

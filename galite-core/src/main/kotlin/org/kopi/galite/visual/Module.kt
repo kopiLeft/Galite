@@ -32,7 +32,7 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param shortname           the shortname
  * @param source              the source
  * @param objectName          the name of the object which are linked with the module
- * @param access              the access of the current user
+ * @param accessibility       the access of the current user to the module
  * @param priority            the priority
  * @param icon                the mnemonic
  */
@@ -41,7 +41,7 @@ class Module(val id: Int,
              private val shortname: String,
              private val source: String,
              objectName: String?,
-             var access: Int,
+             var accessibility: Int,
              private var priority: Int,
              icon: String?)
   : Comparable<Module> {
@@ -49,14 +49,51 @@ class Module(val id: Int,
   /**
    * return the mnemonic
    */
-  fun getSmallIcon(): Image? = smallIcon
+  var icon: Image? = null
+    private set
+
+  /**
+   * return the name of the object which are linked with the module
+   * this object is the name of the class to be executed when this module
+   * is called.
+   */
+  var objectName : String? = objectName
+    private set
+
+  /**
+   * return description of the module
+   */
+  lateinit var description: String
+    private set
+
+  /**
+   * return the help
+   */
+  lateinit var help: String
+    private set
+
+  /**
+   * return the mnemonic
+   */
+  var smallIcon: Image? = null
+    private set
+
+  init {
+    if (icon != null) {
+      this.icon = ImageHandler.imageHandler.getImage(icon)
+      smallIcon = ImageHandler.imageHandler.getImage(icon)
+      if (smallIcon == null) {
+        smallIcon = smallIcon!!.getScaledInstance(16, 16, Image.SCALE_SMOOTH)
+      }
+    }
+  }
 
   /**
    *
    * @param    context        the context where to look for application
    */
   fun run(context: DBContext) {
-    startForm(context, objectName, description, getSmallIcon())
+    startForm(context, objectName!!, description, smallIcon)
   }
 
   override fun toString(): String = shortname
@@ -94,37 +131,6 @@ class Module(val id: Int,
       priority - module.priority
     }
   }
-
-  /**
-   * return the mnemonic
-   */
-  var icon: Image? = null
-    private set
-
-  /**
-   * return the name of the object which are linked with the module
-   * this object is the name of the class to be executed when this module
-   * is called.
-   */
-  var objectName : String
-    private set
-
-  /**
-   * return description of the module
-   */
-  lateinit var description: String
-    private set
-
-  /**
-   * return the help
-   */
-  lateinit var help: String
-    private set
-
-  /**
-   * return the mnemonic
-   */
-  private var smallIcon: Image? = null
 
   companion object {
     fun getExecutable(objectName: String): Executable {
@@ -177,16 +183,5 @@ class Module(val id: Int,
     const val ACS_PARENT = 0
     const val ACS_TRUE = 1
     const val ACS_FALSE = 2
-  }
-
-  init {
-    this.objectName = objectName!!
-    if (icon != null) {
-      this.icon = ImageHandler.imageHandler.getImage(icon)
-      smallIcon = ImageHandler.imageHandler.getImage(icon)
-      if (smallIcon == null) {
-        smallIcon = smallIcon!!.getScaledInstance(16, 16, Image.SCALE_SMOOTH)
-      }
-    }
   }
 }

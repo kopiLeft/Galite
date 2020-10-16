@@ -362,7 +362,7 @@ class VMenuTree(ctxt: DBContext,
         val module = iterator.previous()
 
         // remove all modules where access is explicitly denied
-        if (module.access == Module.ACS_FALSE) {
+        if (module.accessibility == Module.ACS_FALSE) {
           iterator.remove()
         }
       }
