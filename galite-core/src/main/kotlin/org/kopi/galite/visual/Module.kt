@@ -53,7 +53,7 @@ class Module(val id: Int,
     private set
 
   /**
-   * return the name of the object which are linked with the module
+   * the name of the object which are linked with the module
    * this object is the name of the class to be executed when this module
    * is called.
    */
@@ -93,7 +93,7 @@ class Module(val id: Int,
    * @param    context        the context where to look for application
    */
   fun run(context: DBContext) {
-    startForm(context, objectName!!, description, smallIcon)
+    startForm(context, objectName, description, smallIcon)
   }
 
   override fun toString(): String = shortname
@@ -133,7 +133,7 @@ class Module(val id: Int,
   }
 
   companion object {
-    fun getExecutable(objectName: String): Executable {
+    fun getExecutable(objectName: String?): Executable {
       return try {
         Class.forName(objectName).newInstance() as Executable
       } catch (iae: IllegalAccessException) {
@@ -146,7 +146,7 @@ class Module(val id: Int,
     }
 
     fun startForm(ctxt: DBContext,
-                  objectName: String,
+                  objectName: String?,
                   description: String,
                   icon: Image? = null): Executable? {
       return try {

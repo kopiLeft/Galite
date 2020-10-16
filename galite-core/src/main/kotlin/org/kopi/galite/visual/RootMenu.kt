@@ -33,21 +33,21 @@ class RootMenu(id: Int, name: String) {
 
   private val rootModule: Module
 
-  init {
-    rootModule = Module(id,
-            0,
-            name,
-            ROOT_MENU_LOCALIZATION_RESOURCE,
-            null,
-            Module.ACS_PARENT, Int.MAX_VALUE,
-            null)
-  }
-
   /**
    * return the menu tree
    */
   var root: TreeNode? = null
     private set
+
+  init {
+    rootModule = Module(id,
+                        0,
+                        name,
+                        ROOT_MENU_LOCALIZATION_RESOURCE,
+                        null,
+                        Module.ACS_PARENT, Int.MAX_VALUE,
+                        null)
+  }
 
   /**
    * Creates the module tree nodes for this root menu.
