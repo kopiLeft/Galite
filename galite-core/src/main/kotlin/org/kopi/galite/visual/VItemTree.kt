@@ -94,7 +94,7 @@ class VItemTree(rootName: String?,
    *
    * @param     locale  the locale to use
    */
-  fun localizeActors(locale: Locale) {
+  fun localizeActors(locale: Locale?) {
     var manager: LocalizationManager?
 
     manager = LocalizationManager(locale, Locale.getDefault())
