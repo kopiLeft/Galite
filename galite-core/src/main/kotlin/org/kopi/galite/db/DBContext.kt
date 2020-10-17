@@ -35,20 +35,19 @@ class DBContext() {
    * @param     lookupUserId    lookup user id in table of users ?
    * @param     schema          the current database schema
    */
-  fun createConnection(
-    driverName: String,
-    url: String,
-    user: String,
-    password: String,
-    lookupUserId: Boolean = true, // TODO
-    schema: String? = null // TODO
+  fun createConnection(driverName: String,
+                       url: String,
+                       user: String,
+                       password: String,
+                       lookupUserId: Boolean = true, // TODO
+                       schema: String? = null // TODO
   ): Connection {
     this.connection = Connection(url = url,
-                                driver = driverName,
-                                userName = user,
-                                password = password,
-                                lookupUserId = lookupUserId,
-                                schema = schema)
+                                 driver = driverName,
+                                 userName = user,
+                                 password = password,
+                                 lookupUserId = lookupUserId,
+                                 schema = schema)
     return this.connection
   }
 
@@ -59,10 +58,9 @@ class DBContext() {
    * @param     lookupUserId    lookup user id in table of users ?
    * @param     schema          the current database schema
    */
-  fun createConnection(
-    connection: java.sql.Connection,
-    lookupUserId: Boolean, // TODO
-    schema: String? // TODO
+  fun createConnection(connection: java.sql.Connection,
+                       lookupUserId: Boolean, // TODO
+                       schema: String? // TODO
   ): Connection {
     this.connection = Connection(connection = connection,
                                  lookupUserId = lookupUserId,
