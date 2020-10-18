@@ -291,7 +291,7 @@ class VMenuTree(ctxt: DBContext,
                                          null))
     for (menu in ROOT_MENUS) {
       if (!menu.isEmpty()) {
-        (root as DefaultMutableTreeNode).add(menu.getRoot() as DefaultMutableTreeNode)
+        (root as DefaultMutableTreeNode).add(menu.root as DefaultMutableTreeNode)
       }
     }
   }

@@ -15,8 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
-class LogoutModule {
+import org.kopi.galite.db.DBContext
 
+/**
+ * A logout module that simply call [Application.logout]
+ */
+class LogoutModule : Executable {
+
+  /**
+   * MenuTree sets the context of new executable to the default connection
+   */
+  override lateinit var dBContext: DBContext
+
+  /**
+   * The start method called every time the user launch this app from menu
+   * it should be not modal
+   * @exception VException      an exception may be raised by your app
+   */
+  override fun doNotModal() {
+    ApplicationContext.applicationContext.getApplication().logout()
+  }
 }

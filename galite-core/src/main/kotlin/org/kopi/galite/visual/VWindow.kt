@@ -48,7 +48,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   private var display: UWindow? = null
   private var actors: ArrayList<VActor> = arrayListOf()
   protected lateinit var windowTitle: String
-  protected var smallIcon: Image? = null
+  internal var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
