@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report title="Report Test">
+  <field ident="field1" label="field1" help="Le field1" />
+</report>
+
