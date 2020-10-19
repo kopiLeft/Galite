@@ -144,7 +144,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    *
    * @param     locale  the locale to use
    */
-  fun localize(locale: Locale) {
+  fun localize(locale: Locale?) {
     var manager: LocalizationManager?
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
 

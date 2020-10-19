@@ -16,24 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
-
-import org.kopi.galite.db.DBContext
+package org.kopi.galite.ui.base
 
 /**
- * An interface for stand alone apps that can be executed from the
- * Menu tree.
+ * A centralized way to inject styles in the browser page.
+ * TODO : use this class to handle report styles.
  */
-interface Executable {
-  /**
-   * MenuTree sets the context of new executable to the default connection
-   */
-  var dBContext: DBContext?
+class StylesInjector {
 
-  /**
-   * The start method called every time the user launch this app from menu
-   * it should be not modal
-   * @exception        VException        an exception may be raised by your app
-   */
-  fun doNotModal()
 }
