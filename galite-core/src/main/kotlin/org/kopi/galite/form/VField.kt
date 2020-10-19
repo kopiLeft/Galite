@@ -162,7 +162,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  protected open fun getListColumn(): VListColumn {
+  protected open fun getListColumn(): VListColumn? {
     TODO()
   }
 
