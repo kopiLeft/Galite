@@ -48,8 +48,8 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
 
   companion object {
     fun convertToGhostscript(printdata: PrintJob): PrintJob {
-      val tempfile: File = Utils.getTempFile("kopigsconv", "PS")
-      val gsJob: PrintJob = printdata.createFromThis(tempfile, true)
+      val tempfile = Utils.getTempFile("kopigsconv", "PS")
+      val gsJob = printdata.createFromThis(tempfile, true)
       val ous = BufferedWriter(FileWriter(tempfile))
 
       /* READ HEADER */
@@ -96,6 +96,6 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
   }
 
   var numberOfCopies = 1 // the number of copy to print
-  private var tray: Int = 1
+  private var tray = 1
   private var paperFormat: String? = null
 }

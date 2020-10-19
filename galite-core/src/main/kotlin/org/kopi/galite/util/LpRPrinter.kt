@@ -99,5 +99,4 @@ class LpRPrinter(private val name: String,
 
   private var tray = 0
   private var paperFormat: String? = null
-
 }

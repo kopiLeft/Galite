@@ -146,8 +146,8 @@ object HylaFAXUtils {
    * HANDLE THE QUEUES --- ALL QUEUES ARE HANDLED BY THAT METHOD
    * ----------------------------------------------------------------------
    */
+  @Suppress("UNCHECKED_CAST")
   private fun getQueue(host: String, port: Int, user: String, password: String, qname: String): ArrayList<String> {
-    val entries: ArrayList<String>
     val faxClient = HylaFAXClient()
 
     faxClient.open(host)
@@ -159,7 +159,7 @@ object HylaFAXUtils {
     faxClient.rcvfmt("%f| %t| %s| %p| %h| %e")
     faxClient.jobfmt("%j| %J| %o| %e| %a| %P| %D| %.25s")
     faxClient.mdmfmt("Modem %m (%n): %s")
-    entries = faxClient.getList(qname) as ArrayList<String>
+    val entries = ArrayList(faxClient.getList(qname)) as ArrayList<String>
     faxClient.quit()
     return entries
   }
@@ -177,12 +177,12 @@ object HylaFAXUtils {
       val result = getQueue(host, port, user, password, qname)
 
       Utils.log("Fax", "READ $qname : host $host / user $user")
-     result.forEach{element ->
+     result.forEach{ element ->
         try {
           val process = StringTokenizer(element, "|")
 
           if (qname != "recvq") {
-            queue.add(FaxStatus(process.nextToken().trim { it <= ' ' },  // ID
+            queue.add(FaxStatus(process.nextToken().trim(),  // ID
                                 process.nextToken().trim(),  // TAG
                                 process.nextToken().trim(),  // USER
                                 process.nextToken().trim(),  // DIALNO

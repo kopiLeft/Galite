@@ -38,10 +38,10 @@ class IPPPrinter(name: String,
                  private val port: Int,
                  private val printer: String,
                  private val user: String,
-                 private val attributesForMedia: List<*>)
+                 private val attributesForMedia: List<Array<String>>)
       : AbstractPrinter(name), Printer {
 
-  fun getMediaTypes(): List<*>{
+  fun getMediaTypes(): List<*> {
       val client = IPPClient(host, port.toShort(), printer, user)
 
       return client.getMediaTypes()
@@ -57,13 +57,9 @@ class IPPPrinter(name: String,
     return if (media == null) {
       null
     } else {
-      val it = attributesForMedia.iterator()
-
-      while (it.hasNext()) {
-        val att = it.next() as Array<String?>
-
-        if (att.size == 2 && att[0] == media) {
-          return if (att[1] == null) null else att[1]!!.split(" ").toTypedArray()
+      attributesForMedia.forEach { att ->
+      if (att.size == 2 && att[0] == media) {
+          return if (att[1] == null) null else att[1].split(" ").toTypedArray()
         }
       }
       null
