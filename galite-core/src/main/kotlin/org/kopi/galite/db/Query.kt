@@ -18,11 +18,39 @@
 
 package org.kopi.galite.db
 
-import java.sql.Blob
-
 import org.kopi.galite.type.NotNullDate
 
-class Query {
+class Query(conn: Connection) {
+
+  fun addString(value: String?) {
+    TODO()
+  }
+
+  fun next(): Boolean {
+    TODO()
+  }
+
+  fun getString(pos: Int): String {
+    TODO()
+  }
+
+  fun addInt(value: Int) {
+    TODO()
+  }
+
+  fun run(format: String?): Int = TODO()
+
+  fun delete(format: String?): Int= TODO()
+
+  fun getInt(pos: Int): Int = TODO()
+
+  fun close() {
+    TODO()
+  }
+
+  fun open(format: String) {
+    TODO()
+  }
 
   fun isNull(column: Int): Boolean = TODO()
 
@@ -30,9 +58,5 @@ class Query {
 
   fun getBoolean(column: Int): Boolean = TODO()
 
-  fun getString(pos: Int): String = TODO()
-
-  fun getBlob(pos: Int): Blob? = TODO()
-
-  fun getObject(pos:Int):Any = TODO()
+  fun getObject(pos:Int):Any =TODO()
 }

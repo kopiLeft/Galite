@@ -18,23 +18,38 @@
 
 package org.kopi.galite.form
 
-import org.kopi.galite.db.DBContext
-
 abstract class VBlock {
+
+  fun getForm(): VForm = TODO()
+
+  fun fetchLookup(fld: VField) {
+    TODO()
+  }
+
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
-  var activeRecord = 0 // current record
+  // current record
+  var activeRecord = 0
 
-  open fun getDBContext(): DBContext {
-   TODO()
-  }
+  var activeField: VField? = null
 
-  var activeField : VField? = null
+  fun getMode(): Int = TODO()
+
+  interface OrderListener
 
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
+
+  fun gotoNextField() {
+    TODO()
+  }
+
+  fun executeObjectTrigger(VKT_Type: Int?): Any = TODO()
+
+  fun isChart(): Boolean = TODO()
+
   open fun helpOnBlock(help: VHelpGenerator) {
     TODO()
   }

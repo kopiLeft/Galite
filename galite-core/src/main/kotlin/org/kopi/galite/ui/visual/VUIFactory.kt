@@ -16,25 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.print
+package org.kopi.galite.ui.visual
 
-import org.kopi.galite.util.Printer
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.VModel
 
-interface PrintManager {
-  /**
-   * Handle printing
-   * @param    parent    the form that initiate the printing process
-   * @param    report    the report to print
-   * @param     copies  the number of copies to print
-   * @param    printer    an optional default printer
-   * @param    fax    an optional default fax number
-   * @param    mail    an optional default mail address
-   */
-  fun print(parent: VWindow,
-            report: Printable,
-            copies: Int,
-            printer: Printer,
-            fax: String?,
-            mail: String?)
+class VUIFactory : UIFactory() {
+  override fun createView(model: VModel): UComponent {
+    TODO("Not yet implemented")
+  }
+
 }

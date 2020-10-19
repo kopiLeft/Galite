@@ -32,12 +32,12 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param acceleratorModifier The modifier accelerator key
  */
 open class VActor(var menuIdent: String,
-             private val menuSource: String?,
-             val actorIdent: String,
-             private val actorSource: String?,
-             var iconName: String?,
-             val acceleratorKey: Int,
-             val acceleratorModifier: Int) : VModel {
+                  private val menuSource: String?,
+                  val actorIdent: String,
+                  private val actorSource: String?,
+                  var iconName: String?,
+                  val acceleratorKey: Int,
+                  val acceleratorModifier: Int) : VModel {
 
   override fun getDisplay(): UActor? {
     return display
@@ -89,11 +89,11 @@ open class VActor(var menuIdent: String,
       false
     } else {
       menuName == obj.menuName
-      && menuItem == obj.menuItem
-      && ((iconName == null && obj.iconName == null)
-          || (iconName != null
-              && obj.iconName != null
-              && iconName == obj.iconName))
+              && menuItem == obj.menuItem
+              && ((iconName == null && obj.iconName == null)
+                   || (iconName != null
+                       && obj.iconName != null
+                       && iconName == obj.iconName))
     }
   }
 

@@ -16,25 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.print
+package org.kopi.galite.ui.base
 
-import org.kopi.galite.util.Printer
-import org.kopi.galite.visual.VWindow
+/**
+ * A centralized way to inject styles in the browser page.
+ * TODO : use this class to handle report styles.
+ */
+class StylesInjector {
 
-interface PrintManager {
-  /**
-   * Handle printing
-   * @param    parent    the form that initiate the printing process
-   * @param    report    the report to print
-   * @param     copies  the number of copies to print
-   * @param    printer    an optional default printer
-   * @param    fax    an optional default fax number
-   * @param    mail    an optional default mail address
-   */
-  fun print(parent: VWindow,
-            report: Printable,
-            copies: Int,
-            printer: Printer,
-            fax: String?,
-            mail: String?)
 }
