@@ -21,7 +21,7 @@ package org.kopi.galite.form
 import kotlin.math.max
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VFixnumColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Fixed
@@ -176,13 +176,13 @@ class VFixnumField(private val digits: Int,
       }
       if (v != null) {
         if (v.scale > scale) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale) as? Array<Any>))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
         if (minval != null && v.compareTo(minval) == -1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval) as? Array<Any>))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval)))
         }
         if (maxval != null && v.compareTo(maxval) == 1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval) as? Array<Any>))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval)))
         }
         if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
@@ -406,13 +406,13 @@ class VFixnumField(private val digits: Int,
       }
       if (v != null) {
         if (v.scale > scale) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale) as Array<Any>?))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
         if (minval != null && v.compareTo(minval) == -1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval) as Array<Any>?))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval)))
         }
         if (maxval != null && v.compareTo(maxval) == 1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval) as Array<Any>?))
+          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval)))
         }
         if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
