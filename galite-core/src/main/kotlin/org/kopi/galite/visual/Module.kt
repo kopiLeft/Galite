@@ -47,9 +47,9 @@ class Module(val id: Int,
   : Comparable<Module> {
 
   /**
-   * return the mnemonic
+   * return description of the module
    */
-  var icon: Image? = null
+  lateinit var description: String
     private set
 
   /**
@@ -61,15 +61,15 @@ class Module(val id: Int,
     private set
 
   /**
-   * return description of the module
-   */
-  lateinit var description: String
-    private set
-
-  /**
    * return the help
    */
   lateinit var help: String
+    private set
+
+  /**
+   * return the mnemonic
+   */
+  var icon: Image? = null
     private set
 
   /**
