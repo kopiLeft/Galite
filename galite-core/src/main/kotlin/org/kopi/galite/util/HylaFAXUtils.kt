@@ -76,9 +76,9 @@ object HylaFAXUtils {
     } catch (e: ConnectException) {
       throw FaxException("NO FAX SERVER")
     } catch (e: IOException) {
-      throw FaxException("Trying read server state: " + e.message, e)
+      throw FaxException("Trying read server state: ${e.message}", e)
     } catch (e: ServerResponseException) {
-      throw FaxException("Trying read server state: " + e.message, e)
+      throw FaxException("Trying read server state: ${e.message}", e)
     }
     return status
   }
@@ -177,7 +177,7 @@ object HylaFAXUtils {
       val result = getQueue(host, port, user, password, qname)
 
       Utils.log("Fax", "READ $qname : host $host / user $user")
-     result.forEach{ element ->
+     result.forEach { element ->
         try {
           val process = StringTokenizer(element, "|")
 

@@ -20,7 +20,6 @@ package org.kopi.galite.util
 
 import java.io.BufferedReader
 import java.io.BufferedWriter
-import java.io.File
 import java.io.FileWriter
 import java.io.InputStreamReader
 
@@ -47,20 +46,20 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
   }
 
   companion object {
-    fun convertToGhostscript(printdata: PrintJob): PrintJob {
-      val tempfile = Utils.getTempFile("kopigsconv", "PS")
-      val gsJob = printdata.createFromThis(tempfile, true)
-      val ous = BufferedWriter(FileWriter(tempfile))
+    fun convertToGhostscript(printData: PrintJob): PrintJob {
+      val tempFile = Utils.getTempFile("kopigsconv", "PS")
+      val gsJob = printData.createFromThis(tempFile, true)
+      val ous = BufferedWriter(FileWriter(tempFile))
 
       /* READ HEADER */
-      val reader = BufferedReader(InputStreamReader(printdata.inputStream))
+      val reader = BufferedReader(InputStreamReader(printData.inputStream))
       var line: String
       var currentPage = -1
 
       while (reader.readLine().also { line = it } != null) {
         when {
           line == TOPRINTER_TRUE -> ous.write(TOPRINTER_FALSE)
-          printdata.numberOfPages == -1 && line.startsWith("%%Page: ") -> {
+          printData.numberOfPages == -1 && line.startsWith("%%Page: ") -> {
             currentPage = readCurrentPageNumber(line)
             ous.write(line)
           }
