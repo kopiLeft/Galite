@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.form
 
+import java.sql.SQLException
+
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBInterruptionException
@@ -27,7 +29,6 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
-import java.sql.SQLException
 
 /**
  * This class implements predefined commands
@@ -119,7 +120,7 @@ object Commands : VConstants {
       form.setMenuQuery(true)
     }
 
-    val id: Int = b.singleMenuQuery(false) as Int
+    val id = b.singleMenuQuery(false) as Int
 
     if (id != -1) {
       while (true) {
@@ -174,7 +175,7 @@ object Commands : VConstants {
     b.validate()
     form.saveFilledField()
 
-    val id : Int = b.singleMenuQuery(false) as Int
+    val id = b.singleMenuQuery(false) as Int
 
     if (id != -1) {
       while (true) {
@@ -231,7 +232,7 @@ object Commands : VConstants {
 
     b.validate()
 
-    val id: Int = b.singleMenuQuery(false) as Int
+    val id = b.singleMenuQuery(false) as Int
 
     if (id != -1) {
       try {
@@ -275,7 +276,7 @@ object Commands : VConstants {
       var i = 0
 
       while (i < form.getBlockCount() - 1) {
-        if (b === form.getBlock(i)) {
+        if (b == form.getBlock(i)) {
           form.gotoBlock(form.getBlock(i + 1))
           return
         }
@@ -365,7 +366,7 @@ object Commands : VConstants {
       setDefault()
       setRecordFetched(0, false)
       setRecordChanged(0, changed)
-      if (!isMulti() && getForm().getActiveBlock() === this) {
+      if (!isMulti() && getForm().getActiveBlock() == this) {
         gotoFirstUnfilledField()
       }
     }
@@ -562,7 +563,7 @@ object Commands : VConstants {
    */
   fun insertLine(b: VBlock) {
     assert(b.isMulti()) { "The command InsertLine can be used only with a multi block." }
-    assert(b === b.getForm().getActiveBlock()) { b.getName().toString() + " is not the active block. (" + b.getForm().getActiveBlock()?.getName() + ")" }
+    assert(b == b.getForm().getActiveBlock()) { b.getName().toString() + " is not the active block. (" + b.getForm().getActiveBlock()?.getName() + ")" }
     val recno: Int = b.activeRecord
 
     b.leaveRecord(true)
@@ -610,7 +611,7 @@ object Commands : VConstants {
     var otherBlocks = 0
 
     for (i in 0 until blockCount) {
-      if (b === b.getForm().getBlock(i)) {
+      if (b == b.getForm().getBlock(i)) {
         continue
       }
       if (!b.getForm().getBlock(i).isAccessible()) {
