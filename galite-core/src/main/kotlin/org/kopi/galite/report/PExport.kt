@@ -209,13 +209,9 @@ abstract class PExport(val table: UTable,
 
   internal open fun formatTimestampColumn(column: VReportColumn, index: Int) {}
 
-  fun getColumnLabel(column: Int): String {
-    return model.getAccessibleColumn(table.convertColumnIndexToModel(column))!!.label
-  }
+  fun getColumnLabel(column: Int): String = model.getAccessibleColumn(table.convertColumnIndexToModel(column))!!.label
 
-  fun getBackgroundForLevel(level: Int): Color {
-    return parameters.getBackground(level)
-  }
+  fun getBackgroundForLevel(level: Int): Color = parameters.getBackground(level)
 
   /**
    * checks if  we are in a toner saving mode.
