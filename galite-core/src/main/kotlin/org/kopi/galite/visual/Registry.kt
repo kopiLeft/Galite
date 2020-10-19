@@ -20,7 +20,7 @@ package org.kopi.galite.visual
 
 import java.util.Hashtable
 
-class Registry(val domain: String, private var parents: Array<Registry>?) {
+open class Registry(val domain: String, private var parents: Array<Registry>?) {
 
   var dependencies = Hashtable<String, String>()
 

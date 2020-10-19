@@ -17,5 +17,20 @@
  */
 package org.kopi.galite.chart
 
-class VTimestampDimension {
+import org.kopi.galite.type.Timestamp
+
+/**
+ * Represents a time stamp chart column.
+ *
+ * @param ident The column identifier.
+ * @param format The time stamp format to be used to format the time stamp value.
+ */
+class VTimestampDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+  override fun toString(value: Any?): String {
+    return when (value) {
+      null -> CConstants.EMPTY_TEXT
+      is Timestamp -> value.toString()
+      else -> value.toString()
+    }
+  }
 }

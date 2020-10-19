@@ -18,10 +18,68 @@
 
 package org.kopi.galite.visual
 
+import java.util.Locale
+
+import org.kopi.galite.base.ExtendedMessageFormat
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.util.base.InconsistencyException
+
+/**
+ * This class handles localized messages
+ */
 object Message {
-  fun getMessage(source: String?, ident: String, param: Any?): String {
-    TODO()
+  /**
+   * Returns a message (convenience routine).
+   *
+   * @param     ident             the message ident
+   * @return    the requested message
+   */
+  fun getMessage(ident: String): String {
+    return getMessage(ident = ident, params = null as Any?)
   }
 
-  fun getMessage(string: String): String = TODO()
+  /**
+   * Returns a message (convenience routine).
+   *
+   * @param     ident             the message ident
+   * @param     param1          the first message parameter
+   * @param     param1          the second message parameter
+   * @return    the requested message
+   */
+  fun getMessage(source: String, ident: String, param1: Any, param2: Any): String {
+    return getMessage(source = source, ident = ident, params = arrayOf(param1, param2))
+  }
+
+  /**
+   * Returns the formatted message identified by its unique key and formatted
+   * using the given parameters objects.
+   *
+   * @param source The localization XML source.
+   * @param ident The message identifiers.
+   * @param params The message parameters.
+   * @return The formatted message.
+   */
+  fun getMessage(source: String = VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE, ident: String, params: Any? = null): String {
+    val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
+
+    val manager = if (ApplicationContext.applicationContext != null
+            && ApplicationContext.applicationContext.getApplication() != null) {
+      ApplicationContext.getLocalizationManager()
+    } else {
+      LocalizationManager(Locale.getDefault(), null)
+    }
+    return try {
+      //   Within a String, "''" represents a single quote in java.text.MessageFormat.
+      val format = manager!!.getMessageLocalizer(source, ident).getText().replace("'", "''")
+      ExtendedMessageFormat.formatMessage(format, params)
+    } catch (e: InconsistencyException) {
+      System.err.println("ERROR: " + e.message)
+      "!$ident!"
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private const val VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/VKMessages"
 }

@@ -18,8 +18,28 @@
 
 package org.kopi.galite.form
 
-interface UMultiBlock {
-   fun switchView(i: Int) {
-     TODO()
-   }
+import org.kopi.galite.base.UComponent
+
+/**
+ * `UMultiBlock` is the top-level interface that represents a double layout
+ * block.
+ * `UMultiBlock` is a both chart block and simple block with the possibility
+ * to switch between the two layouts.
+ */
+interface UMultiBlock : UBlock {
+
+  /**
+   * Switches view between list and detail mode.
+   * @param row The selected record.
+   * @throws org.kopi.galite.visual.VException Switch operation may fail.
+   */
+  fun switchView(row: Int)
+
+  /**
+   * Adds a component to the detail view. The add to the chart block
+   * is ensured by [.add].
+   * @param comp The [UComponent] to be added to detail view.
+   * @param constraint The [Alignment] component constraints.
+   */
+  fun addToDetail(comp: UComponent, constraint: Alignment)
 }

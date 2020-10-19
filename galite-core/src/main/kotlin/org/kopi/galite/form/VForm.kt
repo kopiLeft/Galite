@@ -22,10 +22,9 @@ import java.sql.SQLException
 
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VActor
 
-open class VForm : VWindow() {
-
-  fun isChanged(): Boolean = TODO()
+abstract class VForm : VConstants, VWindow() {
 
   fun ask(s: String): Boolean = TODO()
 
@@ -65,19 +64,26 @@ open class VForm : VWindow() {
     TODO()
   }
 
-  fun getBlock(i: Int) : VBlock {
-    TODO()
-  }
-
   fun gotoBlock(block: VBlock?) {
-    TODO()
-  }
-
-  fun getActiveBlock(): VBlock? {
     TODO()
   }
 
   fun setFieldSearchOperator(searchOperator: Any) {
     TODO()
+  }
+
+  fun getDefaultActor(type: Int): VActor = TODO()
+
+  fun getActiveBlock(): VBlock = TODO()
+
+  fun isChanged(): Boolean = TODO()
+
+  fun getBlock(i: Int): VBlock = TODO()
+
+  companion object {
+    const val CMD_NEWITEM = -2
+    const val CMD_EDITITEM = -3
+    const val CMD_EDITITEM_S = -4
+    const val CMD_AUTOFILL = -5
   }
 }

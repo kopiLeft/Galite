@@ -36,14 +36,9 @@ class NotNullFixed : Fixed {
   /**
    * Checks whether this object is equal to the specified object.
    */
-  override fun equals(other: Any?): Boolean {
-    return (other is NotNullFixed
-            && super.equals(other))
-  }
+  override fun equals(other: Any?): Boolean = (other is NotNullFixed? && super.equals(other))
 
   companion object {
-    fun castToNotNull(value: Fixed?): NotNullFixed {
-      return value as NotNullFixed
-    }
+    fun castToNotNull(value: Fixed?): NotNullFixed? = value as? NotNullFixed
   }
 }

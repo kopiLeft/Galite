@@ -15,8 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class MultiFieldAlignment {
-
-}
+/**
+ * A class to specify alignment in Layout
+ */
+class MultiFieldAlignment(x: Int,
+                          y: Int,
+                          width: Int,
+                          height: Int,
+                          alignRight: Boolean)
+                :Alignment(x,
+                           y,
+                           width,
+                           height,
+                           alignRight)

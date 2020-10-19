@@ -15,7 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-open class Alignment {
+import java.io.Serializable
+
+/**
+ * A class to specify alignment in Layout
+ *
+ * @param          x               position in x
+ * @param          y               position in y
+ * @param          width           number of column
+ * @param          height          number of lines
+ * @param          alignRight      position in alignRight
+ * @param          useAll          use the whole possible width of the column
+ */
+open class Alignment(var x: Int,
+                     var y: Int,
+                     var width: Int,
+                     var height: Int,
+                     var alignRight: Boolean,
+                     var useAll: Boolean = false) : Serializable {
+  var ALG_LEFT = false
+  var ALG_RIGHT = true
 }

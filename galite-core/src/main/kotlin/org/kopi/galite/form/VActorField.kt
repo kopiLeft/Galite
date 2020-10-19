@@ -20,7 +20,7 @@ package org.kopi.galite.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VlibProperties
 
@@ -48,7 +48,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun setNull(r: Int) {}
 
-  override fun setObject(r: Int, v: Any){}
+  override fun setObject(r: Int, v: Any) {}
 
   override fun retrieveQuery(query: Query, column: Int): Any? = null
 

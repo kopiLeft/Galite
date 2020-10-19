@@ -37,7 +37,7 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param dBContext The database context for this object.
  * if if is specified, it will create a window with a DB context
  */
-abstract class VWindow(override var dBContext: DBContext = ApplicationContext.getDBContext()
+abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.getDBContext()
 ) : Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   private var display: UWindow? = null
   private var actors: ArrayList<VActor> = arrayListOf()
   protected lateinit var windowTitle: String
-  protected var smallIcon: Image? = null
+  internal var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
@@ -247,7 +247,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * change the title of this form
    */
-  fun setTitle(title: String) {
+  open fun setTitle(title: String) {
     this.windowTitle = title
     display?.setTitle(getTitle())
   }
@@ -263,7 +263,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
     actors.addAll(actorDefs)
   }
 
-  fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
+  open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
 
   fun getActors(): ArrayList<VActor> {
     return actors
@@ -272,7 +272,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Enables/disables the actor.
    */
-  fun setActorEnabled(position: Int, enabled: Boolean) {
+  open fun setActorEnabled(position: Int, enabled: Boolean) {
     val actor: VActor = getActor(position)
     actor.handler = this
     actor.isEnabled = enabled
@@ -433,7 +433,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   override fun executeVoidTrigger(VKT_Type: Int) {
     if (VKT_Type == Constants.CMD_GOTO_SHORTCUTS) {
       try {
-        ApplicationContext.getMenu().getDisplay().gotoShortcuts()
+        ApplicationContext.getMenu()!!.getDisplay().gotoShortcuts()
       } catch (npe: NullPointerException) {
         throw VExecFailedException(VlibProperties.getString("shortcuts-not-available"))
       }
@@ -472,12 +472,12 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Returns the current user name
    */
-  open fun getUserName(): String? = dBContext.defaultConnection.userName
+  open fun getUserName(): String? = dBContext!!.defaultConnection.userName
 
   /**
    * Returns the user ID
    */
-  open fun getUserID(): Int = dBContext.defaultConnection.getUserID()
+  open fun getUserID(): Int = dBContext!!.defaultConnection.getUserID()
 
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING
@@ -512,7 +512,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
    */
   protected fun formatMessage(ident: String, params: Array<Any?>): String? {
     return if (source != null) {
-      Message.getMessage(source, ident, params)
+      Message.getMessage(source!!, ident, params)
     } else {
       null
     }

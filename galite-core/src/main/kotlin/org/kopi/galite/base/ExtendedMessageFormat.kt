@@ -46,7 +46,7 @@ class ExtendedMessageFormat : MessageFormat {
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
   constructor(pattern: String) : super(pattern)
-  constructor(pattern: String, locale: Locale) : super(pattern, locale)
+  constructor(pattern: String, locale: Locale?) : super(pattern, locale)
 
   /**
    * Formats an object to produce a string. This is equivalent to
@@ -60,7 +60,7 @@ class ExtendedMessageFormat : MessageFormat {
    * @exception IllegalArgumentException if the Format cannot format the given
    * object
    */
-  fun formatMessage(obj: Array<Any?>): String = format(toNullRepresentation(obj))
+  fun formatMessage(obj: Array<Any?>?): String = format(toNullRepresentation(obj))
           .toString()
           .replace("null".toRegex(), "")
 
@@ -382,7 +382,7 @@ class ExtendedMessageFormat : MessageFormat {
      * is not of the type expected by the format element(s)
      * that use it.
      */
-    fun formatMessage(pattern: String, arguments: Array<Any?>): String {
+    fun formatMessage(pattern: String, arguments: Array<Any?>?): String {
       val temp = ExtendedMessageFormat(pattern)
       return temp.formatMessage(arguments)
     }
