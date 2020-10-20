@@ -22,7 +22,7 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
@@ -30,6 +30,7 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VModel
+
 
 abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
@@ -65,13 +66,13 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open protected fun enumerateValue(desc: Boolean) {
+  open fun enumerateValue(desc: Boolean) {
     TODO()
   }
 
   /**
    * Sets the field value of given record.
-   * Warning:   This method will become inaccessible to users in next release
+   * Warning:   This method will become inaccessible to kopi users in next release
    */
   open fun setObject(r: Int, v: Any?) {
     TODO()
@@ -156,7 +157,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open protected fun getListColumn(): VListColumn? {
+  open fun getListColumn(): VListColumn? {
     TODO()
   }
 
@@ -219,11 +220,20 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   fun getForm(): VForm {
     TODO()
   }
+
   open fun helpOnField(help: VHelpGenerator) {
     TODO()
   }
 
   fun getSearchCondition(): String? = TODO()
+
+  fun hasFocus(): Boolean = TODO()
+
+   fun getListID(): Int = TODO()
+
+   fun setValueID(id: Int) {
+     TODO()
+   }
 
   companion object {
     const val MDL_FLD_COLOR = 1
@@ -258,7 +268,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   private val posInArray // position in array of fields
           = 0
 
-  var list: VList? = null // list
+  var list: VList ? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>
@@ -268,7 +278,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           : VField
 
   // changed?
-  private val changed // changed by user / changes are done in the model
+  val changed // changed by user / changes are done in the model
           = false
   val changedUI // changed by user / changes are in the ui -> update model
           = false
@@ -296,5 +306,4 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           : Array<VColor>
   private val background // background colors for this field.
           : Array<VColor>
-
 }

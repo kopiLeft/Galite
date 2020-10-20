@@ -23,7 +23,7 @@ import java.util.GregorianCalendar
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VMonthColumn
 import org.kopi.galite.type.Month

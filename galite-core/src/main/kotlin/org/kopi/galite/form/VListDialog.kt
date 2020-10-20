@@ -60,7 +60,7 @@ class VListDialog(list: Array<VListColumn>,
   constructor(list: Array<VListColumn>,
               data: Array<Array<Any>>,
               rows: Int,
-              newForm: String) : this(list, data, rows, Module.Executable(newForm) as VDictionary)
+              newForm: String) : this(list, data, rows, Module.getExecutable(newForm) as VDictionary)
 
   /**
    * Creates a dialog with specified data
