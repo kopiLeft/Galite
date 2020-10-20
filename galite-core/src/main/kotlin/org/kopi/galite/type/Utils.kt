@@ -27,8 +27,3 @@ class Utils {
     fun toSql(t: Week?): String = TODO()
   }
 }
-
-fun toSql(d: Date): String {
-  TODO()
-}
-
