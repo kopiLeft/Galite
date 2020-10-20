@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
 import kotlin.reflect.KClass
@@ -26,8 +27,9 @@ import org.kopi.galite.util.LineBreaker
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.db.Query
+import org.kopi.galite.type.Utils
 
-open class VStringField(width: Int, height: Int, private val visibleHeight: Int, val typeOptions: Int, styled: Boolean)
+open class VStringField(width: Int, height: Int, private val visibleHeight: Int, val convert: Int, styled: Boolean)
   : VField(width, height) {
 
   constructor(width: Int, height: Int, convert: Int, styled: Boolean) : this(width, height, 0, convert, styled)
@@ -54,25 +56,21 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
   /**
    * return the name of this field
    */
-  override fun getTypeName(): String {
-    return VlibProperties.getString(if (height == 1) "String" else "StringArea")
-  }
+  override fun getTypeName(): String = VlibProperties.getString(if (height == 1) "String" else "StringArea")
 
   /**
    * Return the visible height
    */
-  fun getVisibleHeight(): Int {
-    return if (visibleHeight == 0) height else visibleHeight
-  }
+  fun getVisibleHeight(): Int = if (visibleHeight == 0) height else visibleHeight
+
   // ----------------------------------------------------------------------
   // Interface Display
   // ----------------------------------------------------------------------
   /**
    * return a list column for list
    */
-  override fun getListColumn(): VListColumn {
-    return VStringColumn(getHeader(), null, align, width, getPriority() >= 0)
-  }
+  override fun getListColumn(): VListColumn =
+          VStringColumn(getHeader(), null, align, width, getPriority() >= 0)
 
   /**
    * verify that text is valid (during typing)
@@ -93,7 +91,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
     if (s == null || s == "") {
       setNull(rec)
     } else {
-      when (typeOptions and VConstants.FDO_CONVERT_MASK) {
+      when (convert and VConstants.FDO_CONVERT_MASK) {
         VConstants.FDO_CONVERT_NONE -> {
         }
         VConstants.FDO_CONVERT_UPPER -> s = s.toUpperCase()
@@ -116,11 +114,12 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
   private fun convertName(source: String): String {
     val chars = source.toLowerCase().toCharArray()
     var found = false
+
     for (i in chars.indices) {
-      if (!found && Character.isLetter(chars[i])) {
-        chars[i] = Character.toUpperCase(chars[i])
+      if (!found && chars[i].isLetter()) {
+        chars[i] = chars[i].toUpperCase()
         found = true
-      } else if (Character.isWhitespace(chars[i])) {
+      } else if (chars[i].isWhitespace()) {
         found = false
       }
     }
@@ -166,52 +165,36 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    * @param    query        the query holding the tuple
    * @param    column        the index of the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any {
-    return query.getString(column)
-  }
+  override fun retrieveQuery(query: Query, column: Int): Any = query.getString(column)
 
   /**
    * Is the field value of given record null ?
    */
-  override fun isNullImpl(r: Int): Boolean {
-    return value[r] == null
-  }
+  override fun isNullImpl(r: Int): Boolean = value[r] == null
 
   /**
    * Returns the field value of given record as a string value.
    */
-  fun getString(r: Int): String {
-    return getObject(r) as String
-  }
+  fun getString(r: Int): String = getObject(r) as String
 
   /**
    * Returns the field value of the current record as an object
    */
-  override fun getObjectImpl(r: Int): Any? {
-    return value[r]
-  }
+  override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String {
-    return if (o == null) "" else (o as String?)!!
-  }
+  override fun toText(o: Any?): String = (o as String?).orEmpty()
 
-  override fun toObject(s: String): Any? {
-    return if (s == "") null else s
-  }
+  override fun toObject(s: String): Any? = if (s == "") null else s
 
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String {
-    return if (value[r] == null) "" else value[r]!!
-  }
+  override fun getTextImpl(r: Int): String = if (value[r] == null) "" else value[r]!!
 
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    return org.kopi.galite.type.Utils.toSql(value[r]!!)
-  }
+  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r]!!)
 
   /**
    * Copies the value of a record to another
@@ -223,9 +206,9 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block.bufferSize
-            && (oldValue != null && value[t] == null
-                    || oldValue == null && value[t] != null
-                    || oldValue != null && oldValue != value[t])) {
+        && (oldValue != null && value[t] == null
+            || oldValue == null && value[t] != null
+            || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -233,9 +216,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> {
-    return String::class
-  }
+  override fun getDataType(): KClass<*> = String::class
 
   // ----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE
@@ -243,18 +224,14 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
   /**
    * Returns a string representation of a string value wrt the field type.
    */
-  protected fun formatString(value: String): String {
-    return value
-  }
+  protected fun formatString(value: String): String = value
 
   /**
    * Replaces blanks by new-lines
    *
    * @param    record        the index of the record
    */
-  fun modelToText(record: Int): String {
-    return modelToText(getString(record), width)
-  }
+  fun modelToText(record: Int): String = modelToText(getString(record), width)
 
   /**
    * Returns true if the text field supports styled content.
@@ -267,32 +244,21 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
      * Replaces new-lines by blanks
      *
      * @param    source    the source text with carriage return
-     * @param    col    the width of the text
-     */
-    fun textToModel(source: String, col: Int): String {
-      return textToModel(source, col, Int.MAX_VALUE)
-    }
-    /**
-     * Replaces new-lines by blanks
-     *
-     * @param    source    the source text with carriage return
-     * @param    col    the width of the text
+     * @param    col       the width of the text
      */
 
-    fun textToModel(source: String, col: Int, lin: Int): String {
+    fun textToModel(source: String, col: Int, lin: Int = Int.MAX_VALUE): String =
       // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
-      return LineBreaker.textToModel(source, col, lin)
-    }
+      LineBreaker.textToModel(source, col, lin)
 
     /**
      * Replaces blanks by new-lines
      *
      * @param    source        the source text with white space
-     * @param    col        the width of the text area
+     * @param    col           the width of the text area
      */
-    fun modelToText(source: String, col: Int): String {
+    fun modelToText(source: String, col: Int): String =
       // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
-      return LineBreaker.modelToText(source, col)
-    }
+      LineBreaker.modelToText(source, col)
   }
 }
