@@ -16,37 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.util.lpr
 
 /**
- * An interface that defines printer devices
+ * This exception is thrown when lpd return an error code
+ * Represents an exception with a message.
  *
- * Such printers may be remote printers, local printers, print-to-file, fax
- * mailer or whatever
+ * @param    code        the exception code
+ * @param    message        the associated message
  */
-interface Printer {
-
-  /**
-   * Unique name of the printer in the database which is chosen by the user
-   */
-  fun getPrinterName(): String
-
-  /**
-   * Prints a PrintJob
-   */
-  fun print(data: PrintJob): String
-
-  // ----------------------------------------------------------------------
-  // PRINT OPTIONS
-  // ----------------------------------------------------------------------
-
-  /**
-   * Sets the tray to use
-   */
-  fun selectTray(tray: Int)
-
-  /**
-   * Sets the paper format
-   */
-  fun setPaperFormat(paperFormat: String?)
-}
+class LpdException(val code: Int, message: String) : Exception(message)

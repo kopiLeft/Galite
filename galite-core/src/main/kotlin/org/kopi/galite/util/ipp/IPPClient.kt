@@ -16,37 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.util.ipp
 
-/**
- * An interface that defines printer devices
- *
- * Such printers may be remote printers, local printers, print-to-file, fax
- * mailer or whatever
- */
-interface Printer {
+import java.io.InputStream
 
-  /**
-   * Unique name of the printer in the database which is chosen by the user
-   */
-  fun getPrinterName(): String
+class IPPClient(val hostname: String, val port: Short, val printer: String, val user: String) {
 
-  /**
-   * Prints a PrintJob
-   */
-  fun print(data: PrintJob): String
+  fun getMediaTypes(): List<*> {
+    TODO()
+  }
 
-  // ----------------------------------------------------------------------
-  // PRINT OPTIONS
-  // ----------------------------------------------------------------------
+  fun print(file: InputStream,
+            nbCopies: Int,
+            mediaAttributes: List<*>,
+            optionalAttributes: List<*>) {
+    TODO()
+  }
 
-  /**
-   * Sets the tray to use
-   */
-  fun selectTray(tray: Int)
-
-  /**
-   * Sets the paper format
-   */
-  fun setPaperFormat(paperFormat: String?)
+  fun print(file: InputStream, nbCopies: Int, attributes: Array<String>?) {
+    TODO()
+  }
 }
