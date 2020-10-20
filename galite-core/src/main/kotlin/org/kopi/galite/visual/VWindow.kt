@@ -38,7 +38,7 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param dBContext The database context for this object.
  * if if is specified, it will create a window with a DB context
  */
-abstract class VWindow(override var dBContext: DBContext = ApplicationContext.getDBContext())
+abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.getDBContext())
   : Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
@@ -49,7 +49,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   private var display: UWindow? = null
   private var actors: ArrayList<VActor> = arrayListOf()
   protected lateinit var windowTitle: String
-  protected var smallIcon: Image? = null
+  internal var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
@@ -439,7 +439,7 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   override fun executeVoidTrigger(VKT_Type: Int) {
     if (VKT_Type == Constants.CMD_GOTO_SHORTCUTS) {
       try {
-        ApplicationContext.getMenu().getDisplay().gotoShortcuts()
+        ApplicationContext.getMenu()!!.getDisplay().gotoShortcuts()
       } catch (npe: NullPointerException) {
         throw VExecFailedException(VlibProperties.getString("shortcuts-not-available"))
       }
@@ -478,12 +478,12 @@ abstract class VWindow(override var dBContext: DBContext = ApplicationContext.ge
   /**
    * Returns the current user name
    */
-  open fun getUserName(): String? = dBContext.defaultConnection.userName
+  open fun getUserName(): String? = dBContext!!.defaultConnection.userName
 
   /**
    * Returns the user ID
    */
-  open fun getUserID(): Int = dBContext.defaultConnection.getUserID()
+  open fun getUserID(): Int = dBContext!!.defaultConnection.getUserID()
 
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING

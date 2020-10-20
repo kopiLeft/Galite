@@ -15,19 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.cross
+package org.kopi.galite.print
 
-class VDynamicReport {
+import org.kopi.galite.util.PrintException
 
-  companion object {
-    const val EXPORT_ICON = "export"
-    const val FOLD_ICON = "fold"
-    const val UNFOLD_ICON = "unfold"
-    const val FOLD_COLUMN_ICON = "foldColumn"
-    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
-    const val SERIALQUERY_ICON = "serialquery"
-    const val HELP_ICON = "help"
-    const val QUIT_ICON = "quit"
-    const val PRINT_ICON = "print"
-  }
+/**
+ * Postscript Print Failure
+ */
+class PSPrintException : PrintException {
+  /**
+   * Constructs an exception with a message.
+   *
+   * @param        message                the associated message
+   */
+  constructor(message: String?) : super(message, EXC_FATAL)
+
+  /**
+   * Constructs a new exception with the specified detail message and cause.
+   *
+   * @param     message                the associated message
+   * @param     cause           the cause  (null value permited
+   */
+  constructor(message: String?, cause: Throwable?) : super(message, cause, EXC_FATAL)
 }

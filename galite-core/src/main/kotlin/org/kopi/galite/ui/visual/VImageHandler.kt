@@ -15,19 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.cross
 
-class VDynamicReport {
+package org.kopi.galite.ui.visual
 
-  companion object {
-    const val EXPORT_ICON = "export"
-    const val FOLD_ICON = "fold"
-    const val UNFOLD_ICON = "unfold"
-    const val FOLD_COLUMN_ICON = "foldColumn"
-    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
-    const val SERIALQUERY_ICON = "serialquery"
-    const val HELP_ICON = "help"
-    const val QUIT_ICON = "quit"
-    const val PRINT_ICON = "print"
+import org.kopi.galite.base.Image
+import org.kopi.galite.visual.ImageHandler
+
+class VImageHandler : ImageHandler() {
+  override fun getImage(image: String): Image {
+    TODO("Not yet implemented")
   }
+
+  override fun getImage(image: ByteArray): Image {
+    TODO("Not yet implemented")
+  }
+
+  override fun getURL(image: String): String {
+    TODO("Not yet implemented")
+  }
+
 }

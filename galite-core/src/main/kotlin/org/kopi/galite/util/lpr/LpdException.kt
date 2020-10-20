@@ -15,19 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.cross
 
-class VDynamicReport {
+package org.kopi.galite.util.lpr
 
-  companion object {
-    const val EXPORT_ICON = "export"
-    const val FOLD_ICON = "fold"
-    const val UNFOLD_ICON = "unfold"
-    const val FOLD_COLUMN_ICON = "foldColumn"
-    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
-    const val SERIALQUERY_ICON = "serialquery"
-    const val HELP_ICON = "help"
-    const val QUIT_ICON = "quit"
-    const val PRINT_ICON = "print"
-  }
-}
+/**
+ * This exception is thrown when lpd return an error code
+ * Represents an exception with a message.
+ *
+ * @param    code        the exception code
+ * @param    message        the associated message
+ */
+class LpdException(val code: Int, message: String) : Exception(message)

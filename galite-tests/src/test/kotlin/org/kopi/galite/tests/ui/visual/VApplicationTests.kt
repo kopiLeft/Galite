@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,19 +14,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.cross
 
-class VDynamicReport {
+package org.kopi.galite.tests.ui.visual
 
-  companion object {
-    const val EXPORT_ICON = "export"
-    const val FOLD_ICON = "fold"
-    const val UNFOLD_ICON = "unfold"
-    const val FOLD_COLUMN_ICON = "foldColumn"
-    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
-    const val SERIALQUERY_ICON = "serialquery"
-    const val HELP_ICON = "help"
-    const val QUIT_ICON = "quit"
-    const val PRINT_ICON = "print"
+import org.junit.Test
+
+import org.kopi.galite.tests.ApplicationTestBase
+
+class VApplicationTests : ApplicationTestBase() {
+
+  @Test
+  fun applicationInitParametersTest() {
+    // TODO
   }
 }

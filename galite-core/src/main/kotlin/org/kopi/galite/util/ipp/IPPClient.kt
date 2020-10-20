@@ -15,19 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.cross
 
-class VDynamicReport {
+package org.kopi.galite.util.ipp
 
-  companion object {
-    const val EXPORT_ICON = "export"
-    const val FOLD_ICON = "fold"
-    const val UNFOLD_ICON = "unfold"
-    const val FOLD_COLUMN_ICON = "foldColumn"
-    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
-    const val SERIALQUERY_ICON = "serialquery"
-    const val HELP_ICON = "help"
-    const val QUIT_ICON = "quit"
-    const val PRINT_ICON = "print"
+import java.io.InputStream
+
+class IPPClient(val hostname: String, val port: Short, val printer: String, val user: String) {
+
+  fun getMediaTypes(): List<*> {
+    TODO()
+  }
+
+  fun print(file: InputStream,
+            nbCopies: Int,
+            mediaAttributes: List<*>,
+            optionalAttributes: List<*>) {
+    TODO()
+  }
+
+  fun print(file: InputStream, nbCopies: Int, attributes: Array<String>?) {
+    TODO()
   }
 }

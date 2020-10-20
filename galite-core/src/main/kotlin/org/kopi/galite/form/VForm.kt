@@ -206,7 +206,7 @@ abstract class VForm : VWindow, VConstants {
    *
    * @param     locale  the locale to use
    */
-  fun localize(locale: Locale) {
+  fun localize(locale: Locale?) {
     var manager: LocalizationManager?
 
     manager = LocalizationManager(locale, Locale.getDefault())
@@ -621,7 +621,7 @@ abstract class VForm : VWindow, VConstants {
     var localHelp = ""
     val surl = StringBuffer()
     val module = try {
-      ApplicationContext.getMenu().getModule(this)
+      ApplicationContext.getMenu()!!.getModule(this)
     } catch (npe: NullPointerException) {
       null
     }

@@ -55,14 +55,14 @@ object VlibProperties {
 
   fun getString(key: String, params: Any?): String {
     val format: String
-    val manager: LocalizationManager = if (ApplicationContext.applicationContext.getApplication() != null) {
+    val manager = if (ApplicationContext.applicationContext.getApplication() != null) {
       ApplicationContext.getLocalizationManager()
     } else {
       LocalizationManager(Locale.getDefault(), null)
     }
     return try {
       // Within a String, "''" represents a single quote in java.text.MessageFormat.
-      format = manager.getPropertyLocalizer(VLIB_PROPERTIES_RESOURCE_FILE, key).getValue().replace("'", "''")
+      format = manager!!.getPropertyLocalizer(VLIB_PROPERTIES_RESOURCE_FILE, key).getValue().replace("'", "''")
 
       if (params is Array<*>) {
         MessageFormat.format(format, *params)
