@@ -16,19 +16,52 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.db
 
-import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.NotNullTimestamp
+import org.kopi.galite.type.NotNullWeek
 
-object VDatabaseUtils {
+class Query(conn: Connection) {
 
-  fun checkForeignKeys(ctxt: DBContextHandler, id: Int, table: String) {
+  fun addString(value: String?) {
+    TODO()
+  }
+  fun getWeek(pos: Int): NotNullWeek = TODO()
+
+  fun next(): Boolean {
     TODO()
   }
 
-  fun deleteRecords(ctxt: DBContextHandler,
-                    table: String,
-                    condition: String?) {
+  fun getString(pos: Int): String {
     TODO()
   }
+
+  fun addInt(value: Int) {
+    TODO()
+  }
+
+  fun run(format: String?): Int = TODO()
+
+  fun delete(format: String?): Int= TODO()
+
+  fun getInt(pos: Int): Int = TODO()
+
+  fun close() {
+    TODO()
+  }
+
+  fun open(format: String) {
+    TODO()
+  }
+
+  fun isNull(column: Int): Boolean = TODO()
+
+  fun getDate(pos: Int): NotNullDate = TODO()
+
+  fun getBoolean(column: Int): Boolean = TODO()
+
+  fun getObject(pos:Int):Any = TODO()
+
+  fun getTimestamp(pos: Int): NotNullTimestamp = TODO()
 }

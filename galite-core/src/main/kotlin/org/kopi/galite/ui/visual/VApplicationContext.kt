@@ -16,26 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
+package org.kopi.galite.ui.visual
 
-import org.kopi.galite.db.DBContext
+import org.kopi.galite.visual.Application
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.PreviewRunner
 
-/**
- * A logout module that simply call [Application.logout]
- */
-class LogoutModule : Executable {
-
-  /**
-   * MenuTree sets the context of new executable to the default connection
-   */
-  override var dBContext: DBContext? = null
-
-  /**
-   * The start method called every time the user launch this app from menu
-   * it should be not modal
-   * @exception VException      an exception may be raised by your app
-   */
-  override fun doNotModal() {
-    ApplicationContext.applicationContext.getApplication().logout()
+class VApplicationContext : ApplicationContext() {
+  override fun getApplication(): Application {
+    TODO("Not yet implemented")
   }
+
+  override fun getPreviewRunner(): PreviewRunner {
+    TODO("Not yet implemented")
+  }
+
+  override fun isWebApplicationContext(): Boolean {
+    TODO("Not yet implemented")
+  }
+
 }

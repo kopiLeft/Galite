@@ -16,29 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.base
+package org.kopi.galite.ui.visual
 
-import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.NotNullTimestamp
-import org.kopi.galite.type.NotNullWeek
+import java.io.File
 
-class Query {
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.UWindow
 
-  fun isNull(column: Int): Boolean {
-    TODO()
+class VFileHandler : FileHandler() {
+  override fun chooseFile(window: UWindow, defaultName: String): File {
+    TODO("Not yet implemented")
   }
 
-  fun getWeek(pos: Int): NotNullWeek = TODO()
-
-  fun getDate(pos: Int): NotNullDate {
-    TODO()
+  override fun chooseFile(window: UWindow, dir: File, defaultName: String): File {
+    TODO("Not yet implemented")
   }
 
-  fun getBoolean(column: Int): Boolean {
-    TODO()
+  override fun openFile(window: UWindow, defaultName: String): File {
+    TODO("Not yet implemented")
   }
 
-  fun getObject(pos: Int): Any = TODO()
+  override fun openFile(window: UWindow, filter: FileFilter): File {
+    TODO("Not yet implemented")
+  }
 
-  fun getTimestamp(pos: Int): NotNullTimestamp = TODO()
+  override fun openFile(window: UWindow, dir: File, defaultName: String): File {
+    TODO("Not yet implemented")
+  }
+
 }

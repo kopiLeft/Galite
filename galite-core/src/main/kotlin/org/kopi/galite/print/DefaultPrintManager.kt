@@ -49,11 +49,11 @@ class DefaultPrintManager : PrintManager {
 
   companion object {
     fun getPrintManager(): PrintManager {
-      return ApplicationContext.applicationContext.getApplication().getPrintManager() ?: DefaultPrintManager()
+      return ApplicationContext.applicationContext.getApplication().printManager ?: DefaultPrintManager()
     }
 
     fun setPrintManager(printCopies: PrintManager) {
-      ApplicationContext.applicationContext.getApplication().setPrintManager(printCopies)
+      ApplicationContext.applicationContext.getApplication().printManager = printCopies
     }
   }
 }

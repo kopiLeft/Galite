@@ -16,26 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.visual
-
-import org.kopi.galite.db.DBContext
+package org.kopi.galite.ui.base
 
 /**
- * A logout module that simply call [Application.logout]
+ * A centralized way to inject styles in the browser page.
+ * TODO : use this class to handle report styles.
  */
-class LogoutModule : Executable {
+class StylesInjector {
 
-  /**
-   * MenuTree sets the context of new executable to the default connection
-   */
-  override var dBContext: DBContext? = null
-
-  /**
-   * The start method called every time the user launch this app from menu
-   * it should be not modal
-   * @exception VException      an exception may be raised by your app
-   */
-  override fun doNotModal() {
-    ApplicationContext.applicationContext.getApplication().logout()
-  }
 }

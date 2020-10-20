@@ -21,7 +21,7 @@ package org.kopi.galite.form
 import kotlin.math.min
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimestampColumn
 import org.kopi.galite.type.Timestamp

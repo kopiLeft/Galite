@@ -24,7 +24,7 @@ import java.io.InputStream
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VColorColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
