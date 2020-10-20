@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.list
 
 import kotlin.reflect.KClass
@@ -32,9 +33,11 @@ class VTimestampColumn(title: String,
                         VConstants.ALG_LEFT,
                         5,
                         sortAscending) {
+
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------
+
   /**
    * Returns a representation of value
    */

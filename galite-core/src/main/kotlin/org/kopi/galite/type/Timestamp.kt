@@ -19,9 +19,8 @@
 package org.kopi.galite.type
 
 open class Timestamp {
-  fun compareTo(other: Timestamp): Int {
-    TODO()
-  }
+
+  fun compareTo(other: Timestamp): Int = TODO()
 
   fun add(millis: Long): NotNullTimestamp = TODO()
 

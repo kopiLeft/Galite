@@ -18,6 +18,9 @@
 
 package org.kopi.galite.form
 
+import kotlin.math.min
+import kotlin.reflect.KClass
+
 import org.kopi.galite.base.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimestampColumn
@@ -26,17 +29,10 @@ import org.kopi.galite.type.Utils
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
-import kotlin.math.min
-import kotlin.reflect.KClass
 
-/**
- * !!! graf 20100914 complete input methods
- */
+
 class VTimestampField : VField(10 + 1 + 8, 1) {
 
-  /**
-   * !!! NEED COMMENTS
-   */
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -59,7 +55,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls<Timestamp>(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block.bufferSize)
   }
 
   fun isNumeric(): Boolean = true
@@ -86,7 +82,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
     if (o as String == "") {
       setNull(rec)
     } else {
-      setTimestamp(rec, Timestamp.now()) // !!! laurent : TO MODIFY
+      setTimestamp(rec, Timestamp.now())
     }
   }
 
@@ -169,7 +165,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
     return if (s == "") {
       null
     } else {
-      Timestamp.parse(s, "yyyy-MM-dd HH:mm:ss") // !!! laurent : TO MODIFY
+      Timestamp.parse(s, "yyyy-MM-dd HH:mm:ss")
     }
   }
 
@@ -191,15 +187,14 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    return Utils.toSql(value[r])
-  }
+  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r])
 
   /**
    * Copies the value of a record to another
    */
   override fun copyRecord(f: Int, t: Int) {
     val oldValue = value[t]
+
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
@@ -230,6 +225,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    */
   override fun enumerateValue(desc: Boolean) {
     val record: Int = block.activeRecord
+
     when {
       list != null -> {
         super.enumerateValue(desc)

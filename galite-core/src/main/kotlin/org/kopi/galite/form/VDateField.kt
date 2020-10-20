@@ -217,7 +217,7 @@ class VDateField : VField(10, 1) {
   }
 
   override fun toText(o: Any?): String {
-    return if (o == null) "" else Companion.toText(o as Date)
+    return if (o == null) "" else toText(o as Date)
   }
 
   override fun toObject(s: String): Any? {
@@ -277,7 +277,7 @@ class VDateField : VField(10, 1) {
     return if (value[r] == null) {
       ""
     } else {
-      Companion.toText(value[r]!!)
+      toText(value[r]!!)
     }
   }
 
@@ -320,7 +320,7 @@ class VDateField : VField(10, 1) {
   /**
    * Returns a string representation of a date value wrt the field type.
    */
-  fun formatDate(value: Date): String = Companion.toText(value)
+  fun formatDate(value: Date): String = toText(value)
 
   // ----------------------------------------------------------------------
   // PRIVATE METHODS

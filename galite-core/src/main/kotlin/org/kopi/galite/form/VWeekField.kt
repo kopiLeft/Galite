@@ -38,7 +38,7 @@ class VWeekField : VField(7, 1) {
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls<Week>(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block.bufferSize)
   }
 
   override fun hasAutofill(): Boolean = true
@@ -85,6 +85,7 @@ class VWeekField : VField(7, 1) {
    */
   override fun checkType(rec: Int, o: Any) {
     val s = o as String
+
     if (s == "") {
       setNull(rec)
     } else {
@@ -99,15 +100,16 @@ class VWeekField : VField(7, 1) {
     var state: Int
     val buffer = s + '\u0000'
     state = 1
+
     while (state > 0) {
       when (state) {
-        1 -> if (buffer[bp] in '0'..'9') {
+        1 -> if (buffer[bp] in '0'..'9') { /* The first week's digit */
           week = buffer[bp] - '0'
           state = 2
         } else {
           state = -1
         }
-        2 -> if (buffer[bp] in '0'..'9') {
+        2 -> if (buffer[bp] in '0'..'9') { /* The second week's digit */
           week = 10 * week + (buffer[bp] - '0')
           state = 3
         } else if (buffer[bp] == '.' || buffer[bp] == '/') {
@@ -117,14 +119,14 @@ class VWeekField : VField(7, 1) {
         } else {
           state = -1
         }
-        3 -> state = if (buffer[bp] == '.' || buffer[bp] == '/') {
+        3 -> state = if (buffer[bp] == '.' || buffer[bp] == '/') { /* The first point : between week and year */
           4
         } else if (buffer[bp] == '\u0000') {
           0
         } else {
           -1
         }
-        4 -> when {
+        4 -> when { /* The first year's digit */
           buffer[bp] in '0'..'9' -> {
             year = buffer[bp] - '0'
             state = 5
@@ -136,13 +138,13 @@ class VWeekField : VField(7, 1) {
             state = -1
           }
         }
-        5 -> if (buffer[bp] in '0'..'9') {
+        5 -> if (buffer[bp] in '0'..'9') { /* The second year's digit */
           year = 10 * year + (buffer[bp] - '0')
           state = 6
         } else {
           state = -1
         }
-        6 -> when {
+        6 -> when { /* The third year's digit */
           buffer[bp] in '0'..'9' -> {
             year = 10 * year + (buffer[bp] - '0')
             state = 7
@@ -154,13 +156,13 @@ class VWeekField : VField(7, 1) {
             state = -1
           }
         }
-        7 -> if (buffer[bp] in '0'..'9') {
+        7 -> if (buffer[bp] in '0'..'9') { /* The fourth year's digit */
           year = 10 * year + (buffer[bp] - '0')
           state = 8
         } else {
           state = -1
         }
-        8 -> state = if (buffer[bp] == '\u0000') {
+        8 -> state = if (buffer[bp] == '\u0000') { /* The end */
           0
         } else {
           -1
@@ -175,6 +177,7 @@ class VWeekField : VField(7, 1) {
     when {
       year == -1 -> {
         val now: NotNullWeek = Week.now()
+
         year = now.year
       }
       year < 50 -> {
@@ -186,9 +189,11 @@ class VWeekField : VField(7, 1) {
     }
     setWeek(rec, NotNullWeek(year, week))
   }
+
   // ----------------------------------------------------------------------
   // Interface bd/Triggers
   // ----------------------------------------------------------------------
+
   /**
    * Sets the field value of given record to a null value.
    */
@@ -214,7 +219,7 @@ class VWeekField : VField(7, 1) {
 
   /**
    * Sets the field value of given record.
-   * Warning:	This method will become inaccessible to kopi users in next release
+   * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any) {
     setWeek(r, v as? Week)
@@ -248,7 +253,7 @@ class VWeekField : VField(7, 1) {
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String = if (o == null) "" else Companion.toText(o as Week?)
+  override fun toText(o: Any?): String = if (o == null) "" else toText(o as Week?)
 
   override fun toObject(s: String): Any? {
     if (s == "") {
@@ -260,6 +265,7 @@ class VWeekField : VField(7, 1) {
     var state: Int
     val buffer = s + '\u0000'
     state = 1
+
     while (state > 0) {
       when (state) {
         1 -> if (buffer[bp] in '0'..'9') {
@@ -336,6 +342,7 @@ class VWeekField : VField(7, 1) {
     when {
       year == -1 -> {
         val now: NotNullWeek = Week.now()
+
         year = now.year
       }
       year < 50 -> {
@@ -351,13 +358,7 @@ class VWeekField : VField(7, 1) {
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String {
-    return if (value[r] == null) {
-      ""
-    } else {
-      Companion.toText(value[r])
-    }
-  }
+  override fun getTextImpl(r: Int): String = if (value[r] == null) "" else toText(value[r])
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -371,6 +372,7 @@ class VWeekField : VField(7, 1) {
    */
   override fun copyRecord(f: Int, t: Int) {
     val oldValue = value[t]
+
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
@@ -394,7 +396,7 @@ class VWeekField : VField(7, 1) {
   /**
    * Returns a string representation of a week value wrt the field type.
    */
-  protected fun formatWeek(value: Week?): String = Companion.toText(value)
+  protected fun formatWeek(value: Week?): String = toText(value)
 
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
@@ -409,11 +411,13 @@ class VWeekField : VField(7, 1) {
     return if (list != null) {
       super.fillField(handler)
     } else {
-      var force = false
-      force = try {
+
+       val force = try {
         val oldText = getDisplayedValue(true) as? String
+
         checkType(oldText as Any?)
         val newText = getText(block.activeRecord)
+
         oldText == null || newText == null || newText == "" || oldText != newText
       } catch (e: Exception) {
         true
@@ -421,8 +425,7 @@ class VWeekField : VField(7, 1) {
       if (handler == null || force) {
         setWeek(block.activeRecord, Week.now())
       } else {
-        setWeek(block.activeRecord,
-                NotNullWeek(handler.selectDate(getWeek(block.activeRecord).getFirstDay())))
+        setWeek(block.activeRecord, NotNullWeek(handler.selectDate(getWeek(block.activeRecord).getFirstDay())))
       }
       true
     }
