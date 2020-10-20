@@ -17,13 +17,14 @@
 
 package org.kopi.galite.report
 
+import java.awt.event.KeyEvent
+
 import org.kopi.galite.cross.VDynamicReport
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
-import java.awt.event.KeyEvent
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
