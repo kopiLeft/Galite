@@ -79,7 +79,6 @@ open class Report: VReport() {
    */
   fun reportCommands() {
     setActors(arrayOf(
-
             VActor("File", null,"Quit", null, VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
             VActor("File", null, "Print", null, VDynamicReport.PRINT_ICON, KeyEvent.VK_F6, 0),
             VActor("File", null, "ExportCSV", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F8, 0),
@@ -112,6 +111,6 @@ open class Report: VReport() {
   }
 
   override fun add() {
-
+    // TODO
   }
 }
