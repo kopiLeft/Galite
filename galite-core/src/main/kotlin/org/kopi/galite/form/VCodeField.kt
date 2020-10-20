@@ -135,7 +135,7 @@ abstract class VCodeField(val type: String,
           val listDialog: VListDialog
           val selected: Int
           val selectedToModel: IntArray
-          val codes: Array<Any?>
+          val codes: Array<Any>
           var count: Int = 0
           run {
             var i = 0
@@ -147,7 +147,7 @@ abstract class VCodeField(val type: String,
               i++
             }
           }
-          codes = arrayOfNulls(count)
+          codes = arrayOf(count)
           selectedToModel = IntArray(count)
           var j = 0
 
@@ -159,7 +159,8 @@ abstract class VCodeField(val type: String,
             }
             i++
           }
-          listDialog = VListDialog(arrayOf(getListColumn()!!), arrayOf(codes))
+
+          listDialog = VListDialog(arrayOf(getListColumn()!!), arrayOf<Array<Any>>(codes))
           selected = listDialog.selectFromDialog(getForm(), null, this)
           if (selected != -1) {
             setCode(rec, selectedToModel[selected])
@@ -312,7 +313,7 @@ abstract class VCodeField(val type: String,
     throw InconsistencyException()
   }
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     for (i in getCodes().indices) {
       if (getCodes()[i] == o) {
         return labels[i]

@@ -33,7 +33,7 @@ import org.kopi.galite.visual.VWindow
 class VListDialog(list: Array<VListColumn>,
                   val data: Array<Array<Any>>,
                   val idents: IntArray,
-                  val rows: Int,
+                  rows: Int,
                   skipFirstLine: Boolean) : VModel {
 
   /**
@@ -77,6 +77,7 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * Creates a dialog with specified data and title bar.
    */
+  @Suppress("UNCHECKED_CAST")
   constructor(title: String,
               data: Array<String>,
               rows: Int = data.size) : this(arrayOf<VListColumn>(VStringColumn(title,
@@ -84,7 +85,7 @@ class VListDialog(list: Array<VListColumn>,
                                                                  VConstants.ALG_LEFT,
                                                                  getMaxLength(data),
                                                                  true)),
-                                            arrayOf<Array<String>>(data) as Array<Array<Any>>,
+                                            arrayOf(data as Array<Any>),
                                             rows)
 
   /**
@@ -95,7 +96,7 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * Displays a dialog box returning position of selected element.
    */
-  fun selectFromDialog(form: VForm, window: VWindow, field: VField): Int {
+  fun selectFromDialog(form: VForm, window: VWindow?, field: VField): Int {
     this.form = form
     return selectFromDialog(window, field, true)
   }
@@ -140,7 +141,7 @@ class VListDialog(list: Array<VListColumn>,
         var swap = if (value1 != null && value2 != null) {
           when (value1) {
             is String -> {
-              value1 > (value2 as String?)!!
+              value1 > (value2 as? String)!!
             }
             is Number -> {
               value1.toDouble() > (value2 as Number).toDouble()
@@ -149,7 +150,7 @@ class VListDialog(list: Array<VListColumn>,
               value1 && !(value2 as Boolean)
             }
             is Date -> {
-              (value1 as Date) > value2 as Date?
+              (value1 as Date) > value2 as? Date
             }
             else -> {
               false

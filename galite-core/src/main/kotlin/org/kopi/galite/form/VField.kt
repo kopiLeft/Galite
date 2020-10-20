@@ -71,13 +71,13 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   /**
    * Sets the field value of given record.
-   * Warning:   This method will become inaccessible to kopi users in next release
+   * Warning:   This method will become inaccessible to users in next release
    */
   open fun setObject(r: Int, v: Any?) {
     TODO()
   }
 
-  open fun toText(o: Any?): String {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 

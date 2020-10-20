@@ -177,7 +177,7 @@ class VDateField : VField(10, 1) {
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to kopi users in next release
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     setDate(r, v as Date?)
   }
 
@@ -215,7 +215,7 @@ class VDateField : VField(10, 1) {
     return value[r]!!
   }
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     return if (o == null) "" else Companion.toText(o as Date)
   }
 

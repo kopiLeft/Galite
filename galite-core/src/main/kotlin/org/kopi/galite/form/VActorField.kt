@@ -48,7 +48,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun setNull(r: Int) {}
 
-  override fun setObject(r: Int, v: Any) {}
+  override fun setObject(r: Int, v: Any?) {}
 
   override fun retrieveQuery(query: Query, column: Int): Any? = null
 
@@ -56,7 +56,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun getObjectImpl(r: Int): Any? = null
 
-  override fun toText(o: Any): String? = null
+  override fun toText(o: Any?): String? = null
 
   override fun toObject(s: String): Any? = null
 
