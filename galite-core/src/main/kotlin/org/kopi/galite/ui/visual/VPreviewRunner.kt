@@ -15,19 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.cross
+package org.kopi.galite.ui.visual
 
-class VDynamicReport {
+import org.kopi.galite.preview.VPreviewWindow
+import org.kopi.galite.print.PSPrintException
+import org.kopi.galite.util.AbstractPrinter
+import org.kopi.galite.util.PrintJob
+import org.kopi.galite.visual.PreviewRunner
+import org.kopi.galite.visual.VException
 
-  companion object {
-    const val EXPORT_ICON = "export"
-    const val FOLD_ICON = "fold"
-    const val UNFOLD_ICON = "unfold"
-    const val FOLD_COLUMN_ICON = "foldColumn"
-    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
-    const val SERIALQUERY_ICON = "serialquery"
-    const val HELP_ICON = "help"
-    const val QUIT_ICON = "quit"
-    const val PRINT_ICON = "print"
+/**
+ * The `VPreviewRunner` is the vaadin implementation of the
+ * [PreviewRunner] specification.
+ */
+class VPreviewRunner : PreviewRunner {
+  override fun run(data: PrintJob, command: String) {
+    try {
+      VPreviewWindow().preview(if (data.dataType != PrintJob.DAT_PS) data else AbstractPrinter.convertToGhostscript(data), command)
+    } catch (e: VException) {
+      throw PSPrintException("PreviewPrinter.PrintTaskImpl::print()", e)
+    }
   }
 }

@@ -171,7 +171,7 @@ class Module(val id: Int,
                                                  "String object, String description, ImageIcon icon)",
                                          t.message,
                                          t)
-        ApplicationContext.displayError(ApplicationContext.getMenu().getDisplay(),
+        ApplicationContext.displayError(ApplicationContext.getMenu()!!.getDisplay(),
                 MessageCode.getMessage("VIS-00041"))
         null
       }
