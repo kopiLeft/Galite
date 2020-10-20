@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.form
 
-import java.sql.SQLException
-
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBInterruptionException
@@ -29,6 +27,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
+import java.sql.SQLException
 
 /**
  * This class implements predefined commands
@@ -100,7 +99,7 @@ object Commands : VConstants {
     if (activeBlock == null) {
       form.gotoBlock(lastBlock)
     } else {
-      if (activeBlock.getActiveField() == null) {
+      if (activeBlock.activeField == null) {
         activeBlock.gotoFirstField()
       }
     }
@@ -580,7 +579,7 @@ object Commands : VConstants {
    * Sets the search operator for the current field
    */
   fun setSearchOperator(b: VBlock) {
-    val f: VField? = b.getActiveField()
+    val f: VField? = b.activeField
 
     if (f != null) {
       val v: Int = VListDialog(VlibProperties.getString("search_operator"), arrayOf(

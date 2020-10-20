@@ -27,7 +27,7 @@ class VListDialog : VModel {
   /**
    * Creates a dialog with specified data and title bar.
    */
-  constructor(list: Array<VListColumn?>?, data: Array<Array<Any?>>)
+  constructor(list: Array<VListColumn>, data: Array<Array<Any?>>?)
 
   /**
    * Creates a dialog with specified data and title bar.
@@ -41,8 +41,6 @@ class VListDialog : VModel {
    */
   constructor(title: String, data: Array<String>)
 
-
-  fun selectFromDialog(form: Any, nothing: Nothing?, vCodeField: VCodeField?): Int = TODO()
   override fun setDisplay(display: UComponent) {
     TODO("Not yet implemented")
   }

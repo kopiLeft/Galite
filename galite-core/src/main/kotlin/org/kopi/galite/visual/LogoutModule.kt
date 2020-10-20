@@ -28,7 +28,7 @@ class LogoutModule : Executable {
   /**
    * MenuTree sets the context of new executable to the default connection
    */
-  override lateinit var dBContext: DBContext
+  override var dBContext: DBContext? = null
 
   /**
    * The start method called every time the user launch this app from menu

@@ -52,10 +52,6 @@ abstract class VBlock {
     TODO()
   }
 
-  fun getActiveField(): VField? {
-    TODO()
-  }
-
   fun gotoFirstField() {
     TODO()
   }
@@ -77,10 +73,6 @@ abstract class VBlock {
   }
 
   fun load() {
-    TODO()
-  }
-
-  fun getMode(): Int {
     TODO()
   }
 
@@ -139,9 +131,6 @@ abstract class VBlock {
   fun isAccessible(): Boolean {
     TODO()
   }
-
-
-  fun getForm(): VForm = TODO()
 
   fun fetchLookup(fld: VField) {
     TODO()

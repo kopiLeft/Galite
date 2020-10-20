@@ -19,8 +19,10 @@
 package org.kopi.galite.form
 
 import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VWindow
 
 class VDictionaryForm : VForm(), VDictionary {
+
   fun isRecursiveQuery(): Boolean = TODO()
   override fun reset() {
     TODO()
@@ -57,5 +59,17 @@ class VDictionaryForm : VForm(), VDictionary {
   }
   fun isMenuQuery(): Boolean{
     TODO()
+  }
+
+  override fun search(parent: VWindow): Int {
+    TODO("Not yet implemented")
+  }
+
+  override fun edit(parent: VWindow, id: Int): Int {
+    TODO("Not yet implemented")
+  }
+
+  override fun add(parent: VWindow): Int {
+    TODO("Not yet implemented")
   }
 }
