@@ -36,7 +36,7 @@ class LpRPrinter(private val name: String,
                  private val user: String) : Printer {
 
   init {
-    selectTray(1) // Standard tray (see common/MAKEDB/dbSchema)
+    selectTray(1) // Standard tray
     setPaperFormat(null)
   }
 

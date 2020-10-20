@@ -21,13 +21,10 @@ package org.kopi.galite.util
 import org.kopi.galite.util.ipp.IPPClient
 
 /**
- * IPP printer
- *
  * Represents an IPP Printer
  *
  * @param host the IPP server host
  * @param port the IPP server port
- *
  * @param printer the name of the IPP printer
  * @param user the name of the printer user
  * @param attributesForMedia a list of String[2] with the correspondence
