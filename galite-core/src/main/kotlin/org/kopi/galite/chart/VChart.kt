@@ -77,12 +77,13 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     const val TYP_PNG = 2
     const val TYP_JPEG = 3
 
+    // --------------------------------------------------------------------
+    // STATIC INITIALIZATION
+    // --------------------------------------------------------------------
     init {
       WindowController.windowController.registerWindowBuilder(Constants.MDL_CHART, object : WindowBuilder {
 
-        override fun createWindow(model: VWindow): UWindow {
-          return UIFactory.uiFactory.createView(model) as UChart
-        }
+        override fun createWindow(model: VWindow): UWindow = UIFactory.uiFactory.createView(model) as UChart
       })
     }
   }
@@ -128,6 +129,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------
+
   override fun createPrintJob(): PrintJob {
     return try {
       val printJob: PrintJob
@@ -214,20 +216,20 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     activeCommands.clear()
     if (commands != null) {
       commands!!.forEachIndexed { i, it ->
-        when {
-          it.getIdent() == "BarView" -> {
+        when(it.getIdent() ) {
+          "BarView" -> {
             cmdBarView = it
           }
-         it.getIdent() == "ColumnView" -> {
+          "ColumnView" -> {
             cmdColumnView = it
           }
-         it.getIdent() == "LineView" -> {
+          "LineView" -> {
             cmdLineView = it
           }
-          it.getIdent() == "AreaView" -> {
+          "AreaView" -> {
             cmdAreaView = it
           }
-          it.getIdent() == "PieView" -> {
+          "PieView" -> {
             cmdPieView = it
           }
           else -> {
@@ -383,6 +385,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   // ----------------------------------------------------------------------
   // COMMANDS
   // ----------------------------------------------------------------------
+
   /**
    * Enables/disables the actor.
    */
@@ -425,6 +428,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   // --------------------------------------------------------------------
   // TRIGGER HANDLING
   // --------------------------------------------------------------------
+
   override fun executeVoidTrigger(VKT_Type: Int) {}
 
   fun executeObjectTrigger(VKT_Type: Int): Any {

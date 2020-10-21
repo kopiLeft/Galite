@@ -22,6 +22,7 @@ import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VHelpGenerator
 
 class VChartCommand(private val chart: VChart, actor: VActor)
   : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
@@ -49,7 +50,8 @@ class VChartCommand(private val chart: VChart, actor: VActor)
   // --------------------------------------------------------------------
   // HELP HANDLING
   // --------------------------------------------------------------------
-  override fun helpOnCommand(help: org.kopi.galite.visual.VHelpGenerator) {
+
+  override fun helpOnCommand(help: VHelpGenerator) {
     if (actor == null) {
       return
     }
