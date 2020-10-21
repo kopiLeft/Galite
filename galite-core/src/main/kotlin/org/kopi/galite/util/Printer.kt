@@ -48,5 +48,5 @@ interface Printer {
   /**
    * Sets the paper format
    */
-  fun setPaperFormat(paperFormat: String)
+  fun setPaperFormat(paperFormat: String?)
 }

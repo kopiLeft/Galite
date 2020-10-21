@@ -18,19 +18,17 @@
 
 package org.kopi.galite.form
 
-import org.kopi.galite.base.Query
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.util.Arrays
+
+import kotlin.reflect.KClass
+
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VImageColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.sql.Blob
-import java.util.*
-import kotlin.reflect.KClass
 
 class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
 
@@ -104,7 +102,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    * Sets the field value of given record to a date value.
    */
   fun setImage(r: Int, v: ByteArray?) {
-    if (changedUI || value[r] != v) {
+    if (changedUI || !value[r].contentEquals(v)) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
@@ -128,29 +126,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    * @param    column        the index of the column in the tuple
    */
   override fun retrieveQuery(query: Query, column: Int): Any? {
-    return if (TODO()) {
-      query.getByteArray(column)
-    } else {
-      val blob: Blob? = query.getBlob(column)
-
-      if (blob != null) {
-        val inputStream = blob.binaryStream
-        val out = ByteArrayOutputStream()
-        val buf = ByteArray(2048)
-        var nread: Int
-
-        try {
-          while (inputStream.read(buf).also { nread = it } != -1) {
-            out.write(buf, 0, nread)
-          }
-        } catch (e: IOException) {
-          throw VRuntimeException(e)
-        }
-        out.toByteArray()
-      } else {
-        null
-      }
-    }
+    TODO()
   }
 
   /**
@@ -168,20 +144,14 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any): String {
-    throw InconsistencyException("UNEXPECTED GET TEXT")
-  }
+  override fun toText(o: Any): String = throw InconsistencyException("UNEXPECTED GET TEXT")
 
-  fun toObject(s: String?): String {
-    throw InconsistencyException("UNEXPECTED GET TEXT")
-  }
+  fun toObject(s: String?): String = throw InconsistencyException("UNEXPECTED GET TEXT")
 
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String {
-    throw InconsistencyException("UNEXPECTED GET TEXT")
-  }
+  override fun getTextImpl(r: Int): String = throw InconsistencyException("UNEXPECTED GET TEXT")
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -248,7 +218,6 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    * autofill
    * @exception    org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
-
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     if (handler != null) {
       val b = handler.selectImage()

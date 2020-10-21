@@ -91,7 +91,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     val dictionary = (when {
       getModel().list != null && getModel().list!!.newForm != null -> {
         // OLD SYNTAX
-        Module.getExecutable(getModel().list!!.newForm) as VDictionary
+        Module.getExecutable(getModel().list!!.newForm!!) as VDictionary
       }
       getModel().list != null && getModel().list!!.action != -1 -> {
         // NEW SYNTAX

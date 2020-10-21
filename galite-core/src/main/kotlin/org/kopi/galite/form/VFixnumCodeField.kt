@@ -15,16 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-import org.kopi.galite.base.Query
+import kotlin.reflect.KClass
+
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VFixnumCodeColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Fixed
 import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.util.base.InconsistencyException
-import java.sql.SQLException
-import kotlin.reflect.KClass
 
 /**
  * Constructor
@@ -33,20 +34,21 @@ import kotlin.reflect.KClass
  * @param     source          the qualified name of the source file defining the list
  */
 open class VFixnumCodeField(ident: String,
-                       source: String,
-                       names: Array<String>,
-                       private val codes: Array<Fixed>) : VCodeField(ident, source, names) {
+                            source: String,
+                            names: Array<String>,
+                            private val codes: Array<Fixed>) : VCodeField(ident, source, names) {
 
   /**
    * return a list column for list
    */
-  override fun getListColumn(): VListColumn {
-    return VFixnumCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
-  }
+  override fun getListColumn(): VListColumn =
+          VFixnumCodeColumn(getHeader(), null, labels, codes, getPriority() >= 0)
+
 
   /**
    * Returns the array of codes.
    */
+  @Suppress("UNCHECKED_CAST")
   override fun getCodes(): Array<Any> = codes as Array<Any>
 
   // ----------------------------------------------------------------------
@@ -63,8 +65,8 @@ open class VFixnumCodeField(ident: String,
 
     for (i in 0 until block.bufferSize) {
       if (block.isRecordFilled(i)
-              && !isNull(i)
-              && (!exclude || i != block.activeRecord)) {
+          && !isNull(i)
+          && (!exclude || i != block.activeRecord)) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }

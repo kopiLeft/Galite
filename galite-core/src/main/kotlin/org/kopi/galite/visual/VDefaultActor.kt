@@ -15,6 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.visual
 
-class VDefaultActor 
+/**
+ * Represents an VDefaultActor model.
+ *
+ * @param code                the code of this default command
+ * @param menuIdent           the qualified name of menu source file which this actor belongs to
+ * @param menuSource          the menu source qualified name
+ * @param actorIdent          the qualified name of actor's source file
+ * @param actorSource         the actor source qualified name
+ * @param acceleratorKey      the accelerator key description
+ * @param acceleratorModifier The modifier accelerator key
+ */
+class VDefaultActor(val code: Int,
+                    menuIdent: String,
+                    menuSource: String,
+                    actorIdent: String,
+                    actorSource: String,
+                    iconName: String,
+                    acceleratorKey: Int,
+                    acceleratorModifier: Int
+) : VActor(menuIdent, menuSource, actorIdent, actorSource, iconName, acceleratorKey, acceleratorModifier)

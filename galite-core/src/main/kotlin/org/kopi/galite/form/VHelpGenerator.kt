@@ -19,7 +19,6 @@
 package org.kopi.galite.form
 
 import java.io.BufferedWriter
-import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStreamWriter
@@ -46,7 +45,7 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
                       help: String?,
                       code: String): String? {
     return try {
-      val file: File = Utils.getTempFile(name, "htm")
+      val file = Utils.getTempFile(name, "htm")
       
       printer = PrintWriter(BufferedWriter(OutputStreamWriter(FileOutputStream(file), "UTF-8")))
       printer.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//DE\">")

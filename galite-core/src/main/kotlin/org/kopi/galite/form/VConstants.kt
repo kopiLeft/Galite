@@ -137,7 +137,7 @@ interface VConstants : Constants {
     // ---------------------------------------------------------------------
     // SEARCH TYPE
     // ---------------------------------------------------------------------
-    const val STY_NO_COND: Int = 0 // no conditions for field
+    const val STY_NO_COND = 0 // no conditions for field
     const val STY_EXACT = 1 // requires exact match
     const val STY_MANY = 2 // many values can match
 
