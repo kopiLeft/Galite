@@ -18,6 +18,8 @@
 
 package org.kopi.galite.form
 
+import kotlin.reflect.KClass
+
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimeColumn
@@ -27,17 +29,9 @@ import org.kopi.galite.type.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
-import kotlin.reflect.KClass
 
-/**
- * !!! NEED COMMENTS
- * default values
- */
 class VTimeField : VField(5, 1) {
 
-  /**
-   * !!! NEED COMMENTS
-   */
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -105,7 +99,7 @@ class VTimeField : VField(5, 1) {
 
       while (state > 0) {
         when (state) {
-          1 -> when {
+          1 -> when { /* The first hours' digit */
             buffer[bp] in '0'..'9' -> {
               hours = buffer[bp] - '0'
               state = 2
@@ -117,7 +111,7 @@ class VTimeField : VField(5, 1) {
               state = -1
             }
           }
-          2 -> when {
+          2 -> when { /* The second hours' digit */
             buffer[bp] in '0'..'9' -> {
               hours = 10 * hours + (buffer[bp] - '0')
               state = 3
@@ -132,7 +126,7 @@ class VTimeField : VField(5, 1) {
               state = -1
             }
           }
-          3 -> state = when {
+          3 -> state = when { /* The point between hours and minutes */
             buffer[bp] == ':' -> {
               4
             }
@@ -143,7 +137,7 @@ class VTimeField : VField(5, 1) {
               -1
             }
           }
-          4 -> when {
+          4 -> when { /* The first minutes' digit */
             buffer[bp] in '0'..'9' -> {
               minutes = buffer[bp] - '0'
               state = 5
@@ -155,13 +149,13 @@ class VTimeField : VField(5, 1) {
               state = -1
             }
           }
-          5 -> if (buffer[bp] in '0'..'9') {
+          5 -> if (buffer[bp] in '0'..'9') { /* The second minutes' digit */
             minutes = 10 * minutes + (buffer[bp] - '0')
             state = 6
           } else {
             state = -1
           }
-          6 -> state = if (buffer[bp] == '\u0000') {
+          6 -> state = if (buffer[bp] == '\u0000') { /* The end */
             0
           } else {
             -1
