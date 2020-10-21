@@ -197,9 +197,7 @@ class VIntegerField(width: Int,
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String {
-    return o?.toString() ?: ""
-  }
+  override fun toText(o: Any?): String = o?.toString() ?: ""
 
   override fun toObject(s: String): Any? {
     return if (s == "") {

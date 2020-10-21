@@ -40,4 +40,3 @@ class NotNullMonth : Month {
   TODO()
   }
 }
-
