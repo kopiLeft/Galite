@@ -18,6 +18,42 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.util.PrintJob
 import org.kopi.galite.visual.UWindow
 
-interface UForm: UWindow, FormListener {}
+/**
+ * `UForm` is the top-level interface that must be implemented
+ * by all forms. It is the visual component of the [VForm] model.
+ */
+interface UForm : UWindow, FormListener {
+
+  /**
+   * Returns the block view of a given [UBlock] model.
+   * @param block the [VBlock] model.
+   * @return The [UBlock] view.
+   */
+  fun getBlockView(block: VBlock): UBlock
+
+  /**
+   * Returns the print job of the form view.
+   * @return The [PrintJob] of this `UForm`
+   * @throws VException operation may fail
+   */
+  fun printForm(): PrintJob
+
+  /**
+   * Prepares the snapshot.
+   */
+  fun printSnapshot()
+
+  /**
+   * Returns the Debug throwable info
+   * @return The [Throwable] debug info.
+   */
+  fun getRuntimeDebugInfo(): Throwable
+
+  /**
+   * Show document preview
+   */
+  fun launchDocumentPreview(file: String)
+}

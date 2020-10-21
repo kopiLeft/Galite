@@ -19,7 +19,7 @@ package org.kopi.galite.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Fixed
 
@@ -83,11 +83,11 @@ class VFixnumField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun getTextImpl(r: Int?): String? {
+  override fun getTextImpl(r: Int): String? {
     TODO("Not yet implemented")
   }
 
-  override fun getSqlImpl(r: Int?): String? {
+  override fun getSqlImpl(r: Int): String? {
     TODO("Not yet implemented")
   }
 

@@ -20,6 +20,10 @@ package org.kopi.galite.form
 
 abstract class VBlock {
 
+  fun fetchLookup(fld: VField) {
+    TODO()
+  }
+
   fun noDetail(): Boolean {
     TODO()
   }
@@ -109,4 +113,10 @@ abstract class VBlock {
   open fun helpOnBlock(help: VHelpGenerator) {
     TODO()
   }
+
+  fun executeObjectTrigger(VKT_Type: Int?): Any = TODO()
+
+  fun isChart(): Boolean = TODO()
+
+  interface OrderListener
 }

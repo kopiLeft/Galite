@@ -18,4 +18,16 @@
 package org.kopi.galite.cross
 
 class VDynamicReport {
+
+  companion object {
+    const val EXPORT_ICON = "export"
+    const val FOLD_ICON = "fold"
+    const val UNFOLD_ICON = "unfold"
+    const val FOLD_COLUMN_ICON = "foldColumn"
+    const val UNFOLD_COLUMN_ICON = "unfoldColumn"
+    const val SERIALQUERY_ICON = "serialquery"
+    const val HELP_ICON = "help"
+    const val QUIT_ICON = "quit"
+    const val PRINT_ICON = "print"
+  }
 }

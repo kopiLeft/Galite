@@ -18,11 +18,11 @@
 
 package org.kopi.galite.type
 
-object Utils {
-
-  fun toSql(l: String): String = TODO()
-
-  fun toSql(d: Date): String {
-    TODO()
+class Utils {
+  companion object {
+    fun toSql(l: String): String = TODO()
+    fun trimString(input: String): String = TODO()
+    fun trailString(input: String): String = TODO()
+    fun toSql(date: Date?): String = TODO()
   }
 }

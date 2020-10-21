@@ -22,11 +22,12 @@ import java.util.StringTokenizer
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -160,7 +161,7 @@ class VDateField : VField(10, 1) {
   /**
    * Sets the field value of given record to a date value.
    */
-  internal fun setDate(r: Int, v: Date?) {
+  override fun setDate(r: Int, v: Date?) {
     if (changedUI
             || value[r] == null && v != null
             || value[r] != null && value[r]!! != v) {
@@ -272,8 +273,8 @@ class VDateField : VField(10, 1) {
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int?): String {
-    return if (value[r!!] == null) {
+  override fun getTextImpl(r: Int): String? {
+    return if (value[r] == null) {
       ""
     } else {
       Companion.toText(value[r]!!)
@@ -283,9 +284,9 @@ class VDateField : VField(10, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int?): String {
-    return if (value[r!!] == null) "NULL"
-    else org.kopi.galite.type.Utils.toSql(value[r]!!)
+  override fun getSqlImpl(r: Int): String? {
+    return if (value[r] == null) "NULL"
+    else Utils.toSql(value[r]!!)
   }
 
   /**
@@ -298,9 +299,9 @@ class VDateField : VField(10, 1) {
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-            && (oldValue != null && value[t] == null
-                    || oldValue == null && value[t] != null
-                    || oldValue != null && oldValue != value[t])) {
+        && (oldValue != null && value[t] == null
+            || oldValue == null && value[t] != null
+            || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }

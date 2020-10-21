@@ -16,57 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.base
+package org.kopi.galite.ui.visual
 
-import java.sql.SQLException
+import java.io.File
 
-import org.kopi.galite.db.Connection
-import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.UWindow
 
-class Query(defaultConnection: Connection) {
-
-  fun getBoolean(pos: Int): Boolean = TODO()
-
-  @Throws(SQLException::class)
-  fun getDate(pos: Int): NotNullDate? {
-    TODO()
+class VFileHandler : FileHandler() {
+  override fun chooseFile(window: UWindow, defaultName: String): File {
+    TODO("Not yet implemented")
   }
 
-  fun addString(value: String) {
-   TODO()
+  override fun chooseFile(window: UWindow, dir: File, defaultName: String): File {
+    TODO("Not yet implemented")
   }
 
-  fun open(format: String)  {
-    TODO()
+  override fun openFile(window: UWindow, defaultName: String): File {
+    TODO("Not yet implemented")
   }
 
-  fun next() : Boolean {
-    TODO()
+  override fun openFile(window: UWindow, filter: FileFilter): File {
+    TODO("Not yet implemented")
   }
 
-  fun close() {
-    TODO()
+  override fun openFile(window: UWindow, dir: File, defaultName: String): File {
+    TODO("Not yet implemented")
   }
 
-  fun getString(pos: Int): String? {
-    TODO()
-  }
-
-  fun getInt(pos: Int): Int {
-    TODO()
-  }
-
-  fun isNull(pos: Int): Boolean {
-    TODO()
-  }
-
-  fun getObject(pos: Int?): Any {
-    TODO()
-  }
-
-  fun addInt(value: Int) {
-    TODO()
-  }
-
-  fun getObject(pos:Int):Any =TODO()
 }

@@ -20,7 +20,7 @@ package org.kopi.galite.form
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VBooleanCodeColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
@@ -34,20 +34,18 @@ import org.kopi.galite.util.base.InconsistencyException
  */
 open class VBooleanCodeField : VCodeField {
 
-  constructor (
-          ident: String,
-          source: String,
-          names: Array<String>,
-          codes: Array<Boolean?>,
+  constructor (ident: String,
+               source: String,
+               names: Array<String>,
+               codes: Array<Boolean?>,
   ) : super(ident, source, names) {
     this.codes = codes
   }
 
-  constructor(
-          ident: String,
-          source: String,
-          names: Array<String>,
-          codes: BooleanArray,
+  constructor(ident: String,
+              source: String,
+              names: Array<String>,
+              codes: BooleanArray,
   ) : super(ident, source, names) {
     this.codes = arrayOfNulls(codes.size)
     for (i in codes.indices) {
@@ -131,8 +129,8 @@ open class VBooleanCodeField : VCodeField {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int?): String? {
-    return if (value[r!!] == -1) {
+  override fun getSqlImpl(r: Int): String? {
+    return if (value[r] == -1) {
       "NULL"
     } else {
       if (codes[value[r]]!!) "{fn TRUE}" else "{fn FALSE}"

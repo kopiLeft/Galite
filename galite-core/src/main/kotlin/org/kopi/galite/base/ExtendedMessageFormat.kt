@@ -46,7 +46,7 @@ class ExtendedMessageFormat : MessageFormat {
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
   constructor(pattern: String) : super(pattern)
-  constructor(pattern: String, locale: Locale) : super(pattern, locale)
+  constructor(pattern: String, locale: Locale?) : super(pattern, locale)
 
   /**
    * Formats an object to produce a string. This is equivalent to

@@ -333,13 +333,13 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int?): String = if (value[r!!] == -1) ""
+  override fun getTextImpl(r: Int): String = if (value[r] == -1) ""
   else labels[value[r]]
 
   /**
    * Returns the SQL representation of field value of given record.
    */
-  abstract override fun getSqlImpl(r: Int?): String?
+  abstract override fun getSqlImpl(r: Int): String?
 
   /**
    * Copies the value of a record to another

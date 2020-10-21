@@ -20,7 +20,6 @@ package org.kopi.galite.util
 
 import java.io.BufferedReader
 import java.io.BufferedWriter
-import java.io.File
 import java.io.FileWriter
 import java.io.InputStreamReader
 
@@ -42,25 +41,25 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
   /**
    * Sets the paper format
    */
-  override fun setPaperFormat(paperFormat: String) {
+  override fun setPaperFormat(paperFormat: String?) {
     this.paperFormat = paperFormat
   }
 
   companion object {
-    fun convertToGhostscript(printdata: PrintJob): PrintJob {
-      val tempfile: File = Utils.getTempFile("kopigsconv", "PS")
-      val gsJob: PrintJob = printdata.createFromThis(tempfile, true)
-      val ous = BufferedWriter(FileWriter(tempfile))
+    fun convertToGhostscript(printData: PrintJob): PrintJob {
+      val tempFile = Utils.getTempFile("kopigsconv", "PS")
+      val gsJob = printData.createFromThis(tempFile, true)
+      val ous = BufferedWriter(FileWriter(tempFile))
 
       /* READ HEADER */
-      val reader = BufferedReader(InputStreamReader(printdata.getInputStream()))
+      val reader = BufferedReader(InputStreamReader(printData.inputStream))
       var line: String
       var currentPage = -1
 
       while (reader.readLine().also { line = it } != null) {
         when {
           line == TOPRINTER_TRUE -> ous.write(TOPRINTER_FALSE)
-          printdata.numberOfPages == -1 && line.startsWith("%%Page: ") -> {
+          printData.numberOfPages == -1 && line.startsWith("%%Page: ") -> {
             currentPage = readCurrentPageNumber(line)
             ous.write(line)
           }
@@ -84,11 +83,11 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
       }
 
       return if (buffer.isEmpty()) -1
-        else try {
-          buffer.toInt()
-        } catch (e: NumberFormatException) {
-          -1
-        }
+      else try {
+        buffer.toInt()
+      } catch (e: NumberFormatException) {
+        -1
+      }
     }
 
     protected const val TOPRINTER_TRUE = "/toprinter {true} def"
@@ -96,6 +95,6 @@ abstract class AbstractPrinter protected constructor(private val name: String) :
   }
 
   var numberOfCopies = 1 // the number of copy to print
-  private var tray: Int = 1
+  private var tray = 1
   private var paperFormat: String? = null
 }

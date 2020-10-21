@@ -26,7 +26,7 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.base.Query
+import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
@@ -889,7 +889,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setDate(r: Int, v: Date) {
+  open fun setDate(r: Int, v: Date?) {
     throw InconsistencyException()
   }
 
@@ -1257,7 +1257,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  abstract fun getTextImpl(r: Int?): String?
+  abstract fun getTextImpl(r: Int): String?
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -1271,7 +1271,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (hasTrigger(VConstants.TRG_VALUE)) {
       setObject(r!!, callSafeTrigger(VConstants.TRG_VALUE))
     }
-    return getSqlImpl(r)
+    return getSqlImpl(r!!)
   }
 
   /**
@@ -1279,7 +1279,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  abstract fun getSqlImpl(r: Int?): String?
+  abstract fun getSqlImpl(r: Int): String?
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -1475,7 +1475,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (!alreadyProtected) {
               getForm().startProtected(null)
             }
-            Query(getForm().dBContext.defaultConnection).let {
+            Query(getForm().dBContext!!.defaultConnection).let {
               it.addString(list!!.getColumn(0).column!!)
               it.addString(evalListTable())
               it.addString(getSql(block!!.activeRecord)!!)
@@ -1528,7 +1528,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (!alreadyProtected) {
               getForm().startProtected(null)
             }
-            Query(getForm().dBContext.defaultConnection).let {
+            Query(getForm().dBContext!!.defaultConnection).let {
               it.addString(list!!.getColumn(0).column!!)
               it.addString(evalListTable())
               it.addString(getString(block!!.activeRecord))
@@ -1627,7 +1627,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().startProtected(null)
-          Query(getForm().dBContext.defaultConnection).let {
+          Query(getForm().dBContext!!.defaultConnection).let {
             it.addString(list!!.getColumn(0).column!!)
             it.addString(evalListTable())
             it.addString(getSql(block!!.activeRecord)!!)
@@ -1682,7 +1682,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().startProtected(Message.getMessage("searching_database"))
-          Query(getForm().dBContext.defaultConnection).let {
+          Query(getForm().dBContext!!.defaultConnection).let {
             it.open(queryText)
             lineCount = 0
             while (it.next() && lineCount < MAX_LINE_COUNT - 1) {
@@ -1743,7 +1743,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                       " FROM     $2                   " +
                       " WHERE    $3 = " + selected
 
-              Query(getForm().dBContext.defaultConnection).let {
+              Query(getForm().dBContext!!.defaultConnection).let {
                 it.addString(list!!.getColumn(0).column!!)
                 it.addString(evalListTable())
                 it.addString("ID")
@@ -1833,7 +1833,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     while (true) {
       try {
         getForm().startProtected(null)
-        Query(getForm().dBContext.defaultConnection).let {
+        Query(getForm().dBContext!!.defaultConnection).let {
           it.open(qrybuf)
           while (value == null && it.next()) {
             value = it.getObject(1)
@@ -1918,7 +1918,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           getForm().startProtected(null)
 
-          Query(getForm().dBContext.defaultConnection).let {
+          Query(getForm().dBContext!!.defaultConnection).let {
             it.open(qrybuf)
             while (it.next()) {
               var columns: MutableList<String>
@@ -2009,7 +2009,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().startProtected(null)
-          Query(getForm().dBContext.defaultConnection).let {
+          Query(getForm().dBContext!!.defaultConnection).let {
             it.addString(list!!.getColumn(0).column!!)
             it.addString(evalListTable())
             it.addString("ID")

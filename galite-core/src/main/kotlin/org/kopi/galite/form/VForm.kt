@@ -60,7 +60,11 @@ abstract class VForm : VWindow() {
     TODO()
   }
 
-  fun getDefaultActor(type : Int) : VActor =TODO()
+  fun getDefaultActor(type: Int): VActor = TODO()
+
+  fun isChanged(): Boolean = TODO()
+
+  fun getBlock(i: Int): VBlock = TODO()
 
   companion object {
     const val CMD_NEWITEM = -2

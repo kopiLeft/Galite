@@ -15,8 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-interface FormListener {
+import java.io.Serializable
+import java.util.EventListener
 
+interface FormListener : EventListener, Serializable {
+  fun currentBlockChanged(oldBlock: VBlock, newBlock: VBlock)
+  fun setFieldSearchOperator(op: Int)
 }

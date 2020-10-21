@@ -28,7 +28,7 @@ interface Executable {
   /**
    * MenuTree sets the context of new executable to the default connection
    */
-  var dBContext: DBContext
+  var dBContext: DBContext?
 
   /**
    * The start method called every time the user launch this app from menu

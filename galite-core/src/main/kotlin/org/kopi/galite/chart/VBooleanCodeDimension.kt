@@ -48,6 +48,6 @@ class VBooleanCodeDimension(ident: String,
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
   protected override fun getIndex(value: Any?): Int {
-    return if ((value as Boolean) == codes[0]) 0 else 1
+    return if ((value as? Boolean) == codes[0]) 0 else 1
   }
 }
