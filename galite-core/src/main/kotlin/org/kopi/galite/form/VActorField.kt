@@ -48,7 +48,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun setNull(r: Int) {}
 
-  override fun setObject(r: Int, v: Any) {}
+  override fun setObject(r: Int, v: Any?) {}
 
   override fun retrieveQuery(query: Query, column: Int): Any? = null
 
@@ -60,9 +60,9 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun toObject(s: String): Any? = null
 
-  override fun getTextImpl(r: Int): String? = null
+  override fun getTextImpl(r: Int?): String? = null
 
-  override fun getSqlImpl(r: Int): String? = null
+  override fun getSqlImpl(r: Int): String = ""
 
   override fun copyRecord(f: Int, t: Int) {}
 

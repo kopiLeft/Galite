@@ -100,7 +100,7 @@ open class VBooleanCodeField : VCodeField {
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to galite users in next release
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     setBoolean(r, v as Boolean)
   }
 
@@ -123,6 +123,10 @@ open class VBooleanCodeField : VCodeField {
    * Returns the field value of given record as a boolean value.
    */
   override fun getBoolean(r: Int): Boolean? = if (value[r] == -1) null else codes[value[r]]
+
+  override fun getTextImpl(r: Int?): String? {
+    TODO("Not yet implemented")
+  }
 
   /**
    * Returns the field value of the current record as an object

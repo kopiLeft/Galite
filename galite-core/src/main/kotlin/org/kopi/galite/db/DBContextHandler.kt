@@ -25,7 +25,7 @@ interface DBContextHandler {
   /**
    * Returns the database context for this object.
    */
-  fun getDBContext(): DBContext
+  fun getDBContext(): DBContext?
 
   /**
    * Sets the database context for this object

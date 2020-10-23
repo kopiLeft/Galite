@@ -16,16 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.db
 
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VHelpGenerator
+import java.sql.SQLException
 
-open class VHelpGenerator : VHelpGenerator() {
-  open fun helpOnBlock(replace: String,
-                       title: String,
-                       help: String,
-                       commands: Array<VCommand>?,
-                       fields: Array<VField?>?,
-                       b: Boolean) {}
+open class DBConstraintException(query: String?, original: SQLException?,
+                                 val constraint: String = "unspecified") : DBException(query, original!!){
+/**
+ * Constructor
+ *
+ * @param     query                   the sql query which generated the exception
+ * @param     original                the original SQLException
+ * @param     constraintName          the violated constraint
+**/
+constructor(original: SQLException?) : this(null, original, "unspecified")
+
+constructor(original: SQLException?, constraintName: String) : this(null, original, constraintName)
+
+/**
+ * Returns the index name
+*/
+val description: String
+get() = "DBConstraintException: '$constraint'"
 }

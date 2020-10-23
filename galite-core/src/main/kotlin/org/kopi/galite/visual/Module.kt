@@ -150,7 +150,7 @@ class Module(val id: Int,
                   description: String,
                   icon: Image? = null): Executable? {
       return try {
-        if (ApplicationContext.getDefaults().isDebugModeEnabled()) {
+        if (ApplicationContext.getDefaults()!!.isDebugModeEnabled()) {
           System.gc()
           Thread.yield()
         }

@@ -27,6 +27,7 @@ import javax.swing.event.EventListenerList
 import org.kopi.galite.base.Image
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.XInterruptProtectedException
 import org.kopi.galite.l10n.LocalizationManager
@@ -37,9 +38,20 @@ import org.kopi.galite.l10n.LocalizationManager
  * @param dBContext The database context for this object.
  * if if is specified, it will create a window with a DB context
  */
-abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.getDBContext()
-) : Executable, ActionHandler, VModel {
+abstract class VWindow : Executable, ActionHandler, VModel {
 
+  /**
+   * Creates a window with a DB context
+   */
+  constructor( dBContext: DBContext? = ApplicationContext.getDBContext()) {
+    this.dBContext = dBContext
+  }
+  /**
+   * Creates a window without DB context handler
+   */
+  constructor(dBContext: DBContextHandler) {
+    this.dBContext = dBContext.getDBContext()
+  }
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
@@ -56,12 +68,12 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
 
   init {
     f12 = VActor("File",
-            WINDOW_LOCALIZATION_RESOURCE,
-            "GotoShortcuts",
-            WINDOW_LOCALIZATION_RESOURCE,
-            null,
-            KeyEvent.VK_F12,
-            0)
+                 WINDOW_LOCALIZATION_RESOURCE,
+                 "GotoShortcuts",
+                 WINDOW_LOCALIZATION_RESOURCE,
+                 null,
+                 KeyEvent.VK_F12,
+                 0)
     f12.number = Constants.CMD_GOTO_SHORTCUTS
     f12.handler = this
     setActors(arrayOf(f12))
@@ -110,7 +122,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Resets form to initial state
    */
-  fun reset() {
+  open fun reset() {
     // do nothing
 
     // TODO set it abstract
@@ -120,7 +132,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * Returns true if it is allowed to quit this model
    * (the form for this model)
    */
-  fun allowQuit(): Boolean = !inTransaction()
+  open fun allowQuit(): Boolean = !inTransaction()
 
   /**
    * Destroy this class (break all references to help java to GC the form)
@@ -133,13 +145,13 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * -) THIS method should do as less as possible
    * -) THIS method should need be used to fix the model
    */
-  fun executedAction(action: Action) {
+  open fun executedAction(action: Action) {
     // overrriden in VForm
     // nothing to do here
   }
 
   @Deprecated("use method performAsynAction",
-          ReplaceWith("performAsyncAction(action)"))
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     performAsyncAction(action)
   }
@@ -294,7 +306,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * close model if allowed
    */
-  fun willClose(code: Int) {
+  open fun willClose(code: Int) {
     close(code)
   }
 
@@ -417,11 +429,11 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   // ----------------------------------------------------------------------
   open fun getType(): Int = Constants.MDL_UNKOWN
 
-  fun enableCommands() {
+  open fun enableCommands() {
     f12.isEnabled = (true)
   }
 
-  fun setCommandsEnabled(enable: Boolean) {
+  open fun setCommandsEnabled(enable: Boolean) {
     f12.isEnabled = enable
   }
 
@@ -438,6 +450,10 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
         throw VExecFailedException(VlibProperties.getString("shortcuts-not-available"))
       }
     }
+  }
+
+  fun startProtected(message: String) {
+    TODO()
   }
 
   // ----------------------------------------------------------------------
@@ -598,6 +614,8 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
       }
     }
   }
+
+  override var dBContext: DBContext? = null
 
   companion object {
     // ----------------------------------------------------------------------

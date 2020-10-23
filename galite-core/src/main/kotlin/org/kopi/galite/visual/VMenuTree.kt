@@ -209,7 +209,7 @@ class VMenuTree(ctxt: DBContext,
         val informationText: String
 
         informationText = try {
-          ApplicationContext.getDefaults().getInformationText()
+          ApplicationContext.getDefaults()!!.getInformationText()
         } catch (e: PropertyException) {
           e.printStackTrace()
           ""

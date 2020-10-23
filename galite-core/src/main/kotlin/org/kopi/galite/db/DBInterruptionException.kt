@@ -16,16 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.db
 
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VHelpGenerator
+import java.sql.SQLException
 
-open class VHelpGenerator : VHelpGenerator() {
-  open fun helpOnBlock(replace: String,
-                       title: String,
-                       help: String,
-                       commands: Array<VCommand>?,
-                       fields: Array<VField?>?,
-                       b: Boolean) {}
+class DBInterruptionException : DBException {
+  /**
+   * Constructor
+   */
+  constructor() : super(SQLException("DBInterruptionException"))
+
+  /**
+   * Constructor
+   *
+   * @param     query           the sql query which generated the exception
+   */
+  constructor(query: String?) : super(query, SQLException("DBInterruptionException"))
+
 }

@@ -26,4 +26,10 @@ class VListDialog(list: Array<VListColumn>, values: Array<Array<Any?>>?) {
   fun selectFromDialog(form: VForm?, window: VWindow?, field: VField?): Int {
    TODO()
   }
+  fun selectFromDialog(window: VWindow?, field: VField?, showSingleEntry: Boolean): Int {
+    TODO()
+  }
+  fun setTooManyRows(){
+    TODO()
+  }
 }
