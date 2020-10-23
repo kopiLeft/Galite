@@ -19,7 +19,6 @@
 package org.kopi.galite.visual
 
 import java.awt.event.KeyEvent
-import java.util.ArrayList
 import java.util.Locale
 
 import javax.swing.tree.DefaultMutableTreeNode
@@ -27,12 +26,24 @@ import javax.swing.tree.TreeNode
 
 import kotlin.system.exitProcess
 
-import org.kopi.galite.base.Utils
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.db.DBContext
-
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.base.Utils
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBSchema.Favorites
+import org.kopi.galite.db.DBSchema.GroupParties
+import org.kopi.galite.db.DBSchema.GroupRights
+import org.kopi.galite.db.DBSchema.Groups
+import org.kopi.galite.db.DBSchema.Modules
+import org.kopi.galite.db.DBSchema.Symbols
+import org.kopi.galite.db.DBSchema.UserRights
+import org.kopi.galite.db.DBSchema.Users
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Represents a menu tree model.
@@ -50,10 +61,11 @@ class VMenuTree(ctxt: DBContext,
                 loadFavorites: Boolean = true) : VWindow(ctxt) {
 
   companion object {
-    private const val SELECT_MODULES = "" // TODO
-    private const val SELECT_USER_RIGHTS = "" // TODO
-    private const val SELECT_GROUP_RIGHTS_BY_USERID = "" // TODO
-    private const val SELECT_GROUP_RIGHTS_BY_GROUPID = "" // TODO
+
+    private val SELECT_MODULES = Modules.slice(Modules.id, Modules.father, Modules.shortName,
+            Modules.sourceName, Modules.objectName, Modules.priority, Modules.symbol).selectAll().
+            orderBy(Modules.priority to SortOrder.ASC)
+
     const val CMD_QUIT = 0
     const val CMD_OPEN = 1
     const val CMD_SHOW = 2
@@ -128,9 +140,9 @@ class VMenuTree(ctxt: DBContext,
       super.localizeActors(manager) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble("MenuTree Actor localization",
-                                       "MenuTreeModel.localize",
-                                       e.message,
-                                       e)
+              "MenuTreeModel.localize",
+              e.message,
+              e)
       exitProcess(1)
     }
     manager = null
@@ -164,12 +176,12 @@ class VMenuTree(ctxt: DBContext,
                           key: Int,
                           modifier: Int) {
     actors[number] = VActor(menu,
-                            MENU_LOCALIZATION_RESOURCE,
-                            item,
-                            MENU_LOCALIZATION_RESOURCE,
-                            icon,
-                            key,
-                            modifier)
+            MENU_LOCALIZATION_RESOURCE,
+            item,
+            MENU_LOCALIZATION_RESOURCE,
+            icon,
+            key,
+            modifier)
     actors[number]!!.number = number
   }
 
@@ -282,13 +294,13 @@ class VMenuTree(ctxt: DBContext,
    */
   private fun createTopLevelTree() {
     root = DefaultMutableTreeNode(Module(0,
-                                         0,
-                                         VlibProperties.getString("PROGRAM"),
-                                         VlibProperties.getString("program"),
-                                         null,
-                                         Module.ACS_PARENT,
-                                         Int.MAX_VALUE,
-                                         null))
+            0,
+            VlibProperties.getString("PROGRAM"),
+            VlibProperties.getString("program"),
+            null,
+            Module.ACS_PARENT,
+            Int.MAX_VALUE,
+            null))
     for (menu in ROOT_MENUS) {
       if (!menu.isEmpty()) {
         (root as DefaultMutableTreeNode).add(menu.root as DefaultMutableTreeNode)
@@ -300,23 +312,138 @@ class VMenuTree(ctxt: DBContext,
    * Fetches the modules from the database.
    */
   private fun fetchModules(isUnicode: Boolean): MutableList<Module> {
-    TODO()
+    val localModules: ArrayList<Module> = ArrayList()
+    var icon: String? = null
+
+    transaction {
+      SELECT_MODULES.forEach {
+        if (it[Modules.symbol] != null && it[Modules.symbol] != 0) {
+          val symbol = it[Modules.symbol] as Int
+
+          icon = Symbols.select { Symbols.id eq symbol }.single()[Symbols.objectName]
+        }
+
+        val module = Module(it[Modules.id],
+                it[Modules.father],
+                it[Modules.shortName],
+                it[Modules.sourceName],
+                it[Modules.objectName],
+                Module.ACS_PARENT,
+                it[Modules.priority],
+                icon)
+
+        localModules.add(module)
+        items.add(module)
+      }
+    }
+    return localModules
   }
 
   private fun fetchGroupRightsByUserId(modules: List<Module>) {
-    fetchRights(modules, SELECT_GROUP_RIGHTS_BY_USERID)
+    when {
+      groupName != null -> {
+        fetchRights(modules, (Modules innerJoin GroupRights innerJoin GroupParties)
+                .slice(Modules.id, GroupRights.access, Modules.priority)
+                .select {
+                  (Modules.id eq GroupRights.module) and
+                          (GroupRights.group eq GroupParties.group) and (GroupParties.user
+                          inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName }))
+                }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+      }
+      menuTreeUser != null -> {
+        fetchRights(modules, (Modules innerJoin GroupRights innerJoin GroupParties)
+                .slice(Modules.id, GroupRights.access, Modules.priority)
+                .select {
+                  (Modules.id eq GroupRights.module) and
+                          (GroupRights.group eq GroupParties.group) and (GroupParties.user
+                          inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }))
+                }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+      }
+      else -> {
+        fetchRights(modules, (Modules innerJoin GroupRights innerJoin GroupParties)
+                .slice(Modules.id, GroupRights.access, Modules.priority)
+                .select {
+                  (Modules.id eq GroupRights.module) and
+                          (GroupRights.group eq GroupParties.group) and (GroupParties.user eq getUserID())
+                }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+      }
+    }
   }
 
   private fun fetchGroupRightsByGroupId(modules: List<Module>) {
-    fetchRights(modules, SELECT_GROUP_RIGHTS_BY_GROUPID)
+    when {
+      groupName != null -> {
+        fetchRights(modules, (Modules innerJoin GroupRights)
+                .slice(Modules.id, GroupRights.access, Modules.priority)
+                .select {
+                  (Modules.id eq GroupRights.module) and (GroupRights.group
+                          inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName }))
+                }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
+                .withDistinct())
+      }
+      menuTreeUser != null -> {
+        fetchRights(modules, (Modules innerJoin GroupRights)
+                .slice(Modules.id, GroupRights.access, Modules.priority)
+                .select {
+                  (Modules.id eq GroupRights.module) and (GroupRights.group
+                          inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }))
+                }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
+                .withDistinct())
+      }
+      else -> {
+        fetchRights(modules, (Modules innerJoin GroupRights)
+                .slice(Modules.id, GroupRights.access, Modules.priority)
+                .select { (Modules.id eq GroupRights.module) and (GroupRights.group eq getUserID()) }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC)
+                .withDistinct())
+      }
+    }
   }
 
   private fun fetchUserRights(modules: List<Module>) {
-    fetchRights(modules, SELECT_USER_RIGHTS)
+    when {
+      groupName != null -> {
+        fetchRights(modules, (Modules innerJoin UserRights)
+                .slice(Modules.id, UserRights.access, Modules.priority)
+                .select {
+                  (Modules.id eq UserRights.module) and (UserRights.user inSubQuery (
+                          Groups.slice(Groups.id).select { Groups.shortName eq groupName }
+                          ))
+                }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+      }
+      menuTreeUser != null -> {
+        fetchRights(modules, (Modules innerJoin UserRights)
+                .slice(Modules.id, UserRights.access, Modules.priority)
+                .select {
+                  (Modules.id eq UserRights.module) and (UserRights.user inSubQuery (
+                          Users.slice(Users.id).select { Users.shortName eq menuTreeUser }
+                          ))
+                }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+      }
+      else -> {
+        fetchRights(modules, (Modules innerJoin UserRights)
+                .slice(Modules.id, UserRights.access, Modules.priority)
+                .select { (Modules.id eq UserRights.module) and (UserRights.user eq getUserID()) }
+                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
+      }
+    }
   }
 
-  private fun fetchRights(modules: List<Module>, queryText: String) {
-    TODO()
+  private fun fetchRights(modules: List<Module>, query: Query) {
+    transaction {
+      query.forEach {
+        val module = findModuleById(modules, it[Modules.id])
+
+        module?.accessibility = if (it[UserRights.access]) Module.ACS_TRUE else Module.ACS_FALSE
+      }
+    }
   }
 
   private fun findModuleById(modules: List<Module>, id: Int): Module? {
@@ -332,7 +459,25 @@ class VMenuTree(ctxt: DBContext,
    * Fetches the favorites from the database.
    */
   private fun fetchFavorites() {
-    TODO()
+    transaction {
+      val query = if (isSuperUser && menuTreeUser != null) {
+
+        val id = UserRights.select { UserRights.id eq 0 }.single()[UserRights.id]
+        Modules.select { Modules.id eq  id }
+
+        Favorites.slice(Favorites.module, Favorites.id)
+                .select { Favorites.user inSubQuery(Users.slice(Users.id).select {Users.shortName eq  menuTreeUser  })
+                }
+                .orderBy(Favorites.id)
+      } else {
+        Favorites.slice(Favorites.module, Favorites.id).select { Favorites.user eq getUserID() }.orderBy(Favorites.id)
+      }
+      query.forEach {
+        if (it[Favorites.module] != 0) {
+          shortcutsID.add(it[Favorites.module])
+        }
+      }
+    }
   }
 
   /*
@@ -381,12 +526,12 @@ class VMenuTree(ctxt: DBContext,
    */
   protected fun addLogoutModule(localModules: MutableList<Module>) {
     val logout = Module(Int.MAX_VALUE,
-                        USER_MENU,
-                        "logout",
-                        RootMenu.ROOT_MENU_LOCALIZATION_RESOURCE,
-                        LogoutModule::class.java.name,
-                        Module.ACS_TRUE, Int.MIN_VALUE,
-                        null)
+            USER_MENU,
+            "logout",
+            RootMenu.ROOT_MENU_LOCALIZATION_RESOURCE,
+            LogoutModule::class.java.name,
+            Module.ACS_TRUE, Int.MIN_VALUE,
+            null)
     items.add(logout)
     localModules.add(logout)
   }

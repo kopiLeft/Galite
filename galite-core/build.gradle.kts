@@ -31,6 +31,7 @@ val hylafaxVersion = "1.0.0"
 dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
+  api("org.jetbrains.exposed", "exposed-jodatime", exposedVersion)
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core", vaadinVersion) {
