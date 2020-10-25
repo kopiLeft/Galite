@@ -17,6 +17,8 @@
 
 package org.kopi.galite.tests.ui.report
 
+import java.util.Locale
+
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
 import org.kopi.galite.domain.Domain
@@ -38,6 +40,10 @@ class VReportTests : VerticalLayout() {
    * Simple report with two fields
    */
   class SimpleReport : Report() {
+    override val locale = Locale.FRANCE
+
+    override val title = "SimpleReport"
+
     val field1 = field(StringTestType()) {
       label = "field1"
     }

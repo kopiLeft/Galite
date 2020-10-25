@@ -87,7 +87,7 @@ class VMenuTree(ctxt: DBContext,
   // --------------------------------------------------------------------
   var root: TreeNode? = null
     private set
-  private val actors = arrayOfNulls<VActor>(9)
+  private val treeActors: Array<VActor?> = arrayOfNulls(9)
   lateinit var moduleArray: Array<Module> // Sets the accessibility of the module
     private set
   private val items = mutableListOf<Module>()
@@ -106,10 +106,10 @@ class VMenuTree(ctxt: DBContext,
     createActor(CMD_UNFOLD, "Edit", "Unfold", "unfold", KeyEvent.VK_ENTER, 0)
     createActor(CMD_INFORMATION, "Help", "Information", null, 0, 0)
     createActor(CMD_HELP, "Help", "Help", "help", KeyEvent.VK_F1, 0)
-    setActors(actors.filterIsInstance<VActor>().toTypedArray())
-    localizeActors(ApplicationContext!!.getDefaultLocale())
+    addActors(treeActors.requireNoNulls())
+    localizeActors(ApplicationContext.getDefaultLocale())
     createTree(isSuperUser || loadFavorites)
-    localizeRootMenus(ApplicationContext!!.getDefaultLocale())
+    localizeRootMenus(ApplicationContext.getDefaultLocale())
   }
 
   // ----------------------------------------------------------------------
@@ -140,14 +140,14 @@ class VMenuTree(ctxt: DBContext,
    * Enables or disable the given actor
    */
   override fun setActorEnabled(actor: Int, enabled: Boolean) {
-    actors[actor]!!.handler = this
-    actors[actor]!!.isEnabled = enabled
+    treeActors[actor]!!.handler = this
+    treeActors[actor]!!.isEnabled = enabled
   }
 
   /**
    * Returns the actor having the given number.
    */
-  override fun getActor(number: Int): VActor = actors[number]!!
+  override fun getActor(number: Int): VActor = treeActors[number]!!
 
   /**
    * Returns the ID of the current user

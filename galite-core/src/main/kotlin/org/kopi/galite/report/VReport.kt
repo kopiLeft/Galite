@@ -18,16 +18,17 @@
 
 package org.kopi.galite.report
 
+import java.awt.event.KeyEvent
 import java.io.File
 import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.util.Locale
 
+import org.kopi.galite.cross.VDynamicReport
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.l10n.ReportLocalizer
 import org.kopi.galite.print.Printable
 import org.kopi.galite.print.Printable.Companion.DOC_UNKNOWN
 import org.kopi.galite.type.Date
@@ -39,6 +40,7 @@ import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VHelpViewer
@@ -53,7 +55,7 @@ import org.kopi.galite.visual.WindowController
  *
  * @param ctxt Database context handler
  */
-abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
+abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
   companion object {
     const val TYP_CSV = 1
     const val TYP_PDF = 2
@@ -160,7 +162,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    * @param     manager         the manger to use for localization
    */
   private fun localize(manager: LocalizationManager) {
-    val loc: ReportLocalizer = manager.getReportLocalizer(source)
+    val loc = manager.getReportLocalizer(source)
 
     setPageTitle(loc.getTitle())
     help = loc.getHelp()
@@ -579,6 +581,33 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
 
   fun showHelp() {
     VHelpViewer().showHelp(genHelp())
+  }
+
+  fun addDefaultReportCommands() {
+    initDefaultActors()
+    initDefaultCommands()
+  }
+
+  private fun initDefaultActors() {
+    addActors(arrayOf(
+            VActor("File", null, "Quit", null, VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
+            VActor("File", null, "Print", null, VDynamicReport.PRINT_ICON, KeyEvent.VK_F6, 0),
+            VActor("File", null, "ExportCSV", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F8, 0),
+            VActor("File", null, "ExportXLSX", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_MASK),
+            VActor("File", null, "ExportPDF", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, 0),
+            VActor("Action", null, "Fold", null, VDynamicReport.FOLD_ICON, KeyEvent.VK_F2, 0),
+            VActor("Action", null, "Unfold", null, VDynamicReport.UNFOLD_ICON, KeyEvent.VK_F3, 0),
+            VActor("Action", null, "FoldColumn", null, VDynamicReport.FOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0),
+            VActor("Action", null, "UnfoldColumn", null, VDynamicReport.UNFOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0),
+            VActor("Action", null, "Sort", null, VDynamicReport.SERIALQUERY_ICON, KeyEvent.VK_F4, 0),
+            VActor("Help", null, "Help", null, VDynamicReport.HELP_ICON, KeyEvent.VK_F1, 0),
+    ))
+  }
+
+  private fun initDefaultCommands() {
+    actors.forEachIndexed { index, vActor ->
+      VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.actorIdent)
+    }
   }
 
   var help: String? = null
