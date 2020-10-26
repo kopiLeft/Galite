@@ -17,79 +17,13 @@
 
 package org.kopi.galite.tests.ui.base
 
-import io.github.sukgu.Shadow
-
-import org.junit.After
-import org.junit.Before
-
-import org.kopi.galite.tests.TestBase
-
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
+import com.github.mvysny.kaributesting.v10.Routes
 
 /**
  * The high level class for all classes containing UI tests
  */
-abstract class UITestBase : TestBase() {
-  abstract val driver: WebDriver
-  private val url = "http://localhost:8080"
-
-  /**
-   * Initializes [driver], opening web page on the address [url]
-   */
-  @Before
-  open fun setupTest() {
-    driver.get(url)
-  }
-
-  /**
-   * Quit [driver], closing all associated windows
-   */
-  @After
-  open fun teardown() {
-    driver.quit()
-  }
-
-  /**
-   * Finds an element that have a specific [tag].
-   * Can return at most one element.
-   *
-   * @param tag web element tag.
-   * @return one element with the tag [tag] or null if no element was found.
-   */
-  fun findElementByTag(tag: String = "*"): WebElement? {
-    val shadow = Shadow(driver)
-
-    return shadow.findElement(buildSelector(tag = tag))
-  }
-
-  /**
-   * Finds all elements that have a specific [tag].
-   * Can return one or many elements.
-   *
-   * @param tag web element tag.
-   * @return all elements with the tag [tag] or null if no element was found.
-   */
-  fun findElementsByTag(tag: String = "*"): List<WebElement>? {
-    val shadow = Shadow(driver)
-
-    return shadow.findElements(buildSelector(tag = tag))
-  }
-
-  /**
-   * Builds the selection query used to select a specific [tag].
-   * You can optionally provide one or many criteria to target a specific element
-   * withing elements with the same [tag].
-   *
-   * @param tag the element's tag.
-   * @param criteria the criteria of selection.
-   */
-  private fun buildSelector(tag: String = "*", vararg criteria: Pair<String, String>): String {
-    var query = tag
-    criteria.forEach {
-      query += "[${it.first}='${it.second}']"
-    }
-
-    return query
+open class UITestBase {
+  companion object {
+    var routes: Routes?  = null
   }
 }

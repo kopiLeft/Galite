@@ -17,14 +17,41 @@
 
 package org.kopi.galite.tests.ui.report
 
+import com.github.mvysny.kaributesting.v10.MockVaadin
+import com.github.mvysny.kaributesting.v10.Routes
+
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
+import org.kopi.galite.tests.ui.base.UITestBase
 import org.kopi.galite.ui.report.VReport
 
+class VReportTests: UITestBase() {
+
+  @Test
+  fun testSimpleReport() {
+  }
+
+  @Before
+  fun createRoutes() {
+    MockVaadin.setup(routes!!)
+  }
+
+  companion object {
+    @BeforeClass
+    @JvmStatic
+    fun setupVaadin() {
+      routes  = Routes().autoDiscoverViews(SimpleReportTest::class.java.packageName)
+    }
+  }
+}
+
 @Route("VReport")
-class VReportTests : VerticalLayout() {
+class SimpleReportTest : VerticalLayout() {
 
   init {
     val report = SimpleReport()
