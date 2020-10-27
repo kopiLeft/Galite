@@ -19,11 +19,12 @@ package org.kopi.galite.tests.ui.base
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
+import org.kopi.galite.tests.TestBase
 
 /**
  * The high level class for all classes containing UI tests
  */
-open class UITestBase {
+open class UITestBase: TestBase() {
   fun setupRoutes() {
     MockVaadin.setup(routes!!)
   }
