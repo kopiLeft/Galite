@@ -54,7 +54,6 @@ class VDatabaseUtils {
         when (query1Row[references.action] as Char) {
           'R' -> transaction {
             auxTable = Table(query1Row[references.table]) as AuxTable
-            auxTable// How to add the column after object declaration?
             val query2 = auxTable.slice(auxTable.id)
                     .select { auxTable.id eq id }
             if (query2.toList()[1] != null) {
@@ -67,12 +66,11 @@ class VDatabaseUtils {
 
           'C' -> transaction {
             auxTable = Table(query1Row[references.table]) as AuxTable
-            var query2 = auxTable.slice(auxTable.id)
+            val query2 = auxTable.slice(auxTable.id)
                     .select { auxTable.id eq id }
             query2.forEach {
               checkForeignKeys(context, it[auxTable.id], query1Row[references.table])
             }
-
             auxTable.deleteWhere { auxTable.id eq id }
           }
 
