@@ -41,10 +41,10 @@ dependencies {
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
-  implementation("org.jdom", "jdom2", jdomVersion)
-
-  // UI tests dependencies .
+  // UI tests dependencies
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
+
+  implementation("org.jdom", "jdom2", jdomVersion)
 }
 
 tasks {
