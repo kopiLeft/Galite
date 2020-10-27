@@ -253,10 +253,9 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           = 0
   private val indices // bitset of unique indices
           = 0
-  val name // field name (for dumps)
-          : String? = null
-  val label // field label
-          : String? = null
+  lateinit var name // field name (for dumps)
+          : String
+  val label: String? = null // field label
   private val options // options
           = 0
   private val help // help text
