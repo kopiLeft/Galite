@@ -17,13 +17,25 @@
 
 package org.kopi.galite.tests.ui.base
 
+import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
 
 /**
  * The high level class for all classes containing UI tests
  */
 open class UITestBase {
+  fun setupRoutes() {
+    MockVaadin.setup(routes!!)
+  }
+
   companion object {
+    fun discoverRooterByPackage(packageName: String) {
+      routes  = Routes().autoDiscoverViews(packageName)
+    }
+
+    fun discoverRooterClass(clazz: Class<*>) {
+      routes  = Routes().autoDiscoverViews(clazz.packageName)
+    }
     var routes: Routes?  = null
   }
 }
