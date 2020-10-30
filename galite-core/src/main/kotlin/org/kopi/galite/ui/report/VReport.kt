@@ -17,6 +17,7 @@
 
 package org.kopi.galite.ui.report
 
+import org.kopi.galite.report.MReport
 import org.kopi.galite.ui.common.Window
 import org.kopi.galite.report.Report
 
@@ -25,7 +26,8 @@ import org.kopi.galite.report.Report
  */
 class VReport(val report: Report) : Window() {
   /**Report's data table */
-  private val table = VTable()
+  val rep = MReport()
+  private val table = VTable(rep)
 
   init {
     table.fillTable(report)
