@@ -33,7 +33,7 @@ class Item(val id: Int,
   var icon: Image? = null
   var smallIcon: Image? = null
   var childCount = 0
-  lateinit var children: Array<Item>
+  var children: Array<Item?>? = null
   var level = 0
 
   init {
