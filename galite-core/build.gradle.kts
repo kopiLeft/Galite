@@ -57,5 +57,9 @@ dependencies {
 
   // Hylafax dependencies
   implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", hylafaxVersion)
+
+  implementation ("com.vaadin","vaadin-spring-boot-starter","16.0.0")
+
+  implementation ("org.springframework.boot","spring-boot-devtools","2.2.0.RELEASE")
 }
 
