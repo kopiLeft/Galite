@@ -33,7 +33,7 @@ import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 
-class MReport : Constants, Serializable {
+open class MReport : Constants, Serializable {
   fun computeColumnWidth(column: Int): Int {
     var max = 0
 
@@ -343,7 +343,7 @@ class MReport : Constants, Serializable {
    * @param    column        the index of the desired column
    * @return    the desired column
    */
-  fun getAccessibleColumn(column: Int): VReportColumn? = accessibleColumns[column]
+  open fun getAccessibleColumn(column: Int): VReportColumn? = accessibleColumns[column]
 
   /**
    * Returns the number of columns visible or hide
@@ -841,7 +841,7 @@ class MReport : Constants, Serializable {
    *
    * @return    the number or columns to display
    */
-  fun getColumnCount(): Int = accessibleColumns.size
+  open fun getColumnCount(): Int = accessibleColumns.size
 
   /**
    * Returns the number of records managed by the data source object.
@@ -884,7 +884,7 @@ class MReport : Constants, Serializable {
    * @param    column        the index of the column
    * @return    the name of the column
    */
-  fun getColumnName(column: Int): String {
+  open fun getColumnName(column: Int): String {
     val label: String? = accessibleColumns[column]!!.label
 
     if (label == null || label.isEmpty()) {

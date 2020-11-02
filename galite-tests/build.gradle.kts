@@ -24,6 +24,9 @@ val vaadinVersion = "17.0.0"
 val jdomVersion = "2.0.5"
 val karibuTestingVersion = "1.2.5"
 
+val bootJar: org.springframework.boot.gradle.tasks.bundling.BootJar by tasks
+bootJar.enabled = false
+
 dependencies {
   implementation(project(":galite-core"))
 
