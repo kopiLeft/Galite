@@ -15,17 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.print
 
-package org.kopi.galite.type
+import org.kopi.galite.util.PrintException
 
-class Utils {
-  companion object {
-    fun trimString(input: String): String = TODO()
-    fun trailString(input: String): String = TODO()
-    fun toSql(date: Date): String = TODO()
-    fun toSql(l: String): String = TODO()
-  }
+/**
+ * Postscript Print Failure
+ */
+class PSPrintException : PrintException {
+  /**
+   * Constructs an exception with a message.
+   *
+   * @param        message                the associated message
+   */
+  constructor(message: String?) : super(message, EXC_FATAL)
+
+  /**
+   * Constructs a new exception with the specified detail message and cause.
+   *
+   * @param     message                the associated message
+   * @param     cause           the cause  (null value permited
+   */
+  constructor(message: String?, cause: Throwable?) : super(message, cause, EXC_FATAL)
 }
-
-
-

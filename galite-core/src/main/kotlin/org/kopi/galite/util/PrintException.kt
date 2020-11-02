@@ -21,14 +21,14 @@ package org.kopi.galite.util
 /**
  * An error has occur during printing
  */
-class PrintException : Exception {
+open class PrintException : Exception {
   /**
    * PrintException
    *
    * @param        msg        Explanation of the error
    * @param        code        Kind of the error (see EXEC_ constants)
    */
-  constructor(msg: String, code: Int) : super(msg) {
+  constructor(msg: String?, code: Int) : super(msg) {
     this.code = code
   }
 
@@ -38,7 +38,7 @@ class PrintException : Exception {
    * @param        msg        Explanation of the error
    * @param        code        Kind of the error (see EXEC_ constants)
    */
-  constructor(msg: String, cause: Throwable, code: Int) : super(msg, cause) {
+  constructor(msg: String?, cause: Throwable?, code: Int) : super(msg, cause) {
     this.code = code
   }
   // ----------------------------------------------------------------------

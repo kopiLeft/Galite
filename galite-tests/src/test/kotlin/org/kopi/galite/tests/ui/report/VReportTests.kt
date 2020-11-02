@@ -19,12 +19,37 @@ package org.kopi.galite.tests.ui.report
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
+import org.kopi.galite.tests.ui.base.UITestBase
 import org.kopi.galite.ui.report.VReport
 
+class VReportTests: UITestBase() {
+
+  @Test
+  fun testSimpleReport() {
+    // TODO
+  }
+
+  @Before
+  fun createRoutes() {
+    setupRoutes()
+  }
+
+  companion object {
+    @BeforeClass
+    @JvmStatic
+    fun setupVaadin() {
+      discoverRooterClass(SimpleReportTest::class.java)
+    }
+  }
+}
+
 @Route("VReport")
-class VReportTests : VerticalLayout() {
+class SimpleReportTest : VerticalLayout() {
 
   init {
     val report = SimpleReport()

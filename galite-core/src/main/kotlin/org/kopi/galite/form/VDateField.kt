@@ -23,11 +23,11 @@ import java.util.StringTokenizer
 import kotlin.reflect.KClass
 
 import org.kopi.galite.db.Query
+import org.kopi.galite.db.Utils
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
