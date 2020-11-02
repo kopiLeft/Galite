@@ -179,7 +179,7 @@ class VDateField : VField(10, 1) {
    * Warning:	This method will become inaccessible to kopi users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setDate(r, v as Date?)
+    setDate(r, v as? Date)
   }
 
   /**

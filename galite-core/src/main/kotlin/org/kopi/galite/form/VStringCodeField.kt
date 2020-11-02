@@ -85,7 +85,7 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setString(r, v as String)
+    setString(r, v as? String)
   }
 
   /**

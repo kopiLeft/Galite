@@ -100,7 +100,7 @@ abstract class VCodeField(val type: String,
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, o: Any?) {
-    var s = o as String
+    var s = o as? String
 
     if (s == "") {
       setNull(rec)
@@ -112,7 +112,7 @@ abstract class VCodeField(val type: String,
        */
       var found = -1
 
-      s = s.toLowerCase()
+      s = s!!.toLowerCase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
