@@ -108,7 +108,7 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = if (value[r] == -1) "NULL" else org.kopi.galite.type.Utils.toSql(codes[value[r]])
+  override fun getSqlImpl(r: Int): String = if (value[r] == -1) "NULL" else org.kopi.galite.db.Utils.toSql(codes[value[r]])
 
   /**
    * Returns the data type handled by this field.

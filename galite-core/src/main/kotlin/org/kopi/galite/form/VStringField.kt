@@ -27,7 +27,7 @@ import org.kopi.galite.util.LineBreaker
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.db.Query
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 
 open class VStringField(width: Int, height: Int, private val visibleHeight: Int, val convert: Int, styled: Boolean)
   : VField(width, height) {
