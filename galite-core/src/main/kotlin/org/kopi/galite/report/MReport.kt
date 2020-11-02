@@ -226,11 +226,11 @@ open class MReport : Constants, Serializable {
             var max: Float
             // init max
             max = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F
-                  else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+            else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
             // calculate max value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
-                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               if (tmp > max) {
                 max = tmp
               }
@@ -242,11 +242,11 @@ open class MReport : Constants, Serializable {
 
             // init max
             min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F
-                  else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+            else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
             // calculate min value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
-                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               if (tmp < min) {
                 min = tmp
               }
@@ -258,7 +258,7 @@ open class MReport : Constants, Serializable {
             // calculate average.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
-                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               ovr += tmp / baseRows.size
             }
             vm.setValue(params[j], ovr.toDouble())
@@ -268,7 +268,7 @@ open class MReport : Constants, Serializable {
             // calculate sum.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
-                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
               sum += tmp
             }
             vm.setValue(params[j], sum.toDouble())

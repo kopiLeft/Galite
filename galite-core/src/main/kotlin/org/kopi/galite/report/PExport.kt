@@ -207,6 +207,7 @@ abstract class PExport(val table: UTable,
 
   internal open fun formatTimeColumn(column: VReportColumn, index: Int) {}
 
+
   internal open fun formatTimestampColumn(column: VReportColumn, index: Int) {}
 
   fun getColumnLabel(column: Int): String {
