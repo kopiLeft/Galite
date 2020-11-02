@@ -201,7 +201,7 @@ abstract class PExport(val table: UTable,
 
   internal open fun formatFixedColumn(column: VReportColumn, index: Int) {}
 
-  open fun formatIntegerColumn(column: VReportColumn, index: Int) {}
+  internal open fun formatIntegerColumn(column: VReportColumn, index: Int) {}
 
   internal open fun formatBooleanColumn(column: VReportColumn, index: Int) {}
 
