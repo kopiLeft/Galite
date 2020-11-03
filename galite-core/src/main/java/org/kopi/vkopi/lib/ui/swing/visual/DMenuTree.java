@@ -19,11 +19,25 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.vkopi.lib.visual.*;
-import org.kopi.xkopi.lib.base.Query;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -32,13 +46,15 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
+import org.kopi.galite.visual.Message;
+import org.kopi.galite.visual.Module;
+import org.kopi.galite.visual.UMenuTree;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VMenuTree;
+import org.kopi.galite.visual.VlibProperties;
+import org.kopi.galite.db.Query;
 
 public class DMenuTree extends DWindow implements UMenuTree {
 
@@ -168,8 +184,8 @@ public class DMenuTree extends DWindow implements UMenuTree {
 
 	public void actionPerformed(ActionEvent e) {
 	  setWaitInfo(VlibProperties.getString("menu_form_started"));
-	  getModel().performAsyncAction(new KopiAction("menu_form_started") {
-	    public void execute() throws VException {
+	  getModel().performAsyncAction(new org.kopi.galite.visual.Action("menu_form_started") {
+	    public void execute() {
 	      module.run(getModel().getDBContext());
 	      unsetWaitInfo();
 	    }

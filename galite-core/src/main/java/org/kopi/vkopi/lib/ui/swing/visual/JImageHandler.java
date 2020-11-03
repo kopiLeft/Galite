@@ -19,11 +19,12 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.base.Image;
-import org.kopi.vkopi.lib.visual.ImageHandler;
-
-import javax.swing.*;
 import java.net.URL;
+
+import javax.swing.ImageIcon;
+
+import org.kopi.galite.base.Image;
+import org.kopi.galite.visual.ImageHandler;
 
 public class JImageHandler extends ImageHandler {
 
@@ -45,7 +46,7 @@ public class JImageHandler extends ImageHandler {
    * 
    */
   public String getURL(String image) {
-    return Utils.getURLFromResource(image).toString();
+    return Utils.Companion.getURLFromResource(image).toString();
   }
 
   //-------------------------------------------------------------------------
