@@ -315,12 +315,12 @@ public class DItemTree extends DWindow implements UItemTree {
     if (selectedNode != null) {
       parent = (Item)selectedNode.getUserObject();
       if (getModel().getDepth() > 0 && ((parent.getLevel() + 1) > getModel().getDepth())) {
-        throw new VExecFailedException(MessageCode.Companion.getMessage("VIS-00069" , getModel().getDepth()));
+        throw new VExecFailedException(MessageCode.INSTANCE.getMessage("VIS-00069" , getModel().getDepth()));
       }
 
       do {
         newItem = JOptionPane.showInputDialog(this,
-                                              MessageCode.Companion.getMessage("VIS-00068", maxLength),
+                                              MessageCode.INSTANCE.getMessage("VIS-00068", maxLength),
                                               VlibProperties.getString("New_item"),
                                               JOptionPane.PLAIN_MESSAGE);
       } while (newItem != null && newItem.length() > maxLength);
@@ -449,7 +449,7 @@ public class DItemTree extends DWindow implements UItemTree {
       selectedItem = (Item)selectedNode.getUserObject();
       do {
         newName = (String) JOptionPane.showInputDialog(this,
-                                                       MessageCode.Companion.getMessage("VIS-00068", maxLength),
+                                                       MessageCode.INSTANCE.getMessage("VIS-00068", maxLength),
                                                        VlibProperties.getString("OpenLine"),
                                                        JOptionPane.PLAIN_MESSAGE,
                                                        null,
@@ -481,7 +481,7 @@ public class DItemTree extends DWindow implements UItemTree {
       selectedItem = (Item)selectedNode.getUserObject();
       do {
         localisedName = (String)JOptionPane.showInputDialog(this,
-                                                            MessageCode.Companion.getMessage("VIS-00068", maxLength),
+                                                            MessageCode.INSTANCE.getMessage("VIS-00068", maxLength),
                                                             VlibProperties.getString("OpenLine"),
                                                             JOptionPane.PLAIN_MESSAGE,
                                                             null,

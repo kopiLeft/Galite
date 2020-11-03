@@ -28,65 +28,64 @@ import org.kopi.galite.util.base.InconsistencyException
 /**
  * This class handles localized messages.
  */
-class MessageCode {
-  companion object {
-    /**
-     * Returns a message (convenience routine).
-     *
-     * @param     key             the message ke
-     * @param     param1          the first message parameter
-     * @param     param1          the second message parameter
-     * @return    the requested message
-     */
-    fun getMessage(key: String, param1: Any, param2: Any): String =
-            getMessage(key = key, params = arrayOf(param1, param2))
+object MessageCode {
 
-    /**
-     * Returns a message (convenience routine).
-     * key must be of the form CCC-DDDDD (exp: KOP-00001)
-     * where CCC is a 3 capital character module id
-     * and DDDDD a 5 digit message id
-     *
-     * @param     key             the message key
-     * @param     params          the array of message parameters
-     * @return    the requested message
-     */
-    @Suppress("UNCHECKED_CAST")
-    @JvmOverloads
-    fun getMessage(key: String, params: Any? = null, withKey: Boolean = true): String {
-      val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
+  /**
+   * Returns a message (convenience routine).
+   *
+   * @param     key             the message ke
+   * @param     param1          the first message parameter
+   * @param     param1          the second message parameter
+   * @return    the requested message
+   */
+  fun getMessage(key: String, param1: Any, param2: Any): String =
+          getMessage(key = key, params = arrayOf(param1, param2))
 
-      if (!keyPattern.matcher(key).matches()) {
-        throw InconsistencyException("Malformed message key '$key'")
-      }
-      val domain = key.substring(0, 3)
-      val ident = key.substring(4, 9)
-      if (ApplicationContext.getRegistry() == null) {
-        throw InconsistencyException("No Registry set for this application.")
-      }
-      val src = ApplicationContext.getRegistry().getMessageSource(domain)
-              ?: throw InconsistencyException("No message source found for module '"
-                      + domain + "'")
-      return try {
-        val manager = LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
+  /**
+   * Returns a message (convenience routine).
+   * key must be of the form CCC-DDDDD (exp: KOP-00001)
+   * where CCC is a 3 capital character module id
+   * and DDDDD a 5 digit message id
+   *
+   * @param     key             the message key
+   * @param     params          the array of message parameters
+   * @return    the requested message
+   */
+  @Suppress("UNCHECKED_CAST")
+  @JvmOverloads
+  fun getMessage(key: String, params: Any? = null, withKey: Boolean = true): String {
+    val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
 
-        // Within a String, "''" represents a single quote in java.text.MessageFormat.
-        val format = manager.getMessageLocalizer(src, ident).getText().replace("'", "''")
-        val messageFormat = ExtendedMessageFormat(format, ApplicationContext.getDefaultLocale())
-        (if (withKey) "$key: " else "") + messageFormat.formatMessage(params)
-      } catch (e: InconsistencyException) {
-        ApplicationContext.reportTrouble("localize MessageCode",
-                "org.kopi.galite.visual.MessageCode.getMessage(String key, Object[] params, boolean withKey)",
-                e.message,
-                e)
-        System.err.println("ERROR: " + e.message)
-        "$key: message for !$key! not found!"
-      }
+    if (!keyPattern.matcher(key).matches()) {
+      throw InconsistencyException("Malformed message key '$key'")
     }
+    val domain = key.substring(0, 3)
+    val ident = key.substring(4, 9)
+    if (ApplicationContext.getRegistry() == null) {
+      throw InconsistencyException("No Registry set for this application.")
+    }
+    val src = ApplicationContext.getRegistry().getMessageSource(domain)
+            ?: throw InconsistencyException("No message source found for module '"
+                    + domain + "'")
+    return try {
+      val manager = LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
 
-    // ----------------------------------------------------------------------
-    // DATA MEMBERS
-    // ----------------------------------------------------------------------
-    private val keyPattern = Pattern.compile("^[A-Z][A-Z][A-Z]-\\d\\d\\d\\d\\d$")
+      // Within a String, "''" represents a single quote in java.text.MessageFormat.
+      val format = manager.getMessageLocalizer(src, ident).getText().replace("'", "''")
+      val messageFormat = ExtendedMessageFormat(format, ApplicationContext.getDefaultLocale())
+      (if (withKey) "$key: " else "") + messageFormat.formatMessage(params)
+    } catch (e: InconsistencyException) {
+      ApplicationContext.reportTrouble("localize MessageCode",
+              "org.kopi.galite.visual.MessageCode.getMessage(String key, Object[] params, boolean withKey)",
+              e.message,
+              e)
+      System.err.println("ERROR: " + e.message)
+      "$key: message for !$key! not found!"
+    }
   }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  private val keyPattern = Pattern.compile("^[A-Z][A-Z][A-Z]-\\d\\d\\d\\d\\d$")
 }

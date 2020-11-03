@@ -77,7 +77,7 @@ public class WaitWindow {
       progressBar.setValue(0);
       progressBar.setStringPainted(true);
 
-      text = new JLabel("<html><b> " + MessageCode.Companion.getMessage("VIS-00067") + " </b><br>" + message);
+      text = new JLabel("<html><b> " + MessageCode.INSTANCE.getMessage("VIS-00067") + " </b><br>" + message);
 
       JPanel            panel = new JPanel();
 
@@ -125,14 +125,14 @@ public class WaitWindow {
       });
     } else {
       // change dialog text
-      text.setText("<html><b> " + MessageCode.Companion.getMessage("VIS-00067") + " </b><br>" + message);
+      text.setText("<html><b> " + MessageCode.INSTANCE.getMessage("VIS-00067") + " </b><br>" + message);
       progressBar.setMaximum(maxTime);
     }
   }
 
   public void updateMessage(String message) {
     if (waitDialog != null) {
-      text.setText("<html><b> " + MessageCode.Companion.getMessage("VIS-00067") + " </b><br>" + message);
+      text.setText("<html><b> " + MessageCode.INSTANCE.getMessage("VIS-00067") + " </b><br>" + message);
     }
   }
 

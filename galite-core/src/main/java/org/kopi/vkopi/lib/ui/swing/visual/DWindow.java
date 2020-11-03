@@ -559,7 +559,7 @@ public abstract class DWindow extends JPanel implements UWindow {
       try {
 	undo.undo();
       } catch (CannotUndoException ex) {
-	System.out.println(MessageCode.Companion.getMessage("VIS-00029") + ex);
+	System.out.println(MessageCode.INSTANCE.getMessage("VIS-00029") + ex);
       }
       update();
       redoAction.update();
@@ -587,7 +587,7 @@ public abstract class DWindow extends JPanel implements UWindow {
       try {
 	undo.redo();
       } catch (CannotRedoException ex) {
-	System.out.println(MessageCode.Companion.getMessage("VIS-00030") + ex);
+	System.out.println(MessageCode.INSTANCE.getMessage("VIS-00030") + ex);
 	ex.printStackTrace();
       }
       update();
