@@ -22,15 +22,11 @@ import org.jetbrains.exposed.sql.Table
 
 class DBSchema {
   object references : Table() {
-    val id = integer("id").uniqueIndex().autoIncrement()
     val table = varchar("table", 255)
     val column = varchar("column", 255)
-    val action = char("action", 1)
     val reference  = varchar("reference"  , 255)
+    val action = char("action", 1)
 
-    init {
-      uniqueIndex("REFERENCES0",table, column)
-    }
-    override val primaryKey = PrimaryKey(id, name = "PK_REFERENCES_ID")
+    override val primaryKey = PrimaryKey(table , column)
   }
 }
