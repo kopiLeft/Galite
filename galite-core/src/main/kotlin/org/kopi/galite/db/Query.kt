@@ -59,4 +59,3 @@ class Query(conn: Connection) {
 
   fun getTime(pos: Int): NotNullTime = TODO()
 }
-
