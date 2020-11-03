@@ -24,8 +24,10 @@ val vaadinVersion = "17.0.0"
 val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
 val apachePoi = "4.1.2"
-val apacheOoxml ="3.9"
-val graphbuilder ="1.02"
+val apacheOoxml = "3.9"
+val graphbuilder = "1.02"
+val hylafaxVersion = "1.0.0"
+val jFreeChartVersion = "1.0.19"
 
 dependencies {
   // Exposed dependencies
@@ -41,16 +43,23 @@ dependencies {
 
   // Itext dependency
   implementation("com.lowagie", "itext", itextVersion)
-  
+
   // Jdom dependency
   implementation("org.jdom", "jdom2", jdomVersion)
 
   //Apache POI
-  implementation("org.apache.poi","poi",apachePoi)
+  implementation("org.apache.poi", "poi", apachePoi)
 
   // Apache OOxml
-  implementation("org.apache.poi","poi-ooxml",apacheOoxml)
+  implementation("org.apache.poi", "poi-ooxml", apacheOoxml)
 
   // Graphbuilder dependency
   implementation("com.github.virtuald", "curvesapi", graphbuilder)
+
+  // Hylafax dependencies
+  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", hylafaxVersion)
+
+  //JFreeChart dependency
+  implementation("org.jfree", "jfreechart", jFreeChartVersion)
+
 }

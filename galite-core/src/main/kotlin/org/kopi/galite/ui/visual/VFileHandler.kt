@@ -16,13 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.type
+package org.kopi.galite.ui.visual
 
-class Utils {
-  companion object {
-    fun trimString(input: String): String = TODO()
-    fun trailString(input: String): String = TODO()
-    fun toSql(date: Date): String = TODO()
-    fun toSql(t: Time?): String = TODO()
+import java.io.File
+
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.UWindow
+
+class VFileHandler : FileHandler() {
+  override fun chooseFile(window: UWindow, defaultName: String): File {
+    TODO("Not yet implemented")
   }
+
+  override fun chooseFile(window: UWindow, dir: File, defaultName: String): File {
+    TODO("Not yet implemented")
+  }
+
+  override fun openFile(window: UWindow, defaultName: String): File {
+    TODO("Not yet implemented")
+  }
+
+  override fun openFile(window: UWindow, filter: FileFilter): File {
+    TODO("Not yet implemented")
+  }
+
+  override fun openFile(window: UWindow, dir: File, defaultName: String): File {
+    TODO("Not yet implemented")
+  }
+
 }

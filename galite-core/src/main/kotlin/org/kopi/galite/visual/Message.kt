@@ -70,7 +70,7 @@ object Message {
     }
     return try {
       //   Within a String, "''" represents a single quote in java.text.MessageFormat.
-      val format = manager.getMessageLocalizer(source, ident).getText().replace("'", "''")
+      val format = manager!!.getMessageLocalizer(source, ident).getText().replace("'", "''")
       ExtendedMessageFormat.formatMessage(format, params)
     } catch (e: InconsistencyException) {
       System.err.println("ERROR: " + e.message)

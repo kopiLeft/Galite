@@ -23,7 +23,7 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimeColumn
 import org.kopi.galite.type.NotNullTime
 import org.kopi.galite.type.Time
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -93,7 +93,7 @@ class VTimeField : VField(5, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     if (o as String == "") {
       setNull(rec)
     } else {
@@ -215,7 +215,7 @@ class VTimeField : VField(5, 1) {
    * Warning:	This method will become inaccessible to users in next release
 
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     setTime(r, v as? Time)
   }
 
