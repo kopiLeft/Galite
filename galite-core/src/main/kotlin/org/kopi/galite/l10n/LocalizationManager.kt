@@ -31,13 +31,13 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param     locale          the locale used for localization management
  * @param     defaultLocale   the default locale used when there is no file in [locale]
  */
-class LocalizationManager(val locale: Locale, private val defaultLocale: Locale?) {
+class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale?) {
   /**
    * Constructs a form localizer using the specified source.
    *
    * @param     source          the source qualified name
    */
-  fun getFormLocalizer(source: String): FormLocalizer {
+  fun getFormLocalizer(source: String?): FormLocalizer {
     return FormLocalizer(getDocument(source))
   }
 

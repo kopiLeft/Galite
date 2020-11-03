@@ -23,7 +23,7 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VIntegerCodeColumn
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -96,7 +96,7 @@ class VIntegerCodeField : VCodeField {
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     setInt(r, v as Int)
   }
 

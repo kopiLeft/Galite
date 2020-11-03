@@ -25,7 +25,7 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VIntegerColumn
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
 
@@ -103,7 +103,7 @@ class VIntegerField(width: Int,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     val s = o as String
 
     if (s == "") {
@@ -165,7 +165,7 @@ class VIntegerField(width: Int,
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     setInt(r, v as? Int)
   }
 

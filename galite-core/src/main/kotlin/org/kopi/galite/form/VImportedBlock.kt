@@ -30,6 +30,5 @@ abstract class VImportedBlock (form: VForm) : VBlock(form) {
     return actors!![i]
   }
 
-  override  var actors: Array<VActor>? = null
-
+  override lateinit var actors: Array<VActor>
 }

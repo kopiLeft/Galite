@@ -22,6 +22,6 @@ import java.io.Serializable
 import java.util.EventListener
 
 interface FormListener : EventListener, Serializable {
-  fun currentBlockChanged(oldBlock: VBlock, newBlock: VBlock)
+  fun currentBlockChanged(oldBlock: VBlock?, newBlock: VBlock?)
   fun setFieldSearchOperator(op: Int)
 }

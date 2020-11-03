@@ -18,7 +18,9 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
 
 abstract class VBlock(form: VForm) {
 
@@ -33,8 +35,6 @@ abstract class VBlock(form: VForm) {
   // dynamic data
   // current record
   var activeRecord = 0
-
-  var activeField: VField? = null
 
   fun getMode(): Int = TODO()
 
@@ -55,8 +55,130 @@ abstract class VBlock(form: VForm) {
   open fun helpOnBlock(help: VHelpGenerator) {
     TODO()
   }
-  fun isRecordFilled(rec:Int):Boolean =TODO()
 
-  open var actors: Array<VActor>? = null
-    internal set
+  internal var activeField: VField? = null
+
+  var currentRecord = 0
+
+  // qualified name of source file
+  internal var source : String? = null
+
+  // block short name
+  internal var shortcut : String? = null
+
+  // block title
+  internal var title : String? = null
+
+  internal var align: BlockAlignment? = null
+
+  // the help on this block
+  internal var help : String? = null
+
+  // names of database tables
+  internal lateinit var tables : Array<String>
+
+  // block options
+  internal var options = 0
+
+  // access flags for each mode
+  internal lateinit var access : IntArray
+
+  // error messages for violated indices
+  internal lateinit var indices : Array<String>
+
+  // block name
+  internal lateinit var name: String
+
+  var isChanged = false
+
+  var pageNumber: Int = 0
+
+  protected lateinit var sortedRecords: IntArray
+
+  protected var blockAccess = false
+
+  // prevent that the access of a field is updated
+  // (performance in big charts)
+  protected var ignoreAccessChange = false
+
+  // max number of buffered IDs
+  protected var fetchSize  = 0
+
+  // max number of displayed records
+  protected var displaySize  = 0
+
+  // commands
+  protected lateinit var commands : Array<VCommand>
+
+  // actors to send to form (move to block import)
+  internal open lateinit var actors  : Array<VActor>
+
+  // fields
+  protected lateinit var fields : Array<VField>
+
+  protected lateinit var VKT_Triggers: Array<IntArray>
+
+  /**
+   * Returns true if the block is accessible
+   */
+  open fun isAccessible(): Boolean {
+    TODO()
+  }
+  open fun updateBlockAccess() {
+    TODO()
+  }
+  open fun checkBlock() {
+    TODO()
+  }
+  open fun initialise() {
+    TODO()
+  }
+  open fun initIntern() {
+    TODO()
+  }
+  open fun close() {
+    TODO()
+  }
+  open fun setCommandsEnabled(enable: Boolean) {
+    TODO()
+  }
+
+  fun leave(b: Boolean) {
+    TODO()
+  }
+
+  fun clear(){
+    TODO()
+  }
+  fun setMode(modQuery: Int){
+    TODO()
+  }
+  open fun singleMenuQuery(showSingleEntry: Boolean): Int {
+    TODO()
+  }
+
+  fun enter() {
+    TODO()
+  }
+
+  abstract fun localize(manager: LocalizationManager)
+
+  fun isRecordFilled(rec: Int): Boolean {
+    TODO()
+  }
+
+  fun isMulti(): Boolean {
+    TODO()
+  }
+
+  inner class OrderModel {
+    //TODO()
+  }
+  companion object {
+    // record info flags
+    protected val RCI_FETCHED = 0x00000001
+    protected val RCI_CHANGED = 0x00000002
+    protected val RCI_DELETED = 0x00000004
+    protected val RCI_TRAILED = 0x00000008
+  }
 }
