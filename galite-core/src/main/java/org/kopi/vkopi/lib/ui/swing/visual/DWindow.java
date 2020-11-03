@@ -19,11 +19,12 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
+import org.kopi.galite.visual.Action;
 import org.kopi.vkopi.lib.ui.swing.base.JButtonPanel;
 import org.kopi.vkopi.lib.ui.swing.base.KnownBugs;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.vkopi.lib.util.LineBreaker;
-import org.kopi.vkopi.lib.visual.*;
+import org.kopi.galite.util.LineBreaker;
+import org.kopi.galite.visual.*;
 
 import javax.swing.FocusManager;
 import javax.swing.*;
@@ -604,7 +605,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  public void performAsyncAction(final KopiAction action) {
+  public void performAsyncAction(final Action action) {
     performActionImpl(action, true);
   }
 
@@ -613,7 +614,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  public void performBasicAction(final KopiAction action) {
+  public void performBasicAction(final Action action) {
     performActionImpl(action, false);
   }
 
@@ -623,7 +624,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  private void performActionImpl(final KopiAction action, boolean asynch) {
+  private void performActionImpl(final Action action, boolean asynch) {
     SwingThreadHandler.verifyRunsInEventThread("DForm:performActionImpl");
 
     if (inAction == true) {

@@ -124,7 +124,7 @@ open class Date : Type {
   /**
    * Returns the day number (starts at 1, ends at 7)
    */
-   fun getweekday() : Int {
+    open fun getweekday() : Int {
       synchronized(calendar) {
         val gregorian = julianToGregorian(scalar)
 

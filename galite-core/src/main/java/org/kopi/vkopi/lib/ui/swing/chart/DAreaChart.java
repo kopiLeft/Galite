@@ -54,7 +54,7 @@ public class DAreaChart extends DAbstractChartType {
     
     dataset = createDataset(series);
     chart = ChartFactory.createAreaChart(title,
-	                                 series[0].getDimension().name,
+	                                 series[0].getDimension().getName(),
 	                                 null,
 	                                 dataset,
 	                                 PlotOrientation.VERTICAL,

@@ -47,6 +47,106 @@ abstract class VBlock {
     TODO()
   }
 
+  open fun getTitle(): String? {
+    TODO()
+  }
+
+  // ----------------------------------------------------------------------
+  // LISTENER
+  // ----------------------------------------------------------------------
+  open fun addBlockListener(bl: BlockListener?) {
+    TODO()
+  }
+  // ----------------------------------------------------------------------
+  // UI
+  // ----------------------------------------------------------------------
+  open fun getBorder(): Int {
+    TODO()
+  }
+  open fun getMaxRowPos(): Int {
+    TODO()
+  }
+
+  open fun getMaxColumnPos(): Int {
+    TODO()
+  }
+
+  open fun getDisplayedFields(): Int {
+    TODO()
+  }
+
+  open fun isMulti(): Boolean {
+    TODO()
+  }
+
+  open fun getDisplaySize(): Int {
+    TODO()
+  }
+
+  open fun isDroppable(): Boolean {
+    TODO()
+  }
+
+  open fun getFields(): Array<VField?>? {
+   TODO()
+  }
+
+  open fun getAlignment(): BlockAlignment? {
+    TODO()
+  }
+
+  open fun gotoPrevRecord() {
+    TODO()
+  }
+
+  open fun isRecordAccessible(rec: Int): Boolean {
+    TODO()
+  }
+
+  open fun isSortedRecordDeleted(sortedRec: Int): Boolean {
+    TODO()
+  }
+
+  open fun getSortedPosition(rec: Int): Int {
+    TODO()
+  }
+
+  open fun isRecordDeleted(rec: Int): Boolean {
+    TODO()
+  }
+
+  open fun isAccepted(flavor: String): Boolean {
+    TODO()
+  }
+
+  open fun changeActiveRecord(record: Int) {
+    TODO()
+  }
+
+  open fun getDropTarget(flavor: String): VField? {
+    TODO()
+  }
+
+  open fun noMove(): Boolean {
+    TODO()
+  }
+
+  open fun getDataPosition(rec: Int): Int {
+    TODO()
+  }
+
+  open fun gotoNextRecord() {
+    TODO()
+  }
+
+  open fun gotoRecord(recno: Int) {
+    TODO()
+  }
+
+  open fun getActiveField(): VField? {
+    TODO()
+  }
+
   fun executeObjectTrigger(VKT_Type: Int?): Any = TODO()
 
   fun isChart(): Boolean = TODO()

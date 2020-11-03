@@ -18,18 +18,16 @@
 
 package org.kopi.galite.form
 
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
-import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VModel
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 
 abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
@@ -68,6 +66,34 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   open fun enumerateValue(desc: Boolean) {
     TODO()
+  }
+
+  open fun getToolTip(): String {
+    TODO()
+  }
+
+  open fun getDefaultAccess(): Int {
+    TODO()
+  }
+
+  fun isInternal(): Boolean {
+    TODO()
+  }
+
+  fun onBeforeDrop() {
+    TODO()
+  }
+
+  open fun updateText() {
+  TODO()
+  }
+
+  fun onAfterDrop() {
+    TODO()
+  }
+
+  open fun setString(v: String?) {
+   TODO()
   }
 
   /**

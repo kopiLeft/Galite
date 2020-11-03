@@ -17,4 +17,8 @@
  */
 package org.kopi.galite.form
 
-class VStringField 
+class VStringField(width: Int, height: Int) : VField(width, height) {
+  fun setString(r: Int, v: String?) {
+    TODO()
+  }
+}
