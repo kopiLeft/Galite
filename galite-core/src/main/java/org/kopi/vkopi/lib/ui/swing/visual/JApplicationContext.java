@@ -19,9 +19,9 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.Application;
-import org.kopi.vkopi.lib.visual.ApplicationContext;
-import org.kopi.vkopi.lib.visual.PreviewRunner;
+import org.kopi.galite.visual.Application;
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.PreviewRunner;
 
 /**
  * {@code JApplicationContext} is an application context

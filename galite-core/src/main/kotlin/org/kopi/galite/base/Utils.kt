@@ -139,6 +139,7 @@ open class Utils : org.kopi.galite.util.base.Utils() {
     /**
      * return an URL from the resources
      */
+    @JvmOverloads
     fun getURLFromResource(name: String, directory: String? = RESOURCE_DIR): URL? {
       return if (directory == null) {
         null

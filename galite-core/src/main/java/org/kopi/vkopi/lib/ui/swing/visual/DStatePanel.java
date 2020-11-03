@@ -19,8 +19,9 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
 
 /**
  * STATE PANEL CLASS

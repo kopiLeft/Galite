@@ -19,16 +19,23 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.VHelpViewer;
-
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.text.Document;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.Document;
+
+import org.kopi.galite.visual.VHelpViewer;
 
 /**
  * A window with an html pane
@@ -58,9 +65,9 @@ import java.net.URL;
                            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     getContentPanel().setLayout(new BorderLayout());
     try {
-      html = new JEditorPane(model.getURL());
+      html = new JEditorPane(model.getUrl());
     } catch (java.io.IOException e) {
-      throw new org.kopi.util.base.InconsistencyException(e);
+      throw new org.kopi.galite.util.base.InconsistencyException(e);
     }
     html.setEditable(false);
     html.addHyperlinkListener(this);
@@ -126,7 +133,7 @@ import java.net.URL;
    * @param u the URL to follow
    */
   protected void linkActivated(URL u) {
-    ((VHelpViewer)getModel()).setURL(u);
+    ((VHelpViewer)getModel()).setUrl(u);
   }
   
   // ----------------------------------------------------------------------
