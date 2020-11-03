@@ -137,7 +137,8 @@ abstract class VReportColumn(
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   var label: String = ""
-  private var help: String? = null
+  var help: String? = null
+    private set
   var visible: Boolean = true
   open var folded: Boolean = false
   var addedAtRuntime: Boolean = false

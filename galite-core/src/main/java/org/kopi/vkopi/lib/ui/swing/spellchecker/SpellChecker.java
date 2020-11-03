@@ -19,17 +19,19 @@
 
 package org.kopi.vkopi.lib.ui.swing.spellchecker;
 
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.vkopi.lib.visual.VlibProperties;
-
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import java.awt.*;
+import java.awt.Frame;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
+import org.kopi.galite.visual.VlibProperties;
 
 public class SpellChecker {
 
@@ -52,21 +54,21 @@ public class SpellChecker {
 
     if (checkNext()) {
       SpellcheckerDialog  spellDialog = new SpellcheckerDialog(parent,
-                                                               VlibProperties.getString("aspell-dialog-title"),
-                                                               this);
+              VlibProperties.getString("aspell-dialog-title"),
+              this);
       spellDialog.show();
     }
 
     Object[]    options = { VlibProperties.getString("CLOSE")};
 
     JOptionPane.showOptionDialog(parent,
-				 VlibProperties.getString("aspell-finished"),
-				 VlibProperties.getString("aspell-notice"),
-				 JOptionPane.DEFAULT_OPTION,
-				 JOptionPane.INFORMATION_MESSAGE,
-				 ICN_NOTICE,
-				 options,
-				 options[0]);
+            VlibProperties.getString("aspell-finished"),
+            VlibProperties.getString("aspell-notice"),
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.INFORMATION_MESSAGE,
+            ICN_NOTICE,
+            options,
+            options[0]);
 
     //    return check(text, results);
   }
@@ -114,10 +116,10 @@ public class SpellChecker {
   void change (String word) {
     if(changeAllMap.containsKey( result.getOriginalWord())) {
       System.err.println( "Change  all: same word: " +
-                          result.getOriginalWord());
+              result.getOriginalWord());
     }
     changeAllMap.put(result.getOriginalWord(),
-                     word);
+            word);
     replaceWord(word);
   }
 
@@ -131,7 +133,7 @@ public class SpellChecker {
   void ignoreAll(String word) {
     if(ignoreAllSet.contains( result.getOriginalWord())) {
       System.err.println("Ignore all: same word: " +
-                         result.getOriginalWord());
+              result.getOriginalWord());
     }
     ignoreAllSet.add(result.getOriginalWord());
   }

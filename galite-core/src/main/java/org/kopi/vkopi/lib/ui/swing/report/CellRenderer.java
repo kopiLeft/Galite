@@ -19,10 +19,16 @@
 
 package org.kopi.vkopi.lib.ui.swing.report;
 
-import org.kopi.vkopi.lib.report.Constants;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Toolkit;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+
+import org.kopi.galite.report.Constants;
 
 /**
  * @version 1.0 11/09/98
@@ -35,10 +41,10 @@ public class CellRenderer extends JComponent {
 
   @SuppressWarnings("deprecation")
   protected CellRenderer(int state,
-			 int align,
-			 Color back,
-			 Color fore,
-			 Font font) {
+                         int align,
+                         Color back,
+                         Color fore,
+                         Font font) {
     this.state = state;
     this.align = align;
     this.back = back;
@@ -51,52 +57,52 @@ public class CellRenderer extends JComponent {
     Dimension   size = getSize();
     Color	bg;
     switch (state) {
-    case Constants.STA_FOLDED:
-      bg = Color.lightGray;
-      break;
-    case Constants.STA_SEPARATOR:
-      bg = Color.red;
-      break;
-    default:
-      bg = selected ? Color.black : this.back == Color.white ? level : this.back;
+      case Constants.STA_FOLDED:
+        bg = Color.lightGray;
+        break;
+      case Constants.STA_SEPARATOR:
+        bg = Color.red;
+        break;
+      default:
+        bg = selected ? Color.black : this.back == Color.white ? level : this.back;
     }
     g.setColor(bg);
     g.fillRect(0, 0, size.width, size.height);
 
     switch (state) {
-    case Constants.STA_FOLDED:
-    case Constants.STA_SEPARATOR:
-      break;
-    default:
-      if (state != Constants.STA_SEPARATOR && str != null) {
-	Color		fg = selected ? level : this.fore;
-	int		left;
-	int		index = 0, oldIndex = 0;
-	int		line = 0;
+      case Constants.STA_FOLDED:
+      case Constants.STA_SEPARATOR:
+        break;
+      default:
+        if (state != Constants.STA_SEPARATOR && str != null) {
+          Color		fg = selected ? level : this.fore;
+          int		left;
+          int		index = 0, oldIndex = 0;
+          int		line = 0;
 
-	g.setColor(fg);
-	g.setFont(font);
+          g.setColor(fg);
+          g.setFont(font);
 
-	while ((index = str.indexOf('\n', oldIndex)) != -1) {
-	  if (align == Constants.ALG_RIGHT) {
-	    left = size.width - metrics.stringWidth(str.substring(oldIndex, index)) - 2;
-	    //} else if (align == Constants.ALG_CENTER){
-	    //left = (size.width - metrics.stringWidth(str)) / 2 - 2;
-	  } else {
-	    left = 2;
-	  }
-	  g.drawString(str.substring(oldIndex, index), left, (line++ + 1) * metrics.getHeight() - 2);
-	  oldIndex = index + 1;
-	}
-	if (align == Constants.ALG_RIGHT) {
-	  left = size.width - metrics.stringWidth(str.substring(oldIndex)) - 2; // $$$
-	  //} else if (align == Constants.ALG_CENTER) {
-	  //left = (size.width - metrics.stringWidth(str)) / 2 - 2;
-	} else {
-	  left = 2;
-	}
-	g.drawString(str.substring(oldIndex), left, (line++ + 1) * metrics.getHeight() - 2);
-      }
+          while ((index = str.indexOf('\n', oldIndex)) != -1) {
+            if (align == Constants.ALG_RIGHT) {
+              left = size.width - metrics.stringWidth(str.substring(oldIndex, index)) - 2;
+              //} else if (align == Constants.ALG_CENTER){
+              //left = (size.width - metrics.stringWidth(str)) / 2 - 2;
+            } else {
+              left = 2;
+            }
+            g.drawString(str.substring(oldIndex, index), left, (line++ + 1) * metrics.getHeight() - 2);
+            oldIndex = index + 1;
+          }
+          if (align == Constants.ALG_RIGHT) {
+            left = size.width - metrics.stringWidth(str.substring(oldIndex)) - 2; // $$$
+            //} else if (align == Constants.ALG_CENTER) {
+            //left = (size.width - metrics.stringWidth(str)) / 2 - 2;
+          } else {
+            left = 2;
+          }
+          g.drawString(str.substring(oldIndex), left, (line++ + 1) * metrics.getHeight() - 2);
+        }
     }
   }
 

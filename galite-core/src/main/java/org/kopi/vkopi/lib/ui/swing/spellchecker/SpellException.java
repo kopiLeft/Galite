@@ -20,17 +20,17 @@
 package org.kopi.vkopi.lib.ui.swing.spellchecker;
 
 public class SpellException extends Exception {
-    
-	public SpellException(String message)  {
-        super(message);
-    }
 
-    public SpellException(String message, Throwable cause)  {
-        super(message, cause);
-    }
-    /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 8871082496962296305L;
+  public SpellException(String message)  {
+    super(message);
+  }
+
+  public SpellException(String message, Throwable cause)  {
+    super(message, cause);
+  }
+  /**
+   * Comment for <code>serialVersionUID</code>
+   */
+  private static final long serialVersionUID = 8871082496962296305L;
 
 }

@@ -25,8 +25,8 @@ import org.kopi.galite.util.base.InconsistencyException
 
 class ColumnStyle {
 
-  var foreground = 0
-  var background = 0
+  var foregroundCode = 0
+  var backgroundCode = 0
   var fontName = 0
   var fontStyle = 0
   val state = 0
@@ -36,7 +36,7 @@ class ColumnStyle {
    *
    * @return        color	The color to become this component's background color.
    */
-  fun getBackground(): Color = when (background) {
+  fun getBackground(): Color = when (backgroundCode) {
     Constants.CLR_WHITE -> Color.white
     Constants.CLR_BLACK -> Color.black
     Constants.CLR_RED -> Color.red
@@ -57,7 +57,7 @@ class ColumnStyle {
    *
    * @return        color	The color to become this component's foreground color.
    */
-  fun getForeground(): Color = when (foreground) {
+  fun getForeground(): Color = when (foregroundCode) {
     Constants.CLR_WHITE -> Color.white
     Constants.CLR_BLACK -> Color.black
     Constants.CLR_RED -> Color.red
