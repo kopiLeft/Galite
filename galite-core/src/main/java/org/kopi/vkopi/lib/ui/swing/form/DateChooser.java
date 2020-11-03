@@ -20,8 +20,8 @@
 package org.kopi.vkopi.lib.ui.swing.form;
 
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.vkopi.lib.visual.VlibProperties;
-import org.kopi.xkopi.lib.type.*;
+import org.kopi.galite.visual.VlibProperties;
+import org.kopi.galite.type.*;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
@@ -47,7 +47,7 @@ public class DateChooser extends JPanel implements ActionListener {
    * be initialized to the current date.
    */
   public DateChooser(Date date) {
-    selectedDate = date == null ? Date.now() : date;
+    selectedDate = date == null ? Date.Companion.now() : date;
 
     setLayout(new BorderLayout(5, 5));
     setOpaque(false);
@@ -158,7 +158,7 @@ public class DateChooser extends JPanel implements ActionListener {
     Object	o = evt.getSource();
 
     if (o == todayButton) {
-      selectedDate = Date.now();
+      selectedDate = Date.Companion.now();
       okay = true;
       dispose();
     } else {

@@ -19,11 +19,13 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.util.base.InconsistencyException;
-import org.kopi.vkopi.lib.form.KopiAlignment;
-import org.kopi.vkopi.lib.form.KopiLayoutManager;
-import org.kopi.vkopi.lib.form.MultiFieldAlignment;
-import org.kopi.vkopi.lib.form.ViewBlockAlignment;
+import org.kopi.galite.form.Alignment;
+import org.kopi.galite.form.ViewBlockAlignment;
+import org.kopi.galite.util.base.InconsistencyException;
+import org.kopi.galite.form.Alignment;
+import org.kopi.galite.form.LayoutManager;
+import org.kopi.galite.form.MultiFieldAlignment;
+import org.kopi.galite.form.ViewBlockAlignment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,11 +34,11 @@ import java.util.Vector;
 /**
  *
  */
-public class KopiSimpleBlockLayout implements KopiLayoutManager {
+public class KopiSimpleBlockLayout implements LayoutManager {
   Component[][]		components;
-  KopiAlignment[][]	aligns;
+  Alignment[][]	aligns;
   Vector<Component>	follows;
-  Vector<KopiAlignment>	followsAligns;
+  Vector<Alignment>	followsAligns;
   int[]			minStart;
   int[]			sizes;
   int			height;
@@ -54,11 +56,11 @@ public class KopiSimpleBlockLayout implements KopiLayoutManager {
    */
   public KopiSimpleBlockLayout(int col, int line, ViewBlockAlignment align) {
     components = new Component[col][line];
-    aligns = new KopiAlignment[col][line];
+    aligns = new Alignment[col][line];
     sizes = new int[col];
     minStart = new int[components.length + 2];
     follows = new Vector<Component>();
-    followsAligns = new Vector<KopiAlignment>();
+    followsAligns = new Vector<Alignment>();
     this.align = align;
   }
 
@@ -100,14 +102,14 @@ public class KopiSimpleBlockLayout implements KopiLayoutManager {
    */
   public void addLayoutComponent(Component comp, Object constraints) {
     synchronized (comp.getTreeLock()) {
-      if (constraints instanceof KopiAlignment) {
-	KopiAlignment	align = (KopiAlignment)constraints;
-	if (align.width < 0) {
+      if (constraints instanceof Alignment) {
+	Alignment	align = (Alignment)constraints;
+	if (align.getWidth() < 0) {
 	  follows.addElement(comp);
 	  followsAligns.addElement(align);
 	} else {
-	  aligns[align.x][align.y] = align;
-	  components[align.x][align.y] = comp;
+	  aligns[align.getX()][align.getY()] = align;
+	  components[align.getX()][align.getY()] = comp;
 	}
       } else {
 	throw new IllegalArgumentException("cannot add to layout: constraint must be a KopiAlignment");
@@ -182,9 +184,9 @@ public class KopiSimpleBlockLayout implements KopiLayoutManager {
           // use dimension with all follows
           Dimension   dim = getDimension(x, y);
 
-          minStart[x + aligns[x][y].width] = Math.max(minStart[x] + dim.width+hgap,
-                                                      minStart[x + aligns[x][y].width]);
-          if (aligns[x][y].width == 1) {
+          minStart[x + aligns[x][y].getWidth()] = Math.max(minStart[x] + dim.width+hgap,
+                                                      minStart[x + aligns[x][y].getWidth()]);
+          if (aligns[x][y].getWidth() == 1) {
             width_c = Math.max(width_c, dim.width+hgap);
           }
           height_c = Math.max(height_c, y * (columnHeight + vgap) + dim.height);
@@ -232,9 +234,9 @@ public class KopiSimpleBlockLayout implements KopiLayoutManager {
     int         height = dim.height;
 
     for (int i = 0; i < follows.size(); i++) {
-      KopiAlignment         align = followsAligns.elementAt(i);
+      Alignment         align = followsAligns.elementAt(i);
 
-      if (align.x != x || align.y != y) {
+      if (align.getX() != x || align.getY() != y) {
         continue;
       }
 
@@ -377,7 +379,7 @@ public class KopiSimpleBlockLayout implements KopiLayoutManager {
             int               sup = 0;
 
             if (aligns[x][y] instanceof MultiFieldAlignment) {
-              if (aligns[x][y].alignRight) {
+              if (aligns[x][y].getAlignRight()) {
                 // label
                 cleft = ((x-1)/2) * (Math.max(d.width, components[x][y + 1].getPreferredSize().width) + hgap)+insets.left;
                 sup = 5;
@@ -385,7 +387,7 @@ public class KopiSimpleBlockLayout implements KopiLayoutManager {
                 // fields
                 cleft = ((x-1)/2) * (Math.max(d.width,components[x][y - 1].getPreferredSize().width) + hgap)+insets.left;
               }
-            } else if (!aligns[x][y].alignRight && align != null && align.isAligned(x / 2 + 1)) {
+            } else if (!aligns[x][y].getAlignRight() && align != null && align.isAligned(x / 2 + 1)) {
               if (components[x][y] instanceof DLabel) {
                 cleft = insets.left;
               } else {
@@ -397,14 +399,14 @@ public class KopiSimpleBlockLayout implements KopiLayoutManager {
               }
             } else if (align != null && align.isAligned(x / 2 + 1)) {
               cleft = insets.left;
-            } else if (aligns[x][y].alignRight) {
+            } else if (aligns[x][y].getAlignRight()) {
               cleft = minStart[x + 1] - d.width;
             } else {
               cleft = left ;
             }
             components[x][y].setBounds(cleft,
                                        y * (vgap + columnHeight) + top + sup,
-                                       (aligns[x][y].alignRight || !aligns[x][y].useAll) ?
+                                       (aligns[x][y].getAlignRight() || !aligns[x][y].getUseAll()) ?
                                        d.width
                                        : minStart[x + 1]-cleft,
                                        d.height);
@@ -414,14 +416,14 @@ public class KopiSimpleBlockLayout implements KopiLayoutManager {
       }
 
       for (int i = 0; i < follows.size(); i++) {
-        KopiAlignment         align = (KopiAlignment)followsAligns.elementAt(i);
+        Alignment         align = (Alignment)followsAligns.elementAt(i);
         Component             comp = (Component)follows.elementAt(i);
         Dimension             d = comp.getPreferredSize();
 
-        comp.setBounds(components[align.x][align.y].getLocation().x
+        comp.setBounds(components[align.getX()][align.getY()].getLocation().x
                        + hgap
-                       + components[align.x][align.y].getPreferredSize().width,
-                       align.y * (vgap + columnHeight) + top,
+                       + components[align.getX()][align.getY()].getPreferredSize().width,
+                       align.getY() * (vgap + columnHeight) + top,
                        d.width,
                        d.height);
       }

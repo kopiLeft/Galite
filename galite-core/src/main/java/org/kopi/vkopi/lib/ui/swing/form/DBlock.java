@@ -19,6 +19,7 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
+import org.kopi.galite.form.LayoutManager;
 import org.kopi.galite.util.base.InconsistencyException;
 import org.kopi.galite.base.UComponent;
 import org.kopi.galite.form.*;
@@ -86,7 +87,7 @@ public class DBlock extends JPanel implements UBlock {
   }
 
 
-  protected KopiLayoutManager createLayoutManager() {
+  protected LayoutManager createLayoutManager() {
     return new KopiSimpleBlockLayout(2 * maxColumnPos, // label + field => 2
                                      maxRowPos,
                                      (model.getAlignment() == null) ?
@@ -204,7 +205,7 @@ public class DBlock extends JPanel implements UBlock {
   }
 
   
-  public void add(UComponent comp, KopiAlignment constraints) {
+  public void add(UComponent comp, Alignment constraints) {
     super.add((Component)comp, constraints);
   }
 
@@ -498,7 +499,7 @@ public class DBlock extends JPanel implements UBlock {
   private final DForm				formView;
   protected final VBlock			model;
   private VFieldUI[]           			columnViews;
-  protected KopiLayoutManager  		        layout;
+  protected LayoutManager layout;
 
   protected final int				maxRowPos;
   protected final int				maxColumnPos;
