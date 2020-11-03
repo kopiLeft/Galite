@@ -25,6 +25,7 @@ import org.kopi.galite.list.VBooleanCodeColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 
+
 /**
  *
  * @param     ident           the identifier of the type in the source file
@@ -100,7 +101,7 @@ open class VBooleanCodeField : VCodeField {
    * Warning:	This method will become inaccessible to galite users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setBoolean(r, v as? Boolean)
+    setBoolean(r, v as Boolean)
   }
 
   /**

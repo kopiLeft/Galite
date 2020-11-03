@@ -60,11 +60,11 @@ abstract class PrinterManager {
   companion object {
 
     fun getPrinterManager(): PrinterManager {
-      return ApplicationContext.applicationContext.getApplication().getPrinterManager()
+      return ApplicationContext.applicationContext.getApplication().printerManager
     }
 
     fun setPrinterManager(manager: PrinterManager) {
-      ApplicationContext.applicationContext.getApplication().setPrinterManager(manager)
+      ApplicationContext.applicationContext.getApplication().printerManager = manager
     }
   }
 }

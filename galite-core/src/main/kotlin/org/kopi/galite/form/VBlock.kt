@@ -18,25 +18,11 @@
 
 package org.kopi.galite.form
 
-import java.util.Vector
-import javax.swing.event.EventListenerList
-
+import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
 
 abstract class VBlock {
-
-  fun isRecordFilled(rec: Int): Boolean {
-    TODO()
-  }
-
-  fun isMulti(): Boolean {
-    TODO()
-  }
-
-  inner class OrderModel {
-    //TODO()
-  }
 
   fun getForm(): VForm = TODO()
 
@@ -44,114 +30,11 @@ abstract class VBlock {
     TODO()
   }
 
-  companion object {
-    // record info flags
-    protected val RCI_FETCHED = 0x00000001
-    protected val RCI_CHANGED = 0x00000002
-    protected val RCI_DELETED = 0x00000004
-    protected val RCI_TRAILED = 0x00000008
-  }
-
-  protected lateinit var sortedRecords: IntArray
-
-  protected var blockAccess = false
-
-  // prevent that the access of a field is updated
-  // (performance in big charts)
-  protected var ignoreAccessChange = false
-
-  // max number of buffered records
-  var bufferSize = 0
-
-  // max number of buffered IDs
-  protected var fetchSize  = 0
-
-  // max number of displayed records
-  protected var displaySize  = 0
-
-  // page number
-  protected var page = 0
-
-  // qualified name of source file
-  protected var source : String? = null
-
-  // block name
-  protected var name   : String? = null
-
-  // block short name
-  protected var shortcut  : String? = null
-
-  // block title
-  protected var title   : String? = null
-
-  // the help on this block
-  protected var align: BlockAlignment? = null
-
-  protected var help  : String? = null
-
-  // names of database tables
-  protected lateinit var tables : Array<String>
-
-  // block options
-  protected var options = 0
-
-  // access flags for each mode
-  protected lateinit var access : IntArray
-
-  // error messages for violated indices
-  protected lateinit var indices: Array<String>
-
-  // commands
-  protected lateinit var commands : Array<VCommand>
-
-  // actors to send to form (move to block import)
-  protected lateinit var actors  : Array<VActor>
-
-  // fields
-  protected lateinit var fields : Array<VField>
-
-  protected lateinit var VKT_Triggers: Array<IntArray>
+  var bufferSize = 0 // max number of buffered records
 
   // dynamic data
   // current record
   var activeRecord = 0
-
-  internal var activeField: VField? = null
-
-  protected var detailMode = false
-
-  // number of active records
-  protected var recordCount  = 0
-
-  // commands currently active
-  protected var activeCommands : Vector<VCommand>? = null
-
-  var currentRecord = 0
-
-  // status vector for records
-  protected lateinit var recordInfo : IntArray
-
-  // holds Id's of fetched records
-  protected lateinit var fetchBuffer : IntArray
-
-  // # of fetched records
-  protected var fetchCount  = 0
-
-  // position of current record
-  protected var fetchPosition = 0
-
-  protected var blockListener: EventListenerList? = null
-
-  protected var orderModel: org.kopi.galite.form.VBlock.OrderModel? = null
-
-  protected var border = 0
-  protected var maxRowPos = 0
-  protected var maxColumnPos = 0
-  protected var displayedFields = 0
-
-  private val isFilterVisible = false
-
-  protected var dropListMap: HashMap<*, *>? = null
 
   fun getMode(): Int = TODO()
 
@@ -171,5 +54,130 @@ abstract class VBlock {
 
   open fun helpOnBlock(help: VHelpGenerator) {
     TODO()
+  }
+
+  internal var activeField: VField? = null
+
+  var currentRecord = 0
+
+  // qualified name of source file
+  internal var source : String? = null
+
+  // block short name
+  internal var shortcut : String? = null
+
+  // block title
+  internal var title : String? = null
+
+  internal var align: BlockAlignment? = null
+
+  // the help on this block
+  internal var help : String? = null
+
+  // names of database tables
+  internal lateinit var tables : Array<String>
+
+  // block options
+  internal var options = 0
+
+  // access flags for each mode
+  internal lateinit var access : IntArray
+
+  // error messages for violated indices
+  internal lateinit var indices : Array<String>
+
+  // block name
+  internal lateinit var name: String
+
+  var isChanged = false
+
+  var pageNumber: Int = 0
+
+  protected lateinit var sortedRecords: IntArray
+
+  protected var blockAccess = false
+
+  // prevent that the access of a field is updated
+  // (performance in big charts)
+  protected var ignoreAccessChange = false
+
+  // max number of buffered IDs
+  protected var fetchSize  = 0
+
+  // max number of displayed records
+  protected var displaySize  = 0
+
+  // commands
+  protected lateinit var commands : Array<VCommand>
+
+  // actors to send to form (move to block import)
+ internal lateinit var actors  : Array<VActor>
+
+  // fields
+  protected lateinit var fields : Array<VField>
+
+  protected lateinit var VKT_Triggers: Array<IntArray>
+
+  /**
+   * Returns true if the block is accessible
+   */
+  open fun isAccessible(): Boolean {
+    TODO()
+  }
+  open fun updateBlockAccess() {
+    TODO()
+  }
+  open fun checkBlock() {
+    TODO()
+  }
+  open fun initialise() {
+    TODO()
+  }
+  open fun initIntern() {
+    TODO()
+  }
+  open fun close() {
+    TODO()
+  }
+  open fun setCommandsEnabled(enable: Boolean) {
+    TODO()
+  }
+
+  fun leave(b: Boolean) {
+    TODO()
+  }
+
+  fun clear(){
+    TODO()
+  }
+  fun setMode(modQuery: Int){
+    TODO()
+  }
+  open fun singleMenuQuery(showSingleEntry: Boolean): Int {
+    TODO()
+  }
+
+  fun enter() {
+    TODO()
+  }
+
+  abstract fun localize(manager: LocalizationManager)
+  fun isRecordFilled(rec: Int): Boolean {
+    TODO()
+  }
+
+  fun isMulti(): Boolean {
+    TODO()
+  }
+
+  inner class OrderModel {
+    //TODO()
+  }
+  companion object {
+    // record info flags
+    protected val RCI_FETCHED = 0x00000001
+    protected val RCI_CHANGED = 0x00000002
+    protected val RCI_DELETED = 0x00000004
+    protected val RCI_TRAILED = 0x00000008
   }
 }

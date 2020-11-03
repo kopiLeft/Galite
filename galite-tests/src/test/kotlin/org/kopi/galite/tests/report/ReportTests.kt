@@ -20,9 +20,10 @@ package org.kopi.galite.tests.report
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
+import org.kopi.galite.tests.ApplicationTestBase
 import kotlin.test.assertEquals
 
-class ReportTests {
+class ReportTests: ApplicationTestBase() {
 
   /**
    * Tests that fields has been registered in the report.
@@ -64,6 +65,8 @@ class ReportTests {
     }
 
     init {
+      reportCommands()
+
       add {
         this[field1] = "test1"
         this[field2] = 64L

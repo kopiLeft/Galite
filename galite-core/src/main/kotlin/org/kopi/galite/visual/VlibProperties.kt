@@ -55,14 +55,14 @@ object VlibProperties {
 
   fun getString(key: String, params: Any?): String {
     val format: String
-    val manager: LocalizationManager = if (ApplicationContext.applicationContext.getApplication() != null) {
+    val manager = if (ApplicationContext.applicationContext.getApplication() != null) {
       ApplicationContext.getLocalizationManager()
     } else {
       LocalizationManager(Locale.getDefault(), null)
     }
     return try {
       // Within a String, "''" represents a single quote in java.text.MessageFormat.
-      format = manager.getPropertyLocalizer(VLIB_PROPERTIES_RESOURCE_FILE, key).getValue().replace("'", "''")
+      format = manager!!.getPropertyLocalizer(VLIB_PROPERTIES_RESOURCE_FILE, key).getValue().replace("'", "''")
 
       if (params is Array<*>) {
         MessageFormat.format(format, *params)
@@ -72,10 +72,10 @@ object VlibProperties {
 
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble("localize Property",
-              "org.kopi.galite.visual.VlibProperties.getString(key: String, params: Any?)",
-              e.message,
-              e)
-      System.err.println("ERROR: " + e.message)
+                                       "org.kopi.galite.visual.VlibProperties.getString(key: String, params: Any?)",
+                                       e.message,
+                                       e)
+      System.err.println("ERROR: ${e.message}")
       "!$key!"
     }
   }
@@ -83,5 +83,5 @@ object VlibProperties {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private const val VLIB_PROPERTIES_RESOURCE_FILE = "org/kopi/galite/lib/resource/VlibProperties"
+  private const val VLIB_PROPERTIES_RESOURCE_FILE ="resource/org/kopi/galite/VlibProperties"
 }

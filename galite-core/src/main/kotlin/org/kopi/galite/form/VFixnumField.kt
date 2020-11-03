@@ -161,7 +161,7 @@ class VFixnumField(private val digits: Int,
    * verify that value is valid (on exit)
    * @exception         org.kopi.galite.visual.VException       an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     val s: String = o as String
     val scale: Int = currentScale[rec]
 

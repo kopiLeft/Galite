@@ -31,7 +31,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VModel
 
-
 abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   // ----------------------------------------------------------------------
@@ -141,7 +140,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   override fun getDisplay(): UField = TODO()
 
-  open fun checkType(rec: Int, s: Any) {
+  open fun checkType(rec: Int, s: Any?) {
     TODO()
   }
 
@@ -257,10 +256,9 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           = 0
   private val indices // bitset of unique indices
           = 0
-  val name // field name (for dumps)
-          : String? = null
-  val label // field label
-          : String? = null
+  lateinit var name // field name (for dumps)
+          : String
+  val label: String? = null // field label
   private val options // options
           = 0
   private val help // help text
