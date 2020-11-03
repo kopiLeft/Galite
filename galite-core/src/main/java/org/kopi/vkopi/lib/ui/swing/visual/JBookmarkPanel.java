@@ -19,7 +19,7 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.UMenuTree.UBookmarkPanel;
+import org.kopi.galite.visual.UMenuTree.UBookmarkPanel;
 
 import javax.swing.*;
 import java.awt.*;
