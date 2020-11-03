@@ -25,10 +25,9 @@ class Utils {
     fun trimString(input: String): String = TODO()
     fun trailString(input: String): String = TODO()
     fun toSql(date: Date): String = TODO()
+    fun toSql(l: String): String = TODO()
   }
 }
 
-fun toSql(d: Date): String {
-  TODO()
-}
+
 

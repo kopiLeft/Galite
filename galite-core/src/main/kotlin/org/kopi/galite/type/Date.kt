@@ -124,16 +124,16 @@ open class Date : Type {
   /**
    * Returns the day number (starts at 1, ends at 7)
    */
-    open fun getweekday() : Int {
-      synchronized(calendar) {
-        val gregorian = julianToGregorian(scalar)
+  open fun getWeekday() : Int {
+    synchronized(calendar) {
+      val gregorian = julianToGregorian(scalar)
 
-        calendar[Calendar.YEAR] = gregorian[0]
-        calendar[Calendar.MONTH] = gregorian[1] - 1
-        calendar[Calendar.DAY_OF_MONTH] = gregorian[2]
-        return calendar[Calendar.DAY_OF_WEEK]
-      }
+      calendar[Calendar.YEAR] = gregorian[0]
+      calendar[Calendar.MONTH] = gregorian[1] - 1
+      calendar[Calendar.DAY_OF_MONTH] = gregorian[2]
+      return calendar[Calendar.DAY_OF_WEEK]
     }
+  }
   // ----------------------------------------------------------------------
   // ARITHMETIC OPERATIONS
   // ----------------------------------------------------------------------

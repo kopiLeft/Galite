@@ -29,7 +29,6 @@ import org.kopi.galite.visual.VModel
 import javax.swing.event.EventListenerList
 import kotlin.reflect.KClass
 
-
 abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   // ----------------------------------------------------------------------
@@ -100,11 +99,11 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
    */
-  open fun setObject(r: Int, v: Any) {
+  open fun setObject(r: Int, v: Any?) {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
@@ -167,7 +166,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   override fun getDisplay(): UField = TODO()
 
-  open fun checkType(rec: Int, s: Any) {
+  open fun checkType(rec: Int, s: Any?) {
     TODO()
   }
 
@@ -288,7 +287,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           : String? = null
   private val index // The position in parent field array
           = 0
-  private val align // field alignment
+  val align // field alignment
           = 0
   private val posInArray // position in array of fields
           = 0

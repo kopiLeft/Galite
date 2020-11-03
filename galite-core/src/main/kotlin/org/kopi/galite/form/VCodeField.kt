@@ -99,8 +99,8 @@ abstract class VCodeField(val type: String,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
-    var s = o as String
+  override fun checkType(rec: Int, o: Any?) {
+    var s = o as? String
 
     if (s == "") {
       setNull(rec)
@@ -112,7 +112,7 @@ abstract class VCodeField(val type: String,
        */
       var found = -1
 
-      s = s.toLowerCase()
+      s = s!!.toLowerCase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
@@ -308,11 +308,11 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the field value of given record as a string value.
    */
-  fun getString(r: Int): String {
+  open fun getString(r: Int): String {
     throw InconsistencyException()
   }
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     for (i in getCodes().indices) {
       if (getCodes()[i] == o) {
         return labels[i]
