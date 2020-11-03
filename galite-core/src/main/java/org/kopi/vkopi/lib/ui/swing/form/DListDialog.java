@@ -19,22 +19,57 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.util.base.InconsistencyException;
-import org.kopi.vkopi.lib.form.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.BoundedRangeModel;
+import javax.swing.FocusManager;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
+
+import org.kopi.galite.util.base.InconsistencyException;
+import org.kopi.galite.form.UField;
+import org.kopi.galite.form.UListDialog;
+import org.kopi.galite.form.VDictionary;
+import org.kopi.galite.form.VForm;
+import org.kopi.galite.form.VListDialog;
 import org.kopi.vkopi.lib.ui.swing.base.ListDialogCellRenderer;
 import org.kopi.vkopi.lib.ui.swing.visual.DObject;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.vkopi.lib.visual.*;
-
-import javax.swing.FocusManager;
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.*;
-import javax.swing.table.AbstractTableModel;
-import java.awt.*;
-import java.awt.event.*;
+import org.kopi.galite.visual.MessageCode;
+import org.kopi.galite.visual.UWindow;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.VlibProperties;
 
 public class DListDialog extends JPanel implements UListDialog {
 
@@ -50,12 +85,12 @@ public class DListDialog extends JPanel implements UListDialog {
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------
 
-  
+
   public int selectFromDialog(UWindow window, UField field, boolean showSingleEntry) {
     return selectFromDialogIn((Component)field, showSingleEntry);
   }
 
-  
+
   public int selectFromDialog(UWindow window, boolean showSingleEntry) {
     try {
       return selectFromJDialog(window != null ? (Component)window : DObject.phantom, showSingleEntry);
@@ -136,22 +171,22 @@ public class DListDialog extends JPanel implements UListDialog {
     table.addMouseListener(new MouseAdapter() {
 
       public void mouseClicked(MouseEvent e) {
-	escaped = false;
-	e.consume();
-	dispose();
+        escaped = false;
+        e.consume();
+        dispose();
       }
 
       public void mouseReleased(MouseEvent e) {
-	escaped = false;
-	e.consume();
-	dispose();
+        escaped = false;
+        e.consume();
+        dispose();
       }
     });
 
     table.getColumnModel().addColumnModelListener((ListDialogTableModel) table.getModel());
 
     // set columns width and table width = sum columns width
-    Dimension   screen  = Toolkit.getDefaultToolkit().getScreenSize();
+    Dimension   screen  = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     int         width   = 0;
     int         height  = 0;
 
@@ -165,7 +200,7 @@ public class DListDialog extends JPanel implements UListDialog {
     height = table.getRowHeight() * table.getRowCount();
 
     table.setPreferredScrollableViewportSize(new Dimension(Math.min(width, (int) (screen.width * 0.8f)),
-                                                           Math.min(height, (int) (screen.height * 0.8f))));
+            Math.min(height, (int) (screen.height * 0.8f))));
 
     if (table.getModel().getColumnCount() == 1) {
       table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -185,11 +220,11 @@ public class DListDialog extends JPanel implements UListDialog {
    */
   private void addKeyListener() {
     listener = new KeyAdapter() {
-        String  current = "";
+      String  current = "";
 
-        public void keyPressed(KeyEvent k) {
-          int   key = k.getKeyCode();
-          switch (key) {
+      public void keyPressed(KeyEvent k) {
+        int   key = k.getKeyCode();
+        switch (key) {
           case KeyEvent.VK_SPACE:
             if (model.getNewForm() != null || model.isForceNew()) {
               doNewForm = true;
@@ -239,18 +274,18 @@ public class DListDialog extends JPanel implements UListDialog {
               String    text2 = ((ListDialogTableModel) table.getModel()).getDisplayedValueAt(i).toString();
               int       comp = Math.min(text2.length(), current.length());
               if (current.equalsIgnoreCase(text2.substring(0, comp))) {
-        	ensureSelectionIsVisible(i);
-        	break;
+                ensureSelectionIsVisible(i);
+                break;
               }
             }
             if (i == table.getModel().getRowCount()) {
               Toolkit.getDefaultToolkit().beep();
               current = "";
             }
-          }
-          k.consume();
         }
-      };
+        k.consume();
+      }
+    };
     table.addKeyListener(listener);
     table.requestFocusInWindow();
   }
@@ -275,15 +310,15 @@ public class DListDialog extends JPanel implements UListDialog {
       int       min2 = brm.getValue() / size;
       int       max2 = (brm.getValue() + brm.getExtent()) / size;
       if (oldSel >= min2 && oldSel <= max2) {
-	// oldSel visible => redisplay after that
-	final int oldSelFinal = oldSel;
-	((AbstractTableModel) table.getModel()).fireTableRowsUpdated(oldSel, oldSel);
-	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        // oldSel visible => redisplay after that
+        final int oldSelFinal = oldSel;
+        ((AbstractTableModel) table.getModel()).fireTableRowsUpdated(oldSel, oldSel);
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
-	  public void run() {
-	    ((AbstractTableModel) table.getModel()).fireTableRowsUpdated(oldSelFinal, oldSelFinal);
-	  }
-	});
+          public void run() {
+            ((AbstractTableModel) table.getModel()).fireTableRowsUpdated(oldSelFinal, oldSelFinal);
+          }
+        });
       }
     }
   }
@@ -339,102 +374,102 @@ public class DListDialog extends JPanel implements UListDialog {
 
     private int selectFromDialogAWT(Component field, boolean showSingleEntry) {
       try {
-	Frame      focus;
+        Frame      focus;
 
-	if (field != null) {
-	  focus = Utils.getFrameAncestor(field);
-	} else {
-	  Window  window;
+        if (field != null) {
+          focus = Utils.getFrameAncestor(field);
+        } else {
+          Window  window;
 
-	  window = FocusManager.getCurrentManager().getFocusedWindow();
+          window = FocusManager.getCurrentManager().getFocusedWindow();
 
-	  while (!(window instanceof Frame) && window != null) {
-	    window = window.getOwner();
-	  }
+          while (!(window instanceof Frame) && window != null) {
+            window = window.getOwner();
+          }
 
-	  if (window instanceof Frame) {
-	    focus = (Frame) window;
-	  } else {
-	    focus = null;
-	  }
-	}
+          if (window instanceof Frame) {
+            focus = (Frame) window;
+          } else {
+            focus = null;
+          }
+        }
 
-	if (model.isTooManyRows()) {
-	  Object[]    options = { VlibProperties.getString("CLOSE")};
+        if (model.isTooManyRows()) {
+          Object[]    options = { VlibProperties.getString("CLOSE")};
 
-	  JOptionPane.showOptionDialog(focus,
-	                               MessageCode.getMessage("VIS-00028"),
-	                               VlibProperties.getString("Notice"),
-	                               JOptionPane.DEFAULT_OPTION,
-	                               JOptionPane.INFORMATION_MESSAGE,
-	                               DWindow.ICN_NOTICE,
-	                               options,
-	                               options[0]);
-	}
+          JOptionPane.showOptionDialog(focus,
+                  MessageCode.getMessage("VIS-00028"),
+                  VlibProperties.getString("Notice"),
+                  JOptionPane.DEFAULT_OPTION,
+                  JOptionPane.INFORMATION_MESSAGE,
+                  DWindow.ICN_NOTICE,
+                  options,
+                  options[0]);
+        }
 
-	build();
+        build();
 
-	if (!showSingleEntry && table.getModel().getRowCount() == 1) {
-	  return model.convert(0);
-	}
+        if (!showSingleEntry && table.getModel().getRowCount() == 1) {
+          return model.convert(0);
+        }
 
-	popup = new JDialog(focus, true);
-	popup.setUndecorated(true);
+        popup = new JDialog(focus, true);
+        popup.setUndecorated(true);
 
-	JPanel    panel = new JPanel();
-	panel.setBorder(new EtchedBorder());
+        JPanel    panel = new JPanel();
+        panel.setBorder(new EtchedBorder());
 
-	popup.getContentPane().add(panel);
-	panel.setLayout(new BorderLayout());
-	panel.add(DListDialog.this, BorderLayout.CENTER);
-	if (model.getNewForm() != null || model.isForceNew()) {
-	  JButton button = new JButton(VlibProperties.getString("new-record"));
+        popup.getContentPane().add(panel);
+        panel.setLayout(new BorderLayout());
+        panel.add(DListDialog.this, BorderLayout.CENTER);
+        if (model.getNewForm() != null || model.isForceNew()) {
+          JButton button = new JButton(VlibProperties.getString("new-record"));
 
-	  panel.add(button, BorderLayout.SOUTH);
-	  button.setFocusable(true); // !!! laurent 20020411
-	  //      button.setFont(DObject.FNT_DIALOG);
-	  // use to allow the escape command when the button is focused
-	  button.addKeyListener(new KeyAdapter() {
-	    public void keyPressed(KeyEvent e) {
-	      if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-		dispose();
-		e.consume();
-	      }
-	    }
-	  });
-	  button.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-	      doNewForm = true;
-	      escaped = false;
-	      dispose();
-	    }
-	  });
-	}
+          panel.add(button, BorderLayout.SOUTH);
+          button.setFocusable(true); // !!! laurent 20020411
+          //      button.setFont(DObject.FNT_DIALOG);
+          // use to allow the escape command when the button is focused
+          button.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+              if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                dispose();
+                e.consume();
+              }
+            }
+          });
+          button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+              doNewForm = true;
+              escaped = false;
+              dispose();
+            }
+          });
+        }
 
-	addKeyListener();
-	popup.pack();
-	positionPopup(focus, field, panel);
+        addKeyListener();
+        popup.pack();
+        positionPopup(focus, field, panel);
 
-	if (listenerOwner != null) {
-	  ((DWindow)listenerOwner).setCursor(Cursor.getDefaultCursor());
-	}
+        if (listenerOwner != null) {
+          ((DWindow)listenerOwner).setCursor(Cursor.getDefaultCursor());
+        }
 
-	popup.setFocusCycleRoot(true);
-	popup.setVisible(true);
+        popup.setFocusCycleRoot(true);
+        popup.setVisible(true);
 
-	VForm       temp = model.getForm();
+        VForm       temp = model.getForm();
 
-	model.setForm(null);
-	if (escaped) {
-	  return -1;
-	} else if (doNewForm) {
-	  if (listenerOwner != null) {
-	    ((DWindow)listenerOwner).setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	  }
-	  return doNewForm(temp, model.getNewForm());
-	} else {
-	  return ((ListDialogTableModel) table.getModel()).getSelectedElement();
-	}
+        model.setForm(null);
+        if (escaped) {
+          return -1;
+        } else if (doNewForm) {
+          if (listenerOwner != null) {
+            ((DWindow)listenerOwner).setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+          }
+          return doNewForm(temp, model.getNewForm());
+        } else {
+          return ((ListDialogTableModel) table.getModel()).getSelectedElement();
+        }
       } catch (VException v) {
         throw new VRuntimeException(v);
       }

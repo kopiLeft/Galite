@@ -23,6 +23,7 @@ import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.l10n.ModuleLocalizer
 import org.kopi.galite.util.base.InconsistencyException
+import kotlin.jvm.Throws
 
 /**
  * Represents an Module.
@@ -146,6 +147,7 @@ class Module(val id: Int,
     }
 
     @JvmOverloads
+    @Throws(VException::class)
     fun startForm(ctxt: DBContext,
                   objectName: String?,
                   description: String,

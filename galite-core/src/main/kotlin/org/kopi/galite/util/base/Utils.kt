@@ -22,72 +22,82 @@ package org.kopi.galite.util.base
  * This class defines several utilities methods used in source code
  */
 open class Utils {
-  /**
-   * Returns a string representation of an integer, padding it
-   * with leading zeroes to the specified length.
-   */
-  fun formatInteger(value: Int, length: Int): String = buildString {
-    val valueLength = ("" + value).length
-    for (i in length - valueLength downTo 1) {
-      append("0")
+  companion object {
+    /**
+     * Returns a string representation of an integer, padding it
+     * with leading zeroes to the specified length.
+     */
+    fun formatInteger(value: Int, length: Int): String = buildString {
+      val valueLength = ("" + value).length
+      for (i in length - valueLength downTo 1) {
+        append("0")
+      }
+      append(value)
     }
-    append(value)
-  }
 
-  /**
-   * Check if an assertion is valid
-   *
-   * @param            expression              The expression to verify
-   * @exception        RuntimeException        the entire token reference
-   */
-  @Deprecated("Use the verify with the error message",
-          ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
-  fun verify(expression: Boolean) {
-    if (!expression) {
-      throw InconsistencyException()
+    /**
+     * Check if an assertion is valid
+     *
+     * @param            expression              The expression to verify
+     * @exception        RuntimeException        the entire token reference
+     */
+    @Deprecated("Use the verify with the error message",
+            ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
+    fun verify(expression: Boolean) {
+      if (!expression) {
+        throw InconsistencyException()
+      }
     }
-  }
 
-  /**
-   * Check if an assertion is valid
-   *
-   * @param            expression              The expression to verify
-   * @param            errorMessage            The error message to show when [expression] is not valid
-   * @exception        RuntimeException        the entire token reference
-   */
-  fun verify(expression: Boolean, errorMessage: String) {
-    if (!expression) {
-      throw InconsistencyException(errorMessage)
+    /**
+     * Check if an assertion is valid
+     *
+     * @param            expression              The expression to verify
+     * @param            errorMessage            The error message to show when [expression] is not valid
+     * @exception        RuntimeException        the entire token reference
+     */
+    fun verify(expression: Boolean, errorMessage: String) {
+      if (!expression) {
+        throw InconsistencyException(errorMessage)
+      }
     }
+
+    /**
+     * Splits a string like:
+     * "java/lang/System/out"
+     * into two strings:
+     * "java/lang/System" and "out"
+     */
+    fun splitQualifiedName(name: String, separator: Char): Array<String> = arrayOf(name.substringBeforeLast(separator, ""),
+            name.substringAfterLast(separator))
+
+    /**
+     * Splits a string like:
+     * "java/lang/System/out"
+     * into two strings:
+     * "java/lang/System" and "out"
+     */
+    fun splitQualifiedName(name: String): Array<String> {
+      return splitQualifiedName(name, '/')
+    }
+
+    /**
+     * Returns a substring of this string.
+     *
+     * Provides a more robust implementation of java.lang.String.substring,
+     * handling gracefully the following cases :
+     * - the specified string is null
+     * - a specified index is beyond the limits of the input string
+     */
+    fun substring(baseString: String?, beginIndex: Int, endIndex: Int): String = baseString?.substring(beginIndex.coerceAtMost(baseString.length),
+            endIndex.coerceAtMost(baseString.length)).orEmpty()
+
+    /**
+     * Creates a typed array from a list.
+     *
+     * @param        list                the list containing the elements
+     * @param        type                the type of the elements
+     */
+    fun toArray(list: List<*>): Array<*> = list.toTypedArray()
   }
-
-  /**
-   * Splits a string like:
-   * "java/lang/System/out"
-   * into two strings:
-   * "java/lang/System" and "out"
-   */
-  fun splitQualifiedName(name: String, separator: Char): Array<String> = arrayOf(name.substringBeforeLast(separator, ""),
-          name.substringAfterLast(separator))
-
-  /**
-   * Splits a string like:
-   * "java/lang/System/out"
-   * into two strings:
-   * "java/lang/System" and "out"
-   */
-  fun splitQualifiedName(name: String): Array<String> {
-    return splitQualifiedName(name, '/')
-  }
-
-  /**
-   * Returns a substring of this string.
-   *
-   * Provides a more robust implementation of java.lang.String.substring,
-   * handling gracefully the following cases :
-   * - the specified string is null
-   * - a specified index is beyond the limits of the input string
-   */
-  fun substring(baseString: String?, beginIndex: Int, endIndex: Int): String = baseString?.substring(beginIndex.coerceAtMost(baseString.length),
-          endIndex.coerceAtMost(baseString.length)).orEmpty()
 }
