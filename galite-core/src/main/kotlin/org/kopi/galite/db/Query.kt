@@ -19,6 +19,7 @@
 package org.kopi.galite.db
 
 import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.NotNullFixed
 
 class Query(conn: Connection) {
 
@@ -59,4 +60,6 @@ class Query(conn: Connection) {
   fun getBoolean(column: Int): Boolean = TODO()
 
   fun getObject(pos:Int):Any =TODO()
+
+  fun getFixed(pos: Int): NotNullFixed = TODO()
 }

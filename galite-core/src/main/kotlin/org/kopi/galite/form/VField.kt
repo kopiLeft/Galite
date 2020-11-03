@@ -250,6 +250,10 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  open fun clear(r: Int) {
+    TODO()
+  }
+
   fun getSearchCondition(): String? = TODO()
 
   fun hasFocus(): Boolean = TODO()

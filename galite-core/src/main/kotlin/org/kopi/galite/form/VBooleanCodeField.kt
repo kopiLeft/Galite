@@ -25,6 +25,7 @@ import org.kopi.galite.list.VBooleanCodeColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 
+
 /**
  *
  * @param     ident           the identifier of the type in the source file
