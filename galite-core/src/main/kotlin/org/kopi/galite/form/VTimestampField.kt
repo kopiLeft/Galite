@@ -30,7 +30,6 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
-
 class VTimestampField : VField(10 + 1 + 8, 1) {
 
   override fun hasAutofill(): Boolean = true

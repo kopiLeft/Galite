@@ -97,9 +97,8 @@ class VWeekField : VField(7, 1) {
     var week = 0
     var year = -1
     var bp = 0
-    var state: Int
+    var state = 1
     val buffer = s + '\u0000'
-    state = 1
 
     while (state > 0) {
       when (state) {
