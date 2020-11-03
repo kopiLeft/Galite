@@ -19,9 +19,18 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.*;
+import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -30,13 +39,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.kopi.galite.util.base.Utils;
+import org.kopi.galite.visual.Item;
+import org.kopi.galite.visual.Action;
+import org.kopi.galite.visual.MessageCode;
+import org.kopi.galite.visual.UItemTree;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VExecFailedException;
+import org.kopi.galite.visual.VItemTree;
+import org.kopi.galite.visual.VlibProperties;
 
 public class DItemTree extends DWindow implements UItemTree {
 
@@ -182,7 +194,7 @@ public class DItemTree extends DWindow implements UItemTree {
   /**
    * Sets item selection state
    */
-  public void setSelectedItem() throws VException {
+  public void setSelectedItem() {
     DefaultMutableTreeNode              selectedNode;
     Item                                selectedItem;
     DefaultTreeModel                    treeModel;
@@ -195,11 +207,11 @@ public class DItemTree extends DWindow implements UItemTree {
       treeModel = ((DefaultTreeModel)tree.getModel());
       if (getModel().isSingleSelection()) {
         rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
-        if (!selectedItem.isSelected()) {
+        if (!selectedItem.getSelected()) {
           unselectAll(treeModel, rootNode);
         }
       }
-      selectedItem.setSelected(!selectedItem.isSelected());
+      selectedItem.setSelected(!selectedItem.getSelected());
       treeModel.nodeChanged(selectedNode);
       getModel().refresh();
     }
@@ -221,10 +233,10 @@ public class DItemTree extends DWindow implements UItemTree {
       rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
       selectedItem = (Item)selectedNode.getUserObject();
 
-      if (!selectedItem.isDefaultItem()) {
+      if (!selectedItem.getDefaultItem()) {
         setDefault(treeModel, rootNode);
       }
-      selectedItem.setDefault(!selectedItem.isDefaultItem());
+      selectedItem.setDefaultItem(!selectedItem.getDefaultItem());
       selectedItem.setSelected(true);
       treeModel.nodeChanged(selectedNode);
       getModel().refresh();
@@ -241,8 +253,8 @@ public class DItemTree extends DWindow implements UItemTree {
       DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
       Item item = (Item)child.getUserObject();
 
-      if (item.isDefaultItem()) {
-        item.setDefault(false);
+      if (item.getDefaultItem()) {
+        item.setDefaultItem(false);
         treeModel.nodeChanged(child);
       }
       if (child.getChildCount() > 0) {
@@ -261,7 +273,7 @@ public class DItemTree extends DWindow implements UItemTree {
       DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
       Item item = (Item)child.getUserObject();
 
-      if (item.isSelected()) {
+      if (item.getSelected()) {
         item.setSelected(false);
         treeModel.nodeChanged(child);
       }
@@ -275,8 +287,8 @@ public class DItemTree extends DWindow implements UItemTree {
    * Change item selection state
    */
   private void changeSelectionState() {
-    getModel().performAsyncAction(new KopiAction("change_selection_state") {
-      public void execute() throws VException {
+    getModel().performAsyncAction(new Action("change_selection_state") {
+      public void execute() {
         if (!getModel().isNoEdit()) {
           setSelectedItem();
         }
@@ -287,7 +299,7 @@ public class DItemTree extends DWindow implements UItemTree {
   /**
    * Insert new item
    */
-  public void addItem() throws VException{
+  public void addItem() throws VException {
     DefaultMutableTreeNode              selectedNode;
     DefaultTreeModel                    treeModel;
     DefaultMutableTreeNode              newNode;
@@ -303,12 +315,12 @@ public class DItemTree extends DWindow implements UItemTree {
     if (selectedNode != null) {
       parent = (Item)selectedNode.getUserObject();
       if (getModel().getDepth() > 0 && ((parent.getLevel() + 1) > getModel().getDepth())) {
-        throw new VExecFailedException(MessageCode.getMessage("VIS-00069" , getModel().getDepth()));
+        throw new VExecFailedException(MessageCode.Companion.getMessage("VIS-00069" , getModel().getDepth()));
       }
 
       do {
         newItem = JOptionPane.showInputDialog(this,
-                                              MessageCode.getMessage("VIS-00068", maxLength),
+                                              MessageCode.Companion.getMessage("VIS-00068", maxLength),
                                               VlibProperties.getString("New_item"),
                                               JOptionPane.PLAIN_MESSAGE);
       } while (newItem != null && newItem.length() > maxLength);
@@ -352,7 +364,7 @@ public class DItemTree extends DWindow implements UItemTree {
       treeModel = ((DefaultTreeModel)tree.getModel());
       DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
 
-      if (!getModel().isRemoveDescendantsAlowed()) {
+      if (!getModel().isRemoveDescendantsAllowed()) {
         attacheToParent(treeModel, selectedNode, (DefaultMutableTreeNode)selectedNode.getParent());
       }
       removeItem(treeModel, rootNode, (Item)selectedNode.getUserObject());
@@ -437,7 +449,7 @@ public class DItemTree extends DWindow implements UItemTree {
       selectedItem = (Item)selectedNode.getUserObject();
       do {
         newName = (String) JOptionPane.showInputDialog(this,
-                                                       MessageCode.getMessage("VIS-00068", maxLength),
+                                                       MessageCode.Companion.getMessage("VIS-00068", maxLength),
                                                        VlibProperties.getString("OpenLine"),
                                                        JOptionPane.PLAIN_MESSAGE,
                                                        null,
@@ -469,7 +481,7 @@ public class DItemTree extends DWindow implements UItemTree {
       selectedItem = (Item)selectedNode.getUserObject();
       do {
         localisedName = (String)JOptionPane.showInputDialog(this,
-                                                            MessageCode.getMessage("VIS-00068", maxLength),
+                                                            MessageCode.Companion.getMessage("VIS-00068", maxLength),
                                                             VlibProperties.getString("OpenLine"),
                                                             JOptionPane.PLAIN_MESSAGE,
                                                             null,

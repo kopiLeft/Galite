@@ -19,14 +19,17 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-
-import org.kopi.vkopi.lib.visual.DPositionPanelListener;
-
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
+
+import org.kopi.galite.visual.DPositionPanelListener;
 
 /**
  * The position panel is the used to go trough the rows when fetching

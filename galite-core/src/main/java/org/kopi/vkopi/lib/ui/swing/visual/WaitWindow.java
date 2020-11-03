@@ -19,15 +19,27 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.MessageCode;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.WindowConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import org.kopi.galite.visual.MessageCode;
 
 /**
  * This class displays a window with a menu, a tool bar, a content panel
@@ -65,7 +77,7 @@ public class WaitWindow {
       progressBar.setValue(0);
       progressBar.setStringPainted(true);
 
-      text = new JLabel("<html><b> " + MessageCode.getMessage("VIS-00067") + " </b><br>" + message);
+      text = new JLabel("<html><b> " + MessageCode.Companion.getMessage("VIS-00067") + " </b><br>" + message);
 
       JPanel            panel = new JPanel();
 
@@ -113,14 +125,14 @@ public class WaitWindow {
       });
     } else {
       // change dialog text
-      text.setText("<html><b> " + MessageCode.getMessage("VIS-00067") + " </b><br>" + message);
+      text.setText("<html><b> " + MessageCode.Companion.getMessage("VIS-00067") + " </b><br>" + message);
       progressBar.setMaximum(maxTime);
     }
   }
 
   public void updateMessage(String message) {
     if (waitDialog != null) {
-      text.setText("<html><b> " + MessageCode.getMessage("VIS-00067") + " </b><br>" + message);
+      text.setText("<html><b> " + MessageCode.Companion.getMessage("VIS-00067") + " </b><br>" + message);
     }
   }
 

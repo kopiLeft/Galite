@@ -19,17 +19,35 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.base.UComponent;
-import org.kopi.vkopi.lib.l10n.LocalizationManager;
-import org.kopi.vkopi.lib.print.PrintManager;
-import org.kopi.vkopi.lib.visual.*;
-import org.kopi.xkopi.lib.base.DBContext;
-import org.kopi.xkopi.lib.base.Query;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
 import java.util.Date;
 import java.util.Locale;
+
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+
+import org.kopi.galite.base.UComponent;
+import org.kopi.galite.l10n.LocalizationManager;
+import org.kopi.galite.print.PrintManager;
+import org.kopi.galite.visual.Application;
+import org.kopi.galite.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.FileHandler;
+import org.kopi.galite.visual.ImageHandler;
+import org.kopi.galite.visual.Executable;
+import org.kopi.galite.visual.ModelCloseListener;
+import org.kopi.galite.visual.Module;
+import org.kopi.galite.visual.PrinterManager;
+import org.kopi.galite.visual.PropertyException;
+import org.kopi.galite.visual.Registry;
+import org.kopi.galite.visual.UIFactory;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VMenuTree;
+import org.kopi.galite.visual.VWindow;
+import org.kopi.galite.visual.VerifyConfiguration;
+import org.kopi.galite.visual.WindowController;
+import org.kopi.galite.db.DBContext;
+import org.kopi.galite.db.Query;
 
 /**
  * {@code JApplication} is a swing implementation of a kopi application.
@@ -99,9 +117,9 @@ public abstract class JApplication implements Application {
       }
 
       try {
-	KopiExecutable  module;
+	Executable  module;
 
-	module = Module.startForm(context, form, "initial form");
+	module = Module.Companion.startForm(context, form, "initial form");
 	if (module instanceof VWindow) {
 	  ((VWindow) module).addModelCloseListener(new ModelCloseListener() {
 
@@ -169,7 +187,7 @@ public abstract class JApplication implements Application {
    * @return The database URL.
    */
   public String getURL() {
-    return context.getDefaultConnection().getURL();
+    return context.getDefaultConnection().getUrl();
   }
 
   /**
@@ -308,11 +326,11 @@ public abstract class JApplication implements Application {
   }
 
   public void verifyConfiguration() {
-    VerifyConfiguration       verifyConfiguration = VerifyConfiguration.getVerifyConfiguration();
+    VerifyConfiguration       verifyConfiguration = VerifyConfiguration.Companion.getVerifyConfiguration();
     try {
-      verifyConfiguration.verifyConfiguration(ApplicationContext.getDefaults().getSMTPServer(),
-	                                      ApplicationContext.getDefaults().getDebugMailRecipient(),
-	                                      ApplicationContext.getDefaults().getApplicationName());
+      verifyConfiguration.verifyConfiguration(ApplicationContext.Companion.getDefaults().getSMTPServer(),
+	                                      ApplicationContext.Companion.getDefaults().getDebugMailRecipient(),
+	                                      ApplicationContext.Companion.getDefaults().getApplicationName());
     } catch (PropertyException e) {
       e.printStackTrace();
     }
@@ -467,10 +485,10 @@ public abstract class JApplication implements Application {
   private final Date             		startupTime = new Date(); // remembers the startup time
 
   static {
-    ApplicationContext.setApplicationContext(new JApplicationContext());
-    FileHandler.setFileHandler(new JFileHandler());
-    ImageHandler.setImageHandler(new JImageHandler());
-    WindowController.setWindowController(new JWindowController());
-    UIFactory.setUIFactory(new JUIFactory());
+    ApplicationContext.Companion.setApplicationContext(new JApplicationContext());
+    FileHandler.Companion.setFileHandler(new JFileHandler());
+    ImageHandler.Companion.setImageHandler(new JImageHandler());
+    WindowController.Companion.setWindowController(new JWindowController());
+    UIFactory.uiFactory = new JUIFactory();
   }
 }

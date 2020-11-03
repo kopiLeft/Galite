@@ -19,18 +19,23 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.base.UComponent;
-import org.kopi.vkopi.lib.chart.VChart;
-import org.kopi.vkopi.lib.form.VForm;
-import org.kopi.vkopi.lib.form.VListDialog;
-import org.kopi.vkopi.lib.preview.VPreviewWindow;
-import org.kopi.vkopi.lib.report.VReport;
+import org.kopi.galite.base.UComponent;
+import org.kopi.galite.chart.VChart;
+import org.kopi.galite.form.VForm;
+import org.kopi.galite.form.VListDialog;
+import org.kopi.galite.preview.VPreviewWindow;
+import org.kopi.galite.report.VReport;
 import org.kopi.vkopi.lib.ui.swing.chart.DChart;
 import org.kopi.vkopi.lib.ui.swing.form.DForm;
 import org.kopi.vkopi.lib.ui.swing.form.DListDialog;
 import org.kopi.vkopi.lib.ui.swing.preview.DPreviewWindow;
 import org.kopi.vkopi.lib.ui.swing.report.DReport;
-import org.kopi.vkopi.lib.visual.*;
+import org.kopi.galite.visual.UIFactory;
+import org.kopi.galite.visual.VActor;
+import org.kopi.galite.visual.VItemTree;
+import org.kopi.galite.visual.VHelpViewer;
+import org.kopi.galite.visual.VMenuTree;
+import org.kopi.galite.visual.VModel;
 
 /**
  * {@code JUIFactory} is a swing implementation of the {@link UIFactory}.

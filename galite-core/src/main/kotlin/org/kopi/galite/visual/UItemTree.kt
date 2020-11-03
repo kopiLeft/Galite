@@ -35,7 +35,8 @@ interface UItemTree : UWindow {
    * Change item selection state
    *
    */
-  fun setSelectedItem()
+  @Throws(VException::class)
+  open fun setSelectedItem()
 
   /**
    * Set selected item as default element
@@ -47,7 +48,8 @@ interface UItemTree : UWindow {
    * Adds new item to the tree
    *
    */
-  fun addItem()
+  @Throws(VException::class)
+  open fun addItem()
 
   /**
    * Sets the tree. This allows enabling and disabling item tree actors

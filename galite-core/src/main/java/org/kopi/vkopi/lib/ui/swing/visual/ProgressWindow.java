@@ -19,13 +19,24 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.MessageCode;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Point;
+import java.awt.Toolkit;
 
-import javax.swing.*;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.awt.*;
+
+import org.kopi.galite.visual.MessageCode;
 
 /**
  * This class displays a window with a menu, a tool bar, a content panel
@@ -87,7 +98,7 @@ public class ProgressWindow {
       JPanel            panel = new JPanel();
 
       panel.setLayout(new BorderLayout());
-      panel.add(new JLabel("<html><b> " + MessageCode.getMessage("VIS-00067") + " </b><br>" + message), BorderLayout.NORTH);
+      panel.add(new JLabel("<html><b> " + MessageCode.Companion.getMessage("VIS-00067") + " </b><br>" + message), BorderLayout.NORTH);
       panel.add(progressBar, BorderLayout.SOUTH);
       panel.setBorder(new CompoundBorder(new LineBorder(Color.black, 1), new EmptyBorder(2,2,2,2)));
 

@@ -19,10 +19,12 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 
 /**
  * WAIT PANEL CLASS

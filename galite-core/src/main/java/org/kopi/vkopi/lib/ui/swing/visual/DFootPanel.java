@@ -19,11 +19,15 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import org.kopi.vkopi.lib.ui.swing.plaf.KopiLookAndFeel;
-
-import javax.swing.*;
-import java.awt.*;
-
 /**
  * An information panel displayed at the foot of every window.
  */
