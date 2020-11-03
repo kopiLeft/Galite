@@ -25,7 +25,7 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimestampColumn
 import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -78,7 +78,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     if (o as String == "") {
       setNull(rec)
     } else {
@@ -117,7 +117,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to kopi users in next release
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     setTimestamp(r, v as? Timestamp)
   }
 

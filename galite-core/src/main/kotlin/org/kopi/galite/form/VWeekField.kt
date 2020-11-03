@@ -24,7 +24,7 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VWeekColumn
 import org.kopi.galite.type.NotNullWeek
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
@@ -83,7 +83,7 @@ class VWeekField : VField(7, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     val s = o as String
 
     if (s == "") {
@@ -221,7 +221,7 @@ class VWeekField : VField(7, 1) {
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
-  override fun setObject(r: Int, v: Any) {
+  override fun setObject(r: Int, v: Any?) {
     setWeek(r, v as? Week)
   }
 

@@ -18,7 +18,7 @@
 
 package org.kopi.galite.visual
 
-import java.awt.PrintJob
+import org.kopi.galite.util.PrintJob
 
 interface PreviewRunner {
   /**

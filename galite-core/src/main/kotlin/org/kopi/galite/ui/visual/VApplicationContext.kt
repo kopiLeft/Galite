@@ -23,16 +23,27 @@ import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.PreviewRunner
 
 class VApplicationContext : ApplicationContext() {
-  override fun getApplication(): Application {
-    TODO("Not yet implemented")
-  }
+  override fun getApplication(): Application = VApplication.instance
 
+  /**
+   * Returns the current PreviewRunner.
+   * @return The current PreviewRunner.
+   */
   override fun getPreviewRunner(): PreviewRunner {
-    TODO("Not yet implemented")
+    return previewRunner ?: VPreviewRunner().also { previewRunner = it }
   }
 
+  /**
+   * Returns `true` if we are in a web application context.
+   * @return `true` if we are in a web application context.
+   */
   override fun isWebApplicationContext(): Boolean {
-    TODO("Not yet implemented")
+    return true
   }
+
+  //---------------------------------------------------
+  // DATA MEMBEERS
+  //---------------------------------------------------
+  private var previewRunner: VPreviewRunner? = null
 
 }
