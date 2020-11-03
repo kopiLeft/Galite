@@ -36,10 +36,6 @@ abstract class VForm : VWindow() {
     TODO()
   }
 
-  override fun inTransaction(): Boolean {
-    TODO()
-  }
-
   fun startProtected(message: String?) {
     TODO()
   }

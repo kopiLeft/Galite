@@ -20,7 +20,6 @@ package org.kopi.galite.visual
 
 import java.util.EventListener
 
-
 interface VActionListener : EventListener {
   /**
    * Performs the appropriate action asynchronously.

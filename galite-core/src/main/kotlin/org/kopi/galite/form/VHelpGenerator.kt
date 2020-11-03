@@ -23,21 +23,19 @@ import org.kopi.galite.visual.VHelpGenerator
 
 open class VHelpGenerator : VHelpGenerator() {
 
-  open fun helpOnField(
-          blockTitle: String?,
-          pos: Int,
-          label: String?,
-          anchor: String?,
-          help: String?) {
+  open fun helpOnField(blockTitle: String?,
+                       pos: Int,
+                       label: String,
+                       anchor: String?,
+                       help: String?) {
     TODO()
   }
 
- open fun helpOnType(
-          modeName: String,
-          modeDesc: String,
-          typeName: String,
-          typeDesc: String,
-          names: Array<String>?) {
+ open fun helpOnType(modeName: String,
+                     modeDesc: String,
+                     typeName: String,
+                     typeDesc: String,
+                     names: Array<String>?) {
     TODO()
  }
 

@@ -142,7 +142,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  fun getColor(r: Int?): Color = getObject(r!!) as Color
+  override fun getColor(r: Int): Color = getObject(r) as Color
 
   /**
    * Returns the field value of the current record as an object

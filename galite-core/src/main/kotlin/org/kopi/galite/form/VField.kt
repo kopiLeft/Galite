@@ -18,6 +18,10 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.exists
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
 import java.sql.SQLException
@@ -1223,7 +1227,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getColor(r: Int): Color {
+  open fun getColor(r: Int): Color {
     throw InconsistencyException()
   }
 
@@ -1467,7 +1471,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
     val alreadyProtected: Boolean = getForm().inTransaction()
     if (this !is VStringField) {
-      var exists: Boolean
+      var exists = false
 
       try {
         while (true) {
@@ -1475,13 +1479,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (!alreadyProtected) {
               getForm().startProtected(null)
             }
-            Query(getForm().dBContext!!.defaultConnection).let {
-              it.addString(list!!.getColumn(0).column!!)
-              it.addString(evalListTable())
-              it.addString(getSql(block!!.activeRecord)!!)
-              it.open(SELECT_IS_IN_LIST)
-              exists = it.next()
-              it.close()
+            SELECT_IS_IN_LIST.replace("$2", evalListTable())
+            SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
+            SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
+            transaction {
+              exec(SELECT_IS_IN_LIST) {exists = it.next()}
             }
             if (!alreadyProtected) {
               getForm().commitProtected()
@@ -1528,22 +1530,23 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (!alreadyProtected) {
               getForm().startProtected(null)
             }
-            Query(getForm().dBContext!!.defaultConnection).let {
-              it.addString(list!!.getColumn(0).column!!)
-              it.addString(evalListTable())
-              it.addString(getString(block!!.activeRecord))
-              it.open(SELECT_MATCHING_STRINGS)
-              if (!it.next()) {
-                count = 0
-              } else {
-                count = 1
-                result = it.getString(1)
-                if (it.next()) {
-                  count = 2
+            SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
+            SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
+            SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
+            transaction {
+              exec(SELECT_MATCHING_STRINGS) {
+                if (!it.next()) {
+                  count = 0
+                } else {
+                  count = 1
+                  result = it.getString(1)
+                  if (it.next()) {
+                    count = 2
+                  }
                 }
               }
-              it.close()
             }
+
             if (!alreadyProtected) {
               getForm().commitProtected()
             }
@@ -1627,15 +1630,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().startProtected(null)
-          Query(getForm().dBContext!!.defaultConnection).let {
-            it.addString(list!!.getColumn(0).column!!)
-            it.addString(evalListTable())
-            it.addString(getSql(block!!.activeRecord)!!)
-            it.open(SELECT_IS_IN_LIST)
-            if (it.next()) {
-              id = it.getInt(1)
+          SELECT_IS_IN_LIST.replace("$2", evalListTable())
+          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
+          SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
+          transaction {
+            exec(SELECT_IS_IN_LIST) {
+              if (it.next()) {
+                id = it.getInt(1)
+              }
             }
-            it.close()
           }
           getForm().commitProtected()
           break
@@ -1682,21 +1685,21 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().startProtected(Message.getMessage("searching_database"))
-          Query(getForm().dBContext!!.defaultConnection).let {
-            it.open(queryText)
-            lineCount = 0
-            while (it.next() && lineCount < MAX_LINE_COUNT - 1) {
-              if (it.isNull(1)) {
-                continue
+          transaction {
+            exec(queryText) {
+              lineCount = 0
+              while (it.next() && lineCount < MAX_LINE_COUNT - 1) {
+                if (it.getObject(1) == null) {
+                  continue
+                }
+                var i = 0
+                while (i < lines.size) {
+                  lines[i][lineCount] = it.getObject(i + if (SKIP_FIRST_COLUMN) 2 else 1)
+                  i += 1
+                }
+                lineCount += 1
               }
-              var i = 0
-              while (i < lines.size) {
-                lines[i][lineCount] = it.getObject(i + if (SKIP_FIRST_COLUMN) 2 else 1)
-                i += 1
-              }
-              lineCount += 1
             }
-            it.close()
           }
           getForm().commitProtected()
           break
@@ -1739,18 +1742,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           while (true) {
             try {
               getForm().startProtected(null)
-              val SELECT_IS_IN_LIST = " SELECT   $1                   " +
-                      " FROM     $2                   " +
-                      " WHERE    $3 = " + selected
+              val SELECT_IS_IN_LIST = " SELECT " + list!!.getColumn(0).column!! +
+                      " FROM " + evalListTable() + " WHERE    ID = " + selected
 
-              Query(getForm().dBContext!!.defaultConnection).let {
-                it.addString(list!!.getColumn(0).column!!)
-                it.addString(evalListTable())
-                it.addString("ID")
-                it.open(SELECT_IS_IN_LIST)
-                it.next()
-                result = it.getObject(1)
-                it.close()
+              transaction {
+                exec(SELECT_IS_IN_LIST) {result = it.getObject(1)}
               }
               getForm().commitProtected()
               break
@@ -1833,12 +1829,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     while (true) {
       try {
         getForm().startProtected(null)
-        Query(getForm().dBContext!!.defaultConnection).let {
-          it.open(qrybuf)
-          while (value == null && it.next()) {
-            value = it.getObject(1)
+
+        transaction {
+          exec(qrybuf) {
+            while (value == null && it.next()) {
+              value = it.getObject(1)
+            }
           }
-          it.close()
         }
         getForm().commitProtected()
         break
@@ -1917,18 +1914,18 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           getForm().startProtected(null)
+          transaction {
+            exec(qrybuf) {
+              while (it.next()) {
+                var columns: MutableList<String>
 
-          Query(getForm().dBContext!!.defaultConnection).let {
-            it.open(qrybuf)
-            while (it.next()) {
-              var columns: MutableList<String>
-              columns = ArrayList()
-              for (i in 0 until list!!.columnCount()) {
-                columns.add(list!!.getColumn(i).formatObject(it.getObject(i + 1)) as String)
+                columns = ArrayList()
+                for (i in 0 until list!!.columnCount()) {
+                  columns.add(list!!.getColumn(i).formatObject(it.getObject(i + 1)) as String)
+                }
+                suggestions.add(columns.toTypedArray())
               }
-              suggestions.add(columns.toTypedArray())
             }
-            it.close()
           }
           getForm().commitProtected()
           break
@@ -1996,31 +1993,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  // ----------------------------------------------------------------------
-  // F2
-  // ----------------------------------------------------------------------
-  /**
-   * // TRY TO MERGE WITH queryList !!!!
-   * !!!graf 030729: was ist das ???
-   */
   fun setValueID(id: Int) {
-    var result: Any?
+    var result: Any? = null
+
     try {
       while (true) {
         try {
           getForm().startProtected(null)
-          Query(getForm().dBContext!!.defaultConnection).let {
-            it.addString(list!!.getColumn(0).column!!)
-            it.addString(evalListTable())
-            it.addString("ID")
-            it.addInt(id)
-            it.open("SELECT $1 FROM $2 WHERE $3 = #4")
-            result = if (it.next()) {
-              it.getObject(1)
-            } else {
-              null
+          transaction {
+            exec("SELECT " + list!!.getColumn(0).column!! + " FROM "
+            + evalListTable() + " WHERE ID = " + id) {
+              result = if (it.next()) {
+                it.getObject(1)
+              } else {
+                null
+              }
             }
-            it.close()
           }
           getForm().commitProtected()
           break
@@ -2047,10 +2035,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.getTitle(),
-              block!!.getFieldPos(this),
-              label,
-              lab ?: name,
-              toolTip)
+                       block!!.getFieldPos(this),
+                       label!!,
+                       lab ?: name,
+                       toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {

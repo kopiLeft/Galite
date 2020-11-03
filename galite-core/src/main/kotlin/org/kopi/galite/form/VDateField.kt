@@ -163,8 +163,8 @@ class VDateField : VField(10, 1) {
    */
   override fun setDate(r: Int, v: Date?) {
     if (changedUI
-            || value[r] == null && v != null
-            || value[r] != null && value[r]!! != v) {
+       || value[r] == null && v != null
+       || value[r] != null && value[r]!! != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
