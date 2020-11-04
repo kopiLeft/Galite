@@ -18,11 +18,12 @@
 
 package org.kopi.galite.visual
 
+import java.util.Locale
+import java.util.regex.Pattern
+
 import org.kopi.galite.base.ExtendedMessageFormat
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
-import java.util.*
-import java.util.regex.Pattern
 
 /**
  * This class handles localized messages.
@@ -40,12 +41,11 @@ object MessageCode {
   fun getMessage(key: String, param1: Any, param2: Any): String =
           getMessage(key = key, params = arrayOf(param1, param2))
 
+  fun getMessage(key: String): String = getMessage(key, null)
+
   // ----------------------------------------------------------------------
   // STATIC METHODS
   // ----------------------------------------------------------------------
-  fun getMessage(key: String): String {
-    return getMessage(key, null)
-  }
   /**
    * Returns a message (convenience routine).
    * key must be of the form CCC-DDDDD (exp: KOP-00001)

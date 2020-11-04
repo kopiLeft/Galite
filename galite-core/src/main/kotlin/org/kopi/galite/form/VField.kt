@@ -41,6 +41,18 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  open fun getBorder(): Int {
+    return border
+  }
+
+  open fun getBackground(r: Int): VColor {
+    return background[r]
+  }
+
+  open fun getForeground(r: Int): VColor {
+    return foreground[r]
+  }
+
   // ----------------------------------------------------------------------
   // NAVIGATING
   // ----------------------------------------------------------------------
@@ -350,9 +362,9 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           : VField
 
   // changed?
-  var changed // changed by user / changes are done in the model
+  val changed // changed by user / changes are done in the model
           = false
-  var changedUI // changed by user / changes are in the ui -> update model
+  val changedUI // changed by user / changes are in the ui -> update model
           = false
 
   // UPDATE model before doing anything

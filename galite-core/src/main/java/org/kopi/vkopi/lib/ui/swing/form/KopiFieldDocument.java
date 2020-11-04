@@ -195,8 +195,4 @@ import org.kopi.galite.visual.ApplicationContext;
     private Color bgColor;
     private VField model;
     private ModelTransformer transformer;
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
-    private static final long serialVersionUID = -7098798410173878552L;
 }

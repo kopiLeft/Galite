@@ -21,8 +21,8 @@ package org.kopi.galite.visual
 import kotlinx.coroutines.Runnable
 
 abstract class Action(val name: String) : Runnable {
-  constructor()  {
 
+  constructor()  {
   }
 
   abstract fun execute()
@@ -45,4 +45,3 @@ abstract class Action(val name: String) : Runnable {
 
   override fun toString(): String = super.toString() + " " + name
 }
-

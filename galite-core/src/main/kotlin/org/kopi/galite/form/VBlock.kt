@@ -304,5 +304,14 @@ abstract class VBlock {
   fun prepareSnapshot(b: Boolean) {
     TODO()
   }
+
+  fun updateAccess(recno: Int) {
+    TODO()
+  }
+
+  open fun isRecordFilled(rec: Int): Boolean {
+    TODO()
+  }
+
   open class OrderModel {}
 }

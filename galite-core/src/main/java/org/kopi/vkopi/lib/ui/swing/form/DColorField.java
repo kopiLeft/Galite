@@ -222,11 +222,6 @@ public class DColorField extends DObjectField {
   private Color			image;
 
   private static final int      textHeight;
-  
-  /**
-   * Comment for <code>serialVersionUID</code>
-   */
-  private static final long 	serialVersionUID = 1L;
 
   static {
     Font                font = UIManager.getFont("KopiLayout.font");

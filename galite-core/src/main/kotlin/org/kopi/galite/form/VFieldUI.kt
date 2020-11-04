@@ -18,6 +18,9 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VCommand
+
 open class VFieldUI(blockView: UBlock, model: VField) {
   fun getModel(): VField = TODO()
   fun getDisplay(): UField = TODO()
@@ -92,4 +95,18 @@ open class VFieldUI(blockView: UBlock, model: VField) {
   fun autofillButton() {
     TODO()
   }
+
+  fun performAsyncAction(action: Action) {
+    TODO()
+  }
+
+  open fun getIncrementCommand(): VCommand {
+    TODO()
+  }
+
+  open fun getDecrementCommand(): VCommand {
+    TODO()
+  }
+
+
 }
