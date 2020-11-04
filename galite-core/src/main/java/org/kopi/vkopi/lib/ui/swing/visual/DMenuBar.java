@@ -19,9 +19,10 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.VlibProperties;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 
-import javax.swing.*;
+import org.kopi.galite.visual.VlibProperties;
 
 public class DMenuBar extends JMenuBar {
 

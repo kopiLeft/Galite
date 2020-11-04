@@ -18,9 +18,6 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.exists
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
@@ -47,12 +44,12 @@ import org.kopi.galite.type.Date
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.Module
-import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
@@ -74,20 +71,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * set information on the field.
    */
-  fun setInfo(
-          name: String,
-          index: Int,
-          posInArray: Int,
-          options: Int,
-          access: IntArray,
-          list: VList?,
-          columns: Array<VColumn?>?,
-          indices: Int,
-          priority: Int,
-          commands: Array<VCommand>,
-          pos: VPosition,
-          align: Int,
-          alias: VField,
+  fun setInfo(name: String,
+              index: Int,
+              posInArray: Int,
+              options: Int,
+              access: IntArray,
+              list: VList?,
+              columns: Array<VColumn?>?,
+              indices: Int,
+              priority: Int,
+              commands: Array<VCommand>,
+              pos: VPosition,
+              align: Int,
+              alias: VField
   ) {
     this.name = name
     this.index = index
@@ -172,17 +168,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the auto complete length.
    * @return The auto complete length.
    */
-  open fun getAutocompleteLength(): Int {
-    return if (list != null) list!!.autocompleteLength else 0
-  }
+  open fun getAutocompleteLength(): Int = if (list != null) list!!.autocompleteLength else 0
+
 
   /**
    * Returns the auto complete type.
    * @return The auto complete type.
    */
-  open fun getAutocompleteType(): Int {
-    return if (list != null) list!!.autocompleteType else VList.AUTOCOMPLETE_NONE
-  }
+  open fun getAutocompleteType(): Int = if (list != null) list!!.autocompleteType else VList.AUTOCOMPLETE_NONE
+
 
   /**
    * return true if this field implements "enumerateValue"
@@ -194,13 +188,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if it is a numeric field.
    */
-  open fun isNumeric(): Boolean {
-    return false
-  }
+  open fun isNumeric(): Boolean = false
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
+
   /**
    * Localizes this field
    *
@@ -224,13 +217,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    * @param     loc         the caller localizer
    */
-  protected fun localize(loc: FieldLocalizer?) {
+  protected open fun localize(loc: FieldLocalizer?) {
     // by default nothing to do
   }
 
   // ----------------------------------------------------------------------
   // PUBLIC COMMANDS
   // ----------------------------------------------------------------------
+
   // called if the in a chart the line changes, but it is still visible
   fun updateText() {
     if (changedUI) {
@@ -313,6 +307,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       return
     }
     val autoleave: Boolean
+
     try {
       autoleave = (callTrigger(VConstants.TRG_AUTOLEAVE) as Boolean)
     } catch (e: VException) {
@@ -337,9 +332,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   override fun getDisplay(): UField? {
     var value: UField? = null
+
     if (hasListener) {
       val listeners = fieldListener!!.listenerList
       var i = listeners.size - 2
+
       while (i >= 0 && value == null) {
         if (listeners[i] === FieldListener::class.java) {
           value = (listeners[i + 1] as FieldListener).getCurrentDisplay()
@@ -351,7 +348,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   open fun getType(): Int = MDL_FLD_TEXT
-
 
   open fun build() {
     setAccess(access[VConstants.MOD_QUERY])
@@ -408,13 +404,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  open fun fillField(handler: PredefinedValueHandler?): Boolean {
-    return handler?.selectDefaultValue() ?: false
-  }
+  open fun fillField(handler: PredefinedValueHandler?): Boolean = handler?.selectDefaultValue() ?: false
 
   // ----------------------------------------------------------------------
   // PROTECTED ACCESSORS
   // ----------------------------------------------------------------------
+
   /**
    * @return a list column for list
    */
@@ -423,6 +418,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // NAVIGATING
   // ----------------------------------------------------------------------
+
   /**
    * enter a field
    */
@@ -587,6 +583,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // RESET TO DEFAULT
   // ----------------------------------------------------------------------
+
   /**
    * Sets default values
    */
@@ -603,6 +600,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // QUERY BUILD
   // ----------------------------------------------------------------------
+
   /**
    * Returns the number of database columns associated to the field.
    * !!! change name
@@ -705,6 +703,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE
   // ----------------------------------------------------------------------
+
   /**
    * Returns the field label.
    *
@@ -714,6 +713,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // MANAGING FIELD VALUES
   // ----------------------------------------------------------------------
+
   /**
    * return the name of this field
    */
@@ -744,7 +744,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    * @param     r       the recorde number.
    */
-  fun clear(r: Int) {
+  open fun clear(r: Int) {
     setSearchOperator(VConstants.SOP_EQ)
     setNull(r)
     resetColor(r)
@@ -875,7 +875,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setFixed(r: Int, v: Fixed) {
+  open fun setFixed(r: Int, v: Fixed?) {
     throw InconsistencyException()
   }
 
@@ -936,7 +936,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setString(r: Int, v: String) {
+  open fun setString(r: Int, v: String?) {
     throw InconsistencyException()
   }
 
@@ -1003,6 +1003,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
   // ----------------------------------------------------------------------
+
   /**
    * Is the field value of the current record null ?
    */
@@ -1311,6 +1312,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // FOREGROUND AND BACKGROUND COLOR MANAGEMENT
   // ----------------------------------------------------------------------
+
   /**
    * Sets the foreground and the background colors for the current record.
    * @param foreground The foreground color.
@@ -1331,12 +1333,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     fireColorChanged = false
     if (this.foreground[r] == null && foreground != null
-            || this.foreground[r] != null && !(this.foreground[r]!! == foreground)) {
+            || this.foreground[r] != null && this.foreground[r]!! != foreground) {
       this.foreground[r] = foreground
       fireColorChanged = true
     }
     if (this.background[r] == null && background != null
-            || this.background[r] != null && !(this.background[r]!! == foreground)) {
+            || this.background[r] != null && this.background[r]!! != foreground) {
       this.background[r] = background
       fireColorChanged = true
     }
@@ -1367,6 +1369,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // DRAG AND DROP HANDLIN
   // ----------------------------------------------------------------------
+
   /**
    * Call before a drop starts on this field.
    * @throws VException Visual errors occurring.
@@ -1390,6 +1393,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // UTILS
   // ----------------------------------------------------------------------
+
   /**
    * Copies the fields value of a record to another
    */
@@ -1412,6 +1416,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // PROTECTED UTILS
   // ----------------------------------------------------------------------
+
   /**
    * trails (backups) the record if called in a transaction and restore it
    * if the transaction is aborted.
@@ -1729,6 +1734,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           0
         } else {
           val ld = VListDialog(columns, lines, lineCount, newForm)
+
           ld.selectFromDialog(getForm(), null, this)
         }
       }
@@ -2030,8 +2036,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // HELP HANDLING
   // ----------------------------------------------------------------------
+
   fun helpOnField(help: VHelpGenerator) {
     var lab = label
+
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.getTitle(),
@@ -2092,10 +2100,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-            modeDesc,
-            getTypeName(),
-            getTypeInformation(),
-            names)
+                    modeDesc,
+                    getTypeName(),
+                    getTypeInformation(),
+                    names)
   }
 
   /**
@@ -2108,7 +2116,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   override fun toString(): String {
-
     return buildString {
       try {
         append("\nFIELD ")
@@ -2118,6 +2125,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         append("\n")
         try {
           val value = getObject(block!!.activeRecord)
+
           if (value == null) {
             append("    value: null")
           } else {
@@ -2148,6 +2156,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // LISTENER
   // ----------------------------------------------------------------------
+
   fun addFieldListener(fl: FieldListener) {
     if (!hasListener) {
       hasListener = true
@@ -2297,6 +2306,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   fun getDisplayedValue(trim: Boolean): Any? {
     var value: Any? = null
+
     if (hasListener) {
       val listeners = fieldListener!!.listenerList
       var i = listeners.size - 2
@@ -2346,9 +2356,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   @Deprecated("")
   inner class Compatible {
-    fun getDisplayedValue(trim: Boolean): Any? {
-      return this@VField.getDisplayedValue(trim)
-    }
+    fun getDisplayedValue(trim: Boolean): Any? = this@VField.getDisplayedValue(trim)
+
   }
 
   @Deprecated("")
@@ -2359,6 +2368,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
+
   /**
    * The width of a field is the max number of character needed to display
    * any value
@@ -2387,6 +2397,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   var name: String? = null    // field name (for dumps)
     private set
+
   var label : String? = null // field label
     set(label) {
       field = label
@@ -2397,7 +2408,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the option of this field
    */
   var options = 0 // options
-
 
   /**
    * The tooltip of the field is a small sentence that describe usage of the field
@@ -2448,8 +2458,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   var border = 0
 
   // dynamic data
-  private var searchOperator // search operator
-          = 0
+  private var searchOperator = 0  // search operator
+
   private lateinit var dynAccess: IntArray // dynamic access
 
   // ####
@@ -2458,14 +2468,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // if there is only the model and no gui
   // all the job use less memory and are faster
   private var hasListener = false
+
   var position: VPosition? = null
     private set
+
   lateinit var cmd: Array<VCommand>
+
   private lateinit var foreground: Array<VColor?> // foreground colors for this field.
+
   private lateinit var background: Array<VColor?> // background colors for this field.
 
   companion object {
-
     /**
      * @return a String with the current thread information for debugging
      */

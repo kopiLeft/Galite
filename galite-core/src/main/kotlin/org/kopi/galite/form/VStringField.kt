@@ -182,7 +182,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String = (o as? String).orEmpty()
+  override fun toText(o: AnytoT): String = (o as? String).orEmpty()
 
   override fun toObject(s: String): Any? = if (s == "") null else s
 

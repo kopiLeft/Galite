@@ -19,9 +19,9 @@
 
 package org.kopi.vkopi.lib.ui.swing.report;
 
-import org.kopi.vkopi.lib.report.UReport.UTable;
+import javax.swing.JTable;
 
-import javax.swing.*;
+import org.kopi.galite.report.UReport.UTable;
 
 /**
  * {@code DTable} is swing implementation of {@link UTable}
@@ -45,14 +45,14 @@ public class DTable extends JTable implements UTable {
   //--------------------------------------------------
 
   /**
-   * 
+   *
    */
   public int convertColumnIndexToModel(int viewColumnIndex) {
     return super.convertColumnIndexToModel(viewColumnIndex);
   }
 
   /**
-   * 
+   *
    */
   public int convertColumnIndexToView(int modelColumnIndex) {
     return super.convertColumnIndexToView(modelColumnIndex);

@@ -29,15 +29,26 @@ class VFieldUI  : VConstants, ActionHandler, Serializable {
   fun getBlock(): VBlock = TODO()
   fun fillField(): Boolean = TODO()
 
-    override fun executeVoidTrigger(VKT_Type: Int) {
-      TODO("Not yet implemented")
-    }
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    TODO("Not yet implemented")
+  }
 
-    override fun performAsyncAction(action: Action) {
-      TODO()
-    }
+  override fun performAsyncAction(action: Action) {
+    TODO()
+  }
 
-    override fun performAction(action: Action, block: Boolean) {
-      TODO("Not yet implemented")
-    }
+  override fun performAction(action: Action, block: Boolean) {
+    TODO("Not yet implemented")
+  }
+
+  fun executeAction() {
+    TODO()
+  }
+
+  // ----------------------------------------------------------------------
+  // DISPLAY UTILS
+  // ----------------------------------------------------------------------
+  fun scrollTo(toprec: Int) {
+    TODO()
+  }
 }

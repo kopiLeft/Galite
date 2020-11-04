@@ -43,7 +43,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
  * @param groupName     the group name
  * @param loadFavorites should load favorites ?
  */
-class VMenuTree(ctxt: DBContext,
+
+class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
                 var isSuperUser: Boolean = false,
                 val menuTreeUser: String? = null,
                 private val groupName: String? = null,

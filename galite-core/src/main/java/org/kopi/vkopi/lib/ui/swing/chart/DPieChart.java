@@ -68,7 +68,7 @@ public class DPieChart extends DAbstractChartType {
 	                                  dataset,
 	                                  true,
 	                                  true,
-	                                  ApplicationContext.getDefaultLocale());
+	                                  ApplicationContext.Companion.getDefaultLocale());
       plot = (PiePlot) chart.getPlot();
       plot.setIgnoreNullValues(true);
       plot.setIgnoreZeroValues(true);
@@ -106,7 +106,7 @@ public class DPieChart extends DAbstractChartType {
     dataset = new DefaultPieDataset();
     measures = series.getMeasures();
     for (VMeasureData measure : measures) {
-      dataset.setValue(measure.name, measure.value);
+      dataset.setValue(measure.getName(), measure.getValue());
     }
     
     return dataset;

@@ -35,11 +35,11 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
    * prints a compilation unit
    */
   override fun helpOnForm(name: String,
-                 commands: Array<VCommand>?,
-                 blocks: Array<VBlock>?,
-                 title: String,
-                 help: String,
-                 code: String): String {
+                          commands: Array<VCommand>?,
+                          blocks: Array<VBlock>?,
+                          title: String,
+                          help: String,
+                          code: String): String {
     latexPrinter.println("\\section{$title}")
     latexPrinter.println("\\label{$code}")
     latexPrinter.println(help)

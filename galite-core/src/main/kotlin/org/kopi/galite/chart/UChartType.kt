@@ -19,7 +19,6 @@
 package org.kopi.galite.chart
 
 import org.kopi.galite.base.UComponent
-
 import java.io.IOException
 import java.io.OutputStream
 import java.io.Serializable
@@ -45,6 +44,7 @@ interface UChartType : Serializable, UComponent {
    * @param options The print options.
    * @throws IOException I/O errors.
    */
+  @Throws(IOException::class)
   fun exportToPDF(destination: OutputStream, options: VPrintOptions)
 
   /**
@@ -55,6 +55,7 @@ interface UChartType : Serializable, UComponent {
    * @param height The image height.
    * @throws IOException I/O errors.
    */
+  @Throws(IOException::class)
   fun exportToPNG(destination: OutputStream, width: Int, height: Int)
 
   /**
@@ -65,5 +66,6 @@ interface UChartType : Serializable, UComponent {
    * @param height The image height.
    * @throws IOException I/O errors.
    */
+  @Throws(IOException::class)
   fun exportToJPEG(destination: OutputStream, width: Int, height: Int)
 }

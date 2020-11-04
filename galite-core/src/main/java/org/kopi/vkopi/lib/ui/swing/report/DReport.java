@@ -19,22 +19,54 @@
 
 package org.kopi.vkopi.lib.ui.swing.report;
 
-import org.kopi.vkopi.lib.report.Point;
-import org.kopi.vkopi.lib.report.*;
-import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
-import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.vkopi.lib.visual.VException;
-import org.kopi.vkopi.lib.visual.VlibProperties;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Frame;
+import java.awt.Rectangle;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
+
+import org.kopi.galite.report.ColumnStyle;
+import org.kopi.galite.report.Constants;
+import org.kopi.galite.report.MReport;
+import org.kopi.galite.report.Parameters;
+import org.kopi.galite.report.Point;
+import org.kopi.galite.report.UReport;
+import org.kopi.galite.report.VFixnumColumn;
+import org.kopi.galite.report.VIntegerColumn;
+import org.kopi.galite.report.VReport;
+import org.kopi.galite.report.VReportColumn;
+import org.kopi.galite.report.VSeparatorColumn;
+import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
+import org.kopi.vkopi.lib.ui.swing.visual.Utils;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VlibProperties;
 
 /**
  * This is the display class of a report.
@@ -44,7 +76,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
   /**
    * Constructs a new report view
    *
-   * @param	model		the report model
+   * @param	report		the report model
    */
   public DReport(VReport report) {
     super(report);
@@ -78,10 +110,10 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
     // set new order.
     int[] pos = new int[model.getAccessibleColumnCount()];
 
-     for (int i = 0; i < model.getAccessibleColumnCount(); i ++) {
-       pos[i] = (model.getDisplayOrder(i) > position ) ? model.getDisplayOrder(i) - 1 :  model.getDisplayOrder(i);
-     }
-     report.columnMoved(pos);
+    for (int i = 0; i < model.getAccessibleColumnCount(); i ++) {
+      pos[i] = (model.getDisplayOrder(i) > position ) ? model.getDisplayOrder(i) - 1 :  model.getDisplayOrder(i);
+    }
+    report.columnMoved(pos);
   }
 
   public void addColumn(int position) {
@@ -116,34 +148,34 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
   }
 
   /**
-   * 
+   *
    */
   public void addColumn() {
     addColumn(table.getColumnCount());
   }
 
   /**
-   * 
+   *
    */
   public UTable getTable() {
     return table;
   }
 
   /**
-   * 
+   *
    */
   public void columnMoved(final int[] pos) {
     SwingUtilities.invokeLater (new Runnable() {
       public void run() {
-	reorder(pos);
-	model.columnMoved(pos);
-	redisplay();
+        reorder(pos);
+        model.columnMoved(pos);
+        redisplay();
       }
     });
   }
 
   /**
-   * 
+   *
    */
   public void contentChanged() {
     if (table != null) {
@@ -158,7 +190,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
   public void build() {
     // load personal configuration
     parameters = new Parameters(Color.blue);
-    
+
     // create table view
     table = new DTable(new VTable(model));
 
@@ -181,7 +213,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
       VReportColumn     column = model.getAccessibleColumn(i);
 
       if (column.getHeight() > nbLinesMax) {
-	nbLinesMax = column.getHeight();
+        nbLinesMax = column.getHeight();
       }
     }
     table.setRowHeight(nbLinesMax * fontmetrics.getHeight());
@@ -264,7 +296,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
 
   /**
    * start a block and enter in the good field (rec)
-   * @exception	org.kopi.vkopi.lib.visual.VException	may be raised by triggers
+   * @exception VException  may be raised by triggers
    */
   public void run(final boolean visible) throws VException {
     report.initReport();
@@ -293,7 +325,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
 
   /**
    * start a block and enter in the good field (rec)
-   * @exception	org.kopi.vkopi.lib.visual.VException	may be raised by triggers
+   * @exception VException  may be raised by triggers
    */
   public void run() throws VException {
     run(true);
@@ -338,15 +370,15 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
    * Returns the right cell component
    */
   public Component getTableCellRendererComponent(JTable table,
-						 Object value,
-						 boolean isSelected,
-						 boolean hasFocus,
-						 int row,
-						 int column) {
+                                                 Object value,
+                                                 boolean isSelected,
+                                                 boolean hasFocus,
+                                                 int row,
+                                                 int column) {
     int		col   = table.convertColumnIndexToModel(column);
     int		level = model.getRow(row).getLevel();
-    boolean	folded = model.getAccessibleColumn(col).isFolded() &&
-                         !(model.getAccessibleColumn(col) instanceof VSeparatorColumn);
+    boolean	folded = model.getAccessibleColumn(col).getFolded() &&
+            !(model.getAccessibleColumn(col) instanceof VSeparatorColumn);
     String	text = model.getAccessibleColumn(col).format(value);
     CellRenderer cell = null;
 
@@ -355,23 +387,23 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
       cell = foldedCell;
     } else {
       if (cellRenderers[col].length == 1) {
-	// normal way
-	cell = cellRenderers[col][0];
+        // normal way
+        cell = cellRenderers[col][0];
       } else {
-	// specific way
-	int	state = getState(text);
-	// search
-	for (int i = 0; i < cellRenderers[col].length; i++) {
-	  if (cellRenderers[col][i].getState() == state) {
-	    cell = cellRenderers[col][i];
-	  } else if (cell == null && cellRenderers[col][i].getState() == 0) {
-	    // standard
-	    cell = cellRenderers[col][i];
-	  }
-	}
-	if (cell == null) {
-	  cell = cellRenderers[col][0];
-	}
+        // specific way
+        int	state = getState(text);
+        // search
+        for (int i = 0; i < cellRenderers[col].length; i++) {
+          if (cellRenderers[col][i].getState() == state) {
+            cell = cellRenderers[col][i];
+          } else if (cell == null && cellRenderers[col][i].getState() == 0) {
+            // standard
+            cell = cellRenderers[col][i];
+          }
+        }
+        if (cell == null) {
+          cell = cellRenderers[col][0];
+        }
       }
     }
 
@@ -394,20 +426,20 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
       tableColumn.setHeaderRenderer(headerRenderer);
       VReportColumn column = model.getAccessibleColumn(i);
       if (column instanceof VSeparatorColumn) {
-	cellRenderers[i] = new CellRenderer[] {new CellRenderer(Constants.STA_SEPARATOR)};
+        cellRenderers[i] = new CellRenderer[] {new CellRenderer(Constants.STA_SEPARATOR)};
       } else {
-	ColumnStyle[]	styles = (ColumnStyle[]) column.getStyles();
+        ColumnStyle[]	styles = (ColumnStyle[]) column.getStyles();
 
-	cellRenderers[i] = new CellRenderer[styles.length];
-	for (int j = 0; j < styles.length; j++) {
-	  ColumnStyle style = styles[j];
+        cellRenderers[i] = new CellRenderer[styles.length];
+        for (int j = 0; j < styles.length; j++) {
+          ColumnStyle style = styles[j];
 
-	  cellRenderers[i][j] = new CellRenderer(style.getState(),
-						 column.getAlign(),
-						 style.getBackground(),
-						 style.getForeground(),
-						 style.getFont());
-	}
+          cellRenderers[i][j] = new CellRenderer(style.getState(),
+                  column.getAlign(),
+                  style.getBackground(),
+                  style.getForeground(),
+                  style.getFont());
+        }
       }
     }
   }
@@ -420,9 +452,9 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
 
     table.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseClicked(MouseEvent e) {
-	int	row = table.rowAtPoint(e.getPoint());
-	int	mod = e.getModifiers();
-	int	column	= table.columnAtPoint(e.getPoint());
+        int	row = table.rowAtPoint(e.getPoint());
+        int	mod = e.getModifiers();
+        int	column	= table.columnAtPoint(e.getPoint());
 
         if ((mod & InputEvent.BUTTON2_MASK) == 0 && (mod & InputEvent.BUTTON3_MASK) == 0) {
           if (e.getClickCount() == 2) {
@@ -471,31 +503,31 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
       }
 
       public void mousePressed(MouseEvent e) {
-	int	mod	= e.getModifiers();
-	int	row	= table.rowAtPoint(e.getPoint());
-	int	column	= table.columnAtPoint(e.getPoint());
+        int	mod	= e.getModifiers();
+        int	row	= table.rowAtPoint(e.getPoint());
+        int	column	= table.columnAtPoint(e.getPoint());
 
-	if ((mod & InputEvent.BUTTON2_MASK) == 0 && (mod & InputEvent.BUTTON3_MASK) == 0) {
-	  // button 1 pressed
-	  if ((mod & InputEvent.CTRL_MASK) != 0 && (mod & InputEvent.SHIFT_MASK) != 0) {
+        if ((mod & InputEvent.BUTTON2_MASK) == 0 && (mod & InputEvent.BUTTON3_MASK) == 0) {
+          // button 1 pressed
+          if ((mod & InputEvent.CTRL_MASK) != 0 && (mod & InputEvent.SHIFT_MASK) != 0) {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             int index = table.convertColumnIndexToModel(column);
 
             currentModel.sortColumn(index);
             setCursor(Cursor.getDefaultCursor());
-	  } else if ((mod & InputEvent.CTRL_MASK) != 0) {
-	    // CTRL key pressed
-	    if (row >= 0) {
-	      setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	      int index = table.convertColumnIndexToModel(column);
-	      if (currentModel.isRowFold(row, index)) {
-		currentModel.unfoldingRow(row, index);
-	      } else {
-		currentModel.foldingRow(row, index);
-	      }
-	      setCursor(Cursor.getDefaultCursor());
-	    }
-	  } else if ((mod & InputEvent.SHIFT_MASK) != 0) {
+          } else if ((mod & InputEvent.CTRL_MASK) != 0) {
+            // CTRL key pressed
+            if (row >= 0) {
+              setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+              int index = table.convertColumnIndexToModel(column);
+              if (currentModel.isRowFold(row, index)) {
+                currentModel.unfoldingRow(row, index);
+              } else {
+                currentModel.foldingRow(row, index);
+              }
+              setCursor(Cursor.getDefaultCursor());
+            }
+          } else if ((mod & InputEvent.SHIFT_MASK) != 0) {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             int index = table.convertColumnIndexToModel(column);
 
@@ -506,190 +538,190 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
             }
             setCursor(Cursor.getDefaultCursor());
           }
-	}
+        }
       }
     });
 
     table.getTableHeader().addMouseListener(new java.awt.event.MouseAdapter() {
       public void mousePressed(MouseEvent e) {
-	int	mod	= e.getModifiers();
-	final int	column	= table.columnAtPoint(e.getPoint());
+        int	mod	= e.getModifiers();
+        final int	column	= table.columnAtPoint(e.getPoint());
 
-	columnMove = false;
-	fromIndex  = column;
-	if ((mod & InputEvent.BUTTON2_MASK) == 0 && (mod & InputEvent.BUTTON3_MASK) == 0) {
-	  if ((mod & InputEvent.CTRL_MASK) != 0) {
-	    setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	    int index = table.convertColumnIndexToModel(column);
-	    if (currentModel.isColumnFold(index)) {
-	      currentModel.unfoldingColumn(index);
-	    } else {
-	      currentModel.foldingColumn(index);
-	    }
-	    setCursor(Cursor.getDefaultCursor());
-	  } else if ((mod & InputEvent.SHIFT_MASK) != 0) {
-	    setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	    currentModel.sortColumn(table.convertColumnIndexToModel(column));
-	    setCursor(Cursor.getDefaultCursor());
-	  } else if (e.getClickCount() == 2) {
-	    model.switchColumnFolding(table.convertColumnIndexToModel(column));
+        columnMove = false;
+        fromIndex  = column;
+        if ((mod & InputEvent.BUTTON2_MASK) == 0 && (mod & InputEvent.BUTTON3_MASK) == 0) {
+          if ((mod & InputEvent.CTRL_MASK) != 0) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            int index = table.convertColumnIndexToModel(column);
+            if (currentModel.isColumnFold(index)) {
+              currentModel.unfoldingColumn(index);
+            } else {
+              currentModel.foldingColumn(index);
+            }
+            setCursor(Cursor.getDefaultCursor());
+          } else if ((mod & InputEvent.SHIFT_MASK) != 0) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            currentModel.sortColumn(table.convertColumnIndexToModel(column));
+            setCursor(Cursor.getDefaultCursor());
+          } else if (e.getClickCount() == 2) {
+            model.switchColumnFolding(table.convertColumnIndexToModel(column));
             resetWidth();
-	  } else {
-	    table.setColumnSelectionInterval(column, column);
-	    if (getSelectedCell().y == -1) {
-	      table.setRowSelectionInterval(0, 0);
-	    }
-	  }
-	}
+          } else {
+            table.setColumnSelectionInterval(column, column);
+            if (getSelectedCell().getY() == -1) {
+              table.setRowSelectionInterval(0, 0);
+            }
+          }
+        }
         if ((mod & InputEvent.BUTTON1_MASK) == 0 && (mod & InputEvent.BUTTON2_MASK) == 0) {
           JPopupMenu labelPopupMenu = new JPopupMenu();
           JMenuItem item;
 
           item = new JMenuItem(VlibProperties.getString("set_column_info"));
           item.addActionListener(new  java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent e) {
-                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                try {
-                  report.setColumnInfo();
-                } catch(VException ve) {
-                  // exception thrown by trigger.
-                }
-                table.setRowSelectionAllowed(false);
-                table.setColumnSelectionAllowed(false);
-                table.setCellSelectionEnabled(true);
-                setCursor(Cursor.getDefaultCursor());
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+              try {
+                report.setColumnInfo();
+              } catch(VException ve) {
+                // exception thrown by trigger.
               }
-            });
+              table.setRowSelectionAllowed(false);
+              table.setColumnSelectionAllowed(false);
+              table.setCellSelectionEnabled(true);
+              setCursor(Cursor.getDefaultCursor());
+            }
+          });
           labelPopupMenu.add(item);
           item = new JMenuItem(VlibProperties.getString("sort_ASC"));
           item.addActionListener(new  java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent e) {
-                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                currentModel.sortColumn(table.convertColumnIndexToModel(column), 1);
-                table.setRowSelectionAllowed(false);
-                table.setColumnSelectionAllowed(false);
-                table.setCellSelectionEnabled(true);
-                setCursor(Cursor.getDefaultCursor());
-              }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+              currentModel.sortColumn(table.convertColumnIndexToModel(column), 1);
+              table.setRowSelectionAllowed(false);
+              table.setColumnSelectionAllowed(false);
+              table.setCellSelectionEnabled(true);
+              setCursor(Cursor.getDefaultCursor());
+            }
+          });
           labelPopupMenu.add(item);
           item = new JMenuItem(VlibProperties.getString("sort_DSC"));
           item.addActionListener(new  java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent e) {
-                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                currentModel.sortColumn(table.convertColumnIndexToModel(column), -1);
-                table.setRowSelectionAllowed(false);
-                table.setColumnSelectionAllowed(false);
-                table.setCellSelectionEnabled(true);
-                setCursor(Cursor.getDefaultCursor());
-              }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+              currentModel.sortColumn(table.convertColumnIndexToModel(column), -1);
+              table.setRowSelectionAllowed(false);
+              table.setColumnSelectionAllowed(false);
+              table.setCellSelectionEnabled(true);
+              setCursor(Cursor.getDefaultCursor());
+            }
+          });
           labelPopupMenu.add(item);
           item = new JMenuItem(VlibProperties.getString("add_column"));
           item.addActionListener(new  java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+              addColumn(column + 1);
+              table.setRowSelectionAllowed(false);
+              table.setColumnSelectionAllowed(false);
+              table.setCellSelectionEnabled(true);
+              setCursor(Cursor.getDefaultCursor());
+            }
+          });
+          labelPopupMenu.add(item);
+          if (model.getAccessibleColumn(table.convertColumnIndexToModel(column)).getAddedAtRuntime()) {
+            item = new JMenuItem(VlibProperties.getString("remove_column"));
+            item.addActionListener(new  java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent e) {
                 setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                addColumn(column + 1);
+                removeColumn(column);
                 table.setRowSelectionAllowed(false);
                 table.setColumnSelectionAllowed(false);
                 table.setCellSelectionEnabled(true);
                 setCursor(Cursor.getDefaultCursor());
               }
             });
-          labelPopupMenu.add(item);
-          if (model.getAccessibleColumn(table.convertColumnIndexToModel(column)).isAddedAtRuntime()) {
-            item = new JMenuItem(VlibProperties.getString("remove_column"));
-            item.addActionListener(new  java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                  setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                  removeColumn(column);
-                  table.setRowSelectionAllowed(false);
-                  table.setColumnSelectionAllowed(false);
-                  table.setCellSelectionEnabled(true);
-                  setCursor(Cursor.getDefaultCursor());
-                }
-              });
             labelPopupMenu.add(item);
           }
-          if (model.getAccessibleColumn(table.convertColumnIndexToModel(column)).isAddedAtRuntime()) {
+          if (model.getAccessibleColumn(table.convertColumnIndexToModel(column)).getAddedAtRuntime()) {
             item = new JMenuItem(VlibProperties.getString("set_column_data"));
             item.addActionListener(new  java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                  setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                  try {
-                    report.setColumnData();
-                  } catch(VException ve) {
-                    // exception thrown by the trigger.
-                  }
-                  table.setRowSelectionAllowed(false);
-                  table.setColumnSelectionAllowed(false);
-                  table.setCellSelectionEnabled(true);
-                  setCursor(Cursor.getDefaultCursor());
+              public void actionPerformed(java.awt.event.ActionEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                try {
+                  report.setColumnData();
+                } catch(VException ve) {
+                  // exception thrown by the trigger.
                 }
-              });
-            labelPopupMenu.add(item);
-          }
-          labelPopupMenu.addPopupMenuListener( new PopupMenuListener() {
-              public void popupMenuCanceled(PopupMenuEvent e) {
                 table.setRowSelectionAllowed(false);
                 table.setColumnSelectionAllowed(false);
                 table.setCellSelectionEnabled(true);
-              }
-              public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-              }
-              public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                table.setColumnSelectionAllowed(true);
-                table.setRowSelectionAllowed(false);
-                table.setColumnSelectionInterval(column, column);
+                setCursor(Cursor.getDefaultCursor());
               }
             });
+            labelPopupMenu.add(item);
+          }
+          labelPopupMenu.addPopupMenuListener( new PopupMenuListener() {
+            public void popupMenuCanceled(PopupMenuEvent e) {
+              table.setRowSelectionAllowed(false);
+              table.setColumnSelectionAllowed(false);
+              table.setCellSelectionEnabled(true);
+            }
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+              table.setColumnSelectionAllowed(true);
+              table.setRowSelectionAllowed(false);
+              table.setColumnSelectionInterval(column, column);
+            }
+          });
           labelPopupMenu.show(e.getComponent(), e.getX(), e.getY());
         }
       }
 
       public void mouseReleased(MouseEvent e) {
-	boolean columnOrderChanged	= false;
+        boolean columnOrderChanged	= false;
 
-	if (columnMove) {
-	  int[] newColumnOrder = new int[model.getColumnCount()];
+        if (columnMove) {
+          int[] newColumnOrder = new int[model.getColumnCount()];
 
-	  // test if columns really moved (not 1->2->1)
-	  if (fromIndex != toIndex) {
-	    int index = 0;
-	    int hiddenColumnsCount = 0;
-	    columnOrderChanged = true;
+          // test if columns really moved (not 1->2->1)
+          if (fromIndex != toIndex) {
+            int index = 0;
+            int hiddenColumnsCount = 0;
+            columnOrderChanged = true;
 
-	    for (int i = 0; i < newColumnOrder.length; i++) {
-	      if (!model.getAccessibleColumn(i).isVisible()) {
-		hiddenColumnsCount += 1;
-		newColumnOrder[i] = model.getDisplayOrder(index);
-		index += 1;
-	      } else if (i == (toIndex + hiddenColumnsCount)) {
-		newColumnOrder[i] = table.convertColumnIndexToModel(toIndex);
-	      } else {
-		if (index == (fromIndex + hiddenColumnsCount)) {
-		  index += 1;
-		}
-		newColumnOrder[i] = model.getDisplayOrder(index);
-		index += 1;
-	      }
-	    }
-	  }
+            for (int i = 0; i < newColumnOrder.length; i++) {
+              if (!model.getAccessibleColumn(i).getVisible()) {
+                hiddenColumnsCount += 1;
+                newColumnOrder[i] = model.getDisplayOrder(index);
+                index += 1;
+              } else if (i == (toIndex + hiddenColumnsCount)) {
+                newColumnOrder[i] = table.convertColumnIndexToModel(toIndex);
+              } else {
+                if (index == (fromIndex + hiddenColumnsCount)) {
+                  index += 1;
+                }
+                newColumnOrder[i] = model.getDisplayOrder(index);
+                index += 1;
+              }
+            }
+          }
 
-	  // give the new column order tab
-	  if (columnOrderChanged) {
+          // give the new column order tab
+          if (columnOrderChanged) {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	    model.columnMoved(newColumnOrder);
-	    setCursor(Cursor.getDefaultCursor());
-	  }
-	}
+            model.columnMoved(newColumnOrder);
+            setCursor(Cursor.getDefaultCursor());
+          }
+        }
       }
     });
 
     table.getColumnModel().addColumnModelListener(new TableColumnModelListener() {
-        public void columnMoved(TableColumnModelEvent e) {
-	columnMove = true;
-	toIndex = e.getToIndex();
+      public void columnMoved(TableColumnModelEvent e) {
+        columnMove = true;
+        toIndex = e.getToIndex();
       }
       public void columnMarginChanged(ChangeEvent e) {}
       public void columnAdded(TableColumnModelEvent e) {}
@@ -698,10 +730,10 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
     });
 
     table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-	public void valueChanged(ListSelectionEvent e) {
-	  report.setMenu();
-	}
-      });
+      public void valueChanged(ListSelectionEvent e) {
+        report.setMenu();
+      }
+    });
   }
 
   private int resetColumnSize(int pos) {
@@ -709,7 +741,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
     int			width;
     String              help;
 
-    if (column.isFolded() && !(column instanceof VSeparatorColumn)) {
+    if (column.getFolded() && !(column instanceof VSeparatorColumn)) {
       width = 1;
       help = column.getLabel();
     } else if (column instanceof VFixnumColumn || column instanceof VIntegerColumn) {
@@ -795,7 +827,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
      */
     private static final long serialVersionUID = 565901305687203629L;
   }
-  
+
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
@@ -828,4 +860,3 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
    */
   private static final long	serialVersionUID = -6833408762223390823L;
 }
-

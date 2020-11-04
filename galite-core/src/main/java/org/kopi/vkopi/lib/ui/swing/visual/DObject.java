@@ -19,10 +19,12 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
+import java.awt.Frame;
+import java.awt.Image;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
 
 /**
  * Class with only static methods to cache the properties of a Visual
