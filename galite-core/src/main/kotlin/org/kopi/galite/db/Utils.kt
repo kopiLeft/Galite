@@ -16,17 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.type
+package org.kopi.galite.db
+
+import org.kopi.galite.type.Date
 
 class Utils {
   companion object {
     fun trimString(input: String): String = TODO()
     fun trailString(input: String): String = TODO()
     fun toSql(date: Date): String = TODO()
+    fun toSql(l: String): String = TODO()
   }
 }
-
-fun toSql(d: Date): String {
-  TODO()
-}
-
