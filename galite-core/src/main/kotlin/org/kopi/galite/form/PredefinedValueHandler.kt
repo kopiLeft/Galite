@@ -18,11 +18,12 @@
 
 package org.kopi.galite.form
 
+import java.awt.Color
+import java.io.Serializable
+
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
 import org.kopi.galite.visual.VExecFailedException
-import java.awt.Color
-import java.io.Serializable
 
 interface PredefinedValueHandler : Serializable {
 

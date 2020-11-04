@@ -21,7 +21,7 @@ package org.kopi.galite.form
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
+
 import kotlin.jvm.Throws
 
 /**

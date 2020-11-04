@@ -65,6 +65,7 @@ open class Time : Type {
    * @param     format  the format. see SimpleDateFormat
    * @param     locale  the locale to use
    */
+  @JvmOverloads
   fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
 
@@ -72,10 +73,6 @@ open class Time : Type {
     cal[Calendar.MINUTE] = minutes
     cal[Calendar.SECOND] = seconds
     return SimpleDateFormat(format).format(cal.time)
-  }
-
-  open fun format(format: String): String {
-    return format(format, Locale.getDefault())
   }
 
   /**

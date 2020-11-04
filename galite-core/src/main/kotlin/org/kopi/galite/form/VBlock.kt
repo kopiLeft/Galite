@@ -297,13 +297,22 @@ abstract class VBlock {
   }
 
   open class OrderModel {
+
+    open fun getColumnOrder(index: Int): Int {
+      TODO()
+    }
+
+    open fun addSortingListener(sl: OrderListener?) {
+      TODO()
+    }
+
     open fun sortColumn(index: Int) {
       TODO()
     }
 
     companion object {
       const val STE_UNORDERED = 1
-      const  val STE_INC = 2
+      const val STE_INC = 2
       const val STE_DESC = 4
     }
   }
