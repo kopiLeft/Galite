@@ -943,7 +943,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Sets the field value of given record to a date value.
    */
-  open fun setImage(r: Int, v: ByteArray) {
+  fun setImage(r: Int, v: ByteArray) {
     throw InconsistencyException()
   }
 
@@ -1192,7 +1192,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the field value of given record as a date value.
    */
-  open fun getImage(r: Int): ByteArray {
+  fun getImage(r: Int): ByteArray {
     throw InconsistencyException()
   }
 
@@ -1482,7 +1482,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         while (true) {
           try {
             if (!alreadyProtected) {
-              //getForm().startProtected(null)
+              getForm().startProtected(null)
             }
             SELECT_IS_IN_LIST.replace("$2", evalListTable())
             SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
@@ -1491,24 +1491,24 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               exec(SELECT_IS_IN_LIST) {exists = it.next()}
             }
             if (!alreadyProtected) {
-              //getForm().commitProtected()
+              getForm().commitProtected()
             }
             break
           } catch (e: SQLException) {
             if (!alreadyProtected) {
-             // getForm().abortProtected(e)
+              getForm().abortProtected(e)
             } else {
               throw e
             }
           } catch (error: Error) {
             if (!alreadyProtected) {
-             // getForm().abortProtected(error)
+              getForm().abortProtected(error)
             } else {
               throw error
             }
           } catch (rte: RuntimeException) {
             if (!alreadyProtected) {
-              //getForm().abortProtected(rte)
+              getForm().abortProtected(rte)
             } else {
               throw rte
             }
@@ -1533,7 +1533,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         while (true) {
           try {
             if (!alreadyProtected) {
-             // getForm().startProtected(null)
+              getForm().startProtected(null)
             }
             SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
             SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
@@ -1553,24 +1553,24 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             }
 
             if (!alreadyProtected) {
-             // getForm().commitProtected()
+              getForm().commitProtected()
             }
             break
           } catch (e: SQLException) {
             if (!alreadyProtected) {
-             // getForm().abortProtected(e)
+              getForm().abortProtected(e)
             } else {
               throw e
             }
           } catch (error: Error) {
             if (!alreadyProtected) {
-             // getForm().abortProtected(error)
+              getForm().abortProtected(error)
             } else {
               throw error
             }
           } catch (rte: RuntimeException) {
             if (!alreadyProtected) {
-             // getForm().abortProtected(rte)
+              getForm().abortProtected(rte)
             } else {
               throw rte
             }
@@ -1634,7 +1634,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       while (true) {
         try {
-          //getForm().startProtected(null)
+          getForm().startProtected(null)
           SELECT_IS_IN_LIST.replace("$2", evalListTable())
           SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
           SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
@@ -1645,14 +1645,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               }
             }
           }
-          //getForm().commitProtected()
+          getForm().commitProtected()
           break
         } catch (e: SQLException) {
-          //getForm().abortProtected(e)
+          getForm().abortProtected(e)
         } catch (error: Error) {
-         // getForm().abortProtected(error)
+          getForm().abortProtected(error)
         } catch (rte: RuntimeException) {
-          //getForm().abortProtected(rte)
+          getForm().abortProtected(rte)
         }
       }
     } catch (e: Throwable) {
@@ -1689,7 +1689,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       while (true) {
         try {
-         // getForm().startProtected(Message.getMessage("searching_database"))
+          getForm().startProtected(Message.getMessage("searching_database"))
           transaction {
             exec(queryText) {
               lineCount = 0
@@ -1706,14 +1706,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               }
             }
           }
-        //  getForm().commitProtected()
+          getForm().commitProtected()
           break
         } catch (e: SQLException) {
-         // getForm().abortProtected(e)
+          getForm().abortProtected(e)
         } catch (error: Error) {
-         // getForm().abortProtected(error)
+          getForm().abortProtected(error)
         } catch (rte: RuntimeException) {
-        //  getForm().abortProtected(rte)
+          getForm().abortProtected(rte)
         }
       }
     } catch (e: Throwable) {
@@ -1747,21 +1747,21 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           while (true) {
             try {
-             // getForm().startProtected(null)
+              getForm().startProtected(null)
               val SELECT_IS_IN_LIST = " SELECT " + list!!.getColumn(0).column!! +
                       " FROM " + evalListTable() + " WHERE    ID = " + selected
 
               transaction {
                 exec(SELECT_IS_IN_LIST) {result = it.getObject(1)}
               }
-             // getForm().commitProtected()
+              getForm().commitProtected()
               break
             } catch (e: SQLException) {
-             // getForm().abortProtected(e)
+              getForm().abortProtected(e)
             } catch (error: Error) {
-             // getForm().abortProtected(error)
+              getForm().abortProtected(error)
             } catch (rte: RuntimeException) {
-            //  getForm().abortProtected(rte)
+              getForm().abortProtected(rte)
             }
           }
         } catch (e: Throwable) {
@@ -1834,7 +1834,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     while (true) {
       try {
-       // getForm().startProtected(null)
+        getForm().startProtected(null)
 
         transaction {
           exec(qrybuf) {
@@ -1843,23 +1843,23 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             }
           }
         }
-       // getForm().commitProtected()
+        getForm().commitProtected()
         break
       } catch (e: SQLException) {
         try {
-        //  getForm().abortProtected(e)
+          getForm().abortProtected(e)
         } catch (abortEx: SQLException) {
           throw VExecFailedException(abortEx)
         }
       } catch (error: Error) {
         try {
-       //   getForm().abortProtected(error)
+          getForm().abortProtected(error)
         } catch (abortEx: Error) {
           throw VExecFailedException(abortEx)
         }
       } catch (rte: RuntimeException) {
         try {
-        //  getForm().abortProtected(rte)
+          getForm().abortProtected(rte)
         } catch (abortEx: RuntimeException) {
           throw VExecFailedException(abortEx)
         }
@@ -1919,7 +1919,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
       while (true) {
         try {
-         // getForm().startProtected(null)
+          getForm().startProtected(null)
           transaction {
             exec(qrybuf) {
               while (it.next()) {
@@ -1933,23 +1933,23 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               }
             }
           }
-         // getForm().commitProtected()
+          getForm().commitProtected()
           break
         } catch (e: SQLException) {
           try {
-          //  getForm().abortProtected(e)
+            getForm().abortProtected(e)
           } catch (abortEx: SQLException) {
             throw VExecFailedException(abortEx)
           }
         } catch (error: Error) {
           try {
-           // getForm().abortProtected(error)
+            getForm().abortProtected(error)
           } catch (abortEx: Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (rte: RuntimeException) {
           try {
-           // getForm().abortProtected(rte)
+            getForm().abortProtected(rte)
           } catch (abortEx: RuntimeException) {
             throw VExecFailedException(abortEx)
           }
@@ -2005,7 +2005,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       while (true) {
         try {
-        //  getForm().startProtected(null)
+          getForm().startProtected(null)
           transaction {
             exec("SELECT " + list!!.getColumn(0).column!! + " FROM "
                     + evalListTable() + " WHERE ID = " + id) {
@@ -2016,14 +2016,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               }
             }
           }
-         // getForm().commitProtected()
+          getForm().commitProtected()
           break
         } catch (e: SQLException) {
-         // getForm().abortProtected(e)
+          getForm().abortProtected(e)
         } catch (error: Error) {
-        //  getForm().abortProtected(error)
+          getForm().abortProtected(error)
         } catch (rte: RuntimeException) {
-         // getForm().abortProtected(rte)
+          getForm().abortProtected(rte)
         }
       }
     } catch (e: Throwable) {
@@ -2100,10 +2100,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-                    modeDesc,
-                    getTypeName(),
-                    getTypeInformation(),
-                    names)
+            modeDesc,
+            getTypeName(),
+            getTypeInformation(),
+            names)
   }
 
   /**

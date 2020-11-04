@@ -90,7 +90,7 @@ abstract class Report: Window() {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val destination = destination
-              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.`package`.name.replace(".", "/")
+              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.packageName.replace(".", "/")
       try {
         val writer = ReportLocalizationWriter()
         genLocalization(writer)
@@ -113,7 +113,7 @@ abstract class Report: Window() {
    */
   private val sourceFile: String
     get() {
-      val basename = this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
+      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
     }
 
