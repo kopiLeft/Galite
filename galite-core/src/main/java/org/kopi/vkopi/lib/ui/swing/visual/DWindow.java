@@ -73,7 +73,6 @@ import org.kopi.galite.util.LineBreaker;
 import org.kopi.galite.visual.ApplicationContext;
 import org.kopi.galite.visual.MessageCode;
 import org.kopi.galite.visual.MessageListener;
-import org.kopi.galite.visual.PropertyException;
 import org.kopi.galite.visual.UIFactory;
 import org.kopi.galite.visual.UWindow;
 import org.kopi.galite.visual.VActor;
@@ -123,7 +122,7 @@ public abstract class DWindow extends JPanel implements UWindow {
     add(contentPanel);
     footPanel = new DFootPanel(this);
     add(footPanel);
-    addActorsToGUI(getModel().getActors().toArray(new VActor[0]));
+    addActorsToGUI(getModel().getActors());
 
     model.addVActionListener(this);
     model.addModelCloseListener(this);
@@ -228,7 +227,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    */
   public void setModel(VWindow model) {
     this.model = model;
-    addActorsToGUI(getModel().getActors().toArray(new VActor[0]));
+    addActorsToGUI(getModel().getActors());
     setWindowFocusEnabled(true);
   }
 
