@@ -129,7 +129,7 @@ open class VBooleanCodeField : VCodeField {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? {
+  override fun getSqlImpl(r: Int): String {
     return if (value[r] == -1) {
       "NULL"
     } else {

@@ -100,7 +100,7 @@ abstract class VCodeField(val type: String,
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, o: Any) {
-    var s = o as String
+    var s = o as? String
 
     if (s == "") {
       setNull(rec)
@@ -112,7 +112,7 @@ abstract class VCodeField(val type: String,
        */
       var found = -1
 
-      s = s.toLowerCase()
+      s = s!!.toLowerCase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
@@ -312,7 +312,7 @@ abstract class VCodeField(val type: String,
     throw InconsistencyException()
   }
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     for (i in getCodes().indices) {
       if (getCodes()[i] == o) {
         return labels[i]
@@ -339,7 +339,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  abstract override fun getSqlImpl(r: Int): String?
+  abstract override fun getSqlImpl(r: Int): String
 
   /**
    * Copies the value of a record to another
@@ -398,8 +398,8 @@ abstract class VCodeField(val type: String,
    *
    * @param     parent         the caller localizer
    */
-  internal fun localize(parent: FieldLocalizer) {
-    val loc = parent.manager.getTypeLocalizer(source, type)
+  protected override fun localize(parent: FieldLocalizer?) {
+    val loc = parent!!.manager.getTypeLocalizer(source, type)
 
     for (i in labels.indices) {
       labels[i] = loc.getCodeLabel(idents[i])

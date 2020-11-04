@@ -75,7 +75,7 @@ class VFixnumField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun toText(o: Any): String? {
+  override fun toText(o: Any?): String? {
     TODO("Not yet implemented")
   }
 

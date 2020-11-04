@@ -34,7 +34,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   /**
    * prints a compilation unit
    */
-  fun helpOnForm(name: String,
+  override fun helpOnForm(name: String,
                  commands: Array<VCommand>?,
                  blocks: Array<VBlock>?,
                  title: String,

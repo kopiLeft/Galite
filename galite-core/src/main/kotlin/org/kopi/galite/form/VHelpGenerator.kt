@@ -42,4 +42,13 @@ open class VHelpGenerator : VHelpGenerator() {
   open fun helpOnFieldCommand(commands: Array<VCommand>?) {
     TODO()
   }
+  open fun helpOnForm(name: String,
+                 commands: Array<VCommand>?,
+                 blocks: Array<VBlock>?,
+                 title: String,
+                 help: String,
+                 code: String): String? {
+
+    TODO()
+  }
 }

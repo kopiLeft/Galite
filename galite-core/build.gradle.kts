@@ -27,6 +27,7 @@ val apachePoi = "4.1.2"
 val apacheOoxml = "3.9"
 val graphbuilder = "1.02"
 val hylafaxVersion = "1.0.0"
+val jFreeChartVersion = "1.0.19"
 
 dependencies {
   // Exposed dependencies
@@ -57,4 +58,9 @@ dependencies {
 
   // Hylafax dependencies
   implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", hylafaxVersion)
+
+  //JFreeChart dependency
+  implementation("org.jfree", "jfreechart", jFreeChartVersion)
+
 }
+

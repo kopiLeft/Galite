@@ -18,7 +18,12 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.visual.VActor
+
 abstract class VBlock {
+
+  fun getForm(): VForm = TODO()
 
   fun fetchLookup(fld: VField) {
     TODO()
@@ -34,10 +39,6 @@ abstract class VBlock {
 
 
   fun getActiveField(): VField? {
-    TODO()
-  }
-
-  fun getForm(): VForm {
     TODO()
   }
 
@@ -119,4 +120,75 @@ abstract class VBlock {
   fun isChart(): Boolean = TODO()
 
   interface OrderListener
+
+
+  internal var activeField: VField? = null
+  internal var source // qualified name of source file
+          : String? = null
+  internal var shortcut // block short name
+          : String? = null
+  internal var title // block title
+          : String? = null
+  internal var align: BlockAlignment? = null
+  internal var help // the help on this block
+          : String? = null
+  internal lateinit var tables // names of database tables
+          : Array<String>
+  internal var options // block options
+          = 0
+  internal lateinit var access // access flags for each mode
+          : IntArray
+  internal lateinit var indices // error messages for violated indices
+          : Array<String>
+  internal lateinit var name: String // block name
+  var isChanged = false
+  var pageNumber: Int = 0
+
+  /**
+   * Returns true if the block is accessible
+   */
+  open fun isAccessible(): Boolean {
+    TODO()
+  }
+  open fun updateBlockAccess() {
+    TODO()
+  }
+  open fun checkBlock() {
+    TODO()
+  }
+  open fun getActors(): Array<VActor> {
+    TODO()
+  }
+  open fun initialise() {
+    TODO()
+  }
+  open fun initIntern() {
+    TODO()
+  }
+  open fun close() {
+    TODO()
+  }
+  open fun setCommandsEnabled(enable: Boolean) {
+    TODO()
+  }
+
+  fun leave(b: Boolean) {
+    TODO()
+  }
+
+  fun clear(){
+    TODO()
+  }
+  fun setMode(modQuery: Int){
+    TODO()
+  }
+  open fun singleMenuQuery(showSingleEntry: Boolean): Int {
+    TODO()
+  }
+
+  fun enter() {
+    TODO()
+  }
+
+  abstract fun localize(manager: LocalizationManager)
 }

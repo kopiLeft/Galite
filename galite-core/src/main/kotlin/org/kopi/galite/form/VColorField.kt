@@ -149,7 +149,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     throw InconsistencyException("UNEXPECTD GET TEXT")
   }
 

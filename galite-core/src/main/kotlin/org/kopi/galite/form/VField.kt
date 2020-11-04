@@ -42,7 +42,7 @@ import org.kopi.galite.type.Fixed
 import org.kopi.galite.type.Week
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.type.Date
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VException
@@ -1909,8 +1909,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             append(Utils.toSql(query))
           }
         }
-          append(" ORDER BY 1")
-        }
+        append(" ORDER BY 1")
+      }
       while (true) {
         try {
           getForm().startProtected(null)
@@ -2002,7 +2002,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           getForm().startProtected(null)
           transaction {
             exec("SELECT " + list!!.getColumn(0).column!! + " FROM "
-            + evalListTable() + " WHERE ID = " + id) {
+                    + evalListTable() + " WHERE ID = " + id) {
               result = if (it.next()) {
                 it.getObject(1)
               } else {
@@ -2035,10 +2035,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.getTitle(),
-                       block!!.getFieldPos(this),
-                       label!!,
-                       lab ?: name,
-                       toolTip)
+              block!!.getFieldPos(this),
+              label!!,
+              lab ?: name,
+              toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -2365,7 +2365,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @return    the width of this field
    */
   var width = 0// max # of chars per line
-    protected set
+  protected set
 
   /**
    * The height of a field is the max number of line needed to display
@@ -2439,7 +2439,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   private var alias: VField? = null // The alias field
 
   // changed?
-   var changed = false // changed by user / changes are done in the model
+  var changed = false // changed by user / changes are done in the model
     private set
 
   var changedUI = false // changed by user / changes are in the ui -> update model
