@@ -19,8 +19,7 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-
-import org.kopi.vkopi.lib.visual.DPositionPanelListener;
+import org.kopi.galite.visual.DPositionPanelListener;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -35,155 +34,152 @@ import java.awt.event.ActionListener;
  */
 public class DPositionPanel extends JPanel {
 
-  
-/**
-   * Creates a new position panel.
-   *
-   * @param     listener        the window that gets the requests
-   */
-  public DPositionPanel(DPositionPanelListener listener) {
-    this.listener = listener;
 
-    setLayout(new BorderLayout());
-    setFocusable(false);
+    /**
+     * Creates a new position panel.
+     *
+     * @param listener the window that gets the requests
+     */
+    public DPositionPanel(DPositionPanelListener listener) {
+        this.listener = listener;
 
-    record = new JPanel();
-    record.setLayout(new BorderLayout());
-    
-    recordLeft = new JPanel();
-    recordLeft.setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
+        setFocusable(false);
 
-    recordRight = new JPanel();
-    recordRight.setLayout(new BorderLayout());
+        record = new JPanel();
+        record.setLayout(new BorderLayout());
 
-    // 'goto first' button
-    first = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowfirst.gif"));
-    first.setFocusable(false);
-    first.setBorder(new EtchedBorder());
-    first.setMargin(EMPTY_INSETS);
-    first.setOpaque(false);
-    first.addActionListener(new ActionListener() {
-	public void actionPerformed(ActionEvent e) {
-          DPositionPanel.this.listener.gotoFirstPosition();
-	}
-      });
-    recordLeft.add(first, BorderLayout.WEST);
-    
-    // 'goto previous' button
-    left = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowleft.gif"));
-    left.setFocusable(false);
-    left.setBorder(new EtchedBorder());
-    left.setMargin(EMPTY_INSETS);
-    left.setOpaque(false);
-    left.addActionListener(new ActionListener() {
-	public void actionPerformed(ActionEvent e) {
-          DPositionPanel.this.listener.gotoPrevPosition();
-	}
-      });
-    recordLeft.add(left, BorderLayout.EAST);
-    
-    record.add(recordLeft, BorderLayout.WEST);
-    
-    // 'position/total' label
-    info = new JButton();
-    info.setFont(new Font(null, Font.PLAIN, 8));
-    info.setText(null);
-    info.setFocusable(false);
-    info.setBorder(new EtchedBorder());
-    info.setMargin(EMPTY_INSETS);
-    info.setOpaque(false);
-    info.addActionListener(new ActionListener() {
-	public void actionPerformed(ActionEvent e) {
-          int userInput = DWindow.askPostition(DPositionPanel.this, current, total);
-          if (userInput != current) {
-            DPositionPanel.this.listener.gotoPosition(userInput);
-          }
-        }});
-    record.add(info, BorderLayout.CENTER);
-    
-    // 'goto next' button
-    right = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowright.gif"));
-    right.setFocusable(false);
-    right.setBorder(new EtchedBorder());
-    right.setMargin(EMPTY_INSETS);
-    right.setOpaque(false);
-    right.addActionListener(new ActionListener() {
-	public void actionPerformed(ActionEvent e) {
-          DPositionPanel.this.listener.gotoNextPosition();
-	}
-      });
-    recordRight.add(right, BorderLayout.WEST);
+        recordLeft = new JPanel();
+        recordLeft.setLayout(new BorderLayout());
 
-    // 'goto next' last
-    last = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowlast.gif"));
-    last.setFocusable(false);
-    last.setBorder(new EtchedBorder());
-    last.setMargin(EMPTY_INSETS);
-    last.setOpaque(false);
-    last.addActionListener(new ActionListener() {
-	public void actionPerformed(ActionEvent e) {
-          DPositionPanel.this.listener.gotoLastPosition();
-	}
-      });
-    recordRight.add(last, BorderLayout.EAST);
+        recordRight = new JPanel();
+        recordRight.setLayout(new BorderLayout());
 
-    record.add(recordRight, BorderLayout.EAST);
+        // 'goto first' button
+        first = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowfirst.gif"));
+        first.setFocusable(false);
+        first.setBorder(new EtchedBorder());
+        first.setMargin(EMPTY_INSETS);
+        first.setOpaque(false);
+        first.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                DPositionPanel.this.listener.gotoFirstPosition();
+            }
+        });
+        recordLeft.add(first, BorderLayout.WEST);
+
+        // 'goto previous' button
+        left = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowleft.gif"));
+        left.setFocusable(false);
+        left.setBorder(new EtchedBorder());
+        left.setMargin(EMPTY_INSETS);
+        left.setOpaque(false);
+        left.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                DPositionPanel.this.listener.gotoPrevPosition();
+            }
+        });
+        recordLeft.add(left, BorderLayout.EAST);
+
+        record.add(recordLeft, BorderLayout.WEST);
+
+        // 'position/total' label
+        info = new JButton();
+        info.setFont(new Font(null, Font.PLAIN, 8));
+        info.setText(null);
+        info.setFocusable(false);
+        info.setBorder(new EtchedBorder());
+        info.setMargin(EMPTY_INSETS);
+        info.setOpaque(false);
+        info.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int userInput = DWindow.askPostition(DPositionPanel.this, current, total);
+                if (userInput != current) {
+                    DPositionPanel.this.listener.gotoPosition(userInput);
+                }
+            }
+        });
+        record.add(info, BorderLayout.CENTER);
+
+        // 'goto next' button
+        right = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowright.gif"));
+        right.setFocusable(false);
+        right.setBorder(new EtchedBorder());
+        right.setMargin(EMPTY_INSETS);
+        right.setOpaque(false);
+        right.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                DPositionPanel.this.listener.gotoNextPosition();
+            }
+        });
+        recordRight.add(right, BorderLayout.WEST);
+
+        // 'goto next' last
+        last = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowlast.gif"));
+        last.setFocusable(false);
+        last.setBorder(new EtchedBorder());
+        last.setMargin(EMPTY_INSETS);
+        last.setOpaque(false);
+        last.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                DPositionPanel.this.listener.gotoLastPosition();
+            }
+        });
+        recordRight.add(last, BorderLayout.EAST);
+
+        record.add(recordRight, BorderLayout.EAST);
 
 
-    recordVisible = false;
-  }
-  
-  /**
-   * setBlockRecords
-   * inform user about nb records fetched and current one
-   */
-  public void setPosition(int current, int total) {
-    this.current = current;
-    this.total = total;
-    if (current == -1 || total == 0) {
-      if (recordVisible) {
-        remove(record);
         recordVisible = false;
-      }
-    } else {
-      if (!recordVisible) {
-        add(record, BorderLayout.CENTER);
-        recordVisible = true;
-      }
-      
-      info.setText(" " + current + " / " + total + " ");
-      left.setEnabled(current > 1);
-      first.setEnabled(current > 1);
-      right.setEnabled(current < total);
-      last.setEnabled(current < total);
     }
 
-    doLayout();
-  }
+    /**
+     * setBlockRecords
+     * inform user about nb records fetched and current one
+     */
+    public void setPosition(int current, int total) {
+        this.current = current;
+        this.total = total;
+        if (current == -1 || total == 0) {
+            if (recordVisible) {
+                remove(record);
+                recordVisible = false;
+            }
+        } else {
+            if (!recordVisible) {
+                add(record, BorderLayout.CENTER);
+                recordVisible = true;
+            }
+
+            info.setText(" " + current + " / " + total + " ");
+            left.setEnabled(current > 1);
+            first.setEnabled(current > 1);
+            right.setEnabled(current < total);
+            last.setEnabled(current < total);
+        }
+
+        doLayout();
+    }
 
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
+    // DATA MEMBERS
+    // ----------------------------------------------------------------------
 
-  private static final Insets   EMPTY_INSETS = new Insets(0, 0, 0, 0);
+    private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);
 
-  private final DPositionPanelListener  listener;
-  private final JPanel                  record;
-  private final JPanel                  recordLeft;
-  private final JPanel                  recordRight;
-  private final JButton                 info;
-  private final JButton                 left;
-  private final JButton                 right;
-  private final JButton                 first;
-  private final JButton                 last;
+    private final DPositionPanelListener listener;
+    private final JPanel record;
+    private final JPanel recordLeft;
+    private final JPanel recordRight;
+    private final JButton info;
+    private final JButton left;
+    private final JButton right;
+    private final JButton first;
+    private final JButton last;
 
-  private boolean       recordVisible;
-  private int           current;
-  private int           total;
-  /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-  private static final long serialVersionUID = 3047549694322579187L;
-  
+    private boolean recordVisible;
+    private int current;
+    private int total;
+
 }

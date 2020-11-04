@@ -41,6 +41,47 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  // ----------------------------------------------------------------------
+  // NAVIGATING
+  // ----------------------------------------------------------------------
+  fun enter() {
+    TODO()
+  }
+
+  open fun getOptions(): Int {
+    TODO()
+  }
+
+  open fun noDetail(): Boolean {
+    TODO()
+  }
+
+  open fun noChart(): Boolean {
+    TODO()
+  }
+
+  open fun leave(check: Boolean) {
+    TODO()
+  }
+
+  // ----------------------------------------------------------------------
+  // MANAGING FIELD VALUES
+  // ----------------------------------------------------------------------
+  open fun getTypeOptions(): Int {
+    return 0
+  }
+
+  open fun getSearchOperator(): Int {
+    TODO()
+  }
+
+  /**
+   * text has changed (key typed on a display)
+   */
+  open fun onTextChange(text: String) {
+    TODO()
+  }
+
   open fun predefinedFill(): Any {
     TODO()
   }
@@ -84,7 +125,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   }
 
   open fun updateText() {
-  TODO()
+    TODO()
   }
 
   fun onAfterDrop() {
@@ -92,7 +133,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   }
 
   open fun setString(v: String?) {
-   TODO()
+    TODO()
   }
 
   /**
@@ -133,6 +174,10 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
    * return the name of this field
    */
   open fun getTypeName(): String {
+    TODO()
+  }
+
+  open fun displayFieldError(message: String?) {
     TODO()
   }
 
@@ -254,11 +299,14 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   fun hasFocus(): Boolean = TODO()
 
-   fun getListID(): Int = TODO()
+  fun getListID(): Int = TODO()
 
-   fun setValueID(id: Int) {
-     TODO()
-   }
+  fun setValueID(id: Int) {
+    TODO()
+  }
+
+  open fun getAccess(i: Int): Int = TODO()
+
 
   companion object {
     const val MDL_FLD_COLOR = 1
@@ -292,7 +340,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   private val posInArray // position in array of fields
           = 0
 
-  var list: VList ? = null // list
+  var list: VList? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>
@@ -302,9 +350,9 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           : VField
 
   // changed?
-  val changed // changed by user / changes are done in the model
+  var changed // changed by user / changes are done in the model
           = false
-  val changedUI // changed by user / changes are in the ui -> update model
+  var changedUI // changed by user / changes are in the ui -> update model
           = false
 
   // UPDATE model before doing anything

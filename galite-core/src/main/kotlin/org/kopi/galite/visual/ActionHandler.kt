@@ -47,5 +47,9 @@ interface ActionHandler {
    */
   @Deprecated("use method performAsyncAction")
   fun performAction(action: Action, block: Boolean)
+  fun displayError(Message: String) {
+    TODO()
+
+  }
 
 }

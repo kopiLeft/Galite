@@ -20,9 +20,7 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.GregorianCalendar
-import java.util.Locale
+import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -250,9 +248,10 @@ open class Date : Type {
      * @param     format  the format of the date
      * @param     locale  the Locale to use
      */
-    fun parse(input: String,
-              format: String,
-              locale: Locale,
+    fun parse(
+            input: String,
+            format: String,
+            locale: Locale,
     ): NotNullDate {
       val cal = GregorianCalendar()
 
@@ -329,5 +328,9 @@ open class Date : Type {
     init {
       calendar.minimalDaysInFirstWeek = 4
     }
+  }
+
+  open fun format(format: String): String {
+    return format(format, Locale.getDefault())
   }
 }

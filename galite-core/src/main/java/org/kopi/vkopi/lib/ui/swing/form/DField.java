@@ -19,8 +19,25 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
 import org.kopi.galite.base.UComponent;
-import org.kopi.galite.form.*;
+import org.kopi.galite.form.UBlock;
+import org.kopi.galite.form.UField;
+import org.kopi.galite.form.VBlock;
+import org.kopi.galite.form.VConstants;
+import org.kopi.galite.form.VField;
+import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.form.VForm;
 import org.kopi.vkopi.lib.ui.swing.base.FieldStates;
 import org.kopi.vkopi.lib.ui.swing.base.JFieldButton;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
@@ -28,12 +45,6 @@ import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 import org.kopi.galite.visual.Action;
 import org.kopi.galite.visual.VColor;
 import org.kopi.galite.visual.VException;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * DField is a panel composed in a text field and an information panel

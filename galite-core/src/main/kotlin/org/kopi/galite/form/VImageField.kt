@@ -17,4 +17,12 @@
  */
 package org.kopi.galite.form
 
-class VImageField 
+class VImageField(width: Int, height: Int) : VField(width, height) {
+  fun getIconWidth(): Int {
+    TODO()
+  }
+
+  fun getIconHeight(): Int {
+    TODO()
+  }
+}

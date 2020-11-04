@@ -21,6 +21,9 @@ package org.kopi.galite.visual
 import kotlinx.coroutines.Runnable
 
 abstract class Action(val name: String) : Runnable {
+  constructor()  {
+
+  }
 
   abstract fun execute()
 

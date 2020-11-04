@@ -19,17 +19,20 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.form.KopiLayoutManager;
-import org.kopi.galite.form.VBlock;
-import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
-import org.kopi.vkopi.lib.visual.KopiAction;
-import org.kopi.vkopi.lib.visual.VException;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.AWTEvent;
+import java.awt.Adjustable;
+import java.awt.Toolkit;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.InvocationEvent;
+
+import javax.swing.JScrollBar;
+
+import org.kopi.galite.form.LayoutManager;
+import org.kopi.galite.form.VBlock;
+import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
+import org.kopi.galite.visual.Action;
+import org.kopi.galite.visual.VException;
 
 public class DChartBlock extends DBlock {
 
@@ -90,7 +93,7 @@ public class DChartBlock extends DBlock {
     return scrollBar;
   }
 
-  protected KopiLayoutManager createLayoutManager() {
+  protected LayoutManager createLayoutManager() {
     return new KopiMultiBlockLayout(displayedFields, getModel().getDisplaySize() + 1 /* Records + Header*/);
   }
 

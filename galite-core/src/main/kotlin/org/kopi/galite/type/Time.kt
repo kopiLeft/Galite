@@ -20,9 +20,7 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.GregorianCalendar
-import java.util.Locale
+import java.util.*
 
 /**
  * This class represents the time types
@@ -32,6 +30,9 @@ open class Time : Type {
     scalar = (hours * 3600 + minutes * 60 + seconds) % (3600 * 24)
   }
 
+  open fun format(format: String): String {
+    return format(format, Locale.getDefault())
+  }
   internal constructor(time: java.sql.Time) {
     var hours: Int
     var minutes: Int

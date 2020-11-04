@@ -19,13 +19,15 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.form.UChartLabel;
-import org.kopi.galite.form.VBlock;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.UIManager;
+
+import org.kopi.galite.form.UChartLabel;
+import org.kopi.galite.form.VBlock;
 
 public class DChartHeaderLabel extends DLabel implements UChartLabel {
 

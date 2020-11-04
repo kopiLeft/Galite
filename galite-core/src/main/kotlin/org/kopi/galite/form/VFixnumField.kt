@@ -21,7 +21,7 @@ package org.kopi.galite.form
 import org.kopi.galite.type.Fixed
 
 //TODO
-class VFixnumField {
+class VFixnumField(width: Int, height: Int) : VField(width, height){
 
   companion object {
     /**

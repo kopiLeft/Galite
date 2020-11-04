@@ -19,20 +19,22 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.vkopi.lib.form.VField;
-import org.kopi.vkopi.lib.ui.swing.base.Stateful;
-import org.kopi.vkopi.lib.ui.swing.visual.Utils;
-import org.kopi.vkopi.lib.util.PrintException;
-import org.kopi.vkopi.lib.util.PrintJob;
-import org.kopi.vkopi.lib.visual.KopiAction;
-import org.kopi.vkopi.lib.visual.PrinterManager;
-import org.kopi.vkopi.lib.visual.VException;
-import org.kopi.vkopi.lib.visual.VExecFailedException;
-
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.text.JTextComponent;
+
+import org.kopi.galite.form.VField;
+import org.kopi.vkopi.lib.ui.swing.base.Stateful;
+import org.kopi.vkopi.lib.ui.swing.visual.Utils;
+import org.kopi.galite.util.PrintException;
+import org.kopi.galite.util.PrintJob;
+import org.kopi.galite.visual.Action;
+import org.kopi.galite.visual.PrinterManager;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VExecFailedException;
 
 public class KeyNavigator extends AbstractAction {
 
@@ -75,67 +77,67 @@ public class KeyNavigator extends AbstractAction {
 
   protected final void processKeyCode(final DField fieldView, final VField	field, final JTextComponent sharedText)
   {
-    KopiAction	action;
+    Action	action;
 
     switch (keyCode) {
     case KEY_NEXT_FIELD:
-      action = new KopiAction("keyKEY_TAB") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_TAB") {
+	public void execute() {
 	  field.getBlock().getForm().getActiveBlock().gotoNextField();
 	}
       };
       break;
     case KEY_PREV_FIELD:
-      action = new KopiAction("keyKEY_STAB") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_STAB") {
+	public void execute()  {
 	  field.getBlock().getForm().getActiveBlock().gotoPrevField();
 	}
       };
       break;
     case KEY_NEXT_BLOCK:
-      action = new KopiAction("keyKEY_BLOCK") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_BLOCK") {
+	public void execute() {
 	  field.getBlock().getForm().gotoNextBlock();
 	}
       };
       break;
     case KEY_REC_UP:
-      action = new KopiAction("keyKEY_REC_UP") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_REC_UP") {
+	public void execute() {
 	  fieldView.getBlockView().getModel().gotoPrevRecord();
 	}
       };
       break;
     case KEY_REC_DOWN:
-      action = new KopiAction("keyKEY_REC_DOWN") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_REC_DOWN") {
+	public void execute() {
 	  fieldView.getBlockView().getModel().gotoNextRecord();
 	}
       };
       break;
     case KEY_REC_FIRST:
-      action = new KopiAction("keyKEY_REC_FIRST") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_REC_FIRST") {
+	public void execute() {
 	  field.getBlock().getForm().getActiveBlock().gotoFirstRecord();
 	}
       };
       break;
     case KEY_REC_LAST:
-      action = new KopiAction("keyKEY_REC_LAST") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_REC_LAST") {
+	public void execute() {
 	  field.getBlock().getForm().getActiveBlock().gotoLastRecord();
 	}
       };
       break;
     case KEY_EMPTY_FIELD:
-      action = new KopiAction("keyKEY_ALTENTER") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_ALTENTER") {
+	public void execute() {
 	  field.getBlock().getForm().getActiveBlock().gotoNextEmptyMustfill();
 	}
       };
       break;
     case KEY_DIAMETER:
-      action = new KopiAction("keyKEY_DIAMETER") {
+      action = new Action("keyKEY_DIAMETER") {
 	public void execute() {
 	  JTextComponent	text = sharedText;
 
@@ -151,19 +153,13 @@ public class KeyNavigator extends AbstractAction {
       action = null;
       break;
     case KEY_PRINTFORM:
-      action = new KopiAction("keyKEY_ALTENTER") {
-	public void execute() throws VException {
-	  try {
-	    PrintJob    job = fieldView.getBlockView().getFormView().printForm();
+      action = new Action("keyKEY_ALTENTER") {
+	public void execute() {
+        PrintJob    job = fieldView.getBlockView().getFormView().printForm();
 
-	    PrinterManager.getPrinterManager().getCurrentPrinter().print(job);
+        PrinterManager.Companion.getPrinterManager().getCurrentPrinter().print(job);
 
-	  } catch (PrintException e) {
-	    throw new VExecFailedException(e.getMessage());
-	  } catch (IOException e) {
-	    throw new VExecFailedException(e.getMessage());
-	  }
-	}
+    }
       };
       break;
     default:
@@ -178,21 +174,21 @@ public class KeyNavigator extends AbstractAction {
    * Subclasses must override this method to process their specific
    * keys they are added by addSpecificNavigationKeys
    */
-  protected KopiAction processSpecificKeyCode(final DField fieldView, final VField field)
+  protected Action processSpecificKeyCode(final DField fieldView, final VField field)
   {
-    KopiAction	action;
+    Action	action;
 
     switch (keyCode) {
     case KEY_PREV_VAL:
-      action = new KopiAction("keyKEY_LIST_UP") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_LIST_UP") {
+	public void execute() {
 	  fieldView.getRowController().previousEntry();
 	}
       };
       break;
     case KEY_NEXT_VAL:
-      action = new KopiAction("keyKEY_LIST_DOWN") {
-	public void execute() throws VException {
+      action = new Action("keyKEY_LIST_DOWN") {
+	public void execute() {
 	  fieldView.getRowController().nextEntry();
 	}
       };
@@ -251,9 +247,4 @@ public class KeyNavigator extends AbstractAction {
       new KeyNavigator(KEY_PRINTFORM)
     };
   }
-
-  /**
-   * Comment for <code>serialVersionUID</code>
-   */
-  private static final long 		serialVersionUID = -3277175963522587180L;
 }
