@@ -71,7 +71,6 @@ import org.kopi.galite.visual.VException;
 import org.kopi.galite.visual.VRuntimeException;
 import org.kopi.galite.visual.VlibProperties;
 
-
 public class DListDialog extends JPanel implements UListDialog {
 
     // --------------------------------------------------------------------

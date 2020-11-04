@@ -86,6 +86,7 @@ open class Utils : org.kopi.galite.util.base.Utils() {
      * this case default is "tmp")
      * @return an empty temp file on the local machine
      */
+    @JvmOverloads
     fun getTempFile(prefix: String,
                     extension: String?,
                     deleteOnExit: Boolean = true): File {
@@ -95,11 +96,6 @@ open class Utils : org.kopi.galite.util.base.Utils() {
         file.deleteOnExit()
       }
       return file
-    }
-
-    fun getTempFile(prefix: String,
-                    extension: String): File {
-      return getTempFile(prefix, extension, true)
     }
 
     /**
@@ -144,6 +140,7 @@ open class Utils : org.kopi.galite.util.base.Utils() {
     /**
      * return an URL from the resources
      */
+    @JvmOverloads
     fun getURLFromResource(name: String, directory: String? = RESOURCE_DIR): URL? {
       return if (directory == null) {
         null

@@ -19,16 +19,16 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.preview.VPreviewWindow;
-import org.kopi.vkopi.lib.print.PSPrintException;
-import org.kopi.vkopi.lib.util.AbstractPrinter;
-import org.kopi.vkopi.lib.util.PrintException;
-import org.kopi.vkopi.lib.util.PrintJob;
-import org.kopi.vkopi.lib.visual.ApplicationConfiguration;
-import org.kopi.vkopi.lib.visual.PreviewRunner;
-import org.kopi.vkopi.lib.visual.VException;
-
 import java.io.IOException;
+
+import org.kopi.galite.preview.VPreviewWindow;
+import org.kopi.galite.print.PSPrintException;
+import org.kopi.galite.util.AbstractPrinter;
+import org.kopi.galite.util.PrintException;
+import org.kopi.galite.util.PrintJob;
+import org.kopi.galite.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.PreviewRunner;
+import org.kopi.galite.visual.VException;
 
 public class JPreviewRunner implements PreviewRunner {
 
@@ -36,7 +36,7 @@ public class JPreviewRunner implements PreviewRunner {
    * Launch document preview
    */
   public void run(PrintJob data, String command) throws IOException, PrintException {
-    if (ApplicationConfiguration.getConfiguration().useAcroread()) {
+    if (ApplicationConfiguration.Companion.getConfiguration().useAcroread()) {
       try {
 	if (System.getProperty("os.name").startsWith("Linux")) {
 	  Runtime.getRuntime().exec("acroread " + data.getDataFile());
@@ -48,8 +48,8 @@ public class JPreviewRunner implements PreviewRunner {
       }
     } else {
       try {
-	new VPreviewWindow().preview((data.getDataType() != PrintJob.DAT_PS) ? data : AbstractPrinter.convertToGhostscript(data), command);
-      } catch (VException e) {
+	new VPreviewWindow().preview((data.getDataType() != PrintJob.DAT_PS) ? data : AbstractPrinter.Companion.convertToGhostscript(data), command);
+      } catch (Exception e) {
 	throw new PSPrintException("PreviewPrinter.PrintTaskImpl::print()", e);
       }
     }

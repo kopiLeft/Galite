@@ -20,6 +20,7 @@ package org.kopi.galite.form
 
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
 
 abstract class VBlock {
 
@@ -180,26 +181,60 @@ abstract class VBlock {
   }
 
   internal var activeField: VField? = null
-  internal var source // qualified name of source file
-          : String? = null
-  internal var shortcut // block short name
-          : String? = null
-  internal var title // block title
-          : String? = null
+
+  var currentRecord = 0
+
+  // qualified name of source file
+  internal var source: String? = null
+
+  // block short name
+  internal var shortcut: String? = null
+
+  // block title
+  internal var title: String? = null
+
   internal var align: BlockAlignment? = null
-  internal var help // the help on this block
-          : String? = null
-  internal lateinit var tables // names of database tables
-          : Array<String>
-  internal var options // block options
-          = 0
-  internal lateinit var access // access flags for each mode
-          : IntArray
-  internal lateinit var indices // error messages for violated indices
-          : Array<String>
-  internal lateinit var name: String // block name
+
+  // the help on this block
+  internal var help: String? = null
+
+  // names of database tables
+  internal lateinit var tables: Array<String>
+
+  // block options
+  internal var options = 0
+
+  // access flags for each mode
+  internal lateinit var access: IntArray
+
+  // error messages for violated indices
+  internal lateinit var indices: Array<String>
+
+  // block name
+  internal lateinit var name: String
+
   var isChanged = false
+
   var pageNumber: Int = 0
+
+  protected lateinit var sortedRecords: IntArray
+
+  protected var blockAccess = false
+
+  // prevent that the access of a field is updated
+  // (performance in big charts)
+  protected var ignoreAccessChange = false
+
+  // max number of buffered IDs
+  protected var fetchSize = 0
+
+  // commands
+  protected lateinit var commands: Array<VCommand>
+
+  // actors to send to form (move to block import)
+  internal lateinit var actors: Array<VActor>
+
+  protected lateinit var VKT_Triggers: Array<IntArray>
 
   /**
    * Returns true if the block is accessible
@@ -257,6 +292,30 @@ abstract class VBlock {
   }
 
   abstract fun localize(manager: LocalizationManager)
+  fun isRecordFilled(rec: Int): Boolean {
+    TODO()
+  }
+
+  open class OrderModel {
+    open fun sortColumn(index: Int) {
+      TODO()
+    }
+
+    companion object {
+      const val STE_UNORDERED = 1
+      const  val STE_INC = 2
+      const val STE_DESC = 4
+    }
+  }
+
+  companion object {
+    // record info flags
+    protected val RCI_FETCHED = 0x00000001
+    protected val RCI_CHANGED = 0x00000002
+    protected val RCI_DELETED = 0x00000004
+    protected val RCI_TRAILED = 0x00000008
+  }
+
   fun gotoFirstRecord() {
     TODO()
   }
@@ -307,21 +366,5 @@ abstract class VBlock {
 
   fun updateAccess(recno: Int) {
     TODO()
-  }
-
-  open fun isRecordFilled(rec: Int): Boolean {
-    TODO()
-  }
-
-  open class OrderModel {
-    open fun sortColumn(index: Int) {
-      TODO()
-    }
-
-    companion object {
-      const val STE_UNORDERED = 1
-     const  val STE_INC = 2
-     const val STE_DESC = 4
-    }
   }
 }

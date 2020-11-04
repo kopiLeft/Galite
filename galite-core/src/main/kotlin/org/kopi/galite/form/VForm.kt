@@ -237,7 +237,7 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   private fun initActors() {
     for (i in blocks.indices) {
-      setActors(blocks!![i].getActors())
+      setActors(blocks[i].actors)
     }
   }
 
@@ -605,7 +605,7 @@ abstract class VForm : VWindow, VConstants {
               help: String,
               code: String) {
     for (i in blocks.indices) {
-      setActors(blocks!![i].getActors())
+      setActors(blocks[i].actors)
     }
     VDocGenerator(p).helpOnForm(getName(),
             commands,

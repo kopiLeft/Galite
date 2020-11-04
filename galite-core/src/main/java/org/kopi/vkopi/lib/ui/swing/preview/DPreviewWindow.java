@@ -51,9 +51,9 @@ import javax.swing.ScrollPaneConstants;
 import org.kopi.galite.util.base.InconsistencyException;
 import org.kopi.galite.preview.PreviewListener;
 import org.kopi.galite.preview.VPreviewWindow;
-import org.kopi.galite.ui.swing.visual.DPositionPanel;
-import org.kopi.galite.ui.swing.visual.DWindow;
-import org.kopi.galite.ui.swing.visual.Utils;
+import org.kopi.vkopi.lib.ui.swing.visual.DPositionPanel;
+import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
+import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 import org.kopi.galite.visual.ApplicationConfiguration;
 import org.kopi.galite.visual.DPositionPanelListener;
 import org.kopi.galite.visual.Action;
@@ -72,21 +72,21 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
     super(model);
     this.model = model;
     registerKeyboardAction(new AbstractAction() {
-      /**
-       * Comment for <code>serialVersionUID</code>
-       */
-      private static final long serialVersionUID = -3945777720296639744L;
+                             /**
+                              * Comment for <code>serialVersionUID</code>
+                              */
+                             private static final long serialVersionUID = -3945777720296639744L;
 
-      public void actionPerformed(ActionEvent e) {
-	closeWindow();
-      }},
-      null,
-      KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-      JComponent.WHEN_IN_FOCUSED_WINDOW);
+                             public void actionPerformed(ActionEvent e) {
+                               closeWindow();
+                             }},
+            null,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
     label = new JLabel(); // model.label;
     bodypane = new JScrollPane(label,
-                               ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                               ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     getContentPanel().setLayout(new BorderLayout());
     getContentPanel().add(bodypane, BorderLayout.CENTER);
     label.setIconTextGap(0);
@@ -94,29 +94,29 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
     setStatePanel(blockInfo = new DPositionPanel(this));
     model.addPreviewListener(this);
     label.addKeyListener(new KeyAdapter () {
-        public void keyPressed(KeyEvent k) {
-          if (k.getKeyCode() == KeyEvent.VK_PAGE_UP
-              && DPreviewWindow.this.model.getCurrentPage() > 1)
-            {
-              gotoPrevPosition();
-            }
-          if (k.getKeyCode() == KeyEvent.VK_PAGE_DOWN
-              && DPreviewWindow.this.model.getCurrentPage() < DPreviewWindow.this.model.getNumberOfPages())
-            {
-              gotoNextPosition();
-            }
-          if (k.getKeyCode() == KeyEvent.VK_HOME
-              && DPreviewWindow.this.model.getCurrentPage() > 1)
-            {
-              gotoFirstPosition();
-            }
-          if (k.getKeyCode() == KeyEvent.VK_END
-              && DPreviewWindow.this.model.getCurrentPage() < DPreviewWindow.this.model.getNumberOfPages())
-            {
-              gotoLastPosition();
-            }
+      public void keyPressed(KeyEvent k) {
+        if (k.getKeyCode() == KeyEvent.VK_PAGE_UP
+                && DPreviewWindow.this.model.getCurrentPage() > 1)
+        {
+          gotoPrevPosition();
         }
-      });
+        if (k.getKeyCode() == KeyEvent.VK_PAGE_DOWN
+                && DPreviewWindow.this.model.getCurrentPage() < DPreviewWindow.this.model.getNumberOfPages())
+        {
+          gotoNextPosition();
+        }
+        if (k.getKeyCode() == KeyEvent.VK_HOME
+                && DPreviewWindow.this.model.getCurrentPage() > 1)
+        {
+          gotoFirstPosition();
+        }
+        if (k.getKeyCode() == KeyEvent.VK_END
+                && DPreviewWindow.this.model.getCurrentPage() < DPreviewWindow.this.model.getNumberOfPages())
+        {
+          gotoLastPosition();
+        }
+      }
+    });
     // not used
      /*
     try {
@@ -148,28 +148,28 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
     setPagePosition(model.getCurrentPage(), model.getNumberOfPages());
 
     WindowStateListener listener = new WindowAdapter() {
-        public void windowStateChanged(WindowEvent evt) {
-          int   oldState = evt.getOldState();
-          int   newState = evt.getNewState();
+      public void windowStateChanged(WindowEvent evt) {
+        int   oldState = evt.getOldState();
+        int   newState = evt.getNewState();
 
-          if ((oldState & Frame.MAXIMIZED_BOTH) == 0
-              && (newState & Frame.MAXIMIZED_BOTH) != 0) {
-            getFrame().invalidate();
-            getFrame().validate();
+        if ((oldState & Frame.MAXIMIZED_BOTH) == 0
+                && (newState & Frame.MAXIMIZED_BOTH) != 0) {
+          getFrame().invalidate();
+          getFrame().validate();
 
-            UserConfiguration   userConfig = ApplicationConfiguration.getConfiguration().getUserConfiguration();
+          UserConfiguration   userConfig = ApplicationConfiguration.Companion.getConfiguration().getUserConfiguration();
 
-            zoomFit(userConfig == null ? PreviewListener.FIT_BOTH : userConfig.getPreviewMode());
-          }
+          zoomFit(userConfig == null ? PreviewListener.FIT_BOTH : userConfig.getPreviewMode());
         }
-      };
+      }
+    };
 
     frame.addWindowStateListener(listener);
 
     frame.setVisible(true);
     label.requestFocusInWindow();
 
-    UserConfiguration   userConfig = ApplicationConfiguration.getConfiguration().getUserConfiguration();
+    UserConfiguration   userConfig = ApplicationConfiguration.Companion.getConfiguration().getUserConfiguration();
 
     if (userConfig != null && userConfig.getPreviewScreen() == UserConfiguration.PRS_FULLSCREEN) {
       frame.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -237,7 +237,7 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
         // round the ratio with 0.99f, so that there are definitly no
         // scrollbars
         ratio = Math.min((float) dim.height / model.getHeight(),
-                         (float) dim.width / model.getWidth()) * 0.99f;
+                (float) dim.width / model.getWidth()) * 0.99f;
         break;
       case FIT_HEIGHT:
         // 1.03 : do not show the white border
@@ -247,8 +247,8 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
         // 1.05 : do not show the white border
         ratio = dim.width * 1.05f / model.getWidth();
         break;
-    default:
-      throw new InconsistencyException("Unkown type of zoom");
+      default:
+        throw new InconsistencyException("Unkown type of zoom");
     }
 
     model.zoom(ratio);
@@ -263,10 +263,10 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
    */
   public void gotoNextPosition() {
     getModel().performAsyncAction(new Action("preview right") {
-        public void execute() throws VException {
-          getModel().executeVoidTrigger(VPreviewWindow.CMD_RIGHT);
-        }
-      });
+      public void execute() {
+        getModel().executeVoidTrigger(VPreviewWindow.CMD_RIGHT);
+      }
+    });
   }
 
   /**
@@ -274,10 +274,10 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
    */
   public void gotoPrevPosition() {
     getModel().performAsyncAction(new Action("preview left") {
-        public void execute() throws VException {
-          getModel().executeVoidTrigger(VPreviewWindow.CMD_LEFT);
-        }
-      });
+      public void execute() {
+        getModel().executeVoidTrigger(VPreviewWindow.CMD_LEFT);
+      }
+    });
   }
 
   /**
@@ -285,10 +285,10 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
    */
   public void gotoLastPosition() {
     getModel().performAsyncAction(new Action("preview last") {
-        public void execute() throws VException {
-          getModel().executeVoidTrigger(VPreviewWindow.CMD_LAST);
-        }
-      });
+      public void execute() {
+        getModel().executeVoidTrigger(VPreviewWindow.CMD_LAST);
+      }
+    });
   }
 
   /**
@@ -296,10 +296,10 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
    */
   public void gotoFirstPosition() {
     getModel().performAsyncAction(new Action("preview first") {
-        public void execute() throws VException {
-          getModel().executeVoidTrigger(VPreviewWindow.CMD_FIRST);
-        }
-      });
+      public void execute() {
+        getModel().executeVoidTrigger(VPreviewWindow.CMD_FIRST);
+      }
+    });
   }
 
   /**
@@ -307,10 +307,10 @@ public class DPreviewWindow extends DWindow implements DPositionPanelListener, P
    */
   public void gotoPosition(final int posno) {
     getModel().performAsyncAction(new Action("preview position") {
-        public void execute() throws VException {
-          ((VPreviewWindow)getModel()).gotoPosition(posno);
-        }
-      });
+      public void execute() {
+        ((VPreviewWindow)getModel()).gotoPosition(posno);
+      }
+    });
   }
 
   private ImageIcon createIcon(int idx) {

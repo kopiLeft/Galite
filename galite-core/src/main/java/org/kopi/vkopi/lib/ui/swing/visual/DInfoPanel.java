@@ -19,7 +19,7 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 
 /**
  * INFOPANEL CLASS

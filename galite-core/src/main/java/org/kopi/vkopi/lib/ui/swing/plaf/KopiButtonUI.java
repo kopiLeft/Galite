@@ -209,7 +209,7 @@ public class KopiButtonUI extends MetalButtonUI {
         super.paintIcon(g, c, iconRect);
       }
     } catch (NullPointerException npe) {
-      Utils.freeMemory();
+      Utils.Companion.freeMemory();
       // try again
       KnownBugs.paintIconFailure = true;
     }

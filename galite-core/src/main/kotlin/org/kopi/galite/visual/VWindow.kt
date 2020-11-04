@@ -31,6 +31,7 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.XInterruptProtectedException
 import org.kopi.galite.l10n.LocalizationManager
+import kotlin.jvm.Throws
 
 /**
  * Creates a window
@@ -49,7 +50,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   private var display: UWindow? = null
   private var actors: ArrayList<VActor> = arrayListOf()
   protected lateinit var windowTitle: String
-  internal var smallIcon: Image? = null
+  var smallIcon: Image? = null
   protected var isProtected = false
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
@@ -102,6 +103,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * no modal call to this form
    * @exception        VException        an exception may be raised by triggers
    */
+  @Throws(VException::class)
   override fun doNotModal() = WindowController.windowController.doNotModal(this)
 
   // ----------------------------------------------------------------------
@@ -307,7 +309,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Inform close linstener that this model was closed
    */
-  fun close(code: Int) {
+  open fun close(code: Int) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] == ModelCloseListener::class.java) {
