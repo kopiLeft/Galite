@@ -19,10 +19,11 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.vkopi.lib.ui.swing.base.Stateful;
+import java.awt.Color;
 
 import javax.swing.text.Document;
-import java.awt.*;
+
+import org.kopi.vkopi.lib.ui.swing.base.Stateful;
 
 /**
  * A text container for text that serves
@@ -32,19 +33,19 @@ import java.awt.*;
  */
 public interface KopiDocument extends Document, Stateful {
 
-  public String getModelText();
-  
-  public void setModelText(String text);
-  
-  public void setState(int state);
+    public String getModelText();
 
-  public void setHasCriticalValue(boolean hasCriticalValue);
-  
-  public void setHasAction(boolean hasAction);
-  
-  public void setBgColor(Color bgColor);
+    public void setModelText(String text);
 
-  public void setAlert(boolean alert);
-  
-  public void setAutofill(boolean autofill);
+    public void setState(int state);
+
+    public void setHasCriticalValue(boolean hasCriticalValue);
+
+    public void setHasAction(boolean hasAction);
+
+    public void setBgColor(Color bgColor);
+
+    public void setAlert(boolean alert);
+
+    public void setAutofill(boolean autofill);
 }

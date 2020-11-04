@@ -21,42 +21,40 @@ package org.kopi.vkopi.lib.ui.swing.form;
 
 import org.kopi.galite.form.VFieldUI;
 
-
 /**
  * DField is a panel composed in a text field and an information panel
  * The text field appear as a JLabel until it is edited
  */
 public class DTextEditor extends DTextField {
 
-  // ----------------------------------------------------------------------
-  // CONSTRUCTION
-  // ----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
+    // CONSTRUCTION
+    // ----------------------------------------------------------------------
 
-  
-/**
-   * Constructor
-   *
-   * @param	model		the model for this text field
-   * @param	label		The label that describe this field
-   * @param	width		the number of column
-   * @param	options		The possible options (NO EDIT, NO ECHO)
-   */
-  public DTextEditor(VFieldUI model,
-		     DLabel label,
-		     int align,
-		     int options,
-		     int height,
-                      boolean detail)
-  {
-    super(model, label, align, options, detail);
-  }
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-  private static final long serialVersionUID = 449581722481726591L;
+    /**
+     * Constructor
+     *
+     * @param    model        the model for this text field
+     * @param    label        The label that describe this field
+     * @param    width        the number of column
+     * @param    options        The possible options (NO EDIT, NO ECHO)
+     */
+    public DTextEditor(VFieldUI model,
+                       DLabel label,
+                       int align,
+                       int options,
+                       int height,
+                       boolean detail) {
+        super(model, label, align, options, detail);
+    }
+
+    // ----------------------------------------------------------------------
+    // DATA MEMBERS
+    // ----------------------------------------------------------------------
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 449581722481726591L;
 
 }

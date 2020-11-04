@@ -18,7 +18,10 @@
 
 package org.kopi.galite.form
 
-class VFieldUI {
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VCommand
+
+open class VFieldUI(blockView: UBlock, model: VField) {
   fun getModel(): VField = TODO()
   fun getDisplay(): UField = TODO()
   fun displayFieldError(message: String): Any = TODO()
@@ -30,10 +33,80 @@ class VFieldUI {
     TODO()
   }
 
+  open fun hasAutofill(): Boolean {
+    TODO()
+  }
+
+  fun fireColorHasChanged(recno: Int) {
+    TODO()
+  }
+
+  fun fireAccessHasChanged(recno: Int) {
+    TODO()
+  }
+
+  fun getDetailDisplay(): UField {
+    TODO()
+  }
+
+  fun getDisplays(): Array<UField> {
+    TODO()
+  }
+
+  open fun getBlockView(): UBlock? {
+    TODO()
+  }
+
+  fun getLabel(): ULabel {
+    TODO()
+  }
+
+  fun getDetailLabel(): ULabel {
+    TODO()
+  }
+
   // ----------------------------------------------------------------------
   // DISPLAY UTILS
   // ----------------------------------------------------------------------
   fun scrollTo(toprec: Int) {
     TODO()
   }
+
+  fun previousEntry() {
+    TODO()
+  }
+
+  fun nextEntry() {
+    TODO()
+  }
+
+  fun resetCommands() {
+    TODO()
+  }
+
+  fun resetLabel() {
+    TODO()
+  }
+
+  fun hasAction(): Boolean {
+    TODO()
+  }
+
+  fun autofillButton() {
+    TODO()
+  }
+
+  fun performAsyncAction(action: Action) {
+    TODO()
+  }
+
+  open fun getIncrementCommand(): VCommand {
+    TODO()
+  }
+
+  open fun getDecrementCommand(): VCommand {
+    TODO()
+  }
+
+
 }

@@ -18,7 +18,6 @@
 
 package org.kopi.galite.base
 
-import org.kopi.galite.util.base.InconsistencyException
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -35,6 +34,7 @@ import java.util.ArrayList
 import java.util.Date
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * loading of image
@@ -86,6 +86,7 @@ open class Utils : org.kopi.galite.util.base.Utils() {
      * this case default is "tmp")
      * @return an empty temp file on the local machine
      */
+    @JvmOverloads
     fun getTempFile(prefix: String,
                     extension: String?,
                     deleteOnExit: Boolean = true): File {

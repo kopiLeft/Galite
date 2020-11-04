@@ -19,69 +19,78 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.vkopi.lib.form.AbstractPredefinedValueHandler;
-import org.kopi.vkopi.lib.form.VField;
-import org.kopi.vkopi.lib.form.VFieldUI;
-import org.kopi.vkopi.lib.form.VForm;
-import org.kopi.vkopi.lib.visual.Message;
-import org.kopi.vkopi.lib.visual.VException;
-import org.kopi.vkopi.lib.visual.VExecFailedException;
-import org.kopi.xkopi.lib.type.Date;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.io.File;
 import java.io.FileInputStream;
+
+import javax.swing.JColorChooser;
+
+import org.jetbrains.annotations.NotNull;
+import org.kopi.galite.form.AbstractPredefinedValueHandler;
+import org.kopi.galite.form.VField;
+import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.form.VForm;
+import org.kopi.galite.list.VListColumn;
+import org.kopi.galite.visual.Message;
+import org.kopi.galite.visual.VExecFailedException;
+import org.kopi.galite.type.Date;
 
 @SuppressWarnings("serial")
 public class JPredefinedValueHandler extends AbstractPredefinedValueHandler {
 
-  //----------------------------------------------------------
-  // CONSTRUCTOR
-  //----------------------------------------------------------
+    //----------------------------------------------------------
+    // CONSTRUCTOR
+    //----------------------------------------------------------
 
-  public JPredefinedValueHandler(VFieldUI model, VForm form, VField field) {
-    super(model, form, field);
-  }
-
-  /**
-   * 
-   */
-  public Color selectColor(Color color) {
-    Color       f = JColorChooser.showDialog((Component)form.getDisplay(),
-                                             Message.getMessage("color-chooser"),
-                                             color);
-
-    return f;
-  }
-
-  /**
-   * 
-   */
-  public Date selectDate(Date date) {
-    return DateChooser.getDate((Container)form.getDisplay(), (Component)field.getDisplay(), date);
-  }
-
-  /**
-   * 
-   */
-  public byte[] selectImage() throws VException {
-    File        f = ImageFileChooser.chooseFile((Component)form.getDisplay());
-
-    if (f == null) {
-      return null;
+    public JPredefinedValueHandler(VFieldUI model, VForm form, VField field) {
+        super(model, form, field);
     }
 
-    try {
-      FileInputStream	is = new FileInputStream(f);
-      byte[]            b = new byte[is.available()];
-      is.read(b);
+    /**
+     *
+     */
+    public Color selectColor(Color color) {
+        Color f = JColorChooser.showDialog((Component) getForm().getDisplay(),
+                Message.INSTANCE.getMessage("color-chooser"),
+                color);
 
-      is.close();
-      return b;
-    } catch (Exception e) {
-      throw new VExecFailedException("bad-file", e);
+        return f;
     }
-  }
 
+    /**
+     *
+     */
+    public Date selectDate(Date date) {
+        return DateChooser.getDate((Container) getForm().getDisplay(), (Component) getField().getDisplay(), date);
+    }
+
+    /**
+     *
+     */
+    public byte[] selectImage() throws VExecFailedException {
+        File f = ImageFileChooser.chooseFile((Component) getForm().getDisplay());
+
+        if (f == null) {
+            return null;
+        }
+
+        try {
+            FileInputStream is = new FileInputStream(f);
+            byte[] b = new byte[is.available()];
+            is.read(b);
+
+            is.close();
+            return b;
+        } catch (Exception e) {
+            throw new VExecFailedException("bad-file", e);
+        }
+    }
+
+    @NotNull
+    @Override
+    public String selectFromList(@NotNull VListColumn[] list, @NotNull Object[] values, @NotNull String[] predefinedValues) {
+        return null;
+    }
 }

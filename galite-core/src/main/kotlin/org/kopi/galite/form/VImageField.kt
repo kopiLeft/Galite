@@ -15,6 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VImageField 
+class VImageField(width: Int, height: Int) : VField(width, height) {
+  fun getIconWidth(): Int {
+    TODO()
+  }
+
+  fun getIconHeight(): Int {
+    TODO()
+  }
+
+  fun getImage(r: Int): ByteArray {
+    TODO()
+  }
+
+  fun setImage(r: Int, v: ByteArray) {
+    TODO()
+  }
+}

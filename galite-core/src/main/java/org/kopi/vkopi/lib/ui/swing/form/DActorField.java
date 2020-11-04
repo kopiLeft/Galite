@@ -19,14 +19,16 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+
 import org.kopi.galite.form.UActorField;
 import org.kopi.galite.form.VConstants;
 import org.kopi.galite.form.VFieldUI;
 import org.kopi.vkopi.lib.ui.swing.base.JActorFieldButton;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 
 /**
  * UI Implementation of actor field in swing environment.
