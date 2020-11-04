@@ -68,8 +68,9 @@ open class Utils {
      * into two strings:
      * "java/lang/System" and "out"
      */
-    fun splitQualifiedName(name: String, separator: Char): Array<String> = arrayOf(name.substringBeforeLast(separator, ""),
-            name.substringAfterLast(separator))
+    fun splitQualifiedName(name: String, separator: Char): Array<String> =
+            arrayOf(name.substringBeforeLast(separator, ""),
+                    name.substringAfterLast(separator))
 
     /**
      * Splits a string like:
@@ -89,8 +90,9 @@ open class Utils {
      * - the specified string is null
      * - a specified index is beyond the limits of the input string
      */
-    fun substring(baseString: String?, beginIndex: Int, endIndex: Int): String = baseString?.substring(beginIndex.coerceAtMost(baseString.length),
-            endIndex.coerceAtMost(baseString.length)).orEmpty()
+    fun substring(baseString: String?, beginIndex: Int, endIndex: Int): String =
+            baseString?.substring(beginIndex.coerceAtMost(baseString.length),
+                    endIndex.coerceAtMost(baseString.length)).orEmpty()
 
     /**
      * Creates a typed array from a list.
