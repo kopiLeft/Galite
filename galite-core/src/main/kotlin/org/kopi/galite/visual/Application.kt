@@ -41,7 +41,7 @@ interface Application : MessageListener {
    * @param schema The database schema.
    * @return The [DBContext] containing database connection information.
    */
-  fun login(database: String, driver: String, username: String, password: String, schema: String): DBContext
+  fun login(database: String, driver: String, username: String, password: String, schema: String): DBContext?
 
   /**
    * Signs out from the application.
@@ -60,71 +60,6 @@ interface Application : MessageListener {
   fun allowQuit(): Boolean
 
   /**
-   * Returns `true` if no bug report is sent.
-   * @return `true if no bug report is sent.`
-   */
-  fun isNoBugReport(): Boolean
-
-  /**
-   * Returns the start up time.
-   * @return The start up time.
-   */
-  fun getStartupTime(): Date
-
-  /**
-   * Returns the application menu.
-   * @return The application menu.
-   */
-  fun getMenu(): VMenuTree
-
-  /**
-   * Sets the application in help generating mode.
-   */
-  fun setGeneratingHelp()
-
-  /**
-   * Returns `true` if the application in help generating  mode.
-   * @return `true` if the application in help generating  mode.
-   */
-  fun isGeneratingHelp(): Boolean
-
-  /**
-   * Returns the [DBContext] containing user connection information.
-   * @return The [DBContext] containing user connection information.
-   */
-  fun getDBContext(): DBContext
-
-  /**
-   * Returns the connected user name.
-   * @return The connected user name.
-   */
-  fun getUserName(): String
-
-  /**
-   * Returns the connected user IP address.
-   * @return The connected user IP address.
-   */
-  fun getUserIP(): String
-
-  /**
-   * Returns the application [Registry].
-   * @return The application [Registry].
-   */
-  fun getRegistry(): Registry
-
-  /**
-   * Returns the application default [Locale].
-   * @return The application default [Locale].
-   */
-  fun getDefaultLocale(): Locale
-
-  /**
-   * Returns the application [LocalizationManager].
-   * @return The application [LocalizationManager].
-   */
-  fun getLocalizationManager(): LocalizationManager
-
-  /**
    * Displays a message box when we are not in a model context.
    * @param parent The parent component.
    * @param message The message to be displayed.
@@ -132,38 +67,67 @@ interface Application : MessageListener {
   fun displayError(parent: UComponent, message: String)
 
   /**
-   * Returns the print manager of the application instance.
-   * @return The print manager of the application instance.
+   * `true` if no bug report is sent.
    */
-  fun getPrintManager(): PrintManager
+  val isNoBugReport: Boolean
 
   /**
-   * Sets the print manager to the application.
-   * @param printManager The print manager instance.
+   * The start up time.
    */
-  fun setPrintManager(printManager: PrintManager)
+  val startupTime: Date
 
   /**
-   * Returns the printer manger of the application.
-   * @return The printer manger of the application.
+   * The application menu.
    */
-  fun getPrinterManager(): PrinterManager
+  val menu: VMenuTree?
 
   /**
-   * Sets the printer manager of the application instance.
-   * @param printerManager The printer manager.
+   * `true` if the application in help generating  mode.
    */
-  fun setPrinterManager(printerManager: PrinterManager)
+  var isGeneratingHelp: Boolean
 
   /**
-   * Returns the application configuration instance.
-   * @return The application configuration instance.
+   * The [DBContext] containing user connection information.
    */
-  fun getApplicationConfiguration(): ApplicationConfiguration
+  val dBContext: DBContext?
 
   /**
-   * Sets the application configuration.
-   * @param configuration The application configuration instance.
+   * The connected user name.
    */
-  fun setApplicationConfiguration(configuration: ApplicationConfiguration)
+  val userName: String
+
+  /**
+   * The connected user IP address.
+   */
+  val userIP: String
+
+  /**
+   * The application [Registry].
+   */
+  val registry: Registry
+
+  /**
+   * The application default [Locale].
+   */
+  val defaultLocale: Locale?
+
+  /**
+   * The application [LocalizationManager].
+   */
+  val localizationManager: LocalizationManager?
+
+  /**
+   * The print manager of the application instance.
+   */
+  var printManager: PrintManager
+
+  /**
+   * The printer manger of the application.
+   */
+  var printerManager: PrinterManager
+
+  /**
+   * The application configuration instance.
+   */
+  var applicationConfiguration: ApplicationConfiguration
 }

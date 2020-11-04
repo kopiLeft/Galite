@@ -18,11 +18,14 @@
 
 package org.kopi.galite.visual
 
-import java.awt.PrintJob
+import org.kopi.galite.util.PrintException
+import org.kopi.galite.util.PrintJob
+import java.io.IOException
 
 interface PreviewRunner {
   /**
    * Launch document preview
    */
-  fun run(data: PrintJob, command: String)
+  @Throws(IOException::class, PrintException::class)
+  open fun run(data: PrintJob, command: String)
 }

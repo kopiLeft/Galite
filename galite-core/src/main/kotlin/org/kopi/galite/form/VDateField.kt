@@ -27,7 +27,7 @@ import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -89,7 +89,7 @@ class VDateField : VField(10, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     val s = o as String
 
     if (s == "") {
@@ -178,8 +178,8 @@ class VDateField : VField(10, 1) {
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to kopi users in next release
    */
-  override fun setObject(r: Int, v: Any) {
-    setDate(r, v as Date?)
+  override fun setObject(r: Int, v: Any?) {
+    setDate(r, v as? Date)
   }
 
   /**
@@ -216,7 +216,7 @@ class VDateField : VField(10, 1) {
     return value[r]!!
   }
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     return if (o == null) "" else Companion.toText(o as Date)
   }
 
@@ -280,8 +280,8 @@ class VDateField : VField(10, 1) {
       Companion.toText(value[r]!!)
     }
   }
+/**
 
-  /**
    * Returns the SQL representation of field value of given record.
    */
   override fun getSqlImpl(r: Int): String {

@@ -47,6 +47,7 @@ import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
+import kotlin.jvm.Throws
 
 /**
  * Represents a report model.
@@ -144,7 +145,7 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
    *
    * @param     locale  the locale to use
    */
-  fun localize(locale: Locale) {
+  fun localize(locale: Locale?) {
     var manager: LocalizationManager?
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
 
@@ -379,18 +380,21 @@ abstract class VReport protected constructor(ctxt: DBContextHandler? = null) : V
   /**
    * Sort the displayed tree wrt to a column
    */
+  @Throws(VException::class)
   fun editLine() {
     if (cmdOpenLine != null) {
       executeVoidTrigger(cmdOpenLine!!.trigger)
     }
   }
 
+  @Throws(VException::class)
   fun setColumnData() {
     if (cmdEditColumn != null) {
       executeVoidTrigger(cmdEditColumn!!.trigger)
     }
   }
 
+  @Throws(VException::class)
   fun setColumnInfo() {
     if (cmdColumnInfo != null) {
       executeVoidTrigger(cmdColumnInfo!!.trigger)

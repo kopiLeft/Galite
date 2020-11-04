@@ -43,7 +43,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
  * @param groupName     the group name
  * @param loadFavorites should load favorites ?
  */
-class VMenuTree(ctxt: DBContext,
+
+class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
                 var isSuperUser: Boolean = false,
                 val menuTreeUser: String? = null,
                 private val groupName: String? = null,
@@ -107,9 +108,9 @@ class VMenuTree(ctxt: DBContext,
     createActor(CMD_INFORMATION, "Help", "Information", null, 0, 0)
     createActor(CMD_HELP, "Help", "Help", "help", KeyEvent.VK_F1, 0)
     setActors(actors.filterIsInstance<VActor>().toTypedArray())
-    localizeActors(ApplicationContext.getDefaultLocale())
+    localizeActors(ApplicationContext!!.getDefaultLocale())
     createTree(isSuperUser || loadFavorites)
-    localizeRootMenus(ApplicationContext.getDefaultLocale())
+    localizeRootMenus(ApplicationContext!!.getDefaultLocale())
   }
 
   // ----------------------------------------------------------------------
@@ -120,7 +121,7 @@ class VMenuTree(ctxt: DBContext,
    *
    * @param     locale  the locale to use
    */
-  fun localizeActors(locale: Locale) {
+  fun localizeActors(locale: Locale?) {
     var manager: LocalizationManager?
 
     manager = LocalizationManager(locale, Locale.getDefault())
@@ -152,7 +153,7 @@ class VMenuTree(ctxt: DBContext,
   /**
    * Returns the ID of the current user
    */
-  override fun getUserID(): Int = dBContext.defaultConnection.getUserID()
+  override fun getUserID(): Int = dBContext!!.defaultConnection.getUserID()
 
   /**
    * Creates a new actor
@@ -226,7 +227,7 @@ class VMenuTree(ctxt: DBContext,
    * Localizes the root menus with a given locale
    * @param locale The locale to be used for localization
    */
-  protected fun localizeRootMenus(locale: Locale) {
+  protected fun localizeRootMenus(locale: Locale?) {
     var manager: LocalizationManager?
 
     manager = LocalizationManager(locale, Locale.getDefault())
@@ -241,7 +242,7 @@ class VMenuTree(ctxt: DBContext,
    *
    * @param     locale  the locale to use
    */
-  protected fun localizeModules(locale: Locale) {
+  protected fun localizeModules(locale: Locale?) {
     var manager: LocalizationManager?
 
     manager = LocalizationManager(locale, Locale.getDefault())
@@ -291,7 +292,7 @@ class VMenuTree(ctxt: DBContext,
                                          null))
     for (menu in ROOT_MENUS) {
       if (!menu.isEmpty()) {
-        (root as DefaultMutableTreeNode).add(menu.getRoot() as DefaultMutableTreeNode)
+        (root as DefaultMutableTreeNode).add(menu.root as DefaultMutableTreeNode)
       }
     }
   }

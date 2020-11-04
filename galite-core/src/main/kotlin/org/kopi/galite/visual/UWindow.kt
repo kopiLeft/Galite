@@ -29,7 +29,8 @@ interface UWindow : UComponent, VActionListener, ModelCloseListener, WaitDialogL
   /**
    * Starts the window view
    */
-  fun run()
+  @Throws(VException::class)
+  open fun run()
 
   /**
    * Returns the [VWindow] model of this UI component.

@@ -21,6 +21,7 @@ package org.kopi.galite.visual
 import org.kopi.galite.util.Rexec
 
 import java.io.File
+import kotlin.jvm.Throws
 
 /**
  * Manages Application configuration data
@@ -88,6 +89,7 @@ abstract class ApplicationConfiguration {
    * Property smtp.server
    * Returns the name of the SMTP server to use
    */
+  @Throws(PropertyException::class)
   abstract fun getSMTPServer(): String
 
   /**
@@ -197,7 +199,7 @@ abstract class ApplicationConfiguration {
 
     fun getConfiguration(): ApplicationConfiguration? {
       return if (ApplicationContext.applicationContext != null) {
-        ApplicationContext.applicationContext.getApplication().getApplicationConfiguration()
+        ApplicationContext.applicationContext.getApplication().applicationConfiguration
       } else {
         configuration
       }
@@ -205,7 +207,7 @@ abstract class ApplicationConfiguration {
 
     fun setConfiguration(conf: ApplicationConfiguration) {
       if (ApplicationContext.applicationContext != null) {
-        ApplicationContext.applicationContext.getApplication().setApplicationConfiguration(conf)
+        ApplicationContext.applicationContext.getApplication().applicationConfiguration = conf
       } else {
         configuration = conf
       }
