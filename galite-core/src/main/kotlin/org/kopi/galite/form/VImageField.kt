@@ -26,4 +26,12 @@ class VImageField(width: Int, height: Int) : VField(width, height) {
   fun getIconHeight(): Int {
     TODO()
   }
+
+  fun getImage(r: Int): ByteArray {
+    TODO()
+  }
+
+  fun setImage(r: Int, v: ByteArray) {
+    TODO()
+  }
 }

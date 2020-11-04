@@ -71,7 +71,7 @@ public class DChartBlock extends DBlock {
             // another command executed
             return;
           }
-          getFormView().performAsyncAction(new KopiAction("chart") {
+          getFormView().performAsyncAction(new Action("chart") {
               public void execute() throws VException {
                 if (!init) {
                   init = true;

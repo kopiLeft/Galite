@@ -148,6 +148,10 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  open fun setImage(v: ByteArray) {
+    TODO()
+  }
+
   /**
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
@@ -296,6 +300,10 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   }
 
   fun setChanged(r: Int) {
+    TODO()
+  }
+
+  fun setChanged(r: Boolean) {
     TODO()
   }
 

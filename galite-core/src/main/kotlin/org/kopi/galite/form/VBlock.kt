@@ -48,6 +48,11 @@ abstract class VBlock {
     TODO()
   }
 
+  open fun getNumberOfValidRecordBefore(recno: Int): Int {
+    TODO()
+  }
+
+  abstract val numberOfValidRecord: Int
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
