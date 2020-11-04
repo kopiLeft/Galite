@@ -69,10 +69,6 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun getToolTip(): String {
-    TODO()
-  }
-
   fun onBeforeDrop() {
     TODO()
   }
@@ -111,11 +107,11 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
    */
-  open fun setObject(r: Int, v: Any) {
+  open fun setObject(r: Int, v: Any?) {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
@@ -178,7 +174,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   override fun getDisplay(): UField = TODO()
 
-  open fun checkType(rec: Int, s: Any) {
+  open fun checkType(rec: Int, s: Any?) {
     TODO()
   }
 
@@ -306,6 +302,11 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   open fun getCommand(): Array<VCommand>? {
     TODO()
   }
+
+  fun getAccess(activeRecord: Int): Int {
+    TODO()
+  }
+
   companion object {
     const val MDL_FLD_COLOR = 1
     const val MDL_FLD_IMAGE = 2
@@ -326,7 +327,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           = 0
   lateinit var name // field name (for dumps)
           : String
-  val label: String? = null // field label
+  lateinit var label: String // field label
   private val options // options
           = 0
   private val help // help text

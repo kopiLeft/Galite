@@ -468,7 +468,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * @return the displayed size of this column.
    */
   protected open fun getDisplaySize(): Int {
-    return getBlock().displaySize
+    return getBlock().getDisplaySize()
   }
 
 

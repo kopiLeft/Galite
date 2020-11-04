@@ -30,25 +30,17 @@ abstract class VBlock {
     TODO()
   }
 
+  abstract val detailMode: Boolean
+  abstract val fields: Array<VField>
   var bufferSize = 0 // max number of buffered records
 
   // dynamic data
   // current record
   var activeRecord = 0
 
-  var activeField: VField? = null
-
-  var detailMode = false
-  internal lateinit var fields // fields
-          : Array<VField>
-  internal lateinit var commands // commands
-          : Array<VCommand>
-
   fun getMode(): Int = TODO()
 
   interface OrderListener
-
-  class OrderModel
 
   // ----------------------------------------------------------------------
   // HELP HANDLING
@@ -96,10 +88,6 @@ abstract class VBlock {
 
   open fun isDroppable(): Boolean {
     TODO()
-  }
-
-  open fun getFields(): Array<VField?>? {
-   TODO()
   }
 
   open fun getAlignment(): BlockAlignment? {
@@ -215,10 +203,10 @@ abstract class VBlock {
   protected var fetchSize  = 0
 
   // commands
-  protected lateinit var commands : Array<VCommand>
+  internal lateinit var commands : Array<VCommand>
 
   // actors to send to form (move to block import)
- internal lateinit var actors  : Array<VActor>
+  internal lateinit var actors  : Array<VActor>
 
   protected lateinit var VKT_Triggers: Array<IntArray>
 
@@ -265,10 +253,20 @@ abstract class VBlock {
     TODO()
   }
 
+  lateinit var orderModel: OrderModel
   abstract fun localize(manager: LocalizationManager)
   fun isRecordFilled(rec: Int): Boolean {
     TODO()
   }
+
+  abstract fun executeVoidTrigger(vktType: Int)
+  abstract fun gotoField(model: VField)
+  abstract fun noDetail(): Boolean
+  abstract fun getDisplay(): Any
+  abstract fun noChart(): Boolean
+  abstract fun getFieldIndex(model: VField): Int
+  abstract fun hasTrigger(trgCmdaccess: Int, any: Any): Boolean
+  abstract fun callTrigger(trgCmdaccess: Int, any: Any): Any
 
   inner class OrderModel {
     //TODO()
