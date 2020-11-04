@@ -18,12 +18,22 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.base.UComponent
 import org.kopi.galite.list.VListColumn
+import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VWindow
 
-class VListDialog(list: Array<VListColumn>, values: Array<Array<Any?>>?) {
+class VListDialog(list: Array<VListColumn>, values: Array<Array<Any?>>?): VModel {
   fun selectFromDialog(form: VForm, field: VField?): Int = TODO()
   fun selectFromDialog(form: VForm?, window: VWindow?, field: VField?): Int {
    TODO()
+  }
+
+  override fun setDisplay(display: UComponent) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getDisplay(): UComponent? {
+    TODO("Not yet implemented")
   }
 }

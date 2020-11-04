@@ -542,7 +542,7 @@ public class DItemTree extends DWindow implements UItemTree {
       List<Item> itemsList = getItems(root);
 
       if (itemsList != null && itemsList.size() > 0) {
-        return (Item[])Utils.toArray(itemsList, Item.class);
+        return (Item[])Utils.Companion.toArray(itemsList);
       }
 
       return null;

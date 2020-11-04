@@ -31,6 +31,7 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.XInterruptProtectedException
 import org.kopi.galite.l10n.LocalizationManager
+import kotlin.jvm.Throws
 
 /**
  * Creates a window
@@ -102,6 +103,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * no modal call to this form
    * @exception        VException        an exception may be raised by triggers
    */
+  @Throws(VException::class)
   override fun doNotModal() = WindowController.windowController.doNotModal(this)
 
   // ----------------------------------------------------------------------

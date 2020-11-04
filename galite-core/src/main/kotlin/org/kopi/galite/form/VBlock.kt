@@ -204,17 +204,11 @@ abstract class VBlock {
   // max number of buffered IDs
   protected var fetchSize  = 0
 
-  // max number of displayed records
-  protected var displaySize  = 0
-
   // commands
   protected lateinit var commands : Array<VCommand>
 
   // actors to send to form (move to block import)
  internal lateinit var actors  : Array<VActor>
-
-  // fields
-  protected lateinit var fields : Array<VField>
 
   protected lateinit var VKT_Triggers: Array<IntArray>
 
@@ -263,10 +257,6 @@ abstract class VBlock {
 
   abstract fun localize(manager: LocalizationManager)
   fun isRecordFilled(rec: Int): Boolean {
-    TODO()
-  }
-
-  fun isMulti(): Boolean {
     TODO()
   }
 
