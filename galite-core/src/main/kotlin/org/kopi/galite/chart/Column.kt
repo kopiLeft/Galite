@@ -14,18 +14,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.chart
 
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.Color
+import java.io.Serializable
 
 /**
- * Represents a measure used to store numeric values in chart.
- *
- * @param domain dimension domain.
+ * A chart column.
  */
-open class Measure<T>(domain: Domain<T>? = null) : Column() where T : Comparable<T>, T : Number {
-
-  /**Measure's color in chart */
-  lateinit var color: Color
+abstract class Column : Serializable {
+  /** The column's label */
+  var label: String = ""
 }

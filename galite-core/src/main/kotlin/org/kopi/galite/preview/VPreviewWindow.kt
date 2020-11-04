@@ -305,7 +305,7 @@ open class VPreviewWindow : VWindow() {
 
   init {
     setTitle(VlibProperties.getString("Preview"))
-    setActors(arrayOf<VActor>(
+    addActors(arrayOf(
             VActor("File",
                     PREVIEW_LOCALIZATION_RESOURCE,
                     "Close",
