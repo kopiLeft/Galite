@@ -19,13 +19,21 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.form.VFieldUI;
-import org.kopi.galite.form.VImageField;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.form.VImageField;
 
 /**
  * DImageField is a panel composed in a Image field and a label behind

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,18 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.chart
+package org.kopi.galite.common
 
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.Color
+import java.util.Locale
+
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VTrigger
 
 /**
- * Represents a measure used to store numeric values in chart.
+ * This class represents the definition of a window
  *
- * @param domain dimension domain.
+ * @param where                the token reference of this node
+ * @param title                the title of this form
+ * @param superName                the type of the form
  */
-open class Measure<T>(domain: Domain<T>? = null) : Column() where T : Comparable<T>, T : Number {
-
-  /**Measure's color in chart */
-  lateinit var color: Color
+abstract class Window {
+  abstract val title: String
+  open val locale: Locale? = null
+  var options: Int? = null
+  lateinit var commands: Array<VCommand>
+  lateinit var triggers: Array<VTrigger>
 }

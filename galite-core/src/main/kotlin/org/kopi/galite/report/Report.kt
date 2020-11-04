@@ -17,24 +17,25 @@
 
 package org.kopi.galite.report
 
-import java.awt.event.KeyEvent
-
-import org.kopi.galite.cross.VDynamicReport
+import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VCommand
+import java.io.File
+import java.io.IOException
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
  */
-open class Report: VReport() {
+abstract class Report: Window() {
+
   /** Report's fields. */
-  val fields = mutableListOf<Field<*>>()
+  val fields = mutableListOf<RField<*>>()
 
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
+
+  var help: String? = null
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
@@ -44,7 +45,7 @@ open class Report: VReport() {
    * @return a field.
    */
   fun <T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
-    val field = Field(domain)
+    val field = RField(domain)
     field.init()
     fields.add(field)
     return field
@@ -78,40 +79,60 @@ open class Report: VReport() {
   /**
    * Adds default report commands
    */
-  fun reportCommands() {
-    setActors(arrayOf(
-            VActor("File", null,"Quit", null, VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
-            VActor("File", null, "Print", null, VDynamicReport.PRINT_ICON, KeyEvent.VK_F6, 0),
-            VActor("File", null, "ExportCSV", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F8, 0),
-            VActor("File", null, "ExportXLSX", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_MASK),
-            VActor("File", null, "ExportPDF", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, 0),
-            VActor("Action", null, "Fold", null, VDynamicReport.FOLD_ICON, KeyEvent.VK_F2, 0),
-            VActor("Action", null, "Unfold", null, VDynamicReport.UNFOLD_ICON, KeyEvent.VK_F3, 0),
-            VActor("Action", null, "FoldColumn", null, VDynamicReport.FOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0),
-            VActor("Action", null, "UnfoldColumn", null, VDynamicReport.UNFOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0),
-            VActor("Action", null, "Sort", null, VDynamicReport.SERIALQUERY_ICON, KeyEvent.VK_F4, 0),
-            VActor("Help", null, "Help", null, VDynamicReport.HELP_ICON, KeyEvent.VK_F1, 0),
-    ))
-    super.commands = arrayOf(
-            VCommand(VConstants.MOD_ANY, this, getActor(0), 1, "Quit"),
-            VCommand(VConstants.MOD_ANY, this, getActor(1), 2, "Print"),
-            VCommand(VConstants.MOD_ANY, this, getActor(2), 3, "PrintOptions"),
-            VCommand(VConstants.MOD_ANY, this, getActor(3), 4, "ExportCSV"),
-            VCommand(VConstants.MOD_ANY, this, getActor(4), 5, "ExportPDF"),
-            VCommand(VConstants.MOD_ANY, this, getActor(5), 6, "ExportXLSX"),
-            VCommand(VConstants.MOD_ANY, this, getActor(6), 7, "Fold"),
-            VCommand(VConstants.MOD_ANY, this, getActor(7), 8, "Unfold"),
-            VCommand(VConstants.MOD_ANY, this, getActor(8), 9, "Sort"),
-            VCommand(VConstants.MOD_ANY, this, getActor(9), 10, "Help"),
-    )
+  open val reportCommands = false
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+
+  fun genLocalization(destination: String? = null) {
+    if (locale != null) {
+      val baseName = this::class.simpleName
+      requireNotNull(baseName)
+      val destination = destination
+              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.`package`.name.replace(".", "/")
+      try {
+        val writer = ReportLocalizationWriter()
+        genLocalization(writer)
+        writer.write(destination, baseName, locale!!)
+      } catch (ioe: IOException) {
+        ioe.printStackTrace()
+        System.err.println("cannot write : $baseName")
+      }
+    }
   }
 
-  override fun init() {
-    super.model.columns = arrayOf()
-    source = "Test" // TODO
+  fun genLocalization(writer: LocalizationWriter) {
+    (writer as ReportLocalizationWriter).genReport(title,
+                                                   help,
+                                                   fields)
   }
 
-  override fun add() {
-    // TODO
+  /**
+   * Returns the qualified source file name where this object is defined.
+   */
+  private val sourceFile: String
+    get() {
+      val basename = this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
+      return basename + this.javaClass.simpleName
+    }
+
+
+  /** Report model*/
+  val reportModel: VReport by lazy {
+    object : VReport() {
+      override fun init() {
+        if (reportCommands) {
+          addDefaultReportCommands()
+        }
+
+        super.model.columns = arrayOf()
+        source = sourceFile
+      }
+
+      override fun add() {
+        // TODO
+      }
+    }
   }
 }

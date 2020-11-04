@@ -18,4 +18,6 @@
 
 package org.kopi.galite.form
 
-class VTextField
+class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styled: Boolean): VStringField (width, height, visibleHeight, convert, styled)
+{
+}

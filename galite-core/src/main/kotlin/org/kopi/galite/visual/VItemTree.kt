@@ -114,16 +114,14 @@ class VItemTree(rootName: String?,
    * Enables or disable the given actor
    */
   override fun setActorEnabled(actor: Int, enabled: Boolean) {
-    actors[actor].handler = this
-    actors[actor].isEnabled = enabled
+    treeActors[actor]!!.handler = this
+    treeActors[actor]!!.isEnabled = enabled
   }
 
   /**
    * Returns the actor having the given number.
    */
-  override fun getActor(number: Int): VActor {
-    return actors[number]
-  }
+  override fun getActor(number: Int): VActor = treeActors[number]!!
 
   /**
    * Creates a new actor
@@ -185,9 +183,7 @@ class VItemTree(rootName: String?,
         itemTreeManager.save()
         unsetWaitInfo()
         isChanged = false
-        if (currentDisplay != null) {
-          currentDisplay.setTree();
-        }
+        currentDisplay?.setTree();
       }
       else -> super.executeVoidTrigger(key)
     }
@@ -258,7 +254,7 @@ class VItemTree(rootName: String?,
   var root: TreeNode? = null
     private set
   private var rootItem: RootItem? = null
-  private val actors= arrayOf<VActor>()
+  private val treeActors: Array<VActor?> = arrayOfNulls(10)
   private var maxId = 0
   private val rootName: String = rootName ?: "Items"
 
@@ -284,7 +280,7 @@ class VItemTree(rootName: String?,
     createActor(CMD_DEFAULT, "Edit", "Default", "top", 0, 0)
     createActor(CMD_LOCALISE, "Edit", "Localise", "bold", 0, 0)
     createActor(CMD_SAVE, "Edit", "Save", "save", 0, 0)
-    setActors(actors)
+    addActors(treeActors.requireNoNulls())
     localizeActors(ApplicationContext.getDefaultLocale())
     createTree()
     if (isInsertMode) {

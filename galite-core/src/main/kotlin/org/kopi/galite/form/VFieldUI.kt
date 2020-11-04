@@ -15,13 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.VCommand
 import java.io.Serializable
 
-class VFieldUI  : VConstants, ActionHandler, Serializable {
+open class VFieldUI(blockView: UBlock, model: VField) : VConstants, ActionHandler, Serializable {
   fun getModel(): VField = TODO()
   fun getDisplay(): UField = TODO()
   fun displayFieldError(message: String): Any = TODO()
@@ -29,19 +31,39 @@ class VFieldUI  : VConstants, ActionHandler, Serializable {
   fun getBlock(): VBlock = TODO()
   fun fillField(): Boolean = TODO()
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun performAsyncAction(action: Action) {
+  fun executeAction() {
     TODO()
   }
 
-  override fun performAction(action: Action, block: Boolean) {
-    TODO("Not yet implemented")
+  open fun hasAutofill(): Boolean {
+    TODO()
   }
 
-  fun executeAction() {
+  fun fireColorHasChanged(recno: Int) {
+    TODO()
+  }
+
+  fun fireAccessHasChanged(recno: Int) {
+    TODO()
+  }
+
+  fun getDetailDisplay(): UField {
+    TODO()
+  }
+
+  fun getDisplays(): Array<UField> {
+    TODO()
+  }
+
+  open fun getBlockView(): UBlock? {
+    TODO()
+  }
+
+  fun getLabel(): ULabel {
+    TODO()
+  }
+
+  fun getDetailLabel(): ULabel {
     TODO()
   }
 
@@ -51,4 +73,49 @@ class VFieldUI  : VConstants, ActionHandler, Serializable {
   fun scrollTo(toprec: Int) {
     TODO()
   }
+
+  fun previousEntry() {
+    TODO()
+  }
+
+  fun nextEntry() {
+    TODO()
+  }
+
+  fun resetCommands() {
+    TODO()
+  }
+
+  fun resetLabel() {
+    TODO()
+  }
+
+  fun hasAction(): Boolean {
+    TODO()
+  }
+
+  fun autofillButton() {
+    TODO()
+  }
+
+  override fun performAsyncAction(action: Action) {
+    TODO()
+  }
+
+  open fun getIncrementCommand(): VCommand {
+    TODO()
+  }
+
+  open fun getDecrementCommand(): VCommand {
+    TODO()
+  }
+
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun performAction(action: Action, block: Boolean) {
+    TODO("Not yet implemented")
+  }
+
 }
