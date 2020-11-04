@@ -593,7 +593,6 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * You can use this method to perform any operation out of the UI event process
    *
    * @param        action                the action to perform.
-   * @param        block                This action should block the UI thread ?
    */
   override fun performAsyncAction(action: Action) {
     blockView.getFormView().performAsyncAction(action)
