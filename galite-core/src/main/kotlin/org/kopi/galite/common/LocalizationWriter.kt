@@ -57,6 +57,7 @@ open class LocalizationWriter {
    */
   fun genMenuDefinition(ident: String, label: String) {
     val self = Element("menu")
+
     self.setAttribute("ident", ident)
     self.setAttribute("label", label)
     peekNode(null).addContent(self)
@@ -67,6 +68,7 @@ open class LocalizationWriter {
    */
   fun genActorDefinition(ident: String, label: String, help: String?) {
     val self = Element("actor")
+
     self.setAttribute("ident", ident)
     self.setAttribute("label", label)
     if (help != null) {
@@ -80,6 +82,7 @@ open class LocalizationWriter {
    */
   fun genMessageDefinition(ident: String, text: String?) {
     val self = Element("message")
+
     self.setAttribute("ident", ident)
     if (text != null) {
       self.setAttribute("text", text)
@@ -87,21 +90,17 @@ open class LocalizationWriter {
     peekNode(null).addContent(self)
   }
 
-  /**
-   *
-   */
   fun genCodeDesc(ident: String, label: String) {
     val self = Element("codedesc")
+
     self.setAttribute("ident", ident)
     self.setAttribute("label", label)
     peekNode("code").addContent(self)
   }
 
-  /**
-   *
-   */
   fun genListDesc(column: String, title: String) {
     val self = Element("listdesc")
+
     self.setAttribute("column", column)
     self.setAttribute("title", title)
     peekNode("list").addContent(self)

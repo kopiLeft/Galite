@@ -29,6 +29,7 @@ class ReportLocalizationWriter  : LocalizationWriter() {
                 help: String?,
                 fields: MutableList<RField<*>>) {
     val self = Element("report")
+
     self.setAttribute("title", title)
     if (help != null) {
       self.setAttribute("help", help)
