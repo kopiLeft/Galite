@@ -30,5 +30,5 @@ interface ULabel : UComponent {
    * @param text The label text.
    * @param help The label tooltip.
    */
-  fun init(text: String?, help: String)
+  fun init(text: String, help: String)
 }

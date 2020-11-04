@@ -20,6 +20,7 @@ package org.kopi.galite.form
 
 import java.io.Serializable
 
+import org.kopi.galite.form.VBlock.OrderModel
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.Action
@@ -40,9 +41,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
                                               val index: Int = 0)
   : VConstants, ActionHandler, Serializable {
 
-  private fun hasEditItem_S(): Boolean {
-    return model.list != null && model.list!!.hasShortcut
-  }
+  private fun hasEditItem_S(): Boolean = model.list != null && model.list!!.hasShortcut
 
   // ----------------------------------------------------------------------
   // ABSTRACT METHOD
@@ -83,15 +82,16 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * @param model The chart label sort model.
    * @return The created [UChartLabel]
    */
-  protected abstract fun createChartHeaderLabel(text: String, help: String, index: Int, model: VBlock.OrderModel): UChartLabel
+  protected abstract fun createChartHeaderLabel(text: String, help: String, index: Int, model: OrderModel): UChartLabel
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
   /**
    * Display error
    */
-  fun displayFieldError(message: String?) {
+  fun displayFieldError(message: String) {
     val display = getModeDisplay()
+
     if (display == null) {
       model.getForm().error(message)
     } else {
@@ -100,7 +100,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
         // this is typically needed in grid based blocks
         gotoActiveRecord()
         // switch to detail view when needed
-        if (getBlock().isMulti() && display === detailDisplay && !getBlock().detailMode) {
+        if (getBlock().isMulti() && display == detailDisplay && !getBlock().detailMode) {
           (blockView as UMultiBlock).switchView(-1)
         }
         display.setBlink(true)
@@ -114,7 +114,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
         display.forceFocus()
       }
     }
-  }// field is visible on both views
+  }
 
   /**
    * Returns the field display according to the model block.
@@ -125,6 +125,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    */
   protected fun getModeDisplay(): UField? {
     val displayLine = blockView.getDisplayLine(getBlock().activeRecord)
+
     return when {
       model.noChart() -> detailDisplay
       model.noDetail() && displayLine != -1 -> displays[displayLine]
@@ -145,13 +146,13 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
   }
 
   fun resetCommands() {
-    for (i in activeCommands.indices) {
-      activeCommands.elementAt(i).setEnabled(false)
+    activeCommands.forEach {
+      it.setEnabled(false)
     }
     activeCommands.clear()
     if (model.hasFocus()) {
       if (hasEditItem_S()) { // TRY TO REMOVE !!!!
-        val command: VCommand = model.getForm().cmdEditItem_S
+        val command = model.getForm().cmdEditItem_S
         activeCommands.add(command)
         command.setEnabled(true)
       } else if (hasAutofill) {
@@ -174,25 +175,25 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
         command.setEnabled(true)
       }
       val localCommands = model.getCommand()
-      if (localCommands != null) {
-        for (i in localCommands.indices) {
-          if (localCommands[i].isActive(getBlock().getMode())) {
-            val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS, getBlock().fields.size + getBlock().commands.size + i + 1)) {
-              try {
-                (getBlock().callTrigger(VConstants.TRG_CMDACCESS, getBlock().fields.size + getBlock().commands.size + i + 1) as Boolean)
-              } catch (e: VException) {
-                // consider that the command is active of any error occurs
-                true
-              }
-            } else {
-              // if no access trigger is associated with the command
-              // we consider it as active command
+      localCommands?.forEachIndexed { index, localCommand ->
+        if (localCommand.isActive(getBlock().getMode())) {
+          val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS,
+                          getBlock().fields.size + getBlock().commands.size + index + 1)) {
+            try {
+              (getBlock().callTrigger(VConstants.TRG_CMDACCESS,
+                      getBlock().fields.size + getBlock().commands.size + index + 1) as Boolean)
+            } catch (e: VException) {
+              // consider that the command is active of any error occurs
               true
             }
-            if (active) {
-              activeCommands.add(localCommands[i])
-              localCommands[i].setEnabled(true)
-            }
+          } else {
+            // if no access trigger is associated with the command
+            // we consider it as active command
+            true
+          }
+          if (active) {
+            activeCommands.add(localCommand)
+            localCommand.setEnabled(true)
           }
         }
       }
@@ -250,27 +251,15 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
     }
   }
 
-  /**
-   *
-   */
-  fun hasAutofill(): Boolean {
-    return hasAutofill || model.list != null || hasAutofillCommand()
-  }
+  fun hasAutofill(): Boolean = hasAutofill || model.list != null || hasAutofillCommand()
 
   /**
    * Returns true if the field has an action trigger.
    * @return True if the field has an action trigger.
    */
-  fun hasAction(): Boolean {
-    return model.hasAction()
-  }
+  fun hasAction(): Boolean = model.hasAction()
 
-  /**
-   *
-   */
-  fun hasAutofillCommand(): Boolean {
-    return autofillCommand != null
-  }
+  fun hasAutofillCommand(): Boolean = autofillCommand != null
 
   /**
    * Executes, if defined, the action defined by the field.
@@ -346,16 +335,12 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
   /**
    * @return the associated incrementCommand
    */
-  fun getIncrementCommand(): VCommand? {
-    return incrementCommand
-  }
+  fun getIncrementCommand(): VCommand? = incrementCommand
 
   /**
    * @return the associated decrementCommand
    */
-  fun getDecrementCommand(): VCommand? {
-    return decrementCommand
-  }
+  fun getDecrementCommand(): VCommand? = decrementCommand
 
   /**
    * Returns true if the UI controller should include the auto fill
@@ -363,9 +348,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * for boolean field between swing and WEB implementations.
    * @return True if the auto fill command should be present for boolean fields.
    */
-  protected fun includeBooleanAutofillCommand(): Boolean {
-    return true
-  }
+  protected fun includeBooleanAutofillCommand(): Boolean = true
 
   // ----------------------------------------------------------------------
   // PROTECTED BUILDING METHODS
@@ -430,7 +413,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
         // multifields (special fields)
         // take care that in this row is only this multifield
         blockView.add(dl, MultiFieldAlignment(columnEnd * 2 - 1, line - 1, 1, 1, true))
-        displays = arrayOf<UField?>(createDisplay(dl, model, false))
+        displays = arrayOf(createDisplay(dl, model, false))
         blockView.add(displays[0]!!, MultiFieldAlignment(columnEnd * 2 - 1,
                 line,
                 1,
@@ -439,12 +422,12 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
         displays[0]!!.setPosition(0)
         displays[0]!!.updateText()
       } else {
-        displays = arrayOf<UField?>(createDisplay(dl, model, false))
-        if (columnEnd >= 0 && displays!![0] !is UActorField) {
+        displays = arrayOf(createDisplay(dl, model, false))
+        if (columnEnd >= 0 && displays[0] !is UActorField) {
           // not an info field and not an actor field  => show label
           blockView.add(dl, Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
         }
-        if (displays!![0] is UActorField) {
+        if (displays[0] is UActorField) {
           // an actor field takes the label and the field space
           blockView.add(displays[0]!!, Alignment(column * 2 - 2, line - 1, (columnEnd - column) * 2 + 2, lineEnd - line + 1, false))
         } else {
@@ -467,9 +450,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * Returns the displayed size of this column.
    * @return the displayed size of this column.
    */
-  protected open fun getDisplaySize(): Int {
-    return getBlock().getDisplaySize()
-  }
+  protected open fun getDisplaySize(): Int = getBlock().getDisplaySize()
 
 
   val display: UField?
@@ -482,19 +463,20 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
         if (displays == null) null else displays[blockView.getDisplayLine()]
       }
     }
+
   // ----------------------------------------------------------------------
   // FOCUS ACCESSORS
   // ----------------------------------------------------------------------
   /**
    * Transfers focus to next accessible field (tab typed)
    * @param display The field display.
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised in leave()
+   * @exception        VException        an exception may be raised in leave()
    */
   fun transferFocus(display: UField) {
-    val recno: Int = blockView.getRecordFromDisplayLine(display.getPosition())
+    val recno = blockView.getRecordFromDisplayLine(display.getPosition())
 
     // go to the correct block if necessary
-    if (getBlock() !== model.getForm().getActiveBlock()) {
+    if (getBlock() != model.getForm().getActiveBlock()) {
       if (!getBlock().isAccessible()) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00025"))
       }
@@ -503,20 +485,22 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
 
     // go to the correct record if necessary
     // but only if we are in the correct block now
-    if (getBlock() === model.getForm().getActiveBlock() && getBlock().isMulti()
+    if (getBlock() == model.getForm().getActiveBlock()
+            && getBlock().isMulti()
             && recno != getBlock().activeRecord && getBlock().isRecordAccessible(recno)) {
       getBlock().gotoRecord(recno)
     }
 
     // go to the correct field if already necessary
     // but only if we are in the correct record now
-    if (getBlock() === model.getForm().getActiveBlock()
+    if (getBlock() == model.getForm().getActiveBlock()
             && recno == getBlock().activeRecord
-            && model !== getBlock().activeField
+            && model != getBlock().activeField
             && display.getAccess() >= VConstants.ACS_VISIT) {
       getBlock().gotoField(model)
     }
   }
+
   // ----------------------------------------------------------------------
   // NAVIGATING
   // ----------------------------------------------------------------------
@@ -526,14 +510,15 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
   fun fireAccessHasChanged(recno: Int) {
     // Comment out because:
     // update only the necessary Display in the column
-    val rowInDisplay: Int = blockView.getDisplayLine(recno)
+    val rowInDisplay = blockView.getDisplayLine(recno)
+
     if (displays != null) {
       if (rowInDisplay != -1) {
         // -1 means currently not displayed
-        displays!![rowInDisplay]!!.updateAccess()
+        displays[rowInDisplay]!!.updateAccess()
       }
     }
-    if (detailDisplay != null && detailDisplay!!.getPosition() == rowInDisplay) {
+    if (detailDisplay != null && detailDisplay.getPosition() == rowInDisplay) {
       detailDisplay.updateAccess()
     }
   }
@@ -542,7 +527,8 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * Changes the color properties of a field.
    */
   fun fireColorHasChanged(recno: Int) {
-    val rowInDisplay: Int = blockView.getDisplayLine(recno)
+    val rowInDisplay = blockView.getDisplayLine(recno)
+
     if (displays != null) {
       if (rowInDisplay != -1) {
         // -1 means currently not displayed
@@ -553,6 +539,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
       detailDisplay.updateColor()
     }
   }
+
   // ----------------------------------------------------------------------
   // DISPLAY UTILS
   // ----------------------------------------------------------------------
@@ -561,11 +548,11 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    */
   fun scrollTo(toprec: Int) {
     if (displays != null) {
-      for (i in displays.indices) {
-        displays[i]!!.updateFocus()
-        displays[i]!!.updateAccess()
-        displays[i]!!.updateText()
-        displays[i]!!.updateColor()
+      displays.forEach {
+        it!!.updateFocus()
+        it.updateAccess()
+        it.updateText()
+        it.updateColor()
       }
     }
     if (detailDisplay != null) {
@@ -645,13 +632,6 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
     // to be redefined if needed
   }
 
-  /**
-   * Returns the field handler instance.
-   * @return The field handler instance.
-   */
-  fun getFieldHandler(): FieldHandler {
-    return fieldHandler
-  }
   // ----------------------------------------------------------------------
   // SNAPSHOT PRINTING
   // ----------------------------------------------------------------------
@@ -661,27 +641,19 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * @param        fieldPos        position of this field within block visible fields
    */
   fun prepareSnapshot(fieldPos: Int, activ: Boolean) {
-    for (i in displays.indices) {
-      displays[i]!!.prepareSnapshot(fieldPos, activ)
+    displays.forEach {
+      it!!.prepareSnapshot(fieldPos, activ)
     }
-  }
-
-  fun getDisplays(): Array<UField?> {
-    return displays
   }
 
   fun getLabel(): ULabel = dl
 
   fun getDetailLabel(): ULabel = dlDetail
 
-  fun getDetailDisplay(): UField {
-    return detailDisplay
-  }
-
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private val fieldHandler = createFieldHandler()
+  val fieldHandler = createFieldHandler() // The field handler instance.
 
   // static (compiled) data
   private val hasAutofill: Boolean // RE
@@ -690,10 +662,12 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
 
   //private	boolean			hasEditItem_S;	// IT !!!!
   private val commands: Array<VCommand>? // commands
-  private lateinit var displays: Array<UField?> // the object displayed on screen
+  lateinit var displays: Array<UField?> // the object displayed on screen
+    private set
   private lateinit var dl: ULabel // label text
   private lateinit var dlDetail: ULabel // label text (chart)
-  private lateinit var detailDisplay: UField // the object displayed on screen (detail)
+  lateinit var detailDisplay: UField // the object displayed on screen (detail)
+    private set
   private var line = 0 // USE A VPosition !!!!
   private var lineEnd = 0
   private var column = 0
@@ -718,6 +692,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
       chartPos = pos.chartPos
     }
     val cmd = model.getCommand()
+
     cmd?.forEach {
       val commandText = it.getIdent()
       when {
