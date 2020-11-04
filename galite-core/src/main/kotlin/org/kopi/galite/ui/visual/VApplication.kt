@@ -65,7 +65,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   }
 
-  override fun error(message: String) {
+  override fun error(message: String?) {
 
   }
 

@@ -111,8 +111,8 @@ class Module(val id: Int,
 
     try {
       loc = manager.getModuleLocalizer(source, shortname)
-      description = loc.getLabel()
-      help = loc.getHelp()
+      description = loc.getLabel()!!
+      help = loc.getHelp()!!
     } catch (e: InconsistencyException) {
       // If the module localization is not found, report it
       ApplicationContext.reportTrouble(shortname,
@@ -145,6 +145,7 @@ class Module(val id: Int,
       }
     }
 
+    @JvmOverloads
     fun startForm(ctxt: DBContext,
                   objectName: String?,
                   description: String,

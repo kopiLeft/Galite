@@ -76,11 +76,11 @@ class VFieldCommand(private val form: VForm,
   override fun executeVoidTrigger(type: Int) {
     when (type) {
       VForm.CMD_AUTOFILL ->
-        form.getActiveBlock().activeField!!.predefinedFill()
+        form.getActiveBlock()!!.activeField!!.predefinedFill()
       VForm.CMD_EDITITEM, VForm.CMD_EDITITEM_S ->
-        form.getActiveBlock().activeField!!.loadItem(VForm.CMD_EDITITEM)
+        form.getActiveBlock()!!.activeField!!.loadItem(VForm.CMD_EDITITEM)
       VForm.CMD_NEWITEM ->
-        form.getActiveBlock().activeField!!.loadItem(VForm.CMD_EDITITEM)
+        form.getActiveBlock()!!.activeField!!.loadItem(VForm.CMD_EDITITEM)
     }
   }
 

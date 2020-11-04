@@ -18,19 +18,16 @@
 
 package org.kopi.galite.form
 
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
-import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VModel
-
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
@@ -70,15 +67,43 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  open fun getToolTip(): String {
+    TODO()
+  }
+
+  open fun getDefaultAccess(): Int {
+    TODO()
+  }
+
+  fun isInternal(): Boolean {
+    TODO()
+  }
+
+  fun onBeforeDrop() {
+    TODO()
+  }
+
+  open fun updateText() {
+  TODO()
+  }
+
+  fun onAfterDrop() {
+    TODO()
+  }
+
+  open fun setString(v: String?) {
+   TODO()
+  }
+
   /**
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
    */
-  open fun setObject(r: Int, v: Any) {
+  open fun setObject(r: Int, v: Any?) {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
@@ -141,7 +166,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   override fun getDisplay(): UField = TODO()
 
-  open fun checkType(rec: Int, s: Any) {
+  open fun checkType(rec: Int, s: Any?) {
     TODO()
   }
 
@@ -225,6 +250,10 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  open fun clear(r: Int) {
+    TODO()
+  }
+
   fun getSearchCondition(): String? = TODO()
 
   fun hasFocus(): Boolean = TODO()
@@ -253,17 +282,16 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           = 0
   private val indices // bitset of unique indices
           = 0
-  val name // field name (for dumps)
-          : String? = null
-  val label // field label
-          : String? = null
+  lateinit var name // field name (for dumps)
+          : String
+  val label: String? = null // field label
   private val options // options
           = 0
   private val help // help text
           : String? = null
   private val index // The position in parent field array
           = 0
-  private val align // field alignment
+  val align // field alignment
           = 0
   private val posInArray // position in array of fields
           = 0

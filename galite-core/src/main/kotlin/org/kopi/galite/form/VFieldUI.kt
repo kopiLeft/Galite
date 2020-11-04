@@ -25,4 +25,15 @@ class VFieldUI {
   fun transferFocus(display: UField): Any = TODO()
   fun getBlock(): VBlock = TODO()
   fun fillField(): Boolean = TODO()
+
+  fun executeAction() {
+    TODO()
+  }
+
+  // ----------------------------------------------------------------------
+  // DISPLAY UTILS
+  // ----------------------------------------------------------------------
+  fun scrollTo(toprec: Int) {
+    TODO()
+  }
 }

@@ -33,4 +33,12 @@ abstract class VChart : VWindow(), CConstants, Printable {
   internal fun getRows(): Array<VRow> {
     TODO()
   }
+
+  open fun setMenu() {
+    TODO()
+  }
+
+  open fun initChart() {
+    TODO()
+  }
 }
