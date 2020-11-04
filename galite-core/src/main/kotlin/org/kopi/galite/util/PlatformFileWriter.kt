@@ -15,9 +15,93 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
+
+/**
+ * An class that simplifies file writing
+ */
 class PlatformFileWriter {
 
-}
+  // ----------------------------------------------------------------------
+  // CONSTRUCTOR
+  // ----------------------------------------------------------------------
 
+  /**
+   * Sets the number of copy to print
+   */
+  constructor(file: File,
+              encoding: String,
+              lineSeparator: String) {
+    this.encoding = encoding
+    this.lineSeparator = lineSeparator
+    dataStream = FileOutputStream(file)
+  }
+
+  /**
+   * Sets the number of copy to print
+   */
+  constructor(stream: OutputStream,
+              encoding: String,
+              lineSeparator: String) {
+    this.encoding = encoding
+    this.lineSeparator = lineSeparator
+    dataStream = stream
+  }
+
+  /**
+   * Sets the number of copy to print
+   */
+  constructor(fileName: String,
+              encoding: String,
+              lineSeparator: String) : this(File(fileName), encoding, lineSeparator) {
+  }
+
+  /**
+   * Writes a string to the file
+   */
+  fun write(string: String?) {
+    if (string != null) {
+      dataStream.write(string.toByteArray(charset(encoding)))
+    }
+  }
+
+  /**
+   * Write a newline character
+   */
+  fun nl() {
+    write(lineSeparator)
+  }
+
+  /**
+   * Writes a string and a newline character into the file
+   */
+  fun writeln(string: String?) {
+    write(string)
+    nl()
+  }
+
+  // ----------------------------------------------------------------------
+  // CLOSE
+  // ----------------------------------------------------------------------
+
+  /**
+   * Close the file
+   */
+  fun close() {
+    dataStream.flush()
+    dataStream.close()
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+
+  private val encoding: String
+  private val lineSeparator: String
+  private val dataStream: OutputStream
+}

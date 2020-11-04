@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
@@ -27,6 +28,10 @@ abstract class VBlock {
   fun getForm(): VForm = TODO()
 
   fun fetchLookup(fld: VField) {
+    TODO()
+  }
+
+  open fun getDBContext(): DBContext {
     TODO()
   }
 

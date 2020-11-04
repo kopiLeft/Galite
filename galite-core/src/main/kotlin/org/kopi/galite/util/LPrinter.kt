@@ -15,8 +15,47 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
-class LPrinter {
+/**
+ * Local printer
+ */
+class LPrinter(name: String, command: String) : AbstractPrinter(name) {
 
+  /**
+   * Print a file and return the output of the command
+   */
+  fun setCommand(command: String) {
+    this.command = command
+  }
+
+  // ----------------------------------------------------------------------
+  // PRINTING WITH AN INPUTSTREAM
+  // ----------------------------------------------------------------------
+
+  override fun print(data: PrintJob): String {
+    val process = Runtime.getRuntime().exec(command)
+    val data = data.inputStream
+    val buffer = ByteArray(1024)
+    val output = process.outputStream
+    var length: Int
+
+    while (data.read(buffer).also { length = it } != -1) {
+      output.write(buffer, 0, length)
+    }
+    output.close()
+
+    return "NYI"
+  }
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+
+  private var command: String? = null
+
+  init {
+    setCommand(command)
+  }
 }
