@@ -313,5 +313,15 @@ abstract class VBlock {
     TODO()
   }
 
-  open class OrderModel {}
+  open class OrderModel {
+    open fun sortColumn(index: Int) {
+      TODO()
+    }
+
+    companion object {
+      const val STE_UNORDERED = 1
+     const  val STE_INC = 2
+     const val STE_DESC = 4
+    }
+  }
 }

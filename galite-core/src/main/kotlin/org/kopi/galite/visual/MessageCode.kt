@@ -41,11 +41,6 @@ object MessageCode {
   fun getMessage(key: String, param1: Any, param2: Any): String =
           getMessage(key = key, params = arrayOf(param1, param2))
 
-  fun getMessage(key: String): String = getMessage(key, null)
-
-  // ----------------------------------------------------------------------
-  // STATIC METHODS
-  // ----------------------------------------------------------------------
   /**
    * Returns a message (convenience routine).
    * key must be of the form CCC-DDDDD (exp: KOP-00001)
@@ -57,6 +52,7 @@ object MessageCode {
    * @return    the requested message
    */
   @Suppress("UNCHECKED_CAST")
+  @JvmOverloads
   fun getMessage(key: String, params: Any? = null, withKey: Boolean = true): String {
     val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
 
