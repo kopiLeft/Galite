@@ -125,8 +125,8 @@ abstract class VReportColumn(
     return if (styles == null) {
       val style = ColumnStyle()
       style.fontName = 0
-      style.background = Constants.CLR_WHITE
-      style.foreground = Constants.CLR_BLACK
+      style.backgroundCode = Constants.CLR_WHITE
+      style.foregroundCode = Constants.CLR_BLACK
       arrayOf(style)
     } else {
       styles!!
