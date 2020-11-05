@@ -467,7 +467,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   }
 
   /**
-   * Returns true iff there is trigger associated with given event.
+   * Returns true if there is trigger associated with given event.
    */
   internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
 
@@ -543,9 +543,9 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   fun genHelp(): String? {
     val surl = StringBuffer()
     val fileName = VHelpGenerator().helpOnChart(getTitle(),
-                                                       commands,
-                                                       getColumns(),
-                                                       help)
+                                                commands,
+                                                getColumns(),
+                                                help)
 
     return if (fileName == null) {
       null
