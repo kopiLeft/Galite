@@ -40,7 +40,19 @@ abstract class VBlock {
     TODO()
   }
 
+  internal fun getCurrentRecord(): Int {
+    TODO()
+  }
+
+  fun isRecordInsertAllowed(rec: Int): Boolean {
+    TODO()
+  }
+
   open fun setDetailMode(mode: Boolean) {
+    TODO()
+  }
+
+  internal fun trailRecord(rec: Int) {
     TODO()
   }
 
@@ -48,7 +60,26 @@ abstract class VBlock {
     TODO()
   }
 
+  internal fun callTrigger(event: Int, index: Int): Any {
+    TODO()
+  }
+
+  fun setRecordChanged(rec: Int, `val`: Boolean) {
+    TODO()
+  }
+
+  internal fun callProtectedTrigger(event: Int, index: Int): Any {
+    TODO()
+  }
+
+  internal fun hasTrigger(event: Int, index: Int): Boolean {
+    TODO()
+  }
+
   open fun getNumberOfValidRecordBefore(recno: Int): Int {
+    TODO()
+  }
+  fun getFieldPos(field: VField): Int {
     TODO()
   }
 
@@ -127,10 +158,6 @@ abstract class VBlock {
     TODO()
   }
 
-  fun setRecordChanged(rec: Int, value: Boolean) {
-    TODO()
-  }
-
   open fun getAlignment(): BlockAlignment? {
     TODO()
   }
@@ -187,7 +214,7 @@ abstract class VBlock {
     TODO()
   }
 
-  open fun setActiveField(f: VField) {
+  open fun setActiveField(f: VField?) {
     TODO()
   }
 

@@ -591,7 +591,6 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
     initDefaultActors()
     initDefaultCommands()
   }
-
   private fun initDefaultActors() {
     addActors(arrayOf(
             VActor("File", null, "Quit", null, VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),

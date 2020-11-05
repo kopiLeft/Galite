@@ -57,8 +57,8 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
    * verify that value is valid (on exit)
    * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised if text is bad
    */
-  override fun checkType(o: Any) {
-    setString(block.activeRecord, o as String?)
+  override fun checkType(o: Any?) {
+    setString(block!!.activeRecord, o as String?)
   }
 
   /**
@@ -66,8 +66,7 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
    *
    * @see VConstants
    */
-  val searchType: Int
-    get() = VConstants.STY_NO_COND
+  override fun getSearchType(): Int = VConstants.STY_NO_COND
 
   /**
    * Sets the field value of given record.
@@ -130,7 +129,7 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
    * @kopi        inaccessible
    * @see .isPostgresDriverInterface
    */
-  fun hasLargeObject(r: Int): Boolean {
+  override fun hasLargeObject(r: Int): Boolean {
     TODO()
   }
 
@@ -139,7 +138,7 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
    * @kopi        inaccessible
    * @see .isPostgresDriverInterface
    */
-  fun hasBinaryLargeObject(r: Int): Boolean {
+  override fun hasBinaryLargeObject(r: Int): Boolean {
     TODO()
   }
 
@@ -149,7 +148,7 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
    * @kopi        inaccessible
    * @see .isPostgresDriverInterface
    */
-  fun getLargeObject(r: Int): InputStream? {
+  override fun getLargeObject(r: Int): InputStream? {
     return if (value.get(r) == null) {
       null
     } else {
