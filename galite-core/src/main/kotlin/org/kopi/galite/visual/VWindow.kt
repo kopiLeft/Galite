@@ -468,7 +468,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * return wether this object handle a transaction at this time
    */
-  fun inTransaction(): Boolean = isProtected
+  open fun inTransaction(): Boolean = isProtected
 
   /**
    * Returns the current user name

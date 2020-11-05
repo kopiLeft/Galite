@@ -19,9 +19,11 @@
 package org.kopi.galite.form
 
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.VCommand
+import java.io.Serializable
 
-open class VFieldUI(blockView: UBlock, model: VField) {
+open class VFieldUI(blockView: UBlock, model: VField) : VConstants, ActionHandler, Serializable {
   fun getModel(): VField = TODO()
   fun getDisplay(): UField = TODO()
   fun displayFieldError(message: String): Any = TODO()
@@ -96,7 +98,7 @@ open class VFieldUI(blockView: UBlock, model: VField) {
     TODO()
   }
 
-  fun performAsyncAction(action: Action) {
+  override fun performAsyncAction(action: Action) {
     TODO()
   }
 
@@ -108,5 +110,12 @@ open class VFieldUI(blockView: UBlock, model: VField) {
     TODO()
   }
 
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun performAction(action: Action, block: Boolean) {
+    TODO("Not yet implemented")
+  }
 
 }
