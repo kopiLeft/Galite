@@ -21,14 +21,7 @@ package org.kopi.galite.util
 /**
  * Local printer
  */
-class LPrinter(name: String, command: String) : AbstractPrinter(name) {
-
-  /**
-   * Print a file and return the output of the command
-   */
-  fun setCommand(command: String) {
-    this.command = command
-  }
+class LPrinter(val name: String,var command: String) : AbstractPrinter(name) {
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
@@ -48,14 +41,5 @@ class LPrinter(name: String, command: String) : AbstractPrinter(name) {
 
     return "NYI"
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-
-  private var command: String? = null
-
-  init {
-    setCommand(command)
-  }
 }
+

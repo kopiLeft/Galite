@@ -20,8 +20,8 @@ package org.kopi.galite.db
 
 import org.kopi.galite.type.NotNullDate
 import org.kopi.galite.type.NotNullFixed
+
 import java.sql.Blob
-import java.sql.SQLException
 
 class Query(conn: Connection) {
 

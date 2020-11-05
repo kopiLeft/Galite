@@ -23,8 +23,8 @@ package org.kopi.galite.util
  */
 internal class FaxPrinter private constructor(private val faxHost: String,
                                               var number: String,
-                                              user: String,
-                                              id: String)
+                                              private val user: String,
+                                              private val id: String)
                : AbstractPrinter("FaxPrinter $number"), Printer {
 
   // ----------------------------------------------------------------------
@@ -41,14 +41,5 @@ internal class FaxPrinter private constructor(private val faxHost: String,
       e.printStackTrace()
     }
     return "NYI"
-  }
-
-  private val id: String
-  private val user: String
-
-  // never used locally but must be implemented.
-  init {
-    this.user = user
-    this.id = id
   }
 }

@@ -35,9 +35,9 @@ import gnu.inet.ftp.ServerResponseException
  */
 class HylaFAXPrinter(private val faxHost: String,
                      var number: String,
-                     user: String,
-                     attachments: List<*>)
-      : AbstractPrinter("FaxPrinter $number"), Printer {
+                     val user: String,
+                     val attachments: List<*>?)
+  : AbstractPrinter("FaxPrinter $number"), Printer {
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
@@ -55,50 +55,50 @@ class HylaFAXPrinter(private val faxHost: String,
     val faxClient = HylaFAXClient()
 
     try {
-      faxClient.debug = false // no debug messages
-      faxClient.open(faxHost) // name of host
-      faxClient.user(user) // hyla fax user
-      // necessary for pdf documents to keep the correct file size
-      faxClient.type(FtpClientProtocol.TYPE_IMAGE)
-      faxClient.noop()
-      faxClient.tzone(HylaFAXClientProtocol.TZONE_LOCAL)
+      with(faxClient) {
+        debug = false // no debug messages
+        open(faxHost) // name of host
+        user(user) // hyla fax user
+        // necessary for pdf documents to keep the correct file size
+        type(FtpClientProtocol.TYPE_IMAGE)
+        noop()
+        tzone(HylaFAXClientProtocol.TZONE_LOCAL)
+      }
 
       // add fax document
       documents.add(faxClient.putTemporary(printdata.inputStream))
 
       // put attachments to server
-      if (attachments != null) {
-        val attachmentIterator = attachments.iterator()
-
-        while (attachmentIterator.hasNext()) {
-          val dataSource = attachmentIterator.next() as InputStream
-
-          // put data to the hylafax server
+      attachments?.let {
+        it.forEach { element ->
+          val dataSource = element as InputStream
+       // put data to the hylafax server
           documents.add(faxClient.putTemporary(dataSource))
         }
       }
+
       // all file to send are at the server
       // create a job to send them
       val job = faxClient.createJob()
 
       // set job properties
-      job.fromUser = user
-      job.notifyAddress = user
-      job.killtime = "000259"
-      job.maximumDials = 3
-      job.maximumTries = 3
-      job.priority = Job.PRIORITY_NORMAL
-      job.dialstring = number
-      job.verticalResolution = Job.RESOLUTION_MEDIUM
-      job.pageDimension = Pagesize.A4
-      job.notifyType = HylaFAXClientProtocol.NOTIFY_NONE
-      job.chopThreshold = 3
+      with(job){
+        fromUser = user
+        notifyAddress = user
+        killtime = "000259"
+        maximumDials = 3
+        maximumTries = 3
+        priority = Job.PRIORITY_NORMAL
+        dialstring = number
+        verticalResolution = Job.RESOLUTION_MEDIUM
+        pageDimension = Pagesize.A4
+        notifyType = HylaFAXClientProtocol.NOTIFY_NONE
+        chopThreshold = 3
+      }
 
       // add documents to the job
-      val docIterator: Iterator<*> = documents.iterator()
-
-      while (docIterator.hasNext()) {
-        job.addDocument(docIterator.next() as String?)
+      documents.forEach {
+        job.addDocument((it as String?))
       }
 
       faxClient.submit(job) // submit the job to the scheduler
@@ -117,17 +117,5 @@ class HylaFAXPrinter(private val faxHost: String,
       }
     }
     return "NYI"
-  }
-
-  private val user: String
-  private val attachments: List<*>
-
-  /**
-   * Constructs a fax printer
-   */
-  init {
-    number = number
-    this.user = user
-    this.attachments = attachments
   }
 }
