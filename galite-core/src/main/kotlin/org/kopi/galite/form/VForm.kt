@@ -649,8 +649,8 @@ abstract class VForm : VWindow, VConstants {
         if (anchor == null) {
           anchor = field.name
         }
-        anchor.replace(' ', '_')
-        surl.append("#" + field.block.title!!.replace(' ', '_') + anchor)
+        anchor!!.replace(' ', '_')
+        surl.append("#" + field.block!!.title!!.replace(' ', '_') + anchor)
       }
       surl.toString()
     }

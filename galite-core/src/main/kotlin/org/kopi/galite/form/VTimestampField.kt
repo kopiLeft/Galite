@@ -47,17 +47,17 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
   /**
    * return true if this field implements "enumerateValue"
    */
-  fun hasNextPreviousEntry(): Boolean = true
+  override fun hasNextPreviousEntry(): Boolean = true
 
   /**
    * just after loading, construct record
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
-  fun isNumeric(): Boolean = true
+  override fun isNumeric(): Boolean = true
 
   // ----------------------------------------------------------------------
   // Interface Display
@@ -77,7 +77,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
+  override fun checkType(rec: Int, o: Any) {
     if (o as String == "") {
       setNull(rec)
     } else {
@@ -99,7 +99,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
   /**
    * Sets the field value of given record to a timestamp value.
    */
-  fun setTimestamp(r: Int, v: Timestamp?) {
+  override fun setTimestamp(r: Int, v: Timestamp?) {
     if (changedUI
         || value[r] == null && v != null
         || value[r] != null && value[r] != v) {
@@ -141,7 +141,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
   /**
    * Returns the field value of given record as a timestamp value.
    */
-  fun getTimestamp(r: Int): Timestamp = getObject(r) as Timestamp
+  override fun getTimestamp(r: Int): Timestamp = getObject(r) as Timestamp
 
   /**
    * Returns the field value of the current record as an object
@@ -197,7 +197,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
         && (oldValue != null && value[t] == null
             || oldValue == null && value[t] != null
             || oldValue != null && oldValue != value[t])) {
@@ -212,7 +212,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
 
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return if (list == null) {
-      setTimestamp(block.activeRecord, Timestamp.now())
+      setTimestamp(block!!.activeRecord, Timestamp.now())
       true
     } else {
       super.fillField(handler)
@@ -223,7 +223,7 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
-    val record: Int = block.activeRecord
+    val record: Int = block!!.activeRecord
 
     when {
       list != null -> {

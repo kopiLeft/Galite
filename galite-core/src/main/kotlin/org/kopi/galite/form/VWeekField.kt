@@ -38,12 +38,12 @@ class VWeekField : VField(7, 1) {
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
   override fun hasAutofill(): Boolean = true
 
-  fun isNumeric(): Boolean = true
+  override fun isNumeric(): Boolean = true
 
   /**
    * return the name of this field
@@ -83,7 +83,7 @@ class VWeekField : VField(7, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
+  override fun checkType(rec: Int, o: Any) {
     val s = o as String
 
     if (s == "") {
@@ -203,7 +203,7 @@ class VWeekField : VField(7, 1) {
   /**
    * Sets the field value of given record to a week value.
    */
-  fun setWeek(r: Int, v: Week?) {
+  override fun setWeek(r: Int, v: Week?) {
     if (changedUI
         || value[r] == null && v != null
         || value[r] != null && value[r] != v) {
@@ -245,7 +245,7 @@ class VWeekField : VField(7, 1) {
   /**
    * Returns the field value of given record as a week value.
    */
-  fun getWeek(r: Int): Week = getObject() as Week
+  override fun getWeek(r: Int): Week = getObject() as Week
 
   /**
    * Returns the field value of the current record as an object
@@ -375,7 +375,7 @@ class VWeekField : VField(7, 1) {
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
         && (oldValue != null && value[t] == null
             || oldValue == null && value[t] != null
             || oldValue != null && oldValue != value[t])) {
@@ -415,16 +415,16 @@ class VWeekField : VField(7, 1) {
         val oldText = getDisplayedValue(true) as? String
 
         checkType(oldText as Any?)
-        val newText = getText(block.activeRecord)
+        val newText = getText(block!!.activeRecord)
 
         oldText == null || newText == null || newText == "" || oldText != newText
       } catch (e: Exception) {
         true
       }
       if (handler == null || force) {
-        setWeek(block.activeRecord, Week.now())
+        setWeek(block!!.activeRecord, Week.now())
       } else {
-        setWeek(block.activeRecord, NotNullWeek(handler.selectDate(getWeek(block.activeRecord).getFirstDay())))
+        setWeek(block!!.activeRecord, NotNullWeek(handler.selectDate(getWeek(block!!.activeRecord).getFirstDay())))
       }
       true
     }
@@ -433,13 +433,13 @@ class VWeekField : VField(7, 1) {
   /**
    * return true if this field implements "enumerateValue"
    */
-  fun hasNextPreviousEntry(): Boolean = true
+  override fun hasNextPreviousEntry(): Boolean = true
 
   /**
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
-    val record: Int = block.activeRecord
+    val record: Int = block!!.activeRecord
     when {
       list != null -> {
         super.enumerateValue(desc)

@@ -18,6 +18,10 @@
 
 package org.kopi.galite.form
 
+import org.kopi.galite.db.Query
+import org.kopi.galite.list.VListColumn
+import kotlin.reflect.KClass
+
 class VImageField(width: Int, height: Int) : VField(width, height) {
   fun getIconWidth(): Int {
     TODO()
@@ -27,11 +31,75 @@ class VImageField(width: Int, height: Int) : VField(width, height) {
     TODO()
   }
 
-  fun getImage(r: Int): ByteArray {
+  override fun getImage(r: Int): ByteArray {
     TODO()
   }
 
-  fun setImage(r: Int, v: ByteArray) {
+  override fun isNullImpl(r: Int): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun getObjectImpl(r: Int): Any? {
+    TODO("Not yet implemented")
+  }
+
+  override fun toText(o: Any?): String? {
+    TODO("Not yet implemented")
+  }
+
+  override fun toObject(s: String): Any? {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTextImpl(r: Int): String? {
+    TODO("Not yet implemented")
+  }
+
+  override fun getSqlImpl(r: Int): String? {
+    TODO("Not yet implemented")
+  }
+
+  override fun copyRecord(f: Int, t: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTypeInformation(): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTypeName(): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun checkText(s: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun checkType(rec: Int, s: Any) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getDataType(): KClass<*> {
+    TODO("Not yet implemented")
+  }
+
+  override fun getListColumn(): VListColumn? {
+    TODO("Not yet implemented")
+  }
+
+  override fun setNull(r: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setObject(r: Int, v: Any?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setImage(r: Int, v: ByteArray) {
     TODO()
+  }
+
+  override fun retrieveQuery(query: Query, column: Int): Any? {
+    TODO("Not yet implemented")
   }
 }

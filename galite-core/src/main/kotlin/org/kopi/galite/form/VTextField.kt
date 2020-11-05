@@ -20,4 +20,7 @@ package org.kopi.galite.form
 
 class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styled: Boolean): VStringField (width, height, visibleHeight, convert, styled)
 {
+  override fun toText(o: Any?): String {
+    TODO("Not yet implemented")
+  }
 }

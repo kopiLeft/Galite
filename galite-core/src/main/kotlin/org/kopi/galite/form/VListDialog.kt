@@ -23,7 +23,19 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VWindow
 
-class VListDialog(list: Array<VListColumn>, values: Array<Array<Any?>>?): VModel {
+class VListDialog: VModel {
+
+  constructor(arrayOf: Array<VListColumn>?, arrayOf1: Array<Array<Any?>>?) {
+    TODO()
+  }
+
+  constructor(list: Array<VListColumn>?,
+              data: Array<Array<Any?>>?,
+              rows: Int,
+              newForm: VDictionary?) {
+    TODO()
+  }
+
   fun selectFromDialog(form: VForm, field: VField?): Int = TODO()
   fun selectFromDialog(form: VForm?, window: VWindow?, field: VField?): Int {
     TODO()

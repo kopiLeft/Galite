@@ -58,7 +58,7 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
   /**
    * Sets the field value of given record to a fixed value.
    */
-  fun setString(r: Int, v: String?) {
+  override fun setString(r: Int, v: String?) {
     if (v == null) {
       setCode(r, -1)
     } else {
@@ -99,6 +99,9 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
    * Returns the field value of given record as a int value.
    */
   override fun getString(r: Int): String = getObject(r) as String
+  override fun toText(o: Any?): String {
+    TODO("Not yet implemented")
+  }
 
   /**
    * Returns the field value of the current record as an object

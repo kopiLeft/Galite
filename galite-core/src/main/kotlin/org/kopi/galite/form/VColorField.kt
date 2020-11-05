@@ -39,7 +39,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
   /**
@@ -72,7 +72,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    * verify that value is valid (on exit)
    * @exception    VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, s: Any?) {}
+  override fun checkType(rec: Int, s: Any) {}
 
   override fun getType(): Int = MDL_FLD_COLOR
 
@@ -85,7 +85,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    *
    * @see VConstants
    */
-  fun getSearchType(): Int = VConstants.STY_NO_COND
+  override fun getSearchType(): Int = VConstants.STY_NO_COND
 
   /**
    * Sets the field value of given record to a null value.
@@ -97,7 +97,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
   /**
    * Sets the field value of given record to a date value.
    */
-  fun setColor(r: Int, v: Color?) {
+  override fun setColor(r: Int, v: Color?) {
     if (changedUI || value[r] !== v) {
       // trails (backup) the record if necessary
       trail(r)
@@ -116,7 +116,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
     if (v is ByteArray) {
       setColor(r, Color(reformat(v[0]), reformat(v[1]), reformat(v[2])))
     } else {
-      setColor(r, v as Color?)
+      setColor(r, v as? Color)
     }
   }
 
@@ -142,7 +142,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  fun getColor(r: Int): Color = getObject(r) as Color
+  override fun getColor(r: Int): Color = getObject(r) as Color
 
   /**
    * Returns the field value of the current record as an object
@@ -177,7 +177,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
             && (oldValue != null && value[t] == null
                     || oldValue == null && value[t] != null
                     || oldValue != null && oldValue != value[t])) {
@@ -189,13 +189,13 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    * Returns the SQL representation of field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
-  fun hasLargeObject(r: Int): Boolean = value[r] != null
+  override fun hasLargeObject(r: Int): Boolean = value[r] != null
 
   /**
    * Returns the SQL representation of field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
-  fun getLargeObject(r: Int): InputStream? {
+  override fun getLargeObject(r: Int): InputStream? {
     return value[r]?.let {
       ByteArrayInputStream(getObjectImpl(r) as ByteArray?)
     }
@@ -223,8 +223,8 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return handler?.let {
-      setColor(block.activeRecord,
-              handler.selectColor(getColor(block.activeRecord)))
+      setColor(block!!.activeRecord,
+              handler.selectColor(getColor(block!!.activeRecord)))
       true
     } ?: false
   }
