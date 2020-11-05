@@ -60,6 +60,7 @@ import org.kopi.galite.visual.VModel
  * (DForm)
  */
 abstract class VField protected constructor(width: Int, height: Int) : VConstants, VModel {
+
   /**
    * Sets the dimensions
    */
@@ -83,8 +84,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               commands: Array<VCommand>,
               pos: VPosition,
               align: Int,
-              alias: VField
-  ) {
+              alias: VField) {
     this.name = name
     this.index = index
     this.posInArray = posInArray
@@ -105,7 +105,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     position = pos
     cmd = commands
     this.alias = alias
-    alias?.addFieldChangeListener(object : FieldChangeListener {
+    alias.addFieldChangeListener(object : FieldChangeListener {
       override fun labelChanged() {}
       override fun searchOperatorChanged() {}
       override fun valueChanged(r: Int) {
@@ -446,7 +446,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       if (check && changed) {
         if (changedUI && hasListener) {
-          checkType(getDisplayedValue(true)!!)
+          checkType(getDisplayedValue(true))
         }
         callTrigger(VConstants.TRG_PREVAL)
         if (!isNull(block!!.activeRecord)) {
@@ -464,7 +464,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
       } else if (getForm().setTextOnFieldLeave()) {
         if (changed && changedUI && hasListener) {
-          checkType(getDisplayedValue(true)!!)
+          checkType(getDisplayedValue(true))
         }
       }
     } catch (e: VException) {
@@ -547,8 +547,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         accessTemp = VConstants.ACS_SKIPPED
       } else if (hasTrigger(VConstants.TRG_FLDACCESS)) {
         // evaluate ACCESS-Trigger
-        val oldRow: Int = block!!.activeRecord
-        val old: VField = block!!.getActiveField()!!
+        val oldRow = block!!.activeRecord
+        val old = block!!.getActiveField()!!
 
         // used by callTrigger
         block!!.activeRecord = current
@@ -667,7 +667,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         else -> "IS NULL"
       }
     } else {
-      var operator: String = VConstants.OPERATOR_NAMES[getSearchOperator()]
+      var operator = VConstants.OPERATOR_NAMES[getSearchOperator()]
       var operand = getSql(block!!.activeRecord)
 
       if (operand!!.indexOf('*') == -1) {
@@ -1333,12 +1333,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     fireColorChanged = false
     if (this.foreground[r] == null && foreground != null
-            || this.foreground[r] != null && this.foreground[r]!! != foreground) {
+        || this.foreground[r] != null && this.foreground[r]!! != foreground) {
       this.foreground[r] = foreground
       fireColorChanged = true
     }
     if (this.background[r] == null && background != null
-            || this.background[r] != null && this.background[r]!! != foreground) {
+        || this.background[r] != null && this.background[r]!! != foreground) {
       this.background[r] = background
       fireColorChanged = true
     }
@@ -1409,8 +1409,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun isInternal(): Boolean {
     return access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN
-            && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
-            && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
+           && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
+           && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
   }
 
   // ----------------------------------------------------------------------
@@ -1524,7 +1524,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } else {
       var count = 0
       var result: String? = null
-      val fldbuf: String = getSql(block!!.activeRecord)!!
+      val fldbuf = getSql(block!!.activeRecord)!!
 
       if (fldbuf.indexOf('*') > 0) {
         return
@@ -1722,9 +1722,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return if (lineCount == 0 && (newForm == null || !isNull(block!!.activeRecord))) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
     } else {
-      val selected: Int
-
-      selected = if (lineCount == 0 && newForm != null && isNull(block!!.activeRecord)) {
+      val selected = if (lineCount == 0 && newForm != null && isNull(block!!.activeRecord)) {
         newForm.add(getForm())
       } else {
         if (lineCount == MAX_LINE_COUNT - 1) {
@@ -2048,8 +2046,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               lab ?: name,
               toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
-              || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
-              || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
+          || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
+          || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
         helpOnType(help)
         help.helpOnFieldCommand(cmd)
       }
@@ -2100,10 +2098,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-            modeDesc,
-            getTypeName(),
-            getTypeInformation(),
-            names)
+                    modeDesc,
+                    getTypeName(),
+                    getTypeInformation(),
+                    names)
   }
 
   /**
@@ -2482,12 +2480,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     /**
      * @return a String with the current thread information for debugging
      */
-    private fun threadInfo(): String {
-      return """
-     Thread: ${Thread.currentThread()}
-     
-     """.trimIndent()
-    }
+    private fun threadInfo(): String = "Thread: ${Thread.currentThread()}".trimIndent()
 
     const val MDL_FLD_COLOR = 1
     const val MDL_FLD_IMAGE = 2
