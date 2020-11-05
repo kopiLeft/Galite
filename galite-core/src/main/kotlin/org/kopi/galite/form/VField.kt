@@ -1185,7 +1185,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getInt(r: Int): Int {
+  open fun getInt(r: Int): Int? {
     throw InconsistencyException()
   }
 

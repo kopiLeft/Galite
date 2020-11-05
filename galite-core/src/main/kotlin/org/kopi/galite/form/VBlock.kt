@@ -92,6 +92,13 @@ abstract class VBlock {
   fun getField(name: String?): VField? {
     return fields!!.find { name == it!!.name }
   }
+  /**
+   * Returns a field from its name
+   *
+   * @param     name    the name of the field
+   * @return the field or null if no field with that name has been found
+   */
+  fun getFieldID(): VField? = getField("ID")
   lateinit var fields: Array<VField>// fields
   fun fetchRecord(id: Int) {
     TODO()

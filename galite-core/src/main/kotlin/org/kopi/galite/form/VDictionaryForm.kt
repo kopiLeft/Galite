@@ -18,7 +18,6 @@
 package org.kopi.galite.form
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.Vector
 
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
@@ -29,16 +28,16 @@ import org.kopi.galite.form.VConstants.Companion.MOD_UPDATE
 
 abstract class VDictionaryForm : VForm, VDictionary {
 
-  protected constructor(parent: DBContextHandler) : super(parent) {}
+  protected constructor(parent: DBContextHandler) : super(parent)
 
-  protected constructor(parent: DBContext) : super(parent) {}
+  protected constructor(parent: DBContext) : super(parent)
 
-  protected constructor() : super() {}
+  protected constructor() : super()
 
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
-   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   fun editWithID(parent: VWindow, id: Int): Int {
     dBContext = parent.dBContext
@@ -52,7 +51,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
   /**
    * This is a modal call. Used in eg. PersonKey.k in some packages
    *
-   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   fun openForQuery(parent: VWindow): Int {
     dBContext = parent.dBContext
@@ -64,7 +63,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
 
   /**
    * create a new record and returns id
-   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   fun newRecord(parent: VWindow): Int {
     newRecord = true
@@ -78,8 +77,6 @@ abstract class VDictionaryForm : VForm, VDictionary {
     block = getBlock(0)
     assert(!block!!.isMulti()) { threadInfo() }
 
-    //initialise();
-    //callTrigger(TRG_PREFORM);
     if (newRecord) {
       if (getBlock(0) == null) {
         gotoBlock(block!!)
@@ -98,12 +95,12 @@ abstract class VDictionaryForm : VForm, VDictionary {
    */
   override fun close(code: Int) {
     assert(!getBlock(0).isMulti()) { threadInfo() }
-    val id = getBlock(0).getField("ID") //!!! graf 20080403: replace by getIdField()
-    if (id != null) {
+    val id = getBlock(0).getFieldID()
+    iD = if (id != null) {
       val i = id.getInt(0)
-      iD = i ?: -1
+      i ?: -1
     } else {
-      iD = -1
+      -1
     }
     super.close(code)
   }
@@ -129,14 +126,14 @@ abstract class VDictionaryForm : VForm, VDictionary {
 
   fun saveFilledField() {
     isRecursiveQuery = true
-    savedData = Vector()
-    savedState = Vector()
+    savedData = arrayListOf()
+    savedState = arrayListOf()
     val fields: Array<VField> = block!!.fields
-    for (i in fields.indices) {
-      savedData!!.addElement(fields[i].getObject(0))
+    fields.forEach { field ->
+      savedData!!.add(field.getObject(0))
     }
-    for (i in fields.indices) {
-      savedState!!.addElement(fields[i].getSearchOperator())
+    fields.forEach { field ->
+      savedState!!.add(field.getSearchOperator())
     }
   }
 
@@ -155,7 +152,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
 
   /**
    *
-   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised by triggers
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
    */
   override fun reset() {
     if (isRecursiveQuery) {
@@ -173,16 +170,10 @@ abstract class VDictionaryForm : VForm, VDictionary {
     isRecursiveQuery = false
   }
 
-  /**
-   *
-   */
   fun isNewRecord(): Boolean {
     return newRecord || lookup || closeOnSave
   }
 
-  /**
-   *
-   */
   fun setCloseOnSave() {
     closeOnSave = true
   }
@@ -203,32 +194,24 @@ abstract class VDictionaryForm : VForm, VDictionary {
     }
   }
 
-  /**
-   * The id of selected or new record
-   */
   // ----------------------------------------------------------------------
   // QUERY SEARCH
   // ----------------------------------------------------------------------
+  /**
+   * The id of selected or new record
+   */
   var iD = -1
     private set
   private var editID = -1
 
-  /**
-   *
-   */
   var isRecursiveQuery = false
     private set
-  /**
-   *
-   */
-  /**
-   *
-   */
+
   var isMenuQuery = false
   private var newRecord = false
   private var lookup = false
   private var closeOnSave = false
-  private var savedData: Vector<Any>? = null
-  private var savedState: Vector<Int>? = null
+  private var savedData: ArrayList<Any?>? = null
+  private var savedState: ArrayList<Int>? = null
   private var block: VBlock? = null
 }

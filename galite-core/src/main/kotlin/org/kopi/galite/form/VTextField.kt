@@ -27,22 +27,13 @@ import org.kopi.galite.list.VTextColumn
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.db.Query
 
-
 /**
  * This class implements multi-line text fields.
  */
 class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styled: Boolean) : VStringField(width, height, visibleHeight, convert, styled) {
 
-  override fun getType(): Int {
-    return MDL_FLD_EDITOR
-  }
+  override fun getType(): Int = MDL_FLD_EDITOR
 
-  // ----------------------------------------------------------------------
-  // INTERFACE DISPLAY
-  // ----------------------------------------------------------------------
-  /**
-   * @return a list column for list
-   */
   // ----------------------------------------------------------------------
   // INTERFACE DISPLAY
   // ----------------------------------------------------------------------
@@ -55,10 +46,10 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
 
   /**
    * verify that value is valid (on exit)
-   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised if text is bad
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised if text is bad
    */
   override fun checkType(o: Any?) {
-    setString(block!!.activeRecord, o as String?)
+    setString(block!!.activeRecord, o as? String)
   }
 
   /**
@@ -91,8 +82,6 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
    * Returns the specified tuple column as object of correct type for the field.
    * @param        query                the query holding the tuple
    * @param        column                the index of the column in the tuple
-   *
-   * @see .isPostgresDriverInterface
    */
   override fun retrieveQuery(query: Query, column: Int): Any {
     TODO()
@@ -109,7 +98,6 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
 
   /**
    * Returns the field value of the current record as an object
-   * @see .isPostgresDriverInterface
    */
   override fun getObjectImpl(r: Int): Any? {
     TODO()
@@ -117,7 +105,6 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
 
   /**
    * Returns the SQL representation of field value of given record.
-   * @see .isPostgresDriverInterface
    */
   override fun getSqlImpl(r: Int): String {
     TODO()
@@ -125,9 +112,6 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
 
   /**
    * Returns the SQL representation of field value of given record.
-   * Warning:	This method will become inaccessible to kopi users in next release
-   * @kopi        inaccessible
-   * @see .isPostgresDriverInterface
    */
   override fun hasLargeObject(r: Int): Boolean {
     TODO()
@@ -135,8 +119,6 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
 
   /**
    * Warning:	This method will become inaccessible to kopi users in next release
-   * @kopi        inaccessible
-   * @see .isPostgresDriverInterface
    */
   override fun hasBinaryLargeObject(r: Int): Boolean {
     TODO()
@@ -144,16 +126,12 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
 
   /**
    * Returns the SQL representation of field value of given record.
-   * Warning:	This method will become inaccessible to kopi users in next release
-   * @kopi        inaccessible
-   * @see .isPostgresDriverInterface
    */
   override fun getLargeObject(r: Int): InputStream? {
-    return if (value.get(r) == null) {
+    return if (value[r] == null) {
       null
     } else {
       ByteArrayInputStream(getObjectImpl(r) as ByteArray?)
     }
   }
-
 }

@@ -301,7 +301,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the field value of given record as a int value.
    */
-  override fun getInt(r: Int): Int {
+  override fun getInt(r: Int): Int? {
     throw InconsistencyException()
   }
 
