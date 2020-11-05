@@ -27,6 +27,7 @@ class NotImplementedException : RuntimeException {
   /**
    * Constructs am NotImplementedException with no specified detail message.
    */
+  @Deprecated("use NotImplementedError instead", ReplaceWith("NotImplementedError()"))
   constructor() : super()
 
   /**
@@ -34,5 +35,6 @@ class NotImplementedException : RuntimeException {
    *
    * @param  message represents the detail message
    */
+  @Deprecated("use NotImplementedError instead", ReplaceWith("NotImplementedError(message)"))
   constructor(message: String) : super(message)
 }

@@ -118,8 +118,8 @@ open class VFixnumCodeField(ident: String,
    * Sets the field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
-  override fun setObject(r: Int, v: Any) {
-    setFixed(r, v as Fixed?)
+  override fun setObject(r: Int, v: Any?) {
+    setFixed(r, v as? Fixed)
   }
 
   /**

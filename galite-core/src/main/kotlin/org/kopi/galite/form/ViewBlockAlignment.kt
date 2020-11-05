@@ -17,4 +17,23 @@
  */
 package org.kopi.galite.form
 
-class ViewBlockAlignment 
+class ViewBlockAlignment(formView: UForm, align: BlockAlignment) {
+  //------------------------------------------------------------
+  // ACCESSORS
+  //------------------------------------------------------------
+  fun isChart(): Boolean {
+    TODO()
+  }
+
+  fun isAligned(x: Int): Boolean {
+    TODO()
+  }
+
+  fun getMinStart(x: Int): Int {
+    TODO()
+  }
+
+  fun getLabelMinStart(x: Int): Int {
+    TODO()
+  }
+}

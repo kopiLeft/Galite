@@ -100,14 +100,13 @@ class VHelpViewer : VWindow() {
 
   init {
     setTitle(VlibProperties.getString("help_viewer"))
-    setActors(arrayOf(
-            VActor("File",
-                    HELPVIEWER_LOCALIZATION_RESOURCE,
-                    "Close",
-                    HELPVIEWER_LOCALIZATION_RESOURCE,
-                    "quit",
-                    KeyEvent.VK_ESCAPE,
-                    0)
+    addActors(arrayOf(VActor("File",
+                             HELPVIEWER_LOCALIZATION_RESOURCE,
+                             "Close",
+                             HELPVIEWER_LOCALIZATION_RESOURCE,
+                             "quit",
+                             KeyEvent.VK_ESCAPE,
+                             0)
     ))
 
     // localize the help viewer using the default locale

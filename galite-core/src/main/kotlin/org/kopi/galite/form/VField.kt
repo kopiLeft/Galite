@@ -18,18 +18,16 @@
 
 package org.kopi.galite.form
 
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
-import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VModel
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
@@ -40,6 +38,59 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
    * Returns the field label.
    */
   open fun getHeader(): String {
+    TODO()
+  }
+
+  open fun getBorder(): Int {
+    return border
+  }
+
+  open fun getBackground(r: Int): VColor {
+    return background[r]
+  }
+
+  open fun getForeground(r: Int): VColor {
+    return foreground[r]
+  }
+
+  // ----------------------------------------------------------------------
+  // NAVIGATING
+  // ----------------------------------------------------------------------
+  fun enter() {
+    TODO()
+  }
+
+  open fun getOptions(): Int {
+    TODO()
+  }
+
+  open fun noDetail(): Boolean {
+    TODO()
+  }
+
+  open fun noChart(): Boolean {
+    TODO()
+  }
+
+  open fun leave(check: Boolean) {
+    TODO()
+  }
+
+  // ----------------------------------------------------------------------
+  // MANAGING FIELD VALUES
+  // ----------------------------------------------------------------------
+  open fun getTypeOptions(): Int {
+    return 0
+  }
+
+  open fun getSearchOperator(): Int {
+    TODO()
+  }
+
+  /**
+   * text has changed (key typed on a display)
+   */
+  open fun onTextChange(text: String) {
     TODO()
   }
 
@@ -69,10 +120,35 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  /**
-   * Sets the field value of given record to a date value.
-   */
-  open fun setImage(v: ByteArray?) {
+  open fun getToolTip(): String {
+    TODO()
+  }
+
+  open fun getDefaultAccess(): Int {
+    TODO()
+  }
+
+  fun isInternal(): Boolean {
+    TODO()
+  }
+
+  fun onBeforeDrop() {
+    TODO()
+  }
+
+  open fun updateText() {
+    TODO()
+  }
+
+  fun onAfterDrop() {
+    TODO()
+  }
+
+  open fun setString(v: String?) {
+    TODO()
+  }
+
+  open fun setImage(v: ByteArray) {
     TODO()
   }
 
@@ -80,11 +156,11 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
    * Sets the field value of given record.
    * Warning:   This method will become inaccessible to kopi users in next release
    */
-  open fun setObject(r: Int, v: Any) {
+  open fun setObject(r: Int, v: Any?) {
     TODO()
   }
 
-  open fun toText(o: Any): String? {
+  open fun toText(o: Any?): String? {
     TODO()
   }
 
@@ -114,6 +190,10 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
    * return the name of this field
    */
   open fun getTypeName(): String {
+    TODO()
+  }
+
+  open fun displayFieldError(message: String?) {
     TODO()
   }
 
@@ -147,7 +227,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
   override fun getDisplay(): UField = TODO()
 
-  open fun checkType(rec: Int, s: Any) {
+  open fun checkType(rec: Int, s: Any?) {
     TODO()
   }
 
@@ -163,7 +243,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  protected open fun getListColumn(): VListColumn? {
+  open fun getListColumn(): VListColumn? {
     TODO()
   }
 
@@ -223,6 +303,10 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  fun setChanged(r: Boolean) {
+    TODO()
+  }
+
   fun getForm(): VForm {
     TODO()
   }
@@ -231,15 +315,22 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  open fun clear(r: Int) {
+    TODO()
+  }
+
   open fun getSearchCondition(): String? = TODO()
 
   fun hasFocus(): Boolean = TODO()
 
-   fun getListID(): Int = TODO()
+  fun getListID(): Int = TODO()
 
-   fun setValueID(id: Int) {
-     TODO()
-   }
+  fun setValueID(id: Int) {
+    TODO()
+  }
+
+  open fun getAccess(i: Int): Int = TODO()
+
 
   companion object {
     const val MDL_FLD_COLOR = 1
@@ -259,22 +350,21 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           = 0
   private val indices // bitset of unique indices
           = 0
-  val name // field name (for dumps)
-          : String? = null
-  val label // field label
-          : String? = null
+  lateinit var name // field name (for dumps)
+          : String
+  val label: String? = null // field label
   private val options // options
           = 0
   private val help // help text
           : String? = null
   private val index // The position in parent field array
           = 0
-  private val align // field alignment
+  val align // field alignment
           = 0
   private val posInArray // position in array of fields
           = 0
 
-  var list: VList ? = null // list
+  var list: VList? = null // list
 
   lateinit var columns // columns in block's tables
           : Array<VColumn>

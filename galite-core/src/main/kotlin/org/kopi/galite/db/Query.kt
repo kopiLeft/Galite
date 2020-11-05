@@ -39,7 +39,7 @@ class Query(conn: Connection) {
 
   fun run(format: String?): Int = TODO()
 
-  fun delete(format: String?): Int= TODO()
+  fun delete(format: String?): Int = TODO()
 
   fun getInt(pos: Int): Int = TODO()
 
@@ -57,7 +57,7 @@ class Query(conn: Connection) {
 
   fun getBoolean(column: Int): Boolean = TODO()
 
-  fun getObject(pos: Int):Any =TODO()
+  fun getObject(pos: Int):Any = TODO()
 
   fun getFixed(pos: Int): NotNullFixed = TODO()
 }

@@ -23,6 +23,7 @@ import java.io.Serializable
 
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
+import org.kopi.galite.visual.VExecFailedException
 
 interface PredefinedValueHandler : Serializable {
 
@@ -34,5 +35,6 @@ interface PredefinedValueHandler : Serializable {
 
   fun selectDate(date: Date): Date
 
+  @Throws(VExecFailedException::class)
   fun selectImage(): ByteArray
 }
