@@ -15,6 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VTextField 
+class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styled: Boolean): VStringField (width, height, visibleHeight, convert, styled)
+{
+}

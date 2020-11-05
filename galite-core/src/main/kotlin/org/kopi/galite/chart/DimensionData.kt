@@ -17,12 +17,10 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.field.Field
-
 /**
  * Represents the value of a dimension
  */
-class DimensionData<T : Comparable<T>>(val value: T) : Field<T>() {
+class DimensionData<T : Comparable<T>>(val value: T) {
 
   /**
    * Measures with corresponding values in a dimension value

@@ -67,7 +67,7 @@ class VImageField : VField(1,1) {
     TODO("Not yet implemented")
   }
 
-  override fun getTextImpl(r: Int?): String? {
+  override fun getTextImpl(r: Int): String? {
     TODO("Not yet implemented")
   }
 
@@ -85,5 +85,21 @@ class VImageField : VField(1,1) {
 
   override fun getTypeName(): String {
     TODO("Not yet implemented")
+  }
+
+  fun getIconWidth(): Int {
+    TODO()
+  }
+
+  fun getIconHeight(): Int {
+    TODO()
+  }
+
+  override fun getImage(r: Int): ByteArray {
+    TODO()
+  }
+
+  override fun setImage(r: Int, v: ByteArray) {
+    TODO()
   }
 }

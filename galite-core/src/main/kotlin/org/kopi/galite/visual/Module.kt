@@ -23,6 +23,7 @@ import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.l10n.ModuleLocalizer
 import org.kopi.galite.util.base.InconsistencyException
+import kotlin.jvm.Throws
 
 /**
  * Represents an Module.
@@ -111,8 +112,8 @@ class Module(val id: Int,
 
     try {
       loc = manager.getModuleLocalizer(source, shortname)
-      description = loc.getLabel()
-      help = loc.getHelp()
+      description = loc.getLabel()!!
+      help = loc.getHelp()!!
     } catch (e: InconsistencyException) {
       // If the module localization is not found, report it
       ApplicationContext.reportTrouble(shortname,
@@ -145,6 +146,8 @@ class Module(val id: Int,
       }
     }
 
+    @JvmOverloads
+    @Throws(VException::class)
     fun startForm(ctxt: DBContext,
                   objectName: String?,
                   description: String,

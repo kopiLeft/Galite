@@ -24,7 +24,7 @@ import org.kopi.galite.util.base.InconsistencyException
 
 open class VStringCodeColumn(
   title: String,
-  column: String,
+  column: String?,
   names: Array<String>,
   private val codes: Array<String>,
   sortAscending: Boolean

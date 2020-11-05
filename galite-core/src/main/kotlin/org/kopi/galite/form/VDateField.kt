@@ -27,7 +27,7 @@ import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -179,7 +179,7 @@ class VDateField : VField(10, 1) {
    * Warning:	This method will become inaccessible to kopi users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setDate(r, v as Date?)
+    setDate(r, v as? Date)
   }
 
   /**
@@ -273,15 +273,15 @@ class VDateField : VField(10, 1) {
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int?): String? {
-    return if (value[r!!] == null) {
+  override fun getTextImpl(r: Int): String {
+    return if (value[r] == null) {
       ""
     } else {
       Companion.toText(value[r]!!)
     }
   }
+/**
 
-  /**
    * Returns the SQL representation of field value of given record.
    */
   override fun getSqlImpl(r: Int): String {

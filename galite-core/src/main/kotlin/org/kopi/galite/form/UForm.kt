@@ -20,6 +20,9 @@ package org.kopi.galite.form
 
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VException
+
+import kotlin.jvm.Throws
 
 /**
  * `UForm` is the top-level interface that must be implemented
@@ -39,6 +42,7 @@ interface UForm : UWindow, FormListener {
    * @return The [PrintJob] of this `UForm`
    * @throws VException operation may fail
    */
+  @Throws(VException::class)
   fun printForm(): PrintJob
 
   /**
@@ -55,5 +59,6 @@ interface UForm : UWindow, FormListener {
   /**
    * Show document preview
    */
+  @Throws(VException::class)
   fun launchDocumentPreview(file: String)
 }
