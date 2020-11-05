@@ -943,7 +943,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Sets the field value of given record to a date value.
    */
-  fun setImage(r: Int, v: ByteArray) {
+  open fun setImage(r: Int, v: ByteArray) {
     throw InconsistencyException()
   }
 
@@ -1192,7 +1192,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the field value of given record as a date value.
    */
-  fun getImage(r: Int): ByteArray {
+  open fun getImage(r: Int): ByteArray {
     throw InconsistencyException()
   }
 
