@@ -33,8 +33,7 @@ import org.kopi.galite.visual.VlibProperties
  */
 abstract class VCodeField(val type: String,
                           val source: String,
-                          val idents: Array<String>)
-  : VField(1, 1) {
+                          val idents: Array<String>): VField(1, 1) {
 
   /**
    *
@@ -333,8 +332,8 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int?): String? = if (value[r!!] == -1) ""
-  else labels[value[r!!]]
+  override fun getTextImpl(r: Int): String? = if (value[r] == -1) ""
+  else labels[value[r]]
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -398,8 +397,8 @@ abstract class VCodeField(val type: String,
    *
    * @param     parent         the caller localizer
    */
-  override fun localize(parent: FieldLocalizer) {
-    val loc = parent.manager.getTypeLocalizer(source, type)
+  override fun localize(parent: FieldLocalizer?) {
+    val loc = parent!!.manager.getTypeLocalizer(source, type)
 
     for (i in labels.indices) {
       labels[i] = loc.getCodeLabel(idents[i])

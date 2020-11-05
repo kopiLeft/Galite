@@ -1460,20 +1460,16 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
       try {
         while (true) {
           try {
-            form.startProtected(Message.getMessage("loading_record"))
             fetchPosition = pos
             fetchRecord(fetchBuffer[pos])
-            form.commitProtected()
             return
           } catch (e: VException) {
             try {
-              form.abortProtected(e)
             } catch (abortEx: VException) {
               throw abortEx
             }
           } catch (e: SQLException) {
             try {
-              form.abortProtected(e)
             } catch (abortEx: DBDeadLockException) {
               throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
             } catch (abortEx: DBInterruptionException) {
@@ -1483,13 +1479,11 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
             }
           } catch (e: Error) {
             try {
-              form.abortProtected(e)
             } catch (abortEx: Error) {
               throw VExecFailedException(abortEx)
             }
           } catch (e: RuntimeException) {
             try {
-              form.abortProtected(e)
             } catch (abortEx: RuntimeException) {
               throw VExecFailedException(abortEx)
             }
@@ -1788,20 +1782,16 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     try {
       while (true) {
         try {
-          form.startProtected(Message.getMessage("searching_database"))
           callProtectedTrigger(TRG_PREQRY)
           dialog = buildQueryDialog()
-          form.commitProtected()
           break
         } catch (e: VException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: VException) {
             throw abortEx
           }
         } catch (e: SQLException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: DBDeadLockException) {
             throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
           } catch (abortEx: DBInterruptionException) {
@@ -1811,13 +1801,11 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
           }
         } catch (e: Error) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (e: RuntimeException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: RuntimeException) {
             throw VExecFailedException(abortEx)
           }
@@ -2346,7 +2334,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * This copy (backup) is used if the transaction is aborted
    * to rollback the form the the correct point.
    */
-  protected fun trailRecord(rec: Int) {
+  fun trailRecord(rec: Int) {
     // check if trailing needed
     if (!form.inTransaction() || isRecordTrailed(rec)) {
       return
@@ -2362,7 +2350,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
-  protected fun callProtectedTrigger(event: Int, index: Int = 0): Any? {
+  fun callProtectedTrigger(event: Int, index: Int = 0): Any? {
     currentRecord = activeRecord
     executeProtectedVoidTrigger(VKT_Triggers[index][event])
     return null
@@ -2373,7 +2361,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
-  protected fun callTrigger(event: Int, index: Int = 0): Any? {
+  fun callTrigger(event: Int, index: Int = 0): Any? {
     val returnValue: Any?
 
     // do not use getCurrentRecord because getCurrentRecord throws an
@@ -2407,7 +2395,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   /**
    * Returns true iff there is trigger associated with given event.
    */
-  protected fun hasTrigger(event: Int, index: Int): Boolean = VKT_Triggers[index][event] != 0
+  fun hasTrigger(event: Int, index: Int): Boolean = VKT_Triggers[index][event] != 0
 
   /*
    * Clears all hidden lookup fields!!.
@@ -2569,17 +2557,11 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
 
   override fun getDBContext(): DBContext? = form.dBContext
 
-  override fun startProtected(message: String) {
-    form.startProtected(message)
-  }
+  override fun startProtected(message: String) {}
 
-  override fun commitProtected() {
-    form.commitProtected()
-  }
+  override fun commitProtected() {}
 
-  override fun abortProtected(interrupt: Boolean) {
-    form.abortProtected(interrupt)
-  }
+  override fun abortProtected(interrupt: Boolean) {}
 
   override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
 
@@ -2901,7 +2883,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   protected var fetchSize = 0
 
   // max number of displayed records
-  protected var displaySize = 0
+  var displaySize = 0
 
   /**
    * @param page the page number of this block
@@ -2909,24 +2891,24 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    */
   var pageNumber = 0 // page number
   protected lateinit var source: String // qualified name of source file
-  protected lateinit var name: String // block name
+  lateinit var name: String // block name
   protected lateinit var shortcut: String // block short name
-  protected var title: String = "" // block title
-  protected var align: BlockAlignment? = null
+  var title: String = "" // block title
+  var align: BlockAlignment? = null
   protected lateinit var help: String // the help on this block
   protected var tables: Array<String>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
   protected var commands: Array<VCommand>? = null // commands
-  protected var actors: Array<VActor>? = null // actors to send to form (move to block import)
+  var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
       val temp: Array<VActor>? = field
       field = null
       return temp
     }
 
-  protected var fields: Array<VField?>? = null // fields
+  var fields: Array<VField?>? = null // fields
   protected lateinit var VKT_Triggers: Array<IntArray>
   // dynamic data
   var activeRecord = 0 // current record
@@ -2939,7 +2921,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     }
 
   var activeField: VField? = null
-  protected var detailMode = false
+  var detailMode = false
     set(mode: Boolean) {
       if (mode != field) {
         // remember field to enter it in the next view
@@ -2951,7 +2933,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     }
 
   // number of active records
-  protected val recordCount
+  val recordCount
     get(): Int {
       var count = 0
       if (isMulti()) {
@@ -3014,10 +2996,10 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   protected var fetchPosition = 0 // position of current record
   protected var blockListener: EventListenerList = EventListenerList()
   protected var orderModel: OrderModel = OrderModel()
-  protected var border = 0
-  protected var maxRowPos = 0
-  protected var maxColumnPos = 0
-  protected var displayedFields = 0
+  var border = 0
+  var maxRowPos = 0
+  var maxColumnPos = 0
+  var displayedFields = 0
   private var isFilterVisible = false
   protected var dropListMap: HashMap<*, *> = HashMap<Any?, Any?>()
 

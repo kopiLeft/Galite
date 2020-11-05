@@ -99,9 +99,9 @@ public class DBlock extends JPanel implements UBlock {
   protected LayoutManager createLayoutManager() {
     return new KopiSimpleBlockLayout(2 * maxColumnPos, // label + field => 2
                                      maxRowPos,
-                                     (model.getAlignment() == null) ?
+                                     (model.getAlign() == null) ?
                                          null :
-                                         new ViewBlockAlignment(formView, model.getAlignment()));
+                                         new ViewBlockAlignment(formView, model.getAlign()));
   }
 
 
@@ -338,7 +338,6 @@ public class DBlock extends JPanel implements UBlock {
    * sort the records to order it by the value of the
    * given column.
    *
-   * @param     column column to order or if -1 back to original order
    */
   public void orderChanged() {
     SwingThreadHandler.startAndWait(synchronRefresh);

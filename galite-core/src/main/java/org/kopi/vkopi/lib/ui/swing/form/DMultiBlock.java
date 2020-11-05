@@ -91,15 +91,15 @@ public class DMultiBlock extends DChartBlock implements UMultiBlock {
         detailPane = new JPanel();
         detailPane.setLayout(detailLayout = new KopiSimpleBlockLayout(2 * maxColumnPos,
                 maxRowPos,
-                (model.getAlignment() == null) ?
+                (model.getAlign() == null) ?
                         null :
-                        new ViewBlockAlignment(getFormView(), model.getAlignment())));
+                        new ViewBlockAlignment(getFormView(), model.getAlign())));
         chartPane.setLayout(chartLayout = layout = new KopiMultiBlockLayout(displayedFields + 1, getModel().getDisplaySize() + 1));
         super.createFields();
     }
 
     public boolean inDetailMode() {
-        return getModel().isDetailMode();
+        return getModel().getDetailMode();
     }
 
     protected LayoutManager createLayoutManager() {
@@ -141,7 +141,7 @@ public class DMultiBlock extends DChartBlock implements UMultiBlock {
         if (row >= 0) {
             getModel().gotoRecord(getRecordFromDisplayLine(row));
         }
-        if (getModel().isDetailMode()) {
+        if (getModel().getDetailMode()) {
             getModel().setDetailMode(false);
             layout = chartLayout;
         } else {

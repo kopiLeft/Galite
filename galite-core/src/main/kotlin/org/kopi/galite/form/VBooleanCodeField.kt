@@ -122,7 +122,7 @@ open class VBooleanCodeField : VCodeField {
    */
   override fun getBoolean(r: Int): Boolean? = if (value[r] == -1) null else codes[value[r]]
 
-  override fun getTextImpl(r: Int?): String? {
+  override fun getTextImpl(r: Int): String? {
     TODO("Not yet implemented")
   }
 

@@ -32,7 +32,7 @@ object Triggers : VConstants {
   /**
    * Returns true if form is changed.
    */
-  fun isChanged(f: VForm): Boolean = f.isChanged
+  fun isChanged(f: VForm): Boolean = f.isChanged()
 
   /*
    * ----------------------------------------------------------------------
