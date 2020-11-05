@@ -175,7 +175,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
   /**
    * Returns the field value of given record as a string value.
    */
-  fun getString(r: Int): String = getObject(r) as String
+  open fun getString(r: Int): String = getObject(r) as String
 
   /**
    * Returns the field value of the current record as an object
