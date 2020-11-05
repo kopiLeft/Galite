@@ -19,11 +19,24 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.*;
+import java.awt.AWTEvent;
+import java.awt.ActiveEvent;
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.Frame;
+import java.awt.MenuComponent;
+import java.awt.Window;
 
 import javax.swing.FocusManager;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.VWindow;
+import org.kopi.galite.visual.WindowBuilder;
+import org.kopi.galite.visual.WindowController;
 
 /**
  * {@code JWindowController} is a swing implementation of the {@link WindowController}.
@@ -70,7 +83,7 @@ public class JWindowController extends WindowController {
 	      }
 	    } catch (RuntimeException e) {
 	      // is ignored
-	      ApplicationContext.reportTrouble("JWindowController",
+	      ApplicationContext.Companion.reportTrouble("JWindowController",
 		  		               "JWindowController.dispatch (I should not be here!)",
 		  		               event.toString(),
 		  		               e);

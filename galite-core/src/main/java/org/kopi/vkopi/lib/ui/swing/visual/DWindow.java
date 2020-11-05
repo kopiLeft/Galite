@@ -19,14 +19,45 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.ui.swing.base.JButtonPanel;
-import org.kopi.vkopi.lib.ui.swing.base.KnownBugs;
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
-import org.kopi.vkopi.lib.util.LineBreaker;
-import org.kopi.vkopi.lib.visual.*;
+import java.awt.AWTEvent;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.io.File;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultFocusManager;
 import javax.swing.FocusManager;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -34,12 +65,23 @@ import javax.swing.text.JTextComponent;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
+
+import org.kopi.vkopi.lib.ui.swing.base.JButtonPanel;
+import org.kopi.vkopi.lib.ui.swing.base.KnownBugs;
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
+import org.kopi.galite.util.LineBreaker;
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.MessageCode;
+import org.kopi.galite.visual.MessageListener;
+import org.kopi.galite.visual.UIFactory;
+import org.kopi.galite.visual.UWindow;
+import org.kopi.galite.visual.VActor;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VRuntimeException;
+import org.kopi.galite.visual.VWindow;
+import org.kopi.galite.visual.VlibProperties;
+import org.kopi.galite.visual.WaitInfoListener;
+
 
 /**
  * This class displays a window with a menu, a tool bar, a content panel
@@ -341,7 +383,7 @@ public abstract class DWindow extends JPanel implements UWindow {
     // the screen width, this is a work around until a 'detail' option is added to
     // error windows.
     if (message.length() > 100) {
-      message = LineBreaker.addBreakForWidth(message, 100);
+      message = LineBreaker.Companion.addBreakForWidth(message, 100);
     }
 
     displayError(frame, message);
@@ -516,7 +558,7 @@ public abstract class DWindow extends JPanel implements UWindow {
       try {
 	undo.undo();
       } catch (CannotUndoException ex) {
-	System.out.println(MessageCode.getMessage("VIS-00029") + ex);
+	System.out.println(MessageCode.INSTANCE.getMessage("VIS-00029") + ex);
       }
       update();
       redoAction.update();
@@ -544,7 +586,7 @@ public abstract class DWindow extends JPanel implements UWindow {
       try {
 	undo.redo();
       } catch (CannotRedoException ex) {
-	System.out.println(MessageCode.getMessage("VIS-00030") + ex);
+	System.out.println(MessageCode.INSTANCE.getMessage("VIS-00030") + ex);
 	ex.printStackTrace();
       }
       update();
@@ -595,7 +637,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    * @deprecated   Use method #performAsyncAction(KopiAction action) without
    *               boolean parameter because this parameter  was ignored.
    */
-  public void performAction(final KopiAction action, boolean block) {
+  public void performAction(final org.kopi.galite.visual.Action action, boolean block) {
     performAsyncAction(action);
   }
   /**
@@ -604,7 +646,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  public void performAsyncAction(final KopiAction action) {
+  public void performAsyncAction(final org.kopi.galite.visual.Action action) {
     performActionImpl(action, true);
   }
 
@@ -613,7 +655,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  public void performBasicAction(final KopiAction action) {
+  public void performBasicAction(final org.kopi.galite.visual.Action action) {
     performActionImpl(action, false);
   }
 
@@ -623,7 +665,7 @@ public abstract class DWindow extends JPanel implements UWindow {
    *
    * @param	action		the action to perform.
    */
-  private void performActionImpl(final KopiAction action, boolean asynch) {
+  private void performActionImpl(final org.kopi.galite.visual.Action action, boolean asynch) {
     SwingThreadHandler.verifyRunsInEventThread("DForm:performActionImpl");
 
     if (inAction == true) {
@@ -641,14 +683,14 @@ public abstract class DWindow extends JPanel implements UWindow {
 
       KnownBugs.paintIconReload = null;
       KnownBugs.paintIconFailure = false;
-      ApplicationContext.reportTrouble("DWindow",
+      ApplicationContext.Companion.reportTrouble("DWindow",
                                        "DWindow.performActionImpl(" + action + ", "+asynch+")",
                                        text,
                                        new RuntimeException("Painting Error - Load retried (Never Thrown)"));
 
     } else if (KnownBugs.paintIconFailure) {
       KnownBugs.paintIconFailure = false;
-      ApplicationContext.reportTrouble("DWindow",
+      ApplicationContext.Companion.reportTrouble("DWindow",
                                        "DWindow.performActionImpl(" + action + ", "+asynch+")",
                                        "no more info",
                                        new RuntimeException("Painting Error (Never Thrown)"));
@@ -912,7 +954,7 @@ public abstract class DWindow extends JPanel implements UWindow {
     contentPanel = null;
     model = null;
     self.setJMenuBar(null);
-    org.kopi.vkopi.lib.base.Utils.freeMemory();
+    org.kopi.galite.base.Utils.Companion.freeMemory();
     self = null;
   }
 
@@ -961,7 +1003,7 @@ public abstract class DWindow extends JPanel implements UWindow {
       for (int i = 0; i < actorDefs.length; i++) {
 	DActor		actorView;
 
-	actorView = (DActor)UIFactory.getUIFactory().createView(actorDefs[i]);
+	actorView = (DActor)UIFactory.uiFactory.createView(actorDefs[i]);
         addButton(buttonPanel, actorView);
         menuBar.addItem(actorView);
       }
@@ -971,7 +1013,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   }
 
   private void addButton(JPanel panel, DActor actorView) {
-    if (actorView.getModel().iconName != null) {
+    if (actorView.getModel().getIconName() != null) {
       panel.add(actorView.getButton());
     }
   }
@@ -1098,7 +1140,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   /*package*/ void verifyNotInTransaction(String message) {
     if (getModel().inTransaction() && debugMessageInTransaction()) {
       try {
-	ApplicationContext.reportTrouble("DWindow",
+	ApplicationContext.Companion.reportTrouble("DWindow",
                                          message + " IN TRANSACTION",
                                          this.toString(),
                                          new RuntimeException("displayNotice in Transaction"));
@@ -1116,8 +1158,8 @@ public abstract class DWindow extends JPanel implements UWindow {
     boolean     debugMessageInTransaction;
 
     try {
-      debugMessageInTransaction = ApplicationContext.getDefaults().debugMessageInTransaction();
-    } catch (PropertyException e) {
+      debugMessageInTransaction = ApplicationContext.Companion.getDefaults().debugMessageInTransaction();
+    } catch (Exception e) {
       debugMessageInTransaction = false;
     }
     return debugMessageInTransaction;
@@ -1350,7 +1392,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   // set/access inAction ONLY in the event-disp.-Thread
   private boolean				inAction;
   // set/access these fields ONLY in the event-disp.-Thread
-  private KopiAction				currentAction;
+  private org.kopi.galite.visual.Action				currentAction;
   private LinkedList<AWTEvent>            	currentEventQueue;
 
   private int                   		returnCode = -1;
@@ -1408,8 +1450,8 @@ public abstract class DWindow extends JPanel implements UWindow {
 
     public void actionPerformed(ActionEvent e) {
       // Bookmarks (Shortcuts)
-      if (ApplicationContext.getMenu() != null) {
-        Action[]    bookmarks = ((DMenuTree)ApplicationContext.getMenu().getDisplay()).getBookmarkActions();
+      if (ApplicationContext.Companion.getMenu() != null) {
+        Action[]    bookmarks = ((DMenuTree)ApplicationContext.Companion.getMenu().getDisplay()).getBookmarkActions();
 
         if ( item < bookmarks.length) {
           bookmarks[item].actionPerformed(e);

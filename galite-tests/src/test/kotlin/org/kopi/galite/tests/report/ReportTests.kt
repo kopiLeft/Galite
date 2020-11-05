@@ -17,6 +17,11 @@
 
 package org.kopi.galite.tests.report
 
+import java.io.File
+import java.util.Locale
+
+import org.jdom2.input.SAXBuilder
+
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
@@ -32,8 +37,8 @@ class ReportTests: ApplicationTestBase() {
   fun reportFieldsTest() {
     val report = SimpleReport()
 
-    assertEquals(report.fields[0], report.field1)
-    assertEquals(report.fields[1], report.field2)
+    assertEquals(report.fields[0], report.name)
+    assertEquals(report.fields[1], report.age)
   }
 
   /**
@@ -43,37 +48,76 @@ class ReportTests: ApplicationTestBase() {
   fun reportDataTest() {
     val report = SimpleReport()
 
-    val rows = report.getRowsForField(report.field1)
-    assertEquals(listOf("test1", "test2"), rows)
+    val rows = report.getRowsForField(report.name)
+    assertEquals(listOf("Sami", "Safia"), rows)
 
     val firstRow = report.getRow(0)
-    assertEquals(mapOf(report.field1 to "test1", report.field2 to 64L), firstRow)
+    assertEquals(mapOf(report.name to "Sami", report.age to 22), firstRow)
 
     val secondRow = report.getRow(1)
-    assertEquals(mapOf(report.field1 to "test2", report.field2 to 32L), secondRow)
+    assertEquals(mapOf(report.name to "Safia", report.age to 23), secondRow)
+  }
+
+  /**
+   * Tests that fields localization is generated to the xml file
+   */
+  @Test
+  fun fieldLocalizationTest() {
+    val builder = SAXBuilder()
+    val tempDir = createTempDir("galite", "")
+    tempDir.deleteOnExit()
+
+    val report = SimpleReport()
+    val sourceFilePath = report.javaClass.classLoader.getResource("").path +
+            this.javaClass.packageName.replace(".", "/") + File.separatorChar
+    report.genLocalization()
+
+    val generatedFile = File("${sourceFilePath}/SimpleReport-${report.locale}.xml")
+    assertEquals(true, generatedFile.exists())
+    val document = builder.build(generatedFile)
+
+    // Check that generated xml file contains fields localization
+    val rootElement = document.rootElement
+    val nameField   = rootElement.children[0]
+    val ageField    = rootElement.children[1]
+    assertEquals("report", rootElement.name)
+    assertEquals("SimpleReport", rootElement.getAttributeValue("title"))
+    assertEquals("name", nameField.getAttributeValue("ident"))
+    assertEquals("name", nameField.getAttributeValue("label"))
+    assertEquals("The user name", nameField.getAttributeValue("help"))
+    assertEquals("age", ageField.getAttributeValue("ident"))
+    assertEquals("age", ageField.getAttributeValue("label"))
+    assertEquals("The user age", ageField.getAttributeValue("help"))
   }
 
   /**
    * Simple Report with two fields.
    */
   class SimpleReport : Report() {
-    val field1 = field(StringTestType()) {
-      label = "field1"
+    override val locale = Locale.FRANCE
+
+    override val title = "SimpleReport"
+
+    override val reportCommands = true
+
+    val name = field(StringTestType()) {
+      label = "name"
+      help = "The user name"
     }
-    val field2 = field(LongTestType()) {
-      label = "field2"
+
+    val age = field(IntTestType()) {
+      label = "age"
+      help = "The user age"
     }
 
     init {
-      reportCommands()
-
       add {
-        this[field1] = "test1"
-        this[field2] = 64L
+        this[name] = "Sami"
+        this[age] = 22
       }
       add {
-        this[field1] = "test2"
-        this[field2] = 32L
+        this[name] = "Safia"
+        this[age] = 23
       }
     }
   }
@@ -84,10 +128,9 @@ class ReportTests: ApplicationTestBase() {
     }
   }
 
-  class LongTestType : Domain<Long>(5) {
+  class IntTestType : Domain<Int>(3) {
     override val type = code {
       this["cde1"] = 1
     }
   }
 }
-

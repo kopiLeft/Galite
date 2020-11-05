@@ -19,13 +19,19 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.ui.swing.base.JMenuButton;
-import org.kopi.vkopi.lib.visual.UActor;
-import org.kopi.vkopi.lib.visual.VActor;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.KeyStroke;
+
+import org.kopi.vkopi.lib.ui.swing.base.JMenuButton;
+import org.kopi.galite.visual.UActor;
+import org.kopi.galite.visual.VActor;
 
 @SuppressWarnings("serial")
 public class DActor implements UActor {
@@ -108,16 +114,16 @@ public class DActor implements UActor {
 
   private void init() {
     action = new DActorAction(model.menuItem,
-                              (model.iconName != null) ?
-                              loadImage(model.iconName) :
+                              (model.getIconName() != null) ?
+                              loadImage(model.getIconName()) :
                               null);
-    if (model.acceleratorKey != KeyEvent.VK_UNDEFINED) {
+    if (model.getAcceleratorKey() != KeyEvent.VK_UNDEFINED) {
       action.putValue(Action.ACCELERATOR_KEY,
-                      KeyStroke.getKeyStroke(model.acceleratorKey,
-                                             model.acceleratorModifier));
+                      KeyStroke.getKeyStroke(model.getAcceleratorKey(),
+                                             model.getAcceleratorModifier()));
     }
 
-    action.putValue(Action.SHORT_DESCRIPTION, model.help);
+    action.putValue(Action.SHORT_DESCRIPTION, model.getHelp());
     action.setEnabled(false);
 
     if (button == null) {

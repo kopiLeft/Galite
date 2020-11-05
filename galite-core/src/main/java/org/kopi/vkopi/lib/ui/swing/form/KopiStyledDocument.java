@@ -19,199 +19,199 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.util.base.InconsistencyException;
-import org.kopi.vkopi.lib.form.ModelTransformer;
-import org.kopi.vkopi.lib.form.VField;
-import org.kopi.vkopi.lib.form.VFixnumField;
-import org.kopi.vkopi.lib.visual.ApplicationContext;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.io.IOException;
+import java.text.DecimalFormatSymbols;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
-import java.awt.*;
-import java.io.IOException;
-import java.text.DecimalFormatSymbols;
+
+import org.kopi.galite.util.base.InconsistencyException;
+import org.kopi.galite.form.ModelTransformer;
+import org.kopi.galite.form.VField;
+import org.kopi.galite.form.VFixnumField;
+import org.kopi.galite.visual.ApplicationContext;
 
 public class KopiStyledDocument extends HTMLDocument implements KopiDocument {
-  
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR
-  // ----------------------------------------------------------------------
-  
-  public KopiStyledDocument(VField model, ModelTransformer transformer) {
-    this.model = model;
-    this.transformer = transformer;
-  }
 
-  // ----------------------------------------------------------------------
-  // MODEL / VIEW INTERFACE
-  // ----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
+    // CONSTRUCTOR
+    // ----------------------------------------------------------------------
 
-  public void setEditorKit(HTMLEditorKit editorKit) {
-    this.editorKit = editorKit;
-  }
-
-  /**
-   * Returns the text currently showed by this document
-   */
-  public synchronized String getModelText() {
-    try {
-      String    text;
-
-      text = getText(0, getLength());
-      return transformer.toModel(text);
-    } catch (BadLocationException e) {
-      throw new InconsistencyException("BadLocationException in KopiFieldDocument");
-    }
-  }
-
-  /**
-   * Changes the text of this document without checking
-   */
-  public synchronized void setModelText(String s) {
-    try {
-      super.remove(0, getLength());
-      s =  transformer.toGui(s);
-      try {
-        editorKit.insertHTML(this, getLength(), s, 0, 0, null);
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    } catch (BadLocationException e) {
-      throw new InconsistencyException("BadLocationException in KopiFieldDocument");
-    }
-    
-  }
-
-  // ----------------------------------------------------------------------
-  // DOCUMENT IMPLEMENTATION
-  // ----------------------------------------------------------------------
-  
-  public void remove(int offs, int len) throws BadLocationException {
-    String      text;
-    
-    text = getText(0, getLength());
-    text = text.substring(0, offs) + text.substring(offs + len);
-    text = transformer.toModel(text);
-
-    if (!transformer.checkFormat(text)) {
-      Toolkit.getDefaultToolkit().beep();
-      return;
+    public KopiStyledDocument(VField model, ModelTransformer transformer) {
+        this.model = model;
+        this.transformer = transformer;
     }
 
-    if (model.checkText(text)) {
-      super.remove(offs, len);
-      model.onTextChange(getText(0, getLength()));
-    } else {
-      Toolkit.getDefaultToolkit().beep();
-    }
-  }
+    // ----------------------------------------------------------------------
+    // MODEL / VIEW INTERFACE
+    // ----------------------------------------------------------------------
 
-  public void insertString(int offs, String str, AttributeSet a)
-    throws BadLocationException {
-
-    if (str == null) {
-      return;
-    }
-    // special treatment for decimal separator
-    if (model instanceof VFixnumField && str.equals(".")) {
-      DecimalFormatSymbols      symbols;
-
-      symbols = new DecimalFormatSymbols(ApplicationContext.getDefaultLocale());
-      if (symbols.getDecimalSeparator() != '.') {
-        str = str.replace('.', symbols.getDecimalSeparator());
-      }
+    public void setEditorKit(HTMLEditorKit editorKit) {
+        this.editorKit = editorKit;
     }
 
-    String text = getText(0, getLength());
-    text = text.substring(0, offs) + str + text.substring(offs);
-    text = transformer.toModel(text);
+    /**
+     * Returns the text currently showed by this document
+     */
+    public synchronized String getModelText() {
+        try {
+            String text;
 
-    if (!transformer.checkFormat(text)) {
-      Toolkit.getDefaultToolkit().beep();
-      return;
+            text = getText(0, getLength());
+            return transformer.toModel(text);
+        } catch (BadLocationException e) {
+            throw new InconsistencyException("BadLocationException in KopiFieldDocument");
+        }
     }
 
-    if (model.checkText(text)) {
-      super.insertString(offs, str, a);
-      model.onTextChange(getText(0, getLength()));
-    } else {
-      Toolkit.getDefaultToolkit().beep();
+    /**
+     * Changes the text of this document without checking
+     */
+    public synchronized void setModelText(String s) {
+        try {
+            super.remove(0, getLength());
+            s = transformer.toGui(s);
+            try {
+                editorKit.insertHTML(this, getLength(), s, 0, 0, null);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } catch (BadLocationException e) {
+            throw new InconsistencyException("BadLocationException in KopiFieldDocument");
+        }
+
     }
-  }
-  
-  // ----------------------------------------------------------------------
-  // STATEFUL IMPLEMENTATION
-  // ----------------------------------------------------------------------
-  
-  public int getState() {
-    return state;
-  }
 
-  public boolean getAutofill() {
-    return autofill;
-  }
+    // ----------------------------------------------------------------------
+    // DOCUMENT IMPLEMENTATION
+    // ----------------------------------------------------------------------
 
-  public boolean isAlert() {
-    return alert;
-  }
+    public void remove(int offs, int len) throws BadLocationException {
+        String text;
 
-  public boolean hasCriticalValue() {
-    return hasCriticalValue;
-  }
-  
-  public boolean hasAction() {
-    return hasAction;
-  }
+        text = getText(0, getLength());
+        text = text.substring(0, offs) + text.substring(offs + len);
+        text = transformer.toModel(text);
 
-  public Color getBgColor() {
-    return bgColor;
-  }
+        if (!transformer.checkFormat(text)) {
+            Toolkit.getDefaultToolkit().beep();
+            return;
+        }
 
-  public Object getModel() {
-    return model;
-  }
-  
-  public void setState(int state) {
-    this.state = state;
-  }
+        if (model.checkText(text)) {
+            super.remove(offs, len);
+            model.onTextChange(getText(0, getLength()));
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }
 
-  public void setHasCriticalValue(boolean hasCriticalValue) {
-    this.hasCriticalValue = hasCriticalValue;
-  }
-  
-  public void setHasAction(boolean hasAction) {
-    this.hasAction = hasAction;
-  }
+    public void insertString(int offs, String str, AttributeSet a)
+            throws BadLocationException {
 
-  public void setBgColor(Color bgColor) {
-    this.bgColor = bgColor;
-  }
+        if (str == null) {
+            return;
+        }
+        // special treatment for decimal separator
+        if (model instanceof VFixnumField && str.equals(".")) {
+            DecimalFormatSymbols symbols;
 
-  public void setAlert(boolean alert) {
-    this.alert = alert;
-  }
+            symbols = new DecimalFormatSymbols(ApplicationContext.Companion.getDefaultLocale());
+            if (symbols.getDecimalSeparator() != '.') {
+                str = str.replace('.', symbols.getDecimalSeparator());
+            }
+        }
 
-  public void setAutofill(boolean autofill) {
-    this.autofill = autofill; 
-  }
+        String text = getText(0, getLength());
+        text = text.substring(0, offs) + str + text.substring(offs);
+        text = transformer.toModel(text);
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  
-  private final VField                  model;
-  private final ModelTransformer        transformer;
-  private HTMLEditorKit                 editorKit;
-  
-  private int                           state;
-  private boolean                       alert;
-  private boolean                       autofill = false;
-  private boolean                       hasCriticalValue;
-  private boolean                       hasAction;
-  private Color                         bgColor;
-  
-  private static final long             serialVersionUID = -6909577520453067610L;
+        if (!transformer.checkFormat(text)) {
+            Toolkit.getDefaultToolkit().beep();
+            return;
+        }
+
+        if (model.checkText(text)) {
+            super.insertString(offs, str, a);
+            model.onTextChange(getText(0, getLength()));
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // STATEFUL IMPLEMENTATION
+    // ----------------------------------------------------------------------
+
+    public int getState() {
+        return state;
+    }
+
+    public boolean getAutofill() {
+        return autofill;
+    }
+
+    public boolean isAlert() {
+        return alert;
+    }
+
+    public boolean hasCriticalValue() {
+        return hasCriticalValue;
+    }
+
+    public boolean hasAction() {
+        return hasAction;
+    }
+
+    public Color getBgColor() {
+        return bgColor;
+    }
+
+    public Object getModel() {
+        return model;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public void setHasCriticalValue(boolean hasCriticalValue) {
+        this.hasCriticalValue = hasCriticalValue;
+    }
+
+    public void setHasAction(boolean hasAction) {
+        this.hasAction = hasAction;
+    }
+
+    public void setBgColor(Color bgColor) {
+        this.bgColor = bgColor;
+    }
+
+    public void setAlert(boolean alert) {
+        this.alert = alert;
+    }
+
+    public void setAutofill(boolean autofill) {
+        this.autofill = autofill;
+    }
+
+    // ----------------------------------------------------------------------
+    // DATA MEMBERS
+    // ----------------------------------------------------------------------
+
+    private final VField model;
+    private final ModelTransformer transformer;
+    private HTMLEditorKit editorKit;
+
+    private int state;
+    private boolean alert;
+    private boolean autofill = false;
+    private boolean hasCriticalValue;
+    private boolean hasAction;
+    private Color bgColor;
 }

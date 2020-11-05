@@ -24,7 +24,7 @@ import org.kopi.galite.field.Field
  *
  * @param reportFields the fields that exists in the report.
  */
-class ReportRow(private val reportFields: MutableList<Field<*>>) {
+class ReportRow(private val reportFields: MutableList<RField<*>>) {
   /** A report data row */
   val data = mutableMapOf<Field<*>, Any>()
 

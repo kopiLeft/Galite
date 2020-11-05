@@ -18,19 +18,16 @@
 
 package org.kopi.galite.form
 
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
-import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.Query
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VModel
-
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
 
@@ -40,11 +37,70 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   /**
    * Returns the field label.
    */
-  open fun getHeader(): String = TODO()
+  open fun getHeader(): String {
+    TODO()
+  }
 
-  open fun predefinedFill(): Any = TODO()
+  open fun getBorder(): Int {
+    return border
+  }
 
-  open fun isNull(r: Int): Boolean = TODO()
+  open fun getBackground(r: Int): VColor {
+    return background[r]
+  }
+
+  open fun getForeground(r: Int): VColor {
+    return foreground[r]
+  }
+
+  // ----------------------------------------------------------------------
+  // NAVIGATING
+  // ----------------------------------------------------------------------
+  fun enter() {
+    TODO()
+  }
+
+  open fun getOptions(): Int {
+    TODO()
+  }
+
+  open fun noDetail(): Boolean {
+    TODO()
+  }
+
+  open fun noChart(): Boolean {
+    TODO()
+  }
+
+  open fun leave(check: Boolean) {
+    TODO()
+  }
+
+  // ----------------------------------------------------------------------
+  // MANAGING FIELD VALUES
+  // ----------------------------------------------------------------------
+  open fun getTypeOptions(): Int {
+    return 0
+  }
+
+  open fun getSearchOperator(): Int {
+    TODO()
+  }
+
+  /**
+   * text has changed (key typed on a display)
+   */
+  open fun onTextChange(text: String) {
+    TODO()
+  }
+
+  open fun predefinedFill(): Any {
+    TODO()
+  }
+
+  open fun isNull(r: Int): Boolean {
+    TODO()
+  }
 
   open fun loadItem(item: Int): Any = TODO()
 
@@ -52,13 +108,47 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun getText(r: Int): String? = TODO()
+  open fun getText(r: Int): String {
+    TODO()
+  }
 
   open fun build() {
     TODO()
   }
 
   open fun enumerateValue(desc: Boolean) {
+    TODO()
+  }
+
+  open fun getToolTip(): String {
+    TODO()
+  }
+
+  open fun getDefaultAccess(): Int {
+    TODO()
+  }
+
+  fun isInternal(): Boolean {
+    TODO()
+  }
+
+  fun onBeforeDrop() {
+    TODO()
+  }
+
+  open fun updateText() {
+    TODO()
+  }
+
+  fun onAfterDrop() {
+    TODO()
+  }
+
+  open fun setString(v: String?) {
+    TODO()
+  }
+
+  open fun setImage(v: ByteArray) {
     TODO()
   }
 
@@ -92,24 +182,44 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     helpOnType(help, null)
   }
 
-  fun getPriority(): Int = TODO()
+  fun getPriority(): Int {
+    TODO()
+  }
 
   /**
    * return the name of this field
    */
-  open fun getTypeName(): String = TODO()
+  open fun getTypeName(): String {
+    TODO()
+  }
 
-  open fun hasAutocomplete(): Boolean = TODO()
+  open fun displayFieldError(message: String?) {
+    TODO()
+  }
 
-  open fun getAutocompleteLength(): Int = TODO()
+  open fun hasAutocomplete(): Boolean {
+    TODO()
+  }
 
-  open fun getAutocompleteType(): Int = TODO()
+  open fun getAutocompleteLength(): Int {
+    TODO()
+  }
 
-  open fun hasAutofill(): Boolean = TODO()
+  open fun getAutocompleteType(): Int {
+    TODO()
+  }
 
-  open fun fillField(handler: PredefinedValueHandler?): Boolean = TODO()
+  open fun hasAutofill(): Boolean {
+    TODO()
+  }
 
-  open fun getDisplayedValue(trim: Boolean): Any? = TODO()
+  open fun fillField(handler: PredefinedValueHandler?): Boolean {
+    TODO()
+  }
+
+  open fun getDisplayedValue(trim: Boolean): Any {
+    TODO()
+  }
 
   override fun setDisplay(display: UComponent) {
     TODO()
@@ -121,59 +231,91 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
-  open fun checkType(s: Any?) {
+  open fun checkType(s: Any) {
     TODO()
   }
 
-  open fun getObject(r: Int): Any = TODO()
-
-  fun getObject(): Any = TODO()
+  open fun getObject(r: Int): Any {
+    TODO()
+  }
 
   fun setDimension(width: Int, height: Int) {
     TODO()
   }
 
-  open fun getListColumn(): VListColumn? = TODO()
+  open fun getListColumn(): VListColumn? {
+    TODO()
+  }
 
-  open fun getTextImpl(r: Int): String? = TODO()
+  open fun getTextImpl(r: Int): String? {
+    TODO()
+  }
 
   open fun copyRecord(f: Int, t: Int) {
     TODO()
   }
 
-  open fun getTypeInformation(): String = TODO()
+  open fun getTypeInformation(): String {
+    TODO()
+  }
 
   fun trail(r: Int) {
     TODO()
   }
 
-  open fun getSqlImpl(r: Int): String? = TODO()
+  open fun getSqlImpl(r: Int): String? {
+    TODO()
+  }
 
-  open fun toObject(s: String): Any? = TODO()
+  open fun toObject(s: String): Any? {
+    TODO()
+  }
 
-  open fun getObjectImpl(r: Int): Any? = TODO()
+  open fun getObjectImpl(r: Int): Any? {
+    TODO()
+  }
 
-  open fun getType(): Int = TODO()
+  open fun getType(): Int {
+    TODO()
+  }
 
-  open fun isNullImpl(r: Int): Boolean = TODO()
+  open fun isNullImpl(r: Int): Boolean {
+    TODO()
+  }
 
-  open fun retrieveQuery(query: Query, column: Int): Any? = TODO()
+  open fun retrieveQuery(query: Query, column: Int): Any? {
+    TODO()
+  }
 
   open fun setNull(r: Int) {
     TODO()
   }
 
-  open fun getDataType(): KClass<*> = TODO()
+  open fun getDataType(): KClass<*> {
+    TODO()
+  }
 
-  open fun checkText(s: String): Boolean = TODO()
+  open fun checkText(s: String): Boolean {
+    TODO()
+  }
 
   fun setChanged(r: Int) {
     TODO()
   }
 
-  fun getForm(): VForm = TODO()
+  fun setChanged(r: Boolean) {
+    TODO()
+  }
+
+  fun getForm(): VForm {
+    TODO()
+  }
 
   open fun helpOnField(help: VHelpGenerator) {
+    TODO()
+  }
+
+  open fun clear(r: Int) {
     TODO()
   }
 
@@ -186,6 +328,9 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
   fun setValueID(id: Int) {
     TODO()
   }
+
+  open fun getAccess(i: Int): Int = TODO()
+
 
   companion object {
     const val MDL_FLD_COLOR = 1
@@ -216,6 +361,7 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
           = 0
   val align // field alignment
           = 0
+
   private val posInArray = 0 // position in array of fields
 
   var list: VList? = null // list

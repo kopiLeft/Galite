@@ -30,7 +30,7 @@ import java.io.Serializable
  * @param          alignRight      position in alignRight
  * @param          useAll          use the whole possible width of the column
  */
-open class Alignment(var x: Int,
+open class Alignment @JvmOverloads constructor(var x: Int,
                      var y: Int,
                      var width: Int,
                      var height: Int,

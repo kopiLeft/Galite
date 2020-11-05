@@ -56,7 +56,7 @@ public class DColumnChart extends DAbstractChartType {
     
     dataset = createDataset(series);
     chart = ChartFactory.createBarChart(title,
-	                                series[0].getDimension().name,
+	                                series[0].getDimension().getName(),
 	                                null,
 	                                dataset,
 	                                getPlotOrientation(),

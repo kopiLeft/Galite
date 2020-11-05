@@ -28,13 +28,13 @@ class ColumnStyleTests {
 
   @Test
   fun getForegroundTest() {
-    columnStyle.foreground = 2
+    columnStyle.foregroundCode = 2
     assertEquals(Color.red, columnStyle.getForeground())
   }
 
   @Test
   fun getBackgroundTest() {
-    columnStyle.background = 1
+    columnStyle.backgroundCode = 1
     assertEquals(Color.black, columnStyle.getBackground())
   }
 
