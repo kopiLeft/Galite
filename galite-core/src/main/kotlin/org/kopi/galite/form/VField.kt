@@ -23,6 +23,7 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VModel
@@ -41,6 +42,13 @@ abstract class VField(val width: Int, val height: Int) : VConstants, VModel {
     TODO()
   }
 
+  fun setSearchOperator(value: Int) {
+    TODO()
+  }
+  fun getInt(): Int? = TODO()
+  open fun getInt(r: Int): Int? {
+    throw InconsistencyException()
+  }
   open fun getBorder(): Int {
     return border
   }

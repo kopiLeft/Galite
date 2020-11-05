@@ -241,7 +241,7 @@ abstract class VForm : VWindow, VConstants {
     }
   }
 
-  fun prepareForm() {
+  open fun prepareForm() {
     val block: VBlock? = getActiveBlock()
 
     block?.leave(false)

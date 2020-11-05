@@ -17,4 +17,218 @@
  */
 package org.kopi.galite.form
 
-abstract class VDictionaryForm 
+import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.Vector
+
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VRuntimeException
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.form.VConstants.Companion.MOD_UPDATE
+
+abstract class VDictionaryForm : VForm, VDictionary {
+
+  protected constructor(parent: DBContextHandler) : super(parent) {}
+
+  protected constructor(parent: DBContext) : super(parent) {}
+
+  protected constructor() : super() {}
+
+  /**
+   * This is a modal call. Used in eg. PersonKey.k in some packages
+   *
+   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised by triggers
+   */
+  fun editWithID(parent: VWindow, id: Int): Int {
+    dBContext = parent.dBContext
+    editID = id
+    doModal(parent)
+    newRecord = false
+    editID = -1
+    return iD
+  }
+
+  /**
+   * This is a modal call. Used in eg. PersonKey.k in some packages
+   *
+   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised by triggers
+   */
+  fun openForQuery(parent: VWindow): Int {
+    dBContext = parent.dBContext
+    lookup = true
+    doModal(parent)
+    lookup = false
+    return iD
+  }
+
+  /**
+   * create a new record and returns id
+   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised by triggers
+   */
+  fun newRecord(parent: VWindow): Int {
+    newRecord = true
+    dBContext = parent.dBContext
+    doModal(parent)
+    newRecord = false
+    return iD
+  }
+
+  override fun prepareForm() {
+    block = getBlock(0)
+    assert(!block!!.isMulti()) { threadInfo() }
+
+    //initialise();
+    //callTrigger(TRG_PREFORM);
+    if (newRecord) {
+      if (getBlock(0) == null) {
+        gotoBlock(block!!)
+      }
+      Commands.insertMode(block!!)
+    } else if (editID != -1) {
+      newRecord = true
+      fetchBlockRecord(0, editID)
+      getBlock(0).setMode(MOD_UPDATE)
+    }
+    super.prepareForm()
+  }
+
+  /**
+   * close the form
+   */
+  override fun close(code: Int) {
+    assert(!getBlock(0).isMulti()) { threadInfo() }
+    val id = getBlock(0).getField("ID") //!!! graf 20080403: replace by getIdField()
+    if (id != null) {
+      val i = id.getInt(0)
+      iD = i ?: -1
+    } else {
+      iD = -1
+    }
+    super.close(code)
+  }
+
+  // ----------------------------------------------------------------------
+  // VDICTIONARY IMPLEMENTATION
+  // ----------------------------------------------------------------------
+  override fun search(parent: VWindow): Int {
+    return openForQuery(parent)
+  }
+
+  override fun edit(parent: VWindow, id: Int): Int {
+    return editWithID(parent, id)
+  }
+
+  override fun add(parent: VWindow): Int {
+    return newRecord(parent)
+  }
+
+  // ----------------------------------------------------------------------
+  // QUERY SEARCH
+  // ----------------------------------------------------------------------
+
+  fun saveFilledField() {
+    isRecursiveQuery = true
+    savedData = Vector()
+    savedState = Vector()
+    val fields: Array<VField> = block!!.fields
+    for (i in fields.indices) {
+      savedData!!.addElement(fields[i].getObject(0))
+    }
+    for (i in fields.indices) {
+      savedState!!.addElement(fields[i].getSearchOperator())
+    }
+  }
+
+  private fun retrieveFilledField() {
+    isRecursiveQuery = false
+    super.reset()
+    val fields: Array<VField> = block!!.fields
+    for (i in fields.indices) {
+      fields[i].setObject(0, savedData!!.elementAt(i))
+    }
+    block!!.setRecordChanged(0, false)
+    for (i in fields.indices) {
+      fields[i].setSearchOperator((savedState!!.elementAt(i) as Int).toInt())
+    }
+  }
+
+  /**
+   *
+   * @exception        org.kopi.vkopi.lib.visual.VException        an exception may be raised by triggers
+   */
+  override fun reset() {
+    if (isRecursiveQuery) {
+      retrieveFilledField()
+    } else {
+      super.reset()
+    }
+    isRecursiveQuery = false
+  }
+
+  /**
+   *
+   */
+  fun interruptRecursiveQuery() {
+    isRecursiveQuery = false
+  }
+
+  /**
+   *
+   */
+  fun isNewRecord(): Boolean {
+    return newRecord || lookup || closeOnSave
+  }
+
+  /**
+   *
+   */
+  fun setCloseOnSave() {
+    closeOnSave = true
+  }
+
+  // ----------------------------------------------------------------------
+  // IMPLEMENTATION
+  // ----------------------------------------------------------------------
+  private fun fetchBlockRecord(block: Int, record: Int) {
+    try {
+      transaction {
+        getBlock(block).fetchRecord(record)
+      }
+    } catch (e: Throwable) {
+      if (e is VSkipRecordException) {
+        throw VExecFailedException()
+      }
+      throw VRuntimeException(e)
+    }
+  }
+
+  /**
+   * The id of selected or new record
+   */
+  // ----------------------------------------------------------------------
+  // QUERY SEARCH
+  // ----------------------------------------------------------------------
+  var iD = -1
+    private set
+  private var editID = -1
+
+  /**
+   *
+   */
+  var isRecursiveQuery = false
+    private set
+  /**
+   *
+   */
+  /**
+   *
+   */
+  var isMenuQuery = false
+  private var newRecord = false
+  private var lookup = false
+  private var closeOnSave = false
+  private var savedData: Vector<Any>? = null
+  private var savedState: Vector<Int>? = null
+  private var block: VBlock? = null
+}

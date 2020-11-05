@@ -52,6 +52,20 @@ abstract class VBlock {
     TODO()
   }
 
+  /**
+   * Returns a field from its name
+   *
+   * @param     name    the name of the field
+   * @return the field or null if no field with that name has been found
+   */
+  fun getField(name: String?): VField? {
+    return fields!!.find { name == it!!.name }
+  }
+  lateinit var fields: Array<VField>// fields
+  fun fetchRecord(id: Int) {
+    TODO()
+  }
+
   abstract val numberOfValidRecord: Int
   var bufferSize = 0 // max number of buffered records
 
@@ -113,7 +127,7 @@ abstract class VBlock {
     TODO()
   }
 
-  open fun getFields(): Array<VField?>? {
+  fun setRecordChanged(rec: Int, value: Boolean) {
     TODO()
   }
 
