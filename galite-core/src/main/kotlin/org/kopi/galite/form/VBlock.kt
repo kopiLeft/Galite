@@ -20,13 +20,11 @@ package org.kopi.galite.form
 
 import java.sql.SQLException
 import java.util.EventListener
-import java.util.Vector
 
 import javax.swing.event.EventListenerList
 
 import kotlin.collections.HashMap
 
-import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
@@ -154,7 +152,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @return true if this block follows an other block
    */
   val isFollow: Boolean
-    get() = align != null
+    get() = alignment != null
 
   val isDroppable: Boolean
     get() = dropListMap.isNotEmpty()
@@ -2892,7 +2890,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   lateinit var name: String // block name
   protected lateinit var shortcut: String // block short name
   var title: String = "" // block title
-  var align: BlockAlignment? = null
+  var alignment: BlockAlignment? = null
   protected lateinit var help: String // the help on this block
   protected var tables: Array<String>? = null // names of database tables
   protected var options = 0 // block options

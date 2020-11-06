@@ -28,15 +28,15 @@ import java.sql.SQLException
  * @param     constraintName          the violated constraint
  **/
 open class DBConstraintException(query: String?, original: SQLException,
-                                 val constraint: String = "unspecified") : DBException(query, original){
+                                 val constraint: String = "unspecified") : DBException(query, original) {
 
-constructor(original: SQLException) : this(null, original, "unspecified")
+  constructor(original: SQLException) : this(null, original, "unspecified")
 
-constructor(original: SQLException, constraintName: String) : this(null, original, constraintName)
+  constructor(original: SQLException, constraintName: String) : this(null, original, constraintName)
 
-/**
- * Returns the index name
-*/
-val description: String
-get() = "DBConstraintException: '$constraint'"
+  /**
+   * Returns the index name
+   */
+  val description: String
+    get() = "DBConstraintException: '$constraint'"
 }

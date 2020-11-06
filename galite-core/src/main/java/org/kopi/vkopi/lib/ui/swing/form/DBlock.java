@@ -99,9 +99,9 @@ public class DBlock extends JPanel implements UBlock {
   protected LayoutManager createLayoutManager() {
     return new KopiSimpleBlockLayout(2 * maxColumnPos, // label + field => 2
                                      maxRowPos,
-                                     (model.getAlign() == null) ?
+                                     (model.getAlignment() == null) ?
                                          null :
-                                         new ViewBlockAlignment(formView, model.getAlign()));
+                                         new ViewBlockAlignment(formView, model.getAlignment()));
   }
 
 

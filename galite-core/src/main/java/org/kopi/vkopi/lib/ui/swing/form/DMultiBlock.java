@@ -36,7 +36,6 @@ import org.kopi.galite.form.UMultiBlock;
 import org.kopi.galite.form.VBlock;
 import org.kopi.galite.form.VField;
 import org.kopi.galite.form.ViewBlockAlignment;
-import org.kopi.galite.visual.VException;
 import org.kopi.galite.visual.VRuntimeException;
 
 public class DMultiBlock extends DChartBlock implements UMultiBlock {
@@ -91,9 +90,9 @@ public class DMultiBlock extends DChartBlock implements UMultiBlock {
         detailPane = new JPanel();
         detailPane.setLayout(detailLayout = new KopiSimpleBlockLayout(2 * maxColumnPos,
                 maxRowPos,
-                (model.getAlign() == null) ?
+                (model.getAlignment() == null) ?
                         null :
-                        new ViewBlockAlignment(getFormView(), model.getAlign())));
+                        new ViewBlockAlignment(getFormView(), model.getAlignment())));
         chartPane.setLayout(chartLayout = layout = new KopiMultiBlockLayout(displayedFields + 1, getModel().getDisplaySize() + 1));
         super.createFields();
     }
