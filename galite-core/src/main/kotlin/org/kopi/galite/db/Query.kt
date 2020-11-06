@@ -31,7 +31,7 @@ class Query(conn: Connection) {
   }
 
   fun getBlob(pos: Int): Blob {
-   TODO()
+    TODO()
   }
 
   fun next(): Boolean = TODO()
@@ -62,7 +62,7 @@ class Query(conn: Connection) {
 
   fun getBoolean(column: Int): Boolean = TODO()
 
-  fun getObject(pos: Int):Any =TODO()
+  fun getObject(pos: Int):Any = TODO()
 
   fun getFixed(pos: Int): NotNullFixed = TODO()
 
