@@ -2120,7 +2120,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    *
    */
-  fun getActor(i: Int): VActor = form.getActor(i)
+  open fun getActor(i: Int): VActor = form.getActor(i)
 
   /**
    * Returns true iff this block can display more than one record.
@@ -2445,7 +2445,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun checkUniqueIndices(recno: Int) {
     if (indices != null) {
-      val id: Int = if (isRecordFetched(recno)) idField.getInt(recno) else -1
+      val id = if (isRecordFetched(recno)) idField.getInt(recno) else -1
 
       for (i in indices!!.indices) {
         checkUniqueIndex(i, recno, id)
@@ -2456,7 +2456,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /*
    * Checks unique index constraints
    */
-  protected fun checkUniqueIndex(idx: Int, recno: Int, id: Int) {
+  protected fun checkUniqueIndex(idx: Int, recno: Int, id: Int?) {
     TODO()
   }
 
@@ -2897,7 +2897,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
   protected var commands: Array<VCommand>? = null // commands
-  var actors: Array<VActor>? = null // actors to send to form (move to block import)
+  open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
       val temp: Array<VActor>? = field
       field = null

@@ -273,7 +273,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     s               the object to check
    * @exception VException      an exception is raised if text is bad
    */
-  abstract fun checkType(rec: Int, s: Any)
+  abstract fun checkType(rec: Int, s: Any?)
 
   /**
    * verify that value is valid (on exit)
@@ -1039,7 +1039,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getInt(): Int = getInt(block!!.currentRecord)
+  fun getInt(): Int? = getInt(block!!.currentRecord)
 
   /**
    * Returns the field value of given record as a date value.
@@ -1184,7 +1184,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getInt(r: Int): Int {
+  open fun getInt(r: Int): Int? {
     throw InconsistencyException()
   }
 
@@ -1252,7 +1252,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return getTextImpl(r)
   }
 
-  abstract fun toText(o: Any): String?
+  abstract fun toText(o: Any?): String?
 
   abstract fun toObject(s: String): Any?
 

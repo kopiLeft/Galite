@@ -15,25 +15,52 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class ViewBlockAlignment(formView: UForm, align: BlockAlignment) {
+import java.io.Serializable
+
+/**
+ * A class to specify alignment in Layout
+ */
+class ViewBlockAlignment(var formView: UForm,
+                         var align: BlockAlignment) : Serializable {
+
   //------------------------------------------------------------
   // ACCESSORS
   //------------------------------------------------------------
-  fun isChart(): Boolean {
-    TODO()
-  }
 
-  fun isAligned(x: Int): Boolean {
-    TODO()
-  }
+  fun isChart(): Boolean = align.isChart()
+
+  fun isAligned(x: Int): Boolean = align.isAligned(x)
 
   fun getMinStart(x: Int): Int {
-    TODO()
+    var x = x
+    val target: Int
+
+    x-- // we want to align middle
+    target = align.getTargetAt(x)
+    val view: UBlock? = formView.getBlockView(align.block!!)
+
+    if (target != -1) {
+      if (view == null) {
+        return 0
+      }
+      val pos = if (isChart()) target else target * 2 + 1
+
+      return view.getColumnPos(pos)
+    }
+    return 0
   }
 
   fun getLabelMinStart(x: Int): Int {
-    TODO()
+    var x = x
+    x-- // we want to align middle
+    val target = align.getTargetAt(x)
+    val view = formView.getBlockView(align.block!!)
+
+    return if (target != -1) {
+      view?.getColumnPos(target * 2) ?: 0
+    } else 0
   }
 }

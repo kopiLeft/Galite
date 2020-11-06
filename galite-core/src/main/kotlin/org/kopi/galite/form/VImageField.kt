@@ -27,7 +27,7 @@ class VImageField : VField(1,1) {
     TODO("Not yet implemented")
   }
 
-  override fun checkType(rec: Int, s: Any) {
+  override fun checkType(rec: Int, s: Any?) {
     TODO("Not yet implemented")
   }
 
@@ -59,7 +59,7 @@ class VImageField : VField(1,1) {
     TODO("Not yet implemented")
   }
 
-  override fun toText(o: Any): String? {
+  override fun toText(o: Any?): String? {
     TODO("Not yet implemented")
   }
 
