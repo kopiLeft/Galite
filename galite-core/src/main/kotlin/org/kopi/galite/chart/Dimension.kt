@@ -18,14 +18,13 @@
 package org.kopi.galite.chart
 
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.Field
 
 /**
  * Represents a one dimension that contains measures [values] to use in chart.
  *
  * @param domain dimension domain.
  */
-open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Field<T>(domain) {
+open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Column() {
 
   /**
    * Dimension values

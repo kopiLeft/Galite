@@ -22,18 +22,30 @@ package org.kopi.vkopi.lib.ui.swing.chart;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.*;
+
+import com.lowagie.text.pdf.DefaultFontMapper;
+import com.lowagie.text.pdf.FontMapper;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.PdfTemplate;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.util.ResourceBundleWrapper;
-import org.kopi.galite.chart.*;
+
+import org.kopi.galite.chart.UChartType;
+import org.kopi.galite.chart.VDataSeries;
+import org.kopi.galite.chart.VDimensionData;
+import org.kopi.galite.chart.VPrintOptions;
+import org.kopi.galite.chart.VMeasureData;
 import org.kopi.galite.util.PPaperType;
 import org.kopi.galite.visual.ApplicationContext;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -54,7 +66,7 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     super(null, true, true, true, true, true);
     this.title = title;
     this.series = series;
-    localizationResources = ResourceBundleWrapper.getBundle("org.jfree.chart.LocalizationBundle", ApplicationContext.getDefaultLocale());
+    localizationResources = ResourceBundleWrapper.getBundle("org.jfree.chart.LocalizationBundle", ApplicationContext.Companion.getDefaultLocale());
   }
   
   //---------------------------------------------------------------------
@@ -92,11 +104,11 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     if (getChart() == null) {
       return;
     } else {
-      PPaperType	paper = PPaperType.getPaperTypeFromCode(options.papertype);
+      PPaperType	paper = PPaperType.Companion.getPaperTypeFromCode(options.getPapertype());
       int		width;
       int 		height;
 
-      if (options.paperlayout.equals("Landscape")) {
+      if (options.getPaperlayout().equals("Landscape")) {
         width = paper.getHeight();
         height = paper.getWidth();
       } else {
@@ -107,11 +119,11 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
       writeAsPDF(destination,
 	         width,
 	         height,
-	         options.leftmargin,
-	         options.rightmargin,
-	         options.topmargin,
-	         options.bottommargin,
-	         new DefaultFontMapper());;
+	         options.getLeftmargin(),
+	         options.getRightmargin(),
+	         options.getTopmargin(),
+	         options.getBottommargin(),
+	         new DefaultFontMapper());
     }
   }
 
@@ -145,13 +157,13 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     
     dataset = new DefaultCategoryDataset();
     for (VDataSeries serie : series) {
-      VDimensionData		dimension;
+      VDimensionData dimension;
       VMeasureData[]		measures;
       
       dimension = serie.getDimension();
       measures = serie.getMeasures();
       for (VMeasureData measure : measures) {
-	dataset.addValue(measure.value, measure.name, dimension.value);
+	dataset.addValue(measure.getValue(), measure.getName(), dimension.getValue());
       }
     }
     
@@ -186,8 +198,8 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     pageSize = new Rectangle(width, height);
     document = new Document(pageSize, marginLeft, marginRight, marginTop, marginBottom);
     try {
-      PdfWriter 		writer;
-      PdfContentByte 		cb;
+      PdfWriter writer;
+      PdfContentByte cb;
       PdfTemplate 		tp;
       Graphics2D 		g2;
       Rectangle2D 		r2D;

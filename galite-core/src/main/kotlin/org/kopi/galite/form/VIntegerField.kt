@@ -43,7 +43,7 @@ class VIntegerField(width: Int,
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
   /**
@@ -67,7 +67,7 @@ class VIntegerField(width: Int,
    */
   override fun getTypeName(): String = VlibProperties.getString("Long")
 
-  fun isNumeric(): Boolean = true
+  override fun isNumeric(): Boolean = true
 
   // ----------------------------------------------------------------------
   // Interface Display
@@ -104,13 +104,13 @@ class VIntegerField(width: Int,
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
   override fun checkType(rec: Int, o: Any?) {
-    val s = o as String
+    val s = o as? String
 
     if (s == "") {
       setNull(rec)
     } else {
       val v = try {
-        s.toInt()
+        s!!.toInt()
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -190,7 +190,7 @@ class VIntegerField(width: Int,
   /**
    * Returns the field value of given record as a int value.
    */
-  fun getInt(r: Int): Int = getObject(r) as Int
+  override fun getInt(r: Int): Int = getObject(r) as Int
 
   /**
    * Returns the field value of the current record as an object
@@ -239,7 +239,7 @@ class VIntegerField(width: Int,
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
         && (oldValue != null && value[t] == null
             || oldValue == null && value[t] != null
             || oldValue != null && oldValue != value[t])) {
@@ -265,10 +265,10 @@ class VIntegerField(width: Int,
   fun computeSum(exclude: Boolean): Int? {
     var sum: Int? = null
 
-    for (i in 0 until block.bufferSize) {
+    for (i in 0 until block!!.bufferSize) {
       if (!isNullImpl(i)
-              && block.isRecordFilled(i)
-              && (!exclude || i != block.activeRecord)) {
+              && block!!.isRecordFilled(i)
+              && (!exclude || i != block!!.activeRecord)) {
         if (sum == null) {
           sum = 0
         }

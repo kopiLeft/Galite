@@ -19,113 +19,124 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.util.base.InconsistencyException;
-import org.kopi.vkopi.lib.form.KopiAlignment;
-import org.kopi.vkopi.lib.form.KopiLayoutManager;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Insets;
+import java.awt.Toolkit;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JScrollBar;
+import javax.swing.UIManager;
+
+import org.kopi.galite.util.base.InconsistencyException;
+import org.kopi.galite.form.Alignment;
+import org.kopi.galite.form.LayoutManager;
 
 /**
  *
  */
-public class KopiMultiBlockLayout implements KopiLayoutManager {
-  Component[][]		components;
-  KopiAlignment[][]	aligns;
-  int[]			sizes;
-  int[]			realPos;
-  int			height;
-  int			width;
-  boolean		computed = false;
+public class KopiMultiBlockLayout implements LayoutManager {
+    Component[][] components;
+    Alignment[][] aligns;
+    int[] sizes;
+    int[] realPos;
+    int height;
+    int width;
+    boolean computed = false;
 
-  int			hgap = 0;
-  int			vgap = 0;
-  int			columnHeight;
+    int hgap = 0;
+    int vgap = 0;
+    int columnHeight;
 
-  JScrollBar		scrollBar;
+    JScrollBar scrollBar;
 
-  /**
-   * @param	col	number of columns
-   * @param	line	number of lines
-   */
-  public KopiMultiBlockLayout(int col, int line) {
-    components = new Component[col][line];
-    aligns = new KopiAlignment[col][line];
-    sizes = new int[col];
-    realPos = new int[col];
-  }
-
-  /**
-   * Returns the horizontal gap between components.
-   */
-  public int getHgap() {
-    return hgap;
-  }
-
-  /**
-   * Sets the horizontal gap between components.
-   * @param hgap the horizontal gap between components
-   */
-  public void setHgap(int hgap) {
-    this.hgap = hgap;
-  }
-
-  /**
-   * Returns the vertical gap between components.
-   */
-  public int getVgap() {
-    return vgap;
-  }
-
-  /**
-   * Sets the vertical gap between components.
-   * @param vgap the vertical gap between components
-   */
-  public void setVgap(int vgap) {
-    this.vgap = vgap;
-  }
-
-  /**
-   * Adds the specified component to the layout, using the specified
-   * constraint object.    public void layoutContainer(Container target) {
-
-   * @param   comp         the component to be added.
-   * @param   constraints  an object that specifies how and where
-   */
-  public void addLayoutComponent(Component comp, Object constraints) {
-    synchronized (comp.getTreeLock()) {
-      if (constraints instanceof KopiAlignment) {
-	KopiAlignment	align = (KopiAlignment)constraints;
-
-	aligns[align.x][align.y] = align;
-	components[align.x][align.y] = comp;
-      } else if (comp instanceof JScrollBar) {
-	scrollBar = (JScrollBar)comp;
-      } else {
-	throw new IllegalArgumentException("cannot add to layout: constraint must be a KopiAlignment");
-      }
+    /**
+     * @param col  number of columns
+     * @param line number of lines
+     */
+    public KopiMultiBlockLayout(int col, int line) {
+        components = new Component[col][line];
+        aligns = new Alignment[col][line];
+        sizes = new int[col];
+        realPos = new int[col];
     }
-  }
 
-  /**
-   * @deprecated  replaced by <code>addLayoutComponent(Component, Object)</code>.
-   */
-  public void addLayoutComponent(String name, Component comp) {
-      throw new IllegalArgumentException("dont use this deprecated method please");
-  }
+    /**
+     * Returns the horizontal gap between components.
+     */
+    public int getHgap() {
+        return hgap;
+    }
+
+    /**
+     * Sets the horizontal gap between components.
+     *
+     * @param hgap the horizontal gap between components
+     */
+    public void setHgap(int hgap) {
+        this.hgap = hgap;
+    }
+
+    /**
+     * Returns the vertical gap between components.
+     */
+    public int getVgap() {
+        return vgap;
+    }
+
+    /**
+     * Sets the vertical gap between components.
+     *
+     * @param vgap the vertical gap between components
+     */
+    public void setVgap(int vgap) {
+        this.vgap = vgap;
+    }
+
+    /**
+     * Adds the specified component to the layout, using the specified
+     * constraint object.    public void layoutContainer(Container target) {
+     *
+     * @param comp        the component to be added.
+     * @param constraints an object that specifies how and where
+     */
+    public void addLayoutComponent(Component comp, Object constraints) {
+        synchronized (comp.getTreeLock()) {
+            if (constraints instanceof Alignment) {
+                Alignment align = (Alignment) constraints;
+
+                aligns[align.getX()][align.getY()] = align;
+                components[align.getX()][align.getY()] = comp;
+            } else if (comp instanceof JScrollBar) {
+                scrollBar = (JScrollBar) comp;
+            } else {
+                throw new IllegalArgumentException("cannot add to layout: constraint must be a Alignment");
+            }
+        }
+    }
+
+    /**
+     * @deprecated replaced by <code>addLayoutComponent(Component, Object)</code>.
+     */
+    public void addLayoutComponent(String name, Component comp) {
+        throw new IllegalArgumentException("dont use this deprecated method please");
+    }
 
     /**
      * Removes the specified component from this border layout. This
      * method is called when a container calls its <code>remove</code> or
      * <code>removeAll</code> methods. Most applications do not call this
      * method directly.
-     * @param   comp   the component to be removed.
-     * @see     Container#remove(Component)
-     * @see     Container#removeAll()
-     * @since   JDK1.0
+     *
+     * @param comp the component to be removed.
+     * @see Container#remove(Component)
+     * @see Container#removeAll()
+     * @since JDK1.0
      */
     public void removeLayoutComponent(Component comp) {
-      throw new InconsistencyException("removeLayoutComponent not yet supported");
+        throw new InconsistencyException("removeLayoutComponent not yet supported");
     }
 
     /**
@@ -135,60 +146,61 @@ public class KopiMultiBlockLayout implements KopiLayoutManager {
      * This method is called when a container calls its
      * <code>getMinimumSize</code> method. Most applications do not call
      * this method directly.
-     * @param   target   the container in which to do the layout.
-     * @return  the minimum dimensions needed to lay out the subcomponents
-     *          of the specified container.
-     * @see     Container
-     * @see     java.awt.BorderLayout#preferredLayoutSize
-     * @see     Container#getMinimumSize()
-     * @since   JDK1.0
+     *
+     * @param target the container in which to do the layout.
+     * @return the minimum dimensions needed to lay out the subcomponents
+     * of the specified container.
+     * @see Container
+     * @see java.awt.BorderLayout#preferredLayoutSize
+     * @see Container#getMinimumSize()
+     * @since JDK1.0
      */
     public Dimension minimumLayoutSize(Container target) {
-      return preferredLayoutSize(target);
+        return preferredLayoutSize(target);
     }
 
-  /**
-   * get Column Pos, returns the pos of a column
-   */
-  public int getColumnPos(int x) {
-    if (x < realPos.length - 1) {
-      return realPos[x + 1];
-    } else if (x == realPos.length - 1) {
-      return realPos[x] + sizes[x] + hgap;
+    /**
+     * get Column Pos, returns the pos of a column
+     */
+    public int getColumnPos(int x) {
+        if (x < realPos.length - 1) {
+            return realPos[x + 1];
+        } else if (x == realPos.length - 1) {
+            return realPos[x] + sizes[x] + hgap;
+        }
+        return 0;
     }
-    return 0;
-  }
 
     /**
      *
      */
     private void precalculateSize() {
-      // Compute all size
-      height	= 0;
-      width	= hgap;
+        // Compute all size
+        height = 0;
+        width = hgap;
 
-      // compute column height
-      columnHeight = textHeight;
+        // compute column height
+        columnHeight = textHeight;
 
-      // labels
-      for (int x = 0; x < components.length; x++) {
-        // breite von label soll mit der von spalten
-        //	sizes[x] = components[x][0].getPreferredSize().width;
-      }
+        // labels
+        for (int x = 0; x < components.length; x++) {
+            // breite von label soll mit der von spalten
+            //	sizes[x] = components[x][0].getPreferredSize().width;
+        }
 
-      // fields
-      for (int x = 0; x < components.length; x++) {
-	sizes[x] = Math.max(sizes[x], components[x][1].getPreferredSize().width);
-	width += sizes[x] + hgap;
-      }
+        // fields
+        for (int x = 0; x < components.length; x++) {
+            sizes[x] = Math.max(sizes[x], components[x][1].getPreferredSize().width);
+            width += sizes[x] + hgap;
+        }
 
-      height = components[0].length * (vgap + columnHeight) +  vgap;
+        height = components[0].length * (vgap + columnHeight) + vgap;
 
-      if (scrollBar != null) {
-	width += 2 * hgap + scrollBar.getPreferredSize().width;
-      }
+        if (scrollBar != null) {
+            width += 2 * hgap + scrollBar.getPreferredSize().width;
+        }
 
-      computed = true;
+        computed = true;
     }
 
     /**
@@ -199,41 +211,43 @@ public class KopiMultiBlockLayout implements KopiLayoutManager {
      * Most applications do not call this method directly. This method
      * is called when a container calls its <code>getPreferredSize</code>
      * method.
-     * @param   target   the container in which to do the layout.
-     * @return  the preferred dimensions to lay out the subcomponents
-     *          of the specified container.
-     * @see     Container
-     * @see     java.awt.BorderLayout#minimumLayoutSize
-     * @see     Container#getPreferredSize()
-     * @since   JDK1.0
+     *
+     * @param target the container in which to do the layout.
+     * @return the preferred dimensions to lay out the subcomponents
+     * of the specified container.
+     * @see Container
+     * @see java.awt.BorderLayout#minimumLayoutSize
+     * @see Container#getPreferredSize()
+     * @since JDK1.0
      */
     public Dimension preferredLayoutSize(Container target) {
-      synchronized (target.getTreeLock()) {
+        synchronized (target.getTreeLock()) {
 
-	if (!computed) {
-	  precalculateSize();
-	}
+            if (!computed) {
+                precalculateSize();
+            }
 
-	Dimension dim = new Dimension(width, height);
+            Dimension dim = new Dimension(width, height);
 
-	Insets insets = target.getInsets();
-	dim.width += insets.left + insets.right;
-	dim.height += insets.top + insets.bottom;
+            Insets insets = target.getInsets();
+            dim.width += insets.left + insets.right;
+            dim.height += insets.top + insets.bottom;
 
-	return dim;
-      }
+            return dim;
+        }
     }
 
     /**
      * Returns the maximum dimensions for this layout given the components
      * in the specified target container.
+     *
      * @param target the component which needs to be laid out
      * @see Container
      * @see #minimumLayoutSize
      * @see #preferredLayoutSize
      */
     public Dimension maximumLayoutSize(Container target) {
-      return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     /**
@@ -244,7 +258,7 @@ public class KopiMultiBlockLayout implements KopiLayoutManager {
      * the furthest away from the origin, 0.5 is centered, etc.
      */
     public float getLayoutAlignmentX(Container parent) {
-	return 0.5f;
+        return 0.5f;
     }
 
     /**
@@ -255,7 +269,7 @@ public class KopiMultiBlockLayout implements KopiLayoutManager {
      * the furthest away from the origin, 0.5 is centered, etc.
      */
     public float getLayoutAlignmentY(Container parent) {
-	return 0.5f;
+        return 0.5f;
     }
 
     /**
@@ -263,7 +277,7 @@ public class KopiMultiBlockLayout implements KopiLayoutManager {
      * has cached information it should be discarded.
      */
     public void invalidateLayout(Container target) {
-      computed = false;
+        computed = false;
     }
 
     /**
@@ -281,76 +295,78 @@ public class KopiMultiBlockLayout implements KopiLayoutManager {
      * <p>
      * Most applications do not call this method directly. This method
      * is called when a container calls its <code>doLayout</code> method.
-     * @param   target   the container in which to do the layout.
-     * @see     Container
-     * @see     Container#doLayout()
-     * @since   JDK1.0
+     *
+     * @param target the container in which to do the layout.
+     * @see Container
+     * @see Container#doLayout()
+     * @since JDK1.0
      */
     public void layoutContainer(Container target) {
-      synchronized (target.getTreeLock()) {
-	Insets insets = target.getInsets();
-	int top = insets.top;
-	int left = insets.left;
-	int right = target.getSize().width - insets.right;
+        synchronized (target.getTreeLock()) {
+            Insets insets = target.getInsets();
+            int top = insets.top;
+            int left = insets.left;
+            int right = target.getSize().width - insets.right;
 
-	if (!computed) {
-	  precalculateSize();
-	}
+            if (!computed) {
+                precalculateSize();
+            }
 
-	int	extra_size_H = (right - left - width);
+            int extra_size_H = (right - left - width);
 
-	if (extra_size_H < 0) {
-	  extra_size_H = 0;
-	}
+            if (extra_size_H < 0) {
+                extra_size_H = 0;
+            }
 
-	left += hgap + extra_size_H / 2;
+            left += hgap + extra_size_H / 2;
 
-	for (int x = 0; x < components.length; x++) {	// for every component
-	  realPos[x] = left - 2 * hgap;
+            for (int x = 0; x < components.length; x++) {    // for every component
+                realPos[x] = left - 2 * hgap;
 
-	    Dimension d1 = components[x][1].getPreferredSize();
-	    components[x][0].setBounds(aligns[x][1].alignRight ? left + sizes[x] - d1.width :
-				       left,
-				       0 * (columnHeight + vgap) + vgap + insets.top,
-				       d1.width,
-				       columnHeight);
-	  for (int y = 1; y < components[0].length; y++) {
-	    Dimension d = components[x][y].getPreferredSize();
-	    components[x][y].setBounds(aligns[x][y].alignRight ? left + sizes[x] - d.width :
-				       left,
-				       y * (columnHeight + vgap) + vgap + (y == 0 ? 2 : 0) + insets.top,
-				       d.width,
-				       d.height);
-	  }
-	  left += sizes[x] + hgap;
-	}
+                Dimension d1 = components[x][1].getPreferredSize();
+                components[x][0].setBounds(aligns[x][1].getALG_RIGHT() ? left + sizes[x] - d1.width :
+                                left,
+                        0 * (columnHeight + vgap) + vgap + insets.top,
+                        d1.width,
+                        columnHeight);
+                for (int y = 1; y < components[0].length; y++) {
+                    Dimension d = components[x][y].getPreferredSize();
+                    components[x][y].setBounds(aligns[x][y].getALG_RIGHT() ? left + sizes[x] - d.width :
+                                    left,
+                            y * (columnHeight + vgap) + vgap + (y == 0 ? 2 : 0) + insets.top,
+                            d.width,
+                            d.height);
+                }
+                left += sizes[x] + hgap;
+            }
 
-	if (scrollBar != null) {
-	  scrollBar.setBounds(left,
-			      columnHeight + vgap + top,
-			      scrollBar.getPreferredSize().width,
-			      height - columnHeight - vgap);
-	}
-      }
+            if (scrollBar != null) {
+                scrollBar.setBounds(left,
+                        columnHeight + vgap + top,
+                        scrollBar.getPreferredSize().width,
+                        height - columnHeight - vgap);
+            }
+        }
     }
 
     /**
      * Returns a string representation of the state of this border layout.
-     * @return    a string representation of this border layout.
-     * @since     JDK1.0
+     *
+     * @return a string representation of this border layout.
+     * @since JDK1.0
      */
     public String toString() {
-	return getClass().getName() + "[hgap=" + hgap + ",vgap=" + vgap + "]";
+        return getClass().getName() + "[hgap=" + hgap + ",vgap=" + vgap + "]";
     }
 
 
-  private static final int textHeight;
+    private static final int textHeight;
 
-  static {
-    Font                font = UIManager.getFont("KopiLayout.font");
-    @SuppressWarnings("deprecation")
-    FontMetrics         fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
+    static {
+        Font font = UIManager.getFont("KopiLayout.font");
+        @SuppressWarnings("deprecation")
+        FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
 
-    textHeight = fm.getHeight()+ UIManager.getInt("FieldText.y.space");
-  }
+        textHeight = fm.getHeight() + UIManager.getInt("FieldText.y.space");
+    }
 }

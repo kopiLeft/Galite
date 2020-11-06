@@ -20,8 +20,16 @@
 package org.kopi.vkopi.lib.ui.swing.form;
 
 import org.kopi.galite.util.base.InconsistencyException;
-import org.kopi.galite.form.*;
+import org.kopi.galite.form.FieldHandler;
+import org.kopi.galite.form.UBlock;
+import org.kopi.galite.form.UChartLabel;
+import org.kopi.galite.form.UField;
+import org.kopi.galite.form.ULabel;
 import org.kopi.galite.form.VBlock.OrderModel;
+import org.kopi.galite.form.VField;
+import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.form.VImageField;
+import org.kopi.galite.form.VTextField;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 
 /**
@@ -30,73 +38,73 @@ import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 @SuppressWarnings("serial")
 public class DFieldUI extends VFieldUI {
 
-  // ----------------------------------------------------------------------
-  // CONSTRUCTORS
-  // ----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
+    // CONSTRUCTORS
+    // ----------------------------------------------------------------------
 
-  public DFieldUI(UBlock blockView, VField model) {
-    super(blockView, model);
-  }
-  
-  // ----------------------------------------------------------------------
-  // VFIELDUI IMPLEMENTATION
-  // ----------------------------------------------------------------------
-  
-  /**
-   * 
-   */
-  protected UField createDisplay(ULabel label, VField model, boolean detail) {
-    DField      	field;
-
-    switch (model.getType()) {
-    case VField.MDL_FLD_COLOR:
-      field = new DColorField(this, (DLabel)label, model.getAlign(), 0, detail);
-      break;
-    case VField.MDL_FLD_IMAGE:
-      field = new DImageField(this, (DLabel)label, model.getAlign(), 0, ((VImageField) model).getIconWidth(), ((VImageField) model).getIconHeight(), detail);
-      break;
-    case VField.MDL_FLD_EDITOR:
-      field = new DTextEditor(this, (DLabel)label, model.getAlign(), model.getOptions(), ((VTextField) model).getHeight(), detail);
-      break;
-    case VField.MDL_FLD_TEXT:      
-      field = new DTextField(this, (DLabel)label, model.getAlign(), model.getOptions(), detail);
-      break;
-    case VField.MDL_FLD_ACTOR:
-      field = new DActorField(this, (DLabel)label, model.getAlign(), model.getOptions(), detail);
-      break;
-    default:
-      throw new InconsistencyException("Type of model " + model.getType() + " not supported.");
+    public DFieldUI(UBlock blockView, VField model) {
+        super(blockView, model);
     }
-    
-    return field;
-  }
-  
-  /**
-   * 
-   */
-  protected FieldHandler createFieldHandler() {
-    return new JFieldHandler(this);
-  }
 
-  /**
-   * 
-   */
-  protected ULabel createLabel(String text, String help, boolean detail) {
-    return new DLabel(text, help);
-  }
+    // ----------------------------------------------------------------------
+    // VFIELDUI IMPLEMENTATION
+    // ----------------------------------------------------------------------
 
-  /**
-   * 
-   */
-  protected UChartLabel createChartHeaderLabel(String text, String help, int index, OrderModel model) {
-    return new DChartHeaderLabel(text, help, index, model);
-  }
+    /**
+     *
+     */
+    protected UField createDisplay(ULabel label, VField model, boolean detail) {
+        DField field;
 
-  // ----------------------------------------------------------------------
-  // STATIC INITIALIZATION
-  // ----------------------------------------------------------------------
-  
-  static {
-    SwingThreadHandler.verifyRunsInEventThread("DFieldUI <init>");
-  }
+        switch (model.getType()) {
+            case VField.MDL_FLD_COLOR:
+                field = new DColorField(this, (DLabel) label, model.getAlign(), 0, detail);
+                break;
+            case VField.MDL_FLD_IMAGE:
+                field = new DImageField(this, (DLabel) label, model.getAlign(), 0, ((VImageField) model).getIconWidth(), ((VImageField) model).getIconHeight(), detail);
+                break;
+            case VField.MDL_FLD_EDITOR:
+                field = new DTextEditor(this, (DLabel) label, model.getAlign(), model.getOptions(), ((VTextField) model).getHeight(), detail);
+                break;
+            case VField.MDL_FLD_TEXT:
+                field = new DTextField(this, (DLabel) label, model.getAlign(), model.getOptions(), detail);
+                break;
+            case VField.MDL_FLD_ACTOR:
+                field = new DActorField(this, (DLabel) label, model.getAlign(), model.getOptions(), detail);
+                break;
+            default:
+                throw new InconsistencyException("Type of model " + model.getType() + " not supported.");
+        }
+
+        return field;
+    }
+
+    /**
+     *
+     */
+    protected FieldHandler createFieldHandler() {
+        return new JFieldHandler(this);
+    }
+
+    /**
+     *
+     */
+    protected ULabel createLabel(String text, String help, boolean detail) {
+        return new DLabel(text, help);
+    }
+
+    /**
+     *
+     */
+    protected UChartLabel createChartHeaderLabel(String text, String help, int index, OrderModel model) {
+        return new DChartHeaderLabel(text, help, index, model);
+    }
+
+    // ----------------------------------------------------------------------
+    // STATIC INITIALIZATION
+    // ----------------------------------------------------------------------
+
+    static {
+        SwingThreadHandler.verifyRunsInEventThread("DFieldUI <init>");
+    }
 }

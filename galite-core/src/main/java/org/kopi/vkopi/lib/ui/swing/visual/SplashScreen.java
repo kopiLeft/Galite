@@ -22,14 +22,17 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-
 public class SplashScreen extends Window {
 
-  
 /** Construct a new <code>SplashScreen</code>.
    *
    * @param image The image to display in the splash screen.

@@ -18,16 +18,19 @@
  */
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.visual.ApplicationContext;
-import org.kopi.vkopi.lib.visual.VException;
-import org.kopi.vkopi.lib.visual.VRuntimeException;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InvocationEvent;
 import java.util.ArrayList;
+
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VRuntimeException;
 
 /**
  * Helps to run code in the Event dispatch Thread. Subclass it
@@ -122,9 +125,9 @@ public class SwingThreadHandler {
     if (! SwingUtilities.isEventDispatchThread()) {
       System.out.println("Must be called in event disp, Thread. " + message);
       Thread.dumpStack();
-      if (!ApplicationContext.getDefaults().isDebugModeEnabled()) {
+      if (!ApplicationContext.Companion.getDefaults().isDebugModeEnabled()) {
         try {
-          ApplicationContext.reportTrouble("SwingThreadHandler " + Thread.currentThread(),
+          ApplicationContext.Companion.reportTrouble("SwingThreadHandler " + Thread.currentThread(),
                                            "verifyRunsInEventThread",
                                            "message",
                                            new RuntimeException(message));
@@ -179,11 +182,11 @@ public class SwingThreadHandler {
                                           final String data,
                                           final Throwable failure)
   {
-    if (!ApplicationContext.getDefaults().isDebugModeEnabled()) {
+    if (!ApplicationContext.Companion.getDefaults().isDebugModeEnabled()) {
       // send the mail NOT in the awt-event-thread
       Runnable  localRunner = new Runnable() {
           public void run() {
-            ApplicationContext.reportTrouble("Event Handling Queue",
+            ApplicationContext.Companion.reportTrouble("Event Handling Queue",
                                              where,
                                              data,
                                              failure);

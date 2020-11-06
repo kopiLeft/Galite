@@ -26,9 +26,9 @@ abstract class VImportedBlock (form: VForm) : VBlock(form) {
   // ACTOR HANDLING
   // ----------------------------------------------------------------------
 
-  fun getActor(i: Int): VActor? {
+  override fun getActor(i: Int): VActor {
     return actors!![i]
   }
 
-  override lateinit var actors: Array<VActor>
+  override var actors: Array<VActor>? = null
 }

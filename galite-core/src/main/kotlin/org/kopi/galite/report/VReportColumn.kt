@@ -125,8 +125,8 @@ abstract class VReportColumn(
     return if (styles == null) {
       val style = ColumnStyle()
       style.fontName = 0
-      style.background = Constants.CLR_WHITE
-      style.foreground = Constants.CLR_BLACK
+      style.backgroundCode = Constants.CLR_WHITE
+      style.foregroundCode = Constants.CLR_BLACK
       arrayOf(style)
     } else {
       styles!!
@@ -137,7 +137,8 @@ abstract class VReportColumn(
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   var label: String = ""
-  private var help: String? = null
+  var help: String? = null
+    private set
   var visible: Boolean = true
   open var folded: Boolean = false
   var addedAtRuntime: Boolean = false

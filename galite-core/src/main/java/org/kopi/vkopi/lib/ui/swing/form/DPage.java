@@ -19,54 +19,58 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 
 public class DPage extends JPanel {
 
-  public DPage(boolean align) {
-    super(true);
-    setLayout(new BoxLayout(this, align ? BoxLayout.X_AXIS : BoxLayout.Y_AXIS));
-  }
-
-  public void addBlock(Component block) {
-    if (getComponentCount() > 0) {
-      add(Box.createRigidArea(new Dimension(10, 10)));
+    public DPage(boolean align) {
+        super(true);
+        setLayout(new BoxLayout(this, align ? BoxLayout.X_AXIS : BoxLayout.Y_AXIS));
     }
-    add(block);
-    last = block;
-  }
 
-  public void addFollowBlock(Component block) {
-    if (last != null) {
-      JPanel	temp = new JPanel() {
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 4802353020694430279L;
-
-	public Dimension getMaximumSize() {
-	  return this.getPreferredSize();
-	}
-      };
-      temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
-      remove(last);
-      temp.add(last);
-      temp.add(block);
-      add(temp);
-    } else {
-      add(block);
+    public void addBlock(Component block) {
+        if (getComponentCount() > 0) {
+            add(Box.createRigidArea(new Dimension(10, 10)));
+        }
+        add(block);
+        last = block;
     }
-    last = null;
-  }
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
+    public void addFollowBlock(Component block) {
+        if (last != null) {
+            JPanel temp = new JPanel() {
+                /**
+                 * Comment for <code>serialVersionUID</code>
+                 */
+                private static final long serialVersionUID = 4802353020694430279L;
 
-  private Component	last;
-  /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 9005939783618490430L;
+                public Dimension getMaximumSize() {
+                    return this.getPreferredSize();
+                }
+            };
+            temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
+            remove(last);
+            temp.add(last);
+            temp.add(block);
+            add(temp);
+        } else {
+            add(block);
+        }
+        last = null;
+    }
+
+    // ----------------------------------------------------------------------
+    // DATA MEMBERS
+    // ----------------------------------------------------------------------
+
+    private Component last;
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 9005939783618490430L;
 }

@@ -181,8 +181,8 @@ abstract class VForm : VWindow, VConstants {
   /**
    * addCommand in menu
    */
-  override fun setActors(actors: Array<VActor>) {
-    actors?.forEach { actor ->
+  override fun addActors(actors: Array<VActor>) {
+    actors.forEach { actor ->
       if (actor is VDefaultActor) {
         when ((actor as VDefaultActor).code) {
           CMD_AUTOFILL -> autofillActor = actor
@@ -192,7 +192,7 @@ abstract class VForm : VWindow, VConstants {
         }
       }
     }
-    super.setActors(actors)
+    super.addActors(actors)
   }
 
   fun setTextOnFieldLeave(): Boolean = false
@@ -237,7 +237,7 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   private fun initActors() {
     for (i in blocks.indices) {
-      setActors(blocks[i].actors)
+      blocks[i].actors?.let { addActors(it) }
     }
   }
 
@@ -269,7 +269,7 @@ abstract class VForm : VWindow, VConstants {
     if (activeBlock == null) {
       var i = 0
       while (i < blocks!!.size) {
-        if (blocks!![i].isAccessible()) {
+        if (blocks!![i].isAccessible) {
           break
         }
         i++
@@ -306,7 +306,7 @@ abstract class VForm : VWindow, VConstants {
     var block: VBlock? = null
     var i = 0
     while (block == null && i < blocks!!.size) {
-      if (blocks!![i].pageNumber == target && blocks!![i].isAccessible()) {
+      if (blocks!![i].pageNumber == target && blocks!![i].isAccessible) {
         block = blocks!![i]
       }
       i++
@@ -344,7 +344,7 @@ abstract class VForm : VWindow, VConstants {
       if (index == blocks!!.size) {
         index = 0
       }
-      if (blocks!![index].isAccessible()) {
+      if (blocks!![index].isAccessible) {
         target = blocks!![index]
       }
       i += 1
@@ -359,7 +359,7 @@ abstract class VForm : VWindow, VConstants {
     assert(activeBlock == null) { "active block = $activeBlock" }
     var i = 0
     while (i < blocks!!.size) {
-      if (blocks!![i].isAccessible()) {
+      if (blocks!![i].isAccessible) {
         break
       }
       i++
@@ -414,7 +414,7 @@ abstract class VForm : VWindow, VConstants {
 
     for (i in blocks.indices) {
       blocks!![i].clear()
-      blocks!![i].setMode(VConstants.MOD_QUERY) // vincent 14.9.98
+      blocks!![i].mode = VConstants.MOD_QUERY // vincent 14.9.98
     }
     initialise()
     if (activeBlock == null) {
@@ -605,7 +605,7 @@ abstract class VForm : VWindow, VConstants {
               help: String,
               code: String) {
     for (i in blocks.indices) {
-      setActors(blocks[i].actors)
+      blocks[i].actors?.let { addActors(it) }
     }
     VDocGenerator(p).helpOnForm(getName(),
             commands,
@@ -649,8 +649,8 @@ abstract class VForm : VWindow, VConstants {
         if (anchor == null) {
           anchor = field.name
         }
-        anchor.replace(' ', '_')
-        surl.append("#" + field.block.title!!.replace(' ', '_') + anchor)
+        anchor!!.replace(' ', '_')
+        surl.append("#" + field.block!!.title!!.replace(' ', '_') + anchor)
       }
       surl.toString()
     }

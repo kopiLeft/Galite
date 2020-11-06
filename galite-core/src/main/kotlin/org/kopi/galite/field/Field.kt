@@ -17,6 +17,7 @@
 
 package org.kopi.galite.field
 
+import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.exceptions.InvalidValueException
@@ -28,12 +29,12 @@ import org.kopi.galite.exceptions.InvalidValueException
  *
  * @param domain the field's domain
  */
-open class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
+abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
   /** Field's label */
   var label: String = ""
 
   /** Field's help that describes the expected value of an input field */
-  var help: String = ""
+  var help: String? = null
 
   /**
    * Checks if the value passed to the field doesn't exceed the length of the field's domain
@@ -44,8 +45,8 @@ open class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
    */
   fun checkLength(value: T): Boolean = when {
     domain == null -> true
-    domain.length == null -> true
-    else -> value.toString().length <= domain.length
+    domain!!.length == null -> true
+    else -> value.toString().length <= domain!!.length!!
   }
 
   /**
@@ -58,8 +59,8 @@ open class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
    */
   fun checkValue(value: T): Boolean = when {
     domain == null -> true
-    domain.type is ListDomain && (domain.type as ListDomain).checkValue(value) -> true
-    domain.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
+    domain!!.type is ListDomain && (domain!!.type as ListDomain).checkValue(value) -> true
+    domain!!.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
             "by this domain type")
     else -> throw InvalidValueException(value, label)
   }
@@ -70,4 +71,11 @@ open class Field<T : Comparable<T>>(val domain: Domain<T>? = null) {
   fun getValues(): MutableMap<String, *>? {
     return domain?.getValues()
   }
+
+  /**
+   * Generates localization for this field
+   *
+   * @param The localization writer.
+   */
+  abstract fun genLocalization(writer: LocalizationWriter)
 }
