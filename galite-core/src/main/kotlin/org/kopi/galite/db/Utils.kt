@@ -19,6 +19,7 @@
 package org.kopi.galite.db
 
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Time
 
 class Utils {
   companion object {
@@ -26,6 +27,8 @@ class Utils {
     fun trailString(input: String): String = TODO()
     fun toSql(date: Date): String = TODO()
     fun toSql(l: String): String = TODO()
+    fun toSql(t: Time?): String = TODO()
+    fun toSql(d: Int?): String = TODO()
   }
 }
 

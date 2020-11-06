@@ -16,30 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.db
 
-/**
- * Local printer
- */
-class LPrinter(val name: String,var command: String) : AbstractPrinter(name) {
+import java.sql.SQLException
 
-  // ----------------------------------------------------------------------
-  // PRINTING WITH AN INPUTSTREAM
-  // ----------------------------------------------------------------------
+class DBInterruptionException : DBException {
+  /**
+   * Constructor
+   */
+  constructor() : super(SQLException("DBInterruptionException"))
 
-  override fun print(data: PrintJob): String {
-    val process = Runtime.getRuntime().exec(command)
-    val data = data.inputStream
-    val buffer = ByteArray(1024)
-    val output = process.outputStream
-    var length: Int
+  /**
+   * Constructor
+   *
+   * @param     query           the sql query which generated the exception
+   */
+  constructor(query: String) : super(query, SQLException("DBInterruptionException"))
 
-    while (data.read(buffer).also { length = it } != -1) {
-      output.write(buffer, 0, length)
-    }
-    output.close()
-
-    return "NYI"
-  }
 }
-

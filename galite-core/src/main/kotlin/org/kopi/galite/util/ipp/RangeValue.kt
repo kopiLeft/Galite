@@ -18,7 +18,16 @@
 
 package org.kopi.galite.util.ipp
 
-class RangeValue(private var lower: Int,private var upper: Int) : IPPValue() {
+class RangeValue : IPPValue {
+
+  // --------------------------------------------------------------------
+  // CONSTRUCTOR
+  // --------------------------------------------------------------------
+
+  constructor(lower: Int, upper: Int) {
+    this.lower = lower
+    this.upper = upper
+  }
 
   constructor(inputStream: IPPInputStream) {
     inputStream.readShort() //value-length
@@ -42,4 +51,10 @@ class RangeValue(private var lower: Int,private var upper: Int) : IPPValue() {
 
   override fun toString(): String = "<$lower, $upper>"
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var lower: Int
+  private var upper: Int
 }

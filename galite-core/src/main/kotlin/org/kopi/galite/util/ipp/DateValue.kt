@@ -18,7 +18,11 @@
 
 package org.kopi.galite.util.ipp
 
-class DateValue(private var value: ByteArray) : IPPValue() {
+class DateValue: IPPValue {
+
+  constructor( value: ByteArray) {
+    this.value = value
+  }
 
   constructor(inputStream: IPPInputStream) {
     inputStream.readShort() //value-length
@@ -48,4 +52,5 @@ class DateValue(private var value: ByteArray) : IPPValue() {
     }
     println("")
   }
+  private var value: ByteArray
 }

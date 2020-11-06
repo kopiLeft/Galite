@@ -20,14 +20,10 @@ package org.kopi.galite.util.ipp
 
 class IPP() {
 
-  constructor(ippInputStream: IPPInputStream) {
+  constructor(ippInputStream: IPPInputStream) : this() {
     var endAttributes = false
     var groupTag = IPPConstants.TAG_ZERO.toByte()
     var read: Byte
-
-    header = IPPHeader(ippInputStream)
-    attributes = mutableListOf()
-    data = ByteArray(0)
 
     while (!endAttributes) {
       read = ippInputStream.peekByte()
@@ -87,31 +83,42 @@ class IPP() {
   }
 
   fun write(os: IPPOutputStream) {
+    val atts = attributes.iterator()
     var lastGroup = -1
 
     header.write(os)
 
-    attributes.forEach {
-      it.write(os, lastGroup)
-      lastGroup = it.group
+    while (atts.hasNext()) {
+      val attribute = atts.next() as IPPAttribute
+
+      attribute.write(os, lastGroup)
+      lastGroup = attribute.group
     }
 
     os.writeByte(IPPConstants.TAG_END)
+
     os.writeArray(data)
   }
 
   fun dump() {
+    val atts = attributes.iterator()
+
     header.dump()
-    attributes.forEach {
-      it.dump()
+
+    while (atts.hasNext()) {
+      val attribute = atts.next() as IPPAttribute
+
+      attribute.dump()
     }
   }
 
   fun simpleDump() {
     val atts = attributes.iterator()
 
-    attributes.forEach {
-      it.simpleDump()
+    while (atts.hasNext()) {
+      val attribute = atts.next() as IPPAttribute
+
+      attribute.simpleDump()
     }
   }
 
@@ -119,15 +126,20 @@ class IPP() {
   // DATA MEMBERS
   // --------------------------------------------------------------------
 
-  var header: IPPHeader = IPPHeader()
+  var header: IPPHeader
     private set
 
-  private var attributes: MutableList<IPPAttribute> = mutableListOf()
+  private var attributes: MutableList<IPPAttribute>
 
-  var data: ByteArray = ByteArray(0)
+  var data: ByteArray
 
   companion object {
     const val DEBUG = false
   }
 
+  init {
+    header = IPPHeader()
+    attributes = mutableListOf()
+    data = ByteArray(0)
+  }
 }

@@ -18,7 +18,11 @@
 
 package org.kopi.galite.util.ipp
 
-class IntegerValue(private var value: Int) : IPPValue() {
+class IntegerValue : IPPValue {
+
+  constructor(value: Int) {
+    this.value = value
+  }
 
   constructor(inputStream: IPPInputStream) {
     inputStream.readShort() //value-length
@@ -41,4 +45,10 @@ class IntegerValue(private var value: Int) : IPPValue() {
   }
 
   override fun toString(): String = value.toString() + ""
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var value: Int
 }

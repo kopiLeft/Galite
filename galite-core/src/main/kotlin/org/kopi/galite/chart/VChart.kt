@@ -96,7 +96,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    *
    * @param     locale  the locale to use
    */
-  fun localize(locale: Locale) {
+  fun localize(locale: Locale?) {
     var manager: LocalizationManager?
 
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
@@ -612,13 +612,5 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     init()
     // localize the report using the default locale
     localize(ApplicationContext.getDefaultLocale())
-  }
-
-  open fun setMenu() {
-    TODO()
-  }
-
-  open fun initChart() {
-    TODO()
   }
 }

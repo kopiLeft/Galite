@@ -20,7 +20,7 @@ package org.kopi.galite.util.ipp
 
 class IPPHeader() {
 
-  constructor(inputStream: IPPInputStream) {
+  constructor(inputStream: IPPInputStream): this() {
     majorVersion = inputStream.readByte()
     minorVersion = inputStream.readByte()
     operationID = inputStream.readShort()

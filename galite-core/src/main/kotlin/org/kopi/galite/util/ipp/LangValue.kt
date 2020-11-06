@@ -18,8 +18,12 @@
 
 package org.kopi.galite.util.ipp
 
-class LangValue(var charset: String,var value: String) : IPPValue() {
+class LangValue : IPPValue {
 
+  constructor(charset: String, value: String) {
+    this.charset = charset
+    this.value = value
+  }
 
   constructor(inputStream: IPPInputStream) {
     inputStream.readShort() //value-length
@@ -43,4 +47,10 @@ class LangValue(var charset: String,var value: String) : IPPValue() {
 
   override fun toString(): String = value
 
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var charset: String
+  private var value: String
 }
