@@ -76,4 +76,10 @@ class VListDialog: VModel {
   override fun getDisplay(): UComponent? {
     TODO("Not yet implemented")
   }
+  fun selectFromDialog(window: VWindow?, field: VField?, showSingleEntry: Boolean): Int {
+    TODO()
+  }
+  fun setTooManyRows(){
+    TODO()
+  }
 }

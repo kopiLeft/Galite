@@ -66,9 +66,9 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   /**
    * printlns a compilation unit
    */
-  fun helpOnBlock(formCode: String,
+  override fun helpOnBlock(formCode: String,
                   title: String,
-                  help: String?,
+                  help: String,
                   commands: Array<VCommand>?,
                   fields: Array<VField>,
                   alone: Boolean) {
@@ -173,7 +173,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         latexPrinter.println("\\begin{description}")
 
         fields.forEach { field ->
-          field.helpOnField(this)
+          field!!.helpOnField(this)
         }
 
         latexPrinter.println("\\end{description}")

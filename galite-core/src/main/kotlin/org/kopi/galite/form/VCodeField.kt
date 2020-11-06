@@ -33,12 +33,8 @@ import org.kopi.galite.visual.VlibProperties
  */
 abstract class VCodeField(val type: String,
                           val source: String,
-                          val idents: Array<String>)
-  : VField(1, 1) {
+                          val idents: Array<String>): VField(1, 1) {
 
-  /**
-   *
-   */
   override fun hasAutofill(): Boolean = true
 
   override fun hasAutocomplete(): Boolean = true
@@ -99,7 +95,7 @@ abstract class VCodeField(val type: String,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     var s = o as? String
 
     if (s == "") {
@@ -312,7 +308,7 @@ abstract class VCodeField(val type: String,
     throw InconsistencyException()
   }
 
-  override fun toText(o: Any): String? {
+  override fun toText(o: Any?): String {
     for (i in getCodes().indices) {
       if (getCodes()[i] == o) {
         return labels[i]
@@ -333,7 +329,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String = if (value[r] == -1) ""
+  override fun getTextImpl(r: Int): String? = if (value[r] == -1) ""
   else labels[value[r]]
 
   /**
@@ -385,7 +381,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns a string representation of a int value wrt the field type.
    */
-  protected fun formatInt(value: Int): String {
+  protected open fun formatInt(value: Int): String {
     throw InconsistencyException()
   }
 
@@ -398,7 +394,7 @@ abstract class VCodeField(val type: String,
    *
    * @param     parent         the caller localizer
    */
-  protected override fun localize(parent: FieldLocalizer?) {
+  override fun localize(parent: FieldLocalizer?) {
     val loc = parent!!.manager.getTypeLocalizer(source, type)
 
     for (i in labels.indices) {

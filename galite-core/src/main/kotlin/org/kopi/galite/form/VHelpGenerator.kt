@@ -51,4 +51,10 @@ open class VHelpGenerator : VHelpGenerator() {
 
     TODO()
   }
+  open fun helpOnBlock(replace: String,
+                       title: String,
+                       help: String,
+                       commands: Array<VCommand>?,
+                       fields: Array<VField>,
+                       b: Boolean) {}
 }
