@@ -2900,7 +2900,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
-  protected var commands: Array<VCommand>? = null // commands
+  internal var commands: Array<VCommand>? = null // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
       val temp: Array<VActor>? = field
@@ -2995,7 +2995,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected var fetchCount = 0 // # of fetched records
   protected var fetchPosition = 0 // position of current record
   protected var blockListener = EventListenerList()
-  protected var orderModel = OrderModel()
+  internal var orderModel = OrderModel()
   var border = 0
   var maxRowPos = 0
   var maxColumnPos = 0

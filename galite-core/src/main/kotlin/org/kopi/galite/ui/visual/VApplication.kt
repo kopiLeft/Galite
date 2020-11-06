@@ -43,7 +43,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.router.Route
 
-
 /**
  * The entry point for all Galite WEB applications.
  *

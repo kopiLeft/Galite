@@ -25,7 +25,7 @@ import org.kopi.galite.type.Month
  * Represents a list column.
  */
 class VMonthColumn(title: String,
-                   column: String,
+                   column: String?,
                    sortAscending:
                    Boolean)
       : VListColumn(title,
