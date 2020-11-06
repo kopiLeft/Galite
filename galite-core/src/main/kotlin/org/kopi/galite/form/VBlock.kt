@@ -182,8 +182,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         indices!![i] = loc.getIndexMessage(indices!![i])
       }
     }
-    fields!!.forEach {
-      if (it!!.isInternal()) {
+    fields.forEach {
+      if (!it.isInternal()) {
         it.localize(loc)
       }
     }
