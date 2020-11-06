@@ -33,12 +33,8 @@ import org.kopi.galite.visual.VlibProperties
  */
 abstract class VCodeField(val type: String,
                           val source: String,
-                          val idents: Array<String>)
-  : VField(1, 1) {
+                          val idents: Array<String>): VField(1, 1) {
 
-  /**
-   *
-   */
   override fun hasAutofill(): Boolean = true
 
   override fun hasAutocomplete(): Boolean = true
@@ -52,8 +48,8 @@ abstract class VCodeField(val type: String,
    */
   override fun build() {
     super.build()
-    value = IntArray(2 * block.bufferSize)
-    for (i in 0 until block.bufferSize) {
+    value = IntArray(2 * block!!.bufferSize)
+    for (i in 0 until block!!.bufferSize) {
       value[i] = -1
     }
   }
@@ -197,7 +193,7 @@ abstract class VCodeField(val type: String,
           i++
         }
         assert(found >= 0)
-        setCode(block.activeRecord, found)
+        setCode(block!!.activeRecord, found)
         return true
       }
     }
@@ -216,7 +212,7 @@ abstract class VCodeField(val type: String,
     var desc = desc
 
     desc = if (!getListColumn()!!.isSortAscending) desc else !desc
-    var pos = value[block.activeRecord]
+    var pos = value[block!!.activeRecord]
 
     if (pos == -1 && desc) {
       pos = labels.size
@@ -225,11 +221,11 @@ abstract class VCodeField(val type: String,
     if (pos < 0 || pos >= labels.size) {
       throw VExecFailedException() // no message to display
     } else {
-      setCode(block.activeRecord, pos)
+      setCode(block!!.activeRecord, pos)
     }
   }
 
-  fun getSuggestions(query: String?): Array<Array<String?>>? {
+  override fun getSuggestions(query: String?): Array<Array<String?>>? {
     return if (query == null) {
       null
     } else {
@@ -285,7 +281,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the field value of given record as a bigdecimal value.
    */
-  fun getFixed(r: Int): org.kopi.galite.type.Fixed {
+  override fun getFixed(r: Int): org.kopi.galite.type.Fixed {
     throw InconsistencyException()
   }
 
@@ -293,7 +289,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the field value of given record as a boolean value.
    */
-  open fun getBoolean(r: Int): Boolean? {
+  override fun getBoolean(r: Int): Boolean? {
     throw InconsistencyException()
   }
 
@@ -301,14 +297,14 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the field value of given record as a int value.
    */
-  fun getInt(r: Int): Int {
+  override fun getInt(r: Int): Int? {
     throw InconsistencyException()
   }
 
   /**
    * Returns the field value of given record as a string value.
    */
-  open fun getString(r: Int): String {
+  override fun getString(r: Int): String {
     throw InconsistencyException()
   }
 
@@ -333,7 +329,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String = if (value[r] == -1) ""
+  override fun getTextImpl(r: Int): String? = if (value[r] == -1) ""
   else labels[value[r]]
 
   /**
@@ -350,7 +346,7 @@ abstract class VCodeField(val type: String,
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize && oldValue != value[t]) {
+    if (t < block!!.bufferSize && oldValue != value[t]) {
       fireValueChanged(t)
     }
   }
@@ -385,7 +381,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns a string representation of a int value wrt the field type.
    */
-  protected fun formatInt(value: Int): String {
+  protected open fun formatInt(value: Int): String {
     throw InconsistencyException()
   }
 
@@ -398,8 +394,8 @@ abstract class VCodeField(val type: String,
    *
    * @param     parent         the caller localizer
    */
-  protected fun localize(parent: FieldLocalizer) {
-    val loc = parent.manager.getTypeLocalizer(source, type)
+  override fun localize(parent: FieldLocalizer?) {
+    val loc = parent!!.manager.getTypeLocalizer(source, type)
 
     for (i in labels.indices) {
       labels[i] = loc.getCodeLabel(idents[i])

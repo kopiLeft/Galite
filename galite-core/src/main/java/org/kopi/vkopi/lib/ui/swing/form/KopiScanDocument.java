@@ -19,88 +19,85 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.vkopi.lib.form.ModelTransformer;
-import org.kopi.vkopi.lib.form.VField;
+import java.awt.Toolkit;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import java.awt.*;
+
+import org.kopi.galite.form.ModelTransformer;
+import org.kopi.galite.form.VField;
 
 /**
- * !!! NEED COMMENTS 
+ * !!! NEED COMMENTS
  */
 /*package*/ class KopiScanDocument extends KopiFieldDocument {
- 
-public KopiScanDocument(VField model, ModelTransformer transformer)
-  {
-    super(model, transformer);
 
-    scanedtext = new StringBuffer();
-    progress = 0;
-  }
+    public KopiScanDocument(VField model, ModelTransformer transformer) {
+        super(model, transformer);
 
-  // ----------------------------------------------------------------------
-  // MODEL / VIEW INTERFACE
-  // -----------------------------------------------------------------------
-  /**
-   * Returns the text currently showed by this document
-   */
-  public String getModelText() {
-    return scanedtext.toString();
-  }
-
-  /**
-   * Changes the text of this document without checking
-   */
-  public void setModelText(String s) {
-    scanedtext = new StringBuffer(s);
-    if (s == null || s.length() == 0) {
-      super.setModelText(""); // Ready to read 
-    } else {
-      super.setModelText(PROGRESS_BAR.substring(0,1)); // Reading
-    }
-    progress = 0;
-  }
-
-  // ----------------------------------------------------------------------
-  // DOCUMENT IMPLEMENTATION
-  // ----------------------------------------------------------------------
-
-  public void remove(int offs, int len) throws BadLocationException {
-    // delete is not supported
-  }
-
-  public void insertString(int offs, String str, AttributeSet a)
-    throws BadLocationException {
-    
-    if (str == null) {
-      return;
+        scanedtext = new StringBuffer();
+        progress = 0;
     }
 
-    String              text = scanedtext.toString();
+    // ----------------------------------------------------------------------
+    // MODEL / VIEW INTERFACE
+    // -----------------------------------------------------------------------
 
-    text =  text + str ;
-
-    if (((VField) getModel()).checkText(text)) {
-      scanedtext.append(str);
-      ((VField) getModel()).onTextChange(scanedtext.toString());
-      progress = (progress + 1) % PROGRESS_BAR.length();
-      super.setModelText(PROGRESS_BAR.substring(0, progress+1));
-    } else {
-      Toolkit.getDefaultToolkit().beep();
+    /**
+     * Returns the text currently showed by this document
+     */
+    public String getModelText() {
+        return scanedtext.toString();
     }
-  }
 
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
+    /**
+     * Changes the text of this document without checking
+     */
+    public void setModelText(String s) {
+        scanedtext = new StringBuffer(s);
+        if (s == null || s.length() == 0) {
+            super.setModelText(""); // Ready to read
+        } else {
+            super.setModelText(PROGRESS_BAR.substring(0, 1)); // Reading
+        }
+        progress = 0;
+    }
 
-  private StringBuffer  scanedtext;
-  private int           progress;
+    // ----------------------------------------------------------------------
+    // DOCUMENT IMPLEMENTATION
+    // ----------------------------------------------------------------------
 
-  private static String PROGRESS_BAR = ".........................";
-  /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-  private static final long serialVersionUID = 7109691655153595581L;
+    public void remove(int offs, int len) throws BadLocationException {
+        // delete is not supported
+    }
+
+    public void insertString(int offs, String str, AttributeSet a)
+            throws BadLocationException {
+
+        if (str == null) {
+            return;
+        }
+
+        String text = scanedtext.toString();
+
+        text = text + str;
+
+        if (((VField) getModel()).checkText(text)) {
+            scanedtext.append(str);
+            ((VField) getModel()).onTextChange(scanedtext.toString());
+            progress = (progress + 1) % PROGRESS_BAR.length();
+            super.setModelText(PROGRESS_BAR.substring(0, progress + 1));
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // DATA MEMBERS
+    // ----------------------------------------------------------------------
+
+    private StringBuffer scanedtext;
+    private int progress;
+
+    private static String PROGRESS_BAR = ".........................";
 }

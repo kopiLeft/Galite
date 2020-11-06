@@ -19,6 +19,9 @@ package org.kopi.galite.form
 
 import java.io.Serializable
 
+/**
+ * Represents a list column.
+ */
 class VPosition(val line: Int,
                 val lineEnd: Int,
                 val column: Int,

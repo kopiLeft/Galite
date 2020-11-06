@@ -19,13 +19,15 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.galite.form.UChartLabel;
-import org.kopi.galite.form.VBlock;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.UIManager;
+
+import org.kopi.galite.form.UChartLabel;
+import org.kopi.galite.form.VBlock;
 
 public class DChartHeaderLabel extends DLabel implements UChartLabel {
 
@@ -66,19 +68,19 @@ public class DChartHeaderLabel extends DLabel implements UChartLabel {
     int      order = sortModel.getColumnOrder(fieldIndex);
 
     switch (order) {
-    case VBlock.OrderModel.STE_INC:
+      case VBlock.STE_INC:
       g.setColor(color_active);
       g.fillPolygon(new int[]{w-6, w-1, w-11}, new int[]{1, 8, 8}, 3);
       g.setColor(color_mark);
       g.fillPolygon(new int[]{w-6, w-1, w-11}, new int[]{16, 10, 10}, 3);
       break;
-    case VBlock.OrderModel.STE_DESC:
+      case VBlock.STE_DESC:
       g.setColor(color_mark);
       g.fillPolygon(new int[]{w-6, w-1, w-11}, new int[]{1, 8, 8}, 3);
       g.setColor(color_active);
       g.fillPolygon(new int[]{w-6, w-1, w-11}, new int[]{16, 10, 10}, 3);
       break;
-    case VBlock.OrderModel.STE_UNORDERED:
+      case VBlock.STE_UNORDERED:
     default:
       g.setColor(color_mark);
       g.fillPolygon(new int[]{w-6, w-1, w-11}, new int[]{1, 8, 8}, 3);
