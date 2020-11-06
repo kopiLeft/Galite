@@ -273,7 +273,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     s               the object to check
    * @exception VException      an exception is raised if text is bad
    */
-  abstract fun checkType(rec: Int, s: Any)
+  abstract fun checkType(rec: Int, s: Any?)
 
   /**
    * verify that value is valid (on exit)
@@ -281,7 +281,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     s               the object to check
    * @exception VException      an exception is raised if text is bad
    */
-  fun checkType(s: Any?) {
+  open fun checkType(s: Any?) {
     checkType(block!!.activeRecord, s!!)
   }
 
@@ -1039,7 +1039,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getInt(): Int = getInt(block!!.currentRecord)
+  fun getInt(): Int? = getInt(block!!.currentRecord)
 
   /**
    * Returns the field value of given record as a date value.
@@ -1184,7 +1184,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getInt(r: Int): Int {
+  open fun getInt(r: Int): Int? {
     throw InconsistencyException()
   }
 
@@ -1252,7 +1252,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return getTextImpl(r)
   }
 
-  abstract fun toText(o: Any): String?
+  abstract fun toText(o: Any?): String?
 
   abstract fun toObject(s: String): Any?
 
@@ -1454,7 +1454,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   private fun checkList() {
-    if (!getForm().forceCheckList()) {
+    TODO()
+    /*if (!getForm().forceCheckList()) {
       // Oracle doesn't force the value to be in the list
       return
     }
@@ -1604,7 +1605,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
         else -> throw InconsistencyException(threadInfo() + "count = " + count)
       }
-    }
+    }*/
   }
 
   /**
@@ -1612,7 +1613,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * !!! TRY TO MERGE WITH checkList ???
    */
   fun getListID(): Int {
-    val SELECT_IS_IN_LIST = " SELECT  ID                      " +
+    TODO()
+    /*val SELECT_IS_IN_LIST = " SELECT  ID                      " +
             " FROM    $2                      " +
             " WHERE   $1 = $3"
 
@@ -1645,11 +1647,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (id == -1) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
     }
-    return id
+    return id*/
   }
 
   private fun displayQueryList(queryText: String, columns: Array<VListColumn>): Any? {
-    val MAX_LINE_COUNT = 1024
+    TODO()
+    /*val MAX_LINE_COUNT = 1024
     val SKIP_FIRST_COLUMN = false
     val SHOW_SINGLE_ENTRY: Boolean
     val lines = Array(columns.size - if (SKIP_FIRST_COLUMN) 1 else 0) { arrayOfNulls<Any>(MAX_LINE_COUNT) }
@@ -1743,7 +1746,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       } else {
         lines[0][selected]
       }
-    }
+    }*/
   }
 
   /**
@@ -1797,7 +1800,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   protected open fun enumerateValue(desc: Boolean) {
-    var value: Any? = null
+    TODO()
+    /*var value: Any? = null
     val qrybuf: String = " SELECT " + list!!.getColumn(0).column +
             " FROM " + evalListTable() +
             (if (isNull(block!!.activeRecord)) "" else " WHERE " + list!!.getColumn(0).column +
@@ -1836,7 +1840,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       throw VExecFailedException() // no message to display
     } else {
       setObject(block!!.activeRecord, value)
-    }
+    }*/
   }
 
   /**
@@ -1847,6 +1851,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @throws VException Visual exceptions related to database errors.
    */
   open fun getSuggestions(query: String?): Array<Array<String?>>? {
+    TODO()
+    /*
     return if (query == null || getAutocompleteType() == VList.AUTOCOMPLETE_NONE) {
       null
     } else {
@@ -1918,7 +1924,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
       }
       suggestions.toTypedArray()
-    }
+    }*/
   }
 
   // ---------------------------------------------------------------------
@@ -1962,6 +1968,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   fun setValueID(id: Int) {
+    TODO()
+    /*
     var result: Any? = null
 
     try {
@@ -1988,6 +1996,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
     setObject(block!!.activeRecord, result)
     changed = true // if you edit the value it's like if you change it
+    */
   }
 
   // ----------------------------------------------------------------------

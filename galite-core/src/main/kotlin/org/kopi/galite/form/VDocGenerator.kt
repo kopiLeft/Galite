@@ -70,7 +70,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
                            title: String,
                            help: String?,
                            commands: Array<VCommand>?,
-                           fields: Array<VField?>?,
+                           fields: Array<VField>,
                            alone: Boolean) {
     latexPrinter.println("\\subsection{$title}")
     latexPrinter.uncheckedPrintln("\\begin{center}\\includegraphics{images/" +
@@ -81,8 +81,8 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
     }
     latexPrinter.println()
     var countNNull = 0
-    for (i in fields!!.indices) {
-      if (fields[i]!!.label != null) {
+    for (i in fields.indices) {
+      if (fields[i].label != null) {
         countNNull++
         break
       }

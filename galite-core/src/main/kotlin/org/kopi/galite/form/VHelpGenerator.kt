@@ -107,7 +107,7 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
                        title: String,
                        help: String?,
                        commands: Array<VCommand>?,
-                       fields: Array<VField?>?,
+                       fields: Array<VField>,
                        alone: Boolean) {
     if (!alone) {
       printer.println("<TD><H2>$title</H2>")

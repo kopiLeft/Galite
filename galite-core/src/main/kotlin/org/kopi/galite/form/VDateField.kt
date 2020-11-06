@@ -89,8 +89,8 @@ class VDateField : VField(10, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
-    val s = o as String
+  override fun checkType(rec: Int, o: Any?) {
+    val s = o as? String
 
     if (s == "") {
       setNull(rec)
@@ -99,7 +99,7 @@ class VDateField : VField(10, 1) {
     }
   }
 
-  private fun parseDate(rec: Int, s: String) {
+  private fun parseDate(rec: Int, s: String?) {
     var day = 0
     var month = 0
     var year = -2
@@ -212,11 +212,11 @@ class VDateField : VField(10, 1) {
   /**
    * Returns the field value of the current record as an object
    */
-  override fun getObjectImpl(r: Int): Any {
-    return value[r]!!
+  override fun getObjectImpl(r: Int): Any? {
+    return value[r]
   }
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     return if (o == null) "" else Companion.toText(o as Date)
   }
 

@@ -40,7 +40,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun checkText(s: String): Boolean = true
 
-  override fun checkType(rec: Int, s: Any) {}
+  override fun checkType(rec: Int, s: Any?) {}
 
   override fun getDataType(): KClass<*> = Unit::class
 
@@ -56,7 +56,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun getObjectImpl(r: Int): Any? = null
 
-  override fun toText(o: Any): String? = null
+  override fun toText(o: Any?): String? = null
 
   override fun toObject(s: String): Any? = null
 

@@ -72,7 +72,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {}
+  override fun checkType(rec: Int, o: Any?) {}
 
   override fun getType(): Int = MDL_FLD_IMAGE
 
@@ -144,7 +144,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any): String? = throw InconsistencyException("UNEXPECTED GET TEXT")
+  override fun toText(o: Any?): String? = throw InconsistencyException("UNEXPECTED GET TEXT")
 
   override fun toObject(s: String): String = throw InconsistencyException("UNEXPECTED GET TEXT")
 

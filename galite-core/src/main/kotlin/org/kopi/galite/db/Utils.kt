@@ -28,6 +28,7 @@ class Utils {
     fun toSql(date: Date): String = TODO()
     fun toSql(l: String): String = TODO()
     fun toSql(t: Time?): String = TODO()
+    fun toSql(d: Int?): String = TODO()
   }
 }
 

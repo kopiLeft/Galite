@@ -72,7 +72,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    * verify that value is valid (on exit)
    * @exception    VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, s: Any) {}
+  override fun checkType(rec: Int, s: Any?) {}
 
   override fun getType(): Int = MDL_FLD_COLOR
 
@@ -149,7 +149,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any): String {
+  override fun toText(o: Any?): String {
     throw InconsistencyException("UNEXPECTD GET TEXT")
   }
 
