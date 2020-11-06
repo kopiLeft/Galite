@@ -28,7 +28,7 @@ class DBForeignKeyException : DBConstraintException {
    * Constructor
    *
    * @param        original                the original SQLException
-   * @param        constraintName                the violated constraint
+   * @param        constraint              the violated constraint
    */
   constructor(original: SQLException, constraint: String) : super(original, constraint)
 
@@ -37,7 +37,7 @@ class DBForeignKeyException : DBConstraintException {
    *
    * @param     query                   the sql query which generated the exception
    * @param     original                the original SQLException
-   * @param     constraintName          the violated constraint
+   * @param     constraint              the violated constraint
    */
   constructor(query: String, original: SQLException, constraint: String) : super(query, original, constraint) {}
 
@@ -46,7 +46,7 @@ class DBForeignKeyException : DBConstraintException {
    *
    * @param     query                   the sql query which generated the exception
    * @param     original                the original SQLException
-   * @param     constraintName          the violated constraint
+   * @param     constraint              the violated constraint
    * @param     referenced              the referenced table
    * @param     referencing             the referencing table
    */
@@ -58,24 +58,17 @@ class DBForeignKeyException : DBConstraintException {
     referencedTable = referenced
     referencingTable = referencing
   }
-  //---------------------------------------------------
-  // ACCESSORS
-  //---------------------------------------------------
-  /**
-   * Returns the referenced table in this FK exception.
-   */
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  var referencedTable // The referenced table
-          : String? = null
+  var referencedTable : String? = null // The referenced table
     private set
 
   /**
    * Returns the referencing table in this FK exception.
    */
-  var referencingTable // The referencing table
-          : String? = null
+  var referencingTable : String? = null // The referencing table
     private set
 
 }

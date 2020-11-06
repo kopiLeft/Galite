@@ -1269,14 +1269,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getSql(r: Int?): String? {
+  fun getSql(r: Int): String? {
     if (alias != null) {
       return alias!!.getSql(0)
     }
     if (hasTrigger(VConstants.TRG_VALUE)) {
-      setObject(r!!, callSafeTrigger(VConstants.TRG_VALUE))
+      setObject(r, callSafeTrigger(VConstants.TRG_VALUE))
     }
-    return getSqlImpl(r!!)
+    return getSqlImpl(r)
   }
 
   /**

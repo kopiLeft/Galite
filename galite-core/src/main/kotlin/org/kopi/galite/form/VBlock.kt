@@ -78,12 +78,12 @@ import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
 import org.kopi.galite.form.VConstants.Companion.TRG_VOID
 import org.kopi.galite.util.base.InconsistencyException
 
-abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler {
+abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
    * Build everything after construction
    */
   protected fun buildCstr() {
-    activeCommands = Vector<VCommand>()
+    activeCommands = ArrayList<VCommand>()
     if (bufferSize == 1) {
       fetchSize = displaySize
       displaySize = 1
@@ -117,7 +117,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
       val listeners = blockListener.listenerList
       var i = listeners.size - 2
       while (i >= 0 && view == null) {
-        if (listeners[i] === BlockListener::class.java) {
+        if (listeners[i] == BlockListener::class.java) {
           view = (listeners[i + 1] as BlockListener).getCurrentDisplay()
         }
         i -= 2
@@ -161,7 +161,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
 
   fun isAccepted(flavor: String): Boolean = dropListMap.containsKey(flavor.toLowerCase())
 
-  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.toLowerCase()] as String?)
+  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.toLowerCase()] as? String)
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -172,7 +172,8 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @param     manager         the manger to use for localization
    */
   fun localize(manager: LocalizationManager) {
-    val loc: BlockLocalizer = manager.getBlockLocalizer(source, name)
+    val loc = manager.getBlockLocalizer(source, name)
+
     title = loc.getTitle()
     help = loc.getHelp()
 
@@ -257,7 +258,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   val isAccessible: Boolean
     get() {
       if (hasTrigger(TRG_ACCESS)) {
-        val res: Any? = try {
+        val res = try {
           callTrigger(TRG_ACCESS)
         } catch (e: VException) {
           throw InconsistencyException(e)
@@ -268,7 +269,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
         }
       }
 
-      val newAccess: Boolean = getAccess() >= ACS_VISIT || isAlwaysAccessible()
+      val newAccess = getAccess() >= ACS_VISIT || isAlwaysAccessible()
       setAccess(newAccess)
       return newAccess
     }
@@ -477,7 +478,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * enter record
    */
   protected fun enterRecord(recno: Int) {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(isMulti()) { "Is not multiblock" }
     assert(activeRecord == -1) { "Is multi and activeRecord = $activeRecord" }
     assert(activeField == null) { "current field != $activeField" }
@@ -486,7 +487,8 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     activeRecord = recno
 
     currentRecord = recno
-    /* calculate the access of all fields in the row */updateAccess(recno)
+    /* calculate the access of all fields in the row */
+    updateAccess(recno)
 
     fireBlockChanged() // cause a refresh of display
     try {
@@ -501,7 +503,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in field.leave()
    */
   fun leaveRecord(check: Boolean) {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(isMulti()) { "$name is not a multiblock" }
     assert(activeRecord != -1) { "Is multi and activeRecord = $activeRecord" }
 
@@ -517,7 +519,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in record.leave()
    */
   fun gotoFirstRecord() {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
 
     if (!isMulti()) {
       changeActiveRecord(-fetchPosition)
@@ -559,7 +561,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in record.leave()
    */
   fun gotoLastRecord() {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     if (!isMulti()) {
       if (fetchPosition >= fetchCount - 1) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00015"))
@@ -608,7 +610,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   }
 
   fun changeActiveRecord(record: Int) {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     if (!isMulti()) {
       var act: VField? = activeField
 
@@ -735,7 +737,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in record.leave()
    */
   fun gotoRecord(recno: Int) {
-    assert(this === form.getActiveBlock()) {
+    assert(this == form.getActiveBlock()) {
       (name + " != "
               + (if (form.getActiveBlock() == null) "null" else form.getActiveBlock()!!.name))
     }
@@ -760,7 +762,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in record.leave()
    */
   fun gotoField(fld: VField) {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     //!!! hacheni 20171213 : the assertion is replaced by a simple test to avoid fatal error when inaccessible
 //    field is to be focused. This case can happen web version due to free navigation. See ticket #1077754
 //    for more details. Note that this is only a workaround to not raise a fatal error. Simply, the field
@@ -782,7 +784,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in record.leave()
    */
   fun gotoNextField() {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     if (activeField == null) {
       return
     }
@@ -816,7 +818,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in field.leave()
    */
   fun gotoPrevField() {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(activeField != null) { "current field $activeField" }
     var index = getFieldIndex(activeField)
     var target: VField? = null
@@ -848,7 +850,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in field.leave()
    */
   fun gotoFirstField() {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(activeRecord != -1) {
       " current record $activeRecord" // also valid for single blocks
     }
@@ -872,7 +874,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in field.leave()
    */
   fun gotoFirstUnfilledField() {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(activeRecord != -1) {
       " current record $activeRecord" // also valid for single blocks
     }
@@ -897,7 +899,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in field.leave()
    */
   fun gotoNextEmptyMustfill() {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(activeRecord != -1) {
       " current record $activeRecord" // also valid for single blocks
     }
@@ -944,7 +946,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may occur in field.leave()
    */
   fun gotoLastField() {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     assert(activeRecord != -1) {
       " current record $activeRecord" // also valid for single blocks
     }
@@ -1042,7 +1044,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception VException      an exception may be raised by record.leave
    */
   fun leave(check: Boolean): Boolean {
-    assert(this === form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
+    assert(this == form.getActiveBlock()) { name + " != " + form.getActiveBlock()!!.name }
     if (check) {
       validate()
     } else {
@@ -1173,7 +1175,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).blockAccessChanged(this, blockAccess)
       }
       i -= 2
@@ -1184,7 +1186,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).blockViewModeEntered(block, field)
       }
       i -= 2
@@ -1196,7 +1198,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).blockViewModeLeaved(block, field)
       }
       i -= 2
@@ -1210,7 +1212,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockRecordListener::class.java) {
+      if (listeners[i] == BlockRecordListener::class.java) {
         (listeners[i + 1] as BlockRecordListener).blockRecordChanged(getSortedPosition(record - 1) + 1, localRecordCount)
       }
       i -= 2
@@ -1273,7 +1275,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * Clears the entire block.
    */
   fun clear() {
-    if (this === form.getActiveBlock()) {
+    if (this == form.getActiveBlock()) {
       if (!isMulti()) {
         if (activeField != null) {
           try {
@@ -1515,7 +1517,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    * @exception SQLException    an exception may be raised DB access
    */
   fun delete() {
-    if (this === form.getActiveBlock()) {
+    if (this == form.getActiveBlock()) {
       if (!isMulti()) {
         if (activeField != null) {
           try {
@@ -1734,7 +1736,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    */
   fun fetchLookupFirst(fld: VField?) {
     assert(fld != null) { "fld = $fld" }
-    assert(this === form.getActiveBlock()) {
+    assert(this == form.getActiveBlock()) {
       (name + " != "
               + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
@@ -1749,7 +1751,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
    */
   fun fetchLookup(fld: VField?) {
     assert(fld != null) { "fld = $fld" }
-    assert(this === form.getActiveBlock()) {
+    assert(this == form.getActiveBlock()) {
       (name + " != "
               + (if ((form.getActiveBlock() == null)) "null" else form.getActiveBlock()!!.name))
     }
@@ -2292,7 +2294,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
               // we consider it as active command
               true
             }
-            activeCommands.addElement(commands!![i])
+            activeCommands.add(commands!![i])
             commands!![i].setEnabled(active)
           }
         }
@@ -2303,7 +2305,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
 
         cmd.setEnabled(false)
       }
-      activeCommands.setSize(0)
+      activeCommands.clear()
     }
   }
 
@@ -2593,7 +2595,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).blockChanged()
       }
       i -= 2
@@ -2605,7 +2607,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).validRecordNumberChanged()
       }
       i -= 2
@@ -2617,7 +2619,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).recordInfoChanged(rec, info)
       }
       i -= 2
@@ -2629,7 +2631,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).blockCleared()
       }
       i -= 2
@@ -2641,7 +2643,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).orderChanged()
       }
       i -= 2
@@ -2653,7 +2655,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).filterShown()
       }
       i -= 2
@@ -2665,7 +2667,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
     var i = listeners.size - 2
 
     while (i >= 0) {
-      if (listeners[i] === BlockListener::class.java) {
+      if (listeners[i] == BlockListener::class.java) {
         (listeners[i + 1] as BlockListener).filterHidden()
       }
       i -= 2
@@ -2724,7 +2726,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
       var i = listeners.size - 2
 
       while (i >= 0) {
-        if (listeners[i] === OrderListener::class.java) {
+        if (listeners[i] == OrderListener::class.java) {
           (listeners[i + 1] as OrderListener).orderChanged()
         }
         i -= 2
@@ -2872,10 +2874,6 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   // (performance in big charts)
   protected var ignoreAccessChange = false
 
-  // static (compiled) data
-  // enclosing form
-  var form: VForm = form
-
   // max number of buffered records
   var bufferSize = 0
 
@@ -2952,7 +2950,7 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
       return count
     }
 
-  protected lateinit var activeCommands: Vector<VCommand> // commands currently active
+  protected lateinit var activeCommands: ArrayList<VCommand> // commands currently active
   var currentRecord = 0
     get(): Int {
       return if (!isMulti()) {
@@ -2994,14 +2992,14 @@ abstract class VBlock(form: VForm) : VConstants, DBContextHandler, ActionHandler
   protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
   protected var fetchCount = 0 // # of fetched records
   protected var fetchPosition = 0 // position of current record
-  protected var blockListener: EventListenerList = EventListenerList()
-  protected var orderModel: OrderModel = OrderModel()
+  protected var blockListener = EventListenerList()
+  protected var orderModel = OrderModel()
   var border = 0
   var maxRowPos = 0
   var maxColumnPos = 0
   var displayedFields = 0
   private var isFilterVisible = false
-  protected var dropListMap: HashMap<*, *> = HashMap<Any?, Any?>()
+  protected var dropListMap = HashMap<Any?, Any?>()
 
   companion object {
     // record info flags
