@@ -21,10 +21,16 @@ package org.kopi.galite.db
 import org.kopi.galite.type.NotNullDate
 import org.kopi.galite.type.NotNullFixed
 
+import java.sql.Blob
+
 class Query(conn: Connection) {
 
   fun addString(value: String?) {
     TODO()
+  }
+
+  fun getBlob(pos: Int): Blob {
+   TODO()
   }
 
   fun next(): Boolean {
@@ -59,7 +65,7 @@ class Query(conn: Connection) {
 
   fun getBoolean(column: Int): Boolean = TODO()
 
-  fun getObject(pos:Int):Any =TODO()
+  fun getObject(pos: Int):Any =TODO()
 
   fun getFixed(pos: Int): NotNullFixed = TODO()
 }
