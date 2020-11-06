@@ -36,7 +36,7 @@ class DBSchema {
     override val primaryKey = PrimaryKey(id, name = "PK_Module_ID")
   }
 
-  object   UserRights : Table("BENUTZERRECHTE") {
+  object UserRights : Table("BENUTZERRECHTE") {
     val id = integer("ID").autoIncrement()
     val ts = integer("TS")
     val user = integer("BENUTZER")
@@ -49,7 +49,7 @@ class DBSchema {
     override val primaryKey = PrimaryKey(id, name = "PK_USER_RIGHTS_ID")
   }
 
-  object   GroupRights : Table("GRUPPENRECHTE") {
+  object GroupRights : Table("GRUPPENRECHTE") {
     val id = integer("ID").autoIncrement()
     val ts = integer("TS")
     val group = integer("GRUPPE")
@@ -62,7 +62,7 @@ class DBSchema {
     override val primaryKey = PrimaryKey(id, name = "PK_GROUP_RIGHTS_ID")
   }
 
-  object   GroupParties : Table("GRUPPENZUGEHOERIGKEITEN") {
+  object GroupParties : Table("GRUPPENZUGEHOERIGKEITEN") {
     val id = integer("ID").autoIncrement()
     val ts = integer("TS")
     val user = integer("BENUTZER")
@@ -74,7 +74,7 @@ class DBSchema {
     override val primaryKey = PrimaryKey(id, name = "PK_GROUP_PARTIES_ID")
   }
 
-  object   Symbols : Table("SYMBOLE") {
+  object Symbols : Table("SYMBOLE") {
     val id = integer("ID").autoIncrement()
     val ts = integer("TS")
     val shortName = varchar("KURZNAME", 20).uniqueIndex("SYMBOLS0").nullable()
@@ -84,7 +84,7 @@ class DBSchema {
     override val primaryKey = PrimaryKey(id, name = "PK_GROUP_PARTIES_ID")
   }
 
-  object   Favorites : Table("FAVORITEN") {
+  object Favorites : Table("FAVORITEN") {
     val id = integer("ID").autoIncrement()
     val ts = integer("TS")
     val user = integer("BENUTZER")
@@ -93,7 +93,7 @@ class DBSchema {
     override val primaryKey = PrimaryKey(id, name = "PK_Favorites_ID")
   }
 
-  object   Users : Table("KOPI_USERS") {
+  object Users : Table("KOPI_USERS") {
     val id = integer("ID").autoIncrement()
     val uc = integer("UC")
     val ts = integer("TS")
@@ -111,12 +111,21 @@ class DBSchema {
     override val primaryKey = PrimaryKey(id, name = "PK_Users_ID")
   }
 
-  object   Groups : Table("GRUPPEN") {
+  object Groups : Table("GRUPPEN") {
     val id = integer("ID").autoIncrement()
     val ts = integer("TS")
     val shortName = varchar("KURZNAME", 10).uniqueIndex("Groups0")
     val description = varchar("BEZEICHNUNG", 40).uniqueIndex("Groups1")
 
     override val primaryKey = PrimaryKey(id, name = "PK_Groups_ID")
+  }
+
+  object References : Table("REFERENZEN") {
+    val table = varchar("TABELLE", 255)
+    val column = varchar("SPALTE", 255)
+    val reference  = varchar("REFERENZ", 255)
+    val action = char("AKTION", 1)
+
+    override val primaryKey = PrimaryKey(table , column)
   }
 }
