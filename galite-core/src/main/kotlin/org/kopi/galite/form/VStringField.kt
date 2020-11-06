@@ -39,7 +39,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
   /**
@@ -85,7 +85,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
+  override fun checkType(rec: Int, o: Any) {
     var s = o as? String
 
     if (s == null || s == "") {
@@ -139,7 +139,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
   /**
    * Sets the field value of given record to a string value.
    */
-  fun setString(r: Int, v: String?) {
+  override fun setString(r: Int, v: String?) {
     val modelVal = if (v == null || v == "") null else v
 
     if (changedUI || value[r] == null && modelVal != null || value[r] != null && value[r] != modelVal) {
@@ -165,7 +165,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    * @param    query        the query holding the tuple
    * @param    column        the index of the column in the tuple
    */
-  override fun retrieveQuery(query: Query, column: Int): Any? = query.getString(column)
+  override fun retrieveQuery(query: Query, column: Int): Any = query.getString(column)
 
   /**
    * Is the field value of given record null ?
@@ -175,14 +175,14 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
   /**
    * Returns the field value of given record as a string value.
    */
-  open fun getString(r: Int): String = getObject(r) as String
+  override fun getString(r: Int): String = getObject(r) as String
 
   /**
    * Returns the field value of the current record as an object
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String = (o as? String).orEmpty()
+  override fun toText(o: Any): String = (o as? String).orEmpty()
 
   override fun toObject(s: String): Any? = if (s == "") null else s
 
@@ -205,7 +205,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
         && (oldValue != null && value[t] == null
             || oldValue == null && value[t] != null
             || oldValue != null && oldValue != value[t])) {

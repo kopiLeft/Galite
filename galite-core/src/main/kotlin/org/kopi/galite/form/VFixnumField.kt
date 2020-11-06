@@ -74,7 +74,7 @@ class VFixnumField(private val digits: Int,
    * just after loading, construct record
    */
   override fun build() {
-    val size = 2 * block.bufferSize
+    val size = 2 * block!!.bufferSize
 
     super.build()
     value = arrayOfNulls(size)
@@ -120,7 +120,7 @@ class VFixnumField(private val digits: Int,
    */
   override fun getTypeName(): String = VlibProperties.getString("Fixed")
 
-  fun isNumeric(): Boolean = true
+  override fun isNumeric(): Boolean = true
 
   /*
    * ----------------------------------------------------------------------
@@ -161,7 +161,7 @@ class VFixnumField(private val digits: Int,
    * verify that value is valid (on exit)
    * @exception         org.kopi.galite.visual.VException       an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
+  override fun checkType(rec: Int, o: Any) {
     val s: String = o as String
     val scale: Int = currentScale[rec]
 
@@ -210,10 +210,10 @@ class VFixnumField(private val digits: Int,
   fun computeSum(exclude: Boolean): Fixed? {
     var sum: Fixed? = null
 
-    for (i in 0 until block.bufferSize) {
+    for (i in 0 until block!!.bufferSize) {
       if ((!isNullImpl(i)
-           && block.isRecordFilled(i)
-           && (!exclude || i != block.activeRecord))) {
+           && block!!.isRecordFilled(i)
+           && (!exclude || i != block!!.activeRecord))) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }
@@ -261,7 +261,7 @@ class VFixnumField(private val digits: Int,
    *
    * @return    the scale value.
    */
-  fun getScale(): Int = getScale(block.activeRecord)
+  fun getScale(): Int = getScale(block!!.activeRecord)
 
   /**
    * Sets the scale value for the specified record.
@@ -282,7 +282,7 @@ class VFixnumField(private val digits: Int,
    * @param     scale           the scale value.
    */
   fun setScale(scale: Int) {
-    setScale(block.currentRecord, scale)
+    setScale(block!!.currentRecord, scale)
   }
 
   /**
@@ -314,7 +314,7 @@ class VFixnumField(private val digits: Int,
   /**
    * Sets the field value of given record to a Fixed value.
    */
-  fun setFixed(r: Int, v: Fixed?) {
+  override fun setFixed(r: Int, v: Fixed?) {
     // trails (backup) the record if necessary
     var v = v
 
@@ -377,14 +377,14 @@ class VFixnumField(private val digits: Int,
   /**
    * Returns the field value of given record as a Fixed value.
    */
-  fun getFixed(r: Int): Fixed = getObject(r) as Fixed
+  override fun getFixed(r: Int): Fixed = getObject(r) as Fixed
 
   /**
    * Returns the field value of the current record as an object
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String {
+  override fun toText(o: Any): String {
     if (o == null) {
       return ""
     }
@@ -433,7 +433,7 @@ class VFixnumField(private val digits: Int,
 
     // append spaces until the max scale is reached to make commas aligned.
     // append an extra space to replace the missing comma if the current scale is zero.
-    if (block.isMulti()) {
+    if (block!!.isMulti()) {
       for (i in (if (currentScale[r] == 0) -1 else currentScale[r]) until maxScale) {
         res += " "
       }
@@ -457,7 +457,7 @@ class VFixnumField(private val digits: Int,
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
         && (((oldValue != null && value[t] == null)
               || (oldValue == null && value[t] != null)
               || (oldValue != null && oldValue != value[t])))) {
@@ -475,7 +475,7 @@ class VFixnumField(private val digits: Int,
    * Returns a string representation of a big decimal value wrt the field type.
    */
   fun formatFixed(value: Fixed): String {
-    return toText(value.setScale(currentScale[block.activeRecord]))
+    return toText(value.setScale(currentScale[block!!.activeRecord]))
   }
 
   /**
