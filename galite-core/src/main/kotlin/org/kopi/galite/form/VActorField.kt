@@ -40,7 +40,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun checkText(s: String): Boolean = true
 
-  override fun checkType(rec: Int, s: Any) {}
+  override fun checkType(rec: Int, s: Any?) {}
 
   override fun getDataType(): KClass<*> = Unit::class
 
@@ -48,7 +48,7 @@ class VActorField(width: Int, height: Int) : VField(1, 1) {
 
   override fun setNull(r: Int) {}
 
-  override fun setObject(r: Int, v: Any?){}
+  override fun setObject(r: Int, v: Any?) {}
 
   override fun retrieveQuery(query: Query, column: Int): Any? = null
 

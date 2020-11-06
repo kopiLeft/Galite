@@ -85,7 +85,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     var s = o as? String
 
     if (s == null || s == "") {

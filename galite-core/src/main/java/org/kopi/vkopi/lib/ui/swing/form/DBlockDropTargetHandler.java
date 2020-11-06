@@ -229,7 +229,7 @@ public class DBlockDropTargetHandler implements DropTargetListener {
   }
 
   private boolean isChartBlockContext() {
-    return block.noDetail() || (block.isMulti() && !block.isDetailMode());
+    return block.noDetail() || (block.isMulti() && !block.getDetailMode());
   }
 
   private static String getExtension(File file) {

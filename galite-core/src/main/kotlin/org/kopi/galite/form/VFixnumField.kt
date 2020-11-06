@@ -161,8 +161,8 @@ class VFixnumField(private val digits: Int,
    * verify that value is valid (on exit)
    * @exception         org.kopi.galite.visual.VException       an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
-    val s: String = o as String
+  override fun checkType(rec: Int, o: Any?) {
+    val s = o as? String
     val scale: Int = currentScale[rec]
 
     if ((s == "")) {
@@ -596,7 +596,7 @@ class VFixnumField(private val digits: Int,
     /**
      * Parses the string argument as a fixed number in human-readable format.
      */
-    private fun scanFixed(str: String): Fixed? {
+    private fun scanFixed(str: String?): Fixed? {
       var negative = false
       var state = 0
       var scale = 0
@@ -607,7 +607,7 @@ class VFixnumField(private val digits: Int,
       if ((str == "")) {
         return null
       }
-      for (i in str.indices) {
+      for (i in str!!.indices) {
         // skip dots
         if (str[i] == '.') {
           continue

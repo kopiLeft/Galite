@@ -77,8 +77,8 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
-    if (o as String == "") {
+  override fun checkType(rec: Int, o: Any?) {
+    if (o as? String == "") {
       setNull(rec)
     } else {
       setTimestamp(rec, Timestamp.now())

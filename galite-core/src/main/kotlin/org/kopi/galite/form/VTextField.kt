@@ -17,7 +17,9 @@
  */
 
 package org.kopi.galite.form
-
+/**
+ * This class implements multi-line text fields.
+ */
 class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styled: Boolean): VStringField (width, height, visibleHeight, convert, styled)
 {
   override fun toText(o: Any?): String {
