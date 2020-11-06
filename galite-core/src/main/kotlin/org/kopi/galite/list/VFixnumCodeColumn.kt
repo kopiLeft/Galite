@@ -27,7 +27,7 @@ import org.kopi.galite.util.base.InconsistencyException
  * Represents a list column.
  */
 class VFixnumCodeColumn(title: String,
-                        column: String,
+                        column: String?,
                         names: Array<String>,
                         private val codes: Array<Fixed>,
                         sortAscending: Boolean)

@@ -658,7 +658,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  fun getSearchCondition(): String? {
+  open fun getSearchCondition(): String? {
     return if (isNull(block!!.activeRecord)) {
       when(getSearchOperator()) {
         VConstants.SOP_EQ -> null
@@ -942,7 +942,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Sets the field value of given record to a date value.
    */
-  open fun setImage(r: Int, v: ByteArray) {
+  open fun setImage(r: Int, v: ByteArray?) {
     throw InconsistencyException()
   }
 
@@ -2009,10 +2009,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-              block!!.getFieldPos(this),
-              label!!,
-              lab ?: name,
-              toolTip)
+                       block!!.getFieldPos(this),
+                       label!!,
+                       lab ?: name,
+                       toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
