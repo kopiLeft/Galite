@@ -19,16 +19,16 @@
 
 package org.kopi.vkopi.lib.ui.swing.report;
 
-import org.kopi.vkopi.lib.report.MReport;
-
 import javax.swing.table.AbstractTableModel;
+
+import org.kopi.galite.report.MReport;
 
 public class VTable extends AbstractTableModel {
 
   //-----------------------------------------------------------------
   // CONSTRUCTOR
   //-----------------------------------------------------------------
-  
+
   public VTable(MReport model) {
     this.model = model;
   }
@@ -58,8 +58,8 @@ public class VTable extends AbstractTableModel {
   /**
    * Returns an attribute value for a cell.
    *
-   * @param	row		the index of the row whose value is to be looked up
-   * @param	column		the index of the column whose value is to be looked up (column of the model)
+   * @param	rowIndex		the index of the row whose value is to be looked up
+   * @param	columnIndex		the index of the column whose value is to be looked up (column of the model)
    * @return	the value Object at the specified cell
    */
   public Object getValueAt(int rowIndex, int columnIndex) {
@@ -91,7 +91,7 @@ public class VTable extends AbstractTableModel {
   //-----------------------------------------------------------------
   // DATA MEMBERS
   //-----------------------------------------------------------------
-  
+
   private MReport			model;
   private static final long 		serialVersionUID = -8541215011797681655L;
 }

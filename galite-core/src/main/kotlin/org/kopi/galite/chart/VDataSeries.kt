@@ -36,5 +36,5 @@ class VDataSeries(val dimension: VDimensionData) : Serializable {
   // DATA MEMBERS
   //---------------------------------------------------------------------
 
-  val measures = mutableListOf<VMeasureData>()
+  internal val measures = mutableListOf<VMeasureData>()
 }

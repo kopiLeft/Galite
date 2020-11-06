@@ -56,7 +56,7 @@ public class DLineChart extends DAbstractChartType {
     
     dataset = createDataset(series);
     chart = ChartFactory.createLineChart(title,
-	                                 series[0].getDimension().name,
+	                                 series[0].getDimension().getName(),
 	                                 null,
 	                                 dataset,
 	                                 PlotOrientation.VERTICAL,

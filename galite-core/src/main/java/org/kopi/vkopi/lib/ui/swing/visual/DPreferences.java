@@ -19,7 +19,7 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
  * !!! Not used in Kopi. Check if used by an application

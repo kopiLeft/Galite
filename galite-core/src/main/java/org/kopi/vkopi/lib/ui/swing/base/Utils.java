@@ -39,7 +39,7 @@ public class Utils extends org.kopi.galite.base.Utils {
 
   /**
    * return image from classpath or jar file
-   * @param img must be an image from resource directory
+   * @param image must be an image from resource directory
    * path separator is "/"
    * @return an imageIcon
    */
@@ -98,7 +98,7 @@ public class Utils extends org.kopi.galite.base.Utils {
    * return image from resources or null if not found
    */
   public static ImageIcon getImageFromResource(String name, String directory) {
-    URL       url = getURLFromResource(name, directory);
+    URL       url = Utils.Companion.getURLFromResource(name, directory);
 
     return url == null ? null :new ImageIcon(url);
   }

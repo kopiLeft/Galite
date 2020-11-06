@@ -22,6 +22,7 @@ package org.kopi.vkopi.lib.ui.swing.form;
 import org.kopi.galite.form.AbstractFieldHandler;
 import org.kopi.galite.form.VConstants;
 import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.visual.Constants;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 import org.kopi.galite.visual.VException;
 
@@ -31,139 +32,139 @@ import org.kopi.galite.visual.VException;
 @SuppressWarnings("serial")
 public class JFieldHandler extends AbstractFieldHandler {
 
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR
-  // ----------------------------------------------------------------------
-  
-  public JFieldHandler(VFieldUI rowController) {
-    super(rowController);
-  }
+    // ----------------------------------------------------------------------
+    // CONSTRUCTOR
+    // ----------------------------------------------------------------------
 
-  // ----------------------------------------------------------------------
-  // ABSTRACTFIELDHANDLER IMPLEMENTATION
-  // ----------------------------------------------------------------------
-  
-  /**
-   * @Override
-   */
-  public boolean predefinedFill() throws VException {
-    boolean     filled;
-
-    filled = getModel().fillField(new JPredefinedValueHandler(getRowController(), getModel().getForm(), getModel()));
-    if (filled) {
-      getRowController().getBlock().gotoNextField();
+    public JFieldHandler(VFieldUI rowController) {
+        super(rowController);
     }
-    
-    return filled;
-  }
 
-  /**
-   * @Override
-   */
-  public void enter() {
-    // this is the correct thread to calculate the display of the
-    // field NOT later in the event thread
-    final DField      enterMe = (DField)getCurrentDisplay();
+    // ----------------------------------------------------------------------
+    // ABSTRACTFIELDHANDLER IMPLEMENTATION
+    // ----------------------------------------------------------------------
 
-    if (enterMe != null) {
-      SwingThreadHandler.start(new Runnable() {
-	public void run() {
-	  getRowController().resetCommands();
-	  enterMe.enter(true);
-	}
-      });
+    /**
+     * @Override
+     */
+    public boolean predefinedFill() {
+        boolean filled;
+
+        filled = getModel().fillField(new JPredefinedValueHandler(getRowController(), getModel().getForm(), getModel()));
+        if (filled) {
+            getRowController().getBlock().gotoNextField();
+        }
+
+        return filled;
     }
-  }
 
-  /**
-   * @Override
-   */
-  public void leave() {
-    // this is the correct thread to calculate the display of the
-    // field NOT later in the event thread
-    final DField      leaveMe = (DField)getCurrentDisplay();
+    /**
+     * @Override
+     */
+    public void enter() {
+        // this is the correct thread to calculate the display of the
+        // field NOT later in the event thread
+        final DField enterMe = (DField) getCurrentDisplay();
 
-    if (leaveMe != null) {
-      SwingThreadHandler.start(new Runnable() {
-	public void run() {
-	  getRowController().resetCommands();
-	  leaveMe.leave();
-	}
-      });
+        if (enterMe != null) {
+            SwingThreadHandler.start(new Runnable() {
+                public void run() {
+                    getRowController().resetCommands();
+                    enterMe.enter(true);
+                }
+            });
+        }
     }
-  }
 
-  /**
-   * @Override
-   */
-  public void labelChanged() {
-    SwingThreadHandler.startEnqueued(new Runnable() {
-      public void run() {
-	getRowController().resetLabel();
-      }
-    });
-  }
+    /**
+     * @Override
+     */
+    public void leave() {
+        // this is the correct thread to calculate the display of the
+        // field NOT later in the event thread
+        final DField leaveMe = (DField) getCurrentDisplay();
 
-  /**
-   * @Override
-   */
-  public void searchOperatorChanged() {
-    int               operator = getModel().getSearchOperator();
-    final String      info = operator == VConstants.SOP_EQ ? null : VConstants.OPERATOR_NAMES[operator];
-
-    SwingThreadHandler.startEnqueued(new Runnable() {
-      public void run() {
-	if (getRowController().getLabel() != null) {
-	  ((DLabel)getRowController().getLabel()).setInfoText(info);
-	}
-	if (getRowController().getDetailLabel() != null) {
-	  ((DLabel)getRowController().getDetailLabel()).setInfoText(info);
-	}
-      }
-    });
-  }
-
-  /**
-   * @Override
-   */
-  public void valueChanged(int r) {
-    final int         dispRow = getRowController().getBlockView().getDisplayLine(r);
-
-    if (dispRow != -1) {
-      SwingThreadHandler.startEnqueued(new Runnable() {
-	public void run() {
-	  if (getRowController().getDisplays() != null) {
-	    getRowController().getDisplays()[dispRow].updateText();
-	  }
-	  if (getRowController().getDetailDisplay() != null) {
-	    getRowController().getDetailDisplay().updateText();
-	  }
-	}
-      });
+        if (leaveMe != null) {
+            SwingThreadHandler.start(new Runnable() {
+                public void run() {
+                    getRowController().resetCommands();
+                    leaveMe.leave();
+                }
+            });
+        }
     }
-  }
 
-  /**
-   * @Override
-   */
-  public void accessChanged(final int row) {
-    if (getRowController().getBlockView().getDisplayLine(row) != -1) {
-      SwingThreadHandler.startEnqueued(new Runnable() {
-	public void run() {
-	  getRowController().fireAccessHasChanged(row);
-	}
-      });
+    /**
+     * @Override
+     */
+    public void labelChanged() {
+        SwingThreadHandler.startEnqueued(new Runnable() {
+            public void run() {
+                getRowController().resetLabel();
+            }
+        });
     }
-  }
 
-  /**
-   * @Override
-   */
-  public void colorChanged(final int r) {
-    SwingThreadHandler.startEnqueued(new Runnable() {
-      public void run() {
-        getRowController().fireColorHasChanged(r);
-      }
-    });
-  }
+    /**
+     * @Override
+     */
+    public void searchOperatorChanged() {
+        int operator = getModel().getSearchOperator();
+        final String info = operator == VConstants.SOP_EQ ? null : VConstants.Companion.getOPERATOR_NAMES()[operator];
+
+        SwingThreadHandler.startEnqueued(new Runnable() {
+            public void run() {
+                if (getRowController().getLabel() != null) {
+                    ((DLabel) getRowController().getLabel()).setInfoText(info);
+                }
+                if (getRowController().getDetailLabel() != null) {
+                    ((DLabel) getRowController().getDetailLabel()).setInfoText(info);
+                }
+            }
+        });
+    }
+
+    /**
+     * @Override
+     */
+    public void valueChanged(int r) {
+        final int dispRow = getRowController().getBlockView().getDisplayLine(r);
+
+        if (dispRow != -1) {
+            SwingThreadHandler.startEnqueued(new Runnable() {
+                public void run() {
+                    if (getRowController().getDisplays() != null) {
+                        getRowController().getDisplays()[dispRow].updateText();
+                    }
+                    if (getRowController().getDetailDisplay() != null) {
+                        getRowController().getDetailDisplay().updateText();
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * @Override
+     */
+    public void accessChanged(final int row) {
+        if (getRowController().getBlockView().getDisplayLine(row) != -1) {
+            SwingThreadHandler.startEnqueued(new Runnable() {
+                public void run() {
+                    getRowController().fireAccessHasChanged(row);
+                }
+            });
+        }
+    }
+
+    /**
+     * @Override
+     */
+    public void colorChanged(final int r) {
+        SwingThreadHandler.startEnqueued(new Runnable() {
+            public void run() {
+                getRowController().fireColorHasChanged(r);
+            }
+        });
+    }
 }

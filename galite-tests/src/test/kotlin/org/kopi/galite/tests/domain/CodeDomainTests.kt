@@ -19,7 +19,7 @@ package org.kopi.galite.tests.domain
 
 import org.junit.Test
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.Field
+import org.kopi.galite.report.RField
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -47,7 +47,7 @@ class CodeDomainTests {
     }
 
     // Creating a field with the domain StringTestType
-    val field = Field(StringTestType())
+    val field = RField(StringTestType())
 
     // test with a valid value
     val checkValid = field.checkLength("abcde")
@@ -143,7 +143,7 @@ class CodeDomainTests {
     }
 
     // Creating a field with the domain StringTestType
-    val field = Field(StringTestType())
+    val field = RField(StringTestType())
 
     // test check
     assertFailsWith<UnsupportedOperationException> {

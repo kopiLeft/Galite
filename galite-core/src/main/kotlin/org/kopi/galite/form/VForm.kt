@@ -181,7 +181,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * addCommand in menu
    */
-  override fun setActors(actors: Array<VActor>) {
+  override fun addActors(actors: Array<VActor>) {
     actors?.forEach { actor ->
       if (actor is VDefaultActor) {
         when ((actor as VDefaultActor).code) {
@@ -192,7 +192,7 @@ abstract class VForm : VWindow, VConstants {
         }
       }
     }
-    super.setActors(actors)
+    super.addActors(actors)
   }
 
   fun setTextOnFieldLeave(): Boolean = false
@@ -237,7 +237,7 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   private fun initActors() {
     for (i in blocks.indices) {
-      setActors(blocks!![i].getActors())
+      addActors(blocks[i].actors)
     }
   }
 
@@ -605,7 +605,7 @@ abstract class VForm : VWindow, VConstants {
               help: String,
               code: String) {
     for (i in blocks.indices) {
-      setActors(blocks!![i].getActors())
+      addActors(blocks[i].actors)
     }
     VDocGenerator(p).helpOnForm(getName(),
             commands,
@@ -649,8 +649,8 @@ abstract class VForm : VWindow, VConstants {
         if (anchor == null) {
           anchor = field.name
         }
-        anchor.replace(' ', '_')
-        surl.append("#" + field.block.title!!.replace(' ', '_') + anchor)
+        anchor!!.replace(' ', '_')
+        surl.append("#" + field.block!!.title!!.replace(' ', '_') + anchor)
       }
       surl.toString()
     }

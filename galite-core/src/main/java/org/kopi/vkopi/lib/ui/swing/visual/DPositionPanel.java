@@ -20,7 +20,7 @@
 package org.kopi.vkopi.lib.ui.swing.visual;
 
 
-import org.kopi.vkopi.lib.visual.DPositionPanelListener;
+import org.kopi.galite.visual.DPositionPanelListener;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -35,7 +35,7 @@ import java.awt.event.ActionListener;
  */
 public class DPositionPanel extends JPanel {
 
-  
+
 /**
    * Creates a new position panel.
    *
@@ -49,7 +49,7 @@ public class DPositionPanel extends JPanel {
 
     record = new JPanel();
     record.setLayout(new BorderLayout());
-    
+
     recordLeft = new JPanel();
     recordLeft.setLayout(new BorderLayout());
 
@@ -68,7 +68,7 @@ public class DPositionPanel extends JPanel {
 	}
       });
     recordLeft.add(first, BorderLayout.WEST);
-    
+
     // 'goto previous' button
     left = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowleft.gif"));
     left.setFocusable(false);
@@ -81,9 +81,9 @@ public class DPositionPanel extends JPanel {
 	}
       });
     recordLeft.add(left, BorderLayout.EAST);
-    
+
     record.add(recordLeft, BorderLayout.WEST);
-    
+
     // 'position/total' label
     info = new JButton();
     info.setFont(new Font(null, Font.PLAIN, 8));
@@ -100,7 +100,7 @@ public class DPositionPanel extends JPanel {
           }
         }});
     record.add(info, BorderLayout.CENTER);
-    
+
     // 'goto next' button
     right = new JButton(org.kopi.vkopi.lib.ui.swing.base.Utils.getImage("arrowright.gif"));
     right.setFocusable(false);
@@ -132,7 +132,7 @@ public class DPositionPanel extends JPanel {
 
     recordVisible = false;
   }
-  
+
   /**
    * setBlockRecords
    * inform user about nb records fetched and current one
@@ -150,7 +150,7 @@ public class DPositionPanel extends JPanel {
         add(record, BorderLayout.CENTER);
         recordVisible = true;
       }
-      
+
       info.setText(" " + current + " / " + total + " ");
       left.setEnabled(current > 1);
       first.setEnabled(current > 1);
@@ -185,5 +185,5 @@ public class DPositionPanel extends JPanel {
 	 * Comment for <code>serialVersionUID</code>
 	 */
   private static final long serialVersionUID = 3047549694322579187L;
-  
+
 }

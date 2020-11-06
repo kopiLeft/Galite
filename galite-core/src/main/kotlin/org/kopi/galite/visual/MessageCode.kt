@@ -52,6 +52,7 @@ object MessageCode {
    * @return    the requested message
    */
   @Suppress("UNCHECKED_CAST")
+  @JvmOverloads
   fun getMessage(key: String, params: Any? = null, withKey: Boolean = true): String {
     val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
 

@@ -19,17 +19,34 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.base.UComponent;
-import org.kopi.vkopi.lib.l10n.LocalizationManager;
-import org.kopi.vkopi.lib.print.PrintManager;
-import org.kopi.vkopi.lib.visual.*;
-import org.kopi.xkopi.lib.base.DBContext;
-import org.kopi.xkopi.lib.base.Query;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
 import java.util.Date;
 import java.util.Locale;
+
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+
+import org.jetbrains.exposed.sql.StdOutSqlLogger;
+import org.kopi.galite.base.UComponent;
+import org.kopi.galite.l10n.LocalizationManager;
+import org.kopi.galite.print.PrintManager;
+import org.kopi.galite.visual.Application;
+import org.kopi.galite.visual.ApplicationConfiguration;
+import org.kopi.galite.visual.ApplicationContext;
+import org.kopi.galite.visual.FileHandler;
+import org.kopi.galite.visual.ImageHandler;
+import org.kopi.galite.visual.Executable;
+import org.kopi.galite.visual.Module;
+import org.kopi.galite.visual.PrinterManager;
+import org.kopi.galite.visual.PropertyException;
+import org.kopi.galite.visual.Registry;
+import org.kopi.galite.visual.UIFactory;
+import org.kopi.galite.visual.VException;
+import org.kopi.galite.visual.VMenuTree;
+import org.kopi.galite.visual.VWindow;
+import org.kopi.galite.visual.VerifyConfiguration;
+import org.kopi.galite.visual.WindowController;
+import org.kopi.galite.db.DBContext;
 
 /**
  * {@code JApplication} is a swing implementation of a kopi application.
@@ -83,79 +100,73 @@ public abstract class JApplication implements Application {
       menuTree.getDisplay().closeWindow();
     }
   }
-  
+
   public void startApplication() {
     if (options.form != null) {
       String    form;
 
       if (options.form.indexOf(".") != -1) {
-	form = options.form;
+        form = options.form;
       } else {
-	// form name without qualification: qualify with application package
-	String  appli = getClass().getName();
-	int     index = appli.lastIndexOf('.');
+        // form name without qualification: qualify with application package
+        String  appli = getClass().getName();
+        int     index = appli.lastIndexOf('.');
 
-	form = appli.substring(0, index + 1) + options.form;
+        form = appli.substring(0, index + 1) + options.form;
       }
 
       try {
-	KopiExecutable  module;
+        Executable  module;
 
-	module = Module.startForm(context, form, "initial form");
-	if (module instanceof VWindow) {
-	  ((VWindow) module).addModelCloseListener(new ModelCloseListener() {
-
-	    
-	    public void modelClosed(int type) {
-	      exitWithError(type);
-	    }
-	  });
-	} else {
-	  exitWithError(1);
-	}
+        module = Module.Companion.startForm(context, form, "initial form");
+        if (module instanceof VWindow) {
+          ((VWindow) module).addModelCloseListener(type -> exitWithError(type));
+        } else {
+          exitWithError(1);
+        }
       } catch (VException e) {
-	e.printStackTrace();
-	exitWithError(1);
+        e.printStackTrace();
+        exitWithError(1);
       }
     } else {
       try {
-	String url = getURL();
+        String url = getURL();
 
-	menuTree = new VMenuTree(context);
-	menuTree.setTitle(getUserName() + "@" + url.substring(url.indexOf("//") + 2));
-	menuTree.doNotModal();
+        menuTree = new VMenuTree(context);
+        menuTree.setTitle(getUserName() + "@" + url.substring(url.indexOf("//") + 2));
+        menuTree.doNotModal();
       } catch (VException e) {
-	e.printStackTrace();
-	exitWithError(1);
+        e.printStackTrace();
+        exitWithError(1);
       }
     }
     removeSplashScreen();
   }
-  
+
   public boolean allowQuit() {
     return true;
   }
-  
+
   public PrintManager getPrintManager() {
     return printManager;
   }
-  
+
   public void setPrintManager(PrintManager printManager) {
     this.printManager = printManager;
   }
-  
+
   public PrinterManager getPrinterManager() {
     return printerManager;
   }
-  
+
   public void setPrinterManager(PrinterManager printerManager) {
     this.printerManager = printerManager;
   }
-  
+
   public ApplicationConfiguration getApplicationConfiguration() {
     return configuration;
   }
-  
+
   public void setApplicationConfiguration(ApplicationConfiguration configuration) {
     this.configuration = configuration;
   }
@@ -169,7 +180,7 @@ public abstract class JApplication implements Application {
    * @return The database URL.
    */
   public String getURL() {
-    return context.getDefaultConnection().getURL();
+    return context.getDefaultConnection().getUrl();
   }
 
   /**
@@ -257,14 +268,14 @@ public abstract class JApplication implements Application {
       return false;
     }
 
-     try {
-       UIManager.setLookAndFeel(new org.kopi.vkopi.lib.ui.swing.plaf.KopiLookAndFeel());//UIManager.getSystemLookAndFeelClassName());
-     } catch (Exception e) {
-       System.err.println("Undefined look and feel: Kopi Look & Feel must be installed!");
-     }
-     //if (!DObject.isLookAndFeelInstalled()) {
-     //  installLF(defaults.getKopiLFProperties());
-     //}
+    try {
+      UIManager.setLookAndFeel(new org.kopi.vkopi.lib.ui.swing.plaf.KopiLookAndFeel());//UIManager.getSystemLookAndFeelClassName());
+    } catch (Exception e) {
+      System.err.println("Undefined look and feel: Kopi Look & Feel must be installed!");
+    }
+    //if (!DObject.isLookAndFeelInstalled()) {
+    //  installLF(defaults.getKopiLFProperties());
+    //}
 
     startApplication();
 
@@ -288,18 +299,18 @@ public abstract class JApplication implements Application {
       char[]    chars = options.locale.toCharArray();
 
       if(chars.length != 5
-         || chars[0] < 'a' || chars[0] > 'z'
-         || chars[1] < 'a' || chars[1] > 'z'
-         || chars[2] != '_'
-         || chars[3] < 'A' || chars[3] > 'Z'
-         || chars[4] < 'A' || chars[4] > 'Z'
-         ) {
+              || chars[0] < 'a' || chars[0] > 'z'
+              || chars[1] < 'a' || chars[1] > 'z'
+              || chars[2] != '_'
+              || chars[3] < 'A' || chars[3] > 'Z'
+              || chars[4] < 'A' || chars[4] > 'Z'
+      ) {
         System.err.println("Error: Wrong locale format.");
         options.usage();
         return false;
       } else {
         defaultLocale = new Locale(options.locale.substring(0,2),
-                                   options.locale.substring(3,5));
+                options.locale.substring(3,5));
       }
     }
 
@@ -308,11 +319,11 @@ public abstract class JApplication implements Application {
   }
 
   public void verifyConfiguration() {
-    VerifyConfiguration       verifyConfiguration = VerifyConfiguration.getVerifyConfiguration();
+    VerifyConfiguration       verifyConfiguration = VerifyConfiguration.Companion.getVerifyConfiguration();
     try {
-      verifyConfiguration.verifyConfiguration(ApplicationContext.getDefaults().getSMTPServer(),
-	                                      ApplicationContext.getDefaults().getDebugMailRecipient(),
-	                                      ApplicationContext.getDefaults().getApplicationName());
+      verifyConfiguration.verifyConfiguration(ApplicationContext.Companion.getDefaults().getSMTPServer(),
+	                                            ApplicationContext.Companion.getDefaults().getDebugMailRecipient(),
+	                                            ApplicationContext.Companion.getDefaults().getApplicationName());
     } catch (PropertyException e) {
       e.printStackTrace();
     }
@@ -324,9 +335,9 @@ public abstract class JApplication implements Application {
   private boolean connectToDatabase() {
     if (options.username != null) {
       try {
-        DBContext.registerDriver(options.driver);
         context = new DBContext();
-        context.setDefaultConnection(context.createConnection(options.database,
+        context.setDefaultConnection(context.createConnection(options.driver,
+                                                              options.database,
                                                               options.username,
                                                               options.password,
                                                               options.lookupUserId,
@@ -343,15 +354,15 @@ public abstract class JApplication implements Application {
 
       removeSplashScreen();
       context = login(options.database,
-                      options.driver,
-                      options.username,
-                      options.password,
-                      options.schema);
+              options.driver,
+              options.username,
+              options.password,
+              options.schema);
       displaySplashScreen();
     }
 
     if (context != null) {
-      Query.setTraceLevel(options.trace);
+      context.setLogger(StdOutSqlLogger.INSTANCE);
     }
 
     return context != null;
@@ -361,57 +372,57 @@ public abstract class JApplication implements Application {
   // ACCESSORS
   // ---------------------------------------------------------------------
 
-  
+
   public boolean isNobugReport() {
     return options != null && options.nobugreport;
   }
 
-  
+
   public Date getStartupTime() {
     return startupTime;
   }
 
-  
+
   public VMenuTree getMenu() {
     return menuTree;
   }
 
-  
+
   public void setGeneratingHelp() {
     isGeneratingHelp = true;
   }
 
-  
+
   public boolean isGeneratingHelp() {
     return isGeneratingHelp;
   }
 
-  
+
   public DBContext getDBContext() {
     return context;
   }
 
-  
+
   public String getUserName() {
     return context.getDefaultConnection().getUserName();
   }
 
-  
+
   public Registry getRegistry() {
     return registry;
   }
 
-  
+
   public Locale getDefaultLocale() {
     return defaultLocale;
   }
 
-  
+
   public LocalizationManager getLocalizationManager() {
     return localizationManager;
   }
 
-  
+
   public void displayError(UComponent parent, String message) {
     DWindow.displayError((Component)parent, message);
   }
@@ -425,19 +436,19 @@ public abstract class JApplication implements Application {
     // swing event-dispatch-thread
     menuTree.notice(message);
   }
-  
+
   public void error(String message) {
     // use model, because we are outside
     // swing event-dispatch-thread
     menuTree.error(message);
   }
-  
+
   public void warn(String message) {
     // use model, because we are outside
     // swing event-dispatch-thread
     menuTree.warn(message);
   }
-  
+
   public int ask(String message, boolean yesIsDefault) {
     return AWR_UNDEF;
   }
@@ -467,10 +478,10 @@ public abstract class JApplication implements Application {
   private final Date             		startupTime = new Date(); // remembers the startup time
 
   static {
-    ApplicationContext.setApplicationContext(new JApplicationContext());
-    FileHandler.setFileHandler(new JFileHandler());
-    ImageHandler.setImageHandler(new JImageHandler());
-    WindowController.setWindowController(new JWindowController());
-    UIFactory.setUIFactory(new JUIFactory());
+    ApplicationContext.Companion.setApplicationContext(new JApplicationContext());
+    FileHandler.Companion.setFileHandler(new JFileHandler());
+    ImageHandler.Companion.setImageHandler(new JImageHandler());
+    WindowController.Companion.setWindowController(new JWindowController());
+    UIFactory.uiFactory = new JUIFactory();
   }
 }

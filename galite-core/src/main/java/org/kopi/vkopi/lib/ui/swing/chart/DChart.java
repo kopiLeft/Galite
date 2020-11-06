@@ -131,6 +131,6 @@ public class DChart extends DWindow implements UChart {
   private UChartType					type;
   
   static {
-    ChartTypeFactory.setChartTypeFactory(new JChartTypeFactory());
+    ChartTypeFactory.chartTypeFactory = new JChartTypeFactory();
   }
 }

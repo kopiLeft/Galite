@@ -63,6 +63,6 @@ object Triggers : VConstants {
    * next record was deleted by tierce
    */
   fun fetchLookup(f: VField) {
-    f.block.fetchLookup(f)
+    f.block!!.fetchLookup(f)
   }
 }

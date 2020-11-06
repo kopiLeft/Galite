@@ -19,20 +19,36 @@
 
 package org.kopi.vkopi.lib.ui.swing.spellchecker;
 
-import org.kopi.vkopi.lib.visual.VlibProperties;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import org.kopi.galite.visual.VlibProperties;
+
 public class SpellcheckerDialog extends JDialog {
 
-public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker) {
+  public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker) {
     super( owner );
     this.spellChecker = spellchecker;
     setModal(true);
@@ -61,7 +77,7 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
     mainBox.add( hBox );
 
     Dimension           labelComponentDim =
-      new Dimension( 100, labelComponent.getPreferredSize().height );
+            new Dimension( 100, labelComponent.getPreferredSize().height );
     labelComponent.setPreferredSize( labelComponentDim );
     labelComponent.setMinimumSize( labelComponentDim );
     labelComponent.setMaximumSize( labelComponentDim );
@@ -139,23 +155,23 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
   }
 
   private void initSuggestionElements() {
-      DefaultComboBoxModel              model;
-      Suggestions               	result;
+    DefaultComboBoxModel              model;
+    Suggestions               	result;
 
-      result = spellChecker.getSuggestions();
-      suggestions = result.getSuggestions();
-      model= new DefaultComboBoxModel(result.getSuggestions().toArray());
-      suggestionsList.setModel(model);
-      originalWordTextField.setText(result.getOriginalWord());
-      if (suggestions.size() > 0) {
-        suggestionsList.setSelectedIndex(0);
-        suggestionsList.grabFocus();
-      }
+    result = spellChecker.getSuggestions();
+    suggestions = result.getSuggestions();
+    model= new DefaultComboBoxModel(result.getSuggestions().toArray());
+    suggestionsList.setModel(model);
+    originalWordTextField.setText(result.getOriginalWord());
+    if (suggestions.size() > 0) {
+      suggestionsList.setSelectedIndex(0);
+      suggestionsList.grabFocus();
+    }
   }
 
   private class CancelAction extends AbstractAction {
 
-	private CancelAction() {
+    private CancelAction() {
       super(VlibProperties.getString("aspell-dialog-cancel"));
     }
 
@@ -170,7 +186,7 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
 
   private class ChangeAction extends AbstractAction {
 
-	private ChangeAction() {
+    private ChangeAction() {
       super(VlibProperties.getString("aspell-dialog-change"));
       putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_C));
       putValue(ACCELERATOR_KEY, new Integer(KeyEvent.VK_C));
@@ -181,14 +197,14 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
       checkNext();
     }
     /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = -9046898360749709345L;
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = -9046898360749709345L;
   }
 
   private class ChangeAllAction extends AbstractAction {
 
-	private ChangeAllAction() {
+    private ChangeAllAction() {
       super(VlibProperties.getString("aspell-dialog-change-all"));
       putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_L));
       putValue(ACCELERATOR_KEY, new Integer(KeyEvent.VK_L));
@@ -199,14 +215,14 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
       checkNext();
     }
     /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 8492059401975099177L;
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 8492059401975099177L;
   }
 
   private class IgnoreAction extends AbstractAction {
 
-	private IgnoreAction() {
+    private IgnoreAction() {
       super(VlibProperties.getString("aspell-dialog-ignore"));
       putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_I));
       putValue(ACCELERATOR_KEY, new Integer(KeyEvent.VK_I));
@@ -217,14 +233,14 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
       checkNext();
     }
     /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = -5969056223868591429L;
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = -5969056223868591429L;
   }
 
   private class IgnoreAllAction extends AbstractAction {
 
-	private IgnoreAllAction() {
+    private IgnoreAllAction() {
       super(VlibProperties.getString("aspell-dialog-ignore-all"));
       putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_G));
       putValue(ACCELERATOR_KEY, new Integer(KeyEvent.VK_G));
@@ -235,9 +251,9 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
       checkNext();
     }
     /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 3082583855533470939L;
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 3082583855533470939L;
   }
 
   private class CloseDialogActionListener implements ActionListener {
@@ -247,7 +263,7 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
   }
 
 
- private class MyListSelectionListener implements ListSelectionListener {
+  private class MyListSelectionListener implements ListSelectionListener {
     public void valueChanged(ListSelectionEvent e) {
       int       selectedIndex = suggestionsList.getSelectedIndex();
 
@@ -263,7 +279,7 @@ public SpellcheckerDialog(Frame owner, String title,  SpellChecker spellchecker)
   private JTextField            originalWordTextField;
   private JList                 suggestionsList;
   /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
+   * Comment for <code>serialVersionUID</code>
+   */
   private static final long serialVersionUID = -220369137180783262L;
 }

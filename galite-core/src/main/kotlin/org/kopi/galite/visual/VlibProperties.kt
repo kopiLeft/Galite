@@ -29,6 +29,7 @@ import org.kopi.galite.l10n.LocalizationManager
  */
 object VlibProperties {
 
+
   // ----------------------------------------------------------------------
   // STATIC METHODS
   // ----------------------------------------------------------------------
@@ -39,6 +40,7 @@ object VlibProperties {
    * @param     key             the property key
    * @return    the requested property value
    */
+  @JvmStatic
   fun getString(key: String): String = getString(key, null)
 
   /**
