@@ -33,8 +33,7 @@ import org.kopi.galite.visual.VlibProperties
  */
 abstract class VCodeField(val type: String,
                           val source: String,
-                          val idents: Array<String>)
-  : VField(1, 1) {
+                          val idents: Array<String>): VField(1, 1) {
 
   /**
    *
@@ -100,7 +99,7 @@ abstract class VCodeField(val type: String,
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
   override fun checkType(rec: Int, o: Any) {
-    var s = o as? String
+    var s = o as String
 
     if (s == "") {
       setNull(rec)
@@ -112,7 +111,7 @@ abstract class VCodeField(val type: String,
        */
       var found = -1
 
-      s = s!!.toLowerCase()
+      s = s.toLowerCase()
       var i = 0
 
       while (found != -2 && i < labels.size) {
@@ -312,7 +311,7 @@ abstract class VCodeField(val type: String,
     throw InconsistencyException()
   }
 
-  override fun toText(o: Any): String? {
+  override fun toText(o: Any): String {
     for (i in getCodes().indices) {
       if (getCodes()[i] == o) {
         return labels[i]
@@ -333,7 +332,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String = if (value[r] == -1) ""
+  override fun getTextImpl(r: Int): String? = if (value[r] == -1) ""
   else labels[value[r]]
 
   /**
@@ -398,7 +397,7 @@ abstract class VCodeField(val type: String,
    *
    * @param     parent         the caller localizer
    */
-  protected override fun localize(parent: FieldLocalizer?) {
+  override fun localize(parent: FieldLocalizer?) {
     val loc = parent!!.manager.getTypeLocalizer(source, type)
 
     for (i in labels.indices) {

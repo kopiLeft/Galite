@@ -47,17 +47,17 @@ class VTimeField : VField(5, 1) {
   /**
    * return true if this field implements "enumerateValue"
    */
-  fun hasNextPreviousEntry(): Boolean = true
+  override fun hasNextPreviousEntry(): Boolean = true
 
   /**
    * just after loading, construct record
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
-  fun isNumeric(): Boolean = true
+  override fun isNumeric(): Boolean = true
 
   // ----------------------------------------------------------------------
   // Interface Display
@@ -87,7 +87,7 @@ class VTimeField : VField(5, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
+  override fun checkType(rec: Int, o: Any) {
     if (o as String == "") {
       setNull(rec)
     } else {
@@ -191,7 +191,7 @@ class VTimeField : VField(5, 1) {
   /**
    * Sets the field value of given record to a time value.
    */
-  fun setTime(r: Int, v: Time?) {
+  override fun setTime(r: Int, v: Time?) {
     if (changedUI
         || value[r] == null && v != null
         || value[r] != null && !value[r]?.equals(v)!!) {
@@ -234,14 +234,14 @@ class VTimeField : VField(5, 1) {
   /**
    * Returns the field value of given record as a time value.
    */
-  fun getTime(r: Int): Time = getObject(r) as Time
+  override fun getTime(r: Int): Time = getObject(r) as Time
 
   /**
    * Returns the field value of the current record as an object
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String = if (o == null) "" else (o as Time).toString()
+  override fun toText(o: Any): String = if (o == null) "" else (o as Time).toString()
 
   override fun toObject(s: String): Any? {
     return if (s == "") {
@@ -351,7 +351,7 @@ class VTimeField : VField(5, 1) {
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
         && (oldValue != null && value[t] == null
             || oldValue == null && value[t] != null
             || oldValue != null && oldValue != value[t])) {
@@ -374,7 +374,7 @@ class VTimeField : VField(5, 1) {
 
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return if (list == null) {
-      setTime(block.activeRecord, Time.now())
+      setTime(block!!.activeRecord, Time.now())
       true
     } else {
       super.fillField(handler)
@@ -385,7 +385,7 @@ class VTimeField : VField(5, 1) {
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
-    val record = block.activeRecord
+    val record = block!!.activeRecord
 
     when {
       list != null -> {

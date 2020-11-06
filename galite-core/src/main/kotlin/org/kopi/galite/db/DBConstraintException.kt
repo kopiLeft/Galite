@@ -16,30 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.util
+package org.kopi.galite.db
+
+import java.sql.SQLException
 
 /**
- * Local printer
- */
-class LPrinter(val name: String,var command: String) : AbstractPrinter(name) {
+ * Constructor
+ *
+ * @param     query                   the sql query which generated the exception
+ * @param     original                the original SQLException
+ * @param     constraintName          the violated constraint
+ **/
+open class DBConstraintException(query: String?, original: SQLException,
+                                 val constraint: String = "unspecified") : DBException(query, original) {
 
-  // ----------------------------------------------------------------------
-  // PRINTING WITH AN INPUTSTREAM
-  // ----------------------------------------------------------------------
+  constructor(original: SQLException) : this(null, original, "unspecified")
 
-  override fun print(data: PrintJob): String {
-    val process = Runtime.getRuntime().exec(command)
-    val data = data.inputStream
-    val buffer = ByteArray(1024)
-    val output = process.outputStream
-    var length: Int
+  constructor(original: SQLException, constraintName: String) : this(null, original, constraintName)
 
-    while (data.read(buffer).also { length = it } != -1) {
-      output.write(buffer, 0, length)
-    }
-    output.close()
-
-    return "NYI"
-  }
+  /**
+   * Returns the index name
+   */
+  val description: String
+    get() = "DBConstraintException: '$constraint'"
 }
-
