@@ -21,6 +21,8 @@ package org.kopi.galite.db
 import java.sql.Blob
 
 import org.kopi.galite.type.NotNullDate
+import org.kopi.galite.type.NotNullTimestamp
+import org.kopi.galite.type.NotNullWeek
 import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.type.NotNullMonth
 import org.kopi.galite.type.NotNullTime
@@ -35,7 +37,11 @@ class Query(conn: Connection) {
     TODO()
   }
 
-  fun next(): Boolean = TODO()
+  fun next(): Boolean {
+    TODO()
+  }
+
+  fun getWeek(pos: Int): NotNullWeek = TODO()
 
   fun getString(pos: Int): String = TODO()
 
@@ -63,7 +69,9 @@ class Query(conn: Connection) {
 
   fun getBoolean(column: Int): Boolean = TODO()
 
-  fun getObject(pos: Int):Any = TODO()
+  fun getObject(pos: Int): Any =TODO()
+
+  fun getTimestamp(pos: Int): NotNullTimestamp = TODO()
 
   fun getFixed(pos: Int): NotNullFixed = TODO()
 

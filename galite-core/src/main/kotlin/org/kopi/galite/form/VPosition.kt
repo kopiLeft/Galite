@@ -15,7 +15,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
 import java.io.Serializable
@@ -27,5 +26,5 @@ class VPosition(val line: Int,
                 val lineEnd: Int,
                 val column: Int,
                 val columnEnd: Int = -1,
-                val chartPos: Int = -1) : VConstants, Serializable {
-}
+                val chartPos: Int = -1)
+  : VConstants, Serializable

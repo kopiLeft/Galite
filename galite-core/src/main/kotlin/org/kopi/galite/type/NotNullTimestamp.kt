@@ -16,27 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.db
+package org.kopi.galite.type
 
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
-
-class Utils {
-  companion object {
-    fun trimString(input: String): String = TODO()
-    fun trailString(input: String): String = TODO()
-    fun toSql(date: Date): String = TODO()
-    fun toSql(l: String): String = TODO()
-    fun toSql(t: Time?): String = TODO()
-    fun toSql(d: Int?): String = TODO()
-    fun toSql(t: Timestamp?): String = TODO()
-    fun toSql(t: Week?): String = TODO()
-    fun toSql(m: Month?): String = TODO()
-  }
+class NotNullTimestamp : Timestamp() {
 }
-
-
-

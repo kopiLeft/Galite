@@ -216,9 +216,7 @@ class VDateField : VField(10, 1) {
     return value[r]
   }
 
-  override fun toText(o: Any?): String {
-    return if (o == null) "" else Companion.toText(o as Date)
-  }
+  override fun toText(o: Any?): String = if (o == null) "" else Companion.toText(o as Date)
 
   override fun toObject(s: String): Any? {
     if (s == "") {
