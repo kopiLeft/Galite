@@ -54,7 +54,7 @@ interface UForm : UWindow, FormListener {
    * Returns the Debug throwable info
    * @return The [Throwable] debug info.
    */
-  fun getRuntimeDebugInfo(): Throwable
+  fun getRuntimeDebugInfo(): Throwable?
 
   /**
    * Show document preview

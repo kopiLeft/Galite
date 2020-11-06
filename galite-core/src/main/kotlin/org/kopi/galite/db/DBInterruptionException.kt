@@ -15,31 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.util
 
-/**
- * FaxException
- */
-open class FaxException : Exception {
+package org.kopi.galite.db
+
+import java.sql.SQLException
+
+class DBInterruptionException : DBException {
   /**
-   * Constructs an exception with a message.
-   *
-   * @param        message                the associated message
+   * Constructor
    */
-  constructor(message: String) : super(message) {}
+  constructor() : super(SQLException("DBInterruptionException"))
 
   /**
-   * Constructs a new exception with the specified detail message and cause.
+   * Constructor
    *
-   * @param        message                the associated message
-   * @param     cause           the cause  (null value permited
+   * @param     query           the sql query which generated the exception
    */
-  constructor(message: String, cause: Throwable) : super(message, cause) {}
+  constructor(query: String) : super(query, SQLException("DBInterruptionException"))
 
-  /**
-   * Constructs a new exception with the specified detail message and cause.
-   *
-   * @param     cause           the cause  (null value permited
-   */
-  constructor(cause: Throwable) : super(cause) {}
 }

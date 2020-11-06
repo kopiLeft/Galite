@@ -66,11 +66,11 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   /**
    * printlns a compilation unit
    */
-  fun helpOnBlock(formCode: String,
+  override fun helpOnBlock(formCode: String,
                   title: String,
-                  help: String?,
+                  help: String,
                   commands: Array<VCommand>?,
-                  fields: Array<VField>,
+                  fields: Array<VField?>?,
                   alone: Boolean) {
     latexPrinter.println("\\subsection{$title}")
     latexPrinter.uncheckedPrintln("\\begin{center}\\includegraphics{images/" +
@@ -81,8 +81,8 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
     }
     latexPrinter.println()
     var countNNull = 0
-    for (i in fields.indices) {
-      if (fields[i].label != null) {
+    for (i in fields!!.indices) {
+      if (fields[i]!!.label != null) {
         countNNull++
         break
       }
@@ -173,7 +173,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         latexPrinter.println("\\begin{description}")
 
         fields.forEach { field ->
-          field.helpOnField(this)
+          field!!.helpOnField(this)
         }
 
         latexPrinter.println("\\end{description}")

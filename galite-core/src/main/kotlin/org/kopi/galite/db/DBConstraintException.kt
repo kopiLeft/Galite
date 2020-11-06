@@ -15,31 +15,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.util
+
+package org.kopi.galite.db
+
+import java.sql.SQLException
 
 /**
- * FaxException
- */
-open class FaxException : Exception {
-  /**
-   * Constructs an exception with a message.
-   *
-   * @param        message                the associated message
-   */
-  constructor(message: String) : super(message) {}
+ * Constructor
+ *
+ * @param     query                   the sql query which generated the exception
+ * @param     original                the original SQLException
+ * @param     constraintName          the violated constraint
+ **/
+open class DBConstraintException(query: String?, original: SQLException,
+                                 val constraint: String = "unspecified") : DBException(query, original) {
+
+  constructor(original: SQLException) : this(null, original, "unspecified")
+
+  constructor(original: SQLException, constraintName: String) : this(null, original, constraintName)
 
   /**
-   * Constructs a new exception with the specified detail message and cause.
-   *
-   * @param        message                the associated message
-   * @param     cause           the cause  (null value permited
+   * Returns the index name
    */
-  constructor(message: String, cause: Throwable) : super(message, cause) {}
-
-  /**
-   * Constructs a new exception with the specified detail message and cause.
-   *
-   * @param     cause           the cause  (null value permited
-   */
-  constructor(cause: Throwable) : super(cause) {}
+  val description: String
+    get() = "DBConstraintException: '$constraint'"
 }
