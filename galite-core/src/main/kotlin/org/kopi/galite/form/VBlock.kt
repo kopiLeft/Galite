@@ -1223,7 +1223,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * check that user has proper UI with focus on a field on the good page
    */
   fun checkBlock() {
-    if (form.getActiveBlock() === this) {
+    if (form.getActiveBlock() == this) {
       if (activeField == null) {
         try {
           if (activeRecord == -1 || isRecordDeleted(activeRecord)) {
@@ -2155,7 +2155,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun getFieldIndex(fld: VField?): Int {
     for (i in fields!!.indices) {
-      if (fld === fields!![i]) {
+      if (fld == fields!![i]) {
         return i
       }
     }
@@ -2766,7 +2766,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var count = 1
 
     for (i in fields!!.indices) {
-      if (field === fields!![i]) {
+      if (field == fields!![i]) {
         return count
       }
       if (fields!![i]!!.getDefaultAccess() != ACS_HIDDEN) {

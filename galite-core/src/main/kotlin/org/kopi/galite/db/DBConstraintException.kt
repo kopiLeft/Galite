@@ -20,15 +20,16 @@ package org.kopi.galite.db
 
 import java.sql.SQLException
 
-open class DBConstraintException(query: String?, original: SQLException,
-                                 val constraint: String = "unspecified") : DBException(query, original){
 /**
  * Constructor
  *
  * @param     query                   the sql query which generated the exception
  * @param     original                the original SQLException
  * @param     constraintName          the violated constraint
-**/
+ **/
+open class DBConstraintException(query: String?, original: SQLException,
+                                 val constraint: String = "unspecified") : DBException(query, original){
+
 constructor(original: SQLException) : this(null, original, "unspecified")
 
 constructor(original: SQLException, constraintName: String) : this(null, original, constraintName)
