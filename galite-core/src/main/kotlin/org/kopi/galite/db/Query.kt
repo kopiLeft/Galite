@@ -24,6 +24,7 @@ import org.kopi.galite.type.NotNullDate
 import org.kopi.galite.type.NotNullTimestamp
 import org.kopi.galite.type.NotNullWeek
 import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.NotNullMonth
 import org.kopi.galite.type.NotNullTime
 
 class Query(conn: Connection) {
@@ -75,4 +76,6 @@ class Query(conn: Connection) {
   fun getFixed(pos: Int): NotNullFixed = TODO()
 
   fun getTime(pos: Int): NotNullTime = TODO()
+
+  fun getMonth(pos: Int): NotNullMonth = TODO()
 }

@@ -29,5 +29,4 @@ class VWindowController : WindowController() {
   override fun doNotModal(model: VWindow) {
     TODO("Not yet implemented")
   }
-
 }

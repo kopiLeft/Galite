@@ -896,7 +896,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setMonth(r: Int, v: Month) {
+  open fun setMonth(r: Int, v: Month?) {
     throw InconsistencyException()
   }
 
@@ -1161,7 +1161,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getMonth(r: Int): Month {
+  open fun getMonth(r: Int): Month {
     throw InconsistencyException()
   }
 

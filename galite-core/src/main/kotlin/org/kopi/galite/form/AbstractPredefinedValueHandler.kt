@@ -22,14 +22,12 @@ import org.kopi.galite.list.VListColumn
 
 abstract class AbstractPredefinedValueHandler(private val model: VFieldUI,
                                               protected val form: VForm,
-                                              protected val field: VField)
-  : PredefinedValueHandler {
-
+                                              protected val field: VField) : PredefinedValueHandler {
 
   override fun selectDefaultValue(): Boolean = model.fillField()
 
   fun selectFromList(list: Array<VListColumn>,
-                     values: Array<Array<Any?>>?,
+                     values: Array<Array<Any?>>,
                      predefinedValues: Array<String>): String? {
     val listDialog = VListDialog(list, values)
     val selected = listDialog.selectFromDialog(form, field)

@@ -155,6 +155,7 @@ abstract class VCodeField(val type: String,
             }
             i++
           }
+
           listDialog = VListDialog(arrayOf(getListColumn()!!), arrayOf(codes))
           selected = listDialog.selectFromDialog(getForm(), null, this)
           if (selected != -1) {
