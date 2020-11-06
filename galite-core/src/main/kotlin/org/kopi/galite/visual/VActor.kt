@@ -39,9 +39,7 @@ open class VActor(var menuIdent: String,
                   val acceleratorKey: Int,
                   val acceleratorModifier: Int) : VModel {
 
-  override fun getDisplay(): UActor? {
-    return display
-  }
+  override fun getDisplay(): UActor? = display
 
   override fun setDisplay(display: UComponent) {
     assert(display is UActor) { "VActor display should be UActor" }
@@ -67,9 +65,7 @@ open class VActor(var menuIdent: String,
        *
        * @return `true` if this not a reset action.
        */
-      override fun isCancellable(): Boolean {
-        return !("quit".equals(actorIdent, ignoreCase = true) || "break".equals(actorIdent, ignoreCase = true))
-      }
+      override fun isCancellable(): Boolean = !("quit".equals(actorIdent, ignoreCase = true) || "break".equals(actorIdent, ignoreCase = true))
     }, false)
   }
 
@@ -80,9 +76,7 @@ open class VActor(var menuIdent: String,
   // ----------------------------------------------------------------------
   // HASHCODE AND EQUALS REDEFINITION
   // ----------------------------------------------------------------------
-  override fun hashCode(): Int {
-    return actorIdent.hashCode() * actorIdent.hashCode()
-  }
+  override fun hashCode(): Int = actorIdent.hashCode() * actorIdent.hashCode()
 
   override fun equals(obj: Any?): Boolean {
     return if (obj !is VActor) {
@@ -118,11 +112,11 @@ open class VActor(var menuIdent: String,
   // ----------------------------------------------------------------------
   fun helpOnCommand(help: VHelpGenerator) {
     help.helpOnCommand(menuName,
-                       menuItem,
-                       iconName,
-                       acceleratorKey,
-                       acceleratorModifier,
-                       this.help)
+            menuItem,
+            iconName,
+            acceleratorKey,
+            acceleratorModifier,
+            this.help)
   }
 
   // --------------------------------------------------------------------

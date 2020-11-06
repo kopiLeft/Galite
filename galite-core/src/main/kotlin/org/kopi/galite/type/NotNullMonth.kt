@@ -35,5 +35,8 @@ class NotNullMonth : Month {
   companion object {
     fun castToNotNull(value: Month): NotNullMonth = value as NotNullMonth
   }
-}
 
+  fun getInt(column: Int): Int {
+  TODO()
+  }
+}

@@ -21,7 +21,16 @@ package org.kopi.galite.db
 import java.sql.SQLException
 
 class DBInterruptionException : DBException {
+  /**
+   * Constructor
+   */
   constructor() : super(SQLException("DBInterruptionException"))
 
-  constructor(query: String?) : super(query, SQLException("DBInterruptionException"))
+  /**
+   * Constructor
+   *
+   * @param     query           the sql query which generated the exception
+   */
+  constructor(query: String) : super(query, SQLException("DBInterruptionException"))
+
 }

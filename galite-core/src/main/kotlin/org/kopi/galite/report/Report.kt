@@ -17,18 +17,25 @@
 
 package org.kopi.galite.report
 
+import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
+import java.io.File
+import java.io.IOException
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
  */
-open class Report {
+abstract class Report: Window() {
+
   /** Report's fields. */
-  val fields = mutableListOf<Field<*>>()
+  val fields = mutableListOf<RField<*>>()
 
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
+
+  var help: String? = null
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
@@ -38,7 +45,7 @@ open class Report {
    * @return a field.
    */
   fun <T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
-    val field = Field(domain)
+    val field = RField(domain)
     field.init()
     fields.add(field)
     return field
@@ -68,4 +75,64 @@ open class Report {
    * @param field the field.
    */
   fun getRowsForField(field: Field<*>) = reportRows.map { it.data[field] }
+
+  /**
+   * Adds default report commands
+   */
+  open val reportCommands = false
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+
+  fun genLocalization(destination: String? = null) {
+    if (locale != null) {
+      val baseName = this::class.simpleName
+      requireNotNull(baseName)
+      val destination = destination
+              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.packageName.replace(".", "/")
+      try {
+        val writer = ReportLocalizationWriter()
+        genLocalization(writer)
+        writer.write(destination, baseName, locale!!)
+      } catch (ioe: IOException) {
+        ioe.printStackTrace()
+        System.err.println("cannot write : $baseName")
+      }
+    }
+  }
+
+  fun genLocalization(writer: LocalizationWriter) {
+    (writer as ReportLocalizationWriter).genReport(title,
+                                                   help,
+                                                   fields)
+  }
+
+  /**
+   * Returns the qualified source file name where this object is defined.
+   */
+  private val sourceFile: String
+    get() {
+      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
+      return basename + this.javaClass.simpleName
+    }
+
+
+  /** Report model*/
+  val reportModel: VReport by lazy {
+    object : VReport() {
+      override fun init() {
+        if (reportCommands) {
+          addDefaultReportCommands()
+        }
+
+        super.model.columns = arrayOf()
+        source = sourceFile
+      }
+
+      override fun add() {
+        // TODO
+      }
+    }
+  }
 }

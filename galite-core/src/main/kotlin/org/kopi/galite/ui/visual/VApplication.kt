@@ -45,13 +45,14 @@ import com.vaadin.flow.router.Route
 
 
 /**
- * The entry point for all WEB applications.
+ * The entry point for all Galite WEB applications.
  *
  * @param registry The [Registry] object.
  */
 @Route("")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application {
   init {
+    instance = this
     // registry and locale initialization
     initialize()
     gotoWelcomeView()
@@ -64,7 +65,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   }
 
-  override fun error(message: String) {
+  override fun error(message: String?) {
 
   }
 
@@ -181,7 +182,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * you should use it to define [Locale], debugMode...
    */
   fun initialize() {
-
+    if (registry != null) {
+      registry.buildDependencies()
+    }
+    // set locale from initialization.
+    // set locale from initialization.
+    setLocalizationContext(Locale.FRANCE) // TODO
   }
 
   /**
@@ -216,7 +222,22 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    *
    */
   protected fun setLocalizationContext(locale: Locale) {
+    // default application locale is initialized
+    // from application descriptor file (web.xml)
 
+    // default application locale is initialized
+    // from application descriptor file (web.xml)
+    defaultLocale = locale
+    if (defaultLocale == null) {
+      // if no valid local is defined in the application descriptor
+      // pick the locale from the extra locale given with application
+      // specifics.
+      // This is only to be share that we start with a language.
+      defaultLocale = alternateLocale
+    }
+    // Now create the localization manager using the application default locale.
+    // Now create the localization manager using the application default locale.
+    localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
   }
 
   /**
@@ -379,6 +400,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val startupTime: Date = Date() // remembers the startup time
 
   companion object {
+
+    /** Application instance */
+    lateinit var instance: Application
+
     init {
       ApplicationContext.applicationContext = VApplicationContext()
       FileHandler.fileHandler = VFileHandler()

@@ -96,7 +96,7 @@ open class VHelpGenerator {
    * Add an image
    */
   private fun addImage(name: String, border: Int) {
-    printer.print("<img src=\"" + ImageHandler.imageHandler!!.getURL(name))
+    printer.print("<img src=\"" + ImageHandler.imageHandler.getURL(name))
     printer.print("\" BORDER =\"$border")
     printer.println("\" alt=\"$name\">")
   }

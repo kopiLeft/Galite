@@ -15,61 +15,203 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
-import org.kopi.galite.visual.VException
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.form.VConstants.Companion.MOD_UPDATE
 
-class VDictionaryForm : VForm(), VDictionary {
+abstract class VDictionaryForm : VForm, VDictionary {
 
-  fun isRecursiveQuery(): Boolean = TODO()
-  override fun reset() {
-    TODO()
-  }
+  protected constructor(parent: DBContextHandler) : super(parent)
 
-  fun isNewRecord(): Boolean {
-    TODO()
-  }
+  protected constructor(parent: DBContext) : super(parent)
 
-  fun setMenuQuery(b: Boolean) {
-    TODO()
-  }
+  protected constructor() : super()
 
-  fun saveFilledField(){
-    TODO()
-  }
-  override fun startProtected(message: String){
-    TODO()
-  }
-  override fun commitProtected(){
-    TODO()
-  }
-  override fun abortProtected(e: VException){
-    TODO()
-  }
-  override fun abortProtected(e: Error){
-    TODO()
-  }
-  override fun abortProtected(e: RuntimeException){
-    TODO()
-  }
-  fun interruptRecursiveQuery(){
-    TODO()
-  }
-  fun isMenuQuery(): Boolean{
-    TODO()
+  /**
+   * This is a modal call. Used in eg. PersonKey.k in some packages
+   *
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
+   */
+  fun editWithID(parent: VWindow, id: Int): Int {
+    dBContext = parent.dBContext
+    editID = id
+    doModal(parent)
+    newRecord = false
+    editID = -1
+    return iD
   }
 
+  /**
+   * This is a modal call. Used in eg. PersonKey.k in some packages
+   *
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
+   */
+  fun openForQuery(parent: VWindow): Int {
+    dBContext = parent.dBContext
+    lookup = true
+    doModal(parent)
+    lookup = false
+    return iD
+  }
+
+  /**
+   * create a new record and returns id
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
+   */
+  fun newRecord(parent: VWindow): Int {
+    newRecord = true
+    dBContext = parent.dBContext
+    doModal(parent)
+    newRecord = false
+    return iD
+  }
+
+  override fun prepareForm() {
+    block = getBlock(0)
+    assert(!block!!.isMulti()) { threadInfo() }
+
+    if (newRecord) {
+      if (getBlock(0) == null) {
+        gotoBlock(block!!)
+      }
+      Commands.insertMode(block!!)
+    } else if (editID != -1) {
+      newRecord = true
+      fetchBlockRecord(0, editID)
+      getBlock(0).mode = MOD_UPDATE
+    }
+    super.prepareForm()
+  }
+
+  /**
+   * close the form
+   */
+  override fun close(code: Int) {
+    assert(!getBlock(0).isMulti()) { threadInfo() }
+    val id = getBlock(0).getFieldID()
+    iD = if (id != null) {
+      val i = id.getInt(0)
+      i ?: -1
+    } else {
+      -1
+    }
+    super.close(code)
+  }
+
+  // ----------------------------------------------------------------------
+  // VDICTIONARY IMPLEMENTATION
+  // ----------------------------------------------------------------------
   override fun search(parent: VWindow): Int {
-    TODO("Not yet implemented")
+    return openForQuery(parent)
   }
 
   override fun edit(parent: VWindow, id: Int): Int {
-    TODO("Not yet implemented")
+    return editWithID(parent, id)
   }
 
   override fun add(parent: VWindow): Int {
-    TODO("Not yet implemented")
+    return newRecord(parent)
   }
+
+  // ----------------------------------------------------------------------
+  // QUERY SEARCH
+  // ----------------------------------------------------------------------
+
+  fun saveFilledField() {
+    isRecursiveQuery = true
+    savedData = arrayListOf()
+    savedState = arrayListOf()
+    val fields: Array<VField> = block!!.fields
+    fields.forEach { field ->
+      savedData!!.add(field.getObject(0))
+    }
+    fields.forEach { field ->
+      savedState!!.add(field.getSearchOperator())
+    }
+  }
+
+  private fun retrieveFilledField() {
+    isRecursiveQuery = false
+    super.reset()
+    val fields: Array<VField> = block!!.fields
+    for (i in fields.indices) {
+      fields[i].setObject(0, savedData!!.elementAt(i))
+    }
+    block!!.setRecordChanged(0, false)
+    for (i in fields.indices) {
+      fields[i].setSearchOperator((savedState!!.elementAt(i) as Int).toInt())
+    }
+  }
+
+  /**
+   *
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by triggers
+   */
+  override fun reset() {
+    if (isRecursiveQuery) {
+      retrieveFilledField()
+    } else {
+      super.reset()
+    }
+    isRecursiveQuery = false
+  }
+
+  /**
+   *
+   */
+  fun interruptRecursiveQuery() {
+    isRecursiveQuery = false
+  }
+
+  fun isNewRecord(): Boolean {
+    return newRecord || lookup || closeOnSave
+  }
+
+  fun setCloseOnSave() {
+    closeOnSave = true
+  }
+
+  // ----------------------------------------------------------------------
+  // IMPLEMENTATION
+  // ----------------------------------------------------------------------
+  private fun fetchBlockRecord(block: Int, record: Int) {
+    try {
+      transaction {
+        getBlock(block).fetchRecord(record)
+      }
+    } catch (e: Throwable) {
+      if (e is VSkipRecordException) {
+        throw VExecFailedException()
+      }
+      throw VRuntimeException(e)
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // QUERY SEARCH
+  // ----------------------------------------------------------------------
+  /**
+   * The id of selected or new record
+   */
+  var iD = -1
+    private set
+  private var editID = -1
+
+  var isRecursiveQuery = false
+    private set
+
+  var isMenuQuery = false
+  private var newRecord = false
+  private var lookup = false
+  private var closeOnSave = false
+  private var savedData: ArrayList<Any?>? = null
+  private var savedState: ArrayList<Int>? = null
+  private var block: VBlock? = null
 }

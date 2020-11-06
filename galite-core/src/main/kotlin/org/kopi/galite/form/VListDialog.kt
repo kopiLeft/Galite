@@ -41,21 +41,55 @@ class VListDialog : VModel {
    */
   constructor(title: String, data: Array<String>)
 
-  override fun setDisplay(display: UComponent) {
-    TODO("Not yet implemented")
-  }
-
   fun selectFromDialog(window: VWindow?, field: VField?): Int {
     TODO()
-  }
-
-  override fun getDisplay(): UComponent? {
-    TODO("Not yet implemented")
   }
 
   fun selectFromDialog(form: VForm, field: VField?): Int = TODO()
 
   fun selectFromDialog(form: VForm?, window: VWindow?, field: VField?): Int {
+    TODO()
+  }
+
+  fun getCount(): Int = TODO()
+
+  fun convert(pos: Int): Int = TODO()
+  fun getForm(): VForm = TODO()
+  fun setForm(form: VForm) {
+    TODO()
+  }
+
+  fun getNewForm(): VDictionary = TODO()
+  fun getColumns(): Array<VListColumn> = TODO()
+  fun getSizes(): IntArray = TODO()
+  fun isForceNew(): Boolean = TODO()
+  fun isTooManyRows(): Boolean = TODO()
+  fun getData(): Array<Array<Any>> = TODO()
+  fun getTitles(): Array<String?> = TODO()
+  fun getColumnCount(): Int = TODO()
+  fun isSkipFirstLine(): Boolean = TODO()
+  fun getColumnName(column: Int): String = TODO()
+  fun sort(left: Int) {
+    TODO()
+  }
+  fun getIdents(): IntArray= TODO()
+  fun getTranslatedIdents(): IntArray = TODO()
+
+  companion object {
+    var NEW_CLICKED = -2
+  }
+
+  override fun setDisplay(display: UComponent) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getDisplay(): UComponent? {
+    TODO("Not yet implemented")
+  }
+  fun selectFromDialog(window: VWindow?, field: VField?, showSingleEntry: Boolean): Int {
+    TODO()
+  }
+  fun setTooManyRows(){
     TODO()
   }
 }

@@ -69,7 +69,7 @@ object Commands : VConstants {
    */
   fun switchBlockView(b: VBlock) {
     assert(b.isMulti()) { "The command switchBlockView can be used only with a multi block." }
-    (b.getDisplay() as UMultiBlock).switchView(-1)
+    (b.display as UMultiBlock).switchView(-1)
   }
 
   /**
@@ -77,16 +77,16 @@ object Commands : VConstants {
    * @exception        VException        an exception may occur in b.clear()
    */
   fun resetBlock(b: VBlock) {
-    if (!b.isChanged() || b.getForm().ask(Message.getMessage("confirm_break"))) {
+    if (!b.isChanged || b.form.ask(Message.getMessage("confirm_break"))) {
       b.clear()
-      if (b.getForm() is VDictionaryForm) {
-        if ((b.getForm() as VDictionaryForm).isRecursiveQuery()) {
-          b.getForm().reset()
-        } else if (!(b.getForm() as VDictionaryForm).isNewRecord()) {
-          b.setMode(VConstants.MOD_QUERY)
+      if (b.form is VDictionaryForm) {
+        if ((b.form as VDictionaryForm).isRecursiveQuery) {
+          b.form.reset()
+        } else if (!(b.form as VDictionaryForm).isNewRecord()) {
+          b.mode = VConstants.MOD_QUERY
         }
       } else {
-        b.setMode(VConstants.MOD_QUERY)
+        b.mode = VConstants.MOD_QUERY
       }
     }
   }
@@ -94,7 +94,7 @@ object Commands : VConstants {
   private fun gotoFieldIfNoActive(lastBlock: VBlock) {
     // it is possible that (for example) the load method is
     // overridden and it include now a gotoBlock(..)
-    val form: VForm = lastBlock.getForm()
+    val form: VForm = lastBlock.form
     val activeBlock = form.getActiveBlock()
 
     if (activeBlock == null) {
@@ -111,13 +111,13 @@ object Commands : VConstants {
    * @exception        VException        an exception may occur during DB access
    */
   fun menuQuery(b: VBlock) {
-    val form: VForm = b.getForm()
+    val form: VForm = b.form
 
 
     Utils.freeMemory()
     b.validate()
     if (form is VDictionaryForm) {
-      form.setMenuQuery(true)
+      form.isMenuQuery = true
     }
 
     val id = b.singleMenuQuery(false) as Int
@@ -125,20 +125,16 @@ object Commands : VConstants {
     if (id != -1) {
       while (true) {
         try {
-          form.startProtected(Message.getMessage("loading_record"))
           b.fetchRecord(id)
-          form.commitProtected()
           gotoFieldIfNoActive(b)
           break
         } catch (e: VException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: VException) {
             throw abortEx
           }
         } catch (e: SQLException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: DBDeadLockException) {
             throw VExecFailedException(MessageCode.getMessage(VIS))
           } catch (abortEx: DBInterruptionException) {
@@ -148,13 +144,11 @@ object Commands : VConstants {
           }
         } catch (e: Error) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: Error) {
             throw InconsistencyException(abortEx)
           }
         } catch (e: RuntimeException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: RuntimeException) {
             throw InconsistencyException(abortEx)
           }
@@ -169,7 +163,7 @@ object Commands : VConstants {
    * @exception        VException        an exception may occur during DB access
    */
   fun recursiveQuery(b: VBlock) {
-    val form = b.getForm() as VDictionaryForm
+    val form = b.form as VDictionaryForm
 
     Utils.freeMemory()
     b.validate()
@@ -180,22 +174,18 @@ object Commands : VConstants {
     if (id != -1) {
       while (true) {
         try {
-          form.startProtected(Message.getMessage("loading_record"))
 
           // fetches data to active record
           b.fetchRecord(id)
-          form.commitProtected()
           gotoFieldIfNoActive(b)
           break
         } catch (e: VException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: VException) {
             throw abortEx
           }
         } catch (e: SQLException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: DBDeadLockException) {
             throw VExecFailedException(MessageCode.getMessage(VIS))
           } catch (abortEx: DBInterruptionException) {
@@ -205,13 +195,11 @@ object Commands : VConstants {
           }
         } catch (e: Error) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: Error) {
             throw InconsistencyException(abortEx)
           }
         } catch (e: RuntimeException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: RuntimeException) {
             throw InconsistencyException(abortEx)
           }
@@ -228,7 +216,7 @@ object Commands : VConstants {
    * @exception        VException        an exception may occur during DB access
    */
   fun queryMove(b: VBlock) {
-    val form: VForm = b.getForm()
+    val form: VForm = b.form
 
     b.validate()
 
@@ -238,32 +226,26 @@ object Commands : VConstants {
       try {
         while (true) {
           try {
-            form.startProtected(Message.getMessage("loading_record"))
-            b.fetchRecord(id)
-            form.commitProtected()
-            break
+              b.fetchRecord(id)
+              break
           } catch (e: VException) {
             try {
-              form.abortProtected(e)
-            } catch (abortEx: VException) {
+              } catch (abortEx: VException) {
               throw VExecFailedException(abortEx.message!!, abortEx)
             }
           } catch (e: SQLException) {
             try {
-              form.abortProtected(e)
-            } catch (abortEx: SQLException) {
+              } catch (abortEx: SQLException) {
               throw VExecFailedException(abortEx)
             }
           } catch (e: Error) {
             try {
-              form.abortProtected(e)
-            } catch (abortEx: Error) {
+              } catch (abortEx: Error) {
               throw InconsistencyException(abortEx)
             }
           } catch (e: RuntimeException) {
             try {
-              form.abortProtected(e)
-            } catch (abortEx: RuntimeException) {
+              } catch (abortEx: RuntimeException) {
               throw InconsistencyException(abortEx)
             }
           }
@@ -291,31 +273,27 @@ object Commands : VConstants {
    * @exception        VException        an exception may occur during DB access
    */
   fun serialQuery(b: VBlock) {
-    val form: VForm = b.getForm()
+    val form: VForm = b.form
 
     b.validate()
     Utils.freeMemory()
     try {
       while (true) {
         try {
-          form.startProtected(Message.getMessage("searching_database"))
           try {
             b.load()
             gotoFieldIfNoActive(b)
           } catch (e: VQueryOverflowException) {
             // !!! HANDLE OVERFLOW WARNING
           }
-          form.commitProtected()
           break
         } catch (e: VException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: VException) {
             throw abortEx
           }
         } catch (e: SQLException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: DBDeadLockException) {
             throw VExecFailedException(MessageCode.getMessage(VIS))
           } catch (abortEx: DBInterruptionException) {
@@ -325,13 +303,11 @@ object Commands : VConstants {
           }
         } catch (e: Error) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: Error) {
             throw InconsistencyException(abortEx)
           }
         } catch (e: RuntimeException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: RuntimeException) {
             throw InconsistencyException(abortEx)
           }
@@ -349,24 +325,24 @@ object Commands : VConstants {
    */
   fun insertMode(b: VBlock) {
     assert(!b.isMulti()) { "The command InsertMode can be used only with a single block." }
-    assert(b.getMode() != VConstants.MOD_INSERT) {
-      "The block " + b.getName() + " is already in INSERT mode."
+    assert(b.mode != VConstants.MOD_INSERT) {
+      "The block " + b.name + " is already in INSERT mode."
     }
 
-    if (b.getMode() == VConstants.MOD_UPDATE
-            && b.isChanged()
-            && !b.getForm().ask(Message.getMessage("confirm_insert_mode"))) {
+    if (b.mode == VConstants.MOD_UPDATE
+            && b.isChanged
+            && !b.form.ask(Message.getMessage("confirm_insert_mode"))) {
       return
     }
 
     b.apply {
       val changed: Boolean = isRecordChanged(0)
 
-      setMode(VConstants.MOD_INSERT)
+      mode = (VConstants.MOD_INSERT)
       setDefault()
       setRecordFetched(0, false)
       setRecordChanged(0, changed)
-      if (!isMulti() && getForm().getActiveBlock() == this) {
+      if (!isMulti() && form.getActiveBlock() == this) {
         gotoFirstUnfilledField()
       }
     }
@@ -377,30 +353,26 @@ object Commands : VConstants {
    * @exception        VException        an exception may occur during DB access
    */
   fun saveBlock(b: VBlock) {
-    val form: VForm = b.getForm()
+    val form: VForm = b.form
 
     Utils.freeMemory()
     assert(!b.isMulti()) { "saveBlock can be used only with a single block." }
     b.validate()
-    if (!b.isChanged() && !form.ask(Message.getMessage("confirm_save_unchanged"))) {
+    if (!b.isChanged && !form.ask(Message.getMessage("confirm_save_unchanged"))) {
       return
     }
     try {
       while (true) {
         try {
-          form.startProtected(Message.getMessage("saving_record"))
           b.save()
-          form.commitProtected()
           break
         } catch (e: VException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: VException) {
             throw VExecFailedException(abortEx)
           }
         } catch (e: SQLException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: DBDeadLockException) {
             throw VExecFailedException(MessageCode.getMessage(VIS))
           } catch (abortEx: DBInterruptionException) {
@@ -410,13 +382,11 @@ object Commands : VConstants {
           }
         } catch (e: Error) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (e: RuntimeException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: RuntimeException) {
             throw VExecFailedException(abortEx)
           }
@@ -443,15 +413,15 @@ object Commands : VConstants {
    * @exception        VException        an exception may occur during DB access
    */
   private fun saveDone(b: VBlock, single: Boolean) {
-    val form: VForm = b.getForm()
-    val mode: Int = b.getMode()
+    val form: VForm = b.form
+    val mode: Int = b.mode
 
     if (form is VDictionaryForm) {
       if ((form).isNewRecord()) {
         form.close(VWindow.CDE_VALIDATE)
         return
-      } else if ((form).isRecursiveQuery() ||
-              (form).isMenuQuery()) {
+      } else if ((form).isRecursiveQuery ||
+              (form).isMenuQuery) {
         form.reset()
         return
       }
@@ -473,7 +443,7 @@ object Commands : VConstants {
           return
         } catch (e: VException) {}
         b.clear()
-        b.setMode(VConstants.MOD_QUERY)
+        b.mode = VConstants.MOD_QUERY
         return
       }
       else -> throw InconsistencyException()
@@ -485,7 +455,7 @@ object Commands : VConstants {
    * @exception        VException        an exception may occur during DB access
    */
   fun deleteBlock(b: VBlock) {
-    val form: VForm = b.getForm()
+    val form: VForm = b.form
 
     if (!form.ask(Message.getMessage("confirm_delete"))) {
       return
@@ -493,19 +463,15 @@ object Commands : VConstants {
     try {
       while (true) {
         try {
-          form.startProtected(Message.getMessage("deleting_record"))
           b.delete()
-          form.commitProtected()
           break
         } catch (e: VException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: VException) {
             throw VExecFailedException(abortEx)
           }
         } catch (e: SQLException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: DBDeadLockException) {
             throw VExecFailedException(MessageCode.getMessage(VIS))
           } catch (abortEx: DBInterruptionException) {
@@ -515,13 +481,11 @@ object Commands : VConstants {
           }
         } catch (e: Error) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (e: RuntimeException) {
           try {
-            form.abortProtected(e)
           } catch (abortEx: RuntimeException) {
             throw VExecFailedException(abortEx)
           }
@@ -530,11 +494,11 @@ object Commands : VConstants {
     } catch (e: VException) {
       throw e
     }
-    if (b.getForm() is VDictionaryForm && (b.getForm() as VDictionaryForm).isRecursiveQuery()) {
-      b.getForm().reset()
+    if (b.form is VDictionaryForm && (b.form as VDictionaryForm).isRecursiveQuery) {
+      b.form.reset()
       return
     }
-    b.setMode(VConstants.MOD_QUERY)
+    b.mode = VConstants.MOD_QUERY
 
     // Fetch record (forward)
     try {
@@ -553,7 +517,7 @@ object Commands : VConstants {
     }
 
     // No more records
-    b.setMode(VConstants.MOD_QUERY)
+    b.mode = VConstants.MOD_QUERY
     b.clear()
   }
 
@@ -563,7 +527,7 @@ object Commands : VConstants {
    */
   fun insertLine(b: VBlock) {
     assert(b.isMulti()) { "The command InsertLine can be used only with a multi block." }
-    assert(b == b.getForm().getActiveBlock()) { b.getName().toString() + " is not the active block. (" + b.getForm().getActiveBlock()?.getName() + ")" }
+    assert(b == b.form.getActiveBlock()) { b.name.toString() + " is not the active block. (" + b.form.getActiveBlock()?.name + ")" }
     val recno: Int = b.activeRecord
 
     b.leaveRecord(true)
@@ -590,7 +554,7 @@ object Commands : VConstants {
               VlibProperties.getString("operator_le"),
               VlibProperties.getString("operator_ge"),
               VlibProperties.getString("operator_ne")
-      )).selectFromDialog(b.getForm(), f)
+      )).selectFromDialog(b.form, f)
       if (v != -1) {
         f.setSearchOperator(v)
         f.getForm().setFieldSearchOperator(f.getSearchOperator())
@@ -605,20 +569,20 @@ object Commands : VConstants {
   fun changeBlock(b: VBlock) {
     b.validate()
     Utils.freeMemory()
-    val blockCount: Int = b.getForm().getBlockCount()
+    val blockCount: Int = b.form.getBlockCount()
     val blockTable = arrayOfNulls<VBlock>(blockCount - 1)
     val titleTable = arrayOfNulls<String>(blockCount - 1)
     var otherBlocks = 0
 
     for (i in 0 until blockCount) {
-      if (b == b.getForm().getBlock(i)) {
+      if (b == b.form.getBlock(i)) {
         continue
       }
-      if (!b.getForm().getBlock(i).isAccessible()) {
+      if (!b.form.getBlock(i).isAccessible) {
         continue
       }
-      blockTable[otherBlocks] = b.getForm().getBlock(i)
-      titleTable[otherBlocks] = blockTable[otherBlocks]!!.getTitle()
+      blockTable[otherBlocks] = b.form.getBlock(i)
+      titleTable[otherBlocks] = blockTable[otherBlocks]!!.title
       otherBlocks += 1
     }
     val sel: Int
@@ -628,12 +592,12 @@ object Commands : VConstants {
       1 -> 0
       else -> VListDialog(VlibProperties.getString("pick_in_list"),
                           titleTable,
-                          otherBlocks).selectFromDialog(b.getForm(), null, null)
+                          otherBlocks).selectFromDialog(b.form, null, null)
     }
     if (sel < 0) {
-      b.getForm().gotoBlock(b)
+      b.form.gotoBlock(b)
     } else {
-      b.getForm().gotoBlock(blockTable[sel])
+      b.form.gotoBlock(blockTable[sel]!!)
     }
   }
 
@@ -647,7 +611,7 @@ object Commands : VConstants {
    */
   fun increment(field: VField) {
     if (field is VIntegerField) {
-      val r: Int = field.block.activeRecord
+      val r: Int = field.block!!.activeRecord
 
       field.requestFocus()
       field.validate()
@@ -664,7 +628,7 @@ object Commands : VConstants {
    */
   fun decrement(field: VField?) {
     if (field is VIntegerField) {
-      val r: Int = field.block.activeRecord
+      val r: Int = field.block!!.activeRecord
 
       field.requestFocus()
       field.validate()
