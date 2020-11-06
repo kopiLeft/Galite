@@ -22,6 +22,7 @@ plugins {
 
 val vaadinVersion = "17.0.0"
 val jdomVersion = "2.0.5"
+val karibuTestingVersion = "1.2.5"
 
 dependencies {
   implementation(project(":galite-core"))
@@ -40,13 +41,8 @@ dependencies {
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
-
-  // UI tests dependencies .
-  implementation("org.seleniumhq.selenium", "selenium-java", "3.141.59")
-  implementation("io.github.bonigarcia:webdrivermanager:4.0.0") {
-    exclude("org.jsoup", "jsoup")
-  }
-  implementation("io.github.sukgu:automation:0.0.13")
+  // UI tests dependencies
+  implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
 
   implementation("org.jdom", "jdom2", jdomVersion)
 }

@@ -19,9 +19,11 @@
 package org.kopi.galite.visual
 
 import kotlinx.coroutines.Runnable
+import kotlin.jvm.Throws
 
-abstract class Action(val name: String) : Runnable {
+abstract class Action @JvmOverloads constructor(val name: String? = null) : Runnable {
 
+ @Throws(VException::class)
   abstract fun execute()
 
   override fun run() {
@@ -42,4 +44,3 @@ abstract class Action(val name: String) : Runnable {
 
   override fun toString(): String = super.toString() + " " + name
 }
-

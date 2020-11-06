@@ -20,6 +20,7 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
+
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
@@ -64,6 +65,7 @@ open class Time : Type {
    * @param     format  the format. see SimpleDateFormat
    * @param     locale  the locale to use
    */
+  @JvmOverloads
   fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
 

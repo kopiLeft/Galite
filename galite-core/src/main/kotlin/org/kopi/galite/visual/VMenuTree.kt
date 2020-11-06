@@ -54,7 +54,7 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param groupName     the group name
  * @param loadFavorites should load favorites ?
  */
-class VMenuTree(ctxt: DBContext,
+class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
                 var isSuperUser: Boolean = false,
                 val menuTreeUser: String? = null,
                 private val groupName: String? = null,
@@ -64,7 +64,7 @@ class VMenuTree(ctxt: DBContext,
 
     private val SELECT_MODULES = Modules.slice(Modules.id, Modules.father, Modules.shortName,
             Modules.sourceName, Modules.objectName, Modules.priority, Modules.symbol).selectAll().
-            orderBy(Modules.priority to SortOrder.DESC)
+    orderBy(Modules.priority to SortOrder.DESC)
 
     const val CMD_QUIT = 0
     const val CMD_OPEN = 1
@@ -99,7 +99,7 @@ class VMenuTree(ctxt: DBContext,
   // --------------------------------------------------------------------
   var root: TreeNode? = null
     private set
-  private val actors = arrayOfNulls<VActor>(9)
+  private val treeActors = arrayOfNulls<VActor>(9)
   lateinit var moduleArray: Array<Module> // Sets the accessibility of the module
     private set
   private val items = mutableListOf<Module>()
@@ -118,7 +118,7 @@ class VMenuTree(ctxt: DBContext,
     createActor(CMD_UNFOLD, "Edit", "Unfold", "unfold", KeyEvent.VK_ENTER, 0)
     createActor(CMD_INFORMATION, "Help", "Information", null, 0, 0)
     createActor(CMD_HELP, "Help", "Help", "help", KeyEvent.VK_F1, 0)
-    setActors(actors.filterIsInstance<VActor>().toTypedArray())
+    addActors(actors.filterIsInstance<VActor>().toTypedArray())
     localizeActors(ApplicationContext.getDefaultLocale())
     createTree(isSuperUser || loadFavorites)
     localizeRootMenus(ApplicationContext.getDefaultLocale())
@@ -176,12 +176,12 @@ class VMenuTree(ctxt: DBContext,
                           key: Int,
                           modifier: Int) {
     actors[number] = VActor(menu,
-                            MENU_LOCALIZATION_RESOURCE,
-                            item,
-                            MENU_LOCALIZATION_RESOURCE,
-                            icon,
-                            key,
-                            modifier)
+            MENU_LOCALIZATION_RESOURCE,
+            item,
+            MENU_LOCALIZATION_RESOURCE,
+            icon,
+            key,
+            modifier)
     actors[number]!!.number = number
   }
 
@@ -294,13 +294,13 @@ class VMenuTree(ctxt: DBContext,
    */
   private fun createTopLevelTree() {
     root = DefaultMutableTreeNode(Module(0,
-                                         0,
-                                         VlibProperties.getString("PROGRAM"),
-                                         VlibProperties.getString("program"),
-                                         null,
-                                         Module.ACS_PARENT,
-                                         Int.MAX_VALUE,
-                                         null))
+            0,
+            VlibProperties.getString("PROGRAM"),
+            VlibProperties.getString("program"),
+            null,
+            Module.ACS_PARENT,
+            Int.MAX_VALUE,
+            null))
     for (menu in ROOT_MENUS) {
       if (!menu.isEmpty()) {
         (root as DefaultMutableTreeNode).add(menu.root as DefaultMutableTreeNode)
@@ -326,13 +326,13 @@ class VMenuTree(ctxt: DBContext,
         }
 
         val module = Module(it[Modules.id],
-                            it[Modules.father],
-                            it[Modules.shortName],
-                            it[Modules.sourceName],
-                            it[Modules.objectName],
-                            Module.ACS_PARENT,
-                            it[Modules.priority],
-                            icon)
+                it[Modules.father],
+                it[Modules.shortName],
+                it[Modules.sourceName],
+                it[Modules.objectName],
+                Module.ACS_PARENT,
+                it[Modules.priority],
+                icon)
 
         localModules.add(module)
         items.add(module)
@@ -524,12 +524,12 @@ class VMenuTree(ctxt: DBContext,
    */
   protected fun addLogoutModule(localModules: MutableList<Module>) {
     val logout = Module(Int.MAX_VALUE,
-                        USER_MENU,
-                        "logout",
-                        RootMenu.ROOT_MENU_LOCALIZATION_RESOURCE,
-                        LogoutModule::class.java.name,
-                        Module.ACS_TRUE, Int.MIN_VALUE,
-                        null)
+            USER_MENU,
+            "logout",
+            RootMenu.ROOT_MENU_LOCALIZATION_RESOURCE,
+            LogoutModule::class.java.name,
+            Module.ACS_TRUE, Int.MIN_VALUE,
+            null)
     items.add(logout)
     localModules.add(logout)
   }

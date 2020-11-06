@@ -40,7 +40,7 @@ import org.kopi.galite.visual.WindowController
 /**
  * A special window that display an html help
  */
-class VPreviewWindow : VWindow() {
+open class VPreviewWindow : VWindow() {
   companion object {
     private const val DEF_ZOOM_RATIO = 1.30f
     private const val PREVIEW_LOCALIZATION_RESOURCE = "org/kopi/galite/Preview"
@@ -282,7 +282,7 @@ class VPreviewWindow : VWindow() {
   }
 
   override fun getTitle(): String {
-    return windowTitle
+    return windowTitle!!
   }
 
   // ---------------------------------------------------------------------
@@ -305,7 +305,7 @@ class VPreviewWindow : VWindow() {
 
   init {
     setTitle(VlibProperties.getString("Preview"))
-    setActors(arrayOf<VActor>(
+    addActors(arrayOf<VActor>(
             VActor("File",
                     PREVIEW_LOCALIZATION_RESOURCE,
                     "Close",

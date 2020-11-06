@@ -18,11 +18,104 @@
 
 package org.kopi.galite.form
 
-class VFieldUI {
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.VCommand
+import java.io.Serializable
+
+open class VFieldUI(blockView: UBlock, model: VField) : VConstants, ActionHandler, Serializable {
   fun getModel(): VField = TODO()
   fun getDisplay(): UField = TODO()
   fun displayFieldError(message: String): Any = TODO()
   fun transferFocus(display: UField): Any = TODO()
   fun getBlock(): VBlock = TODO()
   fun fillField(): Boolean = TODO()
+
+  fun executeAction() {
+    TODO()
+  }
+
+  open fun hasAutofill(): Boolean {
+    TODO()
+  }
+
+  fun fireColorHasChanged(recno: Int) {
+    TODO()
+  }
+
+  fun fireAccessHasChanged(recno: Int) {
+    TODO()
+  }
+
+  fun getDetailDisplay(): UField {
+    TODO()
+  }
+
+  fun getDisplays(): Array<UField> {
+    TODO()
+  }
+
+  open fun getBlockView(): UBlock? {
+    TODO()
+  }
+
+  fun getLabel(): ULabel {
+    TODO()
+  }
+
+  fun getDetailLabel(): ULabel {
+    TODO()
+  }
+
+  // ----------------------------------------------------------------------
+  // DISPLAY UTILS
+  // ----------------------------------------------------------------------
+  fun scrollTo(toprec: Int) {
+    TODO()
+  }
+
+  fun previousEntry() {
+    TODO()
+  }
+
+  fun nextEntry() {
+    TODO()
+  }
+
+  fun resetCommands() {
+    TODO()
+  }
+
+  fun resetLabel() {
+    TODO()
+  }
+
+  fun hasAction(): Boolean {
+    TODO()
+  }
+
+  fun autofillButton() {
+    TODO()
+  }
+
+  override fun performAsyncAction(action: Action) {
+    TODO()
+  }
+
+  open fun getIncrementCommand(): VCommand {
+    TODO()
+  }
+
+  open fun getDecrementCommand(): VCommand {
+    TODO()
+  }
+
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun performAction(action: Action, block: Boolean) {
+    TODO("Not yet implemented")
+  }
+
 }
