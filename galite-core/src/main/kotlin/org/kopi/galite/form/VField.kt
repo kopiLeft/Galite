@@ -951,7 +951,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTime(r: Int, v: Time) {
+  open fun setTime(r: Int, v: Time?) {
     throw InconsistencyException()
   }
 
@@ -1209,7 +1209,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getTime(r: Int): Time {
+  open fun getTime(r: Int): Time {
     throw InconsistencyException()
   }
 
