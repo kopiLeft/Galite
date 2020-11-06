@@ -123,7 +123,7 @@ class DBSchema {
   object References : Table("REFERENZEN") {
     val table = varchar("TABELLE", 255)
     val column = varchar("SPALTE", 255)
-    val reference  = varchar("REFERENZ"  , 255)
+    val reference  = varchar("REFERENZ", 255)
     val action = char("AKTION", 1)
 
     override val primaryKey = PrimaryKey(table , column)
