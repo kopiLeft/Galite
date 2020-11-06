@@ -37,7 +37,7 @@ class VFieldException(val field: VField,
    */
   fun resetValue() {
     if (newValue != null) {
-      field.setObject(field.block.activeRecord, newValue)
+      field.setObject(field.block!!.activeRecord, newValue)
     }
   }
 }

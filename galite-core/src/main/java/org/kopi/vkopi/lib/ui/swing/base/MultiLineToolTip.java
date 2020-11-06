@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,23 +12,22 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * $Id: MultiLineToolTip.java 34961 2016-11-04 17:20:49Z hacheni $
  */
 
-package org.kopi.galite.tests.ui.base
+package org.kopi.vkopi.lib.ui.swing.base;
 
-import io.github.bonigarcia.wdm.WebDriverManager
+import javax.swing.JToolTip;
 
-import org.openqa.selenium.chrome.ChromeDriver
-
-/**
- * The high level class for all classes containing UI tests on Chrome
- */
-open class UIChromeTestBase : UITestBase() {
-  override val driver = ChromeDriver()
-
-  override fun setupTest() {
-    WebDriverManager.chromedriver().setup()
-    super.setupTest()
+public class MultiLineToolTip extends JToolTip {
+  
+public MultiLineToolTip() {
+    setUI(new MultiLineToolTipUI());
   }
+/**
+ * Comment for <code>serialVersionUID</code>
+ */
+ private static final long serialVersionUID = 3113464481131798390L;
 }

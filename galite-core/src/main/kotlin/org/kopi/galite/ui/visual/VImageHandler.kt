@@ -33,5 +33,4 @@ class VImageHandler : ImageHandler() {
   override fun getURL(image: String): String {
     TODO("Not yet implemented")
   }
-
 }

@@ -40,4 +40,11 @@ class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Bo
    * Returns the qualified name of the column (i.e. with correlation)
    */
   fun getQualifiedName(): String = "T$pos.$name"
+
+  /**
+   * Returns wether ther column is a key
+   */
+  fun isNullable(): Boolean {
+   TODO()
+  }
 }
