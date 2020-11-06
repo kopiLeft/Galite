@@ -28,7 +28,7 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VMonthColumn
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.NotNullMonth
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -40,14 +40,14 @@ class VMonthField : VField(7, 1) {
   /**
    * Returns true if this field implements "enumerateValue"
    */
-  fun hasNextPreviousEntry(): Boolean = true
+  override fun hasNextPreviousEntry(): Boolean = true
 
   /**
    * Just after loading, construct record
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls<Month>(2 * block.bufferSize)
+    value = arrayOfNulls<Month>(2 * block!!.bufferSize)
   }
 
   /**
@@ -60,7 +60,7 @@ class VMonthField : VField(7, 1) {
    */
   override fun getTypeName(): String = VlibProperties.getString("Month")
 
-  fun isNumeric(): Boolean = true
+  override fun isNumeric(): Boolean = true
 
   // ----------------------------------------------------------------------
   // Interface Display
@@ -89,7 +89,7 @@ class VMonthField : VField(7, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
+  override fun checkType(rec: Int, o: Any?) {
     val s = o as String
 
     if (s == "") {
@@ -148,7 +148,7 @@ class VMonthField : VField(7, 1) {
   /**
    * Sets the field value of given record to a month value.
    */
-  fun setMonth(r: Int, v: Month?) {
+  override fun setMonth(r: Int, v: Month?) {
     if (changedUI
         || value[r] == null && v != null
         || value[r] != null && value[r]!! != v) {
@@ -190,7 +190,7 @@ class VMonthField : VField(7, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  fun getMonth(r: Int): Month = getObject(r) as Month
+  override fun getMonth(r: Int): Month = getObject(r) as Month
 
   /**
    * Returns the field value of the current record as an object
@@ -262,7 +262,7 @@ class VMonthField : VField(7, 1) {
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
         && (oldValue != null && value[t] == null
             || oldValue == null && value[t] != null
             || oldValue != null && oldValue != value[t])) {
@@ -289,7 +289,7 @@ class VMonthField : VField(7, 1) {
 
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return if (list == null) {
-      setMonth(block.activeRecord, Month.now())
+      setMonth(block!!.activeRecord, Month.now())
       true
     } else {
       super.fillField(handler)
@@ -300,7 +300,7 @@ class VMonthField : VField(7, 1) {
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
-    val record: Int = block.activeRecord
+    val record: Int = block!!.activeRecord
 
     when {
       list != null -> {

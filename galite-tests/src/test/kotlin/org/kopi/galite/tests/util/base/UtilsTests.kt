@@ -32,15 +32,15 @@ class UtilsTests: TestBase() {
   @Test
   fun formatIntegerTest() {
     // case 1
-    var newFormat = utils.formatInteger(1, 20)
+    var newFormat = Utils.formatInteger(1, 20)
     assertEquals("00000000000000000001", newFormat)
 
     // case 2
-    newFormat = utils.formatInteger(100, 20)
+    newFormat = Utils.formatInteger(100, 20)
     assertEquals("00000000000000000100", newFormat)
 
     // case 3
-    newFormat = utils.formatInteger(1000, 2)
+    newFormat = Utils.formatInteger(1000, 2)
     assertEquals("1000", newFormat)
   }
 
@@ -53,12 +53,12 @@ class UtilsTests: TestBase() {
   @Test
   fun verifyAssertionTest() {
     // case 1: A very simple correct assertion
-    utils.verify(2 > 1, "2 must be greater than 1")
+    Utils.verify(2 > 1, "2 must be greater than 1")
 
     // case 2 : A false assertion
     val exception = assertFailsWith<InconsistencyException> {
       // A false assertion
-      utils.verify(1 > 2, "2 must be greater than 1")
+      Utils.verify(1 > 2, "2 must be greater than 1")
     }
     assertEquals("2 must be greater than 1", exception.message)
   }
@@ -69,31 +69,31 @@ class UtilsTests: TestBase() {
   @Test
   fun splitQualifiedNameTest() {
     // case 1
-    var split = utils.splitQualifiedName("abc/def/ghi")
+    var split = Utils.splitQualifiedName("abc/def/ghi")
     assertArraysEquals(arrayOf("abc/def", "ghi"), split)
 
     // case 2
-    split = utils.splitQualifiedName("ghi")
+    split = Utils.splitQualifiedName("ghi")
     assertArraysEquals(arrayOf("", "ghi"), split)
 
     // case 3
-    split = utils.splitQualifiedName("")
+    split = Utils.splitQualifiedName("")
     assertArraysEquals(arrayOf("", ""), split)
 
     // case 4
-    split = utils.splitQualifiedName("/def")
+    split = Utils.splitQualifiedName("/def")
     assertArraysEquals(arrayOf("", "def"), split)
 
     // case 5
-    split = utils.splitQualifiedName("def/")
+    split = Utils.splitQualifiedName("def/")
     assertArraysEquals(arrayOf("def", ""), split)
 
     // case 6
-    split = utils.splitQualifiedName("/")
+    split = Utils.splitQualifiedName("/")
     assertArraysEquals(arrayOf("", ""), split)
 
     // case 7
-    split = utils.splitQualifiedName("//")
+    split = Utils.splitQualifiedName("//")
     assertArraysEquals(arrayOf("/", ""), split)
   }
 
@@ -103,26 +103,23 @@ class UtilsTests: TestBase() {
   @Test
   fun subtringTest() {
     // case 1
-    var substring = utils.substring("abcdefghi", 0, 3)
+    var substring = Utils.substring("abcdefghi", 0, 3)
     assertEquals("abc", substring)
 
     // case 2
-    substring = utils.substring("abcdefghi", 1, 4)
+    substring = Utils.substring("abcdefghi", 1, 4)
     assertEquals("bcd", substring)
 
     // case 3
-    substring = utils.substring("abcdefghi", 0, 20)
+    substring = Utils.substring("abcdefghi", 0, 20)
     assertEquals("abcdefghi", substring)
 
     // case 4
-    substring = utils.substring("abcdefghi", 10, 11)
+    substring = Utils.substring("abcdefghi", 10, 11)
     assertEquals("", substring)
 
     // case 5
-    substring = utils.substring(null, 1, 11)
+    substring = Utils.substring(null, 1, 11)
     assertEquals("", substring)
   }
-
-  // Util instance to use in tests.
-  private val utils = Utils()
 }

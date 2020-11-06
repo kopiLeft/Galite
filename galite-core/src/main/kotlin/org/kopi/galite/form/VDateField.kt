@@ -27,7 +27,7 @@ import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -39,7 +39,7 @@ class VDateField : VField(10, 1) {
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
   /**
@@ -57,7 +57,7 @@ class VDateField : VField(10, 1) {
    */
   override fun getTypeName(): String = VlibProperties.getString("Date")
 
-  fun isNumeric(): Boolean = true
+  override fun isNumeric(): Boolean = true
 
   // ----------------------------------------------------------------------
   // Interface Display
@@ -89,8 +89,8 @@ class VDateField : VField(10, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any) {
-    val s = o as String
+  override fun checkType(rec: Int, o: Any?) {
+    val s = o as? String
 
     if (s == "") {
       setNull(rec)
@@ -99,7 +99,7 @@ class VDateField : VField(10, 1) {
     }
   }
 
-  private fun parseDate(rec: Int, s: String) {
+  private fun parseDate(rec: Int, s: String?) {
     var day = 0
     var month = 0
     var year = -2
@@ -161,7 +161,7 @@ class VDateField : VField(10, 1) {
   /**
    * Sets the field value of given record to a date value.
    */
-  fun setDate(r: Int, v: Date?) {
+  override fun setDate(r: Int, v: Date?) {
     if (changedUI
             || value[r] == null && v != null
             || value[r] != null && value[r]!! != v) {
@@ -179,7 +179,7 @@ class VDateField : VField(10, 1) {
    * Warning:	This method will become inaccessible to kopi users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setDate(r, v as Date?)
+    setDate(r, v as? Date)
   }
 
   /**
@@ -205,15 +205,15 @@ class VDateField : VField(10, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  fun getDate(r: Int): Date {
+  override fun getDate(r: Int): Date {
     return getObject(r) as Date
   }
 
   /**
    * Returns the field value of the current record as an object
    */
-  override fun getObjectImpl(r: Int): Any {
-    return value[r]!!
+  override fun getObjectImpl(r: Int): Any? {
+    return value[r]
   }
 
   override fun toText(o: Any?): String {
@@ -280,8 +280,8 @@ class VDateField : VField(10, 1) {
       Companion.toText(value[r]!!)
     }
   }
+/**
 
-  /**
    * Returns the SQL representation of field value of given record.
    */
   override fun getSqlImpl(r: Int): String {
@@ -298,7 +298,7 @@ class VDateField : VField(10, 1) {
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
             && (oldValue != null && value[t] == null
                     || oldValue == null && value[t] != null
                     || oldValue != null && oldValue != value[t])) {
@@ -347,7 +347,7 @@ class VDateField : VField(10, 1) {
    * @exception    org.kopi.galite.visual.VException    an exception may occur in gotoNextField
    */
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
-    val record = block.activeRecord
+    val record = block!!.activeRecord
 
     return if (list != null) {
       super.fillField(handler)
@@ -355,9 +355,9 @@ class VDateField : VField(10, 1) {
       var force = false
 
       force = try {
-        val oldText = getDisplayedValue(true) as String
+        val oldText = getDisplayedValue(true) as? String
         checkType(oldText)
-        val newText = getText(block.activeRecord)
+        val newText = getText(block!!.activeRecord)
         oldText == null || newText == null || newText == "" || oldText != newText
       } catch (e: Exception) {
         true
@@ -374,13 +374,13 @@ class VDateField : VField(10, 1) {
   /**
    * return true if this field implements "enumerateValue"
    */
-  fun hasNextPreviousEntry(): Boolean = true
+  override fun hasNextPreviousEntry(): Boolean = true
 
   /**
    * Checks that field value exists in list
    */
   override fun enumerateValue(desc: Boolean) {
-    val record = block.activeRecord
+    val record = block!!.activeRecord
 
     when {
       list != null -> {

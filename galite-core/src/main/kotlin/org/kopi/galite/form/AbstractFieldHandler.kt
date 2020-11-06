@@ -18,7 +18,7 @@
 
 package org.kopi.galite.form
 
-import org.kopi.galite.type.Utils
+import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.Module
@@ -95,7 +95,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
       }
       getModel().list != null && getModel().list!!.action != -1 -> {
         // NEW SYNTAX
-        getModel().block.executeObjectTrigger(getModel().list!!.action) as VDictionary
+        getModel().block!!.executeObjectTrigger(getModel().list!!.action) as VDictionary
       }
       else -> {
         null
@@ -131,7 +131,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
       throw VExecFailedException() // no message needed
     }
     getModel().setValueID(id)
-    getModel().block.gotoNextField()
+    getModel().block!!.gotoNextField()
     return true
   }
 }

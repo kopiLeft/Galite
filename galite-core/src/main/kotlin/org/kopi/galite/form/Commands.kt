@@ -18,5 +18,10 @@
 package org.kopi.galite.form
 
 object Commands {
-
+  fun quitForm(form: VForm, code: Int) {
+    TODO()
+  }
+  fun insertMode(b: VBlock) {
+    TODO()
+  }
 }

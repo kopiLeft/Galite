@@ -15,8 +15,31 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.util
 
-internal class FaxPrinter {
+/**
+ * Represents a Fax printer
+ */
+internal class FaxPrinter private constructor(private val faxHost: String,
+                                              var number: String,
+                                              private val user: String,
+                                              private val id: String)
+               : AbstractPrinter("FaxPrinter $number"), Printer {
 
+  // ----------------------------------------------------------------------
+  // PRINTING WITH AN INPUTSTREAM
+  // ----------------------------------------------------------------------
+
+  /**
+   * Print a file and return the output of the command
+   */
+  override fun print(printdata: PrintJob): String {
+    try {
+      Fax.fax(faxHost, printdata.inputStream, user, number, id)
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+    return "NYI"
+  }
 }
