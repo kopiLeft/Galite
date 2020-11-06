@@ -16,49 +16,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 package org.kopi.galite.util.ipp
 
-import java.io.IOException
-
 class RangeValue : IPPValue {
+
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
+
   constructor(lower: Int, upper: Int) {
     this.lower = lower
     this.upper = upper
   }
 
-  constructor(`is`: IPPInputStream) {
-    `is`.readShort() //value-length
-    lower = `is`.readInteger()
-    upper = `is`.readInteger()
-  }// value-length + value
+  constructor(inputStream: IPPInputStream) {
+    inputStream.readShort() //value-length
+    lower = inputStream.readInteger()
+    upper = inputStream.readInteger()
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
+
   override fun getSize(): Int = 2 + 8 // value-length + value
 
-  @Throws(IOException::class)
   override fun write(os: IPPOutputStream) {
     os.writeShort(8)
     os.writeInteger(lower)
     os.writeInteger(upper)
   }
 
-  override fun dump() {
-    println("\tlower : $lower\tupper : $upper")
-  }
+  override fun dump() { println("\tlower : $lower\tupper : $upper") }
 
-  override fun toString(): String {
-    return "<$lower, $upper>"
-  }
+  override fun toString(): String = "<$lower, $upper>"
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
+  
   private var lower: Int
   private var upper: Int
 }

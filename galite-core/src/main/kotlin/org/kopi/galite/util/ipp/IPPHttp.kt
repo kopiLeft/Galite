@@ -20,7 +20,7 @@ package org.kopi.galite.util.ipp
 
 class IPPHttp {
 
-  constructor(printerName: String?, request: IPP) {
+  constructor(printerName: String, request: IPP) {
     ippHeader = IPPHttpHeader(printerName, request.getSize())
     ipp = request
   }

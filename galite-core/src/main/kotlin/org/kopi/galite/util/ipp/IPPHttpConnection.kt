@@ -35,14 +35,20 @@ class IPPHttpConnection(private val url: URL) {
 
   fun sendRequest(request: IPP) {
     val httpRequest = IPPHttp(url.path, request)
+
     httpRequest.write(IPPOutputStream(os))
     os.flush()
   }
   
   fun receiveResponse(): IPP {
     val httpRequest = IPPHttp(IPPInputStream(inputStream))
+
     return httpRequest.ipp
   }
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
 
   private val connection: Socket
   private val os: OutputStream
@@ -51,6 +57,7 @@ class IPPHttpConnection(private val url: URL) {
   // --------------------------------------------------------------------
   // CONSTRUCTORS
   // --------------------------------------------------------------------
+
   init {
     if (IPP.Companion.DEBUG) {
       println("printURL : $url")

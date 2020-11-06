@@ -28,6 +28,7 @@ class IntegerValue(private var value: Int) : IPPValue() {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
+
   override fun getSize(): Int = 2 + 4 // value-length + value
 
   override fun write(os: IPPOutputStream) {

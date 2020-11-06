@@ -18,7 +18,38 @@
 
 package org.kopi.galite.util.ipp
 
-class IPP(ippInputStream: IPPInputStream) {
+class IPP() {
+
+  constructor(ippInputStream: IPPInputStream) {
+    var endAttributes = false
+    var groupTag = IPPConstants.TAG_ZERO.toByte()
+    var read: Byte
+
+    header = IPPHeader(ippInputStream)
+    attributes = mutableListOf()
+    data = ByteArray(0)
+
+    while (!endAttributes) {
+      read = ippInputStream.peekByte()
+      when {
+        read.toInt() == IPPConstants.TAG_END -> {
+          ippInputStream.readByte()
+          endAttributes = true
+        }
+        read < IPPConstants.TAG_UNSUPPORTED_VALUE -> {
+          // it is a new group tag
+          groupTag = ippInputStream.readByte()
+        }
+        else -> {
+          // new attribute
+          (attributes).add(IPPAttribute(ippInputStream, groupTag.toInt()))
+        }
+      }
+    }
+
+    data = ippInputStream.readArray()
+  }
+
 
   // --------------------------------------------------------------------
   // ACCESSORS
@@ -111,32 +142,8 @@ class IPP(ippInputStream: IPPInputStream) {
   }
 
   init {
-    var endAttributes = false
-    var groupTag = IPPConstants.TAG_ZERO.toByte()
-    var read: Byte
-
-    header = IPPHeader(ippInputStream)
+    header = IPPHeader()
     attributes = mutableListOf()
     data = ByteArray(0)
-
-    while (!endAttributes) {
-      read = ippInputStream.peekByte()
-      when {
-        read.toInt() == IPPConstants.TAG_END -> {
-          ippInputStream.readByte()
-          endAttributes = true
-        }
-        read < IPPConstants.TAG_UNSUPPORTED_VALUE -> {
-          // it is a new group tag
-          groupTag = ippInputStream.readByte()
-        }
-        else -> {
-          // new attribute
-          (attributes).add(IPPAttribute(ippInputStream, groupTag.toInt()))
-        }
-      }
-    }
-
-    data = ippInputStream.readArray()
   }
 }

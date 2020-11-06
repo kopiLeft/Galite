@@ -18,7 +18,14 @@
 
 package org.kopi.galite.util.ipp
 
-class IPPHeader(inputStream: IPPInputStream) {
+class IPPHeader() {
+
+  constructor(inputStream: IPPInputStream) {
+    majorVersion = inputStream.readByte()
+    minorVersion = inputStream.readByte()
+    operationID = inputStream.readShort()
+    requestID = inputStream.readInteger()
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
@@ -77,11 +84,4 @@ class IPPHeader(inputStream: IPPInputStream) {
   private var minorVersion: Byte = 1
   var operationID: Short = 0
   var requestID = 0
-
-  init {
-    majorVersion = inputStream.readByte()
-    minorVersion = inputStream.readByte()
-    operationID = inputStream.readShort()
-    requestID = inputStream.readInteger()
-  }
 }

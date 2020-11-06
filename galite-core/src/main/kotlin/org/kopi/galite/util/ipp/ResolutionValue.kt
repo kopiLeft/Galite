@@ -18,31 +18,30 @@
 
 package org.kopi.galite.util.ipp
 
-import java.io.IOException
-
 class ResolutionValue : IPPValue {
+
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
+
   constructor(units: Byte, xres: Int, yres: Int) {
     this.units = units
     this.xres = xres
     this.yres = yres
   }
 
-  constructor(`is`: IPPInputStream) {
-    `is`.readShort() //value-length
-    xres = `is`.readInteger()
-    yres = `is`.readInteger()
-    units = `is`.readByte()
-  }// value-length + value
+  constructor(inputStream: IPPInputStream) {
+    inputStream.readShort() //value-length
+    xres = inputStream.readInteger()
+    yres = inputStream.readInteger()
+    units = inputStream.readByte()
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
   override fun getSize(): Int = 2 + 9 // value-length + value
 
-  @Throws(IOException::class)
   override fun write(os: IPPOutputStream) {
     os.writeShort(9)
     os.writeInteger(xres)
@@ -59,6 +58,7 @@ class ResolutionValue : IPPValue {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
+
   private var units: Byte
   private var xres: Int
   private var yres: Int

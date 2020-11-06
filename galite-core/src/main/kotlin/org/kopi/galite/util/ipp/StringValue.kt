@@ -18,8 +18,6 @@
 
 package org.kopi.galite.util.ipp
 
-import java.io.IOException
-
 class StringValue : IPPValue {
 
   // --------------------------------------------------------------------
@@ -30,10 +28,11 @@ class StringValue : IPPValue {
     this.value = value
   }
 
-  constructor(`is`: IPPInputStream) {
-    val n = `is`.readShort().toInt() //value-length
-    value = `is`.readString(n) //value
-  }// value-length + value
+  constructor(inputStream: IPPInputStream) {
+    val n = inputStream.readShort().toInt() //value-length
+
+    value = inputStream.readString(n) //value
+  }
 
   // --------------------------------------------------------------------
   // ACCESSORS
@@ -46,17 +45,14 @@ class StringValue : IPPValue {
     os.writeString(value)
   }
 
-  override fun dump() {
-    println("\tString : $value")
-  }
+  override fun dump() { println("\tString : $value") }
 
-  override fun toString(): String {
-    return value
-  }
+  override fun toString(): String = value
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
+
   var value: String
     private set
 }

@@ -20,7 +20,7 @@ package org.kopi.galite.util.ipp
 
 import java.io.IOException
 
-class IPPHttpHeader(printerName: String, contentLength: Int) {
+class IPPHttpHeader(private var name : String, private var size : Int) {
 
   constructor(inputStream: IPPInputStream) {
     var line = inputStream.readLine()
@@ -55,13 +55,6 @@ class IPPHttpHeader(printerName: String, contentLength: Int) {
     os.writeString("\r\n")
   }
 
-  private var name: String? = null
-  private var size = 0
-  
-  init {
-    name = printerName
-    size = contentLength
-  }
   companion object {
     private const val HTTP_OK = 200
   }

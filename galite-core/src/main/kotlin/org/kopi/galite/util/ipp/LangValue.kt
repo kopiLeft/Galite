@@ -20,42 +20,37 @@ package org.kopi.galite.util.ipp
 
 class LangValue : IPPValue {
 
- constructor(charset: String?, value: String) {
+ constructor(charset: String, value: String) {
     this.charset = charset
     this.value = value
   }
 
-  constructor(`is`: IPPInputStream) {
-    var n: Int
-    `is`.readShort() //value-length
-    n = `is`.readShort().toInt()
-    charset = `is`.readString(n)
-    n = `is`.readShort().toInt()
-    value = `is`.readString(n)
+  constructor(inputStream: IPPInputStream) {
+    inputStream.readShort() //value-length
+    var n = inputStream.readShort().toInt()
+    charset = inputStream.readString(n)
+    n = inputStream.readShort().toInt()
+    value = inputStream.readString(n)
   }
 
-  override fun getSize(): Int = 6 + charset!!.length + value.length
+  override fun getSize(): Int = 6 + charset.length + value.length
 
   override fun write(os: IPPOutputStream) {
-    os.writeShort(4 + value.length + charset!!.length)
-    os.writeShort(charset!!.length)
+    os.writeShort(4 + value.length + charset.length)
+    os.writeShort(charset.length)
     os.writeString(charset)
     os.writeShort(value.length)
     os.writeString(value)
   }
 
-  override fun dump() {
-    println("\tcharset : $charset\tvalue : $value")
-  }
+  override fun dump() {println("\tcharset : $charset\tvalue : $value") }
 
-  override fun toString(): String {
-    return value
-  }
+  override fun toString(): String = value
 
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
 
-  private var charset: String?
+  private var charset: String
   private var value: String
 }

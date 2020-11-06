@@ -31,17 +31,19 @@ class IPPInputStream(private val inputStream: InputStream) {
   // --------------------------------------------------------------------
 
   fun peekByte(): Byte {
-    val read: Int
     verify()
+
     inputStream.mark(1)
-    read = read()
+    val read = read()
     inputStream.reset()
     return read.toByte()
   }
 
   fun peekShortAfterFirstByte(): Short {
     var i = 0
+
     verify()
+
     inputStream.mark(3)
     read()
     i = i or (read() shl 8)
@@ -50,12 +52,11 @@ class IPPInputStream(private val inputStream: InputStream) {
     return i.toShort()
   }
 
-  fun readByte(): Byte {
-    return read().toByte()
-  }
+  fun readByte(): Byte = read().toByte()
 
   fun readShort(): Short {
     var i: Short = 0
+
     i = i or (read() shl 8).toShort()
     i = i or read().toShort()
     return i
@@ -63,16 +64,19 @@ class IPPInputStream(private val inputStream: InputStream) {
 
   fun readInteger(): Int {
     var i = 0
+
     i = i or (read() shl 24)
     i = i or (read() shl 16)
     i = i or (read() shl 8)
     i = i or read()
+
     return i
   }
 
   fun readString(length: Int): String {
     val buf = ByteArray(length)
     var nread = 0
+
     nread = inputStream.read(buf, 0, length)
     if (nread != length) {
       throw IOException("Error reading socket: unexpected end of transmission")
@@ -84,6 +88,7 @@ class IPPInputStream(private val inputStream: InputStream) {
     val sb = StringBuffer()
     var c: Int
     var end = false
+
     while (!end) {
       c = read()
       if (c == -1 || c == '\n'.toInt()) {
@@ -92,6 +97,7 @@ class IPPInputStream(private val inputStream: InputStream) {
         sb.append(c.toChar())
       }
     }
+
     return sb.toString()
   }
 
@@ -99,9 +105,11 @@ class IPPInputStream(private val inputStream: InputStream) {
     val buf = ByteArray(1024)
     val outputStream = ByteArrayOutputStream()
     var nread = 0
+
     while (inputStream.read(buf).also { nread = it } > 0) {
       outputStream.write(buf, 0, nread)
     }
+
     return outputStream.toByteArray()
   }
 
@@ -111,6 +119,7 @@ class IPPInputStream(private val inputStream: InputStream) {
 
   private fun read(): Int {
     val c = inputStream.read()
+
     if (c == -1) {
       throw IOException("Error reading socket: unexpected end of transmission")
     }

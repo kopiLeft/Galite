@@ -18,24 +18,23 @@
 
 package org.kopi.galite.util.ipp
 
-import java.io.IOException
 import java.io.OutputStream
 import java.nio.charset.Charset
 
-class IPPOutputStream(private val os: OutputStream) { // --------------------------------------------------------------------
+class IPPOutputStream(private val os: OutputStream) {
+
+  // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
   fun writeByte(b: Int) {
     os.write((b and 0xff))
   }
 
-  @Throws(IOException::class)
   fun writeShort(s: Int) {
     os.write((s and 0xff00 shr 8))
     os.write((s and 0xff))
   }
 
-  @Throws(IOException::class)
   fun writeInteger(i: Int) {
     os.write((i and -0x1000000 shr 24))
     os.write((i and 0xff0000 shr 16))
@@ -43,11 +42,11 @@ class IPPOutputStream(private val os: OutputStream) { // -----------------------
     os.write((i and 0xff))
   }
 
-  fun writeString(s: String?) {
+  fun writeString(s: String) {
     val charset = Charset.forName("iso-8859-1")
     val byteBuffer = charset.encode(s)
-    for (element in s!!) {
-      os.write(element.toInt())
+    for (i in 0 until s.length) {
+      os.write(byteBuffer[i].toInt())
     }
   }
 
