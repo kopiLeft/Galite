@@ -36,7 +36,7 @@ import org.kopi.galite.visual.VExecFailedException
  * @param model     The field model.
  * @param index     The row controller index.
  */
-abstract class VFieldUI protected constructor(val blockView: UBlock,
+abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBlock,
                                               val model: VField,
                                               val index: Int = 0)
   : VConstants, ActionHandler, Serializable {
@@ -71,7 +71,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * @param detail Creates the label for the detail mode ?
    * @return The created [ULabel].
    */
-  protected abstract fun createLabel(text: String, help: String, detail: Boolean): ULabel
+  protected abstract fun createLabel(text: String?, help: String?, detail: Boolean): ULabel
 
   /**
    * Creates a [UChartLabel] for this row controller.
@@ -82,7 +82,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * @param model The chart label sort model.
    * @return The created [UChartLabel]
    */
-  protected abstract fun createChartHeaderLabel(text: String, help: String, index: Int, model: OrderModel): UChartLabel
+  protected abstract fun createChartHeaderLabel(text: String?, help: String?, index: Int, model: OrderModel): UChartLabel
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
@@ -174,14 +174,14 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
         activeCommands.add(command)
         command.setEnabled(true)
       }
-      val localCommands = model.getCommand()
+      val localCommands = model.command
       localCommands?.forEachIndexed { index, localCommand ->
-        if (localCommand.isActive(getBlock().getMode())) {
+        if (localCommand.isActive(getBlock().mode)) {
           val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS,
-                          getBlock().fields.size + getBlock().commands.size + index + 1)) {
+                          getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
             try {
               (getBlock().callTrigger(VConstants.TRG_CMDACCESS,
-                      getBlock().fields.size + getBlock().commands.size + index + 1) as Boolean)
+                      getBlock().fields.size + getBlock().commands!!.size + index + 1) as Boolean)
             } catch (e: VException) {
               // consider that the command is active of any error occurs
               true
@@ -199,10 +199,10 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
       }
     }
     // 20021022 laurent : do the same for increment and decrement buttons ?
-    if (model.getAccess(model.block.activeRecord) > VConstants.ACS_SKIPPED &&
+    if (model.getAccess(model.block!!.activeRecord) > VConstants.ACS_SKIPPED &&
             hasAutofillCommand() &&
-            !model.block.isChart() && display != null && display!!.getAutofillButton() != null) {
-      display!!.getAutofillButton().setEnabled(autofillCommand!!.isActive(model.block.getMode()))
+            !model.block!!.isChart() && display != null && display!!.getAutofillButton() != null) {
+      display!!.getAutofillButton().setEnabled(autofillCommand!!.isActive(model.block!!.mode))
     }
   }
 
@@ -244,10 +244,10 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    */
   fun resetLabel() {
     if (dl != null) {
-      dl!!.init(model.label, model.getToolTip())
+      dl!!.init(model.label, model.toolTip)
     }
     if (dlDetail != null) {
-      dl!!.init(model.label, model.getToolTip())
+      dl!!.init(model.label, model.toolTip)
     }
   }
 
@@ -357,9 +357,9 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
     // building
     dl = if (model.isSortable()) {
       // !!! override dl ist not good
-      createChartHeaderLabel(model.label, model.getToolTip(), getBlock().getFieldIndex(model), getBlock().orderModel)
+      createChartHeaderLabel(model.label, model.toolTip, getBlock().getFieldIndex(model), getBlock().orderModel)
     } else {
-      createLabel(model.label, model.getToolTip(), false)
+      createLabel(model.label, model.toolTip, false)
     }
     if (!model.isInternal()) {
       // no hidden field (in all modes):
@@ -387,14 +387,14 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
         }
         if (!getBlock().noDetail() && !model.noDetail()) {
           // create the second label for the detail view
-          dlDetail = createLabel(model.label, model.getToolTip(), true)
+          dlDetail = createLabel(model.label, model.toolTip, true)
           if (columnEnd >= 0) {
-            (getBlock().getDisplay() as UMultiBlock).addToDetail(dlDetail,
+            (getBlock().display as UMultiBlock).addToDetail(dlDetail,
                     Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
           }
           // field for the value in the detail view
           detailDisplay = createDisplay(dlDetail, model, true)
-          (getBlock().getDisplay() as UMultiBlock).addToDetail(detailDisplay,
+          (getBlock().display as UMultiBlock).addToDetail(detailDisplay,
                   Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, (lineEnd - line) * 2 + 1, false))
           detailDisplay.setPosition(0)
           detailDisplay.setInDetail(true)
@@ -450,7 +450,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
    * Returns the displayed size of this column.
    * @return the displayed size of this column.
    */
-  protected open fun getDisplaySize(): Int = getBlock().getDisplaySize()
+  protected open fun getDisplaySize(): Int = getBlock().displaySize
 
 
   val display: UField?
@@ -477,7 +477,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
 
     // go to the correct block if necessary
     if (getBlock() != model.getForm().getActiveBlock()) {
-      if (!getBlock().isAccessible()) {
+      if (!getBlock().isAccessible) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00025"))
       }
       model.getForm().gotoBlock(getBlock())
@@ -620,7 +620,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
   /**
    * return the block of the model
    */
-  fun getBlock(): VBlock = model.block
+  fun getBlock(): VBlock = model.block!!
 
   /**
    * Called when the display is created for this row controller.
@@ -690,7 +690,7 @@ abstract class VFieldUI protected constructor(val blockView: UBlock,
       columnEnd = pos.columnEnd
       chartPos = pos.chartPos
     }
-    val cmd = model.getCommand()
+    val cmd = model.command
 
     cmd?.forEach {
       val commandText = it.getIdent()

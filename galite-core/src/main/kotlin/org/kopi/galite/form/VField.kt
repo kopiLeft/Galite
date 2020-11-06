@@ -20,7 +20,6 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
-import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
@@ -38,20 +37,16 @@ import org.kopi.galite.type.Fixed
 import org.kopi.galite.type.Week
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Timestamp
-import org.kopi.galite.db.Utils
 import org.kopi.galite.type.Date
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -102,7 +97,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       this.align = VConstants.ALG_RIGHT
     }
     position = pos
-    cmd = commands
+    command = commands
     this.alias = alias
     alias.addFieldChangeListener(object : FieldChangeListener {
       override fun labelChanged() {}
@@ -1752,7 +1747,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
-  protected fun selectFromList(gotoNextField: Boolean) {
+  internal fun selectFromList(gotoNextField: Boolean) {
     val qrybuf =  buildString{
       append("SELECT ")
       for (i in 0 until list!!.columnCount()) {
@@ -1799,7 +1794,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
-  protected open fun enumerateValue(desc: Boolean) {
+  internal open fun enumerateValue(desc: Boolean) {
     TODO()
     /*var value: Any? = null
     val qrybuf: String = " SELECT " + list!!.getColumn(0).column +
@@ -2017,7 +2012,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
         helpOnType(help)
-        help.helpOnFieldCommand(cmd)
+        help.helpOnFieldCommand(command)
       }
     }
   }
@@ -2438,7 +2433,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   var position: VPosition? = null
     private set
 
-  lateinit var cmd: Array<VCommand>
+  lateinit var command: Array<VCommand>
 
   private lateinit var foreground: Array<VColor?> // foreground colors for this field.
 
