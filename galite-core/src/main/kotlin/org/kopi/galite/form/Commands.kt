@@ -120,7 +120,7 @@ object Commands : VConstants {
       form.isMenuQuery = true
     }
 
-    val id = b.singleMenuQuery(false) as Int
+    val id = b.singleMenuQuery(false)
 
     if (id != -1) {
       while (true) {
@@ -169,7 +169,7 @@ object Commands : VConstants {
     b.validate()
     form.saveFilledField()
 
-    val id = b.singleMenuQuery(false) as Int
+    val id = b.singleMenuQuery(false)
 
     if (id != -1) {
       while (true) {
@@ -220,7 +220,7 @@ object Commands : VConstants {
 
     b.validate()
 
-    val id = b.singleMenuQuery(false) as Int
+    val id = b.singleMenuQuery(false)
 
     if (id != -1) {
       try {
