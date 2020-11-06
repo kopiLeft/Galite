@@ -34,8 +34,6 @@ import org.kopi.galite.util.base.InconsistencyException
 object VDatabaseUtils {
 
   fun checkForeignKeys(context: DBContextHandler, id: Int, table: String) {
-    Database.connect(context.getDBContext()!!.defaultConnection.url).useNestedTransactions
-
     transaction {
 
       val query1 = References.slice(References.table, References.column, References.action)
