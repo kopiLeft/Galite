@@ -284,8 +284,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       // for simple blocks
       return
     }
-    for (field in fields!!) {
-      if (!field!!.isInternal()) {
+    for (field in fields) {
+      if (!field.isInternal()) {
         field.setColor(r, foreground, background)
       }
     }
@@ -301,8 +301,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       // for simple blocks
       return
     }
-    for (field in fields!!) {
-      if (!field!!.isInternal()) {
+    for (field in fields) {
+      if (!field.isInternal()) {
         field.resetColor(r)
       }
     }
@@ -318,8 +318,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       // for simple blocks
       return
     }
-    for (field in fields!!) {
-      if (!field!!.isInternal()) {
+    for (field in fields) {
+      if (!field.isInternal()) {
         if (isRecordFilled(r)) {
           field.updateColor(r)
         } else {
@@ -369,7 +369,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
                         hi: Int,
                         scratch: IntArray) {
     // a one-element array is always sorted
-    val field: VField? = fields!![column]
+    val field: VField? = fields[column]
     if (lo < hi) {
       val mid = (lo + hi) / 2
 
@@ -793,14 +793,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     activeField!!.leave(true)
 
     var i = 0
-    while (target == null && i < fields!!.size) {
+    while (target == null && i < fields.size) {
       index += 1
-      if (index == fields!!.size) {
+      if (index == fields.size) {
         index = 0
       }
-      if (!fields!![index]!!.hasAction() && fields!![index]!!.getAccess(activeRecord) >= ACS_VISIT && (detailMode && !fields!![index]!!.noDetail()
-                      || !detailMode && !fields!![index]!!.noChart())) {
-        target = fields!![index]
+      if (!fields[index].hasAction() && fields[index].getAccess(activeRecord) >= ACS_VISIT && (detailMode && !fields[index].noDetail()
+                      || !detailMode && !fields[index].noChart())) {
+        target = fields[index]
       }
       i += 1
     }
@@ -825,14 +825,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     activeField!!.leave(true)
 
     var i = 0
-    while (target == null && i < fields!!.size) {
+    while (target == null && i < fields.size) {
       if (index == 0) {
-        index = fields!!.size
+        index = fields.size
       }
       index -= 1
-      if (!fields!![index]!!.hasAction() && fields!![index]!!.getAccess(activeRecord) >= ACS_VISIT && (detailMode && !fields!![index]!!.noDetail()
-                      || !detailMode && !fields!![index]!!.noChart())) {
-        target = fields!![index]
+      if (!fields[index].hasAction() && fields[index].getAccess(activeRecord) >= ACS_VISIT && (detailMode && !fields[index].noDetail()
+                      || !detailMode && !fields[index].noChart())) {
+        target = fields[index]
       }
       i += 1
     }
@@ -857,9 +857,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var target: VField? = null
     var i = 0
 
-    while (target == null && i < fields!!.size) {
-      if (!fields!![i]!!.hasAction() && fields!![i]!!.getAccess(activeRecord) >= ACS_VISIT) {
-        target = fields!![i]
+    while (target == null && i < fields.size) {
+      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= ACS_VISIT) {
+        target = fields[i]
       }
       i += 1
     }
@@ -881,11 +881,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var target: VField? = null
     var i = 0
 
-    while (target == null && i < fields!!.size) {
-      if (!fields!![i]!!.hasAction()
-              && fields!![i]!!.getAccess(activeRecord) >= ACS_VISIT
-              && fields!![i]!!.isNull(activeRecord)) {
-        target = fields!![i]
+    while (target == null && i < fields.size) {
+      if (!fields[i].hasAction()
+              && fields[i].getAccess(activeRecord) >= ACS_VISIT
+              && fields[i].isNull(activeRecord)) {
+        target = fields[i]
       }
       i += 1
     }
@@ -914,25 +914,25 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // found field
     var i: Int = 0
-    while (i < fields!!.size && fields!![i] !== current) {
+    while (i < fields.size && fields[i] !== current) {
       i += 1
     }
-    assert(i < fields!!.size) { "i: " + i + "  fields!!.length" + fields!!.size }
+    assert(i < fields.size) { "i: " + i + "  fields.length" + fields.size }
     i += 1
 
     // walk next to next
-    while (target == null && i < fields!!.size) {
-      if (!fields!![i]!!.hasAction() && fields!![i]!!.getAccess(activeRecord) == ACS_MUSTFILL && fields!![i]!!.isNull(activeRecord)) {
-        target = fields!![i]
+    while (target == null && i < fields.size) {
+      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) == ACS_MUSTFILL && fields[i].isNull(activeRecord)) {
+        target = fields[i]
       }
       i += 1
     }
 
     // redo from start
     i = 0
-    while (target == null && i < fields!!.size) {
-      if (!fields!![i]!!.hasAction() && fields!![i]!!.getAccess(activeRecord) == ACS_MUSTFILL && fields!![i]!!.isNull(activeRecord)) {
-        target = fields!![i]
+    while (target == null && i < fields.size) {
+      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) == ACS_MUSTFILL && fields[i].isNull(activeRecord)) {
+        target = fields[i]
       }
       i += 1
     }
@@ -951,11 +951,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     activeField?.leave(true)
 
     var target: VField? = null
-    var i = fields!!.size - 1
+    var i = fields.size - 1
 
     while (i >= 0) {
-      if (!fields!![i]!!.hasAction() && fields!![i]!!.getAccess(activeRecord) >= ACS_VISIT) {
-        target = fields!![i]
+      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= ACS_VISIT) {
+        target = fields[i]
       }
       i -= 1
     }
@@ -1100,14 +1100,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
           if (isRecordChanged(i)) {
             j = 0
-            while (j < fields!!.size) {
-              val fld: VField? = fields!![j]
+            while (j < fields.size) {
+              val fld: VField? = fields[j]
               if (fld!!.getAccess(activeRecord) >= ACS_VISIT && !fld.isNull(i)) {
                 break
               }
               j++
             }
-            if (j == fields!!.size && !noDelete()) {
+            if (j == fields.size && !noDelete()) {
               if (!isRecordFetched(i)) {
                 setRecordChanged(i, false)
               } else {
@@ -1259,8 +1259,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Checks that all mustfill fields are filled.
    */
   protected fun checkMustfillFields() {
-    for (i in fields!!.indices) {
-      val fld: VField? = fields!![i]
+    for (i in fields.indices) {
+      val fld: VField? = fields[i]
       if (fld!!.getAccess(activeRecord) == ACS_MUSTFILL && fld.isNull(activeRecord)) {
         // !!! lackner 04.10.2003 I don't know if it is really necessary here
         fireBlockChanged()
@@ -1293,8 +1293,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
       }
     }
-    for (i in fields!!.indices) {
-      fields!![i]!!.setSearchOperator(SOP_EQ)
+    for (i in fields.indices) {
+      fields[i].setSearchOperator(SOP_EQ)
     }
     if (!noChart() && detailMode) {
       detailMode = false
@@ -1325,8 +1325,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
     for (i in 0 until bufferSize) {
       activeRecord = i // also valid for single blocks
-      for (j in fields!!.indices) {
-        fields!![j]!!.setDefault()
+      for (j in fields.indices) {
+        fields[j].setDefault()
       }
       setRecordChanged(i, false)
     }
@@ -1341,8 +1341,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun setAccess(value: Int) {
     assert(this !== form.getActiveBlock() || activeField == null) { "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField }
-    for (i in fields!!.indices) {
-      fields!![i]!!.setAccess(value)
+    for (i in fields.indices) {
+      fields[i].setAccess(value)
     }
   }
 
@@ -1379,8 +1379,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // don't update access
     ignoreAccessChange = true
-    for (i in fields!!.indices) {
-      fields!![i]!!.clear(recno)
+    for (i in fields.indices) {
+      fields[i].clear(recno)
     }
     setRecordFetched(recno, false)
     setRecordChanged(recno, false)
@@ -1597,10 +1597,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @return    the field if found, otherwise null
    */
   protected fun getBaseTableField(field: String): VField? {
-    for (i in fields!!.indices) {
-      val column: String? = fields!![i]!!.lookupColumn(0)
+    for (i in fields.indices) {
+      val column: String? = fields[i].lookupColumn(0)
       if (column != null && column == field) {
-        return fields!![i]
+        return fields[i]
       }
     }
     return null
@@ -1614,8 +1614,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     result = null
 
     // take all visible fields with database access
-    for (i in fields!!.indices) {
-      val fld: VField? = fields!![i]
+    for (i in fields.indices) {
+      val fld: VField? = fields[i]
 
       // image fields cannot be handled in a report.
       if (fld !is VImageField
@@ -1631,8 +1631,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     // add ID field AT END if it exists and not already taken
-    for (i in fields!!.indices) {
-      val fld: VField? = fields!![i]
+    for (i in fields.indices) {
+      val fld: VField? = fields[i]
 
       //!!! graf 20080329: should we replace fld!!.name.equals("ID") by fld == getIdField() ?
       if (fld!!.isInternal() && fld.name.equals(idField.name) && fld.getColumnCount() > 0) {
@@ -1654,8 +1654,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun getSearchColumns(): String? {
     var result: String? = null
 
-    for (i in fields!!.indices) {
-      val fld: VField? = fields!![i]
+    for (i in fields.indices) {
+      val fld: VField? = fields[i]
       if (fld!!.getColumnCount() > 0) {
         if (result == null) {
           result = ""
@@ -1681,8 +1681,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Tests whether the specified table has nullable columns.
    */
   fun hasNullableColumns(table: Int): Boolean {
-    for (i in fields!!.indices) {
-      val fld: VField? = fields!![i]
+    for (i in fields.indices) {
+      val fld: VField? = fields[i]
 
       if (fld!!.fetchColumn(table) != -1 && fld.isInternal()
               && fld.getColumn(fld.fetchColumn(table))!!.nullable) {
@@ -1693,11 +1693,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
-   * Tests whether this table has only internal fields!!.
+   * Tests whether this table has only internal fields.
    */
   fun hasOnlyInternalFields(table: Int): Boolean {
-    for (i in fields!!.indices) {
-      val fld: VField? = fields!![i]
+    for (i in fields.indices) {
+      val fld: VField? = fields[i]
 
       if (fld!!.fetchColumn(table) != -1 && !fld.isInternal()) {
         return false
@@ -1922,8 +1922,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Returns the current block access.
    */
   fun getAccess(): Int {
-    for (i in fields!!.indices) {
-      if (fields!![i]!!.getAccess(activeRecord) >= ACS_VISIT) {
+    for (i in fields.indices) {
+      if (fields[i].getAccess(activeRecord) >= ACS_VISIT) {
         return ACS_VISIT
       }
     }
@@ -1937,11 +1937,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   @JvmOverloads
   fun updateAccess(record: Int = activeRecord) {
-    for (i in fields!!.indices) {
-      if (!fields!![i]!!.isInternal()) {
+    for (i in fields.indices) {
+      if (!fields[i].isInternal()) {
         // internal fields are always hidden
         // no need for an update
-        fields!![i]!!.updateAccess(record)
+        fields[i].updateAccess(record)
       }
     }
   }
@@ -2091,8 +2091,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       trailRecord(to)
     }
     recordInfo[to] = recordInfo[from]
-    for (i in fields!!.indices) {
-      fields!![i]!!.copyRecord(from, to)
+    for (i in fields.indices) {
+      fields[i].copyRecord(from, to)
     }
   }
 
@@ -2105,12 +2105,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   fun initIntern() {
-    for (i in fields!!.indices) {
-      fields!![i]!!.block = this
+    for (i in fields.indices) {
+      fields[i].block = this
     }
     build()
-    for (i in fields!!.indices) {
-      fields!![i]!!.build()
+    for (i in fields.indices) {
+      fields[i].build()
     }
   }
   // ----------------------------------------------------------------------
@@ -2136,7 +2136,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * nb field on this block
    */
-  fun getFieldCount(): Int = fields!!.size
+  fun getFieldCount(): Int = fields.size
 
   /**
    * Returns a field from its name
@@ -2145,7 +2145,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @return the field or null if no field with that name has been found
    */
   fun getField(name: String?): VField? {
-    return fields!!.find { name == it!!.name }
+    return fields.find { name == it.name }
   }
 
   fun getFieldID(): VField? {
@@ -2156,8 +2156,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Returns the index of field in block
    */
   fun getFieldIndex(fld: VField?): Int {
-    for (i in fields!!.indices) {
-      if (fld == fields!![i]) {
+    for (i in fields.indices) {
+      if (fld == fields[i]) {
         return i
       }
     }
@@ -2284,9 +2284,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // look command access only when the command
           // is active for the block mode.
           if (commands!![i].isActive(mode)) {
-            val active: Boolean = if (hasTrigger(TRG_CMDACCESS, fields!!.size + i + 1)) {
+            val active: Boolean = if (hasTrigger(TRG_CMDACCESS, fields.size + i + 1)) {
               try {
-                (callTrigger(TRG_CMDACCESS, fields!!.size + i + 1) as Boolean)
+                (callTrigger(TRG_CMDACCESS, fields.size + i + 1) as Boolean)
               } catch (e: VException) {
                 // consider that the command is active of any error occurs
                 true
@@ -2402,13 +2402,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun hasTrigger(event: Int, index: Int): Boolean = VKT_Triggers[index][event] != 0
 
   /*
-   * Clears all hidden lookup fields!!.
+   * Clears all hidden lookup fields.
    */
   protected fun clearLookups(recno: Int) {
     if (tables != null) {
       for (i in 1 until tables!!.size) {
-        for (j in fields!!.indices) {
-          val fld: VField? = fields!![j]
+        for (j in fields.indices) {
+          val fld: VField? = fields[j]
 
           if (fld!!.isInternal() && fld.lookupColumn(i) != null && fld.eraseOnLookup()) {
             fld.setNull(recno)
@@ -2760,7 +2760,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
                        this.help,
                        commands,
                        fields,
-                       form.blocks!!.size == 1)
+                       form.blocks.size == 1)
     }
   }
 
@@ -2793,9 +2793,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
     var count = 1
 
-    for (i in fields!!.indices) {
-      if (fields!![i]!!.getDefaultAccess() != ACS_HIDDEN) {
-        fields!![i]!!.prepareSnapshot(count++, active)
+    for (i in fields.indices) {
+      if (fields[i].getDefaultAccess() != ACS_HIDDEN) {
+        fields[i].prepareSnapshot(count++, active)
       }
     }
   }
@@ -2841,9 +2841,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         append("\n")
         append("CURRENT RECORD:\n")
         if (fields != null) {
-          for (i in fields!!.indices) {
-            if (fields!![i] != null) {
-              append(fields!![i]!!.toString())
+          for (i in fields.indices) {
+            if (fields[i] != null) {
+              append(fields[i].toString())
             } else {
               append("Field ")
               append(i)
@@ -2913,7 +2913,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   // dynamic data
   var activeRecord = 0 // current record
     get() {
-      return if (field >= 0 && field < bufferSize) field else -1
+      return if (field in 0 until bufferSize) field else -1
     }
     set(rec: Int) {
       assert(isMulti() || rec == 0) { "multi? " + isMulti() + "rec: " + rec }
@@ -2973,8 +2973,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     set(mode) {
       if (this !== form.getActiveBlock()) {
         field = mode
-        for (i in fields!!.indices) {
-          fields!![i]!!.updateModeAccess()
+        for (i in fields.indices) {
+          fields[i].updateModeAccess()
         }
       } else {
         // is this restriction acceptable ?
@@ -2982,8 +2982,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val act: VField? = activeField
         act?.leave(true)
         field = mode
-        for (i in fields!!.indices) {
-          fields!![i]!!.updateModeAccess()
+        for (i in fields.indices) {
+          fields[i].updateModeAccess()
         }
         if (act != null && !act.hasAction() && act.getAccess(activeRecord) >= ACS_VISIT) {
           act.enter()

@@ -368,7 +368,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  protected fun formatFixed(value: org.kopi.galite.type.Fixed): String {
+  protected open fun formatFixed(value: org.kopi.galite.type.Fixed): String {
     throw InconsistencyException()
   }
 

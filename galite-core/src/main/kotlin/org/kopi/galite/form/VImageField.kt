@@ -15,91 +15,219 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-import org.kopi.galite.db.Query
-import org.kopi.galite.list.VListColumn
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.util.Arrays
 
 import kotlin.reflect.KClass
 
-class VImageField : VField(1,1) {
-  override fun checkText(s: String): Boolean {
-    TODO("Not yet implemented")
+import org.kopi.galite.db.Query
+import org.kopi.galite.list.VImageColumn
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VlibProperties
+
+class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
+
+  override fun hasAutofill(): Boolean = true
+
+  /**
+   * just after loading, construct record
+   */
+  override fun build() {
+    super.build()
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
-  override fun checkType(rec: Int, s: Any?) {
-    TODO("Not yet implemented")
-  }
+  /**
+   * return the name of this field
+   */
+  override fun getTypeInformation(): String = VlibProperties.getString("image-type-field")
 
-  override fun getDataType(): KClass<*> {
-    TODO("Not yet implemented")
-  }
+  /**
+   * return the name of this field
+   */
+  override fun getTypeName(): String = VlibProperties.getString("Image")
 
-  override fun getListColumn(): VListColumn? {
-    TODO("Not yet implemented")
-  }
+  /*
+   * ----------------------------------------------------------------------
+   * Interface Display
+   * ----------------------------------------------------------------------
+   */
 
+  /**
+   * return a list column for list
+   */
+  override fun getListColumn(): VListColumn = VImageColumn(getHeader(), null, getPriority() >= 0)
+
+  /**
+   * verify that text is valid (during typing)
+   */
+  override fun checkText(s: String): Boolean = true
+
+  /**
+   * verify that value is valid (on exit)
+   * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
+   */
+  override fun checkType(rec: Int, o: Any?) {}
+
+  override fun getType(): Int = MDL_FLD_IMAGE
+
+  // ---------------------------------------------------------------------
+  // INTERFACE BD/TRIGGERS
+  // ---------------------------------------------------------------------
+  /**
+   * @return the type of search condition for this field.
+   *
+   * @see VConstants
+   */
+  override fun getSearchType(): Int = VConstants.STY_NO_COND
+
+  /**
+   * Returns the search conditions for this field.
+   */
+  override fun getSearchCondition(): String? = null
+
+  /**
+   * Sets the field value of given record to a null value.
+   */
   override fun setNull(r: Int) {
-    TODO("Not yet implemented")
+    setImage(r, null)
   }
 
+  /**
+   * Sets the field value of given record to a date value.
+   */
+  override fun setImage(r: Int, v: ByteArray?) {
+    if (changedUI || !value[r].contentEquals(v)) {
+      // trails (backup) the record if necessary
+      trail(r)
+      // set value in the defined row
+      value[r] = v
+      // inform that value has changed
+      setChanged(r)
+    }
+  }
+
+  /**
+   * Sets the field value of given record.
+   * Warning:	This method will become inaccessible to users in next release
+   */
   override fun setObject(r: Int, v: Any?) {
-    TODO("Not yet implemented")
+    setImage(r, v as? ByteArray)
   }
 
+  /**
+   * Returns the specified tuple column as object of correct type for the field.
+   * @param    query        the query holding the tuple
+   * @param    column        the index of the column in the tuple
+   */
   override fun retrieveQuery(query: Query, column: Int): Any? {
-    TODO("Not yet implemented")
+    TODO()
   }
 
-  override fun isNullImpl(r: Int): Boolean {
-    TODO("Not yet implemented")
-  }
+  /**
+   * Is the field value of given record null ?
+   */
+  override fun isNullImpl(r: Int): Boolean = value[r] == null
 
-  override fun getObjectImpl(r: Int): Any? {
-    TODO("Not yet implemented")
-  }
+  /**
+   * Returns the field value of given record as a date value.
+   */
+  override fun getImage(r: Int): ByteArray = getObject(r) as ByteArray
 
-  override fun toText(o: Any?): String? {
-    TODO("Not yet implemented")
-  }
+  /**
+   * Returns the field value of the current record as an object
+   */
+  override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toObject(s: String): Any? {
-    TODO("Not yet implemented")
-  }
+  override fun toText(o: Any?): String? = throw InconsistencyException("UNEXPECTED GET TEXT")
 
-  override fun getTextImpl(r: Int): String? {
-    TODO("Not yet implemented")
-  }
+  override fun toObject(s: String): String = throw InconsistencyException("UNEXPECTED GET TEXT")
 
-  override fun getSqlImpl(r: Int): String {
-    TODO("Not yet implemented")
-  }
+  /**
+   * Returns the display representation of field value of given record.
+   */
+  override fun getTextImpl(r: Int): String = throw InconsistencyException("UNEXPECTED GET TEXT")
 
+  /**
+   * Returns the SQL representation of field value of given record.
+   */
+  override fun getSqlImpl(r: Int): String = if (value[r] == null) "NULL" else "?"
+
+  /**
+   * Copies the value of a record to another
+   */
   override fun copyRecord(f: Int, t: Int) {
-    TODO("Not yet implemented")
+    val oldValue = value[t]
+
+    value[t] = value[f]
+    // inform that value has changed for non backup records
+    // only when the value has really changed.
+    if (t < block!!.bufferSize
+        && (oldValue != null && value[t] == null
+            || oldValue == null && value[t] != null
+            || oldValue != null && !Arrays.equals(oldValue, value[t]))) {
+      fireValueChanged(t)
+    }
   }
 
-  override fun getTypeInformation(): String {
-    TODO("Not yet implemented")
+  /**
+   * Returns the SQL representation of field value of given record.
+   * Warning:	This method will become inaccessible to users in next release
+   */
+  override fun hasLargeObject(r: Int): Boolean = value[r] != null
+
+  /**
+   * Warning:	This method will become inaccessible to users in next release
+   */
+  override fun hasBinaryLargeObject(r: Int): Boolean = true
+
+  /**
+   * Returns the SQL representation of field value of given record.
+   * Warning:	This method will become inaccessible to users in next release
+   */
+  override fun getLargeObject(r: Int): InputStream? {
+    return if (value[r] == null) {
+      null
+    } else {
+      ByteArrayInputStream(value[r])
+    }
   }
 
-  override fun getTypeName(): String {
-    TODO("Not yet implemented")
+  /**
+   * Returns the data type handled by this field.
+   */
+  override fun getDataType(): KClass<*> = ByteArray::class
+
+  /*
+   * ----------------------------------------------------------------------
+   * FORMATTING VALUES WRT FIELD TYPE
+   * ----------------------------------------------------------------------
+   */
+
+  /**
+   * Returns a string representation of a date value wrt the field type.
+   */
+  protected fun formatImage(value: Any): String = "image"
+
+  /**
+   * autofill
+   * @exception    org.kopi.galite.visual.VException    an exception may occur in gotoNextField
+   */
+  override fun fillField(handler: PredefinedValueHandler?): Boolean {
+    if (handler != null) {
+      val b = handler.selectImage()
+      if (b != null) {
+        setImage(b)
+        return true
+      }
+    }
+    return false
   }
 
-  fun getIconWidth(): Int {
-    TODO()
-  }
-
-  fun getIconHeight(): Int {
-    TODO()
-  }
-
-  override fun getImage(r: Int): ByteArray {
-    TODO()
-  }
-
-  override fun setImage(r: Int, v: ByteArray) {
-    TODO()
-  }
+  private lateinit var value: Array<ByteArray?>
 }

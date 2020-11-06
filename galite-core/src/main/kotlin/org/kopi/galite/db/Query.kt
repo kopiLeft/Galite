@@ -63,11 +63,11 @@ class Query(conn: Connection) {
 
   fun getBoolean(column: Int): Boolean = TODO()
 
+  fun getObject(pos: Int):Any = TODO()
+
   fun getFixed(pos: Int): NotNullFixed = TODO()
 
   fun getTime(pos: Int): NotNullTime = TODO()
-
-  fun getObject(pos: Int):Any = TODO()
 
   fun getMonth(pos: Int): NotNullMonth = TODO()
 }

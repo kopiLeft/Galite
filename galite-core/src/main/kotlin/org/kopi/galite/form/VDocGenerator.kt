@@ -38,8 +38,8 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
                           commands: Array<VCommand>?,
                           blocks: Array<VBlock>?,
                           title: String,
-                          help: String,
-                          code: String): String {
+                          help: String?,
+                          code: String): String? {
     latexPrinter.println("\\section{$title}")
     latexPrinter.println("\\label{$code}")
     latexPrinter.println(help)
@@ -67,11 +67,11 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
    * printlns a compilation unit
    */
   override fun helpOnBlock(formCode: String,
-                  title: String,
-                  help: String,
-                  commands: Array<VCommand>?,
-                  fields: Array<VField>,
-                  alone: Boolean) {
+                           title: String,
+                           help: String?,
+                           commands: Array<VCommand>?,
+                           fields: Array<VField>,
+                           alone: Boolean) {
     latexPrinter.println("\\subsection{$title}")
     latexPrinter.uncheckedPrintln("\\begin{center}\\includegraphics{images/" +
             formCode + "_" + title.replace(' ', '_') + ".ps" +
@@ -185,12 +185,12 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   /**
    * printlns a compilation unit
    */
-  override fun helpOnField(blockTitle: String?,
+  override fun helpOnField(blockTitle: String,
                            pos: Int,
-                           label: String,
+                           label: String?,
                            anchor: String?,
                            help: String?) {
-    latexPrinter.printItem(label)
+    latexPrinter.printItem(label!!)
     latexPrinter.println("\\index{$label}")
     if (help != null && help.isNotEmpty()) {
       latexPrinter.println(help + "\\\\")
