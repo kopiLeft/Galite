@@ -63,10 +63,10 @@ open class VFixnumCodeField(ident: String,
   fun computeSum(exclude: Boolean): Fixed? {
     var sum: Fixed? = null
 
-    for (i in 0 until block.bufferSize) {
-      if (block.isRecordFilled(i)
+    for (i in 0 until block!!.bufferSize) {
+      if (block!!.isRecordFilled(i)
           && !isNull(i)
-          && (!exclude || i != block.activeRecord)) {
+          && (!exclude || i != block!!.activeRecord)) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }
@@ -95,7 +95,7 @@ open class VFixnumCodeField(ident: String,
   /**
    * Sets the field value of given record to a fixed value.
    */
-  fun setFixed(r: Int, v: Fixed?) {
+  override fun setFixed(r: Int, v: Fixed?) {
     if (v == null) {
       setCode(r, -1)
     } else {

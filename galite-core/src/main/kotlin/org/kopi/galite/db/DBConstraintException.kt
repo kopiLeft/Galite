@@ -16,35 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.list
+package org.kopi.galite.db
 
-import java.io.Serializable
+import java.sql.SQLException
 
 /**
- * Represents a column
+ * Constructor
  *
- * @param pos position of associated table
- * @param name column name
- * @param key column key of table
- * @param nullable true if column is nullable
- */
-class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean) : Serializable {
+ * @param     query                   the sql query which generated the exception
+ * @param     original                the original SQLException
+ * @param     constraintName          the violated constraint
+ **/
+open class DBConstraintException(query: String?, original: SQLException,
+                                 val constraint: String = "unspecified") : DBException(query, original) {
+
+  constructor(original: SQLException) : this(null, original, "unspecified")
+
+  constructor(original: SQLException, constraintName: String) : this(null, original, constraintName)
 
   /**
-   * Returns the position of the table in the array of tables
-   * of the field's block
+   * Returns the index name
    */
-  fun getTable(): Int = pos
-
-  /**
-   * Returns the qualified name of the column (i.e. with correlation)
-   */
-  fun getQualifiedName(): String = "T$pos.$name"
-
-  /**
-   * Returns wether ther column is a key
-   */
-  fun isNullable(): Boolean {
-   TODO()
-  }
+  val description: String
+    get() = "DBConstraintException: '$constraint'"
 }

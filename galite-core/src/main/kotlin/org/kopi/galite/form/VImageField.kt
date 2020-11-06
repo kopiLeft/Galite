@@ -39,7 +39,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    */
   override fun build() {
     super.build()
-    value = arrayOfNulls(2 * block.bufferSize)
+    value = arrayOfNulls(2 * block!!.bufferSize)
   }
 
   /**
@@ -72,7 +72,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {}
+  override fun checkType(rec: Int, o: Any) {}
 
   override fun getType(): Int = MDL_FLD_IMAGE
 
@@ -84,7 +84,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    *
    * @see VConstants
    */
-  fun getSearchType(): Int = VConstants.STY_NO_COND
+  override fun getSearchType(): Int = VConstants.STY_NO_COND
 
   /**
    * Returns the search conditions for this field.
@@ -101,7 +101,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
   /**
    * Sets the field value of given record to a date value.
    */
-  fun setImage(r: Int, v: ByteArray?) {
+  override fun setImage(r: Int, v: ByteArray?) {
     if (changedUI || !value[r].contentEquals(v)) {
       // trails (backup) the record if necessary
       trail(r)
@@ -137,16 +137,16 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
   /**
    * Returns the field value of given record as a date value.
    */
-  fun getImage(r: Int): ByteArray = getObject(r) as ByteArray
+  override fun getImage(r: Int): ByteArray = getObject(r) as ByteArray
 
   /**
    * Returns the field value of the current record as an object
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String? = throw InconsistencyException("UNEXPECTED GET TEXT")
+  override fun toText(o: Any): String? = throw InconsistencyException("UNEXPECTED GET TEXT")
 
-  fun toObject(s: String?): String = throw InconsistencyException("UNEXPECTED GET TEXT")
+  override fun toObject(s: String): String = throw InconsistencyException("UNEXPECTED GET TEXT")
 
   /**
    * Returns the display representation of field value of given record.
@@ -167,7 +167,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
     value[t] = value[f]
     // inform that value has changed for non backup records
     // only when the value has really changed.
-    if (t < block.bufferSize
+    if (t < block!!.bufferSize
         && (oldValue != null && value[t] == null
             || oldValue == null && value[t] != null
             || oldValue != null && !Arrays.equals(oldValue, value[t]))) {
@@ -179,18 +179,18 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
    * Returns the SQL representation of field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
-  fun hasLargeObject(r: Int): Boolean = value[r] != null
+  override fun hasLargeObject(r: Int): Boolean = value[r] != null
 
   /**
    * Warning:	This method will become inaccessible to users in next release
    */
-  fun hasBinaryLargeObject(r: Int): Boolean = true
+  override fun hasBinaryLargeObject(r: Int): Boolean = true
 
   /**
    * Returns the SQL representation of field value of given record.
    * Warning:	This method will become inaccessible to users in next release
    */
-  fun getLargeObject(r: Int): InputStream? {
+  override fun getLargeObject(r: Int): InputStream? {
     return if (value[r] == null) {
       null
     } else {

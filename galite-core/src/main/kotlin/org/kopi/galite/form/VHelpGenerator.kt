@@ -107,7 +107,7 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
                        title: String,
                        help: String?,
                        commands: Array<VCommand>?,
-                       fields: Array<VField>,
+                       fields: Array<VField?>?,
                        alone: Boolean) {
     if (!alone) {
       printer.println("<TD><H2>$title</H2>")
@@ -122,8 +122,8 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
     printer.println("</TD>")
     printer.println("<TD>")
     printer.println("<DL>")
-    fields.forEach {
-      it.helpOnField(this)
+    fields!!.forEach {
+      it!!.helpOnField(this)
     }
     printer.println("</DL>")
     printer.println("</TD>")
@@ -140,14 +140,14 @@ open class VHelpGenerator : VHelpGenerator(), VConstants, Serializable {
   open fun helpOnField(blockTitle: String,
                        pos: Int,
                        label: String?,
-                       anchor: String,
+                       anchor: String?,
                        help: String?) {
     if (label == null) {
       return
     }
     printer.println("<DT>")
     printer.println("<A NAME=\"" + (blockTitle.replace(' ', '_')
-            + anchor.replace(' ', '_')) + "\"></A>")
+            + anchor!!.replace(' ', '_')) + "\"></A>")
     printer.println("<H2>$label</H2>")
     printer.println("<DD>")
     if (help != null) {

@@ -429,7 +429,7 @@ public abstract class DField extends JPanel implements UField {
                 }
 
                 if (!model.getBlock().isMulti()
-                        || model.getBlock().isDetailMode() == isInDetail()
+                        || model.getBlock().getDetailMode() == isInDetail()
                         || model.getBlock().noChart()) {
                     Action action = new Action("mouse1") {
                         public void execute() {

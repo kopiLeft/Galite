@@ -58,7 +58,7 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
   /**
    * Sets the field value of given record to a fixed value.
    */
-  fun setString(r: Int, v: String?) {
+  override fun setString(r: Int, v: String?) {
     if (v == null) {
       setCode(r, -1)
     } else {

@@ -18,6 +18,9 @@
 
 package org.kopi.galite.form
 
-class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styled: Boolean): VStringField (width, height, visibleHeight, convert, styled)
-{
+/**
+ * This class implements multi-line text fields.
+ */
+class VTextField (width: Int, height: Int, visibleHeight: Int, convert: Int, styled: Boolean) : VStringField(width, height, visibleHeight, convert, styled) {
 }
+
