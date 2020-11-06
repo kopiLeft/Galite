@@ -79,7 +79,7 @@ class VListDialog(list: Array<VListColumn>,
    */
   @Suppress("UNCHECKED_CAST")
   constructor(title: String,
-              data: Array<String>,
+              data: Array<String?>,
               rows: Int = data.size) : this(arrayOf<VListColumn>(VStringColumn(title,
                                                                  null,
                                                                  VConstants.ALG_LEFT,
@@ -96,7 +96,7 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * Displays a dialog box returning position of selected element.
    */
-  fun selectFromDialog(form: VForm, window: VWindow?, field: VField): Int {
+  fun selectFromDialog(form: VForm, window: VWindow?, field: VField?): Int {
     this.form = form
     return selectFromDialog(window, field, true)
   }
@@ -292,7 +292,7 @@ class VListDialog(list: Array<VListColumn>,
     /**
      * Returns the max length in a given String array.
      */
-    private fun getMaxLength(values: Array<String>): Int {
+    private fun getMaxLength(values: Array<String?>): Int {
       var result = 0
 
       values.forEach {
