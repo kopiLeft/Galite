@@ -16,21 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.visual
+package org.kopi.galite.db
 
-import org.kopi.galite.base.Image
-import org.kopi.galite.visual.ImageHandler
+import java.sql.SQLException
 
-class VImageHandler : ImageHandler() {
-  override fun getImage(image: String): Image {
-    TODO("Not yet implemented")
-  }
+/**
+ * Constructor
+ *
+ * @param     query                   the sql query which generated the exception
+ * @param     original                the original SQLException
+ * @param     constraintName          the violated constraint
+ **/
+open class DBConstraintException(query: String?, original: SQLException,
+                                 val constraint: String = "unspecified") : DBException(query, original) {
 
-  override fun getImage(image: ByteArray): Image {
-    TODO("Not yet implemented")
-  }
+  constructor(original: SQLException) : this(null, original, "unspecified")
 
-  override fun getURL(image: String): String {
-    TODO("Not yet implemented")
-  }
+  constructor(original: SQLException, constraintName: String) : this(null, original, constraintName)
+
+  /**
+   * Returns the index name
+   */
+  val description: String
+    get() = "DBConstraintException: '$constraint'"
 }

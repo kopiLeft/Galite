@@ -16,21 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.visual
+package org.kopi.galite.db
 
-import org.kopi.galite.base.Image
-import org.kopi.galite.visual.ImageHandler
+import java.sql.SQLException
 
-class VImageHandler : ImageHandler() {
-  override fun getImage(image: String): Image {
-    TODO("Not yet implemented")
-  }
+class DBInterruptionException : DBException {
+  /**
+   * Constructor
+   */
+  constructor() : super(SQLException("DBInterruptionException"))
 
-  override fun getImage(image: ByteArray): Image {
-    TODO("Not yet implemented")
-  }
+  /**
+   * Constructor
+   *
+   * @param     query           the sql query which generated the exception
+   */
+  constructor(query: String) : super(query, SQLException("DBInterruptionException"))
 
-  override fun getURL(image: String): String {
-    TODO("Not yet implemented")
-  }
 }

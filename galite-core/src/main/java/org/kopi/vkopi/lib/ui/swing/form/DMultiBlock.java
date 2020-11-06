@@ -36,7 +36,6 @@ import org.kopi.galite.form.UMultiBlock;
 import org.kopi.galite.form.VBlock;
 import org.kopi.galite.form.VField;
 import org.kopi.galite.form.ViewBlockAlignment;
-import org.kopi.galite.visual.VException;
 import org.kopi.galite.visual.VRuntimeException;
 
 public class DMultiBlock extends DChartBlock implements UMultiBlock {
@@ -99,7 +98,7 @@ public class DMultiBlock extends DChartBlock implements UMultiBlock {
     }
 
     public boolean inDetailMode() {
-        return getModel().isDetailMode();
+        return getModel().getDetailMode();
     }
 
     protected LayoutManager createLayoutManager() {
@@ -141,7 +140,7 @@ public class DMultiBlock extends DChartBlock implements UMultiBlock {
         if (row >= 0) {
             getModel().gotoRecord(getRecordFromDisplayLine(row));
         }
-        if (getModel().isDetailMode()) {
+        if (getModel().getDetailMode()) {
             getModel().setDetailMode(false);
             layout = chartLayout;
         } else {

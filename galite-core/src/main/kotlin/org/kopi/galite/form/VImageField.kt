@@ -15,62 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
+
 import kotlin.reflect.KClass
 
-class VImageField(width: Int, height: Int) : VField(width, height) {
-  fun getIconWidth(): Int {
-    TODO()
-  }
-
-  fun getIconHeight(): Int {
-    TODO()
-  }
-
-  override fun getImage(r: Int): ByteArray {
-    TODO()
-  }
-
-  override fun isNullImpl(r: Int): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun getObjectImpl(r: Int): Any? {
-    TODO("Not yet implemented")
-  }
-
-  override fun toText(o: Any): String? {
-    TODO("Not yet implemented")
-  }
-
-  override fun toObject(s: String): Any? {
-    TODO("Not yet implemented")
-  }
-
-  override fun getTextImpl(r: Int): String? {
-    TODO("Not yet implemented")
-  }
-
-  override fun getSqlImpl(r: Int): String? {
-    TODO("Not yet implemented")
-  }
-
-  override fun copyRecord(f: Int, t: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun getTypeInformation(): String {
-    TODO("Not yet implemented")
-  }
-
-  override fun getTypeName(): String {
-    TODO("Not yet implemented")
-  }
-
+class VImageField : VField(1,1) {
   override fun checkText(s: String): Boolean {
     TODO("Not yet implemented")
   }
@@ -95,11 +47,59 @@ class VImageField(width: Int, height: Int) : VField(width, height) {
     TODO("Not yet implemented")
   }
 
-  override fun setImage(r: Int, v: ByteArray) {
+  override fun retrieveQuery(query: Query, column: Int): Any? {
+    TODO("Not yet implemented")
+  }
+
+  override fun isNullImpl(r: Int): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun getObjectImpl(r: Int): Any? {
+    TODO("Not yet implemented")
+  }
+
+  override fun toText(o: Any): String? {
+    TODO("Not yet implemented")
+  }
+
+  override fun toObject(s: String): Any? {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTextImpl(r: Int): String? {
+    TODO("Not yet implemented")
+  }
+
+  override fun getSqlImpl(r: Int): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun copyRecord(f: Int, t: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTypeInformation(): String {
+    TODO("Not yet implemented")
+  }
+
+  override fun getTypeName(): String {
+    TODO("Not yet implemented")
+  }
+
+  fun getIconWidth(): Int {
     TODO()
   }
 
-  override fun retrieveQuery(query: Query, column: Int): Any? {
-    TODO("Not yet implemented")
+  fun getIconHeight(): Int {
+    TODO()
+  }
+
+  override fun getImage(r: Int): ByteArray {
+    TODO()
+  }
+
+  override fun setImage(r: Int, v: ByteArray) {
+    TODO()
   }
 }
