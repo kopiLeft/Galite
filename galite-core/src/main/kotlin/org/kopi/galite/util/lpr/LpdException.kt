@@ -20,9 +20,11 @@ package org.kopi.galite.util.lpr
 
 /**
  * This exception is thrown when lpd return an error code
- * Represents an exception with a message.
  *
- * @param    code        the exception code
- * @param    message        the associated message
+ * Represents an exception with a message
+ *
+ * @param	code		the exception code
+ * @param	message		the associated message
  */
-class LpdException(val code: Int, message: String) : Exception(message)
+class LpdException( val code: Int, message: String) : Exception(message) {
+}
