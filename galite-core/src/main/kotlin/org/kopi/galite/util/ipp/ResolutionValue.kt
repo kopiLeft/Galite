@@ -18,17 +18,7 @@
 
 package org.kopi.galite.util.ipp
 
-class ResolutionValue : IPPValue {
-
-  // --------------------------------------------------------------------
-  // CONSTRUCTOR
-  // --------------------------------------------------------------------
-
-  constructor(units: Byte, xres: Int, yres: Int) {
-    this.units = units
-    this.xres = xres
-    this.yres = yres
-  }
+class ResolutionValue(private var units: Byte,private var xres: Int,private var yres: Int) : IPPValue() {
 
   constructor(inputStream: IPPInputStream) {
     inputStream.readShort() //value-length
@@ -55,11 +45,4 @@ class ResolutionValue : IPPValue {
             "\tyres : " + yres)
   }
 
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  private var units: Byte
-  private var xres: Int
-  private var yres: Int
 }

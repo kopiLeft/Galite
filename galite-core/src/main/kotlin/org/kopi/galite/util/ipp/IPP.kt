@@ -87,42 +87,31 @@ class IPP() {
   }
 
   fun write(os: IPPOutputStream) {
-    val atts = attributes.iterator()
     var lastGroup = -1
 
     header.write(os)
 
-    while (atts.hasNext()) {
-      val attribute = atts.next() as IPPAttribute
-
-      attribute.write(os, lastGroup)
-      lastGroup = attribute.group
+    attributes.forEach {
+      it.write(os, lastGroup)
+      lastGroup = it.group
     }
 
     os.writeByte(IPPConstants.TAG_END)
-
     os.writeArray(data)
   }
 
   fun dump() {
-    val atts = attributes.iterator()
-
     header.dump()
-
-    while (atts.hasNext()) {
-      val attribute = atts.next() as IPPAttribute
-
-      attribute.dump()
+    attributes.forEach {
+      it.dump()
     }
   }
 
   fun simpleDump() {
     val atts = attributes.iterator()
 
-    while (atts.hasNext()) {
-      val attribute = atts.next() as IPPAttribute
-
-      attribute.simpleDump()
+    attributes.forEach {
+      it.simpleDump()
     }
   }
 
@@ -130,20 +119,15 @@ class IPP() {
   // DATA MEMBERS
   // --------------------------------------------------------------------
 
-  var header: IPPHeader
+  var header: IPPHeader = IPPHeader()
     private set
 
-  private var attributes: MutableList<IPPAttribute>
+  private var attributes: MutableList<IPPAttribute> = mutableListOf()
 
-  var data: ByteArray
+  var data: ByteArray = ByteArray(0)
 
   companion object {
     const val DEBUG = false
   }
 
-  init {
-    header = IPPHeader()
-    attributes = mutableListOf()
-    data = ByteArray(0)
-  }
 }

@@ -84,7 +84,7 @@ class IPPInputStream(private val inputStream: InputStream) {
     return String(buf)
   }
 
-  fun readLine(): String {
+  fun readLine(): String? {
     val sb = StringBuffer()
     var c: Int
     var end = false

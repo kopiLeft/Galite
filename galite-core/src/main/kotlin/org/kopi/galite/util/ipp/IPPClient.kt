@@ -19,7 +19,6 @@
 package org.kopi.galite.util.ipp
 
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 
@@ -33,11 +32,11 @@ class IPPClient (private val hostname: String,
     val optionalAttributes: MutableList<String> = mutableListOf()
 
     if (attributes != null) {
-      for (i in attributes.indices) {
-        if (attributes[i].indexOf('=') != -1) {
-          optionalAttributes.add(attributes[i])
+      attributes?.forEach {
+        if (it.indexOf('=') != -1) {
+          optionalAttributes.add(it)
         } else {
-          mediaAttributes.add(attributes[i])
+          mediaAttributes.add(it)
         }
       }
     }
@@ -53,8 +52,8 @@ class IPPClient (private val hostname: String,
    */
   protected fun print(file: InputStream,
                       nbCopies: Int,
-                      mediaAttributes: MutableList<String>,
-                      optionalAttributes: MutableList<String>) {
+                      mediaAttributes: MutableList<String>?,
+                      optionalAttributes: MutableList<String>?) {
     var att: IPPAttribute
     val req = IPP()
     val baos = ByteArrayOutputStream()
@@ -98,31 +97,26 @@ class IPPClient (private val hostname: String,
     // end workaround
 
     if (mediaAttributes != null && mediaAttributes.isNotEmpty()) {
-      val atts = mediaAttributes.iterator()
-
       att = IPPAttribute(IPPConstants.TAG_JOB,
               IPPConstants.TAG_KEYWORD,
               "media")
 
-      while (atts.hasNext()) {
-        att.addValue(StringValue((atts.next() as String?)!!))
+      mediaAttributes.forEach {
+        att.addValue(StringValue(it))
       }
+
       req.addAttribute(att)
     }
 
-    if (optionalAttributes != null) {
-      val atts = optionalAttributes.iterator()
-
-      while (atts.hasNext()) {
-        val optionalAttribute = atts.next() as String
-        val attributeName = optionalAttribute.substring(0, optionalAttribute.indexOf("="))
-        val attributeValue = optionalAttribute.substring(optionalAttribute.indexOf("=") + 1, optionalAttribute.length)
-        att = IPPAttribute(IPPConstants.TAG_JOB,
-                IPPConstants.TAG_NAME,
-                attributeName)
-        att.addValue(StringValue(attributeValue))
-        req.addAttribute(att)
-      }
+    optionalAttributes?.forEach {
+      val optionalAttribute = it
+      val attributeName = optionalAttribute.substring(0, optionalAttribute.indexOf("="))
+      val attributeValue = optionalAttribute.substring(optionalAttribute.indexOf("=") + 1, optionalAttribute.length)
+      att = IPPAttribute(IPPConstants.TAG_JOB,
+              IPPConstants.TAG_NAME,
+              attributeName)
+      att.addValue(StringValue(attributeValue))
+      req.addAttribute(att)
     }
 
     while (file.read().also { read = it } != -1) {
