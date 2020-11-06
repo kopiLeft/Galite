@@ -905,7 +905,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setWeek(r: Int, v: Week) {
+  open fun setWeek(r: Int, v: Week?) {
     throw InconsistencyException()
   }
 
@@ -955,7 +955,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTimestamp(r: Int, v: Timestamp) {
+  open fun setTimestamp(r: Int, v: Timestamp?) {
     throw InconsistencyException()
   }
 
@@ -1170,7 +1170,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getWeek(r: Int): Week {
+  open fun getWeek(r: Int): Week {
     throw InconsistencyException()
   }
 
@@ -1213,7 +1213,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getTimestamp(r: Int): Timestamp {
+  open fun getTimestamp(r: Int): Timestamp {
     throw InconsistencyException()
   }
 
