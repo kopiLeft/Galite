@@ -182,8 +182,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         indices!![i] = loc.getIndexMessage(indices!![i])
       }
     }
-    fields!!.forEach {
-      if (it!!.isInternal()) {
+    fields.forEach {
+      if (!it.isInternal()) {
         it.localize(loc)
       }
     }
@@ -2148,6 +2148,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     return fields!!.find { name == it!!.name }
   }
 
+  fun getFieldID(): VField? {
+    return getField("ID")
+  }
+
   /**
    * Returns the index of field in block
    */
@@ -2763,11 +2767,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun getFieldPos(field: VField): Int {
     var count = 1
 
-    for (i in fields!!.indices) {
-      if (field == fields!![i]) {
+    for (i in fields.indices) {
+      if (field == fields[i]) {
         return count
       }
-      if (fields!![i]!!.getDefaultAccess() != ACS_HIDDEN) {
+      if (fields[i].getDefaultAccess() != ACS_HIDDEN) {
         count++
       }
     }
@@ -2904,7 +2908,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       return temp
     }
 
-  var fields: Array<VField?>? = null // fields
+  lateinit var fields: Array<VField> // fields
   protected lateinit var VKT_Triggers: Array<IntArray>
   // dynamic data
   var activeRecord = 0 // current record

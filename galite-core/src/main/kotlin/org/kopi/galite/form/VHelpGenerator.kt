@@ -55,6 +55,6 @@ open class VHelpGenerator : VHelpGenerator() {
                        title: String,
                        help: String,
                        commands: Array<VCommand>?,
-                       fields: Array<VField?>?,
+                       fields: Array<VField>,
                        b: Boolean) {}
 }
