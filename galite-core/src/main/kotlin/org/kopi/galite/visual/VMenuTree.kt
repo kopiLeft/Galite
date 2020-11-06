@@ -118,7 +118,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
     createActor(CMD_UNFOLD, "Edit", "Unfold", "unfold", KeyEvent.VK_ENTER, 0)
     createActor(CMD_INFORMATION, "Help", "Information", null, 0, 0)
     createActor(CMD_HELP, "Help", "Help", "help", KeyEvent.VK_F1, 0)
-    addActors(actors.filterIsInstance<VActor>().toTypedArray())
+    addActors(treeActors.filterIsInstance<VActor>().toTypedArray())
     localizeActors(ApplicationContext.getDefaultLocale())
     createTree(isSuperUser || loadFavorites)
     localizeRootMenus(ApplicationContext.getDefaultLocale())
@@ -140,9 +140,9 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       super.localizeActors(manager) // localizes the actors in VWindow
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble("MenuTree Actor localization",
-              "MenuTreeModel.localize",
-              e.message,
-              e)
+                                       "MenuTreeModel.localize",
+                                       e.message,
+                                       e)
       exitProcess(1)
     }
     manager = null
@@ -152,14 +152,14 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
    * Enables or disable the given actor
    */
   override fun setActorEnabled(actor: Int, enabled: Boolean) {
-    actors[actor]!!.handler = this
-    actors[actor]!!.isEnabled = enabled
+    treeActors[actor]!!.handler = this
+    treeActors[actor]!!.isEnabled = enabled
   }
 
   /**
    * Returns the actor having the given number.
    */
-  override fun getActor(number: Int): VActor = actors[number]!!
+  override fun getActor(number: Int): VActor = treeActors[number]!!
 
   /**
    * Returns the ID of the current user
@@ -175,14 +175,14 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
                           icon: String?,
                           key: Int,
                           modifier: Int) {
-    actors[number] = VActor(menu,
-            MENU_LOCALIZATION_RESOURCE,
-            item,
-            MENU_LOCALIZATION_RESOURCE,
-            icon,
-            key,
-            modifier)
-    actors[number]!!.number = number
+    treeActors[number] = VActor(menu,
+                                MENU_LOCALIZATION_RESOURCE,
+                                item,
+                                MENU_LOCALIZATION_RESOURCE,
+                                icon,
+                                key,
+                                modifier)
+    treeActors[number]!!.number = number
   }
 
   /**
@@ -294,13 +294,13 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
    */
   private fun createTopLevelTree() {
     root = DefaultMutableTreeNode(Module(0,
-            0,
-            VlibProperties.getString("PROGRAM"),
-            VlibProperties.getString("program"),
-            null,
-            Module.ACS_PARENT,
-            Int.MAX_VALUE,
-            null))
+                                         0,
+                                         VlibProperties.getString("PROGRAM"),
+                                         VlibProperties.getString("program"),
+                                         null,
+                                         Module.ACS_PARENT,
+                                         Int.MAX_VALUE,
+                                         null))
     for (menu in ROOT_MENUS) {
       if (!menu.isEmpty()) {
         (root as DefaultMutableTreeNode).add(menu.root as DefaultMutableTreeNode)
@@ -524,12 +524,12 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
    */
   protected fun addLogoutModule(localModules: MutableList<Module>) {
     val logout = Module(Int.MAX_VALUE,
-            USER_MENU,
-            "logout",
-            RootMenu.ROOT_MENU_LOCALIZATION_RESOURCE,
-            LogoutModule::class.java.name,
-            Module.ACS_TRUE, Int.MIN_VALUE,
-            null)
+                        USER_MENU,
+                        "logout",
+                        RootMenu.ROOT_MENU_LOCALIZATION_RESOURCE,
+                        LogoutModule::class.java.name,
+                        Module.ACS_TRUE, Int.MIN_VALUE,
+                        null)
     items.add(logout)
     localModules.add(logout)
   }
