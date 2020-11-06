@@ -131,7 +131,7 @@ abstract class VCodeField(val type: String,
           val listDialog: VListDialog
           val selected: Int
           val selectedToModel: IntArray
-          val codes: Array<Any>
+          val codes: Array<Any?>
           var count: Int = 0
           run {
             var i = 0
@@ -143,7 +143,7 @@ abstract class VCodeField(val type: String,
               i++
             }
           }
-          codes = arrayOf(count)
+          codes = arrayOfNulls(count)
           selectedToModel = IntArray(count)
           var j = 0
 
@@ -156,7 +156,7 @@ abstract class VCodeField(val type: String,
             i++
           }
 
-          listDialog = VListDialog(arrayOf(getListColumn()!!), arrayOf<Array<Any>>(codes))
+          listDialog = VListDialog(arrayOf(getListColumn()!!), arrayOf(codes))
           selected = listDialog.selectFromDialog(getForm(), null, this)
           if (selected != -1) {
             setCode(rec, selectedToModel[selected])

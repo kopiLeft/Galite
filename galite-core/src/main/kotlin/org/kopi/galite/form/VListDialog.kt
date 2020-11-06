@@ -31,7 +31,7 @@ import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VWindow
 
 class VListDialog(list: Array<VListColumn>,
-                  val data: Array<Array<Any>>,
+                  val data: Array<Array<Any?>>,
                   val idents: IntArray,
                   rows: Int,
                   skipFirstLine: Boolean) : VModel {
@@ -40,7 +40,7 @@ class VListDialog(list: Array<VListColumn>,
    * Creates a dialog with specified data
    */
   constructor(list: Array<VListColumn>,
-              data: Array<Array<Any>>,
+              data: Array<Array<Any?>>,
               idents: IntArray,
               rows: Int) : this(list, data, idents, rows, true)
 
@@ -48,7 +48,7 @@ class VListDialog(list: Array<VListColumn>,
    * Creates a dialog with specified data
    */
   constructor(list: Array<VListColumn>,
-              data: Array<Array<Any>>,
+              data: Array<Array<Any?>>,
               rows: Int,
               newForm: VDictionary) : this(list, data, makeIdentArray(rows), rows, false) {
     this.newForm = newForm
@@ -58,7 +58,7 @@ class VListDialog(list: Array<VListColumn>,
    * Creates a dialog with specified data
    */
   constructor(list: Array<VListColumn>,
-              data: Array<Array<Any>>,
+              data: Array<Array<Any?>>,
               rows: Int,
               newForm: String) : this(list, data, rows, Module.getExecutable(newForm) as VDictionary)
 
@@ -66,13 +66,13 @@ class VListDialog(list: Array<VListColumn>,
    * Creates a dialog with specified data
    */
   constructor(list: Array<VListColumn>,
-              data: Array<Array<Any>>,
+              data: Array<Array<Any?>>,
               rows: Int) : this(list, data, makeIdentArray(rows), rows, false)
 
   /**
    * Creates a dialog with specified data and title bar.
    */
-  constructor(list: Array<VListColumn>, data: Array<Array<Any>>) : this(list, data, data[0].size)
+  constructor(list: Array<VListColumn>, data: Array<Array<Any?>>) : this(list, data, data[0].size)
 
   /**
    * Creates a dialog with specified data and title bar.
@@ -85,7 +85,7 @@ class VListDialog(list: Array<VListColumn>,
                                                                  VConstants.ALG_LEFT,
                                                                  getMaxLength(data),
                                                                  true)),
-                                            arrayOf(data as Array<Any>),
+                                            arrayOf(data as Array<Any?>),
                                             rows)
 
   /**
@@ -204,7 +204,7 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * Returns a value at a given position
    */
-  fun getValueAt(row: Int, col: Int): Any = data[col][row]
+  fun getValueAt(row: Int, col: Int): Any? = data[col][row]
 
   fun convert(pos: Int): Int = if (pos == -1) -1 else idents[translatedIdents[pos]]
 
@@ -274,7 +274,7 @@ class VListDialog(list: Array<VListColumn>,
         size = max(size, it.length)
       }
       return VListDialog(arrayOf(VStringColumn("Auswahl", null, 0, size, true)),
-              arrayOf(str as Array<Any>)).selectFromDialog(window, null, true)
+              arrayOf(str as Array<Any?>)).selectFromDialog(window, null, true)
     }
 
     /**
