@@ -38,7 +38,7 @@ import java.util.zip.DeflaterOutputStream
 import org.kopi.galite.base.Utils
 
 @Deprecated("replaced by the class HylaFAXUtils")
-class Fax(port: Int, host: String) {
+class Fax(var port: Int, var host: String) {
 
   fun login(uname: String): Int {
     Utils.log("Fax", "login:$uname")
@@ -280,7 +280,7 @@ class Fax(port: Int, host: String) {
   private fun checkNumber(number: String): String {
     var newNumber = ""
 
-    number.forEach{
+    number.forEach {
       if (it in '0'..'9') {
         newNumber += it
       }
@@ -309,7 +309,7 @@ class Fax(port: Int, host: String) {
   }
 
   private fun readLine(): String {
-    val readLine : String = clntIn.readLine()
+    val readLine: String = clntIn.readLine()
     if (verboseMode) {
       System.err.println(readLine)
     }
@@ -317,7 +317,7 @@ class Fax(port: Int, host: String) {
     return readLine
   }
 
-  private fun check(str: String): Int {
+  private fun check(str: String?): Int {
     /*
      * checks the replies from the fax server and reacts
      * as follows:
@@ -338,16 +338,11 @@ class Fax(port: Int, host: String) {
       throw PROTOException("Fax.check: empty Reply String!!!",
               EMPTY_REPLY_STRING)
     }
-
-    val delim: String = if (str[3] == '-') {
-      "-"
-    } else {
-      " "
-    }
+    val delim: String = if (str[3] == '-') "-" else " "
 
     val st = StringTokenizer(str, delim)
 
-    //
+
     //If str is a normal string, return 0
     rtc = try {
       st.nextToken().toInt()
@@ -385,16 +380,11 @@ class Fax(port: Int, host: String) {
   }
 
   // Localhost should also remain localhost ...
-  private fun getInetAddr(): ByteArray{
-
-    val iaddr = if (host.equals("localhost", ignoreCase = true)) {
-      // Localhost should also remain localhost ...
-      byteArrayOf(127, 0, 0, 1)
-    } else {
-      InetAddress.getLocalHost().address
-    }
-
-    return iaddr
+  private fun getInetAddr(): ByteArray = if (host.equals("localhost", ignoreCase = true)) {
+    // Localhost should also remain localhost ...
+    byteArrayOf(127, 0, 0, 1)
+  } else {
+    InetAddress.getLocalHost().address
   }
 
   protected fun fail(msg: String, e: Exception, which: Int) {
@@ -410,10 +400,9 @@ class Fax(port: Int, host: String) {
   // ----------------------------------------------------------------------
 
   private val debug = false
-  private val clnt: Socket
+  private val clnt: Socket?
   private val clntIn: BufferedReader
   private val clntOut: PrintWriter
-  private val host: String
 
   // ----------------------------------------------------------------------
   // INNER CLASSES
@@ -443,13 +432,12 @@ class Fax(port: Int, host: String) {
     }
 
     val port: Int
-    protected val srv: ServerSocket?
+    protected val srv: ServerSocket? = ServerSocket(0, Companion.TIMEOUT)
 
 
     init {
-      srv = ServerSocket(0, Companion.TIMEOUT)
       // get next free port
-      port = srv.localPort
+      port = srv!!.localPort
       debug("BasicServ: port=$port")
       start()
     }
@@ -467,7 +455,6 @@ class Fax(port: Int, host: String) {
 
     // thread body
     override fun run() {
-      val dataInputStream: DataInputStream
       val buf = ByteArray(1024)
 
       try {
@@ -475,7 +462,7 @@ class Fax(port: Int, host: String) {
         val srv_clnt = srv!!.accept()
 
         debug("RecvServ.run: Generate InputStream")
-        dataInputStream = DataInputStream(srv_clnt.getInputStream())
+        val dataInputStream = DataInputStream(srv_clnt.getInputStream())
 
         debug("RecvServ.run: Wait for data")
 
@@ -594,7 +581,7 @@ class Fax(port: Int, host: String) {
       val queue = Vector<FaxStatus>()
 
       try {
-        val ret  = getQueue(HFAX_PORT, host, user, qname)
+        val ret = getQueue(HFAX_PORT, host, user, qname)
         val token = StringTokenizer(ret, "\n")
 
         Utils.log("Fax", "READ $qname : host $host / user $user")
@@ -812,8 +799,6 @@ class Fax(port: Int, host: String) {
   // CONSTRUCTORS
   // ----------------------------------------------------------------------
   init {
-    var port = port
-    var host = host
 
     if (port == 0) {
       port = HFAX_PORT
