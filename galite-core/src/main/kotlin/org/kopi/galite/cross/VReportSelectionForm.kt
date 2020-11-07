@@ -17,5 +17,61 @@
  */
 package org.kopi.galite.cross
 
-abstract class VReportSelectionForm {
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VDictionaryForm
+import org.kopi.galite.form.VForm
+import org.kopi.galite.report.VNoRowException
+import org.kopi.galite.report.VReport
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+
+abstract class VReportSelectionForm : VDictionaryForm {
+  protected constructor() {}
+  protected constructor(caller: VForm) : super(caller)
+  protected constructor(caller: DBContextHandler) : super(caller)
+  protected constructor(caller: DBContext) : super(caller)
+
+  /**
+   * Implements interface for COMMAND CreateReport
+   */
+  fun createReport(b: VBlock) {
+    b.validate()
+    try {
+      setWaitInfo(Message.getMessage("report_generation"))
+      val report: VReport = createReport()
+      report.dBContext = dBContext
+      report.doNotModal()
+      unsetWaitInfo()
+    } catch (e: VNoRowException) {
+      unsetWaitInfo()
+      error(MessageCode.getMessage("VIS-00057"))
+    }
+    b.setRecordChanged(0, false)
+  }
+
+  /**
+   * create a report for this form
+   */
+  protected abstract fun createReport(): VReport
+
+  companion object {
+    /**
+     * static call to createReport.
+     */
+    fun createReport(report: VReport, b: VBlock) {
+      b.validate()
+      try {
+        report.setWaitInfo(Message.getMessage("report_generation"))
+        report.dBContext = report.dBContext
+        report.doNotModal()
+        report.unsetWaitInfo()
+      } catch (e: VNoRowException) {
+        report.unsetWaitInfo()
+        report.error(MessageCode.getMessage("VIS-00057"))
+      }
+      b.setRecordChanged(0, false)
+    }
+  }
 }

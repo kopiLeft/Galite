@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Table
 import java.sql.SQLException
 import java.util.EventListener
 
@@ -2552,20 +2553,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  // ----------------------------------------------------------------------
-  // IMPLEMENTATION OF DBContextHandler
-  // ----------------------------------------------------------------------
-  override fun setDBContext(context: DBContext) {
-    throw InconsistencyException("CALL IT ON FORM")
-  }
-
-  override fun getDBContext(): DBContext? = form.dBContext
-
-  override fun startProtected(message: String) {}
-
-  override fun commitProtected() {}
-
-  override fun abortProtected(interrupt: Boolean) {}
+  override var dBContext: DBContext?
+    get() = form.dBContext
+    set(value) = throw InconsistencyException("CALL IT ON FORM")
 
   override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
 
@@ -2896,7 +2886,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected lateinit var help: String // the help on this block
-  protected var tables: Array<String>? = null // names of database tables
+  protected var tables: Array<Table>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices

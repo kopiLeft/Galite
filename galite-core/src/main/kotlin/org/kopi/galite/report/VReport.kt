@@ -116,21 +116,18 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
 
     // all commands are by default enabled
     activeCommands.clear()
-    if (commands != null) {
-      commands!!.forEachIndexed { i, vCommand ->
-        val command: VCommand = vCommand
-        when {
-          command.getIdent() == "Fold" -> cmdFold = command
-          command.getIdent() == "Unfold" -> cmdUnfold = command
-          command.getIdent() == "Sort" -> cmdSort = command
-          command.getIdent() == "FoldColumn" -> cmdFoldColumn = command
-          command.getIdent() == "UnfoldColumn" -> cmdUnfoldColumn = command
-          command.getIdent() == "OpenLine" -> cmdOpenLine = command
-          command.getIdent() == "ColumnInfo" -> cmdColumnInfo = command
-          command.getIdent() == "EditColumnData" -> cmdEditColumn = command
-          else -> {
-            setCommandEnabled(vCommand, model.getModelColumnCount() + i + 1, true)
-          }
+    commands?.forEachIndexed { i, vCommand ->
+      when {
+        vCommand!!.getIdent() == "Fold" -> cmdFold = vCommand
+        vCommand.getIdent() == "Unfold" -> cmdUnfold = vCommand
+        vCommand.getIdent() == "Sort" -> cmdSort = vCommand
+        vCommand.getIdent() == "FoldColumn" -> cmdFoldColumn = vCommand
+        vCommand.getIdent() == "UnfoldColumn" -> cmdUnfoldColumn = vCommand
+        vCommand.getIdent() == "OpenLine" -> cmdOpenLine = vCommand
+        vCommand.getIdent() == "ColumnInfo" -> cmdColumnInfo = vCommand
+        vCommand.getIdent() == "EditColumnData" -> cmdEditColumn = vCommand
+        else -> {
+          setCommandEnabled(vCommand, model.getModelColumnCount() + i + 1, true)
         }
       }
     }
@@ -147,7 +144,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
    *
    * @param     locale  the locale to use
    */
-  fun localize(locale: Locale?) {
+  open fun localize(locale: Locale?) {
     var manager: LocalizationManager?
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
 
@@ -173,7 +170,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------
-  fun initReport() {
+  open fun initReport() {
     build()
     callTrigger(Constants.TRG_PREREPORT)
   }
@@ -567,7 +564,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   fun genHelp(): String? {
     val surl = StringBuffer()
     val fileName: String? = VHelpGenerator().helpOnReport(pageTitle,
-            commands,
+            commands.requireNoNulls(),
             model,
             help)
 
@@ -632,14 +629,14 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   private var pageTitle = ""
   private var firstPageHeader = ""
   protected var VKT_Triggers: Array<IntArray>? = null
-  protected var commands: Array<VCommand>? = null
+  protected lateinit var commands: Array<VCommand?>
   private val activeCommands = ArrayList<VCommand>()
   var printOptions: PConfig = PConfig() // The print options
   var media: String? = null             // The media for this document
 
   init {
     if (ctxt != null) {
-      dBContext = ctxt.getDBContext()
+      dBContext = ctxt.dBContext
     }
     init()
 

@@ -17,9 +17,433 @@
  */
 package org.kopi.galite.cross
 
-class VDynamicReport {
+import org.jetbrains.exposed.sql.transactions.transaction
+import java.awt.event.KeyEvent
+import java.util.ArrayList
+import java.util.Locale
+
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VBooleanCodeField
+import org.kopi.galite.form.VBooleanField
+import org.kopi.galite.form.VCodeField
+import org.kopi.galite.form.VDateField
+import org.kopi.galite.form.VField
+import org.kopi.galite.form.VFixnumCodeField
+import org.kopi.galite.form.VFixnumField
+import org.kopi.galite.form.VImageField
+import org.kopi.galite.form.VIntegerCodeField
+import org.kopi.galite.form.VIntegerField
+import org.kopi.galite.form.VMonthField
+import org.kopi.galite.form.VStringCodeField
+import org.kopi.galite.form.VStringField
+import org.kopi.galite.form.VTimeField
+import org.kopi.galite.form.VTimestampField
+import org.kopi.galite.form.VWeekField
+import org.kopi.galite.report.Constants
+import org.kopi.galite.report.PConfig
+import org.kopi.galite.report.VBooleanCodeColumn
+import org.kopi.galite.report.VBooleanColumn
+import org.kopi.galite.report.VDateColumn
+import org.kopi.galite.report.VDefaultReportActor
+import org.kopi.galite.report.VFixnumCodeColumn
+import org.kopi.galite.report.VFixnumColumn
+import org.kopi.galite.report.VIntegerCodeColumn
+import org.kopi.galite.report.VIntegerColumn
+import org.kopi.galite.report.VMonthColumn
+import org.kopi.galite.report.VNoRowException
+import org.kopi.galite.report.VReport
+import org.kopi.galite.report.VReportColumn
+import org.kopi.galite.report.VReportCommand
+import org.kopi.galite.report.VStringCodeColumn
+import org.kopi.galite.report.VStringColumn
+import org.kopi.galite.report.VTimeColumn
+import org.kopi.galite.report.VTimestampColumn
+import org.kopi.galite.report.VWeekColumn
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.type.NotNullFixed
+
+class VDynamicReport(block: VBlock) : VReport() {
+  /**
+   * @param     fields  block fields.
+   * @return fields that will represent columns in the dynamic report.
+   */
+  private fun initFields(fields: Array<VField>): Array<VField> {
+    val processedFields: MutableList<VField> = ArrayList<VField>()
+    for (i in fields.indices) {
+      // Images fields cannot be handled in dynamic reports
+      if (fields[i] !is VImageField
+              && (!fields[i].isInternal() || fields[i].name.equals(block.idField.name))) {
+        if (fields[i].getColumnCount() > 0 || block.isMulti() && isFetched) {
+          processedFields.add(fields[i])
+        }
+      }
+    }
+    if (processedFields.isEmpty()) {
+      throw InconsistencyException("Can't generate a report, check that this block contains unhidden fields with database columns.")
+    }
+    return processedFields.toTypedArray()
+  }
+
+  val isFetched: Boolean
+    get() {
+      var i = 0
+      while (i < block.bufferSize) {
+        if (block.isRecordFetched(i)) {
+          return true
+        }
+        i += 1
+      }
+      return false
+    }
+
+  /**
+   * create report columns and fill them with data.
+   */
+  @Throws(VException::class)
+  protected fun initColumns() {
+    var col = 0
+    for (i in fields.indices) {
+      if (fields[i] is VStringField) {
+        columns[col] = VStringColumn(null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                fields[i].width,
+                1,
+                null)
+      } else if (fields[i] is VBooleanField) {
+        columns[col] = VBooleanColumn(null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                1,
+                null)
+      } else if (fields[i] is VDateField) {
+        columns[col] = VDateColumn(null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                1,
+                null)
+      } else if (fields[i] is VFixnumField) {
+        columns[col] = VFixnumColumn(null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                fields[i].width,
+                (fields[i] as VFixnumField).getScale(0),
+                null)
+      } else if (fields[i] is VIntegerField) {
+        // hidden field ID of the block will represent the last column in the report.
+        if (fields[i].name.equals(block.idField.name) && fields[i].isInternal()) {
+          idColumn = fields.size - 1
+          columns[fields.size - 1] = VIntegerColumn(null,
+                  0,
+                  fields[i].align,
+                  getColumnGroups(fields[i]),
+                  null,
+                  fields[i].width,
+                  null)
+          columns[fields.size - 1]!!.folded = true
+          // next column will have the position col.
+          col -= 1
+        } else {
+          if (fields[i].name.equals(block.idField.name)) {
+            idColumn = i
+          }
+          columns[col] = VIntegerColumn(null,
+                  0,
+                  fields[i].align,
+                  getColumnGroups(fields[i]),
+                  null,
+                  fields[i].width,
+                  null)
+        }
+      } else if (fields[i] is VMonthField) {
+        columns[col] = VMonthColumn(null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                fields[i].width,
+                null)
+      } else if (fields[i] is VTimeField) {
+        columns[col] = VTimeColumn(null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                fields[i].width,
+                null)
+      } else if (fields[i] is VTimestampField) {
+        columns[col] = VTimestampColumn(null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                fields[i].width,
+                null)
+      } else if (fields[i] is VWeekField) {
+        columns[col] = VWeekColumn(fields[i].name,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                fields[i].width,
+                null)
+      } else if (fields[i] is VStringCodeField) {
+        columns[col] = VStringCodeColumn(null,
+                null,
+                null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                fields[i].width,
+                null,
+                (fields[i] as VCodeField).labels,
+                (fields[i] as VCodeField).getCodes() as Array<String>)
+      } else if (fields[i] is VIntegerCodeField) {
+        columns[col] = VIntegerCodeColumn(null,
+                null,
+                null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                fields[i].width,
+                null,
+                (fields[i] as VCodeField).labels,
+                getIntArray((fields[i] as VCodeField).getCodes() as Array<Int>))
+      } else if (fields[i] is VFixnumCodeField) {
+        columns[col] = VFixnumCodeColumn(null,
+                null,
+                null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                1,
+                null,
+                (fields[i] as VCodeField).labels,
+                (fields[i] as VCodeField).getCodes() as Array<NotNullFixed>)
+      } else if (fields[i] is VBooleanCodeField) {
+        columns[col] = VBooleanCodeColumn(null,
+                null,
+                null,
+                0,
+                fields[i].align,
+                getColumnGroups(fields[i]),
+                null,
+                1,
+                null,
+                (fields[i] as VCodeField).labels,
+                getBoolArray((fields[i] as VCodeField).getCodes() as Array<Boolean>))
+      } else {
+        throw InconsistencyException("Error: unknown field type.")
+      }
+      // add labels for columns.
+      if (!fields[i].name.equals(block.idField.name)) {
+        val columnLabel = if (fields[i].label != null) {
+          fields[i].label!!.trim()
+        } else {
+          fields[i].name
+        }
+        columns[col]!!.label = columnLabel!!
+      }
+      col++
+    }
+    model.columns = columns
+    if (block.isMulti() && isFetched) {
+      for (i in 0 until block.bufferSize) {
+        if (block.isRecordFilled(i)) {
+          block.currentRecord = i
+          val list = ArrayList<Any?>()
+          for (j in fields.indices) {
+            if (!fields[j].name.equals(block.idField.name)) {
+              list.add(fields[j].getObject())
+            }
+          }
+          // add ID field in the end.
+          for (j in fields.indices) {
+            if (fields[j].name.equals(block.idField.name)) {
+              list.add(fields[j].getObject())
+              break
+            }
+          }
+          model.addLine(list.toTypedArray())
+        }
+      }
+    } else {
+      try {
+        transaction {
+          if (block.isMulti()) {
+            block.activeRecord = 0
+          }
+          val searchCondition = if (block.getSearchConditions() == null) "" else block.getSearchConditions()
+          val searchColumns = block.getReportSearchColumns()
+          val searchTables = block.getSearchTables()
+          if (block.isMulti()) {
+            block.activeRecord = -1
+            block.activeField = null
+          }
+          TODO()
+        }
+      } catch (e: Throwable) {
+        throw VExecFailedException(e)
+      }
+    }
+  }
+
+  // methods overriden from VReport
+  override fun localize(locale: Locale?) {
+    // report clumnns inherit their localization from the Block.
+    // actors are localized with VlibProperties.
+  }
+
+  override fun add() {}
+  override fun init() {
+  }
+
+  override fun initReport() {
+    build()
+  }
+
+  override fun destroyModel() {
+    //
+  }
+
+  // ----------------------------------------------------------------------
+  // Default Actors
+  // ----------------------------------------------------------------------
+  private fun initDefaultActors() {
+    actorsDef = arrayOfNulls(11)
+    createActor("File", "Quit", QUIT_ICON, KeyEvent.VK_ESCAPE, 0, Constants.CMD_QUIT)
+    createActor("File", "Print", PRINT_ICON, KeyEvent.VK_F6, 0, Constants.CMD_PRINT)
+    createActor("File", "ExportCSV", EXPORT_ICON, KeyEvent.VK_F8, 0, Constants.CMD_EXPORT_CSV)
+    createActor("File", "ExportXLSX", EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_MASK, Constants.CMD_EXPORT_XLSX)
+    createActor("File", "ExportPDF", EXPORT_ICON, KeyEvent.VK_F9, 0, Constants.CMD_EXPORT_PDF)
+    createActor("Action", "Fold", FOLD_ICON, KeyEvent.VK_F2, 0, Constants.CMD_FOLD)
+    createActor("Action", "Unfold", UNFOLD_ICON, KeyEvent.VK_F3, 0, Constants.CMD_UNFOLD)
+    createActor("Action", "FoldColumn", FOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0, Constants.CMD_FOLD_COLUMN)
+    createActor("Action", "UnfoldColumn", UNFOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0, Constants.CMD_UNFOLD_COLUMN)
+    createActor("Action", "Sort", SERIALQUERY_ICON, KeyEvent.VK_F4, 0, Constants.CMD_SORT)
+    createActor("Help", "Help", HELP_ICON, KeyEvent.VK_F1, 0, Constants.CMD_HELP)
+    // !!! wael 20070418: these actors can be added in the future.
+    //    createActor("File", "Preview", null, KeyEvent.SHIFT_MASK + KeyEvent.VK_F6, 0, Constants.CMD_PREVIEW);
+    //    createActor("File", "PrintOptions", "border", KeyEvent.VK_F7, KeyEvent.SHIFT_MASK, Constants.CMD_PRINT_OPTIONS);
+    //    createActor("Action", "OpenLine", "edit", KeyEvent.VK_UNDEFINED, 0, CMD_OPEN_LINE);
+    //    createActor("Settings", "RemoveConfiguration", null, KeyEvent.VK_UNDEFINED, 0, Constants.CMD_REMOVE_CONFIGURATION);
+    //    createActor("Settings", "LoadConfiguration", "save", KeyEvent.VK_UNDEFINED, 0, Constants.CMD_LOAD_CONFIGURATION);
+    //    createActor("Action", "ColumnInfo", "options", KeyEvent.VK_UNDEFINED , 0, Constants.CMD_COLUMN_INFO);
+    addActors(actorsDef.requireNoNulls())
+  }
+
+  // ----------------------------------------------------------------------
+  // Default Actors
+  // ----------------------------------------------------------------------
+  private fun createActor(menuIdent: String, actorIdent: String, iconIdent: String, key: Int, modifier: Int, trigger: Int) {
+    actorsDef[number] = VDefaultReportActor(menuIdent, actorIdent, iconIdent, key, modifier)
+    actorsDef[number]!!.number = trigger
+    number++
+  }
+
+  // ----------------------------------------------------------------------
+  // Default Commands
+  // ----------------------------------------------------------------------
+  private fun initDefaultCommands() {
+    commands = arrayOfNulls(actorsDef.size)
+    for (i in 0..10) {
+      commands[i] = VReportCommand(this, actorsDef[i]!!)
+    }
+  }
+
+  /**
+   * return the report column group for the given table.
+   */
+  private fun getColumnGroups(table: Int): Int {
+    val flds: Array<VField> = block.fields
+    for (i in flds.indices) {
+      if (flds[i].isInternal() && flds[i].getColumnCount() > 1) {
+        val col: Int = flds[i].fetchColumn(table)
+        if (col != -1 && flds[i].getColumn(col)!!.name.equals(block.idField.name)) {
+          if (flds[i].fetchColumn(0) !== -1) {
+            // group with the Id of the block.
+            return idColumn
+          }
+        }
+      }
+    }
+    return -1
+  }
+
+  /**
+   * return the report column group for the given field.
+   */
+  private fun getColumnGroups(field: VField): Int {
+    return if (field.getColumnCount() === 0 || field.getColumn(0)!!.getTable() === 0) {
+      -1
+    } else {
+      getColumnGroups(field.getColumn(0)!!.getTable())
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  //  useful Methods.
+  // ----------------------------------------------------------------------
+  private fun getBoolArray(codes: Array<Boolean>): BooleanArray {
+    val result = BooleanArray(codes.size)
+    for (i in codes.indices) {
+      result[i] = codes[i]
+    }
+    return result
+  }
+
+  private fun getIntArray(codes: Array<Int>): IntArray {
+    val result = IntArray(codes.size)
+    for (i in codes.indices) {
+      result[i] = codes[i]
+    }
+    return result
+  }
+
+  // ----------------------------------------------------------------------
+  // Data Members
+  // ----------------------------------------------------------------------
+  private val columns: Array<VReportColumn?>
+  private val fields: Array<VField>
+  private val block: VBlock
+  private lateinit var actorsDef: Array<VActor?>
+  private var number = 0
+  private var idColumn = 0
 
   companion object {
+    /**
+     * Implements interface for COMMAND CreateDynamicReport
+     */
+    fun createDynamicReport(block: VBlock) {
+      try {
+        val report: VReport
+        block.form.setWaitInfo(Message.getMessage("report_generation"))
+        report = VDynamicReport(block)
+        report.doNotModal()
+      } catch (e: VNoRowException) {
+        block.form.error(MessageCode.getMessage("VIS-00057"))
+      } finally {
+        block.form.unsetWaitInfo()
+      }
+      block.setRecordChanged(0, false)
+    }
+
     const val EXPORT_ICON = "export"
     const val FOLD_ICON = "fold"
     const val UNFOLD_ICON = "unfold"
@@ -30,4 +454,18 @@ class VDynamicReport {
     const val QUIT_ICON = "quit"
     const val PRINT_ICON = "print"
   }
+
+  init {
+    printOptions = PConfig()
+    dBContext = block.dBContext
+    this.block = block
+    fields = initFields(block.fields)
+    columns = arrayOfNulls(fields.size)
+    idColumn = -1
+    setPageTitle(block.title)
+    initDefaultActors()
+    initDefaultCommands()
+    initColumns()
+  }
 }
+

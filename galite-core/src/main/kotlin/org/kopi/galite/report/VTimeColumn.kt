@@ -29,13 +29,13 @@ import org.kopi.galite.type.Time
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
  */
-class VTimeColumn(ident: String,
+class VTimeColumn(ident: String?,
                   options: Int,
                   align: Int,
                   groups: Int,
-                  function: VCalculateColumn,
+                  function: VCalculateColumn?,
                   width: Int,
-                  format: VCellFormat)
+                  format: VCellFormat?)
       : VReportColumn(ident,
                       options,
                       align,

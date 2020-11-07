@@ -17,5 +17,69 @@
  */
 package org.kopi.galite.cross
 
-abstract class VChartSelectionForm {
+import org.kopi.galite.chart.VChart
+import org.kopi.galite.chart.VNoChartRowException
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VDictionaryForm
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+
+abstract class VChartSelectionForm: VDictionaryForm {
+
+  //---------------------------------------------------------------------
+  // CONSTRUCTORS
+  //---------------------------------------------------------------------
+  constructor(parent: DBContextHandler): super(parent)
+
+  constructor(parent: DBContext): super(parent)
+
+  constructor(): super()
+
+  //---------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------------------------
+  /**
+   * static call to createReport.
+   */
+  open fun createChart(chart: VChart, b: VBlock) {
+    b.validate()
+    try {
+      chart.setWaitInfo(Message.getMessage("chart_generation"))
+      chart.dBContext = chart.dBContext
+      chart.doNotModal()
+      chart.unsetWaitInfo()
+    } catch (e: VNoChartRowException) {
+      chart.unsetWaitInfo()
+      chart.error(MessageCode.getMessage("VIS-00057"))
+    }
+    b.setRecordChanged(0, false)
+  }
+
+  /**
+   * Implements interface for COMMAND CreateChart
+   */
+  open fun createChart(b: VBlock) {
+    b.validate()
+    try {
+      setWaitInfo(Message.getMessage("chart_generation"))
+      val chart: VChart = createChart()
+      chart.dBContext = dBContext
+      chart.doNotModal()
+      unsetWaitInfo()
+    } catch (e: VNoChartRowException) {
+      unsetWaitInfo()
+      error(MessageCode.getMessage("VIS-00057"))
+    }
+    b.setRecordChanged(0, false)
+  }
+
+  //---------------------------------------------------------------------
+  // ABSTRACT METHODS
+  //---------------------------------------------------------------------
+  /**
+   * create a report for this form
+   */
+  protected abstract fun createChart(): VChart
 }
