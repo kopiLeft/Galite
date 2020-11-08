@@ -21,7 +21,6 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Query
 
 import org.kopi.galite.exceptions.InvalidValueException
-import kotlin.reflect.KClass
 
 /**
  * Represents a list domain.

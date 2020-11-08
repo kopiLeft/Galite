@@ -17,8 +17,6 @@
 
 package org.kopi.galite.domain
 
-import kotlin.reflect.KClass
-
 /**
  * Represents a code domain.
  */
