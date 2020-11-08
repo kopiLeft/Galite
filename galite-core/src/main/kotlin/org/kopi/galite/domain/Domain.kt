@@ -24,11 +24,16 @@ import kotlin.reflect.KClass
  *
  * @param length the maximum length of the value that can be passed.
  */
-abstract class Domain<T : Comparable<T>>(val length: Int? = null, val kClass: KClass<*>) {
+open class Domain<T : Comparable<T>>(val length: Int? = null) {
   /**
    * The type of this domain.
    */
-  abstract val type: Domain<T>
+  open val type: Domain<T>? = null
+
+  /**
+   * Determines the column data type
+   */
+  var kClass: KClass<T>? = null
 
   /**
    * Allows to define the possible codes that the domain can take
@@ -36,7 +41,7 @@ abstract class Domain<T : Comparable<T>>(val length: Int? = null, val kClass: KC
    * @param init used to initialize the code domain
    */
   fun code(init: CodeDomain<T>.() -> Unit): CodeDomain<T> {
-    val codeDomain = CodeDomain<T>(this::class.java.simpleName, kClass)
+    val codeDomain = CodeDomain<T>(this::class.java.simpleName)
     codeDomain.init()
     return codeDomain
   }
@@ -47,7 +52,7 @@ abstract class Domain<T : Comparable<T>>(val length: Int? = null, val kClass: KC
    * @param init used to initialize the list domain
    */
   fun list(init: ListDomain<T>.() -> Unit): ListDomain<T> {
-    val listDomain = ListDomain<T>(this::class.java.simpleName, kClass)
+    val listDomain = ListDomain<T>(this::class.java.simpleName)
     listDomain.init()
     return listDomain
   }

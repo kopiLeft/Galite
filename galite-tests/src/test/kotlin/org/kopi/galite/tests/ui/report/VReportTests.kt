@@ -93,7 +93,7 @@ class SimpleReportTest : VerticalLayout() {
   /**
    * String type Domain
    */
-  class StringTestType : Domain<String>(5, String::class) {
+  class StringTestType : Domain<String>(5) {
     override val type = code {
       this["cde1"] = "test1"
     }
@@ -102,7 +102,7 @@ class SimpleReportTest : VerticalLayout() {
   /**
    * Long type Domain
    */
-  class LongTestType : Domain<Long>(5, Long::class) {
+  class LongTestType : Domain<Long>(5) {
     override val type = code {
       this["cde1"] = 1
     }

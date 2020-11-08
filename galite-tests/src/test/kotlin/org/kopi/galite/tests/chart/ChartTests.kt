@@ -164,13 +164,13 @@ class ChartTests : TestBase() {
   }
 }
 
-class StringTestType(val param: Int) : Domain<String>(25, String::class) {
+class StringTestType(val param: Int) : Domain<String>(25) {
   override val type = code {
     this["cde1"] = "1"
   }
 }
 
-class IntTestType(val param: Int) : Domain<Int>(25, Int::class) {
+class IntTestType(val param: Int) : Domain<Int>(25) {
   override val type = code {
     this["cde1"] = 1
   }

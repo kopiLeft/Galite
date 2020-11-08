@@ -44,13 +44,13 @@ class ReportTests: ApplicationTestBase() {
   @Test
   fun reportDataTest() {
     val rows = SimpleReport.getRowsForField(SimpleReport.name)
-    assertEquals(listOf("Sami", "Safia"), rows)
+    assertEquals(listOf("Sami", "Sofia"), rows)
 
     val firstRow = SimpleReport.getRow(0)
     assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22), firstRow)
 
     val secondRow = SimpleReport.getRow(1)
-    assertEquals(mapOf(SimpleReport.name to "Safia", SimpleReport.age to 23), secondRow)
+    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23), secondRow)
   }
 
   /**
@@ -94,12 +94,12 @@ class ReportTests: ApplicationTestBase() {
 
     override val reportCommands = true
 
-    val name = field(StringTestType()) {
+    val name = field(Domain<String>(20)) {
       label = "name"
       help = "The user name"
     }
 
-    val age = field(IntTestType()) {
+    val age = field(Domain<Int>(3)) {
       label = "age"
       help = "The user age"
     }
@@ -110,19 +110,19 @@ class ReportTests: ApplicationTestBase() {
         this[age] = 22
       }
       add {
-        this[name] = "Safia"
+        this[name] = "Sofia"
         this[age] = 23
       }
     }
   }
 
-  class StringTestType : Domain<String>(5, String::class) {
+  class StringTestType : Domain<String>(5) {
     override val type = code {
       this["cde1"] = "test1"
     }
   }
 
-  class IntTestType : Domain<Int>(3, Int::class) {
+  class IntTestType : Domain<Int>(3) {
     override val type = code {
       this["cde1"] = 1
     }

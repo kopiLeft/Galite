@@ -17,6 +17,11 @@
 
 package org.kopi.galite.report
 
+import java.io.File
+import java.io.IOException
+import java.lang.RuntimeException
+import java.util.Date
+
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
@@ -25,11 +30,6 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
-import java.io.File
-import java.io.IOException
-import java.lang.Exception
-import java.lang.RuntimeException
-import java.util.*
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -51,7 +51,8 @@ abstract class Report: Window() {
    * @param init    initialization method.
    * @return a field.
    */
-  fun <T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
+  inline fun <reified T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
+    domain.kClass = T::class
     val field = RField(domain)
     field.init()
     fields.add(field)

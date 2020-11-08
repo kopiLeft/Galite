@@ -31,7 +31,7 @@ import kotlin.reflect.KClass
  * It allows optionally to define a constraint that makes restrictions
  * on the set of allowed values.
  */
-class ListDomain<T : Comparable<T>>(private val name: String, kClass: KClass<*>) : Domain<T>(kClass = kClass) {
+class ListDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
   var query: Query? = null
 
   /**

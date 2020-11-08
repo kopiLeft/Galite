@@ -38,7 +38,7 @@ class ListDomainTests {
   @Test
   fun simpleDomainWithLengthTest() {
     // Declaration of the domain with length
-    class StringTestType : Domain<String>(20, String::class) {
+    class StringTestType : Domain<String>(20) {
       override val type = list {
         query = TestTable.selectAll()
 
@@ -66,7 +66,7 @@ class ListDomainTests {
   @Test
   fun domainWithConvertUpperTest() {
     // Declaration of the domain with length
-    class StringTestType : Domain<String>(5, String::class) {
+    class StringTestType : Domain<String>(5) {
       override val type = list {
         convertUpper()
 
@@ -94,7 +94,7 @@ class ListDomainTests {
   @Test
   fun domainWithCheckTest() {
     // Declaration of the domain with length
-    class StringTestType(val param: String) : Domain<String>(5, Int::class) {
+    class StringTestType(val param: String) : Domain<String>(5) {
       override val type = list {
         convertUpper()
 
