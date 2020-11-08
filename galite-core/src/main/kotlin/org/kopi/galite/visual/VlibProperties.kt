@@ -85,5 +85,5 @@ object VlibProperties {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private const val VLIB_PROPERTIES_RESOURCE_FILE ="resource/org/kopi/galite/VlibProperties"
+  private const val VLIB_PROPERTIES_RESOURCE_FILE ="org/kopi/galite/VlibProperties"
 }
