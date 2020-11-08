@@ -33,9 +33,9 @@ class VTimeColumn(ident: String,
                   options: Int,
                   align: Int,
                   groups: Int,
-                  function: VCalculateColumn,
+                  function: VCalculateColumn?,
                   width: Int,
-                  format: VCellFormat)
+                  format: VCellFormat?)
       : VReportColumn(ident,
                       options,
                       align,

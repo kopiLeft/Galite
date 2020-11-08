@@ -14,7 +14,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.tests.report
 
 import java.io.File
@@ -35,10 +34,8 @@ class ReportTests: ApplicationTestBase() {
    */
   @Test
   fun reportFieldsTest() {
-    val report = SimpleReport()
-
-    assertEquals(report.fields[0], report.name)
-    assertEquals(report.fields[1], report.age)
+    assertEquals(SimpleReport.fields[0], SimpleReport.name)
+    assertEquals(SimpleReport.fields[1], SimpleReport.age)
   }
 
   /**
@@ -46,16 +43,14 @@ class ReportTests: ApplicationTestBase() {
    */
   @Test
   fun reportDataTest() {
-    val report = SimpleReport()
-
-    val rows = report.getRowsForField(report.name)
+    val rows = SimpleReport.getRowsForField(SimpleReport.name)
     assertEquals(listOf("Sami", "Safia"), rows)
 
-    val firstRow = report.getRow(0)
-    assertEquals(mapOf(report.name to "Sami", report.age to 22), firstRow)
+    val firstRow = SimpleReport.getRow(0)
+    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22), firstRow)
 
-    val secondRow = report.getRow(1)
-    assertEquals(mapOf(report.name to "Safia", report.age to 23), secondRow)
+    val secondRow = SimpleReport.getRow(1)
+    assertEquals(mapOf(SimpleReport.name to "Safia", SimpleReport.age to 23), secondRow)
   }
 
   /**
@@ -67,12 +62,11 @@ class ReportTests: ApplicationTestBase() {
     val tempDir = createTempDir("galite", "")
     tempDir.deleteOnExit()
 
-    val report = SimpleReport()
-    val sourceFilePath = report.javaClass.classLoader.getResource("").path +
+    val sourceFilePath = SimpleReport.javaClass.classLoader.getResource("").path +
             this.javaClass.packageName.replace(".", "/") + File.separatorChar
-    report.genLocalization()
+    SimpleReport.genLocalization()
 
-    val generatedFile = File("${sourceFilePath}/SimpleReport-${report.locale}.xml")
+    val generatedFile = File("${sourceFilePath}/SimpleReport-${SimpleReport.locale}.xml")
     assertEquals(true, generatedFile.exists())
     val document = builder.build(generatedFile)
 
@@ -93,7 +87,7 @@ class ReportTests: ApplicationTestBase() {
   /**
    * Simple Report with two fields.
    */
-  class SimpleReport : Report() {
+  object SimpleReport : Report() {
     override val locale = Locale.FRANCE
 
     override val title = "SimpleReport"
@@ -122,13 +116,13 @@ class ReportTests: ApplicationTestBase() {
     }
   }
 
-  class StringTestType : Domain<String>(5) {
+  class StringTestType : Domain<String>(5, String::class) {
     override val type = code {
       this["cde1"] = "test1"
     }
   }
 
-  class IntTestType : Domain<Int>(3) {
+  class IntTestType : Domain<Int>(3, Int::class) {
     override val type = code {
       this["cde1"] = 1
     }

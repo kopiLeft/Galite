@@ -40,7 +40,7 @@ class CodeDomainTests {
   @Test
   fun simpleDomainWithLengthTest() {
     // Declaration of the domain with length
-    class StringTestType : Domain<String>(5) {
+    class StringTestType : Domain<String>(5, String::class) {
       override val type = code {
         this["cde1"] = "1"
       }
@@ -64,7 +64,7 @@ class CodeDomainTests {
   @Test
   fun domainCodeTest() {
     // Declaration of the domain with codes
-    class IntTestType : Domain<Long>(5) {
+    class IntTestType : Domain<Long>(5, Long::class) {
       override val type = code {
         this["cde1"] = 1L
         this["cde2"] = 2L
@@ -89,7 +89,7 @@ class CodeDomainTests {
   @Test
   fun domainRedundantCodeTest() {
     // Declaration of the domain with codes
-    class IntTestType : Domain<Long>(5) {
+    class IntTestType : Domain<Long>(5, Long::class) {
       override val type = code {
         this["cde1"] = 1L
         this["cde2"] = 2L
@@ -112,7 +112,7 @@ class CodeDomainTests {
   @Test
   fun applyConvertUpperOnCodeDomainTest() {
     // Declaration of the domain with length
-    class StringTestType() : Domain<String>(5) {
+    class StringTestType() : Domain<String>(5, String::class) {
       override val type = code {
         this["cde1"] = "1"
       }
@@ -136,7 +136,7 @@ class CodeDomainTests {
   @Test
   fun applyConvertCheckOnCodeDomainTest() {
     // Declaration of the domain with length
-    class StringTestType : Domain<String>(5) {
+    class StringTestType : Domain<String>(5, String::class) {
       override val type = code {
         this["cde1"] = "1"
       }

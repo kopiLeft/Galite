@@ -17,10 +17,12 @@
 
 package org.kopi.galite.domain
 
+import kotlin.reflect.KClass
+
 /**
  * Represents a code domain.
  */
-class CodeDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
+class CodeDomain<T : Comparable<T>>(private val name: String, kClass: KClass<*>) : Domain<T>(kClass = kClass) {
   /**
    * Mapping of all values that a domain can take
    */

@@ -75,7 +75,7 @@ class VItemTree(rootName: String?,
     const val CMD_EDIT = 7
     const val CMD_ADD = 8
     const val CMD_REMOVE = 9
-    private const val MENU_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/Menu"
+    private const val MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/Menu"
 
     init {
       WindowController.windowController.registerWindowBuilder(Constants.MDL_ITEM_TREE, object : WindowBuilder {
@@ -132,14 +132,14 @@ class VItemTree(rootName: String?,
                           icon: String,
                           key: Int,
                           modifier: Int) {
-    actors[number] = VActor(menu,
+    treeActors[number] = VActor(menu,
                             MENU_LOCALIZATION_RESOURCE,
                             item,
                             MENU_LOCALIZATION_RESOURCE,
                             icon,
                             key,
                             modifier)
-    actors[number].number= number
+    treeActors[number]!!.number= number
   }
 
   /**

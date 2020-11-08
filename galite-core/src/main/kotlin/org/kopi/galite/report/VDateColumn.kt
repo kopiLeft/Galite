@@ -35,7 +35,7 @@ class VDateColumn(ident: String,
                   options: Int,
                   align: Int,
                   groups: Int,
-                  function: VCalculateColumn,
+                  function: VCalculateColumn?,
                   width: Int,
                   format: VCellFormat?)
   : VReportColumn(ident,

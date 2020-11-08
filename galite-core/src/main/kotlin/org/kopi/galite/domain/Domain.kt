@@ -17,12 +17,14 @@
 
 package org.kopi.galite.domain
 
+import kotlin.reflect.KClass
+
 /**
  * A domain is a data type with predefined list of allowed values.
  *
  * @param length the maximum length of the value that can be passed.
  */
-abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
+abstract class Domain<T : Comparable<T>>(val length: Int? = null, val kClass: KClass<*>) {
   /**
    * The type of this domain.
    */
@@ -34,7 +36,7 @@ abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
    * @param init used to initialize the code domain
    */
   fun code(init: CodeDomain<T>.() -> Unit): CodeDomain<T> {
-    val codeDomain = CodeDomain<T>(this::class.java.simpleName)
+    val codeDomain = CodeDomain<T>(this::class.java.simpleName, kClass)
     codeDomain.init()
     return codeDomain
   }
@@ -45,7 +47,7 @@ abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
    * @param init used to initialize the list domain
    */
   fun list(init: ListDomain<T>.() -> Unit): ListDomain<T> {
-    val listDomain = ListDomain<T>(this::class.java.simpleName)
+    val listDomain = ListDomain<T>(this::class.java.simpleName, kClass)
     listDomain.init()
     return listDomain
   }

@@ -30,7 +30,7 @@ class RegistryTests {
   fun registryTest() {
     testRegistry.buildDependencies()
     assertEquals("org.kopi.galite.visual.Messages", testRegistry.dependencies["mainDomain"])
-    assertEquals("org.kopi.galite.resource.Messages", testRegistry.dependencies["VIS"])
+    assertEquals("org.kopi.galite.Messages", testRegistry.dependencies["VIS"])
     assertEquals(true, testRegistry.dependencies.containsKey("firstDomaineName"))
     assertEquals(true, testRegistry.dependencies.containsKey("secondDomaineName"))
   }

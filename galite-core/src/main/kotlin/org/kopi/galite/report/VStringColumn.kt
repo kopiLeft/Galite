@@ -31,10 +31,10 @@ class VStringColumn(ident: String,
                     options: Int,
                     align: Int,
                     groups: Int,
-                    function: VCalculateColumn,
+                    function: VCalculateColumn?,
                     width: Int,
                     height: Int,
-                    format: VCellFormat)
+                    format: VCellFormat?)
      : VReportColumn(ident,
                      options,
                      align,

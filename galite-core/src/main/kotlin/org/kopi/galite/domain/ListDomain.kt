@@ -21,6 +21,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Query
 
 import org.kopi.galite.exceptions.InvalidValueException
+import kotlin.reflect.KClass
 
 /**
  * Represents a list domain.
@@ -30,7 +31,7 @@ import org.kopi.galite.exceptions.InvalidValueException
  * It allows optionally to define a constraint that makes restrictions
  * on the set of allowed values.
  */
-class ListDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
+class ListDomain<T : Comparable<T>>(private val name: String, kClass: KClass<*>) : Domain<T>(kClass = kClass) {
   var query: Query? = null
 
   /**

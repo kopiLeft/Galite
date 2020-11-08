@@ -181,8 +181,8 @@ abstract class VForm : VWindow, VConstants {
   /**
    * addCommand in menu
    */
-  override fun addActors(actors: Array<VActor>) {
-    actors.forEach { actor ->
+  override fun addActors(actors: Array<VActor>?) {
+    actors?.forEach { actor ->
       if (actor is VDefaultActor) {
         when ((actor as VDefaultActor).code) {
           CMD_AUTOFILL -> autofillActor = actor
@@ -237,7 +237,7 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   private fun initActors() {
     for (i in blocks.indices) {
-      blocks[i].actors?.let { addActors(it) }
+      addActors(blocks[i].actors)
     }
   }
 
@@ -605,7 +605,7 @@ abstract class VForm : VWindow, VConstants {
               help: String,
               code: String) {
     for (i in blocks.indices) {
-      blocks[i].actors?.let { addActors(it) }
+      addActors(blocks[i].actors)
     }
     VDocGenerator(p).helpOnForm(getName(),
             commands,
