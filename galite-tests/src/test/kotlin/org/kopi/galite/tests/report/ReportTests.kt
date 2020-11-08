@@ -100,12 +100,12 @@ class ReportTests: ApplicationTestBase() {
 
     override val reportCommands = true
 
-    val name = field(StringTestType()) {
+    val name = field(Domain<String>(20)) {
       label = "name"
       help = "The user name"
     }
 
-    val age = field(IntTestType()) {
+    val age = field(Domain<Int>(3)) {
       label = "age"
       help = "The user age"
     }
@@ -119,18 +119,6 @@ class ReportTests: ApplicationTestBase() {
         this[name] = "Safia"
         this[age] = 23
       }
-    }
-  }
-
-  class StringTestType : Domain<String>(5) {
-    override val type = code {
-      this["cde1"] = "test1"
-    }
-  }
-
-  class IntTestType : Domain<Int>(3) {
-    override val type = code {
-      this["cde1"] = 1
     }
   }
 }
