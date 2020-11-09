@@ -1181,7 +1181,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  protected fun fireViewModeEntered(block: VBlock, field: VField) {
+  protected fun fireViewModeEntered(block: VBlock, field: VField?) {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
     while (i >= 0) {
