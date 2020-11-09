@@ -21,6 +21,8 @@ import java.awt.event.KeyEvent
 import java.util.ArrayList
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VBooleanCodeField
@@ -62,11 +64,8 @@ import org.kopi.galite.report.VWeekColumn
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.type.NotNullFixed
-
-import org.jetbrains.exposed.sql.transactions.transaction
 
 class VDynamicReport(block: VBlock) : VReport() {
   /**
