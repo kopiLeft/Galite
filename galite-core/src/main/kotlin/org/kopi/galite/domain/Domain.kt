@@ -22,11 +22,11 @@ package org.kopi.galite.domain
  *
  * @param length the maximum length of the value that can be passed.
  */
-abstract class Domain<T : Comparable<T>>(val length: Int? = null) {
+open class Domain<T : Comparable<T>>(val length: Int? = null) {
   /**
    * The type of this domain.
    */
-  abstract val type: Domain<T>
+  open val type: Domain<T>? = null
 
   /**
    * Allows to define the possible codes that the domain can take

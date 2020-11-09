@@ -83,7 +83,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
             RootMenu(MAIN_MENU, "forms"),
             RootMenu(USER_MENU, "user"),
             RootMenu(ADMIN_MENU, "admin"))
-    private const val MENU_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/Menu"
+    private const val MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/Menu"
 
     init {
       WindowController.windowController.registerWindowBuilder(Constants.MDL_MENU_TREE, object : WindowBuilder {

@@ -81,5 +81,5 @@ object Message {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private const val VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/VKMessages"
+  private const val VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE = "org/kopi/galite/VKMessages"
 }
