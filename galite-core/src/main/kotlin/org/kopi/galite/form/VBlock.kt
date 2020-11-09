@@ -1192,7 +1192,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  protected fun fireViewModeLeaved(block: VBlock, field: VField) {
+  protected fun fireViewModeLeaved(block: VBlock, field: VField?) {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 
@@ -2915,8 +2915,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     set(mode: Boolean) {
       if (mode != field) {
         // remember field to enter it in the next view
-        val vField: VField? = activeField
-        fireViewModeLeaved(this, vField!!)
+        val vField = activeField
+        fireViewModeLeaved(this, vField)
         field = mode
         fireViewModeEntered(this, vField)
       }
@@ -2969,7 +2969,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     } else {
       // is this restriction acceptable ?
       assert(!isMulti()) { "Block $name is a multiblock." }
-      val act: VField? = activeField
+      val act = activeField
       act?.leave(true)
       this.mode = mode
       for (i in fields.indices) {
