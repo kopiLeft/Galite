@@ -75,10 +75,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               columns: Array<VColumn?>?,
               indices: Int,
               priority: Int,
-              commands: Array<VCommand>,
+              commands: Array<VCommand>?,
               pos: VPosition,
               align: Int,
-              alias: VField) {
+              alias: VField?) {
     this.name = name
     this.index = index
     this.posInArray = posInArray
@@ -99,7 +99,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     position = pos
     command = commands
     this.alias = alias
-    alias.addFieldChangeListener(object : FieldChangeListener {
+    alias?.addFieldChangeListener(object : FieldChangeListener {
       override fun labelChanged() {}
       override fun searchOperatorChanged() {}
       override fun valueChanged(r: Int) {
@@ -109,7 +109,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       override fun accessChanged(r: Int) {}
       override fun colorChanged(r: Int) {}
     })
-
   }
 
   fun fetchColumn(table: Int): Int {
@@ -506,7 +505,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * return access of this field in current mode
    */
-  fun getDefaultAccess(): Int = access[block!!.mode]
+  fun getDefaultAccess(): Int = access[block!!.getMode()]
 
   fun getAccess(i: Int): Int {
     return if (i == -1) {
@@ -2433,7 +2432,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   var position: VPosition? = null
     private set
 
-  lateinit var command: Array<VCommand>
+  var command: Array<VCommand>? = null
 
   private lateinit var foreground: Array<VColor?> // foreground colors for this field.
 

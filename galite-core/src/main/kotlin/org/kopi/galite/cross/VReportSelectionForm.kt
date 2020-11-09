@@ -28,7 +28,7 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 
 abstract class VReportSelectionForm : VDictionaryForm {
-  protected constructor() {}
+  protected constructor()
   protected constructor(caller: VForm) : super(caller)
   protected constructor(caller: DBContextHandler) : super(caller)
   protected constructor(caller: DBContext) : super(caller)

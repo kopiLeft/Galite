@@ -176,7 +176,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       }
       val localCommands = model.command
       localCommands?.forEachIndexed { index, localCommand ->
-        if (localCommand.isActive(getBlock().mode)) {
+        if (localCommand.isActive(getBlock().getMode())) {
           val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS,
                           getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
             try {
@@ -202,7 +202,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     if (model.getAccess(model.block!!.activeRecord) > VConstants.ACS_SKIPPED &&
             hasAutofillCommand() &&
             !model.block!!.isChart() && display != null && display!!.getAutofillButton() != null) {
-      display!!.getAutofillButton().setEnabled(autofillCommand!!.isActive(model.block!!.mode))
+      display!!.getAutofillButton().setEnabled(autofillCommand!!.isActive(model.block!!.getMode()))
     }
   }
 

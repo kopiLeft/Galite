@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.cross
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.event.KeyEvent
 import java.util.ArrayList
 import java.util.Locale
@@ -67,24 +66,28 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.type.NotNullFixed
 
+import org.jetbrains.exposed.sql.transactions.transaction
+
 class VDynamicReport(block: VBlock) : VReport() {
   /**
    * @param     fields  block fields.
    * @return fields that will represent columns in the dynamic report.
    */
   private fun initFields(fields: Array<VField>): Array<VField> {
-    val processedFields: MutableList<VField> = ArrayList<VField>()
-    for (i in fields.indices) {
+    val processedFields = arrayListOf<VField>()
+
+    fields.forEach { field ->
       // Images fields cannot be handled in dynamic reports
-      if (fields[i] !is VImageField
-              && (!fields[i].isInternal() || fields[i].name.equals(block.idField.name))) {
-        if (fields[i].getColumnCount() > 0 || block.isMulti() && isFetched) {
-          processedFields.add(fields[i])
+      if (field !is VImageField
+              && (!field.isInternal() || field.name.equals(block.idField.name))) {
+        if (field.getColumnCount() > 0 || block.isMulti() && isFetched) {
+          processedFields.add(field)
         }
       }
     }
     if (processedFields.isEmpty()) {
-      throw InconsistencyException("Can't generate a report, check that this block contains unhidden fields with database columns.")
+      throw InconsistencyException("Can't generate a report, check that this block contains " +
+              "unhidden fields with database columns.")
     }
     return processedFields.toTypedArray()
   }
@@ -104,159 +107,159 @@ class VDynamicReport(block: VBlock) : VReport() {
   /**
    * create report columns and fill them with data.
    */
-  @Throws(VException::class)
   protected fun initColumns() {
     var col = 0
-    for (i in fields.indices) {
-      if (fields[i] is VStringField) {
-        columns[col] = VStringColumn(null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                fields[i].width,
-                1,
-                null)
-      } else if (fields[i] is VBooleanField) {
-        columns[col] = VBooleanColumn(null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                1,
-                null)
-      } else if (fields[i] is VDateField) {
-        columns[col] = VDateColumn(null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                1,
-                null)
-      } else if (fields[i] is VFixnumField) {
-        columns[col] = VFixnumColumn(null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                fields[i].width,
-                (fields[i] as VFixnumField).getScale(0),
-                null)
-      } else if (fields[i] is VIntegerField) {
-        // hidden field ID of the block will represent the last column in the report.
-        if (fields[i].name.equals(block.idField.name) && fields[i].isInternal()) {
-          idColumn = fields.size - 1
-          columns[fields.size - 1] = VIntegerColumn(null,
-                  0,
-                  fields[i].align,
-                  getColumnGroups(fields[i]),
-                  null,
-                  fields[i].width,
-                  null)
-          columns[fields.size - 1]!!.folded = true
-          // next column will have the position col.
-          col -= 1
-        } else {
-          if (fields[i].name.equals(block.idField.name)) {
-            idColumn = i
+
+    fields.forEachIndexed { index, field ->
+      when(field) {
+        is VStringField ->
+          columns[col] = VStringColumn(null,
+                                       0,
+                                       field.align,
+                                       getColumnGroups(field),
+                                       null,
+                                       field.width,
+                                       1,
+                                       null)
+        is VBooleanField ->
+          columns[col] = VBooleanColumn(null,
+                                        0,
+                                        field.align,
+                                        getColumnGroups(field),
+                                        null,
+                                        1,
+                                        null)
+        is VDateField ->
+          columns[col] = VDateColumn(null,
+                                     0,
+                                     field.align,
+                                     getColumnGroups(field),
+                                     null,
+                                     1,
+                                     null)
+        is VFixnumField ->
+          columns[col] = VFixnumColumn(null,
+                                       0,
+                                       field.align,
+                                       getColumnGroups(field),
+                                       null,
+                                       field.width,
+                                       (field as VFixnumField).getScale(0),
+                                       null)
+        is VIntegerField ->
+          // hidden field ID of the block will represent the last column in the report.
+          if (field.name.equals(block.idField.name) && field.isInternal()) {
+            idColumn = fields.size - 1
+            columns[fields.size - 1] = VIntegerColumn(null,
+                                                      0,
+                                                      field.align,
+                                                      getColumnGroups(field),
+                                                      null,
+                                                      field.width,
+                                                      null)
+            columns[fields.size - 1]!!.folded = true
+            // next column will have the position col.
+            col -= 1
+          } else {
+            if (field.name.equals(block.idField.name)) {
+              idColumn = index
+            }
+            columns[col] = VIntegerColumn(null,
+                                          0,
+                                          field.align,
+                                          getColumnGroups(field),
+                                          null,
+                                          field.width,
+                                          null)
           }
-          columns[col] = VIntegerColumn(null,
-                  0,
-                  fields[i].align,
-                  getColumnGroups(fields[i]),
-                  null,
-                  fields[i].width,
-                  null)
-        }
-      } else if (fields[i] is VMonthField) {
-        columns[col] = VMonthColumn(null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                fields[i].width,
-                null)
-      } else if (fields[i] is VTimeField) {
-        columns[col] = VTimeColumn(null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                fields[i].width,
-                null)
-      } else if (fields[i] is VTimestampField) {
-        columns[col] = VTimestampColumn(null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                fields[i].width,
-                null)
-      } else if (fields[i] is VWeekField) {
-        columns[col] = VWeekColumn(fields[i].name,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                fields[i].width,
-                null)
-      } else if (fields[i] is VStringCodeField) {
-        columns[col] = VStringCodeColumn(null,
-                null,
-                null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                fields[i].width,
-                null,
-                (fields[i] as VCodeField).labels,
-                (fields[i] as VCodeField).getCodes() as Array<String>)
-      } else if (fields[i] is VIntegerCodeField) {
-        columns[col] = VIntegerCodeColumn(null,
-                null,
-                null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                fields[i].width,
-                null,
-                (fields[i] as VCodeField).labels,
-                getIntArray((fields[i] as VCodeField).getCodes() as Array<Int>))
-      } else if (fields[i] is VFixnumCodeField) {
-        columns[col] = VFixnumCodeColumn(null,
-                null,
-                null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                1,
-                null,
-                (fields[i] as VCodeField).labels,
-                (fields[i] as VCodeField).getCodes() as Array<NotNullFixed>)
-      } else if (fields[i] is VBooleanCodeField) {
-        columns[col] = VBooleanCodeColumn(null,
-                null,
-                null,
-                0,
-                fields[i].align,
-                getColumnGroups(fields[i]),
-                null,
-                1,
-                null,
-                (fields[i] as VCodeField).labels,
-                getBoolArray((fields[i] as VCodeField).getCodes() as Array<Boolean>))
-      } else {
-        throw InconsistencyException("Error: unknown field type.")
+        is VMonthField ->
+          columns[col] = VMonthColumn(null,
+                                      0,
+                                      field.align,
+                                      getColumnGroups(field),
+                                      null,
+                                      field.width,
+                                      null)
+        is VTimeField ->
+          columns[col] = VTimeColumn(null,
+                                     0,
+                                     field.align,
+                                     getColumnGroups(field),
+                                     null,
+                                     field.width,
+                                     null)
+        is VTimestampField ->
+          columns[col] = VTimestampColumn(null,
+                                          0,
+                                          field.align,
+                                          getColumnGroups(field),
+                                          null,
+                                          field.width,
+                                          null)
+        is VWeekField ->
+          columns[col] = VWeekColumn(field.name,
+                                     0,
+                                     field.align,
+                                     getColumnGroups(field),
+                                     null,
+                                     field.width,
+                                     null)
+        is VStringCodeField ->
+          columns[col] = VStringCodeColumn(null,
+                                           null,
+                                           null,
+                                           0,
+                                           field.align,
+                                           getColumnGroups(field),
+                                           null,
+                                           field.width,
+                                           null,
+                                           (field as VCodeField).labels,
+                                           (field as VCodeField).getCodes() as Array<String>)
+        is VIntegerCodeField ->
+          columns[col] = VIntegerCodeColumn(null,
+                                            null,
+                                            null,
+                                            0,
+                                            field.align,
+                                            getColumnGroups(field),
+                                            null,
+                                            field.width,
+                                            null,
+                                            (field as VCodeField).labels,
+                                            getIntArray((field as VCodeField).getCodes() as Array<Int>))
+        is VFixnumCodeField ->
+          columns[col] = VFixnumCodeColumn(null,
+                                           null,
+                                           null,
+                                           0,
+                                           field.align,
+                                           getColumnGroups(field),
+                                           null,
+                                           1,
+                                           null,
+                                           (field as VCodeField).labels,
+                                           (field as VCodeField).getCodes() as Array<NotNullFixed>)
+        is VBooleanCodeField ->
+          columns[col] = VBooleanCodeColumn(null,
+                                            null,
+                                            null,
+                                            0,
+                                            field.align,
+                                            getColumnGroups(field),
+                                            null,
+                                            1,
+                                            null,
+                                            (field as VCodeField).labels,
+                                            getBoolArray((field as VCodeField).getCodes() as Array<Boolean>))
+        else -> throw InconsistencyException("Error: unknown field type.")
       }
       // add labels for columns.
-      if (!fields[i].name.equals(block.idField.name)) {
-        val columnLabel = if (fields[i].label != null) {
-          fields[i].label!!.trim()
+      if (!field.name.equals(block.idField.name)) {
+        val columnLabel = if (field.label != null) {
+          field.label!!.trim()
         } else {
-          fields[i].name
+          field.name
         }
         columns[col]!!.label = columnLabel!!
       }
@@ -304,15 +307,14 @@ class VDynamicReport(block: VBlock) : VReport() {
     }
   }
 
-  // methods overriden from VReport
+  // methods overridden from VReport
   override fun localize(locale: Locale?) {
-    // report clumnns inherit their localization from the Block.
+    // report columns inherit their localization from the Block.
     // actors are localized with VlibProperties.
   }
 
   override fun add() {}
-  override fun init() {
-  }
+  override fun init() {}
 
   override fun initReport() {
     build()
@@ -371,12 +373,12 @@ class VDynamicReport(block: VBlock) : VReport() {
    * return the report column group for the given table.
    */
   private fun getColumnGroups(table: Int): Int {
-    val flds: Array<VField> = block.fields
+    val flds = block.fields
     for (i in flds.indices) {
       if (flds[i].isInternal() && flds[i].getColumnCount() > 1) {
         val col: Int = flds[i].fetchColumn(table)
-        if (col != -1 && flds[i].getColumn(col)!!.name.equals(block.idField.name)) {
-          if (flds[i].fetchColumn(0) !== -1) {
+        if (col != -1 && flds[i].getColumn(col)!!.name == block.idField.name) {
+          if (flds[i].fetchColumn(0) != -1) {
             // group with the Id of the block.
             return idColumn
           }
@@ -390,7 +392,7 @@ class VDynamicReport(block: VBlock) : VReport() {
    * return the report column group for the given field.
    */
   private fun getColumnGroups(field: VField): Int {
-    return if (field.getColumnCount() === 0 || field.getColumn(0)!!.getTable() === 0) {
+    return if (field.getColumnCount() == 0 || field.getColumn(0)!!.getTable() == 0) {
       -1
     } else {
       getColumnGroups(field.getColumn(0)!!.getTable())
@@ -402,6 +404,7 @@ class VDynamicReport(block: VBlock) : VReport() {
   // ----------------------------------------------------------------------
   private fun getBoolArray(codes: Array<Boolean>): BooleanArray {
     val result = BooleanArray(codes.size)
+
     for (i in codes.indices) {
       result[i] = codes[i]
     }
@@ -410,6 +413,7 @@ class VDynamicReport(block: VBlock) : VReport() {
 
   private fun getIntArray(codes: Array<Int>): IntArray {
     val result = IntArray(codes.size)
+
     for (i in codes.indices) {
       result[i] = codes[i]
     }

@@ -64,7 +64,7 @@ abstract class VChartSelectionForm: VDictionaryForm {
     b.validate()
     try {
       setWaitInfo(Message.getMessage("chart_generation"))
-      val chart: VChart = createChart()
+      val chart = createChart()
       chart.dBContext = dBContext
       chart.doNotModal()
       unsetWaitInfo()

@@ -414,7 +414,7 @@ abstract class VForm : VWindow, VConstants {
 
     for (i in blocks.indices) {
       blocks!![i].clear()
-      blocks!![i].mode = VConstants.MOD_QUERY // vincent 14.9.98
+      blocks!![i].setMode(VConstants.MOD_QUERY) // vincent 14.9.98
     }
     initialise()
     if (activeBlock == null) {
