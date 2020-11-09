@@ -30,7 +30,7 @@ import org.kopi.galite.l10n.LocalizationManager
  */
 class VHelpViewer : VWindow() {
   companion object {
-    private const val HELPVIEWER_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/HelpViewer"
+    private const val HELPVIEWER_LOCALIZATION_RESOURCE = "org/kopi/galite/HelpViewer"
 
     const val CMD_QUIT = 0
 

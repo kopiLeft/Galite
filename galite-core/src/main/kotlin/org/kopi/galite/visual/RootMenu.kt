@@ -121,6 +121,6 @@ class RootMenu(id: Int, name: String) {
     return root == null
   }
   companion object {
-    const val ROOT_MENU_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/RootMenu"
+    const val ROOT_MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/RootMenu"
   }
 }
