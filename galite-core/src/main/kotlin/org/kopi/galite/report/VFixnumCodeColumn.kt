@@ -21,15 +21,15 @@ package org.kopi.galite.report
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.type.NotNullFixed
 
-class VFixnumCodeColumn(ident: String,
-                        type: String,
-                        source: String,
+class VFixnumCodeColumn(ident: String?,
+                        type: String?,
+                        source: String?,
                         options: Int,
                         align: Int,
                         groups: Int,
-                        function: VCalculateColumn,
+                        function: VCalculateColumn?,
                         width: Int,
-                        format: VCellFormat,
+                        format: VCellFormat?,
                         names: Array<String>,
                         codes: Array<NotNullFixed>)
        : VCodeColumn(ident,

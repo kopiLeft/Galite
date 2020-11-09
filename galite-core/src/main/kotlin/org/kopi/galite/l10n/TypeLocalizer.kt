@@ -31,7 +31,7 @@ import org.kopi.galite.util.base.InconsistencyException
  */
 class TypeLocalizer(manager: LocalizationManager,
                     document: Document,
-                    ident: String) : Localizer(manager) {
+                    ident: String?) : Localizer(manager) {
 
   /**
    * Returns the title of the specified item.

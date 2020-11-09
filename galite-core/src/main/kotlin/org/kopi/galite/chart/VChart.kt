@@ -607,7 +607,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
 
   init {
     if (context != null) {
-      dBContext = context.getDBContext()
+      dBContext = context.dBContext
     }
     init()
     // localize the report using the default locale

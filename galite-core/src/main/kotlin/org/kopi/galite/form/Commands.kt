@@ -83,10 +83,10 @@ object Commands : VConstants {
         if ((b.form as VDictionaryForm).isRecursiveQuery) {
           b.form.reset()
         } else if (!(b.form as VDictionaryForm).isNewRecord()) {
-          b.mode = VConstants.MOD_QUERY
+          b.setMode(VConstants.MOD_QUERY)
         }
       } else {
-        b.mode = VConstants.MOD_QUERY
+        b.setMode(VConstants.MOD_QUERY)
       }
     }
   }
@@ -325,11 +325,11 @@ object Commands : VConstants {
    */
   fun insertMode(b: VBlock) {
     assert(!b.isMulti()) { "The command InsertMode can be used only with a single block." }
-    assert(b.mode != VConstants.MOD_INSERT) {
+    assert(b.getMode() != VConstants.MOD_INSERT) {
       "The block " + b.name + " is already in INSERT mode."
     }
 
-    if (b.mode == VConstants.MOD_UPDATE
+    if (b.getMode() == VConstants.MOD_UPDATE
             && b.isChanged
             && !b.form.ask(Message.getMessage("confirm_insert_mode"))) {
       return
@@ -338,7 +338,7 @@ object Commands : VConstants {
     b.apply {
       val changed: Boolean = isRecordChanged(0)
 
-      mode = (VConstants.MOD_INSERT)
+      setMode(VConstants.MOD_INSERT)
       setDefault()
       setRecordFetched(0, false)
       setRecordChanged(0, changed)
@@ -414,7 +414,7 @@ object Commands : VConstants {
    */
   private fun saveDone(b: VBlock, single: Boolean) {
     val form: VForm = b.form
-    val mode: Int = b.mode
+    val mode: Int = b.getMode()
 
     if (form is VDictionaryForm) {
       if ((form).isNewRecord()) {
@@ -443,7 +443,7 @@ object Commands : VConstants {
           return
         } catch (e: VException) {}
         b.clear()
-        b.mode = VConstants.MOD_QUERY
+        b.setMode(VConstants.MOD_QUERY)
         return
       }
       else -> throw InconsistencyException()
@@ -498,7 +498,7 @@ object Commands : VConstants {
       b.form.reset()
       return
     }
-    b.mode = VConstants.MOD_QUERY
+    b.setMode(VConstants.MOD_QUERY)
 
     // Fetch record (forward)
     try {
@@ -517,7 +517,7 @@ object Commands : VConstants {
     }
 
     // No more records
-    b.mode = VConstants.MOD_QUERY
+    b.setMode(VConstants.MOD_QUERY)
     b.clear()
   }
 

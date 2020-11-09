@@ -48,7 +48,7 @@ object Triggers : VConstants {
   /**
    * Returns true iff first block of form is not in query mode
    */
-  fun mainBlockInsertable(b: VBlock): Boolean = b.form.getBlock(0).mode != VConstants.MOD_QUERY
+  fun mainBlockInsertable(b: VBlock): Boolean = b.form.getBlock(0).getMode() != VConstants.MOD_QUERY
 
   /*
    * ----------------------------------------------------------------------
