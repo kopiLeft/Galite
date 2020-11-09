@@ -15,16 +15,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.ui.visual
+package org.kopi.galite.ui.vaadin.report
 
-import org.junit.Test
+import com.vaadin.flow.component.grid.Grid
+import org.kopi.galite.report.ReportRow
+import org.kopi.galite.report.Report
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
-
-class VApplicationTests : ApplicationTestBase() {
-
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
+/**
+ * Data table for of a report.
+ */
+class VTable() : Grid<ReportRow>() {
+  init {
+    isColumnReorderingAllowed = true
   }
+
+  /**
+   * Fill table with data from report
+   * @param report report that provides data
+   */
+  fun fillTable(report: Report) {
+    setItems(report.reportRows.map { it })
+
+    report.fields.forEach { field ->
+      addColumn {
+        it.getValueOf(field)
+      }.setHeader(field.label).setSortable(true)
+    }
+  }
+
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,17 +15,37 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.event
 
-package org.kopi.galite.tests.ui.visual
+import java.io.Serializable
 
-import org.junit.Test
+/**
+ * Registered objects are notified with actions performed on the position panel.
+ */
+interface PositionPanelListener : Serializable {
+  /**
+   * Requests to go to the next position.
+   */
+  fun gotoNextPosition()
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
+  /**
+   * Requests to go to the previous position.
+   */
+  fun gotoPrevPosition()
 
-class VApplicationTests : ApplicationTestBase() {
+  /**
+   * Requests to go to the last position.
+   */
+  fun gotoLastPosition()
 
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
-  }
+  /**
+   * Requests to go to the last position.
+   */
+  fun gotoFirstPosition()
+
+  /**
+   * Requests to go to the specified position.
+   * @param posno The position number.
+   */
+  fun gotoPosition(posno: Int)
 }

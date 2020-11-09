@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,17 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.event
 
-package org.kopi.galite.tests.ui.visual
+import java.io.Serializable
 
-import org.junit.Test
+/**
+ * The field listener that notifies registered objects with
+ * actions performed on a field.
+ */
+interface FieldListener : Serializable {
+  /**
+   * Fired when increment button is clicked.
+   */
+  fun onIncrement()
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
+  /***
+   * Fired when decrement action is fired.
+   */
+  fun onDecrement()
 
-class VApplicationTests : ApplicationTestBase() {
-
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
-  }
+  /**
+   * Fired when the field is clicked.
+   */
+  fun onClick()
 }

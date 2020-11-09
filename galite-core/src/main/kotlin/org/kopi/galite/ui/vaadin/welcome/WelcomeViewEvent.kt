@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,17 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.welcome
 
-package org.kopi.galite.tests.ui.visual
+import com.vaadin.flow.component.ComponentEvent
 
-import org.junit.Test
+/**
+ * A welcome screen event that encapsulates the login information.
+ *
+ * @param source The source component.
+ * @param username The user name.
+ * @param password The password.
+ * @param locale The locale.
+ */
+class WelcomeViewEvent(source: WelcomeView,
+                       val username: String,
+                       val password: String,
+                       val locale: String)
+  : ComponentEvent<WelcomeView?>(source, false) {
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
-
-class VApplicationTests : ApplicationTestBase() {
-
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
-  }
+  /**
+   * Returns the welcome screen component.
+   */
+  val welcomeView: WelcomeView
+    get() = super.getSource() as WelcomeView
 }

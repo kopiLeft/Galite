@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,16 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.ui.visual
+package org.kopi.galite.ui.vaadin.base
 
-import org.junit.Test
+/**
+ * A centralized way to inject styles in the browser page.
+ * TODO : use this class to handle report styles.
+ */
+class StylesInjector {
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
-
-class VApplicationTests : ApplicationTestBase() {
-
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
-  }
 }

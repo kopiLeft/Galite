@@ -25,7 +25,7 @@ import org.jdom2.input.SAXBuilder
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.ApplicationTestBase
+import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
 import kotlin.test.assertEquals
 
 class ReportTests: ApplicationTestBase() {

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,17 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.login
 
-package org.kopi.galite.tests.ui.visual
+import com.vaadin.flow.component.html.Div
 
-import org.junit.Test
-
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
-
-class VApplicationTests : ApplicationTestBase() {
-
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
+/**
+ * An empty module list.
+ */
+class VEmptyModuleList : Div() {
+  //---------------------------------------------------
+// CONSTRUCTORS
+//---------------------------------------------------
+  /**
+   * Creates the empty module list component.
+   */
+  init {
+    setId("moduleList_empty")
   }
 }

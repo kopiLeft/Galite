@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,17 +15,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.event
 
-package org.kopi.galite.tests.ui.visual
+import com.vaadin.flow.component.Component
+import java.io.Serializable
 
-import org.junit.Test
+/**
+ * Registered objects are notified about actions happening
+ * in the main application window.
+ */
+interface MainWindowListener : Serializable {
+  /**
+   * Fired when the logout link is clicked.
+   */
+  fun onLogout()
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
+  /**
+   * Fired when the connected user link is clicked.
+   */
+  fun onUser()
 
-class VApplicationTests : ApplicationTestBase() {
+  /**
+   * Fired when windows link is clicked.
+   */
+  fun onWindows()
 
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
-  }
+  /**
+   * Fired when the given window is shown on the main window.
+   * @param window The window the became visible.
+   */
+  fun onWindowVisible(window: Component?)
 }

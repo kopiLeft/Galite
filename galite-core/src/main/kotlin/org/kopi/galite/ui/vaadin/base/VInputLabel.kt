@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,17 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.base
 
-package org.kopi.galite.tests.ui.visual
+import com.vaadin.flow.component.html.Label
 
-import org.junit.Test
+/**
+ * An input label component.
+ */
+class VInputLabel(text: String? = "") : Label(text) {
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
 
-class VApplicationTests : ApplicationTestBase() {
-
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
+  /**
+   * This attribute links this label with another form control by id attribute.
+   */
+  fun setHtmlFor(target: String?) {
+    element.setAttribute("for", target)
   }
 }

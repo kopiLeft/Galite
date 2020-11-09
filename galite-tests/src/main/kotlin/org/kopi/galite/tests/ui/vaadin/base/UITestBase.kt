@@ -15,16 +15,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.ui.visual
+package org.kopi.galite.tests.ui.vaadin.base
 
-import org.junit.Test
+import com.github.mvysny.kaributesting.v10.MockVaadin
+import com.github.mvysny.kaributesting.v10.Routes
+import org.kopi.galite.tests.TestBase
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
+/**
+ * The high level class for all classes containing UI tests
+ */
+open class UITestBase: TestBase() {
+  fun setupRoutes() {
+    MockVaadin.setup(routes!!)
+  }
 
-class VApplicationTests : ApplicationTestBase() {
+  companion object {
+    fun discoverRooterByPackage(packageName: String) {
+      routes  = Routes().autoDiscoverViews(packageName)
+    }
 
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
+    fun discoverRooterClass(clazz: Class<*>) {
+      routes  = Routes().autoDiscoverViews(clazz.packageName)
+    }
+    var routes: Routes?  = null
   }
 }

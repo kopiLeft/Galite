@@ -15,16 +15,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.ui.visual
+package org.kopi.galite.ui.vaadin.report
 
-import org.junit.Test
+import org.kopi.galite.ui.vaadin.common.Window
+import org.kopi.galite.report.Report
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
+/**
+ * Visual class for a report.
+ */
+class VReport(val report: Report) : Window() {
+  /**Report's data table */
+  private val table = VTable()
 
-class VApplicationTests : ApplicationTestBase() {
-
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
+  init {
+    table.fillTable(report)
+    add(table)
   }
 }
