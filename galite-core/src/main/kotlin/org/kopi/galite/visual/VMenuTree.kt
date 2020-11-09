@@ -64,11 +64,16 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
 
   companion object {
 
-    private val SELECT_MODULES = Modules.slice(Modules.id, Modules.parent, Modules.shortName,
-            Modules.sourceName, Modules.objectName,
-            Modules.priority, Modules.symbol)
-            .selectAll()
-            .orderBy(Modules.priority to SortOrder.DESC)
+    private val SELECT_MODULES =
+            Modules.slice(Modules.id,
+                          Modules.parent,
+                          Modules.shortName,
+                          Modules.sourceName,
+                          Modules.objectName,
+                          Modules.priority,
+                          Modules.symbol)
+                    .selectAll()
+                    .orderBy(Modules.priority to SortOrder.DESC)
 
     const val CMD_QUIT = 0
     const val CMD_OPEN = 1
