@@ -1355,9 +1355,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setColor(r, getForeground(r), getBackground(r))
   }
 
-  fun getForeground(r: Int): VColor = foreground[r]!!
+  fun getForeground(r: Int): VColor? = foreground[r]
 
-  fun getBackground(r: Int): VColor = background[r]!!
+  fun getBackground(r: Int): VColor? = background[r]
 
   // ----------------------------------------------------------------------
   // DRAG AND DROP HANDLIN
