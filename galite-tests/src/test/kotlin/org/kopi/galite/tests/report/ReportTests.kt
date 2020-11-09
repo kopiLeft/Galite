@@ -115,16 +115,4 @@ class ReportTests: ApplicationTestBase() {
       }
     }
   }
-
-  class StringTestType : Domain<String>(5) {
-    override val type = code {
-      this["cde1"] = "test1"
-    }
-  }
-
-  class IntTestType : Domain<Int>(3) {
-    override val type = code {
-      this["cde1"] = 1
-    }
-  }
 }

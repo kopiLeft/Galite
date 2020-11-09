@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.report
 
 import org.junit.Test
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.PConfig
 import org.kopi.galite.report.Report
@@ -106,18 +107,18 @@ class VReportTests: ApplicationTestBase() {
 
     override val title = "SimpleReport"
 
-    val id = field(ReportTests.IntTestType()) {
+    val id = field(Domain<Int>(20)) {
       label = "id"
       help = "The user id"
       hidden = true
     }
 
-    val name = field(ReportTests.StringTestType()) {
+    val name = field(Domain<String>(20)) {
       label = "name"
       help = "The user name"
     }
 
-    val age = field(ReportTests.IntTestType()) {
+    val age = field(Domain<Int>(3)) {
       label = "age"
       help = "The user age"
     }
