@@ -24,7 +24,6 @@ import com.vaadin.flow.component.Tag
 import com.vaadin.flow.data.binder.HasItems
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.dom.Element
-import java.util.*
 
 @Tag(Tag.SELECT)
 class VSelect : Component(), HasSize, HasItems<Any>, HasComponents {
@@ -56,8 +55,9 @@ class VSelect : Component(), HasSize, HasItems<Any>, HasComponents {
    * @param index the index at which to insert the select option
    */
   fun insertItem(item: String, value: String?, index: Int) {
-    items.add(item)
     val option = Element(Tag.OPTION)
+
+    items.add(item)
     option.text = item
     option.setProperty("value", value)
     if (index == INSERT_AT_END) {
@@ -89,11 +89,12 @@ class VSelect : Component(), HasSize, HasItems<Any>, HasComponents {
   }
 
   private lateinit var selectedValue: String
-  private var items: ArrayList<String>
+  private var items = arrayListOf<String>()
   private val INSERT_AT_END = -1
 
   init {
-    items = ArrayList<String>()
-    addChangeHandler({ event: DomEvent? -> handleSelectionChange(event!!) })
+    addChangeHandler { event: DomEvent? ->
+      handleSelectionChange(event!!)
+    }
   }
 }

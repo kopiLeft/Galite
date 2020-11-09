@@ -59,7 +59,7 @@ object LocalizedProperties {
    * Properties initialization.
    */
   private val frenchProperties: HashMap<String, String>
-    private get() {
+    get() {
       val properties: HashMap<String, String> = HashMap()
       properties["OK"] = "Oui"
       properties["CLOSE"] = "Fermer"
@@ -108,7 +108,7 @@ object LocalizedProperties {
    * Properties initialization.
    */
   private val englishProperties: HashMap<String, String>
-    private get() {
+    get() {
       val properties: HashMap<String, String> = HashMap()
       properties["OK"] = "Yes"
       properties["CLOSE"] = "Close"
@@ -157,7 +157,7 @@ object LocalizedProperties {
    * Properties initialization.
    */
   private val germanProperties: HashMap<String, String>
-    private get() {
+    get() {
       val properties = HashMap<String, String> ()
       properties["OK"] = "Ja"
       properties["CLOSE"] = "Schließen"
@@ -206,7 +206,7 @@ object LocalizedProperties {
    * Properties initialization.
    */
   private val arabicProperties: HashMap<String, String>
-    private get() {
+    get() {
       val properties: HashMap<String, String> = HashMap()
       properties["OK"] = "نعم"
       properties["CLOSE"] = "غلق"

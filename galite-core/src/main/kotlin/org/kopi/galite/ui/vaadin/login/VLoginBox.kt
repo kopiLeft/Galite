@@ -17,13 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.login
 
-import com.vaadin.flow.component.*
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.textfield.PasswordField
-import com.vaadin.flow.dom.DomEvent
-import com.vaadin.flow.dom.Element
-import com.vaadin.flow.dom.ElementFactory
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VHiddenSeparator
 import org.kopi.galite.ui.vaadin.base.VInputButton
@@ -31,6 +24,20 @@ import org.kopi.galite.ui.vaadin.base.VInputLabel
 import org.kopi.galite.ui.vaadin.base.VInputText
 import org.kopi.galite.ui.vaadin.common.VSelect
 import org.kopi.galite.ui.vaadin.common.VSimpleTable
+
+
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.component.ShortcutEvent
+import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.textfield.PasswordField
+import com.vaadin.flow.dom.DomEvent
+import com.vaadin.flow.dom.Element
+import com.vaadin.flow.dom.ElementFactory
 
 /**
  * The login box widget.
@@ -126,12 +133,7 @@ class VLoginBox : Div() {
   }
 
   /**
-   * Returns the language selected value.
-   * @return The selected value.
-   */
-  /**
-   * Sets the selected language.
-   * @param language The language index.
+   * The language selected value.
    */
   var selectedLanguage: String
     get() = table.selectedLanguage
@@ -171,8 +173,8 @@ class VLoginBox : Div() {
   @Tag("table")
   private class Table : Component() {
     //---------------------------------------
-// IMPLEMENTATIONS
-//---------------------------------------
+    // IMPLEMENTATIONS
+    //---------------------------------------
     /**
      * Sets the welcome text.
      * @param text The welcome text.
@@ -185,9 +187,9 @@ class VLoginBox : Div() {
      * Sets the welcome image.
      * @param uri The welcome image URI.
      */
-    fun setWelcomeImage(uri: String?) { // welcomeImage.setClassName(Styles.LOGIN_BOX_IMAGE);
+    fun setWelcomeImage(uri: String?) { // welcomeImage.setClassName(Styles.LOGIN_BOX_IMAGE); TODO
       welcomeImage.setAttribute("src", uri)
-      // welcomeImage.addClassName(ResourcesUtil.getResourceName(uri));
+      // welcomeImage.addClassName(ResourcesUtil.getResourceName(uri)); TODO
     }
 
     /**
@@ -261,12 +263,7 @@ class VLoginBox : Div() {
     }
 
     /**
-     * Returns the language selected value.
-     * @return The selected value.
-     */
-    /**
-     * Sets the selected language.
-     * @param language The language index.
+     * The language selected value.
      */
     var selectedLanguage: String
       get() = content.selectedLanguage
@@ -301,8 +298,7 @@ class VLoginBox : Div() {
     /**
      * Focus on the first field in the login box.
      */
-/*package*/
-    fun focus() { /*  Scheduler.get().scheduleEntry(new ScheduledCommand() {
+    fun focus() { /*  Scheduler.get().scheduleEntry(new ScheduledCommand() { TODO
 
         @Override
         public void execute() {
@@ -312,14 +308,14 @@ class VLoginBox : Div() {
     }
 
     //---------------------------------------
-// DATA MEMBERS
-//---------------------------------------
+    // DATA MEMBERS
+    //---------------------------------------
     private val welcomeText: Element
     private val welcomeImage: Element
     private val content: LoginPane
     //---------------------------------------
-// CONSTRUCTOR
-//---------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------
     /**
      * Creates the table widget.
      */
@@ -436,12 +432,7 @@ class VLoginBox : Div() {
     }
 
     /**
-     * Returns the language selected value.
-     * @return The selected value.
-     */
-    /**
-     * Sets the selected language.
-     * @param language The language index.
+     * The language selected value.
      */
     var selectedLanguage: String
       get() = language.getSelectedValue()

@@ -17,12 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.common
 
+import java.util.Objects
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.dom.Element
-import java.util.*
 
 @Tag("table")
 open class VSimpleTable : Component(), HasComponents, HasSize {
@@ -70,7 +71,7 @@ open class VSimpleTable : Component(), HasComponents, HasSize {
   }
 
   fun setTdColSpan(colSpan: Int) {
-    lastTd!!.setAttribute("colSpan", Integer.toString(colSpan))
+    lastTd!!.setAttribute("colSpan", colSpan.toString())
   }
 
   fun setTdHeight(height: String?) {
@@ -88,7 +89,7 @@ open class VSimpleTable : Component(), HasComponents, HasSize {
     }
   }
 
-  var tbody: Element
+  var tbody: Element = Element("tbody")
   var lastTR: Element
   var lastTd: Element? = null
   //---------------------------------------------------
@@ -98,7 +99,6 @@ open class VSimpleTable : Component(), HasComponents, HasSize {
    * Creates the login table instance.
    */
   init {
-    tbody = Element("tbody")
     element.appendChild(tbody)
     lastTR = Element("tr")
   }

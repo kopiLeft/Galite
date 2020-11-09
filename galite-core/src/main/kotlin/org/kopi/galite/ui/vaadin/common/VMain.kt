@@ -25,8 +25,8 @@ import com.vaadin.flow.component.html.Div
  */
 class VMain : Div() {
   //---------------------------------------------------
-// IMPLEMENTATIONS
-//---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
   /**
    * Sets this main window content.
    * @param content The window content.
@@ -36,8 +36,8 @@ class VMain : Div() {
     add(content)
   }
   //---------------------------------------------------
-// CONSTRUCTOR
-//---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
   /**
    * Creates the main component instance.
    */

@@ -27,6 +27,8 @@ import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.StylesInjector
+import org.kopi.galite.ui.vaadin.welcome.WelcomeView
+import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
@@ -42,8 +44,6 @@ import org.kopi.galite.visual.WindowController
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.router.Route
-import org.kopi.galite.ui.vaadin.welcome.WelcomeView
-import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 
 /**
  * The entry point for all Galite WEB applications.

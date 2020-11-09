@@ -22,9 +22,7 @@ import com.vaadin.flow.component.html.Anchor
 /**
  * A simple panel that wraps an anchor element.
  */
-open class VAnchorPanel
-
-  : Anchor() {
+open class VAnchorPanel : Anchor() {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

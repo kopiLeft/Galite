@@ -17,9 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.common
 
-import com.vaadin.flow.component.html.Image
 import org.kopi.galite.ui.vaadin.base.ResourcesUtil
 import org.kopi.galite.ui.vaadin.base.VAnchorPanel
+
+import com.vaadin.flow.component.html.Image
 
 /**
  * A logo component.
@@ -34,7 +35,8 @@ class VLogo : VAnchorPanel() {
    */
   fun setImage(url: String, alt: String?) {
     image.src = url
-    if (alt != null) { //  image.setAlt(alt);
+    if (alt != null) {
+      image.setAlt(alt)
     }
     image.element.setProperty("border", 0.0)
     image.className = "logo-image"
@@ -42,17 +44,16 @@ class VLogo : VAnchorPanel() {
   }
 
   //---------------------------------------------------
-// DATA MEMBERS
-//---------------------------------------------------
-  private val image: Image
+  // DATA MEMBERS
   //---------------------------------------------------
-// CONSTRUCTOR
-//---------------------------------------------------
+  private val image = Image()
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
   /**
    * Creates the logo component instance.
    */
   init {
-    image = Image()
     add(image)
   }
 }

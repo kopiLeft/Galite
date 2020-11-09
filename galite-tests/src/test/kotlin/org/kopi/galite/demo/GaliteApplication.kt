@@ -1,9 +1,10 @@
 package org.kopi.galite.demo
 
+import java.util.Locale
+
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.Registry
-import java.util.*
 
 class GaliteRegistry: Registry("Galite", null)
 

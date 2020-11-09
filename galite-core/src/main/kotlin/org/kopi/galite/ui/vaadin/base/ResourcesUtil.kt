@@ -36,14 +36,17 @@ object ResourcesUtil {
     val lastSlashIndex = uri.lastIndexOf('/')
     // look for the last .
     val lastDotIndex = uri.lastIndexOf('.')
-    return if (lastDotIndex == -1 && lastSlashIndex == -1) {
-      uri
-    } else if (lastDotIndex != -1 && lastSlashIndex != 1) { // found it is OK now, the resource name is between the the / and the .
-      uri.substring(lastSlashIndex + 1, lastDotIndex)
-    } else if (lastDotIndex != -1 && lastSlashIndex == 1) { // no / found, the resource name starts from the beginning.
-      uri.substring(0, lastDotIndex)
-    } else { // no . found take it until the end
-      uri.substring(lastSlashIndex)
+    return when {
+      lastDotIndex == -1 && lastSlashIndex == -1 -> uri
+      lastDotIndex != -1 && lastSlashIndex != 1 ->
+        // found it is OK now, the resource name is between the the / and the .
+        uri.substring(lastSlashIndex + 1, lastDotIndex)
+      lastDotIndex != -1 && lastSlashIndex == 1 ->
+        // no / found, the resource name starts from the beginning.
+        uri.substring(0, lastDotIndex)
+      else ->
+        // no . found take it until the end
+        uri.substring(lastSlashIndex)
     }
   }
 

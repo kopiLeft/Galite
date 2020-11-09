@@ -17,8 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.event
 
-import com.vaadin.flow.component.Component
 import java.io.Serializable
+
+import com.vaadin.flow.component.Component
 
 /**
  * Registered objects are notified about actions happening

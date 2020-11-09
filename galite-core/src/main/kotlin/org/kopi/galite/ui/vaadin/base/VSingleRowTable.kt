@@ -17,11 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import java.util.Objects
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.dom.Element
-import java.util.*
 
 /**
  * A Single row table panel.

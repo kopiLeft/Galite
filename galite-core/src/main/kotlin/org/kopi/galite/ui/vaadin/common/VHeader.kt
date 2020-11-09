@@ -83,17 +83,16 @@ class VHeader : Div() {
   }
 
   //---------------------------------------------------
-// DATA MEMBERS
-//---------------------------------------------------
-  private val logo: VCompanyLogo
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val logo = VCompanyLogo()
   //---------------------------------------------------
   // CONSTRUCTOR
-//---------------------------------------------------
+  //---------------------------------------------------
   /**
    * Creates the window header component.
    */
   init {
-    logo = VCompanyLogo()
     setId("header")
     add(logo)
   }

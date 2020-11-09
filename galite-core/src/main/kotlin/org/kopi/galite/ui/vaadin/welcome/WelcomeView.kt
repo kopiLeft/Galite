@@ -17,9 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.welcome
 
-import com.vaadin.flow.component.HasSize
-import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.applayout.AppLayout
+import java.util.Locale
+
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
@@ -28,7 +27,10 @@ import org.kopi.galite.ui.vaadin.event.LoginWindowListener
 import org.kopi.galite.ui.vaadin.login.VEmptyModuleList
 import org.kopi.galite.ui.vaadin.login.VLoginView
 import org.kopi.galite.ui.vaadin.login.VLoginWindow
-import java.util.*
+
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.applayout.AppLayout
 
 /**
  * The server side of the welcome screen.
@@ -97,7 +99,7 @@ class WelcomeView(locale: Locale,
    * Removes a login window listener.
    * @param l The listener to be removed.
    */
-  fun removeLoginWindowListener(l: LoginWindowListener?) { //loginWindow.addLoginWindowListener(l);
+  fun removeLoginWindowListener(l: LoginWindowListener?) { //loginWindow.addLoginWindowListener(l); TODO
   }
 
   /**
@@ -150,7 +152,7 @@ class WelcomeView(locale: Locale,
   /**
    * Focus on the first field in the login panel.
    */
-  fun focus() { //loginWindow.focus();
+  fun focus() { //loginWindow.focus(); TODO
   }
 
   fun clear() { //super.clear();

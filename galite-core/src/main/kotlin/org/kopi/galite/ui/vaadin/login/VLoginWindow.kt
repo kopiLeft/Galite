@@ -22,7 +22,6 @@ import com.vaadin.flow.dom.DomEvent
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.event.LoginWindowListener
-import java.util.*
 
 /**
  * The login window box used for identification of the user.
@@ -144,7 +143,7 @@ class VLoginWindow : Div() {
    * Focus on the first field in the login box.
    */
   fun focus() {
-    //  loginBox.focus();
+    //  loginBox.focus(); TODO
   }
 
   //---------------------------------------------------
@@ -163,7 +162,7 @@ class VLoginWindow : Div() {
     listeners = ArrayList()
     loginBox = VLoginBox()
     add(loginBox)
-    loginBox.addClickHandler { componentEvent: Any -> onClick() }
+    loginBox.addClickHandler { onClick() }
     loginBox.addChangeHandler { event: DomEvent? -> handleSelectionChange(event) }
     width = "400px"
   }
