@@ -2005,7 +2005,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
                        block!!.getFieldPos(this),
-                       label!!,
+                       label,
                        lab ?: name,
                        toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
