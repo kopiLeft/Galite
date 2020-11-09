@@ -19,30 +19,33 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
+import java.awt.Component;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
 
 public class DImage extends JPanel {
 
 
-/**
-   * Constructor
-   */
-  public DImage(String name, int border) {
-    setLayout(null);
-    image = Utils.getImage(name);
-    label = new JLabel();
-    label.setIcon(image);
-    add(label);
-    label.setLocation(2, 2);
-    setBorder(border);
-  }
+    /**
+     * Constructor
+     */
+    public DImage(String name, int border) {
+        setLayout(null);
+        image = Utils.getImage(name);
+        label = new JLabel();
+        label.setIcon(image);
+        add(label);
+        label.setLocation(2, 2);
+        setBorder(border);
+    }
 
-  private void setBorder(int style) {
-    switch (style) {
- //    case VConstants.BRD_NONE:
+    private void setBorder(int style) {
+        switch (style) {
+            //    case VConstants.BRD_NONE:
 //       setBorder(DObject.BRD_EMPTY);
 //       break;
 //     case VConstants.BRD_LINE:
@@ -59,28 +62,28 @@ public class DImage extends JPanel {
 //       break;
 //     default:
 //       break;
+        }
     }
-  }
 
-  public void setLocation(int left, int top) {
-    super.setLocation(left, top);
-  }
+    public void setLocation(int left, int top) {
+        super.setLocation(left, top);
+    }
 
-  public Component getComponent() {
-    return this;
-  }
+    public Component getComponent() {
+        return this;
+    }
 
-  /*
-   * ----------------------------------------------------------------------
-   * DATA MEMBERS
-   * ----------------------------------------------------------------------
-   */
+    /*
+     * ----------------------------------------------------------------------
+     * DATA MEMBERS
+     * ----------------------------------------------------------------------
+     */
 
-  private ImageIcon	image;
-  private JLabel        label;
-  /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-  private static final long serialVersionUID = 7670435167866572674L;
+    private ImageIcon image;
+    private JLabel label;
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 7670435167866572674L;
 
 }

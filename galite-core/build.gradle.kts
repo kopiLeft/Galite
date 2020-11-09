@@ -28,10 +28,12 @@ val apacheOoxml = "3.9"
 val graphbuilder = "1.02"
 val hylafaxVersion = "1.0.0"
 val jFreeChartVersion = "1.0.19"
+val getoptVersion = "1.0.13"
 
 dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
+  api("org.jetbrains.exposed", "exposed-jodatime", exposedVersion)
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core", vaadinVersion) {
@@ -61,5 +63,8 @@ dependencies {
 
   //JFreeChart dependency
   implementation("org.jfree", "jfreechart", jFreeChartVersion)
+
+  //getOpt dependency
+  implementation("gnu.getopt", "java-getopt", getoptVersion)
 
 }

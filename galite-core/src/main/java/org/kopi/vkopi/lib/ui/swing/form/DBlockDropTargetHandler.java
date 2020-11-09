@@ -19,19 +19,29 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
+
+import javax.activation.MimetypesFileTypeMap;
+
 import org.kopi.galite.form.VBlock;
 import org.kopi.galite.form.VField;
 import org.kopi.galite.form.VImageField;
 import org.kopi.galite.form.VStringField;
 import org.kopi.galite.visual.VException;
-
-import javax.activation.MimetypesFileTypeMap;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.*;
-import java.io.*;
-import java.util.List;
 
 public class DBlockDropTargetHandler implements DropTargetListener {
 
@@ -219,7 +229,7 @@ public class DBlockDropTargetHandler implements DropTargetListener {
   }
 
   private boolean isChartBlockContext() {
-    return block.noDetail() || (block.isMulti() && !block.isDetailMode());
+    return block.noDetail() || (block.isMulti() && !block.getDetailMode());
   }
 
   private static String getExtension(File file) {

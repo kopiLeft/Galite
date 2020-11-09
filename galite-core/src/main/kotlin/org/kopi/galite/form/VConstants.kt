@@ -18,9 +18,8 @@
 
 package org.kopi.galite.form
 
-import javax.swing.SwingConstants
-
 import org.kopi.galite.visual.Constants
+import javax.swing.SwingConstants
 
 interface VConstants : Constants {
   companion object {

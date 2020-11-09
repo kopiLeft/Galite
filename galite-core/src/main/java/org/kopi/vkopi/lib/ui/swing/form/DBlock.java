@@ -19,19 +19,29 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
+import java.awt.Component;
+import java.awt.Insets;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
 import org.kopi.galite.util.base.InconsistencyException;
 import org.kopi.galite.base.UComponent;
-import org.kopi.galite.form.*;
+import org.kopi.galite.form.Alignment;
+import org.kopi.galite.form.LayoutManager;
+import org.kopi.galite.form.UBlock;
+import org.kopi.galite.form.UForm;
+import org.kopi.galite.form.VBlock;
+import org.kopi.galite.form.VConstants;
+import org.kopi.galite.form.VField;
+import org.kopi.galite.form.VFieldUI;
+import org.kopi.galite.form.ViewBlockAlignment;
 import org.kopi.vkopi.lib.ui.swing.base.KopiTitledBorder;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 import org.kopi.galite.visual.VException;
 import org.kopi.galite.visual.VExecFailedException;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
 
 public class DBlock extends JPanel implements UBlock {
 
@@ -86,7 +96,7 @@ public class DBlock extends JPanel implements UBlock {
   }
 
 
-  protected KopiLayoutManager createLayoutManager() {
+  protected LayoutManager createLayoutManager() {
     return new KopiSimpleBlockLayout(2 * maxColumnPos, // label + field => 2
                                      maxRowPos,
                                      (model.getAlignment() == null) ?
@@ -204,7 +214,7 @@ public class DBlock extends JPanel implements UBlock {
   }
 
   
-  public void add(UComponent comp, KopiAlignment constraints) {
+  public void add(UComponent comp, Alignment constraints) {
     super.add((Component)comp, constraints);
   }
 
@@ -328,7 +338,6 @@ public class DBlock extends JPanel implements UBlock {
    * sort the records to order it by the value of the
    * given column.
    *
-   * @param     column column to order or if -1 back to original order
    */
   public void orderChanged() {
     SwingThreadHandler.startAndWait(synchronRefresh);
@@ -498,7 +507,7 @@ public class DBlock extends JPanel implements UBlock {
   private final DForm				formView;
   protected final VBlock			model;
   private VFieldUI[]           			columnViews;
-  protected KopiLayoutManager  		        layout;
+  protected LayoutManager layout;
 
   protected final int				maxRowPos;
   protected final int				maxColumnPos;

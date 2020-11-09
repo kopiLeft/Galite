@@ -25,7 +25,7 @@ import org.kopi.galite.type.Time
  * Represents a list column.
  */
 class VTimeColumn(title: String,
-                  column: String,
+                  column: String?,
                   sortAscending: Boolean)
     : VListColumn(title,
                   column,

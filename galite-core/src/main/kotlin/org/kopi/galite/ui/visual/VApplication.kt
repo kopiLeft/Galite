@@ -45,9 +45,8 @@ import com.vaadin.flow.router.Route
 import org.kopi.galite.ui.welcome.WelcomeView
 import org.kopi.galite.ui.welcome.WelcomeViewEvent
 
-
 /**
- * The entry point for all WEB applications.
+ * The entry point for all Galite WEB applications.
  *
  * @param registry The [Registry] object.
  */

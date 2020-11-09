@@ -15,6 +15,358 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
-class VIntegerField 
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.reflect.KClass
+
+import org.kopi.galite.db.Query
+import org.kopi.galite.list.VIntegerColumn
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.db.Utils
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VlibProperties
+
+/**
+ * @param     width
+ * @param     minval    the min permitted value
+ * @param     maxval    the max permitted value
+ */
+class VIntegerField(width: Int,
+                    val minval: Int,
+                    val maxval: Int) : VField(width, 1) {
+
+  /**
+   * just after loading, construct record
+   */
+  override fun build() {
+    super.build()
+    value = arrayOfNulls(2 * block!!.bufferSize)
+  }
+
+  /**
+   * return the name of this field
+   */
+  override fun getTypeInformation(): String {
+    var min = minval
+    var max = maxval
+    var nines = 1
+
+    for (i in width downTo 1) {
+      nines *= 10
+    }
+    max = min(max, nines - 1)
+    min = max(min, -(nines / 10 - 1))
+    return VlibProperties.getString("integer-type-field", arrayOf(min, max))
+  }
+
+  /**
+   * return the name of this field
+   */
+  override fun getTypeName(): String = VlibProperties.getString("Long")
+
+  override fun isNumeric(): Boolean = true
+
+  // ----------------------------------------------------------------------
+  // Interface Display
+  // ----------------------------------------------------------------------
+
+  /**
+   * return a list column for list
+   */
+  override fun getListColumn(): VListColumn = VIntegerColumn(getHeader(),
+                                                             null,
+                                                             align,
+                                                             width,
+                                                             getPriority() >= 0)
+
+  /**
+   * verify that text is valid (during typing)
+   */
+  override fun checkText(s: String): Boolean {
+    if (s.length > width) {
+      return false
+    }
+
+    s.forEach {
+      val c = it
+      if (!(Character.isDigit(c) || c == '.' || c == '-')) {
+        return false
+      }
+    }
+    return true
+  }
+
+  /**
+   * verify that value is valid (on exit)
+   * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
+   */
+  override fun checkType(rec: Int, o: Any?) {
+    val s = o as? String
+
+    if (s == "") {
+      setNull(rec)
+    } else {
+      val v = try {
+        s!!.toInt()
+      } catch (e: NumberFormatException) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
+      }
+      if (v < minval) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minval) as? Array<Any>))
+      }
+      if (v > maxval) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval) as? Array<Any>))
+      }
+      setInt(rec, v)
+    }
+  }
+
+  // ----------------------------------------------------------------------
+  // Interface bd/Triggers
+  // ----------------------------------------------------------------------
+
+  /**
+   * Sets the field value of given record to a null value.
+   */
+  override fun setNull(r: Int) {
+    setInt(r, null)
+  }
+
+  /**
+   * Sets the field value of given record to a int value.
+   */
+  fun setInt(r: Int, v: Int?) {
+    var v = v
+    if (changedUI
+        || value[r] == null && v != null
+        || value[r] != null && value[r] != v) {
+      // trails (backup) the record if necessary
+      trail(r)
+      if (v == null) {
+        value[r] = null
+      } else {
+        if (v < minval) {
+          v = minval
+        } else if (v > maxval) {
+          v = maxval
+        }
+        value[r] = v
+      }
+      // inform that value has changed
+      setChanged(r)
+    }
+    checkCriticalValue()
+  }
+
+  /**
+   * Sets the field value of given record.
+   * Warning:	This method will become inaccessible to users in next release
+   */
+  override fun setObject(r: Int, v: Any?) {
+    setInt(r, v as? Int)
+  }
+
+  /**
+   * Returns the specified tuple column as object of correct type for the field.
+   * @param    query        the query holding the tuple
+   * @param    column        the index of the column in the tuple
+   */
+  override fun retrieveQuery(query: Query, column: Int): Any? {
+    return if (query.isNull(column)) {
+      null
+    } else {
+      query.getInt(column)
+    }
+  }
+
+  /**
+   * Is the field value of given record null ?
+   */
+  override fun isNullImpl(r: Int): Boolean = value[r] == null
+
+  /**
+   * Returns the field value of given record as a int value.
+   */
+  override fun getInt(r: Int): Int = getObject(r) as Int
+
+  /**
+   * Returns the field value of the current record as an object
+   */
+  override fun getObjectImpl(r: Int): Any? = value[r]
+
+  override fun toText(o: Any?): String = o?.toString() ?: ""
+
+  override fun toObject(s: String): Any? {
+    return if (s == "") {
+      null
+    } else {
+      val v = try {
+        s.toInt()
+      } catch (e: NumberFormatException) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
+      }
+
+      if (v < minval) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minval) as? Array<Any>))
+      }
+
+      if (v > maxval) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval) as? Array<Any>))
+      }
+
+      v
+    }
+  }
+
+  /**
+   * Returns the display representation of field value of given record.
+   */
+  override fun getTextImpl(r: Int): String = if (value[r] == null) "" else value[r].toString()
+
+  /**
+   * Returns the SQL representation of field value of given record.
+   */
+  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r])
+
+  /**
+   * Copies the value of a record to another
+   */
+  override fun copyRecord(f: Int, t: Int) {
+    val oldValue = value[t]
+    value[t] = value[f]
+    // inform that value has changed for non backup records
+    // only when the value has really changed.
+    if (t < block!!.bufferSize
+        && (oldValue != null && value[t] == null
+            || oldValue == null && value[t] != null
+            || oldValue != null && oldValue != value[t])) {
+      fireValueChanged(t)
+    }
+  }
+
+  /**
+   * Returns the data type handled by this field.
+   */
+  override fun getDataType(): KClass<*> = Int::class
+
+  // ----------------------------------------------------------------------
+  // FIELD VALUE ACCESS
+  // ----------------------------------------------------------------------
+
+  /**
+   * Returns the sum of the field values of all records.
+   *
+   * @param     exclude         exclude the current record
+   * @return    the sum of the field values, null if none is filled.
+   */
+  fun computeSum(exclude: Boolean): Int? {
+    var sum: Int? = null
+
+    for (i in 0 until block!!.bufferSize) {
+      if (!isNullImpl(i)
+              && block!!.isRecordFilled(i)
+              && (!exclude || i != block!!.activeRecord)) {
+        if (sum == null) {
+          sum = 0
+        }
+        sum += getInt(i)
+      }
+    }
+    return sum
+  }
+
+  /**
+   * Returns the sum of the field values of all records.
+   *
+   * @param     exclude         exclude the current record
+   * @param     coalesceValue   the value to take if all fields are empty
+   * @return    the sum of the field values or coalesceValue if none is filled.
+   */
+  fun computeSum(exclude: Boolean, coalesceValue: Int): Int {
+    val sum = computeSum(exclude)
+
+    return sum ?: coalesceValue
+  }
+
+  /**
+   * Returns the sum of the field values of all records.
+   *
+   * @return    the sum of the field values, null if none is filled.
+   */
+  fun computeSum() : Int? = computeSum(false)
+
+  /**
+   * Returns the sum of every filled records in block
+   */
+  fun getCoalesceSum(coalesceValue: Int): Int {
+    val sum = computeSum()
+
+    return sum ?: coalesceValue
+  }
+
+  /**
+   * Returns the sum of every filled records in block
+   *
+   * @param     coalesceValue   the value to take if all fields are empty
+   * @return    the sum of the field values or coalesceValue if none is filled.
+   */
+  fun computeSum(coalesceValue: Int): Int = computeSum(false, coalesceValue)
+
+  /**
+   * Returns the sum of every filled records in block
+   * @deprecated        use int getCoalesceSum(int) instead
+   * */
+  fun getSum(): Int {
+    val sum = computeSum()
+
+      return sum ?: 0
+    }
+
+  //----------------------------------------------------------------------
+  // FORMATTING VALUES WRT FIELD TYPE
+  //----------------------------------------------------------------------
+
+  /**
+   * Returns a string representation of a int value wrt the field type.
+   */
+  protected fun formatInt(value: Int): String = value.toString()
+
+  fun setCriticalMinValue(criticalMinValue: Int) {
+    this.criticalMinValue = criticalMinValue
+  }
+
+  fun setCriticalMaxValue(criticalMaxValue: Int) {
+    this.criticalMaxValue = criticalMaxValue
+  }
+
+  fun checkCriticalValue() {
+    if (value[0] != null && criticalMinValue != null) {
+      if (value[0]!! < criticalMinValue!!) {
+        setHasCriticalValue(true)
+        return
+      }
+    }
+    if (value[0] != null && criticalMaxValue != null) {
+      if (value[0]!! > criticalMaxValue!!) {
+        setHasCriticalValue(true)
+        return
+      }
+    }
+    setHasCriticalValue(false)
+  }
+
+  private fun setHasCriticalValue(critical: Boolean) {
+    if (getDisplay() != null) {
+      (getDisplay() as UTextField).setHasCriticalValue(critical)
+    }
+  }
+
+  // dynamic data
+  // value
+  private lateinit var value: Array<Int?>
+  private var criticalMinValue: Int? = minval
+  private var criticalMaxValue: Int? = maxval
+}

@@ -29,6 +29,7 @@ package org.kopi.galite.visual
  * the current form
  */
 abstract class VException : Exception {
+
   /**
    * Constructs an exception with no message.
    */

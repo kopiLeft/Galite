@@ -19,12 +19,18 @@
 
 package org.kopi.vkopi.lib.ui.swing.visual;
 
-import org.kopi.vkopi.lib.ui.swing.base.Utils;
+import java.awt.Color;
+import java.awt.Component;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
-import java.awt.*;
+
+import org.kopi.vkopi.lib.ui.swing.base.Utils;
+import org.kopi.galite.visual.Module;
 
 class MenuItemRenderer extends JLabel implements TreeCellRenderer {
 

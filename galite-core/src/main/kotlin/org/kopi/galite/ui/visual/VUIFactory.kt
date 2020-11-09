@@ -26,5 +26,4 @@ class VUIFactory : UIFactory() {
   override fun createView(model: VModel): UComponent {
     TODO("Not yet implemented")
   }
-
 }

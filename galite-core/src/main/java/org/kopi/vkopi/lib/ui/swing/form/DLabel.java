@@ -19,14 +19,17 @@
 
 package org.kopi.vkopi.lib.ui.swing.form;
 
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.JToolTip;
+import javax.swing.UIManager;
+
 import org.kopi.galite.form.ULabel;
 import org.kopi.galite.form.VConstants;
 import org.kopi.galite.form.VField;
 import org.kopi.vkopi.lib.ui.swing.base.JFieldLabel;
 import org.kopi.vkopi.lib.ui.swing.base.MultiLineToolTip;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * !!! NEED COMMENTS
@@ -108,8 +111,6 @@ public class DLabel extends JFieldLabel implements ULabel {
 
   /**
    * prepare a snapshot
-   *
-   * @param	fieldPos	position of this field within block visible fields
    */
   public void prepareSnapshot(boolean activ) {
     if (activ) {
@@ -122,8 +123,4 @@ public class DLabel extends JFieldLabel implements ULabel {
       setFont(UIManager.getFont("snapshot.font.dialog"));
     }
   }
-  /**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-  private static final long serialVersionUID = -8806871660434906097L;
-}
+ }
