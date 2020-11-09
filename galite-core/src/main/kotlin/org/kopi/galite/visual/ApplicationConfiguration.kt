@@ -162,12 +162,12 @@ abstract class ApplicationConfiguration {
   // --------------------------------------------------------------
   // Preview with acroread
   // --------------------------------------------------------------
-  fun useAcroread(): Boolean = false
+  open fun useAcroread(): Boolean = false
 
   // --------------------------------------------------------------
   // Database Encoding
   // --------------------------------------------------------------
-  fun isUnicodeDatabase(): Boolean = false
+  open fun isUnicodeDatabase(): Boolean = false
 
   // ----------------------------------------------------------------------
   // User configuration

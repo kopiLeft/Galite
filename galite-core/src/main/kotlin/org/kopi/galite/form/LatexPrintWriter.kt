@@ -50,7 +50,7 @@ class LatexPrintWriter(writer: Writer) : PrintWriter(writer) {
    * Prints an item. it adds the 'item' keyword to [src] and writes the line separator to the end.
    * @param src The string to print.
    */
-  fun printItem(src: String) {
+  fun printItem(src: String?) {
     super.print("\\item[")
     print(src)
     super.print("]")

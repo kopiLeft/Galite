@@ -34,7 +34,7 @@ class VDefaultActor(val code: Int,
                     menuSource: String,
                     actorIdent: String,
                     actorSource: String,
-                    iconName: String,
+                    iconName: String?,
                     acceleratorKey: Int,
                     acceleratorModifier: Int
 ) : VActor(menuIdent, menuSource, actorIdent, actorSource, iconName, acceleratorKey, acceleratorModifier)

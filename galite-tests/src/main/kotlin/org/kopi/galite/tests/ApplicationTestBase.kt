@@ -44,7 +44,7 @@ open class ApplicationTestBase : TestBase() {
             driver: String,
             username: String,
             password: String,
-            schema: String
+            schema: String?
     ): DBContext? {
       return try {
         DBContext().apply {

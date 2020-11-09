@@ -48,7 +48,7 @@ interface UWindow : UComponent, VActionListener, ModelCloseListener, WaitDialogL
    * Sets the `UWindow` information text.
    * @param text The window information text.
    */
-  fun setInformationText(text: String)
+  fun setInformationText(text: String?)
 
   /**
    * Sets the `UWindow` total jobs.

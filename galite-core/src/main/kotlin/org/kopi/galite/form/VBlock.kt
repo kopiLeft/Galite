@@ -2895,7 +2895,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected lateinit var shortcut: String // block short name
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
-  protected lateinit var help: String // the help on this block
+  protected var help: String? = null // the help on this block
   protected var tables: Array<String>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
