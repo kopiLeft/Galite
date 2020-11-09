@@ -116,7 +116,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
     if (v is ByteArray) {
       setColor(r, Color(reformat(v[0]), reformat(v[1]), reformat(v[2])))
     } else {
-      setColor(r, v as? Color)
+      setColor(r, v as Color?)
     }
   }
 
@@ -160,7 +160,7 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String? {
+  override fun getTextImpl(r: Int): String {
     throw InconsistencyException("UNEXPECTED GET TEXT")
   }
 

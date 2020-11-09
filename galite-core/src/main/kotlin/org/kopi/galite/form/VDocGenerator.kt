@@ -173,7 +173,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
         latexPrinter.println("\\begin{description}")
 
         fields.forEach { field ->
-          field!!.helpOnField(this)
+          field.helpOnField(this)
         }
 
         latexPrinter.println("\\end{description}")
@@ -188,9 +188,9 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   override fun helpOnField(blockTitle: String,
                            pos: Int,
                            label: String?,
-                           anchor: String?,
+                           anchor: String,
                            help: String?) {
-    latexPrinter.printItem(label!!)
+    latexPrinter.printItem(label)
     latexPrinter.println("\\index{$label}")
     if (help != null && help.isNotEmpty()) {
       latexPrinter.println(help + "\\\\")

@@ -16,24 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.util.ipp
 
-import java.io.Serializable
-import java.util.EventListener
+abstract class IPPValue {
 
-interface BlockListener : EventListener, Serializable {
-  fun blockClosed()
-  fun blockChanged()
-  fun blockCleared()
-  fun blockAccessChanged(block: VBlock, newAccess: Boolean)
-  fun blockViewModeLeaved(block: VBlock, actviceField: VField?)
-  fun blockViewModeEntered(block: VBlock, actviceField: VField?)
-  fun validRecordNumberChanged()
-  fun recordInfoChanged(rec: Int, info: Int)
-  fun orderChanged()
-  fun filterHidden()
-  fun filterShown()
+  // --------------------------------------------------------------------
+  // ACCESSORS
+  // --------------------------------------------------------------------
 
-  // please do not use!
-  fun getCurrentDisplay(): UBlock
+  abstract fun getSize(): Int
+
+  abstract fun write(os: IPPOutputStream)
+
+  abstract fun dump()
 }

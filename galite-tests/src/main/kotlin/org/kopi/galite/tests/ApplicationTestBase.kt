@@ -30,8 +30,8 @@ open class ApplicationTestBase : TestBase() {
   class GaliteRegistry: Registry("Galite", null)
 
   class GaliteApplication: VApplication(GaliteRegistry()) {
-    override val sologanImage get() = "resource/slogan.png"
-    override val logoImage get() = "resource/logo_kopi.png"
+    override val sologanImage get() = "slogan.png"
+    override val logoImage get() = "logo_kopi.png"
     override val logoHref get() = "http://"
     override val alternateLocale get() = Locale("de", "AT")
     override val supportedLocales get() =
@@ -44,7 +44,7 @@ open class ApplicationTestBase : TestBase() {
             driver: String,
             username: String,
             password: String,
-            schema: String
+            schema: String?
     ): DBContext? {
       return try {
         DBContext().apply {

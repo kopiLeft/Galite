@@ -49,13 +49,13 @@ class VBooleanField : VBooleanCodeField("boolean",
      */
     fun toText(o: Boolean): String = booleanNames[if (o) 0 else 1]
 
-   /*
-   * ----------------------------------------------------------------------
-   * DATA MEMBERS
-   * ----------------------------------------------------------------------
-   */
+    /*
+    * ----------------------------------------------------------------------
+    * DATA MEMBERS
+    * ----------------------------------------------------------------------
+    */
 
-    private const val GENERAL_LOCALIZATION_RESOURCE = "resource/org/kopi/galite/General"
+    private const val GENERAL_LOCALIZATION_RESOURCE = "org/kopi/galite/General"
     private val booleanNames = arrayOf("true", "false")
     private val booleanCodes = arrayOf(java.lang.Boolean.TRUE, java.lang.Boolean.FALSE)
   }
