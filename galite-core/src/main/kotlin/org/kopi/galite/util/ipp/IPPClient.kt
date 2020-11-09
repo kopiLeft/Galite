@@ -22,22 +22,20 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.net.URL
 
-class IPPClient (private val hostname: String,
-                 private val port: Short,
-                 private val printer: String,
-                 private val user: String) {
+class IPPClient(private val hostname: String,
+                private val port: Short,
+                private val printer: String,
+                private val user: String) {
 
   fun print(file: InputStream, nbCopies: Int, attributes: Array<String>?) {
-    val mediaAttributes: MutableList<String> = mutableListOf()
-    val optionalAttributes: MutableList<String> = mutableListOf()
+    val mediaAttributes: MutableList<String>? = mutableListOf()
+    val optionalAttributes: MutableList<String>? = mutableListOf()
 
-    if (attributes != null) {
-      attributes?.forEach {
-        if (it.indexOf('=') != -1) {
-          optionalAttributes.add(it)
-        } else {
-          mediaAttributes.add(it)
-        }
+    attributes?.forEach {
+      if (it.indexOf('=') != -1) {
+        optionalAttributes!!.add(it)
+      } else {
+        mediaAttributes!!.add(it)
       }
     }
 
@@ -104,7 +102,6 @@ class IPPClient (private val hostname: String,
       mediaAttributes.forEach {
         att.addValue(StringValue(it))
       }
-
       req.addAttribute(att)
     }
 
@@ -129,7 +126,7 @@ class IPPClient (private val hostname: String,
     // see description above
     for (i in 0 until nbCopies) {
       var resp: IPP
-      var httpConnection = IPPHttpConnection(
+      val httpConnection = IPPHttpConnection(
               URL("http://$hostname:$port/printers/$printer"))
 
       httpConnection.sendRequest(req)
@@ -145,67 +142,67 @@ class IPPClient (private val hostname: String,
   }
 
   fun getMediaTypes(): List<*> {
-      val media = mutableListOf<String>()
-      val properties = getPrinterAttributes()
-      val attributes = properties.getAttributes()
+    val media = mutableListOf<String>()
+    val properties = getPrinterAttributes()
+    val attributes = properties.getAttributes()
 
-      while (attributes.hasNext()) {
-        val attribute = attributes.next() as IPPAttribute
+    while (attributes.hasNext()) {
+      val attribute = attributes.next() as IPPAttribute
 
-        if (attribute.name == "media-supported") {
-          val values = attribute.getValues()
+      if (attribute.name == "media-supported") {
+        val values = attribute.getValues()
 
-          while (values.hasNext()) {
-            val value = values.next() as IPPValue
+        while (values.hasNext()) {
+          val value = values.next() as IPPValue
 
-            if (value is StringValue) {
-              media.add(value.value)
-            }
+          if (value is StringValue) {
+            media.add(value.value)
           }
         }
       }
-
-      return media
     }
+
+    return media
+  }
 
   // --------------------------------------------------------------------
   // PRIVATE METHODS
   // --------------------------------------------------------------------
 
   private fun getPrinterAttributes(): IPP {
-      val req = IPP()
-      val httpConnection = IPPHttpConnection(
-              URL("http://$hostname:$port/printers/$printer"))
-      req.setRequest(1, IPPConstants.OPS_GET_PRINTER_ATTRIBUTES)
+    val req = IPP()
+    val httpConnection = IPPHttpConnection(
+            URL("http://$hostname:$port/printers/$printer"))
+    req.setRequest(1, IPPConstants.OPS_GET_PRINTER_ATTRIBUTES)
 
-      var att = IPPAttribute(IPPConstants.TAG_OPERATION,
-              IPPConstants.TAG_CHARSET,
-              "attributes-charset")
-      att.addValue(StringValue("iso-8859-1"))
-      //att.addValue(new StringValue("utf-8"));
-      req.addAttribute(att)
-
-      att = IPPAttribute(IPPConstants.TAG_OPERATION,
-              IPPConstants.TAG_LANGUAGE,
-              "attributes-natural-language")
-      att.addValue(StringValue("en"))
-      req.addAttribute(att)
+    var att = IPPAttribute(IPPConstants.TAG_OPERATION,
+            IPPConstants.TAG_CHARSET,
+            "attributes-charset")
+    att.addValue(StringValue("iso-8859-1"))
+    //att.addValue(new StringValue("utf-8"));
+    req.addAttribute(att)
 
     att = IPPAttribute(IPPConstants.TAG_OPERATION,
-              IPPConstants.TAG_URI,
-              "printer-uri")
-      att.addValue(StringValue("ipp://" + hostname + ":" + port +
-              "/printers/" + printer))
-      req.addAttribute(att)
+            IPPConstants.TAG_LANGUAGE,
+            "attributes-natural-language")
+    att.addValue(StringValue("en"))
+    req.addAttribute(att)
 
-      att = IPPAttribute(IPPConstants.TAG_OPERATION,
-              IPPConstants.TAG_NAME,
-              "printer-name")
-      att.addValue(StringValue(printer))
-      req.addAttribute(att)
+    att = IPPAttribute(IPPConstants.TAG_OPERATION,
+            IPPConstants.TAG_URI,
+            "printer-uri")
+    att.addValue(StringValue("ipp://" + hostname + ":" + port +
+            "/printers/" + printer))
+    req.addAttribute(att)
+
+    att = IPPAttribute(IPPConstants.TAG_OPERATION,
+            IPPConstants.TAG_NAME,
+            "printer-name")
+    att.addValue(StringValue(printer))
+    req.addAttribute(att)
 
     httpConnection.sendRequest(req)
 
-      return httpConnection.receiveResponse()
-    }
+    return httpConnection.receiveResponse()
+  }
 }

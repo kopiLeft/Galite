@@ -59,7 +59,7 @@ class IPPHttpConnection(private val url: URL) {
   // --------------------------------------------------------------------
 
   init {
-    if (IPP.Companion.DEBUG) {
+    if (IPP.DEBUG) {
       println("printURL : $url")
     }
     connection = Socket(url.host, url.port)
