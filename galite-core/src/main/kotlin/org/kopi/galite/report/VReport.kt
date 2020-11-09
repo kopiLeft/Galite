@@ -609,7 +609,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
 
   private fun initDefaultCommands() {
     actors.forEachIndexed { index, vActor ->
-      VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.actorIdent)
+      VCommand(VConstants.MOD_ANY, this, vActor, index, vActor!!.actorIdent)
     }
   }
 

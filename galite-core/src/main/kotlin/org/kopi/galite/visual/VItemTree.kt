@@ -132,14 +132,14 @@ class VItemTree(rootName: String?,
                           icon: String,
                           key: Int,
                           modifier: Int) {
-    actors[number] = VActor(menu,
+    treeActors[number] = VActor(menu,
                             MENU_LOCALIZATION_RESOURCE,
                             item,
                             MENU_LOCALIZATION_RESOURCE,
                             icon,
                             key,
                             modifier)
-    actors[number].number= number
+    treeActors[number]!!.number= number
   }
 
   /**

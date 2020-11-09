@@ -278,8 +278,8 @@ class VDateField : VField(10, 1) {
       Companion.toText(value[r]!!)
     }
   }
-/**
 
+  /**
    * Returns the SQL representation of field value of given record.
    */
   override fun getSqlImpl(r: Int): String {
@@ -353,7 +353,7 @@ class VDateField : VField(10, 1) {
       var force = false
 
       force = try {
-        val oldText = getDisplayedValue(true) as? String
+        val oldText = getDisplayedValue(true) as String
         checkType(oldText)
         val newText = getText(block!!.activeRecord)
         oldText == null || newText == null || newText == "" || oldText != newText
