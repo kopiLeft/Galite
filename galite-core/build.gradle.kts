@@ -34,6 +34,8 @@ dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
   api("org.jetbrains.exposed", "exposed-jodatime", exposedVersion)
+  api("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
+  api("com.impossibl.pgjdbc-ng", "pgjdbc-ng", "0.8.6")
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core", vaadinVersion) {

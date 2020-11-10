@@ -26,7 +26,7 @@ import org.kopi.galite.visual.Registry
 /**
  * TestBase class for all tests.
  */
-open class ApplicationTestBase : TestBase() {
+open class VApplicationTestBase : TestBase() {
   class GaliteRegistry: Registry("Galite", null)
 
   class GaliteApplication: VApplication(GaliteRegistry()) {

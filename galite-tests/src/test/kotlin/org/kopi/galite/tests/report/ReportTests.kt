@@ -24,10 +24,10 @@ import org.jdom2.input.SAXBuilder
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.ApplicationTestBase
+import org.kopi.galite.tests.VApplicationTestBase
 import kotlin.test.assertEquals
 
-class ReportTests: ApplicationTestBase() {
+class ReportTests: VApplicationTestBase() {
 
   /**
    * Tests that fields has been registered in the report.
