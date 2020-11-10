@@ -364,7 +364,7 @@ class VDynamicReport(block: VBlock) : VReport() {
   private fun initDefaultCommands() {
     commands = arrayOfNulls(actorsDef.size)
     for (i in 0..10) {
-      commands[i] = VReportCommand(this, actorsDef[i]!!)
+      commands!![i] = VReportCommand(this, actorsDef[i]!!)
     }
   }
 

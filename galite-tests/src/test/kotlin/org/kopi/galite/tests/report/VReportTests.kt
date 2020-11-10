@@ -41,12 +41,12 @@ class VReportTests: ApplicationTestBase() {
    * Checks that f12 actor is the first report actor.
    */
   @Test
-  fun reportVAactorTest() {
+  fun reportVActorTest() {
     val report = SimpleReport.reportModel
     val f12 = VActor("File",
-                     "org/kopi/galite/resource/Window",
+                     "org/kopi/galite/Window",
                      "GotoShortcuts",
-                     "org/kopi/galite/resource/Window",
+                     "org/kopi/galite/Window",
                      null,
                      KeyEvent.VK_F12,
                      0)
@@ -58,7 +58,7 @@ class VReportTests: ApplicationTestBase() {
     // Actor checks
     assertEquals(f12, report.actors[0])
     assertEquals(f12, report.actors[0])
-    assertEquals(-8, report.actors[0].number)
+    assertEquals(-8, report.actors[0]!!.number)
   }
 
   /**

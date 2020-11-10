@@ -130,7 +130,7 @@ abstract class Report: Window() {
         Month::class ->
           VMonthColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
         Week::class ->
-          VMonthColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
+          VWeekColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
         Time::class ->
           VTimeColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
         Timestamp::class ->
