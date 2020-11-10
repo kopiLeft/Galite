@@ -23,7 +23,7 @@ import org.kopi.galite.report.PConfig
 import org.kopi.galite.report.Report
 
 import org.kopi.galite.report.VReport
-import org.kopi.galite.tests.ApplicationTestBase
+import org.kopi.galite.tests.VApplicationTestBase
 import org.kopi.galite.visual.VActor
 import java.awt.event.KeyEvent
 import java.util.*
@@ -35,7 +35,7 @@ import kotlin.test.assertEquals
  *
  * @see VReport
  */
-class VReportTests: ApplicationTestBase() {
+class VReportTests: VApplicationTestBase() {
 
   /**
    * Checks that f12 actor is the first report actor.
