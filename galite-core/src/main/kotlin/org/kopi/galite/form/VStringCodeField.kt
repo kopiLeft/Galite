@@ -30,7 +30,7 @@ import org.kopi.galite.db.Query
  * @param     ident           the identifier of the type in the source file
  * @param     source          the qualified name of the source file defining the list
  */
-class VStringCodeField(ident: String, source: String, names: Array<String>, private val codes: Array<String>)
+class VStringCodeField(ident: String, source: String, names: Array<String>, private val codes: Array<String?>)
   : VCodeField(ident, source, names) {
 
   /*
@@ -48,7 +48,8 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
   /**
    * Returns the array of codes.
    */
-  override fun getCodes(): Array<Any> = arrayOf(codes)
+  @Suppress("UNCHECKED_CAST")
+  override fun getCodes(): Array<Any?> = codes as Array<Any?>
 
   /*
    * ----------------------------------------------------------------------
