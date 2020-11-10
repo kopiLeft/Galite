@@ -15,6 +15,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 -->
 <insert>
-  <menu ident="File" label="Fichier" />
-  <actor ident="GotoShortcuts" label="Favoris" help="Aller au menu des favoris" />
+  <type ident="boolean">
+    <code>
+      <codedesc ident="true" label="yes" />
+      <codedesc ident="false" label="no" />
+    </code>
+  </type>
 </insert>
