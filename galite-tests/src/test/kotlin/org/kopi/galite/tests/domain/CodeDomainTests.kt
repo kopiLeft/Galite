@@ -112,7 +112,7 @@ class CodeDomainTests {
   @Test
   fun applyConvertUpperOnCodeDomainTest() {
     // Declaration of the domain with length
-    class StringTestType() : Domain<String>(5) {
+    class StringTestType : Domain<String>(5) {
       override val type = code {
         this["cde1"] = "1"
       }

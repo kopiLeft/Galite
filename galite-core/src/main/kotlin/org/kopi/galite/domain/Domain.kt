@@ -17,6 +17,8 @@
 
 package org.kopi.galite.domain
 
+import kotlin.reflect.KClass
+
 /**
  * A domain is a data type with predefined list of allowed values.
  *
@@ -27,6 +29,11 @@ open class Domain<T : Comparable<T>>(val length: Int? = null) {
    * The type of this domain.
    */
   open val type: Domain<T>? = null
+
+  /**
+   * Determines the column data type
+   */
+  var kClass: KClass<T>? = null
 
   /**
    * Allows to define the possible codes that the domain can take

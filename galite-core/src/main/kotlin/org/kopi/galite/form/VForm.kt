@@ -605,7 +605,7 @@ abstract class VForm : VWindow, VConstants {
               help: String,
               code: String) {
     for (i in blocks.indices) {
-      addActors(blocks[i].actors!!)
+      addActors(blocks[i].actors)
     }
     VDocGenerator(p).helpOnForm(getName(),
             commands,

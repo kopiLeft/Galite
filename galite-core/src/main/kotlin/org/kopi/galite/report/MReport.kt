@@ -576,7 +576,7 @@ class MReport : Constants, Serializable {
 
       for (k in lo..hi) {
         if (t_lo > mid || t_hi <= hi && order * array[t_hi]!!.compareTo(array[t_lo]!!,
-                        column, getModelColumn(column)!!) < 0) {
+                        column, getModelColumn(column)) < 0) {
           scratch!![k] = array[t_hi++]
         } else {
           scratch!![k] = array[t_lo++]
@@ -973,8 +973,8 @@ class MReport : Constants, Serializable {
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
   // accessiblecolumns is a part of columns which contains only visible columns
-  lateinit var columns: Array<VReportColumn?>    // array of column definitions
-  lateinit var accessibleColumns: Array<VReportColumn?> // array of visible or hide columns
+  var columns: Array<VReportColumn?> = arrayOf()    // array of column definitions
+  var accessibleColumns: Array<VReportColumn?> = arrayOf() // array of visible or hide columns
     private set
 
   // Root is the root of the tree (which is our model to manipulate data)

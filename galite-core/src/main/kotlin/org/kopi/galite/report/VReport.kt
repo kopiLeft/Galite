@@ -40,7 +40,6 @@ import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VHelpViewer
@@ -564,9 +563,9 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   fun genHelp(): String? {
     val surl = StringBuffer()
     val fileName: String? = VHelpGenerator().helpOnReport(pageTitle,
-            commands.requireNoNulls(),
-            model,
-            help)
+                                                          commands!!.requireNoNulls(),
+                                                          model,
+                                                          help)
 
     return if (fileName == null) {
       null
@@ -590,23 +589,24 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   }
   private fun initDefaultActors() {
     addActors(arrayOf(
-            VActor("File", null, "Quit", null, VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
-            VActor("File", null, "Print", null, VDynamicReport.PRINT_ICON, KeyEvent.VK_F6, 0),
-            VActor("File", null, "ExportCSV", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F8, 0),
-            VActor("File", null, "ExportXLSX", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_MASK),
-            VActor("File", null, "ExportPDF", null, VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, 0),
-            VActor("Action", null, "Fold", null, VDynamicReport.FOLD_ICON, KeyEvent.VK_F2, 0),
-            VActor("Action", null, "Unfold", null, VDynamicReport.UNFOLD_ICON, KeyEvent.VK_F3, 0),
-            VActor("Action", null, "FoldColumn", null, VDynamicReport.FOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0),
-            VActor("Action", null, "UnfoldColumn", null, VDynamicReport.UNFOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0),
-            VActor("Action", null, "Sort", null, VDynamicReport.SERIALQUERY_ICON, KeyEvent.VK_F4, 0),
-            VActor("Help", null, "Help", null, VDynamicReport.HELP_ICON, KeyEvent.VK_F1, 0),
+            VDefaultReportActor("File", "Quit", VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
+            VDefaultReportActor("File", "Print", VDynamicReport.PRINT_ICON, KeyEvent.VK_F6, 0),
+            VDefaultReportActor("File", "ExportCSV", VDynamicReport.EXPORT_ICON, KeyEvent.VK_F8, 0),
+            VDefaultReportActor("File", "ExportXLSX", VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, KeyEvent.SHIFT_MASK),
+            VDefaultReportActor("File", "ExportPDF", VDynamicReport.EXPORT_ICON, KeyEvent.VK_F9, 0),
+            VDefaultReportActor("Action", "Fold", VDynamicReport.FOLD_ICON, KeyEvent.VK_F2, 0),
+            VDefaultReportActor("Action", "Unfold", VDynamicReport.UNFOLD_ICON, KeyEvent.VK_F3, 0),
+            VDefaultReportActor("Action", "FoldColumn", VDynamicReport.FOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0),
+            VDefaultReportActor("Action", "UnfoldColumn", VDynamicReport.UNFOLD_COLUMN_ICON, KeyEvent.VK_UNDEFINED, 0),
+            VDefaultReportActor("Action", "Sort", VDynamicReport.SERIALQUERY_ICON, KeyEvent.VK_F4, 0),
+            VDefaultReportActor("Help", "Help", VDynamicReport.HELP_ICON, KeyEvent.VK_F1, 0),
     ))
   }
 
   private fun initDefaultCommands() {
+    commands = arrayOfNulls(actors.size)
     actors.forEachIndexed { index, vActor ->
-      VCommand(VConstants.MOD_ANY, this, vActor, index, vActor!!.actorIdent)
+      commands!![index] = VCommand(VConstants.MOD_ANY, this, vActor, index, vActor!!.actorIdent)
     }
   }
 
@@ -629,7 +629,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   private var pageTitle = ""
   private var firstPageHeader = ""
   protected var VKT_Triggers: Array<IntArray>? = null
-  protected lateinit var commands: Array<VCommand?>
+  var commands: Array<VCommand?>? = null
   private val activeCommands = ArrayList<VCommand>()
   var printOptions: PConfig = PConfig() // The print options
   var media: String? = null             // The media for this document
