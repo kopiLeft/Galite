@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+<properties>
+<!-- FIELD VALUES / LABELS-->
+  <property key="info-autofill" value="REMPLISSAGE AUTO" />
+  <property key="info-noecho" value="MOT DE PASSE" />
+  <property key="info-noedit" value="EDITION INTERDITE" />
+  <property key="new-record" value="Nouveau [espace]" />
+  <property key="true" value="oui" />
+  <property key="false" value="non" />
+  <property key="operator_eq" value="= : égal" />
+  <property key="operator_lt" value="&lt; : plus petit" />
+  <property key="operator_gt" value="&gt; : plus grand" />
+  <property key="operator_le" value="&lt;=: plus petit ou égal" />
+  <property key="operator_ge" value="&gt;=: plus grand ou égal" />
+  <property key="operator_ne" value="&lt;&gt;: différent" />
+  <property key="scan-ready" value="prêt" />
+  <property key="scan-read" value="lit" />
+  <property key="scan-finished" value="fini" />
+<!-- HEADERS-->
+  <property key="value" value="Val" />
+<!-- TITLES-->
+  <property key="Warning" value="Attention" />
+  <property key="Error" value="Erreur" />
+  <property key="Question" value="Question" />
+  <property key="Notice" value="Information" />
+  <property key="Please_wait" value="Veuillez attendre" />
+  <property key="pick_in_list" value="Choisissez" />
+  <property key="search_operator" value="Opérateur" />
+  <property key="color_chooser" value="Choix d''une couleur" />
+  <property key="toolbar-title" value="Favoris" />
+  <property key="New_item" value="Nouvel élément" />
+<!-- MENUTREE-->
+  <property key="program_menu" value="Menu des formulaires" />
+  <property key="PROGRAM" value="PROGRAMME" />
+  <property key="program" value="Formulaires" />
+  <property key="program_help" value="L''ensemble des formulaires accessibles." />
+  <property key="menu-close-help" value="Quitter l''application en cours" />
+  <property key="menu-open-help" value="Ouvrir le formulaire" />
+  <property key="menu-launch-help" value="Exécuter le formulaire" />
+  <property key="menu-fold-help" value="Fermer le menu" />
+  <property key="menu-unfold-help" value="Ouvrir le menu" />
+  <property key="menu-help-help" value="Ouvre la fenêtre d''aide et affiche la table des matières" />
+  <property key="menu_form_started" value="En cours de chargement" />
+  <property key="menu_cant_load" value="Ce module n''est pas accessible" />
+<!-- MENUS-->
+  <property key="menu-file" value="Fichier" />
+  <property key="menu-edit" value="Procédure" />
+  <property key="menu-show" value="Afficher les favoris" />
+  <property key="menu-add" value="Ajouter aux favoris" />
+  <property key="menu-remove" value="Enlever des favoris" />
+  <property key="menu-action" value="Action" />
+  <property key="item-top" value="Debut" />
+  <property key="item-index" value="Index" />
+  <property key="item-cut" value="Couper" />
+  <property key="item-copy" value="Copier" />
+  <property key="item-paste" value="Coller" />
+  <property key="item-select-all" value="Tout selectionner" />
+  <property key="item-undo" value="Annuler" />
+  <property key="item-redo" value="Refaire" />
+  <property key="item-save" value="Sauver" />
+  <property key="item-page-left" value="Page -" />
+  <property key="item-page-right" value="Page +" />
+  <property key="item-page-first" value="Première" />
+  <property key="item-page-last" value="Dernière" />
+  <property key="item-preview-fit" value="Optimal" />
+  <property key="item-preview-fit-width" value="Optimal" />
+  <property key="item-preview-fit-height" value="Optimal" />
+  <property key="item-preview-plus" value="Zoom +" />
+  <property key="item-preview-minus" value="Zoom -" />
+  <property key="help-menu" value="Aide" />
+  <property key="help-item" value="Information" />
+  <property key="close" value="Quitter" />
+  <property key="open" value="Ouvrir" />
+  <property key="process" value="Kopi" />
+  <property key="print" value="Imprimer" />
+  <property key="standard" value="Remplir" />
+  <property key="launch" value="Executer" />
+  <property key="fold" value="Fermer" />
+  <property key="unfold" value="Ouvrir" />
+  <property key="goto-shortcuts" value="" />
+  <property key="from" value="sur" />
+  <property key="position-number" value="Numéro de position" />
+  <property key="shortcuts-not-available" value="Favoris non disponible" />
+<!-- BUTTONS-->
+  <property key="OK" value="Oui" />
+  <property key="CLOSE" value="Fermer" />
+  <property key="CANCEL" value="Annuler" />
+  <property key="NO" value="Non" />
+<!-- INFO-->
+  <property key="READY" value="PRET..." />
+  <property key="WAIT" value="ACCES" />
+<!-- FIELD TYPE HELP-->
+  <property key="string-type-area" value="Ce champ doit être rempli avec un texte de moins de {0} lettres et de moins de {1} lignes." />
+  <property key="print-pageLeft-help" value="Affiche la page precedent." />
+  <property key="print-pageRight-help" value="Affiche la page suivante." />
+  <property key="string-type-field" value="Ce champ doit être rempli avec un texte de moind de {0} lettres." />
+  <property key="date-type-field" value="Ce champ doit contenir une date (JJ.MM.AAAA)." />
+  <property key="month-type-field" value="Ce champ doit contenir un mois (MM.AAAA)." />
+  <property key="time-type-field" value="Ce champ doit contenir une heure (HH:MM)." />
+  <property key="week-type-field" value="Ce champ doit contenir une semaine ISO (SS.AAAA)." />
+  <property key="boolean-type-field" value="Ce champ doit contenir une valeur booléenne (vrai ou faux)." />
+  <property key="integer-type-field" value="Ce champ doit contenir un entier entre {0} et {1}." />
+  <property key="fixed-type-field" value="" />
+  <property key="code-type-field" value="Ce champ doit être rempli avec une des valeurs proposées (F2)." />
+  <property key="image-type-field" value="" />
+  <property key="color-type-field" value="" />
+  <property key="actor-type-field" value="" />
+<!-- DOC GENERATOR-->
+  <property key="Type" value="Type" />
+  <property key="Image" value="Image" />
+  <property key="Color" value="Couleur" />
+  <property key="String" value="Texte" />
+  <property key="StringArea" value="Texte" />
+  <property key="Text" value="Texte" />
+  <property key="Fixed" value="Nombre" />
+  <property key="Long" value="Entier" />
+  <property key="Date" value="Date" />
+  <property key="Month" value="Mois" />
+  <property key="Time" value="Heure" />
+  <property key="Week" value="Semaine" />
+  <property key="Boolean" value="Booleen" />
+  <property key="Code" value="Code" />
+  <property key="Timestamp" value="Timestamp" />
+  <property key="Image-long" value="Une image de {0}x{1} pixels" />
+  <property key="Color-long" value="Une couleur definie par ces composantes RGB" />
+  <property key="StringArea-long" value="Ce champ doit être rempli par un texte de moins de {0} caracteres et de {1} lignes au plus" />
+  <property key="String-long" value="Ce champ doit être rempli par un texte de au plus {0} caracteres" />
+  <property key="Text-long" value="Ce champ peut être rempli par un texte de taille quelconque" />
+  <property key="Fixed-long" value="Ce champ doit être rempli par un nombre entre {0} et {1}" />
+  <property key="Long-long" value="Ce champ doit être rempli par un entier entre {0} et {1}" />
+  <property key="Date-long" value="Ce champ doit contenir une date (JJ.MM.AAAA)" />
+  <property key="Month-long" value="Ce champ doit contenir un mois (MM.AAAA)" />
+  <property key="Time-long" value="Ce champ doit contenir une heure (HH:mm)" />
+  <property key="Week-long" value="Ce champ doit contenir une semaine ISO (SS.AAAA)." />
+  <property key="Boolean-long" value="Ce champ doit contenir une valeur booleenne (vrai ou faux)" />
+  <property key="Code-long" value="Ce champ doit être rempli par une des valeurs suivantes:" />
+  <property key="Mode" value="Mode" />
+  <property key="skipped" value="Inaccessible" />
+  <property key="visit" value="Viste" />
+  <property key="mustfill" value="Obligatoire" />
+  <property key="skipped-long" value="La valeur de ce champ ne peut pas etre editée, c''est une simple information" />
+  <property key="visit-long" value="La valeur de ce champ est optionnelle" />
+  <property key="mustfill-long" value="La valeur de ce champ est obligatoire pour tout enregistrement" />
+<!-- HELP MENU-->
+  <property key="help-close-help" value="Close the help window" />
+  <property key="help-top-help" value="Show the table of contents" />
+  <property key="help-index-help" value="Show the index table" />
+  <property key="help-goto-shortcuts" value="Affiche la fenêtre de favoris en premier plan" />
+<!-- PRINT-->
+  <property key="building_document" value="Construction du document." />
+  <property key="print-close-help" value="Ferme l''editeur de texte." />
+  <property key="print-print-help" value="Imprime cette page sur l''imprimante par défaut." />
+  <property key="print-save-help" value="Sauve cette page dans un fichier POSTSCRIPT." />
+  <property key="show-blocks" value="Bords" />
+  <property key="print-block-help" value="Affiche un bord autour des blocks d''edition." />
+  <property key="print-dialog" value="Impression" />
+  <property key="print-message" value="Impression du document en cours." />
+  <property key="export-message" value="Sauvegarde du document en cours." />
+  <property key="print-interupt" value="Interrompre." />
+  <property key="print-page" value="Page" />
+<!-- REPORT-->
+  <property key="separator" value="A droite de ce séparateur, il n'y a plus de groupage." />
+<!-- DateChooser-->
+  <property key="Monday" value="Lu" />
+  <property key="Tuesday" value="Ma" />
+  <property key="Wednesday" value="Me" />
+  <property key="Thursday" value="Je" />
+  <property key="Friday" value="Ve" />
+  <property key="Saturday" value="Sa" />
+  <property key="Sunday" value="Di" />
+  <property key="Jan" value="Jan" />
+  <property key="Feb" value="Fev" />
+  <property key="Mar" value="Mar" />
+  <property key="Apr" value="Avr" />
+  <property key="May" value="Mai" />
+  <property key="Jun" value="Jui" />
+  <property key="Jul" value="Jul" />
+  <property key="Aug" value="Aou" />
+  <property key="Sep" value="Sep" />
+  <property key="Oct" value="Oct" />
+  <property key="Nov" value="Nov" />
+  <property key="Dec" value="Dec" />
+  <property key="today" value="Aujourd." />
+  <property key="menu-format" value="" />
+  <property key="menu-font-family" value="" />
+  <property key="menu-font-style" value="" />
+  <property key="item-font-bold" value="" />
+  <property key="item-font-italic" value="" />
+  <property key="item-font-underline" value="" />
+  <property key="menu-font-size" value="" />
+  <property key="menu-alignment" value="" />
+  <property key="item-justify-left" value="" />
+  <property key="item-justify-right" value="" />
+  <property key="item-justify-center" value="" />
+  <property key="editor-label-print" value="" />
+  <property key="editor-help-print" value="" />
+  <property key="editor-label-preview" value="" />
+  <property key="editor-help-preview" value="" />
+  <property key="help_viewer" value="Aide" />
+<!-- SPELL CHECKER-->
+  <property key="aspell-dialog-title" value="Rechtschreibprüfung" />
+  <property key="aspell-dialog-not-in" value="Not in dictionary:" />
+  <property key="aspell-dialog-change-to" value="Change to:" />
+  <property key="aspell-dialog-suggestions" value="Suggestions:" />
+  <property key="aspell-dialog-ignore" value="Ignore" />
+  <property key="aspell-dialog-ignore-all" value="Ignore All" />
+  <property key="aspell-dialog-change" value="Change" />
+  <property key="aspell-dialog-change-all" value="Change All" />
+  <property key="aspell-dialog-cancel" value="Chancel" />
+  <property key="aspell-finished" value="Rechtschreibprüfung beendet." />
+  <property key="aspell-notice" value="Rechtschreibprüfung" />
+  <property key="aspell-menu-title" value="Rechtschreibprüfung" />
+  <property key="aspell-german" value="Deutsch" />
+  <property key="aspell-english" value="Englisch" />
+  <property key="aspell-french" value="Französisch" />
+
+  <property key="File" value="Fichier" />
+  <property key="Edit" value="Procédure" />
+  <property key="Action" value="Action" />
+  <property key="Settings" value="Préférences" />
+  <property key="Help" value="Aide" />
+  <property key="Help-help" value="Aide" />
+  <property key="Quit" value="Quitter" />
+  <property key="Quit-help" value="Quitter le rapport." />
+  <property key="Print" value="Imprimer" />
+  <property key="Print-help" value="Imprimer le rapport" />
+  <property key="Preview" value="Aperçu" />
+  <property key="Preview-help" value="Afficher le rapport sur l'écran" />
+  <property key="PrintOptions" value="Options" />
+  <property key="PrintOptions-help" value="Changer les options d'impression" />
+  <property key="ExportCSV" value="CSV" />
+  <property key="ExportCSV-help" value="Enregistrer les données dans un fichier CSV" />
+  <property key="ExportXLSX" value="XLSX" />
+  <property key="ExportXLSX-help" value="Enregistrer les données dans un fichier XLSX" />
+  <property key="ExportPDF" value="PDF" />
+  <property key="ExportPDF-help" value="Enregistrer les données dans un fichier PDF" />
+  <property key="Fold" value="Plier" />
+  <property key="Fold-help" value="Plie la colonne pour synthétiser les données" />
+  <property key="Unfold" value="Déplier" />
+  <property key="Unfold-help" value="Déplie la colonne pour approfondir la vision " />
+  <property key="FoldColumn" value="Cacher" />
+  <property key="FoldColumn-help" value="Cacher la colonne" />
+  <property key="UnfoldColumn" value="Montrer" />
+  <property key="UnfoldColumn-help" value="Montrer la colonne" />
+  <property key="ColumnInfo" value="Options" />
+  <property key="ColumnInfo-help" value="Changer l'affichage des champs en fonction de leur valeur" />
+  <property key="Sort" value="Trier" />
+  <property key="Sort-help" value="Trier les données de la colonne." />
+  <property key="OpenLine" value="Editer" />
+  <property key="OpenLine-help" value="Ouvre le formulaire d'édition." />
+  <property key="RemoveConfiguration" value="Effacer" />
+  <property key="RemoveConfiguration-help" value="Effacer une configuration enregistrée." />
+  <property key="AddConfiguration" value="Enregister" />
+  <property key="AddConfiguration-help" value="Enregister une nouvelle configuration." />
+  <property key="LoadConfiguration" value="Charger" />
+  <property key="LoadConfiguration" value="Charger une configuration enregistrée." />
+  <property key="Options" value="Change les options d'affichages" />
+  <property key="Options-help" value="Change les options d'affichages" />
+  <property key="choose_column" value="choisis une colonne depuis la liste:" />
+  <property key="validate" value="Valider" />
+  <property key="enter_new_label" value="entrer un nouveau label pour cette colonne" />
+  <property key="add_data_for_column" value="Ajouter des données pour cette colonne" />
+<!-- report column popup menu -->
+  <property key="set_column_data" value="attribuer une formule" />
+  <property key="add_column" value="Ajouter une colonne" />
+  <property key="sort_DSC" value="trier &lt;&lt;" />
+  <property key="sort_ASC" value="trier &gt;&gt;" />
+  <property key="set_column_info" value="personnaliser la colonne" />
+  <property key="remove_column" value="supprimer la colonne" />
+<!-- Vaadin UI static texts-->
+  <property key="welcomeMessage" value="Bienvenue" />
+  <property key="userName" value="Nom d'utilisateur " />
+  <property key="password" value="Mot de passe " />
+  <property key="login" value="Connexion" />
+  <property key="logout" value="Déconnexion" />
+  <property key="help" value="Aide" />
+  <property key="loginInstructionMsg" value="Veuillez saisir votre nom d'utilisateur et votre mot de passe." />
+  <property key="loginErrorMsg" value="Vous devez saisir un nom d'utilisateur et un mot de passe corrects." />
+  <property key="admin" value="Administrateur" />
+  <property key="user" value="Utilisateur" />
+  <property key="language" value="Langue " />
+  <property key="themes" value="Thèmes" />
+  <property key="theme-confirmation" value="Le changement de thème provoque la déconnexion de votre session." />
+  <property key="available-themes" value="Thèmes disponibles :" />
+  <property key="home" value="Accueil" />
+  <property key="session-expired-caption" value="Session expirée" />
+  <property key="session-expired-message" value="Prenez note de toutes les données non sauvegardées, et cliquez ici pour continuer." />
+</properties>

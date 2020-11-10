@@ -16,5 +16,5 @@
 -->
 <insert>
   <menu ident="File" label="Fichier" />
-  <actor ident="GotoShortcuts" label="Favoris" help="Aller au menu des favoris" />
+  <actor ident="Close" label="Quitter" help="Fermer la fenêtre d'aide" />
 </insert>
