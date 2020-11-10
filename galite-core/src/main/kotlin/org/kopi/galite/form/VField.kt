@@ -18,35 +18,49 @@
 
 package org.kopi.galite.form
 
-import java.awt.Color
-import java.io.InputStream
-
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
-import org.kopi.galite.db.Query
+import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.Function
+import org.jetbrains.exposed.sql.IColumnType
+import org.jetbrains.exposed.sql.IntegerColumnType
+import org.jetbrains.exposed.sql.QueryBuilder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Substring
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.append
+import org.jetbrains.exposed.sql.function
+import org.jetbrains.exposed.sql.intLiteral
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.substring
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.Query
 import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.Week
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.VModel
+import java.awt.Color
+import java.io.InputStream
+import java.sql.SQLException
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -76,7 +90,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               indices: Int,
               priority: Int,
               commands: Array<VCommand>?,
-              pos: VPosition,
+              pos: VPosition?,
               align: Int,
               alias: VField?) {
     this.name = name
@@ -1448,19 +1462,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   private fun checkList() {
-    TODO()
-    /*if (!getForm().forceCheckList()) {
+    if (!getForm().forceCheckList()) {
       // Oracle doesn't force the value to be in the list
       return
     }
-    val SELECT_IS_IN_LIST = " SELECT   1                                      " +
-            " FROM     $2                                     " +
-            " WHERE    $1 = $3"
-
-    val SELECT_MATCHING_STRINGS = " SELECT   $1                                     " +
-            " FROM     $2                                     " +
-            " WHERE    {fn SUBSTRING($1, 1, {fn LENGTH(#3)})} = #3    " +
-            " ORDER BY 1"
 
     if (isNull(block!!.activeRecord)) {
       return
@@ -1468,40 +1473,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (list == null) {
       return
     }
-    val alreadyProtected: Boolean = getForm().inTransaction()
+
+    val one = object : Expression<Int>() {
+      override fun toQueryBuilder(queryBuilder: QueryBuilder) = queryBuilder {
+        append("1")
+      }
+    }
+
     if (this !is VStringField) {
       var exists = false
 
       try {
-        while (true) {
-          try {
-            if (!alreadyProtected) {
-            }
-            SELECT_IS_IN_LIST.replace("$2", evalListTable())
-            SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
-            transaction {
-              exec(SELECT_IS_IN_LIST) {exists = it.next()}
-            }
-            if (!alreadyProtected) {
-            }
-            break
-          } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
-          } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+        transaction {
+          val table = object : Table(evalListTable()) {
+            val column = varchar(list!!.getColumn(0).column!!, 1000)
           }
+          exists = table.slice(one).select { table.column eq getSql(block!!.activeRecord)!! }.map { it }.isNotEmpty()
         }
       } catch (e: Throwable) {
         throw VExecFailedException(e)
@@ -1513,50 +1500,32 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } else {
       var count = 0
       var result: String? = null
-      val fldbuf = getSql(block!!.activeRecord)!!
-
-      if (fldbuf.indexOf('*') > 0) {
+      val fldbuf = getSql(block!!.activeRecord)
+      if (fldbuf!!.indexOf('*') > 0) {
         return
       }
       try {
-        while (true) {
-          try {
-            if (!alreadyProtected) {
-            }
-            SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
-            SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
-            transaction {
-              exec(SELECT_MATCHING_STRINGS) {
-                if (!it.next()) {
-                  count = 0
-                } else {
-                  count = 1
-                  result = it.getString(1)
-                  if (it.next()) {
-                    count = 2
-                  }
-                }
-              }
-            }
+        transaction {
+          val table = object : Table(evalListTable()) {
+            val column = varchar(list!!.getColumn(0).column!!, 1000)
+          }
+          class Length<T : Comparable<T>, in S : T?> (
+                  val expr: Expression<in S>
+          ) : Function<Int>(IntegerColumnType()) {
+            override fun toQueryBuilder(queryBuilder: QueryBuilder): Unit = queryBuilder { append("LENGTH(", expr, ")") }
+          }
+          val results = table.slice(table.column)
+                  .select {
+                    Substring(table.column, intLiteral(1), Length(table.column)) eq  getString(block!!.activeRecord)
+                  }.orderBy(table.column).map { it }
 
-            if (!alreadyProtected) {
-            }
-            break
-          } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
-          } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
+          if (results.isEmpty()) {
+            count = 0
+          } else {
+            count = 1
+            result = results[0][table.column]
+            if (results.size > 1) {
+              count = 2
             }
           }
         }
@@ -1567,7 +1536,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         0 -> throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
         1 -> {
           if (result != getString(block!!.activeRecord)) {
-            setString(block!!.activeRecord, result!!)
+            setString(block!!.activeRecord, result)
           }
           return
         }
@@ -1593,13 +1562,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           if (result == null) {
             throw VExecFailedException() // no message to display
           } else {
-            setString(block!!.activeRecord, result!!)
+            setString(block!!.activeRecord, result)
             return
           }
         }
         else -> throw InconsistencyException(threadInfo() + "count = " + count)
       }
-    }*/
+    }
   }
 
   /**
@@ -1607,33 +1576,27 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * !!! TRY TO MERGE WITH checkList ???
    */
   fun getListID(): Int {
-    TODO()
-    /*val SELECT_IS_IN_LIST = " SELECT  ID                      " +
-            " FROM    $2                      " +
-            " WHERE   $1 = $3"
+    val table = object : IntIdTable(evalListTable()) {
+      val column = varchar(list!!.getColumn(0).column!!, 1000)
+    }
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
     assert(list != null) { threadInfo() + "list ist not null" }
     var id = -1
 
     try {
-      while (true) {
-        try {
-          SELECT_IS_IN_LIST.replace("$2", evalListTable())
-          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
-          SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
-          transaction {
-            exec(SELECT_IS_IN_LIST) {
-              if (it.next()) {
-                id = it.getInt(1)
-              }
-            }
+      try {
+        transaction {
+          val ids = table.slice(table.id).select {
+            table.column eq getSql(block!!.activeRecord)!!
+          }.map { it[table.id] }
+          if (ids.isNotEmpty()) {
+            id = ids[0].value
           }
-          break
-        } catch (e: SQLException) {
-        } catch (error: Error) {
-        } catch (rte: RuntimeException) {
         }
+      } catch (e: SQLException) {
+      } catch (error: Error) {
+      } catch (rte: RuntimeException) {
       }
     } catch (e: Throwable) {
       throw VExecFailedException(e)
@@ -1641,7 +1604,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (id == -1) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
     }
-    return id*/
+    return id
   }
 
   private fun displayQueryList(queryText: String, columns: Array<VListColumn>): Any? {
@@ -2003,10 +1966,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-                       block!!.getFieldPos(this),
-                       label,
-                       lab ?: name,
-                       toolTip)
+              block!!.getFieldPos(this),
+              label,
+              lab ?: name,
+              toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -2060,10 +2023,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-                    modeDesc,
-                    getTypeName(),
-                    getTypeInformation(),
-                    names)
+            modeDesc,
+            getTypeName(),
+            getTypeInformation(),
+            names)
   }
 
   /**
@@ -2374,7 +2337,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip : String = "" // help text
+  var toolTip : String? = null // help text
     private set
 
   private var index = 0 // The position in parent field array

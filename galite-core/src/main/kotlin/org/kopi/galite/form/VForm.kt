@@ -745,9 +745,9 @@ abstract class VForm : VWindow, VConstants {
   // static (from DSL) data
   override var source: String? = null // qualified name of source file
   lateinit var blocks: Array<VBlock>
-  internal lateinit var pages: Array<String>
+  internal var pages: Array<String> = arrayOf()
   internal var help: String? = null //the name of this field
-  internal lateinit var VKT_Triggers: Array<IntArray>
+  internal var VKT_Triggers: Array<IntArray> = arrayOf()
 
   // dynamic data
   private val blockMoveAllowed = true

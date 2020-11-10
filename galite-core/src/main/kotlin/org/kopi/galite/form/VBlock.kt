@@ -140,7 +140,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     buildCstr()
   }
 
-  protected fun setInfo() {
+  protected open fun setInfo() {
     // Do nothing, should be redefined if some info
     // has to be set
   }
