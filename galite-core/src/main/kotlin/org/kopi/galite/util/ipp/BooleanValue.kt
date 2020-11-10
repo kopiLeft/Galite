@@ -16,24 +16,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.util.ipp
 
-import java.io.Serializable
-import java.util.EventListener
+class BooleanValue : IPPValue {
 
-interface BlockListener : EventListener, Serializable {
-  fun blockClosed()
-  fun blockChanged()
-  fun blockCleared()
-  fun blockAccessChanged(block: VBlock, newAccess: Boolean)
-  fun blockViewModeLeaved(block: VBlock, actviceField: VField?)
-  fun blockViewModeEntered(block: VBlock, actviceField: VField?)
-  fun validRecordNumberChanged()
-  fun recordInfoChanged(rec: Int, info: Int)
-  fun orderChanged()
-  fun filterHidden()
-  fun filterShown()
+  constructor(value: Boolean) {
+    this.value = value
+  }
 
-  // please do not use!
-  fun getCurrentDisplay(): UBlock
+  constructor(inputStream: IPPInputStream) {
+    inputStream.readShort() // value-length
+    value = inputStream.readByte().toInt() != 0 // value
+  }
+
+  // --------------------------------------------------------------------
+  // ACCESSORS
+  // --------------------------------------------------------------------
+
+  override fun getSize(): Int = 2 + 1 // value-length + value
+
+  override fun write(os: IPPOutputStream) {
+    os.writeShort(1)
+    os.writeByte(if (value) 1 else 0)
+  }
+
+  override fun dump() {
+    println("\tboolean : $value")
+  }
+
+  override fun toString(): String = value.toString() + ""
+
+  private var value: Boolean
 }

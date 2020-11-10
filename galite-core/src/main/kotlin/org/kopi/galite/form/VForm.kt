@@ -96,7 +96,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * load form (from sub class)
    */
-  protected fun init() {}
+  protected open fun init() {}
 
   override fun getType(): Int = Constants.MDL_FORM
 
@@ -126,7 +126,7 @@ abstract class VForm : VWindow, VConstants {
    * close model if allowed
    */
   override fun willClose(code: Int) {
-    Commands.quitForm(this, VWindow.CDE_ESCAPED)
+    Commands.quitForm(this, CDE_ESCAPED)
   }
 
   /**
@@ -184,7 +184,7 @@ abstract class VForm : VWindow, VConstants {
   override fun addActors(actors: Array<VActor>?) {
     actors?.forEach { actor ->
       if (actor is VDefaultActor) {
-        when ((actor as VDefaultActor).code) {
+        when (actor.code) {
           CMD_AUTOFILL -> autofillActor = actor
           CMD_EDITITEM -> editItemActor = actor
           CMD_EDITITEM_S -> editItemActor_S = actor
@@ -413,8 +413,8 @@ abstract class VForm : VWindow, VConstants {
     activeBlock?.leave(false)
 
     for (i in blocks.indices) {
-      blocks!![i].clear()
-      blocks!![i].mode = VConstants.MOD_QUERY // vincent 14.9.98
+      blocks[i].clear()
+      blocks[i].setMode(VConstants.MOD_QUERY) // vincent 14.9.98
     }
     initialise()
     if (activeBlock == null) {
@@ -512,7 +512,7 @@ abstract class VForm : VWindow, VConstants {
    * @param        index                the index of the specified block
    */
   fun getBlock(index: Int): VBlock {
-    return blocks!![index]
+    return blocks[index]
   }
 
   /**
@@ -618,7 +618,7 @@ abstract class VForm : VWindow, VConstants {
   fun genHelp(): String? {
 
     var description = getName()
-    var localHelp = ""
+    var localHelp: String? = null
     val surl = StringBuffer()
     val module = try {
       ApplicationContext.getMenu()!!.getModule(this)
@@ -649,7 +649,7 @@ abstract class VForm : VWindow, VConstants {
         if (anchor == null) {
           anchor = field.name
         }
-        anchor!!.replace(' ', '_')
+        anchor.replace(' ', '_')
         surl.append("#" + field.block!!.title!!.replace(' ', '_') + anchor)
       }
       surl.toString()

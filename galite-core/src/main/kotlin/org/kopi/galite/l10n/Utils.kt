@@ -34,7 +34,7 @@ object Utils {
   fun lookupChild(parent: Element,
                   type: String,
                   attribute: String,
-                  value: String): Element {
+                  value: String?): Element {
     val children = parent.getChildren(type)
 
     children.forEach { element ->

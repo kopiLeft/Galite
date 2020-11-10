@@ -16,27 +16,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.util.ipp
 
-import org.kopi.galite.list.VListColumn
+class DateValue: IPPValue {
 
-abstract class AbstractPredefinedValueHandler(private val model: VFieldUI,
-                                              protected val form: VForm,
-                                              protected val field: VField)
-  : PredefinedValueHandler {
+  constructor( value: ByteArray) {
+    this.value = value
+  }
 
-  override fun selectDefaultValue(): Boolean = model.fillField()
-
-  fun selectFromList(list: Array<VListColumn>,
-                     values: Array<Array<Any?>>,
-                     predefinedValues: Array<String>): String? {
-    val listDialog = VListDialog(list, values)
-    val selected = listDialog.selectFromDialog(form, field)
-
-    return if (selected != -1) {
-      predefinedValues[selected]
-    } else {
-      null
+  constructor(inputStream: IPPInputStream) {
+    inputStream.readShort() //value-length
+    value = ByteArray(11)
+    for (i in 0..10) {
+      value[i] = inputStream.readByte()
     }
   }
+
+  // --------------------------------------------------------------------
+  // ACCESSORS
+  // --------------------------------------------------------------------
+
+  override fun getSize(): Int = 2 + 11 // value-length + value
+
+  override fun write(os: IPPOutputStream) {
+    os.writeShort(11)
+    for (i in 0..10) {
+      os.writeByte(value[i].toInt())
+    }
+  }
+
+  override fun dump() {
+    print("\tdate : ")
+    for (i in 0..10) {
+      print(value[i])
+    }
+    println("")
+  }
+  private var value: ByteArray
 }

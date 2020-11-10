@@ -176,7 +176,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       }
       val localCommands = model.command
       localCommands?.forEachIndexed { index, localCommand ->
-        if (localCommand.isActive(getBlock().mode)) {
+        if (localCommand.isActive(getBlock().getMode())) {
           val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS,
                           getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
             try {
@@ -202,7 +202,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     if (model.getAccess(model.block!!.activeRecord) > VConstants.ACS_SKIPPED &&
             hasAutofillCommand() &&
             !model.block!!.isChart() && display != null && display!!.getAutofillButton() != null) {
-      display!!.getAutofillButton().setEnabled(autofillCommand!!.isActive(model.block!!.mode))
+      display!!.getAutofillButton().setEnabled(autofillCommand!!.isActive(model.block!!.getMode()))
     }
   }
 
@@ -396,8 +396,8 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
           detailDisplay = createDisplay(dlDetail, model, true)
           (getBlock().display as UMultiBlock).addToDetail(detailDisplay,
                   Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, (lineEnd - line) * 2 + 1, false))
-          detailDisplay.setPosition(0)
-          detailDisplay.setInDetail(true)
+          detailDisplay!!.setPosition(0)
+          detailDisplay!!.setInDetail(true)
         }
 
         // update text
@@ -407,7 +407,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
           }
         }
         if (!getBlock().noDetail() && !model.noDetail()) {
-          detailDisplay.updateText()
+          detailDisplay!!.updateText()
         }
       } else if (column < 0) {
         // multifields (special fields)
@@ -518,8 +518,8 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         displays[rowInDisplay]!!.updateAccess()
       }
     }
-    if (detailDisplay != null && detailDisplay.getPosition() == rowInDisplay) {
-      detailDisplay.updateAccess()
+    if (detailDisplay != null && detailDisplay!!.getPosition() == rowInDisplay) {
+      detailDisplay!!.updateAccess()
     }
   }
 
@@ -535,8 +535,8 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         displays[rowInDisplay]!!.updateColor()
       }
     }
-    if (detailDisplay != null && detailDisplay.getPosition() == rowInDisplay) {
-      detailDisplay.updateColor()
+    if (detailDisplay != null && detailDisplay!!.getPosition() == rowInDisplay) {
+      detailDisplay!!.updateColor()
     }
   }
 
@@ -565,11 +565,11 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       if (dispLine < 0) {
         dispLine = 0
       }
-      detailDisplay.setPosition(dispLine)
-      detailDisplay.updateFocus()
-      detailDisplay.updateAccess()
-      detailDisplay.updateText()
-      detailDisplay.updateColor()
+      detailDisplay!!.setPosition(dispLine)
+      detailDisplay!!.updateFocus()
+      detailDisplay!!.updateAccess()
+      detailDisplay!!.updateText()
+      detailDisplay!!.updateColor()
     }
   }
   // ---------------------------------------------------------------------
@@ -665,7 +665,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     private set
   private lateinit var dl: ULabel // label text
   private lateinit var dlDetail: ULabel // label text (chart)
-  lateinit var detailDisplay: UField // the object displayed on screen (detail)
+  var detailDisplay: UField? = null // the object displayed on screen (detail)
     private set
   private var line = 0 // USE A VPosition !!!!
   private var lineEnd = 0

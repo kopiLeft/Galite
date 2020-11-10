@@ -68,7 +68,7 @@ class Connection {
     this.url = url
     this.userName = userName
     this.password = password
-    setUserID()
+    //setUserID() TODO
   }
 
   /**

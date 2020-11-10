@@ -107,10 +107,10 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   /**
    * build everything after loading
    */
-  fun build() {
+  protected fun build() {
     model.build()
     model.createTree()
-    (getDisplay() as? UReport)!!.build()
+    (getDisplay() as UReport).build()
     built = true
 
     // all commands are by default enabled
@@ -143,7 +143,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
    *
    * @param     locale  the locale to use
    */
-  fun localize(locale: Locale?) {
+  open fun localize(locale: Locale?) {
     var manager: LocalizationManager?
     manager = LocalizationManager(locale, ApplicationContext.getDefaultLocale())
 
@@ -169,7 +169,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
   // ----------------------------------------------------------------------
-  fun initReport() {
+  open fun initReport() {
     build()
     callTrigger(Constants.TRG_PREREPORT)
   }
@@ -563,9 +563,9 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   fun genHelp(): String? {
     val surl = StringBuffer()
     val fileName: String? = VHelpGenerator().helpOnReport(pageTitle,
-            commands?.requireNoNulls(),
-            model,
-            help)
+                                                          commands!!.requireNoNulls(),
+                                                          model,
+                                                          help)
 
     return if (fileName == null) {
       null
@@ -606,7 +606,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   private fun initDefaultCommands() {
     commands = arrayOfNulls(actors.size)
     actors.forEachIndexed { index, vActor ->
-      commands!![index] = VCommand(VConstants.MOD_ANY, this, vActor, index, vActor.actorIdent)
+      commands!![index] = VCommand(VConstants.MOD_ANY, this, vActor, index, vActor!!.actorIdent)
     }
   }
 
@@ -636,7 +636,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
 
   init {
     if (ctxt != null) {
-      dBContext = ctxt.getDBContext()
+      dBContext = ctxt.dBContext
     }
     init()
 

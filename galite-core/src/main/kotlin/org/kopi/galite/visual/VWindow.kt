@@ -40,7 +40,7 @@ import kotlin.jvm.Throws
  * if if is specified, it will create a window with a DB context
  */
 abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.getDBContext())
-  : Executable, ActionHandler, VModel {
+  : DBContextHandler, Executable, ActionHandler, VModel {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -48,7 +48,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   private val modelListener = EventListenerList()
   private var extraTitle: String? = null
   private var display: UWindow? = null
-  var actors = arrayOf<VActor>()
+  open var actors : Array<VActor?> = arrayOf()
   protected lateinit var windowTitle: String
   var smallIcon: Image? = null
   protected var isProtected = false
@@ -72,7 +72,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Creates a window with DB context handler
    */
-  protected constructor(ctxt: DBContextHandler): this(ctxt.getDBContext())
+  protected constructor(ctxt: DBContextHandler): this(ctxt.dBContext)
 
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
@@ -267,7 +267,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
     actors += actorDefs.orEmpty()
   }
 
-  open fun getActor(at: Int): VActor = actors[at + 1] // "+1" because of the f12-Actor
+  open fun getActor(at: Int): VActor = actors[at + 1]!! // "+1" because of the f12-Actor
 
   /**
    * Enables/disables the actor.
@@ -287,7 +287,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    */
   fun localizeActors(manager: LocalizationManager) {
     actors.forEach {
-      it.localize(manager)
+      it!!.localize(manager)
     }
   }
 
@@ -327,7 +327,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * setInformationText
    */
-  fun setInformationText(text: String) {
+  fun setInformationText(text: String?) {
     display?.setInformationText(text)
   }
 
@@ -450,7 +450,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * @param reason the reason of the transaction failure
    * @return true if a retry is possible
    */
-  fun retryableAbort(reason: Exception): Boolean {
+  override fun retryableAbort(reason: Exception): Boolean {
     if (reason is DBDeadLockException) {
       return true
     }
@@ -462,12 +462,12 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    *
    * @return true, if the transaction should be retried.
    */
-  fun retryProtected(): Boolean = ask(MessageCode.getMessage("VIS-00039"))
+  override fun retryProtected(): Boolean = ask(MessageCode.getMessage("VIS-00039"))
 
   /**
    * return wether this object handle a transaction at this time
    */
-  open fun inTransaction(): Boolean = isProtected
+  override fun inTransaction(): Boolean = isProtected
 
   /**
    * Returns the current user name

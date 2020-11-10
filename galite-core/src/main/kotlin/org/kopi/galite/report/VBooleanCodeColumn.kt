@@ -29,15 +29,15 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
  */
-class VBooleanCodeColumn(ident: String,
-                         type: String,
-                         source: String,
+class VBooleanCodeColumn(ident: String?,
+                         type: String?,
+                         source: String?,
                          options: Int,
                          align: Int,
                          groups: Int,
-                         function: VCalculateColumn,
+                         function: VCalculateColumn?,
                          width: Int,
-                         format: VCellFormat,
+                         format: VCellFormat?,
                          names: Array<String>,
                          private val codes: BooleanArray)
       : VCodeColumn(ident,

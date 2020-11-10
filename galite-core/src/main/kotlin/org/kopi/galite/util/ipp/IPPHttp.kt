@@ -16,24 +16,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.form
+package org.kopi.galite.util.ipp
 
-import java.io.Serializable
-import java.util.EventListener
+class IPPHttp {
 
-interface BlockListener : EventListener, Serializable {
-  fun blockClosed()
-  fun blockChanged()
-  fun blockCleared()
-  fun blockAccessChanged(block: VBlock, newAccess: Boolean)
-  fun blockViewModeLeaved(block: VBlock, actviceField: VField?)
-  fun blockViewModeEntered(block: VBlock, actviceField: VField?)
-  fun validRecordNumberChanged()
-  fun recordInfoChanged(rec: Int, info: Int)
-  fun orderChanged()
-  fun filterHidden()
-  fun filterShown()
+  constructor(printerName: String, request: IPP) {
+    ippHeader = IPPHttpHeader(printerName, request.getSize())
+    ipp = request
+  }
 
-  // please do not use!
-  fun getCurrentDisplay(): UBlock
+  constructor(inputStream: IPPInputStream) {
+    ippHeader = IPPHttpHeader(inputStream)
+    ipp = IPP(inputStream)
+  }
+
+  // --------------------------------------------------------------------
+  // ACCESSORS
+  // --------------------------------------------------------------------
+
+  fun write(os: IPPOutputStream) {
+    ippHeader.write(os)
+    ipp.write(os)
+  }
+
+  // --------------------------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------------------------
+
+  private var ippHeader: IPPHttpHeader
+
+  var ipp: IPP
+    private set
 }

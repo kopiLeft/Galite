@@ -27,7 +27,7 @@ package org.kopi.galite.report
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
  */
-class VStringColumn(ident: String,
+class VStringColumn(ident: String?,
                     options: Int,
                     align: Int,
                     groups: Int,

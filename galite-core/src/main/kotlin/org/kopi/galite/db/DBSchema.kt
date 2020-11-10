@@ -27,7 +27,7 @@ class DBSchema {
     val uc = integer("UC")
     val ts = integer("TS")
     val shortName = varchar("KURZNAME", 25).uniqueIndex()
-    val father = integer("VATER")
+    val parent = integer("VATER")
     val sourceName = varchar("QUELLE", 255)
     val priority = integer("PRIORITAET")
     val objectName = varchar("OBJEKT", 255)

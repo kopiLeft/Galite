@@ -32,13 +32,13 @@ import org.kopi.galite.l10n.TypeLocalizer
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
  */
-abstract class VCodeColumn(ident: String,
-                           private val type: String,
-                           private val source: String,
+abstract class VCodeColumn(ident: String?,
+                           private val type: String?,
+                           private val source: String?,
                            options: Int, align: Int,
-                           groups: Int, function: VCalculateColumn,
+                           groups: Int, function: VCalculateColumn?,
                            width: Int,
-                           format: VCellFormat,
+                           format: VCellFormat?,
                            private val idents: Array<String>)
               : VReportColumn(ident,
                               options,

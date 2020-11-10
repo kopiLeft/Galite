@@ -75,10 +75,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               columns: Array<VColumn?>?,
               indices: Int,
               priority: Int,
-              commands: Array<VCommand>,
+              commands: Array<VCommand>?,
               pos: VPosition,
               align: Int,
-              alias: VField) {
+              alias: VField?) {
     this.name = name
     this.index = index
     this.posInArray = posInArray
@@ -99,7 +99,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     position = pos
     command = commands
     this.alias = alias
-    alias.addFieldChangeListener(object : FieldChangeListener {
+    alias?.addFieldChangeListener(object : FieldChangeListener {
       override fun labelChanged() {}
       override fun searchOperatorChanged() {}
       override fun valueChanged(r: Int) {
@@ -109,7 +109,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       override fun accessChanged(r: Int) {}
       override fun colorChanged(r: Int) {}
     })
-
   }
 
   fun fetchColumn(table: Int): Int {
@@ -506,7 +505,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * return access of this field in current mode
    */
-  fun getDefaultAccess(): Int = access[block!!.mode]
+  fun getDefaultAccess(): Int = access[block!!.getMode()]
 
   fun getAccess(i: Int): Int {
     return if (i == -1) {
@@ -1356,9 +1355,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setColor(r, getForeground(r), getBackground(r))
   }
 
-  fun getForeground(r: Int): VColor = foreground[r]!!
+  fun getForeground(r: Int): VColor? = foreground[r]
 
-  fun getBackground(r: Int): VColor = background[r]!!
+  fun getBackground(r: Int): VColor? = background[r]
 
   // ----------------------------------------------------------------------
   // DRAG AND DROP HANDLIN
@@ -2005,7 +2004,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
                        block!!.getFieldPos(this),
-                       label!!,
+                       label,
                        lab ?: name,
                        toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
@@ -2356,7 +2355,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * The name of the field is the ident in the galite language
    * @return    the name of this field
    */
-  var name: String? = null    // field name (for dumps)
+  lateinit var name: String   // field name (for dumps)
     private set
 
   var label : String? = null // field label
@@ -2375,7 +2374,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip : String? = null // help text
+  var toolTip : String = "" // help text
     private set
 
   private var index = 0 // The position in parent field array
@@ -2433,7 +2432,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   var position: VPosition? = null
     private set
 
-  lateinit var command: Array<VCommand>
+  var command: Array<VCommand>? = null
 
   private lateinit var foreground: Array<VColor?> // foreground colors for this field.
 

@@ -28,7 +28,7 @@ import org.kopi.galite.type.Month
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
  */
-class VMonthColumn(ident: String,
+class VMonthColumn(ident: String?,
                    options: Int,
                    align: Int,
                    groups: Int,

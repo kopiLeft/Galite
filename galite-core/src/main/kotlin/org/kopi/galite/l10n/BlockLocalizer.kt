@@ -40,7 +40,7 @@ class BlockLocalizer(manager: LocalizationManager,
   /**
    * Returns the value of the help attribute.
    */
-  fun getHelp(): String = self.getAttributeValue("help")
+  fun getHelp(): String? = self.getAttributeValue("help")
 
   /**
    * Returns the message for the specified index.
