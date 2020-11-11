@@ -248,7 +248,7 @@ abstract class VCodeField(val type: String,
   /**
    * Returns the array of codes.
    */
-  abstract fun getCodes(): Array<Any>
+  abstract fun getCodes(): Array<Any?>
 
   /*
    *

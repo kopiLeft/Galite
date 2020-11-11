@@ -49,7 +49,7 @@ open class VFixnumCodeField(ident: String,
    * Returns the array of codes.
    */
   @Suppress("UNCHECKED_CAST")
-  override fun getCodes(): Array<Any> = codes as Array<Any>
+  override fun getCodes(): Array<Any?> = codes as Array<Any?>
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS

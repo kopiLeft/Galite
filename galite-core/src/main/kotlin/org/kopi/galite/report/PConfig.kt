@@ -40,7 +40,7 @@ import java.io.Serializable
  * @param border border size
  * @param reportScale report scale
  */
-class PConfig(val papertype: Int = PPaperType.PPT_A4.code,
+data class PConfig(val papertype: Int = PPaperType.PPT_A4.code,
               val paperlayout: String = "Landscape",
               val topmargin: Int = 30,
               val bottommargin: Int = 30,

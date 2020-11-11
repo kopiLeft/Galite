@@ -14,7 +14,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.tests.report
 
 import java.io.File
@@ -25,20 +24,18 @@ import org.jdom2.input.SAXBuilder
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.ApplicationTestBase
+import org.kopi.galite.tests.VApplicationTestBase
 import kotlin.test.assertEquals
 
-class ReportTests: ApplicationTestBase() {
+class ReportTests: VApplicationTestBase() {
 
   /**
    * Tests that fields has been registered in the report.
    */
   @Test
   fun reportFieldsTest() {
-    val report = SimpleReport()
-
-    assertEquals(report.fields[0], report.name)
-    assertEquals(report.fields[1], report.age)
+    assertEquals(SimpleReport.fields[0], SimpleReport.name)
+    assertEquals(SimpleReport.fields[1], SimpleReport.age)
   }
 
   /**
@@ -46,16 +43,14 @@ class ReportTests: ApplicationTestBase() {
    */
   @Test
   fun reportDataTest() {
-    val report = SimpleReport()
+    val rows = SimpleReport.getRowsForField(SimpleReport.name)
+    assertEquals(listOf("Sami", "Sofia"), rows)
 
-    val rows = report.getRowsForField(report.name)
-    assertEquals(listOf("Sami", "Safia"), rows)
+    val firstRow = SimpleReport.getRow(0)
+    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22), firstRow)
 
-    val firstRow = report.getRow(0)
-    assertEquals(mapOf(report.name to "Sami", report.age to 22), firstRow)
-
-    val secondRow = report.getRow(1)
-    assertEquals(mapOf(report.name to "Safia", report.age to 23), secondRow)
+    val secondRow = SimpleReport.getRow(1)
+    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23), secondRow)
   }
 
   /**
@@ -67,12 +62,11 @@ class ReportTests: ApplicationTestBase() {
     val tempDir = createTempDir("galite", "")
     tempDir.deleteOnExit()
 
-    val report = SimpleReport()
-    val sourceFilePath = report.javaClass.classLoader.getResource("").path +
+    val sourceFilePath = SimpleReport.javaClass.classLoader.getResource("").path +
             this.javaClass.packageName.replace(".", "/") + File.separatorChar
-    report.genLocalization()
+    SimpleReport.genLocalization()
 
-    val generatedFile = File("${sourceFilePath}/SimpleReport-${report.locale}.xml")
+    val generatedFile = File("${sourceFilePath}/SimpleReport-${SimpleReport.locale}.xml")
     assertEquals(true, generatedFile.exists())
     val document = builder.build(generatedFile)
 
@@ -93,7 +87,7 @@ class ReportTests: ApplicationTestBase() {
   /**
    * Simple Report with two fields.
    */
-  class SimpleReport : Report() {
+  object SimpleReport : Report() {
     override val locale = Locale.FRANCE
 
     override val title = "SimpleReport"
@@ -116,7 +110,7 @@ class ReportTests: ApplicationTestBase() {
         this[age] = 22
       }
       add {
-        this[name] = "Safia"
+        this[name] = "Sofia"
         this[age] = 23
       }
     }

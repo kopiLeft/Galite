@@ -20,9 +20,9 @@ package org.kopi.galite.visual
 
 open class VCommand(private var mode: Int,
                     protected var handler: ActionHandler?,
-                    protected var actor: VActor?,
+                    var actor: VActor?,
                     internal val trigger: Int,
-                    private val item: String) {
+                    val item: String) {
 
   /**
    * Kill a command: this command will never been enabled again
@@ -49,23 +49,17 @@ open class VCommand(private var mode: Int,
    *
    * @param    mode        the mode to test
    */
-  fun isActive(mode: Int): Boolean {
-    return this.mode and (1 shl mode) != 0
-  }
+  fun isActive(mode: Int): Boolean = this.mode and (1 shl mode) != 0
 
   /**
    * Returns the actor
    */
-  fun isEnabled(): Boolean {
-    return actor != null && actor!!.isEnabled
-  }
+  fun isEnabled(): Boolean = actor != null && actor!!.isEnabled
 
   /**
    * Returns the name has defined in source
    */
-  fun getIdent(): String {
-    return this.item
-  }
+  fun getIdent(): String = item
 
   /**
    * Returns true iff the command is active in given to mode.

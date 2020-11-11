@@ -14,19 +14,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.tests
 
-import org.kopi.galite.db.Connection
-
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.ui.visual.VApplication
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.Registry
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
-import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * TestBase class for all tests.
@@ -35,7 +29,6 @@ open class JApplicationTestBase : TestBase() {
   class GaliteRegistry: Registry("Galite", null)
 
   class GaliteApplication() : JApplication(GaliteRegistry()) {
-
     override fun login(
             database: String,
             driver: String,
@@ -51,96 +44,36 @@ open class JApplicationTestBase : TestBase() {
         null
       }
     }
-
     override val dBContext: DBContext? = null
-
-    override val isGeneratingHelp: Boolean = false
-
+    override var isGeneratingHelp: Boolean = false
     override val isNoBugReport: Boolean
       get() = true
-
     init {
       ApplicationConfiguration.setConfiguration(
               object : ApplicationConfiguration() {
-                override fun getVersion(): String {
-                  return ""
-                }
-
-                override fun getApplicationName(): String {
-                  return ""
-                }
-
-                override fun getInformationText(): String {
-                  return ""
-                }
-
-                override fun getLogFile(): String {
-                  return ""
-                }
-
-                override fun getDebugMailRecipient(): String {
-                  return ""
-                }
-
-                override fun mailErrors(): Boolean {
-                  return false
-                }
-
-                override fun logErrors(): Boolean {
-                  return true
-                }
-
-                override fun debugMessageInTransaction(): Boolean {
-                  return true
-                }
-
-                override fun getSMTPServer(): String {
-                  return ""
-                }
-
-                override fun getFaxServer(): String {
-                  return ""
-                }
-
-                override fun getDictionaryServer(): String {
-                  return ""
-                }
-
-                override fun getRExec(): Rexec {
-                  TODO()
-                }
-
-                override fun getStringFor(var1: String): String {
-                  TODO()
-                }
-
+                override fun getVersion(): String = ""
+                override fun getApplicationName(): String = ""
+                override fun getInformationText(): String = ""
+                override fun getLogFile(): String = ""
+                override fun getDebugMailRecipient(): String = ""
+                override fun mailErrors(): Boolean = false
+                override fun logErrors(): Boolean = true
+                override fun debugMessageInTransaction(): Boolean = true
+                override fun getSMTPServer(): String = ""
+                override fun getFaxServer(): String = ""
+                override fun getDictionaryServer(): String = ""
+                override fun getRExec(): Rexec = TODO()
+                override fun getStringFor(var1: String): String = TODO()
                 override fun getIntFor(var1: String): Int {
                   val var2 = this.getStringFor(var1)
                   return var2.toInt()
                 }
-
                 override fun getBooleanFor(var1: String): Boolean {
                   return java.lang.Boolean.valueOf(this.getStringFor(var1))
                 }
-
-                override fun isUnicodeDatabase(): Boolean {
-                  return false
-                }
-
-                override fun useAcroread(): Boolean {
-                  TODO()
-                }
-
-                val PRP_REXEC = 2
-                val PRP_LPR = 3
-                val PRP_IPP = 4
-                val STANDARD_TRAY = 1
-                private val connection: Connection? = null
-                private val propertyCache: HashMap<*, *>? = null
-                private val commandLineProperties: Hashtable<String, String>? = null
-
+                override fun isUnicodeDatabase(): Boolean = false
+                override fun useAcroread(): Boolean = TODO()
               }
-
       )
     }
   }

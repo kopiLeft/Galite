@@ -27,9 +27,9 @@ abstract class AbstractPredefinedValueHandler(private val model: VFieldUI,
 
   override fun selectDefaultValue(): Boolean = model.fillField()
 
-  fun selectFromList(list: Array<VListColumn>,
-                     values: Array<Array<Any?>>,
-                     predefinedValues: Array<String>): String? {
+  override fun selectFromList(list: Array<VListColumn>,
+                              values: Array<Array<Any?>>,
+                              predefinedValues: Array<String>): String? {
     val listDialog = VListDialog(list, values)
     val selected = listDialog.selectFromDialog(form, field)
 
