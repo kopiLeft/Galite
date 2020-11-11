@@ -63,7 +63,7 @@ class VIntegerCodeField : VCodeField {
   /**
    * Returns the array of codes.
    */
-  override fun getCodes(): Array<Any> = codes as Array<Any>
+  override fun getCodes(): Array<Any?> = codes as Array<Any?>
 
   // ----------------------------------------------------------------------
   // INTERFACE BD/TRIGGERS

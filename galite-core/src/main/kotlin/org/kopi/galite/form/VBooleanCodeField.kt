@@ -115,7 +115,7 @@ open class VBooleanCodeField : VCodeField {
     }
   }
 
-  override fun getCodes(): Array<Any> = codes as Array<Any>
+  override fun getCodes(): Array<Any?> = codes as Array<Any?>
 
   /**
    * Returns the field value of given record as a boolean value.
