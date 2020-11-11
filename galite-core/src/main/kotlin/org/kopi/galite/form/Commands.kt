@@ -618,7 +618,7 @@ object Commands : VConstants {
       if (field.isNull(r)) {
         field.setInt(r, 1)
       } else {
-        field.setInt(r, field.getInt(r) + 1)
+        field.setInt(r, field.getInt(r)!! + 1)
       }
     }
   }
@@ -635,7 +635,7 @@ object Commands : VConstants {
       if (field.isNull(r)) {
         field.setInt(r, 1)
       } else {
-        field.setInt(r, field.getInt(r) - 1)
+        field.setInt(r, field.getInt(r)!! - 1)
       }
     }
   }

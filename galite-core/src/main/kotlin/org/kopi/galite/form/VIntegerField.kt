@@ -190,7 +190,7 @@ class VIntegerField(width: Int,
   /**
    * Returns the field value of given record as a int value.
    */
-  override fun getInt(r: Int): Int = getObject(r) as Int
+  override fun getInt(r: Int): Int? = getObject(r) as Int?
 
   /**
    * Returns the field value of the current record as an object
@@ -272,7 +272,7 @@ class VIntegerField(width: Int,
         if (sum == null) {
           sum = 0
         }
-        sum += getInt(i)
+        sum += getInt(i)!!
       }
     }
     return sum
