@@ -27,12 +27,10 @@ import java.io.FileInputStream;
 
 import javax.swing.JColorChooser;
 
-import org.jetbrains.annotations.NotNull;
 import org.kopi.galite.form.AbstractPredefinedValueHandler;
 import org.kopi.galite.form.VField;
 import org.kopi.galite.form.VFieldUI;
 import org.kopi.galite.form.VForm;
-import org.kopi.galite.list.VListColumn;
 import org.kopi.galite.visual.Message;
 import org.kopi.galite.visual.VExecFailedException;
 import org.kopi.galite.type.Date;
@@ -86,11 +84,5 @@ public class JPredefinedValueHandler extends AbstractPredefinedValueHandler {
         } catch (Exception e) {
             throw new VExecFailedException("bad-file", e);
         }
-    }
-
-    @NotNull
-    @Override
-    public String selectFromList(@NotNull VListColumn[] list, @NotNull Object[] values, @NotNull String[] predefinedValues) {
-        return null;
     }
 }

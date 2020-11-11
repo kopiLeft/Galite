@@ -46,7 +46,7 @@ class Utils {
     }
     fun trailString(input: String): String = TODO()
     fun toSql(date: Date): String = TODO()
-    fun toSql(l: String): String = TODO()
+    fun toSql(l: String?): String = TODO()
     fun toSql(t: Time?): String = TODO()
     fun toSql(d: Int?): String = TODO()
     fun toSql(t: Timestamp?): String = TODO()
