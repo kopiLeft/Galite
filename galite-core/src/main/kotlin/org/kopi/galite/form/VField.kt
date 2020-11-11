@@ -79,7 +79,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               indices: Int,
               priority: Int,
               commands: Array<VCommand>?,
-              pos: VPosition,
+              pos: VPosition?,
               align: Int,
               alias: VField?) {
     this.name = name
@@ -544,7 +544,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       } else if (hasTrigger(VConstants.TRG_FLDACCESS)) {
         // evaluate ACCESS-Trigger
         val oldRow = block!!.activeRecord
-        val old = block!!.activeField!!
+        val old = block!!.activeField
 
         // used by callTrigger
         block!!.activeRecord = current
@@ -916,7 +916,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setInt(r: Int, v: Int) {
+  open fun setInt(r: Int, v: Int?) {
     throw InconsistencyException()
   }
 

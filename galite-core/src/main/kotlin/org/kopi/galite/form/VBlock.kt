@@ -215,7 +215,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
+  open fun executeIntegerTrigger(VKT_Type: Int): Int {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 

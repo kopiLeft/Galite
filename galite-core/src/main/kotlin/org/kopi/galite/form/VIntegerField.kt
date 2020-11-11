@@ -138,7 +138,7 @@ class VIntegerField(width: Int,
   /**
    * Sets the field value of given record to a int value.
    */
-  fun setInt(r: Int, v: Int?) {
+  override fun setInt(r: Int, v: Int?) {
     var v = v
     if (changedUI
         || value[r] == null && v != null
