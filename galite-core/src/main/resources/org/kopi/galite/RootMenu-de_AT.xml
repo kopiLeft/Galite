@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+  <module ident="forms" label="Programme" />
+  <module ident="user" label="Benutzer" />
+  <module ident="admin" label="Verwaltung" />
+  <module ident="logout" label="Austragen" />
+</modules>

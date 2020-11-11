@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+  <menu ident="File" label="Datei" />
+  <actor ident="Close" label="Quit" help="Close the help window." />
+</insert>

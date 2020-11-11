@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+  <menu ident="File" label="ملف"/>
+  <menu ident="Action" label="الاجراءات"/>
+  <actor ident="Close" label="انهاء" help="انهاء البرنامج"/>
+  <actor ident="PageFirst" label="الصفحة الأولى"/>
+  <actor ident="PageLeft" label="الصفحة -"/>
+  <actor ident="PageRight" label="صفحة +"/>
+  <actor ident="PageLast" label="أخير"/>
+  <actor ident="PreviewFit" label="الأفضل"/>
+  <actor ident="PreviewFitWidth" label="عرض"/>
+  <actor ident="PreviewFitHeight" label="ارتفاع"/>
+  <actor ident="PreviewPlus" label="تكبير +"/>
+  <actor ident="PreviewMinus" label="تكبير -"/>
+</insert>

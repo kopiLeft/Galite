@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+  <type ident="boolean">
+    <code>
+      <codedesc ident="true" label="yes" />
+      <codedesc ident="false" label="no" />
+    </code>
+  </type>
+</insert>

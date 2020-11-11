@@ -1,0 +1,41 @@
+%%
+%% Copyright (c) 1990-2009 kopiRight Managed Solutions GmbH
+%%
+%% This program is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License version 2
+%% as published by the Free Software Foundation.
+%%
+%% This program is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+%% GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public License
+%% along with this program; if not, write to the Free Software
+%% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+%%
+%% $Id: german.ps 33836 2009-02-02 16:37:31Z bmwael $
+%%
+
+%param oldfont newfont
+/ReEncodeFont {
+  /new exch def
+  /old exch def
+
+  old findfont
+  dup length dict begin
+    {
+      1 index /FID ne {def} {pop pop} ifelse} forall
+    /Encoding ISOLatin1Encoding def
+    currentdict
+  end
+  new exch definefont pop
+} def
+
+/Helvetica	/Helvetica	ReEncodeFont
+/Helvetica-Bold /Helvetica-Bold	ReEncodeFont
+/Courier	/Courier	ReEncodeFont
+/Courier-Bold	/Courier-Bold	ReEncodeFont
+/Times-Roman	/Times		ReEncodeFont
+/Times-Bold	/Times-Bold	ReEncodeFont
+

@@ -749,7 +749,7 @@ public abstract class DWindow extends JPanel implements UWindow {
         //        getModel().error(v.getMessage());
       } catch (Throwable exc) {
         exc.printStackTrace();
-        getModel().fatalError(DWindow.this.getModel(), "VWindow.performActionImpl(final KopiAction action)", exc);
+        getModel().fatalError(DWindow.this.getModel(), "VWindow.performActionImpl(final Action action)", exc);
       } finally {
         // sets inAction in event-disp.-thread
         setInAction();

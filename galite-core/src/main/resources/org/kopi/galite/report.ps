@@ -1,0 +1,403 @@
+%-------------------------------------------------------------------------------
+% This file contains the header of the poscript file, it replace the file header.ps
+%
+% from left to right
+% borderSize columnWidth grid_V columnWidth ... grid_V columnWidth borderSize
+%
+% from top to bottom
+% borderSize headerHeight borderSize rowHeight grid_H rowHeight ... grid_H rowHeight BorderSize
+%-------------------------------------------------------------------------------
+
+%param : page to print
+/printpage {
+	/current_y max_y borderSize 2 mul sub headerHeight sub def
+	{
+		/line exch def
+		current_y line 0 get line 1 get printline
+		/current_y current_y rowHeight sub grid_H sub def
+	} forall
+} def
+
+%param : current_y, level, line to print [()()()...()]
+/printline {
+	/line exch def		% load the line
+	/level exch def		% load the level
+	/current_y exch def	% load the current_y position
+	/i 0 def
+	/current_x min_x borderSize add def
+	line {
+		i current_x current_y cellReport
+		level setcolor
+                dup 0 get /style exch def		% load the style
+                1 get
+		/icurrent_y current_y rowHeight add scale sub borderSize 2 mul sub def
+                {
+			i current_x icurrent_y style cellReportValue
+			/icurrent_y icurrent_y scale sub def
+                } forall	
+		/current_x current_x columnsWidth i get add grid_V add def
+		/i i 1 add def
+	} forall
+} def
+
+%param : level of the row
+/setcolor {
+	colors exch get
+	dup 
+	/red exch 0 get def
+	dup 
+	/green exch 1 get def
+	/blue exch 2 get def
+	red 255 div green 255 div blue 255 div setrgbcolor fill
+} def
+
+%param : 
+/cellReportFont {
+	reportFont findfont
+	0 setgray
+	scale scalefont
+	setfont
+} def
+
+%param : 
+/cellHeaderFont {
+	headerFont findfont
+	1 setgray
+	scale scalefont
+	setfont
+} def
+
+%param :
+/headFont {
+	headFontName findfont
+	0 setgray
+	headScale scalefont
+	setfont
+} def
+
+%param :
+/footFont {
+	footFontName findfont
+	0 setgray
+	footScale scalefont
+	setfont
+} def
+
+%param : style
+/setStyle {
+	styles exch get innerSetStyle
+} def
+
+%param : [styleDef]
+/innerSetStyle {
+        findfont
+	0 setgray
+	scale scalefont
+	dup
+        setfont
+} def
+
+%param : 
+/landscapeMode {
+	toprinter {
+	  pageheight 0 translate
+	  90 rotate
+	} if
+} def
+
+%param : name
+/pageheader {
+	headFont
+	leftmargin headermargin 2 div max_y add moveto
+        show
+} def
+
+%param : numpage
+/pagefooter {
+	footFont
+	leftmargin footermargin 2 div bottommargin add moveto
+        show
+	( - Seite ) show
+	show
+	(/) show
+	nbsheet show
+% move to the place for date
+        pagewidth rightmargin sub 70 sub bottommargin moveto
+} def
+
+%param : x y
+/reportheader {
+	/y exch def
+	/x exch def
+	/index 0 def
+	x y moveto
+	columnsLabel {
+		index x y cellHeader
+		0.0 0.0 0.0 setrgbcolor fill
+		index x y cellHeaderValue
+		/x x grid_V add columnsWidth index get add def
+		/index index 1 add def
+	} forall
+} def
+
+%param : columnindex x y
+/cellHeader {
+	newpath						% initiate a new path
+	moveto						% moveto (x,y)
+	columnsWidth exch get				% get the width of the column
+	headerHeight dup neg 0 exch rlineto
+	exch dup 0 rlineto
+	exch 0 exch rlineto
+	neg 0 rlineto
+	closepath					% close the path
+} def
+
+%param : string index x y 
+/cellHeaderValue {
+	headerFont findfont 
+	begin 
+		/FontBBox load 1 get neg dup 
+		/FontBBox load 3 get 
+	end 
+	add 
+	div 
+	scale mul 
+	add
+	headerHeight sub
+	innerSpace add
+	moveto
+	cellHeaderFont
+	/ind exch def			% string
+	columnsAlign ind get		% string - align
+	alg_center eq			% align = center
+	{
+		dup			% string - string
+		stringwidth pop		% string - max_x
+		2 div			% string - max_x / 2
+		columnsWidth ind get	% string - max_x / 2 - columnWidth
+		2 div			% string - max_x / 2 - columnWidth / 2
+		exch			% string - columnWidth / 2 - max_x / 2
+		sub			% string - diff
+		0 rmoveto		% string
+	} if
+	columnsAlign ind get		% string - align
+	alg_right eq				% align = right
+	{
+		dup			% string - string
+		stringwidth pop		% string - max_x
+		columnsWidth ind get	% string - max_x - columnWidth
+		exch			% string - columnWidth - max_x
+		sub			% string - diff
+		0 rmoveto		% string
+	} if
+	show
+} def
+
+%param : columnindex x y
+/cellReport {
+	newpath
+	moveto
+	columnsWidth exch get
+	rowHeight dup neg 0 exch rlineto
+	exch dup 0 rlineto
+	exch 0 exch rlineto
+	neg 0 rlineto
+	closepath
+} def
+
+%param : string columnindex x y 
+/cellReportValue {
+	setStyle
+        %reportFont findfont			% load the right font
+	begin 
+		/FontBBox load 1 get neg dup	% |min_y| - |min_y|
+		/FontBBox load 3 get		% |min_y| - |min_y| - max_y
+	end 
+	add					% |min_y| - (|min_y| + max_y)
+	div					% |min_y| / (|min_y| + max_y)
+	scale mul				% * scale
+	add					% + y
+	rowHeight sub				% substract rowHeight
+	innerSpace add
+	moveto
+	%cellReportFont
+	/ind exch def			% string
+	columnsAlign ind get		% string - align
+	alg_center eq			% align = center
+	{
+		dup			% string - string
+		stringwidth pop		% string - max_x
+		2 div			% string - max_x / 2
+		columnsWidth ind get	% string - max_x / 2 - columnWidth
+		2 div			% string - max_x / 2 - columnWidth / 2
+		exch			% string - columnWidth / 2 - max_x / 2
+		sub			% string - diff
+		0 rmoveto		% string
+	} if
+	columnsAlign ind get		% string - align
+	alg_right eq			% align = right
+	{
+		dup			% string - string
+		stringwidth pop		% string - max_x
+		columnsWidth ind get	% string - max_x - columnWidth
+		exch			% string - columnWidth - max_x
+		sub			% string - diff
+		innerSpace sub		% sub innerspace
+		0 rmoveto		% string
+	} if
+	columnsAlign ind get		% string - align
+	alg_left eq			% string
+	{
+		innerSpace 0 rmoveto
+	} if
+	columnsAlign ind get		% string - align
+	alg_default eq			% string
+	{
+		innerSpace 0 rmoveto
+	} if
+	show
+} def
+
+% param : nb rows
+/verticalGrid {
+	/nbrows exch def		% nb of rows
+	columnsWidth length		% length of the array
+	2 sub				% (length-2)
+	/nbvert exch def		% nbvert = nb of verticals
+	/current_x 
+		min_x 
+		borderSize add
+	def
+	0 1 nbvert {
+		newpath
+		columnsWidth exch get		% get the n-ieme column width
+		/current_x exch current_x add	def % (current_x+columnWidth)
+		current_x grid_V 2 div add	% (current_x_grid_v / 2)
+		max_y				% print zone
+		borderSize sub
+		headerHeight sub		% header height sub
+		borderSize sub			% grid_h sub (below header)
+		moveto				% move to the right point
+		nbrows rowHeight mul	 	% (nb_rows * rowHeight)
+		nbrows 1 sub			% (nb_rows * rowHeight) - (nb_rows-1)
+		grid_H mul add			% length
+		neg 0 exch			% 0 - (-length)
+		rlineto
+		closepath
+		grid_V setlinewidth		% line width
+		stroke
+		/current_x current_x grid_V add def % add the grid_v to current_x
+	} for
+} def
+
+% param : nb rows
+/horizontalGrid {
+	/nbrows exch 2 sub def
+	/current_y max_y
+		borderSize sub
+		headerHeight sub
+		borderSize sub
+		rowHeight sub
+	def
+	/rowlength 0
+		columnsWidth {
+			add
+		} forall
+		columnsWidth length 1 sub grid_V mul add
+	def
+
+	0 1 nbrows {
+		newpath
+		min_x borderSize add current_y grid_H 2 div sub moveto
+		rowlength 0 rlineto
+		closepath
+		grid_H setlinewidth
+		stroke
+		/current_y current_y 
+			rowHeight sub
+			grid_H sub
+		def
+	} for
+} def
+
+%param : nb rows
+/createBorder {
+	/nbrows exch def
+	/borderLength
+		borderSize 
+		columnsWidth {
+			add
+		} forall
+		columnsWidth length 1 sub grid_V mul add
+		borderSize add
+	def
+	/borderHeight
+		borderSize
+		headerHeight add
+		borderSize add
+		nbrows rowHeight mul add
+		nbrows 1 sub grid_H mul add
+		borderSize add
+	def
+
+	newpath
+	min_x borderSize 2 div add
+	max_y
+	moveto
+	0 borderHeight neg rlineto	% left border
+
+	min_x
+	max_y
+	borderHeight sub
+	borderSize 2 div add
+	moveto
+	borderLength 0 rlineto		% bottom border
+
+	min_x
+	borderLength add
+	borderSize 2 div sub
+	max_y
+	borderHeight sub
+	moveto
+	0 borderHeight rlineto		% right border
+
+	min_x
+	borderLength add
+	max_y
+	borderSize 2 div sub
+	moveto
+	borderLength neg 0 rlineto	% top border
+
+	min_x
+	max_y
+	borderSize sub
+	headerHeight sub
+	borderSize 2 div sub
+	moveto
+	borderLength 0 rlineto		% line below the header
+
+	closepath
+	borderSize setlinewidth
+	stroke
+} def
+
+% -----------------------------------------------------------------------------
+
+/ReEncodeFont { %param oldfont newfont
+  /new exch def
+  /old exch def
+
+  old findfont
+  dup length dict begin
+    {
+      1 index /FID ne {def} {pop pop} ifelse} forall
+    /Encoding ISOLatin1Encoding def
+    currentdict
+  end
+  new exch definefont pop
+} def
+
+/Helvetica	/Helvetica-German	ReEncodeFont
+/Helvetica-Bold /Helvetica-Bold-German	ReEncodeFont
+/Courier	/Courier-German		ReEncodeFont
+/Courier-Bold	/Courier-Bold-German	ReEncodeFont

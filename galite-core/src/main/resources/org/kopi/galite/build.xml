@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+<!--
+  Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+  $Id: build.xml 35325 2018-08-29 11:27:17Z iayadi $
+-->
+<!--==================================================================
+	package: org.kopi.vkopi.lib.resource
+	==================================================================-->
+
+<project default="build" basedir=".">
+
+  <property name="non.standard.build" value="yes" />
+  <property name="topdir" value="../../.." />
+  <import file="${topdir}/defs.xml" />
+  <property name="destcopy" value="${classroot}/org/kopi/vkopi/lib/resource" />
+  <property name="src" value="." />
+  <property name="freegifs" value="" />
+  <property name="oldgifs"
+            value="all.gif apply.gif arrowleft.gif arrowright.gif arrowlast.gif  arrowfirst.gif
+                   article.gif ask.gif bkup.gif bkup3.gif block.gif block2.gif board.gif bomb.gif
+                   bookmark.gif boxarrow.gif break.gif bw.gif calculate.gif cfolder.gif clip.gif
+                   collapsed.gif collapsed_f.gif collapsed_s.gif collapsed_t.gif collapsedb.gif
+                   combo.gif config.gif convert.gif copy.gif delete.gif deleteline.gif desk.gif
+                   detail.gif done.gif duke.gif edit.gif error.gif expanded.gif expanded_f.gif
+                   expanded_s.gif expanded_t.gif expandedb.gif export.gif fax.gif fold.gif
+                   foldColumn.gif form.gif form_f.gif form_s.gif form_t.gif forms.gif forms_f.gif
+                   forms_s.gif forms_t.gif fw.gif gifIcon.gif green.gif guide.gif help.gif home.gif
+                   index.gif info.gif info2.gif insert.gif insertline.gif interrupt.gif jpgIcon.gif
+                   launch.gif list.gif lock.gif login.gif mail.gif menuquery.gif money.gif
+                   moneycheck.gif noIcon.gif note.gif nothing.gif notice.gif ofolder.gif open.gif
+                   options.gif pageLeft.gif pageRight.gif phone.gif preview.gif print.gif
+                   printoptions.gif project.gif quit.gif red.gif refresh.gif reload.gif
+                   report.gif save.gif search.gif search2.gif searchop.gif sec.gif selected.gif
+                   send.gif serialquery.gif serviceoff.gif serviceon.gif sort.gif split.gif
+                   standard.gif stick.gif stop.gif store.gif suggest.gif todo.gif top.gif
+                   unfold.gif unfoldColumn.gif unstick.gif users.gif utils.gif validate.gif
+                   wait.gif warning.gif window.gif yellow.gif arrowfirst.gif arrowlast.gif" />
+  <property name="pngfiles"
+            value="align_center.png align_justify.png align_left.png align_right.png
+                   all.png apply.png article.png ask.png bkup.png bkup3.png block.png
+                   block2.png board.png bold.png bomb.png bookmark.png border.png
+                   boxarrow.png break.png bw.png calculate.png chart_view.png
+                   checkbox.png clip.png config.png convert.png copy.png cut.png
+                   delete.png deleteline.png desk.png detail.png detail_view.png
+                   done.png duke.png edit.png error.png export.png fold.png
+                   foldColumn.png forms.png fw.png gifIcon.png help.png home.png
+                   ident.png insert.png insertline.png italic.png jpgIcon.png
+                   launch.png list.png lock.png login.png mail.png menuquery.png
+                   money.png note.png nothing.png notice.png open.png options.png
+                   pageLeft.png pageRight.png password.png paste.png phone.png
+                   preview.png print.png printoptions.png project.png quit.png
+                   redo.png refresh.png reload.png report.png save.png search.png
+                   search2.png searchop.png sec.png send.png serialquery.png
+                   serviceoff.png serviceon.png sort.png split.png standard.png
+                   stop.png store.png suggest.png todo.png top.png underline.png
+                   undo.png unfold.png unfoldColumn.png unident.png users.png
+                   utils.png validate.png wait.png warning.png zoomminus.png
+                   pageLast.png pageFirst.png zoomheight.png  zoomwidth.png
+                   zoomoptimal.png zoomplus.png formula.png area_chart.png
+  	               column_chart.png pie_chart.png bar_chart.png line_chart.png
+  	               checked.png unchecked.png default.png checked_s.png unchecked_s.png
+  	               default_s.png radio_checked.png radio_checked_s.png" />
+  <property name="giffiles" value="${freegifs} ${oldgifs}" />
+  <property name="psfiles" value="German.ps StoneGerman.ps german.ps report.ps" />
+  <property name="otherfiles"
+            value="general.tex macros.tex splash.jpg titlepage.sty top.tex" />
+  <property name="localizationfiles"
+	    value="General-de_AT.xml HelpViewer-de_AT.xml Preview-de_AT.xml
+  	           Menu-de_AT.xml Window-de_AT.xml Messages-de_AT.xml
+  	           VKMessages-de_AT.xml VlibProperties-de_AT.xml General-fr_FR.xml
+  	           HelpViewer-fr_FR.xml Preview-fr_FR.xml Menu-fr_FR.xml Window-fr_FR.xml
+  	           Messages-fr_FR.xml VKMessages-fr_FR.xml VlibProperties-fr_FR.xml
+  	           General-en_GB.xml HelpViewer-en_GB.xml Preview-en_GB.xml
+  	  	   Menu-en_GB.xml Window-en_GB.xml Messages-en_GB.xml
+  	  	   VKMessages-en_GB.xml VlibProperties-en_GB.xml General-ar_TN.xml
+  	           HelpViewer-ar_TN.xml Preview-ar_TN.xml Menu-ar_TN.xml Window-ar_TN.xml
+  	           Messages-ar_TN.xml VKMessages-ar_TN.xml VlibProperties-ar_TN.xml
+		   RootMenu-ar_TN.xml RootMenu-fr_FR.xml RootMenu-de_AT.xml RootMenu-en_GB.xml" />
+
+  <property name="files" value="${pngfiles} ${giffiles} ${psfiles} ${otherfiles} ${localizationfiles}" />
+
+  <target name="non.standard.build"
+     description=" Copying files to org/kopi/vkopi/lib/resource package ">
+    <copy todir="${destcopy}">
+      <fileset dir="${src}" includes="${files}" />
+    </copy>
+  </target>
+
+    <!-- =================================
+          SPECIAL TARGETS
+         ================================= -->
+  <target name="gallery.html" >
+	<exec executable="sh" output="gallery.html">
+	  <arg line="makegallery.sh ${giffiles}"/>
+    </exec>
+  </target>
+
+
+
+</project>

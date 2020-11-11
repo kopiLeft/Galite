@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+  <module ident="forms" label="الاستمارات" />
+  <module ident="user" label="المستخدم" />
+  <module ident="admin" label="الادارة" />
+  <module ident="logout" label="تسجيل الخروج" />
+</modules>

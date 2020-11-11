@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+  <menu ident="File" label="ملف" />
+  <menu ident="Locale" label="لغة" />
+  <actor ident="GotoShortcuts" label="المفضل" help="الاشياء المفضلة"/>
+  <actor ident="de" label="الألمانية" help=""/>
+  <actor ident="fr" label="الفرنسية" help=""/>
+  <actor ident="ar" label="العربية" help=""/>
+</insert>

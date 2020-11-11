@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2009 kopiRight Managed Solutions GmbH
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+  $Id: VlibProperties-ar_TN.xml 35325 2018-08-29 11:27:17Z iayadi $
+-->
+<properties>
+<!-- FIELD VALUES / LABELS-->
+  <property key="info-autofill" value="ملء ذاتي"/>
+  <property key="info-noecho" value="كلمة العبور"/>
+  <property key="info-noedit" value="الطباعة ممنوعة"/>
+  <property key="new-record" value="فراغ جديد"/>
+  <property key="true" value="صواب "/>
+  <property key="false" value="خطأ"/>
+  <property key="operator_eq" value="= : يساوي"/>
+  <property key="operator_lt" value="&lt; : أصغر"/>
+  <property key="operator_gt" value="&gt;: أكبر"/>
+  <property key="operator_le" value="&lt;=: أصغر أو يساوي"/>
+  <property key="operator_ge" value="&gt;=: أكبر أو يساوي"/>
+  <property key="operator_ne" value="&lt;&gt;: مختلف"/>
+  <property key="scan-ready" value="جاهز"/>
+  <property key="scan-read" value="قراءة"/>
+  <property key="scan-finished" value="انتهى"/>
+<!-- HEADERS-->
+  <property key="value" value="قيمة"/>
+<!-- TITLES-->
+  <property key="Warning" value="انتباه"/>
+  <property key="Error" value="خطأ"/>
+  <property key="Question" value="سؤال"/>
+  <property key="Notice" value="معلومة"/>
+  <property key="Please_wait" value=" انتظر من فضلك"/>
+  <property key="pick_in_list" value="اختيار"/>
+  <property key="search_operator" value="معامل"/>
+  <property key="color_chooser" value="اختيار لون"/>
+  <property key="toolbar-title" value="مفضل"/>
+  <property key="New_item" value="عنصر جديد" />
+<!-- MENUTREE-->
+  <property key="program_menu" value="قائمة الاستمارات"/>
+  <property key="PROGRAM" value="برنامج"/>
+  <property key="program" value="استمارات"/>
+  <property key="program_help" value="مجموعة الاستمارات المتاحة"/>
+  <property key="menu-close-help" value="قطع التطبيق الجاري"/>
+  <property key="menu-open-help" value="فتح الاستمارة"/>
+  <property key="menu-launch-help" value="تنفيذ الاستمارة"/>
+  <property key="menu-fold-help" value="غلق القائمة"/>
+  <property key="menu-unfold-help" value="فتح القائمة"/>
+  <property key="menu-help-help" value="فتح نافذة المساعدة و تعليق المحتوى"/>
+  <property key="menu_form_started" value="التحميل جار"/>
+  <property key="menu_cant_load" value="هذه التركيبة  غير متاحة"/>
+<!-- MENUS-->
+  <property key="menu-file" value="ملف"/>
+  <property key="menu-edit" value="اجراء"/>
+  <property key="menu-show" value="تعليق الأفضليات"/>
+  <property key="menu-add" value="أضف الى الأفضليات"/>
+  <property key="menu-remove" value="ازالة الأفضليات"/>
+  <property key="menu-action" value="عمل"/>
+  <property key="item-top" value="بداية"/>
+  <property key="item-index" value="فهرس"/>
+  <property key="item-cut" value="قص"/>
+  <property key="item-copy" value="نسخ"/>
+  <property key="item-paste" value="حفظ"/>
+  <property key="item-select-all" value="اختيار كلي"/>
+  <property key="item-undo" value="الغاء"/>
+  <property key="item-redo" value="اعادة"/>
+  <property key="item-save" value="تخزين"/>
+  <property key="item-page-left" value="صفحة -"/>
+  <property key="item-page-right" value="صفحة +"/>
+  <property key="item-page-first" value="أولى"/>
+  <property key="item-page-last" value="أخيرة"/>
+  <property key="item-preview-fit" value="أمثل"/>
+  <property key="item-preview-fit-width" value="أفضل"/>
+  <property key="item-preview-fit-height" value="أفضل"/>
+  <property key="item-preview-plus" value="تكبير +"/>
+  <property key="item-preview-minus" value="تكبير -"/>
+  <property key="help-menu" value="مساعدة"/>
+  <property key="help-item" value="معلومة"/>
+  <property key="close" value="قطع"/>
+  <property key="open" value="فتح"/>
+  <property key="process" value="Kopi" />
+  <property key="print" value="طبع"/>
+  <property key="standard" value="ملء"/>
+  <property key="launch" value="تنفيذ"/>
+  <property key="fold" value="غلق"/>
+  <property key="unfold" value="فتح"/>
+  <property key="goto-shortcuts" value="" />
+  <property key="from" value="على"/>
+  <property key="position-number" value="رقم الموضع"/>
+  <property key="shortcuts-not-available" value="مفضل غير متوفر"/>
+<!-- BUTTONS-->
+  <property key="OK" value="نعم"/>
+  <property key="CLOSE" value="غلق"/>
+  <property key="CANCEL" value="الغاء"/>
+  <property key="NO" value="لا"/>
+<!-- INFO-->
+  <property key="READY" value="جاهز"/>
+  <property key="WAIT" value="مدخل"/>
+<!-- FIELD TYPE HELP-->
+  <property key="string-type-area" value="هذا الموقع يجب ملؤه بنص به  على الأقل (0) حرف  و(1) سطر على الأقل  "/>
+  <property key="print-pageLeft-help" value="تعليق الصفحة السابقة"/>
+  <property key="print-pageRight-help" value="تعليق الصفحة اللآحقة"/>
+  <property key="string-type-field" value="هذا الموقع يجب  ملؤه بنص به(0) حرف على الأقل"/>
+  <property key="date-type-field" value="هذا الموقع يجب أن يحتوي على تاريخ (يوم/شهر/سنة)"/>
+  <property key="month-type-field" value="هذا الموقع يجب أن يحتوي على ثهر(شهر/سنة)"/>
+  <property key="time-type-field" value="هذا الموقع يجب أن يحتوي على ساعة (ساعة/دقائق)"/>
+  <property key="week-type-field" value="هذا الموقع يجب  أن  يحتوي على أسبوع  ايزو (أسبوع .سنة)"/>
+  <property key="boolean-type-field" value="هذا الموقع يجب  أن يحتوي على قيمة بوليانية (صواب أو خطأ )"/>
+  <property key="integer-type-field" value="هذا  الموقع يجب أن يحتوي على عدد صحيح (0) و (1)"/>
+  <property key="fixed-type-field" value="" />
+  <property key="code-type-field" value="هذا  الموقع يجب أن يحتوي على قيم مقترحة (F2)"/>
+  <property key="image-type-field" value="" />
+  <property key="color-type-field" value="" />
+  <property key="actor-type-field" value="" />
+<!-- DOC GENERATOR-->
+  <property key="Type" value="صنف"/>
+  <property key="Image" value="صورة"/>
+  <property key="Color" value="لون"/>
+  <property key="String" value="نص"/>
+  <property key="StringArea" value="نص"/>
+  <property key="Text" value="نص"/>
+  <property key="Fixed" value="عدد"/>
+  <property key="Long" value="كامل"/>
+  <property key="Date" value="تاريخ"/>
+  <property key="Month" value="شهر"/>
+  <property key="Time" value="ساعة"/>
+  <property key="Week" value="أسبوع"/>
+  <property key="Boolean" value="بوليني"/>
+  <property key="Code" value="رمز"/>
+  <property key="Timestamp" value="Timestamp" />
+  <property key="Image-long" value="صورة (0)(1) بكسل"/>
+  <property key="Color-long" value=" RGB صورة محددة بمكونات"/>
+  <property key="StringArea-long" value="هذا الموقع يجب أن يملأ بنص به (0)حرف و (1)سطر على الأكثر"/>
+  <property key="String-long" value="هذا الموقع يجب أن يملأ بنص به أكثر من(0) حرف"/>
+  <property key="Text-long" value="هذا الموقع يجب أن  يملأ بنص  بأي حجم"/>
+  <property key="Fixed-long" value="هذا الموقع يجب أن  يملأ بعدد بين(0) و(1)"/>
+  <property key="Long-long" value="هذا الموقع يجب  أن يملأ بعدد صحيح بين (0) و ()1"/>
+  <property key="Date-long" value="هذا الموقع يجب أن يحتوي تاريخ (يوم.شهر .سنة )"/>
+  <property key="Month-long" value="هذا الموقع يجب أن يحتوي على شهر(شهر. سنة)"/>
+  <property key="Time-long" value="هذا الموقع يجب أن يحتوي على ساعة(ساعة.دقائق))"/>
+  <property key="Week-long" value="هذا  الموقع يجب أن يحتوي على أسبوع  ايزو  (اسبوع.سنة)"/>
+  <property key="Boolean-long" value="هذا الموقع يجب أن  يحتوي على قيمة بولينية (صواب أو خطأ )"/>
+  <property key="Code-long" value="هذا الموقع يجب أن يملأ بواحدة من القيم التالية"/>
+  <property key="Mode" value="أسلوب"/>
+  <property key="skipped" value="يتعذر الدخول اليه"/>
+  <property key="visit" value="زيارة"/>
+  <property key="mustfill" value="اجباري"/>
+  <property key="skipped-long" value="قيمة هذا  الموقع غير قابلة للتعديل"/>
+  <property key="visit-long" value="قيمة هذا الموقع  اختيارية"/>
+  <property key="mustfill-long" value="قيمة هذا الموقع اجبارية لكل  تسجيل"/>
+<!-- HELP MENU-->
+  <property key="help-close-help" value="غلق نافذة المساعة"/>
+  <property key="help-top-help" value="تعليق قائمة المحتويات"/>
+  <property key="help-index-help" value="تعليق الفهرس"/>
+  <property key="help-goto-shortcuts" value="تعليق نافذة الأفضليات في الامام"/>
+<!-- PRINT-->
+  <property key="building_document" value="انشاء وثيقة"/>
+  <property key="print-close-help" value="غلق معالج النصوص"/>
+  <property key="print-print-help" value="طبع هذه الصفحة  بآلة  الطابعة"/>
+  <property key="print-save-help" value="تخزين هذه الصفحة في ملف postscript "/>
+  <property key="show-blocks" value="أطر"/>
+  <property key="print-block-help" value="تعليق اطار حول لوحات النشر"/>
+  <property key="print-dialog" value="طباعة"/>
+  <property key="print-message" value="طباعة الوثيقة الجارية"/>
+  <property key="export-message" value="تخزين الوثيقة الجارية"/>
+  <property key="print-interupt" value="قطع"/>
+  <property key="print-page" value="صفحة"/>
+<!-- REPORT-->
+  <property key="separator" value=" لا يوجد تجميع على يمين الفاصل"/>
+<!-- DateChooser-->
+  <property key="Monday" value="الاثنين"/>
+  <property key="Tuesday" value="الثلاثاء"/>
+  <property key="Wednesday" value="الأربعاء"/>
+  <property key="Thursday" value="الخميس"/>
+  <property key="Friday" value="الجمعة"/>
+  <property key="Saturday" value="السبت"/>
+ <property key="Sunday" value="الأحد"/>
+  <property key="Jan" value="جانفي"/>
+  <property key="Feb" value="فيفري"/>
+  <property key="Mar" value="مارس"/>
+  <property key="Apr" value="أفريل"/>
+  <property key="May" value="ماي"/>
+  <property key="Jun" value="جوان"/>
+  <property key="Jul" value="جويلية"/>
+  <property key="Aug" value="أوت"/>
+  <property key="Sep" value="سبتمبر"/>
+  <property key="Oct" value="أكتوبر"/>
+  <property key="Nov" value="نوفمبر"/>
+  <property key="Dec" value="ديسمبر"/>
+  <property key="today" value="اليوم"/>
+  <property key="menu-format" value="" />
+  <property key="menu-font-family" value="" />
+  <property key="menu-font-style" value="" />
+  <property key="item-font-bold" value="" />
+  <property key="item-font-italic" value="" />
+  <property key="item-font-underline" value="" />
+  <property key="menu-font-size" value="" />
+  <property key="menu-alignment" value="" />
+  <property key="item-justify-left" value="" />
+  <property key="item-justify-right" value="" />
+  <property key="item-justify-center" value="" />
+  <property key="editor-label-print" value="" />
+  <property key="editor-help-print" value="" />
+  <property key="editor-label-preview" value="" />
+  <property key="editor-help-preview" value="" />
+  <property key="help_viewer" value="مساعدة" />
+<!-- SPELL CHECKER-->
+  <property key="aspell-dialog-title" value="التدقيق الاملائي"/>
+  <property key="aspell-dialog-not-in" value="ليس بالمعجم"/>
+  <property key="aspell-dialog-change-to" value="حول الى "/>
+  <property key="aspell-dialog-suggestions" value="اقتراحات"/>
+  <property key="aspell-dialog-ignore" value="مجهول"/>
+  <property key="aspell-dialog-ignore-all" value="جهل تام"/>
+  <property key="aspell-dialog-change" value="تغيير"/>
+  <property key="aspell-dialog-change-all" value="تغيير تام"/>
+  <property key="aspell-dialog-cancel" value="الغاء"/>
+  <property key="aspell-finished" value="انهاء التدقيق الاملائي"/>
+  <property key="aspell-notice" value="الدقيق الاملائي"/>
+  <property key="aspell-menu-title" value="التدقيق الاملائي"/>
+  <property key="aspell-german" value="الألمانية"/>
+  <property key="aspell-english" value="الانجليزية"/>
+  <property key="aspell-french" value="الفرنسية"/>
+
+  <property key="File" value="ملف"/>
+  <property key="Edit" value="اجراء"/>
+  <property key="Action" value="عمل"/>
+  <property key="Settings" value="مراجع"/>
+  <property key="Help" value="مساعدة"/>
+  <property key="Help-help" value="مساعدة"/>
+  <property key="Quit" value="قطع"/>
+  <property key="Quit-help" value="قطع الصلة"/>
+  <property key="Print" value="طبع"/>
+  <property key="Print-help" value="طباعة  القرير"/>
+  <property key="Preview" value="تعليق"/>
+  <property key="Preview-help" value="تعليق التقرير على الشاشة"/>
+  <property key="PrintOptions" value="اختيارات"/>
+  <property key="PrintOptions-help" value="تغيير اختيارت الطباعة"/>
+  <property key="ExportCSV" value="CSV" />
+  <property key="ExportCSV-help" value="تسجيل البيانات في ملف CSV"/>
+  <property key="ExportXLSX" value="XLSX" />
+  <property key="ExportXLSX-help" value="تسجيل البيانات في  ملف XSLX"/>
+  <property key="ExportPDF" value="PDF" />
+  <property key="ExportPDF-help" value="تسجيل البيانات  في ملف PDF"/>
+  <property key="Fold" value="الطي"/>
+  <property key="Fold-help" value="طي الخانة لتركيب البيانات"/>
+  <property key="Unfold" value="توضيح"/>
+  <property key="Unfold-help" value="توضيح الخانة لتعميق الرؤية"/>
+  <property key="FoldColumn" value="اخفاء"/>
+  <property key="FoldColumn-help" value="اخفاء الخانة"/>
+  <property key="UnfoldColumn" value="اظهار الخانة"/>
+  <property key="UnfoldColumn-help" value="اظهار الخانة"/>
+  <property key="ColumnInfo" value="اختيارات"/>
+  <property key="ColumnInfo-help" value="تغيير المواقع حسب  القيمة"/>
+  <property key="Sort" value="فرز"/>
+  <property key="Sort-help" value="فرز بيانات الخانة"/>
+  <property key="OpenLine" value="تعديل"/>
+  <property key="OpenLine-help" value="فتح استمارة التعديل"/>
+  <property key="RemoveConfiguration" value="شطب"/>
+  <property key="RemoveConfiguration-help" value="شطب تشكيلة مسجلة"/>
+  <property key="AddConfiguration" value="تسجيل"/>
+  <property key="AddConfiguration-help" value="تسجيل تشكيلة جديدة"/>
+  <property key="LoadConfiguration" value="شحن"/>
+  <property key="LoadConfiguration" value="شحن تشكيلة مسجلة"/>
+  <property key="Options" value="تغيير اختيارات التعليق"/>
+  <property key="Options-help" value="تغيير اختيارات  العليق"/>
+  <property key="choose_column" value="اختيار خانة من  القائمة "/>
+  <property key="validate" value="توثيق"/>
+  <property key="enter_new_label" value="ادخاال تسمية جديدة هذه الخانة"/>
+  <property key="add_data_for_column" value="اضافة بيانات  جديدة لهذه الخانة"/>
+<!-- report column popup menu -->
+  <property key="set_column_data" value="اعطاء صيغة"/>
+  <property key="add_column" value="اضافة  خانة"/>
+  <property key="sort_DSC" value="فرز&lt;&lt;"/>
+  <property key="sort_ASC" value="فرز&gt;&gt;"/>
+  <property key="set_column_info" value="تشخيص الخانة"/>
+  <property key="remove_column" value="حذف الخانة"/>
+<!-- Vaadin UI static texts-->
+  <property key="welcomeMessage" value="مرحبا"/>
+  <property key="userName" value="   اسم المستخدم"/>
+  <property key="password" value="   كلمة السر"/>
+  <property key="login" value="دخول"/>
+  <property key="logout" value="خروج "/>
+  <property key="help" value="مساعدة"/>
+  <property key="loginInstructionMsg" value=".يرجى إدخال اسم المستخدم وكلمة المرور"/>
+  <property key="loginErrorMsg" value=".يجب إدخال اسم المستخدم وكلمة المرور بشكل صحيح"/>
+  <property key="admin" value="مشرف"/>
+  <property key="user" value="المستخدم"/>
+  <property key="language" value="  اللّغة"/>
+  <property key="themes" value="التصاميم" />
+  <property key="theme-confirmation" value="يؤدي تغيير التصميم إلى الخروج من جلسة العمل الخاصة بك." />
+  <property key="available-themes" value=": التصاميم المتاحة" />
+  <property key="home" value="إستقبال" />
+  <property key="session-expired-caption" value="انتهت الدورة" />
+  <property key="session-expired-message" value="تثبّت من أيّة بيانات لم يتم حفظها، ثم انقر هنا للمتابعة." />
+</properties>

@@ -1,0 +1,721 @@
+%%
+%% Copyright (c) 1990-2009 kopiRight Managed Solutions GmbH
+%%
+%% This program is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License version 2
+%% as published by the Free Software Foundation.
+%%
+%% This program is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+%% GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public License
+%% along with this program; if not, write to the Free Software
+%% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+%%
+%% $Id: general.tex 34241 2014-06-28 11:36:05Z thomas_graf $
+%%
+
+\chapter{Einleitung}
+
+Das vorliegende Dokument dient als Einf\"{u}hrung und zur Bedienung bzw.
+Handhabung von mit KOPI entwickelten Programmen.\\
+
+Dieses Dokument ist in mehrere Kapitel unterteilt.\\
+
+Das erste Kapitel, die Einleitung, dient zur allgemeinen Erkl\"{a}rung und soll
+dem Leser=Benutzer helfen, sich einen \"{U}berblick \"{u}ber das ihm
+vorliegende Dokument zu verschaffen. \\
+
+Im zweiten Kapitel soll dem Leser ein \"{U}berblick
+\"{u}ber die ihm zur Verf\"{u}gung stehende Hardware vermittelt werden. Weiters
+erh\"{a}lt der Leser eine kurze Erkl\"{a}rung \"{u}ber dessen korrekte Nutzung.\\
+
+Im dritten Kapitel werden  allgemeine Begriffe der Software, die Handhabung der
+Programm-Auswahl sowie die Tastaturbelegung erkl\"{a}rt, die f\"{u}r mit KOPI entwickelte Programme gelten. Diese Begriffe sind die Basisvoraussetzung f\"{u}r die
+Bedienung des Systems (Programms).\\
+
+Die restlichen Kapitel (vier bis achzehn) erl\"{a}utern schlie{\ss}lich den
+Programmaufbau, die Masken und Felder des Programmes und die Bedienung der
+einzelnen Module, die dem Benutzer in diesem Programm zur Verf\"{u}gung stehen.\\
+
+\cleardoublepage
+
+\chapter{Hardware allgemein}
+
+\cleardoublepage
+
+\section{Bildschirm}\index{Bildschirm}
+
+In einer Computeranwendung (Programm) erf\"{u}llt der Bildschirm
+grunds\"{a}tzlich immer die Funktion eines Anzeigemediums. Der Benutzer
+kann sich auf einem Bildschirm verschiedene Masken, Grafiken oder
+andere Darstellungen anzeigen lassen.\\
+
+Da das Anzeigen von Masken, Grafiken und Darstellungen meistens statisch ist, d.h. nicht wie bei einem Fernseher in bewegten Bildern stattfindet,
+besteht bei einem Bildschirm die Gefahr, da{\ss} sich das angezeigte Bild
+in die Bildr\"{o}hre brennt und das Ger\"{a}t dadurch fr\"{u}hzeitig
+abgenutzt bzw. kaputt wird. \\
+
+Um dieser eventuellen Gefahr, die durch die Bedienung eines oder
+mehrerer Benutzer entsteht, Rechnung zu tragen, besitzen die meisten
+am Markt erh\"{a}ltlichen Bildschirme eine sogenannte Sleeper-Funktion.
+Diese Funktion aktiviert den Bildschirmschoner oder verdunkelt, nach
+einer vom Benutzer festgelegten Anzahl von Minuten, automatisch den
+Bildschirm. Durch eine Bewegung mit der Maus oder durch einen einfachen Druck
+auf eine Taste der Tastatur wird die Sleeper-Funktion wieder au{\ss}er Kraft gesetzt.\\
+Achtung! Das Programm interpretiert diesen Tastendruck als neue Eingabe.
+Daher:
+
+\vspace{0.5cm}
+\begin{bf}
+\begin{it}
+Ein dunkler Bildschirm mu{\ss} kein abgeschalteter Bildschirm sein!
+(Kontrollampe des Bildschirms beachten). Zur \"{U}berpr\"{u}fung,
+ob bei dem Bildschirm die Sleeper-Funktion aktiv ist oder ob der
+Bildschirm abgeschaltet ist, die Maus bewegen oder eine Taste dr\"{u}cken.\\
+Bitte verwenden Sie dazu aber nur unbedenkliche Tasten wie z.B.
+die \Taste{Hochstelltaste}, auf keinen Fall d\"{u}rfen Sie
+zu diesem Zweck die \Taste{Enter}-, \Taste{Esc}- oder auch eine
+Funktionstaste verwenden, da diese eventuell Aktionen ausl\"{o}sen k\"{o}nnten.
+\end{it}
+\end{bf}
+\vspace{0.5cm}
+
+Besitzt Ihr Bildschirm keine sogenannte Sleeper-Funktion
+(Verdunkelungsmechanismus), so achten Sie bitte darauf, da{\ss} der
+Schirm nicht \"{u}ber l\"{a}ngere Zeit eingeschalten bleibt, ohne
+da{\ss} an ihm gearbeitet wird.
+
+\subsection{Der Cursor(Eingabepunkt)}
+
+Der Cursor (Eingabepunkt) zeigt die Stelle am Bildschirm bzw. in einer
+Maske an, an der sich der Benutzer gerade befindet. Der Cursor wird
+meistens durch einen kleinen blinkenden Strich oder Block dargestellt.
+
+\section{Tastatur}\index{Tastatur}
+
+Die Funktionsweise einer Tastatur ist der einer Schreibmaschine sehr
+\"{a}hnlich. Die Abweichungen werden im weiteren Verlauf dieses
+Punktes kurz beschrieben.\\
+
+Die Tastatur ist in vier unterschiedliche Bl\"{o}cke unterteilt, und zwar in
+
+\begin{itemize}
+\item den Schreibmaschinen - Tastaturblock (links),
+\item den Kontrollblock (mitte),
+\item den Zahlenblock (rechts) und
+\item den Funktionstastenblock (oben).
+\end{itemize}
+
+Die Zeichen, die sich \"{u}ber manchen Tasten befinden, z.B. die eckigen
+Klammern auf der Taste \Taste{8} und \Taste{9} sind nur mittels der Taste
+\Taste{Shift} (Hochstelltaste) erreichbar.\\
+Weitere wichtige Tasten werden in den nachfolgenden Punkten kurz beschrieben.
+
+%%\raisebox{-280truept}[47truept][0truept]{\makebox[-120truept][r]{\special{psfile=tast.ps}}}
+
+\subsection{Die \protect\Taste{Enter} oder \protect\Taste{Return} Taste}
+
+Die wichtigste Taste in den meisten Programmen ist gro{\ss}e Taste
+mit dem abgewinkelten Pfeil. Diese Taste wird als \Taste{Enter} oder
+\Taste{Return} Taste bezeichnet. Mit dieser Taste kann ein Benutzer
+
+\begin{itemize}
+\item eine oder mehrere Eingaben best\"{a}tigen,
+\item eine Zeile beenden bzw. in die n\"{a}chste Zeile springen,
+\item einen oder mehrere Eintr\"{a}ge aus einer Liste ausw\"{a}hlen
+\end{itemize}
+
+und vieles mehr.\\
+
+Die \Taste{Enter} Taste befindet sich in der rechten H\"{a}lfte des
+normalen Schreibmaschinen- bzw. Tastaturblockes. Auf einer Tastatur
+mit einem Zahlenblock befindet sich meistens in diesem Zahlenblock
+eine zweite \Taste{Enter} Taste.
+
+\subsection{Die \protect\Taste{Esc} Taste}
+Die \Taste{Esc} (``Escape'' = ``entkommen'') Taste ist im Prinzip das
+Gegenst\"{u}ck zur \Taste{Enter} Taste. Mit dieser Taste kann der
+Benutzer
+
+\begin{itemize}
+\item die meisten Dinge widerrufen,
+\item aus Programmen oder Programmteilen aussteigen oder
+\item Eingaben r\"{u}ckg\"{a}ngig machen.
+\end{itemize}
+
+Die \Taste{Esc}-Taste befindet sich am linken oberen Ende der Tastatur neben
+dem Funktionstastenblock.
+
+\subsection{Gro{\ss}buchstaben- bzw. Hochstelltaste \protect\Taste{Shift}}
+
+Durch Dr\"{u}cken der Hochstelltaste (auch \Taste{Shift}-Taste genannt),
+wird es dem Benutzer erm\"{o}glicht, Gro{\ss}buchstaben bzw. Sonder-
+und Satzzeichen einzugeben. Die Hochstelltaste funktioniert genauso
+wie auf einer Schreibmaschine. Die \Taste{Shift} Taste ist zweimal
+(links unten und rechts unten im normalen Block) angebracht.\\
+
+Die Fixierung der Hochstelltaste ist mit der Taste \Taste{Caps}, welche
+sich \"{u}ber der linken \Taste{Shift} Taste befindet, m\"{o}glich.\\
+
+Ob die Hochstelltaste fixiert ist, erkennt man am dazugeh\"{o}rigen
+Kontroll\"{a}mpchen - leuchtet es, so ist die Hochstelltaste fixiert.
+Um sie wieder zu entriegeln, bet\"{a}tigt man sie einfach ein zweites Mal.\\
+
+(HINWEIS: Ist die Verriegelung eingeschaltet, sind trotzdem noch die Zahlen und
+nicht die jeweiligen Sonderzeichen aktiviert.)
+
+
+\subsection{L\"{o}schtasten}
+
+Es gibt zwei M\"{o}glichkeiten, einzelne Zeichen zu l\"{o}schen.
+
+Erstens die sogenannte R\"{u}ckschrittaste (auch \Taste{Backspace} Taste
+genannt), die auch auf den meisten Schreibmaschinen vorhanden ist.
+Diese Taste befindet sich ganz rechts oben am normalen Tastaturblock
+und l\"{o}scht das Zeichen vor, d.h. links vom Cursor.
+
+Die zweite M\"{o}glichkeit, ein Zeichen zu l\"{o}schen, ist die Taste
+\Taste{Entf} (``Entf'' steht f\"{u}r ``entfernen''), diese befindet sich
+im Kontrollblock. Sie l\"{o}scht das Zeichen, das sich genau an der
+Cursor-Position befindet. Bei L\"{o}schung eines Zeichens r\"{u}ckt
+der nachfolgende Text automatisch um ein Zeichen nach.
+
+\subsection{Cursortasten, Positionstasten} \index{Cursortasten}
+
+Zum Bewegen des Cursors im Bildschirm oder in einer Bildschirmmaske,
+ohne eine Eingabe zu t\"{a}tigen, kann man grunds\"{a}tzlich die
+Cursortasten benutzen. Diese Tasten sind wie ein Kreuz angeordnet
+und befinden sich im Kontrollblock. Sie bewegen den Cursor um jeweils
+ein Zeichen nach links, rechts, unten oder oben.\\
+Sollte der Cursor in der gew\"{u}nschten Richtung nicht mehr
+weiterbewegt werden k\"{o}nnen, ert\"{o}nt in den meisten F\"{a}llen
+ein akustisches Warnsignal.\\
+Es gibt neben den normalen Cursortasten auch noch spezielle
+Positionstasten, die aber nicht in jedem Programm jederzeit
+verf\"{u}gbar sind und manchmal auch ein wenig ver\"{a}nderte
+Funktionen besitzen.
+
+\begin{enumerate}
+\item Tabulator \index{Tabulator} \\
+
+Die Tabulatortaste, diese befindet sich wie bei der Schreibmaschine
+\"{u}ber der Hochstellfixierungstaste \Taste{Caps}, bewegt den Cursor um eine
+Tabulatorposition weiter nach rechts, bzw. bei gleichzeitigem Dr\"{u}cken der
+Taste \Taste{Shift} um eine Position nach links.\\
+In einer Bildschirmmaske kommt man mit der Tabulatortaste um ein Feld
+vorw\"{a}rts bzw. um ein Feld r\"{u}ckw\"{a}rts.
+
+\item Positionstasten \index{Positionstaste} \\
+
+Im Kontrollblock befinden sich die restlichen Positionstasten.
+Mit der Taste \Taste{Pos1} kann man zum Anfang bzw. mit der Taste
+\Taste{Ende} zum Ende eines bearbeiteten Bereiches springen.
+Die Tasten \Taste{Bild $\uparrow$} und \Taste{Bild $\downarrow$}
+agieren als Pendant zu den jeweiligen Cursortasten, nur, da{\ss} sie
+nicht nur eine Zeile, sondern um eine ganze Bildschirmseite
+weiterspringen. Auch bei diesen Tasten gibt es abh\"{a}ngig von den
+verschiedenen Programmen unterschiedliche Belegungen.
+
+\item Einf\"{u}ge-Taste \index{Einf\"{u}ge-Taste} \\
+
+Um zwischen dem Einf\"{u}ge- und \"{U}berschreibmodus umzuschalten,
+wird die Taste \Taste{Einfg} benutzt. Mit dieser Taste kann der
+Benutzer zwischen den M\"{o}glichkeiten w\"{a}hlen, ob der
+nachfolgende Text entweder \"{u}ber\-schrieben oder verschoben
+wird, d.h., da{\ss} ein neu eingegebener Text eingef\"{u}gt bzw.
+\"{u}berschrieben werden kann. In welchem Modus (Einf\"{u}ge- oder
+\"{U}berschreibmodus) sich der Benutzer gerade befindet, wird
+meistens durch eine kurze Erkl\"{a}rung oder Abk\"{u}rzung in der
+untersten Bildschirmzeile angezeigt.
+\end{enumerate}
+
+\subsection{Zahlenblock} \index{Zahlenblock}
+
+Mit dem Zahlen- oder Zehnerblock, welcher sich im rechten Viertel der
+Tastatur befindet, kann der Benutzer schneller die Eingabe von
+Zahlen, einem Datum oder \"{a}hnlichem bewerkstelligen. Aktiviert
+wird der Block mit der im linken oberen Eck befindlichen Taste
+\Taste{Num}. Ob der Zahlenblock aktiviert ist oder nicht, kann
+der Benutzer durch ein Kontroll\"{a}mpchen, welches sich oberhalb der
+Taste befindet, sehen (leuchtet es - ist der Block aktiviert). Sollte
+der Block nicht aktiviert sein (das Kontroll\"{a}mpchen leuchtet nicht), verhalten sich die Tasten im Zahlenblock in \"{a}hnlicher Weise
+wie die des Kontrollblocks.\\
+Im Zahlenblock befindet sich auch eine Taste \Taste{Enter}, die
+dem gleichen Zweck dient, wie die normale gro{\ss}e Taste \Taste{Enter},
+nur in ganz wenigen Ausnahmef\"{a}llen kann diese Taste auch eine
+eigene Funktion erf\"{u}llen.
+
+\subsection{Funktionstasten} \index{Funktionstasten}
+
+Der Funktionstastenblock, welcher aus 12 Funktionstasten besteht,
+befindet sich am oberen Rand der Tastatur, diese Funktionstasten
+sind in jedem Programm anders belegt. Die einzige Funktionstaste,
+die in jedem Programm gleich belegt ist, ist die Taste \Taste{F1}.
+Diese Taste hat in jedem Programm eine {\bf Hilfefunktion}.
+
+\section{Maus}\index{Maus}
+
+Eine andere M\"{o}glichkeit, sich am Bildschirm zu bewegen, bietet die
+Maus. Anstelle des Benutzens von verschiedenen Tasten kann man mit der Maus
+durch Anklicken die Position des Cursers ver\"{a}ndern, mit gehaltener
+Maustaste einzelne W\"{o}rter bzw. Textstellen markieren oder in der
+Men\"{u}zeile verschiedene Aktionen durch Mausklick ausw\"{a}hlen (=Funktionstasten der Tastatur).
+
+\section{Zentraleinheit (Computer)}\index{Zentraleinheit}
+
+Die Zentraleinheit kann entweder ein Server (PC oder Gro{\ss}rechner), an
+dem ein oder mehrere Arbeitspl\"{a}tze angeschlossen sind (Mehrplatzsystem),
+oder ein einzelner alleinstehender Computer (Einplatzsystem) sein.\\
+Die Zentraleinheit bildet das Nervenzentrum des Systems, welches
+die Daten an die verschiedenen Medien (Bildschirm, Drucker, usw.)
+verteilt. Wenn es sich bei der Zentraleinheit um einen Server handelt, an dem
+mehrere Benutzer angeschlossen sind, ist es somit von extremer Wichtigkeit, da{\ss} dieser niemals ausgeschaltet wird, bevor
+man sich nicht davon \"{u}berzeugt hat, da{\ss} keiner der Benutzer noch
+arbeitet. Bei einem einzelnen Computer kann man die Zentraleinheit
+dann abschalten, wenn  der momentan darauf arbeitende Benutzer
+sicher ist, da{\ss} alle vorhandenen Daten oder Arbeiten ausgef\"{u}hrt
+worden sind.
+
+\vspace{0.5cm}
+
+\begin{bf}
+\begin{it}
+ACHTUNG: Nie den Ein-Aus-Schalter der Zentraleinheit bet\"{a}tigen, wenn
+das System l\"{a}uft. Zuerst mu{\ss} das Abschalt-Programm gestartet werden.
+Erst danach darf der Computer abgeschaltet werden. Das Abschalten der
+Zentrale sollte nur von einer Person (System-Administrator) durchgef\"{u}hrt
+werden.
+\end{it}
+\end{bf}
+
+\section{Drucker} \index{Drucker}
+
+Der Drucker ist das Ausgabemedium, mit dessen Hilfe der Benutzer eine
+oder mehrere Listen, Grafiken oder Darstellungen ausdrucken kann. Ein
+Drucker empf\"{a}ngt die Daten, die er ausgeben (ausdrucken) soll, von
+verschiedenen Programmen, welche auf einem Server (Computer) oder PC
+(Personal Computer) installiert sind, und kann von einem oder mehreren
+Benutzern bedient werden.\\
+Der Benutzer kann Daten aber nur dann am Drucker ausgeben, wenn dieser
+auf Empfang (d.h. {\bf ONLINE}) ist. Das Gegenteil dazu ist,
+da{\ss} der Drucker nicht auf Empfang (d.h. {\bf OFFLINE}) ist. Diese zwei
+Betriebszust\"{a}nde werden entweder durch ein Display oder durch eine
+Taste am Drucker angezeigt.\\
+Hat ein Benutzer einen Druckauftrag (Liste, Auswertung, Darstellung)
+gestartet und der Drucker gibt keine Daten aus, so sollte der
+Benutzer zuerst den Betriebszustand des Druckers (ONLINE - auf
+Empfang, OFFLINE - nicht auf Empang) kontrollieren.\\
+Es hat keinen Sinn, einen Druckauftrag, welcher von einem Benutzer
+gestartet, aber vom Drucker, der nicht auf Empfang war, noch nicht ausgegeben
+wurde, nochmals zu starten, da der Druckauftrag zweimal ausgegeben wird, wenn
+der Drucker dann wieder auf Empfang ist.
+
+\section{Laufwerk} \index{Laufwerk} \index{Diskettenlaufwerk} \index{Kassettenlaufwerk}
+
+Es gibt verschiedene Arten von Laufwerken:
+
+\begin{itemize}
+\item Diskettenlaufwerk
+\item Kassettenlaufwerk
+\begin{itemize}
+\item Streamer Tape
+\item DAT Tape
+\end{itemize}
+\item Wechselplattenlaufwerk
+\item Optisches Laufwerk
+\end{itemize}
+
+Die Hauptaufgabe aller dieser Arten von Laufwerken ist die Datensicherung.
+Eine regelm\"{a}{\ss}ige, m\"{o}glichst t\"{a}gliche Datensicherung ist
+dringend anzuraten, um f\"{u}r den Fall ger\"{u}stet zu sein, da{\ss} der
+Server(Computer) oder der PC (Personal Computer) bzw. die Festplatte einen
+nicht r\"{u}ckg\"{a}ngig zu machenden Fehler aufweist. Denn nur mit einer
+ordnungsgem\"{a}{\ss}en Datensicherung kann der alte Programm- und Datenbestand
+wieder hergestellt werden.
+
+\cleardoublepage
+
+\chapter{Basisbegriffe-Software}
+
+Die folgenden Kapitel/Unterkapitel beschreiben die Software: die
+Programm-Auswahl, den Aufbau und die Handhabung der Masken, das
+Ordner-System, nach dem die Programm-Auswahl aufgebaut ist, sowie die
+Handhabung der Eingabemasken. Au{\ss}erdem wird auf die verschiedenen
+Bedeutungen der Funktionstasten eingegangen, wobei die Tasten
+eingerahmt dargestellt werden (z.B. kennzeichnet \Taste{F1} die
+Funktionstaste F1).  Eine Tastenkombination (d.h. zwei Tasten
+m\"{u}ssen gleichzeitig gedr\"{u}ckt werden) wird durch die zwei
+Tasten und ein ``+'' dargestellt (z.B. \Taste{shift}+\Taste{TAB}
+bedeutet, da{\ss} die Taste \Taste{shift} gleichzeitig mit der Taste
+\Taste{TAB} gedr\"{u}ckt werden mu{\ss}).\\ Auf die Erl\"{a}uterung,
+wie sich jeder Benutzer seine ``Favoriten'' anlegen kann, folgen
+abschlie{\ss}end Informationen \"{u}ber die verschiedenen Typen von
+Feldern und m\"{o}gliche Meldungen von Seiten des Systems.
+
+\cleardoublepage
+
+\section{Programm-Auswahl} \index{Men\"{u}s}
+
+Ruft man das System auf, dann \"{o}ffnet
+sich eine Maske bzw. Fenster mit der sogenannten Programm-Auswahl.
+Diese bietet dem Benutzer eine Auswahlm\"{o}glichkeit an, in deren Rahmen er
+die gew\"{u}nschte Auswahl treffen kann. \\
+\\
+Der {\bf Aufbau} der Programm-Auswahl gestaltet sich generell in Form eines
+Ordnersystems. Man kann demnach die Programm-Auswahl unterteilen in 
+
+\begin{itemize}
+\item Ordner
+\item Unterordner und
+\item Eingabemasken.
+\end{itemize}
+
+In  den nun fogenden Unterkapiteln  wird speziell auf diese Punkte
+eingegangen, nachdem zuerst einige allgemeine Erl\"{a}uterungen zu den Masken
+und der Programm-Auswahl angef\"{u}hrt werden.
+
+\subsection{Allgemeine Erl\"{a}uterungen}
+
+Ganz oben auf der Maske der Programm-Auswahl befinden sich drei
+Maskenmen\"{u}s:
+``Datei'', ``Bearbeiten'' und ``Hilfe''.\\
+\\
+Darunter befindet sich eine Funktionsleiste, die, abh\"{a}ngig davon, in
+welchem Programm man sich befindet, aus verschieden vielen ``Druckkn\"{o}pfen'' mit
+einer Kurzbenennung besteht. Diese Druckkn\"{o}pfe stellen verschiedene
+Funktionen oder Aktionen dar. Wenn man sich mit der Maus auf einen
+``Druckknopf'' stellt und die Maus dann nicht mehr bewegt, erscheint eine
+n\"{a}here Beschreibung der Funktion dieses Druckknopfes. Ein paar Beispiele
+daf\"{u}r: ``Beenden'' (Beenden des Programmes), ``Aufrufen'' (ein Programm
+aufrufen), ``\"{O}ffnen'' und ``Schlie{\ss}en'' (ein bestimmtes Verzeichnis
+\"{o}ffnen oder schlie{\ss}en). Grau dargestellte Kn\"{o}pfe k\"{o}nnen nicht
+bet\"{a}tigt werden.\\
+\\
+Am unteren Rand des Fensters befindet sich eine Leiste mit Hilfstexten, die
+zus\"{a}tzliche Bearbeitungshinweise enth\"{a}lt: steht man zum
+Beispiel auf dem Untermen\"{u} ``Stammdaten Verwaltung'', so scheint in dieser
+Leiste als Zusatzinformation auf: ``Hier k\"{o}nnen die verschiedenen
+Stammdaten verwaltet werden.''\\
+\\
+Ganz allgemein ist hier zu sagen, da{\ss} der Benutzer 3 M\"{o}glichkeiten hat,
+in einer Programm-Auswahl Aktionen zu setzen.
+
+\begin{itemize}
+\item Der Benutzer verwendet die Funktionstasten auf der Tastatur, auf die
+weiter unten n\"{a}her eingegangen wird (z.B.: F7=Speichern).
+\item Der Benutzer arbeitet mit der Maus und klickt auf die sich in der
+Funktionsleiste befindlichen Druckkn\"{o}pfe.
+\item Die dritte M\"{o}glichkeit besteht darin, mit der Maus auf die ganz oben
+angef\"{u}hrten Maskenmen\"{u}s zu gehen und unter ``Datei'', ``Bearbeiten''
+oder ``Aktionen'' die jeweils gew\"{u}nschte Aktion auszuw\"{a}hlen und zu
+setzen. Hinzuzuf\"{u}gen ist noch, da{\ss} hier auch die zu der
+jeweiligen Aktion alternativ zu verwendenden Funktionstasten angezeigt werden. 
+\end{itemize}
+
+In der Programm-Auswahl kann der Benutzer zwischen den
+Anwendungspunkten  mit Hilfe der Maus oder mit den Tasten
+\Taste{$\downarrow$} und \Taste{$\uparrow$} hin- und herspringen, wobei die
+momentan g\"{u}ltige Auswahl farbig unterlegt wird.\\
+
+Die Programm-Auswahl kann der Benutzer entweder unter dem Maskenmen\"{u}
+``Datei''-Beenden  oder durch
+Anklicken des Druckknopfes ``Beenden'' in der Funktionsleiste
+verlassen.
+
+\vspace{0.5cm}
+
+\begin{Keys}{Zusammenfassung der wichtigsten Tasten}
+\StdKey{$\uparrow$}{}{Aktiviert den vorhergehenden Auswahlpunkt}
+\StdKey{$\downarrow$}{}{Aktiviert den n\"{a}chsten Auswahlpunkt}
+\StdKey{F1}{Hilfe}{Blendet ein Hilfefenster zum aktiven Auswahlpunkt ein.}\\
+\StdKey{Enter}{}{Ausw\"{a}hlen des aktiven Auswahlpunktes.}
+\end{Keys}
+
+\subsection{Ordner und Unterordner}
+
+Um einen Ordner zu \"{o}ffnen, klickt man entweder auf das kleine
+voranstehende + (plus) K\"{a}stchen  oder bet\"{a}tigt die  \Taste{Enter}
+Taste, vorausgesetzt, man hat diesen Punkt ausgew\"{a}lt. Eine dritte M\"{o}glichkeit
+w\"{a}re, wie bereits erw\"{a}hnt, auf den Druckknopf ``\"{O}ffnen'' in der
+Funktionsleiste zu klicken. Der ``Ordner'' \"{o}ffnet sich und man bekommt
+entweder verschiedene Eingabemasken zur Auswahl oder nochmals Unterordner, die
+sich wiederum auf die gleiche Art und Weise \"{o}ffnen lassen. Da{\ss} ein
+Ordner ge\"{o}ffnet ist, erkennt man daran, da{\ss} aus dem + K\"{a}stchen ein
+- (minus) K\"{a}stchen geworden ist. Um einen Ordner wieder zu schlie{\ss}en,
+klickt man auf das - (minus) K\"{a}stchen oder bet\"{a}tigt nochmals die Taste
+\Taste{Enter}.\\
+
+\subsection{Handhabung von Eingabemasken}
+
+\"{A}hnlich wie bei der Programm-Auswahl befinden sich auch in den Eingabemasken ganz
+oben am Fenster die Maskenmen\"{u}s, in diesem Falle aber vier:
+``Datei'', ``Bearbeiten'' und ``Aktionen'' und``Hilfe''.\\
+\\
+Darunter befindet sich wieder eine Funktionsleiste, die, abh\"{a}ngig davon, in
+welchem Programm man sich befindet, aus verschieden vielen ``Druckkn\"{o}pfen''
+mit einer Kurzbenennung besteht. Diese Druckkn\"{o}pfe stellen verschiedene
+Funktionen oder Aktionen dar. Wenn man sich mit der Maus auf einen Druckknopf stellt und die Maus dann nicht mehr bewegt, erscheint eine
+n\"{a}here Beschreibung der Funktion dieses Druckknopfes.\\
+\\
+Am unteren Rand des Fensters der Eingabemaske befindet sich eine Leiste,
+die zus\"{a}tzliche Bearbeitungshinweise zu den einzelnen Feldern
+enth\"{a}lt.\\
+\\
+Um eine Eingabemaske zu \"{o}ffnen, stellt man sich auf die ausgew\"{a}hlte
+Maske und dr\"{u}ckt die Taste \Taste{Enter} oder macht darauf einen
+Doppelklick mit der Maus oder bet\"{a}tigt den Druckknopf `` Aufrufen''.   \\
+\\
+Eine Eingabemaske besteht aus einer bestimmten Menge von Eingabefeldern.\\
+\\
+So wie bei der Programm-Auswahl ist in der Eingabemaske immer nur ein Feld
+aktiv. Dies ist das Feld, in dem sich der Cursor momentan befindet. Prinzipiell
+unterscheidet man zwischen zwei Arten von Feldern:
+
+\begin{itemize}
+\item Felder, die vom Benutzer ver\"{a}ndert werden k\"{o}nnen,
+\item Felder, die vom Benutzer nicht ver\"{a}ndert werden k\"{o}nnen,
+\end{itemize}
+wobei hinzuzuf\"{u}gen ist, da{\ss} diese entweder einzeilig oder zweizeilig sein k\"{o}nnen.\\
+\\
+In einem Eingabefeld kann sich der Benutzer mit Hilfe der Maus oder den 4
+Kursortasen (Pfeiltasten) bewegen.
+
+\begin{itemize}
+\item \Taste{$\rightarrow$} eine Stelle(Buchstabe) nach rechts
+\item \Taste{$\leftarrow$} eine Stelle(Buchstabe) nach links
+\item bei mehrzeiligen Feldern: \Taste{$\downarrow$} n\"{a}chste Zeile
+\item bei mehrzeiligen Feldern: \Taste{$\uparrow$} vorhergehende Zeile
+\end{itemize}
+
+In der Eingabemaske kann sich der Benutzer mit Hilfe der Maus oder der
+folgenden Tasten zwischen den von ihm zu ver\"{a}ndernden Eingabefeldern
+bewegen.
+
+\begin{itemize}
+\item \Taste{TAB} zum n\"{a}chsten Feld
+\item \Taste{shift}+\Taste{TAB} zum vorherigen Feld
+\item \Taste{Enter} Taste bewegt den Kursor ins n\"{a}chste Feld \"{a}hnlich
+	wie \Taste{TAB}. Bei mehrzeiligen Feldern jedoch bewirkt diese
+	Taste einen Zeilenumbruch
+\end{itemize}
+
+Befinden sich in einer Eingabemaske mehrere Felder gleicher Art
+untereinander (mehrzeilige Eintr\"{a}ge), so werden die Tasten
+\Taste{Bild$\uparrow$} und \Taste{Bild $\downarrow$} dazu verwendet, um
+von einem Eintrag in den n\"{a}chsten bzw. in den vorhergegangenen
+Eintrag zu gelangen.\\
+\\
+
+
+\begin{Keys}{Die Bedeutung(-en) der Funktionstasten}\\
+Alle Aktionen, die aus einer Eingabemaske heraus von einem
+Benutzer ausgef\"{u}hrt werden k\"{o}nnen, sind durch eine
+Funktionstaste bezeichnet. Bei den folgenden Beschreibungen handelt es sich um Standardbelegungen, deren
+Bedeutungen sich aber abh\"{a}ngig vom Programm ver\"{a}ndern k\"{o}nnen:
+
+
+\StdKey{F1}{}{Hilfe}\\
+{Durch das Bet\"{a}tigen der Taste \Taste{F1} erh\"{a}lt der Benutzer ein
+Hilfefenster eingeblendet. Dieses zeigt zu dem jeweiligen Feld der
+Eingabemaske, in der sich der Benutzer momentan befindet, einen
+Hilfetext sowie auch die Beschreibung der m\"{o}glichen Funktionen an.\\
+Jedes Hilfefenster kann durch die Taste \Taste{Esc} verlassen werden.}
+
+\StdKey{F2}{}{Die Bedeutung von  \Taste{F2} ist feldbezogen, das hei{\ss}t, sie wechselt
+von Feld zu Feld. Gibt es bei einem Feld Auswahlm\"{o}glichkeiten, auch
+erkennbar daran, da{\ss} sich am Ende eines Eingabefeldes ein kleiner
+Druckknopf mit einer Lupe befindet, dann erlaubt dem Benutzer das Dr\"{u}cken
+der Funktionstaste  \Taste{F2} bzw. das Anklicken der Lupe, da{\ss} das Ergebnis in Form
+einer Liste angezeigt wird. In diesen Listen kann sich der Benutzer entweder
+mit den Tasten \Taste{$\uparrow$} und \Taste{$\downarrow$} von einer Zeile zur
+anderen bewegen oder er kann mit den Tasten \Taste{Bild$\uparrow$} und
+\Taste{Bild $\downarrow$} von einer Seite zur anderen springen.\\
+Wie im Anwendungsmen\"{u} erfolgt die Auswahl eines Punktes der Liste durch
+die Taste \Taste{Enter}, d.h. der Wert des aktiven Punktes wird in
+das Feld der Eingabemaske \"{u}bernommen, in dem sich der Benutzer momentan
+befindet.\\
+Die Taste \Taste{Esc} blendet die Liste aus, ohne eine Auswahl zu
+treffen. \\
+Bei leeren Uhrzeit- und Datumsfeldern setzt die Taste \Taste{F2} die aktuelle
+Uhrzeit bzw. das aktuelle Datum ein. Befindet sich bereits ein Datum in dem
+Feld, bewirkt ein nochmaliges Dr\"{u}cken der Taste \Taste{F2} das Erscheinen
+eines Kalenders, mithilfe dessen man dann das momentan eingetragene Datum
+\"{a}ndern kann.\\
+Au{\ss}erdem hat man die M\"{o}glichkeit, wenn schon ein Datum im Feld steht,
+mit den Tasten  \Taste{$\uparrow$} und \Taste{$\downarrow$} zeitm\"{a}{\ss}ig
+nach vorne oder nach hinten zu bl\"{a}ttern.}
+\StdKey{F3}{}{Abbrechen}\\
+{Die Eingaben in die Maske werden gel\"{o}scht und  die Eingabemaske wird
+wieder in den urspr\"{u}nglichen Modus bei Aufruf (Suchmodus) versetzt.}
+\StdKey{F4}{}{Anlegen}\\
+{Die Maske wird in den Anlege-Modus versetzt und es wird hiermit
+erm\"{o}glicht, neue Datens\"{a}tze anzulegen.}
+\StdKey{F5}{}{Befindet sich der Benutzer im Anlege-Modus, dann bedeutet F5
+L\"{o}schen, befindet er sich hingegen im Such-Modus, werden mit Hilfe der
+Funktionstaste F5 die Suchoperatoren aufgerufen. Die Suchoperatoren
+erm\"{o}glichen komplexere Abfragen (z.B. alle Artikel, deren Preis
+gr\"{o}{\ss}er als 100 ist).}
+\StdKey{F6}{}{Suche starten und Bl\"{a}ttern}\\
+{Der Benutzer hat die M\"{o}glichkeit, einen bestimmten Eintrag zu suchen,
+indem er alle gespeicherten Eintr\"{a}ge vom ersten bis zum letzten Datensatz
+mit den Tasten  \Taste{Bild$\uparrow$} und \Taste{Bild $\downarrow$} durchbl\"{a}ttert.}
+\StdKey{F7}{}{Speichern}\\
+{Der bearbeitete Datensatz wird abgespeichert.}
+\StdKey{F8}{}{Diese Taste hat zwei Bedeutungen: \\
+{\bf Erstens} kann sich der Benutzer damit eine Liste aufrufen lassen. Befindet er sich in einem
+bestimmten Programm (z.B.: Firmen - Stammdaten), erm\"{o}glicht es ihm die
+Taste  \Taste{F8}, sich eine Liste mit allen gespeicherten Eintr\"{a}gen
+auflisten zu lassen. Dabei ist es m\"{o}glich, sich s\"{a}mtliche Eintr\"{a}ge
+anzeigen zu lassen (alle Felder bleiben frei) oder durch Ausf\"{u}llen gewisser Felder die Auswahl enger
+zu gestalten. Mit den Tasten  \Taste{$\uparrow$} und
+\Taste{$\downarrow$} kann man sich in dieser Liste bewegen und durch die Taste
+\Taste{Enter} kann der ausgew\"{a}hlte Eintrag direkt in die Eingabemaske
+\"{u}bernommen werden. Nat\"{u}rlich kann man daf\"{u}r auch die Maus benutzen,
+indem man einfach den gew\"{u}nschten Eintrag anklickt.\\
+ Verlassen ohne eine Auswahl getroffen zu haben wird diese Liste mit der Taste \Taste{Esc}.\\
+{\bf Zweitens} bewirkt die Taste \Taste{F8} bei Eingabemasken, die in
+verschiedene Bl\"{o}cke eingeteilt sind, einen Wechsel von einem Block in den
+anderen (z.B. gibt es bei Auftr\"{a}gen den Auftragskopf und die
+Auftragspositionen, und  die Taste \Taste{F8} erm\"{o}glicht es, schnell von einem Block in den anderen zu wechseln).}
+\StdKey{F12}{}{Favoriten anzeigen}\\
+{Die Favoriten des Benutzers werden in einem ``frei-schwebenden'' Fenster angezeigt.}
+\end{Keys}
+
+Alle Eingabemasken werden mit der Taste \Taste{Esc} oder einem Klick auf den
+Druckknopf ``Beenden'' verlassen. Wurden
+durch den Benutzer bereits Felder der Eingabemaske gef\"{u}llt, fragt
+das Programm, ob der Ausstieg wirklich erw\"{u}nscht sei, da sonst der
+Inhalt der Felder verloren geht.
+
+\vspace{0.5cm}
+
+\begin{Keys}{Zusammenfassung der wichtigsten Tasten}
+\StdKey{TAB}{}{N\"{a}chstes Feld}
+\StdKey{shift}{+ \Taste{TAB}}{Vorhergehendes Feld}
+\StdKey{$\downarrow$}{}{Bei einem einzeiligen Feld: n\"{a}chstes Feld\\
+	bei einem mehrzeiligen Feld: n\"{a}chste Zeile}
+\StdKey{$\uparrow$}{}{Bei einem einzeiligem Feld: vorhergehendes Feld\\
+	bei einem mehrzeiligen Feld: vorhergehende Zeile}
+\StdKey{$\rightarrow$}{}{Kursor wird innerhalb des aktiven Feldes nach
+rechts bewegt}
+\StdKey{$\leftarrow$}{}{Kursor wird innerhalb des aktiven Feldes nach links bewegt}
+\StdKey{Bild $\uparrow$}{}{Bei mehrzeiligen Eintr\"{a}gen vorhergehender Eintrag}
+\StdKey{Bild $\downarrow$}{}{Bei mehrzeiligen Eintr\"{a}gen n\"{a}chster Eintrag}
+\StdKey{Esc}{}{Ist ein Hilfefenster oder ein Auswahlmen\"{u} eingeblendet, so
+bewirkt die Taste \Taste{Esc} das Ausblenden(Beenden) dieses Fensters oder
+des Men\"{u}s. Sonst dient die Taste \Taste{Esc} zum Verlassen einer
+Eingabemaske oder zum Beenden der meisten Verarbeitungen.}
+\StdKey{Enter}{}{Bei einzeiligem Feld: n\"{a}chstes Feld; bei mehrzeiligem
+Feld: Zeilenumbruch}.
+\end{Keys}
+
+\subsection{Favoriten anlegen}
+
+Jeder Benutzer hat die M\"{o}glichkeit, f\"{u}r sich
+Favoriten zu definieren und anzulegen, das hei{\ss}t, da{\ss} bestimmte
+Eingabemasken/Programme, welche vom Benutzer sehr h\"{a}ufig verwendet werden, am
+Bildschirm mittels eines Druckknopfes angezeit werden. Diese
+M\"{o}glichkeit erlaubt es dem Benutzer, schneller zu dieser bestimmten
+Anwendung zu gelangen.\\
+Vorgangsweise ist folgende: das Programm, das der Benutzer gerne als Favorit
+anlegen m\"{o}chte, muss im Anwendungsmen\"{u} aktiviert sein (z.B. einmal
+anklicken mit der Maus), daran erkennbar, da{\ss}  der Men\"{u}eintrag blau
+unterlegt ist. Anschlie{\ss}end w\"{a}hlt man im Maskenmen\"{u}  ``Bearbeiten''
+den Punkt ``Favoriten anlegen'' und ein kleiner Druckknopf mit dem Namen der
+gew\"{a}hlten Anwendung erscheint auf dem Bildschirm.\\
+Durch Anklicken des Druckknopfes des jeweiligen Favoriten wird dann
+sofort das dazugeh\"{o}rige Programm ge\"{o}ffnet.\\
+Es ist noch hinzuzuf\"{u}gen, da{\ss} die Anlage von Favoriten
+benutzerabh\"{a}ngig ist, was bedeutet, da{\ss} jeder Benutzer sich seine
+eigenen Favoriten anlegen kann. Diese erscheinen sofort bei Starten des
+Anwendungsprogrammes am Bildschirm.
+\section{Felder} \index{Felder}
+
+Das Programm unterscheidet die Felder nach der Art der Eingaben, die der Benutzer t\"{a}tigen kann.\\
+Es gibt folgende Arten(Typen) von Feldern:
+
+\begin{Fieldtypes} \index{Feldtypen} \index{Funktionstasten}
+\Fieldtype{Text}{Es k\"{o}nnen alle Buchstaben bzw. Ziffern, d.h. alphanumerische Zeichen eingegeben werden}{}
+\Fieldtype{Zahl}{Es k\"{o}nnen bei diesem Feldtyp nur Ziffern von '0' bis
+'9' und die Vorzeichen '+' und '-' verwendet werden. Bei diesem Feldtyp wird
+weiters zwischen ganzen Zahlen und Kommazahlen unterschieden. Bei Kommazahlen
+kann zus\"{a}tzlich das Zeichen '.' (um Tausenderstellen zu kennzeichnen)
+sowie das Zeichen ',' (komma) verwendet werden.}{}
+\Fieldtype{Datum}{Die Eingabe erfolgt im Datumsformat ``TT.MM.JJJJ''. Wird
+das Jahr nur zweistellig eingegeben, so wird das Datum vom System automatisch
+umgewandelt. Gibt der Benutzer z.B. 1.2.10 ein, so f\"{u}llt das System auf
+01.02.2010 auf.}
+{\Taste{F2} (Heute): Einsetzen des aktuellen Datums, nochmaliges Dr\"{u}cken
+von \Taste{F2} bewirkt die Einblendung eines Kalenders.\\
+Au{\ss}erdem hat man die M\"{o}glichkeit, wenn schon ein Datum im Feld steht,
+mit den Tasten  \Taste{$\uparrow$} und \Taste{$\downarrow$} zeitm\"{a}{\ss}ig
+nach vorne oder nach hinten zu bl\"{a}ttern.}
+\Fieldtype{Monat}{Die Eingabe erfolgt im Datumsformat ``MM.JJJJ''. Wird das
+Jahr nur zweistellig eingegeben, so wird das Datum vom System umgewandelt. Gibt
+der Benutzer z.B. 2.10 ein, so f\"{u}llt das System auf 02.2010 auf.}
+{\Taste{F2} (Heute): Einsetzen des aktuellen Monats.}
+\Fieldtype{Uhrzeit}{Die Eingabe erfolgt im Zeitformat ``MM:SS''.}
+{\Taste{F2} (Jetzt): Einsetzen der aktuellen Uhrzeit.}
+\Fieldtype{ja/nein}{Es kann ``ja'' oder ``nein'' eingegeben werden.
+Eindeutige Abk\"{u}rzungen werden auch akzeptiert.}
+{\Taste{F2} (Auswahl): Anzeigen einer Liste der erlaubten Werte}
+\Fieldtype{Auswahl}{Die Eingabe wird auf eine Liste von Werten
+eingeschr\"{a}nkt. Nur Werte, die in dieser Liste enthalten sind,
+werden vom System akzeptiert.}
+{\Taste{F2} (Auswahl): Anzeigen der Liste der erlaubten Werte.}
+\end{Fieldtypes}
+
+Hinzuzuf\"{u}gen w\"{a}re hier noch, da{\ss}, wie weiter oben bereits
+erw\"{a}hnt, alternativ zur Taste \Taste{F2} auch ein Mausklick auf die Lupe
+bei dem jeweiligen Feld ausreicht, um dasselbe Ergebnis zu erhalten.\\
+\\
+\section{Systemmeldungen} \index{Systemmeldungen}
+\index{Fehlermeldungen} \index{Fragen} \index{Ablaufmeldungen}
+\index{Benutzermeldungen}
+
+Das Programm unterscheidet zwischen vier Arten von Systemmeldungen.
+\begin{itemize}
+\item Fehlermeldungen
+\item Fragen
+\item Ablaufmeldungen
+\item Benutzermeldungen
+\end{itemize}
+
+{\bf Fehlermeldungen}  k\"{o}nnen wiederum in drei Gruppen
+eingeteilt werden:
+
+\begin{itemize}
+\item Warnungen
+\item Benutzerfehler
+\item Systeminterne Fehler
+\end{itemize}
+
+Warnungen werden ausgegeben, um den Benutzer auf einen Zustand
+aufmerksam zu machen, der jedoch nicht unbedingt ein Fehler sein
+mu{\ss}.\\
+Benutzerfehler werden dann angezeigt, wenn eine falsche Bedienung
+des Programmes erfolgt ist. Die dabei angezeigte Fehlermeldung erkl\"{a}rt
+den Fehler; diese Fehler k\"{o}nnen dann vom Benutzer korrigiert werden.\\
+Programmfehler (Systeminterne Fehler) werden dann angezeigt, wenn
+ein f\"{u}r das Programm unzul\"{a}ssiger Zustand eingetreten ist. Dabei
+wird die Meldung ``Interner Fehler: bitte System--Administrator benachrichtigen'' angezeigt.\\
+
+{\bf Fragen}  werden vom System angezeigt, wenn der Benutzer eine
+Entscheidung treffen mu{\ss} (z.B. ``Ende der Bearbeitung: sind Sie
+sicher? \Taste{j}/\Taste{n} ``). Diese Frage mu{\ss} mit \Taste{j} f\"{u}r
+ja oder \Taste{n} f\"{u}r nein beantwortet werden, bzw. klickt man den
+entsprechenden Druckknopf an.\\
+
+{\bf Ablaufmeldungen}
+werden dann angezeigt, wenn das System eine l\"{a}ngere Bearbeitung
+durchf\"{u}hrt. Diese Meldungen erfordern keine Bedienungsschritte des
+Benutzers. Sie verschwinden nach vollendeter Bearbeitung. Sie erscheinen in der unteren Leiste des Fensters.\\
+
+{\bf Benutzermeldungen} werden dann angezeigt, wenn der
+Benutzer die ausgegebene Meldung quittieren mu{\ss} (z.B. ``Band
+einlegen und eine beliebige Taste dr\"{u}cken''). Das Quittieren einer
+solchen Meldung erfolgt durch Bet\"{a}tigung einer beliebigen Taste bzw.durch
+Anklicken des Druckknopfes ``Schlie{\ss}en''.

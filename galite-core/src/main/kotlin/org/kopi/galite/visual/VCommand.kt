@@ -114,4 +114,16 @@ open class VCommand(private var mode: Int,
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private var killed = false
+
+  override fun equals(other: Any?): Boolean {
+    return if (other !is VCommand) {
+      false
+    } else {
+      this.mode == other.mode &&
+              this.handler == other.handler &&
+              this.actor == other.actor &&
+              this.trigger == other.trigger &&
+              this.item == other.item
+    }
+  }
 }

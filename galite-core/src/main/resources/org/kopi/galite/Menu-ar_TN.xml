@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insert>
+  <menu ident="File" label="الملف"/>
+  <menu ident="Edit" label="الاجراء"/>
+  <menu ident="Help" label="المساعدة"/>
+  <actor ident="Close" label="قطع" help="قطع التطبيق الحالي"/>
+  <actor ident="Open" label="فتح" help="فتح استمارة"/>
+  <actor ident="Show" label="تعليق الأفضليات" help="تعليق الأفضليات"/>
+  <actor ident="Add" label="أضف الى الأفضليات" help="أضف الى الأفضليات"/>
+  <actor ident="Remove" label="شطب الأفضليات" help="شطب الأفضليات"/>
+  <actor ident="Fold" label="غلق" help="غلق القائمة"/>
+  <actor ident="Unfold" label="فتح" help="فتح القائمة"/>
+  <actor ident="Information" label="معلومة" help="معلومة"/>
+  <actor ident="Help" label="المساعدة" help="فتح نافذة المساعدة"/>
+  <actor ident="Autofill" label="مقيس" help="اعطاء قائمة القيم الممكنة"/>
+  <actor ident="NewItem" label="جديد" help="اضافة عنصر جديد"/>
+  <actor ident="EditItem" label="تحرير" help="تحرير العنصر المختار" />
+  <actor ident="EditItem_S" label="تحرير" help="تحرير العنصر المختار" />
+  <actor ident="Default" label="افتراضي" help="تعريف عنصر افتراضي" />
+  <actor ident="Select" label="اختيار" help="اختيار العنصر" />
+  <actor ident="AddItem" label="إضافة" help="إضافة عنصر جديد" />
+  <actor ident="RemoveItem" label="حذف " help="حذف العنصر" />
+  <actor ident="Localise" label="تحرير " help="تحرير العنصر المختار" />
+  <actor ident="Save" label="Sauver" help="تخزين" />
+</insert>

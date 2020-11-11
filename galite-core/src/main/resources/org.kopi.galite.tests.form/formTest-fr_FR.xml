@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form title="Déclaration d'échange de biens">
+  <actor ident="Saisie" label="test label" help="test help" />
+  <actor ident="Descendre" label="Descendre" help="Descendre la ligne courante d'une ligne" />
+  <actor ident="Monter" label="Monter" help="Monter la ligne courante d'une ligne" />
+  <page ident="Id$0" title="Commandes" />
+  <block name="Selection" title="Sélection">
+    <field ident="DateDebut" label="Depuis le" help="Date minimale de saisie des commandes." />
+    <field ident="DateFin" label="Jusqu'au" help="Date maximale de saisie des commandes." />
+    <field ident="France" label="France" help="Prendre en compte les commandes en France." />
+    <field ident="CEE" label="CEE" help="Prendre en compte les commandes en CEE." />
+    <field ident="Monde" label="Monde" help="Prendre en compte les commandes Monde." />
+  </block>
+</form>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2009 kopiRight Managed Solutions GmbH
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+  $Id: Messages-en_GB.xml 35325 2018-08-29 11:27:17Z iayadi $
+-->
+<messages>
+<!-- ERRORS-->
+  <message ident="00001" text="Data entry error: No matching value." />
+  <message ident="00002" text="Data entry error: More than one matching value." />
+  <message ident="00003" text="Data entry error: This is not a valid date value." />
+  <message ident="00004" text="Data entry error: This is not an integer." />
+  <message ident="00005" text="Data entry error: This is not a valid month value." />
+  <message ident="00006" text="Data entry error: This in not a number." />
+  <message ident="00007" text="Data entry error: This is not a valid time value." />
+  <message ident="00008" text="Data entry error: This is not a valid week value." />
+  <message ident="00009" text="Data entry error: This number is to big (max {0})." />
+  <message ident="00010" text="Data entry error: This number is to big" />
+  <message ident="00011" text="Data entry error: Too many digit after comma (max. {0})." />
+  <message ident="00012" text="Data entry error: This number is to small (min {0})." />
+  <message ident="00013" text="Data entry error: This text is too long." />
+  <message ident="00014" text="{0}" />
+  <message ident="00015" text="No (more) data." />
+  <message ident="00016" text="No matching value in {0}." />
+  <message ident="00017" text="The value of the record has changed." />
+  <message ident="00018" text="The record was deleted." />
+  <message ident="00019" text="This record can''t be deleted." />
+  <message ident="00020" text="The value in {0} is not unique." />
+  <message ident="00021" text="{0} is used in relation {1}." />
+  <message ident="00022" text="No matching value found." />
+  <message ident="00023" text="This field must be filled." />
+  <message ident="00024" text="This page is not accessible." />
+  <message ident="00025" text="Command not accessible." />
+  <message ident="00026" text="File {0} not found" />
+  <message ident="00027" text="File {0} not readable." />
+<!-- WARNINGS-->
+  <message ident="00028" text="Too many data." />
+  <message ident="00029" text="Unable to undo." />
+  <message ident="00030" text="Unable to redo." />
+<!-- QUESTIONS-->
+  <message ident="00033" text="{0}: An error has occured while trying to close the application, quit anyway ?" />
+  <message ident="00034" text="A fax failed to be sent, quit anyway ?" />
+  <message ident="00039" text="Transaction interrupted: Retry ?" />
+  <message ident="00040" text="Error during printing: retry ?" />
+<!-- ERROR MESSAGES-->
+  <message ident="00041" text="FATAL ERROR, The system administrator will be informed." />
+  <message ident="00042" text="You can''t access any forms" />
+<!-- EXCEL READER (APPS.COMMON)-->
+  <message ident="00043" text="Error reading file on line" />
+  <message ident="00044" text="Error closing file" />
+  <message ident="00045" text="Structure error on line/field " />
+  <message ident="00046" text="Structure error, field empty on line/field " />
+  <message ident="00047" text="Field is not a valid date on line/field" />
+  <message ident="00048" text="Field is not a valid boolean on line/field" />
+  <message ident="00049" text="Field is not a number on line/field" />
+  <message ident="00050" text="Field is not a string on line/field" />
+  <message ident="00051" text="Field is not an integer on line/field" />
+  <message ident="00052" text="Field is not a fixed point number on line/field" />
+<!-- LOGIN (APPS.COMMON)-->
+  <message ident="00053" text="Driver could not be loaded" />
+  <message ident="00054" text="Error during database login." />
+<!-- MAIL (APPS.COMMON)-->
+  <message ident="00055" text="Sender has no e-mail address" />
+  <message ident="00056" text="Could not send E-Mail." />
+<!-- INFO TEXTS-->
+  <message ident="00057" text="No data to display" />
+  <message ident="00058" text="Abort transaction." />
+<!-- ERRORS-->
+  <message ident="00059" text="Data entry error: Incorrect period" />
+  <message ident="00060" text="The scale {0} is bigger than the maximum allowed {1}" />
+  <message ident="00061" text="Wrong parameter {0} this is the list of possible parameters : {1} where x is the column number." />
+  <message ident="00062" text="{0} is not a number" />
+  <message ident="00063" text="Wrong column number,{0} choose from column list"/>
+  <message ident="00064" text="Exception occured during parsing of expression : {0} {1}"/>
+  <message ident="00065" text="Text is too large for this field VStringField({0}, {1})"/>
+  <message ident="00066" text="can not compute this formula."/>
+  <message ident="00067" text="Please wait ..." />
+  <message ident="00068" text="Maximum {0} characters" />
+  <message ident="00069" text="Maximum depth of the tree : {0} levels" />
+</messages>

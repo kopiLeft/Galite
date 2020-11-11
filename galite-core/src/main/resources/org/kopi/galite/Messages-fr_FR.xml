@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 1990-2009 kopiRight Managed Solutions GmbH
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+  $Id: Messages-fr_FR.xml 35325 2018-08-29 11:27:17Z iayadi $
+-->
+<messages>
+<!-- ERRORS-->
+  <message ident="00001" text="Erreur de saisie: Aucune valeur appropriée." />
+  <message ident="00002" text="Erreur de saisie: Valeurs multiples." />
+  <message ident="00003" text="Erreur de saisie: Ce n''est pas une date valide." />
+  <message ident="00004" text="Erreur de saisie: Ce n'est pas un entier." />
+  <message ident="00005" text="Erreur de saisie: Ce n'est pas un mois valide." />
+  <message ident="00006" text="Erreur de saisie: Ce nombre n'est pas valide." />
+  <message ident="00007" text="Erreur de saisie: Ce n'est pas une heure valide." />
+  <message ident="00008" text="Erreur de saisie: Ce n'est pas une semaine valide." />
+  <message ident="00009" text="Erreur de saisie: Ce nombre est trop grand (max {0})." />
+  <message ident="00010" text="Erreur de saisie: Ce nombre est trop grand." />
+  <message ident="00011" text="Erreur de saisie: Trop de chiffres après la virgule (max. {0})." />
+  <message ident="00012" text="Ce nombre est trop petit (min {0})." />
+  <message ident="00013" text="Erreur de saisie: texte trop long." />
+  <message ident="00014" text="{0}" />
+  <message ident="00015" text="Pas (plus) de données." />
+  <message ident="00016" text="Aucune valeur appropriée dans {0}." />
+  <message ident="00017" text="La valeur de l'enregistrement a changé." />
+  <message ident="00018" text="L'enregistrement a été éffacé." />
+  <message ident="00019" text="Cet enregistrement ne peut pas etre effacé." />
+  <message ident="00020" text="La valeur dans {0} n'est pas unique." />
+  <message ident="00021" text="L'enregistrement dans {1} ne peut être supprimé car il est utilisé dans {0}." />
+  <message ident="00022" text="Aucune valeur appropriée trouvée." />
+  <message ident="00023" text="Ce champ doit être rempli." />
+  <message ident="00024" text="Cette page n'est pas accessible." />
+  <message ident="00025" text="Commande non autorisée." />
+  <message ident="00026" text="Fichier pas trouvé." />
+  <message ident="00027" text="" />
+<!-- WARNINGS-->
+  <message ident="00028" text="Trop de données." />
+  <message ident="00029" text="Impossible d'annuler:" />
+  <message ident="00030" text="Impossible de refaire:" />
+<!-- QUESTIONS-->
+  <message ident="00033" text="{0}: Une errerur est survenue en essayant de quitter l'application, quitter quand même ?" />
+  <message ident="00034" text="Un fax n'a pas ete envoye, quitter quand meme ?" />
+  <message ident="00039" text="Transaction interrompue: reessayer ?" />
+  <message ident="00040" text="Erreur durant l'impression: reessayer ?" />
+<!-- ERROR MESSAGES-->
+  <message ident="00041" text="ERREUR FATALE, l'administrateur système sera informé." />
+  <message ident="00042" text="Vous n'avez accès à aucun formulaire." />
+<!-- EXCEL READER (APPS.COMMON)-->
+  <message ident="00043" text="Erreur de lecture ligne" />
+  <message ident="00044" text="Erreur fermeture" />
+  <message ident="00045" text="Erreur de structure sur ligne/champ " />
+  <message ident="00046" text="Erreur champ vide sur ligne/champ " />
+  <message ident="00047" text="Champ ne represente pas une date sur ligne/champ" />
+  <message ident="00048" text="Champ ne represente pas une valeur boolean sur ligne/champ" />
+  <message ident="00049" text="Champ ne represente pas une date sur ligne/champ" />
+  <message ident="00050" text="Champ ne represente pas une chaine sur ligne/champ" />
+  <message ident="00051" text="Champ ne represente pas un entier sur ligne/champ" />
+  <message ident="00052" text="Champ ne represente pas un nombre a virgule fixe sur ligne/champ" />
+<!-- LOGIN (APPS.COMMON)-->
+  <message ident="00053" text="Impossible de charger le pilote de base de données" />
+  <message ident="00054" text="Erreur durant la connection à la base de données" />
+<!-- MAIL (APPS.COMMON)-->
+  <message ident="00055" text="L'emetteur n'a pas d'adresse mail" />
+  <message ident="00056" text="Impossible d'envoyer." />
+<!-- INFO TEXTS-->
+  <message ident="00057" text="Aucune donnée à afficher." />
+  <message ident="00058" text="Opération annulée." />
+<!-- ERRORS-->
+  <message ident="00059" text="Erreur de saisie: Période saisie incorrecte." />
+  <message ident="00060" text="La précision {0} est plus grande que la précision maximale permise {1}" />
+  <message ident="00061" text="le parametre {0} est faux, la liste des parametres possibles est : {1} avec x le numéro de la colonne." />
+  <message ident="00062" text="{0} n'est pas un numéro." />
+  <message ident="00063" text="Le numéro de la colonne est faux : {0}, choisis une colonne depuis la liste."/>
+  <message ident="00064" text="Une exception s'est produite lors du parsing de l'expression : {0} {1}"/>
+  <message ident="00065" text="Ce texte est trop long pour ce champ : max {0} * {1} caractères"/>
+  <message ident="00066" text="Impossible de calculer cette formule."/>
+  <message ident="00067" text="Attendez s'il vous plaît ..." />
+  <message ident="00068" text="Maximum {0} caractères" />
+  <message ident="00069" text="Profondeur maximale de l'arbre : {0} niveaux" />
+</messages>
