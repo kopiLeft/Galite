@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
 
@@ -41,12 +42,14 @@ import org.kopi.galite.type.Date
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
+import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -76,7 +79,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               indices: Int,
               priority: Int,
               commands: Array<VCommand>?,
-              pos: VPosition,
+              pos: VPosition?,
               align: Int,
               alias: VField?) {
     this.name = name
@@ -541,7 +544,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       } else if (hasTrigger(VConstants.TRG_FLDACCESS)) {
         // evaluate ACCESS-Trigger
         val oldRow = block!!.activeRecord
-        val old = block!!.activeField!!
+        val old = block!!.activeField
 
         // used by callTrigger
         block!!.activeRecord = current
@@ -913,7 +916,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setInt(r: Int, v: Int) {
+  open fun setInt(r: Int, v: Int?) {
     throw InconsistencyException()
   }
 
@@ -1448,8 +1451,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   private fun checkList() {
-    TODO()
-    /*if (!getForm().forceCheckList()) {
+    if (!getForm().forceCheckList()) {
       // Oracle doesn't force the value to be in the list
       return
     }
@@ -1599,7 +1601,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
         else -> throw InconsistencyException(threadInfo() + "count = " + count)
       }
-    }*/
+    }
   }
 
   /**

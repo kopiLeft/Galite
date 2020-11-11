@@ -27,7 +27,7 @@ class FieldLocalizer(manager: LocalizationManager, private val self: Element) : 
   /**
    * Returns the value of the label attribute.
    */
-  fun getLabel(): String = self.getAttributeValue("label")
+  fun getLabel(): String? = self.getAttributeValue("label")
 
   /**
    * Returns the value of the help attribute.

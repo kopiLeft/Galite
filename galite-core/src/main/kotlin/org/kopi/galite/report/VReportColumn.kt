@@ -106,7 +106,7 @@ abstract class VReportColumn(
     if (!isHidden() && ident != "") {
       val loc: FieldLocalizer = parent.getFieldLocalizer(ident!!)
 
-      label = loc.getLabel()
+      label = loc.getLabel() ?: ""
       help = loc.getHelp()
       localize(loc)
     }
