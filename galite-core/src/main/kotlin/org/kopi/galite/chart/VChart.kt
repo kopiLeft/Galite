@@ -372,7 +372,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * @param dimensions The dimension value.
    * @param measures The measures values.
    */
-  protected fun addRow(dimensions: Array<Any>, measures: Array<Any>) {
+  protected fun addRow(dimensions: Array<Any?>, measures: Array<Any?>) {
     rows.add(VRow(dimensions, measures))
   }
 

@@ -2374,7 +2374,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip : String = "" // help text
+  var toolTip : String? = null // help text
     private set
 
   private var index = 0 // The position in parent field array
