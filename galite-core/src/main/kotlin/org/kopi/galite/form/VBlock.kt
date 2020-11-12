@@ -19,6 +19,7 @@
 package org.kopi.galite.form
 
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.*
 import org.kopi.galite.form.VConstants.Companion.ACS_HIDDEN
@@ -1748,59 +1749,58 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   protected fun fetchLookup(table: Int, currentField: VField) {
 
-    val tab = object : Table(tables!![table]) {
+    val tab = object : Table(tables!![table]) {}
+    val columns = mutableListOf<Column<String>>()
+    val conditions = mutableListOf<Op<Boolean>>()
 
-      val headbuff = mutableListOf<String>() // columns to select
-
-      val condbuff = mutableListOf<Op<Boolean>>()  // search condition
-
-      init {
-        headbuff.forEach {
-          varchar(it, 15)
-        }
-      }
-    }
-
-    // clears all fields of lookup except the key(s)
-    // the specified field is considered to be a key
     for (i in fields.indices) {
       val f = fields[i]
 
-      //affecter null a f
       if (f !== currentField && f.lookupColumn(table) != null && !f.isLookupKey(table)) {
         f.setNull(activeRecord)
       }
     }
 
     for (i in fields.indices) {
-      if (fields[i] === currentField || fields[i].isLookupKey(table)) {
-        val column = fields[i].lookupColumn(table)
-        val fldbuff = fields[i].getSearchCondition()
-        val flbf : Op<Boolean>? = fldbuff!! as Op<Boolean>?
-        if (fldbuff == null || !fldbuff.startsWith("= ")) {
-          tab.headbuff.add(column!!)
-          tab.condbuff.add(flbf!!)
+      val column = fields[i].lookupColumn(table)
+      val col = Column<String>(tab, column!!, VarCharColumnType())
+
+
+      if (column != null) {
+        columns.add(col)
+      }
+      if (fields[i] == currentField || fields[i].isLookupKey(table)) {
+        val condition = fields[i].getSearchCondition()
+
+        val cond = object : Op<Boolean>() {
+          override fun toQueryBuilder(queryBuilder: QueryBuilder) {
+            TODO("Not yet implemented")
+          }
+        }
+
+        if (condition == null || !condition.startsWith("= ")) {
+          conditions.add(cond)
         }
       }
     }
+
     try {
       transaction {
-        addLogger(StdOutSqlLogger)
-        for (i in 0 until tab.headbuff.size) {
-          val query : org.jetbrains.exposed.sql.Query = tab.slice(tab.columns)
-                  .select { tab.condbuff[i] }
-          if (query.toList().isEmpty() == null) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                    arrayOf<Any>(tables!![table])))
-          }
-          else if (query.toList().isEmpty() != null)
-          {
+        var t : Op<Boolean> = conditions[0]
+        conditions.minusElement(t).forEach {
+          t = t and it
+        }
 
-              throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                      arrayOf<Any>(tables!![table])))
-            }
-          }
-                commit() // !!! END_SYNC();
+        val query = tab.slice(columns).select (t)
+
+        if (query.toList().isEmpty()) {
+          throw VExecFailedException(MessageCode.getMessage("VIS-00016",
+                  arrayOf<Any>(tables!![table])))
+        } else if (query.toList().isNotEmpty()) {
+
+          throw VExecFailedException(MessageCode.getMessage("VIS-00020",
+                  arrayOf<Any>(tables!![table])))
+        }
       }
     } catch (e: SQLException) {
       throw VExecFailedException("XXXX !!!!" + e.message)
