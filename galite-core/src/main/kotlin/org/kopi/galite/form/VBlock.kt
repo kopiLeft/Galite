@@ -18,30 +18,9 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Table
-import java.sql.SQLException
-import java.util.EventListener
-
-import javax.swing.event.EventListenerList
-
-import kotlin.collections.HashMap
-
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.db.DBDeadLockException
-import org.kopi.galite.db.DBForeignKeyException
-import org.kopi.galite.db.DBInterruptionException
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.db.*
 import org.kopi.galite.form.VConstants.Companion.ACS_HIDDEN
 import org.kopi.galite.form.VConstants.Companion.ACS_MUSTFILL
 import org.kopi.galite.form.VConstants.Companion.ACS_SKIPPED
@@ -75,7 +54,15 @@ import org.kopi.galite.form.VConstants.Companion.TRG_TYPES
 import org.kopi.galite.form.VConstants.Companion.TRG_VALBLK
 import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
 import org.kopi.galite.form.VConstants.Companion.TRG_VOID
+import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.*
+import java.sql.SQLException
+import java.util.*
+import javax.swing.event.EventListenerList
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1760,7 +1747,64 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   protected fun fetchLookup(table: Int, currentField: VField) {
-    TODO()
+
+    val tab = object : Table(tables!![table]) {
+
+      val headbuff = mutableListOf<String>() // columns to select
+
+      val condbuff = mutableListOf<Op<Boolean>>()  // search condition
+
+      init {
+        headbuff.forEach {
+          varchar(it, 15)
+        }
+      }
+    }
+
+    // clears all fields of lookup except the key(s)
+    // the specified field is considered to be a key
+    for (i in fields.indices) {
+      val f = fields[i]
+
+      //affecter null a f
+      if (f !== currentField && f.lookupColumn(table) != null && !f.isLookupKey(table)) {
+        f.setNull(activeRecord)
+      }
+    }
+
+    for (i in fields.indices) {
+      if (fields[i] === currentField || fields[i].isLookupKey(table)) {
+        val column = fields[i].lookupColumn(table)
+        val fldbuff = fields[i].getSearchCondition()
+        val flbf : Op<Boolean>? = fldbuff!! as Op<Boolean>?
+        if (fldbuff == null || !fldbuff.startsWith("= ")) {
+          tab.headbuff.add(column!!)
+          tab.condbuff.add(flbf!!)
+        }
+      }
+    }
+    try {
+      transaction {
+        addLogger(StdOutSqlLogger)
+        for (i in 0 until tab.headbuff.size) {
+          val query : org.jetbrains.exposed.sql.Query = tab.slice(tab.columns)
+                  .select { tab.condbuff[i] }
+          if (query.toList().isEmpty() == null) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00016",
+                    arrayOf<Any>(tables!![table])))
+          }
+          else if (query.toList().isEmpty() != null)
+          {
+
+              throw VExecFailedException(MessageCode.getMessage("VIS-00020",
+                      arrayOf<Any>(tables!![table])))
+            }
+          }
+                commit() // !!! END_SYNC();
+      }
+    } catch (e: SQLException) {
+      throw VExecFailedException("XXXX !!!!" + e.message)
+    }
   }
 
   fun refreshLookup(record: Int) {
@@ -2557,7 +2601,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() = form.dBContext
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
-  override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
+  override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
 
@@ -2886,7 +2930,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
-  protected var tables: Array<String>? = null // names of database tables
+  var tables: Array<String>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
@@ -2900,6 +2944,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   lateinit var fields: Array<VField> // fields
   protected lateinit var VKT_Triggers: Array<IntArray>
+
   // dynamic data
   var activeRecord = 0 // current record
     get() {
