@@ -24,7 +24,7 @@ package org.kopi.galite.chart
  * @param ident The column identifier.
  * @param format The dimension format ?
  */
-class VStringDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+class VStringDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------

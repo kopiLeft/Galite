@@ -32,5 +32,5 @@ class FieldLocalizer(manager: LocalizationManager, private val self: Element) : 
   /**
    * Returns the value of the help attribute.
    */
-  fun getHelp(): String = self.getAttributeValue("help")
+  fun getHelp(): String? = self.getAttributeValue("help")
 }

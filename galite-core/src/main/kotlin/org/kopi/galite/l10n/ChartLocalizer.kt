@@ -37,7 +37,7 @@ class ChartLocalizer(manager: LocalizationManager, document: Document) : Localiz
   /**
    * Returns the value of the help attribute.
    */
-  fun getHelp(): String = root.getAttributeValue("help")
+  fun getHelp(): String? = root.getAttributeValue("help")
 
   /**
    * Constructs a field localizer for the given field.

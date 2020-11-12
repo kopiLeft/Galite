@@ -26,7 +26,7 @@ import org.kopi.galite.visual.VColor
  * @param ident The measure identifier.
  * @param color The color to be used.
  */
-abstract class VMeasure protected constructor(ident: String, var color: VColor) : VColumn(ident) {
+abstract class VMeasure protected constructor(ident: String, var color: VColor?) : VColumn(ident) {
   /**
    * Returns the number representation of the given value.
    * @param value

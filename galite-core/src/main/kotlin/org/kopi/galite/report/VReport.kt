@@ -471,7 +471,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   // ----------------------------------------------------------------------
   override fun executeVoidTrigger(VKT_Type: Int) {}
 
-  fun executeObjectTrigger(VKT_Type: Int): Any = throw InconsistencyException("SHOULD BE REDEFINED")
+  open fun executeObjectTrigger(VKT_Type: Int): Any = throw InconsistencyException("SHOULD BE REDEFINED")
 
   fun executeBooleanTrigger(VKT_Type: Int): Boolean = throw InconsistencyException("SHOULD BE REDEFINED")
 
