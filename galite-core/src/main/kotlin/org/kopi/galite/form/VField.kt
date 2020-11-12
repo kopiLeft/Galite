@@ -18,38 +18,40 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.intLiteral
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.awt.Color
-import java.io.InputStream
-
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
-import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.Query
 import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.Week
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.VModel
+import java.awt.Color
+import java.io.InputStream
 import java.sql.SQLException
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -419,8 +421,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * enter a field
    */
   fun enter() {
-    assert(block === getForm().getActiveBlock()) { threadInfo() + "field : " + name + " block : " + block!!.name +
-            " active block : " + getForm().getActiveBlock()!!.name }
+    assert(block === getForm().getActiveBlock()) {
+      threadInfo() + "field : " + name + " block : " + block!!.name +
+              " active block : " + getForm().getActiveBlock()!!.name
+    }
     assert(block!!.activeRecord != -1) { threadInfo() + "current record = " + block!!.activeRecord }
     assert(block!!.activeField == null) { threadInfo() + "current field: " + block!!.activeField }
     block!!.activeField = this
@@ -617,7 +621,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable()}?.key ?: false
+  fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
 
   /**
    * Is the field part of given index ?
@@ -636,7 +640,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getSearchType(): Int {
     return if (isNull(block!!.activeRecord)) {
-      when(getSearchOperator()) {
+      when (getSearchOperator()) {
         VConstants.SOP_EQ -> VConstants.STY_NO_COND
         VConstants.SOP_NE -> VConstants.STY_MANY
         else -> VConstants.STY_EXACT
@@ -657,7 +661,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getSearchCondition(): String? {
     return if (isNull(block!!.activeRecord)) {
-      when(getSearchOperator()) {
+      when (getSearchOperator()) {
         VConstants.SOP_EQ -> null
         VConstants.SOP_NE -> "IS NOT NULL"
         else -> "IS NULL"
@@ -1104,7 +1108,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun isNull(r: Int): Boolean  = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+  fun isNull(r: Int): Boolean = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
     callSafeTrigger(VConstants.TRG_VALUE) == null
   } else isNullImpl(r)
 
@@ -1329,12 +1333,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     fireColorChanged = false
     if (this.foreground[r] == null && foreground != null
-        || this.foreground[r] != null && this.foreground[r]!! != foreground) {
+            || this.foreground[r] != null && this.foreground[r]!! != foreground) {
       this.foreground[r] = foreground
       fireColorChanged = true
     }
     if (this.background[r] == null && background != null
-        || this.background[r] != null && this.background[r]!! != foreground) {
+            || this.background[r] != null && this.background[r]!! != foreground) {
       this.background[r] = background
       fireColorChanged = true
     }
@@ -1405,8 +1409,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun isInternal(): Boolean {
     return access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
   }
 
   // ----------------------------------------------------------------------
@@ -1441,7 +1445,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Marks the field changed, trails the record if necessary
    */
   fun setChanged(changed: Boolean) {
-    if (changed && block!!.activeRecord!= -1) {
+    if (changed && block!!.activeRecord != -1) {
       block!!.setRecordChanged(block!!.activeRecord, true)
     }
     this.changed = changed
@@ -1450,59 +1454,37 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
-  private fun checkList() {
-    if (!getForm().forceCheckList()) {
-      // Oracle doesn't force the value to be in the list
-      return
-    }
-    val SELECT_IS_IN_LIST = " SELECT   1                                      " +
-            " FROM     $2                                     " +
-            " WHERE    $1 = $3"
-
+  open fun checkList() {
     val SELECT_MATCHING_STRINGS = " SELECT   $1                                     " +
             " FROM     $2                                     " +
             " WHERE    {fn SUBSTRING($1, 1, {fn LENGTH(#3)})} = #3    " +
             " ORDER BY 1"
+    if (isNull(block.activeRecord) || list == null) {
+      return
+    }
 
-    if (isNull(block!!.activeRecord)) {
-      return
-    }
-    if (list == null) {
-      return
-    }
     val alreadyProtected: Boolean = getForm().inTransaction()
     if (this !is VStringField) {
-      var exists = false
-
+      var exists: Boolean = false
       try {
         while (true) {
           try {
-            if (!alreadyProtected) {
-            }
-            SELECT_IS_IN_LIST.replace("$2", evalListTable())
-            SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
             transaction {
-              exec(SELECT_IS_IN_LIST) {exists = it.next()}
-            }
-            if (!alreadyProtected) {
+              val auxTable = object : Table(evalListTable()) {
+                val column = varchar(list!!.getColumn(0).column!!,
+                                     list!!.getColumn(0).column!!.length)
+              }
+              exists = auxTable.select {
+                auxTable.column eq getSql(block!!.activeRecord).toString()
+              }.map { 1 }.isNotEmpty()
             }
             break
           } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
+            throw e
           } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
+            throw error
           } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+            throw rte
           }
         }
       } catch (e: Throwable) {
@@ -1513,63 +1495,49 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
       return
     } else {
+      var query: Query
       var count = 0
       var result: String? = null
-      val fldbuf = getSql(block!!.activeRecord)!!
-
-      if (fldbuf.indexOf('*') > 0) {
+      val fldbuf: String? = getSql(block!!.activeRecord)
+      if (fldbuf!!.indexOf('*') > 0) {
         return
       }
       try {
         while (true) {
           try {
-            if (!alreadyProtected) {
-            }
-            SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
-            SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
             transaction {
-              exec(SELECT_MATCHING_STRINGS) {
-                if (!it.next()) {
-                  count = 0
-                } else {
-                  count = 1
-                  result = it.getString(1)
-                  if (it.next()) {
-                    count = 2
-                  }
-                }
+              val auxTable = object : Table(evalListTable()) {
+                val column = varchar(list!!.getColumn(0).column!!,
+                                     list!!.getColumn(0).column!!.length)
               }
-            }
 
-            if (!alreadyProtected) {
+              val substring = auxTable.column.substring(1,getString(block!!.activeRecord).length)
+            val query = auxTable.slice(substring)
+                      .select (substring eq getString(block!!.activeRecord))
+                      .orderBy(auxTable.column)
+           count = query.count()
+           if(count == 1) result = list!!.getColumn(0).column!!
+
             }
             break
+
           } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
+            throw e
           } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
+            throw error
           } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+            throw rte
           }
         }
       } catch (e: Throwable) {
         throw VExecFailedException(e)
       }
+
       when (count) {
         0 -> throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
         1 -> {
           if (result != getString(block!!.activeRecord)) {
-            setString(block!!.activeRecord, result!!)
+            setString(block!!.activeRecord, result)
           }
           return
         }
@@ -1579,7 +1547,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           val qrybuf: String
           var colbuf = ""
           var i = 0
-
           while (i < list!!.columnCount()) {
             if (i != 0) {
               colbuf += ", "
@@ -1591,11 +1558,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                   " FROM     " + evalListTable() +
                   " WHERE    {fn SUBSTRING(" + list!!.getColumn(0).column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
                   " ORDER BY 1"
-          result = displayQueryList(qrybuf, list!!.columns) as String?
+          result = displayQueryList(qrybuf, list.columns) as String?
           if (result == null) {
             throw VExecFailedException() // no message to display
           } else {
-            setString(block!!.activeRecord, result!!)
+            setString(block!!.activeRecord, result)
             return
           }
         }
@@ -1603,6 +1570,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }
   }
+
 
   /**
    * Checks that field value exists in list
@@ -1749,7 +1717,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   internal fun selectFromList(gotoNextField: Boolean) {
-    val qrybuf =  buildString{
+    val qrybuf = buildString {
       append("SELECT ")
       for (i in 0 until list!!.columnCount()) {
         if (i != 0) {
@@ -2010,8 +1978,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                        lab ?: name,
                        toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
-          || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
-          || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
+              || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
+              || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
         helpOnType(help)
         help.helpOnFieldCommand(command)
       }
@@ -2336,18 +2304,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * any value
    * @return    the width of this field
    */
-  var width = 0// max # of chars per line
-  protected set
+  var width = 0
+    // max # of chars per line
+    protected set
 
   /**
    * The height of a field is the max number of line needed to display
    * any value
    * @return    the width of this field
    */
-  var height  = 0 // max # of lines
+  var height = 0 // max # of lines
     protected set
 
-  private lateinit var access : IntArray // access in each mode
+  private lateinit var access: IntArray // access in each mode
 
   private var priority = 0  // order in select results
 
@@ -2360,7 +2329,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   lateinit var name: String   // field name (for dumps)
     private set
 
-  var label : String? = null // field label
+  var label: String? = null // field label
     set(label) {
       field = label
       fireLabelChanged()
@@ -2376,7 +2345,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip : String? = null // help text
+  var toolTip: String? = null // help text
     private set
 
   private var index = 0 // The position in parent field array
