@@ -1,3 +1,21 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 package org.kopi.galite.util.lpr
 
 import java.io.ByteArrayInputStream
@@ -17,6 +35,10 @@ import kotlin.collections.ArrayList
  * This class encapsulates the communication with a LPD host
  */
 internal class LpdClient(var options: LpdOptions) {
+
+  // --------------------------------------------------------------------
+  // CONNECTION
+  // --------------------------------------------------------------------
 
   /**
    * Connects to the LPD server
@@ -40,6 +62,7 @@ internal class LpdClient(var options: LpdOptions) {
       options.remotePort = if (options.proxyHost != null) PROXY_PORT else REMOTE_PORT
     }
     val remoteHost = InetAddress.getByName(if (options.proxyHost != null) options.proxyHost else options.printHost)
+
     if (options.bindSourcePort) {
       var port = SOURCE_PORT_LOW
       while (connection == null && port <= SOURCE_PORT_HIGH) {
@@ -64,6 +87,7 @@ internal class LpdClient(var options: LpdOptions) {
     connection!!.soTimeout = options.timeout
     inputStream = DataInputStream(connection!!.getInputStream())
     outputStream = DataOutputStream(connection!!.getOutputStream())
+
     if (options.proxyHost != null) {
       outputStream!!.writeBytes("${options.printHost}\n")
     }
@@ -86,7 +110,7 @@ internal class LpdClient(var options: LpdOptions) {
   }
 
   /**
-   * Returns true iff the connection to the LPD server is established.
+   * Returns true if the connection to the LPD server is established.
    */
   val isConnected: Boolean
     get() = connection != null

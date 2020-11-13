@@ -147,6 +147,7 @@ open class LpR {
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
+
   /**
    * Sets the user
    */
@@ -257,6 +258,7 @@ open class LpR {
   // --------------------------------------------------------------------
   // UTILITIES METHODS
   // --------------------------------------------------------------------
+
   protected open fun readFully(inputStream: InputStream): ByteArray {
     val size = inputStream.available()
     val data = ByteArray(size)
@@ -272,6 +274,7 @@ open class LpR {
   // --------------------------------------------------------------------
   // PRIVATE METHODS
   // --------------------------------------------------------------------
+
   private fun initControl() {
     control = StringBuffer()
     addControl('H', client.printHost)
@@ -324,9 +327,11 @@ open class LpR {
   private var client: LpdClient
 
   companion object {
+
     // --------------------------------------------------------------------
     // ENTRY POINT
     // --------------------------------------------------------------------
+
     /**
      * Program entry point
      * @exception    org.kopi.galite.util.lpr.LpdException    problem during communication with lpd

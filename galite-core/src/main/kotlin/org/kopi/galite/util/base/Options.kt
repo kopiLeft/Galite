@@ -31,13 +31,13 @@ abstract class Options(private val name: String?) {
   /**
    * Parses the command line and processes the arguments.
    *
-   * @param        args                the command line arguments
-   * @return true iff the command line is valid
+   * @param        argv               the command line arguments
+   * @return true if the command line is valid
    */
   fun parseCommandLine(argv: Array<String>): Boolean {
     val parser = Getopt(name, argv, shortOptions, longOptions, true)
     while (true) {
-      var code: Int = parser.getopt()
+      val code = parser.getopt()
 
       if (code == -1) {
         break
@@ -87,7 +87,7 @@ abstract class Options(private val name: String?) {
       var i = options.size
       while (--i >= 0) {
         for (j in 0 until i) {
-          if (options[j]!!.compareTo(options[j + 1]!!) > 0) {
+          if (options[j]!! > options[j + 1]!!) {
             val tmp = options[j]
             options[j] = options[j + 1]
             options[j + 1] = tmp

@@ -24,6 +24,7 @@ import gnu.getopt.LongOpt
 import org.kopi.galite.util.base.Options
 
 open class LpdOptions @JvmOverloads constructor(name: String? = "Lpd") : Options(name) {
+
   var localHost = "localhost"
   var printHost = "localhost"
   var proxyHost: String? = null
@@ -101,7 +102,7 @@ open class LpdOptions @JvmOverloads constructor(name: String? = "Lpd") : Options
   }
 
   override fun usage() {
-    System.err.println("usage: org.kopi.lpd.Dummy")
+    System.err.println("usage: org.kopi.galite.lpd.Dummy")
   }
 
   override val longOptions: Array<LongOpt?>

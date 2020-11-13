@@ -22,6 +22,7 @@ import gnu.getopt.Getopt
 import gnu.getopt.LongOpt
 
 class LpROptions @JvmOverloads constructor(name: String? = "LpR") : LpdOptions(name) {
+
   var copies = 1
   var filetype = "l"
   var indent = -1
@@ -123,7 +124,7 @@ class LpROptions @JvmOverloads constructor(name: String? = "LpR") : LpdOptions(n
   }
 
   override fun usage() {
-    System.err.println("usage: org.kopi.LpR.Main [options] <files>")
+    System.err.println("usage: org.kopi.galite.util.lpr.LpR.Main [options] <files>")
   }
 
   override val longOptions: Array<LongOpt?>
