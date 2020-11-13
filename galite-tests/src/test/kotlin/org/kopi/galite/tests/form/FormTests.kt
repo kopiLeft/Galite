@@ -22,10 +22,13 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.Table
 
 import org.junit.Test
+import org.kopi.galite.chart.Chart
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.visual.WindowController
+import java.awt.event.KeyEvent
 
 class FormTests: JApplicationTestBase() {
   object User: Table() {
@@ -37,6 +40,15 @@ class FormTests: JApplicationTestBase() {
   object TestForm: Form() {
     override val locale = Locale.FRANCE
     override val title = "form for test"
+
+    val graph = actor (
+      menu =  "Action",
+      label = "Graphe",
+      help =  "Representer les valeurs en graphe"
+    ) {
+      key  =  KeyEvent.VK_F9  // key is optional here
+      icon =  "column_chart"  // icon is optional here
+    }
 
     init {
       page("test page") {
@@ -53,19 +65,29 @@ class FormTests: JApplicationTestBase() {
             help = "The user name"
             columns(u.name)
           }
-          val age = mustFill(Domain<Int>(3)) {
+          val age = visit(Domain<Int>(3)) {
             label = "age"
             help = "The user age"
             columns(u.age)
+          }
+
+          command(item = graph) {
+            action = {
+              WindowController.windowController.doNotModal(CommandesC(id.value))
+            }
           }
         }
       }
     }
   }
 
+  class CommandesC(fournisseur: Int?): Chart() {
+    override val title: String = "Fournisseur"
+  }
+
   @Test
   fun simpleFormTest() {
-    //val formModel = TestForm.formModel
+    //val formModel = TestForm.model
     //assertEquals("org.kopi.galite.tests.form.FormTests", formModel.source) TODO
   }
 }

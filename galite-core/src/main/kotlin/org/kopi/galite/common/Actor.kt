@@ -17,24 +17,31 @@
  */
 package org.kopi.galite.common
 
-import java.util.Locale
-
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
-import org.kopi.galite.visual.VWindow
-
 /**
- * This class represents the definition of a window
+ * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
+ * and a help
  *
- * @param where                the token reference of this node
- * @param title                the title of this form
- * @param superName                the type of the form
+ * @param menu                the containing menu
+ * @param label                the label
+ * @param help                the help
+ * @param key                        the shortcut
+ * @param icon                the icon
  */
-abstract class Window {
-  abstract val title: String
-  open val locale: Locale? = null
-  var options: Int? = null
-  lateinit var commands: Array<VCommand>
-  lateinit var triggers: Array<VTrigger>
-  abstract val model: VWindow
+class Actor(val menu: String, val label: String, val help: String) {
+
+  var key: Int? = null
+  var icon: String? = null
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!!FIX:taoufik
+   */
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genActorDefinition(label, label, help)
+  }
+
+  private var keyCode = 0
+  private var keyModifier = 0
 }

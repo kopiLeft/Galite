@@ -18,6 +18,7 @@
 
 package org.kopi.galite.ui.visual
 
+import org.kopi.galite.common.Window
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.WindowController
 
@@ -27,6 +28,10 @@ class VWindowController : WindowController() {
   }
 
   override fun doNotModal(model: VWindow) {
+    TODO("Not yet implemented")
+  }
+
+  override fun doNotModal(model: Window) {
     TODO("Not yet implemented")
   }
 }

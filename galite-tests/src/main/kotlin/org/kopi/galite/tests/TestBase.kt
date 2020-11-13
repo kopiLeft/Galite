@@ -29,7 +29,9 @@ open class TestBase {
    * Tests operation on a chart.
    */
   fun withChart(chartInit: Chart.() -> Unit) {
-    val chart = Chart("test")
+    val chart = object : Chart() {
+      override val title: String = "test"
+    }
     chart.chartInit()
   }
 

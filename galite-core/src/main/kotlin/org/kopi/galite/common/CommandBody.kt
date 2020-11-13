@@ -22,4 +22,6 @@ package org.kopi.galite.common
  * This class represent a command, ie a link between an actor and
  * an action
  */
-class CommandBody(private val actor: String)
+class CommandBody(private val actor: String) {
+
+}

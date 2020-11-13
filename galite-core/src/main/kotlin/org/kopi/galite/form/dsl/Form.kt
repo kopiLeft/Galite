@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VForm
@@ -27,6 +28,9 @@ import java.io.IOException
  */
 abstract class Form: Window() {
 
+  /** Form's actors. */
+  val actors = mutableListOf<Actor>()
+
   /** Form's blocks. */
   val formBlocks = mutableListOf<FormBlock>()
 
@@ -37,9 +41,23 @@ abstract class Form: Window() {
   var help: String? = null
 
   /**
+   * Adds a new actor to this form.
+   *
+   * @param menu                the containing menu
+   * @param label                the label
+   * @param help                 the help
+   */
+  fun actor(menu: String, label: String, help: String, init: Actor.() -> Unit): Actor {
+    val actor = Actor(menu, label, help)
+    actor.init()
+    actors.add(actor)
+    return actor
+  }
+
+  /**
    * Adds a new block to this form.
    *
-   * @param        buffer                the buffer size of this block
+   * @param        buffer                 the buffer size of this block
    * @param        visible                the number of visible elements
    */
   fun block(buffer: Int, visible: Int, title: String, init: FormBlock.() -> Unit): FormBlock {
@@ -52,7 +70,7 @@ abstract class Form: Window() {
   /**
    * Adds a new page to this form.
    *
-   * @param        tite                the title of the page
+   * @param        title                the title of the page
    */
   fun page(title: String, init: FormPage.() -> Unit): FormPage {
     val page = FormPage(title, title) // TODO
@@ -116,7 +134,7 @@ abstract class Form: Window() {
 
 
   /** Form model */
-  val formModel: VForm by lazy {
+  override val model: VForm by lazy {
     genLocalization()
 
     object : VForm() {

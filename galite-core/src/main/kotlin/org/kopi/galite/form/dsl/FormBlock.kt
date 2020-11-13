@@ -18,6 +18,7 @@
 package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Table
+import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.Trigger
@@ -59,8 +60,11 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
   lateinit var triggers: Array<Trigger>
   lateinit var dropListMap: HashMap<*, *>
 
-  /** Forms's fields. */
+  /** Blocks's fields. */
   val blockFields = mutableListOf<FormField<*>>()
+
+  /** Blocks's commands. */
+  val blockCommands = mutableListOf<Command>()
 
   /**
    * Adds the [table] to this block
@@ -133,6 +137,20 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
     field.init()
     blockFields.add(field)
     return field
+  }
+
+  /**
+   * Adds a new command to this block.
+   *
+   * @param domain  the domain of the field.
+   * @param init    initialization method.
+   * @return a field.
+   */
+  fun command(item: Actor, init: Command.() -> Unit): Command {
+    val command = Command()
+    command.init()
+    blockCommands.add(command)
+    return command
   }
 
   // ----------------------------------------------------------------------

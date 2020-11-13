@@ -157,7 +157,7 @@ abstract class Report: Window() {
 
 
   /** Report model*/
-  val reportModel: VReport by lazy {
+  override val model: VReport by lazy {
     genLocalization()
 
     object : VReport() {

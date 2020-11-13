@@ -24,4 +24,8 @@ package org.kopi.galite.common
  * @param modes                the menu name
  * @param body                 the command body
  */
-abstract class Command(protected var modes: Int, protected var body: CommandBody? = null)
+class Command() {
+  var modes: Int? = null
+  var body: CommandBody? = null
+  var action: (() -> Unit)? = null
+}

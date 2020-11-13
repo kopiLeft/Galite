@@ -67,6 +67,7 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null):
   var commands: Array<Command>? = null
   var triggers: Array<Trigger>? = null
   var alias: String? = null
+  var value: T? = null
 
   var block: FormBlock? = null
     private set
