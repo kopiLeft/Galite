@@ -42,7 +42,7 @@ class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Bo
   fun getQualifiedName(): String = "T$pos.$name"
 
   /**
-   * Returns wether ther column is a key
+   * Returns whether the column is nullable
    */
   fun isNullable(): Boolean {
    TODO()
