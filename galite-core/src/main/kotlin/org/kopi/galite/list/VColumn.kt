@@ -20,6 +20,8 @@ package org.kopi.galite.list
 
 import java.io.Serializable
 
+import org.jetbrains.exposed.sql.Column
+
 /**
  * Represents a column
  *
@@ -28,7 +30,7 @@ import java.io.Serializable
  * @param key column key of table
  * @param nullable true if column is nullable
  */
-class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean) : Serializable {
+class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean, val column: Column<Any>? = null) : Serializable {
 
   /**
    * Returns the position of the table in the array of tables

@@ -18,13 +18,17 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Table
 import java.sql.SQLException
 import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
 import kotlin.collections.HashMap
+
+import org.apache.poi.ss.formula.functions.T
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.VarCharColumnType
 
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.ActionHandler
@@ -1668,6 +1672,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
     return result
   }
+
+  /**
+   * Returns the database columns of block.
+   */
+  fun getSearchColumns(table: Table, ini: Int): List<Column<*>>? =
+          fields.map {
+            it.getColumn(0)!!.column!!
+          }
 
   /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
