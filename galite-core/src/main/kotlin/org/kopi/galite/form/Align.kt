@@ -5,5 +5,4 @@ enum class Align(val value: Int){
   CENTER (VConstants.ALG_CENTER),
   LEFT (VConstants.ALG_LEFT),
   RIGHT (VConstants.ALG_RIGHT),
-
 }

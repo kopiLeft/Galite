@@ -85,6 +85,4 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
    * @param The localization writer.
    */
   abstract fun genLocalization(writer: LocalizationWriter)
-
-
 }

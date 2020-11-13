@@ -112,8 +112,8 @@ abstract class Report: Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as ReportLocalizationWriter).genReport(title,
-            help,
-            fields)
+                                                   help,
+                                                   fields)
   }
 
   fun MReport.addReportColumns() {
