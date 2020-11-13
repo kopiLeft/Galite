@@ -52,7 +52,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
   var align: FormBlockAlign? = null
   val help: String? = null
   var options: Int = 0
-  var tables: MutableList<FormBlockTable> = mutableListOf()
+  var blockTables: MutableList<FormBlockTable> = mutableListOf()
   var indices: Array<FormBlockIndex> = arrayOf()
   lateinit var access: IntArray
   lateinit var commands: Array<Command?>
@@ -66,8 +66,8 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    * Adds the [table] to this block
    */
   fun <T: Table> table(table: T): T {
-    val formBlockTable = FormBlockTable(table.tableName, table.tableName)
-    tables.add(formBlockTable)
+    val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
+    blockTables.add(formBlockTable)
     return table
   }
 
@@ -153,8 +153,19 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
   /** Returns block model */
   fun getBlockModel(vForm: VForm): VBlock {
     return object : VBlock(vForm) {
-      init {
+      override fun setInfo() {
+        blockFields.forEach {
+          it.setInfo()
+        }
+      }
 
+      init {
+        super.tables = blockTables.map {
+          it.table
+        }.toTypedArray()
+        fields = blockFields.map {
+          it.getFieldModel()
+        }.toTypedArray()
       }
     }
   }

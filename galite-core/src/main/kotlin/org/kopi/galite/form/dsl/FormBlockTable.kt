@@ -17,13 +17,15 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.jetbrains.exposed.sql.Table
+
 /**
  * A block table information
  *
  * @param name                the name of the table
  * @param corr                the shortcut
  */
-class FormBlockTable(val name: String, val corr: String) {
+class FormBlockTable(val name: String, val corr: String, val table: Table) {
   /**
    * Check expression and evaluate and alter context
    * @param block        the actual context of analyse

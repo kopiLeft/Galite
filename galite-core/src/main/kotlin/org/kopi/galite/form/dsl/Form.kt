@@ -33,6 +33,7 @@ abstract class Form: Window() {
   /** Form's pages. */
   val pages = mutableListOf<FormPage>()
 
+  /** the help text TODO: Move to super class */
   var help: String? = null
 
   /**
@@ -121,7 +122,11 @@ abstract class Form: Window() {
     object : VForm() {
       override fun init() {
         source = sourceFile
-        blocks = formBlocks.map { it.getBlockModel(this) }.toTypedArray()
+        blocks = formBlocks.map { formBlock ->
+          formBlock.getBlockModel(this).also { vBlock ->
+            vBlock.setInfo(formBlock.pageNumber)
+          }
+        }.toTypedArray()
       }
 
       init {

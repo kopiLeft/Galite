@@ -20,11 +20,11 @@ package org.kopi.galite.report
 import java.io.File
 import java.io.IOException
 import java.lang.RuntimeException
-import java.util.Date
 
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.type.Date
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -125,7 +125,7 @@ abstract class Report: Window() {
           VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, it.domain.length ?: 0, null)
         Boolean::class ->
           VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
-        Date::class ->
+        Date::class, java.util.Date::class ->
           VDateColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         Month::class ->
           VMonthColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)

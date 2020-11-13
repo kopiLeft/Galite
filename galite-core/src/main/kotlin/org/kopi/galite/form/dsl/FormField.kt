@@ -17,13 +17,28 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.jetbrains.exposed.sql.Column
-import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
+import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.VDateField
+import org.kopi.galite.form.VField
+import org.kopi.galite.form.VIntegerField
+import org.kopi.galite.form.VMonthField
+import org.kopi.galite.form.VStringField
+import org.kopi.galite.form.VTimeField
+import org.kopi.galite.form.VTimestampField
+import org.kopi.galite.form.VWeekField
+import org.kopi.galite.type.Date
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
+
+import org.jetbrains.exposed.sql.Column
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -56,6 +71,9 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null):
   var block: FormBlock? = null
     private set
 
+  /** the alignment of the text */
+  var align: FieldAlignment = FieldAlignment.LEFT
+
   /**
    * Returns the index in parent array of fields
    */
@@ -65,11 +83,48 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null):
   /**
    * Assigns [columns] to this field.
    */
-  fun columns(fieldColumn: Column<T>, vararg joinColumns: Column<*>) {
+  fun columns(vararg joinColumns: Column<*>) {
     val cols = joinColumns.map {
       FormFieldColumn(it, it.table.tableName, it.name, true, true) // TODO
     }
     columns = FormFieldColumns(cols.toTypedArray(), index, 0) // TODO
+  }
+
+  lateinit var vField: VField
+
+  /**
+   * Returns the field model based on the field type.
+   */
+  fun getFieldModel(): VField {
+    return when(domain?.kClass) {
+      Int::class -> VIntegerField(domain?.length ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
+      String::class -> VStringField(domain?.length ?: 0, 0, 0, 0, false) // TODO
+      Boolean::class -> VBooleanField()
+      Date::class, java.util.Date::class -> VDateField()
+      Month::class -> VMonthField()
+      Week::class -> VWeekField()
+      Time::class -> VTimeField()
+      Timestamp::class -> VTimestampField()
+      else -> throw RuntimeException("Type ${domain?.kClass!!.qualifiedName} is not supported")
+    }.also { vField = it }
+  }
+
+  fun setInfo() {
+    vField.setInfo(
+            getIdent(),
+            index, // TODO
+            posInArray,
+            options,
+            access,
+            null, // TODO
+            null, // TODO
+            index, // TODO
+            0, // TODO
+            null, // TODO
+            null, // TODO
+            align.value,
+            null // TODO
+    )
   }
 
   // ----------------------------------------------------------------------
