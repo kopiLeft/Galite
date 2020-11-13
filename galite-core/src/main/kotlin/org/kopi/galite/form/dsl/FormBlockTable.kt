@@ -15,30 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
-package org.kopi.galite.list
-
-import org.jetbrains.exposed.sql.Column
-import java.io.Serializable
+package org.kopi.galite.form.dsl
 
 /**
- * Represents a column
+ * A block table information
  *
- * @param pos       position of associated table
- * @param name      column name
- * @param key       whether the column is a key
- * @param nullable  true if column is nullable
+ * @param name                the name of the table
+ * @param corr                the shortcut
  */
-class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean, val column: Column<*>? = null) : Serializable {
-
+class FormBlockTable(val name: String, val corr: String) {
   /**
-   * Returns the position of the table in the array of tables
-   * of the field's block
+   * Check expression and evaluate and alter context
+   * @param block        the actual context of analyse
+   * @exception        PositionedError        Error catched as soon as possible
    */
-  fun getTable(): Int = pos
-
-  /**
-   * Returns the qualified name of the column (i.e. with correlation)
-   */
-  fun getQualifiedName(): String = "T$pos.$name"
+  fun checkCode(block: FormBlock?) {
+    // don't do nothing now
+  }
 }

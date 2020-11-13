@@ -15,30 +15,32 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.form.dsl
 
-package org.kopi.galite.list
+import org.kopi.galite.common.LocalizationWriter
 
-import org.jetbrains.exposed.sql.Column
-import java.io.Serializable
 
 /**
- * Represents a column
+ * A block on a form
+ * A block contains fields and reference to database
  *
- * @param pos       position of associated table
- * @param name      column name
- * @param key       whether the column is a key
- * @param nullable  true if column is nullable
+ * @param     ident           the identifier of this block
+ * @param     shortcut        the shortcut of this block
  */
-class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean, val column: Column<*>? = null) : Serializable {
+abstract class FormElement(val ident: String) {
+
+  open lateinit var shortcut: String
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!!FIX:taoufik
+   */
+  abstract fun genLocalization(writer: LocalizationWriter)
 
   /**
-   * Returns the position of the table in the array of tables
-   * of the field's block
+   * Sets the page number
    */
-  fun getTable(): Int = pos
-
-  /**
-   * Returns the qualified name of the column (i.e. with correlation)
-   */
-  fun getQualifiedName(): String = "T$pos.$name"
+  var pageNumber = 0
 }

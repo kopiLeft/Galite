@@ -15,30 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.form.dsl
 
-package org.kopi.galite.list
-
-import org.jetbrains.exposed.sql.Column
-import java.io.Serializable
+import org.kopi.galite.common.LocalizationWriter
 
 /**
- * Represents a column
+ * A binding to database. This is a position given by x and y location
  *
- * @param pos       position of associated table
- * @param name      column name
- * @param key       whether the column is a key
- * @param nullable  true if column is nullable
+ * @param ident                  the identifier of the index
+ * @param message                the error message in the default locale
  */
-class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean, val column: Column<*>? = null) : Serializable {
+class
+FormBlockIndex(val ident: String, val message: String) {
 
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
   /**
-   * Returns the position of the table in the array of tables
-   * of the field's block
+   * !!!FIX:taoufik
    */
-  fun getTable(): Int = pos
-
-  /**
-   * Returns the qualified name of the column (i.e. with correlation)
-   */
-  fun getQualifiedName(): String = "T$pos.$name"
+  fun genLocalization(writer: LocalizationWriter) {
+    (writer as FormLocalizationWriter).genBlockIndex(ident, message)
+  }
 }

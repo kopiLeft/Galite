@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+package org.kopi.galite.tests.form
+
+import java.util.Locale
+
+import org.jetbrains.exposed.sql.Table
+
+import org.junit.Test
+
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.tests.JApplicationTestBase
+
+class FormTests: JApplicationTestBase() {
+  object User: Table() {
+    val id = integer("id")
+    val name = varchar("name", 20)
+    val age = integer("age")
+  }
+
+  object TestForm: Form() {
+    override val locale = Locale.FRANCE
+    override val title = "form for test"
+
+    init {
+      page("test page") {
+        val testBlock = block(1, 1, "Test block") {
+          val u = table(User)
+
+          val id = hidden(Domain<Int>(20)) {
+            label = "id"
+            help = "The user id"
+            columns(u.id)
+          }
+          val name = mustFill(Domain<String>(20)) {
+            label = "name"
+            help = "The user name"
+            columns(u.name)
+          }
+          val age = mustFill(Domain<Int>(3)) {
+            label = "age"
+            help = "The user age"
+            columns(u.age)
+          }
+        }
+      }
+    }
+  }
+
+  @Test
+  fun simpleFormTest() {
+    //val formModel = TestForm.formModel
+    //assertEquals("org.kopi.galite.tests.form.FormTests", formModel.source) TODO
+  }
+}

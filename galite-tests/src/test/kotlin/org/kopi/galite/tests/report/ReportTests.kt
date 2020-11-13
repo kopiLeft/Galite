@@ -24,7 +24,7 @@ import org.jdom2.input.SAXBuilder
 import org.junit.Test
 
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.Align
+import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.tests.VApplicationTestBase
 
@@ -100,13 +100,13 @@ class ReportTests: VApplicationTestBase() {
     val name = field(Domain<String>(20)) {
       label = "name"
       help = "The user name"
-      align = Align.LEFT
+      align = FieldAlignment.LEFT
     }
 
     val age = field(Domain<Int>(3)) {
       label = "age"
       help = "The user age"
-      align = Align.LEFT
+      align = FieldAlignment.LEFT
     }
 
     init {

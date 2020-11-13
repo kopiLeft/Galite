@@ -14,16 +14,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.report
 
-package org.kopi.galite.exceptions
-
-/**
- * Thrown to indicate that an invalid value has been passed to a field.
- *
- * @param value to pass
- * @param label the field's label
- *
- */
-class InvalidValueException(value: Comparable<*>, label: String?) : RuntimeException() {
-  override val message = "invalid value $value for the field $label"
+enum class FieldAlignment(val value: Int){
+  DEFAULT (Constants.ALG_DEFAULT),
+  CENTER (Constants.ALG_CENTER),
+  LEFT (Constants.ALG_LEFT),
+  RIGHT (Constants.ALG_RIGHT),
 }
