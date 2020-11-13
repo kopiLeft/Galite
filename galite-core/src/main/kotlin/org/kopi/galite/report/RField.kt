@@ -38,8 +38,6 @@ class RField<T : Comparable<T>>(override val domain: Domain<T>? = null): Field<T
   /** the ident of this field */
   private val ident: String get() = label
 
-  var align: Int = 0
-
   var options: Int = 0
 
   var group: String? = null

@@ -120,21 +120,21 @@ abstract class Report: Window() {
     columns = fields.map {
       when(it.domain?.kClass) {
         Int::class ->
-          VIntegerColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
+          VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         String::class ->
-          VStringColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, it.domain.length ?: 0, null)
+          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, it.domain.length ?: 0, null)
         Boolean::class ->
-          VBooleanColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
+          VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         Date::class ->
-          VDateColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
+          VDateColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         Month::class ->
-          VMonthColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
+          VMonthColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         Week::class ->
-          VWeekColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
+          VWeekColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         Time::class ->
-          VTimeColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
+          VTimeColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         Timestamp::class ->
-          VTimestampColumn(it.label, it.options, it.align, it.groupID, null, it.domain.length ?: 0, null)
+          VTimestampColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         else -> throw RuntimeException("Type ${it.domain?.kClass!!.qualifiedName} is not supported")
       }
     }.toTypedArray()
