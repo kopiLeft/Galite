@@ -1463,7 +1463,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       return
     }
 
-    val alreadyProtected: Boolean = getForm().inTransaction()
     if (this !is VStringField) {
       var exists: Boolean = false
       try {
@@ -1512,8 +1511,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
               val substring = auxTable.column.substring(1, getString(block!!.activeRecord).length)
               val query = auxTable.slice(substring)
-                      .select(substring eq getString(block!!.activeRecord))
+                      .select{
+                        substring eq getString(block!!.activeRecord)
+                      }
                       .orderBy(auxTable.column)
+
               count = query.count().toInt()
               if (count == 1) result = list!!.getColumn(0).column!!
             }
@@ -1577,7 +1579,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             while (true) {
               try {
                 val auxTable = object : Table(evalListTable()) {
-                  val column: VarCharColumnType? = null
                 }
 
                 val columnList: List<Column<String>> = colbuf.split(", ")
@@ -1585,14 +1586,20 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                           Column(auxTable, it.trim(), VarCharColumnType())
                         }
                 val indexOfColumn = columnList.indexOf(list!!.getColumn(0).column!!)
-                val substring = columnList[indexOfColumn].substring(1, fldbuf.length)
+                val column = columnList[indexOfColumn]
+                val substring = column.substring(1, fldbuf.length)
 
                 transaction {
-                  val queryResult = auxTable.slice(columnList)
-                          .select(substring eq fldbuf)
+                  val queryResult = auxTable.slice(column , substring)
+                          .select{
+                            substring eq fldbuf
+                          }
                           .orderBy(columnList[0])
 
-                  val queryList = queryResult.toList()
+                  //How to get the columns list only in list without substring ?
+                  val queryList = queryResult.map {
+                    it[column]
+                  }
                   lineCount = 0
                   queryList.forEachIndexed { index, resultRow ->
                     loop@ while (lineCount < MAX_LINE_COUNT - 1) {
@@ -1648,11 +1655,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                 while (true) {
                   try {
                     val auxTable = object : Table(evalListTable()) {
-                      val id = integer("ID").autoIncrement()
+                      val id = integer("ID")
                       val column = varchar(list!!.getColumn(0).column!!,
                                            list!!.getColumn(0).width)
-
-                      override val primaryKey = PrimaryKey(id, name = "ID")
                     }
 
                     transaction {
@@ -1689,7 +1694,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }
   }
-
 
   /**
    * Checks that field value exists in list
