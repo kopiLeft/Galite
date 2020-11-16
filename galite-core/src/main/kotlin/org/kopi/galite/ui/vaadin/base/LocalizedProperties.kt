@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
-import java.util.*
-
 /**
  * Localized properties.
  */

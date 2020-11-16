@@ -20,7 +20,7 @@ package org.kopi.galite.tests
 import java.util.Locale
 
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.ui.visual.VApplication
+import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.Registry
 
 /**
