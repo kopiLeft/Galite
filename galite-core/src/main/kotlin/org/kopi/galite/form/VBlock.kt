@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Table
 import java.sql.SQLException
 import java.util.EventListener
 
@@ -2886,6 +2887,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
   var tables: Array<String>? = null // names of database tables
+  var tables_: Array<Table>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
