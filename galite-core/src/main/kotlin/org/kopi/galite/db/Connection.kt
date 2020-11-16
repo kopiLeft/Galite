@@ -18,10 +18,13 @@
 
 package org.kopi.galite.db
 
-import java.sql.Connection
-
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.util.base.InconsistencyException
+import java.sql.Connection
+import java.sql.SQLException
 
 /**
  * A connection maintain information about current context, underlying
@@ -87,7 +90,31 @@ class Connection {
    * Retrieves the user ID of the current user
    */
   private fun setUserID() {
-    TODO()
+
+    if (user != USERID_NO_LOOKUP) {
+      if (userName == "root" || userName == "lgvplus" || userName == "tbadmin" || userName == "dba") {
+        user = USERID_NO_LOOKUP
+      } else {
+        try {
+          val KopiUsers = object : Table("kopi_users") {
+            val id = integer("ID")
+            val kurzname = varchar("Kurzname", 255)
+          }
+
+          transaction {
+            val query = with(KopiUsers) {
+              slice(id, kurzname).select {
+                kurzname eq userName
+              }.also { if (it.empty()) throw SQLException("user unknown") }
+            }
+            user = query.also { if (it.count() > 1) throw SQLException("different users with same name") }
+                    .first()[KopiUsers.id]
+          }
+        } catch (e: SQLException) {
+          throw InconsistencyException(e.message!!)
+        }
+      }
+    }
   }
 
   companion object {
@@ -106,5 +133,5 @@ class Connection {
   val userName: String
   val password: String?
   var dbConnection: Database
-  val user: Int = 0
+  var user: Int = 0
 }
