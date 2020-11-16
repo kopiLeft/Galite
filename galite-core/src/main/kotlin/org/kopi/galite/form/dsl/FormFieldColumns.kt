@@ -17,12 +17,11 @@
  */
 package org.kopi.galite.form.dsl
 
-
 /**
  * This class define a column list information
  *
- * @param columns                a vector of columns
- * @param indices                the indice of this column
+ * @param columns                 a vector of columns
+ * @param indices                 the indices of this column
  * @param priority                the priority in sorting
  */
 class FormFieldColumns(val columns: Array<FormFieldColumn?>,

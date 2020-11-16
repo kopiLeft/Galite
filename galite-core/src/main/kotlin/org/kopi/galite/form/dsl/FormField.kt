@@ -157,7 +157,6 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null):
       return true
     }
 
-
   /**
    * Returns the position in the array of fields
    */

@@ -41,9 +41,6 @@ class FormLocalizationWriter : LocalizationWriter() {
     // do not pop: this is the root element
   }
 
-  /**
-   *
-   */
   fun genBlockInsert(block: FormBlock) {
     val self = Element("blockinsert")
     pushNode(self)

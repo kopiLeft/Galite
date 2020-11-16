@@ -19,7 +19,6 @@ package org.kopi.galite.form.dsl
 
 import org.kopi.galite.common.LocalizationWriter
 
-
 /**
  * A block on a form
  * A block contains fields and reference to database

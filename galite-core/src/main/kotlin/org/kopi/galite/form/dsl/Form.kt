@@ -16,12 +16,13 @@
  */
 package org.kopi.galite.form.dsl
 
+import java.io.File
+import java.io.IOException
+
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VForm
-import java.io.File
-import java.io.IOException
 
 /**
  * Represents a form.
@@ -43,7 +44,7 @@ abstract class Form: Window() {
   /**
    * Adds a new actor to this form.
    *
-   * @param menu                the containing menu
+   * @param menu                 the containing menu
    * @param label                the label
    * @param help                 the help
    */
@@ -59,6 +60,7 @@ abstract class Form: Window() {
    *
    * @param        buffer                 the buffer size of this block
    * @param        visible                the number of visible elements
+   * @param        title                  the title of the block
    */
   fun block(buffer: Int, visible: Int, title: String, init: FormBlock.() -> Unit): FormBlock {
     val block = FormBlock(buffer, visible, title)
@@ -87,9 +89,9 @@ abstract class Form: Window() {
    * Get block
    */
   open fun getFormElement(ident: String?): FormElement? {
-    for (j in formBlocks.indices) {
-      if (formBlocks[j].ident == ident || formBlocks[j].shortcut == ident) {
-        return formBlocks[j]
+    formBlocks.forEach { formBlock ->
+      if (formBlock.ident == ident || formBlock.shortcut == ident) {
+        return formBlock
       }
     }
     return null
@@ -104,7 +106,8 @@ abstract class Form: Window() {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val destination = destination
-              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.packageName.replace(".", "/")
+              ?: this.javaClass.classLoader.getResource("")?.path +
+              this.javaClass.packageName.replace(".", "/")
       try {
         val writer = FormLocalizationWriter()
         genLocalization(writer)
@@ -118,8 +121,8 @@ abstract class Form: Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genForm(title,
-            pages.toTypedArray(),
-            formBlocks.toTypedArray()
+                                               pages.toTypedArray(),
+                                               formBlocks.toTypedArray()
     )
   }
 
@@ -131,7 +134,6 @@ abstract class Form: Window() {
       val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
     }
-
 
   /** Form model */
   override val model: VForm by lazy {

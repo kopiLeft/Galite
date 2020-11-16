@@ -32,19 +32,19 @@ import org.kopi.galite.form.VForm
  * A block contains fields and reference to database
  *
  * @param        buffer                the buffer size of this block
- * @param        visible                the number of visible elements
- * @param        ident                the simple identifier of this block
- * @param        shortcut        the shortcut of this block
- * @param        title                the title of the block
+ * @param        visible               the number of visible elements
+ * @param        ident                 the simple identifier of this block
+ * @param        shortcut              the shortcut of this block
+ * @param        title                 the title of the block
  * @param        border                the border of the block
- * @param        align                the type of alignment in form
- * @param        help                the help
- * @param        options                the options
+ * @param        align                 the type of alignment in form
+ * @param        help                  the help
+ * @param        options               the options
  * @param        tables                the tables accessed on the database
- * @param        indices                the indices for database
- * @param        access                the accessmode
- * @param        commands        the commands associated with this block
- * @param        triggers        the triggers executed by this form
+ * @param        indices               the indices for database
+ * @param        access                the access mode
+ * @param        commands              the commands associated with this block
+ * @param        triggers              the triggers executed by this form
  * @param        fields                the objects that populate the block
  */
 class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(ident), VConstants {
@@ -142,7 +142,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
   /**
    * Adds a new command to this block.
    *
-   * @param domain  the domain of the field.
+   * @param item    the actor linked to the command.
    * @param init    initialization method.
    * @return a field.
    */

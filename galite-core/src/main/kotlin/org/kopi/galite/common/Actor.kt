@@ -22,9 +22,9 @@ package org.kopi.galite.common
  * and a help
  *
  * @param menu                the containing menu
- * @param label                the label
+ * @param label               the label
  * @param help                the help
- * @param key                        the shortcut
+ * @param key                 the shortcut
  * @param icon                the icon
  */
 class Actor(val menu: String, val label: String, val help: String) {

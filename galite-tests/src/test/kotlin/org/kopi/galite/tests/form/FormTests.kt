@@ -17,18 +17,18 @@
  */
 package org.kopi.galite.tests.form
 
+import java.awt.event.KeyEvent
 import java.util.Locale
-
-import org.jetbrains.exposed.sql.Table
 
 import org.junit.Test
 import org.kopi.galite.chart.Chart
+
+import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.WindowController
-import java.awt.event.KeyEvent
 
 class FormTests: JApplicationTestBase() {
   object User: Table() {
