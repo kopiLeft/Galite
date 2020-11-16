@@ -128,4 +128,9 @@ class DBSchema {
 
     override val primaryKey = PrimaryKey(table , column)
   }
+
+  companion object {
+    val list_Of_Tables = listOf(Modules, UserRights, GroupRights, GroupParties, Symbols,
+            Favorites, Users, Groups, References)
+  }
 }

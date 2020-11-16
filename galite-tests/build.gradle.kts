@@ -23,6 +23,8 @@ plugins {
 val vaadinVersion = "17.0.0"
 val jdomVersion = "2.0.5"
 val karibuTestingVersion = "1.2.5"
+val h2Version = "1.4.199"
+val exposedVersion = "0.27.1"
 
 dependencies {
   implementation(project(":galite-core"))
@@ -45,6 +47,11 @@ dependencies {
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
 
   implementation("org.jdom", "jdom2", jdomVersion)
+
+// Exposed dependencies
+  implementation ("org.jetbrains.exposed", "exposed-core",exposedVersion)
+  implementation ("org.jetbrains.exposed", "exposed-jdbc",exposedVersion)
+  implementation("com.h2database", "h2", h2Version)
 }
 
 tasks {
