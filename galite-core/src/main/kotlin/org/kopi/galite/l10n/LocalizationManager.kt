@@ -87,7 +87,7 @@ class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale
    * @param     source          the source qualified name
    * @param     name            the identifier of the type
    */
-  fun getTypeLocalizer(source: String, name: String): TypeLocalizer {
+  fun getTypeLocalizer(source: String?, name: String?): TypeLocalizer {
     return TypeLocalizer(this, getDocument(source), name)
   }
 

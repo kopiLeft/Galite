@@ -27,11 +27,11 @@ package org.kopi.galite.report
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
  */
-class VIntegerColumn(ident: String,
+class VIntegerColumn(ident: String?,
                      options: Int,
                      align: Int,
                      groups: Int,
-                     function: VCalculateColumn,
+                     function: VCalculateColumn?,
                      width: Int,
                      format: VCellFormat?)
       : VReportColumn(ident,

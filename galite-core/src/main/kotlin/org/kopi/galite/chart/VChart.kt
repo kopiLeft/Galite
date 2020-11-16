@@ -372,7 +372,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * @param dimensions The dimension value.
    * @param measures The measures values.
    */
-  protected fun addRow(dimensions: Array<Any>, measures: Array<Any>) {
+  protected fun addRow(dimensions: Array<Any?>, measures: Array<Any?>) {
     rows.add(VRow(dimensions, measures))
   }
 
@@ -607,7 +607,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
 
   init {
     if (context != null) {
-      dBContext = context.getDBContext()
+      dBContext = context.dBContext
     }
     init()
     // localize the report using the default locale

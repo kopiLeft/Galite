@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
 
@@ -41,12 +42,14 @@ import org.kopi.galite.type.Date
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
+import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -75,10 +78,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               columns: Array<VColumn?>?,
               indices: Int,
               priority: Int,
-              commands: Array<VCommand>,
-              pos: VPosition,
+              commands: Array<VCommand>?,
+              pos: VPosition?,
               align: Int,
-              alias: VField) {
+              alias: VField?) {
     this.name = name
     this.index = index
     this.posInArray = posInArray
@@ -99,7 +102,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     position = pos
     command = commands
     this.alias = alias
-    alias.addFieldChangeListener(object : FieldChangeListener {
+    alias?.addFieldChangeListener(object : FieldChangeListener {
       override fun labelChanged() {}
       override fun searchOperatorChanged() {}
       override fun valueChanged(r: Int) {
@@ -109,7 +112,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       override fun accessChanged(r: Int) {}
       override fun colorChanged(r: Int) {}
     })
-
   }
 
   fun fetchColumn(table: Int): Int {
@@ -506,7 +508,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * return access of this field in current mode
    */
-  fun getDefaultAccess(): Int = access[block!!.mode]
+  fun getDefaultAccess(): Int = access[block!!.getMode()]
 
   fun getAccess(i: Int): Int {
     return if (i == -1) {
@@ -542,7 +544,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       } else if (hasTrigger(VConstants.TRG_FLDACCESS)) {
         // evaluate ACCESS-Trigger
         val oldRow = block!!.activeRecord
-        val old = block!!.activeField!!
+        val old = block!!.activeField
 
         // used by callTrigger
         block!!.activeRecord = current
@@ -914,7 +916,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setInt(r: Int, v: Int) {
+  open fun setInt(r: Int, v: Int?) {
     throw InconsistencyException()
   }
 
@@ -1356,9 +1358,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setColor(r, getForeground(r), getBackground(r))
   }
 
-  fun getForeground(r: Int): VColor = foreground[r]!!
+  fun getForeground(r: Int): VColor? = foreground[r]
 
-  fun getBackground(r: Int): VColor = background[r]!!
+  fun getBackground(r: Int): VColor? = background[r]
 
   // ----------------------------------------------------------------------
   // DRAG AND DROP HANDLIN
@@ -1449,8 +1451,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   private fun checkList() {
-    TODO()
-    /*if (!getForm().forceCheckList()) {
+    if (!getForm().forceCheckList()) {
       // Oracle doesn't force the value to be in the list
       return
     }
@@ -1600,7 +1601,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
         else -> throw InconsistencyException(threadInfo() + "count = " + count)
       }
-    }*/
+    }
   }
 
   /**
@@ -2005,7 +2006,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
                        block!!.getFieldPos(this),
-                       label!!,
+                       label,
                        lab ?: name,
                        toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
@@ -2356,7 +2357,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * The name of the field is the ident in the galite language
    * @return    the name of this field
    */
-  var name: String? = null    // field name (for dumps)
+  lateinit var name: String   // field name (for dumps)
     private set
 
   var label : String? = null // field label
@@ -2433,7 +2434,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   var position: VPosition? = null
     private set
 
-  lateinit var command: Array<VCommand>
+  var command: Array<VCommand>? = null
 
   private lateinit var foreground: Array<VColor?> // foreground colors for this field.
 

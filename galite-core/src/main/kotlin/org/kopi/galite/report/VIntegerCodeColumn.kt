@@ -73,15 +73,15 @@ class VIntegerCodeColumn : VCodeColumn {
    * @param     names           The names of the cells
    * @param     codes           The codes of the cells
    */
-  constructor(ident: String,
-              type: String,
-              source: String,
+  constructor(ident: String?,
+              type: String?,
+              source: String?,
               options: Int,
               align: Int,
               groups: Int,
-              function: VCalculateColumn,
+              function: VCalculateColumn?,
               width: Int,
-              format: VCellFormat,
+              format: VCellFormat?,
               names: Array<String>,
               codes: IntArray)
           : super(ident,

@@ -15,19 +15,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.ui.vaadin.base
+package org.kopi.galite.tests
 
 import java.util.Locale
 
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.tests.TestBase
-import org.kopi.galite.ui.vaadin.visual.VApplication
+import org.kopi.galite.ui.visual.VApplication
 import org.kopi.galite.visual.Registry
 
 /**
  * TestBase class for all tests.
  */
-open class ApplicationTestBase : TestBase() {
+open class VApplicationTestBase : TestBase() {
   class GaliteRegistry: Registry("Galite", null)
 
   class GaliteApplication: VApplication(GaliteRegistry()) {
@@ -45,7 +44,7 @@ open class ApplicationTestBase : TestBase() {
             driver: String,
             username: String,
             password: String,
-            schema: String
+            schema: String?
     ): DBContext? {
       return try {
         DBContext().apply {

@@ -64,13 +64,13 @@ class Module(val id: Int,
   /**
    * return description of the module
    */
-  lateinit var description: String
+  var description: String = ""
     private set
 
   /**
    * return the help
    */
-  lateinit var help: String
+  var help: String? = null
     private set
 
   /**
@@ -113,7 +113,7 @@ class Module(val id: Int,
     try {
       loc = manager.getModuleLocalizer(source, shortname)
       description = loc.getLabel()!!
-      help = loc.getHelp()!!
+      help = loc.getHelp()
     } catch (e: InconsistencyException) {
       // If the module localization is not found, report it
       ApplicationContext.reportTrouble(shortname,
@@ -153,6 +153,7 @@ class Module(val id: Int,
                   description: String,
                   icon: Image? = null): Executable? {
       return try {
+        val i = ApplicationContext.getDefaults()
         if (ApplicationContext.getDefaults().isDebugModeEnabled()) {
           System.gc()
           Thread.yield()

@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Table
 import java.sql.SQLException
 import java.util.EventListener
 
@@ -139,7 +140,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     buildCstr()
   }
 
-  protected fun setInfo() {
+  protected open fun setInfo() {
     // Do nothing, should be redefined if some info
     // has to be set
   }
@@ -214,7 +215,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
+  open fun executeIntegerTrigger(VKT_Type: Int): Int {
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
@@ -1180,7 +1181,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  protected fun fireViewModeEntered(block: VBlock, field: VField) {
+  protected fun fireViewModeEntered(block: VBlock, field: VField?) {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
     while (i >= 0) {
@@ -1191,7 +1192,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  protected fun fireViewModeLeaved(block: VBlock, field: VField) {
+  protected fun fireViewModeLeaved(block: VBlock, field: VField?) {
     val listeners = blockListener.listenerList
     var i = listeners.size - 2
 
@@ -1367,7 +1368,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-                   || !isMulti() && activeField == null) {
+            || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
               .toString() + " recno " + recno.toString() + " current record " + activeRecord
               .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
@@ -2204,8 +2205,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun isAlwaysSkipped(): Boolean {
     return access[MOD_QUERY] <= ACS_SKIPPED &&
-           access[MOD_UPDATE] <= ACS_SKIPPED &&
-           access[MOD_INSERT] <= ACS_SKIPPED
+            access[MOD_UPDATE] <= ACS_SKIPPED &&
+            access[MOD_INSERT] <= ACS_SKIPPED
   }
 
   // ----------------------------------------------------------------------
@@ -2552,20 +2553,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  // ----------------------------------------------------------------------
-  // IMPLEMENTATION OF DBContextHandler
-  // ----------------------------------------------------------------------
-  override fun setDBContext(context: DBContext) {
-    throw InconsistencyException("CALL IT ON FORM")
-  }
-
-  override fun getDBContext(): DBContext? = form.dBContext
-
-  override fun startProtected(message: String) {}
-
-  override fun commitProtected() {}
-
-  override fun abortProtected(interrupt: Boolean) {}
+  override var dBContext: DBContext?
+    get() = form.dBContext
+    set(value) = throw InconsistencyException("CALL IT ON FORM")
 
   override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
 
@@ -2756,11 +2746,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun helpOnBlock(help: VHelpGenerator) {
     if (!isAlwaysSkipped()) {
       help.helpOnBlock(form.javaClass.name.replace('.', '_'),
-                       title,
-                       this.help,
-                       commands,
-                       fields,
-                       form.blocks.size == 1)
+              title,
+              this.help,
+              commands,
+              fields,
+              form.blocks.size == 1)
     }
   }
 
@@ -2857,7 +2847,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         append("Exception while retrieving bock information. \n")
       }
     }
-    }
+  }
 
 
   /**
@@ -2895,7 +2885,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected lateinit var shortcut: String // block short name
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
-  protected lateinit var help: String // the help on this block
+  protected var help: String? = null // the help on this block
   protected var tables: Array<String>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
@@ -2925,8 +2915,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     set(mode: Boolean) {
       if (mode != field) {
         // remember field to enter it in the next view
-        val vField: VField? = activeField
-        fireViewModeLeaved(this, vField!!)
+        val vField = activeField
+        fireViewModeLeaved(this, vField)
         field = mode
         fireViewModeEntered(this, vField)
       }
@@ -2968,28 +2958,31 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
     }
 
-  // current mode
-  var mode = 0
-    set(mode) {
-      if (this !== form.getActiveBlock()) {
-        field = mode
-        for (i in fields.indices) {
-          fields[i].updateModeAccess()
-        }
-      } else {
-        // is this restriction acceptable ?
-        assert(!isMulti()) { "Block $name is a multiblock." }
-        val act: VField? = activeField
-        act?.leave(true)
-        field = mode
-        for (i in fields.indices) {
-          fields[i].updateModeAccess()
-        }
-        if (act != null && !act.hasAction() && act.getAccess(activeRecord) >= ACS_VISIT) {
-          act.enter()
-        }
+  fun getMode(): Int = mode
+
+  fun setMode(mode: Int) {
+    if (this !== form.getActiveBlock()) {
+      this.mode = mode
+      for (i in fields.indices) {
+        fields[i].updateModeAccess()
+      }
+    } else {
+      // is this restriction acceptable ?
+      assert(!isMulti()) { "Block $name is a multiblock." }
+      val act = activeField
+      act?.leave(true)
+      this.mode = mode
+      for (i in fields.indices) {
+        fields[i].updateModeAccess()
+      }
+      if (act != null && !act.hasAction() && act.getAccess(activeRecord) >= ACS_VISIT) {
+        act.enter()
       }
     }
+  }
+
+  // current mode
+  private var mode = 0
   protected lateinit var recordInfo: IntArray // status vector for records
   protected lateinit var fetchBuffer: IntArray // holds Id's of fetched records
   protected var fetchCount = 0 // # of fetched records

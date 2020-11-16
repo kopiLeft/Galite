@@ -28,7 +28,9 @@ import kotlin.system.exitProcess
 
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.innerJoin
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -55,16 +57,23 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param loadFavorites should load favorites ?
  */
 class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
-                var isSuperUser: Boolean = false,
-                val menuTreeUser: String? = null,
-                private val groupName: String? = null,
-                loadFavorites: Boolean = true) : VWindow(ctxt) {
+                                          var isSuperUser: Boolean = false,
+                                          val menuTreeUser: String? = null,
+                                          private val groupName: String? = null,
+                                          loadFavorites: Boolean = true) : VWindow(ctxt) {
 
   companion object {
 
-    private val SELECT_MODULES = Modules.slice(Modules.id, Modules.father, Modules.shortName,
-            Modules.sourceName, Modules.objectName, Modules.priority, Modules.symbol).selectAll().
-    orderBy(Modules.priority to SortOrder.DESC)
+    private val SELECT_MODULES =
+            Modules.slice(Modules.id,
+                          Modules.parent,
+                          Modules.shortName,
+                          Modules.sourceName,
+                          Modules.objectName,
+                          Modules.priority,
+                          Modules.symbol)
+                    .selectAll()
+                    .orderBy(Modules.priority to SortOrder.DESC)
 
     const val CMD_QUIT = 0
     const val CMD_OPEN = 1
@@ -99,7 +108,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   // --------------------------------------------------------------------
   var root: TreeNode? = null
     private set
-  private val treeActors = arrayOfNulls<VActor>(9)
+  private val treeActors: Array<VActor?> = arrayOfNulls(9)
   lateinit var moduleArray: Array<Module> // Sets the accessibility of the module
     private set
   private val items = mutableListOf<Module>()
@@ -118,7 +127,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
     createActor(CMD_UNFOLD, "Edit", "Unfold", "unfold", KeyEvent.VK_ENTER, 0)
     createActor(CMD_INFORMATION, "Help", "Information", null, 0, 0)
     createActor(CMD_HELP, "Help", "Help", "help", KeyEvent.VK_F1, 0)
-    addActors(treeActors.filterIsInstance<VActor>().toTypedArray())
+    addActors(treeActors.requireNoNulls())
     localizeActors(ApplicationContext.getDefaultLocale())
     createTree(isSuperUser || loadFavorites)
     localizeRootMenus(ApplicationContext.getDefaultLocale())
@@ -326,7 +335,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
         }
 
         val module = Module(it[Modules.id],
-                it[Modules.father],
+                it[Modules.parent],
                 it[Modules.shortName],
                 it[Modules.sourceName],
                 it[Modules.objectName],
@@ -344,33 +353,32 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   private fun fetchGroupRightsByUserId(modules: List<Module>) {
     when {
       groupName != null -> {
-        fetchRights(modules, (Modules innerJoin GroupRights innerJoin GroupParties)
-                .slice(Modules.id, GroupRights.access, Modules.priority)
-                .select {
-                  (Modules.id eq GroupRights.module) and
-                          (GroupRights.group eq GroupParties.group) and (GroupParties.user
-                          inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName }))
-                }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+        fetchRights(modules,
+                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+                        .slice(Modules.id, GroupRights.access, Modules.priority)
+                        .select {
+                          GroupParties.user inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName })
+                        }
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
       }
       menuTreeUser != null -> {
-        fetchRights(modules, (Modules innerJoin GroupRights innerJoin GroupParties)
-                .slice(Modules.id, GroupRights.access, Modules.priority)
-                .select {
-                  (Modules.id eq GroupRights.module) and
-                          (GroupRights.group eq GroupParties.group) and (GroupParties.user
-                          inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser }))
-                }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+        fetchRights(modules,
+                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+                        .slice(Modules.id, GroupRights.access, Modules.priority)
+                        .select {
+                          GroupParties.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
+                        }
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
       }
       else -> {
-        fetchRights(modules, (Modules innerJoin GroupRights innerJoin GroupParties)
-                .slice(Modules.id, GroupRights.access, Modules.priority)
-                .select {
-                  (Modules.id eq GroupRights.module) and
-                          (GroupRights.group eq GroupParties.group) and (GroupParties.user eq getUserID())
-                }
-                .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+        fetchRights(modules,
+                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+                        .slice(Modules.id, GroupRights.access, Modules.priority)
+                        .select {
+                          GroupParties.user eq getUserID()
+                        }
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
+        )
       }
     }
   }
@@ -552,7 +560,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   /**
    * Sets the tool tip in the foot panel
    */
-  fun setToolTip(s: String) {
+  fun setToolTip(s: String?) {
     setInformationText(s)
   }
 

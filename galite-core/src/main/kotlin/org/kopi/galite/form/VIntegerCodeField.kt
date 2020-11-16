@@ -63,7 +63,7 @@ class VIntegerCodeField : VCodeField {
   /**
    * Returns the array of codes.
    */
-  override fun getCodes(): Array<Any> = codes as Array<Any>
+  override fun getCodes(): Array<Any?> = codes as Array<Any?>
 
   // ----------------------------------------------------------------------
   // INTERFACE BD/TRIGGERS
@@ -72,7 +72,7 @@ class VIntegerCodeField : VCodeField {
   /**
    * Sets the field value of given record to a int value.
    */
-  fun setInt(r: Int, v: Int?) {
+  override fun setInt(r: Int, v: Int?) {
     if (v == null) {
       setCode(r, -1)
     } else {

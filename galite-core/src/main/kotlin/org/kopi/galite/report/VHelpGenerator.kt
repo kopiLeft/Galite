@@ -60,7 +60,7 @@ class VHelpGenerator : VHelpGenerator() {
       if (help != null) {
         printer.println("<P>$help</P>")
       }
-      helpOnCommands(commands!!)
+      helpOnCommands(commands)
       val columnCount: Int = model.getModelColumnCount()
       printer.println("<TABLE border=\"0\" cellspacing=\"3\" cellpadding=\"2\">")
       printer.println("<TR>")

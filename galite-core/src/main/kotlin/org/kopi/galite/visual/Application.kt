@@ -41,7 +41,7 @@ interface Application : MessageListener {
    * @param schema The database schema.
    * @return The [DBContext] containing database connection information.
    */
-  fun login(database: String, driver: String, username: String, password: String, schema: String): DBContext?
+  fun login(database: String, driver: String, username: String, password: String, schema: String?): DBContext?
 
   /**
    * Signs out from the application.
@@ -84,7 +84,7 @@ interface Application : MessageListener {
   /**
    * `true` if the application in help generating  mode.
    */
-  var isGeneratingHelp: Boolean
+  val isGeneratingHelp: Boolean
 
   /**
    * The [DBContext] containing user connection information.

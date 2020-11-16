@@ -41,5 +41,5 @@ interface UMultiBlock : UBlock {
    * @param comp The [UComponent] to be added to detail view.
    * @param constraint The [Alignment] component constraints.
    */
-  fun addToDetail(comp: UComponent, constraint: Alignment)
+  fun addToDetail(comp: UComponent?, constraint: Alignment)
 }

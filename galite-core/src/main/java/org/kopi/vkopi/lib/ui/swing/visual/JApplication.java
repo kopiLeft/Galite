@@ -398,11 +398,6 @@ public abstract class JApplication implements Application {
   }
 
 
-  public DBContext getDBContext() {
-    return context;
-  }
-
-
   public String getUserName() {
     return context.getDefaultConnection().getUserName();
   }

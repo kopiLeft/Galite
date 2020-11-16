@@ -38,8 +38,6 @@ class RField<T : Comparable<T>>(override val domain: Domain<T>? = null): Field<T
   /** the ident of this field */
   private val ident: String get() = label
 
-  var align: Int = 0
-
   var options: Int = 0
 
   var group: String? = null
@@ -56,7 +54,17 @@ class RField<T : Comparable<T>>(override val domain: Domain<T>? = null): Field<T
   /**
    * true if the field is hidden, false otherwise
    */
-  val isHidden: Boolean get() = options and Constants.CLO_HIDDEN > 0
+  private val isHidden: Boolean get() = options and Constants.CLO_HIDDEN > 0
+
+
+  /** Field's help that describes the expected value of an input field */
+  override var hidden: Boolean? = false
+    set(value) {
+      options = if(value == true) Constants.CLO_HIDDEN else Constants.CLO_VISIBLE
+      field = value
+    }
+
+  var groupID = -1
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

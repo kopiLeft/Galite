@@ -278,8 +278,8 @@ class VDateField : VField(10, 1) {
       Companion.toText(value[r]!!)
     }
   }
-/**
 
+  /**
    * Returns the SQL representation of field value of given record.
    */
   override fun getSqlImpl(r: Int): String {

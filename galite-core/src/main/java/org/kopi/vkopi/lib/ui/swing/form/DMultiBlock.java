@@ -29,6 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.border.EmptyBorder;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.kopi.galite.base.UComponent;
 import org.kopi.galite.form.Alignment;
 import org.kopi.galite.form.LayoutManager;
@@ -114,7 +116,7 @@ public class DMultiBlock extends DChartBlock implements UMultiBlock {
     }
 
 
-    public void addToDetail(UComponent comp, Alignment constraint) {
+    public void addToDetail(@Nullable UComponent comp, @NotNull Alignment constraint) {
         detailPane.add((Component) comp, constraint);
     }
 

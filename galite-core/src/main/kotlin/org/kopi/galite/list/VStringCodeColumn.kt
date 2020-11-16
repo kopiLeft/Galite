@@ -26,7 +26,7 @@ open class VStringCodeColumn(
   title: String,
   column: String?,
   names: Array<String>,
-  private val codes: Array<String>,
+  private val codes: Array<String?>,
   sortAscending: Boolean
 ) : VCodeColumn(title, column, names, sortAscending) {
   // --------------------------------------------------------------------

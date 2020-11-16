@@ -26,10 +26,27 @@ import org.kopi.galite.type.Week
 
 class Utils {
   companion object {
-    fun trimString(input: String): String = TODO()
+    fun trimString(input: String): String {
+      val buffer = CharArray(input.length)
+      var bufpos = 0
+      var state = 0
+      for (element in input) {
+        val c = element
+        if (Character.isWhitespace(c)) {
+          state = if (state == 0) 0 else 2
+        } else {
+          if (state == 2) {
+            buffer[bufpos++] = ' '
+          }
+          buffer[bufpos++] = c
+          state = 1
+        }
+      }
+      return if (bufpos == 0) "" else String(buffer, 0, bufpos)
+    }
     fun trailString(input: String): String = TODO()
     fun toSql(date: Date): String = TODO()
-    fun toSql(l: String): String = TODO()
+    fun toSql(l: String?): String = TODO()
     fun toSql(t: Time?): String = TODO()
     fun toSql(d: Int?): String = TODO()
     fun toSql(t: Timestamp?): String = TODO()
@@ -37,6 +54,3 @@ class Utils {
     fun toSql(m: Month?): String = TODO()
   }
 }
-
-
-

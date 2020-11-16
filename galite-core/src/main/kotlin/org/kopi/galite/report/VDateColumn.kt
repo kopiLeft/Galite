@@ -31,11 +31,11 @@ import org.kopi.galite.type.Date
  * @param     width           The width of the cells
  * @param     format          The format of the cells
  */
-class VDateColumn(ident: String,
+class VDateColumn(ident: String?,
                   options: Int,
                   align: Int,
                   groups: Int,
-                  function: VCalculateColumn,
+                  function: VCalculateColumn?,
                   width: Int,
                   format: VCellFormat?)
   : VReportColumn(ident,

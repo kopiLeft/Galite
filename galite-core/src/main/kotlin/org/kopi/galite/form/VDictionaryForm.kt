@@ -85,7 +85,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
     } else if (editID != -1) {
       newRecord = true
       fetchBlockRecord(0, editID)
-      getBlock(0).mode = MOD_UPDATE
+      getBlock(0).setMode(MOD_UPDATE)
     }
     super.prepareForm()
   }

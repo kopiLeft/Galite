@@ -19,9 +19,9 @@ package org.kopi.galite.tests.ui.visual
 
 import org.junit.Test
 
-import org.kopi.galite.tests.ui.vaadin.base.ApplicationTestBase
+import org.kopi.galite.tests.VApplicationTestBase
 
-class VApplicationTests : ApplicationTestBase() {
+class VApplicationTests : VApplicationTestBase() {
 
   @Test
   fun applicationInitParametersTest() {

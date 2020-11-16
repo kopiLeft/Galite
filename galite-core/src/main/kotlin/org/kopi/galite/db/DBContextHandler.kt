@@ -23,35 +23,9 @@ package org.kopi.galite.db
  */
 interface DBContextHandler {
   /**
-   * Returns the database context for this object.
+   * The database context for this object.
    */
-  fun getDBContext(): DBContext?
-
-  /**
-   * Sets the database context for this object
-   *
-   * @param        context                a database context
-   */
-  fun setDBContext(context: DBContext)
-
-  /**
-   * Starts a protected transaction.
-   *
-   * @param        message                the message to be displayed
-   */
-  fun startProtected(message: String)
-
-  /**
-   * Commits a protected transaction.
-   */
-  fun commitProtected()
-
-  /**
-   * Aborts a protected transaction.
-   *
-   * @param        interrupt       should interrupt the connection if true
-   */
-  fun abortProtected(interrupt: Boolean)
+  var dBContext: DBContext?
 
   /**
    * Returns true if the exception allows a retry of the
