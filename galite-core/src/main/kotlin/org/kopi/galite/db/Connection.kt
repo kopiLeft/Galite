@@ -18,14 +18,12 @@
 
 package org.kopi.galite.db
 
-import java.sql.Connection
-import java.sql.SQLException
-
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-
 import org.kopi.galite.util.base.InconsistencyException
+import java.sql.Connection
+import java.sql.SQLException
 
 /**
  * A connection maintain information about current context, underlying
@@ -103,15 +101,12 @@ class Connection {
                 shortName eq userName
               }
             }
-
-            try {
-              user = query.single()[DBSchema.Users.id]
-            } catch (e: NoSuchElementException) {
-              throw SQLException("user unknown")
-            } catch (e: IllegalArgumentException) {
-              throw SQLException("different users with same name")
-            }
+            user = query.single()[DBSchema.Users.id]
           }
+        } catch (e: NoSuchElementException) {
+          throw SQLException("user unknown")
+        } catch (e: IllegalArgumentException) {
+          throw SQLException("different users with same name")
         } catch (e: SQLException) {
           throw InconsistencyException(e.message!!)
         }
