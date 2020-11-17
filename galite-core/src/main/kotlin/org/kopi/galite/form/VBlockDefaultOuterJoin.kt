@@ -136,7 +136,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     return operation
   }
 
-  private fun joinTables(tables: Array<Table>): Join {
+  fun joinTables(tables: Array<Table>): Join {
     var op: Join? = null
     for (i in 1 until tables.size) {
       transaction {
