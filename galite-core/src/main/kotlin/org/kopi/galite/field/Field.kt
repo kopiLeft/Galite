@@ -21,8 +21,6 @@ import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.exceptions.InvalidValueException
-import org.kopi.galite.form.Align
-import org.kopi.galite.form.VConstants
 
 /**
  * A field represents a visual component that can hold values
@@ -33,15 +31,13 @@ import org.kopi.galite.form.VConstants
  */
 abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
   /** Field's label */
-  var label: String = ""
+  var label: String? = null
 
   /** Field's help that describes the expected value of an input field */
   var help: String? = null
 
   /** true if the field is hidden, false otherwise */
   open var hidden: Boolean? = false
-
-  var align: Align = Align.DEFAULT
 
   /**
    * Checks if the value passed to the field doesn't exceed the length of the field's domain
