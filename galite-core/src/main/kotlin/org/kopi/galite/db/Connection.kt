@@ -42,12 +42,13 @@ class Connection {
    * @param     schema              the database schema to set as current schema
    */
   constructor(connection: Connection,
-              lookupUserId: Boolean = true, // TODO
+              lookupUserId: Boolean = true,
               schema: String? = null) { // TODO
     dbConnection = Database.connect({ connection })
     url = dbConnection.url
     userName = connection.metaData.userName
     password = null // already authenticated
+    user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
     setUserID()
   }
 
