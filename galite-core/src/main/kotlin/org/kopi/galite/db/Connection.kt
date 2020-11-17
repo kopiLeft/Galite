@@ -18,13 +18,14 @@
 
 package org.kopi.galite.db
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.util.base.InconsistencyException
 import java.sql.Connection
 import java.sql.SQLException
+
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * A connection maintain information about current context, underlying
@@ -96,19 +97,20 @@ class Connection {
         user = USERID_NO_LOOKUP
       } else {
         try {
-          val KopiUsers = object : Table("kopi_users") {
-            val id = integer("ID")
-            val kurzname = varchar("Kurzname", 255)
-          }
-
           transaction {
-            val query = with(KopiUsers) {
-              slice(id, kurzname).select {
-                kurzname eq userName
-              }.also { if (it.empty()) throw SQLException("user unknown") }
+            val query = with(DBSchema.Users) {
+              slice(id, shortName).select {
+                shortName eq userName
+              }
             }
-            user = query.also { if (it.count() > 1) throw SQLException("different users with same name") }
-                    .first()[KopiUsers.id]
+
+            try {
+              user = query.single()[DBSchema.Users.id]
+            } catch (e: NoSuchElementException) {
+              throw SQLException("user unknown")
+            } catch (e: IllegalArgumentException) {
+              throw SQLException("different users with same name")
+            }
           }
         } catch (e: SQLException) {
           throw InconsistencyException(e.message!!)
