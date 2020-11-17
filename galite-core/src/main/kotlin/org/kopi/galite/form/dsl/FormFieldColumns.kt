@@ -24,9 +24,9 @@ package org.kopi.galite.form.dsl
  * @param indices                 the indices of this column
  * @param priority                the priority in sorting
  */
-class FormFieldColumns(val columns: Array<FormFieldColumn?>,
-                       val indices: Int,
-                       val priority: Int) {
+class FormFieldColumns(internal val columns: Array<FormFieldColumn?>,
+                       val indices: Int = 0,
+                       var priority: Int = 0) {
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
