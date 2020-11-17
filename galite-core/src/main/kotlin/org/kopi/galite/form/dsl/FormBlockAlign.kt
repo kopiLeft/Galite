@@ -15,26 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
-
-import java.util.Locale
-
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
-import org.kopi.galite.visual.VWindow
+package org.kopi.galite.form.dsl
 
 /**
- * This class represents the definition of a window
+ * This class describe the alignment of multi blocks
+ *
+ * This class describe the alignment of multi blocks
  *
  * @param where                the token reference of this node
- * @param title                the title of this form
- * @param superName                the type of the form
+ * @param block                block alignment
+ * @param target                the target column vector
+ * @param source                the source column vector
  */
-abstract class Window {
-  abstract val title: String
-  open val locale: Locale? = null
-  var options: Int? = null
-  lateinit var commands: Array<VCommand>
-  lateinit var triggers: Array<VTrigger>
-  abstract val model: VWindow
-}
+class FormBlockAlign(private val block: String, private val target: IntArray, private val source: IntArray)

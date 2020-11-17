@@ -18,17 +18,18 @@
 
 package org.kopi.galite.list
 
+import org.jetbrains.exposed.sql.Column
 import java.io.Serializable
 
 /**
  * Represents a column
  *
- * @param pos position of associated table
- * @param name column name
- * @param key column key of table
- * @param nullable true if column is nullable
+ * @param pos       position of associated table
+ * @param name      column name
+ * @param key       whether the column is a key
+ * @param nullable  true if column is nullable
  */
-class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean) : Serializable {
+class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean, val column: Column<*>? = null) : Serializable {
 
   /**
    * Returns the position of the table in the array of tables
@@ -40,11 +41,4 @@ class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Bo
    * Returns the qualified name of the column (i.e. with correlation)
    */
   fun getQualifiedName(): String = "T$pos.$name"
-
-  /**
-   * Returns wether ther column is a key
-   */
-  fun isNullable(): Boolean {
-   TODO()
-  }
 }

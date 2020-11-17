@@ -17,24 +17,11 @@
  */
 package org.kopi.galite.common
 
-import java.util.Locale
-
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
-import org.kopi.galite.visual.VWindow
 
 /**
- * This class represents the definition of a window
- *
- * @param where                the token reference of this node
- * @param title                the title of this form
- * @param superName                the type of the form
+ * This class represent a command, ie a link between an actor and
+ * an action
  */
-abstract class Window {
-  abstract val title: String
-  open val locale: Locale? = null
-  var options: Int? = null
-  lateinit var commands: Array<VCommand>
-  lateinit var triggers: Array<VTrigger>
-  abstract val model: VWindow
+class CommandBody(private val actor: String) {
+
 }

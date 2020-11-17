@@ -179,7 +179,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun hasNextPreviousEntry(): Boolean = list != null
 
-  fun hasNullableCols(): Boolean = columns!!.find { it!!.isNullable() } != null
+  fun hasNullableCols(): Boolean = columns!!.find { it!!.nullable } != null
 
   /**
    * Returns true if it is a numeric field.

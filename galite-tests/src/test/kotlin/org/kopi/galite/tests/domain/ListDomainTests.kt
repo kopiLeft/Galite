@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.exceptions.InvalidValueException
-import org.kopi.galite.report.RField
+import org.kopi.galite.report.ReportField
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
@@ -110,7 +110,7 @@ class ListDomainTests {
     }
 
     // Creating a field with the domain StringTestType
-    val field = RField(StringTestType("A"))
+    val field = ReportField(StringTestType("A"))
 
     // test with a valid value
     val checkValid = field.checkValue("Abcdef")
