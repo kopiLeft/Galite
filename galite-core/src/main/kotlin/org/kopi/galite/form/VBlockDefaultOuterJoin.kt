@@ -45,8 +45,8 @@ class VBlockDefaultOuterJoin(block: VBlock) {
         val rootColumn = field.fetchColumn(rootTable)
 
         if (tableColumn != -1) {
-          if (field.getColumn(tableColumn)!!.isNullable() ||
-                  field.getColumn(rootColumn)!!.isNullable()) {
+          if (field.getColumn(tableColumn)!!.nullable ||
+                  field.getColumn(rootColumn)!!.nullable) {
             for (j in 0 until field.getColumnCount()) {
               if (j != tableColumn) {
                 if (isJoinedTable(field.getColumn(j)!!.getTable())) {
@@ -151,7 +151,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     var operation: Op<Boolean>? = null
     if (fld.hasNullableCols()) {
       for (j in 1 until fld.getColumnCount()) {
-        if (!fld.getColumn(j)!!.isNullable()) {
+        if (!fld.getColumn(j)!!.nullable) {
           val tab = object : Table() {
             val col1 = varchar(fld.getColumn(j)!!.getQualifiedName(), 50)
             val col2 = varchar(fld.getColumn(0)!!.getQualifiedName(), 50)
@@ -193,7 +193,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
             val column2 = varchar(fld.getColumn(0)!!.getQualifiedName(), 30)
           }
 
-          if (!fld.getColumn(j)!!.isNullable()) {
+          if (!fld.getColumn(j)!!.nullable) {
             transaction {
               operation = Op.build {
                 (auxTable.column1 eq auxTable.column2)
@@ -207,7 +207,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
             val column3 = varchar(fld.getColumn(j)!!.getQualifiedName(), 30)
             val column4 = varchar(fld.getColumn(j - 1)!!.getQualifiedName(), 30)
           }
-          if (!fld.getColumn(j)!!.isNullable()) {
+          if (!fld.getColumn(j)!!.nullable) {
             operation =
                     Op.build {
                       (auxTable2.column3 eq auxTable2.column4)
@@ -239,5 +239,5 @@ class VBlockDefaultOuterJoin(block: VBlock) {
   private var fields: Array<VField> = block.fields
   private var joinedTables: ArrayList<String>? = ArrayList<String>()
   private var processedFields: ArrayList<String>? = ArrayList<String>()
-  private var tables: Array<Table>? = block.tables_
+  private var tables: Array<Table>? = block.tables
 }

@@ -15,26 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.form.dsl
 
-import java.util.Locale
-
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.common.LocalizationWriter
 
 /**
- * This class represents the definition of a window
+ * A binding to database. This is a position given by x and y location
  *
- * @param where                the token reference of this node
- * @param title                the title of this form
- * @param superName                the type of the form
+ * @param ident                  the identifier of the index
+ * @param message                the error message in the default locale
  */
-abstract class Window {
-  abstract val title: String
-  open val locale: Locale? = null
-  var options: Int? = null
-  lateinit var commands: Array<VCommand>
-  lateinit var triggers: Array<VTrigger>
-  abstract val model: VWindow
+class
+FormBlockIndex(val ident: String, val message: String) {
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!!FIX:taoufik
+   */
+  fun genLocalization(writer: LocalizationWriter) {
+    (writer as FormLocalizationWriter).genBlockIndex(ident, message)
+  }
 }

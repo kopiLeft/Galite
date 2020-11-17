@@ -17,14 +17,16 @@
 
 package org.kopi.galite.chart
 
+import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.visual.VWindow
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
  *
  * @param name the name of the chart. It represents the title
  */
-open class Chart(val name: String) {
+abstract class Chart(): Window() {
   /** The chart's dimension */
   lateinit var dimension: Dimension<*>
 
@@ -55,5 +57,17 @@ open class Chart(val name: String) {
     chartMeasure.init()
     this.measures.add(chartMeasure)
     return chartMeasure
+  }
+  override val model: VWindow by lazy {
+    object: VChart() {
+      override fun init() {
+        TODO("Not yet implemented")
+      }
+
+      override fun add() {
+        TODO("Not yet implemented")
+      }
+
+    }
   }
 }
