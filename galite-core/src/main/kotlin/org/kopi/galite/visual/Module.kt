@@ -138,7 +138,7 @@ class Module(val id: Int,
     fun getExecutable(objectName: String?): Executable {
       return try {
         (Class.forName(objectName).kotlin.objectInstance as? Window)?.model
-                ?: Class.forName(objectName).newInstance() as Executable
+                ?: (Class.forName(objectName).newInstance() as Window).model
       } catch (iae: IllegalAccessException) {
         throw VRuntimeException(iae)
       } catch (ie: InstantiationException) {
