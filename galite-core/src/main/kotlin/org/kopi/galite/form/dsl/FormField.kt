@@ -56,7 +56,7 @@ import org.jetbrains.exposed.sql.Column
  * @param triggers             the triggers executed by this field
  * @param alias                the e alias of this field
  */
-open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null, var index: Int): Field<T>(domain) {
+open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null, private val fieldIndex: Int): Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -114,13 +114,13 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null, 
   fun setInfo() {
     vField.setInfo(
             getIdent(),
-            index,
+            fieldIndex,
             posInArray,
             options,
             access,
             null, // TODO
             null, // TODO
-            columns?.indices ?: 0,
+            columns?.index?.indexNumber ?: 0,
             columns?.priority ?: 0,
             null, // TODO
             null, // TODO

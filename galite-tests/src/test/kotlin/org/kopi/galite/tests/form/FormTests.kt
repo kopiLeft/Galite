@@ -70,7 +70,7 @@ class FormTests: JApplicationTestBase() {
             label = "age"
             help = "The user age"
             columns(u.age) {
-              index = 0
+              index = i
               priority = 1
             }
           }

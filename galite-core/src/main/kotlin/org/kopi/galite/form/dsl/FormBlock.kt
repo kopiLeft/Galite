@@ -144,7 +144,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
    * @param message                the error message in the default locale
    */
   fun index(message: String): FormBlockIndex {
-    val formBlockIndex = FormBlockIndex("Id\$${indices.size}", message)
+    val formBlockIndex = FormBlockIndex("Id\$${indices.size}", message, indices.size)
     indices.add(formBlockIndex)
     return formBlockIndex
   }
