@@ -64,13 +64,14 @@ class Connection {
               driver: String,
               userName: String,
               password: String,
-              lookupUserId: Boolean = true, // TODO
+              lookupUserId: Boolean = true,
               schema: String? = null) { // TODO
     dbConnection = Database.connect(url = url, driver = driver, user = userName, password = password)
     this.url = url
     this.userName = userName
     this.password = password
-    //setUserID() TODO
+    this.user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
+    setUserID()
   }
 
   /**
@@ -96,12 +97,9 @@ class Connection {
       } else {
         try {
           transaction {
-            val query = with(DBSchema.Users) {
-              slice(id, shortName).select {
-                shortName eq userName
-              }
-            }
-            user = query.single()[DBSchema.Users.id]
+            user = DBSchema.Users.slice(DBSchema.Users.id).select {
+              DBSchema.Users.shortName eq userName
+              }.single()[DBSchema.Users.id]
           }
         } catch (e: NoSuchElementException) {
           throw SQLException("user unknown")
