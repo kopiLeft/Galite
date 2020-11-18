@@ -142,6 +142,7 @@ abstract class Form: Window() {
 
     object : VForm() {
       override fun init() {
+        source = sourceFile
         pages = this@Form.pages.map {
           it.ident
         }.toTypedArray()
@@ -153,7 +154,6 @@ abstract class Form: Window() {
       }
 
       init {
-        source = sourceFile
       }
     }
   }
