@@ -26,13 +26,14 @@ import org.kopi.galite.form.dsl.FormEvent
  * @param modes        the events that this trigger listen
  * @param action        the action to perform
  */
-open class Trigger(var event: FormEvent, var action: Action) {
+open class Trigger(var event: Int, var action: Action) {
 
-  fun getEvent(e: Int) {
+  /*fun getEvent(e: Int) {
     event = FormEvent(e)
   }
 
   fun getAction(a: Action) {
     action = a
-  }
+  }*/
+
 }

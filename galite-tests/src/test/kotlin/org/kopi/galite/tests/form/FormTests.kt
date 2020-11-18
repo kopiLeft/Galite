@@ -24,6 +24,7 @@ import org.junit.Test
 import org.kopi.galite.chart.Chart
 
 import org.jetbrains.exposed.sql.Table
+import org.kopi.galite.common.Trigger
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
@@ -51,7 +52,6 @@ class FormTests: JApplicationTestBase() {
     }
 
     init {
-
       page("test page") {
         val testBlock = block(1, 1, "Test block") {
           val u = table(User)

@@ -82,12 +82,14 @@ abstract class Form : Window() {
     return page
   }
 
-  fun trigger(event: FormEvent, action: Action, init: Trigger.() -> Unit): Trigger {
+  fun trigger(event: Int, action: Action, init: Trigger.() -> Unit): Trigger {
     val trigger = Trigger(event, action)
     trigger.init()
     formTriggers.add(trigger)
     return trigger
   }
+
+
 
   // ----------------------------------------------------------------------
   // ACCESSORS

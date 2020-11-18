@@ -44,6 +44,7 @@ import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.form.VConstants.Companion.TRG_INIT
 
 abstract class VForm : VWindow, VConstants {
   companion object {
@@ -60,6 +61,7 @@ abstract class VForm : VWindow, VConstants {
       })
     }
   }
+
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
@@ -459,14 +461,65 @@ abstract class VForm : VWindow, VConstants {
   }
 
   fun executeObjectTrigger(VKT_Type: Int): Any {
+    when (VKT_Type) {
+      1 -> {
+        quitAction
+      }
+      2 -> {
+        resetAction
+      }
+      3 -> {
+        postformAction
+      }
+      4 -> {
+        initAction
+      }
+      5 -> {
+        preformAction
+      }
+    }
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
+    when (VKT_Type) {
+      1 -> {
+        quitAction
+      }
+      2 -> {
+        resetAction
+      }
+      3 -> {
+        postformAction
+      }
+      4 -> {
+        initAction
+      }
+      5 -> {
+        preformAction
+      }
+    }
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
   fun executeIntegerTrigger(VKT_Type: Int): Int {
+    when (VKT_Type) {
+      1 -> {
+        quitAction
+      }
+      2 -> {
+        resetAction
+      }
+      3 -> {
+        postformAction
+      }
+      4 -> {
+        initAction
+      }
+      5 -> {
+        preformAction
+      }
+    }
     throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
@@ -739,6 +792,39 @@ abstract class VForm : VWindow, VConstants {
     return (getDisplay() as UForm).printForm()
   }
 
+  val eventList: MutableList<Int> = mutableListOf()
+
+  fun init(initTrigger: () -> Unit) {
+    VKT_Triggers[0][16] = 4
+    initAction = initTrigger
+  }
+
+  fun preform(preformTrigger: () -> Unit) {
+    VKT_Triggers[0][25] = 5
+    preformAction = preformTrigger
+  }
+
+  fun postform(postformTrigger: () -> Unit) {
+    VKT_Triggers[0][26] = 3
+    postformAction = postformTrigger
+  }
+
+  fun reset(resetTrigger: () -> Unit) {
+    VKT_Triggers[0][17] = 2
+    resetAction = resetTrigger
+  }
+
+  fun quit(quitTrigger: () -> Unit) {
+    VKT_Triggers[0][30] = 1
+    quitAction = quitTrigger
+  }
+
+  lateinit var initAction: () -> Unit
+  lateinit var preformAction: () -> Unit
+  lateinit var postformAction: () -> Unit
+  lateinit var resetAction: () -> Unit
+  lateinit var quitAction: () -> Unit
+
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
@@ -747,7 +833,7 @@ abstract class VForm : VWindow, VConstants {
   lateinit var blocks: Array<VBlock>
   internal lateinit var pages: Array<String?>
   internal var help: String? = null //the name of this field
-  internal lateinit var VKT_Triggers: Array<IntArray>
+  open lateinit var VKT_Triggers: Array<IntArray>
 
   // dynamic data
   private val blockMoveAllowed = true
@@ -767,8 +853,8 @@ abstract class VForm : VWindow, VConstants {
   // ---------------------------------------------------------------------
   // PREDEFINED COMMANDS
   // ---------------------------------------------------------------------
-  val cmdAutofill:    VCommand = VFieldCommand(this, CMD_AUTOFILL)
-  val cmdEditItem_S:  VCommand = VFieldCommand(this, CMD_EDITITEM_S)
-  val cmdEditItem:    VCommand = VFieldCommand(this, CMD_EDITITEM)
-  val cmdNewItem:     VCommand = VFieldCommand(this, CMD_NEWITEM)
+  val cmdAutofill: VCommand = VFieldCommand(this, CMD_AUTOFILL)
+  val cmdEditItem_S: VCommand = VFieldCommand(this, CMD_EDITITEM_S)
+  val cmdEditItem: VCommand = VFieldCommand(this, CMD_EDITITEM)
+  val cmdNewItem: VCommand = VFieldCommand(this, CMD_NEWITEM)
 }
