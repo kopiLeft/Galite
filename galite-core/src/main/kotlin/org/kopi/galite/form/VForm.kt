@@ -18,33 +18,21 @@
 
 package org.kopi.galite.form
 
-import java.io.File
-import java.net.MalformedURLException
-import java.util.Locale
-
-import javax.swing.event.EventListenerList
-
-import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.PrintJob
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Constants
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.UWindow
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VDefaultActor
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VHelpViewer
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowBuilder
-import org.kopi.galite.visual.WindowController
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.form.VConstants.Companion.TRG_INIT
+import org.kopi.galite.form.VConstants.Companion.TRG_POSTFORM
+import org.kopi.galite.form.VConstants.Companion.TRG_PREFORM
+import org.kopi.galite.form.VConstants.Companion.TRG_QUITFORM
+import org.kopi.galite.form.VConstants.Companion.TRG_RESET
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.util.PrintJob
+import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.*
+import java.io.File
+import java.net.MalformedURLException
+import java.util.*
+import javax.swing.event.EventListenerList
 
 abstract class VForm : VWindow, VConstants {
   companion object {
@@ -795,27 +783,27 @@ abstract class VForm : VWindow, VConstants {
   val eventList: MutableList<Int> = mutableListOf()
 
   fun init(initTrigger: () -> Unit) {
-    VKT_Triggers[0][16] = 4
+    VKT_Triggers[0][TRG_INIT] = 4
     initAction = initTrigger
   }
 
   fun preform(preformTrigger: () -> Unit) {
-    VKT_Triggers[0][25] = 5
+    VKT_Triggers[0][TRG_PREFORM] = 5
     preformAction = preformTrigger
   }
 
   fun postform(postformTrigger: () -> Unit) {
-    VKT_Triggers[0][26] = 3
+    VKT_Triggers[0][TRG_POSTFORM] = 3
     postformAction = postformTrigger
   }
 
   fun reset(resetTrigger: () -> Unit) {
-    VKT_Triggers[0][17] = 2
+    VKT_Triggers[0][TRG_RESET] = 2
     resetAction = resetTrigger
   }
 
   fun quit(quitTrigger: () -> Unit) {
-    VKT_Triggers[0][30] = 1
+    VKT_Triggers[0][TRG_QUITFORM] = 1
     quitAction = quitTrigger
   }
 
