@@ -42,7 +42,7 @@ class VReportTests: VApplicationTestBase() {
    */
   @Test
   fun reportVActorTest() {
-    val report = SimpleReport.reportModel
+    val report = SimpleReport.model
     val f12 = VActor("File",
                      "org/kopi/galite/Window",
                      "GotoShortcuts",
@@ -66,7 +66,7 @@ class VReportTests: VApplicationTestBase() {
    */
   @Test
   fun reportSourceTitleTest() {
-    val report = SimpleReport.reportModel
+    val report = SimpleReport.model
     assertEquals("org/kopi/galite/tests/report/SimpleReport", report.source)
     assertEquals("SimpleReport", report.getTitle())
     assertEquals(null, report.smallIcon)
@@ -77,8 +77,8 @@ class VReportTests: VApplicationTestBase() {
    * Tests the report data model
    */
   @Test
-  fun vReportModelTest() {
-    val model = SimpleReport.reportModel.model
+  fun vmodelTest() {
+    val model = SimpleReport.model.model
     val id = model.columns[0]!!
     val name = model.columns[1]!!
 

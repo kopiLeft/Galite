@@ -15,26 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.form.dsl
 
-import java.util.Locale
-
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
-import org.kopi.galite.visual.VWindow
+import org.jetbrains.exposed.sql.Table
 
 /**
- * This class represents the definition of a window
+ * A block table information
  *
- * @param where                the token reference of this node
- * @param title                the title of this form
- * @param superName                the type of the form
+ * @param name                the name of the table
+ * @param corr                the shortcut
  */
-abstract class Window {
-  abstract val title: String
-  open val locale: Locale? = null
-  var options: Int? = null
-  lateinit var commands: Array<VCommand>
-  lateinit var triggers: Array<VTrigger>
-  abstract val model: VWindow
+class FormBlockTable(val name: String, val corr: String, val table: Table) {
+  /**
+   * Check expression and evaluate and alter context
+   * @param block        the actual context of analyse
+   * @exception        PositionedError        Error catched as soon as possible
+   */
+  fun checkCode(block: FormBlock?) {
+    // don't do nothing now
+  }
 }

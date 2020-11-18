@@ -20,12 +20,11 @@ package org.kopi.galite.report
 import java.io.File
 import java.io.IOException
 import java.lang.RuntimeException
-import java.util.Date
 
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.Field
+import org.kopi.galite.type.Date
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -37,11 +36,12 @@ import org.kopi.galite.type.Week
 abstract class Report: Window() {
 
   /** Report's fields. */
-  val fields = mutableListOf<RField<*>>()
+  val fields = mutableListOf<ReportField<*>>()
 
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
 
+  /** the help text */
   var help: String? = null
 
   /**
@@ -51,9 +51,9 @@ abstract class Report: Window() {
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
+  inline fun <reified T : Comparable<T>> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
-    val field = RField(domain)
+    val field = ReportField(domain)
     field.init()
     fields.add(field)
     return field
@@ -75,14 +75,14 @@ abstract class Report: Window() {
    *
    * @param rowNumber the index of the desired row.
    */
-  fun getRow(rowNumber: Int): MutableMap<Field<*>, Any> = reportRows[rowNumber].data
+  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any> = reportRows[rowNumber].data
 
   /**
    * Returns rows of data for a specific [field].
    *
    * @param field the field.
    */
-  fun getRowsForField(field: Field<*>) = reportRows.map { it.data[field] }
+  fun getRowsForField(field: ReportField<*>) = reportRows.map { it.data[field] }
 
   /**
    * Adds default report commands
@@ -125,7 +125,7 @@ abstract class Report: Window() {
           VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, it.domain.length ?: 0, null)
         Boolean::class ->
           VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
-        Date::class ->
+        Date::class, java.util.Date::class ->
           VDateColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
         Month::class ->
           VMonthColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
@@ -157,7 +157,7 @@ abstract class Report: Window() {
 
 
   /** Report model*/
-  val reportModel: VReport by lazy {
+  override val model: VReport by lazy {
     genLocalization()
 
     object : VReport() {

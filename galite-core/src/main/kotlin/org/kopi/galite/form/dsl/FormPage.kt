@@ -15,26 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.form.dsl
 
-import java.util.Locale
-
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
-import org.kopi.galite.visual.VWindow
+import org.kopi.galite.common.LocalizationWriter
 
 /**
- * This class represents the definition of a window
  *
- * @param where                the token reference of this node
- * @param title                the title of this form
- * @param superName                the type of the form
+ * @param ident                the identifier of the page
+ * @param title                the page title in default locale
  */
-abstract class Window {
-  abstract val title: String
-  open val locale: Locale? = null
-  var options: Int? = null
-  lateinit var commands: Array<VCommand>
-  lateinit var triggers: Array<VTrigger>
-  abstract val model: VWindow
+class FormPage(val ident: String, val title: String) {
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!!FIX:taoufik
+   */
+  fun genLocalization(writer: LocalizationWriter) {
+    (writer as FormLocalizationWriter).genPage(ident, title)
+  }
 }
