@@ -51,6 +51,7 @@ class FormTests: JApplicationTestBase() {
     }
 
     init {
+
       page("test page") {
         val testBlock = block(1, 1, "Test block") {
           val u = table(User)

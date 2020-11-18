@@ -14,20 +14,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form.dsl
 
+import org.kopi.galite.common.*
+import org.kopi.galite.form.VForm
 import java.io.File
 import java.io.IOException
-
-import org.kopi.galite.common.Actor
-import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Window
-import org.kopi.galite.form.VForm
 
 /**
  * Represents a form.
  */
-abstract class Form: Window() {
+abstract class Form : Window() {
 
   /** Form's actors. */
   val actors = mutableListOf<Actor>()
@@ -40,6 +38,9 @@ abstract class Form: Window() {
 
   /** the help text TODO: Move to super class */
   var help: String? = null
+
+  /** Form's triggers. */
+  var formTriggers = mutableListOf<Trigger>()
 
   /**
    * Adds a new actor to this form.
@@ -79,6 +80,13 @@ abstract class Form: Window() {
     page.init()
     pages.add(page)
     return page
+  }
+
+  fun trigger(event: FormEvent, action: Action, init: Trigger.() -> Unit): Trigger {
+    val trigger = Trigger(event, action)
+    trigger.init()
+    formTriggers.add(trigger)
+    return trigger
   }
 
   // ----------------------------------------------------------------------

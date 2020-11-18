@@ -15,9 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.common
+
+import org.kopi.galite.form.dsl.FormEvent
 
 /**
  * This class represents a trigger, ie an action to be executed on events
+ * @param where        the token reference of this node
+ * @param modes        the events that this trigger listen
+ * @param action        the action to perform
  */
-class Trigger(val events: Long, private val action: Action)
+open class Trigger(var event: FormEvent, var action: Action) {
+
+  fun getEvent(e: Int) {
+    event = FormEvent(e)
+  }
+
+  fun getAction(a: Action) {
+    action = a
+  }
+}
