@@ -28,7 +28,8 @@ import kotlin.system.exitProcess
 
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.innerJoin
 import org.jetbrains.exposed.sql.select
@@ -438,9 +439,10 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
                 .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
       else -> {
-        fetchRights(modules, (Modules innerJoin UserRights)
+        fetchRights(modules, Join(Modules, UserRights, JoinType.INNER,
+                additionalConstraint = { Modules.id eq UserRights.module })
                 .slice(Modules.id, UserRights.access, Modules.priority)
-                .select { (Modules.id eq UserRights.module) and (UserRights.user eq getUserID()) }
+                .select { UserRights.user eq getUserID() }
                 .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
     }
