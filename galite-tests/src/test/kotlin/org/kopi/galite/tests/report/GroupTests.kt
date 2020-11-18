@@ -18,14 +18,12 @@
 
 package org.kopi.galite.tests.report
 
-import java.util.Locale
-
-import kotlin.test.assertEquals
-
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
+import java.util.Locale
+import kotlin.test.assertEquals
 
 class GroupTests {
   @Test
