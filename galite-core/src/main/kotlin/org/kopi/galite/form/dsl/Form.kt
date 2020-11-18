@@ -142,18 +142,18 @@ abstract class Form: Window() {
 
     object : VForm() {
       override fun init() {
-        source = sourceFile
         pages = this@Form.pages.map {
           it.ident
         }.toTypedArray()
         blocks = formBlocks.map { formBlock ->
-          formBlock.getBlockModel(this, sourceFile).also { vBlock ->
+          formBlock.getBlockModel(this, source).also { vBlock ->
             vBlock.setInfo(formBlock.pageNumber)
           }
         }.toTypedArray()
       }
 
       init {
+        source = sourceFile
       }
     }
   }
