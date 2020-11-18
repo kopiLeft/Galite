@@ -19,7 +19,6 @@ package org.kopi.galite.report
 
 import java.io.File
 import java.io.IOException
-import java.lang.RuntimeException
 
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Window
@@ -36,7 +35,7 @@ import org.kopi.galite.type.Week
 abstract class Report: Window() {
 
   /** Report's fields. */
-  val fields = mutableListOf<ReportField<*>>()
+  open val fields = mutableListOf<ReportField<*>>()
 
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
@@ -56,6 +55,7 @@ abstract class Report: Window() {
     val field = ReportField(domain)
     field.init()
     fields.add(field)
+    field.reportIndex = fields.indexOf(field)
     return field
   }
 

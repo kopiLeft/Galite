@@ -36,7 +36,16 @@ class ReportField<T : Comparable<T>>(override val domain: Domain<T>? = null): Fi
   var options: Int = 0
 
   /** the grouping column */
-  var group: String? = null
+  var group: ReportField<*>? = null
+    get() = field
+    set(value) {
+      value?.let {
+        groups.add(value)
+        groupID = value.reportIndex
+      }
+    }
+
+  var groups : MutableList<ReportField<*>?> = mutableListOf()
 
   /** the commands accessible in this field */
   lateinit var commands: Array<VCommand>

@@ -39,6 +39,9 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
   /** true if the field is hidden, false otherwise */
   open var hidden: Boolean? = false
 
+  /** Field's index in the report's fields list */
+  var reportIndex = -1
+
   /**
    * Checks if the value passed to the field doesn't exceed the length of the field's domain
    *
