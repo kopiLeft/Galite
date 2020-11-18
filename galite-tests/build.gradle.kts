@@ -25,6 +25,7 @@ val jdomVersion = "2.0.5"
 val karibuTestingVersion = "1.2.5"
 val h2Version = "1.4.199"
 val exposedVersion = "0.27.1"
+val postgresNGVersion = "0.8.6"
 
 dependencies {
   implementation(project(":galite-core"))
@@ -49,9 +50,9 @@ dependencies {
   implementation("org.jdom", "jdom2", jdomVersion)
 
 // Exposed dependencies
-  implementation ("org.jetbrains.exposed", "exposed-core",exposedVersion)
-  implementation ("org.jetbrains.exposed", "exposed-jdbc",exposedVersion)
-  implementation("com.h2database", "h2", h2Version)
+  testImplementation ("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
+  testImplementation("com.h2database", "h2", h2Version)
+  testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", postgresNGVersion)
 }
 
 tasks {
