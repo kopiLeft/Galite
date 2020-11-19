@@ -56,7 +56,8 @@ import org.jetbrains.exposed.sql.Column
  * @param triggers             the triggers executed by this field
  * @param alias                the e alias of this field
  */
-open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null, private val fieldIndex: Int): Field<T>(domain) {
+open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
+                                        private val fieldIndex: Int): Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
