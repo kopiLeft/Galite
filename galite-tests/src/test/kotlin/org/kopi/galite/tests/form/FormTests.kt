@@ -71,7 +71,8 @@ class FormTests: JApplicationTestBase() {
             columns(u.age)
           }
 
-          command(item = graph) {
+          command{
+            item = graph
             action = {
               WindowController.windowController.doNotModal(CommandesC(id.value))
             }

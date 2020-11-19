@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.common
 
+import org.kopi.galite.visual.VActor
+
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
  * and a help
@@ -29,6 +31,7 @@ package org.kopi.galite.common
  */
 class Actor(val menu: String, val label: String, val help: String) {
 
+  var ident : String? = null
   var key: Int? = null
   var icon: String? = null
 

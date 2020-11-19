@@ -18,14 +18,15 @@
 package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.Actor
-import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.CommandBody
+import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
+import org.kopi.galite.visual.VCommand
 
 /**
  * A block on a form
@@ -69,7 +70,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
   /**
    * Adds the [table] to this block
    */
-  fun <T: Table> table(table: T): T {
+  fun <T : Table> table(table: T): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
     blockTables.add(formBlockTable)
     return table
@@ -146,11 +147,27 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    * @param init    initialization method.
    * @return a field.
    */
-  fun command(item: Actor, init: Command.() -> Unit): Command {
+  fun command(init: CommandBody.() -> Unit): Command {
     val command = Command()
-    command.init()
+
+    command.body.init()
+    command.modes = when (command.mode) {
+      "QUERY" -> 1 shl VConstants.MOD_QUERY
+      "INSERT" -> 1 shl VConstants.MOD_INSERT
+      "UPDATE" -> 1 shl VConstants.MOD_UPDATE
+      else -> VConstants.MOD_ANY
+    }
     blockCommands.add(command)
     return command
+  }
+
+  /**
+   * Calls another pre-defined command
+   */
+  fun command(name: String?): Command {
+    return blockCommands.find {
+      it.name.equals(name)
+    } ?: throw NoSuchElementException("Command $name is not defined")
   }
 
   // ----------------------------------------------------------------------
@@ -178,6 +195,18 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
       }
 
       init {
+        /** Used actors in form*/
+        val usedActors  = form.actors.map { vActor ->
+           vActor?.actorIdent to vActor
+        }.toMap()
+
+        super.commands = blockCommands.map {
+          VCommand(it.modes,
+                   this,
+                   usedActors.get(it.body.item.ident),
+                   it.trigger!!,
+                   it.body.item.label)
+        }.toTypedArray()
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()

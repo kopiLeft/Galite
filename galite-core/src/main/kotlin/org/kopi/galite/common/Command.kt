@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.common
 
+import org.apache.commons.lang3.mutable.Mutable
+import org.kopi.galite.form.VConstants
+
 /**
  * This class represent a command, ie a link between an actor and
  * an action
@@ -25,7 +28,10 @@ package org.kopi.galite.common
  * @param body                 the command body
  */
 class Command() {
-  var modes: Int? = null
-  var body: CommandBody? = null
-  var action: (() -> Unit)? = null
+  var modes: Int  = VConstants.MOD_ANY
+  var name : String? = null
+  lateinit var body: CommandBody
+  var trigger : Int? = null
+  var mode : String? = null
+
 }
