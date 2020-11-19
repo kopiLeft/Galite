@@ -20,7 +20,7 @@ package org.kopi.galite.db
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.jodatime.datetime
 
-class DBSchema {
+object DBSchema {
 
   object Modules : Table("MODULE") {
     val id = integer("ID").autoIncrement()
@@ -129,8 +129,6 @@ class DBSchema {
     override val primaryKey = PrimaryKey(table , column)
   }
 
-  companion object {
-    val list_Of_Tables = listOf(Modules, UserRights, GroupRights, GroupParties, Symbols,
+  val list_Of_Tables = listOf(Modules, UserRights, GroupRights, GroupParties, Symbols,
             Favorites, Users, Groups, References)
-  }
 }

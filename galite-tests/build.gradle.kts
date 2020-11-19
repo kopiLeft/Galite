@@ -49,8 +49,9 @@ dependencies {
 
   implementation("org.jdom", "jdom2", jdomVersion)
 
-// Exposed dependencies
+  // Exposed dependencies
   testImplementation ("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
+
   testImplementation("com.h2database", "h2", h2Version)
   testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", postgresNGVersion)
 }

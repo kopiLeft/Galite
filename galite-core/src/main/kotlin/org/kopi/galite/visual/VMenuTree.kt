@@ -28,13 +28,12 @@ import kotlin.system.exitProcess
 
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Join
-import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.innerJoin
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBSchema.Favorites
@@ -439,8 +438,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
                 .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
       else -> {
-        fetchRights(modules, Join(Modules, UserRights, JoinType.INNER,
-                additionalConstraint = { Modules.id eq UserRights.module })
+        fetchRights(modules, Modules.innerJoin(UserRights, { id }, { module })
                 .slice(Modules.id, UserRights.access, Modules.priority)
                 .select { UserRights.user eq getUserID() }
                 .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
