@@ -20,6 +20,7 @@ package org.kopi.galite.form.dsl
 import java.io.File
 
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Window
 
 /**
  * A block on a form
@@ -40,6 +41,13 @@ abstract class FormElement(val ident: String) {
       val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
     }
+
+  /**
+   * Make a tuning pass in order to create informations about exported elements
+   *
+   * @param window        the actual context of analyse
+   */
+  abstract fun initialize(window: Window)
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

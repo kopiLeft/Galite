@@ -20,19 +20,19 @@ package org.kopi.galite.form.dsl
 import java.awt.Point
 
 import org.kopi.galite.form.VPosition
-import org.kopi.galite.util.base.InconsistencyException
 
 /**
- * A position within a block. This is a position given by x and y location
+ * A position within a block
  *
+ * @param field                the master field
  */
-abstract class FormPosition protected constructor() {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
-  open fun setChartPosition(chartPos: Int) {
-    // this method should not be called
-    throw InconsistencyException("setChartPosition(chartPos) should not be called from here !!!")
+class FormDescriptionPosition<T : Comparable<T>>(val field: FormField<T>, chartPos: Int = -1) : FormPosition() {
+
+  /**
+   * Sets chart position to [chartPos]
+   */
+  override fun setChartPosition(chartPos: Int) {
+    this.chartPos = chartPos
   }
 
   /**
@@ -41,19 +41,54 @@ abstract class FormPosition protected constructor() {
    *
    * @param point                the current bottomRight point
    */
-  abstract fun createRBPoint(point: Point, field: FormField<*>)
+  override fun createRBPoint(point: Point, field: FormField<*>) {
+    // do nothing
+  }
+
+  /**
+   * Return the line pos
+   */
+  override fun getLine(): Int {
+    return field.position!!.getLine()
+  }
+
+  /**
+   * Return the column pos
+   */
+  override fun getColumn(): Int {
+    return field.position!!.getColumn()
+  }
+
+  /**
+   * Return the column end pos
+   */
+  override fun getColumnEnd(): Int {
+    return field.position!!.getColumnEnd()
+  }
+
+  /**
+   * Return the line end pos
+   */
+  override fun getLineEnd(): Int {
+    return field.position!!.getLineEnd()
+  }
+
+  /**
+   * Return the chart pos
+   */
+  override fun getChartPosition(): Int {
+    return chartPos
+  }
 
   // ----------------------------------------------------------------------
-  // Position method
+  // DATA MEMBERS
   // ----------------------------------------------------------------------
-  abstract fun getLine(): Int
-  abstract fun getColumn(): Int
-  abstract fun getColumnEnd(): Int
-  abstract fun getLineEnd(): Int
-  open fun getChartPosition(): Int = -1
+
+  private var chartPos = 0
 
   /**
    * Creates and returns a VPosition model resolved from this form field position
    */
-  abstract fun getPositionModel(): VPosition
+  override fun getPositionModel(): VPosition =
+    VPosition(getLine(), getLineEnd(), getColumn(), getColumnEnd(), getChartPosition())
 }
