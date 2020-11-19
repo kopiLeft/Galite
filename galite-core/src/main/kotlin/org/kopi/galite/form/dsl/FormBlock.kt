@@ -54,7 +54,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
   var options: Int = 0
   var blockTables: MutableList<FormBlockTable> = mutableListOf()
   var indices: MutableList<FormBlockIndex> = mutableListOf()
-  lateinit var access: IntArray
+  val access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
   lateinit var commands: Array<Command?>
   lateinit var triggers: Array<Trigger>
   lateinit var dropListMap: HashMap<*, *>
@@ -68,7 +68,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
   /**
    * Adds the [table] to this block
    */
-  fun <T: Table> table(table: T): T {
+  fun <T : Table> table(table: T): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
     blockTables.add(formBlockTable)
     return table
@@ -201,4 +201,42 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
       }
     }
   }
+
+  fun hidden(command: ModCommand) {
+    action = command
+    when (command) {
+      ModCommand.QUERY -> access[0] = VConstants.ACS_HIDDEN
+      ModCommand.INSERT -> access[1] = VConstants.ACS_HIDDEN
+      else -> access[2] = VConstants.ACS_HIDDEN
+    }
+  }
+
+  fun visit(command: ModCommand) {
+    action = command
+    when (command) {
+      ModCommand.QUERY -> access[0] = VConstants.ACS_VISIT
+      ModCommand.INSERT -> access[1] = VConstants.ACS_VISIT
+      else -> access[2] = VConstants.ACS_VISIT
+    }
+  }
+
+  fun mustfill(command: ModCommand) {
+    action = command
+    when (command) {
+      ModCommand.QUERY -> access[0] = VConstants.ACS_MUSTFILL
+      ModCommand.INSERT -> access[1] = VConstants.ACS_MUSTFILL
+      else -> access[2] = VConstants.ACS_MUSTFILL
+    }
+  }
+  fun skipped(command: ModCommand) {
+    action = command
+    when (command) {
+      ModCommand.QUERY -> access[0] = VConstants.ACS_SKIPPED
+      ModCommand.INSERT -> access[1] = VConstants.ACS_SKIPPED
+      else -> access[2] = VConstants.ACS_SKIPPED
+    }
+  }
+
+  lateinit var action: ModCommand
+
 }

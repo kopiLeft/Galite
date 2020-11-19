@@ -27,7 +27,7 @@ import org.kopi.galite.form.VForm
 /**
  * Represents a form.
  */
-abstract class Form: Window() {
+abstract class Form : Window() {
 
   /** Form's actors. */
   val actors = mutableListOf<Actor>()
@@ -158,3 +158,4 @@ abstract class Form: Window() {
     }
   }
 }
+

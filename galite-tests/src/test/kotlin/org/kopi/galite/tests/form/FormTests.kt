@@ -27,17 +27,18 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.form.dsl.ModCommand
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.WindowController
 
-class FormTests: JApplicationTestBase() {
-  object User: Table() {
+class FormTests : JApplicationTestBase() {
+  object User : Table() {
     val id = integer("id")
     val name = varchar("name", 20)
     val age = integer("age")
   }
 
-  object TestForm: Form() {
+  object TestForm : Form() {
     override val locale = Locale.FRANCE
     override val title = "form for test"
 
@@ -53,9 +54,12 @@ class FormTests: JApplicationTestBase() {
     init {
       page("test page") {
         val testBlock = block(1, 1, "Test", "Test block") {
+          hidden(ModCommand.UPDATE)
+          mustfill(ModCommand.INSERT)
+          visit(ModCommand.QUERY)
+          skipped(ModCommand.QUERY)
           val u = table(FormTests.User)
           val i = index(message = "ID should be unique")
-
           val id = hidden(Domain<Int>(20)) {
             label = "id"
             help = "The user id"
@@ -85,7 +89,7 @@ class FormTests: JApplicationTestBase() {
     }
   }
 
-  class CommandesC(fournisseur: Int?): Chart() {
+  class CommandesC(fournisseur: Int?) : Chart() {
     override val title: String = "Fournisseur"
   }
 
