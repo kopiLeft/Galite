@@ -23,6 +23,9 @@ plugins {
 val vaadinVersion = "17.0.0"
 val jdomVersion = "2.0.5"
 val karibuTestingVersion = "1.2.5"
+val h2Version = "1.4.199"
+val exposedVersion = "0.27.1"
+val postgresNGVersion = "0.8.6"
 
 dependencies {
   implementation(project(":galite-core"))
@@ -45,6 +48,12 @@ dependencies {
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
 
   implementation("org.jdom", "jdom2", jdomVersion)
+
+  // Exposed dependencies
+  testImplementation ("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
+
+  testImplementation("com.h2database", "h2", h2Version)
+  testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", postgresNGVersion)
 }
 
 tasks {
