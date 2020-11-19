@@ -60,10 +60,11 @@ abstract class Form: Window() {
    *
    * @param        buffer                 the buffer size of this block
    * @param        visible                the number of visible elements
+   * @param        name                   the simple identifier of this block
    * @param        title                  the title of the block
    */
-  fun block(buffer: Int, visible: Int, title: String, init: FormBlock.() -> Unit): FormBlock {
-    val block = FormBlock(buffer, visible, title)
+  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock {
+    val block = FormBlock(buffer, visible, name, title)
     block.init()
     formBlocks.add(block)
     return block
@@ -75,7 +76,7 @@ abstract class Form: Window() {
    * @param        title                the title of the page
    */
   fun page(title: String, init: FormPage.() -> Unit): FormPage {
-    val page = FormPage(title, title) // TODO
+    val page = FormPage("Id\$${pages.size}", title)
     page.init()
     pages.add(page)
     return page
@@ -142,8 +143,11 @@ abstract class Form: Window() {
     object : VForm() {
       override fun init() {
         source = sourceFile
+        pages = this@Form.pages.map {
+          it.ident
+        }.toTypedArray()
         blocks = formBlocks.map { formBlock ->
-          formBlock.getBlockModel(this).also { vBlock ->
+          formBlock.getBlockModel(this, source).also { vBlock ->
             vBlock.setInfo(formBlock.pageNumber)
           }
         }.toTypedArray()

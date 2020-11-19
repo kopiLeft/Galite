@@ -52,8 +52,9 @@ class FormTests: JApplicationTestBase() {
 
     init {
       page("test page") {
-        val testBlock = block(1, 1, "Test block") {
-          val u = table(User)
+        val testBlock = block(1, 1, "Test", "Test block") {
+          val u = table(FormTests.User)
+          val i = index(message = "ID should be unique")
 
           val id = hidden(Domain<Int>(20)) {
             label = "id"
@@ -68,7 +69,10 @@ class FormTests: JApplicationTestBase() {
           val age = visit(Domain<Int>(3)) {
             label = "age"
             help = "The user age"
-            columns(u.age)
+            columns(u.age) {
+              index = i
+              priority = 1
+            }
           }
 
           command(item = graph) {

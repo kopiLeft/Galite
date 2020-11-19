@@ -47,14 +47,13 @@ import org.kopi.galite.form.VForm
  * @param        triggers              the triggers executed by this form
  * @param        fields                the objects that populate the block
  */
-class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(ident), VConstants {
-  var title: String = ident
+class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FormElement(ident), VConstants {
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
   var options: Int = 0
   var blockTables: MutableList<FormBlockTable> = mutableListOf()
-  var indices: Array<FormBlockIndex> = arrayOf()
+  var indices: MutableList<FormBlockIndex> = mutableListOf()
   lateinit var access: IntArray
   lateinit var commands: Array<Command?>
   lateinit var triggers: Array<Trigger>
@@ -84,7 +83,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    */
   inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain)
+    val field = FormField(domain, blockFields.size)
     field.access = IntArray(3) { VConstants.ACS_MUSTFILL }
     field.init()
     blockFields.add(field)
@@ -100,7 +99,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    */
   inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain)
+    val field = FormField(domain, blockFields.size)
     field.access = IntArray(3) { VConstants.ACS_VISIT }
     field.init()
     blockFields.add(field)
@@ -116,7 +115,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    */
   inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain)
+    val field = FormField(domain, blockFields.size)
     field.access = IntArray(3) { VConstants.ACS_SKIPPED }
     field.init()
     blockFields.add(field)
@@ -132,11 +131,22 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    */
   inline fun <reified T : Comparable<T>> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain)
+    val field = FormField(domain, blockFields.size)
     field.access = IntArray(3) { VConstants.ACS_HIDDEN }
     field.init()
     blockFields.add(field)
     return field
+  }
+
+  /**
+   * creates and returns a form block index. It uses [init] method to initialize the index.
+   *
+   * @param message                the error message in the default locale
+   */
+  fun index(message: String): FormBlockIndex {
+    val formBlockIndex = FormBlockIndex("Id\$${indices.size}", message, indices.size)
+    indices.add(formBlockIndex)
+    return formBlockIndex
   }
 
   /**
@@ -163,13 +173,12 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
     (writer as FormLocalizationWriter).genBlock(ident,
                                                 title,
                                                 help,
-                                                indices,
+                                                indices.toTypedArray(),
                                                 blockFields.toTypedArray())
   }
 
-
   /** Returns block model */
-  fun getBlockModel(vForm: VForm): VBlock {
+  fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
     return object : VBlock(vForm) {
       override fun setInfo() {
         blockFields.forEach {
@@ -178,11 +187,16 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
       }
 
       init {
+        super.source = source ?: sourceFile
+        super.name = ident
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()
         fields = blockFields.map {
           it.getFieldModel()
+        }.toTypedArray()
+        super.indices = this@FormBlock.indices.map {
+          it.ident
         }.toTypedArray()
       }
     }

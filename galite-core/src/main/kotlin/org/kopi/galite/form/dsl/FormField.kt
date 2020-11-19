@@ -44,6 +44,7 @@ import org.jetbrains.exposed.sql.Column
  * This class represents a form field. It represents an editable element of a block
  *
  * @param ident                the ident of this field
+ * @param index                the index in parent array of fields
  * @param detailedPosition     the position within the block
  * @param label                the label (text on the left)
  * @param help                 the help text
@@ -55,7 +56,8 @@ import org.jetbrains.exposed.sql.Column
  * @param triggers             the triggers executed by this field
  * @param alias                the e alias of this field
  */
-open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null): Field<T>(domain) {
+open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
+                                        private val fieldIndex: Int): Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -76,19 +78,19 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null):
   var align: FieldAlignment = FieldAlignment.LEFT
 
   /**
-   * Returns the index in parent array of fields
-   */
-  var index = 0
-    private set
-
-  /**
    * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
    */
-  fun columns(vararg joinColumns: Column<*>) {
+  fun columns(vararg joinColumns: Column<*>, init: (FormFieldColumns.() -> Unit)? = null) {
     val cols = joinColumns.map {
       FormFieldColumn(it, it.table.tableName, it.name, true, true) // TODO
     }
-    columns = FormFieldColumns(cols.toTypedArray(), index, 0) // TODO
+    columns = FormFieldColumns(cols.toTypedArray())
+    if (init != null) {
+      columns!!.init()
+    }
   }
 
   lateinit var vField: VField
@@ -113,14 +115,14 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null):
   fun setInfo() {
     vField.setInfo(
             getIdent(),
-            index, // TODO
+            fieldIndex,
             posInArray,
             options,
             access,
             null, // TODO
             null, // TODO
-            index, // TODO
-            0, // TODO
+            columns?.index?.indexNumber ?: 0,
+            columns?.priority ?: 0,
             null, // TODO
             null, // TODO
             align.value,

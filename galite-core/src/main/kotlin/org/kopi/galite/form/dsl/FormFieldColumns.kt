@@ -20,16 +20,14 @@ package org.kopi.galite.form.dsl
 /**
  * This class define a column list information
  *
- * @param columns                 a vector of columns
- * @param indices                 the indices of this column
+ * @param columns                 an array of columns
+ * @param index                   the indices of this column
  * @param priority                the priority in sorting
  */
-class FormFieldColumns(val columns: Array<FormFieldColumn?>,
-                       val indices: Int,
-                       val priority: Int) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
+class FormFieldColumns(internal val columns: Array<FormFieldColumn?>,
+                       var index: FormBlockIndex? = null,
+                       var priority: Int = 0) {
+
   /**
    * Sets the position in an array of fields
    */
@@ -38,6 +36,6 @@ class FormFieldColumns(val columns: Array<FormFieldColumn?>,
     for (i in columns.indices) {
       clone[i] = columns[i]!!.cloneToPos(pos)
     }
-    return FormFieldColumns(clone, indices, priority)
+    return FormFieldColumns(clone, index, priority)
   }
 }
