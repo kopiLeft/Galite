@@ -23,7 +23,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.tests.form.FormTests
+import org.kopi.galite.tests.form.TestForm
 
 val testURL = "jdbc:h2:mem:test"
 val testDriver = "org.h2.Driver"
@@ -42,7 +42,7 @@ fun main(args: Array<String>) {
 
     dbTest.insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
     dbTest.insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
-    dbTest.insertIntoModule("2009",  "org/kopi/galite/test/Menu", 90, "1000", FormTests::class)
+    dbTest.insertIntoModule("2009",  "org/kopi/galite/test/Menu", 90, "1000", TestForm::class)
 
     dbTest.insertIntoUserRights("admin","2000" , true)
     dbTest.insertIntoUserRights("admin", "1000", true)
