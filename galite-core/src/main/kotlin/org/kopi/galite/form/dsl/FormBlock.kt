@@ -163,6 +163,12 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
     return command
   }
 
+  fun align(block : FormBlock, positions : HashMap<Int, Int>) {
+    align = FormBlockAlign(block, positions.keys, positions.values as MutableSet<Int>)
+  }
+
+  lateinit var vBlock: VBlock
+
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
@@ -198,7 +204,10 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
         super.indices = this@FormBlock.indices.map {
           it.ident
         }.toTypedArray()
+        alignment = align?.getBlockAlignModel()
       }
+    }.also {
+      vBlock = it
     }
   }
 }
