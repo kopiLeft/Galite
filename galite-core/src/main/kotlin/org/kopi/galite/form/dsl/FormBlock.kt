@@ -255,7 +255,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
 
-  open fun positionField(field: FormField<*>): FormPosition? {
+  fun positionField(field: FormField<*>): FormPosition? {
     return FormCoordinatePosition(++displayedFields)
   }
 
