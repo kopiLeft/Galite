@@ -100,8 +100,12 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
    */
   fun getFieldModel(): VField {
     return when(domain?.kClass) {
-      Int::class -> VIntegerField(domain?.length ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
-      String::class -> VStringField(domain?.length ?: 0, 0, 0, 0, false) // TODO
+      Int::class -> VIntegerField(domain?.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
+      String::class -> VStringField(domain?.width ?: 0,
+                                    domain?.height ?: 1,
+                                    domain?.visibleHeight ?: 1,
+                                    0,  // TODO
+                                    false) // TODO
       Boolean::class -> VBooleanField()
       Date::class, java.util.Date::class -> VDateField()
       Month::class -> VMonthField()
