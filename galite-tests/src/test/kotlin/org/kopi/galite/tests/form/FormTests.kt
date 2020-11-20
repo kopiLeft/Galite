@@ -100,7 +100,7 @@ object TestForm: Form() {
         }
 
         position.put(1, 3)
-        align(this, testBlock, position)
+        align(testBlock, position)
       }
     }
   }
