@@ -30,7 +30,7 @@ import org.kopi.galite.visual.VWindow
  * @param title                the title of this form
  * @param superName                the type of the form
  */
-abstract class Window {
+abstract class Window{
   abstract val title: String
   open val locale: Locale? = null
   var options: Int? = null

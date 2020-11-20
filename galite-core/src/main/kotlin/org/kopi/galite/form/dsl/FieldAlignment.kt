@@ -18,9 +18,9 @@ package org.kopi.galite.form.dsl
 
 import org.kopi.galite.form.VConstants
 
-enum class FieldAlignment(val value: Int){
-  DEFAULT (VConstants.ALG_DEFAULT),
-  CENTER (VConstants.ALG_CENTER),
-  LEFT (VConstants.ALG_LEFT),
-  RIGHT (VConstants.ALG_RIGHT),
+enum class FieldAlignment(val value: Int) : FieldBlock {
+  DEFAULT(VConstants.ALG_DEFAULT),
+  CENTER(VConstants.ALG_CENTER),
+  LEFT(VConstants.ALG_LEFT),
+  RIGHT(VConstants.ALG_RIGHT),
 }

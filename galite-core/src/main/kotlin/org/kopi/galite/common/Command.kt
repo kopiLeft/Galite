@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.common
 
+import org.kopi.galite.form.dsl.FieldBlock
+
 /**
  * This class represent a command, ie a link between an actor and
  * an action
@@ -24,7 +26,7 @@ package org.kopi.galite.common
  * @param modes                the menu name
  * @param body                 the command body
  */
-class Command() {
+class Command() : FieldBlock {
   var modes: Int? = null
   var body: CommandBody? = null
   var action: (() -> Unit)? = null

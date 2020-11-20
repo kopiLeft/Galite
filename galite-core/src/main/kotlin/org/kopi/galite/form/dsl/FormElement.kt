@@ -28,7 +28,7 @@ import org.kopi.galite.common.LocalizationWriter
  * @param     ident           the identifier of this block
  * @param     shortcut        the shortcut of this block
  */
-abstract class FormElement(val ident: String) {
+abstract class FormElement(open val ident: String) {
 
   open lateinit var shortcut: String
 

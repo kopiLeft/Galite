@@ -25,7 +25,7 @@ import org.jetbrains.exposed.sql.Table
  * @param name                the name of the table
  * @param corr                the shortcut
  */
-class FormBlockTable(val name: String, val corr: String, val table: Table) {
+class FormBlockTable(val name: String, val corr: String, val table: Table): FieldBlock {
   /**
    * Check expression and evaluate and alter context
    * @param block        the actual context of analyse

@@ -26,7 +26,7 @@ import org.kopi.galite.common.LocalizationWriter
  * @param message                the error message in the default locale
  * @param indexNumber            the number of this index
  */
-class FormBlockIndex(val ident: String, val message: String, val indexNumber: Int) {
+class FormBlockIndex(val ident: String, val message: String, val indexNumber: Int): FieldBlock {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

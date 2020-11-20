@@ -57,7 +57,7 @@ import org.jetbrains.exposed.sql.Column
  * @param alias                the e alias of this field
  */
 open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
-                                        private val fieldIndex: Int): Field<T>(domain) {
+                                        private val fieldIndex: Int): FieldBlock, Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS

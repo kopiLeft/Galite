@@ -23,7 +23,7 @@ import org.kopi.galite.util.base.InconsistencyException
  * A position within a block. This is a position given by x and y location
  *
  */
-abstract class FormPosition protected constructor() {
+abstract class FormPosition protected constructor() : FieldBlock{
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------

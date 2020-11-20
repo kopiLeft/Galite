@@ -26,7 +26,7 @@ package org.kopi.galite.form.dsl
  */
 class FormFieldColumns(internal val columns: Array<FormFieldColumn?>,
                        var index: FormBlockIndex? = null,
-                       var priority: Int = 0) {
+                       var priority: Int = 0) : FieldBlock {
 
   /**
    * Sets the position in an array of fields
