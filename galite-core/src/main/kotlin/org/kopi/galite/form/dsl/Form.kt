@@ -63,10 +63,11 @@ abstract class Form: Window() {
    * @param        name                   the simple identifier of this block
    * @param        title                  the title of the block
    */
-  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock {
+  fun block(buffer: Int, visible: Int, name: String, title: String, shortcut : String , init: FormBlock.() -> Unit): FormBlock {
     val block = FormBlock(buffer, visible, name, title)
     block.init()
     block.initialize(this)
+    block.shortcut = shortcut
     formBlocks.add(block)
     return block
   }
