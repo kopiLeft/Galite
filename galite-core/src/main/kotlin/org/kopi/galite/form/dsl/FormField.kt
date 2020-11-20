@@ -44,7 +44,7 @@ import org.jetbrains.exposed.sql.Column
  * This class represents a form field. It represents an editable element of a block
  *
  * @param ident                the ident of this field
- * @param index                the index in parent array of fields
+ * @param fieldIndex           the index in parent array of fields
  * @param detailedPosition     the position within the block
  * @param label                the label (text on the left)
  * @param help                 the help text
@@ -57,12 +57,12 @@ import org.jetbrains.exposed.sql.Column
  * @param alias                the e alias of this field
  */
 open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
-                                        private val fieldIndex: Int): Field<T>(domain) {
+                                        private val fieldIndex: Int,
+                                        var position: FormPosition? = null): Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  var detailedPosition: FormPosition? = null
   var options: Int = 0
   var columns: FormFieldColumns? = null
   lateinit var access: IntArray
@@ -124,10 +124,46 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
             columns?.index?.indexNumber ?: 0,
             columns?.priority ?: 0,
             null, // TODO
-            null, // TODO
+            position?.getPositionModel(),
             align.value,
             null // TODO
     )
+  }
+
+  /**
+   * Initializes form field properties
+   *
+   * @param block        the actual form block
+   */
+  open fun initialize(block: FormBlock) {
+    this.block = block
+
+    // ACCESS
+    val blockAccess: IntArray = block.access
+    for (i in 0..2) {
+      access[i] = access[i].coerceAtMost(blockAccess[i])
+    }
+
+    // TRANSIENT MODE
+    if (columns == null && isNeverAccessible) {
+      options = options or VConstants.FDO_TRANSIENT
+    }
+
+    // POSITION
+    if (!isInternal && !block.isSingle()) {
+      // with NO DETAIL the position must be null
+      if (hasOption(VConstants.FDO_NODETAIL) || block.hasOption(VConstants.BKO_NODETAIL)) {
+
+        // Get a position for the chart view.
+        position = block.positionField(this)
+      }
+      if (!(hasOption(VConstants.FDO_NODETAIL)
+                      || block.hasOption(VConstants.BKO_NODETAIL)
+                      || hasOption(VConstants.FDO_NOCHART)
+                      || block.hasOption(VConstants.BKO_NOCHART))) {
+        block.positionField(position)
+      }
+    }
   }
 
   // ----------------------------------------------------------------------
