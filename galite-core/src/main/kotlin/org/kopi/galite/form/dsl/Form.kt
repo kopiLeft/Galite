@@ -66,6 +66,7 @@ abstract class Form: Window() {
   fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock {
     val block = FormBlock(buffer, visible, name, title)
     block.init()
+    block.initialize(this)
     formBlocks.add(block)
     return block
   }
@@ -151,6 +152,11 @@ abstract class Form: Window() {
             vBlock.setInfo(formBlock.pageNumber)
           }
         }.toTypedArray()
+
+        //TODO ----------begin-------------
+        super.commands = arrayOf()
+        VKT_Triggers = arrayOf(IntArray(200))
+        //TODO ----------end-------------
       }
 
       init {

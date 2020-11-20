@@ -48,8 +48,8 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
    */
   fun checkLength(value: T): Boolean = when {
     domain == null -> true
-    domain!!.length == null -> true
-    else -> value.toString().length <= domain!!.length!!
+    domain!!.width == null -> true
+    else -> value.toString().length <= domain!!.width!!
   }
 
   /**

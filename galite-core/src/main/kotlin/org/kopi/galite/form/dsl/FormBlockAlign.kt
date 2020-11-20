@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.form.dsl
 
+import java.util.ArrayList
+
 import org.kopi.galite.form.BlockAlignment
 
 /**
@@ -28,25 +30,26 @@ import org.kopi.galite.form.BlockAlignment
  * @param target                the target column vector
  * @param source                the source column vector
  */
-class FormBlockAlign(private val block: FormBlock,
-                     private val target: MutableSet<Int>,
-                     private val source: MutableSet<Int>) {
+class FormBlockAlign(private val sourceBlock: FormBlock,
+                     private val targetBlock: FormBlock,
+                     private val source: ArrayList<Int>,
+                     private val target: ArrayList<Int>) {
 
   fun genTargetPositions() : IntArray {
-    val columnCount: Int = block.blockFields.size
-    val target : ArrayList<Int>? = null
+    val columnCount: Int = sourceBlock.blockFields.size
+    val targetResult = arrayListOf<Int>()
     var pos = 0
 
     for (i in 0 until columnCount) {
-      if (source.elementAt(pos) != i + 1) {
-        target!!.add(-1)
+      if (source[pos] != i + 1) {
+        targetResult.add(-1)
       } else {
-        target!!.add(target[pos] - 1)
+        targetResult.add(target[pos] - 1)
         pos += 1
       }
     }
-    return target!!.toTypedArray().toIntArray()
+    return targetResult.toTypedArray().toIntArray()
   }
 
-  fun getBlockAlignModel() : BlockAlignment = BlockAlignment(block.vBlock, genTargetPositions())
+  fun getBlockAlignModel() : BlockAlignment = BlockAlignment(targetBlock.vBlock, genTargetPositions())
 }
