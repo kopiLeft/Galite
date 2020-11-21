@@ -51,13 +51,14 @@ import org.jetbrains.exposed.sql.Column
  * @param align                the alignment of the text
  * @param options              the options of the field
  * @param columns              the column in the database
- * @param access               the access mode
+ * @param initialAccess        the initial access mode
  * @param commands             the commands accessible in this field
  * @param triggers             the triggers executed by this field
  * @param alias                the e alias of this field
  */
-open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
+class FormField<T : Comparable<T>>(override val domain: Domain<T>,
                                         private val fieldIndex: Int,
+                                        initialAccess: Int,
                                         var position: FormPosition? = null): Field<T>(domain) {
 
   // ----------------------------------------------------------------------
@@ -65,11 +66,27 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
   // ----------------------------------------------------------------------
   var options: Int = 0
   var columns: FormFieldColumns? = null
-  lateinit var access: IntArray
+  var access: IntArray = IntArray(3) { initialAccess }
   var commands: Array<Command>? = null
   var triggers: Array<Trigger>? = null
   var alias: String? = null
+  var initialValue: T? = null
   var value: T? = null
+    get() {
+      return if(vField.block == null) {
+        field
+      } else {
+        vField.getObject() as? T
+      }
+    }
+    set(value) {
+      field = value
+      if(vField.block == null) {
+        initialValue = value
+      } else {
+        vField.setObject(value)
+      }
+    }
 
   var block: FormBlock? = null
     private set
@@ -93,28 +110,25 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
     }
   }
 
-  lateinit var vField: VField
-
   /**
-   * Returns the field model based on the field type.
+   * The field model based on the field type.
    */
-  fun getFieldModel(): VField {
-    return when(domain?.kClass) {
-      Int::class -> VIntegerField(domain?.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
-      String::class -> VStringField(domain?.width ?: 0,
-                                    domain?.height ?: 1,
-                                    domain?.visibleHeight ?: 1,
-                                    0,  // TODO
-                                    false) // TODO
-      Boolean::class -> VBooleanField()
-      Date::class, java.util.Date::class -> VDateField()
-      Month::class -> VMonthField()
-      Week::class -> VWeekField()
-      Time::class -> VTimeField()
-      Timestamp::class -> VTimestampField()
-      else -> throw RuntimeException("Type ${domain?.kClass!!.qualifiedName} is not supported")
-    }.also { vField = it }
-  }
+  var vField: VField =
+          when(domain.kClass) {
+            Int::class -> VIntegerField(domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
+            String::class -> VStringField(domain.width ?: 0,
+                                          domain.height ?: 1,
+                                          domain.visibleHeight ?: 1,
+                                          0,  // TODO
+                                          false) // TODO
+            Boolean::class -> VBooleanField()
+            Date::class, java.util.Date::class -> VDateField()
+            Month::class -> VMonthField()
+            Week::class -> VWeekField()
+            Time::class -> VTimeField()
+            Timestamp::class -> VTimestampField()
+            else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+          }
 
   fun setInfo() {
     vField.setInfo(

@@ -29,7 +29,7 @@ import org.kopi.galite.exceptions.InvalidValueException
  *
  * @param domain the field's domain
  */
-abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
+abstract class Field<T : Comparable<T>>(open val domain: Domain<T>) {
   /** Field's label */
   var label: String? = null
 
@@ -47,9 +47,8 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
    * and returns false otherwise.
    */
   fun checkLength(value: T): Boolean = when {
-    domain == null -> true
-    domain!!.width == null -> true
-    else -> value.toString().length <= domain!!.width!!
+    domain.width == null -> true
+    else -> value.toString().length <= domain.width!!
   }
 
   /**
@@ -61,9 +60,8 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
    * @throws InvalidValueException otherwise
    */
   fun checkValue(value: T): Boolean = when {
-    domain == null -> true
-    domain!!.type is ListDomain && (domain!!.type as ListDomain).checkValue(value) -> true
-    domain!!.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
+    domain.type is ListDomain && (domain.type as ListDomain).checkValue(value) -> true
+    domain.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
             "by this domain type")
     else -> throw InvalidValueException(value, label)
   }
@@ -72,7 +70,7 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
    * returns list of values that can this field get.
    */
   fun getValues(): MutableMap<String, *>? {
-    return domain?.getValues()
+    return domain.getValues()
   }
 
   /**

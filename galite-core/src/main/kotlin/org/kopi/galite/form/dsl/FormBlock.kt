@@ -51,7 +51,7 @@ import org.kopi.galite.form.VForm
  * @param        triggers              the triggers executed by this form
  * @param        fields                the objects that populate the block
  */
-class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FormElement(ident), VConstants {
+open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FormElement(ident), VConstants {
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
@@ -90,8 +90,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
    */
   inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain, blockFields.size, position)
-    field.access = IntArray(3) { VConstants.ACS_MUSTFILL }
+    val field = FormField(domain, blockFields.size, VConstants.ACS_MUSTFILL, position)
     field.init()
     blockFields.add(field)
     return field
@@ -106,8 +105,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
    */
   inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain, blockFields.size, position)
-    field.access = IntArray(3) { VConstants.ACS_VISIT }
+    val field = FormField(domain, blockFields.size, VConstants.ACS_VISIT, position)
     field.init()
     blockFields.add(field)
     return field
@@ -122,8 +120,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
    */
   inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain, blockFields.size, position)
-    field.access = IntArray(3) { VConstants.ACS_SKIPPED }
+    val field = FormField(domain, blockFields.size, VConstants.ACS_SKIPPED, position)
     field.init()
     blockFields.add(field)
     return field
@@ -138,8 +135,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
    */
   inline fun <reified T : Comparable<T>> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain, blockFields.size)
-    field.access = IntArray(3) { VConstants.ACS_HIDDEN }
+    val field = FormField(domain, blockFields.size, VConstants.ACS_HIDDEN)
     field.init()
     blockFields.add(field)
     return field
@@ -312,7 +308,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
           it.table
         }.toTypedArray()
         fields = blockFields.map {
-          it.getFieldModel()
+          it.vField
         }.toTypedArray()
         super.indices = this@FormBlock.indices.map {
           it.ident

@@ -75,7 +75,7 @@ open class VBooleanCodeField : VCodeField {
   /**
    * Sets the field value of given record to a boolean value.
    */
-  fun setBoolean(r: Int, v: Boolean?) {
+  override fun setBoolean(r: Int, v: Boolean?) {
     if (v == null) {
       setCode(r, -1)
     } else {
