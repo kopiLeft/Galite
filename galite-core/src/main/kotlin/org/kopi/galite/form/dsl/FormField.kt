@@ -56,10 +56,11 @@ import org.jetbrains.exposed.sql.Column
  * @param triggers             the triggers executed by this field
  * @param alias                the e alias of this field
  */
-class FormField<T : Comparable<T>>(override val domain: Domain<T>,
-                                        private val fieldIndex: Int,
-                                        initialAccess: Int,
-                                        var position: FormPosition? = null): Field<T>(domain) {
+class FormField<T : Comparable<T>>(val block: FormBlock,
+                                   override val domain: Domain<T>,
+                                   private val fieldIndex: Int,
+                                   initialAccess: Int,
+                                   var position: FormPosition? = null): Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -88,8 +89,26 @@ class FormField<T : Comparable<T>>(override val domain: Domain<T>,
       }
     }
 
-  var block: FormBlock? = null
-    private set
+  /**
+   * Returns the field value of the current record number [record]
+   *
+   * @param record the record number
+   */
+  operator fun get(record: Int): T? {
+    return vField.getObject(record) as? T
+
+  }
+
+  /**
+   * Sets the field value of given record.
+   *
+   * @param record the record number
+   * @param value  the value
+   */
+  operator fun set(record: Int = 0, value: T) {
+    vField.setObject(record, value)
+  }
+
 
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.LEFT
@@ -115,18 +134,19 @@ class FormField<T : Comparable<T>>(override val domain: Domain<T>,
    */
   var vField: VField =
           when(domain.kClass) {
-            Int::class -> VIntegerField(domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
-            String::class -> VStringField(domain.width ?: 0,
+            Int::class -> VIntegerField(block.buffer, domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
+            String::class -> VStringField(block.buffer,
+                                          domain.width ?: 0,
                                           domain.height ?: 1,
                                           domain.visibleHeight ?: 1,
                                           0,  // TODO
                                           false) // TODO
-            Boolean::class -> VBooleanField()
-            Date::class, java.util.Date::class -> VDateField()
-            Month::class -> VMonthField()
-            Week::class -> VWeekField()
-            Time::class -> VTimeField()
-            Timestamp::class -> VTimestampField()
+            Boolean::class -> VBooleanField(block.buffer)
+            Date::class, java.util.Date::class -> VDateField(block.buffer)
+            Month::class -> VMonthField(block.buffer)
+            Week::class -> VWeekField(block.buffer)
+            Time::class -> VTimeField(block.buffer)
+            Timestamp::class -> VTimestampField(block.buffer)
             else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
           }
 
@@ -154,7 +174,6 @@ class FormField<T : Comparable<T>>(override val domain: Domain<T>,
    * @param block        the actual form block
    */
   open fun initialize(block: FormBlock) {
-    this.block = block
 
     // ACCESS
     val blockAccess: IntArray = block.access

@@ -90,7 +90,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    */
   inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain, blockFields.size, VConstants.ACS_MUSTFILL, position)
+    val field = FormField(this, domain, blockFields.size, VConstants.ACS_MUSTFILL, position)
     field.init()
     blockFields.add(field)
     return field
@@ -105,7 +105,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    */
   inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain, blockFields.size, VConstants.ACS_VISIT, position)
+    val field = FormField(this, domain, blockFields.size, VConstants.ACS_VISIT, position)
     field.init()
     blockFields.add(field)
     return field
@@ -120,7 +120,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    */
   inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain, blockFields.size, VConstants.ACS_SKIPPED, position)
+    val field = FormField(this, domain, blockFields.size, VConstants.ACS_SKIPPED, position)
     field.init()
     blockFields.add(field)
     return field
@@ -135,7 +135,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    */
   inline fun <reified T : Comparable<T>> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain, blockFields.size, VConstants.ACS_HIDDEN)
+    val field = FormField(this, domain, blockFields.size, VConstants.ACS_HIDDEN)
     field.init()
     blockFields.add(field)
     return field

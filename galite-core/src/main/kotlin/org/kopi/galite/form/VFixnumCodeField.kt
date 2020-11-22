@@ -33,10 +33,11 @@ import org.kopi.galite.util.base.InconsistencyException
  * @param     ident           the identifier of the type in the source file
  * @param     source          the qualified name of the source file defining the list
  */
-open class VFixnumCodeField(ident: String,
+open class VFixnumCodeField(bufferSize: Int,
+                            ident: String,
                             source: String,
                             names: Array<String>,
-                            private val codes: Array<Fixed>) : VCodeField(ident, source, names) {
+                            private val codes: Array<Fixed>) : VCodeField(bufferSize, ident, source, names) {
 
   /**
    * return a list column for list
