@@ -17,11 +17,15 @@
  */
 package org.kopi.galite.form.dsl
 
+import java.awt.Point
+
 import org.jetbrains.exposed.sql.Table
+
 import org.kopi.galite.common.Actor
-import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
+import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
@@ -47,18 +51,20 @@ import org.kopi.galite.form.VForm
  * @param        triggers              the triggers executed by this form
  * @param        fields                the objects that populate the block
  */
-class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(ident), VConstants {
-  var title: String = ident
+class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FormElement(ident), VConstants {
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
   var options: Int = 0
   var blockTables: MutableList<FormBlockTable> = mutableListOf()
-  var indices: Array<FormBlockIndex> = arrayOf()
-  lateinit var access: IntArray
+  var indices: MutableList<FormBlockIndex> = mutableListOf()
+  var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
   lateinit var commands: Array<Command?>
   lateinit var triggers: Array<Trigger>
   lateinit var dropListMap: HashMap<*, *>
+  private var maxRowPos = 0
+  private var maxColumnPos = 0
+  private var displayedFields = 0
 
   /** Blocks's fields. */
   val blockFields = mutableListOf<FormField<*>>()
@@ -69,7 +75,7 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
   /**
    * Adds the [table] to this block
    */
-  fun <T: Table> table(table: T): T {
+  fun <T : Table> table(table: T): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
     blockTables.add(formBlockTable)
     return table
@@ -82,9 +88,9 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain)
+    val field = FormField(domain, blockFields.size, position)
     field.access = IntArray(3) { VConstants.ACS_MUSTFILL }
     field.init()
     blockFields.add(field)
@@ -98,9 +104,9 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain)
+    val field = FormField(domain, blockFields.size, position)
     field.access = IntArray(3) { VConstants.ACS_VISIT }
     field.init()
     blockFields.add(field)
@@ -114,9 +120,9 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain)
+    val field = FormField(domain, blockFields.size, position)
     field.access = IntArray(3) { VConstants.ACS_SKIPPED }
     field.init()
     blockFields.add(field)
@@ -132,11 +138,83 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
    */
   inline fun <reified T : Comparable<T>> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(domain)
+    val field = FormField(domain, blockFields.size)
     field.access = IntArray(3) { VConstants.ACS_HIDDEN }
     field.init()
     blockFields.add(field)
     return field
+  }
+
+  /**
+   * Sets the field in position given by x and y location
+   *
+   * @param line		the line
+   * @param column		the column
+   */
+  fun at(line: Int, column: Int): FormPosition = FormCoordinatePosition(line, 0, column, 0)
+
+  /**
+   * Sets the field in position given by x and y location
+   *
+   * @param lineRange		the line range (lineRange.first: the line,
+   *                            lineRange.last: the last line into this field may be placed)
+   * @param column		the column
+   */
+  fun at(lineRange: IntRange, column: Int): FormPosition =
+          FormCoordinatePosition(lineRange.first, lineRange.last, column, 0)
+
+  /**
+   * Sets the field in position given by x and y location
+   *
+   * @param line		the line
+   * @param columnRange		the line range (columnRange.first: the column,
+   *                            columnRange.last: the last column into this field may be placed)
+   */
+  fun at(line: Int, columnRange: IntRange): FormPosition =
+          FormCoordinatePosition(line, 0, columnRange.first, columnRange.last)
+
+  /**
+   * Sets the field in position given by x and y location
+   *
+   * @param lineRange		the line range (lineRange.first: the line,
+   *                            lineRange.last: the last line into this field may be placed)
+   * @param columnRange		the line range (columnRange.first: the column,
+   *                            columnRange.last: the last column into this field may be placed)
+   */
+  fun at(lineRange: IntRange, columnRange: IntRange): FormPosition =
+          FormCoordinatePosition(lineRange.first, lineRange.last, columnRange.first, columnRange.last)
+
+  /**
+   * Sets the field in position given by x location
+   *
+   * @param lineRange		the line range (lineRange.first: the line,
+   *                            lineRange.last: the last line into this field may be placed)
+   */
+  fun at(lineRange: IntRange): FormPosition = FormMultiFieldPosition(lineRange.first, lineRange.last)
+
+  /**
+   * Sets the field in position given by x location
+   *
+   * @param line		the line
+   */
+  fun at(line: Int): FormPosition = FormMultiFieldPosition(line, 0)
+
+  /**
+   * Sets the field in position that follows a specific [field]
+   *
+   * @param field		the field
+   */
+  fun <T : Comparable<T>> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
+
+  /**
+   * creates and returns a form block index. It uses [init] method to initialize the index.
+   *
+   * @param message                the error message in the default locale
+   */
+  fun index(message: String): FormBlockIndex {
+    val formBlockIndex = FormBlockIndex("Id\$${indices.size}", message, indices.size)
+    indices.add(formBlockIndex)
+    return formBlockIndex
   }
 
   /**
@@ -153,6 +231,46 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
     return command
   }
 
+  /**
+   * Make a tuning pass in order to create informations about exported
+   * elements such as block fields positions
+   *
+   * @param window        the actual context of analyse
+   */
+  override fun initialize(window: Window) {
+    val bottomRight = Point(0, 0)
+
+    blockFields.forEach { field ->
+      field.initialize(this)
+      if (field.position != null) {
+        field.position!!.createRBPoint(bottomRight, field)
+      }
+    }
+
+    maxRowPos = bottomRight.y
+    maxColumnPos = bottomRight.x
+  }
+
+  // ----------------------------------------------------------------------
+  // IMPLEMENTATION
+  // ----------------------------------------------------------------------
+
+  fun positionField(field: FormField<*>): FormPosition? {
+    return FormCoordinatePosition(++displayedFields)
+  }
+
+
+  fun positionField(pos: FormPosition?) {
+    pos!!.setChartPosition(++displayedFields)
+  }
+
+  fun hasOption(option: Int): Boolean = options and option == option
+
+  /**
+   * Returns true if the size of the buffer == 1, false otherwise
+   */
+  fun isSingle(): Boolean = buffer == 1
+
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
@@ -163,13 +281,12 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
     (writer as FormLocalizationWriter).genBlock(ident,
                                                 title,
                                                 help,
-                                                indices,
+                                                indices.toTypedArray(),
                                                 blockFields.toTypedArray())
   }
 
-
   /** Returns block model */
-  fun getBlockModel(vForm: VForm): VBlock {
+  fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
     return object : VBlock(vForm) {
       override fun setInfo() {
         blockFields.forEach {
@@ -178,11 +295,27 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String) : FormElement(
       }
 
       init {
+        //TODO ----------begin-------------
+        super.VKT_Triggers = arrayOf(IntArray(200), IntArray(200), IntArray(200), IntArray(200), IntArray(200), IntArray(200))
+        super.access = intArrayOf(
+                4, 4, 4
+        )
+        super.commands = arrayOf()
+        //TODO ------------end-----------
+
+        super.source = source ?: sourceFile
+        super.bufferSize = buffer
+        super.maxRowPos = this@FormBlock.maxRowPos
+        super.maxColumnPos = this@FormBlock.maxColumnPos
+        super.name = ident
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()
         fields = blockFields.map {
           it.getFieldModel()
+        }.toTypedArray()
+        super.indices = this@FormBlock.indices.map {
+          it.ident
         }.toTypedArray()
       }
     }
