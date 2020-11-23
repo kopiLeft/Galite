@@ -20,5 +20,4 @@ package org.kopi.galite.common
 /**
  * This class represents an action, ie a list of instructions
  */
-class Action(val action: Trigger.() -> Unit) {
-}
+class Action(val action: Trigger.() -> Unit)
