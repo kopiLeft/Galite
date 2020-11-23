@@ -61,7 +61,10 @@ fun main(args: Array<String>) {
               testPassword,
               "-l",
               testLocale.toString(),
-              "-r")
+              "-r",
+              "-f", TestForm::class.qualifiedName
+
+      )
     }
 
     JApplicationTestBase.GaliteApplication().run(args)

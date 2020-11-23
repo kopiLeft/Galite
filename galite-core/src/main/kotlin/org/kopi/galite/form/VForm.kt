@@ -20,11 +20,6 @@ package org.kopi.galite.form
 
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.form.VConstants.Companion.TRG_INIT
-import org.kopi.galite.form.VConstants.Companion.TRG_POSTFORM
-import org.kopi.galite.form.VConstants.Companion.TRG_PREFORM
-import org.kopi.galite.form.VConstants.Companion.TRG_QUITFORM
-import org.kopi.galite.form.VConstants.Companion.TRG_RESET
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.util.base.InconsistencyException
@@ -68,7 +63,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * loads the form
    */
-  private fun initIntern(enterField: Boolean) {
+  open fun initIntern(enterField: Boolean) {
     init()
     blocks.forEach {
       it.initIntern()
@@ -447,70 +442,6 @@ abstract class VForm : VWindow, VConstants {
   protected fun hasTrigger(event: Int, index: Int = 0): Boolean {
     return VKT_Triggers[index][event] != 0
   }
-
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    when (VKT_Type) {
-      1 -> {
-        quitAction
-      }
-      2 -> {
-        resetAction
-      }
-      3 -> {
-        postformAction
-      }
-      4 -> {
-        initAction
-      }
-      5 -> {
-        preformAction
-      }
-    }
-    throw InconsistencyException("SHOULD BE REDEFINED")
-  }
-
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    when (VKT_Type) {
-      1 -> {
-        quitAction
-      }
-      2 -> {
-        resetAction
-      }
-      3 -> {
-        postformAction
-      }
-      4 -> {
-        initAction
-      }
-      5 -> {
-        preformAction
-      }
-    }
-    throw InconsistencyException("SHOULD BE REDEFINED")
-  }
-
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
-    when (VKT_Type) {
-      1 -> {
-        quitAction
-      }
-      2 -> {
-        resetAction
-      }
-      3 -> {
-        postformAction
-      }
-      4 -> {
-        initAction
-      }
-      5 -> {
-        preformAction
-      }
-    }
-    throw InconsistencyException("SHOULD BE REDEFINED")
-  }
-
   // ----------------------------------------------------------------------
   // UTILS
   // ----------------------------------------------------------------------
@@ -780,38 +711,81 @@ abstract class VForm : VWindow, VConstants {
     return (getDisplay() as UForm).printForm()
   }
 
+  fun executeObjectTrigger(VKT_Type: Int): Any {
+    when (VKT_Type) {
+      1 -> {
+        quitAction()
+      }
+      2 -> {
+        resetAction()
+      }
+      3 -> {
+        postformAction()
+      }
+      4 -> {
+        initAction()
+      }
+      5 -> {
+        preformAction()
+      }
+    }
+    throw InconsistencyException("SHOULD BE REDEFINED")
+  }
+
+  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
+    when (VKT_Type) {
+      1 -> {
+        quitAction()
+      }
+      2 -> {
+        resetAction()
+      }
+      3 -> {
+        postformAction()
+      }
+      4 -> {
+        initAction()
+      }
+      5 -> {
+        preformAction()
+      }
+    }
+    throw InconsistencyException("SHOULD BE REDEFINED")
+  }
+
+  fun executeIntegerTrigger(VKT_Type: Int): Int {
+    when (VKT_Type) {
+      1 -> {
+        quitAction()
+        callTrigger(VKT_Type)
+      }
+      2 -> {
+        resetAction()
+        callTrigger(VKT_Type)
+      }
+      3 -> {
+        postformAction()
+        callTrigger(VKT_Type)
+      }
+      4 -> {
+        initAction()
+        callTrigger(VKT_Type)
+      }
+      5 -> {
+        preformAction()
+        callTrigger(VKT_Type)
+      }
+    }
+    throw InconsistencyException("SHOULD BE REDEFINED")
+  }
+
+  open lateinit var initAction: () -> Unit
+  open lateinit var preformAction: () -> Unit
+  open lateinit var postformAction: () -> Unit
+  open lateinit var resetAction: () -> Unit
+  open lateinit var quitAction: () -> Unit
+
   val eventList: MutableList<Int> = mutableListOf()
-
-  fun init(initTrigger: () -> Unit) {
-    VKT_Triggers[0][TRG_INIT] = 4
-    initAction = initTrigger
-  }
-
-  fun preform(preformTrigger: () -> Unit) {
-    VKT_Triggers[0][TRG_PREFORM] = 5
-    preformAction = preformTrigger
-  }
-
-  fun postform(postformTrigger: () -> Unit) {
-    VKT_Triggers[0][TRG_POSTFORM] = 3
-    postformAction = postformTrigger
-  }
-
-  fun reset(resetTrigger: () -> Unit) {
-    VKT_Triggers[0][TRG_RESET] = 2
-    resetAction = resetTrigger
-  }
-
-  fun quit(quitTrigger: () -> Unit) {
-    VKT_Triggers[0][TRG_QUITFORM] = 1
-    quitAction = quitTrigger
-  }
-
-  lateinit var initAction: () -> Unit
-  lateinit var preformAction: () -> Unit
-  lateinit var postformAction: () -> Unit
-  lateinit var resetAction: () -> Unit
-  lateinit var quitAction: () -> Unit
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS

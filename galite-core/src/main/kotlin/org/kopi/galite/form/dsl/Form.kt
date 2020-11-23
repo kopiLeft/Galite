@@ -18,6 +18,7 @@
 package org.kopi.galite.form.dsl
 
 import org.kopi.galite.common.*
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import java.io.File
 import java.io.IOException
@@ -26,6 +27,7 @@ import java.io.IOException
  * Represents a form.
  */
 abstract class Form : Window() {
+  val _tokenSet_3_data_ = longArrayOf(0L, 90107314362647552L, 0L, 0L)
 
   /** Form's actors. */
   val actors = mutableListOf<Actor>()
@@ -84,13 +86,42 @@ abstract class Form : Window() {
     return page
   }
 
-  fun trigger(event: Int, action: Action, init: Trigger.() -> Unit): Trigger {
-    val trigger = Trigger(event, action)
-    trigger.init()
+  fun trigger(event: Int, index: Int, action: Action, init: Trigger.() -> Unit): Trigger {
+   val trigger = Trigger(event, index, action)
+   trigger.init()
     formTriggers.add(trigger)
-    return trigger
+   return trigger
   }
 
+   fun init(initTrigger: Trigger. () -> Unit) : Trigger {
+    val trigger = trigger(VConstants.TRG_INIT, 4, Action(initTrigger),initTrigger)
+    formTriggers.add(trigger)
+     return trigger
+  }
+
+   fun preform(preformTrigger: Trigger. () -> Unit) : Trigger {
+    val trigger = trigger(VConstants.TRG_PREFORM, 5, Action(preformTrigger),preformTrigger)
+    formTriggers.add(trigger)
+     return trigger
+  }
+
+   fun postform(postformTrigger: Trigger. () -> Unit) : Trigger {
+    val trigger = trigger(VConstants.TRG_POSTFORM, 5, Action(postformTrigger),postformTrigger)
+    formTriggers.add(trigger)
+     return trigger
+  }
+
+   fun reset(resetTrigger: Trigger.() -> Unit) : Trigger {
+    val trigger = trigger(VConstants.TRG_RESET, 5, Action(resetTrigger),resetTrigger)
+    formTriggers.add(trigger)
+     return trigger
+  }
+
+   fun quit(quitTrigger: Trigger. () -> Unit) :Trigger {
+    val trigger = trigger(VConstants.TRG_QUITFORM, 5, Action(quitTrigger),quitTrigger)
+    formTriggers.add(trigger)
+     return trigger
+  }
 
 
   // ----------------------------------------------------------------------
@@ -133,8 +164,8 @@ abstract class Form : Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genForm(title,
-                                               pages.toTypedArray(),
-                                               formBlocks.toTypedArray()
+            pages.toTypedArray(),
+            formBlocks.toTypedArray()
     )
   }
 
@@ -165,12 +196,45 @@ abstract class Form : Window() {
 
         //TODO ----------begin-------------
         super.commands = arrayOf()
-        VKT_Triggers = arrayOf(IntArray(200))
-        //TODO ----------end-------------
+        var i : Int = 0
+        VKT_Triggers = Array(5) { IntArray(36) }
+    //    if( hasTrigger(it.event, it.index))
+
+        formTriggers.forEach {
+
+            VKT_Triggers[it.index][it.event]= it.index
+              i++
+        }
+
       }
 
-      init {
-      }
     }
+
+
   }
+  /*
+  private fun vkFormTriggers(
+          context: VKParseFormContext
+  ) {
+    var e: Long
+    var t: VKAction?
+    val sourceRef: TokenReference = buildTokenReference() // !!! add comments;
+    run {
+      var _cnt136 = 0
+      _loop136@ do {
+        if (org.kopi.vkopi.comp.form.FormParser._tokenSet_3.member(LA(1))) {
+          e = vkFormEventList()
+          t = vkTriggerAction()
+          context.addTrigger(VKTrigger(sourceRef, e, t))
+        } else {
+          if (_cnt136 >= 1) {
+            break@_loop136
+          } else {
+            throw NoViableAltException(LT(1), getFilename())
+          }
+        }
+        _cnt136++
+      } while (true)
+    }
+  }*/
 }

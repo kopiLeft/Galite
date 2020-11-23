@@ -18,22 +18,10 @@
 
 package org.kopi.galite.common
 
-import org.kopi.galite.form.dsl.FormEvent
-
 /**
  * This class represents a trigger, ie an action to be executed on events
  * @param where        the token reference of this node
  * @param modes        the events that this trigger listen
  * @param action        the action to perform
  */
-open class Trigger(var event: Int, var action: Action) {
-
-  /*fun getEvent(e: Int) {
-    event = FormEvent(e)
-  }
-
-  fun getAction(a: Action) {
-    action = a
-  }*/
-
-}
+open class Trigger(val event: Int, val index:Int=0, val action: Action)
