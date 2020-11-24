@@ -46,8 +46,8 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>) {
    * @return true if the domain is not defined or the value's length doesn't exceed the domain size,
    * and returns false otherwise.
    */
-  fun checkLength(value: T): Boolean = when {
-    domain.width == null -> true
+  fun checkLength(value: T): Boolean = when (domain.width) {
+    null -> true
     else -> value.toString().length <= domain.width!!
   }
 
@@ -69,7 +69,7 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>) {
   /**
    * returns list of values that can this field get.
    */
-  fun getValues(): MutableMap<String, *>? {
+  fun getValues(): MutableMap<String, *> {
     return domain.getValues()
   }
 

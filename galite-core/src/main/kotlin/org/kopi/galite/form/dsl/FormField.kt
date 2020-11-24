@@ -54,7 +54,7 @@ import org.kopi.galite.type.Week
  * @param initialAccess        the initial access mode
  * @param commands             the commands accessible in this field
  * @param triggers             the triggers executed by this field
- * @param alias                the e alias of this field
+ * @param alias                the alias of this field
  */
 class FormField<T : Comparable<T>>(val block: FormBlock,
                                    override val domain: Domain<T>,
