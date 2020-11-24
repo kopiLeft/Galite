@@ -30,7 +30,7 @@ import org.kopi.galite.visual.VTrigger
  */
 class ReportField<T : Comparable<T>>(override val domain: Domain<T>? = null): Field<T>(domain) {
   /** the ident of this field */
-  private val ident: String? get() = label
+  override lateinit var ident: String
 
   /** the options of the field */
   var options: Int = 0

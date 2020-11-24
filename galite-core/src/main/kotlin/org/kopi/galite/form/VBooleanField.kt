@@ -42,6 +42,12 @@ class VBooleanField : VBooleanCodeField("boolean",
    */
   override fun getListColumn(): VListColumn = VBooleanColumn(getHeader(), null, getPriority() >= 0)
 
+  override fun equals(other: Any?): Boolean = when {
+    other == null -> false
+    other !is VBooleanField -> false
+    else -> super.equals(other)
+  }
+
   companion object {
 
     /**

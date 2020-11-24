@@ -62,7 +62,7 @@ object TestForm: Form() {
 
   init {
     page("test page") {
-      val testBlock = block(1, 1, "Test", "Test block") {
+      val testBlock = block(1, 1, "Test", "Test block"  , "S") {
         val u = table(User)
         val i = index(message = "ID should be unique")
 

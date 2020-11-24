@@ -400,6 +400,13 @@ class VDateField : VField(10, 1) {
     }
   }
 
+  override fun equals(other: Any?): Boolean = when {
+    other == null -> false
+    other !is VDateField -> false
+    !value.contentEquals(other.value) -> false
+    else -> super.equals(other)
+  }
+
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------

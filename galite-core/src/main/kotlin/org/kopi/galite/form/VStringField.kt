@@ -206,9 +206,9 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -233,6 +233,16 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    */
   fun modelToText(record: Int): String = modelToText(getString(record), width)
 
+  override fun equals(other: Any?): Boolean = when {
+    other == null -> false
+    other !is VStringField -> false
+    visibleHeight != other.visibleHeight -> false
+    convert != other.convert -> false
+    isStyled != other.isStyled -> false
+    !value.contentEquals(other.value) -> false
+    else -> super.equals(other)
+  }
+
   /**
    * Returns true if the text field supports styled content.
    */
@@ -248,8 +258,8 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
      */
 
     fun textToModel(source: String, col: Int, lin: Int = Int.MAX_VALUE): String =
-      // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
-      LineBreaker.textToModel(source, col, lin)
+            // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
+            LineBreaker.textToModel(source, col, lin)
 
     /**
      * Replaces blanks by new-lines
@@ -258,7 +268,7 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
      * @param    col           the width of the text area
      */
     fun modelToText(source: String, col: Int): String =
-      // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
-      LineBreaker.modelToText(source, col)
+            // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
+            LineBreaker.modelToText(source, col)
   }
 }

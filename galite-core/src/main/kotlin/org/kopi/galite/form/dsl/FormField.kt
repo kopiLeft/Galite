@@ -58,7 +58,7 @@ import org.jetbrains.exposed.sql.Column
  */
 open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
                                         private val fieldIndex: Int,
-                                        var position: FormPosition? = null): Field<T>(domain) {
+                                        var position: FormPosition? = null) : Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -99,7 +99,7 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
    * Returns the field model based on the field type.
    */
   fun getFieldModel(): VField {
-    return when(domain?.kClass) {
+    return when (domain?.kClass) {
       Int::class -> VIntegerField(domain?.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
       String::class -> VStringField(domain?.width ?: 0,
                                     domain?.height ?: 1,
@@ -118,7 +118,7 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
 
   fun setInfo() {
     vField.setInfo(
-            getIdent(),
+            ident,
             fieldIndex,
             posInArray,
             options,
@@ -181,7 +181,7 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
     get() = access[0] == VConstants.ACS_HIDDEN && access[1] == VConstants.ACS_HIDDEN && access[2] == VConstants.ACS_HIDDEN
 
 
-  fun getIdent() = label ?: "ANONYMOUS!@#$%^&*()"
+  override lateinit var ident: String
 
   /**
    * Returns true iff it is certain that the field will never be entered
@@ -213,7 +213,7 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
    */
   override fun genLocalization(writer: LocalizationWriter) {
     if (!isInternal) {
-      (writer as FormLocalizationWriter).genField(label, label, help)
+      (writer as FormLocalizationWriter).genField(ident, label, help)
     }
   }
 

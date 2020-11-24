@@ -364,6 +364,17 @@ class VIntegerField(width: Int,
     }
   }
 
+  override fun equals(other: Any?): Boolean = when {
+    other == null -> false
+    other !is VIntegerField -> false
+    criticalMinValue != other.criticalMinValue -> false
+    criticalMaxValue != other.criticalMaxValue -> false
+    minval != other.minval -> false
+    maxval != other.maxval -> false
+    !value.contentEquals(other.value) -> false
+    else -> super.equals(other)
+  }
+
   // dynamic data
   // value
   private lateinit var value: Array<Int?>
