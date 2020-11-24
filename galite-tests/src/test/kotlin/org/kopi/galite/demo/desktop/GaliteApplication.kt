@@ -46,10 +46,10 @@ fun main(args: Array<String>) {
     dbTest.insertIntoModule("2009",  "org/kopi/galite/test/Menu", 90, "1000", TestForm::class)
     dbTest.insertIntoModule("2010",  "org/kopi/galite/test/Menu", 90, "1000", FieldsVisibilityTest::class)
 
-    dbTest.insertIntoUserRights("admin","2000" , true)
-    dbTest.insertIntoUserRights("admin", "1000", true)
-    dbTest.insertIntoUserRights("admin", "2009", true)
-    dbTest.insertIntoUserRights("admin", "2010", true)
+    dbTest.insertIntoUserRights(testUser,"2000" , true)
+    dbTest.insertIntoUserRights(testUser, "1000", true)
+    dbTest.insertIntoUserRights(testUser, "2009", true)
+    dbTest.insertIntoUserRights(testUser, "2010", true)
 
     val args = if (args.isNotEmpty()) {
       args
@@ -64,7 +64,8 @@ fun main(args: Array<String>) {
               testPassword,
               "-l",
               testLocale.toString(),
-              "-r")
+              "-r"
+      )
     }
 
     JApplicationTestBase.GaliteApplication().run(args)

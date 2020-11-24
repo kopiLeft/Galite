@@ -31,15 +31,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
 
-class VWeekField : VField(7, 1) {
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
+class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
   override fun hasAutofill(): Boolean = true
 
@@ -463,7 +455,7 @@ class VWeekField : VField(7, 1) {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private lateinit var value: Array<Week?>
+  private var value: Array<Week?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
     fun toText(value: Week?): String = value.toString()
