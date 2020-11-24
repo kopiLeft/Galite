@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.jetbrains.exposed.sql.Column
+
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
@@ -37,8 +39,6 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
-
-import org.jetbrains.exposed.sql.Column
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -91,6 +91,56 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
     if (init != null) {
       columns!!.init()
     }
+  }
+  /** changing field visibility in mode query */
+  fun onQueryHidden() {
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_HIDDEN
+  }
+
+  fun onQuerySkipped() {
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_SKIPPED
+  }
+
+  fun onQueryVisit() {
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_VISIT
+  }
+
+  fun onQueryMustFill() {
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_MUSTFILL
+  }
+
+  /** changing field visibility in mode insert */
+  fun onInsertHidden() {
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_HIDDEN
+  }
+
+  fun onInsertSkipped() {
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_SKIPPED
+  }
+
+  fun onInsertVisit() {
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_VISIT
+  }
+
+  fun onInsertMustFill() {
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_MUSTFILL
+  }
+
+  /** changing field visibility in mode update */
+  fun onUpdateHidden() {
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_HIDDEN
+  }
+
+  fun onUpdateSkipped() {
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_SKIPPED
+  }
+
+  fun onUpdateVisit() {
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_VISIT
+  }
+
+  fun onUpdateMustFill() {
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
   lateinit var vField: VField
@@ -179,7 +229,6 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null,
    */
   val isInternal: Boolean
     get() = access[0] == VConstants.ACS_HIDDEN && access[1] == VConstants.ACS_HIDDEN && access[2] == VConstants.ACS_HIDDEN
-
 
   fun getIdent() = label ?: "ANONYMOUS!@#$%^&*()"
 
