@@ -89,11 +89,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @return a field.
    */
   inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
-    domain.kClass = T::class
-    val field = FormField(this, domain, blockFields.size, VConstants.ACS_MUSTFILL, position)
-    field.init()
-    blockFields.add(field)
-    return field
+    return initField(domain, init, VConstants.ACS_MUSTFILL, position)
   }
 
   /**
@@ -104,11 +100,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @return a field.
    */
   inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
-    domain.kClass = T::class
-    val field = FormField(this, domain, blockFields.size, VConstants.ACS_VISIT, position)
-    field.init()
-    blockFields.add(field)
-    return field
+    return initField(domain, init, VConstants.ACS_VISIT, position)
   }
 
   /**
@@ -119,11 +111,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @return a field.
    */
   inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
-    domain.kClass = T::class
-    val field = FormField(this, domain, blockFields.size, VConstants.ACS_SKIPPED, position)
-    field.init()
-    blockFields.add(field)
-    return field
+    return initField(domain, init, VConstants.ACS_SKIPPED, position)
   }
 
   /**
@@ -134,9 +122,20 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @return a field.
    */
   inline fun <reified T : Comparable<T>> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
+    return initField(domain, init, VConstants.ACS_HIDDEN)
+  }
+
+  /**
+   * Initializes a field.
+   */
+  inline fun <reified T: Comparable<T>> initField(domain: Domain<T>,
+                                                  init: FormField<T>.() -> Unit,
+                                                  access: Int,
+                                                  position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
-    val field = FormField(this, domain, blockFields.size, VConstants.ACS_HIDDEN)
+    val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
+    field.setInfo()
     blockFields.add(field)
     return field
   }
@@ -285,9 +284,6 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
     return object : VBlock(vForm) {
       override fun setInfo() {
-        blockFields.forEach {
-          it.setInfo()
-        }
       }
 
       init {

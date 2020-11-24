@@ -28,6 +28,7 @@ import org.kopi.galite.chart.Chart
 import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.tests.JApplicationTestBase
@@ -72,7 +73,8 @@ object TestForm: Form() {
       }
     }
 
-    TestBlock.age.value = 5
+    TestBlock.age[0] = 5
+    TestBlock.age.value = 6
   }
 }
 

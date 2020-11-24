@@ -71,11 +71,11 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   var commands: Array<Command>? = null
   var triggers: Array<Trigger>? = null
   var alias: String? = null
-  var initialValue: T? = null
+  var initialValues = mutableMapOf<Int, T?>()
   var value: T? = null
     get() {
       return if(vField.block == null) {
-        field
+        initialValues[0]
       } else {
         vField.getObject() as? T
       }
@@ -83,7 +83,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     set(value) {
       field = value
       if(vField.block == null) {
-        initialValue = value
+        initialValues[0] = value
       } else {
         vField.setObject(value)
       }
@@ -92,21 +92,32 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   /**
    * Returns the field value of the current record number [record]
    *
+   * FIXME temporary workaround
+   *
    * @param record the record number
    */
   operator fun get(record: Int): T? {
-    return vField.getObject(record) as? T
-
+    return if(vField.block == null) {
+      initialValues[record]
+    } else {
+      vField.getObject(record) as? T
+    }
   }
 
   /**
    * Sets the field value of given record.
    *
+   * FIXME temporary workaround
+   *
    * @param record the record number
    * @param value  the value
    */
   operator fun set(record: Int = 0, value: T) {
-    vField.setObject(record, value)
+    initialValues[record] = value
+
+    if(vField.block != null) {
+      vField.setObject(record, value)
+    }
   }
 
 

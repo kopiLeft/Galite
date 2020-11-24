@@ -159,7 +159,9 @@ abstract class Form: Window() {
             vBlock.setInfo(formBlock.pageNumber)
             vBlock.initIntern()
             formBlock.blockFields.forEach { formField ->
-              if (formField.initialValue != null) formField.vField.setObject(formField.initialValue)
+              formField.initialValues.forEach {
+                formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
+              }
             }
           }
         }.toTypedArray()
