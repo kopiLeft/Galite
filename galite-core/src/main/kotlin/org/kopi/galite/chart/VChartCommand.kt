@@ -25,7 +25,7 @@ import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VHelpGenerator
 
 class VChartCommand(private val chart: VChart, actor: VActor)
-  : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
+  : VCommand(0xFFFF, null, actor, actor.number, null, actor.actorIdent), ActionHandler {
 
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {

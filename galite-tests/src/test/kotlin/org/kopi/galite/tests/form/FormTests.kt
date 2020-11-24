@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.tests.form
 
-import java.awt.event.KeyEvent
 import java.util.Locale
 
 import kotlin.test.assertEquals
@@ -29,8 +28,8 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.form.dsl.KeyCode
 import org.kopi.galite.tests.JApplicationTestBase
-import org.kopi.galite.visual.WindowController
 
 class FormTests: JApplicationTestBase() {
 
@@ -51,17 +50,19 @@ object TestForm: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
-  val graph = actor (
+ val graph = actor (
+          ident =  "graph",
           menu =  "Action",
-          label = "Graphe",
-          help =  "Representer les valeurs en graphe"
+          label = "Graph for test",
+          help =  "show graph values" ,
+          key  =  KeyCode.F1
   ) {
-    key  =  KeyEvent.VK_F9  // key is optional here
     icon =  "column_chart"  // icon is optional here
   }
 
   init {
     page("test page") {
+      menu("Action")
       val testBlock = block(1, 1, "Test", "Test block") {
         val u = table(User)
         val i = index(message = "ID should be unique")
@@ -85,9 +86,10 @@ object TestForm: Form() {
           }
         }
 
-        command(item = graph) {
+       command(item = graph) {
+          this.name = "graphe"
           action = {
-            WindowController.windowController.doNotModal(CommandesC(id.value))
+            println("---------------------------------- IN TEST COMMAND ----------------------------------")
           }
         }
       }

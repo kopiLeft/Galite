@@ -606,7 +606,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   private fun initDefaultCommands() {
     commands = arrayOfNulls(actors.size)
     actors.forEachIndexed { index, vActor ->
-      commands!![index] = VCommand(VConstants.MOD_ANY, this, vActor, index, vActor!!.actorIdent)
+      commands!![index] = VCommand(VConstants.MOD_ANY, this, vActor, index, null, vActor!!.actorIdent)
     }
   }
 

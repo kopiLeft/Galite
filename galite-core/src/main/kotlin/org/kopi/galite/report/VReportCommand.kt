@@ -27,7 +27,7 @@ import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.PrinterManager
 import org.kopi.galite.visual.VHelpGenerator
 
-class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
+class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.number, null, actor.actorIdent), ActionHandler {
   /**
    * Returns the actor
    */

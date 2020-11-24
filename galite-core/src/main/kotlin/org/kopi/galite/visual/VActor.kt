@@ -53,6 +53,7 @@ open class VActor(var menuIdent: String,
     handler!!.performAction(object : Action("$menuItem in $menuName") {
       override fun execute() {
         handler!!.executeVoidTrigger(number)
+        action!!()
       }
 
       /**
@@ -112,11 +113,11 @@ open class VActor(var menuIdent: String,
   // ----------------------------------------------------------------------
   fun helpOnCommand(help: VHelpGenerator) {
     help.helpOnCommand(menuName,
-            menuItem,
-            iconName,
-            acceleratorKey,
-            acceleratorModifier,
-            this.help)
+                       menuItem,
+                       iconName,
+                       acceleratorKey,
+                       acceleratorModifier,
+                       this.help)
   }
 
   // --------------------------------------------------------------------
@@ -151,6 +152,7 @@ open class VActor(var menuIdent: String,
   lateinit var menuItem: String
   private var display: UActor? = null
   var number = 0 // The number for the actor
+  var action: (() -> Unit)? = null
   internal var handler: ActionHandler? = null // the handler for the actor
   var help: String? = null
 }

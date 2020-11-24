@@ -31,6 +31,7 @@ class VFieldCommand(private val form: VForm,
              null,
              null,
              type,
+             null,
              "Standard $type"), ActionHandler, Serializable {
 
   /**
