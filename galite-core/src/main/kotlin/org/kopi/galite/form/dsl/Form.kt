@@ -52,8 +52,8 @@ abstract class Form: Window() {
    * @param label                the label
    * @param help                 the help
    */
-  fun actor(ident: String, menu: String, label: String, help: String, key: String?, init: Actor.() -> Unit): Actor {
-    val actor = Actor(ident, menu, label, help, key)
+  fun actor(ident: String, menu: String, label: String, help: String, init: Actor.() -> Unit): Actor {
+    val actor = Actor(ident, menu, label, help)
     actor.init()
     formActors.add(actor)
     return actor
@@ -142,7 +142,7 @@ abstract class Form: Window() {
                                                formActors.toTypedArray(),
                                                pages.toTypedArray(),
                                                formBlocks.toTypedArray()
-    )
+                                              )
   }
 
   /**

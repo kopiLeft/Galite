@@ -27,6 +27,7 @@ import org.kopi.galite.chart.Chart
 import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.KeyCode
 import org.kopi.galite.tests.JApplicationTestBase
@@ -55,9 +56,9 @@ object TestForm: Form() {
           menu =  "Action",
           label = "Graph for test",
           help =  "show graph values" ,
-          key  =  KeyCode.F1
   ) {
-    icon =  "column_chart"  // icon is optional here
+    key  =  KeyCode.F1
+    icon =  "refresh"  // icon is optional here
   }
 
   init {
@@ -87,8 +88,9 @@ object TestForm: Form() {
         }
 
        command(item = graph) {
-          this.name = "graphe"
-          action = {
+         this.name = "graphe"
+         mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+         action = {
             println("---------------------------------- IN TEST COMMAND ----------------------------------")
           }
         }

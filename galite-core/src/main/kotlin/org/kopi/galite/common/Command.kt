@@ -27,5 +27,14 @@ class Command(val item: Actor) {
   var name : String? = null
   var action: (() -> Unit)? = null
   lateinit var body: CommandBody
-  var mode : String? = null
+  var mode : Int = 7
+    private set
+
+  /** function to change the mode of the command **/
+  fun mode(vararg access: Int) {
+    mode = 0
+    for (item in access) {
+      mode += 1 shl item
+    }
+  }
 }

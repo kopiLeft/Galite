@@ -53,7 +53,7 @@ open class VActor(var menuIdent: String,
     handler!!.performAction(object : Action("$menuItem in $menuName") {
       override fun execute() {
         handler!!.executeVoidTrigger(number)
-        action!!()
+        action?.let { it() }
       }
 
       /**

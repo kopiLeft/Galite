@@ -303,17 +303,17 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
         )
 
         /** Used actors in form*/
-        val usedActors  = vForm.actors.map { vActor ->
+        val usedActors  = form.actors.map { vActor ->
           vActor?.actorIdent to vActor
         }.toMap()
 
         super.commands = blockCommands?.map {
-          VCommand(0xFFFF, // TO CHECK !!
+          VCommand(it.mode,
                    this,
                    usedActors[it.item.ident],
-                   1,
-                   it.action!!,
-                   it.name!!
+                   -1,
+                   it.name!!,
+                   it.action
                   )
         }.toTypedArray()
 

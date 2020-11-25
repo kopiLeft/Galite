@@ -16,34 +16,32 @@
  */
 package org.kopi.galite.form.dsl
 
-interface KeyCode {
-  companion object {
-    const val F1 = "F1"
-    const val F2 = "F2"
-    const val F3 = "F3"
-    const val F4 = "F4"
-    const val F5 = "F5"
-    const val F6 = "F6"
-    const val F7 = "F7"
-    const val F8 = "F8"
-    const val F9 = "F9"
-    const val F10 = "F10"
-    const val F11 = "F11"
-    const val F12 = "F12"
+import java.awt.event.KeyEvent
 
-    const val Shift_F1 = "Shift-F1"
-    const val Shift_F2 = "Shift-F2"
-    const val Shift_F3 = "Shift-F3"
-    const val Shift_F4 = "Shift-F4"
-    const val Shift_F5 = "Shift-F5"
-    const val Shift_F6 = "Shift-F6"
-    const val Shift_F7 = "Shift-F7"
-    const val Shift_F8 = "Shift-F8"
-    const val Shift_F9 = "Shift-F9"
-    const val Shift_F10 = "Shift-F10"
-    const val Shift_F11 = "Shift-F11"
-    const val Shift_F12 = "Shift-F12"
-
-    const val Esc =  "esc"
-  }
+enum class KeyCode(val value : Int) {
+  F1(KeyEvent.VK_F1),
+  F2(KeyEvent.VK_F2),
+  F3(KeyEvent.VK_F3),
+  F4(KeyEvent.VK_F4),
+  F5(KeyEvent.VK_F5),
+  F6(KeyEvent.VK_F6),
+  F7(KeyEvent.VK_F7),
+  F8(KeyEvent.VK_F8),
+  F9(KeyEvent.VK_F9),
+  F10(KeyEvent.VK_F10),
+  F11(KeyEvent.VK_F11),
+  F12(KeyEvent.VK_F12),
+  SHIFT_F1(KeyEvent.VK_F1),
+  SHIFT_F2(KeyEvent.VK_F2),
+  SHIFT_F3(KeyEvent.VK_F3),
+  SHIFT_F4(KeyEvent.VK_F4),
+  SHIFT_F5(KeyEvent.VK_F5),
+  SHIFT_F6(KeyEvent.VK_F6),
+  SHIFT_F7(KeyEvent.VK_F7),
+  SHIFT_F8(KeyEvent.VK_F8),
+  SHIFT_F9(KeyEvent.VK_F9),
+  SHIFT_F10(KeyEvent.VK_F10),
+  SHIFT_F11(KeyEvent.VK_F11),
+  SHIFT_F12(KeyEvent.VK_F12),
+  ESCAPE(KeyEvent.VK_ESCAPE),
 }
