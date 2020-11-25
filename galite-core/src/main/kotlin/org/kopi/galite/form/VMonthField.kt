@@ -33,7 +33,7 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
-class VMonthField : VField(7, 1) {
+class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
   override fun hasAutofill(): Boolean = true
 
@@ -41,14 +41,6 @@ class VMonthField : VField(7, 1) {
    * Returns true if this field implements "enumerateValue"
    */
   override fun hasNextPreviousEntry(): Boolean = true
-
-  /**
-   * Just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls<Month>(2 * block!!.bufferSize)
-  }
 
   /**
    * Returns the name of this field
@@ -322,5 +314,5 @@ class VMonthField : VField(7, 1) {
     }
   }
 
-  private lateinit var value: Array<Month?>
+  private var value: Array<Month?> = arrayOfNulls(2 * bufferSize)
 }

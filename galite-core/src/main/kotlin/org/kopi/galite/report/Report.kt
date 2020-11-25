@@ -118,7 +118,7 @@ abstract class Report: Window() {
 
   fun MReport.addReportColumns() {
     columns = fields.map {
-      when(it.domain?.kClass) {
+      when(it.domain.kClass) {
         Int::class ->
           VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         String::class ->
@@ -135,7 +135,7 @@ abstract class Report: Window() {
           VTimeColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         Timestamp::class ->
           VTimestampColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
-        else -> throw RuntimeException("Type ${it.domain?.kClass!!.qualifiedName} is not supported")
+        else -> throw RuntimeException("Type ${it.domain.kClass!!.qualifiedName} is not supported")
       }
     }.toTypedArray()
   }

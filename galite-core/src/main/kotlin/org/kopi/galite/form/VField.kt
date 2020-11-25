@@ -758,7 +758,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setFixed(v: Fixed) {
+  fun setFixed(v: Fixed?) {
     setFixed(block!!.currentRecord, v)
   }
 
@@ -767,7 +767,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setBoolean(v: Boolean) {
+  fun setBoolean(v: Boolean?) {
     setBoolean(block!!.currentRecord, v)
   }
 
@@ -776,7 +776,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setDate(v: Date) {
+  fun setDate(v: Date?) {
     setDate(block!!.currentRecord, v)
   }
 
@@ -785,7 +785,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setMonth(v: Month) {
+  fun setMonth(v: Month?) {
     setMonth(block!!.currentRecord, v)
   }
 
@@ -794,7 +794,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setInt(v: Int) {
+  fun setInt(v: Int?) {
     setInt(block!!.currentRecord, v)
   }
 
@@ -803,7 +803,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setObject(v: Any) {
+  fun setObject(v: Any?) {
     setObject(block!!.currentRecord, v)
   }
 
@@ -812,14 +812,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setString(v: String) {
+  fun setString(v: String?) {
     setString(block!!.currentRecord, v)
   }
 
   /**
    * Sets the field value of given record to a date value.
    */
-  fun setImage(v: ByteArray) {
+  fun setImage(v: ByteArray?) {
     setImage(block!!.currentRecord, v)
   }
 
@@ -828,7 +828,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTime(v: Time) {
+  fun setTime(v: Time?) {
     setTime(block!!.currentRecord, v)
   }
 
@@ -837,7 +837,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setWeek(v: Week) {
+  fun setWeek(v: Week?) {
     setWeek(block!!.currentRecord, v)
   }
 
@@ -846,7 +846,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTimestamp(v: Timestamp) {
+  fun setTimestamp(v: Timestamp?) {
     setTimestamp(block!!.currentRecord, v)
   }
 
@@ -880,7 +880,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setBoolean(r: Int, v: Boolean) {
+  open fun setBoolean(r: Int, v: Boolean?) {
     throw InconsistencyException()
   }
 

@@ -31,7 +31,8 @@ import org.kopi.galite.visual.VlibProperties
  * @param     source          the qualified name of the source file defining the list
  * @param     idents          an array of identifiers identifying each code value
  */
-abstract class VCodeField(val type: String,
+abstract class VCodeField(val bufferSize: Int,
+                          val type: String,
                           val source: String,
                           val idents: Array<String>)
   : VField(1, 1) {
@@ -49,7 +50,6 @@ abstract class VCodeField(val type: String,
    */
   override fun build() {
     super.build()
-    value = IntArray(2 * block!!.bufferSize)
     for (i in 0 until block!!.bufferSize) {
       value[i] = -1
     }
@@ -417,7 +417,7 @@ abstract class VCodeField(val type: String,
     private set
 
   // dynamic data
-  protected lateinit var value: IntArray // -1: null
+  protected var value: IntArray = IntArray(2 * bufferSize) // -1: null
 
 
   companion object {

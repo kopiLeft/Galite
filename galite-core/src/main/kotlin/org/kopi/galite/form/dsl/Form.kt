@@ -18,15 +18,16 @@
 package org.kopi.galite.form.dsl
 
 import org.kopi.galite.common.*
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VForm
 import java.io.File
 import java.io.IOException
+
+import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.VForm
 
 /**
  * Represents a form.
  */
-abstract class Form : Window() {
+abstract class Form: Window() {
 
   /** Form's actors. */
   val actors = mutableListOf<Actor>()
@@ -65,8 +66,15 @@ abstract class Form : Window() {
    * @param        name                   the simple identifier of this block
    * @param        title                  the title of the block
    */
-  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock {
-    val block = FormBlock(buffer, visible, name, title)
+  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock =
+          insertBlock(FormBlock(buffer, visible, name, title), init)
+
+  /**
+   * Adds a new block to this form.
+   *
+   * @param        block                 the block to insert
+   */
+  fun <T: FormBlock> insertBlock(block: T, init: T.() -> Unit): T {
     block.init()
     block.initialize(this)
     formBlocks.add(block)
@@ -116,7 +124,6 @@ abstract class Form : Window() {
     return trigger
   }
 
-
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
@@ -157,8 +164,8 @@ abstract class Form : Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genForm(title,
-                                               pages.toTypedArray(),
-                                               formBlocks.toTypedArray()
+            pages.toTypedArray(),
+            formBlocks.toTypedArray()
     )
   }
 
@@ -184,6 +191,12 @@ abstract class Form : Window() {
         blocks = formBlocks.map { formBlock ->
           formBlock.getBlockModel(this, source).also { vBlock ->
             vBlock.setInfo(formBlock.pageNumber)
+            vBlock.initIntern()
+            formBlock.blockFields.forEach { formField ->
+              formField.initialValues.forEach {
+                formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
+              }
+            }
           }
         }.toTypedArray()
 
@@ -210,6 +223,9 @@ abstract class Form : Window() {
             }
           }
         }
+      }
+
+      init {
       }
     }
   }

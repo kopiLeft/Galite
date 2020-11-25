@@ -79,9 +79,6 @@ abstract class VForm : VWindow, VConstants {
    */
   open fun initIntern(enterField: Boolean) {
     init()
-    blocks.forEach {
-      it.initIntern()
-    }
     if (!ApplicationContext.isGeneratingHelp()) {
       initialise()
       callTrigger(VConstants.TRG_PREFORM)
