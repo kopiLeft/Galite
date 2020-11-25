@@ -23,10 +23,24 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Constants
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VDefaultActor
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VHelpViewer
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.WindowBuilder
+import org.kopi.galite.visual.WindowController
 import java.io.File
 import java.net.MalformedURLException
-import java.util.*
+import java.util.Locale
 import javax.swing.event.EventListenerList
 
 abstract class VForm : VWindow, VConstants {
@@ -711,14 +725,26 @@ abstract class VForm : VWindow, VConstants {
     return (getDisplay() as UForm).printForm()
   }
 
+  override fun executeVoidTrigger(VKT_Type: Int) {
+   return when (VKT_Type) {
+     3 -> {
+       postformAction()
+       super.executeVoidTrigger(VKT_Type)
+     }
+     4 -> {
+       initAction()
+       super.executeVoidTrigger(VKT_Type)
+     }
+     5 -> {
+       preformAction()
+       super.executeVoidTrigger(VKT_Type)
+     }
+    else -> {
+    }
+   }
+  }
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    when (VKT_Type) {
-      1 -> {
-        quitAction()
-      }
-      2 -> {
-        resetAction()
-      }
+   return when (VKT_Type) {
       3 -> {
         postformAction()
       }
@@ -728,62 +754,34 @@ abstract class VForm : VWindow, VConstants {
       5 -> {
         preformAction()
       }
+      else -> {
+      }
     }
-    throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    when (VKT_Type) {
+    return when (VKT_Type) {
       1 -> {
         quitAction()
       }
       2 -> {
         resetAction()
       }
-      3 -> {
-        postformAction()
-      }
-      4 -> {
-        initAction()
-      }
-      5 -> {
-        preformAction()
+      else -> {
+        true
       }
     }
-    throw InconsistencyException("SHOULD BE REDEFINED")
   }
 
   fun executeIntegerTrigger(VKT_Type: Int): Int {
-    when (VKT_Type) {
-      1 -> {
-        quitAction()
-        callTrigger(VKT_Type)
-      }
-      2 -> {
-        resetAction()
-        callTrigger(VKT_Type)
-      }
-      3 -> {
-        postformAction()
-        callTrigger(VKT_Type)
-      }
-      4 -> {
-        initAction()
-        callTrigger(VKT_Type)
-      }
-      5 -> {
-        preformAction()
-        callTrigger(VKT_Type)
-      }
-    }
-    throw InconsistencyException("SHOULD BE REDEFINED")
+        throw IllegalArgumentException()
   }
 
   open lateinit var initAction: () -> Unit
   open lateinit var preformAction: () -> Unit
   open lateinit var postformAction: () -> Unit
-  open lateinit var resetAction: () -> Unit
-  open lateinit var quitAction: () -> Unit
+  open lateinit var resetAction: () -> Boolean
+  open lateinit var quitAction: () -> Boolean
 
   val eventList: MutableList<Int> = mutableListOf()
 

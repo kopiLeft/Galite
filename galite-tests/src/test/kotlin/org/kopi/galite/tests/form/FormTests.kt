@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.tests.form
 
 import java.awt.event.KeyEvent
@@ -26,7 +27,6 @@ import org.junit.Test
 import org.kopi.galite.chart.Chart
 
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.Trigger
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
@@ -64,8 +64,21 @@ object TestForm : Form() {
   init {
 
     page("test page") {
+
       init {
-        print("init okay")
+        println("hello")
+      }
+      preform {
+        println("prefooorm")
+      }
+      reset {
+  println("reset ???????????")
+}
+      postform {
+        println("postpostpostpost")
+      }
+      quitform {
+        println("quit okay")
       }
       val testBlock = block(1, 1, "Test", "Test block") {
         val u = table(User)

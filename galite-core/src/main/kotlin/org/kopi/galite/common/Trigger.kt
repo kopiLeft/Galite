@@ -20,8 +20,8 @@ package org.kopi.galite.common
 
 /**
  * This class represents a trigger, ie an action to be executed on events
- * @param where        the token reference of this node
- * @param modes        the events that this trigger listen
- * @param action        the action to perform
+ * @param event        the event of the trigger
+ * @param identifier   the identifier of the trigger
+ * @param action       the action to perform
  */
-open class Trigger(val event: Int, val index:Int=0, val action: Action)
+open class Trigger(val event: Int, val identifier : Int = 0, val action: Action)

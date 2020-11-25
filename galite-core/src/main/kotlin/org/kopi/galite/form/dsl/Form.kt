@@ -27,7 +27,6 @@ import java.io.IOException
  * Represents a form.
  */
 abstract class Form : Window() {
-  val _tokenSet_3_data_ = longArrayOf(0L, 90107314362647552L, 0L, 0L)
 
   /** Form's actors. */
   val actors = mutableListOf<Actor>()
@@ -86,39 +85,33 @@ abstract class Form : Window() {
     return page
   }
 
-  fun trigger(event: Int, index: Int, action: Action, init: Trigger.() -> Unit): Trigger {
-    val trigger = Trigger(event, index, action)
-    trigger.init()
+  fun init(initTrigger: () -> Unit): Trigger {
+    val trigger = Trigger(VConstants.TRG_INIT, 4, Action(initTrigger))
     formTriggers.add(trigger)
     return trigger
   }
 
-  fun init(initTrigger: Trigger. () -> Unit): Trigger {
-    val trigger = trigger(VConstants.TRG_INIT, 4, Action(initTrigger), initTrigger)
+  fun preform(preformTrigger: () -> Unit): Trigger {
+    val trigger = Trigger(VConstants.TRG_PREFORM, 5, Action(preformTrigger))
+    formTriggers.add(trigger)
+
+    return trigger
+  }
+
+  fun postform(postformTrigger:  () -> Unit): Trigger {
+    val trigger = Trigger(VConstants.TRG_POSTFORM, 3, Action(postformTrigger))
     formTriggers.add(trigger)
     return trigger
   }
 
-  fun preform(preformTrigger: Trigger. () -> Unit): Trigger {
-    val trigger = trigger(VConstants.TRG_PREFORM, 5, Action(preformTrigger), preformTrigger)
+  fun reset(resetTrigger:() -> Unit): Trigger {
+    val trigger = Trigger(VConstants.TRG_RESET, 2, Action(resetTrigger))
     formTriggers.add(trigger)
     return trigger
   }
 
-  fun postform(postformTrigger: Trigger. () -> Unit): Trigger {
-    val trigger = trigger(VConstants.TRG_POSTFORM, 5, Action(postformTrigger), postformTrigger)
-    formTriggers.add(trigger)
-    return trigger
-  }
-
-  fun reset(resetTrigger: Trigger.() -> Unit): Trigger {
-    val trigger = trigger(VConstants.TRG_RESET, 5, Action(resetTrigger), resetTrigger)
-    formTriggers.add(trigger)
-    return trigger
-  }
-
-  fun quit(quitTrigger: Trigger. () -> Unit): Trigger {
-    val trigger = trigger(VConstants.TRG_QUITFORM, 5, Action(quitTrigger), quitTrigger)
+  fun quitform(quitTrigger: () -> Unit): Trigger {
+    val trigger = Trigger(VConstants.TRG_QUITFORM, 1, Action(quitTrigger))
     formTriggers.add(trigger)
     return trigger
   }
@@ -198,13 +191,26 @@ abstract class Form : Window() {
         super.commands = arrayOf()
         VKT_Triggers = Array(200) { IntArray(36) }
         formTriggers.forEach {
-          VKT_Triggers[it.index][it.event] = it.index
+          VKT_Triggers[0][it.event] = it.identifier
+          when(it.identifier){
+            1 -> {
+              quitAction = it.action.action as () -> Boolean
+            }
+            2 -> {
+              resetAction = it.action.action as () -> Boolean
+            }
+            3 -> {
+              postformAction = it.action.action
+            }
+            4 -> {
+              initAction = it.action.action
+            }
+            5 -> {
+              preformAction = it.action.action
+            }
+          }
         }
-
       }
-
     }
-
-
   }
 }
