@@ -23,6 +23,7 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.CommandBody
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
@@ -30,6 +31,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
+import org.kopi.galite.visual.VCommand
 
 /**
  * A block on a form
@@ -128,10 +130,10 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Initializes a field.
    */
-  inline fun <reified T: Comparable<T>> initField(domain: Domain<T>,
-                                                  init: FormField<T>.() -> Unit,
-                                                  access: Int,
-                                                  position: FormPosition? = null): FormField<T> {
+  inline fun <reified T : Comparable<T>> initField(domain: Domain<T>,
+                                                   init: FormField<T>.() -> Unit,
+                                                   access: Int,
+                                                   position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
@@ -143,17 +145,17 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Sets the field in position given by x and y location
    *
-   * @param line		the line
-   * @param column		the column
+   * @param line                the line
+   * @param column                the column
    */
   fun at(line: Int, column: Int): FormPosition = FormCoordinatePosition(line, 0, column, 0)
 
   /**
    * Sets the field in position given by x and y location
    *
-   * @param lineRange		the line range (lineRange.first: the line,
+   * @param lineRange                the line range (lineRange.first: the line,
    *                            lineRange.last: the last line into this field may be placed)
-   * @param column		the column
+   * @param column                the column
    */
   fun at(lineRange: IntRange, column: Int): FormPosition =
           FormCoordinatePosition(lineRange.first, lineRange.last, column, 0)
@@ -161,8 +163,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Sets the field in position given by x and y location
    *
-   * @param line		the line
-   * @param columnRange		the line range (columnRange.first: the column,
+   * @param line                the line
+   * @param columnRange                the line range (columnRange.first: the column,
    *                            columnRange.last: the last column into this field may be placed)
    */
   fun at(line: Int, columnRange: IntRange): FormPosition =
@@ -171,9 +173,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Sets the field in position given by x and y location
    *
-   * @param lineRange		the line range (lineRange.first: the line,
+   * @param lineRange                the line range (lineRange.first: the line,
    *                            lineRange.last: the last line into this field may be placed)
-   * @param columnRange		the line range (columnRange.first: the column,
+   * @param columnRange                the line range (columnRange.first: the column,
    *                            columnRange.last: the last column into this field may be placed)
    */
   fun at(lineRange: IntRange, columnRange: IntRange): FormPosition =
@@ -182,7 +184,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Sets the field in position given by x location
    *
-   * @param lineRange		the line range (lineRange.first: the line,
+   * @param lineRange                the line range (lineRange.first: the line,
    *                            lineRange.last: the last line into this field may be placed)
    */
   fun at(lineRange: IntRange): FormPosition = FormMultiFieldPosition(lineRange.first, lineRange.last)
@@ -190,14 +192,14 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Sets the field in position given by x location
    *
-   * @param line		the line
+   * @param line                the line
    */
   fun at(line: Int): FormPosition = FormMultiFieldPosition(line, 0)
 
   /**
    * Sets the field in position that follows a specific [field]
    *
-   * @param field		the field
+   * @param field                the field
    */
   fun <T : Comparable<T>> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
 
@@ -219,11 +221,30 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param init    initialization method.
    * @return a field.
    */
-  fun command(item: Actor, init: Command.() -> Unit): Command {
+  fun command(init: CommandBody.() -> Unit): Command {
     val command = Command()
-    command.init()
+    val commandBody = CommandBody()
+
+    commandBody.init()
+    //commandBody.item.action = commandBody.action
+    command.body = commandBody
+    command.modes = when (command.mode) {
+      "QUERY" -> 1 shl VConstants.MOD_QUERY
+      "INSERT" -> 1 shl VConstants.MOD_INSERT
+      "UPDATE" -> 1 shl VConstants.MOD_UPDATE
+      else -> VConstants.MOD_ANY
+    }
     blockCommands.add(command)
     return command
+  }
+
+  /**
+   * Calls another pre-defined command
+   */
+  fun command(name: String?): Command {
+    return blockCommands.find {
+      it.name.equals(name)
+    } ?: throw NoSuchElementException("Command $name is not defined")
   }
 
   /**
@@ -292,8 +313,23 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
         super.access = intArrayOf(
                 4, 4, 4
         )
-        super.commands = arrayOf()
-        //TODO ------------end-----------
+
+        /** Used actors in form*/
+      //  val usedActors = form.actors.map { vActor ->
+        val usedActors = vForm.actors.map { vActor ->
+          vActor?.actorIdent to vActor
+        }.toMap()
+
+        super.commands = blockCommands.map {
+          VCommand(//it.modes,
+                  0xFFFF,
+                   this,
+                   usedActors[it.body.item.ident],
+                   //it.trigger!!,
+                  1,
+                   it.body.action ,
+                   it.body.item.ident)
+        }.toTypedArray()
 
         super.source = source ?: sourceFile
         super.bufferSize = buffer

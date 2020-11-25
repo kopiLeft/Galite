@@ -22,6 +22,7 @@ open class VCommand(private var mode: Int,
                     protected var handler: ActionHandler?,
                     var actor: VActor?,
                     internal val trigger: Int,
+                    internal val action: (() -> Unit)?,
                     val item: String) {
 
   /**
@@ -29,6 +30,13 @@ open class VCommand(private var mode: Int,
    */
   fun kill() {
     killed = true
+  }
+
+  init {
+    println(" test -----------VCOMM!!---------------")
+            val x = null
+    print(x)
+    /*throw (IllegalCallerException())*/
   }
 
   /**
@@ -39,6 +47,7 @@ open class VCommand(private var mode: Int,
       if (!killed) {
         it.isEnabled = enabled
         it.number = trigger
+        it.action = action
         it.handler = handler
       }
     }

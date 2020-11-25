@@ -31,6 +31,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.KeyCode
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.WindowController
 
@@ -54,18 +55,21 @@ object TestForm: Form() {
   override val title = "form for test"
 
   val graph = actor (
+          ident = "Graph" ,
           menu =  "Action",
           label = "Graphe",
-          help =  "Representer les valeurs en graphe"
+          help =  "Representer les valeurs en graphe" ,
+          key  =  KeyCode.F1
   ) {
-    key  =  KeyEvent.VK_F9  // key is optional here
+    //key  =  KeyEvent.VK_F9  // key is optional here
     icon =  "column_chart"  // icon is optional here
   }
 
   init {
     page("test page") {
       insertBlock(TestBlock) {
-        command(item = graph) {
+        command {
+          item = graph
           action = {
             WindowController.windowController.doNotModal(CommandesC(id.value))
           }

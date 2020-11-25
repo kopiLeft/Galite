@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,16 +14,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.form.dsl
 
+import org.kopi.galite.common.LocalizationWriter
 
 /**
- * This class represent a command, ie a link between an actor and
- * an action
+ *
+ * @param ident                the menu label in default locale
+ * @param label                the menu label in default locale
  */
-class CommandBody() {
-  lateinit var name: String
-  lateinit var method: String
-  var action: (() -> Unit)? = null
-  lateinit var item : Actor
+class Menu(val ident: String, var label : String? = null) {
+  init {
+    label  = label ?: ident
+  }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!!FIX:taoufik
+   */
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genMenuDefinition(ident, label!!)
+  }
 }

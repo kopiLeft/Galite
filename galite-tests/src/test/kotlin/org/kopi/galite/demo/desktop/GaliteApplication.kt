@@ -25,6 +25,7 @@ import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FieldsVisibilityTest
 import org.kopi.galite.tests.form.TestForm
+import org.kopi.galite.tests.report.TestReportForm
 
 val testURL = "jdbc:h2:mem:test"
 val testDriver = "org.h2.Driver"
@@ -45,11 +46,13 @@ fun main(args: Array<String>) {
     dbTest.insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
     dbTest.insertIntoModule("2009",  "org/kopi/galite/test/Menu", 90, "1000", TestForm::class)
     dbTest.insertIntoModule("2010",  "org/kopi/galite/test/Menu", 90, "1000", FieldsVisibilityTest::class)
+    dbTest.insertIntoModule("2011",  "org/kopi/galite/test/Menu", 90, "1000", TestReportForm::class)
 
     dbTest.insertIntoUserRights(testUser,"2000" , true)
     dbTest.insertIntoUserRights(testUser, "1000", true)
     dbTest.insertIntoUserRights(testUser, "2009", true)
     dbTest.insertIntoUserRights(testUser, "2010", true)
+    dbTest.insertIntoUserRights(testUser, "2011", true)
 
     val args = if (args.isNotEmpty()) {
       args

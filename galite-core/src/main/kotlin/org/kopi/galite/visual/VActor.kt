@@ -53,6 +53,8 @@ open class VActor(var menuIdent: String,
     handler!!.performAction(object : Action("$menuItem in $menuName") {
       override fun execute() {
         handler!!.executeVoidTrigger(number)
+        println(" test -----------here!!---------------")
+        action!!()
       }
 
       /**
@@ -153,4 +155,8 @@ open class VActor(var menuIdent: String,
   var number = 0 // The number for the actor
   internal var handler: ActionHandler? = null // the handler for the actor
   var help: String? = null
+
+  // should be replaced with Action (kopiAction)
+  var action: (() -> Unit)? = null
+
 }
