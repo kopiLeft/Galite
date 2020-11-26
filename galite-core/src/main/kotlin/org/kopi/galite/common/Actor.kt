@@ -21,7 +21,6 @@ import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.Menu
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut

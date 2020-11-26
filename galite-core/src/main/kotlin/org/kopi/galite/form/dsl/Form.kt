@@ -21,6 +21,7 @@ import java.io.IOException
 
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Menu
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
