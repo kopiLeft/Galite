@@ -36,7 +36,7 @@ class Command(val item: Actor) {
   fun mode(vararg access: Int) {
     mode = 0
     for (item in access) {
-      mode = (1 shl item) or mode
+      mode = mode or (1 shl item)
     }
   }
 }
