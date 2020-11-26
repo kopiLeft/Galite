@@ -17,7 +17,12 @@
 
 package org.kopi.galite.form.dsl
 
-import org.kopi.galite.common.*
+import org.kopi.galite.common.Window
+import org.kopi.galite.common.Actor
+import org.kopi.galite.common.Trigger
+import org.kopi.galite.common.Action
+import org.kopi.galite.common.LocalizationWriter
+
 import java.io.File
 import java.io.IOException
 
