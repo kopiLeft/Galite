@@ -20,6 +20,7 @@ package org.kopi.galite.report
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
+import org.kopi.galite.report.dsl.FieldAlignment
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VTrigger
 

@@ -27,7 +27,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.report.Report
+import org.kopi.galite.report.dsl.Report
 import org.kopi.galite.tests.ui.base.UITestBase
 import org.kopi.galite.ui.report.VReport
 

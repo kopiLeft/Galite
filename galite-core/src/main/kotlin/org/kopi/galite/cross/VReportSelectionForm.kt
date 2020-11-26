@@ -54,7 +54,7 @@ abstract class VReportSelectionForm : VDictionaryForm {
   /**
    * create a report for this form
    */
-  protected abstract fun createReport(): VReport
+  abstract fun createReport(): VReport
 
   companion object {
     /**

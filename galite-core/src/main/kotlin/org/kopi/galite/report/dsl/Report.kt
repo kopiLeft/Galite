@@ -15,20 +15,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.report
-
-import java.io.File
-import java.io.IOException
-import java.lang.RuntimeException
+package org.kopi.galite.report.dsl
 
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.kopi.galite.report.*
+import org.kopi.galite.type.*
+import java.io.File
+import java.io.IOException
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -112,8 +107,8 @@ abstract class Report: Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as ReportLocalizationWriter).genReport(title,
-                                                   help,
-                                                   fields)
+            help,
+            fields)
   }
 
   fun MReport.addReportColumns() {
@@ -122,7 +117,8 @@ abstract class Report: Window() {
         Int::class ->
           VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         String::class ->
-          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, it.domain.height ?: 0, null)
+          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, it.domain.height
+                  ?: 0, null)
         Boolean::class ->
           VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         Date::class, java.util.Date::class ->
@@ -170,10 +166,16 @@ abstract class Report: Window() {
         super.model.addReportLines()
 
         source = sourceFile
+        add()
       }
 
       override fun add() {
-        // TODO
+        super.model.addLine(arrayOf(
+                arrayListOf("test1" , "test2") ,
+                arrayListOf("test3" , "test4")
+
+
+        ))
       }
     }
   }

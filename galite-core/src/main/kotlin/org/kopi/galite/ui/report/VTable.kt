@@ -18,8 +18,8 @@
 package org.kopi.galite.ui.report
 
 import com.vaadin.flow.component.grid.Grid
-import org.kopi.galite.report.ReportRow
-import org.kopi.galite.report.Report
+import org.kopi.galite.report.dsl.ReportRow
+import org.kopi.galite.report.dsl.Report
 
 /**
  * Data table for of a report.

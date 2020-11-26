@@ -20,6 +20,7 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Represents an actor model.
@@ -53,7 +54,6 @@ open class VActor(var menuIdent: String,
     handler!!.performAction(object : Action("$menuItem in $menuName") {
       override fun execute() {
         handler!!.executeVoidTrigger(number)
-        println(" test -----------here!!---------------")
         action!!()
       }
 

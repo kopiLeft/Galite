@@ -20,7 +20,7 @@ import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.PConfig
-import org.kopi.galite.report.Report
+import org.kopi.galite.report.dsl.Report
 
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.VApplicationTestBase

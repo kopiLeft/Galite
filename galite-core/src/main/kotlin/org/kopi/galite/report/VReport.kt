@@ -584,8 +584,8 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   }
 
   fun addDefaultReportCommands() {
-    initDefaultActors()
-    initDefaultCommands()
+  //  initDefaultActors()
+  //  initDefaultCommands()
   }
   private fun initDefaultActors() {
     addActors(arrayOf(
@@ -610,7 +610,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
     }
   }
 
-  var help: String? = null
+  open var help: String? = null
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS

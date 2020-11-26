@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.report
 
 import org.kopi.galite.ui.common.Window
-import org.kopi.galite.report.Report
+import org.kopi.galite.report.dsl.Report
 
 /**
  * Visual class for a report.

@@ -10,6 +10,7 @@ import java.util.Locale
 import kotlin.test.assertEquals
 import org.kopi.galite.cross.VReportSelectionForm
 import org.kopi.galite.form.dsl.KeyCode
+import org.kopi.galite.form.dsl.ReportForm
 
 class GenerateReportTests : JApplicationTestBase() {
   @Test
@@ -25,11 +26,11 @@ object User: Table() {
   val age = integer("age")
 }
 
-object TestReportForm: Form() {
+object TestReportForm: ReportForm() {
   override val locale = Locale.FRANCE
   override val title = "Generate report"
 
-  val report = actor (
+  var report = actor (
           ident =  "report",
           menu =  "Action",
           label = "Report for test",
@@ -71,6 +72,7 @@ object TestReportForm: Form() {
           action = {
             println("Report test -----------00000---------------")
             println("Report test -----------111111---------------")
+            reportObject = GReportTests.model
 
          //   protected VReport createReport() throws VException {
          //     return new DeclarationBiensR(getForm(), @S.DateDebut, @S.DateFin, @!S.France, @!S.CEE, @!S.Monde);
@@ -82,6 +84,3 @@ object TestReportForm: Form() {
   }
 }
 
-class CommandesC(fournisseur: Int?): Chart() {
-  override val title: String = "Fournisseur"
-}

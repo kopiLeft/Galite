@@ -24,8 +24,8 @@ import org.jdom2.input.SAXBuilder
 import org.junit.Test
 
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.report.FieldAlignment
-import org.kopi.galite.report.Report
+import org.kopi.galite.report.dsl.FieldAlignment
+import org.kopi.galite.report.dsl.Report
 import org.kopi.galite.tests.VApplicationTestBase
 
 import kotlin.test.assertEquals
@@ -93,29 +93,29 @@ class ReportTests: VApplicationTestBase() {
   object SimpleReport : Report() {
     override val locale = Locale.FRANCE
 
-    override val title = "SimpleReport"
+    override val title = "GenratedReport"
 
     override val reportCommands = true
 
     val name = field(Domain<String>(20)) {
       label = "name"
       help = "The user name"
-      align = FieldAlignment.LEFT
+      align = FieldAlignment.CENTER
     }
 
     val age = field(Domain<Int>(3)) {
       label = "age"
       help = "The user age"
-      align = FieldAlignment.LEFT
+      align = FieldAlignment.CENTER
     }
 
     init {
       add {
-        this[name] = "Sami"
+        this[name] = "User1"
         this[age] = 22
       }
       add {
-        this[name] = "Sofia"
+        this[name] = "User2"
         this[age] = 23
       }
     }
