@@ -737,6 +737,7 @@ abstract class VForm : VWindow, VConstants {
        super.executeVoidTrigger(VKT_Type)
      }
     else -> {
+      throw IllegalArgumentException()
     }
    }
   }
@@ -752,6 +753,7 @@ abstract class VForm : VWindow, VConstants {
         preformAction()
       }
       else -> {
+        throw  IllegalArgumentException()
       }
     }
   }
@@ -765,7 +767,7 @@ abstract class VForm : VWindow, VConstants {
         resetAction()
       }
       else -> {
-        true
+        throw IllegalArgumentException()
       }
     }
   }
