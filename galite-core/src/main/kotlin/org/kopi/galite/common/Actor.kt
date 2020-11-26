@@ -21,6 +21,7 @@ import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Menu
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
@@ -33,7 +34,7 @@ import org.kopi.galite.form.dsl.Key
  * @param icon                the icon
  * @param key                 the shortcut
  */
-class Actor(val ident: String, val menu: String, val label: String, val help: String) {
+class Actor(val ident: String, val menu: Menu, val label: String, val help: String) {
   var key: Key? = null
     set(key) {
       checkKey(key)
