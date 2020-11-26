@@ -30,17 +30,9 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VlibProperties
 
-class VColorField(width: Int, height: Int) : VField(1, 1) {
+class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
 
   override fun hasAutofill(): Boolean = true
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
 
   /**
    * return the name of this field
@@ -239,5 +231,5 @@ class VColorField(width: Int, height: Int) : VField(1, 1) {
    * DATA MEMBERS
    * ----------------------------------------------------------------------
    */
-  private lateinit var value: Array<Color?>
+  private var value: Array<Color?> = arrayOfNulls(2 * bufferSize)
 }

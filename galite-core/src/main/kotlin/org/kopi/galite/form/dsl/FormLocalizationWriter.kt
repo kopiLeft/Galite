@@ -89,11 +89,11 @@ class FormLocalizationWriter : LocalizationWriter() {
       self.setAttribute("help", help)
     }
     pushNode(self)
-    for (i in indices!!.indices) {
-      indices[i].genLocalization(this)
+    indices.forEach { indice ->
+      indice.genLocalization(this)
     }
-    for (i in fields.indices) {
-      fields[i].genLocalization(this)
+    fields.forEach { field ->
+      field.genLocalization(this)
     }
     popNode(self)
     peekNode(null).addContent(self)
