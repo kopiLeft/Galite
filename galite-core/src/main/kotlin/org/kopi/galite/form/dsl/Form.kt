@@ -169,8 +169,8 @@ abstract class Form: Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genForm(title,
-            pages.toTypedArray(),
-            formBlocks.toTypedArray()
+                                               pages.toTypedArray(),
+                                               formBlocks.toTypedArray()
     )
   }
 

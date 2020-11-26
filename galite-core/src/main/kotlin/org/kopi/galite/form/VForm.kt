@@ -804,16 +804,16 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   // SHARED DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var autofillActor: VActor? = null
-  private var editItemActor: VActor? = null
+  private var autofillActor:   VActor? = null
+  private var editItemActor:   VActor? = null
   private var editItemActor_S: VActor? = null
-  private var newItemActor: VActor? = null
+  private var newItemActor:    VActor? = null
 
   // ---------------------------------------------------------------------
   // PREDEFINED COMMANDS
   // ---------------------------------------------------------------------
-  val cmdAutofill: VCommand = VFieldCommand(this, CMD_AUTOFILL)
+  val cmdAutofill:   VCommand = VFieldCommand(this, CMD_AUTOFILL)
   val cmdEditItem_S: VCommand = VFieldCommand(this, CMD_EDITITEM_S)
-  val cmdEditItem: VCommand = VFieldCommand(this, CMD_EDITITEM)
-  val cmdNewItem: VCommand = VFieldCommand(this, CMD_NEWITEM)
+  val cmdEditItem:   VCommand = VFieldCommand(this, CMD_EDITITEM)
+  val cmdNewItem:    VCommand = VFieldCommand(this, CMD_NEWITEM)
 }
