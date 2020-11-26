@@ -66,7 +66,4 @@ dependencies {
 
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", getoptVersion)
-
-  // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
-  implementation("org.jetbrains.kotlin","kotlin-reflect","1.4.20")
 }
