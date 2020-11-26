@@ -142,7 +142,7 @@ abstract class Form: Window() {
                                                formActors.toTypedArray(),
                                                pages.toTypedArray(),
                                                formBlocks.toTypedArray()
-                                              )
+    )
   }
 
   /**

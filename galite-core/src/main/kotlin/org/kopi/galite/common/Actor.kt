@@ -17,9 +17,10 @@
  */
 package org.kopi.galite.common
 
-import org.kopi.galite.form.dsl.KeyCode
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
+
+import org.kopi.galite.form.dsl.Key
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
@@ -33,7 +34,7 @@ import java.awt.event.KeyEvent
  * @param key                 the shortcut
  */
 class Actor(val ident: String, val menu: String, val label: String, val help: String) {
-  var key: KeyCode? = null
+  var key: Key? = null
     set(key) {
       checkKey(key)
       field = key
@@ -41,17 +42,13 @@ class Actor(val ident: String, val menu: String, val label: String, val help: St
 
   var icon: String? = null
 
-  private fun checkKey(key : KeyCode?) {
+  private fun checkKey(key : Key?) {
     if (key == null) {
       keyModifier = 0
       keyCode = KeyEvent.VK_UNDEFINED
     } else {
       keyCode = key.value
-      keyModifier = if (key.toString().indexOf("SHIFT_") == -1) {
-        0
-      } else {
-        InputEvent.SHIFT_MASK
-      }
+      keyModifier = if (key.toString().contains("SHIFT_")) InputEvent.SHIFT_MASK else 0
     }
   }
   // ----------------------------------------------------------------------
@@ -64,6 +61,6 @@ class Actor(val ident: String, val menu: String, val label: String, val help: St
     writer.genActorDefinition(ident, label, help)
   }
 
-  var keyCode = KeyEvent.VK_UNDEFINED
+  var keyCode = 0
   var keyModifier = 0
 }

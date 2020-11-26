@@ -29,7 +29,7 @@ import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.form.dsl.KeyCode
+import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.tests.JApplicationTestBase
 
 class FormTests: JApplicationTestBase() {
@@ -57,8 +57,8 @@ object TestForm: Form() {
           label = "Graph for test",
           help =  "show graph values" ,
   ) {
-    key  =  KeyCode.F1
-    icon =  "refresh"  // icon is optional here
+    key  =  Key.F9
+    icon =  "column_chart"  // icon is optional here
   }
 
   init {

@@ -18,7 +18,7 @@ package org.kopi.galite.form.dsl
 
 import java.awt.event.KeyEvent
 
-enum class KeyCode(val value : Int) {
+enum class Key(val value : Int) {
   F1(KeyEvent.VK_F1),
   F2(KeyEvent.VK_F2),
   F3(KeyEvent.VK_F3),
