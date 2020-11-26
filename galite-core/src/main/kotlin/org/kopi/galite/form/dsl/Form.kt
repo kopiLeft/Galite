@@ -75,8 +75,10 @@ abstract class Form: Window() {
    *
    * @param        block                 the block to insert
    */
-  fun <T: FormBlock> insertBlock(block: T, init: T.() -> Unit): T {
-    block.init()
+  fun <T: FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T {
+    if (init != null) {
+      block.init()
+    }
     block.initialize(this)
     formBlocks.add(block)
     return block

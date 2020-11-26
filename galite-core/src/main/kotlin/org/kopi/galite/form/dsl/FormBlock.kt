@@ -22,11 +22,18 @@ import java.awt.Point
 import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.common.Actor
+import org.kopi.galite.common.BlockAction
+import org.kopi.galite.common.BlockBooleanTrigger
+import org.kopi.galite.common.BlockProtectedTrigger
+import org.kopi.galite.common.BlockTrigger
+import org.kopi.galite.common.BlockVoidTrigger
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
@@ -61,7 +68,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   var indices: MutableList<FormBlockIndex> = mutableListOf()
   var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
   lateinit var commands: Array<Command?>
-  lateinit var triggers: Array<Trigger>
+  val triggers = mutableListOf<Trigger>()
   lateinit var dropListMap: HashMap<*, *>
   private var maxRowPos = 0
   private var maxColumnPos = 0
@@ -72,6 +79,63 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
 
   /** Blocks's commands. */
   val blockCommands = mutableListOf<Command>()
+
+  // ----------------------------------------------------------------------
+  // BLOCK TRIGGERS
+  // ----------------------------------------------------------------------
+
+  /**
+   * Adds triggers to this form block
+   *
+   * @param blockTriggers the triggers to add
+   * @param method        the method to execute when trigger is called
+   */
+  private fun <T> triggers(blockTriggers: Array<out BlockTrigger>, method: () -> T) {
+    val event = blockEventList(blockTriggers)
+    val blockAction = BlockAction(null, method)
+    val trigger = FormTrigger(event, blockAction)
+    triggers.add(trigger)
+  }
+
+  private fun blockEventList(blockTriggers: Array<out BlockTrigger>): Long {
+    var self = 0L
+
+    blockTriggers.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
+  }
+
+  /**
+   * Adds protected triggers to this form block
+   *
+   * @param blockTriggers the triggers to add
+   * @param method        the method to execute when trigger is called
+   */
+  fun triggers(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit) {
+    triggers(blockTriggers, method)
+  }
+
+  /**
+   * Adds void triggers to this form block
+   *
+   * @param blockTriggers the triggers to add
+   * @param method        the method to execute when trigger is called
+   */
+  fun triggers(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit) {
+    triggers(blockTriggers, method)
+  }
+
+  /**
+   * Adds boolean triggers to this form block
+   *
+   * @param blockTriggers the triggers to add
+   * @param method        the method to execute when trigger is called
+   */
+  fun triggers(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean) {
+    triggers(blockTriggers, method)
+  }
 
   /**
    * Adds the [table] to this block
@@ -281,19 +345,62 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
                                                 blockFields.toTypedArray())
   }
 
+
+  /** The block model */
+  lateinit var vBlock: VBlock
+
   /** Returns block model */
   fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
+
+    fun getFieldsCommands(): List<Command> {
+      return blockFields.map {
+        it.commands
+      }.filterNotNull().flatten()
+    }
+
     return object : VBlock(vForm) {
+      /**
+       * Handling triggers
+       */
+      fun handleTrigger(trigger: Trigger) {
+        // BLOCK TRIGGERS
+        val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        for (i in VConstants.TRG_TYPES.indices) {
+          if (trigger.events shr i and 1 > 0) {
+            blockTriggerArray[i] = i
+            super.triggers[i] = trigger
+          }
+        }
+        super.VKT_Triggers.add(blockTriggerArray)
+
+        // FIELD TRIGGERS
+        blockFields.forEach {
+          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          // TODO : Add field triggers here
+          super.VKT_Triggers.add(fieldTriggerArray)
+        }
+
+        // COMMANDS TRIGGERS
+        blockCommands.forEach {
+          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          // TODO : Add commands triggers here
+          super.VKT_Triggers.add(fieldTriggerArray)
+        }
+
+        // FIELDS COMMANDS TRIGGERS
+        val fieldsCommands = getFieldsCommands()
+        fieldsCommands.forEach {
+          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          // TODO : Add field commands triggers here
+          super.VKT_Triggers.add(fieldTriggerArray)
+        }
+      }
+
       override fun setInfo() {
       }
 
       init {
         //TODO ----------begin-------------
-        super.VKT_Triggers = arrayOf(IntArray(200), IntArray(200), IntArray(200), IntArray(200), IntArray(200), IntArray(200))
-        super.access = intArrayOf(
-                4, 4, 4
-        )
-
         /** Used actors in form*/
         val usedActors  = form.actors.map { vActor ->
           vActor?.actorIdent to vActor
@@ -309,6 +416,13 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
                   )
         }.toTypedArray()
 
+
+        this@FormBlock.triggers.forEach {
+          handleTrigger(it)
+        }
+        super.access = intArrayOf(
+                4, 4, 4
+        )
         //TODO ------------end-----------
 
         super.source = source ?: sourceFile
@@ -326,6 +440,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
           it.ident
         }.toTypedArray()
       }
+    }.also {
+      vBlock = it
     }
   }
 }

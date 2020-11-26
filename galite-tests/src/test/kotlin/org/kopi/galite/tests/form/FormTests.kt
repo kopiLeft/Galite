@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +16,6 @@
  */
 package org.kopi.galite.tests.form
 
-import java.awt.event.KeyEvent
 import java.util.Locale
 
 import kotlin.test.assertEquals
