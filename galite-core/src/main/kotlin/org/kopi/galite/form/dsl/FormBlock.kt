@@ -30,6 +30,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
+import org.kopi.galite.visual.VCommand
 
 /**
  * A block on a form
@@ -220,7 +221,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @return a field.
    */
   fun command(item: Actor, init: Command.() -> Unit): Command {
-    val command = Command()
+    val command = Command(item)
     command.init()
     blockCommands.add(command)
     return command
@@ -292,7 +293,22 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
         super.access = intArrayOf(
                 4, 4, 4
         )
-        super.commands = arrayOf()
+
+        /** Used actors in form*/
+        val usedActors  = form.actors.map { vActor ->
+          vActor?.actorIdent to vActor
+        }.toMap()
+
+        super.commands = blockCommands?.map {
+          VCommand(it.mode,
+                   this,
+                   usedActors[it.item.ident],
+                   -1,
+                   it.name!!,
+                   it.action
+                  )
+        }.toTypedArray()
+
         //TODO ------------end-----------
 
         super.source = source ?: sourceFile

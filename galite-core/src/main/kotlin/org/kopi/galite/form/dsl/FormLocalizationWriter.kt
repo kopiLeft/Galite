@@ -18,6 +18,7 @@
 package org.kopi.galite.form.dsl
 
 import org.jdom2.Element
+import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
 
 /**
@@ -26,12 +27,23 @@ import org.kopi.galite.common.LocalizationWriter
 class FormLocalizationWriter : LocalizationWriter() {
 
   fun genForm(title: String?,
+              menus : Array<Menu>,
+              actors : Array<Actor>,
               pages: Array<FormPage>,
               blocks: Array<FormElement>) {
     val self = Element("form")
     self.setAttribute("title", title)
     pushNode(self)
-    // coll.genLocalization(this) TODO
+
+    // menus
+    for (i in menus.indices) {
+      menus[i].genLocalization(this)
+    }
+    // actors
+    for (i in actors.indices) {
+      actors[i].genLocalization(this)
+    }
+
     for (i in pages.indices) {
       pages[i].genLocalization(this)
     }
