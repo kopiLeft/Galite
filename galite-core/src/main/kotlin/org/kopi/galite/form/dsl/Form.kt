@@ -158,7 +158,7 @@ abstract class Form: Window() {
   /**
    * Returns the qualified source file name where this object is defined.
    */
-  private val sourceFile: String
+  protected val sourceFile: String
     get() {
       val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
@@ -170,33 +170,37 @@ abstract class Form: Window() {
 
     object : VForm() {
       override fun init() {
-        source = sourceFile
-        pages = this@Form.pages.map {
-          it.ident
-        }.toTypedArray()
-        super.actors = formActors.map {
-          VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
-        }.toTypedArray()
-        blocks = formBlocks.map { formBlock ->
-          formBlock.getBlockModel(this, source).also { vBlock ->
-            vBlock.setInfo(formBlock.pageNumber)
-            vBlock.initIntern()
-            formBlock.blockFields.forEach { formField ->
-              formField.initialValues.forEach {
-                formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
-              }
-            }
-          }
-        }.toTypedArray()
-
-        //TODO ----------begin-------------
-        super.commands = arrayOf()
-        VKT_Triggers = arrayOf(IntArray(200))
-        //TODO ----------end-------------
+        initialize()
       }
 
       init {
       }
     }
+  }
+
+  fun VForm.initialize() {
+    source = sourceFile
+    pages = this@Form.pages.map {
+      it.ident
+    }.toTypedArray()
+    this.actors = formActors.map {
+      VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
+    }.toTypedArray()
+    blocks = formBlocks.map { formBlock ->
+      formBlock.getBlockModel(this, source).also { vBlock ->
+        vBlock.setInfo(formBlock.pageNumber)
+        vBlock.initIntern()
+        formBlock.blockFields.forEach { formField ->
+          formField.initialValues.forEach {
+            formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
+          }
+        }
+      }
+    }.toTypedArray()
+
+    //TODO ----------begin-------------
+    this.commands = arrayOf()
+    VKT_Triggers = arrayOf(IntArray(200))
+    //TODO ----------end-------------
   }
 }
