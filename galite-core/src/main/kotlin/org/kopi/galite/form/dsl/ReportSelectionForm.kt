@@ -17,6 +17,7 @@
 package org.kopi.galite.form.dsl
 
 import org.kopi.galite.cross.VReportSelectionForm
+import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 
 /**
@@ -27,7 +28,7 @@ abstract class ReportSelectionForm: DictionaryForm() {
   /**
    * create a report for this form
    */
-  protected abstract fun createReport(): VReport
+  protected abstract fun createReport(): Report
 
   /** Form model */
   override val model: VReportSelectionForm by lazy {
@@ -38,7 +39,7 @@ abstract class ReportSelectionForm: DictionaryForm() {
       }
 
       override fun createReport(): VReport {
-        return this@ReportSelectionForm.createReport()
+        return this@ReportSelectionForm.createReport().model
       }
     }
   }
