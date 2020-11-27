@@ -22,8 +22,7 @@ package org.kopi.galite.form.dsl
  *
  * This class describe the alignment of multi blocks
  *
- * @param where                the token reference of this node
- * @param block                block alignment
+ * @param block                 block alignment
  * @param target                the target column vector
  * @param source                the source column vector
  */

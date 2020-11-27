@@ -17,8 +17,9 @@
  */
 package org.kopi.galite.tests.form
 
-import java.awt.event.KeyEvent
 import java.util.Locale
+
+import kotlin.test.assertEquals
 
 import org.junit.Test
 import org.kopi.galite.chart.Chart
@@ -26,72 +27,84 @@ import org.kopi.galite.chart.Chart
 import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.tests.JApplicationTestBase
-import org.kopi.galite.visual.WindowController
 
 class FormTests: JApplicationTestBase() {
-  object User: Table() {
-    val id = integer("id")
-    val name = varchar("name", 20)
-    val age = integer("age")
+
+  @Test
+  fun sourceFormTest() {
+    val formModel = TestForm.model
+    assertEquals(TestForm::class.qualifiedName!!.replace(".", "/"), formModel.source)
+  }
+}
+
+object User: Table() {
+  val id   = integer("id")
+  val name = varchar("name", 20)
+  val age  = integer("age")
+}
+
+object TestForm: Form() {
+  override val locale = Locale.FRANCE
+  override val title  = "form for test"
+
+  val graph = actor (
+          ident =  "graph",
+          menu  =  "Action",
+          label = "Graph for test",
+          help  =  "show graph values" ,
+  ) {
+    key  =  Key.F9
+    icon =  "column_chart"  // icon is optional here
   }
 
-  object TestForm: Form() {
-    override val locale = Locale.FRANCE
-    override val title = "form for test"
-
-    val graph = actor (
-      menu =  "Action",
-      label = "Graphe",
-      help =  "Representer les valeurs en graphe"
-    ) {
-      key  =  KeyEvent.VK_F9  // key is optional here
-      icon =  "column_chart"  // icon is optional here
-    }
-
-    init {
-      page("test page") {
-        val testBlock = block(1, 1, "Test", "Test block") {
-          val u = table(FormTests.User)
-          val i = index(message = "ID should be unique")
-
-          val id = hidden(Domain<Int>(20)) {
-            label = "id"
-            help = "The user id"
-            columns(u.id)
-          }
-          val name = mustFill(Domain<String>(20)) {
-            label = "name"
-            help = "The user name"
-            columns(u.name)
-          }
-          val age = visit(Domain<Int>(3)) {
-            label = "age"
-            help = "The user age"
-            columns(u.age) {
-              index = i
-              priority = 1
-            }
-          }
-
-          command(item = graph) {
-            action = {
-              WindowController.windowController.doNotModal(CommandesC(id.value))
-            }
+  init {
+    page("test page") {
+      menu("Action")
+      insertBlock(TestBlock) {
+        command(item = graph) {
+          this.name = "graphe"
+          mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+          action = {
+            println("---------------------------------- IN TEST COMMAND ----------------------------------")
           }
         }
       }
     }
-  }
 
-  class CommandesC(fournisseur: Int?): Chart() {
-    override val title: String = "Fournisseur"
+    TestBlock.age[0]    = 5
+    TestBlock.age.value = 6
   }
+}
 
-  @Test
-  fun simpleFormTest() {
-    //val formModel = TestForm.model
-    //assertEquals("org.kopi.galite.tests.form.FormTests", formModel.source) TODO
+object TestBlock : FormBlock(1, 1, "Test", "Test block") {
+  val u = table(User)
+  val i = index(message = "ID should be unique")
+
+  val id  = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help  = "The user id"
+    columns(u.id)
   }
+  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+    label  = "name"
+    help   = "The user name"
+    columns(u.name)
+  }
+  val age = visit(domain = Domain<Int>(3), position = follow(name)) {
+    label = "age"
+    help  = "The user age"
+    columns(u.age) {
+      index    = i
+      priority = 1
+    }
+  }
+}
+
+class CommandesC(fournisseur: Int?): Chart() {
+  override val title: String = "Fournisseur"
 }

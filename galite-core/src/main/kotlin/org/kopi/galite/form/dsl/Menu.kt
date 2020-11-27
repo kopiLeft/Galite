@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,37 +16,13 @@
  */
 package org.kopi.galite.form.dsl
 
-import java.io.File
-
 import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Window
 
 /**
- * A block on a form
- * A block contains fields and reference to database
  *
- * @param     ident           the identifier of this block
- * @param     shortcut        the shortcut of this block
+ * @param label                the menu label in default locale
  */
-abstract class FormElement(open val ident: String) {
-
-  open lateinit var shortcut: String
-
-  /**
-   * Returns the qualified source file name where this element is defined.
-   */
-  protected val sourceFile: String
-    get() {
-      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
-      return basename + this.javaClass.simpleName
-    }
-
-  /**
-   * Make a tuning pass in order to create informations about exported elements
-   *
-   * @param window        the actual context of analyse
-   */
-  abstract fun initialize(window: Window)
+class Menu(val label: String) {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
@@ -55,10 +30,7 @@ abstract class FormElement(open val ident: String) {
   /**
    * !!!FIX:taoufik
    */
-  abstract fun genLocalization(writer: LocalizationWriter)
-
-  /**
-   * Sets the page number
-   */
-  var pageNumber = 0
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genMenuDefinition(label, label)
+  }
 }

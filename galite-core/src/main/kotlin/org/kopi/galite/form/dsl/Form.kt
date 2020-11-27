@@ -23,6 +23,7 @@ import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VForm
+import org.kopi.galite.visual.VActor
 
 /**
  * Represents a form.
@@ -30,13 +31,16 @@ import org.kopi.galite.form.VForm
 abstract class Form: Window(){
 
   /** Form's actors. */
-  val actors = mutableListOf<Actor>()
+  val formActors = mutableListOf<Actor>()
 
   /** Form's blocks. */
   val formBlocks = mutableListOf<FormBlock>()
 
   /** Form's pages. */
   val pages = mutableListOf<FormPage>()
+
+  /** Form's menus. */
+  val menus = mutableListOf<Menu>()
 
   /** the help text TODO: Move to super class */
   var help: String? = null
@@ -48,10 +52,10 @@ abstract class Form: Window(){
    * @param label                the label
    * @param help                 the help
    */
-  fun actor(menu: String, label: String, help: String, init: Actor.() -> Unit): Actor {
-    val actor = Actor(menu, label, help)
+  fun actor(ident: String, menu: String, label: String, help: String, init: Actor.() -> Unit): Actor {
+    val actor = Actor(ident, menu, label, help)
     actor.init()
-    actors.add(actor)
+    formActors.add(actor)
     return actor
   }
 
@@ -63,9 +67,17 @@ abstract class Form: Window(){
    * @param        name                   the simple identifier of this block
    * @param        title                  the title of the block
    */
-  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock {
-    val block = FormBlock(buffer, visible, name, title)
+  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock =
+          insertBlock(FormBlock(buffer, visible, name, title), init)
+
+  /**
+   * Adds a new block to this form.
+   *
+   * @param        block                 the block to insert
+   */
+  fun <T: FormBlock> insertBlock(block: T, init: T.() -> Unit): T {
     block.init()
+    block.initialize(this)
     formBlocks.add(block)
     return block
   }
@@ -80,6 +92,17 @@ abstract class Form: Window(){
     page.init()
     pages.add(page)
     return page
+  }
+
+  /**
+   * Adds a new menu to this form.
+   *
+   * @param label                the menu label in default locale
+   */
+  fun menu(label: String): Menu {
+    val menu = Menu(label)
+    menus.add(menu)
+    return menu
   }
 
   // ----------------------------------------------------------------------
@@ -122,6 +145,8 @@ abstract class Form: Window(){
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genForm(title,
+                                               menus.toTypedArray(),
+                                               formActors.toTypedArray(),
                                                pages.toTypedArray(),
                                                formBlocks.toTypedArray()
     )
@@ -146,11 +171,25 @@ abstract class Form: Window(){
         pages = this@Form.pages.map {
           it.ident
         }.toTypedArray()
+        super.actors = formActors?.map {
+          VActor(it.menu, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
+        }.toTypedArray()
         blocks = formBlocks.map { formBlock ->
           formBlock.getBlockModel(this, source).also { vBlock ->
             vBlock.setInfo(formBlock.pageNumber)
+            vBlock.initIntern()
+            formBlock.blockFields.forEach { formField ->
+              formField.initialValues.forEach {
+                formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
+              }
+            }
           }
         }.toTypedArray()
+
+        //TODO ----------begin-------------
+        super.commands = arrayOf()
+        VKT_Triggers = arrayOf(IntArray(200))
+        //TODO ----------end-------------
       }
 
       init {

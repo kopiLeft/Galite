@@ -2319,7 +2319,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     action          the action to perform.
    * @param     block           This action should block the UI thread ?
    */
-  @Deprecated("Use method performAsyncAction without bool parameter")
+  @Deprecated("Use method performAsyncAction without bool parameter",
+          ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2905,7 +2906,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() {
       return if (field in 0 until bufferSize) field else -1
     }
-    set(rec: Int) {
+    set(rec) {
       assert(isMulti() || rec == 0) { "multi? " + isMulti() + "rec: " + rec }
       field = rec
     }
@@ -2948,7 +2949,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       return if (!isMulti()) {
         0
       } else {
-        assert(field >= 0 && field < bufferSize) { "Bad currentRecord $field" }
+        assert(field in 0 until bufferSize) { "Bad currentRecord $field" }
         field
       }
     }

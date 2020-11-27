@@ -17,7 +17,6 @@
 package org.kopi.galite.form.dsl
 
 @Marker
-interface FieldBlock {
-}
+interface FieldBlock
 @PageMarker
 interface PageForm

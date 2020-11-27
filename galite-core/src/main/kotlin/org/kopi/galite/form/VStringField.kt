@@ -29,18 +29,25 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.db.Query
 import org.kopi.galite.db.Utils
 
-open class VStringField(width: Int, height: Int, private val visibleHeight: Int, val convert: Int, styled: Boolean)
-  : VField(width, height) {
+open class VStringField(val bufferSize: Int,
+                        width: Int,
+                        height: Int,
+                        private val visibleHeight: Int,
+                        val convert: Int,
+                        styled: Boolean)
+               : VField(width, height) {
 
-  constructor(width: Int, height: Int, convert: Int, styled: Boolean) : this(width, height, 0, convert, styled)
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
+  constructor(bufferSize: Int,
+              width: Int,
+              height: Int,
+              convert: Int,
+              styled: Boolean)
+       : this(bufferSize,
+              width,
+              height,
+              0,
+              convert,
+              styled)
 
   /**
    * return the name of this field
@@ -237,7 +244,8 @@ open class VStringField(width: Int, height: Int, private val visibleHeight: Int,
    * Returns true if the text field supports styled content.
    */
   val isStyled: Boolean = styled
-  protected lateinit var value: Array<String?>
+
+  protected var value: Array<String?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
     /**
