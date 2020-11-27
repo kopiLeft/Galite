@@ -14,7 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.base
+package org.kopi.galite.util
 
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.common.Actor
@@ -27,6 +27,7 @@ import kotlin.reflect.jvm.jvmErasure
 /**
  * Class of reflection tools
  * Contains methods which access to formBlocks' fields and indices and tables
+ * in all Galite components using its DSL
  * and @return the element of index requested
  */
 object ReflectTool {
@@ -103,12 +104,9 @@ object ReflectTool {
    */
   fun elementOfFormBlock(formBlock: FormBlock, kClass: KClass<*>, index: Int): String {
     val formBlockClass = formBlock::class
-    val list = mutableListOf<String>()
-    formBlockClass.memberProperties.forEach {
-      if (it.returnType.jvmErasure.isSubclassOf(kClass)) {
-        list.add(it.name)
-      }
-    }
+    val list= formBlockClass.memberProperties.filter {
+      it.returnType.jvmErasure.isSubclassOf(kClass)
+    }.map { it.name }
     return list[index]
   }
 
@@ -124,12 +122,9 @@ object ReflectTool {
    */
   fun elementOfForm(form: Form, kClass: KClass<*>, index: Int): String {
     val formClass = form::class
-    val list = mutableListOf<String>()
-    formClass.memberProperties.forEach {
-      if (it.returnType.jvmErasure.isSubclassOf(kClass)) {
-        list.add(it.name)
-      }
-    }
+    val list =formClass.memberProperties.filter{
+     it.returnType.jvmErasure.isSubclassOf(kClass)
+    }.map { it.name }
     return list[index]
   }
 }

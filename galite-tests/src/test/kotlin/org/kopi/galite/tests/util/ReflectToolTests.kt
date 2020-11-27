@@ -14,10 +14,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.base
+package org.kopi.galite.tests.util
 
 import org.junit.Test
-import org.kopi.galite.base.ReflectTool
+import org.kopi.galite.util.ReflectTool
 import org.kopi.galite.tests.form.TestBlock
 import org.kopi.galite.tests.form.TestForm
 import kotlin.test.assertEquals
@@ -25,7 +25,7 @@ import kotlin.test.assertEquals
 class ReflectToolTests {
 
   /**
-   * This test returns the elements' values of positions index in the form blocks
+   * This test checks the elements' values of positions index in the form blocks
    */
   @Test
   fun reflectToolBlockTest() {
@@ -37,7 +37,7 @@ class ReflectToolTests {
   }
 
   /**
-   * This test returns the actor and the menu elements' values of positions index in  forms
+   * This test checks the actor and the menu elements' values of positions index in  forms
    */
   @Test
   fun reflectToolFormTest() {
