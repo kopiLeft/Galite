@@ -17,7 +17,11 @@
  */
 package org.kopi.galite.common
 
+import org.kopi.galite.report.Constants
+
 /**
- * This class represents an action, ie a list of instructions
+ * This class represents a trigger, ie an action to be executed on events
  */
-abstract class Action<T>(val method: () -> T)
+class ReportTrigger(events: Long, action: Action<*>): Trigger(events, action) {
+  override fun getTriggers(): IntArray = Constants.TRG_TYPES
+}

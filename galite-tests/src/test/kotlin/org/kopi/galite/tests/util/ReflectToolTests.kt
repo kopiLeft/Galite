@@ -42,6 +42,6 @@ class ReflectToolTests {
   @Test
   fun reflectToolFormTest() {
     assertEquals("graph", ReflectTool.formActorAt(TestForm, 0))
-    assertEquals("myMenu", ReflectTool.formMenuAt(TestForm, 0))
+    assertEquals("action", ReflectTool.formMenuAt(TestForm, 0))
   }
 }

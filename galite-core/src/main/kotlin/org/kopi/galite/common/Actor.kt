@@ -33,7 +33,7 @@ import org.kopi.galite.form.dsl.Key
  * @param icon                the icon
  * @param key                 the shortcut
  */
-class Actor(val ident: String, val menu: String, val label: String, val help: String) {
+class Actor(val ident: String, val menu: Menu, val label: String, val help: String) {
   var key: Key? = null
     set(key) {
       checkKey(key)

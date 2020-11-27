@@ -68,7 +68,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   var options: Int = 0
   var columns: FormFieldColumns? = null
   var access: IntArray = IntArray(3) { initialAccess }
-  var commands: Array<Command>? = null
+  var commands: MutableList<Command>? = null
   var triggers: Array<Trigger>? = null
   var alias: String? = null
   var initialValues = mutableMapOf<Int, T?>()

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.tests.form
 
+import java.awt.event.KeyEvent
 import java.util.Locale
 
 import kotlin.test.assertEquals
@@ -43,20 +44,22 @@ class FormTests: JApplicationTestBase() {
 }
 
 object User: Table() {
-  val id   = integer("id")
+  val id = integer("id")
   val name = varchar("name", 20)
-  val age  = integer("age")
+  val age = integer("age")
 }
 
 object TestForm: Form() {
   override val locale = Locale.FRANCE
-  override val title  = "form for test"
+  override val title = "form for test"
+
+  val action = menu("Action")
 
   val graph = actor (
           ident =  "graph",
-          menu  =  "Action",
-          label = "Graph for test",
-          help  =  "show graph values" ,
+          menu  =   action,
+          label =  "Graph for test",
+          help  =   "show graph values" ,
   ) {
     key  =  Key.F9
     icon =  "column_chart"  // icon is optional here
@@ -85,14 +88,14 @@ object TestBlock : FormBlock(1, 1, "Test", "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
-  val id  = hidden(domain = Domain<Int>(20)) {
+  val id = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help  = "The user id"
     columns(u.id)
   }
   val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
-    label  = "name"
-    help   = "The user name"
+    label = "name"
+    help  = "The user name"
     columns(u.name)
   }
   val age = visit(domain = Domain<Int>(3), position = follow(name)) {
