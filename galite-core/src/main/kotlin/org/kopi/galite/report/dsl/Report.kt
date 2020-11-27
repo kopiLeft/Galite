@@ -161,10 +161,8 @@ abstract class Report: Window() {
         if (reportCommands) {
           addDefaultReportCommands()
         }
-
         super.model.addReportColumns()
         super.model.addReportLines()
-
         source = sourceFile
         add()
       }
@@ -173,8 +171,6 @@ abstract class Report: Window() {
         super.model.addLine(arrayOf(
                 arrayListOf("test1" , "test2") ,
                 arrayListOf("test3" , "test4")
-
-
         ))
       }
     }

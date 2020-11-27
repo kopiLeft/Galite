@@ -321,12 +321,12 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
         }.toMap()
 
         super.commands = blockCommands.map {
-          VCommand(//it.modes,
-                  0xFFFF,
+          VCommand(it.modes,
+                  //0xFFFF,
                    this,
                    usedActors[it.body.item.ident],
-                   //it.trigger!!,
-                  1,
+                   it.trigger,
+                  //1,
                    it.body.action ,
                    it.body.item.ident)
         }.toTypedArray()

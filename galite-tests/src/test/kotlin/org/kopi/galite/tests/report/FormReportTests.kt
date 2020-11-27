@@ -8,9 +8,9 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.JApplicationTestBase
 import java.util.Locale
 import kotlin.test.assertEquals
-import org.kopi.galite.cross.VReportSelectionForm
 import org.kopi.galite.form.dsl.KeyCode
 import org.kopi.galite.form.dsl.ReportForm
+import org.kopi.galite.report.VReport
 
 class GenerateReportTests : JApplicationTestBase() {
   @Test
@@ -28,6 +28,10 @@ object User: Table() {
 
 object TestReportForm: ReportForm() {
   override val locale = Locale.FRANCE
+  override fun createReport(): VReport {
+    return GReportTests.model
+  }
+
   override val title = "Generate report"
 
   var report = actor (
@@ -70,13 +74,9 @@ object TestReportForm: ReportForm() {
           item = report
           this.name = "report"
           action = {
-            println("Report test -----------00000---------------")
-            println("Report test -----------111111---------------")
-            reportObject = GReportTests.model
-
-         //   protected VReport createReport() throws VException {
-         //     return new DeclarationBiensR(getForm(), @S.DateDebut, @S.DateFin, @!S.France, @!S.CEE, @!S.Monde);
-         //   }
+            this@TestReportForm.model.createReport()
+          //reportObject = GReportTests.model
+          // VReportSelectionForm.createReport(reportObject , this@block as VBlock )
           }
         }
       }

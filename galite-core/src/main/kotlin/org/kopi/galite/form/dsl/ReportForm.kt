@@ -166,15 +166,15 @@ abstract class ReportForm: Window() {
             return basename + this.javaClass.simpleName
         }
 
+    abstract fun createReport(): VReport
+
     /** Form model */
     override val model: VReportSelectionForm by lazy {
         genLocalization()
 
         object : VReportSelectionForm() {
             override fun createReport(): VReport {
-                println("inside createReport()")
-
-                return reportObject
+                return this@ReportForm.createReport()
             }
 
             override fun init() {
@@ -202,6 +202,7 @@ abstract class ReportForm: Window() {
                 super.commands = arrayOf()
                 VKT_Triggers = arrayOf(IntArray(200))
                 //TODO ----------end-------------
+
             }
 
             init {

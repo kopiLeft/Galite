@@ -97,7 +97,6 @@ class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale
    * @param     source          the source qualified name
    */
   fun getReportLocalizer(source: String): ReportLocalizer {
-    println("getReportLocalizer($source)")
     return ReportLocalizer(this, getDocument(source))
   }
 
@@ -155,8 +154,6 @@ class LocalizationManager(val locale: Locale?, private val defaultLocale: Locale
    * @param     source          the source qualified name
    */
   private fun getDocument(source: String?): Document {
-    println("---------------------------------")
-    println(source)
     if (!documents.containsKey(source)) {
       documents[source] = loadDocument(source)
     }
