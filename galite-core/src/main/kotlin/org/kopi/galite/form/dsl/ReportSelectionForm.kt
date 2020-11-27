@@ -22,7 +22,7 @@ import org.kopi.galite.report.VReport
 /**
  * Represents a report selection form.
  */
-abstract class ReportSelectionForm: Form() {
+abstract class ReportSelectionForm: DictionaryForm() {
 
   /**
    * create a report for this form
