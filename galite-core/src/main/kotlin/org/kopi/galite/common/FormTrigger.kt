@@ -17,7 +17,11 @@
  */
 package org.kopi.galite.common
 
+import org.kopi.galite.form.VConstants
+
 /**
- * This class represents an action, ie a list of instructions
+ * This class represents a trigger, ie an action to be executed on events
  */
-abstract class Action<T>(val method: () -> T)
+class FormTrigger(events: Long, action: Action<*>): Trigger(events, action) {
+  override fun getTriggers(): IntArray = VConstants.TRG_TYPES
+}
