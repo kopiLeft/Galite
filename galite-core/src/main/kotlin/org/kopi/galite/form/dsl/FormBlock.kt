@@ -33,7 +33,6 @@ import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
@@ -362,16 +361,18 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
       /**
        * Handling triggers
        */
-      fun handleTrigger(trigger: Trigger) {
+      fun handleTriggers(triggers: MutableList<Trigger>) {
         // BLOCK TRIGGERS
-        val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-        for (i in VConstants.TRG_TYPES.indices) {
-          if (trigger.events shr i and 1 > 0) {
-            blockTriggerArray[i] = i
-            super.triggers[i] = trigger
+        triggers.forEach { trigger ->
+          val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          for (i in VConstants.TRG_TYPES.indices) {
+            if (trigger.events shr i and 1 > 0) {
+              blockTriggerArray[i] = i
+              super.triggers[i] = trigger
+            }
           }
+          super.VKT_Triggers.add(blockTriggerArray)
         }
-        super.VKT_Triggers.add(blockTriggerArray)
 
         // FIELD TRIGGERS
         blockFields.forEach {
@@ -416,10 +417,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
                   )
         }.toTypedArray()
 
+        handleTriggers(this@FormBlock.triggers)
 
-        this@FormBlock.triggers.forEach {
-          handleTrigger(it)
-        }
         super.access = intArrayOf(
                 4, 4, 4
         )
