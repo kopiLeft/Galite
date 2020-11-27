@@ -58,7 +58,7 @@ import org.kopi.galite.visual.VCommand
  * @param        triggers              the triggers executed by this form
  * @param        fields                the objects that populate the block
  */
-open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FormElement(ident), VConstants {
+open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FieldBlock, FormElement(ident), VConstants {
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null

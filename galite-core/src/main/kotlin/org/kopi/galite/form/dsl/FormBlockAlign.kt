@@ -26,4 +26,4 @@ package org.kopi.galite.form.dsl
  * @param target                the target column vector
  * @param source                the source column vector
  */
-class FormBlockAlign(private val block: String, private val target: IntArray, private val source: IntArray) : FieldBlock
+class FormBlockAlign(private val block: String, private val target: IntArray, private val source: IntArray)

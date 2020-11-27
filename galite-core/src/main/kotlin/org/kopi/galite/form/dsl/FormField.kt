@@ -60,7 +60,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
                                    override val domain: Domain<T>,
                                    private val fieldIndex: Int,
                                    initialAccess: Int,
-                                   var position: FormPosition? = null): Field<T>(domain) {
+                                   var position: FormPosition? = null): FieldBlock, Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -130,7 +130,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    * @param joinColumns columns to use to make join between block tables
    * @param init        initialises the form field column properties (index, priority...)
    */
-  fun columns(vararg joinColumns: Column<*>, init: (FormFieldColumns.() -> Unit)? = null) {
+  fun columns(@Marker vararg joinColumns: Column<*>, init: (FormFieldColumns.() -> Unit)? = null) {
     val cols = joinColumns.map {
       FormFieldColumn(it, it.table.tableName, it.name, true, true) // TODO
     }

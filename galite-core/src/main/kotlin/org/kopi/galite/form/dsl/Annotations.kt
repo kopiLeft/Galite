@@ -16,9 +16,16 @@
  */
 package org.kopi.galite.form.dsl
 
-@Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE, AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER)
+
 @DslMarker
 annotation class Marker
 
 @DslMarker
 annotation class PageMarker
+
+@DslMarker
+annotation class IndexForm
+
+@DslMarker
+annotation class UserF

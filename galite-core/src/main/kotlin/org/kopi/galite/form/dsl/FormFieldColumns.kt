@@ -24,9 +24,10 @@ package org.kopi.galite.form.dsl
  * @param index                   the indices of this column
  * @param priority                the priority in sorting
  */
+@Marker
 class FormFieldColumns(internal val columns: Array<FormFieldColumn?>,
                        var index: FormBlockIndex? = null,
-                       var priority: Int = 0) : FieldBlock {
+                       var priority: Int = 0) : IndexF {
 
   /**
    * Sets the position in an array of fields

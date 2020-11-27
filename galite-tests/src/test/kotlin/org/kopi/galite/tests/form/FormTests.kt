@@ -91,18 +91,18 @@ object TestBlock : FormBlock(1, 1, "Test", "Test block") {
   val id = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help  = "The user id"
-    columns(u.id)
+    columns(this@TestBlock.u.id)
   }
   val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help  = "The user name"
-    columns(u.name)
+    columns(this@TestBlock.u.name)
   }
   val age = visit(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
     help  = "The user age"
-    columns(u.age) {
-      index    = i
+    columns(this@TestBlock.u.age) {
+      index    = this@TestBlock.i
       priority = 1
     }
   }

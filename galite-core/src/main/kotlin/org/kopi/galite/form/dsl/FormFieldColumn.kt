@@ -31,7 +31,7 @@ class FormFieldColumn(val column: Column<*>,
                       val corr: String,
                       private val ident: String,
                       private val isKey: Boolean,
-                      val nullable: Boolean) : FieldBlock {
+                      val nullable: Boolean)  {
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
