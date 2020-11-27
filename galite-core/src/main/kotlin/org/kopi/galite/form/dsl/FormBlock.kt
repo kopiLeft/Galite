@@ -371,7 +371,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
               super.triggers[i] = trigger
             }
           }
-          super.VKT_Triggers.add(blockTriggerArray)
+          super.VKT_Triggers[0] = blockTriggerArray
         }
 
         // FIELD TRIGGERS
