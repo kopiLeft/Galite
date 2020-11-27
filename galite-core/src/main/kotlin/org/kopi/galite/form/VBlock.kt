@@ -2903,7 +2903,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   lateinit var fields: Array<VField> // fields
-  protected var VKT_Triggers = mutableListOf<IntArray>()
+  protected var VKT_Triggers = mutableListOf(IntArray(TRG_TYPES.size))
   protected val triggers = mutableMapOf<Int, Trigger>()
   // dynamic data
   var activeRecord = 0 // current record
