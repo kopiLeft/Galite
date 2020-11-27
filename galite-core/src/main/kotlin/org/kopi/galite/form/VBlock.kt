@@ -19,7 +19,6 @@
 package org.kopi.galite.form
 
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.Trigger
 import java.sql.SQLException
 import java.util.EventListener
 
@@ -27,6 +26,7 @@ import javax.swing.event.EventListenerList
 
 import kotlin.collections.HashMap
 
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext

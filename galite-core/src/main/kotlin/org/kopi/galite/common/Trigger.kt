@@ -60,27 +60,28 @@ abstract class Trigger(val events: Long, val action: Action<*>) {
 open class BlockProtectedTrigger(event: Int) : BlockTrigger(event)
 
 /**
- * Block protected Triggers
+ * Block void Triggers
  *
  * @param event the event of the trigger
  */
 open class BlockVoidTrigger(event: Int) : BlockTrigger(event)
 
 /**
- * Block protected Triggers
+ * Block boolean Triggers
  *
  * @param event the event of the trigger
  */
 open class BlockBooleanTrigger(event: Int) : BlockTrigger(event)
+
 /**
- * Block protected Triggers
+ * Block Int Triggers
  *
  * @param event the event of the trigger
  */
 open class BlockIntTrigger(event: Int) : BlockTrigger(event)
 
 /**
- * Block protected Triggers
+ * Block object Triggers
  *
  * @param event the event of the trigger
  */
