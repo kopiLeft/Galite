@@ -29,7 +29,7 @@ interface PredefinedValueHandler : Serializable {
 
   fun selectDefaultValue(): Boolean
 
-  fun selectFromList(list: Array<VListColumn>, values: Array<Array<Any?>>, predefinedValues: Array<String>): String?
+  fun selectFromList(list: Array<VListColumn?>, values: Array<Array<Any?>>, predefinedValues: Array<String>): String?
 
   fun selectColor(color: Color): Color
 

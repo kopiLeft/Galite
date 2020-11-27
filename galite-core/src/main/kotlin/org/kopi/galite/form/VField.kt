@@ -409,7 +409,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * @return a list column for list
    */
-  protected abstract fun getListColumn(): VListColumn?
+  abstract fun getListColumn(): VListColumn?
 
   // ----------------------------------------------------------------------
   // NAVIGATING

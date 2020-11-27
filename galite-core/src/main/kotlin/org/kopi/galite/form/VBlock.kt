@@ -18,25 +18,20 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Table
 import java.sql.SQLException
 import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.abs
 
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
@@ -75,7 +70,19 @@ import org.kopi.galite.form.VConstants.Companion.TRG_TYPES
 import org.kopi.galite.form.VConstants.Companion.TRG_VALBLK
 import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
 import org.kopi.galite.form.VConstants.Companion.TRG_VOID
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1715,9 +1722,23 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
+   * Returns the tables for database query, with outer joins conditions.
+   */
+  fun getSearchTables_(): Table {
+    TODO()
+  }
+
+  /**
    * Returns the search conditions for database query.
    */
   fun getSearchConditions(): String? {
+    TODO()
+  }
+
+  /**
+   * Returns the search conditions for database query.
+   */
+  fun getSearchConditions_(): Op<Boolean> {
     TODO()
   }
 
@@ -1831,8 +1852,100 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Warning, you should use this method under a protected statement
    */
-  fun buildQueryDialog(): VListDialog {
-    TODO()
+  fun buildQueryDialog(): VListDialog? {
+    val query_tab = arrayOfNulls<VField>(fields.size)
+    var query_cnt = 0
+
+    /* get the fields to be displayed in the dialog */
+    for (i in fields.indices) {
+      val fld = fields[i]
+
+      /* skip fields not related to the database */
+      if (fld.getColumnCount() == 0) {
+        continue
+      }
+
+      /* skip fields we don't want to show */
+      if (fld.getPriority() == 0) {
+        continue
+      }
+
+      /* skip fields with fixed value */
+      if (!fld.isNull(activeRecord) && fld.getSearchOperator() == SOP_EQ &&
+              fld.getSql(activeRecord)!!.indexOf('*') == -1) {
+        continue
+      }
+      query_tab[query_cnt++] = fld
+    }
+
+    /* (bubble) sort fields wrt priorities */
+    for (i in query_cnt - 1 downTo 1) {
+      var swapped = false
+
+      for (j in 0 until i) {
+        if (abs(query_tab[j]!!.getPriority()) < abs(query_tab[j + 1]!!.getPriority())) {
+          var tmp: VField? = query_tab[j]
+          query_tab[j] = query_tab[j + 1]
+          query_tab[j + 1] = tmp
+          swapped = true
+        }
+      }
+      if (!swapped) {
+        break
+      }
+    }
+
+    /* build query: first rows to select ... */
+    var columns = mutableListOf<Column<*>>()
+
+    for (i in 0 until query_cnt) {
+      columns[i] = query_tab[i]!!.getColumn(0)!!.column!!
+    }
+
+    /* ... and now their order */
+    //TODO("order by not implemented")
+
+    /* query from where ? */
+    val tables = getSearchTables_()
+    val conditions = getSearchConditions_()
+
+    val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
+    val ids = IntArray(fetchSize)
+    var rows = 0
+
+    transaction {
+      tables.slice(columns).select(conditions).forEach() {
+
+         /* if (rows == fetchSize) {
+            return
+          }*/
+
+          /* don't show record with ID = 0 */
+          /*  if (query.getInt(1 + query_cnt) == 0) {
+        return@forEach
+      }*/
+          // ids[rows] = query.getInt(1 + query_cnt)
+          for (i in 0 until query_cnt) {
+            values[i][rows] = it[columns[i]]
+          }
+          rows += 1
+        }
+      }
+
+    return if (rows == 0) {
+      null
+    } else {
+      val dialog: VListDialog
+      val cols: Array<VListColumn?> = arrayOfNulls(query_cnt)
+      for (i in cols.indices) {
+        cols[i] = query_tab[i]!!.getListColumn()
+      }
+      dialog = VListDialog(cols, values, ids, rows)
+      if (rows == fetchSize) {
+        dialog.setTooManyRows()
+      }
+      dialog
+    }
   }
   // ----------------------------------------------------------------------
   // SETS/GETS INFORMATION ABOUT THE BLOCK

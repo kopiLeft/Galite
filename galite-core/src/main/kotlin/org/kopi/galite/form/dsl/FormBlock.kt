@@ -27,6 +27,7 @@ import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
@@ -247,6 +248,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
     maxColumnPos = bottomRight.x
   }
 
+  fun recursiveQuery() {
+    Commands.recursiveQuery(vBlock)
+  }
   // ----------------------------------------------------------------------
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
@@ -280,6 +284,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
                                                 indices.toTypedArray(),
                                                 blockFields.toTypedArray())
   }
+
+  lateinit var vBlock : VBlock
 
   /** Returns block model */
   fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
@@ -326,6 +332,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
           it.ident
         }.toTypedArray()
       }
+    }.also {
+      vBlock = it
     }
   }
 }
