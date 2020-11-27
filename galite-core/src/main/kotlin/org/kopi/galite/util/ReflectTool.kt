@@ -18,17 +18,21 @@ package org.kopi.galite.util
 
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.common.Actor
-import org.kopi.galite.form.dsl.*
+import org.kopi.galite.common.Menu
+import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.FormBlockIndex
+import org.kopi.galite.form.dsl.FormField
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.jvmErasure
 
 /**
- * Class of reflection tools
- * Contains methods which access to formBlocks' fields and indices and tables
- * in all Galite components using its DSL
- * and @return the element of index requested
+ * Class of reflection tools. It contains methods which access
+ * elements defined using Galite DSL like formBlocks' fields,
+ * indices, actors, etc.. inorder to get information about
+ * these components like their names
  */
 object ReflectTool {
 

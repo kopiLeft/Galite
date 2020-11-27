@@ -53,11 +53,13 @@ object TestForm: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
+  val action = menu("Action")
+
   val graph = actor (
           ident =  "graph",
-          menu =  "Action",
-          label = "Graph for test",
-          help =  "show graph values" ,
+          menu =   action,
+          label =  "Graph for test",
+          help =   "show graph values" ,
   ) {
     key  =  Key.F9
     icon =  "column_chart"  // icon is optional here
@@ -65,7 +67,6 @@ object TestForm: Form() {
 
   init {
     page("test page") {
-      menu("Action")
       insertBlock(TestBlock) {
         command(item = graph) {
           this.name = "graphe"

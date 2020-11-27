@@ -21,6 +21,7 @@ import java.io.IOException
 
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Menu
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
@@ -52,7 +53,7 @@ abstract class Form: Window() {
    * @param label                the label
    * @param help                 the help
    */
-  fun actor(ident: String, menu: String, label: String, help: String, init: Actor.() -> Unit): Actor {
+  fun actor(ident: String, menu: Menu, label: String, help: String, init: Actor.() -> Unit): Actor {
     val actor = Actor(ident, menu, label, help)
     actor.init()
     formActors.add(actor)
@@ -171,8 +172,8 @@ abstract class Form: Window() {
         pages = this@Form.pages.map {
           it.ident
         }.toTypedArray()
-        super.actors = formActors?.map {
-          VActor(it.menu, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
+        super.actors = formActors.map {
+          VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
         }.toTypedArray()
         blocks = formBlocks.map { formBlock ->
           formBlock.getBlockModel(this, source).also { vBlock ->
