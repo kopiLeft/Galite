@@ -426,6 +426,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
 
         super.source = source ?: sourceFile
         super.bufferSize = buffer
+        super.pageNumber = this@FormBlock.pageNumber
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.name = ident

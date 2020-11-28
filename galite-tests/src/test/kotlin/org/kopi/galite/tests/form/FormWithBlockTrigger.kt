@@ -28,12 +28,12 @@ object FormWithBlockTrigger: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
+  val testPage = page("test page")
+
   init {
     menu("Action")
-    page("test page") {
-      insertBlock(BlockWithTrigger1)
-      insertBlock(BlockWithTrigger2)
-    }
+    insertBlock(BlockWithTrigger1, testPage)
+    insertBlock(BlockWithTrigger2, testPage)
   }
 }
 

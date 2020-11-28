@@ -33,8 +33,8 @@ import org.kopi.galite.visual.VWindow
 abstract class Window {
   abstract val title: String
   open val locale: Locale? = null
-  var options: Int? = null
-  lateinit var commands: Array<VCommand>
-  lateinit var triggers: Array<VTrigger>
+  internal var options: Int? = null
+  internal lateinit var commands: Array<VCommand>
+  internal lateinit var triggers: Array<VTrigger>
   abstract val model: VWindow
 }
