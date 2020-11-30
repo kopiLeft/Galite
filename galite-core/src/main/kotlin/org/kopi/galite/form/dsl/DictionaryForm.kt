@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,22 +16,20 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.form.VDictionaryForm
 
 /**
- *
- * @param ident                the identifier of the page
- * @param title                the page title in default locale
+ * Represents a dictionary form.
  */
-class FormPage(val pageNumber: Int, val ident: String, val title: String) {
+abstract class DictionaryForm: Form() {
 
-  // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
-  fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genPage(ident, title)
+  /** Form model */
+  override val model: VDictionaryForm by lazy {
+    genLocalization()
+    object : VDictionaryForm() {
+      override fun init() {
+        initialize()
+      }
+    }
   }
 }

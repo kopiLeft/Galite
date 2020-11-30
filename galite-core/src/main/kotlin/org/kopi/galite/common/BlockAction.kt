@@ -15,24 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form.dsl
-
-import org.kopi.galite.common.LocalizationWriter
+package org.kopi.galite.common
 
 /**
- *
- * @param ident                the identifier of the page
- * @param title                the page title in default locale
+ * This class represents an action, ie a method to execute
  */
-class FormPage(val pageNumber: Int, val ident: String, val title: String) {
+class BlockAction<T>(protected var name: String?, method: () -> T) : Action<T>(method) {
 
-  // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
-  fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genPage(ident, title)
-  }
 }

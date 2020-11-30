@@ -20,6 +20,7 @@ package org.kopi.galite.form.dsl
 import org.jdom2.Element
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Menu
 
 /**
  * This class implements an  XML localization file generator
@@ -44,7 +45,6 @@ class FormLocalizationWriter : LocalizationWriter() {
       actors[i].genLocalization(this)
     }
 
-    // coll.genLocalization(this) TODO
     for (i in pages.indices) {
       pages[i].genLocalization(this)
     }

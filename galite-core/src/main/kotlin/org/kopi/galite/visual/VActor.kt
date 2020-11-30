@@ -20,7 +20,6 @@ package org.kopi.galite.visual
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * Represents an actor model.
@@ -54,7 +53,7 @@ open class VActor(var menuIdent: String,
     handler!!.performAction(object : Action("$menuItem in $menuName") {
       override fun execute() {
         handler!!.executeVoidTrigger(number)
-        action!!()
+        action?.let { it() }
       }
 
       /**
@@ -114,11 +113,11 @@ open class VActor(var menuIdent: String,
   // ----------------------------------------------------------------------
   fun helpOnCommand(help: VHelpGenerator) {
     help.helpOnCommand(menuName,
-            menuItem,
-            iconName,
-            acceleratorKey,
-            acceleratorModifier,
-            this.help)
+                       menuItem,
+                       iconName,
+                       acceleratorKey,
+                       acceleratorModifier,
+                       this.help)
   }
 
   // --------------------------------------------------------------------
@@ -153,10 +152,7 @@ open class VActor(var menuIdent: String,
   lateinit var menuItem: String
   private var display: UActor? = null
   var number = 0 // The number for the actor
+  var action: (() -> Unit)? = null
   internal var handler: ActionHandler? = null // the handler for the actor
   var help: String? = null
-
-  // should be replaced with Action (kopiAction)
-  var action: (() -> Unit)? = null
-
 }
