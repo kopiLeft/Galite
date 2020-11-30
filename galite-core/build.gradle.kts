@@ -66,5 +66,4 @@ dependencies {
 
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", getoptVersion)
-
 }

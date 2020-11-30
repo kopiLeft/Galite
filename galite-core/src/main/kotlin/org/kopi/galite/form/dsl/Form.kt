@@ -21,6 +21,7 @@ import java.io.IOException
 
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Menu
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
@@ -52,7 +53,7 @@ abstract class Form: Window() {
    * @param label                the label
    * @param help                 the help
    */
-  fun actor(ident: String, menu: String, label: String, help: String, init: Actor.() -> Unit): Actor {
+  fun actor(ident: String, menu: Menu, label: String, help: String, init: Actor.() -> Unit): Actor {
     val actor = Actor(ident, menu, label, help)
     actor.init()
     formActors.add(actor)
@@ -66,17 +67,24 @@ abstract class Form: Window() {
    * @param        visible                the number of visible elements
    * @param        name                   the simple identifier of this block
    * @param        title                  the title of the block
+   * @param        formPage              the page containing the block
    */
-  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock =
-          insertBlock(FormBlock(buffer, visible, name, title), init)
+  fun block(buffer: Int, visible: Int, name: String, title: String, formPage: FormPage? = null, init: FormBlock.() -> Unit): FormBlock =
+          insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
 
   /**
    * Adds a new block to this form.
    *
    * @param        block                 the block to insert
+   * @param        formPage              the page containing the block
    */
-  fun <T: FormBlock> insertBlock(block: T, init: T.() -> Unit): T {
-    block.init()
+  fun <T: FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
+    if (init != null) {
+      block.init()
+    }
+    if(formPage != null) {
+      block.pageNumber = formPage.pageNumber
+    }
     block.initialize(this)
     formBlocks.add(block)
     return block
@@ -87,9 +95,8 @@ abstract class Form: Window() {
    *
    * @param        title                the title of the page
    */
-  fun page(title: String, init: FormPage.() -> Unit): FormPage {
-    val page = FormPage("Id\$${pages.size}", title)
-    page.init()
+  fun page(title: String): FormPage {
+    val page = FormPage(pages.size, "Id\$${pages.size}", title)
     pages.add(page)
     return page
   }
@@ -155,7 +162,7 @@ abstract class Form: Window() {
   /**
    * Returns the qualified source file name where this object is defined.
    */
-  private val sourceFile: String
+  protected val sourceFile: String
     get() {
       val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
@@ -167,33 +174,37 @@ abstract class Form: Window() {
 
     object : VForm() {
       override fun init() {
-        source = sourceFile
-        pages = this@Form.pages.map {
-          it.ident
-        }.toTypedArray()
-        super.actors = formActors?.map {
-          VActor(it.menu, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
-        }.toTypedArray()
-        blocks = formBlocks.map { formBlock ->
-          formBlock.getBlockModel(this, source).also { vBlock ->
-            vBlock.setInfo(formBlock.pageNumber)
-            vBlock.initIntern()
-            formBlock.blockFields.forEach { formField ->
-              formField.initialValues.forEach {
-                formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
-              }
-            }
-          }
-        }.toTypedArray()
-
-        //TODO ----------begin-------------
-        super.commands = arrayOf()
-        VKT_Triggers = arrayOf(IntArray(200))
-        //TODO ----------end-------------
+        initialize()
       }
 
       init {
       }
     }
+  }
+
+  fun VForm.initialize() {
+    source = sourceFile
+    pages = this@Form.pages.map {
+      it.ident
+    }.toTypedArray()
+    this.actors = formActors.map {
+      VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
+    }.toTypedArray()
+    blocks = formBlocks.map { formBlock ->
+      formBlock.getBlockModel(this, source).also { vBlock ->
+        vBlock.setInfo(formBlock.pageNumber)
+        vBlock.initIntern()
+        formBlock.blockFields.forEach { formField ->
+          formField.initialValues.forEach {
+            formField.vField.setObject(it.key, it.value) // FIXME temporary workaround
+          }
+        }
+      }
+    }.toTypedArray()
+
+    //TODO ----------begin-------------
+    this.commands = arrayOf()
+    VKT_Triggers = arrayOf(IntArray(200))
+    //TODO ----------end-------------
   }
 }

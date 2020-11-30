@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +16,6 @@
  */
 package org.kopi.galite.tests.form
 
-import java.awt.event.KeyEvent
 import java.util.Locale
 
 import kotlin.test.assertEquals
@@ -53,36 +51,48 @@ object TestForm: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
+  val action = menu("Action")
+
   val graph = actor (
           ident =  "graph",
-          menu =  "Action",
-          label = "Graph for test",
-          help =  "show graph values" ,
+          menu =   action,
+          label =  "Graph for test",
+          help =   "show graph values" ,
   ) {
-    key  =  Key.F9
+    key  =  Key.F9          // key is optional here
     icon =  "column_chart"  // icon is optional here
   }
 
-  init {
-    page("test page") {
-      menu("Action")
-      insertBlock(TestBlock) {
-        command(item = graph) {
-          this.name = "graphe"
-          mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
-          action = {
-            println("---------------------------------- IN TEST COMMAND ----------------------------------")
-          }
-        }
+  val p1 = page("test page")
+  val p2 = page("test page2")
+
+  val tb1 = insertBlock(TestBlock(), p1) {
+    command(item = graph) {
+      this.name = "graphe"
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
       }
     }
+  }
 
-    TestBlock.age[0] = 5
-    TestBlock.age.value = 6
+  val tb2 = insertBlock(TestBlock(), p2) {
+    command(item = graph) {
+      this.name = "graphe"
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        println("---------------------------------- IN TEST COMMAND ----------------------------------")
+      }
+    }
+  }
+
+  init {
+    tb1.age[0] = 5
+    tb1.age.value = 6
   }
 }
 
-object TestBlock : FormBlock(1, 1, "Test", "Test block") {
+class TestBlock : FormBlock(1, 1, "Test", "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

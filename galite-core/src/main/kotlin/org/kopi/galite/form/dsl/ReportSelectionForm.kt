@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,22 +16,31 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.cross.VReportSelectionForm
+import org.kopi.galite.report.Report
+import org.kopi.galite.report.VReport
 
 /**
- *
- * @param ident                the identifier of the page
- * @param title                the page title in default locale
+ * Represents a report selection form.
  */
-class FormPage(val pageNumber: Int, val ident: String, val title: String) {
+abstract class ReportSelectionForm: DictionaryForm() {
 
-  // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
   /**
-   * !!!FIX:taoufik
+   * create a report for this form
    */
-  fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genPage(ident, title)
+  protected abstract fun createReport(): Report
+
+  /** Form model */
+  override val model: VReportSelectionForm by lazy {
+    genLocalization()
+    object : VReportSelectionForm() {
+      override fun init() {
+        initialize()
+      }
+
+      override fun createReport(): VReport {
+        return this@ReportSelectionForm.createReport().model
+      }
+    }
   }
 }

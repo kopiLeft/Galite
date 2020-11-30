@@ -24,6 +24,26 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.SQLException
+import java.util.EventListener
+import java.lang.Math.abs
+
+import javax.swing.event.EventListenerList
+
+import kotlin.collections.HashMap
+
+import org.kopi.galite.common.Trigger
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
@@ -62,25 +82,8 @@ import org.kopi.galite.form.VConstants.Companion.TRG_TYPES
 import org.kopi.galite.form.VConstants.Companion.TRG_VALBLK
 import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
 import org.kopi.galite.form.VConstants.Companion.TRG_VOID
-import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
-import java.sql.SQLException
-import java.util.*
-import javax.swing.event.EventListenerList
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.math.abs
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -204,24 +207,26 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     VKT_Type        the number of the trigger
    */
   override fun executeVoidTrigger(VKT_Type: Int) {
-    // default: does nothing
+    triggers[VKT_Type]?.action?.method?.invoke()
   }
 
   fun executeProtectedVoidTrigger(VKT_Type: Int) {
-    // default: does nothing
+    triggers[VKT_Type]?.action?.method?.invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    // default: does nothing
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   open fun executeIntegerTrigger(VKT_Type: Int): Int {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
   /**
@@ -1800,9 +1805,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var dialog: VListDialog?
 
     try {
-          callProtectedTrigger(TRG_PREQRY)
-          dialog = buildQueryDialog()
-      } catch (e: VException) {
+      callProtectedTrigger(TRG_PREQRY)
+      dialog = buildQueryDialog()
+    } catch (e: VException) {
       if (e.message != null) {
         form.error(e.message!!)
       }
@@ -1818,6 +1823,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
+  /**
+   * Warning, you should use this method under a protected statement
+   */
   /**
    * Warning, you should use this method under a protected statement
    */
@@ -1901,16 +1909,16 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
 
         /* don't show record with ID = 0 */
-      /*  if (query.getInt(1 + query_cnt) == 0) {
-          continue
-        }*/
+        /*  if (query.getInt(1 + query_cnt) == 0) {
+            continue
+          }*/
 
-          for (i in 0 until query_cnt) {
-            values[i][rows] = result[columns[i]]
-          }
-          rows += 1
+        for (i in 0 until query_cnt) {
+          values[i][rows] = result[columns[i]]
         }
+        rows += 1
       }
+    }
 
     return if (rows == 0) {
       null
@@ -2994,7 +3002,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   lateinit var fields: Array<VField> // fields
-  protected lateinit var VKT_Triggers: Array<IntArray>
+  protected var VKT_Triggers = mutableListOf(IntArray(TRG_TYPES.size))
+  protected val triggers = mutableMapOf<Int, Trigger>()
   // dynamic data
   var activeRecord = 0 // current record
     get() {

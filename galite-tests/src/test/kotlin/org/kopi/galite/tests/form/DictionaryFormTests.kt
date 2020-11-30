@@ -52,9 +52,11 @@ object DictionaryFormTest: DictionaryForm() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
+  val action = menu("Action")
+
   val graph = actor (
           ident =  "graph",
-          menu =  "Action",
+          menu = TestForm.action,
           label = "Graph for test",
           help =  "show graph values" ,
   ) {
@@ -62,21 +64,19 @@ object DictionaryFormTest: DictionaryForm() {
     icon =  "column_chart"  // icon is optional here
   }
 
-  init {
-    page("test page") {
-      menu("Action")
-      insertBlock(TestBlock1) {
-        command(item = graph) {
-          this.name = "graphe"
-          mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
-          action = {
-            println("---------------------------------- IN TEST COMMAND ----------------------------------")
-            recursiveQuery()
-          }
-        }
+  val page = page("test page")
+
+  val tb1 =  insertBlock(TestBlock1, page) {
+    command(item = graph) {
+      this.name = "graphe"
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        println("---------------------------------- IN TEST COMMAND ----------------------------------")
+        recursiveQuery()
       }
     }
   }
+
 }
 
 object TestBlock1 : FormBlock(1, 1, "Test", "Test block") {

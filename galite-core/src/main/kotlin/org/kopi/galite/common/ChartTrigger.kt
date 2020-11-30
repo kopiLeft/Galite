@@ -15,24 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form.dsl
+package org.kopi.galite.common
 
-import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.chart.CConstants
 
 /**
- *
- * @param ident                the identifier of the page
- * @param title                the page title in default locale
+ * This class represents a trigger, ie an action to be executed on events
  */
-class FormPage(val pageNumber: Int, val ident: String, val title: String) {
-
-  // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
-  fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genPage(ident, title)
-  }
+class ChartTrigger(events: Long, action: Action<*>): Trigger(events, action) {
+  override fun getTriggers(): IntArray = CConstants.TRG_TYPES
 }
