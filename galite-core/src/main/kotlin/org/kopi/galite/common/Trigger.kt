@@ -190,7 +190,7 @@ sealed class BlockTrigger(val event: Int) {
    * you can use it to bypass the system control for changes by returning false in the trigger's method:
    *
    * triggers(BlockTrigger.CHANGED) {
-   *   return false
+   *   false
    * }
    *
    */
@@ -200,8 +200,8 @@ sealed class BlockTrigger(val event: Int) {
    * defines whether a block can or not be accessed, it must always return a boolean value.
    *
    * triggers(BlockTrigger.ACCESS) {
-   *   return Block.getMode == MOD_QUERY  // Tests if the block is in query mode,
-   *                                      //this block is only accessible on query mode
+   *   Block.getMode == MOD_QUERY  // Tests if the block is in query mode,
+   *                               //this block is only accessible on query mode
    * }
    *
    */
