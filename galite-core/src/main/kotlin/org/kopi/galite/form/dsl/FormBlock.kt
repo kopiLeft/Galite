@@ -89,11 +89,12 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  private fun <T> triggers(blockTriggers: Array<out BlockTrigger>, method: () -> T) {
+  private fun <T> triggers(blockTriggers: Array<out BlockTrigger>, method: () -> T): FormTrigger {
     val event = blockEventList(blockTriggers)
     val blockAction = BlockAction(null, method)
     val trigger = FormTrigger(event, blockAction)
     triggers.add(trigger)
+    return trigger
   }
 
   private fun blockEventList(blockTriggers: Array<out BlockTrigger>): Long {
@@ -112,8 +113,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit) {
-    triggers(blockTriggers, method)
+  fun triggers(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit): FormTrigger {
+    return triggers(blockTriggers, method)
   }
 
   /**
@@ -122,8 +123,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit) {
-    triggers(blockTriggers, method)
+  fun triggers(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit): FormTrigger {
+    return triggers(blockTriggers, method)
   }
 
   /**
@@ -132,8 +133,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean) {
-    triggers(blockTriggers, method)
+  fun triggers(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean): FormTrigger {
+    return triggers(blockTriggers, method)
   }
 
   /**

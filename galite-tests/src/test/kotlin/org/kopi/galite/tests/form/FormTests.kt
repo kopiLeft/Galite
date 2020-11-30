@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -94,6 +95,7 @@ object TestBlock : FormBlock(1, 1, "Test", "Test block") {
     label = "name"
     help = "The user name"
     columns(u.name)
+    options(FieldOption.NOECHO, FieldOption.NO_CHART)
   }
   val age = visit(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
