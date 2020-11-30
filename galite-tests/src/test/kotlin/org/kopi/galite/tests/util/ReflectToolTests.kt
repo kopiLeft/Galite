@@ -29,11 +29,12 @@ class ReflectToolTests {
    */
   @Test
   fun reflectToolBlockTest() {
-    assertEquals("name", ReflectTool.blockFieldAt(TestBlock, 2))
-    assertEquals("id", ReflectTool.blockFieldAt(TestBlock, 1))
-    assertEquals("age", ReflectTool.blockFieldAt(TestBlock, 0))
-    assertEquals("i", ReflectTool.blockIndexAt(TestBlock, 0))
-    assertEquals("u", ReflectTool.blockTableAt(TestBlock, 0))
+    val testBlock = TestBlock()
+    assertEquals("name", ReflectTool.blockFieldAt(testBlock, 2))
+    assertEquals("id", ReflectTool.blockFieldAt(testBlock, 1))
+    assertEquals("age", ReflectTool.blockFieldAt(testBlock, 0))
+    assertEquals("i", ReflectTool.blockIndexAt(testBlock, 0))
+    assertEquals("u", ReflectTool.blockTableAt(testBlock, 0))
   }
 
   /**

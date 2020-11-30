@@ -67,18 +67,23 @@ abstract class Form: Window() {
    * @param        visible                the number of visible elements
    * @param        name                   the simple identifier of this block
    * @param        title                  the title of the block
+   * @param        formPage              the page containing the block
    */
-  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock =
-          insertBlock(FormBlock(buffer, visible, name, title), init)
+  fun block(buffer: Int, visible: Int, name: String, title: String, formPage: FormPage? = null, init: FormBlock.() -> Unit): FormBlock =
+          insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
 
   /**
    * Adds a new block to this form.
    *
    * @param        block                 the block to insert
+   * @param        formPage              the page containing the block
    */
-  fun <T: FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T {
+  fun <T: FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
+    }
+    if(formPage != null) {
+      block.pageNumber = formPage.pageNumber
     }
     block.initialize(this)
     formBlocks.add(block)
@@ -90,9 +95,8 @@ abstract class Form: Window() {
    *
    * @param        title                the title of the page
    */
-  fun page(title: String, init: FormPage.() -> Unit): FormPage {
-    val page = FormPage("Id\$${pages.size}", title)
-    page.init()
+  fun page(title: String): FormPage {
+    val page = FormPage(pages.size, "Id\$${pages.size}", title)
     pages.add(page)
     return page
   }
