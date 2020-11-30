@@ -92,7 +92,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  private fun <T> triggers(blockTriggers: Array<out BlockTrigger>, method: () -> T): Trigger {
+  private fun <T> trigger(blockTriggers: Array<out BlockTrigger>, method: () -> T): Trigger {
     val event = blockEventList(blockTriggers)
     val blockAction = BlockAction(null, method)
     val trigger = FormTrigger(event, blockAction)
@@ -116,8 +116,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit): Trigger {
-    return triggers(blockTriggers, method)
+  fun trigger(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit): Trigger {
+    return trigger(blockTriggers, method)
   }
 
   /**
@@ -126,8 +126,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit): Trigger {
-    return triggers(blockTriggers, method)
+  fun trigger(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit): Trigger {
+    return trigger(blockTriggers, method)
   }
 
   /**
@@ -136,8 +136,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean): Trigger {
-    return triggers(blockTriggers, method)
+  fun trigger(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean): Trigger {
+    return trigger(blockTriggers, method)
   }
 
   /**

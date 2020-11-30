@@ -43,7 +43,7 @@ object BlockWithTrigger1 : FormBlock(1, 1, "Test", "Test block") {
   val i = index(message = "ID should be unique")
 
   init {
-    triggers(PREBLK, INIT) {
+    trigger(PREBLK, INIT) {
       println("---------------works---------------")
     }
   }
@@ -60,7 +60,7 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
   val i = index(message = "ID should be unique")
 
   init {
-    triggers(PREBLK) {
+    trigger(PREBLK) {
       println("---------------works---------------")
     }
   }
