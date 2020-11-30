@@ -95,7 +95,11 @@ object TestBlock : FormBlock(1, 1, "Test", "Test block") {
     label = "name"
     help = "The user name"
     columns(u.name)
-    options(FieldOption.NOECHO, FieldOption.NO_CHART)
+  }
+  val password = mustFill(domain = Domain<String>(20), position = at(2, 1)) {
+    label = "password"
+    help = "The user password"
+    options(FieldOption.NOECHO)
   }
   val age = visit(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
