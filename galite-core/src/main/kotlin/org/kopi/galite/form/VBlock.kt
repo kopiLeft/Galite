@@ -18,17 +18,9 @@
 
 package org.kopi.galite.form
 
-import java.sql.SQLException
-import java.util.EventListener
-
-import javax.swing.event.EventListenerList
-
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.math.abs
-
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -83,6 +75,12 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import java.sql.SQLException
+import java.util.*
+import javax.swing.event.EventListenerList
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.math.abs
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1802,38 +1800,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var dialog: VListDialog?
 
     try {
-      while (true) {
-        try {
           callProtectedTrigger(TRG_PREQRY)
           dialog = buildQueryDialog()
-          break
-        } catch (e: VException) {
-          try {
-          } catch (abortEx: VException) {
-            throw abortEx
-          }
-        } catch (e: SQLException) {
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          try {
-          } catch (abortEx: Error) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw VExecFailedException(abortEx)
-          }
-        }
-      }
-    } catch (e: VException) {
+      } catch (e: VException) {
       if (e.message != null) {
         form.error(e.message!!)
       }
@@ -1902,9 +1871,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       columns[i] = query_tab[i]!!.getColumn(0)!!.column!!
     }
 
-    /* ... and now their order */
-    //TODO("order by not implemented")
-
     /* query from where ? */
     val tables = getSearchTables_()
     val conditions = getSearchConditions_()
@@ -1912,21 +1878,35 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
     var rows = 0
+    var sortType = SortOrder.ASC
+
+    for (i in 0 until query_cnt) {
+      if (query_tab[i]!!.getPriority() < 0) {
+        sortType = SortOrder.DESC
+      }
+    }
+
+    /* ... and now their order */
+    val orderList : ArrayList<Pair<Column<*>, SortOrder>>? = null
+    val i = 0
+    for( value in columns) {
+      orderList?.add(Pair(value, sortType))
+    }
 
     transaction {
-      tables.slice(columns).select(conditions).forEach() {
 
-         /* if (rows == fetchSize) {
-            return
-          }*/
+      for (result in tables.slice(columns).select(conditions).orderBy(*orderList!!.toTypedArray())) {
+        if (rows == fetchSize) {
+          break
+        }
 
-          /* don't show record with ID = 0 */
-          /*  if (query.getInt(1 + query_cnt) == 0) {
-        return@forEach
-      }*/
-          // ids[rows] = query.getInt(1 + query_cnt)
+        /* don't show record with ID = 0 */
+      /*  if (query.getInt(1 + query_cnt) == 0) {
+          continue
+        }*/
+
           for (i in 0 until query_cnt) {
-            values[i][rows] = it[columns[i]]
+            values[i][rows] = result[columns[i]]
           }
           rows += 1
         }
@@ -1947,6 +1927,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       dialog
     }
   }
+
   // ----------------------------------------------------------------------
   // SETS/GETS INFORMATION ABOUT THE BLOCK
   // ----------------------------------------------------------------------
