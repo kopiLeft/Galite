@@ -27,20 +27,20 @@ import java.io.Serializable
  * @param dimensions The dimension values.
  * @param measures The measures values.
  */
-class VRow(private val dimensions: Array<Any>, private val measures: Array<Any>) : Serializable {
+class VRow(private val dimensions: Array<Any?>, private val measures: Array<Any?>) : Serializable {
   /**
    * Returns the dimensions value of the given index.
    * @param index The desired index.
    * @return The measure value of the given index.
    */
-  fun getDimensionAt(index: Int): Any = dimensions[index]
+  fun getDimensionAt(index: Int): Any? = dimensions[index]
 
   /**
    * Returns the measure value of the given index.
    * @param index The desired index.
    * @return The measure value of the given index.
    */
-  fun getMeasureAt(index: Int): Any = measures[index]
+  fun getMeasureAt(index: Int): Any? = measures[index]
 
   /**
    * Sets the dimension value of the given index.

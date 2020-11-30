@@ -27,7 +27,7 @@ import org.kopi.galite.common.LocalizationWriter
 class ReportLocalizationWriter  : LocalizationWriter() {
   fun genReport(title: String?,
                 help: String?,
-                fields: MutableList<RField<*>>) {
+                fields: MutableList<ReportField<*>>) {
     val self = Element("report")
 
     self.setAttribute("title", title)

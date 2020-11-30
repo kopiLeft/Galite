@@ -22,10 +22,11 @@ import org.kopi.galite.list.VBooleanColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.visual.VlibProperties
 
-class VBooleanField : VBooleanCodeField("boolean",
-                                         GENERAL_LOCALIZATION_RESOURCE,
-                                         booleanNames,
-                                         booleanCodes) {
+class VBooleanField(bufferSize: Int) : VBooleanCodeField(bufferSize,
+                                                         "boolean",
+                                                         GENERAL_LOCALIZATION_RESOURCE,
+                                                         booleanNames,
+                                                         booleanCodes) {
 
   /**
    * return the name of this field

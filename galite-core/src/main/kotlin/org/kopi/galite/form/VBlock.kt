@@ -18,10 +18,31 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.db.*
+import org.jetbrains.exposed.sql.Table
+import java.sql.SQLException
+import java.util.EventListener
+
+import javax.swing.event.EventListenerList
+
+import kotlin.collections.HashMap
+
+import org.kopi.galite.common.Trigger
+import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.db.DBDeadLockException
+import org.kopi.galite.db.DBForeignKeyException
+import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.form.VConstants.Companion.ACS_HIDDEN
 import org.kopi.galite.form.VConstants.Companion.ACS_MUSTFILL
 import org.kopi.galite.form.VConstants.Companion.ACS_SKIPPED
@@ -55,15 +76,7 @@ import org.kopi.galite.form.VConstants.Companion.TRG_TYPES
 import org.kopi.galite.form.VConstants.Companion.TRG_VALBLK
 import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
 import org.kopi.galite.form.VConstants.Companion.TRG_VOID
-import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
-import java.sql.SQLException
-import java.util.*
-import javax.swing.event.EventListenerList
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -128,7 +141,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     buildCstr()
   }
 
-  protected fun setInfo() {
+  protected open fun setInfo() {
     // Do nothing, should be redefined if some info
     // has to be set
   }
@@ -187,24 +200,26 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     VKT_Type        the number of the trigger
    */
   override fun executeVoidTrigger(VKT_Type: Int) {
-    // default: does nothing
+    triggers[VKT_Type]?.action?.method?.invoke()
   }
 
   fun executeProtectedVoidTrigger(VKT_Type: Int) {
-    // default: does nothing
+    triggers[VKT_Type]?.action?.method?.invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    // default: does nothing
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
   }
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+  @Suppress("UNCHECKED_CAST")
+  open fun executeIntegerTrigger(VKT_Type: Int): Int {
+    return (triggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
   /**
@@ -1748,63 +1763,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   protected fun fetchLookup(table: Int, currentField: VField) {
-
-    val tab = object : Table(tables!![table]) {}
-    val columns = mutableListOf<Column<String>>()
-    val conditions = mutableListOf<Op<Boolean>>()
-
-    for (i in fields.indices) {
-      val f = fields[i]
-
-      if (f !== currentField && f.lookupColumn(table) != null && !f.isLookupKey(table)) {
-        f.setNull(activeRecord)
-      }
-    }
-
-    for (i in fields.indices) {
-      val column = fields[i].lookupColumn(table)
-      val col = Column<String>(tab, column!!, VarCharColumnType())
-
-
-      if (column != null) {
-        columns.add(col)
-      }
-      if (fields[i] == currentField || fields[i].isLookupKey(table)) {
-        val condition = fields[i].getSearchCondition()
-
-        val cond = object : Op<Boolean>() {
-          override fun toQueryBuilder(queryBuilder: QueryBuilder) {
-            TODO("Not yet implemented")
-          }
-        }
-
-        if (condition == null || !condition.startsWith("= ")) {
-          conditions.add(cond)
-        }
-      }
-    }
-
-    try {
-      transaction {
-        var t : Op<Boolean> = conditions[0]
-        conditions.minusElement(t).forEach {
-          t = t and it
-        }
-
-        val query = tab.slice(columns).select (t)
-
-        if (query.toList().isEmpty()) {
-          throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                  arrayOf<Any>(tables!![table])))
-        } else if (query.toList().isNotEmpty()) {
-
-          throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                  arrayOf<Any>(tables!![table])))
-        }
-      }
-    } catch (e: SQLException) {
-      throw VExecFailedException("XXXX !!!!" + e.message)
-    }
+    TODO()
   }
 
   fun refreshLookup(record: Int) {
@@ -2363,7 +2322,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     action          the action to perform.
    * @param     block           This action should block the UI thread ?
    */
-  @Deprecated("Use method performAsyncAction without bool parameter")
+  @Deprecated("Use method performAsyncAction without bool parameter",
+          ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2601,7 +2561,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() = form.dBContext
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
-  override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
+  override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
 
@@ -2930,7 +2890,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
-  var tables: Array<String>? = null // names of database tables
+  protected var tables: Array<Table>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
@@ -2943,14 +2903,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   lateinit var fields: Array<VField> // fields
-  protected lateinit var VKT_Triggers: Array<IntArray>
-
+  protected var VKT_Triggers = mutableListOf(IntArray(TRG_TYPES.size))
+  protected val triggers = mutableMapOf<Int, Trigger>()
   // dynamic data
   var activeRecord = 0 // current record
     get() {
       return if (field in 0 until bufferSize) field else -1
     }
-    set(rec: Int) {
+    set(rec) {
       assert(isMulti() || rec == 0) { "multi? " + isMulti() + "rec: " + rec }
       field = rec
     }
@@ -2993,7 +2953,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       return if (!isMulti()) {
         0
       } else {
-        assert(field >= 0 && field < bufferSize) { "Bad currentRecord $field" }
+        assert(field in 0 until bufferSize) { "Bad currentRecord $field" }
         field
       }
     }

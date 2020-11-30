@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
 
@@ -41,12 +42,14 @@ import org.kopi.galite.type.Date
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
+import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -76,7 +79,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               indices: Int,
               priority: Int,
               commands: Array<VCommand>?,
-              pos: VPosition,
+              pos: VPosition?,
               align: Int,
               alias: VField?) {
     this.name = name
@@ -176,7 +179,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun hasNextPreviousEntry(): Boolean = list != null
 
-  fun hasNullableCols(): Boolean = columns!!.find { it!!.isNullable() } != null
+  fun hasNullableCols(): Boolean = columns!!.find { it!!.nullable } != null
 
   /**
    * Returns true if it is a numeric field.
@@ -541,7 +544,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       } else if (hasTrigger(VConstants.TRG_FLDACCESS)) {
         // evaluate ACCESS-Trigger
         val oldRow = block!!.activeRecord
-        val old = block!!.activeField!!
+        val old = block!!.activeField
 
         // used by callTrigger
         block!!.activeRecord = current
@@ -755,7 +758,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setFixed(v: Fixed) {
+  fun setFixed(v: Fixed?) {
     setFixed(block!!.currentRecord, v)
   }
 
@@ -764,7 +767,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setBoolean(v: Boolean) {
+  fun setBoolean(v: Boolean?) {
     setBoolean(block!!.currentRecord, v)
   }
 
@@ -773,7 +776,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setDate(v: Date) {
+  fun setDate(v: Date?) {
     setDate(block!!.currentRecord, v)
   }
 
@@ -782,7 +785,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setMonth(v: Month) {
+  fun setMonth(v: Month?) {
     setMonth(block!!.currentRecord, v)
   }
 
@@ -791,7 +794,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setInt(v: Int) {
+  fun setInt(v: Int?) {
     setInt(block!!.currentRecord, v)
   }
 
@@ -800,7 +803,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setObject(v: Any) {
+  fun setObject(v: Any?) {
     setObject(block!!.currentRecord, v)
   }
 
@@ -809,14 +812,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setString(v: String) {
+  fun setString(v: String?) {
     setString(block!!.currentRecord, v)
   }
 
   /**
    * Sets the field value of given record to a date value.
    */
-  fun setImage(v: ByteArray) {
+  fun setImage(v: ByteArray?) {
     setImage(block!!.currentRecord, v)
   }
 
@@ -825,7 +828,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTime(v: Time) {
+  fun setTime(v: Time?) {
     setTime(block!!.currentRecord, v)
   }
 
@@ -834,7 +837,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setWeek(v: Week) {
+  fun setWeek(v: Week?) {
     setWeek(block!!.currentRecord, v)
   }
 
@@ -843,7 +846,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setTimestamp(v: Timestamp) {
+  fun setTimestamp(v: Timestamp?) {
     setTimestamp(block!!.currentRecord, v)
   }
 
@@ -877,7 +880,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setBoolean(r: Int, v: Boolean) {
+  open fun setBoolean(r: Int, v: Boolean?) {
     throw InconsistencyException()
   }
 
@@ -913,7 +916,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setInt(r: Int, v: Int) {
+  open fun setInt(r: Int, v: Int?) {
     throw InconsistencyException()
   }
 
@@ -1448,8 +1451,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   private fun checkList() {
-    TODO()
-    /*if (!getForm().forceCheckList()) {
+    if (!getForm().forceCheckList()) {
       // Oracle doesn't force the value to be in the list
       return
     }
@@ -1599,7 +1601,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
         else -> throw InconsistencyException(threadInfo() + "count = " + count)
       }
-    }*/
+    }
   }
 
   /**
@@ -2374,7 +2376,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip : String = "" // help text
+  var toolTip : String? = null // help text
     private set
 
   private var index = 0 // The position in parent field array

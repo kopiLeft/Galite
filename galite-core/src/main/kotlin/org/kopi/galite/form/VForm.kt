@@ -80,9 +80,6 @@ abstract class VForm : VWindow, VConstants {
    */
   private fun initIntern(enterField: Boolean) {
     init()
-    blocks.forEach {
-      it.initIntern()
-    }
     if (!ApplicationContext.isGeneratingHelp()) {
       initialise()
       callTrigger(VConstants.TRG_PREFORM)
@@ -745,14 +742,14 @@ abstract class VForm : VWindow, VConstants {
   // static (from DSL) data
   override var source: String? = null // qualified name of source file
   lateinit var blocks: Array<VBlock>
-  internal lateinit var pages: Array<String>
+  internal lateinit var pages: Array<String?>
   internal var help: String? = null //the name of this field
   internal lateinit var VKT_Triggers: Array<IntArray>
 
   // dynamic data
   private val blockMoveAllowed = true
   private var activeBlock: VBlock? = null
-  protected lateinit var commands: Array<VCommand> // commands
+  internal lateinit var commands: Array<VCommand> // commands
 
   private val formListener = EventListenerList()
 

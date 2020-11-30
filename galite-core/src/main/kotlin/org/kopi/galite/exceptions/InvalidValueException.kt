@@ -24,6 +24,6 @@ package org.kopi.galite.exceptions
  * @param label the field's label
  *
  */
-class InvalidValueException(value: Comparable<*>, label: String) : RuntimeException() {
+class InvalidValueException(value: Comparable<*>, label: String?) : RuntimeException() {
   override val message = "invalid value $value for the field $label"
 }
