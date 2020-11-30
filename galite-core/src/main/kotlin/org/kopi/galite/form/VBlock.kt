@@ -26,6 +26,8 @@ import javax.swing.event.EventListenerList
 
 import kotlin.collections.HashMap
 
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.ActionHandler
@@ -1763,9 +1765,65 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   protected fun fetchLookup(table: Int, currentField: VField) {
-    TODO()
-  }
 
+    val tab = object : Table(tables!![table]) {}
+    val columns = mutableListOf<Column<String>>()
+    val conditions = mutableListOf<Op<Boolean>>()
+
+    for (i in fields.indices) {
+      val f = fields[i]
+
+      if (f !== currentField && f.lookupColumn(table) != null && !f.isLookupKey(table)) {
+        f.setNull(activeRecord)
+      }
+    }
+
+    for (i in fields.indices) {
+      val column = fields[i].lookupColumn(table)
+      val col = Column<String>(tab, column!!, VarCharColumnType())
+
+
+      if (column != null) {
+        columns.add(col)
+      }
+      if (fields[i] == currentField || fields[i].isLookupKey(table)) {
+        val condition = fields[i].getSearchCondition()
+
+        val cond = object : Op<Boolean>() {
+          override fun toQueryBuilder(queryBuilder: QueryBuilder) {
+            TODO("Not yet implemented")
+          }
+        }
+
+        if (condition == null || !condition.startsWith("= ")) {
+          conditions.add(cond)
+        }
+      }
+    }
+
+    try {
+      transaction {
+        var t: Op<Boolean> = conditions[0]
+        conditions.minusElement(t).forEach {
+          t = t and it
+        }
+
+        val query = tab.slice(columns).select(t)
+
+        if (query.toList().isEmpty()) {
+          throw VExecFailedException(MessageCode.getMessage("VIS-00016",
+                  arrayOf<Any>(tables!![table])))
+        } else if (query.toList().isNotEmpty()) {
+
+          throw VExecFailedException(MessageCode.getMessage("VIS-00020",
+                  arrayOf<Any>(tables!![table])))
+        }
+      }
+    } catch (e: SQLException) {
+      throw VExecFailedException("XXXX !!!!" + e.message)
+    }
+
+  }
   fun refreshLookup(record: Int) {
     clearLookups(record)
     selectLookups(record)
@@ -2890,9 +2948,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
-  protected var tables: Array<Table>? = null // names of database tables
-  protected var options = 0 // block options
+  var tables: Array<String>? = null // names of database tables  protected lateinit var access: IntArray // access flags for each mode
   protected lateinit var access: IntArray // access flags for each mode
+  protected var options = 0 // block options
   protected var indices: Array<String>? = null // error messages for violated indices
   internal var commands: Array<VCommand>? = null // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
