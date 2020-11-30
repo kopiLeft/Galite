@@ -26,6 +26,9 @@ import org.kopi.galite.form.dsl.Key
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
  * and a help
  *
+ * An Actor is an item to be linked with a command, if its [icon] is specified, it will appear
+ * in the icon_toolbar located under the menu bar, otherwise, it will only be accessible from the menu bar
+ *
  * @param ident               the ident
  * @param menu                the containing menu
  * @param label               the label

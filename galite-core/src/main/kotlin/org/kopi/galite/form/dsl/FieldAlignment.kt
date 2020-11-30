@@ -18,9 +18,22 @@ package org.kopi.galite.form.dsl
 
 import org.kopi.galite.form.VConstants
 
+/**
+ * This command is used to define the localization of the field's content inside the field.
+ */
 enum class FieldAlignment(val value: Int){
-  DEFAULT (VConstants.ALG_DEFAULT),
-  CENTER (VConstants.ALG_CENTER),
-  LEFT (VConstants.ALG_LEFT),
-  RIGHT (VConstants.ALG_RIGHT),
+  /**
+   * The value is centered in the field
+   */
+  CENTER(VConstants.ALG_CENTER),
+
+  /**
+   * The value is displayed at the left inside the field
+   */
+  LEFT(VConstants.ALG_LEFT),
+
+  /**
+   * The value is displayed at the right inside the field
+   */
+  RIGHT(VConstants.ALG_RIGHT),
 }
