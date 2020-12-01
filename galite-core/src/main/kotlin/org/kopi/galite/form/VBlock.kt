@@ -1799,7 +1799,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
           fields.forEach {
             if (it.lookupColumn(tableIndex) != null) {
-              it.setQuery_(query, 1 + j)
+              it.setQuery_(query, it.getColumn(1 + j)!!.column)
               j += 1
             }
           }

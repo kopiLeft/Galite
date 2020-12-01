@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.Op
 import java.awt.Color
@@ -943,7 +944,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setQuery(block!!.currentRecord, query, column)
   }
 
-  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Int) {
+  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Column<*>?) {
     TODO()
   }
 
