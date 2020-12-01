@@ -39,8 +39,9 @@ import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VCommand
 
 /**
- * A block on a form
- * A block contains fields and reference to database
+ * A block is a set of data which are stocked in the database and shown on a [Form].
+ * A block is created in order to either view the content of a database, to insert
+ * new data in the database or to update existing data in the database.
  *
  * @param        buffer                the buffer size of this block
  * @param        visible               the number of visible elements
@@ -84,16 +85,19 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   // ----------------------------------------------------------------------
 
   /**
-   * Adds triggers to this form block
+   * Adds triggers to this form block. The block triggers are the same as form triggers on the block level.
+   * There are actually a set of block triggers you can use to execute actions once they are fired.
+   * see [BlockTrigger] to get the list of supported triggers.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  private fun <T> triggers(blockTriggers: Array<out BlockTrigger>, method: () -> T) {
+  private fun <T> trigger(blockTriggers: Array<out BlockTrigger>, method: () -> T): Trigger {
     val event = blockEventList(blockTriggers)
     val blockAction = BlockAction(null, method)
     val trigger = FormTrigger(event, blockAction)
     triggers.add(trigger)
+    return trigger
   }
 
   private fun blockEventList(blockTriggers: Array<out BlockTrigger>): Long {
@@ -107,37 +111,41 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   }
 
   /**
-   * Adds protected triggers to this form block
+   * Adds protected triggers to this block.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit) {
-    triggers(blockTriggers, method)
+  fun trigger(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit): Trigger {
+    return trigger(blockTriggers, method)
   }
 
   /**
-   * Adds void triggers to this form block
+   * Adds void triggers to this block.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit) {
-    triggers(blockTriggers, method)
+  fun trigger(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit): Trigger {
+    return trigger(blockTriggers, method)
   }
 
   /**
-   * Adds boolean triggers to this form block
+   * Adds boolean triggers to this block.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun triggers(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean) {
-    triggers(blockTriggers, method)
+  fun trigger(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean): Trigger {
+    return trigger(blockTriggers, method)
   }
 
   /**
-   * Adds the [table] to this block
+   * Adds the [table] to this block. It refers to certain tables in the database whereby the first table
+   * is the one on which the user will work. The remaining tables are the so-called "look-up tables",
+   * i.e tables that are associated with the first one.
+   *
+   * @param table     the database table
    */
   fun <T : Table> table(table: T): T {
     val formBlockTable = FormBlockTable(table.tableName, table.tableName, table)
@@ -146,44 +154,52 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   }
 
   /**
-   * creates and returns a field. It uses [init] method to initialize the field.
+   * Creates and returns a MUSTFILL field.
+   *
+   * MUSTFILL fields are accessible fields that the user must fill with a value.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method.
-   * @return a field.
+   * @param init    initialization method to initialize the field.
+   * @return a MUSTFILL field.
    */
   inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_MUSTFILL, position)
   }
 
   /**
-   * creates and returns a field. It uses [init] method to initialize the field.
+   * Creates and returns a VISIT field.
+   *
+   * VISIT fields are accessible, can be modified but not necessary.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method.
-   * @return a field.
+   * @param init    initialization method to initialize the field.
+   * @return a VISIT field.
    */
   inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_VISIT, position)
   }
 
   /**
-   * creates and returns a field. It uses [init] method to initialize the field.
+   * Creates and returns a SKIPPED field.
+   *
+   * SKIPPED fields are read only fields, you can read the value but you can't modify it.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method.
-   * @return a field.
+   * @param init    initialization method to initialize the field.
+   * @return a SKIPPED field.
    */
   inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_SKIPPED, position)
   }
 
   /**
-   * creates and returns a field. It uses [init] method to initialize the field.
+   * Creates and returns a HIDDEN field.
+   *
+   * HIDDEN field are invisible in the form, they are used to store hidden operations and database joins.
    *
    * @param domain  the domain of the field.
-   * @param init    initialization method.
-   * @return a field.
+   * @param init    initialization method to initialize the field.
+   * @return a HIDDEN field.
    */
   inline fun <reified T : Comparable<T>> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_HIDDEN)
@@ -192,10 +208,10 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Initializes a field.
    */
-  inline fun <reified T: Comparable<T>> initField(domain: Domain<T>,
-                                                  init: FormField<T>.() -> Unit,
-                                                  access: Int,
-                                                  position: FormPosition? = null): FormField<T> {
+  inline fun <reified T : Comparable<T>> initField(domain: Domain<T>,
+                                                   init: FormField<T>.() -> Unit,
+                                                   access: Int,
+                                                   position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
@@ -205,68 +221,71 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   }
 
   /**
-   * Sets the field in position given by x and y location
+   * Defines the position of the field in the current block.
    *
-   * @param line		the line
-   * @param column		the column
+   * @param line                the line
+   * @param column                the column
    */
   fun at(line: Int, column: Int): FormPosition = FormCoordinatePosition(line, 0, column, 0)
 
   /**
-   * Sets the field in position given by x and y location
+   * Defines the position of the field in the current block.
    *
-   * @param lineRange		the line range (lineRange.first: the line,
+   * @param lineRange                the line range (lineRange.first: the line,
    *                            lineRange.last: the last line into this field may be placed)
-   * @param column		the column
+   * @param column                the column
    */
   fun at(lineRange: IntRange, column: Int): FormPosition =
           FormCoordinatePosition(lineRange.first, lineRange.last, column, 0)
 
   /**
-   * Sets the field in position given by x and y location
+   * Defines the position of the field in the current block.
    *
-   * @param line		the line
-   * @param columnRange		the line range (columnRange.first: the column,
+   * @param line                the line
+   * @param columnRange                the line range (columnRange.first: the column,
    *                            columnRange.last: the last column into this field may be placed)
    */
   fun at(line: Int, columnRange: IntRange): FormPosition =
           FormCoordinatePosition(line, 0, columnRange.first, columnRange.last)
 
   /**
-   * Sets the field in position given by x and y location
+   * Defines the position of the field in the current block.
    *
-   * @param lineRange		the line range (lineRange.first: the line,
+   * @param lineRange                the line range (lineRange.first: the line,
    *                            lineRange.last: the last line into this field may be placed)
-   * @param columnRange		the line range (columnRange.first: the column,
+   * @param columnRange                the line range (columnRange.first: the column,
    *                            columnRange.last: the last column into this field may be placed)
    */
   fun at(lineRange: IntRange, columnRange: IntRange): FormPosition =
           FormCoordinatePosition(lineRange.first, lineRange.last, columnRange.first, columnRange.last)
 
   /**
-   * Sets the field in position given by x location
+   * Defines the position of the field in the current block.
    *
-   * @param lineRange		the line range (lineRange.first: the line,
+   * @param lineRange                the line range (lineRange.first: the line,
    *                            lineRange.last: the last line into this field may be placed)
    */
   fun at(lineRange: IntRange): FormPosition = FormMultiFieldPosition(lineRange.first, lineRange.last)
 
   /**
-   * Sets the field in position given by x location
+   * Defines the position of the field in the current block.
    *
-   * @param line		the line
+   * @param line                the line
    */
   fun at(line: Int): FormPosition = FormMultiFieldPosition(line, 0)
 
   /**
-   * Sets the field in position that follows a specific [field]
+   * Defines the position of the field in the current block.
    *
-   * @param field		the field
+   * Puts the field in the position that follows a specific [field].
+   *
+   * @param field                the field
    */
   fun <T : Comparable<T>> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
 
   /**
-   * creates and returns a form block index. It uses [init] method to initialize the index.
+   * creates and returns a form block index. It is used to define a value in the database
+   * which is to remain unique so that it can not appear anymore in another field of the same column.
    *
    * @param message                the error message in the default locale
    */
@@ -279,9 +298,10 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Adds a new command to this block.
    *
+   * PS: Block commands are commands accessible only from the block where they are called.
+   *
    * @param item    the actor linked to the command.
    * @param init    initialization method.
-   * @return a field.
    */
   fun command(item: Actor, init: Command.() -> Unit): Command {
     val command = Command(item)
@@ -338,10 +358,10 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    */
   override fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genBlock(ident,
-                                                title,
-                                                help,
-                                                indices.toTypedArray(),
-                                                blockFields.toTypedArray())
+            title,
+            help,
+            indices.toTypedArray(),
+            blockFields.toTypedArray())
   }
 
 
@@ -403,18 +423,18 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
       init {
         //TODO ----------begin-------------
         /** Used actors in form*/
-        val usedActors  = form.actors.map { vActor ->
+        val usedActors = form.actors.map { vActor ->
           vActor?.actorIdent to vActor
         }.toMap()
 
         super.commands = blockCommands?.map {
           VCommand(it.mode,
-                   this,
-                   usedActors[it.item.ident],
-                   -1,
-                   it.name!!,
-                   it.action
-                  )
+                  this,
+                  usedActors[it.item.ident],
+                  -1,
+                  it.name!!,
+                  it.action
+          )
         }.toTypedArray()
 
         handleTriggers(this@FormBlock.triggers)

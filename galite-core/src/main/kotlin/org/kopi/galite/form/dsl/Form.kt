@@ -49,6 +49,8 @@ abstract class Form: Window() {
   /**
    * Adds a new actor to this form.
    *
+   * An Actor is an item to be linked to a command.
+   *
    * @param menu                 the containing menu
    * @param label                the label
    * @param help                 the help
@@ -91,9 +93,12 @@ abstract class Form: Window() {
   }
 
   /**
-   * Adds a new page to this form.
+   * Adds a new page to this form. You can use this method to create Pages in your form, this is optional
+   * and will create a Tab for each page you create under the form's toolbar.
    *
    * @param        title                the title of the page
+   * @return       the form page. You can use it as a parameter to a block it to define that the block
+   * will be inserted in this page. You can put as much blocks you want in each page
    */
   fun page(title: String): FormPage {
     val page = FormPage(pages.size, "Id\$${pages.size}", title)
@@ -102,9 +107,11 @@ abstract class Form: Window() {
   }
 
   /**
-   * Adds a new menu to this form.
+   * Adds a new menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
    *
    * @param label                the menu label in default locale
+   * @return                     the menu. It is used later to adding actors to this menu by specifying
+   * the menu name in the actor definition.
    */
   fun menu(label: String): Menu {
     val menu = Menu(label)

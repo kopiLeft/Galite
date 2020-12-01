@@ -20,6 +20,8 @@ package org.kopi.galite.form.dsl
 import org.kopi.galite.common.LocalizationWriter
 
 /**
+ * A page represents a Tab for each page you create under the form's toolbar.
+ * You can put as much blocks you want in each page, the same goes for form without pages.
  *
  * @param ident                the identifier of the page
  * @param title                the page title in default locale

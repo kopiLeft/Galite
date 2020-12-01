@@ -17,6 +17,8 @@
 package org.kopi.galite.common
 
 /**
+ * A menu represents an entry to the menu bar in the top of the form,
+ * you can add actors to this menu later by specifying the menu name in the actor definition.
  *
  * @param label                the menu label in default locale
  */
