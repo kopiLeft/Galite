@@ -66,9 +66,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   var blockTables: MutableList<FormBlockTable> = mutableListOf()
   var indices: MutableList<FormBlockIndex> = mutableListOf()
   var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
+  var dropListMap = HashMap<String, String>()
   lateinit var commands: Array<Command?>
   val triggers = mutableListOf<Trigger>()
-  lateinit var dropListMap: HashMap<*, *>
   private var maxRowPos = 0
   private var maxColumnPos = 0
   private var displayedFields = 0
@@ -82,6 +82,17 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS
   // ----------------------------------------------------------------------
+
+  fun addDropList(dropList: MutableList<String>, field: FormField<*>): String? {
+    for (i in dropList.indices) {
+      val extension = dropList[i].toLowerCase()
+      if (dropListMap[extension] != null) {
+        return extension
+      }
+      dropListMap.put(extension, field.getIdent())
+    }
+    return null
+  }
 
   /**
    * Adds triggers to this form block
@@ -192,10 +203,10 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Initializes a field.
    */
-  inline fun <reified T: Comparable<T>> initField(domain: Domain<T>,
-                                                  init: FormField<T>.() -> Unit,
-                                                  access: Int,
-                                                  position: FormPosition? = null): FormField<T> {
+  inline fun <reified T : Comparable<T>> initField(domain: Domain<T>,
+                                                   init: FormField<T>.() -> Unit,
+                                                   access: Int,
+                                                   position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
@@ -425,11 +436,14 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
         //TODO ------------end-----------
 
         super.source = source ?: sourceFile
+        super.name = ident
         super.bufferSize = buffer
         super.pageNumber = this@FormBlock.pageNumber
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
-        super.name = ident
+        this@FormBlock.dropListMap.forEach{
+                  super.dropListMap.put(it.key,it.value)
+        }
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()

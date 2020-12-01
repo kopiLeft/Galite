@@ -39,6 +39,7 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
+import java.util.ArrayList
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -68,6 +69,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   var options: Int = 0
   var columns: FormFieldColumns? = null
   var access: IntArray = IntArray(3) { initialAccess }
+  var dropList: MutableList<String>? = null
   var commands: MutableList<Command>? = null
   var triggers: Array<Trigger>? = null
   var alias: String? = null
@@ -120,6 +122,21 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     }
   }
 
+  fun droppable(list: Array<String>): MutableList<String>? {
+    val l = stringList(list)
+    l.forEach {
+      dropList?.add(it)
+    }
+    return dropList
+  }
+
+  fun stringList(list: Array<String>): Array<String>{
+    val vect : ArrayList<String> = arrayListOf()
+    list.forEach {
+      vect.add(it)
+    }
+    return vect.toTypedArray()
+  }
 
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.LEFT
