@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,6 +17,18 @@
 package org.kopi.galite.common
 
 /**
- * This class represents an action, ie a list of instructions
+ *
+ * @param label                the menu label in default locale
  */
-abstract class Action<T>(val method: () -> T)
+class Menu(val label: String) {
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!!FIX:taoufik
+   */
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genMenuDefinition(label, label)
+  }
+}

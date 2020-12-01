@@ -18,6 +18,8 @@
 
 package org.kopi.galite.form
 
+import org.apache.poi.ss.formula.functions.T
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.l10n.LocalizationManager
@@ -723,64 +725,24 @@ abstract class VForm : VWindow, VConstants {
   }
 
   override fun executeVoidTrigger(VKT_Type: Int) {
-   return when (VKT_Type) {
-     3 -> {
-       postformAction()
-       super.executeVoidTrigger(VKT_Type)
-     }
-     4 -> {
-       initAction()
-       super.executeVoidTrigger(VKT_Type)
-     }
-     5 -> {
-       preformAction()
-       super.executeVoidTrigger(VKT_Type)
-     }
-    else -> {
-      throw IllegalArgumentException()
-    }
-   }
+    forTriggers[VKT_Type]?.action?.method?.invoke()
+    super.executeVoidTrigger(VKT_Type)
   }
+
+  @Suppress("UNCHECKED_CAST")
   fun executeObjectTrigger(VKT_Type: Int): Any {
-   return when (VKT_Type) {
-      3 -> {
-        postformAction()
-      }
-      4 -> {
-        initAction()
-      }
-      5 -> {
-        preformAction()
-      }
-      else -> {
-        throw  IllegalArgumentException()
-      }
-    }
+    return (forTriggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    return when (VKT_Type) {
-      1 -> {
-        quitAction()
-      }
-      2 -> {
-        resetAction()
-      }
-      else -> {
-        throw IllegalArgumentException()
-      }
-    }
+    return (forTriggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeIntegerTrigger(VKT_Type: Int): Int {
-        throw IllegalArgumentException()
+    return (forTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
-
-  open lateinit var initAction: () -> Unit
-  open lateinit var preformAction: () -> Unit
-  open lateinit var postformAction: () -> Unit
-  open lateinit var resetAction: () -> Boolean
-  open lateinit var quitAction: () -> Boolean
 
   val eventList: MutableList<Int> = mutableListOf()
 
@@ -792,12 +754,12 @@ abstract class VForm : VWindow, VConstants {
   lateinit var blocks: Array<VBlock>
   internal lateinit var pages: Array<String?>
   internal var help: String? = null //the name of this field
-  open lateinit var VKT_Triggers: Array<IntArray>
-
+  open var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
+  open val forTriggers =  mutableMapOf<Int, Trigger>()
   // dynamic data
   private val blockMoveAllowed = true
   private var activeBlock: VBlock? = null
-  protected lateinit var commands: Array<VCommand> // commands
+  internal lateinit var commands: Array<VCommand> // commands
 
   private val formListener = EventListenerList()
 

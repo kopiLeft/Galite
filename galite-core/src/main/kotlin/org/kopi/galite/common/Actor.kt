@@ -18,21 +18,40 @@
 
 package org.kopi.galite.common
 
+import java.awt.event.InputEvent
+import java.awt.event.KeyEvent
+
+import org.kopi.galite.form.dsl.Key
+
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
  * and a help
  *
+ * @param ident               the ident
  * @param menu                the containing menu
  * @param label               the label
  * @param help                the help
- * @param key                 the shortcut
  * @param icon                the icon
+ * @param key                 the shortcut
  */
-class Actor(val menu: String, val label: String, val help: String) {
+class Actor(val ident: String, val menu: Menu, val label: String, val help: String) {
+  var key: Key? = null
+    set(key) {
+      checkKey(key)
+      field = key
+    }
 
-  var key: Int? = null
   var icon: String? = null
 
+  private fun checkKey(key : Key?) {
+    if (key == null) {
+      keyModifier = 0
+      keyCode = KeyEvent.VK_UNDEFINED
+    } else {
+      keyCode = key.value
+      keyModifier = if (key.toString().contains("SHIFT_")) InputEvent.SHIFT_MASK else 0
+    }
+  }
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
@@ -40,9 +59,9 @@ class Actor(val menu: String, val label: String, val help: String) {
    * !!!FIX:taoufik
    */
   fun genLocalization(writer: LocalizationWriter) {
-    writer.genActorDefinition(label, label, help)
+    writer.genActorDefinition(ident, label, help)
   }
 
-  private var keyCode = 0
-  private var keyModifier = 0
+  var keyCode = 0
+  var keyModifier = 0
 }

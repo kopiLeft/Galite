@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,9 +14,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.form.dsl
+
+import org.kopi.galite.form.VDictionaryForm
 
 /**
- * This class represents an action, ie a list of instructions
+ * Represents a dictionary form.
  */
-abstract class Action<T>(val method: () -> T)
+abstract class DictionaryForm: Form() {
+
+  /** Form model */
+  override val model: VDictionaryForm by lazy {
+    genLocalization()
+    object : VDictionaryForm() {
+      override fun init() {
+        initialize()
+      }
+    }
+  }
+}
