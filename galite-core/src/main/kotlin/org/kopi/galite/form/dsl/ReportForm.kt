@@ -26,6 +26,7 @@ import org.kopi.galite.cross.VReportSelectionForm
 import org.kopi.galite.form.VForm
 import org.kopi.galite.report.VReport
 import org.kopi.galite.visual.VActor
+import org.kopi.galite.common.Menu
 
 /**
  * Represents a form.
@@ -57,8 +58,8 @@ abstract class ReportForm: Window() {
      * @param label                the label
      * @param help                 the help
      */
-    fun actor(ident: String, menu: String, label: String, help: String,key: String , init: Actor.() -> Unit): Actor {
-        val actor = Actor(ident, menu, label, help , key)
+    fun actor(ident: String, menu: Menu, label: String, help: String,key: String , init: Actor.() -> Unit): Actor {
+        val actor = Actor(ident, menu, label, help )
         actor.init()
         formActors.add(actor)
         return actor
@@ -93,7 +94,7 @@ abstract class ReportForm: Window() {
      * @param        title                the title of the page
      */
     fun page(title: String, init: FormPage.() -> Unit): FormPage {
-        val page = FormPage("Id\$${pages.size}", title)
+        val page = FormPage(pages.size,"Id\$${pages.size}", title)
         page.init()
         pages.add(page)
         return page
@@ -183,7 +184,7 @@ abstract class ReportForm: Window() {
                     it.ident
                 }.toTypedArray()
                 super.actors = formActors?.map {
-                    VActor(it.menu, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
+                    VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
                 }.toTypedArray()
 
                 blocks = formBlocks.map { formBlock ->

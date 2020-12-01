@@ -26,6 +26,7 @@ import javax.swing.event.EventListenerList
 
 import kotlin.collections.HashMap
 
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
@@ -199,24 +200,26 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     VKT_Type        the number of the trigger
    */
   override fun executeVoidTrigger(VKT_Type: Int) {
-    // default: does nothing
+    triggers[VKT_Type]?.action?.method?.invoke()
   }
 
   fun executeProtectedVoidTrigger(VKT_Type: Int) {
-    // default: does nothing
+    triggers[VKT_Type]?.action?.method?.invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    // default: does nothing
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   open fun executeIntegerTrigger(VKT_Type: Int): Int {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
   /**
@@ -2900,7 +2903,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   lateinit var fields: Array<VField> // fields
-  protected lateinit var VKT_Triggers: Array<IntArray>
+  protected var VKT_Triggers = mutableListOf(IntArray(TRG_TYPES.size))
+  protected val triggers = mutableMapOf<Int, Trigger>()
   // dynamic data
   var activeRecord = 0 // current record
     get() {

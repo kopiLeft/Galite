@@ -39,42 +39,43 @@ object FieldsVisibilityTest: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test fields visibility"
 
+  val testPage = page("test page")
+
   init {
-    page("test page") {
-      val testBlock = block(1, 1, "Test", "Test block") {
-        val u = table(User)
-        val i = index(message = "ID should be unique")
+    val testBlock = block(1, 1, "Test", "Test block", testPage) {
+      val u = table(User)
+      val i = index(message = "ID should be unique")
 
-        val id = hidden(domain = Domain<Int>(20)) {
-          label = "id"
-          help = "The user id"
-          columns(u.id)
-        }
-        val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
-          label = "name"
-          help = "The user name"
-          onQuerySkipped()
-          columns(u.name)
-        }
-        val age = mustFill(domain = Domain<Int>(3), position = follow(name)) {
-          label = "age"
-          help = "The user age"
-          onQueryHidden()
-          columns(u.age) {
-            index = i
-            priority = 1
-          }
-        }
+      val id = hidden(domain = Domain<Int>(20)) {
+        label = "id"
+        help = "The user id"
+        columns(u.id)
       }
-      val testBlock2 = block(1, 1, "Test2", "Test block2") {
-
-        val totalAge = visit(Domain<Int>(3), position = at(1, 1)) {
-          label = "Total"
-          help = "total user age"
-          onQueryMustFill()
+      val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+        label = "name"
+        help = "The user name"
+        onQuerySkipped()
+        columns(u.name)
+      }
+      val age = mustFill(domain = Domain<Int>(3), position = follow(name)) {
+        label = "age"
+        help = "The user age"
+        onQueryHidden()
+        columns(u.age) {
+          index = i
+          priority = 1
         }
       }
     }
+    val testBlock2 = block(1, 1, "Test2", "Test block2", testPage) {
+
+      val totalAge = visit(Domain<Int>(3), position = at(1, 1)) {
+        label = "Total"
+        help = "total user age"
+        onQueryMustFill()
+      }
+    }
+
   }
 }
 

@@ -749,7 +749,7 @@ abstract class VForm : VWindow, VConstants {
   // dynamic data
   private val blockMoveAllowed = true
   private var activeBlock: VBlock? = null
-  protected lateinit var commands: Array<VCommand> // commands
+  internal lateinit var commands: Array<VCommand> // commands
 
   private val formListener = EventListenerList()
 
