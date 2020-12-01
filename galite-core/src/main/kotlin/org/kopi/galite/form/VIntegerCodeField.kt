@@ -35,17 +35,19 @@ import org.kopi.galite.util.base.InconsistencyException
  */
 class VIntegerCodeField : VCodeField {
 
-  constructor(ident: String,
+  constructor(bufferSize: Int,
+              ident: String,
               source: String,
               names: Array<String>,
-              codes: Array<Int?>) : super(ident, source, names) {
+              codes: Array<Int?>) : super(bufferSize, ident, source, names) {
     this.codes = codes
   }
 
-  constructor(ident: String,
+  constructor(bufferSize: Int,
+              ident: String,
               source: String,
               names: Array<String>,
-              codes: IntArray) : super(ident, source, names) {
+              codes: IntArray) : super(bufferSize, ident, source, names) {
     this.codes = arrayOfNulls(codes.size)
     codes.forEachIndexed { element, i ->
       this.codes[i] = element
@@ -72,7 +74,7 @@ class VIntegerCodeField : VCodeField {
   /**
    * Sets the field value of given record to a int value.
    */
-  fun setInt(r: Int, v: Int?) {
+  override fun setInt(r: Int, v: Int?) {
     if (v == null) {
       setCode(r, -1)
     } else {

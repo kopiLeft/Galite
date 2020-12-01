@@ -21,6 +21,7 @@ import java.util.Locale
 
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VTrigger
+import org.kopi.galite.visual.VWindow
 
 /**
  * This class represents the definition of a window
@@ -35,4 +36,5 @@ abstract class Window {
   var options: Int? = null
   lateinit var commands: Array<VCommand>
   lateinit var triggers: Array<VTrigger>
+  abstract val model: VWindow
 }

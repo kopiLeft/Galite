@@ -32,19 +32,8 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
-class VDateField : VField(10, 1) {
+class VDateField(val bufferSize: Int) : VField(10, 1) {
 
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
-
-  /**
-   *
-   */
   override fun hasAutofill(): Boolean = true
 
   /**
@@ -404,7 +393,7 @@ class VDateField : VField(10, 1) {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
 
-  private lateinit var value: Array<Date?>
+  private var value: Array<Date?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
     private fun stringToInt(input: String): Int {

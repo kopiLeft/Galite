@@ -22,9 +22,11 @@ import kotlin.reflect.KClass
 /**
  * A domain is a data type with predefined list of allowed values.
  *
- * @param length the maximum length of the value that can be passed.
+ * @param width             the width in char of this field
+ * @param height            the height in char of this field
+ * @param visibleHeight     the visible height in char of this field.
  */
-open class Domain<T : Comparable<T>>(val length: Int? = null) {
+open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = null, val visibleHeight: Int? = null) {
   /**
    * The type of this domain.
    */

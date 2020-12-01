@@ -34,7 +34,7 @@ class VSeparatorColumn(
   groups: Int,
   function: VCalculateColumn?,
   width: Int,
-  format: VCellFormat,
+  format: VCellFormat?,
 ) : VReportColumn("", 0, 0, 0, null, 1, 1, null) {
   /**
    * No text here

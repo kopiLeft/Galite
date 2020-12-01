@@ -34,17 +34,10 @@ import org.kopi.galite.visual.VlibProperties
  * @param     minval    the min permitted value
  * @param     maxval    the max permitted value
  */
-class VIntegerField(width: Int,
+class VIntegerField(val bufferSize: Int,
+                    width: Int,
                     val minval: Int,
                     val maxval: Int) : VField(width, 1) {
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
 
   /**
    * return the name of this field
@@ -138,7 +131,7 @@ class VIntegerField(width: Int,
   /**
    * Sets the field value of given record to a int value.
    */
-  fun setInt(r: Int, v: Int?) {
+  override fun setInt(r: Int, v: Int?) {
     var v = v
     if (changedUI
         || value[r] == null && v != null
@@ -190,7 +183,7 @@ class VIntegerField(width: Int,
   /**
    * Returns the field value of given record as a int value.
    */
-  override fun getInt(r: Int): Int = getObject(r) as Int
+  override fun getInt(r: Int): Int? = getObject(r) as Int?
 
   /**
    * Returns the field value of the current record as an object
@@ -272,7 +265,7 @@ class VIntegerField(width: Int,
         if (sum == null) {
           sum = 0
         }
-        sum += getInt(i)
+        sum += getInt(i)!!
       }
     }
     return sum
@@ -366,7 +359,7 @@ class VIntegerField(width: Int,
 
   // dynamic data
   // value
-  private lateinit var value: Array<Int?>
+  private var value: Array<Int?> = arrayOfNulls(2 * bufferSize)
   private var criticalMinValue: Int? = minval
   private var criticalMaxValue: Int? = maxval
 }

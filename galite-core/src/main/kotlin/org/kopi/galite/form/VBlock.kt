@@ -15,10 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.form
 
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.*
 import org.kopi.galite.form.VConstants.Companion.ACS_HIDDEN
 import org.kopi.galite.form.VConstants.Companion.ACS_MUSTFILL
@@ -61,6 +64,7 @@ import java.util.*
 import javax.swing.event.EventListenerList
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -125,7 +129,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     buildCstr()
   }
 
-  protected fun setInfo() {
+  protected open fun setInfo() {
     // Do nothing, should be redefined if some info
     // has to be set
   }
@@ -184,24 +188,26 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     VKT_Type        the number of the trigger
    */
   override fun executeVoidTrigger(VKT_Type: Int) {
-    // default: does nothing
+    triggers[VKT_Type]?.action?.method?.invoke()
   }
 
   fun executeProtectedVoidTrigger(VKT_Type: Int) {
-    // default: does nothing
+    triggers[VKT_Type]?.action?.method?.invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    // default: does nothing
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
   }
 
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+  @Suppress("UNCHECKED_CAST")
+  open fun executeIntegerTrigger(VKT_Type: Int): Int {
+    return (triggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
   /**
@@ -1746,7 +1752,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   protected fun fetchLookup(tableIndex: Int, currentField: VField) {
 
-    val table = object : Table(tables!![tableIndex]) {}
+    val table = object : Table(tables!![tableIndex].tableName) {}
     val columns = mutableListOf<Column<String>>()
     val conditions = mutableListOf<Op<Boolean>>()
 
@@ -2365,7 +2371,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     action          the action to perform.
    * @param     block           This action should block the UI thread ?
    */
-  @Deprecated("Use method performAsyncAction without bool parameter")
+  @Deprecated("Use method performAsyncAction without bool parameter",
+          ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2932,7 +2939,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
-  var tables: Array<String>? = null // names of database tables
+  var tables: Array<Table>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
@@ -2945,14 +2952,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   lateinit var fields: Array<VField> // fields
-  protected lateinit var VKT_Triggers: Array<IntArray>
-
+  protected var VKT_Triggers = mutableListOf(IntArray(TRG_TYPES.size))
+  protected val triggers = mutableMapOf<Int, Trigger>()
   // dynamic data
   var activeRecord = 0 // current record
     get() {
       return if (field in 0 until bufferSize) field else -1
     }
-    set(rec: Int) {
+    set(rec) {
       assert(isMulti() || rec == 0) { "multi? " + isMulti() + "rec: " + rec }
       field = rec
     }
@@ -2995,7 +3002,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       return if (!isMulti()) {
         0
       } else {
-        assert(field >= 0 && field < bufferSize) { "Bad currentRecord $field" }
+        assert(field in 0 until bufferSize) { "Bad currentRecord $field" }
         field
       }
     }

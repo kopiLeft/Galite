@@ -39,7 +39,8 @@ import org.kopi.galite.visual.VlibProperties
  * @param    maxval      The max permitted value
  *
  */
-class VFixnumField(private val digits: Int,
+class VFixnumField(val bufferSize: Int,
+                   private val digits: Int,
                    maxScale: Int,
                    val fraction: Boolean,
                    minval: Fixed?,
@@ -58,12 +59,14 @@ class VFixnumField(private val digits: Int,
   /**
    * Constructor
    */
-  constructor(digits: Int,
+  constructor(bufferSize: Int,
+              digits: Int,
               maxScale: Int,
               minval: String?,
               maxval: String?,
               fraction: Boolean)
-          : this(digits,
+          : this(bufferSize,
+                 digits,
                  maxScale,
                  fraction,
                  minval?.let { NotNullFixed(it) },
@@ -74,15 +77,8 @@ class VFixnumField(private val digits: Int,
    * just after loading, construct record
    */
   override fun build() {
-    val size = 2 * block!!.bufferSize
-
     super.build()
-    value = arrayOfNulls(size)
-    currentScale = IntArray(size)
-
-    for (i in 0 until size) {
-      currentScale[i] = maxScale
-    }
+    currentScale = IntArray(2 * bufferSize) { maxScale }
   }
 
   /**
@@ -585,7 +581,7 @@ class VFixnumField(private val digits: Int,
       }
     }
 
-  private lateinit var value: Array<Fixed?>
+  private var value: Array<Fixed?> = arrayOfNulls(2 * bufferSize)
 
   protected var criticalMinValue= minval
 
