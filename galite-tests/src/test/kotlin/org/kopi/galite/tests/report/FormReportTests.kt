@@ -2,15 +2,14 @@ package org.kopi.galite.tests.report
 
 import org.jetbrains.exposed.sql.Table
 import org.junit.Test
-import org.kopi.galite.chart.Chart
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.tests.JApplicationTestBase
 import java.util.Locale
 import kotlin.test.assertEquals
-import org.kopi.galite.form.dsl.KeyCode
 import org.kopi.galite.form.dsl.ReportForm
 import org.kopi.galite.report.VReport
+import org.kopi.galite.tests.form.TestForm
 
 class GenerateReportTests : JApplicationTestBase() {
   @Test
@@ -33,15 +32,17 @@ object TestReportForm: ReportForm() {
   }
 
   override val title = "Generate report"
+  val action = TestForm.menu("Action")
+
 
   var report = actor (
           ident =  "report",
-          menu =  "Action",
+          menu =  action,
           label = "Report for test",
           help =  "Generate report" ,
-          key  =  KeyCode.F1
   ) {
     icon =  "report"
+    key  =  Key.F1
   }
 
   init {
@@ -70,8 +71,7 @@ object TestReportForm: ReportForm() {
           }
         }
 
-        command {
-          item = report
+        command(item = report) {
           this.name = "report"
           action = {
             this@TestReportForm.model.createReport()

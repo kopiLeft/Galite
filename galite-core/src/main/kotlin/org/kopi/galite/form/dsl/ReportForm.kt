@@ -58,7 +58,7 @@ abstract class ReportForm: Window() {
      * @param label                the label
      * @param help                 the help
      */
-    fun actor(ident: String, menu: Menu, label: String, help: String,key: String , init: Actor.() -> Unit): Actor {
+    fun actor(ident: String, menu: Menu, label: String, help: String, init: Actor.() -> Unit): Actor {
         val actor = Actor(ident, menu, label, help )
         actor.init()
         formActors.add(actor)
