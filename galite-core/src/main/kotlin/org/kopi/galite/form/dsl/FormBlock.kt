@@ -20,8 +20,18 @@ package org.kopi.galite.form.dsl
 import java.awt.Point
 
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.*
 
+import org.kopi.galite.common.Actor
+import org.kopi.galite.common.BlockAction
+import org.kopi.galite.common.BlockBooleanTrigger
+import org.kopi.galite.common.BlockProtectedTrigger
+import org.kopi.galite.common.BlockTrigger
+import org.kopi.galite.common.BlockVoidTrigger
+import org.kopi.galite.common.Command
+import org.kopi.galite.common.FormTrigger
+import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Trigger
+import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
@@ -278,15 +288,6 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
     command.init()
     blockCommands.add(command)
     return command
-  }
-
-  /**
-   * Calls another pre-defined command
-   */
-  fun command(name: String?): Command {
-    return blockCommands.find {
-      it.name.equals(name)
-    } ?: throw NoSuchElementException("Command $name is not defined")
   }
 
   /**
