@@ -15,11 +15,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.*
 import org.kopi.galite.form.VConstants.Companion.ACS_HIDDEN
@@ -63,7 +61,6 @@ import java.util.*
 import javax.swing.event.EventListenerList
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1747,59 +1744,64 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     fetchLookup(table, fld)
   }
 
-  protected fun fetchLookup(table: Int, currentField: VField) {
+  protected fun fetchLookup(tableIndex: Int, currentField: VField) {
 
-    val tab = object : Table(tables!![table]) {}
+    val table = object : Table(tables!![tableIndex]) {}
     val columns = mutableListOf<Column<String>>()
     val conditions = mutableListOf<Op<Boolean>>()
 
     for (i in fields.indices) {
       val f = fields[i]
 
-      if (f !== currentField && f.lookupColumn(table) != null && !f.isLookupKey(table)) {
+      if (f !== currentField && f.lookupColumn(tableIndex) != null && !f.isLookupKey(tableIndex)) {
         f.setNull(activeRecord)
       }
     }
 
     for (i in fields.indices) {
-      val column = fields[i].lookupColumn(table)
-      val col = Column<String>(tab, column!!, VarCharColumnType())
-
+      val column = fields[i].lookupColumn(tableIndex)
 
       if (column != null) {
+        val col = Column<String>(table, column, VarCharColumnType())
         columns.add(col)
       }
-      if (fields[i] == currentField || fields[i].isLookupKey(table)) {
+
+      if (fields[i] == currentField || fields[i].isLookupKey(tableIndex)) {
         val condition = fields[i].getSearchCondition()
 
-        val cond = object : Op<Boolean>() {
-          override fun toQueryBuilder(queryBuilder: QueryBuilder) {
-            TODO("Not yet implemented")
-          }
-        }
-
-        if (condition == null || !condition.startsWith("= ")) {
-          conditions.add(cond)
+        if (condition != null) {
+          conditions.add(condition)
         }
       }
     }
 
     try {
       transaction {
-        var t : Op<Boolean> = conditions[0]
-        conditions.minusElement(t).forEach {
-          t = t and it
+        var condition : Op<Boolean> = conditions[0]
+        conditions.minusElement(condition).forEach {
+          condition = condition and it
         }
 
-        val query = tab.slice(columns).select (t)
+        val query = table.slice(columns).select(condition)
 
         if (query.toList().isEmpty()) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                  arrayOf<Any>(tables!![table])))
-        } else if (query.toList().isNotEmpty()) {
+                  arrayOf<Any>(tables!![tableIndex])))
 
-          throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                  arrayOf<Any>(tables!![table])))
+        } else {
+          var j = 0
+
+          fields.forEach {
+            if (it.lookupColumn(tableIndex) != null) {
+              it.setQuery_(query, 1 + j)
+              j += 1
+            }
+          }
+          if (query.toList().isNotEmpty()) {
+
+            throw VExecFailedException(MessageCode.getMessage("VIS-00020",
+                    arrayOf<Any>(tables!![tableIndex])))
+          }
         }
       }
     } catch (e: SQLException) {

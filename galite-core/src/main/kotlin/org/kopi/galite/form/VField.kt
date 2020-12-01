@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Op
 import java.awt.Color
 import java.io.InputStream
 
@@ -652,45 +653,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  open fun getSearchCondition(): String? {
-    return if (isNull(block!!.activeRecord)) {
-      when(getSearchOperator()) {
-        VConstants.SOP_EQ -> null
-        VConstants.SOP_NE -> "IS NOT NULL"
-        else -> "IS NULL"
-      }
-    } else {
-      var operator = VConstants.OPERATOR_NAMES[getSearchOperator()]
-      var operand = getSql(block!!.activeRecord)
-
-      if (operand!!.indexOf('*') == -1) {
-        // nothing to change: standard case
-      } else {
-        when (getSearchOperator()) {
-          VConstants.SOP_EQ -> {
-            operator = "LIKE "
-            operand = operand.replace('*', '%')
-          }
-          VConstants.SOP_NE -> {
-            operator = "NOT LIKE "
-            operand = operand.replace('*', '%')
-          }
-          VConstants.SOP_GE, VConstants.SOP_GT ->           // remove everything after at '*'
-            operand = operand.substring(0, operand.indexOf('*')) + "'"
-          VConstants.SOP_LE, VConstants.SOP_LT ->           // replace substring starting at '*' by highest (ascii) char
-            operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
-          else -> throw InconsistencyException()
-        }
-      }
-      when (options and VConstants.FDO_SEARCH_MASK) {
-        VConstants.FDO_SEARCH_NONE -> {
-        }
-        VConstants.FDO_SEARCH_UPPER -> operand = "{fn UPPER($operand)}"
-        VConstants.FDO_SEARCH_LOWER -> operand = "{fn LOWER($operand)}"
-        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-      }
-      "$operator $operand"
-    }
+  open fun getSearchCondition(): Op<Boolean>{
+    TODO()
   }
 
   // ----------------------------------------------------------------------
@@ -974,6 +938,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun setQuery(query: Query, column: Int) {
     setQuery(block!!.currentRecord, query, column)
+  }
+
+  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Int) {
+    TODO()
   }
 
   /**
