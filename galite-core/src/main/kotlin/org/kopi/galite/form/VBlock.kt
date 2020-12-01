@@ -18,32 +18,21 @@
 
 package org.kopi.galite.form
 
+import java.sql.SQLException
+import java.util.EventListener
+
+import javax.swing.event.EventListenerList
+
+import kotlin.collections.HashMap
+import kotlin.math.abs
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.sql.SQLException
-import java.util.EventListener
-import java.lang.Math.abs
-
-import javax.swing.event.EventListenerList
-
-import kotlin.collections.HashMap
-
 import org.kopi.galite.common.Trigger
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
@@ -82,8 +71,19 @@ import org.kopi.galite.form.VConstants.Companion.TRG_TYPES
 import org.kopi.galite.form.VConstants.Companion.TRG_VALBLK
 import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
 import org.kopi.galite.form.VConstants.Companion.TRG_VOID
+import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1805,8 +1805,37 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var dialog: VListDialog?
 
     try {
-      callProtectedTrigger(TRG_PREQRY)
-      dialog = buildQueryDialog()
+      while (true) {
+        try {
+          callProtectedTrigger(TRG_PREQRY)
+          dialog = buildQueryDialog()
+          break
+        } catch (e: VException) {
+          try {
+          } catch (abortEx: VException) {
+            throw abortEx
+          }
+        } catch (e: SQLException) {
+          try {
+          } catch (abortEx: DBDeadLockException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: DBInterruptionException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: SQLException) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: Error) {
+          try {
+          } catch (abortEx: Error) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: RuntimeException) {
+          try {
+          } catch (abortEx: RuntimeException) {
+            throw VExecFailedException(abortEx)
+          }
+        }
+      }
     } catch (e: VException) {
       if (e.message != null) {
         form.error(e.message!!)
@@ -1834,8 +1863,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var query_cnt = 0
 
     /* get the fields to be displayed in the dialog */
-    for (i in fields.indices) {
-      val fld = fields[i]
+    for (field in fields) {
+      val fld = field
 
       /* skip fields not related to the database */
       if (fld.getColumnCount() == 0) {
@@ -1848,8 +1877,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
 
       /* skip fields with fixed value */
-      if (!fld.isNull(activeRecord) && fld.getSearchOperator() == SOP_EQ &&
-              fld.getSql(activeRecord)!!.indexOf('*') == -1) {
+      if (!fld.isNull(activeRecord)
+              && fld.getSearchOperator() == SOP_EQ
+              && !fld.getSql(activeRecord)!!.contains("*")) {
         continue
       }
       query_tab[query_cnt++] = fld
@@ -1861,7 +1891,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       for (j in 0 until i) {
         if (abs(query_tab[j]!!.getPriority()) < abs(query_tab[j + 1]!!.getPriority())) {
-          var tmp: VField? = query_tab[j]
+          val tmp = query_tab[j]
           query_tab[j] = query_tab[j + 1]
           query_tab[j + 1] = tmp
           swapped = true
@@ -1873,20 +1903,22 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* build query: first rows to select ... */
-    var columns = mutableListOf<Column<*>>()
+    val columns = mutableListOf<Column<*>>()
 
     for (i in 0 until query_cnt) {
-      columns[i] = query_tab[i]!!.getColumn(0)!!.column!!
+      columns.add(query_tab[i]!!.getColumn(0)!!.column!!)
     }
 
     /* query from where ? */
     val tables = getSearchTables_()
     val conditions = getSearchConditions_()
-
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
     var rows = 0
+
+    /* ... and now their order */
     var sortType = SortOrder.ASC
+    val orderList = ArrayList<Pair<Column<*>, SortOrder>>(columns.size)
 
     for (i in 0 until query_cnt) {
       if (query_tab[i]!!.getPriority() < 0) {
@@ -1894,24 +1926,20 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
     }
 
-    /* ... and now their order */
-    val orderList : ArrayList<Pair<Column<*>, SortOrder>>? = null
-    val i = 0
     for( value in columns) {
-      orderList?.add(Pair(value, sortType))
+      orderList.add(Pair(value, sortType))
     }
 
     transaction {
-
-      for (result in tables.slice(columns).select(conditions).orderBy(*orderList!!.toTypedArray())) {
+      for (result in tables.slice(columns).select(conditions).orderBy(*orderList.toTypedArray())) {
         if (rows == fetchSize) {
           break
         }
 
         /* don't show record with ID = 0 */
-        /*  if (query.getInt(1 + query_cnt) == 0) {
+        if (result[columns[1 + query_cnt]] == 0) {
             continue
-          }*/
+          }
 
         for (i in 0 until query_cnt) {
           values[i][rows] = result[columns[i]]
