@@ -49,7 +49,7 @@ abstract class Form: Window() {
   /**
    * Adds a new actor to this form.
    *
-   * An Actor is an item to be linked with a command.
+   * An Actor is an item to be linked to a command.
    *
    * @param menu                 the containing menu
    * @param label                the label
@@ -93,7 +93,7 @@ abstract class Form: Window() {
    *
    * @param        title                the title of the page
    * @return       the form page. You can use it as a parameter to a block it to define that the block
-   * will be inserted to this page. You can put as much blocks you want in each page
+   * will be inserted in this page. You can put as much blocks you want in each page
    */
   fun page(title: String, init: FormPage.() -> Unit): FormPage {
     val page = FormPage("Id\$${pages.size}", title)

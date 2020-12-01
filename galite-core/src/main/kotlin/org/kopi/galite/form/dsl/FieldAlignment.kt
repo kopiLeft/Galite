@@ -19,7 +19,7 @@ package org.kopi.galite.form.dsl
 import org.kopi.galite.form.VConstants
 
 /**
- * This command is used to define the localization of the field's content inside the field.
+ * The field alignment is used to define the localization of the field's content inside the field.
  */
 enum class FieldAlignment(val value: Int){
   /**
