@@ -29,6 +29,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.FormField.Companion.NO_LABEL
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.tests.JApplicationTestBase
 
@@ -101,18 +102,30 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
-    label = "name"
+  val name = mustFill(domain = Domain<String>(20), position = at(1, 2)) {
+    label( NO_LABEL )
     help = "The user name"
     columns(u.name)
   }
-  val age = visit(domain = Domain<Int>(3), position = follow(name)) {
-    label = "age"
+  val age = visit(domain = Domain<Int>(3) , position = at(1, 1)) {
+    label("age")
     help = "The user age"
     columns(u.age) {
       index = i
       priority = 1
     }
+  }
+
+  val gender = mustFill(domain = Domain<String>(20), position = follow(name)) {
+    label( "shouldn't be seen" )
+    help = "The user gender"
+    columns(u.name)
+  }
+
+  val job = mustFill(domain = Domain<String>(20), position = at(2,1)) {
+    label("job" , "Another job" )
+    help = "The user job"
+    columns(u.name)
   }
 }
 

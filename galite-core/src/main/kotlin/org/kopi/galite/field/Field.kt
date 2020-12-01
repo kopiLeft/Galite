@@ -32,6 +32,18 @@ import org.kopi.galite.exceptions.InvalidValueException
 abstract class Field<T : Comparable<T>>(open val domain: Domain<T>) {
   /** Field's label */
   var label: String? = null
+    set(value)  {
+      field = value
+      labels?.set(0 , value)
+    }
+
+  /** Field's multiple labels */
+  var labels: MutableList<String?>? = null
+    set(value) {
+      if (value != null) {
+        labels?.addAll(value)
+      }
+    }
 
   /** Field's help that describes the expected value of an input field */
   var help: String? = null
