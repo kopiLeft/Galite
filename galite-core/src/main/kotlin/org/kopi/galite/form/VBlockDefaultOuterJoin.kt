@@ -75,7 +75,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   if (rootTable == table) {
                     val mainTable = object : Table(tables!![table].tableName) {
                     }
-                    val joinTable = object : Table(tables!![field.getColumn(j)!!.getTable()].toString()) {
+                    val joinTable = object : Table(tables!![field.getColumn(j)!!.getTable()].tableName) {
                     }
                     // start of an outer join
                     addToJoinedTables(field.getColumn(j)!!.column!!.table)
