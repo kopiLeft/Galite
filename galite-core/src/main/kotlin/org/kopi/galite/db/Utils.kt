@@ -52,5 +52,7 @@ class Utils {
     fun toSql(t: Timestamp?): String = TODO()
     fun toSql(t: Week?): String = TODO()
     fun toSql(m: Month?): String = TODO()
+
+    const val NULL_LITERAL = "NULL"
   }
 }

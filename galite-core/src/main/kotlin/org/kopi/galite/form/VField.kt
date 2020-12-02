@@ -18,6 +18,8 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
@@ -615,6 +617,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun lookupColumn(corr: Int): String? = columns!!.find { corr == it!!.getTable() }?.name
 
   /**
+   * Returns the column name in the table with specified correlation.
+   * returns null if the field has no access to this table.
+   */
+  fun lookupColumn_(corr: Table): Column<Any>? = TODO()
+
+  /**
    * Returns true if the column is a key of the table with specified correlation.
    */
   fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable()}?.key ?: false
@@ -987,6 +995,16 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun setQuery(record: Int, query: Query, column: Int) {
     setObject(record, retrieveQuery(query, column))
+  }
+
+  /**
+   * Sets the field value of given record from a query tuple.
+   * @param     record          the index of the record
+   * @param     query           the query holding the tuple
+   * @param     column          the index of the column in the tuple
+   */
+  fun setQuery_(record: Int, query: org.jetbrains.exposed.sql.Query, column: Int) {
+    TODO()
   }
 
   /**

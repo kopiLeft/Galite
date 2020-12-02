@@ -18,26 +18,29 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Table
 import java.sql.SQLException
 import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.collections.elementAt
+import kotlin.collections.find
+import kotlin.collections.forEach
+import kotlin.collections.forEachIndexed
+import kotlin.collections.indices
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.common.Trigger
-import org.kopi.galite.l10n.LocalizationManager
-import org.kopi.galite.visual.ActionHandler
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.Message
-import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VColor
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
-import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
@@ -76,7 +79,19 @@ import org.kopi.galite.form.VConstants.Companion.TRG_TYPES
 import org.kopi.galite.form.VConstants.Companion.TRG_VALBLK
 import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
 import org.kopi.galite.form.VConstants.Companion.TRG_VOID
+import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.db.Utils
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -2441,11 +2456,80 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     TODO()
   }
 
+  private fun isNullReference_(table: Table, recno: Int): Boolean {
+    TODO()
+  }
+
   /*
    *
    */
   protected fun selectLookup(table: Int, recno: Int) {
     TODO()
+  }
+
+  /*
+   *
+   */
+  protected fun selectLookup_(table: Table, recno: Int) {
+    val headbuff = mutableListOf<Column<*>>()
+    val tailbuff = mutableListOf<Op<Boolean>>()
+
+    // set internal fields to null (null reference)
+    if (isNullReference_(table, recno)) {
+      for (field in fields) {
+        if (field.isInternal() && field.lookupColumn_(table) != null) {
+          field.setNull(recno)
+        }
+      }
+    } else {
+      for (field in fields) {
+        val col = field.lookupColumn_(table)
+
+        if (col != null) {
+          headbuff.add(col)
+          if (!field.isInternal() || !field.isNull(recno)) {
+            val sql = field.getSql(recno)
+
+            if (sql != "?") { // dont lookup for blobs...
+              if (field.getSql(recno).equals(Utils.NULL_LITERAL)) {
+                tailbuff.add(Op.build {col.isNull()})
+              } else {
+                tailbuff.add(Op.build {col eq field.getSql(recno)!!})
+              }
+            }
+          }
+        }
+      }
+      if (tailbuff.isEmpty()) {
+        throw InconsistencyException("no conditions for table $table")
+      }
+
+      transaction {
+        val query = table.slice(headbuff).select(tailbuff.compoundAnd())
+
+        if (!query.execute(this)!!.next()) {
+          activeRecord = recno
+          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf<Any>(table)))
+        } else {
+          var i = 0
+          var j = 0
+
+          while (i < fields.size) {
+            val field = fields[i]
+
+            if (field.lookupColumn_(table) != null) {
+              field.setQuery_(recno, query, 1 + j)
+              j += 1
+            }
+            i++
+          }
+          if (query.execute(this)!!.next()) {
+            activeRecord = recno
+            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf<Any>(table)))
+          }
+        }
+      }
+    }
   }
 
   /*
