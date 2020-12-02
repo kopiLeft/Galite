@@ -51,7 +51,7 @@ import org.kopi.galite.visual.VCommand
  * @param        border                the border of the block
  * @param        align                 the type of alignment in form
  * @param        help                  the help
- * @param        options               the options
+ * @param        blockOptions          the block options
  * @param        tables                the tables accessed on the database
  * @param        indices               the indices for database
  * @param        access                the access mode
@@ -63,7 +63,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
-  var options: Int = 0
+  var blockOptions: Int = 0
   var blockTables: MutableList<FormBlockTable> = mutableListOf()
   var indices: MutableList<FormBlockIndex> = mutableListOf()
   var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
@@ -311,6 +311,19 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   }
 
   /**
+   * Adds the block options. you can use one or more option from the options available for block.
+   *
+   * Use [BlockOption] to see the list of these block options.
+   *
+   * @param options the block options
+   */
+  fun options(vararg options: BlockOption) {
+    options.forEach { blockOption ->
+      blockOptions = blockOptions or blockOption.value
+    }
+  }
+
+  /**
    * Make a tuning pass in order to create informations about exported
    * elements such as block fields positions
    *
@@ -343,7 +356,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
     pos!!.setChartPosition(++displayedFields)
   }
 
-  fun hasOption(option: Int): Boolean = options and option == option
+  fun hasOption(option: Int): Boolean = blockOptions and option == option
 
   /**
    * Returns true if the size of the buffer == 1, false otherwise
@@ -450,6 +463,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.name = ident
+        super.options = blockOptions
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()
