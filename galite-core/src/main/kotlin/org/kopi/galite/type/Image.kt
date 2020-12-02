@@ -16,7 +16,7 @@
  */
 package org.kopi.galite.type
 
-import java.util.Locale
+import java.util.*
 
 /**
  * This class represents image types
@@ -40,6 +40,20 @@ class Image(val width: Int, val height: Int) : Type() {
 
   override fun toSql(): String {
     TODO("Not yet implemented")
+  }
+
+  /**
+   * Compares to another week.
+   *
+   * @param    other    the second operand of the comparison
+   * @return    -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  operator fun compareTo(other: Image?): Int {
+    val v1 = byteArray
+    val v2 = other!!.byteArray
+    return Arrays.compare(v1,v2)
   }
 
   override fun compareTo(other: Any?): Int = compareTo(other as? Image)
