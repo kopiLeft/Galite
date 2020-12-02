@@ -113,9 +113,9 @@ open class Time : Type {
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  operator fun compareTo(other: Time): Int {
+  operator fun compareTo(other: Time?): Int {
     val v1 = scalar
-    val v2 = other.scalar
+    val v2 = other!!.scalar
 
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }

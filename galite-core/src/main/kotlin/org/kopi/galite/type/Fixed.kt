@@ -95,7 +95,7 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   /**
    * Comparisons
    */
-  operator fun compareTo(other: Fixed): Int = value!!.compareTo(other.value)
+  operator fun compareTo(other: Fixed?): Int = value!!.compareTo(other!!.value)
 
   override operator fun compareTo(other: Any?): Int = compareTo(other as? Fixed)
 

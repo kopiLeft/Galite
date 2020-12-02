@@ -32,6 +32,7 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.type.Image
 
 class FormTests: JApplicationTestBase() {
 
@@ -118,6 +119,10 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
       index = i
       priority = 1
     }
+  }
+  val image = visit(domain = Domain<Image>(20), position = at(1, 1)) {
+    label = "image"
+    help = "The user image"
   }
 }
 
