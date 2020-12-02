@@ -18,7 +18,8 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.common.BlockTrigger
+import org.kopi.galite.common.INIT
+import org.kopi.galite.common.PREBLK
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
@@ -28,12 +29,12 @@ object FormWithBlockTrigger: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
+  val testPage = page("test page")
+
   init {
     menu("Action")
-    page("test page") {
-      insertBlock(BlockWithTrigger1)
-      insertBlock(BlockWithTrigger2)
-    }
+    insertBlock(BlockWithTrigger1, testPage)
+    insertBlock(BlockWithTrigger2, testPage)
   }
 }
 
@@ -42,7 +43,7 @@ object BlockWithTrigger1 : FormBlock(1, 1, "Test", "Test block") {
   val i = index(message = "ID should be unique")
 
   init {
-    triggers(BlockTrigger.PREBLK, BlockTrigger.INIT) {
+    trigger(PREBLK, INIT) {
       println("---------------works---------------")
     }
   }
@@ -59,7 +60,7 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
   val i = index(message = "ID should be unique")
 
   init {
-    triggers(BlockTrigger.PREBLK) {
+    trigger(PREBLK) {
       println("---------------works---------------")
     }
   }

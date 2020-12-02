@@ -53,6 +53,13 @@ abstract class Trigger(val events: Long, val action: Action<*>) {
 }
 
 /**
+ * Block Triggers
+ *
+ * @param event the event of the trigger
+ */
+sealed class BlockTrigger(val event: Int)
+
+/**
  * Block protected Triggers
  *
  * @param event the event of the trigger
@@ -88,29 +95,115 @@ open class BlockIntTrigger(event: Int) : BlockTrigger(event)
 open class BlockObjectTrigger(event: Int) : BlockTrigger(event)
 
 /**
- * Block Triggers
- *
- * @param event the event of the trigger
+ * executed before querying the database
  */
-sealed class BlockTrigger(val event: Int) {
-  object PREQRY: BlockProtectedTrigger(VConstants.TRG_PREQRY)    // protected trigger
-  object POSTQRY: BlockProtectedTrigger(VConstants.TRG_POSTQRY)  // protected trigger
-  object PREDEL: BlockProtectedTrigger(VConstants.TRG_PREDEL)    // protected trigger
-  object POSTDEL: BlockProtectedTrigger(VConstants.TRG_POSTDEL)  // protected trigger
-  object PREINS: BlockProtectedTrigger(VConstants.TRG_PREINS)    // protected trigger
-  object POSTINS: BlockProtectedTrigger(VConstants.TRG_POSTINS)  // protected trigger
-  object PREUPD: BlockProtectedTrigger(VConstants.TRG_PREUPD)    // protected trigger
-  object POSTUPD: BlockProtectedTrigger(VConstants.TRG_POSTUPD)  // protected trigger
-  object PRESAVE: BlockProtectedTrigger(VConstants.TRG_PRESAVE)  // protected trigger
-  object PREREC: BlockVoidTrigger(VConstants.TRG_PREREC)    // void trigger
-  object POSTREC: BlockVoidTrigger(VConstants.TRG_POSTREC)  // void trigger
-  object PREBLK: BlockVoidTrigger(VConstants.TRG_PREBLK)    // void trigger
-  object POSTBLK: BlockVoidTrigger(VConstants.TRG_POSTBLK)  // void trigger
-  object VALBLK: BlockVoidTrigger(VConstants.TRG_VALBLK)    // void trigger
-  object VALREC: BlockVoidTrigger(VConstants.TRG_VALREC)    // void trigger
-  object DEFAULT: BlockVoidTrigger(VConstants.TRG_DEFAULT)  // void trigger
-  object INIT: BlockVoidTrigger(VConstants.TRG_INIT)        // void trigger
-  object RESET: BlockBooleanTrigger(VConstants.TRG_RESET)      // Boolean trigger
-  object CHANGED: BlockBooleanTrigger(VConstants.TRG_CHANGED)  // Boolean trigger
-  object ACCESS: BlockVoidTrigger(VConstants.TRG_ACCESS)    // Void trigger
-}
+object PREQRY: BlockProtectedTrigger(VConstants.TRG_PREQRY)    // protected trigger
+
+/**
+ * executed after querying the database
+ */
+object POSTQRY: BlockProtectedTrigger(VConstants.TRG_POSTQRY)  // protected trigger
+
+/**
+ * executed before a row is deleted
+ */
+object PREDEL: BlockProtectedTrigger(VConstants.TRG_PREDEL)    // protected trigger
+
+/**
+ * executed after a row is deleted
+ */
+object POSTDEL: BlockProtectedTrigger(VConstants.TRG_POSTDEL)  // protected trigger
+
+/**
+ * executed before a row is inserted
+ */
+object PREINS: BlockProtectedTrigger(VConstants.TRG_PREINS)    // protected trigger
+
+/**
+ * executed after a row is inserted
+ */
+object POSTINS: BlockProtectedTrigger(VConstants.TRG_POSTINS)  // protected trigger
+
+/**
+ * executed before a row is updated
+ */
+object PREUPD: BlockProtectedTrigger(VConstants.TRG_PREUPD)    // protected trigger
+
+/**
+ * executed after a row is updated
+ */
+object POSTUPD: BlockProtectedTrigger(VConstants.TRG_POSTUPD)  // protected trigger
+
+/**
+ * executed before saving a row
+ */
+object PRESAVE: BlockProtectedTrigger(VConstants.TRG_PRESAVE)  // protected trigger
+
+/**
+ * executed upon record entry
+ */
+object PREREC: BlockVoidTrigger(VConstants.TRG_PREREC)    // void trigger
+
+/**
+ * executed upon record exit
+ */
+object POSTREC: BlockVoidTrigger(VConstants.TRG_POSTREC)  // void trigger
+
+/**
+ * executed upon block entry
+ */
+object PREBLK: BlockVoidTrigger(VConstants.TRG_PREBLK)    // void trigger
+
+/**
+ * executed upon block exit
+ */
+object POSTBLK: BlockVoidTrigger(VConstants.TRG_POSTBLK)  // void trigger
+
+/**
+ * executed upon block validation
+ */
+object VALBLK: BlockVoidTrigger(VConstants.TRG_VALBLK)    // void trigger
+
+/**
+ * executed upon record validation
+ */
+object VALREC: BlockVoidTrigger(VConstants.TRG_VALREC)    // void trigger
+
+/**
+ * is executed when the block is in the InsertMode. This trigger becomes active when
+ * the user presses the key F4. It will then enable the system to load standard values
+ * which will be proposed to the user if he wishes to enter new data.
+ */
+object DEFAULT: BlockVoidTrigger(VConstants.TRG_DEFAULT)  // void trigger
+
+/**
+ * executed upon block initialization
+ */
+object INIT: BlockVoidTrigger(VConstants.TRG_INIT)        // void trigger
+
+/**
+ * executed upon Reset command (ResetForm)
+ */
+object RESET: BlockBooleanTrigger(VConstants.TRG_RESET)      // Boolean trigger
+
+/**
+ * a special trigger that returns a boolean value of whether the block have been changed or not,
+ * you can use it to bypass the system control for changes by returning false in the trigger's method:
+ *
+ * triggers(BlockTrigger.CHANGED) {
+ *   false
+ * }
+ *
+ */
+object CHANGED: BlockBooleanTrigger(VConstants.TRG_CHANGED)  // Boolean trigger
+
+/**
+ * defines whether a block can or not be accessed, it must always return a boolean value.
+ *
+ * triggers(BlockTrigger.ACCESS) {
+ *   Block.getMode == MOD_QUERY  // Tests if the block is in query mode,
+ *                               //this block is only accessible on query mode
+ * }
+ *
+ */
+object ACCESS: BlockVoidTrigger(VConstants.TRG_ACCESS)    // Void trigger
