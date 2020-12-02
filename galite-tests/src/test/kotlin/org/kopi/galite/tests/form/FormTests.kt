@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.Border
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -92,7 +93,7 @@ object TestForm: Form() {
   }
 }
 
-class TestBlock : FormBlock(1, 1, "Test", "Test block") {
+class TestBlock : FormBlock(1, 1, "Test", "Test block", Border.BORDER_ETCHED) {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

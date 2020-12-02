@@ -58,9 +58,9 @@ import org.kopi.galite.visual.VCommand
  * @param        commands              the commands associated with this block
  * @param        triggers              the triggers executed by this form
  * @param        fields                the objects that populate the block
+ * @param        borderBlock           optional border statement that defines the Block's frame type.
  */
-open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FormElement(ident), VConstants {
-  var border: Int = 0
+open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String, var borderBlock: Border = Border.NO_BORDER) : FormElement(ident), VConstants {
   var align: FormBlockAlign? = null
   val help: String? = null
   private var options: Int = 0
@@ -450,6 +450,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.name = ident
+        super.border = borderBlock.value
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()

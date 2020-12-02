@@ -1344,7 +1344,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Sets visibility of block.
    */
   fun setAccess(value: Int) {
-    assert(this !== form.getActiveBlock() || activeField == null) { "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField }
+    assert(this !== form.getActiveBlock() || activeField == null) {
+      "current block: " + form.getActiveBlock().toString() + "; current field: " + activeField
+    }
     for (i in fields.indices) {
       fields[i].setAccess(value)
     }
