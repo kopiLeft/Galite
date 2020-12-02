@@ -36,6 +36,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
+import org.kopi.galite.visual.ApplicationContext.Companion.reportTrouble
 import org.kopi.galite.visual.VCommand
 
 /**
@@ -72,7 +73,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   private var maxRowPos = 0
   private var maxColumnPos = 0
   private var displayedFields = 0
-
+  var dropList : MutableList<String>? = null
   /** Blocks's fields. */
   val blockFields = mutableListOf<FormField<*>>()
 
@@ -211,7 +212,22 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
     field.setInfo()
-    blockFields.add(field)
+
+    if (dropList == null) {
+      blockFields.add(field)
+    } else {
+      if (domain.kClass != String::class
+              && TODO("add Image type")) {
+       error("The field is droppable but its type is not supported as a drop target.")
+      } else {
+        val flavor: String? = this.addDropList(dropList!!, field)
+        if (flavor == null) {
+          blockFields.add(field)
+        } else {
+         error("The extension is already defined as a drop target for this field. ")
+        }
+      }
+    }
     return field
   }
 

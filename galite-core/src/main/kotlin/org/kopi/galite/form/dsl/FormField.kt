@@ -122,15 +122,11 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     }
   }
 
-  fun droppable(list: Array<String>): MutableList<String>? {
-    val l = stringList(list)
-    l.forEach {
-      dropList?.add(it)
-    }
-    return dropList
+  fun droppable(vararg droppables : String) {
+    this.block.dropList?.addAll(droppables)
   }
 
-  fun stringList(list: Array<String>): Array<String>{
+  fun stringList(list: Array<out String>): Array<String>{
     val vect : ArrayList<String> = arrayListOf()
     list.forEach {
       vect.add(it)

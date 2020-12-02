@@ -67,7 +67,6 @@ object TestForm: Form() {
   val p2 = page("test page2")
 
   val tb1 = insertBlock(TestBlock(), p1) {
-    addDropList(mutableListOf("csv","pdf"),field = age)
     command(item = graph) {
       this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
@@ -101,7 +100,7 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
     label = "id"
     help = "The user id"
     columns(u.id)
-    droppable(arrayOf("csv"))
+    droppable("csv")
   }
   val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
@@ -115,7 +114,7 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
       index = i
       priority = 1
     }
-    droppable(arrayOf("csv","xls"))
+    droppable("csv","xls")
   }
 }
 

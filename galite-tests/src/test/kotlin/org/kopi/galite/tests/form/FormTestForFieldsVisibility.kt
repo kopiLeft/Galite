@@ -56,7 +56,6 @@ object FieldsVisibilityTest: Form() {
         help = "The user name"
         onQuerySkipped()
         columns(u.name)
-        droppable(arrayOf("csv"))
       }
       val age = mustFill(domain = Domain<Int>(3), position = follow(name)) {
         label = "age"
