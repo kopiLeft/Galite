@@ -18,13 +18,17 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
+import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
@@ -49,7 +53,6 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -995,6 +998,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     column          the index of the column in the tuple
    */
   abstract fun retrieveQuery(query: Query, column: Int): Any?
+
+  /**
+   * Returns the specified tuple column as object of correct type for the field.
+   * @param     result          the result row
+   * @param     column          the index of the column in the tuple
+   */
+  abstract fun retrieveQuery_(result: ResultRow, column: Column<*>): Any?
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS

@@ -23,7 +23,17 @@ import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.collections.elementAt
+import kotlin.collections.find
+import kotlin.collections.forEach
+import kotlin.collections.forEachIndexed
+import kotlin.collections.indices
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.toTypedArray
 import kotlin.math.abs
 
 import org.jetbrains.exposed.sql.Column
@@ -1575,7 +1585,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the name of the DB column of the ID field.
    */
-  val idColumn_: Column<*>
+  val idColumn_: Column<Int>
     get() {
       TODO()
     }
@@ -1863,34 +1873,30 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Warning, you should use this method under a protected statement
    */
-  /**
-   * Warning, you should use this method under a protected statement
-   */
   fun buildQueryDialog(): VListDialog? {
     val query_tab = arrayOfNulls<VField>(fields.size)
     var query_cnt = 0
 
     /* get the fields to be displayed in the dialog */
     for (field in fields) {
-      val fld = field
 
       /* skip fields not related to the database */
-      if (fld.getColumnCount() == 0) {
+      if (field.getColumnCount() == 0) {
         continue
       }
 
       /* skip fields we don't want to show */
-      if (fld.getPriority() == 0) {
+      if (field.getPriority() == 0) {
         continue
       }
 
       /* skip fields with fixed value */
-      if (!fld.isNull(activeRecord)
-              && fld.getSearchOperator() == SOP_EQ
-              && !fld.getSql(activeRecord)!!.contains("*")) {
+      if (!field.isNull(activeRecord)
+              && field.getSearchOperator() == SOP_EQ
+              && !field.getSql(activeRecord)!!.contains("*")) {
         continue
       }
-      query_tab[query_cnt++] = fld
+      query_tab[query_cnt++] = field
     }
 
     /* (bubble) sort fields wrt priorities */
@@ -1920,24 +1926,22 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     /* ... adding the name of the DB column of the ID field.*/
     columns.add(idColumn_)
 
+    /* ... and now their order */
+    val orderList = ArrayList<Pair<Column<*>, SortOrder>>(columns.size)
+
+    for (i in 0 until query_cnt) {
+      if (query_tab[i]!!.getPriority() < 0) {
+        orderList.add(columns[i] to SortOrder.DESC)
+      }
+      orderList.add(columns[i] to SortOrder.ASC)
+    }
+
     /* query from where ? */
     val tables = getSearchTables_()
     val conditions = getSearchConditions_()
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
     var rows = 0
-
-    /* ... and now their order */
-
-    val orderList = ArrayList<Pair<Column<*>, SortOrder>>(columns.size)
-
-    for (i in 0 until query_cnt) {
-      var sortType = SortOrder.ASC
-      if (query_tab[i]!!.getPriority() < 0) {
-        sortType = SortOrder.DESC
-      }
-      orderList.add(columns[i] to sortType)
-    }
 
     transaction {
       for (result in tables.slice(columns).select(conditions).orderBy(*orderList.toTypedArray())) {
@@ -1946,12 +1950,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
 
         /* don't show record with ID = 0 */
-        if (result[columns[1 + query_cnt]] == 0) {
+        if (result[idColumn_] == 0) {
             continue
           }
 
+        ids[rows] = result[idColumn_]
+
         for (i in 0 until query_cnt) {
-          values[i][rows] = result[columns[i]]
+          values[i][rows] = query_tab[i]!!.retrieveQuery_(result, columns[i])
         }
         rows += 1
       }
