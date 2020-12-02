@@ -1575,6 +1575,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the name of the DB column of the ID field.
    */
+  val idColumn_: Column<*>
+    get() {
+      TODO()
+    }
+
+  /**
+   * Returns the name of the DB column of the ID field.
+   */
   val idColumn: String
     get() {
       return idField.lookupColumn(0) ?: throw InconsistencyException()
@@ -1909,6 +1917,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       columns.add(query_tab[i]!!.getColumn(0)!!.column!!)
     }
 
+    /* ... adding the name of the DB column of the ID field.*/
+    columns.add(idColumn_)
+
     /* query from where ? */
     val tables = getSearchTables_()
     val conditions = getSearchConditions_()
@@ -1917,17 +1928,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var rows = 0
 
     /* ... and now their order */
-    var sortType = SortOrder.ASC
+
     val orderList = ArrayList<Pair<Column<*>, SortOrder>>(columns.size)
 
     for (i in 0 until query_cnt) {
+      var sortType = SortOrder.ASC
       if (query_tab[i]!!.getPriority() < 0) {
         sortType = SortOrder.DESC
       }
-    }
-
-    for( value in columns) {
-      orderList.add(Pair(value, sortType))
+      orderList.add(columns[i] to sortType)
     }
 
     transaction {
