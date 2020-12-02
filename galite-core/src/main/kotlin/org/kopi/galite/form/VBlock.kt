@@ -18,13 +18,32 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Table
-import java.sql.SQLException
 import java.util.EventListener
+import java.lang.reflect.GenericDeclaration
+import java.lang.reflect.TypeVariable
+import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
+import kotlin.collections.ArrayList
+import kotlin.collections.elementAt
+import kotlin.collections.find
+import kotlin.collections.forEach
+import kotlin.collections.forEachIndexed
+import kotlin.collections.indices
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
 import kotlin.collections.HashMap
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.lowerCase
+import org.jetbrains.exposed.sql.upperCase
 
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.l10n.LocalizationManager
@@ -54,6 +73,10 @@ import org.kopi.galite.form.VConstants.Companion.BKO_NODELETE
 import org.kopi.galite.form.VConstants.Companion.BKO_NODETAIL
 import org.kopi.galite.form.VConstants.Companion.BKO_NOINSERT
 import org.kopi.galite.form.VConstants.Companion.BKO_NOMOVE
+import org.kopi.galite.form.VConstants.Companion.FDO_SEARCH_LOWER
+import org.kopi.galite.form.VConstants.Companion.FDO_SEARCH_MASK
+import org.kopi.galite.form.VConstants.Companion.FDO_SEARCH_NONE
+import org.kopi.galite.form.VConstants.Companion.FDO_SEARCH_UPPER
 import org.kopi.galite.form.VConstants.Companion.MOD_INSERT
 import org.kopi.galite.form.VConstants.Companion.MOD_QUERY
 import org.kopi.galite.form.VConstants.Companion.MOD_UPDATE
@@ -1720,8 +1743,31 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search conditions for database query.
    */
-  fun getSearchConditions(): String? {
-    TODO()
+  fun getSearchConditions(): Op<Boolean> {
+    val conditionList : MutableList<Op<Boolean>> = mutableListOf()
+
+    fields.forEach { vField ->
+      if(vField.getColumnCount() > 0 ){
+        val cond = vField.getSearchCondition_()
+
+        cond?.let {
+          val condOperator : (ExpressionWithColumnType<String>.(Any) -> Op<Boolean>) = vField.getSearchCondition_()!!.first
+          val condOperand : TypeVariable<GenericDeclaration> = vField.getSearchCondition_()!!.second
+          val condColumn = Column<String>(tables!![vField.getColumn(0)!!.getTable()],
+                  vField.getColumn(0)!!.getQualifiedName() ,
+                  VarCharColumnType())
+          val searchColumn   = when(vField.options and FDO_SEARCH_MASK){
+
+            FDO_SEARCH_NONE -> condColumn
+            FDO_SEARCH_UPPER -> condColumn.upperCase()
+            FDO_SEARCH_LOWER ->condColumn.lowerCase()
+            else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+          }
+          conditionList.add(Op.build {  searchColumn.condOperator(condOperand) })
+        }
+      }
+    }
+    return conditionList.compoundAnd()
   }
 
   /**

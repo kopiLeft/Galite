@@ -18,9 +18,11 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
+import java.lang.reflect.GenericDeclaration
+import java.lang.reflect.TypeVariable
+import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
@@ -49,7 +51,9 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import java.sql.SQLException
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -650,6 +654,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         VConstants.STY_MANY
       }
     }
+  }
+
+  open fun getSearchCondition_() : Pair<ExpressionWithColumnType<String>.(t: Any)-> Op<Boolean> , TypeVariable<GenericDeclaration>>? {
+    TODO()
   }
 
   /**
