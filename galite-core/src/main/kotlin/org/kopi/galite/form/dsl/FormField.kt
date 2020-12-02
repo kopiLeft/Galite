@@ -126,14 +126,6 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     this.block.dropList?.addAll(droppables)
   }
 
-  fun stringList(list: Array<out String>): Array<String>{
-    val vect : ArrayList<String> = arrayListOf()
-    list.forEach {
-      vect.add(it)
-    }
-    return vect.toTypedArray()
-  }
-
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.LEFT
 
