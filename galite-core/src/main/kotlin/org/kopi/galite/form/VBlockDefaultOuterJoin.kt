@@ -18,9 +18,13 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.*
 
 class VBlockDefaultOuterJoin(block: VBlock) {
 
@@ -31,15 +35,15 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     var joinBuffer: Op<Boolean>? = null
     var field: VField
     if (table == rootTable) {
-      addToJoinedTables(rootTable)
+      addToJoinedTables(tables?.get(rootTable)!!)
     }
 
     for (i in fields.indices) {
       if (isProcessedField(i)) {
         continue
       }
-
       field = fields[i]
+
       if (field.getColumnCount() > 1) {
         val tableColumn = field.fetchColumn(table)
         val rootColumn = field.fetchColumn(rootTable)
@@ -49,20 +53,14 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   field.getColumn(rootColumn)!!.nullable) {
             for (j in 0 until field.getColumnCount()) {
               if (j != tableColumn) {
-                if (isJoinedTable(field.getColumn(j)!!.getTable())) {
+                if (isJoinedTable(field.getColumn(j)!!.column!!.table)) {
                   // the table for this column is present in the outer join tree
                   // as caster outer joins do not work, we assume that the
                   // condition will apply to the root
                   if (j == rootColumn) {
-                    val auxTable = object : Table(tables!![table].toString()) {
-
-                      val column1 = varchar(field.getColumn(tableColumn)!!.getQualifiedName(), 40)
-                      val column2 = varchar(field.getColumn(j)!!.getQualifiedName(), 30)
-                    }
-
                     transaction {
                       joinBuffer = Op.build {
-                        auxTable.column1 eq auxTable.column2
+                        field.getColumn(tableColumn)!!.column!! eq field.getColumn(j)!!.column!!
                       }
                     }
                   }
@@ -75,17 +73,15 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   }
                 } else {
                   if (rootTable == table) {
-                    val mainTable = object : Table(tables!![table].toString()) {
-                      val column = varchar(field.getColumn(tableColumn)!!.getQualifiedName(), 30)
+                    val mainTable = object : Table(tables!![table].tableName) {
                     }
                     val joinTable = object : Table(tables!![field.getColumn(j)!!.getTable()].toString()) {
-                      val column = varchar(field.getColumn(j)!!.getQualifiedName(), 40)
                     }
                     // start of an outer join
-                    addToJoinedTables(field.getColumn(j)!!.getTable())
+                    addToJoinedTables(field.getColumn(j)!!.column!!.table)
 
                     transaction {
-                      mainTable.join(joinTable, JoinType.LEFT, mainTable.column, joinTable.column)
+                      mainTable.join(joinTable, JoinType.LEFT, field.getColumn(tableColumn)!!.column!!, field.getColumn(j)!!.column!!)
                     }
                   }
                   if (j == field.getColumnCount() || field.getColumnCount() == 2) {
@@ -119,15 +115,24 @@ class VBlockDefaultOuterJoin(block: VBlock) {
   }
 
   private fun getSearchTablesCondition(): Query? {
+
     if (tables == null) {
       return null
     }
     var operation: Query? = null
+
+    // first search join condition for the block main table.
+    transaction {
+      operation = joinTables(tables!!).select {
+        getJoinCondition(0, 0)!!
+      }
+    }
+    // search join condition for other lookup tables  not joined with main table.
     for (i in 1 until tables!!.size) {
-      if (!isJoinedTable(i)) {
+      if (!isJoinedTable(tables!![i])) {
         transaction {
           operation = joinTables(tables!!).select {
-            getJoinCondition(0, 0)!!
+            // all not joined tables need to be ran through
             getJoinCondition(i, i)!!
           }
         }
@@ -140,8 +145,8 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     var op: Join? = null
     for (i in 1 until tables.size) {
       transaction {
-        op = (tables[0].join(tables[i], JoinType.LEFT, getJoinCondition(0, i)))
-                .join(tables[i], JoinType.LEFT, getJoinCondition(i, i))
+        op = (tables[0].join(tables[i], JoinType.FULL, getJoinCondition(0, i)))
+                .join(tables[i], JoinType.FULL, getJoinCondition(i, i))
       }
     }
     return op!!
@@ -152,13 +157,10 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     if (fld.hasNullableCols()) {
       for (j in 1 until fld.getColumnCount()) {
         if (!fld.getColumn(j)!!.nullable) {
-          val tab = object : Table() {
-            val col1 = varchar(fld.getColumn(j)!!.getQualifiedName(), 50)
-            val col2 = varchar(fld.getColumn(0)!!.getQualifiedName(), 50)
-          }
+
           transaction {
             operation = Op.build {
-              (tab.col1 eq tab.col2)
+              (fld.getColumn(j)!!.column!! eq fld.getColumn(0)!!.column!!)
 
             }
           }
@@ -166,13 +168,10 @@ class VBlockDefaultOuterJoin(block: VBlock) {
       }
     } else {
       for (j in 1 until fld.getColumnCount()) {
-        val tab = object : Table() {
-          val col3 = varchar(fld.getColumn(j)!!.getQualifiedName(), 50)
-          val col4 = varchar(fld.getColumn(j - 1)!!.getQualifiedName(), 50)
-        }
+
         transaction {
           operation = Op.build {
-            (tab.col3 eq tab.col4)
+            (fld.getColumn(j)!!.column!! eq fld.getColumn(j - 1)!!.column!!)
           }
         }
       }
@@ -187,31 +186,23 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
       if (fld.hasNullableCols()) {
         for (j in 1 until fld.getColumnCount()) {
-          val auxTable = object : Table() {
-
-            val column1 = varchar(fld.getColumn(j)!!.getQualifiedName(), 30, null)
-            val column2 = varchar(fld.getColumn(0)!!.getQualifiedName(), 30)
-          }
 
           if (!fld.getColumn(j)!!.nullable) {
+
             transaction {
               operation = Op.build {
-                (auxTable.column1 eq auxTable.column2)
+                (fld.getColumn(j)!!.column!! eq fld.getColumn(0)!!.column!!)
               }
             }
           }
         }
       } else {
         for (j in 1 until fld.getColumnCount()) {
-          val auxTable2 = object : Table() {
-            val column3 = varchar(fld.getColumn(j)!!.getQualifiedName(), 30)
-            val column4 = varchar(fld.getColumn(j - 1)!!.getQualifiedName(), 30)
-          }
+
           if (!fld.getColumn(j)!!.nullable) {
-            operation =
-                    Op.build {
-                      (auxTable2.column3 eq auxTable2.column4)
-                    }
+            operation = Op.build {
+                      (fld.getColumn(j)!!.column!! eq fld.getColumn(j - 1)!!.column!!)
+            }
           }
         }
       }
@@ -219,12 +210,12 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     return operation
   }
 
-  private fun addToJoinedTables(table: Int) {
-    joinedTables!!.add(table.toString())
+  private fun addToJoinedTables(table: Table) {
+    joinedTables!!.add(table)
   }
 
-  private fun isJoinedTable(table: Int): Boolean {
-    return joinedTables!!.contains(table.toString())
+  private fun isJoinedTable(table: Table): Boolean {
+    return joinedTables!!.contains(table)
   }
 
   private fun addToProcessedFields(field: Int) {
@@ -237,7 +228,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
   private var block: VBlock? = block
   private var fields: Array<VField> = block.fields
-  private var joinedTables: ArrayList<String>? = ArrayList<String>()
-  private var processedFields: ArrayList<String>? = ArrayList<String>()
+  private var joinedTables: ArrayList<Table>? = ArrayList()
+  private var processedFields: ArrayList<String>? = ArrayList()
   private var tables: Array<Table>? = block.tables
 }
