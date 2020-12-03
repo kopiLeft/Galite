@@ -18,11 +18,19 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.common.Trigger
-import org.kopi.galite.db.*
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.db.DBDeadLockException
+import org.kopi.galite.db.DBForeignKeyException
+import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.form.VConstants.Companion.ACS_HIDDEN
 import org.kopi.galite.form.VConstants.Companion.ACS_MUSTFILL
 import org.kopi.galite.form.VConstants.Companion.ACS_SKIPPED
@@ -58,13 +66,21 @@ import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
 import org.kopi.galite.form.VConstants.Companion.TRG_VOID
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.*
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VExecFailedException
 import java.sql.SQLException
-import java.util.*
+import java.util.EventListener
 import javax.swing.event.EventListenerList
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1783,11 +1799,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     try {
       transaction {
-        var condition : Op<Boolean> = conditions[0]
-        conditions.minusElement(condition).forEach {
-          condition = condition and it
-        }
-
+        val condition: Op<Boolean> = conditions.compoundAnd()
         val query = table.slice(columns).select(condition)
 
         if (query.toList().isEmpty()) {
@@ -2954,6 +2966,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   lateinit var fields: Array<VField> // fields
   protected var VKT_Triggers = mutableListOf(IntArray(TRG_TYPES.size))
   protected val triggers = mutableMapOf<Int, Trigger>()
+
   // dynamic data
   var activeRecord = 0 // current record
     get() {
