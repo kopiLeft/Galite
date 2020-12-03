@@ -49,7 +49,9 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.list.VListColumn
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
@@ -1789,8 +1791,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     try {
       while (true) {
         try {
-          callProtectedTrigger(VConstants.TRG_PREQRY)
-          dialog = buildQueryDialog()
+          dialog = transaction {
+            callProtectedTrigger(VConstants.TRG_PREQRY)
+            buildQueryDialog()
+          }
           break
         } catch (e: VException) {
           try {
@@ -1835,9 +1839,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
-   * Warning, you should use this method under a protected statement
+   * Builds the query dialog that shows the list of data rows from database.
+   *
+   * Warning, you should use this method inside a transaction
    */
-  fun buildQueryDialog(): VListDialog? {
+  fun Transaction.buildQueryDialog(): VListDialog? {
     val query_tab = arrayOfNulls<VField>(fields.size)
     var query_cnt = 0
 
@@ -1857,7 +1863,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       /* skip fields with fixed value */
       if (!field.isNull(activeRecord) &&
               field.getSearchOperator() == VConstants.SOP_EQ &&
-              field.getSql(activeRecord)!!.indexOf('*') >= 0) {
+              !field.getSql(activeRecord)!!.contains('*')) {
         continue
       }
       query_tab[query_cnt++] = field
@@ -1866,9 +1872,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     /* (bubble) sort fields wrt priorities */
     for (i in query_cnt - 1 downTo 1) {
       var swapped = false
+
       for (j in 0 until i) {
         if (abs(query_tab[j]!!.getPriority()) < abs(query_tab[j + 1]!!.getPriority())) {
           val tmp = query_tab[j]
+
           query_tab[j] = query_tab[j + 1]
           query_tab[j + 1] = tmp
           swapped = true
@@ -1890,12 +1898,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     columns.add(idColumn_)
 
     /* ... and now their order */
-    var orderbuf = ""
     var orderSize = 0
     //val maxCharacters: Int = form.getDBContext().getDefaultConnection().getMaximumCharactersCountInOrderBy() TODO
     //val maxColumns: Int = form.getDBContext().getDefaultConnection().getMaximumColumnsInOrderBy() TODO
 
-    val orderList = mutableListOf<Pair<Column<*>, SortOrder>>()
+    val orderBys = mutableListOf<Pair<Column<*>, SortOrder>>()
 
     for (i in 0 until query_cnt) {
       // control the size (nbr of columns and size of characters in an "order by" clause)
@@ -1906,9 +1913,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       orderSize += size
 
       if (query_tab[i]!!.getPriority() < 0) {
-        orderList.add(columns[i] to SortOrder.DESC)
+        orderBys.add(columns[i] to SortOrder.DESC)
       } else {
-        orderList.add(columns[i] to SortOrder.ASC)
+        orderBys.add(columns[i] to SortOrder.ASC)
       }
     }
 
@@ -1920,7 +1927,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val ids = IntArray(fetchSize)
     var rows = 0
 
-    for (result in tables.slice(columns).select(conditions).orderBy(*orderList.toTypedArray())) {
+    for (result in tables.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())) {
       if (rows == fetchSize) {
         break
       }
@@ -1941,6 +1948,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       null
     } else {
       val cols = arrayOfNulls<VListColumn>(query_cnt)
+
       for (i in cols.indices) {
         cols[i] = query_tab[i]!!.getListColumn()
       }
