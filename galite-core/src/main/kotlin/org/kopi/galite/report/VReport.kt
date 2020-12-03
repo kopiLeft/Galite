@@ -24,6 +24,7 @@ import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.util.Locale
 
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.cross.VDynamicReport
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.form.VConstants
@@ -469,7 +470,9 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
   // ----------------------------------------------------------------------
-  override fun executeVoidTrigger(VKT_Type: Int) {}
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    triggers[VKT_Type]?.action?.method?.invoke()
+  }
 
   open fun executeObjectTrigger(VKT_Type: Int): Any = throw InconsistencyException("SHOULD BE REDEFINED")
 
@@ -628,7 +631,8 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
-  protected var VKT_Triggers: Array<IntArray>? = null
+  protected var VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
+  protected val triggers = mutableMapOf<Int, Trigger>()
   var commands: Array<VCommand?>? = null
   private val activeCommands = ArrayList<VCommand>()
   var printOptions: PConfig = PConfig() // The print options

@@ -49,6 +49,8 @@ abstract class Form: Window() {
   /**
    * Adds a new actor to this form.
    *
+   * An Actor is an item to be linked to a command.
+   *
    * @param menu                 the containing menu
    * @param label                the label
    * @param help                 the help
@@ -67,18 +69,23 @@ abstract class Form: Window() {
    * @param        visible                the number of visible elements
    * @param        name                   the simple identifier of this block
    * @param        title                  the title of the block
+   * @param        formPage              the page containing the block
    */
-  fun block(buffer: Int, visible: Int, name: String, title: String, init: FormBlock.() -> Unit): FormBlock =
-          insertBlock(FormBlock(buffer, visible, name, title), init)
+  fun block(buffer: Int, visible: Int, name: String, title: String, formPage: FormPage? = null, init: FormBlock.() -> Unit): FormBlock =
+          insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
 
   /**
    * Adds a new block to this form.
    *
    * @param        block                 the block to insert
+   * @param        formPage              the page containing the block
    */
-  fun <T: FormBlock> insertBlock(block: T, init: (T.() -> Unit)? = null): T {
+  fun <T: FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
+    }
+    if(formPage != null) {
+      block.pageNumber = formPage.pageNumber
     }
     block.initialize(this)
     formBlocks.add(block)
@@ -86,21 +93,25 @@ abstract class Form: Window() {
   }
 
   /**
-   * Adds a new page to this form.
+   * Adds a new page to this form. You can use this method to create Pages in your form, this is optional
+   * and will create a Tab for each page you create under the form's toolbar.
    *
    * @param        title                the title of the page
+   * @return       the form page. You can use it as a parameter to a block it to define that the block
+   * will be inserted in this page. You can put as much blocks you want in each page
    */
-  fun page(title: String, init: FormPage.() -> Unit): FormPage {
-    val page = FormPage("Id\$${pages.size}", title)
-    page.init()
+  fun page(title: String): FormPage {
+    val page = FormPage(pages.size, "Id\$${pages.size}", title)
     pages.add(page)
     return page
   }
 
   /**
-   * Adds a new menu to this form.
+   * Adds a new menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
    *
    * @param label                the menu label in default locale
+   * @return                     the menu. It is used later to adding actors to this menu by specifying
+   * the menu name in the actor definition.
    */
   fun menu(label: String): Menu {
     val menu = Menu(label)

@@ -18,53 +18,22 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.VarCharColumnType
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.SQLException
+import java.util.EventListener
+
+import javax.swing.event.EventListenerList
+
+import kotlin.collections.HashMap
+import kotlin.math.abs
+
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBForeignKeyException
 import org.kopi.galite.db.DBInterruptionException
-import org.kopi.galite.form.VConstants.Companion.ACS_HIDDEN
-import org.kopi.galite.form.VConstants.Companion.ACS_MUSTFILL
-import org.kopi.galite.form.VConstants.Companion.ACS_SKIPPED
-import org.kopi.galite.form.VConstants.Companion.ACS_VISIT
-import org.kopi.galite.form.VConstants.Companion.BKO_ALWAYS_ACCESSIBLE
-import org.kopi.galite.form.VConstants.Companion.BKO_INDEXED
-import org.kopi.galite.form.VConstants.Companion.BKO_NOCHART
-import org.kopi.galite.form.VConstants.Companion.BKO_NODELETE
-import org.kopi.galite.form.VConstants.Companion.BKO_NODETAIL
-import org.kopi.galite.form.VConstants.Companion.BKO_NOINSERT
-import org.kopi.galite.form.VConstants.Companion.BKO_NOMOVE
-import org.kopi.galite.form.VConstants.Companion.MOD_INSERT
-import org.kopi.galite.form.VConstants.Companion.MOD_QUERY
-import org.kopi.galite.form.VConstants.Companion.MOD_UPDATE
-import org.kopi.galite.form.VConstants.Companion.SOP_EQ
-import org.kopi.galite.form.VConstants.Companion.TRG_ACCESS
-import org.kopi.galite.form.VConstants.Companion.TRG_BOOLEAN
-import org.kopi.galite.form.VConstants.Companion.TRG_CHANGED
-import org.kopi.galite.form.VConstants.Companion.TRG_CMDACCESS
-import org.kopi.galite.form.VConstants.Companion.TRG_DEFAULT
-import org.kopi.galite.form.VConstants.Companion.TRG_INIT
-import org.kopi.galite.form.VConstants.Companion.TRG_INT
-import org.kopi.galite.form.VConstants.Companion.TRG_OBJECT
-import org.kopi.galite.form.VConstants.Companion.TRG_POSTBLK
-import org.kopi.galite.form.VConstants.Companion.TRG_POSTDEL
-import org.kopi.galite.form.VConstants.Companion.TRG_POSTREC
-import org.kopi.galite.form.VConstants.Companion.TRG_PREBLK
-import org.kopi.galite.form.VConstants.Companion.TRG_PREQRY
-import org.kopi.galite.form.VConstants.Companion.TRG_PREREC
-import org.kopi.galite.form.VConstants.Companion.TRG_TYPES
-import org.kopi.galite.form.VConstants.Companion.TRG_VALBLK
-import org.kopi.galite.form.VConstants.Companion.TRG_VALREC
-import org.kopi.galite.form.VConstants.Companion.TRG_VOID
 import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
@@ -76,11 +45,16 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-import java.sql.SQLException
-import java.util.EventListener
-import javax.swing.event.EventListenerList
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -94,7 +68,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     } else {
       fetchSize = bufferSize
     }
-    mode = MOD_QUERY
+    mode = VConstants.MOD_QUERY
     recordInfo = IntArray(2 * bufferSize)
     fetchBuffer = IntArray(fetchSize)
     fetchCount = 0
@@ -263,9 +237,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   val isAccessible: Boolean
     get() {
-      if (hasTrigger(TRG_ACCESS)) {
+      if (hasTrigger(VConstants.TRG_ACCESS)) {
         val res = try {
-          callTrigger(TRG_ACCESS)
+          callTrigger(VConstants.TRG_ACCESS)
         } catch (e: VException) {
           throw InconsistencyException(e)
         }
@@ -275,7 +249,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
       }
 
-      val newAccess = getAccess() >= ACS_VISIT || isAlwaysAccessible()
+      val newAccess = getAccess() >= VConstants.ACS_VISIT || isAlwaysAccessible()
       setAccess(newAccess)
       return newAccess
     }
@@ -498,7 +472,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     fireBlockChanged() // cause a refresh of display
     try {
-      callTrigger(TRG_PREREC)
+      callTrigger(VConstants.TRG_PREREC)
     } catch (e: VException) {
       throw InconsistencyException(e)
     }
@@ -515,7 +489,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     activeField?.leave(check)
     if (check) {
-      callTrigger(TRG_POSTREC)
+      callTrigger(VConstants.TRG_POSTREC)
     }
     activeRecord = -1
   }
@@ -556,7 +530,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         activeField!!.leave(false)
       }
       act!!.enter()
-      if (activeField!!.hasAction() || activeField!!.getAccess(activeRecord) < ACS_VISIT) {
+      if (activeField!!.hasAction() || activeField!!.getAccess(activeRecord) < VConstants.ACS_VISIT) {
         gotoNextField()
       }
     }
@@ -599,7 +573,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         activeField!!.leave(false)
       }
       act!!.enter()
-      if (activeField!!.hasAction() || activeField!!.getAccess(activeRecord) < ACS_VISIT) {
+      if (activeField!!.hasAction() || activeField!!.getAccess(activeRecord) < VConstants.ACS_VISIT) {
         gotoNextField()
       }
     }
@@ -620,7 +594,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     if (!isMulti()) {
       var act: VField? = activeField
 
-      if (mode != MOD_UPDATE) {
+      if (mode != VConstants.MOD_UPDATE) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00025"))
       }
       if (isChanged && !form.ask(Message.getMessage("confirm_discard_changes"))) {
@@ -637,7 +611,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           act = activeField
           activeField!!.leave(false)
         }
-        if (act == null || act.hasAction() || act.getAccess(activeRecord) < ACS_VISIT) {
+        if (act == null || act.hasAction() || act.getAccess(activeRecord) < VConstants.ACS_VISIT) {
           gotoNextField()
         } else {
           act.enter()
@@ -660,7 +634,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           act = activeField
           activeField!!.leave(false)
         }
-        if (act == null || act.hasAction() || act.getAccess(activeRecord) < ACS_VISIT) {
+        if (act == null || act.hasAction() || act.getAccess(activeRecord) < VConstants.ACS_VISIT) {
           gotoNextField()
         } else {
           act.enter()
@@ -778,7 +752,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 //      + " access= " + fld!!.getAccess(activeRecord)
 //      + " field=" + fld!!.name
 //      + " activeREcord=" + activeRecord;
-    if (fld.hasAction() || fld.getAccess(activeRecord) < ACS_VISIT) {
+    if (fld.hasAction() || fld.getAccess(activeRecord) < VConstants.ACS_VISIT) {
       return
     }
     activeField?.leave(true)
@@ -806,8 +780,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       if (index == fields.size) {
         index = 0
       }
-      if (!fields[index].hasAction() && fields[index].getAccess(activeRecord) >= ACS_VISIT && (detailMode && !fields[index].noDetail()
-                      || !detailMode && !fields[index].noChart())) {
+      if (!fields[index].hasAction() &&
+              fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
+              (detailMode && !fields[index].noDetail() || !detailMode && !fields[index].noChart())) {
         target = fields[index]
       }
       i += 1
@@ -838,8 +813,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         index = fields.size
       }
       index -= 1
-      if (!fields[index].hasAction() && fields[index].getAccess(activeRecord) >= ACS_VISIT && (detailMode && !fields[index].noDetail()
-                      || !detailMode && !fields[index].noChart())) {
+      if (!fields[index].hasAction() &&
+              fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
+              (detailMode && !fields[index].noDetail() || !detailMode && !fields[index].noChart())) {
         target = fields[index]
       }
       i += 1
@@ -866,7 +842,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var i = 0
 
     while (target == null && i < fields.size) {
-      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= ACS_VISIT) {
+      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
         target = fields[i]
       }
       i += 1
@@ -891,7 +867,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     while (target == null && i < fields.size) {
       if (!fields[i].hasAction()
-              && fields[i].getAccess(activeRecord) >= ACS_VISIT
+              && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT
               && fields[i].isNull(activeRecord)) {
         target = fields[i]
       }
@@ -930,7 +906,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // walk next to next
     while (target == null && i < fields.size) {
-      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) == ACS_MUSTFILL && fields[i].isNull(activeRecord)) {
+      if (!fields[i].hasAction() &&
+              fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL &&
+              fields[i].isNull(activeRecord)) {
         target = fields[i]
       }
       i += 1
@@ -939,7 +917,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // redo from start
     i = 0
     while (target == null && i < fields.size) {
-      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) == ACS_MUSTFILL && fields[i].isNull(activeRecord)) {
+      if (!fields[i].hasAction() &&
+              fields[i].getAccess(activeRecord) == VConstants.ACS_MUSTFILL &&
+              fields[i].isNull(activeRecord)) {
         target = fields[i]
       }
       i += 1
@@ -962,7 +942,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var i = fields.size - 1
 
     while (i >= 0) {
-      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= ACS_VISIT) {
+      if (!fields[i].hasAction() && fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
         target = fields[i]
       }
       i -= 1
@@ -975,10 +955,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   val isChanged: Boolean
     get() {
-      if (hasTrigger(TRG_CHANGED)) {
+      if (hasTrigger(VConstants.TRG_CHANGED)) {
         val res: Any?
         try {
-          res = callTrigger(TRG_CHANGED)
+          res = callTrigger(VConstants.TRG_CHANGED)
         } catch (e: VException) {
           throw InconsistencyException(e)
         }
@@ -1005,7 +985,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     //    needResetCommands = true;
     form.setActiveBlock(this)
     try {
-      callTrigger(TRG_PREBLK)
+      callTrigger(VConstants.TRG_PREBLK)
     } catch (e: VException) {
       // a pre block trigger must not fail => chg compiler
       throw InconsistencyException(e)
@@ -1065,7 +1045,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     //    needResetCommands = true;
     if (check) {
-      callTrigger(TRG_POSTBLK)
+      callTrigger(VConstants.TRG_POSTBLK)
     }
     form.setActiveBlock(null)
 
@@ -1110,7 +1090,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             j = 0
             while (j < fields.size) {
               val fld: VField? = fields[j]
-              if (fld!!.getAccess(activeRecord) >= ACS_VISIT && !fld.isNull(i)) {
+              if (fld!!.getAccess(activeRecord) >= VConstants.ACS_VISIT && !fld.isNull(i)) {
                 break
               }
               j++
@@ -1125,13 +1105,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           }
           if (isRecordFilled(i)) {
             checkMustfillFields()
-            callTrigger(TRG_VALREC)
+            callTrigger(VConstants.TRG_VALREC)
           }
           activeRecord = -1
           lastRecord = -1
         }
       }
-      callTrigger(TRG_VALBLK)
+      callTrigger(VConstants.TRG_VALBLK)
     } catch (exc: VFieldException) {
       throw exc
     } catch (exc: VException) {
@@ -1269,7 +1249,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected fun checkMustfillFields() {
     for (i in fields.indices) {
       val fld: VField? = fields[i]
-      if (fld!!.getAccess(activeRecord) == ACS_MUSTFILL && fld.isNull(activeRecord)) {
+      if (fld!!.getAccess(activeRecord) == VConstants.ACS_MUSTFILL && fld.isNull(activeRecord)) {
         // !!! lackner 04.10.2003 I don't know if it is really necessary here
         fireBlockChanged()
         throw VFieldException(fld, MessageCode.getMessage("VIS-00023"))
@@ -1302,12 +1282,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
     }
     for (i in fields.indices) {
-      fields[i].setSearchOperator(SOP_EQ)
+      fields[i].setSearchOperator(VConstants.SOP_EQ)
     }
     if (!noChart() && detailMode) {
       detailMode = false
     }
-    setAccess(ACS_MUSTFILL)
+    setAccess(VConstants.ACS_MUSTFILL)
     for (i in 0 until bufferSize) {
       clearRecordImpl(i)
     }
@@ -1325,7 +1305,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun setDefault() {
     try {
-      callTrigger(TRG_DEFAULT)
+      callTrigger(VConstants.TRG_DEFAULT)
     } catch (e: VException) {
       if (e.message != null) {
         form.notice(e.message!!)
@@ -1358,9 +1338,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Returns true if field is never displayed.
    */
   val isInternal: Boolean
-    get() = (access[MOD_QUERY] == ACS_HIDDEN) &&
-            (access[MOD_INSERT] == ACS_HIDDEN) &&
-            (access[MOD_UPDATE] == ACS_HIDDEN)
+    get() = (access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN) &&
+            (access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN) &&
+            (access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN)
 
   /**
    * Clears given record.
@@ -1557,7 +1537,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
       }
     }
-    callProtectedTrigger(TRG_POSTDEL)
+    callProtectedTrigger(VConstants.TRG_POSTDEL)
   }
 
   /**
@@ -1576,6 +1556,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() {
       return idField.lookupColumn(0) ?: throw InconsistencyException()
     }
+
+  /**
+   * Returns the name of the DB column of the ID field.
+   */
+  val idColumn_: Column<Int>
+    get() {
+      TODO()
+    }
+
   // laurent : return f even if it's null until we add this field in
   // all the forms. After we can throw an Exception if the field UC
   // of the block base table is not present.
@@ -1722,9 +1711,23 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
+   * Returns the tables for database query, with outer joins conditions.
+   */
+  fun getSearchTables_(): Table {
+    TODO()
+  }
+
+  /**
    * Returns the search conditions for database query.
    */
   fun getSearchConditions(): String? {
+    TODO()
+  }
+
+  /**
+   * Returns the search conditions for database query.
+   */
+  fun getSearchConditions_(): Op<Boolean> {
     TODO()
   }
 
@@ -1847,8 +1850,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     try {
       while (true) {
         try {
-          callProtectedTrigger(TRG_PREQRY)
-          dialog = buildQueryDialog()
+          dialog = transaction {
+            callProtectedTrigger(VConstants.TRG_PREQRY)
+            buildQueryDialog()
+          }
           break
         } catch (e: VException) {
           try {
@@ -1893,10 +1898,125 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
-   * Warning, you should use this method under a protected statement
+   * Builds the query dialog that shows the list of data rows from database.
+   *
+   * Warning, you should use this method inside a transaction
    */
-  fun buildQueryDialog(): VListDialog {
-    TODO()
+  fun Transaction.buildQueryDialog(): VListDialog? {
+    val query_tab = arrayOfNulls<VField>(fields.size)
+    var query_cnt = 0
+
+    /* get the fields to be displayed in the dialog */
+    for (field in fields) {
+
+      /* skip fields not related to the database */
+      if (field.getColumnCount() == 0) {
+        continue
+      }
+
+      /* skip fields we don't want to show */
+      if (field.getPriority() == 0) {
+        continue
+      }
+
+      /* skip fields with fixed value */
+      if (!field.isNull(activeRecord) &&
+              field.getSearchOperator() == VConstants.SOP_EQ &&
+              !field.getSql(activeRecord)!!.contains('*')) {
+        continue
+      }
+      query_tab[query_cnt++] = field
+    }
+
+    /* (bubble) sort fields wrt priorities */
+    for (i in query_cnt - 1 downTo 1) {
+      var swapped = false
+
+      for (j in 0 until i) {
+        if (abs(query_tab[j]!!.getPriority()) < abs(query_tab[j + 1]!!.getPriority())) {
+          val tmp = query_tab[j]
+
+          query_tab[j] = query_tab[j + 1]
+          query_tab[j + 1] = tmp
+          swapped = true
+        }
+      }
+      if (!swapped) {
+        break
+      }
+    }
+
+    /* build query: first rows to select ... */
+    val columns = mutableListOf<Column<*>>()
+
+    for (i in 0 until query_cnt) {
+      columns.add(query_tab[i]!!.getColumn(0)!!.column!!)
+    }
+
+    /* add the DB column of the ID field. */
+    columns.add(idColumn_)
+
+    /* ... and now their order */
+    var orderSize = 0
+    //val maxCharacters: Int = form.getDBContext().getDefaultConnection().getMaximumCharactersCountInOrderBy() TODO
+    //val maxColumns: Int = form.getDBContext().getDefaultConnection().getMaximumColumnsInOrderBy() TODO
+
+    val orderBys = mutableListOf<Pair<Column<*>, SortOrder>>()
+
+    for (i in 0 until query_cnt) {
+      // control the size (nbr of columns and size of characters in an "order by" clause)
+      val size = query_tab[i]!!.width * query_tab[i]!!.height
+      /*if (orderSize + size > maxCharacters || i > maxColumns) {
+        break  // TODO
+      }*/
+      orderSize += size
+
+      if (query_tab[i]!!.getPriority() < 0) {
+        orderBys.add(columns[i] to SortOrder.DESC)
+      } else {
+        orderBys.add(columns[i] to SortOrder.ASC)
+      }
+    }
+
+    /* query from where ? */
+    val tables = getSearchTables_()
+    val conditions = getSearchConditions_()
+
+    val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
+    val ids = IntArray(fetchSize)
+    var rows = 0
+
+    for (result in tables.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())) {
+      if (rows == fetchSize) {
+        break
+      }
+
+      /* don't show record with ID = 0 */
+      if (result[idColumn_] == 0) {
+        continue
+      }
+
+      ids[rows] = result[idColumn_]
+      for (i in 0 until query_cnt) {
+        values[i][rows] = query_tab[i]!!.retrieveQuery_(result, columns[i])
+      }
+      rows += 1
+    }
+
+    return if (rows == 0) {
+      null
+    } else {
+      val cols = arrayOfNulls<VListColumn>(query_cnt)
+
+      for (i in cols.indices) {
+        cols[i] = query_tab[i]!!.getListColumn()
+      }
+      val dialog = VListDialog(cols, values, ids, rows)
+      if (rows == fetchSize) {
+        dialog.setTooManyRows()
+      }
+      dialog
+    }
   }
   // ----------------------------------------------------------------------
   // SETS/GETS INFORMATION ABOUT THE BLOCK
@@ -1988,11 +2108,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun getAccess(): Int {
     for (i in fields.indices) {
-      if (fields[i].getAccess(activeRecord) >= ACS_VISIT) {
-        return ACS_VISIT
+      if (fields[i].getAccess(activeRecord) >= VConstants.ACS_VISIT) {
+        return VConstants.ACS_VISIT
       }
     }
-    return ACS_SKIPPED
+    return VConstants.ACS_SKIPPED
   }
   /**
    * Updates current access of fields in the defined record.
@@ -2166,7 +2286,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @exception VException      an exception may be raised by triggers
    */
   fun initialise() {
-    callTrigger(TRG_INIT)
+    callTrigger(VConstants.TRG_INIT)
   }
 
   fun initIntern() {
@@ -2232,45 +2352,45 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /*
    * Will empty records not be deleted automatically ?
    */
-  protected fun noDelete(): Boolean = options and BKO_NODELETE != 0
+  protected fun noDelete(): Boolean = options and VConstants.BKO_NODELETE != 0
 
   /*
    * Are empty records inaccessible ?
    */
-  protected fun noInsert(): Boolean = options and BKO_NOINSERT != 0
+  protected fun noInsert(): Boolean = options and VConstants.BKO_NOINSERT != 0
 
   /*
    * Is navigation between records disabled ?
    */
-  fun noMove(): Boolean = options and BKO_NOMOVE != 0
+  fun noMove(): Boolean = options and VConstants.BKO_NOMOVE != 0
 
   /*
    * Should saving delete and reinsert modified records ?
    */
-  protected fun isIndexed(): Boolean = options and BKO_INDEXED != 0
+  protected fun isIndexed(): Boolean = options and VConstants.BKO_INDEXED != 0
 
   /*
    * Are empty records inaccessible ?
    */
-  fun noDetail(): Boolean = options and BKO_NODETAIL != 0
+  fun noDetail(): Boolean = options and VConstants.BKO_NODETAIL != 0
 
   /*
    * Are empty records inaccessible ?
    */
-  fun noChart(): Boolean = options and BKO_NOCHART != 0
+  fun noChart(): Boolean = options and VConstants.BKO_NOCHART != 0
 
   /*
    * Is this block accessible even when no fields are accessible ?
    */
-  protected fun isAlwaysAccessible(): Boolean = options and BKO_ALWAYS_ACCESSIBLE != 0
+  protected fun isAlwaysAccessible(): Boolean = options and VConstants.BKO_ALWAYS_ACCESSIBLE != 0
 
   /*
    * Is this block accessible even when no fields are accessible ?
    */
   protected fun isAlwaysSkipped(): Boolean {
-    return access[MOD_QUERY] <= ACS_SKIPPED &&
-            access[MOD_UPDATE] <= ACS_SKIPPED &&
-            access[MOD_INSERT] <= ACS_SKIPPED
+    return access[VConstants.MOD_QUERY] <= VConstants.ACS_SKIPPED &&
+            access[VConstants.MOD_UPDATE] <= VConstants.ACS_SKIPPED &&
+            access[VConstants.MOD_INSERT] <= VConstants.ACS_SKIPPED
   }
 
   // ----------------------------------------------------------------------
@@ -2349,9 +2469,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // look command access only when the command
           // is active for the block mode.
           if (commands!![i].isActive(mode)) {
-            val active: Boolean = if (hasTrigger(TRG_CMDACCESS, fields.size + i + 1)) {
+            val active: Boolean = if (hasTrigger(VConstants.TRG_CMDACCESS, fields.size + i + 1)) {
               try {
-                (callTrigger(TRG_CMDACCESS, fields.size + i + 1) as Boolean)
+                (callTrigger(VConstants.TRG_CMDACCESS, fields.size + i + 1) as Boolean)
               } catch (e: VException) {
                 // consider that the command is active of any error occurs
                 true
@@ -2439,15 +2559,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val oldCurrentRecord: Int = currentRecord
     returnValue = try {
       currentRecord = activeRecord
-      when (TRG_TYPES[event]) {
-        TRG_VOID -> {
+      when (VConstants.TRG_TYPES[event]) {
+        VConstants.TRG_VOID -> {
           executeVoidTrigger(VKT_Triggers[index][event])
           null
         }
-        TRG_BOOLEAN -> executeBooleanTrigger(VKT_Triggers[index][event])
-        TRG_INT -> executeIntegerTrigger(VKT_Triggers[index][event])
-        TRG_OBJECT -> executeObjectTrigger(VKT_Triggers[index][event])
-        else -> throw InconsistencyException("BAD TYPE" + TRG_TYPES.get(event))
+        VConstants.TRG_BOOLEAN -> executeBooleanTrigger(VKT_Triggers[index][event])
+        VConstants.TRG_INT -> executeIntegerTrigger(VKT_Triggers[index][event])
+        VConstants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers[index][event])
+        else -> throw InconsistencyException("BAD TYPE" + VConstants.TRG_TYPES.get(event))
       }
     } finally {
       // Triggers like ACCESS or VALUE trigger can be called anywhere
@@ -2622,7 +2742,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() = form.dBContext
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
-  override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
+  override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
 
@@ -2826,7 +2946,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       if (field == fields[i]) {
         return count
       }
-      if (fields[i].getDefaultAccess() != ACS_HIDDEN) {
+      if (fields[i].getDefaultAccess() != VConstants.ACS_HIDDEN) {
         count++
       }
     }
@@ -2849,7 +2969,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var count = 1
 
     for (i in fields.indices) {
-      if (fields[i].getDefaultAccess() != ACS_HIDDEN) {
+      if (fields[i].getDefaultAccess() != VConstants.ACS_HIDDEN) {
         fields[i].prepareSnapshot(count++, active)
       }
     }
@@ -2951,7 +3071,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
-  var tables: Array<Table>? = null // names of database tables
+  internal var tables: Array<Table>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
@@ -2964,9 +3084,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   lateinit var fields: Array<VField> // fields
-  protected var VKT_Triggers = mutableListOf(IntArray(TRG_TYPES.size))
+  protected var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
   protected val triggers = mutableMapOf<Int, Trigger>()
-
   // dynamic data
   var activeRecord = 0 // current record
     get() {
@@ -3042,7 +3161,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       for (i in fields.indices) {
         fields[i].updateModeAccess()
       }
-      if (act != null && !act.hasAction() && act.getAccess(activeRecord) >= ACS_VISIT) {
+      if (act != null && !act.hasAction() && act.getAccess(activeRecord) >= VConstants.ACS_VISIT) {
         act.enter()
       }
     }

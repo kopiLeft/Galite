@@ -18,15 +18,17 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.Op
 import java.awt.Color
 import java.io.InputStream
 
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
@@ -411,7 +413,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * @return a list column for list
    */
-  protected abstract fun getListColumn(): VListColumn?
+  internal abstract fun getListColumn(): VListColumn?
 
   // ----------------------------------------------------------------------
   // NAVIGATING
@@ -546,7 +548,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       } else if (hasTrigger(VConstants.TRG_FLDACCESS)) {
         // evaluate ACCESS-Trigger
         val oldRow = block!!.activeRecord
-        val old = block!!.activeField!!
+        val old = block!!.activeField
 
         // used by callTrigger
         block!!.activeRecord = current
@@ -965,6 +967,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   abstract fun retrieveQuery(query: Query, column: Int): Any?
 
+
+  /**
+   * TODO document! and add needed implementations
+   */
+  open fun <T> retrieveQuery_(result: ResultRow, column: Column<T>): Any? = result[column]
+
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
   // ----------------------------------------------------------------------
@@ -1298,12 +1306,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     fireColorChanged = false
     if (this.foreground[r] == null && foreground != null
-        || this.foreground[r] != null && this.foreground[r]!! != foreground) {
+            || this.foreground[r] != null && this.foreground[r]!! != foreground) {
       this.foreground[r] = foreground
       fireColorChanged = true
     }
     if (this.background[r] == null && background != null
-        || this.background[r] != null && this.background[r]!! != foreground) {
+            || this.background[r] != null && this.background[r]!! != foreground) {
       this.background[r] = background
       fireColorChanged = true
     }
@@ -1374,8 +1382,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun isInternal(): Boolean {
     return access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
   }
 
   // ----------------------------------------------------------------------
@@ -1974,10 +1982,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-                       block!!.getFieldPos(this),
-                       label,
-                       lab ?: name,
-                       toolTip)
+                      block!!.getFieldPos(this),
+                      label,
+                      lab ?: name,
+                      toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -1986,6 +1994,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }
   }
+
 
   /**
    * return the name of this field

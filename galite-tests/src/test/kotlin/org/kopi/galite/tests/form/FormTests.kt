@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -59,29 +60,44 @@ object TestForm: Form() {
           label =  "Graph for test",
           help =   "show graph values" ,
   ) {
-    key  =  Key.F9
+    key  =  Key.F9          // key is optional here
     icon =  "column_chart"  // icon is optional here
   }
 
-  init {
-    page("test page") {
-      insertBlock(TestBlock) {
-        command(item = graph) {
-          this.name = "graphe"
-          mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
-          action = {
-            println("---------------------------------- IN TEST COMMAND ----------------------------------")
-          }
-        }
+  val p1 = page("test page")
+  val p2 = page("test page2")
+
+  val tb1 = insertBlock(TestBlock(), p1) {
+    command(item = graph) {
+      this.name = "graphe"
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
       }
     }
+  }
 
-    TestBlock.age[0] = 5
-    TestBlock.age.value = 6
+  val tb2 = insertBlock(TestBlock(), p2) {
+    command(item = graph) {
+      this.name = "graphe"
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        println("---------------------------------- IN TEST COMMAND ----------------------------------")
+      }
+    }
+  }
+
+  val tb3_to_test_block_options = insertBlock(TestBlock(), p1) {
+    options(BlockOption.NOINSERT)
+  }
+
+  init {
+    tb1.age[0] = 5
+    tb1.age.value = 6
   }
 }
 
-object TestBlock : FormBlock(1, 1, "Test", "Test block") {
+class TestBlock : FormBlock(1, 1, "Test", "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
