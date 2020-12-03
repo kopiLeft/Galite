@@ -92,15 +92,13 @@ object TestForm: Form() {
         }
       }
       val testBlock2 = block(1, 1, "Test2", "Test block2") {
-        val position = HashMap<Int, Int>()
 
         val totalAge = visit(Domain<Int>(3), position = at(1, 1)) {
           label = "Total"
           help = "total user age"
         }
 
-        position.put(1, 3)
-        align(testBlock, position)
+        align(testBlock, 1 to 3)
       }
     }
   }

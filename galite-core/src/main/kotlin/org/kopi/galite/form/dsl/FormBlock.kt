@@ -230,8 +230,8 @@ class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: Str
     return command
   }
 
-  fun align(targetBlock: FormBlock, positions: HashMap<Int, Int>) {
-    align = FormBlockAlign(this, targetBlock, ArrayList(positions.keys) , ArrayList(positions.values))
+  fun align(targetBlock: FormBlock, vararg positions: Pair<Int, Int>) {
+    align = FormBlockAlign(this, targetBlock, ArrayList(positions.toMap().keys) , ArrayList(positions.toMap().values))
   }
 
   lateinit var vBlock: VBlock

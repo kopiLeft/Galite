@@ -24,27 +24,28 @@ import org.kopi.galite.form.BlockAlignment
 /**
  * This class describe the alignment of multi blocks
  *
- * This class describe the alignment of multi blocks
- *
  * @param block                 block alignment
  * @param target                the target column vector
  * @param source                the source column vector
  */
 class FormBlockAlign(private val sourceBlock: FormBlock,
                      private val targetBlock: FormBlock,
-                     private val source: ArrayList<Int>,
-                     private val target: ArrayList<Int>) {
+                     private val sources: ArrayList<Int>,
+                     private val targets: ArrayList<Int>) {
 
+  /**
+   * @return an IntArray contains the position of source fields in the target block
+   */
   fun genTargetPositions() : IntArray {
     val columnCount: Int = sourceBlock.blockFields.size
     val targetResult = arrayListOf<Int>()
     var pos = 0
 
     for (i in 0 until columnCount) {
-      if (source[pos] != i + 1) {
+      if (sources[pos] != i + 1) {
         targetResult.add(-1)
       } else {
-        targetResult.add(target[pos] - 1)
+        targetResult.add(targets[pos] - 1)
         pos += 1
       }
     }
