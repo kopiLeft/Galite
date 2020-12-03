@@ -27,7 +27,14 @@ import kotlin.collections.HashMap
 import kotlin.math.abs
 
 import org.kopi.galite.common.Trigger
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
+import org.kopi.galite.db.DBDeadLockException
+import org.kopi.galite.db.DBForeignKeyException
+import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.l10n.LocalizationManager
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Action
@@ -38,12 +45,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBContextHandler
-import org.kopi.galite.db.DBDeadLockException
-import org.kopi.galite.db.DBForeignKeyException
-import org.kopi.galite.db.DBInterruptionException
-import org.kopi.galite.util.base.InconsistencyException
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
@@ -52,7 +53,6 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.list.VListColumn
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
