@@ -18,6 +18,6 @@
 package org.kopi.galite.common
 
 /**
- * This class represents an action, ie a list of instructions
+ * This class represents an action, ie a method to execute
  */
-abstract class Action
+class Action<T>(var name: String?, val method: () -> T)

@@ -14,29 +14,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.report
+package org.kopi.galite.common
 
-import org.junit.Test
-import org.kopi.galite.report.VBaseRow
-import org.kopi.galite.tests.TestBase
-import kotlin.test.assertEquals
+/**
+ * A menu represents an entry to the menu bar in the top of the form,
+ * you can add actors to this menu later by specifying the menu name in the actor definition.
+ *
+ * @param label                the menu label in default locale
+ */
+class Menu(val label: String) {
 
-class VBaseRowTests : TestBase() {
-
-  val intData: Array<Any?> = arrayOf(1, 2, 3, 4)
-
-  @Test
-  fun vBaseRowIntTest() {
-    /**Base row containing integer data*/
-    val vBaseRowIntTest: VBaseRow = VBaseRow(intData)
-
-    assertEquals(0, vBaseRowIntTest.getLevel())
-    assertEquals(1, vBaseRowIntTest.getValueAt(0))
-
-    vBaseRowIntTest.setValueAt(0, 5)
-    assertEquals(5, vBaseRowIntTest.getValueAt(0))
-
-    val cloneData = vBaseRowIntTest.cloneArray()
-    assertArraysEquals(vBaseRowIntTest.data, cloneData)
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!!FIX:taoufik
+   */
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genMenuDefinition(label, label)
   }
 }

@@ -16,24 +16,38 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.kopi.galite.form.VConstants
+import org.kopi.galite.cross.VReportSelectionForm
+import org.kopi.galite.report.Report
+import org.kopi.galite.report.VReport
 
 /**
- * The field alignment is used to define the localization of the field's content inside the field.
+ * Represents a report selection form.
  */
-enum class FieldAlignment(val value: Int){
-  /**
-   * The value is centered in the field
-   */
-  CENTER(VConstants.ALG_CENTER),
+abstract class ReportSelectionForm: DictionaryForm() {
 
   /**
-   * The value is displayed at the left inside the field
+   * create a report for this form
    */
-  LEFT(VConstants.ALG_LEFT),
+  protected abstract fun createReport(): Report
 
   /**
-   * The value is displayed at the right inside the field
+   * create a report for this form
    */
-  RIGHT(VConstants.ALG_RIGHT),
+  protected fun createReport(formBlock: FormBlock) {
+    model.createReport(formBlock.vBlock)
+  }
+
+  /** Form model */
+  override val model: VReportSelectionForm by lazy {
+    genLocalization()
+    object : VReportSelectionForm() {
+      override fun init() {
+        initialize()
+      }
+
+      override fun createReport(): VReport {
+        return this@ReportSelectionForm.createReport().model
+      }
+    }
+  }
 }

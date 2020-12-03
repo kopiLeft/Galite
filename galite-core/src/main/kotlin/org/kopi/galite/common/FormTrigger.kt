@@ -15,28 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.common
 
-package org.kopi.galite.form
+import org.kopi.galite.form.VConstants
 
-import org.kopi.galite.list.VListColumn
-
-abstract class AbstractPredefinedValueHandler(private val model: VFieldUI,
-                                              protected val form: VForm,
-                                              protected val field: VField)
-  : PredefinedValueHandler {
-
-  override fun selectDefaultValue(): Boolean = model.fillField()
-
-  override fun selectFromList(list: Array<VListColumn?>,
-                              values: Array<Array<Any?>>,
-                              predefinedValues: Array<String>): String? {
-    val listDialog = VListDialog(list, values)
-    val selected = listDialog.selectFromDialog(form, field)
-
-    return if (selected != -1) {
-      predefinedValues[selected]
-    } else {
-      null
-    }
-  }
+/**
+ * This class represents a trigger, ie an action to be executed on events
+ */
+class FormTrigger(events: Long, action: Action<*>): Trigger(events, action) {
+  override fun getTriggers(): IntArray = VConstants.TRG_TYPES
 }

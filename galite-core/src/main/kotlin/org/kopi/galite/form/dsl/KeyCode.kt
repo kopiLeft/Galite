@@ -14,29 +14,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.report
+package org.kopi.galite.form.dsl
 
-import org.junit.Test
-import org.kopi.galite.report.VBaseRow
-import org.kopi.galite.tests.TestBase
-import kotlin.test.assertEquals
+import java.awt.event.KeyEvent
 
-class VBaseRowTests : TestBase() {
-
-  val intData: Array<Any?> = arrayOf(1, 2, 3, 4)
-
-  @Test
-  fun vBaseRowIntTest() {
-    /**Base row containing integer data*/
-    val vBaseRowIntTest: VBaseRow = VBaseRow(intData)
-
-    assertEquals(0, vBaseRowIntTest.getLevel())
-    assertEquals(1, vBaseRowIntTest.getValueAt(0))
-
-    vBaseRowIntTest.setValueAt(0, 5)
-    assertEquals(5, vBaseRowIntTest.getValueAt(0))
-
-    val cloneData = vBaseRowIntTest.cloneArray()
-    assertArraysEquals(vBaseRowIntTest.data, cloneData)
-  }
+enum class Key(val value : Int) {
+  F1(KeyEvent.VK_F1),
+  F2(KeyEvent.VK_F2),
+  F3(KeyEvent.VK_F3),
+  F4(KeyEvent.VK_F4),
+  F5(KeyEvent.VK_F5),
+  F6(KeyEvent.VK_F6),
+  F7(KeyEvent.VK_F7),
+  F8(KeyEvent.VK_F8),
+  F9(KeyEvent.VK_F9),
+  F10(KeyEvent.VK_F10),
+  F11(KeyEvent.VK_F11),
+  F12(KeyEvent.VK_F12),
+  SHIFT_F1(KeyEvent.VK_F1),
+  SHIFT_F2(KeyEvent.VK_F2),
+  SHIFT_F3(KeyEvent.VK_F3),
+  SHIFT_F4(KeyEvent.VK_F4),
+  SHIFT_F5(KeyEvent.VK_F5),
+  SHIFT_F6(KeyEvent.VK_F6),
+  SHIFT_F7(KeyEvent.VK_F7),
+  SHIFT_F8(KeyEvent.VK_F8),
+  SHIFT_F9(KeyEvent.VK_F9),
+  SHIFT_F10(KeyEvent.VK_F10),
+  SHIFT_F11(KeyEvent.VK_F11),
+  SHIFT_F12(KeyEvent.VK_F12),
+  ESCAPE(KeyEvent.VK_ESCAPE),
 }

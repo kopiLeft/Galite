@@ -22,7 +22,8 @@ open class VCommand(private var mode: Int,
                     protected var handler: ActionHandler?,
                     var actor: VActor?,
                     internal val trigger: Int,
-                    val item: String) {
+                    val item: String,
+                    internal val action: (() -> Unit)? = null) {
 
   /**
    * Kill a command: this command will never been enabled again
@@ -39,6 +40,7 @@ open class VCommand(private var mode: Int,
       if (!killed) {
         it.isEnabled = enabled
         it.number = trigger
+        it.action = action
         it.handler = handler
       }
     }

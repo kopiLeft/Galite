@@ -30,7 +30,7 @@ import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VWindow
 
-class VListDialog(list: Array<VListColumn>,
+class VListDialog(list: Array<VListColumn?>,
                   val data: Array<Array<Any?>>,
                   val idents: IntArray,
                   rows: Int,
@@ -39,7 +39,7 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * Creates a dialog with specified data
    */
-  constructor(list: Array<VListColumn>,
+  constructor(list: Array<VListColumn?>,
               data: Array<Array<Any?>>,
               idents: IntArray,
               rows: Int) : this(list, data, idents, rows, true)
@@ -47,7 +47,7 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * Creates a dialog with specified data
    */
-  constructor(list: Array<VListColumn>,
+  constructor(list: Array<VListColumn?>,
               data: Array<Array<Any?>>,
               rows: Int,
               newForm: VDictionary) : this(list, data, makeIdentArray(rows), rows, false) {
@@ -57,7 +57,7 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * Creates a dialog with specified data
    */
-  constructor(list: Array<VListColumn>,
+  constructor(list: Array<VListColumn?>,
               data: Array<Array<Any?>>,
               rows: Int,
               newForm: String) : this(list, data, rows, Module.getExecutable(newForm) as VDictionary)
@@ -65,14 +65,14 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * Creates a dialog with specified data
    */
-  constructor(list: Array<VListColumn>,
+  constructor(list: Array<VListColumn?>,
               data: Array<Array<Any?>>,
               rows: Int) : this(list, data, makeIdentArray(rows), rows, false)
 
   /**
    * Creates a dialog with specified data and title bar.
    */
-  constructor(list: Array<VListColumn>, data: Array<Array<Any?>>) : this(list, data, data[0].size)
+  constructor(list: Array<VListColumn?>, data: Array<Array<Any?>>) : this(list, data, data[0].size)
 
   /**
    * Creates a dialog with specified data and title bar.
@@ -80,11 +80,11 @@ class VListDialog(list: Array<VListColumn>,
   @Suppress("UNCHECKED_CAST")
   constructor(title: String,
               data: Array<String?>,
-              rows: Int = data.size) : this(arrayOf<VListColumn>(VStringColumn(title,
-                                                                 null,
-                                                                 VConstants.ALG_LEFT,
-                                                                 getMaxLength(data),
-                                                                 true)),
+              rows: Int = data.size) : this(arrayOf(VStringColumn(title,
+                                                    null,
+                                                    VConstants.ALG_LEFT,
+                                                    getMaxLength(data),
+                                                    true)),
                                             arrayOf(data as Array<Any?>),
                                             rows)
 
@@ -167,7 +167,7 @@ class VListDialog(list: Array<VListColumn>,
         }
       }
     }
-    if (columns[left].isSortAscending) {
+    if (columns[left]!!.isSortAscending) {
       // reverse sorting
       for (i in 0 until count / 2) {
         val tmp = translatedIdents[i]
@@ -240,7 +240,7 @@ class VListDialog(list: Array<VListColumn>,
   /**
    * @return the columns
    */
-  val columns: Array<VListColumn>
+  val columns: Array<VListColumn?>
 
   /**
    * @return the titles
@@ -327,8 +327,8 @@ class VListDialog(list: Array<VListColumn>,
     }
     translatedIdents = IntArray(idents.size - if (isSkipFirstLine) 1 else 0)
     for (i in sizes.indices) {
-      sizes[i] = max(list[i].width, list[i].title.length)
-      titles[i] = list[i].title
+      sizes[i] = max(list[i]!!.width, list[i]!!.title.length)
+      titles[i] = list[i]!!.title
     }
     for (i in translatedIdents.indices) {
       translatedIdents[i] = i + if (isSkipFirstLine) 1 else 0
