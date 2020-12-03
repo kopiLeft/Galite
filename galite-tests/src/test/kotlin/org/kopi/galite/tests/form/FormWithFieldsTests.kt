@@ -23,14 +23,13 @@ import kotlin.test.assertEquals
 import org.junit.Test
 
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.JApplicationTestBase
 
-class FormTestForFieldsVisibilityTests: JApplicationTestBase() {
+class FormWithFieldsTests: JApplicationTestBase() {
 
   @Test
   fun sourceFormTest() {
-    val formModel = TestForm.model
-    assertEquals(TestForm::class.qualifiedName!!.replace(".", "/"), formModel.source)
+    val formModel = FieldsTest.model
+    assertEquals(FieldsTest::class.qualifiedName!!.replace(".", "/"), formModel.source)
   }
 }

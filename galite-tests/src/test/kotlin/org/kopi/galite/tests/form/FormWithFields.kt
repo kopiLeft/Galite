@@ -23,7 +23,7 @@ import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 
-object FieldsVisibilityTest: Form() {
+object FieldsTest: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test fields visibility"
 
@@ -68,5 +68,5 @@ object FieldsVisibilityTest: Form() {
 }
 
 fun main(){
-  Application.runForm(formName = FieldsVisibilityTest)
+  Application.runForm(formName = FieldsTest)
 }
