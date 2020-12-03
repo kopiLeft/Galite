@@ -18,13 +18,16 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
 
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
@@ -409,7 +412,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * @return a list column for list
    */
-  protected abstract fun getListColumn(): VListColumn?
+  internal abstract fun getListColumn(): VListColumn?
 
   // ----------------------------------------------------------------------
   // NAVIGATING
@@ -995,6 +998,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     column          the index of the column in the tuple
    */
   abstract fun retrieveQuery(query: Query, column: Int): Any?
+
+
+  /**
+   * TODO document! and add needed implementations
+   */
+  open fun <T> retrieveQuery_(result: ResultRow, column: Column<T>): Any? = result[column]
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
