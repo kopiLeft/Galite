@@ -59,7 +59,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Build everything after construction
    */
   protected fun buildCstr() {
-    activeCommands = ArrayList<VCommand>()
+    activeCommands = ArrayList()
     if (bufferSize == 1) {
       fetchSize = displaySize
       displaySize = 1
@@ -1550,17 +1550,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the name of the DB column of the ID field.
    */
-  val idColumn: String
+  @Suppress("UNCHECKED_CAST")
+  val idColumn: Column<Int>
     get() {
-      return idField.lookupColumn(0) ?: throw InconsistencyException()
-    }
-
-  /**
-   * Returns the name of the DB column of the ID field.
-   */
-  val idColumn_: Column<Int>
-    get() {
-      TODO()
+      return idField.lookupColumn(0) as? Column<Int> ?: throw InconsistencyException()
     }
 
   // laurent : return f even if it's null until we add this field in
@@ -1593,8 +1586,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun getBaseTableField(field: String): VField? {
     for (i in fields.indices) {
-      val column: String? = fields[i].lookupColumn(0)
-      if (column != null && column == field) {
+      val column = fields[i].lookupColumn(0)
+      if (column != null && column.name == field) {
         return fields[i]
       }
     }
@@ -1786,43 +1779,40 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun singleMenuQuery(showSingleEntry: Boolean): Int {
     assert(!isMulti()) { "$name is a multi block" }
-    var dialog: VListDialog?
+    var dialog: VListDialog? = null
 
     try {
-      while (true) {
+      try {
+        dialog = transaction {
+          callProtectedTrigger(VConstants.TRG_PREQRY)
+          buildQueryDialog()
+        }
+      } catch (e: VException) {
         try {
-          dialog = transaction {
-            callProtectedTrigger(VConstants.TRG_PREQRY)
-            buildQueryDialog()
-          }
-          break
-        } catch (e: VException) {
-          try {
-          } catch (abortEx: VException) {
-            throw abortEx
-          }
-        } catch (e: SQLException) {
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          try {
-          } catch (abortEx: Error) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw VExecFailedException(abortEx)
-          }
+        } catch (abortEx: VException) {
+          throw abortEx
+        }
+      } catch (e: SQLException) {
+        try {
+        } catch (abortEx: DBDeadLockException) {
+          throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+        } catch (abortEx: DBInterruptionException) {
+          throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+        } catch (abortEx: SQLException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: Error) {
+        try {
+        } catch (abortEx: Error) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: RuntimeException) {
+        try {
+        } catch (abortEx: RuntimeException) {
+          throw VExecFailedException(abortEx)
         }
       }
-    } catch (e: VException) {
+    } catch (e: Exception) {
       if (e.message != null) {
         form.error(e.message!!)
       }
@@ -1891,11 +1881,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val columns = mutableListOf<Column<*>>()
 
     for (i in 0 until query_cnt) {
-      columns.add(query_tab[i]!!.getColumn(0)!!.column!!)
+      columns.add(query_tab[i]!!.getColumn(0)!!.column)
     }
 
     /* add the DB column of the ID field. */
-    columns.add(idColumn_)
+    columns.add(idColumn)
 
     /* ... and now their order */
     var orderSize = 0
@@ -1920,8 +1910,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* query from where ? */
-    val tables = getSearchTables_()
-    val conditions = getSearchConditions_()
+    val tables = getSearchTables_() // TDOD ! You can test this by replacing by (val tables = idColumn.table)
+    val conditions = getSearchConditions_() // TDOD ! You can test this by commenting this line
 
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
@@ -1933,11 +1923,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
 
       /* don't show record with ID = 0 */
-      if (result[idColumn_] == 0) {
+      if (result[idColumn] == 0) {
         continue
       }
 
-      ids[rows] = result[idColumn_]
+      ids[rows] = result[idColumn]
       for (i in 0 until query_cnt) {
         values[i][rows] = query_tab[i]!!.retrieveQuery_(result, columns[i])
       }

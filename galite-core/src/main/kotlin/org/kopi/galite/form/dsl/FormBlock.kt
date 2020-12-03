@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.jetbrains.exposed.sql.Table
+import java.awt.Point
 
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
@@ -37,7 +37,7 @@ import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VCommand
 
-import java.awt.Point
+import org.jetbrains.exposed.sql.Table
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -458,7 +458,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
           vActor?.actorIdent to vActor
         }.toMap()
 
-        super.commands = blockCommands?.map {
+        super.commands = blockCommands.map {
           VCommand(it.mode,
                   this,
                   usedActors[it.item.ident],
@@ -477,6 +477,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
 
         super.source = source ?: sourceFile
         super.bufferSize = buffer
+        super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos

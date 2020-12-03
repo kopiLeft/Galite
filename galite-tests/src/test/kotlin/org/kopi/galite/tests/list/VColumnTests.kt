@@ -20,12 +20,13 @@ package org.kopi.galite.tests.list
 import kotlin.test.assertEquals
 
 import org.junit.Test
+import org.kopi.galite.db.DBSchema
 import org.kopi.galite.list.VColumn
 
 class VColumnTests {
   @Test
   fun vColumnTest() {
-    var vcolumn = VColumn(2, "testName", false, true)
+    val vcolumn = VColumn(2, "testName", false, true, DBSchema.Users.id)
 
     assertEquals(2, vcolumn.getTable())
     assertEquals("T2.testName", vcolumn.getQualifiedName())

@@ -24,9 +24,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FieldsVisibilityTest
+import org.kopi.galite.tests.form.FormWithList
 import org.kopi.galite.tests.form.TestForm
 
-val testURL = "jdbc:h2:mem:test"
+val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
 val testDriver = "org.h2.Driver"
 val testUser = "admin"
 val testPassword = "admin"

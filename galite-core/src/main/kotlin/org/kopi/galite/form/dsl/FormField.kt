@@ -213,7 +213,6 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
           }
 
   fun setInfo() {
-    val k = columns?.getColumnsModels()?.toTypedArray()
     vField.setInfo(
             getIdent(),
             fieldIndex,

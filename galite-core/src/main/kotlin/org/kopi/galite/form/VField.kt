@@ -78,7 +78,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               options: Int,
               access: IntArray,
               list: VList?,
-              columns: Array<VColumn?>?,
+              columns: Array<VColumn<>?>?,
               indices: Int,
               priority: Int,
               commands: Array<VCommand>?,
@@ -93,7 +93,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     this.list = list
     this.columns = columns
     if (columns == null) {
-      this.columns = arrayOfNulls<VColumn>(0)
+      this.columns = arrayOfNulls(0)
     }
     this.indices = indices
     this.priority = priority
@@ -615,7 +615,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the column name in the table with specified correlation.
    * returns null if the field has no access to this table.
    */
-  fun lookupColumn(corr: Int): String? = columns!!.find { corr == it!!.getTable() }?.name
+  fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
 
   /**
    * Returns true if the column is a key of the table with specified correlation.
