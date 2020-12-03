@@ -30,6 +30,7 @@ import org.kopi.galite.exceptions.InvalidValueException
  * @param domain the field's domain
  */
 abstract class Field<T : Comparable<T>>(open val domain: Domain<T>) {
+
   /** Field's label */
   var label: String? = null
     set(value)  {

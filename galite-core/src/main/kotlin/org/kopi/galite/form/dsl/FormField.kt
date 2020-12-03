@@ -329,8 +329,8 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     return -1
   }
 
-  fun label(vararg inputLabel : String? , NO_LABEL : FormField.Companion? = null ){
-    NO_LABEL ?: when{
+  fun label(vararg inputLabel : String? , noLabel : Companion? = null ){
+    noLabel ?: when{
       inputLabel.isEmpty() -> TODO()
       inputLabel.size == 1 -> label = inputLabel[0]
       inputLabel.size >1 -> {
@@ -341,8 +341,6 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   }
 
   companion object{
-    val  NO_LABEL = ""
+    const val  NO_LABEL = ""
   }
-
-
 }
