@@ -656,7 +656,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  open fun getSearchCondition_() : Pair<ExpressionWithColumnType<String>.(t: Any)-> Op<Boolean> , TypeVariable<GenericDeclaration>>? {
+  open fun getSearchCondition_(): Pair<ExpressionWithColumnType<String>.(t: Any) -> Op<Boolean> ,
+                                        TypeVariable<GenericDeclaration>>? {
     TODO()
   }
 

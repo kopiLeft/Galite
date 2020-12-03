@@ -1743,31 +1743,35 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search conditions for database query.
    */
-  fun getSearchConditions(): Op<Boolean> {
-    val conditionList : MutableList<Op<Boolean>> = mutableListOf()
+  fun getSearchConditions(): Op<Boolean>? {
+    val conditionList: MutableList<Op<Boolean>> = mutableListOf()
 
-    fields.forEach { vField ->
-      if(vField.getColumnCount() > 0 ){
-        val cond = vField.getSearchCondition_()
+    fields.forEach { field ->
+      if (field.getColumnCount() > 0) {
+        val cond = field.getSearchCondition_()
 
         cond?.let {
-          val condOperator : (ExpressionWithColumnType<String>.(Any) -> Op<Boolean>) = vField.getSearchCondition_()!!.first
-          val condOperand : TypeVariable<GenericDeclaration> = vField.getSearchCondition_()!!.second
-          val condColumn = Column<String>(tables!![vField.getColumn(0)!!.getTable()],
-                  vField.getColumn(0)!!.getQualifiedName() ,
-                  VarCharColumnType())
-          val searchColumn   = when(vField.options and FDO_SEARCH_MASK){
+          val condOperator = field.getSearchCondition_()!!.first
+          val value = field.getSearchCondition_()!!.second
+          val condColumn = Column<String>(tables!![field.getColumn(0)!!.getTable()],
+                                          field.getColumn(0)!!.getQualifiedName(),
+                                          VarCharColumnType())
+          val searchColumn = when (field.options and FDO_SEARCH_MASK) {
 
             FDO_SEARCH_NONE -> condColumn
             FDO_SEARCH_UPPER -> condColumn.upperCase()
-            FDO_SEARCH_LOWER ->condColumn.lowerCase()
+            FDO_SEARCH_LOWER -> condColumn.lowerCase()
             else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
           }
-          conditionList.add(Op.build {  searchColumn.condOperator(condOperand) })
+          conditionList.add(Op.build { searchColumn.condOperator(value) })
         }
       }
     }
-    return conditionList.compoundAnd()
+    return if (conditionList.isEmpty()) {
+      null
+    } else {
+      conditionList.compoundAnd()
+    }
   }
 
   /**
@@ -2607,7 +2611,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() = form.dBContext
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
-  override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
+  override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
 
@@ -2951,6 +2955,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   lateinit var fields: Array<VField> // fields
   protected var VKT_Triggers = mutableListOf(IntArray(TRG_TYPES.size))
   protected val triggers = mutableMapOf<Int, Trigger>()
+
   // dynamic data
   var activeRecord = 0 // current record
     get() {
