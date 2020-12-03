@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.form.dsl
 
-import java.awt.Point
-
 import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.common.Action
@@ -36,7 +34,10 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VCommand
+
+import java.awt.Point
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -351,7 +352,6 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
     return FormCoordinatePosition(++displayedFields)
   }
 
-
   fun positionField(pos: FormPosition?) {
     pos!!.setChartPosition(++displayedFields)
   }
@@ -362,6 +362,24 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * Returns true if the size of the buffer == 1, false otherwise
    */
   fun isSingle(): Boolean = buffer == 1
+
+  /**
+   * Returns the form block table
+   */
+  fun getTable(table: Table): FormBlockTable {
+    return blockTables.find { it.table == table }
+            ?: throw Exception("The table ${table.tableName} is not defined in this block")
+  }
+
+  /**
+   * Returns the table number
+   *
+   * TODO : Do we really need this?
+   */
+  fun getTableNum(table: FormBlockTable): Int {
+    val indexOfTable = blockTables.indexOf(table)
+    return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException()
+  }
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

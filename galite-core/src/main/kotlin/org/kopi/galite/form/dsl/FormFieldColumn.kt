@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.kopi.galite.list.VColumn
+
 import org.jetbrains.exposed.sql.Column
 
 /**
@@ -27,18 +29,37 @@ import org.jetbrains.exposed.sql.Column
  * @param isKey                true if this column is a key in the database
  * @param nullable                true if this column is nullable.
  */
-class FormFieldColumn(val column: Column<*>,
-                      val corr: String,
-                      private val ident: String,
-                      private val isKey: Boolean,
-                      val nullable: Boolean) {
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
+class FormFieldColumn<T : Comparable<T>>(val column: Column<T>,
+                                         val corr: String,
+                                         private val ident: String,
+                                         private val field: FormField<T>,
+                                         private val isKey: Boolean,
+                                         val nullable: Boolean) {
+  init {
+    initialize()
+  }
+
+  private var num = 0
+
+  /**
+   * Returns the the field column model.
+   */
+  fun getFormFieldColumnModel(): VColumn {
+    return VColumn(num, ident, isKey, nullable)
+  }
+
+  /**
+   * TODO: Do we really need his method
+   */
+  fun initialize() {
+    val table = field.getTable(column.table)
+    num = field.getTableNum(table)
+  }
+
   /**
    * Sets the position in an array of fields
    */
-  fun cloneToPos(pos: Int): FormFieldColumn {
-    return FormFieldColumn(column, corr, ident + pos, isKey, nullable)
+  fun cloneToPos(pos: Int): FormFieldColumn<T> {
+    return FormFieldColumn(column, corr, ident + pos, field, isKey, nullable)
   }
 }
