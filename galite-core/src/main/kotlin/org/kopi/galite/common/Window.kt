@@ -19,8 +19,6 @@ package org.kopi.galite.common
 
 import java.util.Locale
 
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
 import org.kopi.galite.visual.VWindow
 
 /**
@@ -34,7 +32,7 @@ abstract class Window {
   abstract val title: String
   open val locale: Locale? = null
   internal var options: Int? = null
-  internal lateinit var commands: Array<VCommand>
-  internal lateinit var triggers: Array<VTrigger>
+  internal var commands = mutableListOf<Command>()
+  internal var triggers = mutableListOf<Trigger>()
   abstract val model: VWindow
 }

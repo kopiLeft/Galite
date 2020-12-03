@@ -21,12 +21,12 @@ import java.awt.Point
 
 import org.jetbrains.exposed.sql.Table
 
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
-import org.kopi.galite.common.BlockAction
-import org.kopi.galite.common.BlockBooleanTrigger
-import org.kopi.galite.common.BlockProtectedTrigger
-import org.kopi.galite.common.BlockTrigger
-import org.kopi.galite.common.BlockVoidTrigger
+import org.kopi.galite.common.BlockBooleanTriggerEvent
+import org.kopi.galite.common.BlockProtectedTriggerEvent
+import org.kopi.galite.common.BlockTriggerEvent
+import org.kopi.galite.common.BlockVoidTriggerEvent
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
@@ -63,12 +63,12 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
-  var blockOptions: Int = 0
-  var blockTables: MutableList<FormBlockTable> = mutableListOf()
-  var indices: MutableList<FormBlockIndex> = mutableListOf()
-  var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
-  lateinit var commands: Array<Command?>
-  val triggers = mutableListOf<Trigger>()
+  private var blockOptions: Int = 0
+  private var blockTables: MutableList<FormBlockTable> = mutableListOf()
+  private var indices: MutableList<FormBlockIndex> = mutableListOf()
+  internal var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
+  private lateinit var commands: Array<Command?>
+  private val triggers = mutableListOf<Trigger>()
   lateinit var dropListMap: HashMap<*, *>
   private var maxRowPos = 0
   private var maxColumnPos = 0
@@ -78,7 +78,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   val blockFields = mutableListOf<FormField<*>>()
 
   /** Blocks's commands. */
-  val blockCommands = mutableListOf<Command>()
+  private val blockCommands = mutableListOf<Command>()
 
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS
@@ -92,15 +92,15 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  private fun <T> trigger(blockTriggers: Array<out BlockTrigger>, method: () -> T): Trigger {
+  private fun <T> trigger(blockTriggers: Array<out BlockTriggerEvent>, method: () -> T): Trigger {
     val event = blockEventList(blockTriggers)
-    val blockAction = BlockAction(null, method)
+    val blockAction = Action(null, method)
     val trigger = FormTrigger(event, blockAction)
     triggers.add(trigger)
     return trigger
   }
 
-  private fun blockEventList(blockTriggers: Array<out BlockTrigger>): Long {
+  private fun blockEventList(blockTriggers: Array<out BlockTriggerEvent>): Long {
     var self = 0L
 
     blockTriggers.forEach { trigger ->
@@ -116,18 +116,18 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun trigger(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit): Trigger {
+  fun trigger(vararg blockTriggers: BlockProtectedTriggerEvent, method: () -> Unit): Trigger {
     return trigger(blockTriggers, method)
   }
 
   /**
-   * Adds void triggers to this block.
+   * Adds void trigger to this block.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun trigger(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit): Trigger {
-    return trigger(blockTriggers, method)
+  fun trigger(vararg blockTriggerEvents: BlockVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(blockTriggerEvents, method)
   }
 
   /**
@@ -136,7 +136,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun trigger(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean): Trigger {
+  fun trigger(vararg blockTriggers: BlockBooleanTriggerEvent, method: () -> Boolean): Trigger {
     return trigger(blockTriggers, method)
   }
 
