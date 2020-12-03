@@ -18,12 +18,12 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.JoinCondition
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class VBlockDefaultOuterJoin(block: VBlock) {
@@ -31,11 +31,15 @@ class VBlockDefaultOuterJoin(block: VBlock) {
   /**
    * constructs an outer join tree.
    */
-  private fun getJoinCondition(rootTable: Int, table: Int): Op<Boolean>? {
-    var joinBuffer: Op<Boolean>? = null
+  private fun getJoinCondition(rootTable: Int, table: Int): MutableList<Join?> {
+    val joinBuffer: MutableList<Join?>? = null
     var field: VField
+
     if (table == rootTable) {
       addToJoinedTables(tables?.get(rootTable)!!)
+      joinBuffer!!.add(transaction {
+        Join(tables!![table])
+      })
     }
 
     for (i in fields.indices) {
@@ -47,7 +51,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
       if (field.getColumnCount() > 1) {
         val tableColumn = field.fetchColumn(table)
         val rootColumn = field.fetchColumn(rootTable)
-
+        val cond: List<JoinCondition>
         if (tableColumn != -1) {
           if (field.getColumn(tableColumn)!!.nullable ||
                   field.getColumn(rootColumn)!!.nullable) {
@@ -58,10 +62,11 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   // as caster outer joins do not work, we assume that the
                   // condition will apply to the root
                   if (j == rootColumn) {
-                    transaction {
-                      joinBuffer = Op.build {
-                        field.getColumn(tableColumn)!!.column!! eq field.getColumn(j)!!.column!!
-                      }
+                    joinBuffer!!.also {
+                      it.add(Join(field.getColumn(tableColumn)!!.column!!.table,
+                              field.getColumn(j)!!.column!!.table,
+                              JoinType.LEFT,
+                              field.getColumn(tableColumn)!!.column!! eq field.getColumn(j)!!.column!!))
                     }
                   }
 
@@ -81,7 +86,13 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                     addToJoinedTables(field.getColumn(j)!!.column!!.table)
 
                     transaction {
-                      mainTable.join(joinTable, JoinType.LEFT, field.getColumn(tableColumn)!!.column!!, field.getColumn(j)!!.column!!)
+                      joinBuffer!!.also {
+                        it.add(Join(mainTable,
+                                joinTable,
+                                JoinType.LEFT,
+                                field.getColumn(tableColumn)!!.column!! eq field.getColumn(j)!!.column!!)
+                        )
+                      }
                     }
                   }
                   if (j == field.getColumnCount() || field.getColumnCount() == 2) {
@@ -101,7 +112,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
         }
       }
     }
-    return joinBuffer
+    return joinBuffer!!
   }
 
   companion object {
@@ -109,78 +120,63 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     /**
      * search from-clause condition
      */
-    fun getSearchTables(block: VBlock?): Query? {
+    fun getSearchTables(block: VBlock?): MutableList<MutableList<Join?>>? {
       return VBlockDefaultOuterJoin(block!!).getSearchTablesCondition()
     }
   }
 
-  private fun getSearchTablesCondition(): Query? {
+  private fun getSearchTablesCondition(): MutableList<MutableList<Join?>>? {
 
     if (tables == null) {
       return null
     }
-    var operation: Query? = null
+    val searchTablesCondition: MutableList<MutableList<Join?>>? = null
 
     // first search join condition for the block main table.
-    transaction {
-      operation = joinTables(tables!!).select {
-        getJoinCondition(0, 0)!!
-      }
-    }
+    searchTablesCondition!!.add(getJoinCondition(0, 0))
+
     // search join condition for other lookup tables  not joined with main table.
     for (i in 1 until tables!!.size) {
       if (!isJoinedTable(tables!![i])) {
-        transaction {
-          operation = joinTables(tables!!).select {
-            // all not joined tables need to be ran through
-            getJoinCondition(i, i)!!
-          }
-        }
+        searchTablesCondition.add(getJoinCondition(i, i))
       }
     }
-    return operation
-  }
-
-  fun joinTables(tables: Array<Table>): Join {
-    var op: Join? = null
-    for (i in 1 until tables.size) {
-      transaction {
-        op = (tables[0].join(tables[i], JoinType.FULL, getJoinCondition(0, i)))
-                .join(tables[i], JoinType.FULL, getJoinCondition(i, i))
+    // add remaining tables (not joined tables) to the list of tables.
+    for (i in 1 until tables!!.size) {
+      if (!isJoinedTable(tables!![i])) {
+        val jointables : MutableList<Join?> = mutableListOf(Join(tables!![i]))
+        searchTablesCondition.add(jointables)
       }
     }
-    return op!!
+    return searchTablesCondition
   }
 
-  fun getSearchCondition(fld: VField, op: Op<Boolean>?): Op<Boolean>? {
-    var operation: Op<Boolean>? = null
+  fun getSearchCondition(fld: VField, op: Op<Boolean>?): MutableList<Op<Boolean>?> {
+    val searchCondition: MutableList<Op<Boolean>?>? = null
     if (fld.hasNullableCols()) {
       for (j in 1 until fld.getColumnCount()) {
         if (!fld.getColumn(j)!!.nullable) {
 
-          transaction {
-            operation = Op.build {
-              (fld.getColumn(j)!!.column!! eq fld.getColumn(0)!!.column!!)
+          searchCondition!!.add(Op.build {
+            (fld.getColumn(j)!!.column!! eq fld.getColumn(0)!!.column!!)
+          })
 
-            }
-          }
         }
       }
     } else {
       for (j in 1 until fld.getColumnCount()) {
 
-        transaction {
-          operation = Op.build {
-            (fld.getColumn(j)!!.column!! eq fld.getColumn(j - 1)!!.column!!)
-          }
-        }
+        searchCondition!!.add(Op.build {
+          (fld.getColumn(j)!!.column!! eq fld.getColumn(j - 1)!!.column!!)
+        })
       }
     }
-    return operation
+    return searchCondition!!
   }
 
-  fun getFetchRecordCondition(fields: Array<VField>): Op<Boolean>? {
-    var operation: Op<Boolean>? = null
+  fun getFetchRecordCondition(fields: Array<VField>): MutableList<Op<Boolean>?> {
+    val fetchRecordCondition: MutableList<Op<Boolean>?>? = null
+
     for (i in fields.indices) {
       val fld = fields[i]
 
@@ -188,26 +184,24 @@ class VBlockDefaultOuterJoin(block: VBlock) {
         for (j in 1 until fld.getColumnCount()) {
 
           if (!fld.getColumn(j)!!.nullable) {
-
-            transaction {
-              operation = Op.build {
-                (fld.getColumn(j)!!.column!! eq fld.getColumn(0)!!.column!!)
-              }
+            fetchRecordCondition!!.add(Op.build {
+              (fld.getColumn(j)!!.column!! eq fld.getColumn(0)!!.column!!)
             }
+            )
           }
         }
       } else {
         for (j in 1 until fld.getColumnCount()) {
 
           if (!fld.getColumn(j)!!.nullable) {
-            operation = Op.build {
-                      (fld.getColumn(j)!!.column!! eq fld.getColumn(j - 1)!!.column!!)
-            }
+            fetchRecordCondition!!.add(Op.build {
+              (fld.getColumn(j)!!.column!! eq fld.getColumn(j - 1)!!.column!!)
+            })
           }
         }
       }
     }
-    return operation
+    return fetchRecordCondition!!
   }
 
   private fun addToJoinedTables(table: Table) {
