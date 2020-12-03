@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -84,6 +85,10 @@ object TestForm: Form() {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
       }
     }
+  }
+
+  val tb3_to_test_block_options = insertBlock(TestBlock(), p1) {
+    options(BlockOption.NOINSERT)
   }
 
   init {
