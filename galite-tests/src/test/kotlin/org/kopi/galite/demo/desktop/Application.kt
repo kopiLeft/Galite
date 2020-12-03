@@ -14,6 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.demo.desktop
 
 import java.util.Locale
@@ -21,16 +22,17 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 
+import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FieldsVisibilityTest
 import org.kopi.galite.tests.form.TestForm
 
-val testURL = "jdbc:h2:mem:test"
-val testDriver = "org.h2.Driver"
-val testUser = "admin"
-val testPassword = "admin"
-val testLocale = Locale.FRANCE
+const val testURL = "jdbc:h2:mem:test"
+const val testDriver = "org.h2.Driver"
+const val testUser = "admin"
+const val testPassword = "admin"
+val testLocale: Locale = Locale.FRANCE
 
 fun main(args: Array<String>) {
   val dbTest =  DBSchemaTest()
@@ -51,7 +53,7 @@ fun main(args: Array<String>) {
     dbTest.insertIntoUserRights(testUser, "2009", true)
     dbTest.insertIntoUserRights(testUser, "2010", true)
 
-    val args = if (args.isNotEmpty()) {
+    val arguments = if (args.isNotEmpty()) {
       args
     } else {
       arrayOf("-d",
@@ -64,10 +66,38 @@ fun main(args: Array<String>) {
               testPassword,
               "-l",
               testLocale.toString(),
-              "-r"
+              "-r" ,
+
       )
     }
 
-    JApplicationTestBase.GaliteApplication().run(args)
+    JApplicationTestBase.GaliteApplication().run(arguments)
+  }
+}
+
+object Application {
+  fun runForm(formName : Form?,
+     testURL: String = "jdbc:h2:mem:test",
+     testDriver : String = "org.h2.Driver",
+     testUser : String = "admin",
+     testPassword : String = "admin",
+     testLocale : Locale = Locale.FRANCE) {
+
+    val arguments = arrayOf("-d",
+            testDriver,
+            "-b",
+            testURL,
+            "-u",
+            testUser,
+            "-p",
+            testPassword,
+            "-l",
+            testLocale.toString(),
+            "-r",
+            "-f",
+            formName!!::class.qualifiedName!!
+    )
+
+    main(arguments)
   }
 }

@@ -18,29 +18,16 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import kotlin.test.assertEquals
-
-import org.junit.Test
-import org.kopi.galite.chart.Chart
-
 import org.jetbrains.exposed.sql.Table
 
+import org.kopi.galite.chart.Chart
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.tests.JApplicationTestBase
-
-class FormTests: JApplicationTestBase() {
-
-  @Test
-  fun sourceFormTest() {
-    val formModel = TestForm.model
-    assertEquals(TestForm::class.qualifiedName!!.replace(".", "/"), formModel.source)
-  }
-}
 
 object User: Table() {
   val id = integer("id")
@@ -123,4 +110,8 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
 
 class CommandesC(fournisseur: Int?): Chart() {
   override val title: String = "Fournisseur"
+}
+
+fun main(){
+  Application.runForm(formName = TestForm)
 }

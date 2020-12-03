@@ -20,8 +20,6 @@ package org.kopi.galite.db
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.jodatime.datetime
 
-object DBSchema {
-
   object Modules : Table("MODULE") {
     val id = integer("ID").autoIncrement()
     val uc = integer("UC")
@@ -131,4 +129,3 @@ object DBSchema {
 
   val list_Of_Tables = listOf(Modules, UserRights, GroupRights, GroupParties, Symbols,
             Favorites, Users, Groups, References)
-}

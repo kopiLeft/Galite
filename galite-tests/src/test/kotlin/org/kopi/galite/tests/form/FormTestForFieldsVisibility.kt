@@ -14,26 +14,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import kotlin.test.assertEquals
-
-import org.junit.Test
-
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.tests.JApplicationTestBase
-
-class FormTestForFieldsVisibility: JApplicationTestBase() {
-
-  @Test
-  fun sourceFormTest() {
-    val formModel = TestForm.model
-    assertEquals(TestForm::class.qualifiedName!!.replace(".", "/"), formModel.source)
-  }
-}
 
 object FieldsVisibilityTest: Form() {
   override val locale = Locale.FRANCE
@@ -79,3 +67,6 @@ object FieldsVisibilityTest: Form() {
   }
 }
 
+fun main(){
+  Application.runForm(formName = FieldsVisibilityTest)
+}
