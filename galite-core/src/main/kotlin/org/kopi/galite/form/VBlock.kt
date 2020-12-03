@@ -25,14 +25,6 @@ import javax.swing.event.EventListenerList
 
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.collections.elementAt
-import kotlin.collections.find
-import kotlin.collections.forEach
-import kotlin.collections.forEachIndexed
-import kotlin.collections.indices
-import kotlin.collections.isNotEmpty
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
@@ -46,6 +38,7 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBForeignKeyException
 import org.kopi.galite.db.DBInterruptionException
+import org.kopi.galite.db.Utils
 import org.kopi.galite.form.VConstants.Companion.ACS_HIDDEN
 import org.kopi.galite.form.VConstants.Companion.ACS_MUSTFILL
 import org.kopi.galite.form.VConstants.Companion.ACS_SKIPPED
@@ -91,7 +84,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.db.Utils
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1583,6 +1575,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the name of the DB column of the ID field.
    */
+  val idColumn_: Column<Int>
+    get() {
+      TODO()
+    }
+
+  /**
+   * Returns the name of the DB column of the ID field.
+   */
   val idColumn: String
     get() {
       return idField.lookupColumn(0) ?: throw InconsistencyException()
@@ -2492,9 +2492,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
             if (sql != "?") { // dont lookup for blobs...
               if (field.getSql(recno).equals(Utils.NULL_LITERAL)) {
-                tailbuff.add(Op.build {col.isNull()})
+                tailbuff.add(Op.build { col.isNull() })
               } else {
-                tailbuff.add(Op.build {col eq field.getSql(recno)!!})
+                tailbuff.add(Op.build { col eq field.getSql(recno)!! })
               }
             }
           }
@@ -2551,6 +2551,41 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun checkUniqueIndex(idx: Int, recno: Int, id: Int?) {
     TODO()
+  }
+
+  /*
+   * Checks unique index constraints
+   */
+  protected fun checkUniqueIndex_(idx: Int, recno: Int, id: Int?) {
+    val buffer = mutableListOf<Op<Boolean>>()
+
+    for (field in fields) {
+
+      val col: Column<Any>? = if (field.isNull(recno) || !field.hasIndex(idx)) {
+        null
+      } else {
+        field.lookupColumn_(tables!![0])
+      }
+      if (col != null) {
+        buffer.add(Op.build { col eq field.getSql(recno)!! })
+      }
+    }
+
+    if (buffer.isNotEmpty()) {
+      transaction {
+        val query = tables!![0].slice(idColumn_).select(buffer.compoundAnd())
+
+        if (query.execute(this)!!.next()) {
+            if (query.first()[idColumn_] != id) {
+              form.setActiveBlock(this@VBlock)
+              activeRecord = recno
+              gotoFirstField()
+              throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![idx])))
+            }
+          assert(!query.execute(this)!!.next()) { "too many rows" }
+        }
+      }
+    }
   }
 
   /**
