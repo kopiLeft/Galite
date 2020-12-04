@@ -18,13 +18,25 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.awt.Color
 import java.io.InputStream
+import java.lang.reflect.GenericDeclaration
+import java.lang.reflect.TypeVariable
+import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
+
+import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.IsNotNullOp
+import org.jetbrains.exposed.sql.IsNullOp
+import org.jetbrains.exposed.sql.LikeOp
+import org.jetbrains.exposed.sql.NotLikeOp
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.stringParam
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
@@ -49,7 +61,6 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -656,28 +667,67 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the search conditions for this field.
    */
   open fun getSearchCondition(): String? {
-    return if (isNull(block!!.activeRecord)) {
-      when(getSearchOperator()) {
+    TODO()
+  }
+
+  /**
+   * Returns the search conditions for this field.
+   */
+  open fun getSearchCondition_(): Pair<Expression<String>.(t : String) -> Op<Boolean>, Any?>? {
+
+    if (isNull(block!!.activeRecord)) {
+      fun nullCondBuilder(body: (scope: Expression<String>) -> Op<Boolean>): (Expression<String>.(t : String) -> Op<Boolean>) {
+        return ( fun Expression<String>.(t : String): Op<Boolean> = body(this))
+      }
+
+      return when (getSearchOperator()) {
         VConstants.SOP_EQ -> null
-        VConstants.SOP_NE -> "IS NOT NULL"
-        else -> "IS NULL"
+        VConstants.SOP_NE -> (nullCondBuilder {
+          IsNotNullOp(it)
+        } to null)
+        else -> (nullCondBuilder {
+          IsNullOp(it)
+        } to null)
       }
     } else {
-      var operator = VConstants.OPERATOR_NAMES[getSearchOperator()]
+      var operator: (ExpressionWithColumnType<String>.(t: String) -> Op<Boolean>)? = null
+      // Operator name gets one of these operators as string , and will be the default value of operator
+      //eq - (==) neq - (!=) less - (<) lessEq - (<=) greater - (>) greaterEq - (>=)
+      val opratorName = VConstants.OPERATOR_NAMES[getSearchOperator()]
+      operator = TODO()
+
       var operand = getSql(block!!.activeRecord)
+
+      fun compCondBuilder(body: (scope: ExpressionWithColumnType<String>) -> Op<Boolean>)
+              : (ExpressionWithColumnType<String>.(String) -> Op<Boolean>)? {
+        return (lambda@ fun ExpressionWithColumnType<String>.(pattern: String): Op<Boolean> = body(this)) //as (ExpressionWithColumnType<String>.(Any) -> Op<Boolean>)?
+      }
+
+      when (options and VConstants.FDO_SEARCH_MASK) {
+        VConstants.FDO_SEARCH_NONE -> {
+        }
+        VConstants.FDO_SEARCH_UPPER -> operand = operand!!.toUpperCase()
+        VConstants.FDO_SEARCH_LOWER -> operand = operand!!.toLowerCase()
+        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+      }
 
       if (operand!!.indexOf('*') == -1) {
         // nothing to change: standard case
       } else {
         when (getSearchOperator()) {
           VConstants.SOP_EQ -> {
-            operator = "LIKE "
             operand = operand.replace('*', '%')
+            operator = compCondBuilder {
+              LikeOp(it, stringParam((operand!!)))
+            }
           }
           VConstants.SOP_NE -> {
-            operator = "NOT LIKE "
             operand = operand.replace('*', '%')
+            operator = compCondBuilder {
+              NotLikeOp(it, stringParam(operand!!))
+            }
           }
+
           VConstants.SOP_GE, VConstants.SOP_GT ->           // remove everything after at '*'
             operand = operand.substring(0, operand.indexOf('*')) + "'"
           VConstants.SOP_LE, VConstants.SOP_LT ->           // replace substring starting at '*' by highest (ascii) char
@@ -685,14 +735,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           else -> throw InconsistencyException()
         }
       }
-      when (options and VConstants.FDO_SEARCH_MASK) {
-        VConstants.FDO_SEARCH_NONE -> {
-        }
-        VConstants.FDO_SEARCH_UPPER -> operand = "{fn UPPER($operand)}"
-        VConstants.FDO_SEARCH_LOWER -> operand = "{fn LOWER($operand)}"
-        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-      }
-      "$operator $operand"
+      return ((operator as Expression<String>.(t: String) -> Op<Boolean>) to (operand as TypeVariable<GenericDeclaration>?))
     }
   }
 
