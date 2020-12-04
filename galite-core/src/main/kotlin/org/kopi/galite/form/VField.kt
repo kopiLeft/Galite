@@ -961,6 +961,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   }
 
   /**
+   *
+   */
+  fun setQuery_(record: Int, query: org.jetbrains.exposed.sql.Query, column: Int) {
+    TODO()
+  }
+
+  /**
    * Returns the specified tuple column as object of correct type for the field.
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple

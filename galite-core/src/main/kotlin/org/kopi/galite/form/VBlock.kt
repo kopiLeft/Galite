@@ -23,9 +23,20 @@ import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.abs
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -35,9 +46,9 @@ import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
@@ -45,16 +56,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.VarCharColumnType
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1413,6 +1414,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
     clearRecord(recno)
   }
+
   // ----------------------------------------------------------------------
   // Interface bd/Triggers
   // ----------------------------------------------------------------------
@@ -1420,16 +1422,133 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Loads block from database.
    * @exception VException      an exception may be raised by triggers
    */
-  fun load() {
-    TODO()
+  open fun load() {
+    // get select condition from first record in block
+    if (isMulti()) {
+      activeRecord = 0
+    }
+    callProtectedTrigger(VConstants.TRG_PREQRY)
+
+    // create database query
+    val columns = getSearchColumns_()
+    val table = getSearchTables_()
+    val condition = getSearchConditions_()
+    val orderBy = getSearchOrder_()
+
+    if (isMulti()) {
+      activeRecord = -1
+      activeField = null
+    }
+
+    // clear block: it will only hold the retrieved tuples
+    clear()
+
+    // get index of id field in BLOCK
+    val idfld: Int = getFieldIndex(idField)
+
+    // get index of id field in QUERY
+    var idqry = 0
+
+    for (i in 0 until idfld) {
+      if (fields[i].getColumnCount() > 0) {
+        idqry += 1
+      }
+    }
+
+    // open database query, fetch tuples
+    val query = table.slice(columns).select(condition).orderBy(*orderBy.toTypedArray())
+
+    fetchCount = 0
+    for (result in query) {
+      if (fetchCount < fetchSize) {
+        if (result[columns[1 + idqry]] == 0) {
+          continue
+        }
+        fetchBuffer[fetchCount] = result[columns[1 + idqry]] as Int
+        if (fetchCount >= bufferSize) {
+          fetchCount += 1
+        } else {
+          var i = 0
+          var j = 0
+
+          while (i < fields.size) {
+            if (fields[i].getColumnCount() > 0) {
+              fields[i].setQuery_(fetchCount, query, 1 + j)
+              j += 1
+            }
+            i++
+          }
+          setRecordFetched(fetchCount, true)
+          setRecordChanged(fetchCount, false)
+          setRecordDeleted(fetchCount, false)
+          try {
+            if (isMulti()) {
+              activeRecord = fetchCount
+            }
+            callProtectedTrigger(VConstants.TRG_POSTQRY)
+            if (isMulti()) {
+              activeRecord = -1
+            }
+            fetchCount += 1
+          } catch (e: VException) {
+            if (isMulti()) {
+              activeRecord = -1
+            }
+            if (e is VSkipRecordException) {
+              clearRecordImpl(fetchCount)
+            } else {
+              clear()
+              throw e
+            }
+          } catch (t: Throwable) {
+            t.printStackTrace()
+          }
+        }
+      }
+
+    }
+    fetchPosition = 0
+    // !!! REMOVE setActiveRecord(0);
+    if (!isMulti() && fetchCount == 0) {
+      throw VQueryNoRowException(MessageCode.getMessage("VIS-00022"))
+    } else if (!isMulti()) {
+      setMode(VConstants.MOD_UPDATE)
+    }
+    fireBlockChanged()
   }
 
   /**
    * Fetches record with given ID from database.
    * @exception VException      an exception may be raised by triggers
    */
-  fun fetchRecord(id: Int) {
-    TODO()
+  open fun fetchRecord(id: Int) {
+    val columns = getSearchColumns_()
+    val table = getSearchTables_()
+    val condition = Op.build { idColumn_ eq id  }
+    val query = table.slice(columns).select(condition)
+
+    transaction {
+      if (!query.execute(this)!!.next()) {
+        /* Record does not exist anymore: it was deleted by another user */
+        throw VSkipRecordException()
+      } else {
+        /* set values */
+        var j = 0
+
+        for (field in fields) {
+          if (field.getColumnCount() > 0) {
+            field.setQuery_(query, columns[1 + j])
+            j += 1
+          }
+        }
+        assert(!query.execute(this)!!.next()) { "too many rows" }
+      }
+    }
+    setRecordFetched(activeRecord, true)
+    setRecordChanged(activeRecord, false)
+    setRecordDeleted(activeRecord, false)
+    callProtectedTrigger(VConstants.TRG_POSTQRY)
+    setMode(VConstants.MOD_UPDATE)
   }
 
   /**
@@ -1491,10 +1610,64 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Saves changes in block to database.
    * @exception VException      an exception may be raised by triggers
-   * @exception SQLException            an exception may be raised DB access
+   * @exception SQLException    an exception may be raised DB access
    */
-  fun save() {
-    TODO()
+  open fun save() {
+    assert(!isMulti() || activeRecord == -1) { "Is multi and activeRecord = $activeRecord" }
+    try {
+      callProtectedTrigger(VConstants.TRG_PRESAVE)
+    } catch (e: VException) {
+      throw InconsistencyException()
+    }
+    if (!isMulti()) {
+      when (getMode()) {
+        VConstants.MOD_INSERT -> insertRecord(0, -1)
+        VConstants.MOD_UPDATE -> updateRecord(0)
+        else -> throw InconsistencyException()
+      }
+    } else {
+      if (isIndexed()) {
+        /* first delete all deleted and changed old records */
+        for (i in 0 until bufferSize) {
+          if (isRecordFetched(i)) {
+            if (isRecordChanged(i)) {
+              transaction {
+                tables!![0].deleteWhere{ idColumn_ eq idField.getInt(i)!!}
+              }
+            } else if (isRecordDeleted(i)) {
+              deleteRecord(i)
+            }
+          }
+        }
+      }
+      for (i in 0 until bufferSize) {
+        if (isRecordDeleted(i)) {
+          if (!isRecordFetched(i)) {
+            clearRecordImpl(i)
+          } else {
+            // IF INDEX UPDATE SET THEN RECORD ALREADY DELETED
+            if (!isIndexed()) {
+              deleteRecord(i)
+            }
+          }
+        } else if (isRecordChanged(i)) {
+          try {
+            if (!isRecordFetched(i)) {
+              insertRecord(i, -1)
+            } else {
+              if (isIndexed()) {
+                // !!! update with ID
+                insertRecord(i, idField.getInt(i)!!)
+              } else {
+                updateRecord(i)
+              }
+            }
+          } catch (doNothing: VSkipRecordException) {
+            activeRecord = -1
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -1666,6 +1839,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
+   *
+   */
+  fun getSearchColumns_(): ArrayList<Column<*>> {
+    TODO()
+  }
+
+  /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
    *
    * @return    true iff Oracle outer join syntax should be used.
@@ -1735,6 +1915,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Returns the search order for database query.
    */
   fun getSearchOrder(): String? {
+    TODO()
+  }
+
+  /**
+   * Returns the search order for database query.
+   */
+  fun getSearchOrder_(): ArrayList<Pair<Column<*>, SortOrder>> {
     TODO()
   }
 
