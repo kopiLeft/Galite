@@ -67,6 +67,6 @@ object FieldsTest: Form() {
   }
 }
 
-fun main(){
+fun main() {
   Application.runForm(formName = FieldsTest)
 }
