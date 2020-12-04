@@ -35,7 +35,7 @@ object User: Table() {
   val age = integer("age")
 }
 
-object TestForm: Form() {
+object FormSample: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
@@ -113,5 +113,5 @@ class CommandesC(fournisseur: Int?): Chart() {
 }
 
 fun main(){
-  Application.runForm(formName = TestForm)
+  Application.runForm(formName = FormSample)
 }

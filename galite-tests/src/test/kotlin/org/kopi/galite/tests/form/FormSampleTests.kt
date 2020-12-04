@@ -4,11 +4,11 @@ import org.junit.Test
 import org.kopi.galite.tests.JApplicationTestBase
 import kotlin.test.assertEquals
 
-class FormTests: JApplicationTestBase() {
+class FormSampleTests: JApplicationTestBase() {
 
     @Test
     fun sourceFormTest() {
-        val formModel = TestForm.model
-        assertEquals(TestForm::class.qualifiedName!!.replace(".", "/"), formModel.source)
+        val formModel = FormSample.model
+        assertEquals(FormSample::class.qualifiedName!!.replace(".", "/"), formModel.source)
     }
 }
