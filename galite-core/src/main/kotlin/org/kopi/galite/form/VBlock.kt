@@ -1749,7 +1749,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             VConstants.FDO_SEARCH_LOWER -> condColumn.lowerCase()
             else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
           }
-          conditionList.add(Op.build { searchColumn.condOperator(value) })
+          conditionList.add(Op.build { searchColumn.condOperator(value as String) })
         }
       }
     }
@@ -1759,7 +1759,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       conditionList.compoundAnd()
     }
   }
-
 
   /**
    * Returns the search order for database query.
