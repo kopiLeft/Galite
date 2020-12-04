@@ -15,7 +15,7 @@ It is a framework basically, that help them create forms to enter their data, re
 
 Galite offers many advantages:
 * Kotlin-based DSL: using Type-Safe builders for building the application components through the simple declaration of the forms, reports or charts in the Dsl. 
-* Data from database: it provides you with the feature of connecting forms with databases, building reports and charts, getting queries from different database dialects using [Exposed](https://github.com/JetBrains/Exposed) library. 
+* Data from database: it provides you with the feature of connecting forms with databases, building reports and charts, getting queries from different database dialects using [Exposed](https://github.com/JetBrains/Exposed) framework. 
 * Strongly typed fields: you have to declare the data types of fields explicitly, which allows to checks the type of data assigned to a field at compile-time. 
 
 ## Contributing
