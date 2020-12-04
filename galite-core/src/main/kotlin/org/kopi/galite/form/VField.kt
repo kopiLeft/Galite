@@ -28,6 +28,10 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.BlockLocalizer
@@ -53,7 +57,6 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -413,7 +416,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * @return a list column for list
    */
-  protected abstract fun getListColumn(): VListColumn?
+  internal abstract fun getListColumn(): VListColumn?
 
   // ----------------------------------------------------------------------
   // NAVIGATING
@@ -664,45 +667,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  open fun getSearchCondition(): String? {
-    return if (isNull(block!!.activeRecord)) {
-      when(getSearchOperator()) {
-        VConstants.SOP_EQ -> null
-        VConstants.SOP_NE -> "IS NOT NULL"
-        else -> "IS NULL"
-      }
-    } else {
-      var operator = VConstants.OPERATOR_NAMES[getSearchOperator()]
-      var operand = getSql(block!!.activeRecord)
-
-      if (operand!!.indexOf('*') == -1) {
-        // nothing to change: standard case
-      } else {
-        when (getSearchOperator()) {
-          VConstants.SOP_EQ -> {
-            operator = "LIKE "
-            operand = operand.replace('*', '%')
-          }
-          VConstants.SOP_NE -> {
-            operator = "NOT LIKE "
-            operand = operand.replace('*', '%')
-          }
-          VConstants.SOP_GE, VConstants.SOP_GT ->           // remove everything after at '*'
-            operand = operand.substring(0, operand.indexOf('*')) + "'"
-          VConstants.SOP_LE, VConstants.SOP_LT ->           // replace substring starting at '*' by highest (ascii) char
-            operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
-          else -> throw InconsistencyException()
-        }
-      }
-      when (options and VConstants.FDO_SEARCH_MASK) {
-        VConstants.FDO_SEARCH_NONE -> {
-        }
-        VConstants.FDO_SEARCH_UPPER -> operand = "{fn UPPER($operand)}"
-        VConstants.FDO_SEARCH_LOWER -> operand = "{fn LOWER($operand)}"
-        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-      }
-      "$operator $operand"
-    }
+  open fun getSearchCondition(): Op<Boolean>? {
+    TODO()
   }
 
   // ----------------------------------------------------------------------
@@ -988,6 +954,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setQuery(block!!.currentRecord, query, column)
   }
 
+  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Column<*>?) {
+    TODO()
+  }
+
   /**
    * Sets the field value of given record from a query tuple.
    * @param     record          the index of the record
@@ -1004,6 +974,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     column          the index of the column in the tuple
    */
   abstract fun retrieveQuery(query: Query, column: Int): Any?
+
+
+  /**
+   * TODO document! and add needed implementations
+   */
+  open fun <T> retrieveQuery_(result: ResultRow, column: Column<T>): Any? = result[column]
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
@@ -1338,12 +1314,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     fireColorChanged = false
     if (this.foreground[r] == null && foreground != null
-        || this.foreground[r] != null && this.foreground[r]!! != foreground) {
+            || this.foreground[r] != null && this.foreground[r]!! != foreground) {
       this.foreground[r] = foreground
       fireColorChanged = true
     }
     if (this.background[r] == null && background != null
-        || this.background[r] != null && this.background[r]!! != foreground) {
+            || this.background[r] != null && this.background[r]!! != foreground) {
       this.background[r] = background
       fireColorChanged = true
     }
@@ -1414,8 +1390,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun isInternal(): Boolean {
     return access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
   }
 
   // ----------------------------------------------------------------------
@@ -2014,10 +1990,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-                       block!!.getFieldPos(this),
-                       label,
-                       lab ?: name,
-                       toolTip)
+                      block!!.getFieldPos(this),
+                      label,
+                      lab ?: name,
+                      toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
           || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -2026,6 +2002,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }
   }
+
 
   /**
    * return the name of this field
