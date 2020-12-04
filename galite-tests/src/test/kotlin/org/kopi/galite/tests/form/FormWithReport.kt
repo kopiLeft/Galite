@@ -14,56 +14,55 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.tests.form
 
+import org.kopi.galite.demo.desktop.Application
 import java.util.Locale
 
-import org.kopi.galite.common.INIT
-import org.kopi.galite.common.PREBLK
-import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.ReportSelectionForm
+import org.kopi.galite.report.Report
+import org.kopi.galite.tests.report.SimpleReport
 
-object FormWithBlockTrigger: Form() {
-
+object FormWithReport : ReportSelectionForm() {
   override val locale = Locale.FRANCE
+
   override val title = "form for test"
+
+  val action = menu("Action")
   val testPage = page("test page")
-  val menu = menu("Action")
-  val firstBlock = insertBlock(BlockWithTrigger1, testPage)
-  val secondVlock = insertBlock(BlockWithTrigger2, testPage)
-}
+  val report = actor(
+          ident = "report",
+          menu = action,
+          label = "CreateReport",
+          help = "Create report",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "preview"  // icon is optional here
+  }
 
-object BlockWithTrigger1 : FormBlock(1, 1, "Test", "Test block") {
-  val u = table(User)
-  val i = index(message = "ID should be unique")
-
-  init {
-    trigger(PREBLK, INIT) {
-      println("---------------works---------------")
+  val block = insertBlock(BlockSample, testPage) {
+    command(item = report) {
+      this.name = "report"
+      action = {
+        println("-----------Generating report-----------------")
+        createReport(BlockSample)
+      }
     }
   }
 
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
-    label = "name"
-    help = "The user name"
-    columns(u.name)
+  override fun createReport(): Report {
+    return SimpleReport
   }
 }
 
-object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
+object BlockSample : FormBlock(1, 1, "Test", "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
-  init {
-    trigger(PREBLK) {
-      println("---------------works---------------")
-    }
-  }
-
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
@@ -71,5 +70,5 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
 }
 
 fun main(){
-  Application.runForm(FormWithBlockTrigger)
+  Application.runForm(FormWithReport)
 }

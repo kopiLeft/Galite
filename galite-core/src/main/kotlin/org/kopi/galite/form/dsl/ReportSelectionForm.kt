@@ -30,6 +30,13 @@ abstract class ReportSelectionForm: DictionaryForm() {
    */
   protected abstract fun createReport(): Report
 
+  /**
+   * create a report for this form
+   */
+  protected fun createReport(formBlock: FormBlock) {
+    model.createReport(formBlock.vBlock)
+  }
+
   /** Form model */
   override val model: VReportSelectionForm by lazy {
     genLocalization()

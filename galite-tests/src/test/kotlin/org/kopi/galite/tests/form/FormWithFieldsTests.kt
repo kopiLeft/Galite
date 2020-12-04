@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,11 +14,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.tests.form
 
-/**
- * This class represents an action, ie a method to execute
- */
-class BlockAction<T>(protected var name: String?, method: () -> T) : Action<T>(method) {
+import java.util.Locale
 
+import kotlin.test.assertEquals
+
+import org.junit.Test
+
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.tests.JApplicationTestBase
+
+class FormWithFieldsTests: JApplicationTestBase() {
+
+  @Test
+  fun sourceFormTest() {
+    val formModel = FormWithFields.model
+    assertEquals(FormWithFields::class.qualifiedName!!.replace(".", "/"), formModel.source)
+  }
 }
