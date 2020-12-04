@@ -98,9 +98,9 @@ class Connection {
       } else {
         try {
           transaction {
-            user = DBSchema.Users.slice(DBSchema.Users.id).select {
-              DBSchema.Users.shortName eq userName
-              }.single()[DBSchema.Users.id]
+            user = Users.slice(Users.id).select {
+              Users.shortName eq userName
+              }.single()[Users.id]
           }
         } catch (e: NoSuchElementException) {
           throw SQLException("user unknown")

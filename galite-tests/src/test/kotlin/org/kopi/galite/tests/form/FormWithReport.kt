@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.tests.form
 
+import org.kopi.galite.demo.desktop.Application
 import java.util.Locale
 
 import org.kopi.galite.domain.Domain
@@ -66,4 +67,8 @@ object BlockSample : FormBlock(1, 1, "Test", "Test block") {
     help = "The user name"
     columns(u.name)
   }
+}
+
+fun main(){
+  Application.runForm(FormWithReport)
 }
