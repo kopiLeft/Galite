@@ -9,7 +9,7 @@ Galite allows users to build business applications with forms, reports and chart
 
 ## PURPOSE
 Since development must be as creative and enjoyable as doing common tasks, GALITE provides all the needed tools for developers to take the pain out of designing and implementing applications.
-It is a framework basically , designed for commercials and clients ,that help them create forms to enter their data, reports and charts for visualizing them , all to control their stocks and items.
+It is a framework basically, that help them create forms to enter their data, reports and charts for visualizing them, all to control their stocks and items.
 
 ## Advanatages
 
