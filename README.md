@@ -8,7 +8,7 @@ Welcome to **Galite**, the new framework of [kopiLeft](https://github.com/kopiLe
 Galite allows users to build business applications with forms, reports and charts using a simple, creative and specific syntax that will allow you to put all the verbosity aside and concentrate on the business logic with it’s simple domain specific language . 
 
 ## Purpose
-Since development must be as creative and enjoyable as doing common tasks, GALITE provides all the needed tools for developers to take the pain out of designing and implementing applications.
+Since development must be as creative and enjoyable as doing common tasks, Galite provides all the needed tools for developers to take the pain out of designing and implementing applications.
 
 It is a framework basically, a framework that basically helps to create forms, enter data and visualize them.
 
