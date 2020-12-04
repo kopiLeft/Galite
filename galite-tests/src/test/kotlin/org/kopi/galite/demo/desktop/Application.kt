@@ -25,7 +25,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.tests.form.FieldsTest
+import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.tests.form.TestForm
 
 const val testURL = "jdbc:h2:mem:test"
@@ -35,7 +35,7 @@ const val testPassword = "admin"
 val testLocale: Locale = Locale.FRANCE
 
 fun main(args: Array<String>) {
-  val dbTest =  DBSchemaTest()
+  val dbTest = DBSchemaTest()
 
   Database.connect(testURL, driver = testDriver, user = testUser, password = testPassword)
   transaction {
@@ -45,10 +45,10 @@ fun main(args: Array<String>) {
 
     dbTest.insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
     dbTest.insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
-    dbTest.insertIntoModule("2009",  "org/kopi/galite/test/Menu", 90, "1000", TestForm::class)
-    dbTest.insertIntoModule("2010",  "org/kopi/galite/test/Menu", 90, "1000", FieldsTest::class)
+    dbTest.insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", TestForm::class)
+    dbTest.insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", FormWithFields::class)
 
-    dbTest.insertIntoUserRights(testUser,"2000" , true)
+    dbTest.insertIntoUserRights(testUser, "2000", true)
     dbTest.insertIntoUserRights(testUser, "1000", true)
     dbTest.insertIntoUserRights(testUser, "2009", true)
     dbTest.insertIntoUserRights(testUser, "2010", true)
@@ -56,7 +56,8 @@ fun main(args: Array<String>) {
     val arguments = if (args.isNotEmpty()) {
       args
     } else {
-      arrayOf("-d",
+      arrayOf(
+              "-d",
               testDriver,
               "-b",
               testURL,
@@ -66,8 +67,7 @@ fun main(args: Array<String>) {
               testPassword,
               "-l",
               testLocale.toString(),
-              "-r" ,
-
+              "-r"
       )
     }
 
@@ -76,12 +76,12 @@ fun main(args: Array<String>) {
 }
 
 object Application {
-  fun runForm(formName : Form?,
-     testURL: String = "jdbc:h2:mem:test",
-     testDriver : String = "org.h2.Driver",
-     testUser : String = "admin",
-     testPassword : String = "admin",
-     testLocale : Locale = Locale.FRANCE) {
+  fun runForm(formName: Form,
+              testURL: String = "jdbc:h2:mem:test",
+              testDriver: String = "org.h2.Driver",
+              testUser: String = "admin",
+              testPassword: String = "admin",
+              testLocale: Locale = Locale.FRANCE) {
 
     val arguments = arrayOf("-d",
             testDriver,
@@ -95,7 +95,7 @@ object Application {
             testLocale.toString(),
             "-r",
             "-f",
-            formName!!::class.qualifiedName!!
+            formName::class.qualifiedName!!
     )
 
     main(arguments)

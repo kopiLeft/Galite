@@ -74,7 +74,7 @@ object TestForm: Form() {
     }
   }
 
-  val tb3_to_test_block_options = insertBlock(TestBlock(), p1) {
+  val tb3ToTestBlockOptions = insertBlock(TestBlock(), p1) {
     options(BlockOption.NOINSERT)
   }
 

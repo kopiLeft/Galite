@@ -22,7 +22,6 @@ import java.util.Locale
 import org.kopi.galite.common.INIT
 import org.kopi.galite.common.PREBLK
 import org.kopi.galite.demo.desktop.Application
-
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock

@@ -29,7 +29,7 @@ class FormWithFieldsTests: JApplicationTestBase() {
 
   @Test
   fun sourceFormTest() {
-    val formModel = FieldsTest.model
-    assertEquals(FieldsTest::class.qualifiedName!!.replace(".", "/"), formModel.source)
+    val formModel = FormWithFields.model
+    assertEquals(FormWithFields::class.qualifiedName!!.replace(".", "/"), formModel.source)
   }
 }
