@@ -44,7 +44,7 @@ class FormFieldColumn<T : Comparable<T>>(val column: Column<T>,
   /**
    * Returns the the field column model.
    */
-  fun getFormFieldColumnModel(): VColumn<T> {
+  fun getFormFieldColumnModel(): VColumn {
     return VColumn(num, ident, isKey, nullable, column)
   }
 

@@ -78,7 +78,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               options: Int,
               access: IntArray,
               list: VList?,
-              columns: Array<VColumn<>?>?,
+              columns: Array<VColumn?>?,
               indices: Int,
               priority: Int,
               commands: Array<VCommand>?,

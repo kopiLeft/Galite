@@ -29,7 +29,7 @@ import java.io.Serializable
  * @param key       whether the column is a key
  * @param nullable  true if column is nullable
  */
-class VColumn<T: Comparable<T>>(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean, val column: Column<T>) : Serializable {
+class VColumn(val pos: Int, val name: String, val key: Boolean, val nullable: Boolean, val column: Column<*>) : Serializable {
 
   /**
    * Returns the position of the table in the array of tables
