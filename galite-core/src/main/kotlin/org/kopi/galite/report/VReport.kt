@@ -458,7 +458,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
    * requirements (value and search operator) of the field.
    */
   protected fun buildSQLCondition(column: String, field: VField): String {
-    val condition: String? = field.getSearchCondition()
+    val condition = field.getSearchCondition()
 
     return if (condition == null) {
       " TRUE = TRUE "

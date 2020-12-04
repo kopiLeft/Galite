@@ -51,6 +51,8 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -1760,8 +1762,63 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     fetchLookup(table, fld)
   }
 
-  protected fun fetchLookup(table: Int, currentField: VField) {
-    TODO()
+  protected fun fetchLookup(tableIndex: Int, currentField: VField) {
+    val table = object : Table(tables!![tableIndex].tableName) {}
+    val columns = mutableListOf<Column<*>>()
+    val conditions = mutableListOf<Op<Boolean>>()
+
+    for (i in fields.indices) {
+      val f = fields[i]
+
+      if (f !== currentField && f.lookupColumn(tableIndex) != null && !f.isLookupKey(tableIndex)) {
+        f.setNull(activeRecord)
+      }
+    }
+
+    for (i in fields.indices) {
+      val column = fields[i].lookupColumn(tableIndex)
+
+      if (column != null) {
+        columns.add(column)
+      }
+
+      if (fields[i] == currentField || fields[i].isLookupKey(tableIndex)) {
+        val condition = fields[i].getSearchCondition()
+
+        if (condition != null) {
+          conditions.add(condition)
+        }
+      }
+    }
+
+    try {
+      transaction {
+        val condition: Op<Boolean> = conditions.compoundAnd()
+        val query = table.slice(columns).select(condition)
+
+        if (query.toList().isEmpty()) {
+          throw VExecFailedException(MessageCode.getMessage("VIS-00016",
+                  arrayOf<Any>(tables!![tableIndex])))
+
+        } else {
+          var j = 0
+
+          fields.forEach {
+            if (it.lookupColumn(tableIndex) != null) {
+              it.setQuery_(query, it.getColumn(1 + j)!!.column)
+              j += 1
+            }
+          }
+          if (query.toList().isNotEmpty()) {
+
+            throw VExecFailedException(MessageCode.getMessage("VIS-00020",
+                    arrayOf<Any>(tables!![tableIndex])))
+          }
+        }
+      }
+    } catch (e: SQLException) {
+      throw VExecFailedException("XXXX !!!!" + e.message)
+    }
   }
 
   fun refreshLookup(record: Int) {
@@ -3002,7 +3059,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
-  protected var tables: Array<Table>? = null // names of database tables
+  internal var tables: Array<Table>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices

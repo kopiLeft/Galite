@@ -18,6 +18,7 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
@@ -53,4 +54,8 @@ object FormWithReport : ReportSelectionForm() {
   override fun createReport(): Report {
     return SimpleReport
   }
+}
+
+fun main(){
+  Application.runForm(FormWithReport)
 }

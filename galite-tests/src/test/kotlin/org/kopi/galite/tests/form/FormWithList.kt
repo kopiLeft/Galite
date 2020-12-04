@@ -16,13 +16,13 @@
  */
 package org.kopi.galite.tests.form
 
-import org.kopi.galite.db.DBSchema
-import org.kopi.galite.domain.Domain
 import java.util.Locale
 
+import org.kopi.galite.db.Users
+import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
-
 import org.kopi.galite.form.dsl.Key
 
 object FormWithList : DictionaryForm() {
@@ -54,7 +54,7 @@ object FormWithList : DictionaryForm() {
 }
 
 object BlockSample : FormBlock(1, 1, "Test", "Test block") {
-  val u = table(DBSchema.Users)
+  val u = table(Users)
   val i = index(message = "ID should be unique")
 
   val id = hidden(domain = Domain<Int>(20)) {
@@ -70,4 +70,8 @@ object BlockSample : FormBlock(1, 1, "Test", "Test block") {
       priority = 1
     }
   }
+}
+
+fun main(){
+  Application.runForm(formName = FormWithList)
 }

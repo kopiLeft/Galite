@@ -14,29 +14,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.report
+package org.kopi.galite.tests.form
 
-import org.junit.Test
-import org.kopi.galite.report.VBaseRow
-import org.kopi.galite.tests.TestBase
+import java.util.Locale
+
 import kotlin.test.assertEquals
 
-class VBaseRowTests : TestBase() {
+import org.junit.Test
 
-  val intData: Array<Any?> = arrayOf(1, 2, 3, 4)
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.tests.JApplicationTestBase
+
+class FormWithFieldsTests: JApplicationTestBase() {
 
   @Test
-  fun vBaseRowIntTest() {
-    /**Base row containing integer data*/
-    val vBaseRowIntTest: VBaseRow = VBaseRow(intData)
-
-    assertEquals(0, vBaseRowIntTest.getLevel())
-    assertEquals(1, vBaseRowIntTest.getValueAt(0))
-
-    vBaseRowIntTest.setValueAt(0, 5)
-    assertEquals(5, vBaseRowIntTest.getValueAt(0))
-
-    val cloneData = vBaseRowIntTest.cloneArray()
-    assertArraysEquals(vBaseRowIntTest.data, cloneData)
+  fun sourceFormTest() {
+    val formModel = FormWithFields.model
+    assertEquals(FormWithFields::class.qualifiedName!!.replace(".", "/"), formModel.source)
   }
 }
