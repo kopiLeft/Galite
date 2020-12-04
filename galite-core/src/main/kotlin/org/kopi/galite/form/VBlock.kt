@@ -2016,7 +2016,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val ids = IntArray(fetchSize)
     var rows = 0
 
-    for (result in tables.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())) {
+    for (result in tables.slice(columns).select(conditions!!).orderBy(*orderBys.toTypedArray())) {
       if (rows == fetchSize) {
         break
       }
