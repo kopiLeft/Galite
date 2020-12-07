@@ -65,7 +65,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  var options: Int = 0
+  private var options: Int = 0
   var columns: FormFieldColumns? = null
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command>? = null
@@ -261,6 +261,23 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
                       || block.hasOption(VConstants.BKO_NOCHART))) {
         block.positionField(position)
       }
+    }
+  }
+
+  /**
+   * Adds the field options. you can use one or more option from the options available for fields.
+   *
+   * Use [FieldOption] to see the list of these field options.
+   *
+   * @param fieldOptions the field options
+   */
+  fun options(vararg fieldOptions: FieldOption) {
+    fieldOptions.forEach { fieldOption ->
+      if(fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
+        options = options and fieldOption.value.inv()
+      }
+
+      options = options or fieldOption.value
     }
   }
 
