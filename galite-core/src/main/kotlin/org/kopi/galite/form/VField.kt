@@ -28,16 +28,34 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.ComparisonOp
+import org.jetbrains.exposed.sql.EqOp
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.GreaterEqOp
+import org.jetbrains.exposed.sql.GreaterOp
 import org.jetbrains.exposed.sql.IsNotNullOp
 import org.jetbrains.exposed.sql.IsNullOp
+import org.jetbrains.exposed.sql.LessEqOp
+import org.jetbrains.exposed.sql.LessOp
 import org.jetbrains.exposed.sql.LikeOp
+import org.jetbrains.exposed.sql.NeqOp
 import org.jetbrains.exposed.sql.NotLikeOp
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.QueryParameter
+import org.jetbrains.exposed.sql.booleanParam
+import org.jetbrains.exposed.sql.byteParam
+import org.jetbrains.exposed.sql.doubleParam
+import org.jetbrains.exposed.sql.floatParam
+import org.jetbrains.exposed.sql.intParam
+import org.jetbrains.exposed.sql.longParam
+import org.jetbrains.exposed.sql.shortParam
 import org.jetbrains.exposed.sql.stringParam
 import org.jetbrains.exposed.sql.transactions.transaction
-
+import org.jetbrains.exposed.sql.ubyteParam
+import org.jetbrains.exposed.sql.uintParam
+import org.jetbrains.exposed.sql.ulongParam
+import org.jetbrains.exposed.sql.ushortParam
 import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.BlockLocalizer
@@ -430,8 +448,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * enter a field
    */
   fun enter() {
-    assert(block === getForm().getActiveBlock()) { threadInfo() + "field : " + name + " block : " + block!!.name +
-            " active block : " + getForm().getActiveBlock()!!.name }
+    assert(block === getForm().getActiveBlock()) {
+      threadInfo() + "field : " + name + " block : " + block!!.name +
+              " active block : " + getForm().getActiveBlock()!!.name
+    }
     assert(block!!.activeRecord != -1) { threadInfo() + "current record = " + block!!.activeRecord }
     assert(block!!.activeField == null) { threadInfo() + "current field: " + block!!.activeField }
     block!!.activeField = this
@@ -628,7 +648,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable()}?.key ?: false
+  fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
 
   /**
    * Is the field part of given index ?
@@ -647,7 +667,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getSearchType(): Int {
     return if (isNull(block!!.activeRecord)) {
-      when(getSearchOperator()) {
+      when (getSearchOperator()) {
         VConstants.SOP_EQ -> VConstants.STY_NO_COND
         VConstants.SOP_NE -> VConstants.STY_MANY
         else -> VConstants.STY_EXACT
@@ -673,11 +693,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  open fun getSearchCondition_(): Pair<Expression<String>.(t : String) -> Op<Boolean>, Any?>? {
+  open fun getSearchCondition_(): Pair<Expression<String>.(t: String) -> Op<Boolean>, Any?>? {
 
     if (isNull(block!!.activeRecord)) {
-      fun nullCondBuilder(body: (scope: Expression<String>) -> Op<Boolean>): (Expression<String>.(t : String) -> Op<Boolean>) {
-        return ( fun Expression<String>.(t : String): Op<Boolean> = body(this))
+      fun nullCondBuilder(body: (scope: Expression<String>) -> Op<Boolean>): (Expression<String>.(t: String) -> Op<Boolean>) {
+        return (fun Expression<String>.(t: String): Op<Boolean> = body(this))
       }
 
       return when (getSearchOperator()) {
@@ -690,17 +710,60 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         } to null)
       }
     } else {
+
       var operator: (ExpressionWithColumnType<String>.(t: String) -> Op<Boolean>)? = null
       // Operator name gets one of these operators as string , and will be the default value of operator
       //eq - (==) neq - (!=) less - (<) lessEq - (<=) greater - (>) greaterEq - (>=)
-      val opratorName = VConstants.OPERATOR_NAMES[getSearchOperator()]
-      operator = TODO()
-
+      //operator name = "=", "<", ">", "<=", ">=", "<>"
+      val operatorName = VConstants.OPERATOR_NAMES[getSearchOperator()]
       var operand = getSql(block!!.activeRecord)
+
+      fun <T, S1 : T?, S2 : T?> operatorBuilder(body: (scope: ExpressionWithColumnType<in S1>) -> ComparisonOp)
+              : (ExpressionWithColumnType<in S1>.(Any) -> Op<Boolean>)? {
+        return (fun ExpressionWithColumnType<in S1>.(_: Any): Op<Boolean> = body(this)) //as (ExpressionWithColumnType<String>.(Any) -> Op<Boolean>)?
+      }
+
+      fun <T, S : T?> ExpressionWithColumnType<in S>.wrap(value: T): QueryParameter<T> = when (value) {
+        is Boolean -> booleanParam(value)
+        is Byte -> byteParam(value)
+        is UByte -> ubyteParam(value)
+        is Short -> shortParam(value)
+        is UShort -> ushortParam(value)
+        is Int -> intParam(value)
+        is UInt -> uintParam(value)
+        is Long -> longParam(value)
+        is ULong -> ulongParam(value)
+        is Float -> floatParam(value)
+        is Double -> doubleParam(value)
+        is String -> QueryParameter(value, columnType) // String value should inherit from column
+        else -> QueryParameter(value, columnType)
+      } as QueryParameter<T>
+
+      operator = when (operatorName) {
+        "=" -> operatorBuilder {
+          EqOp(it, it.wrap(operand))
+        }
+        "<" -> operatorBuilder {
+          LessOp(it, it.wrap(operand))
+        }
+        ">" -> operatorBuilder {
+          GreaterOp(it, it.wrap(operand))
+        }
+        "<=" -> operatorBuilder {
+          LessEqOp(it, it.wrap(operand))
+        }
+        ">=" -> operatorBuilder {
+          GreaterEqOp(it, it.wrap(operand))
+        }
+        "<>" -> operatorBuilder {
+          NeqOp(it, it.wrap(operand))
+        }
+        else -> null
+      }
 
       fun compCondBuilder(body: (scope: ExpressionWithColumnType<String>) -> Op<Boolean>)
               : (ExpressionWithColumnType<String>.(String) -> Op<Boolean>)? {
-        return (lambda@ fun ExpressionWithColumnType<String>.(pattern: String): Op<Boolean> = body(this)) //as (ExpressionWithColumnType<String>.(Any) -> Op<Boolean>)?
+        return (fun ExpressionWithColumnType<String>.(pattern: String): Op<Boolean> = body(this)) //as (ExpressionWithColumnType<String>.(Any) -> Op<Boolean>)?
       }
 
       when (options and VConstants.FDO_SEARCH_MASK) {
@@ -1147,7 +1210,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun isNull(r: Int): Boolean  = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+  fun isNull(r: Int): Boolean = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
     callSafeTrigger(VConstants.TRG_VALUE) == null
   } else isNullImpl(r)
 
@@ -1372,12 +1435,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     fireColorChanged = false
     if (this.foreground[r] == null && foreground != null
-        || this.foreground[r] != null && this.foreground[r]!! != foreground) {
+            || this.foreground[r] != null && this.foreground[r]!! != foreground) {
       this.foreground[r] = foreground
       fireColorChanged = true
     }
     if (this.background[r] == null && background != null
-        || this.background[r] != null && this.background[r]!! != foreground) {
+            || this.background[r] != null && this.background[r]!! != foreground) {
       this.background[r] = background
       fireColorChanged = true
     }
@@ -1448,8 +1511,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun isInternal(): Boolean {
     return access[VConstants.MOD_QUERY] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
-           && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_INSERT] == VConstants.ACS_HIDDEN
+            && access[VConstants.MOD_UPDATE] == VConstants.ACS_HIDDEN
   }
 
   // ----------------------------------------------------------------------
@@ -1484,7 +1547,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Marks the field changed, trails the record if necessary
    */
   fun setChanged(changed: Boolean) {
-    if (changed && block!!.activeRecord!= -1) {
+    if (changed && block!!.activeRecord != -1) {
       block!!.setRecordChanged(block!!.activeRecord, true)
     }
     this.changed = changed
@@ -1526,7 +1589,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
             SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
             transaction {
-              exec(SELECT_IS_IN_LIST) {exists = it.next()}
+              exec(SELECT_IS_IN_LIST) { exists = it.next() }
             }
             if (!alreadyProtected) {
             }
@@ -1792,7 +1855,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   internal fun selectFromList(gotoNextField: Boolean) {
-    val qrybuf =  buildString{
+    val qrybuf = buildString {
       append("SELECT ")
       for (i in 0 until list!!.columnCount()) {
         if (i != 0) {
@@ -2048,13 +2111,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-                       block!!.getFieldPos(this),
-                       label,
-                       lab ?: name,
-                       toolTip)
+              block!!.getFieldPos(this),
+              label,
+              lab ?: name,
+              toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
-          || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
-          || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
+              || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
+              || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
         helpOnType(help)
         help.helpOnFieldCommand(command)
       }
@@ -2105,10 +2168,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-                    modeDesc,
-                    getTypeName(),
-                    getTypeInformation(),
-                    names)
+            modeDesc,
+            getTypeName(),
+            getTypeInformation(),
+            names)
   }
 
   /**
@@ -2379,18 +2442,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * any value
    * @return    the width of this field
    */
-  var width = 0// max # of chars per line
-  protected set
+  var width = 0
+    // max # of chars per line
+    protected set
 
   /**
    * The height of a field is the max number of line needed to display
    * any value
    * @return    the width of this field
    */
-  var height  = 0 // max # of lines
+  var height = 0 // max # of lines
     protected set
 
-  private lateinit var access : IntArray // access in each mode
+  private lateinit var access: IntArray // access in each mode
 
   private var priority = 0  // order in select results
 
@@ -2403,7 +2467,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   lateinit var name: String   // field name (for dumps)
     private set
 
-  var label : String? = null // field label
+  var label: String? = null // field label
     set(label) {
       field = label
       fireLabelChanged()
@@ -2419,7 +2483,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip : String? = null // help text
+  var toolTip: String? = null // help text
     private set
 
   private var index = 0 // The position in parent field array
