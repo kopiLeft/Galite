@@ -51,7 +51,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
       if (field.getColumnCount() > 1) {
         val tableColumn = field.fetchColumn(table)
         val rootColumn = field.fetchColumn(rootTable)
-        val cond: List<JoinCondition>
+
         if (tableColumn != -1) {
           if (field.getColumn(tableColumn)!!.nullable ||
                   field.getColumn(rootColumn)!!.nullable) {
@@ -64,9 +64,9 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                   if (j == rootColumn) {
                     joinBuffer!!.also {
                       it.add(Join(field.getColumn(tableColumn)!!.column!!.table,
-                              field.getColumn(j)!!.column!!.table,
-                              JoinType.LEFT,
-                              field.getColumn(tableColumn)!!.column!! eq field.getColumn(j)!!.column!!))
+                                  field.getColumn(j)!!.column!!.table,
+                                  JoinType.FULL,
+                                  field.getColumn(tableColumn)!!.column!! eq field.getColumn(j)!!.column!!))
                     }
                   }
 
@@ -88,9 +88,9 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                     transaction {
                       joinBuffer!!.also {
                         it.add(Join(mainTable,
-                                joinTable,
-                                JoinType.LEFT,
-                                field.getColumn(tableColumn)!!.column!! eq field.getColumn(j)!!.column!!)
+                                    joinTable,
+                                    JoinType.LEFT,
+                                    field.getColumn(tableColumn)!!.column!! eq field.getColumn(j)!!.column!!)
                         )
                       }
                     }
@@ -144,8 +144,9 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     // add remaining tables (not joined tables) to the list of tables.
     for (i in 1 until tables!!.size) {
       if (!isJoinedTable(tables!![i])) {
-        val jointables : MutableList<Join?> = mutableListOf(Join(tables!![i]))
-        searchTablesCondition.add(jointables)
+        val joinTables : MutableList<Join?> = mutableListOf(Join(tables!![i]))
+
+        searchTablesCondition.add(joinTables)
       }
     }
     return searchTablesCondition
@@ -153,6 +154,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
   fun getSearchCondition(fld: VField, op: Op<Boolean>?): MutableList<Op<Boolean>?> {
     val searchCondition: MutableList<Op<Boolean>?>? = null
+
     if (fld.hasNullableCols()) {
       for (j in 1 until fld.getColumnCount()) {
         if (!fld.getColumn(j)!!.nullable) {
@@ -177,8 +179,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
   fun getFetchRecordCondition(fields: Array<VField>): MutableList<Op<Boolean>?> {
     val fetchRecordCondition: MutableList<Op<Boolean>?>? = null
 
-    for (i in fields.indices) {
-      val fld = fields[i]
+    for (fld in fields) {
 
       if (fld.hasNullableCols()) {
         for (j in 1 until fld.getColumnCount()) {
