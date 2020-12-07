@@ -103,8 +103,8 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                     addToProcessedFields(i)
                   }
                   if (rootTable == table) {
-                    getJoinCondition(rootTable, field.getColumn(j)!!.getTable())
-                  }
+                    joinBuffer!!.addAll(getJoinCondition(rootTable, field.getColumn(j)!!.getTable()))
+                    }
                 }
               }
             }
