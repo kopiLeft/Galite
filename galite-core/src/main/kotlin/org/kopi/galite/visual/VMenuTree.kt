@@ -28,22 +28,22 @@ import kotlin.system.exitProcess
 
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.innerJoin
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBSchema.Favorites
-import org.kopi.galite.db.DBSchema.GroupParties
-import org.kopi.galite.db.DBSchema.GroupRights
-import org.kopi.galite.db.DBSchema.Groups
-import org.kopi.galite.db.DBSchema.Modules
-import org.kopi.galite.db.DBSchema.Symbols
-import org.kopi.galite.db.DBSchema.UserRights
-import org.kopi.galite.db.DBSchema.Users
+import org.kopi.galite.db.Favorites
+import org.kopi.galite.db.GroupParties
+import org.kopi.galite.db.GroupRights
+import org.kopi.galite.db.Groups
+import org.kopi.galite.db.Modules
+import org.kopi.galite.db.Symbols
+import org.kopi.galite.db.UserRights
+import org.kopi.galite.db.Users
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
 
@@ -438,9 +438,9 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
                 .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
       else -> {
-        fetchRights(modules, (Modules innerJoin UserRights)
+        fetchRights(modules, Modules.innerJoin(UserRights, { id }, { module })
                 .slice(Modules.id, UserRights.access, Modules.priority)
-                .select { (Modules.id eq UserRights.module) and (UserRights.user eq getUserID()) }
+                .select { UserRights.user eq getUserID() }
                 .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC))
       }
     }

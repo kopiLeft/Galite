@@ -20,26 +20,20 @@ package org.kopi.galite.form
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.db.Query
+import org.kopi.galite.db.Utils
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VWeekColumn
 import org.kopi.galite.type.NotNullWeek
-import org.kopi.galite.db.Utils
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
 
-class VWeekField : VField(7, 1) {
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
+class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
   override fun hasAutofill(): Boolean = true
 
@@ -235,6 +229,14 @@ class VWeekField : VField(7, 1) {
     } else {
       query.getWeek(column)
     }
+  }
+
+  /**
+   * TODO document!
+   */
+  override fun <T> retrieveQuery_(result: ResultRow, column: Column<T>): Any? {
+    val tmp = result[column] as? Int ?: return null
+    return NotNullWeek(tmp / 100, tmp % 100)
   }
 
   /**
@@ -463,7 +465,7 @@ class VWeekField : VField(7, 1) {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private lateinit var value: Array<Week?>
+  private var value: Array<Week?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
     fun toText(value: Week?): String = value.toString()

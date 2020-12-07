@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.form.dsl
 
+import java.awt.Point
+
+import org.kopi.galite.form.VPosition
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -32,11 +35,25 @@ abstract class FormPosition protected constructor() {
     throw InconsistencyException("setChartPosition(chartPos) should not be called from here !!!")
   }
 
+  /**
+   * Returns the point that is on the most right and bottom from the location
+   * of the object and the parameter
+   *
+   * @param point                the current bottomRight point
+   */
+  abstract fun createRBPoint(point: Point, field: FormField<*>)
+
   // ----------------------------------------------------------------------
   // Position method
   // ----------------------------------------------------------------------
-  abstract val line: Int
-  abstract val column: Int
-  abstract val columnEnd: Int
-  abstract val lineEnd: Int
+  abstract fun getLine(): Int
+  abstract fun getColumn(): Int
+  abstract fun getColumnEnd(): Int
+  abstract fun getLineEnd(): Int
+  open fun getChartPosition(): Int = -1
+
+  /**
+   * Creates and returns a VPosition model resolved from this form field position
+   */
+  abstract fun getPositionModel(): VPosition
 }

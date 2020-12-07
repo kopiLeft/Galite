@@ -28,7 +28,7 @@ import org.kopi.galite.visual.VTrigger
  *
  * @param domain      the domain of this field
  */
-class ReportField<T : Comparable<T>>(override val domain: Domain<T>? = null): Field<T>(domain) {
+class ReportField<T : Comparable<T>>(override val domain: Domain<T>): Field<T>(domain) {
   /** the ident of this field */
   private val ident: String? get() = label
 

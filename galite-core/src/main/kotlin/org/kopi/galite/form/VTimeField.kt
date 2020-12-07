@@ -30,7 +30,7 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
-class VTimeField : VField(5, 1) {
+class VTimeField(val bufferSize: Int) : VField(5, 1) {
 
   override fun hasAutofill(): Boolean = true
 
@@ -48,14 +48,6 @@ class VTimeField : VField(5, 1) {
    * return true if this field implements "enumerateValue"
    */
   override fun hasNextPreviousEntry(): Boolean = true
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
 
   override fun isNumeric(): Boolean = true
 
@@ -407,5 +399,5 @@ class VTimeField : VField(5, 1) {
     }
   }
 
-  private lateinit var value: Array<Time?>
+  private var value: Array<Time?> = arrayOfNulls(2 * bufferSize)
 }

@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.jetbrains.exposed.sql.Column
+
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
@@ -38,94 +40,245 @@ import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
 
-import org.jetbrains.exposed.sql.Column
-
 /**
  * This class represents a form field. It represents an editable element of a block
  *
  * @param ident                the ident of this field
+ * @param fieldIndex           the index in parent array of fields
  * @param detailedPosition     the position within the block
  * @param label                the label (text on the left)
  * @param help                 the help text
  * @param align                the alignment of the text
  * @param options              the options of the field
  * @param columns              the column in the database
- * @param access               the access mode
+ * @param initialAccess        the initial access mode
  * @param commands             the commands accessible in this field
  * @param triggers             the triggers executed by this field
- * @param alias                the e alias of this field
+ * @param alias                the alias of this field
  */
-open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null): Field<T>(domain) {
+class FormField<T : Comparable<T>>(val block: FormBlock,
+                                   override val domain: Domain<T>,
+                                   private val fieldIndex: Int,
+                                   initialAccess: Int,
+                                   var position: FormPosition? = null): Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  var detailedPosition: FormPosition? = null
-  var options: Int = 0
+  private var options: Int = 0
   var columns: FormFieldColumns? = null
-  lateinit var access: IntArray
-  var commands: Array<Command>? = null
+  var access: IntArray = IntArray(3) { initialAccess }
+  var commands: MutableList<Command>? = null
   var triggers: Array<Trigger>? = null
   var alias: String? = null
+  var initialValues = mutableMapOf<Int, T?>()
   var value: T? = null
+    get() {
+      return if(vField.block == null) {
+        initialValues[0]
+      } else {
+        vField.getObject() as? T
+      }
+    }
+    set(value) {
+      field = value
+      if(vField.block == null) {
+        initialValues[0] = value
+      } else {
+        vField.setObject(value)
+      }
+    }
 
-  var block: FormBlock? = null
-    private set
+  /**
+   * Returns the field value of the current record number [record]
+   *
+   * FIXME temporary workaround
+   *
+   * @param record the record number
+   */
+  operator fun get(record: Int): T? {
+    return if(vField.block == null) {
+      initialValues[record]
+    } else {
+      vField.getObject(record) as? T
+    }
+  }
+
+  /**
+   * Sets the field value of given record.
+   *
+   * FIXME temporary workaround
+   *
+   * @param record the record number
+   * @param value  the value
+   */
+  operator fun set(record: Int = 0, value: T) {
+    initialValues[record] = value
+
+    if(vField.block != null) {
+      vField.setObject(record, value)
+    }
+  }
+
 
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.LEFT
 
   /**
-   * Returns the index in parent array of fields
-   */
-  var index = 0
-    private set
-
-  /**
    * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
    */
-  fun columns(vararg joinColumns: Column<*>) {
+  fun columns(vararg joinColumns: Column<*>, init: (FormFieldColumns.() -> Unit)? = null) {
     val cols = joinColumns.map {
       FormFieldColumn(it, it.table.tableName, it.name, true, true) // TODO
     }
-    columns = FormFieldColumns(cols.toTypedArray(), index, 0) // TODO
+    columns = FormFieldColumns(cols.toTypedArray())
+    if (init != null) {
+      columns!!.init()
+    }
+  }
+  /** changing field visibility in mode query */
+  fun onQueryHidden() {
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_HIDDEN
   }
 
-  lateinit var vField: VField
+  fun onQuerySkipped() {
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_SKIPPED
+  }
+
+  fun onQueryVisit() {
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_VISIT
+  }
+
+  fun onQueryMustFill() {
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_MUSTFILL
+  }
+
+  /** changing field visibility in mode insert */
+  fun onInsertHidden() {
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_HIDDEN
+  }
+
+  fun onInsertSkipped() {
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_SKIPPED
+  }
+
+  fun onInsertVisit() {
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_VISIT
+  }
+
+  fun onInsertMustFill() {
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_MUSTFILL
+  }
+
+  /** changing field visibility in mode update */
+  fun onUpdateHidden() {
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_HIDDEN
+  }
+
+  fun onUpdateSkipped() {
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_SKIPPED
+  }
+
+  fun onUpdateVisit() {
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_VISIT
+  }
+
+  fun onUpdateMustFill() {
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
+  }
 
   /**
-   * Returns the field model based on the field type.
+   * The field model based on the field type.
    */
-  fun getFieldModel(): VField {
-    return when(domain?.kClass) {
-      Int::class -> VIntegerField(domain?.length ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
-      String::class -> VStringField(domain?.length ?: 0, 0, 0, 0, false) // TODO
-      Boolean::class -> VBooleanField()
-      Date::class, java.util.Date::class -> VDateField()
-      Month::class -> VMonthField()
-      Week::class -> VWeekField()
-      Time::class -> VTimeField()
-      Timestamp::class -> VTimestampField()
-      else -> throw RuntimeException("Type ${domain?.kClass!!.qualifiedName} is not supported")
-    }.also { vField = it }
-  }
+  var vField: VField =
+          when(domain.kClass) {
+            Int::class -> VIntegerField(block.buffer, domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
+            String::class -> VStringField(block.buffer,
+                                          domain.width ?: 0,
+                                          domain.height ?: 1,
+                                          domain.visibleHeight ?: 1,
+                                          0,  // TODO
+                                          false) // TODO
+            Boolean::class -> VBooleanField(block.buffer)
+            Date::class, java.util.Date::class -> VDateField(block.buffer)
+            Month::class -> VMonthField(block.buffer)
+            Week::class -> VWeekField(block.buffer)
+            Time::class -> VTimeField(block.buffer)
+            Timestamp::class -> VTimestampField(block.buffer)
+            else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+          }
 
   fun setInfo() {
     vField.setInfo(
             getIdent(),
-            index, // TODO
+            fieldIndex,
             posInArray,
             options,
             access,
             null, // TODO
             null, // TODO
-            index, // TODO
-            0, // TODO
+            columns?.index?.indexNumber ?: 0,
+            columns?.priority ?: 0,
             null, // TODO
-            null, // TODO
+            position?.getPositionModel(),
             align.value,
             null // TODO
     )
+  }
+
+  /**
+   * Initializes form field properties
+   *
+   * @param block        the actual form block
+   */
+  open fun initialize(block: FormBlock) {
+
+    // ACCESS
+    val blockAccess: IntArray = block.access
+    for (i in 0..2) {
+      access[i] = access[i].coerceAtMost(blockAccess[i])
+    }
+
+    // TRANSIENT MODE
+    if (columns == null && isNeverAccessible) {
+      options = options or VConstants.FDO_TRANSIENT
+    }
+
+    // POSITION
+    if (!isInternal && !block.isSingle()) {
+      // with NO DETAIL the position must be null
+      if (hasOption(VConstants.FDO_NODETAIL) || block.hasOption(VConstants.BKO_NODETAIL)) {
+
+        // Get a position for the chart view.
+        position = block.positionField(this)
+      }
+      if (!(hasOption(VConstants.FDO_NODETAIL)
+                      || block.hasOption(VConstants.BKO_NODETAIL)
+                      || hasOption(VConstants.FDO_NOCHART)
+                      || block.hasOption(VConstants.BKO_NOCHART))) {
+        block.positionField(position)
+      }
+    }
+  }
+
+  /**
+   * Adds the field options. you can use one or more option from the options available for fields.
+   *
+   * Use [FieldOption] to see the list of these field options.
+   *
+   * @param fieldOptions the field options
+   */
+  fun options(vararg fieldOptions: FieldOption) {
+    fieldOptions.forEach { fieldOption ->
+      if(fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
+        options = options and fieldOption.value.inv()
+      }
+
+      options = options or fieldOption.value
+    }
   }
 
   // ----------------------------------------------------------------------
@@ -137,7 +290,6 @@ open class FormField<T : Comparable<T>>(override val domain: Domain<T>? = null):
    */
   val isInternal: Boolean
     get() = access[0] == VConstants.ACS_HIDDEN && access[1] == VConstants.ACS_HIDDEN && access[2] == VConstants.ACS_HIDDEN
-
 
   fun getIdent() = label ?: "ANONYMOUS!@#$%^&*()"
 

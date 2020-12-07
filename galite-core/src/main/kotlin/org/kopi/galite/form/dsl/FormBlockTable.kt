@@ -26,12 +26,5 @@ import org.jetbrains.exposed.sql.Table
  * @param corr                the shortcut
  */
 class FormBlockTable(val name: String, val corr: String, val table: Table) {
-  /**
-   * Check expression and evaluate and alter context
-   * @param block        the actual context of analyse
-   * @exception        PositionedError        Error catched as soon as possible
-   */
-  fun checkCode(block: FormBlock?) {
-    // don't do nothing now
-  }
+
 }

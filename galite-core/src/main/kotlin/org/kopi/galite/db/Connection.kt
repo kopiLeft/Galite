@@ -18,10 +18,12 @@
 
 package org.kopi.galite.db
 
-import java.sql.Connection
-
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.util.base.InconsistencyException
+import java.sql.Connection
+import java.sql.SQLException
 
 /**
  * A connection maintain information about current context, underlying
@@ -40,12 +42,13 @@ class Connection {
    * @param     schema              the database schema to set as current schema
    */
   constructor(connection: Connection,
-              lookupUserId: Boolean = true, // TODO
+              lookupUserId: Boolean = true,
               schema: String? = null) { // TODO
     dbConnection = Database.connect({ connection })
     url = dbConnection.url
     userName = connection.metaData.userName
     password = null // already authenticated
+    user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
     setUserID()
   }
 
@@ -62,13 +65,14 @@ class Connection {
               driver: String,
               userName: String,
               password: String,
-              lookupUserId: Boolean = true, // TODO
+              lookupUserId: Boolean = true,
               schema: String? = null) { // TODO
     dbConnection = Database.connect(url = url, driver = driver, user = userName, password = password)
     this.url = url
     this.userName = userName
     this.password = password
-    //setUserID() TODO
+    this.user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
+    setUserID()
   }
 
   /**
@@ -87,7 +91,26 @@ class Connection {
    * Retrieves the user ID of the current user
    */
   private fun setUserID() {
-    TODO()
+
+    if (user != USERID_NO_LOOKUP) {
+      if (userName == "root" || userName == "lgvplus" || userName == "tbadmin" || userName == "dba") {
+        user = USERID_NO_LOOKUP
+      } else {
+        try {
+          transaction {
+            user = Users.slice(Users.id).select {
+              Users.shortName eq userName
+              }.single()[Users.id]
+          }
+        } catch (e: NoSuchElementException) {
+          throw SQLException("user unknown")
+        } catch (e: IllegalArgumentException) {
+          throw SQLException("different users with same name")
+        } catch (e: SQLException) {
+          throw InconsistencyException(e.message!!)
+        }
+      }
+    }
   }
 
   companion object {
@@ -106,5 +129,5 @@ class Connection {
   val userName: String
   val password: String?
   var dbConnection: Database
-  val user: Int = 0
+  var user: Int = 0
 }
