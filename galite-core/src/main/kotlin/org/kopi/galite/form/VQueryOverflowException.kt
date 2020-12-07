@@ -25,4 +25,8 @@ import org.kopi.galite.visual.VException
  *
  * @param message the associated message. It's optional.
  */
-class VQueryOverflowException(message: String? = null) : VException(message)
+class VQueryOverflowException(message: String? = null) : VException(message) {
+  companion object {
+    private const  val serialVersionUID = 0L
+  }
+}

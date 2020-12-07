@@ -40,4 +40,8 @@ class VFieldException(val field: VField,
       field.setObject(field.block!!.activeRecord, newValue)
     }
   }
+
+  companion object {
+    private const  val serialVersionUID = 0L
+  }
 }

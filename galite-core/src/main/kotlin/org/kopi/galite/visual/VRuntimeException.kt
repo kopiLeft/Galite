@@ -50,4 +50,8 @@ open class VRuntimeException : RuntimeException {
    * Constructs an exception with no message.
    */
   constructor() : super()
+
+  companion object {
+    private const  val serialVersionUID = 0L
+  }
 }

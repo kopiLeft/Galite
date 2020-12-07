@@ -21,4 +21,8 @@ package org.kopi.galite.visual
 /**
  * Constructs an exception with a message.
  */
-class VInterruptException : Exception()
+class VInterruptException : Exception() {
+  companion object {
+    private const  val serialVersionUID = 0L
+  }
+}

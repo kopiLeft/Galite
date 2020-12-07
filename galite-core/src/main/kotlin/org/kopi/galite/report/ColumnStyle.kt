@@ -20,10 +20,11 @@ package org.kopi.galite.report
 
 import java.awt.Color
 import java.awt.Font
+import java.io.Serializable
 
 import org.kopi.galite.util.base.InconsistencyException
 
-class ColumnStyle {
+class ColumnStyle : Constants, Serializable {
 
   var foregroundCode = 0
   var backgroundCode = 0

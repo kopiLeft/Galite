@@ -110,4 +110,8 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
       }
     }
   }
+
+  companion object {
+    private const  val serialVersionUID = 0L
+  }
 }

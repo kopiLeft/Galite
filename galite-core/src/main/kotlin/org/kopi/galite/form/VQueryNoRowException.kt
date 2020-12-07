@@ -25,4 +25,8 @@ import org.kopi.galite.visual.VException
  *
  * @param message the associated message. It's optional.
  */
-class VQueryNoRowException(message: String? = null) : VException(message)
+class VQueryNoRowException(message: String? = null) : VException(message) {
+  companion object {
+    private const  val serialVersionUID = 0L
+  }
+}

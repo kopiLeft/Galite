@@ -94,4 +94,8 @@ class ExtendedChoiceFormat : ChoiceFormat {
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private val hasNotNullMarker: Boolean
+
+  companion object {
+    private const  val serialVersionUID = 0L
+  }
 }
