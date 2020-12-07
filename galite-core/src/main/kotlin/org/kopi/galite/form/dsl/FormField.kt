@@ -28,6 +28,7 @@ import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
+import org.kopi.galite.form.VImageField
 import org.kopi.galite.form.VIntegerField
 import org.kopi.galite.form.VMonthField
 import org.kopi.galite.form.VStringField
@@ -35,6 +36,7 @@ import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -208,6 +210,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
             Week::class -> VWeekField(block.buffer)
             Time::class -> VTimeField(block.buffer)
             Timestamp::class -> VTimestampField(block.buffer)
+            Image::class -> VImageField(block.buffer,domain.width!!,domain.height!!)
             else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
           }
 

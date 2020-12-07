@@ -47,6 +47,7 @@ object User: Table() {
   val id = integer("id")
   val name = varchar("name", 20)
   val age = integer("age")
+  val image = blob("image")
 }
 
 object TestForm: Form() {
@@ -73,23 +74,9 @@ object TestForm: Form() {
       this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
-        println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
-      }
-    }
-  }
-
-  val tb2 = insertBlock(TestBlock(), p2) {
-    command(item = graph) {
-      this.name = "graphe"
-      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
-      action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
       }
     }
-  }
-
-  val tb3_to_test_block_options = insertBlock(TestBlock(), p1) {
-    options(BlockOption.NOINSERT)
   }
 
   init {
@@ -120,9 +107,10 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
       priority = 1
     }
   }
-  val image = visit(domain = Domain<Image>(20), position = at(1, 1)) {
+  val image = visit(domain = Domain<Image>(800,500,800), position = at(10,10)) {
     label = "image"
     help = "The user image"
+    columns(u.image)
   }
 }
 

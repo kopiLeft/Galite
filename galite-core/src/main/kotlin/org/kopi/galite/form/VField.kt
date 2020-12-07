@@ -1041,7 +1041,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the field value of given record as a date value.
    */
-  fun getImage(): ByteArray = getImage(block!!.currentRecord)
+  fun getImage(): ByteArray? = getImage(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a month value.
@@ -1188,7 +1188,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the field value of given record as a date value.
    */
-  open fun getImage(r: Int): ByteArray {
+  open fun getImage(r: Int): ByteArray? {
     throw InconsistencyException()
   }
 

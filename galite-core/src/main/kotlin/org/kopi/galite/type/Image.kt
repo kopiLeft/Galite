@@ -16,12 +16,13 @@
  */
 package org.kopi.galite.type
 
-import java.util.*
+import java.util.Locale
+import java.util.Arrays
 
 /**
  * This class represents image types
  */
-class Image(val width: Int, val height: Int) : Type() {
+class Image(val width: Int, val height: Int, var byteArray: ByteArray) : Type() {
 
   override fun equals(other: Any?): Boolean = other is Image?
                                               && width == other?.width
@@ -29,13 +30,12 @@ class Image(val width: Int, val height: Int) : Type() {
                                               && byteArray === other?.byteArray
 
   override fun toString(locale: Locale): String {
-    return buildString {
-      append(width)
-      append(',')
-      append(height)
-      append(',')
-      append(byteArray)
-    }
+    val strBuilder = StringBuilder()
+    return strBuilder.append(width)
+                     .append(',')
+                     .append(height)
+                     .append(',')
+                     .append(byteArray).toString()
   }
 
   override fun toSql(): String {
@@ -53,10 +53,12 @@ class Image(val width: Int, val height: Int) : Type() {
   operator fun compareTo(other: Image?): Int {
     val v1 = byteArray
     val v2 = other!!.byteArray
-    return Arrays.compare(v1,v2)
+    return Arrays.compare(v1, v2)
   }
 
   override fun compareTo(other: Any?): Int = compareTo(other as? Image)
 
-  val byteArray: ByteArray = byteArrayOf(width.toByte(), height.toByte())
+  init {
+    this.byteArray = byteArrayOf(width.toByte(), height.toByte())
+  }
 }

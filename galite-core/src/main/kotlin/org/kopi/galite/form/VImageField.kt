@@ -129,7 +129,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
   /**
    * Returns the field value of given record as a date value.
    */
-  override fun getImage(r: Int): ByteArray = getObject(r) as ByteArray
+  override fun getImage(r: Int): ByteArray? = getObject(r) as? ByteArray
 
   /**
    * Returns the field value of the current record as an object
