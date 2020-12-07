@@ -34,6 +34,7 @@ object User: Table() {
   val id = integer("id")
   val name = varchar("name", 20)
   val age = integer("age")
+  val image = blob("image")
 }
 
 object FormSample: Form() {

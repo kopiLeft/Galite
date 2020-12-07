@@ -22,6 +22,7 @@ import java.util.Locale
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.type.Image
 
 object FormWithFields: Form() {
   override val locale = Locale.FRANCE
@@ -53,6 +54,11 @@ object FormWithFields: Form() {
           index = i
           priority = 1
         }
+      }
+      val image = visit(domain = Domain<Image>(800,500,800), position = at(10,10)) {
+        label = "image"
+        help = "The user image"
+        columns(u.image)
       }
     }
     val testBlock2 = block(1, 1, "Test2", "Test block2", testPage) {
