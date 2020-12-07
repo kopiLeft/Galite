@@ -31,9 +31,9 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
 object User: Table() {
-  val id = integer("id")
-  val name = varchar("name", 20)
-  val age = integer("age")
+  val id = integer("ID")
+  val name = varchar("NAME", 20)
+  val age = integer("AGE")
 }
 
 object FormSample: Form() {
