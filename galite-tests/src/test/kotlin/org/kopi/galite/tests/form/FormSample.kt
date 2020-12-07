@@ -24,6 +24,7 @@ import org.kopi.galite.chart.Chart
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
@@ -97,6 +98,11 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
     label = "name"
     help = "The user name"
     columns(u.name)
+  }
+  val password = mustFill(domain = Domain<String>(20), position = at(2, 1)) {
+    label = "password"
+    help = "The user password"
+    options(FieldOption.NOECHO)
   }
   val age = visit(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
