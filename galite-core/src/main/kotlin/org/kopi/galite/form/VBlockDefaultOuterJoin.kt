@@ -19,7 +19,6 @@
 package org.kopi.galite.form
 
 import org.jetbrains.exposed.sql.Join
-import org.jetbrains.exposed.sql.JoinCondition
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
