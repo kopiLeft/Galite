@@ -51,7 +51,6 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.VarCharColumnType
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -1641,22 +1640,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the database columns of block.
    */
-  fun getSearchColumns(): String? {
-    var result: String? = null
-
-    for (i in fields.indices) {
-      val fld: VField? = fields[i]
-      if (fld!!.getColumnCount() > 0) {
-        if (result == null) {
-          result = ""
-        } else {
-          result += ", "
-        }
-        result += fld.getColumn(0)!!.getQualifiedName()
-      }
-    }
-    return result
-  }
+  fun getSearchColumns(): List<Column<*>>? =
+          fields.filter { it.getColumnCount() > 0 }
+            .map { it.getColumn(0)!!.column }
 
   /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
@@ -1805,7 +1791,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
           fields.forEach {
             if (it.lookupColumn(tableIndex) != null) {
-              it.setQuery_(query, it.getColumn(1 + j)!!.column)
+              it.setQuery_(query.first(), it.getColumn(1 + j)!!.column)
               j += 1
             }
           }
@@ -1967,8 +1953,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* query from where ? */
-    val tables = getSearchTables_() // TDOD ! You can test this by replacing by (val tables = idColumn.table)
-    val conditions = getSearchConditions_() // TDOD ! You can test this by commenting this line
+    val tables = getSearchTables_() // TODO ! You can test this by replacing by (val tables = idColumn.table)
+    val conditions = getSearchConditions_() // TODO ! You can test this by commenting this line
 
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)

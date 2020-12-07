@@ -28,7 +28,7 @@ import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
 
-const val testURL = "jdbc:h2:mem:test"
+const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
 const val testDriver = "org.h2.Driver"
 const val testUser = "admin"
 const val testPassword = "admin"
@@ -76,11 +76,11 @@ fun main(args: Array<String>) {
 
 object Application {
   fun runForm(formName: Form,
-              testURL: String = "jdbc:h2:mem:test",
-              testDriver: String = "org.h2.Driver",
-              testUser: String = "admin",
-              testPassword: String = "admin",
-              testLocale: Locale = Locale.FRANCE) {
+              url: String = testURL,
+              driver: String = testDriver,
+              user: String = testUser,
+              password: String = testPassword,
+              locale: Locale = testLocale) {
 
     val arguments = arrayOf("-d",
                             testDriver,

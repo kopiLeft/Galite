@@ -946,8 +946,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setQuery(block!!.currentRecord, query, column)
   }
 
-  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Column<*>?) {
-    TODO()
+  fun setQuery_(query: ResultRow, column: Column<*>) {
+    setQuery_(block!!.currentRecord, query, column)
   }
 
   /**
@@ -958,6 +958,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun setQuery(record: Int, query: Query, column: Int) {
     setObject(record, retrieveQuery(query, column))
+  }
+
+  fun setQuery_(record: Int, query: ResultRow, column: Column<*>) {
+    setObject(record, retrieveQuery_(query, column))
   }
 
   /**
@@ -971,7 +975,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * TODO document! and add needed implementations
    */
-  open fun <T> retrieveQuery_(result: ResultRow, column: Column<T>): Any? = result[column]
+  open fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? = result[column]
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
