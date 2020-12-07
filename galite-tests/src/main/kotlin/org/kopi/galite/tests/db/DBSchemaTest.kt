@@ -25,7 +25,10 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.joda.time.DateTime
 import org.kopi.galite.tests.TestBase
-import org.kopi.galite.db.DBSchema
+import org.kopi.galite.db.Modules
+import org.kopi.galite.db.UserRights
+import org.kopi.galite.db.Users
+import org.kopi.galite.db.list_Of_Tables
 
 class DBSchemaTest : TestBase() {
 
@@ -34,7 +37,7 @@ class DBSchemaTest : TestBase() {
    */
   @BeforeTest
   fun createDBSchemaTest() {
-    DBSchema.list_Of_Tables.forEach { table ->
+    list_Of_Tables.forEach { table ->
         SchemaUtils.create(table)
     }
   }
@@ -49,11 +52,11 @@ class DBSchemaTest : TestBase() {
                        className: KClass<*>? = null,
                        symbolNumber: Int? = null) {
 
-      DBSchema.Modules.insert {
+      Modules.insert {
         it[uc] = 0
         it[ts] = 0
         it[shortName] = shortname
-        it[parent] = if(parentName != "-1") DBSchema.Modules.select { shortName eq parentName }.single()[id] else -1
+        it[parent] = if(parentName != "-1") Modules.select { shortName eq parentName }.single()[id] else -1
         it[sourceName] = source
         it[priority] = priorityNumber
         it[objectName] = if (className != null) className.qualifiedName!! else null
@@ -67,7 +70,7 @@ class DBSchemaTest : TestBase() {
    */
   fun insertIntoUsers(shortname: String,
                       userName: String) {
-    DBSchema.Users.insert {
+    Users.insert {
       it[uc] = 0
       it[ts] = 0
       it[shortName] = shortname
@@ -88,10 +91,10 @@ class DBSchemaTest : TestBase() {
   fun insertIntoUserRights(userName: String,
                            moduleName: String,
                            accessUser : Boolean) {
-    DBSchema.UserRights.insert {
+    UserRights.insert {
       it[ts] = 0
-      it[module] = DBSchema.Modules.slice(DBSchema.Modules.id).select{ DBSchema.Modules.shortName eq  moduleName}.single()[DBSchema.Modules.id]
-      it[user] = DBSchema.Users.slice(DBSchema.Users.id).select{ DBSchema.Users.shortName eq  userName}.single()[DBSchema.Users.id]
+      it[module] = Modules.slice(Modules.id).select{ Modules.shortName eq  moduleName}.single()[Modules.id]
+      it[user] = Users.slice(Users.id).select{ Users.shortName eq  userName}.single()[Users.id]
       it[access] = accessUser
     }
   }

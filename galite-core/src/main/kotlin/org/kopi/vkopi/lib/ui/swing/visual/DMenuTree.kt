@@ -21,7 +21,7 @@ package org.kopi.vkopi.lib.ui.swing.visual
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.db.DBSchema.Favorites
+import org.kopi.galite.db.Favorites
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message.getMessage
 import org.kopi.galite.visual.Module
