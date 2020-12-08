@@ -20,6 +20,7 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
+import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
@@ -53,7 +54,6 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -94,7 +94,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     this.list = list
     this.columns = columns
     if (columns == null) {
-      this.columns = arrayOfNulls<VColumn>(0)
+      this.columns = arrayOfNulls(0)
     }
     this.indices = indices
     this.priority = priority
@@ -616,7 +616,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the column name in the table with specified correlation.
    * returns null if the field has no access to this table.
    */
-  fun lookupColumn(corr: Int): String? = columns!!.find { corr == it!!.getTable() }?.name
+  fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
 
   /**
    * Returns true if the column is a key of the table with specified correlation.
@@ -946,7 +946,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setQuery(block!!.currentRecord, query, column)
   }
 
-  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Column<*>?) {
+  fun setQuery_(query: ResultRow, column: Column<*>) {
+    setQuery_(block!!.currentRecord, query, column)
+  }
+
+  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Column<*>) {
     TODO()
   }
 
@@ -958,6 +962,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun setQuery(record: Int, query: Query, column: Int) {
     setObject(record, retrieveQuery(query, column))
+  }
+
+  fun setQuery_(record: Int, query: ResultRow, column: Column<*>) {
+    setObject(record, retrieveQuery_(query, column))
   }
 
   /**
@@ -978,7 +986,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * TODO document! and add needed implementations
    */
-  open fun <T> retrieveQuery_(result: ResultRow, column: Column<T>): Any? = result[column]
+  open fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? = result[column]
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS

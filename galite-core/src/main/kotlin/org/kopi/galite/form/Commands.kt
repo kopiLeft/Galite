@@ -19,6 +19,7 @@ package org.kopi.galite.form
 
 import java.sql.SQLException
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBInterruptionException
@@ -174,9 +175,10 @@ object Commands : VConstants {
     if (id != -1) {
       while (true) {
         try {
-
-          // fetches data to active record
-          b.fetchRecord(id)
+          transaction {
+            // fetches data to active record
+            b.fetchRecord(id)
+          }
           gotoFieldIfNoActive(b)
           break
         } catch (e: VException) {
