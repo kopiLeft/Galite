@@ -125,7 +125,6 @@ class VBlockDefaultOuterJoin(block: VBlock) {
   }
 
   private fun getSearchTablesCondition(): MutableList<MutableList<Join?>>? {
-
     if (tables == null) {
       return null
     }
