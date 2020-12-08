@@ -19,14 +19,12 @@ package org.kopi.galite.form.dsl
 
 import java.awt.Point
 
-import org.jetbrains.exposed.sql.Table
-
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
-import org.kopi.galite.common.BlockAction
-import org.kopi.galite.common.BlockBooleanTrigger
-import org.kopi.galite.common.BlockProtectedTrigger
-import org.kopi.galite.common.BlockTrigger
-import org.kopi.galite.common.BlockVoidTrigger
+import org.kopi.galite.common.BlockBooleanTriggerEvent
+import org.kopi.galite.common.BlockProtectedTriggerEvent
+import org.kopi.galite.common.BlockTriggerEvent
+import org.kopi.galite.common.BlockVoidTriggerEvent
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
@@ -36,7 +34,10 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VCommand
+
+import org.jetbrains.exposed.sql.Table
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -51,7 +52,7 @@ import org.kopi.galite.visual.VCommand
  * @param        border                the border of the block
  * @param        align                 the type of alignment in form
  * @param        help                  the help
- * @param        options               the options
+ * @param        blockOptions          the block options
  * @param        tables                the tables accessed on the database
  * @param        indices               the indices for database
  * @param        access                the access mode
@@ -63,12 +64,12 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
-  var options: Int = 0
-  var blockTables: MutableList<FormBlockTable> = mutableListOf()
-  var indices: MutableList<FormBlockIndex> = mutableListOf()
-  var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
-  lateinit var commands: Array<Command?>
-  val triggers = mutableListOf<Trigger>()
+  private var blockOptions: Int = 0
+  private var blockTables: MutableList<FormBlockTable> = mutableListOf()
+  private var indices: MutableList<FormBlockIndex> = mutableListOf()
+  internal var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
+  private lateinit var commands: Array<Command?>
+  private val triggers = mutableListOf<Trigger>()
   lateinit var dropListMap: HashMap<*, *>
   private var maxRowPos = 0
   private var maxColumnPos = 0
@@ -78,7 +79,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   val blockFields = mutableListOf<FormField<*>>()
 
   /** Blocks's commands. */
-  val blockCommands = mutableListOf<Command>()
+  private val blockCommands = mutableListOf<Command>()
 
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS
@@ -92,15 +93,15 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  private fun <T> trigger(blockTriggers: Array<out BlockTrigger>, method: () -> T): Trigger {
+  private fun <T> trigger(blockTriggers: Array<out BlockTriggerEvent>, method: () -> T): Trigger {
     val event = blockEventList(blockTriggers)
-    val blockAction = BlockAction(null, method)
+    val blockAction = Action(null, method)
     val trigger = FormTrigger(event, blockAction)
     triggers.add(trigger)
     return trigger
   }
 
-  private fun blockEventList(blockTriggers: Array<out BlockTrigger>): Long {
+  private fun blockEventList(blockTriggers: Array<out BlockTriggerEvent>): Long {
     var self = 0L
 
     blockTriggers.forEach { trigger ->
@@ -116,18 +117,18 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun trigger(vararg blockTriggers: BlockProtectedTrigger, method: () -> Unit): Trigger {
+  fun trigger(vararg blockTriggers: BlockProtectedTriggerEvent, method: () -> Unit): Trigger {
     return trigger(blockTriggers, method)
   }
 
   /**
-   * Adds void triggers to this block.
+   * Adds void trigger to this block.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun trigger(vararg blockTriggers: BlockVoidTrigger, method: () -> Unit): Trigger {
-    return trigger(blockTriggers, method)
+  fun trigger(vararg blockTriggerEvents: BlockVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(blockTriggerEvents, method)
   }
 
   /**
@@ -136,7 +137,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun trigger(vararg blockTriggers: BlockBooleanTrigger, method: () -> Boolean): Trigger {
+  fun trigger(vararg blockTriggers: BlockBooleanTriggerEvent, method: () -> Boolean): Trigger {
     return trigger(blockTriggers, method)
   }
 
@@ -311,6 +312,19 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   }
 
   /**
+   * Adds the block options. you can use one or more option from the options available for block.
+   *
+   * Use [BlockOption] to see the list of these block options.
+   *
+   * @param options the block options
+   */
+  fun options(vararg options: BlockOption) {
+    options.forEach { blockOption ->
+      blockOptions = blockOptions or blockOption.value
+    }
+  }
+
+  /**
    * Make a tuning pass in order to create informations about exported
    * elements such as block fields positions
    *
@@ -338,17 +352,34 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
     return FormCoordinatePosition(++displayedFields)
   }
 
-
   fun positionField(pos: FormPosition?) {
     pos!!.setChartPosition(++displayedFields)
   }
 
-  fun hasOption(option: Int): Boolean = options and option == option
+  fun hasOption(option: Int): Boolean = blockOptions and option == option
 
   /**
    * Returns true if the size of the buffer == 1, false otherwise
    */
   fun isSingle(): Boolean = buffer == 1
+
+  /**
+   * Returns the form block table
+   */
+  fun getTable(table: Table): FormBlockTable {
+    return blockTables.find { it.table == table }
+            ?: throw Exception("The table ${table.tableName} is not defined in this block")
+  }
+
+  /**
+   * Returns the table number
+   *
+   * TODO : Do we really need this?
+   */
+  fun getTableNum(table: FormBlockTable): Int {
+    val indexOfTable = blockTables.indexOf(table)
+    return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException()
+  }
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
@@ -427,7 +458,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
           vActor?.actorIdent to vActor
         }.toMap()
 
-        super.commands = blockCommands?.map {
+        super.commands = blockCommands.map {
           VCommand(it.mode,
                   this,
                   usedActors[it.item.ident],
@@ -446,10 +477,12 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
 
         super.source = source ?: sourceFile
         super.bufferSize = buffer
+        super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.name = ident
+        super.options = blockOptions
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()

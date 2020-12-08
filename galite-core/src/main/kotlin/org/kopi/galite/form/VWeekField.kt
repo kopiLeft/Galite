@@ -20,11 +20,13 @@ package org.kopi.galite.form
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.db.Query
+import org.kopi.galite.db.Utils
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VWeekColumn
 import org.kopi.galite.type.NotNullWeek
-import org.kopi.galite.db.Utils
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
@@ -227,6 +229,14 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
     } else {
       query.getWeek(column)
     }
+  }
+
+  /**
+   * TODO document!
+   */
+  override fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? {
+    val tmp = result[column] as? Int ?: return null
+    return NotNullWeek(tmp / 100, tmp % 100)
   }
 
   /**
