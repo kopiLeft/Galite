@@ -2576,7 +2576,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val query = tables!![0].slice(idColumn_).select(buffer.compoundAnd())
 
         if (query.execute(this)!!.next()) {
-            if (query.first()[idColumn_] != id) {
+            if (query.single()[idColumn_] != id) {
               form.setActiveBlock(this@VBlock)
               activeRecord = recno
               gotoFirstField()
