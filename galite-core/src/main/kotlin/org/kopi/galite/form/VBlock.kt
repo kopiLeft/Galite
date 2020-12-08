@@ -1201,8 +1201,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     while (i >= 0) {
       if (listeners[i] == BlockRecordListener::class.java) {
-        (listeners[i + 1] as BlockRecordListener).blockRecordChanged(getSortedPosition(record - 1) + 1,
-                                                                     localRecordCount)
+        (listeners[i + 1] as BlockRecordListener).blockRecordChanged(getSortedPosition(record - 1) + 1, localRecordCount)
       }
       i -= 2
     }
@@ -1836,8 +1835,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val query = table.slice(columns).select(condition)
 
         if (query.toList().isEmpty()) {
-          throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                                                            arrayOf<Any>(tables!![tableIndex])))
+          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf<Any>(tables!![tableIndex])))
 
         } else {
           var j = 0
@@ -1850,8 +1848,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           }
           if (query.toList().isNotEmpty()) {
 
-            throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                                                              arrayOf<Any>(tables!![tableIndex])))
+            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf<Any>(tables!![tableIndex])))
           }
         }
       }
