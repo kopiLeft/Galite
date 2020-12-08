@@ -18,26 +18,32 @@
 
 package org.kopi.galite.form
 
-import java.sql.SQLException
-import java.util.EventListener
-
-import javax.swing.event.EventListenerList
-
-import kotlin.collections.HashMap
-import kotlin.math.abs
-
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.IntegerColumnType
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.intLiteral
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.stringLiteral
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBForeignKeyException
 import org.kopi.galite.db.DBInterruptionException
+import org.kopi.galite.db.Users
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
@@ -45,15 +51,12 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.SQLException
+import java.util.*
+import javax.swing.event.EventListenerList
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.math.abs
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1354,7 +1357,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-            || !isMulti() && activeField == null) {
+                   || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
               .toString() + " recno " + recno.toString() + " current record " + activeRecord
               .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
@@ -1642,7 +1645,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun getSearchColumns(): List<Column<*>>? =
           fields.filter { it.getColumnCount() > 0 }
-            .map { it.getColumn(0)!!.column }
+                  .map { it.getColumn(0)!!.column }
 
   /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
@@ -1784,7 +1787,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         if (query.toList().isEmpty()) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                  arrayOf<Any>(tables!![tableIndex])))
+                                                            arrayOf<Any>(tables!![tableIndex])))
 
         } else {
           var j = 0
@@ -1798,7 +1801,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           if (query.toList().isNotEmpty()) {
 
             throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                    arrayOf<Any>(tables!![tableIndex])))
+                                                              arrayOf<Any>(tables!![tableIndex])))
           }
         }
       }
@@ -2478,7 +2481,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     block           This action should block the UI thread ?
    */
   @Deprecated("Use method performAsyncAction without bool parameter",
-          ReplaceWith("performAsyncAction(action)"))
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2662,7 +2665,55 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * database.
    */
   protected fun checkRecordUnchanged(recno: Int) {
-    TODO()
+    if (!blockHasNoUcOrTsField()) {
+      val idFld: VField = idField
+      val ucFld: VField? = ucField
+      val tsFld = getTsField()
+      val table = tables!![0]
+      val cond1 = idColumn
+      val cond2 = idFld.getInt(recno)
+
+      assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
+
+      val col1 = if (ucFld == null) {
+        intLiteral(-1)
+      } else {
+        Column(table, "UC", IntegerColumnType())
+      }
+
+      val col2 = if (tsFld == null) {
+        intLiteral(-1)
+      } else {
+        Column(table, "UC", IntegerColumnType())
+      }
+
+      val query = table.slice(col1, col2)
+              .select { cond1 eq cond2!! }
+
+      if (query.empty()) {
+        activeRecord = recno
+        throw VExecFailedException(MessageCode.getMessage("VIS-00018"))
+      } else {
+        val row = query.first()
+
+        var changed = false
+
+        transaction {
+          if (ucFld != null) {
+            changed = changed or (ucFld.getInt(recno) != row[col1].toInt())
+          }
+          if (tsFld != null) {
+            changed = changed or (tsFld.getInt(recno) != row[col2].toInt())
+          }
+
+          if (changed) {
+            // record has been updated
+            activeRecord = recno // also valid for single blocks
+            throw VExecFailedException(MessageCode.getMessage("VIS-00017"))
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -2716,7 +2767,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() = form.dBContext
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
-  override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
+  override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
 
@@ -2905,11 +2956,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun helpOnBlock(help: VHelpGenerator) {
     if (!isAlwaysSkipped()) {
       help.helpOnBlock(form.javaClass.name.replace('.', '_'),
-              title,
-              this.help,
-              commands,
-              fields,
-              form.blocks.size == 1)
+                       title,
+                       this.help,
+                       commands,
+                       fields,
+                       form.blocks.size == 1)
     }
   }
 
@@ -3060,6 +3111,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   lateinit var fields: Array<VField> // fields
   protected var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
   protected val triggers = mutableMapOf<Int, Trigger>()
+
   // dynamic data
   var activeRecord = 0 // current record
     get() {
