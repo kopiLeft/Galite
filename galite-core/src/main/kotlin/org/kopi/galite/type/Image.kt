@@ -22,7 +22,7 @@ import java.util.Arrays
 /**
  * This class represents image types
  */
-class Image(val width: Int, val height: Int, var byteArray: ByteArray) : Type() {
+class Image(val width: Int, val height: Int, var byteArray: ByteArray?) : Type() {
 
   override fun equals(other: Any?): Boolean = other is Image?
                                               && width == other?.width
@@ -43,22 +43,13 @@ class Image(val width: Int, val height: Int, var byteArray: ByteArray) : Type() 
   }
 
   /**
-   * Compares to another week.
-   *
-   * @param    other    the second operand of the comparison
-   * @return    -1 if the first operand is smaller than the second
-   * 1 if the second operand if smaller than the first
-   * 0 if the two operands are equal
+   * Compares to another image.
+   * TODO Do we need to compare two images?
    */
-  operator fun compareTo(other: Image?): Int {
-    val v1 = byteArray
-    val v2 = other!!.byteArray
-    return Arrays.compare(v1, v2)
+  operator fun compareTo(other: Image): Int {
+    return Arrays.compare(byteArray, other.byteArray)
   }
 
-  override fun compareTo(other: Any?): Int = compareTo(other as? Image)
+  override fun compareTo(other: Any): Int = compareTo(other as Image)
 
-  init {
-    this.byteArray = byteArrayOf(width.toByte(), height.toByte())
-  }
 }

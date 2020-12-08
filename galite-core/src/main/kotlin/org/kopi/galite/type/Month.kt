@@ -98,14 +98,13 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  operator fun compareTo(other: Month?): Int {
+  operator fun compareTo(other: Month): Int {
     val v1 = scalar
-    val v2 = other!!.scalar
-
+    val v2 = other.scalar
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any?): Int = compareTo(other as? Month)
+  override operator fun compareTo(other: Any): Int = compareTo(other as Month)
 
   /**
    * Returns the year of the month (by example 1999 or may be 2000 on year after)

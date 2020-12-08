@@ -150,7 +150,7 @@ class VListDialog(list: Array<VListColumn?>,
               value1 && !(value2 as Boolean)
             }
             is Date -> {
-              (value1 as Date) > value2 as? Date
+              (value1 as Date) > value2 as Date
             }
             else -> {
               false
