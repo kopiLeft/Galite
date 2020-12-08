@@ -21,6 +21,7 @@ package org.kopi.galite.form
 import java.awt.Color
 import java.io.InputStream
 import java.sql.SQLException
+
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
@@ -1591,27 +1592,28 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * !!! TRY TO MERGE WITH checkList ???
    */
   fun getListID(): Int {
-    val table = object : Table(evalListTable()) {
-      val id = integer("ID")
-      val column = Column<Any>(this, list!!.getColumn(0).column!!, VarCharColumnType())
-    }
-    var id = -1
-    val query = table.slice(table.id).select { table.column eq getSql(block!!.activeRecord)!! }
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
     assert(list != null) { threadInfo() + "list ist not null" }
+    var id = -1
+    val table = object : Table(evalListTable()) {
+      val id = integer("ID")
+      val column = Column<Any>(this , list!!.getColumn(0).column!! , VarCharColumnType() )
+    }
 
     try {
-      transaction {
-        query.forEach {
-          try {
-            id = it[table.id]
-          } catch (e: SQLException) {
-          } catch (error: java.lang.Error) {
-          } catch (rte: RuntimeException) {
+        try {
+          transaction {
+            val query = table.slice(table.id).select{ table.column eq getSql(block!!.activeRecord)!! }
+
+            if (query.execute(this)!!.next()) {
+              id = query.first()[table.id]
+            }
           }
+        } catch (e: SQLException) {
+        } catch (error: java.lang.Error) {
+        } catch (rte: RuntimeException) {
         }
-      }
     } catch (e: Throwable) {
       throw VExecFailedException(e)
     }
