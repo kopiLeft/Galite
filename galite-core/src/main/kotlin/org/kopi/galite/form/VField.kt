@@ -688,8 +688,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   open fun getSearchCondition_(): Pair<Expression<String>.(t: String) -> Op<Boolean>, Any?>? {
 
     if (isNull(block!!.activeRecord)) {
-      fun nullCondBuilder(
-              body: (scope: Expression<String>) -> Op<Boolean>): (Expression<String>.(t: String) -> Op<Boolean>) {
+      fun nullCondBuilder(body: (scope: Expression<String>) -> Op<Boolean>): (Expression<String>.(t: String) -> Op<Boolean>) {
         return (fun Expression<String>.(t: String): Op<Boolean> = body(this))
       }
 
@@ -705,16 +704,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } else {
 
       var operator: (ExpressionWithColumnType<String>.(t: String) -> Op<Boolean>)? = null
-      // Operator name gets one of these operators as string , and will be the default value of operator
-      //eq - (==) neq - (!=) less - (<) lessEq - (<=) greater - (>) greaterEq - (>=)
-      //operator name = "=", "<", ">", "<=", ">=", "<>"
       val operatorName = VConstants.OPERATOR_NAMES[getSearchOperator()]
       var operand = getSql(block!!.activeRecord)
 
       fun <T, S1 : T?, S2 : T?> operatorBuilder(body: (scope: ExpressionWithColumnType<in S1>) -> ComparisonOp)
               : (ExpressionWithColumnType<in S1>.(Any) -> Op<Boolean>)? {
-        return (fun ExpressionWithColumnType<in S1>.(_: Any): Op<Boolean> = body(
-                this)) //as (ExpressionWithColumnType<String>.(Any) -> Op<Boolean>)?
+        return (fun ExpressionWithColumnType<in S1>.(_: Any): Op<Boolean> = body(this))
       }
 
       fun <T, S : T?> ExpressionWithColumnType<in S>.wrap(value: T): QueryParameter<T> = when (value) {
@@ -757,8 +752,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
       fun compCondBuilder(body: (scope: ExpressionWithColumnType<String>) -> Op<Boolean>)
               : (ExpressionWithColumnType<String>.(String) -> Op<Boolean>)? {
-        return (fun ExpressionWithColumnType<String>.(pattern: String): Op<Boolean> = body(
-                this)) //as (ExpressionWithColumnType<String>.(Any) -> Op<Boolean>)?
+        return (fun ExpressionWithColumnType<String>.(pattern: String): Op<Boolean> = body(this))
       }
 
       when (options and VConstants.FDO_SEARCH_MASK) {
@@ -796,7 +790,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       return ((operator as Expression<String>.(t: String) -> Op<Boolean>) to (operand as TypeVariable<GenericDeclaration>?))
     }
   }
-
 
   /**
    * Returns the search conditions for this field.
@@ -1708,8 +1701,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           qrybuf = " SELECT   " + colbuf +
                   " FROM     " + evalListTable() +
-                  " WHERE    {fn SUBSTRING(" + list!!.getColumn(
-                  0).column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
+                  " WHERE    {fn SUBSTRING(" + list!!.getColumn(0)
+                  .column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
                   " ORDER BY 1"
           result = displayQueryList(qrybuf, list!!.columns) as String?
           if (result == null) {
