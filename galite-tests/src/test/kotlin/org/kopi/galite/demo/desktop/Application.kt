@@ -19,7 +19,6 @@ package org.kopi.galite.demo.desktop
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.form.dsl.Form
@@ -28,31 +27,49 @@ import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
 
-const val testURL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
-const val testDriver = "org.h2.Driver"
-const val testUser = "admin"
-const val testPassword = "admin"
 val testLocale: Locale = Locale.FRANCE
 
+/**
+ * Entry point to run the application with a menu.
+ */
 fun main(args: Array<String>) {
-  val dbTest = DBSchemaTest()
+  Application.connectToDatabase()
+  Application.initDatabase()
+  Application.initModules()
+  Application.initUserRights()
+  Application.run(args)
+}
 
-  Database.connect(testURL, driver = testDriver, user = testUser, password = testPassword)
-  transaction {
-    dbTest.createDBSchemaTest()
+object Application : DBSchemaTest() {
 
-    dbTest.insertIntoUsers("admin", "administrator")
+  /**
+   * Inserts the modules names to include in the application.
+   */
+  fun initModules() {
+    transaction {
+      insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
+      insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
+      insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", FormSample::class)
+      insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", FormWithFields::class)
+    }
+  }
 
-    dbTest.insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
-    dbTest.insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
-    dbTest.insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", FormSample::class)
-    dbTest.insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", FormWithFields::class)
+  /**
+   * Adds rights to the [user] to access the application modules.
+   */
+  fun initUserRights(user: String = connectedUser) {
+    transaction {
+      insertIntoUserRights(user, "2000", true)
+      insertIntoUserRights(user, "1000", true)
+      insertIntoUserRights(user, "2009", true)
+      insertIntoUserRights(user, "2010", true)
+    }
+  }
 
-    dbTest.insertIntoUserRights(testUser, "2000", true)
-    dbTest.insertIntoUserRights(testUser, "1000", true)
-    dbTest.insertIntoUserRights(testUser, "2009", true)
-    dbTest.insertIntoUserRights(testUser, "2010", true)
-
+  /**
+   * Runs the application
+   */
+  fun run(args: Array<String>) {
     val arguments = if (args.isNotEmpty()) {
       args
     } else {
@@ -69,34 +86,29 @@ fun main(args: Array<String>) {
               "-r"
       )
     }
-
     JApplicationTestBase.GaliteApplication().run(arguments)
   }
-}
 
-object Application {
-  fun runForm(formName: Form,
-              url: String = testURL,
-              driver: String = testDriver,
-              user: String = testUser,
-              password: String = testPassword,
-              locale: Locale = testLocale) {
-
-    val arguments = arrayOf("-d",
-                            testDriver,
-                            "-b",
-                            testURL,
-                            "-u",
-                            testUser,
-                            "-p",
-                            testPassword,
-                            "-l",
-                            testLocale.toString(),
-                            "-r",
-                            "-f",
-                            formName::class.qualifiedName!!
-    )
-
-    main(arguments)
+  /**
+   * Used to run the application and show a specific form.
+   */
+  fun runForm(formName: Form) {
+    connectToDatabase()
+    initDatabase()
+    run(arrayOf(
+            "-d",
+            testDriver,
+            "-b",
+            testURL,
+            "-u",
+            testUser,
+            "-p",
+            testPassword,
+            "-l",
+            testLocale.toString(),
+            "-r",
+            "-f",
+            formName::class.qualifiedName!!
+    ))
   }
 }
