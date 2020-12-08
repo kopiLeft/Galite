@@ -18,28 +18,29 @@
 package org.kopi.galite.form
 
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.compoundAnd
 
 class VBlockDefaultOuterJoin {
 
   companion object {
     fun getFetchRecordCondition(fields: Array<VField>): Op<Boolean>? {
-      var condition : Op<Boolean>? = null
+      val conditions : ArrayList<Op<Boolean>>? = null
 
       for (i in fields.indices) {
         val fld = fields[i]
         if (fld.hasNullableCols()) {
           for (j in 1 until fld.getColumnCount()) {
             if (!fld.getColumn(j)!!.nullable) {
-              condition =  Op.build { fld.getColumn(j)!!.column eq  fld.getColumn(0)!!.column }
+              conditions!!.add(Op.build { fld.getColumn(j)!!.column eq  fld.getColumn(0)!!.column })
             }
           }
         } else {
           for (j in 1 until fld.getColumnCount()) {
-            condition =  Op.build { fld.getColumn(j)!!.column eq  fld.getColumn(j - 1)!!.column }
+            conditions!!.add(Op.build { fld.getColumn(j)!!.column eq  fld.getColumn(j - 1)!!.column })
           }
         }
       }
-      return condition
+      return conditions?.compoundAnd()
     }
   }
 }
