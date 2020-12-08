@@ -2665,45 +2665,43 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * database.
    */
   protected fun checkRecordUnchanged(recno: Int) {
+    //!!! samir 25032008 : Assertion enabled only for tables with ID
     if (!blockHasNoUcOrTsField()) {
       val idFld: VField = idField
       val ucFld: VField? = ucField
       val tsFld = getTsField()
       val table = tables!![0]
-      val cond1 = idColumn
-      val cond2 = idFld.getInt(recno)
+      val value = idFld.getInt(recno)
 
       assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
 
-      val col1 = if (ucFld == null) {
+      val ucColumn = if (ucFld == null) {
         intLiteral(-1)
       } else {
         Column(table, "UC", IntegerColumnType())
       }
 
-      val col2 = if (tsFld == null) {
+      val tsColumn = if (tsFld == null) {
         intLiteral(-1)
       } else {
         Column(table, "UC", IntegerColumnType())
       }
 
-      val query = table.slice(col1, col2)
-              .select { cond1 eq cond2!! }
+      val query = table.slice(ucColumn, tsColumn)
+              .select { idColumn eq value!! }
 
       if (query.empty()) {
         activeRecord = recno
         throw VExecFailedException(MessageCode.getMessage("VIS-00018"))
       } else {
-        val row = query.first()
-
         var changed = false
 
         transaction {
           if (ucFld != null) {
-            changed = changed or (ucFld.getInt(recno) != row[col1].toInt())
+            changed = changed or (ucFld.getInt(recno) != query.first()[ucColumn])
           }
           if (tsFld != null) {
-            changed = changed or (tsFld.getInt(recno) != row[col2].toInt())
+            changed = changed or (tsFld.getInt(recno) != query.first()[tsColumn])
           }
 
           if (changed) {
