@@ -3,7 +3,7 @@ Galite Framework
 
 ![License](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)
 
-Welcome to **Galite**, the new framework of [kopiLeft](https://github.com/kopiLeft) with an expressive and elegant syntax based on Kotlin DSL.
+Welcome to **Galite**, the framework of [kopiLeft](https://github.com/kopiLeft) with an expressive elegant syntax based on Kotlin DSL to create great applications.
 
 ## Purpose
 Since development must be as creative and enjoyable as doing common tasks, Galite provides all the needed tools for developers to take the pain out of designing and implementing applications.
