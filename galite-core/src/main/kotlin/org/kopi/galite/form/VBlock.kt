@@ -1457,54 +1457,51 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val query = table.slice(columns!!).select(condition).orderBy(*orderBy.toTypedArray())
 
     fetchCount = 0
+    for (result in query) {
+      if (fetchCount < fetchSize) {
+        if (result[columns[idqry]] == 0) {
+          continue
+        }
+        fetchBuffer[fetchCount] = result[columns[idqry]] as Int
+        if (fetchCount >= bufferSize) {
+          fetchCount += 1
+        } else {
+          var j = 0
 
-      for (result in query) {
-        if (fetchCount < fetchSize) {
-          if (result[columns[idqry]] == 0) {
-            continue
+          fields.forEach { field ->
+            if (field.getColumnCount() > 0) {
+              field.setQuery_(fetchCount, result, columns[j])
+              j += 1
+            }
           }
-          fetchBuffer[fetchCount] = result[columns[idqry]] as Int
-          if (fetchCount >= bufferSize) {
+          setRecordFetched(fetchCount, true)
+          setRecordChanged(fetchCount, false)
+          setRecordDeleted(fetchCount, false)
+          try {
+            if (isMulti()) {
+              activeRecord = fetchCount
+            }
+            callProtectedTrigger(VConstants.TRG_POSTQRY)
+            if (isMulti()) {
+              activeRecord = -1
+            }
             fetchCount += 1
-          } else {
-            var i = 0
-            var j = 0
-
-            while (i < fields.size) {
-              if (fields[i].getColumnCount() > 0) {
-                fields[i].setQuery_(fetchCount, result, columns[1 + j])
-                j += 1
-              }
-              i++
+          } catch (e: VException) {
+            if (isMulti()) {
+              activeRecord = -1
             }
-            setRecordFetched(fetchCount, true)
-            setRecordChanged(fetchCount, false)
-            setRecordDeleted(fetchCount, false)
-            try {
-              if (isMulti()) {
-                activeRecord = fetchCount
-              }
-              callProtectedTrigger(VConstants.TRG_POSTQRY)
-              if (isMulti()) {
-                activeRecord = -1
-              }
-              fetchCount += 1
-            } catch (e: VException) {
-              if (isMulti()) {
-                activeRecord = -1
-              }
-              if (e is VSkipRecordException) {
-                clearRecordImpl(fetchCount)
-              } else {
-                clear()
-                throw e
-              }
-            } catch (t: Throwable) {
-              t.printStackTrace()
+            if (e is VSkipRecordException) {
+              clearRecordImpl(fetchCount)
+            } else {
+              clear()
+              throw e
             }
+          } catch (t: Throwable) {
+            t.printStackTrace()
           }
         }
       }
+    }
 
     fetchPosition = 0
     // !!! REMOVE setActiveRecord(0);
@@ -1543,7 +1540,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         for (field in fields) {
           if (field.getColumnCount() > 0) {
             for (result in query) {
-              field.setQuery_(result, columns[1 + j])
+              field.setQuery_(result, columns[j])
             }
             j += 1
           }
