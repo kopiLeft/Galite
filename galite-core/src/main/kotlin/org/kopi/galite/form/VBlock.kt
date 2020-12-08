@@ -28,6 +28,7 @@ import kotlin.collections.HashMap
 import kotlin.math.abs
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
@@ -1459,53 +1460,54 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val query = table.slice(columns).select(condition).orderBy(*orderBy.toTypedArray())
 
     fetchCount = 0
-    for (result in query) {
-      if (fetchCount < fetchSize) {
-        if (result[columns[1 + idqry]] == 0) {
-          continue
-        }
-        fetchBuffer[fetchCount] = result[columns[1 + idqry]] as Int
-        if (fetchCount >= bufferSize) {
-          fetchCount += 1
-        } else {
-          var i = 0
-          var j = 0
-
-          while (i < fields.size) {
-            if (fields[i].getColumnCount() > 0) {
-              fields[i].setQuery_(fetchCount, query, 1 + j)
-              j += 1
-            }
-            i++
+    transaction {
+      for (result in query) {
+        if (fetchCount < fetchSize) {
+          if (result[columns[1 + idqry]] == 0) {
+            continue
           }
-          setRecordFetched(fetchCount, true)
-          setRecordChanged(fetchCount, false)
-          setRecordDeleted(fetchCount, false)
-          try {
-            if (isMulti()) {
-              activeRecord = fetchCount
-            }
-            callProtectedTrigger(VConstants.TRG_POSTQRY)
-            if (isMulti()) {
-              activeRecord = -1
-            }
+          fetchBuffer[fetchCount] = result[columns[1 + idqry]] as Int
+          if (fetchCount >= bufferSize) {
             fetchCount += 1
-          } catch (e: VException) {
-            if (isMulti()) {
-              activeRecord = -1
+          } else {
+            var i = 0
+            var j = 0
+
+            while (i < fields.size) {
+              if (fields[i].getColumnCount() > 0) {
+                fields[i].setQuery_(fetchCount, query, 1 + j)
+                j += 1
+              }
+              i++
             }
-            if (e is VSkipRecordException) {
-              clearRecordImpl(fetchCount)
-            } else {
-              clear()
-              throw e
+            setRecordFetched(fetchCount, true)
+            setRecordChanged(fetchCount, false)
+            setRecordDeleted(fetchCount, false)
+            try {
+              if (isMulti()) {
+                activeRecord = fetchCount
+              }
+              callProtectedTrigger(VConstants.TRG_POSTQRY)
+              if (isMulti()) {
+                activeRecord = -1
+              }
+              fetchCount += 1
+            } catch (e: VException) {
+              if (isMulti()) {
+                activeRecord = -1
+              }
+              if (e is VSkipRecordException) {
+                clearRecordImpl(fetchCount)
+              } else {
+                clear()
+                throw e
+              }
+            } catch (t: Throwable) {
+              t.printStackTrace()
             }
-          } catch (t: Throwable) {
-            t.printStackTrace()
           }
         }
       }
-
     }
     fetchPosition = 0
     // !!! REMOVE setActiveRecord(0);
@@ -1524,8 +1526,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   open fun fetchRecord(id: Int) {
     val columns = getSearchColumns_()
     val table = getSearchTables_()
-    val condition = Op.build { idColumn_ eq id  }
-    val query = table.slice(columns).select(condition)
+    val condition = mutableListOf<Op<Boolean>>()
+
+    condition.add(Op.build { idColumn_ eq id  })
+    condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
+
+    val query = table.slice(columns).select(condition.compoundAnd())
 
     transaction {
       if (!query.execute(this)!!.next()) {
@@ -1893,7 +1899,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
-  fun getSearchTables_(): Table {
+  fun getSearchTables_(): Join {
     TODO()
   }
 
@@ -2173,23 +2179,24 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val ids = IntArray(fetchSize)
     var rows = 0
 
-    for (result in tables.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())) {
-      if (rows == fetchSize) {
-        break
-      }
+    transaction {
+      for (result in tables.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())) {
+        if (rows == fetchSize) {
+          break
+        }
 
-      /* don't show record with ID = 0 */
-      if (result[idColumn_] == 0) {
-        continue
-      }
+        /* don't show record with ID = 0 */
+        if (result[idColumn_] == 0) {
+          continue
+        }
 
-      ids[rows] = result[idColumn_]
-      for (i in 0 until query_cnt) {
-        values[i][rows] = query_tab[i]!!.retrieveQuery_(result, columns[i])
+        ids[rows] = result[idColumn_]
+        for (i in 0 until query_cnt) {
+          values[i][rows] = query_tab[i]!!.retrieveQuery_(result, columns[i])
+        }
+        rows += 1
       }
-      rows += 1
     }
-
     return if (rows == 0) {
       null
     } else {
