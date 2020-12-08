@@ -26,6 +26,15 @@ import javax.swing.event.EventListenerList
 import kotlin.collections.HashMap
 import kotlin.math.abs
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -45,15 +54,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.Utils
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
@@ -1355,7 +1355,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-            || !isMulti() && activeField == null) {
+                   || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
               .toString() + " recno " + recno.toString() + " current record " + activeRecord
               .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
@@ -1785,7 +1785,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         if (query.toList().isEmpty()) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                  arrayOf<Any>(tables!![tableIndex])))
+                                                            arrayOf<Any>(tables!![tableIndex])))
 
         } else {
           var j = 0
@@ -1799,7 +1799,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           if (query.toList().isNotEmpty()) {
 
             throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                    arrayOf<Any>(tables!![tableIndex])))
+                                                              arrayOf<Any>(tables!![tableIndex])))
           }
         }
       }
@@ -2479,7 +2479,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     block           This action should block the UI thread ?
    */
   @Deprecated("Use method performAsyncAction without bool parameter",
-          ReplaceWith("performAsyncAction(action)"))
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2821,7 +2821,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() = form.dBContext
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
-  override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
+  override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
 
@@ -3010,11 +3010,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun helpOnBlock(help: VHelpGenerator) {
     if (!isAlwaysSkipped()) {
       help.helpOnBlock(form.javaClass.name.replace('.', '_'),
-              title,
-              this.help,
-              commands,
-              fields,
-              form.blocks.size == 1)
+                       title,
+                       this.help,
+                       commands,
+                       fields,
+                       form.blocks.size == 1)
     }
   }
 
@@ -3165,6 +3165,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   lateinit var fields: Array<VField> // fields
   protected var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
   protected val triggers = mutableMapOf<Int, Trigger>()
+
   // dynamic data
   var activeRecord = 0 // current record
     get() {
