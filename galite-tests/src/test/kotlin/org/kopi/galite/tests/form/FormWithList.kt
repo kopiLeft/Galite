@@ -18,44 +18,60 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
+import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.DictionaryForm
+import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
-import org.kopi.galite.tests.report.SimpleReport
 
-object FormWithReport : ReportSelectionForm() {
+object FormWithList : DictionaryForm() {
   override val locale = Locale.FRANCE
-
   override val title = "form for test"
 
   val action = menu("Action")
   val testPage = page("test page")
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
+
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "preview"  // icon is optional here
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
   }
 
   val block = insertBlock(BlockSample, testPage) {
-    command(item = report) {
-      this.name = "report"
+    command(item = list) {
+      this.name = "list"
       action = {
-        println("-----------Generating report-----------------")
-        createReport(BlockSample)
+        println("-----------Generating list-----------------")
+        recursiveQuery(BlockSample)
       }
     }
   }
+}
 
-  override fun createReport(): Report {
-    return SimpleReport
+object BlockSample : FormBlock(1, 1, "Test", "Test block") {
+  val u = table(Users)
+  val i = index(message = "ID should be unique")
+
+  val id = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The user id"
+    columns(u.id)
+  }
+
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "name"
+    help = "The user name"
+    columns(u.name) {
+      priority = 1
+    }
   }
 }
 
 fun main(){
-  Application.runForm(FormWithReport)
+  Application.runForm(formName = FormWithList)
 }

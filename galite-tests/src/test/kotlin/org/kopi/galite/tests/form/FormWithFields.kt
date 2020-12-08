@@ -58,7 +58,6 @@ object FormWithFields: Form() {
       val image = visit(domain = Domain<Image>(800,500,800), position = at(10,10)) {
         label = "image"
         help = "The user image"
-        columns(u.image)
       }
     }
     val testBlock2 = block(1, 1, "Test2", "Test block2", testPage) {

@@ -234,7 +234,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * TODO document!
    */
-  override fun <T> retrieveQuery_(result: ResultRow, column: Column<T>): Any? {
+  override fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? {
     val tmp = result[column] as? Int ?: return null
     return NotNullWeek(tmp / 100, tmp % 100)
   }

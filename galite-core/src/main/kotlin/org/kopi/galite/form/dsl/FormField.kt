@@ -18,6 +18,7 @@
 package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.LocalizationWriter
@@ -68,7 +69,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private var options: Int = 0
-  var columns: FormFieldColumns? = null
+  var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command>? = null
   var triggers: Array<Trigger>? = null
@@ -132,9 +133,9 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    * @param joinColumns columns to use to make join between block tables
    * @param init        initialises the form field column properties (index, priority...)
    */
-  fun columns(vararg joinColumns: Column<*>, init: (FormFieldColumns.() -> Unit)? = null) {
-    val cols = joinColumns.map {
-      FormFieldColumn(it, it.table.tableName, it.name, true, true) // TODO
+  fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    val cols = joinColumns.map { column ->
+      FormFieldColumn(column, column.table.tableName, column.name, this, true, true) // TODO
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
@@ -222,7 +223,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
             options,
             access,
             null, // TODO
-            null, // TODO
+            columns?.getColumnsModels()?.toTypedArray(), // TODO
             columns?.index?.indexNumber ?: 0,
             columns?.priority ?: 0,
             null, // TODO
@@ -289,6 +290,20 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   // ----------------------------------------------------------------------
 
   /**
+   * return table num
+   */
+  fun getTable(name: Table): FormBlockTable {
+    return block.getTable(name)
+  }
+
+  /**
+   * return table num
+   */
+  fun getTableNum(table: FormBlockTable): Int {
+    return block.getTableNum(table)
+  }
+
+  /**
    * Returns true if the field is never displayed
    */
   val isInternal: Boolean
@@ -339,9 +354,9 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
 
   fun fetchColumn(table: FormBlockTable): Int {
     if (columns != null) {
-      val cols: Array<FormFieldColumn?>? = columns!!.columns
-      for (i in cols!!.indices) {
-        if (cols[i]!!.corr == table.corr) {
+      val cols = columns!!.columns
+      for (i in cols.indices) {
+        if (cols[i].corr == table.corr) {
           return i
         }
       }
