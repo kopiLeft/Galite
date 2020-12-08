@@ -30,12 +30,12 @@ class VBlockDefaultOuterJoin {
         if (fld.hasNullableCols()) {
           for (j in 1 until fld.getColumnCount()) {
             if (!fld.getColumn(j)!!.nullable) {
-              condition =  Op.build { fld.getColumn(j)!!.column!! eq  fld.getColumn(0)!!.column!! }
+              condition =  Op.build { fld.getColumn(j)!!.column eq  fld.getColumn(0)!!.column }
             }
           }
         } else {
           for (j in 1 until fld.getColumnCount()) {
-            condition =  Op.build { fld.getColumn(j)!!.column!! eq  fld.getColumn(j - 1)!!.column!! }
+            condition =  Op.build { fld.getColumn(j)!!.column eq  fld.getColumn(j - 1)!!.column }
           }
         }
       }

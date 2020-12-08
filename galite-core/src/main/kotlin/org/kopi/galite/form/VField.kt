@@ -950,10 +950,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setQuery_(block!!.currentRecord, query, column)
   }
 
-  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Column<*>) {
-    TODO()
-  }
-
   /**
    * Sets the field value of given record from a query tuple.
    * @param     record          the index of the record
@@ -966,13 +962,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   fun setQuery_(record: Int, query: ResultRow, column: Column<*>) {
     setObject(record, retrieveQuery_(query, column))
-  }
-
-  /**
-   *
-   */
-  fun setQuery_(record: Int, query: org.jetbrains.exposed.sql.Query, column: Int) {
-    TODO()
   }
 
   /**

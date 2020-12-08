@@ -1457,13 +1457,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val query = table.slice(columns!!).select(condition).orderBy(*orderBy.toTypedArray())
 
     fetchCount = 0
-    transaction {
+
       for (result in query) {
         if (fetchCount < fetchSize) {
-          if (result[columns[1 + idqry]] == 0) {
+          if (result[columns[idqry]] == 0) {
             continue
           }
-          fetchBuffer[fetchCount] = result[columns[1 + idqry]] as Int
+          fetchBuffer[fetchCount] = result[columns[idqry]] as Int
           if (fetchCount >= bufferSize) {
             fetchCount += 1
           } else {
@@ -1472,7 +1472,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
             while (i < fields.size) {
               if (fields[i].getColumnCount() > 0) {
-                fields[i].setQuery_(fetchCount, query, 1 + j)
+                fields[i].setQuery_(fetchCount, result, columns[1 + j])
                 j += 1
               }
               i++
@@ -1505,7 +1505,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           }
         }
       }
-    }
+
     fetchPosition = 0
     // !!! REMOVE setActiveRecord(0);
     if (!isMulti() && fetchCount == 0) {
@@ -1526,7 +1526,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val condition = mutableListOf<Op<Boolean>>()
 
     condition.add(Op.build { idColumn eq id  })
-    condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
+    if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
+      condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
+    }
 
     val query = table.slice(columns!!).select(condition.compoundAnd())
 
@@ -1540,7 +1542,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         for (field in fields) {
           if (field.getColumnCount() > 0) {
-            field.setQuery_(query, columns[1 + j])
+            for (result in query) {
+              field.setQuery_(result, columns[1 + j])
+            }
             j += 1
           }
         }
