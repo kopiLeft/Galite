@@ -1594,7 +1594,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun getListID(): Int {
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
-    assert(list != null) { threadInfo() + "list ist not null" }
+    assert(list != null) { threadInfo() + "list is not null" }
     var id = -1
     val table = object : Table(evalListTable()) {
       val id = integer("ID")
