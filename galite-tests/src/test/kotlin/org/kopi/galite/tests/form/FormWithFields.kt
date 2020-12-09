@@ -55,7 +55,8 @@ object FormWithFields: Form() {
           priority = 1
         }
       }
-      val image = visit(domain = Domain<Image>(800, 500, 800), position = at(10, 10)) {
+      val image = visit(domain = Domain<Image>(800, 500, 800),
+                        position = at(10, 10)) {
         label = "image"
         help = "The user image"
       }
@@ -68,7 +69,6 @@ object FormWithFields: Form() {
         onQueryMustFill()
       }
     }
-
   }
 }
 
