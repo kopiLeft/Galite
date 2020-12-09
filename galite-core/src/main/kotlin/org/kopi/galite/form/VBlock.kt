@@ -1784,8 +1784,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val query = table.slice(columns).select(condition)
 
         if (query.toList().isEmpty()) {
-          throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                                                            arrayOf<Any>(tables!![tableIndex])))
+          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(tables!![tableIndex])))
 
         } else {
           var j = 0
@@ -1797,9 +1796,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             }
           }
           if (query.toList().isNotEmpty()) {
-
-            throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                                                              arrayOf<Any>(tables!![tableIndex])))
+            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(tables!![tableIndex])))
           }
         }
       }
@@ -2689,7 +2686,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     return if (referenced == null || referencing == null) {
       // use the original exception in this case
       VExecFailedException(exception)
-    } else VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any?>(referencing, referenced)))
+    } else VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf(referencing, referenced)))
     // create a visual exception
   }
 

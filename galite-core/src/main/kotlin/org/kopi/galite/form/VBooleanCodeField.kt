@@ -35,22 +35,20 @@ import org.kopi.galite.util.base.InconsistencyException
  */
 open class VBooleanCodeField : VCodeField {
 
-  constructor(
-          bufferSize: Int,
-          ident: String,
-          source: String,
-          names: Array<String>,
-          codes: Array<Boolean?>,
+  constructor(bufferSize: Int,
+              ident: String,
+              source: String,
+              names: Array<String>,
+              codes: Array<Boolean?>
   ) : super(bufferSize, ident, source, names) {
     this.codes = codes
   }
 
-  constructor(
-          bufferSize: Int,
-          ident: String,
-          source: String,
-          names: Array<String>,
-          codes: BooleanArray,
+  constructor(bufferSize: Int,
+              ident: String,
+              source: String,
+              names: Array<String>,
+              codes: BooleanArray
   ) : super(bufferSize, ident, source, names) {
     this.codes = arrayOfNulls(codes.size)
     for (i in codes.indices) {

@@ -82,7 +82,9 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * @param model The chart label sort model.
    * @return The created [UChartLabel]
    */
-  protected abstract fun createChartHeaderLabel(text: String?, help: String?, index: Int,
+  protected abstract fun createChartHeaderLabel(text: String?,
+                                                help: String?,
+                                                index: Int,
                                                 model: OrderModel): UChartLabel
   // ----------------------------------------------------------------------
   // ACCESSORS

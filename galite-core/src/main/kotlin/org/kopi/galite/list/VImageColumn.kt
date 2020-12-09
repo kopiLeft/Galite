@@ -22,8 +22,8 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.ImageHandler
 
-class VImageColumn(title: String, column: String?, sortAscending: Boolean) :
-        VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {
+class VImageColumn(title: String, column: String?, sortAscending: Boolean)
+  : VListColumn(title, column, VConstants.ALG_LEFT, 7, sortAscending) {
   /**
    * Returns a string representation of value
    */

@@ -71,13 +71,14 @@ abstract class Form : Window() {
    * @param        title                  the title of the block
    * @param        formPage              the page containing the block
    */
-  fun block(buffer: Int,
-            visible: Int,
-            name: String,
-            title: String,
-            formPage: FormPage? = null,
-            init: FormBlock.() -> Unit): FormBlock =
-          insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
+  fun block(
+          buffer: Int,
+          visible: Int,
+          name: String,
+          title: String,
+          formPage: FormPage? = null,
+          init: FormBlock.() -> Unit
+  ): FormBlock = insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
 
   /**
    * Adds a new block to this form.
