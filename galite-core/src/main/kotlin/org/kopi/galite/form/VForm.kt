@@ -15,10 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
-import org.apache.poi.ss.formula.functions.T
+import java.io.File
+import java.net.MalformedURLException
+import java.util.Locale
+
+import javax.swing.event.EventListenerList
+
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -40,10 +44,6 @@ import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
-import java.io.File
-import java.net.MalformedURLException
-import java.util.Locale
-import javax.swing.event.EventListenerList
 
 abstract class VForm : VWindow, VConstants {
   companion object {
@@ -79,7 +79,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * loads the form
    */
-  open fun initIntern(enterField: Boolean) {
+  private fun initIntern(enterField: Boolean) {
     init()
     if (!ApplicationContext.isGeneratingHelp()) {
       initialise()
@@ -455,6 +455,27 @@ abstract class VForm : VWindow, VConstants {
   protected fun hasTrigger(event: Int, index: Int = 0): Boolean {
     return VKT_Triggers[index][event] != 0
   }
+
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    formTriggers[VKT_Type]?.action?.method?.invoke()
+    super.executeVoidTrigger(VKT_Type)
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  fun executeObjectTrigger(VKT_Type: Int): Any {
+    return (formTriggers[VKT_Type]?.action?.method as () -> Any).invoke()
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
+    return (formTriggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  fun executeIntegerTrigger(VKT_Type: Int): Int {
+    return (formTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
+  }
+
   // ----------------------------------------------------------------------
   // UTILS
   // ----------------------------------------------------------------------
@@ -724,26 +745,6 @@ abstract class VForm : VWindow, VConstants {
     return (getDisplay() as UForm).printForm()
   }
 
-  override fun executeVoidTrigger(VKT_Type: Int) {
-    forTriggers[VKT_Type]?.action?.method?.invoke()
-    super.executeVoidTrigger(VKT_Type)
-  }
-
-  @Suppress("UNCHECKED_CAST")
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    return (forTriggers[VKT_Type]?.action?.method as () -> Any).invoke()
-  }
-
-  @Suppress("UNCHECKED_CAST")
-  fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    return (forTriggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
-  }
-
-  @Suppress("UNCHECKED_CAST")
-  fun executeIntegerTrigger(VKT_Type: Int): Int {
-    return (forTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
-  }
-
   val eventList: MutableList<Int> = mutableListOf()
 
   // ----------------------------------------------------------------------
@@ -754,8 +755,8 @@ abstract class VForm : VWindow, VConstants {
   lateinit var blocks: Array<VBlock>
   internal lateinit var pages: Array<String?>
   internal var help: String? = null //the name of this field
-  open var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
-  open val forTriggers =  mutableMapOf<Int, Trigger>()
+  internal val VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
+  internal val formTriggers =  mutableMapOf<Int, Trigger>()
   // dynamic data
   private val blockMoveAllowed = true
   private var activeBlock: VBlock? = null
@@ -766,16 +767,16 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   // SHARED DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var autofillActor:   VActor? = null
-  private var editItemActor:   VActor? = null
+  private var autofillActor: VActor? = null
+  private var editItemActor: VActor? = null
   private var editItemActor_S: VActor? = null
-  private var newItemActor:    VActor? = null
+  private var newItemActor: VActor? = null
 
   // ---------------------------------------------------------------------
   // PREDEFINED COMMANDS
   // ---------------------------------------------------------------------
-  val cmdAutofill:   VCommand = VFieldCommand(this, CMD_AUTOFILL)
-  val cmdEditItem_S: VCommand = VFieldCommand(this, CMD_EDITITEM_S)
-  val cmdEditItem:   VCommand = VFieldCommand(this, CMD_EDITITEM)
-  val cmdNewItem:    VCommand = VFieldCommand(this, CMD_NEWITEM)
+  val cmdAutofill:    VCommand = VFieldCommand(this, CMD_AUTOFILL)
+  val cmdEditItem_S:  VCommand = VFieldCommand(this, CMD_EDITITEM_S)
+  val cmdEditItem:    VCommand = VFieldCommand(this, CMD_EDITITEM)
+  val cmdNewItem:     VCommand = VFieldCommand(this, CMD_NEWITEM)
 }

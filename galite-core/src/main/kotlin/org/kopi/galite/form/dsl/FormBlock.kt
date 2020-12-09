@@ -424,8 +424,8 @@ open class FormBlock(var buffer: Int,
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // BLOCK TRIGGERS
+        val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
         triggers.forEach { trigger ->
-          val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
               blockTriggerArray[i] = i

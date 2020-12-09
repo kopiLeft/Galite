@@ -71,34 +71,34 @@ open class FormTriggerEvent(val event: Int)
  *
  * @param event the event of the trigger
  */
-open class FormVoidTrigger(event: Int) : FormTriggerEvent(event)
+open class FormVoidTriggerEvent(event: Int) : FormTriggerEvent(event)
 
 /**
  * Form boolean Triggers
  *
  * @param event the event of the trigger
  */
-open class FormBooleanTrigger(event: Int) : FormTriggerEvent(event)
+open class FormBooleanTriggerEvent(event: Int) : FormTriggerEvent(event)
 
 /**
  * executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command
  */
-object INIT : FormVoidTrigger(VConstants.TRG_INIT)             // void trigger
+object INITFORM : FormVoidTriggerEvent(VConstants.TRG_INIT)             // void trigger
 
 /**
  * executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command
  */
-object PREFORM : FormVoidTrigger(VConstants.TRG_PREFORM)       // void trigger
+object PREFORM : FormVoidTriggerEvent(VConstants.TRG_PREFORM)       // void trigger
 
 /**
  * executed when closing the form
  */
-object POSTFORM : FormVoidTrigger(VConstants.TRG_POSTFORM)     // void trigger
+object POSTFORM : FormVoidTriggerEvent(VConstants.TRG_POSTFORM)     // void trigger
 
 /**
  * executed upon ResetForm command
  */
-object RESET : FormBooleanTrigger(VConstants.TRG_RESET)        // Boolean trigger
+object RESETFORM : FormBooleanTriggerEvent(VConstants.TRG_RESET)        // Boolean trigger
 
 /**
  * a special trigger that returns a boolean value of whether the form have been changed or not,
@@ -108,13 +108,13 @@ object RESET : FormBooleanTrigger(VConstants.TRG_RESET)        // Boolean trigge
  *   false
  * }
  */
-object CHANGED : FormBooleanTrigger(VConstants.TRG_CHANGED)    // Boolean trigger
+object CHANGEDFORM : FormBooleanTriggerEvent(VConstants.TRG_CHANGED)    // Boolean trigger
 
 /**
  * executed when quitting the form
  * actually not available
  */
-object QUITFORM : FormBooleanTrigger(VConstants.TRG_QUITFORM)  // Boolean trigger
+object QUITFORM : FormBooleanTriggerEvent(VConstants.TRG_QUITFORM)  // Boolean trigger
 
 ///////////////////////////////////////////////////////////////////////////
 // BLOCK TRIGGERS
@@ -268,7 +268,7 @@ object CHANGED : BlockBooleanTriggerEvent(VConstants.TRG_CHANGED)  // Boolean tr
 /**
  * defines whether a block can or not be accessed, it must always return a boolean value.
  *
- * triggerACCESS) {
+ * trigger(ACCESS) {
  *   Block.getMode == MOD_QUERY  // Tests if the block is in query mode,
  *                               //this block is only accessible on query mode
  * }

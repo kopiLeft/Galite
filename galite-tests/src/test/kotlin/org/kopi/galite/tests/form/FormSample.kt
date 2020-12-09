@@ -21,7 +21,10 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.chart.Chart
-import org.kopi.galite.common.FormTrigg
+import org.kopi.galite.common.INIT
+import org.kopi.galite.common.INITFORM
+import org.kopi.galite.common.POSTFORM
+import org.kopi.galite.common.PREFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
@@ -80,10 +83,15 @@ object FormSample: Form() {
     options(BlockOption.NOINSERT)
   }
 
+  val preform = trigger(INITFORM) {
+    println("init form trigger works")
+  }
+
+  val postform = trigger(POSTFORM) {
+    println("post form trigger works")
+  }
+
   init {
-    trigger(FormTrigg.INIT) {
-      println("form trigger works")
-    }
     tb1.age[0] = 5
     tb1.age.value = 6
   }
