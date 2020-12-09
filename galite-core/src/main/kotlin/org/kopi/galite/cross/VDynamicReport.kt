@@ -77,8 +77,7 @@ class VDynamicReport(block: VBlock) : VReport() {
 
     fields.forEach { field ->
       // Images fields cannot be handled in dynamic reports
-      if (field !is VImageField
-              && (!field.isInternal() || field.name.equals(block.idField.name))) {
+      if (field !is VImageField && (!field.isInternal() || field.name == block.idField.name)) {
         if (field.getColumnCount() > 0 || block.isMulti() && isFetched) {
           processedFields.add(field)
         }
