@@ -14,27 +14,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.common.BlockTrigger
-
+import org.kopi.galite.common.INIT
+import org.kopi.galite.common.PREBLK
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
 object FormWithBlockTrigger: Form() {
+
   override val locale = Locale.FRANCE
   override val title = "form for test"
-
-  init {
-    menu("Action")
-    page("test page") {
-      insertBlock(BlockWithTrigger1)
-      insertBlock(BlockWithTrigger2)
-    }
-  }
+  val testPage = page("test page")
+  val menu = menu("Action")
+  val firstBlock = insertBlock(BlockWithTrigger1, testPage)
+  val secondVlock = insertBlock(BlockWithTrigger2, testPage)
 }
 
 object BlockWithTrigger1 : FormBlock(1, 1, "Test", "Test block") {
@@ -42,7 +41,7 @@ object BlockWithTrigger1 : FormBlock(1, 1, "Test", "Test block") {
   val i = index(message = "ID should be unique")
 
   init {
-    triggers(BlockTrigger.PREBLK, BlockTrigger.INIT) {
+    trigger(PREBLK, INIT) {
       println("---------------works---------------")
     }
   }
@@ -59,7 +58,7 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
   val i = index(message = "ID should be unique")
 
   init {
-    triggers(BlockTrigger.PREBLK) {
+    trigger(PREBLK) {
       println("---------------works---------------")
     }
   }
@@ -69,4 +68,8 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
     help = "The user name"
     columns(u.name)
   }
+}
+
+fun main(){
+  Application.runForm(FormWithBlockTrigger)
 }

@@ -35,8 +35,8 @@ class VFixnumMeasure(ident: String, color: VColor, private val maxScale: Int) : 
     if (value == null) {
       return null
     }
-    return when(value) {
-      is Fixed  -> value
+    return when (value) {
+      is Fixed -> value
       is Number -> NotNullFixed(value.toLong(), maxScale)
       else -> null
     }

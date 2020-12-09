@@ -18,6 +18,7 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Op
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.Arrays
@@ -81,7 +82,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
   /**
    * Returns the search conditions for this field.
    */
-  override fun getSearchCondition(): String? = null
+  override fun getSearchCondition(): Op<Boolean>? = null
 
   /**
    * Sets the field value of given record to a null value.
@@ -160,9 +161,9 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && !Arrays.equals(oldValue, value[t]))) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && !Arrays.equals(oldValue, value[t]))) {
       fireValueChanged(t)
     }
   }

@@ -24,6 +24,7 @@ import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.util.Locale
 
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.cross.VDynamicReport
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.form.VConstants
@@ -55,7 +56,8 @@ import kotlin.jvm.Throws
  *
  * @param ctxt Database context handler
  */
-abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
+abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
+  : VWindow(), Constants, VConstants, Printable {
   companion object {
     const val TYP_CSV = 1
     const val TYP_PDF = 2
@@ -63,11 +65,13 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
     const val TYP_XLSX = 4
 
     init {
-      WindowController.windowController.registerWindowBuilder(org.kopi.galite.visual.Constants.MDL_REPORT, object : WindowBuilder {
-        override fun createWindow(model: VWindow): UWindow {
-          return UIFactory.uiFactory.createView(model) as UReport
-        }
-      })
+      WindowController.windowController.registerWindowBuilder(org.kopi.galite.visual.Constants.MDL_REPORT,
+                                                              object : WindowBuilder {
+                                                                override fun createWindow(model: VWindow): UWindow {
+                                                                  return UIFactory.uiFactory.createView(
+                                                                          model) as UReport
+                                                                }
+                                                              })
     }
   }
 
@@ -218,11 +222,11 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
 
   override fun createPrintJob(): PrintJob {
     val exporter: PExport2PDF = PExport2PDF((getDisplay() as UReport).getTable(),
-            model,
-            printOptions,
-            pageTitle,
-            firstPageHeader,
-            Message.getMessage("toner_save_mode") == "true")
+                                            model,
+                                            printOptions,
+                                            pageTitle,
+                                            firstPageHeader,
+                                            Message.getMessage("toner_save_mode") == "true")
     val printJob: PrintJob = exporter.export()
 
     printJob.documentType = getDocumentType()
@@ -241,8 +245,8 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
       else -> throw InconsistencyException("Export type unknown")
     }
     val file: File? = FileHandler.fileHandler?.chooseFile(getDisplay()!!,
-            ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
-            "report$ext")
+                                                          ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
+                                                          "report$ext")
     file?.let { export(it, type) }
   }
 
@@ -258,32 +262,32 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
       TYP_CSV -> {
         extension = ".csv"
         exporter = PExport2CSV((getDisplay() as UReport).getTable(),
-                model,
-                printOptions,
-                pageTitle)
+                               model,
+                               printOptions,
+                               pageTitle)
       }
       TYP_PDF -> {
         extension = ".pdf"
         exporter = PExport2PDF((getDisplay() as UReport).getTable(),
-                model,
-                printOptions,
-                pageTitle,
-                firstPageHeader,
-                Message.getMessage("toner_save_mode") == "true")
+                               model,
+                               printOptions,
+                               pageTitle,
+                               firstPageHeader,
+                               Message.getMessage("toner_save_mode") == "true")
       }
       TYP_XLS -> {
         extension = ".xls"
         exporter = PExport2XLS((getDisplay() as UReport).getTable(),
-                model,
-                printOptions,
-                pageTitle)
+                               model,
+                               printOptions,
+                               pageTitle)
       }
       TYP_XLSX -> {
         extension = ".xlsx"
         exporter = PExport2XLSX((getDisplay() as UReport).getTable(),
-                model,
-                printOptions,
-                pageTitle)
+                                model,
+                                printOptions,
+                                pageTitle)
       }
       else -> throw InconsistencyException("Export type unknown")
     }
@@ -411,25 +415,25 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
    * Returns the ID
    */
   fun getValueOfFieldId(): Int {
-      var idCol = -1
-      var id = -1
-      var i = 0
+    var idCol = -1
+    var id = -1
+    var i = 0
 
-      while (i < model.getModelColumnCount() && idCol == -1) {
-        if (model.getModelColumn(i).ident == "ID") {
-          idCol = i
-        }
-        i++
+    while (i < model.getModelColumnCount() && idCol == -1) {
+      if (model.getModelColumn(i).ident == "ID") {
+        idCol = i
       }
-      if (idCol != -1 && getSelectedCell().y != -1) {
-        id = (model.getRow(getSelectedCell().y)?.getValueAt(idCol) as Int)
-      }
-      return if (id == -1) {
-        throw VRuntimeException()
-      } else {
-        id
-      }
+      i++
     }
+    if (idCol != -1 && getSelectedCell().y != -1) {
+      id = (model.getRow(getSelectedCell().y)?.getValueAt(idCol) as Int)
+    }
+    return if (id == -1) {
+      throw VRuntimeException()
+    } else {
+      id
+    }
+  }
 
   /**
    * Return the value of a field in the selected row
@@ -457,7 +461,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
    * requirements (value and search operator) of the field.
    */
   protected fun buildSQLCondition(column: String, field: VField): String {
-    val condition: String? = field.getSearchCondition()
+    val condition = field.getSearchCondition()
 
     return if (condition == null) {
       " TRUE = TRUE "
@@ -469,7 +473,9 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   // ----------------------------------------------------------------------
   // PRIVATE METHODS
   // ----------------------------------------------------------------------
-  override fun executeVoidTrigger(VKT_Type: Int) {}
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    triggers[VKT_Type]?.action?.method?.invoke()
+  }
 
   open fun executeObjectTrigger(VKT_Type: Int): Any = throw InconsistencyException("SHOULD BE REDEFINED")
 
@@ -587,6 +593,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
     initDefaultActors()
     initDefaultCommands()
   }
+
   private fun initDefaultActors() {
     addActors(arrayOf(
             VDefaultReportActor("File", "Quit", VDynamicReport.QUIT_ICON, KeyEvent.VK_ESCAPE, 0),
@@ -628,7 +635,8 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VW
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
-  protected var VKT_Triggers: Array<IntArray>? = null
+  protected var VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
+  protected val triggers = mutableMapOf<Int, Trigger>()
   var commands: Array<VCommand?>? = null
   private val activeCommands = ArrayList<VCommand>()
   var printOptions: PConfig = PConfig() // The print options

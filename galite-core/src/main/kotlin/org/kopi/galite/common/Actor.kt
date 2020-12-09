@@ -27,6 +27,9 @@ import org.kopi.galite.form.dsl.Key
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
  * and a help
  *
+ * An Actor is an item to be linked to a command, if its [icon] is specified, it will appear
+ * in the icon_toolbar located under the menu bar, otherwise, it will only be accessible from the menu bar
+ *
  * @param ident               the ident
  * @param menu                the containing menu
  * @param label               the label
@@ -43,7 +46,7 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
 
   var icon: String? = null
 
-  private fun checkKey(key : Key?) {
+  private fun checkKey(key: Key?) {
     if (key == null) {
       keyModifier = 0
       keyCode = KeyEvent.VK_UNDEFINED

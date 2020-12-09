@@ -17,9 +17,10 @@
 package org.kopi.galite.tests.util
 
 import org.junit.Test
+import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.util.ReflectTool
 import org.kopi.galite.tests.form.TestBlock
-import org.kopi.galite.tests.form.TestForm
+
 import kotlin.test.assertEquals
 
 class ReflectToolTests {
@@ -29,11 +30,12 @@ class ReflectToolTests {
    */
   @Test
   fun reflectToolBlockTest() {
-    assertEquals("name", ReflectTool.blockFieldAt(TestBlock, 2))
-    assertEquals("id", ReflectTool.blockFieldAt(TestBlock, 1))
-    assertEquals("age", ReflectTool.blockFieldAt(TestBlock, 0))
-    assertEquals("i", ReflectTool.blockIndexAt(TestBlock, 0))
-    assertEquals("u", ReflectTool.blockTableAt(TestBlock, 0))
+    val testBlock = TestBlock()
+    assertEquals("name", ReflectTool.blockFieldAt(testBlock, 2))
+    assertEquals("id", ReflectTool.blockFieldAt(testBlock, 1))
+    assertEquals("age", ReflectTool.blockFieldAt(testBlock, 0))
+    assertEquals("i", ReflectTool.blockIndexAt(testBlock, 0))
+    assertEquals("u", ReflectTool.blockTableAt(testBlock, 0))
   }
 
   /**
@@ -41,7 +43,7 @@ class ReflectToolTests {
    */
   @Test
   fun reflectToolFormTest() {
-    assertEquals("graph", ReflectTool.formActorAt(TestForm, 0))
-    assertEquals("myMenu", ReflectTool.formMenuAt(TestForm, 0))
+    assertEquals("graph", ReflectTool.formActorAt(FormSample, 0))
+    assertEquals("myMenu", ReflectTool.formMenuAt(FormSample, 0))
   }
 }

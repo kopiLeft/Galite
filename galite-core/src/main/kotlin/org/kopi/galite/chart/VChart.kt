@@ -136,7 +136,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
       val file = Utils.getTempFile("galite", "pdf")
       val paper = PPaperType.getPaperTypeFromCode(printOptions.papertype)
 
-     val page = if (printOptions.paperlayout == "Landscape") {
+      val page = if (printOptions.paperlayout == "Landscape") {
         Rectangle(paper.height.toFloat(), paper.width.toFloat())
       } else {
         Rectangle(paper.width.toFloat(), paper.height.toFloat())
@@ -216,7 +216,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     activeCommands.clear()
     if (commands != null) {
       commands!!.forEachIndexed { i, it ->
-        when(it.getIdent() ) {
+        when (it.getIdent()) {
           "BarView" -> {
             cmdBarView = it
           }

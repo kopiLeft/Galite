@@ -96,7 +96,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
               hours = buffer[bp] - '0'
               state = 2
             }
-            buffer[bp] == '\u0000'-> {
+            buffer[bp] == '\u0000' -> {
               state = 0
             }
             else -> {
@@ -185,8 +185,8 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
    */
   override fun setTime(r: Int, v: Time?) {
     if (changedUI
-        || value[r] == null && v != null
-        || value[r] != null && !value[r]?.equals(v)!!) {
+            || value[r] == null && v != null
+            || value[r] != null && !value[r]?.equals(v)!!) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
@@ -286,7 +286,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
             }
           }
           4 -> when {  /* The first minutes' digit */
-            buffer[bp] in '0'..'9' ->{
+            buffer[bp] in '0'..'9' -> {
               minutes = buffer[bp] - '0'
               state = 5
             }
@@ -344,9 +344,9 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }

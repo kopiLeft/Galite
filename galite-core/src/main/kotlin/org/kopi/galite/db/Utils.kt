@@ -44,13 +44,33 @@ class Utils {
       }
       return if (bufpos == 0) "" else String(buffer, 0, bufpos)
     }
+
     fun trailString(input: String): String = TODO()
     fun toSql(date: Date): String = TODO()
-    fun toSql(l: String?): String = TODO()
+
+    fun toSql(l: String?): String {
+      return if (l == null) {
+        NULL_LITERAL
+      } else {
+        val b = StringBuffer()
+        b.append('\'')
+        for (element in l) {
+          if (element == '\'') {
+            b.append('\'')
+          }
+          b.append(element)
+        }
+        b.append('\'')
+        b.toString()
+      }
+    }
+
     fun toSql(t: Time?): String = TODO()
     fun toSql(d: Int?): String = TODO()
     fun toSql(t: Timestamp?): String = TODO()
     fun toSql(t: Week?): String = TODO()
     fun toSql(m: Month?): String = TODO()
+
+    const val NULL_LITERAL = "NULL"
   }
 }

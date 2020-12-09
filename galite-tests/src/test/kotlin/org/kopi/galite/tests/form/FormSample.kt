@@ -18,37 +18,26 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import kotlin.test.assertEquals
-
-import org.junit.Test
-import org.kopi.galite.chart.Chart
-
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.FormTrigg
 
+import org.kopi.galite.chart.Chart
+import org.kopi.galite.common.FormTrigg
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.FieldOption
+import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.tests.JApplicationTestBase
-
-class FormTests: JApplicationTestBase() {
-
-  @Test
-  fun sourceFormTest() {
-    val formModel = TestForm.model
-    assertEquals(TestForm::class.qualifiedName!!.replace(".", "/"), formModel.source)
-  }
-}
 
 object User: Table() {
-  val id = integer("id")
-  val name = varchar("name", 20)
-  val age = integer("age")
+  val id = integer("ID")
+  val name = varchar("NAME", 20)
+  val age = integer("AGE")
 }
 
-object TestForm: Form() {
+object FormSample: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
@@ -60,33 +49,47 @@ object TestForm: Form() {
           label =  "Graph for test",
           help =   "show graph values" ,
   ) {
-    key  =  Key.F9
+    key  =  Key.F9          // key is optional here
     icon =  "column_chart"  // icon is optional here
+  }
+
+  val p1 = page("test page")
+  val p2 = page("test page2")
+
+  val tb1 = insertBlock(TestBlock(), p1) {
+    command(item = graph) {
+      this.name = "graphe"
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
+      }
+    }
+  }
+
+  val tb2 = insertBlock(TestBlock(), p2) {
+    command(item = graph) {
+      this.name = "graphe"
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        println("---------------------------------- IN TEST COMMAND ----------------------------------")
+      }
+    }
+  }
+
+  val tb3ToTestBlockOptions = insertBlock(TestBlock(), p1) {
+    options(BlockOption.NOINSERT)
   }
 
   init {
     trigger(FormTrigg.INIT) {
       println("form trigger works")
-      }
-
-    page("test page") {
-      insertBlock(TestBlock) {
-        command(item = graph) {
-          this.name = "graphe"
-          mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
-          action = {
-            println("---------------------------------- IN TEST COMMAND ----------------------------------")
-          }
-        }
-      }
     }
-
-    TestBlock.age[0] = 5
-    TestBlock.age.value = 6
+    tb1.age[0] = 5
+    tb1.age.value = 6
   }
 }
 
-object TestBlock : FormBlock(1, 1, "Test", "Test block") {
+class TestBlock : FormBlock(1, 1, "Test", "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -100,6 +103,11 @@ object TestBlock : FormBlock(1, 1, "Test", "Test block") {
     help = "The user name"
     columns(u.name)
   }
+  val password = mustFill(domain = Domain<String>(20), position = at(2, 1)) {
+    label = "password"
+    help = "The user password"
+    options(FieldOption.NOECHO)
+  }
   val age = visit(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
@@ -112,4 +120,8 @@ object TestBlock : FormBlock(1, 1, "Test", "Test block") {
 
 class CommandesC(fournisseur: Int?): Chart() {
   override val title: String = "Fournisseur"
+}
+
+fun main(){
+  Application.runForm(formName = FormSample)
 }

@@ -59,7 +59,9 @@ object Message {
    * @param params The message parameters.
    * @return The formatted message.
    */
-  fun getMessage(source: String = VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE, ident: String, params: Any? = null): String {
+  fun getMessage(source: String = VISUAL_KOPI_MESSAGES_LOCALIZATION_RESOURCE,
+                 ident: String,
+                 params: Any? = null): String {
     val params = if (params is Array<*>?) params as Array<Any?>? else arrayOf(params)
 
     val manager = if (ApplicationContext.applicationContext != null

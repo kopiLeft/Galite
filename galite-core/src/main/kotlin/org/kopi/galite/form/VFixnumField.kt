@@ -145,8 +145,8 @@ class VFixnumField(val bufferSize: Int,
     }
     s.forEach {
       if (!((it in '0'..'9')
-             || (it == '.') || (it == '-') || (it == ' ')
-             || (it == ',') || (it == '/'))) {
+                      || (it == '.') || (it == '-') || (it == ' ')
+                      || (it == ',') || (it == '/'))) {
         return false
       }
     }
@@ -208,8 +208,8 @@ class VFixnumField(val bufferSize: Int,
 
     for (i in 0 until block!!.bufferSize) {
       if ((!isNullImpl(i)
-           && block!!.isRecordFilled(i)
-           && (!exclude || i != block!!.activeRecord))) {
+                      && block!!.isRecordFilled(i)
+                      && (!exclude || i != block!!.activeRecord))) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }
@@ -315,8 +315,8 @@ class VFixnumField(val bufferSize: Int,
     var v = v
 
     if ((changedUI
-         || (value[r] == null && v != null)
-         || (value[r] != null && value[r] != v))) {
+                    || (value[r] == null && v != null)
+                    || (value[r] != null && value[r] != v))) {
       trail(r)
       if (v != null) {
         if (v.scale != currentScale[r]) {
@@ -454,9 +454,9 @@ class VFixnumField(val bufferSize: Int,
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (((oldValue != null && value[t] == null)
-              || (oldValue == null && value[t] != null)
-              || (oldValue != null && oldValue != value[t])))) {
+            && (((oldValue != null && value[t] == null)
+                    || (oldValue == null && value[t] != null)
+                    || (oldValue != null && oldValue != value[t])))) {
       fireValueChanged(t)
     }
   }
@@ -583,7 +583,7 @@ class VFixnumField(val bufferSize: Int,
 
   private var value: Array<Fixed?> = arrayOfNulls(2 * bufferSize)
 
-  protected var criticalMinValue= minval
+  protected var criticalMinValue = minval
 
   protected var criticalMaxValue = maxval
 
