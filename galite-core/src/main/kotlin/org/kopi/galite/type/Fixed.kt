@@ -26,7 +26,7 @@ import java.math.MathContext
 /**
  * This class represents the fixed type
  */
-open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
+open class Fixed(b: BigDecimal?) : Number(), Comparable<Any> {
 
   internal constructor(b: BigInteger?) : this(BigDecimal(b)) {}
 
@@ -95,9 +95,9 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   /**
    * Comparisons
    */
-  operator fun compareTo(other: Fixed?): Int = value!!.compareTo(other!!.value)
+  operator fun compareTo(other: Fixed): Int = value!!.compareTo(other.value)
 
-  override operator fun compareTo(other: Any?): Int = compareTo(other as? Fixed)
+  override operator fun compareTo(other: Any): Int = compareTo(other as Fixed)
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
