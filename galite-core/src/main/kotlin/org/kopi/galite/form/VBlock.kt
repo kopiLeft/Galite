@@ -2643,7 +2643,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         null
       } else {
         @Suppress("UNCHECKED_CAST")
-        field.lookupColumn(0) as Column<Any>
+        field.lookupColumn(0) as? Column<Any>
       }
       if (column != null) {
         condition.add(Op.build { column eq field.getSql(recno)!! })
