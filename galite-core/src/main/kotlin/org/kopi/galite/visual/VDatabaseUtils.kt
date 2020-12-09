@@ -32,6 +32,10 @@ import org.kopi.galite.util.base.InconsistencyException
 
 object VDatabaseUtils {
 
+  fun checkForeignKeys_(context: DBContextHandler, id: Int, table: Table){
+    TODO()
+  }
+
   fun checkForeignKeys(context: DBContextHandler, id: Int, table: String) {
     transaction {
 
