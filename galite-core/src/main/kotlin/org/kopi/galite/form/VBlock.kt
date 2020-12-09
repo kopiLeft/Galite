@@ -18,14 +18,15 @@
 
 package org.kopi.galite.form
 
-import java.sql.SQLException
-import java.util.EventListener
-
-import javax.swing.event.EventListenerList
-
-import kotlin.collections.HashMap
-import kotlin.math.abs
-
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -35,9 +36,9 @@ import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
@@ -45,15 +46,26 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.SQLException
+import java.util.*
+import javax.swing.event.EventListenerList
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.elementAt
+import kotlin.collections.filter
+import kotlin.collections.find
+import kotlin.collections.first
+import kotlin.collections.forEach
+import kotlin.collections.forEachIndexed
+import kotlin.collections.indices
+import kotlin.collections.isNotEmpty
+import kotlin.collections.map
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.toList
+import kotlin.collections.toTypedArray
+import kotlin.math.abs
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1354,7 +1366,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-            || !isMulti() && activeField == null) {
+                   || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
               .toString() + " recno " + recno.toString() + " current record " + activeRecord
               .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
@@ -1784,7 +1796,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         if (query.toList().isEmpty()) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                  arrayOf<Any>(tables!![tableIndex])))
+                                                            arrayOf<Any>(tables!![tableIndex])))
 
         } else {
           var j = 0
@@ -1798,7 +1810,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           if (query.toList().isNotEmpty()) {
 
             throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                    arrayOf<Any>(tables!![tableIndex])))
+                                                              arrayOf<Any>(tables!![tableIndex])))
           }
         }
       }
@@ -2478,7 +2490,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     block           This action should block the UI thread ?
    */
   @Deprecated("Use method performAsyncAction without bool parameter",
-          ReplaceWith("performAsyncAction(action)"))
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2620,8 +2632,34 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /*
    * Checks unique index constraints
    */
-  protected fun checkUniqueIndex(idx: Int, recno: Int, id: Int?) {
-    TODO()
+  protected open fun checkUniqueIndex(index: Int, recno: Int, id: Int) {
+    val condition = mutableListOf<Op<Boolean>>()
+
+    for (field in fields) {
+      val column  = if (field.isNull(recno) || !field.hasIndex(index)) {
+        null
+      } else {
+        field.lookupColumn(0)
+      }
+      if (column != null) {
+        condition.add(Op.build { column eq field.getSql(recno)!! })
+      }
+    }
+    if (condition.isNotEmpty()) {
+      val query = tables!![0].slice(idColumn).select{ condition.compoundAnd() }
+
+      transaction {
+        if (query.execute(this)!!.next()) {
+          if (query.first()[idColumn] != id) {
+            form.setActiveBlock(this@VBlock)
+            activeRecord = recno
+            gotoFirstField()
+            throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
+          }
+          assert(!query.execute(this)!!.next()) { "too many rows" }
+        }
+      }
+    }
   }
 
   /**
@@ -2905,11 +2943,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun helpOnBlock(help: VHelpGenerator) {
     if (!isAlwaysSkipped()) {
       help.helpOnBlock(form.javaClass.name.replace('.', '_'),
-              title,
-              this.help,
-              commands,
-              fields,
-              form.blocks.size == 1)
+                       title,
+                       this.help,
+                       commands,
+                       fields,
+                       form.blocks.size == 1)
     }
   }
 
