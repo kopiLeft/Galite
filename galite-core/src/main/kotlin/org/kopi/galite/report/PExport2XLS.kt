@@ -34,7 +34,7 @@ class PExport2XLS(table: UTable,
   : PExport2Excel(table,
                   model,
                   printConfig,
-                                                                                                      title), Constants {
+                  title), Constants {
 
   override fun createWorkbook(): Workbook {
     val wb = HSSFWorkbook()

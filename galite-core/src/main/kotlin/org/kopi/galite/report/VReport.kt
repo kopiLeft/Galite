@@ -56,7 +56,8 @@ import kotlin.jvm.Throws
  *
  * @param ctxt Database context handler
  */
-abstract class VReport internal constructor(ctxt: DBContextHandler? = null) : VWindow(), Constants, VConstants, Printable {
+abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
+  : VWindow(), Constants, VConstants, Printable {
   companion object {
     const val TYP_CSV = 1
     const val TYP_PDF = 2

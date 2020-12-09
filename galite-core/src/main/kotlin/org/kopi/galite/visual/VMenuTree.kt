@@ -355,7 +355,9 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       groupName != null -> {
         fetchRights(
                 modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
                           GroupParties.user inSubQuery (Groups.slice(
@@ -367,7 +369,9 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       menuTreeUser != null -> {
         fetchRights(
                 modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
                           GroupParties.user inSubQuery (Users.slice(
@@ -379,7 +383,9 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       else -> {
         fetchRights(
                 modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
                           GroupParties.user eq getUserID()

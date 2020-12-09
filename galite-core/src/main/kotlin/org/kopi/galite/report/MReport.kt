@@ -219,9 +219,16 @@ class MReport : Constants, Serializable {
     for (i in baseRows.indices) {
       for (j in paramColumns.indices) {
         when (functions[j]) {
-          NONE -> vm.setValue(params[j],
-                              (if (baseRows[i]!!.getValueAt(paramColumns[j]) == null) 0 else // !!! wael 20070622 : use 0 unstead of null values.
-                                (baseRows[i]!!.getValueAt(paramColumns[j]) as NotNullFixed).toFloat()) as Double)
+          NONE -> {
+            val value = if (baseRows[i]!!.getValueAt(paramColumns[j]) == null) {
+              0
+            } else {
+              // !!! wael 20070622 : use 0 unstead of null values.
+              (baseRows[i]!!.getValueAt(paramColumns[j]) as NotNullFixed).toFloat()
+            }
+            vm.setValue(params[j],
+                        value as Double)
+          }
           MAX -> {
             var max: Float
             // init max
