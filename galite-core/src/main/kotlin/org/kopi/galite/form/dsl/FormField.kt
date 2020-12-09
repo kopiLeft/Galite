@@ -61,7 +61,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
                                    override val domain: Domain<T>,
                                    private val fieldIndex: Int,
                                    initialAccess: Int,
-                                   var position: FormPosition? = null): Field<T>(domain) {
+                                   var position: FormPosition? = null) : Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -75,7 +75,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   var initialValues = mutableMapOf<Int, T?>()
   var value: T? = null
     get() {
-      return if(vField.block == null) {
+      return if (vField.block == null) {
         initialValues[0]
       } else {
         vField.getObject() as? T
@@ -83,7 +83,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     }
     set(value) {
       field = value
-      if(vField.block == null) {
+      if (vField.block == null) {
         initialValues[0] = value
       } else {
         vField.setObject(value)
@@ -98,7 +98,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    * @param record the record number
    */
   operator fun get(record: Int): T? {
-    return if(vField.block == null) {
+    return if (vField.block == null) {
       initialValues[record]
     } else {
       vField.getObject(record) as? T
@@ -116,7 +116,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   operator fun set(record: Int = 0, value: T) {
     initialValues[record] = value
 
-    if(vField.block != null) {
+    if (vField.block != null) {
       vField.setObject(record, value)
     }
   }
@@ -140,6 +140,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
       columns!!.init()
     }
   }
+
   /** changing field visibility in mode query */
   fun onQueryHidden() {
     this.access[VConstants.MOD_QUERY] = VConstants.ACS_HIDDEN
@@ -195,7 +196,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    * The field model based on the field type.
    */
   var vField: VField =
-          when(domain.kClass) {
+          when (domain.kClass) {
             Int::class -> VIntegerField(block.buffer, domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
             String::class -> VStringField(block.buffer,
                                           domain.width ?: 0,
@@ -274,7 +275,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    */
   fun options(vararg fieldOptions: FieldOption) {
     fieldOptions.forEach { fieldOption ->
-      if(fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
+      if (fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
         options = options and fieldOption.value.inv()
       }
 

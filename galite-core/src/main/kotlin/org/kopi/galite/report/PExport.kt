@@ -139,7 +139,11 @@ abstract class PExport(val table: UTable,
           newrow[index] = null
           newrowOrig[index] = null
         } else {
-          newrow[index] = if (lineBreak) column.formatWithLineBreaker(row.getValueAt(visibleColumn)) else column.format(row.getValueAt(visibleColumn))
+          newrow[index] = if (lineBreak) {
+            column.formatWithLineBreaker(row.getValueAt(visibleColumn))
+          } else {
+            column.format(row.getValueAt(visibleColumn))
+          }
           newrowOrig[index] = row.getValueAt(visibleColumn)
         }
         alignments[index] = column.align
@@ -162,7 +166,11 @@ abstract class PExport(val table: UTable,
                   && (!printConfig.groupFormfeed || i != firstVisibleColumn)) {
             if (row.level < model.getDisplayLevels(model.getReverseOrder(visibleColumn)) &&
                     parent.level >= model.getDisplayLevels(model.getReverseOrder(visibleColumn))) {
-              newrow[index] = if (lineBreak) column.formatWithLineBreaker(row.getValueAt(visibleColumn)) else column.format(row.getValueAt(visibleColumn))
+              newrow[index] = if (lineBreak) {
+                column.formatWithLineBreaker(row.getValueAt(visibleColumn))
+              } else {
+                column.format(row.getValueAt(visibleColumn))
+              }
               newrowOrig[index] = row.getValueAt(visibleColumn)
             }
             index += 1

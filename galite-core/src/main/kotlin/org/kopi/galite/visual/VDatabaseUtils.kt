@@ -82,7 +82,7 @@ object VDatabaseUtils {
         var id = integer("ID")
       }
       val query: org.jetbrains.exposed.sql.Query = if (condition != null && condition.isNotEmpty()) {
-        auxTable.slice(auxTable.id).select {  auxTable.id  eq condition as Int  }.forUpdate()
+        auxTable.slice(auxTable.id).select { auxTable.id eq condition as Int }.forUpdate()
       } else {
         auxTable.slice(auxTable.id).selectAll().forUpdate()
       }

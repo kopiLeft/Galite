@@ -26,16 +26,16 @@ import org.kopi.galite.form.VDictionaryForm
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 
-abstract class VChartSelectionForm: VDictionaryForm {
+abstract class VChartSelectionForm : VDictionaryForm {
 
   //---------------------------------------------------------------------
   // CONSTRUCTORS
   //---------------------------------------------------------------------
-  constructor(parent: DBContextHandler): super(parent)
+  constructor(parent: DBContextHandler) : super(parent)
 
-  constructor(parent: DBContext): super(parent)
+  constructor(parent: DBContext) : super(parent)
 
-  constructor(): super()
+  constructor() : super()
 
   //---------------------------------------------------------------------
   // IMPLEMENTATIONS

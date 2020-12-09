@@ -28,7 +28,7 @@ import org.kopi.galite.type.Month
  */
 class VMonthDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
   override fun toString(value: Any?): String {
-    return when(value) {
+    return when (value) {
       null -> CConstants.EMPTY_TEXT
       is Month -> value.toString()
       else -> value.toString()

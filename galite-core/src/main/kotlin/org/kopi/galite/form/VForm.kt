@@ -60,6 +60,7 @@ abstract class VForm : VWindow, VConstants {
       })
     }
   }
+
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
@@ -278,9 +279,9 @@ abstract class VForm : VWindow, VConstants {
       // - can be removed if the method checkUI is removed
       try {
         ApplicationContext.reportTrouble("DForm chechUI " + Thread.currentThread(),
-                "Where is this code used? $action",
-                this.toString(),
-                RuntimeException("CHECKUI: Entered  block " + blocks!![i].name))
+                                         "Where is this code used? $action",
+                                         this.toString(),
+                                         RuntimeException("CHECKUI: Entered  block " + blocks!![i].name))
       } catch (e: Exception) {
         e.printStackTrace()
       }
@@ -605,11 +606,11 @@ abstract class VForm : VWindow, VConstants {
       addActors(blocks[i].actors)
     }
     VDocGenerator(p).helpOnForm(getName(),
-            commands,
-            blocks,
-            name,
-            help,
-            code)
+                                commands,
+                                blocks,
+                                name,
+                                help,
+                                code)
   }
 
   fun genHelp(): String? {
@@ -627,11 +628,11 @@ abstract class VForm : VWindow, VConstants {
       localHelp = module.help
     }
     val fileName = VHelpGenerator().helpOnForm(getName(),
-            commands,
-            blocks,
-            description,
-            localHelp,
-            "")
+                                               commands,
+                                               blocks,
+                                               description,
+                                               localHelp,
+                                               "")
     return if (fileName == null) {
       null
     } else {

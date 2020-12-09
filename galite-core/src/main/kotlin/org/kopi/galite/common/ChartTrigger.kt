@@ -22,6 +22,6 @@ import org.kopi.galite.chart.CConstants
 /**
  * This class represents a trigger, ie an action to be executed on events
  */
-class ChartTrigger(events: Long, action: Action<*>): Trigger(events, action) {
+class ChartTrigger(events: Long, action: Action<*>) : Trigger(events, action) {
   override fun getTriggers(): IntArray = CConstants.TRG_TYPES
 }

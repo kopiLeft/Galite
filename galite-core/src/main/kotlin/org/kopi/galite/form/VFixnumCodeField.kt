@@ -66,8 +66,8 @@ open class VFixnumCodeField(bufferSize: Int,
 
     for (i in 0 until block!!.bufferSize) {
       if (block!!.isRecordFilled(i)
-          && !isNull(i)
-          && (!exclude || i != block!!.activeRecord)) {
+              && !isNull(i)
+              && (!exclude || i != block!!.activeRecord)) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }

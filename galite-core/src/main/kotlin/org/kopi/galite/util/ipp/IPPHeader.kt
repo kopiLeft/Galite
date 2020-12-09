@@ -20,7 +20,7 @@ package org.kopi.galite.util.ipp
 
 class IPPHeader() {
 
-  constructor(inputStream: IPPInputStream): this() {
+  constructor(inputStream: IPPInputStream) : this() {
     majorVersion = inputStream.readByte()
     minorVersion = inputStream.readByte()
     operationID = inputStream.readShort()
@@ -43,7 +43,7 @@ class IPPHeader() {
     os.writeInteger(requestID)
   }
 
- fun getSize(): Int = 8
+  fun getSize(): Int = 8
 
   fun dump() {
     println("Major version : $majorVersion")
@@ -55,26 +55,26 @@ class IPPHeader() {
   fun isAnError(): Boolean = operationID >= 0x400
 
   fun getStatus(): String? {
-      val units: Int
+    val units: Int
 
-      if (operationID < 0x400) {
-        units = operationID.toInt()
-        if (units < IPPConstants.ERR_SUCCESSFUL.size) {
-          return IPPConstants.ERR_SUCCESSFUL[units]
-        }
-      } else if (operationID < 0x500) {
-        units = operationID - 0x400
-        if (units < IPPConstants.ERR_CLIENT_ERROR.size) {
-          return IPPConstants.ERR_CLIENT_ERROR[units]
-        }
-      } else {
-        units = operationID - 0x400
-        if (units < IPPConstants.ERR_SERVER_ERROR.size) {
-          return IPPConstants.ERR_SERVER_ERROR[units]
-        }
+    if (operationID < 0x400) {
+      units = operationID.toInt()
+      if (units < IPPConstants.ERR_SUCCESSFUL.size) {
+        return IPPConstants.ERR_SUCCESSFUL[units]
       }
-      return null
+    } else if (operationID < 0x500) {
+      units = operationID - 0x400
+      if (units < IPPConstants.ERR_CLIENT_ERROR.size) {
+        return IPPConstants.ERR_CLIENT_ERROR[units]
+      }
+    } else {
+      units = operationID - 0x400
+      if (units < IPPConstants.ERR_SERVER_ERROR.size) {
+        return IPPConstants.ERR_SERVER_ERROR[units]
+      }
     }
+    return null
+  }
 
   // --------------------------------------------------------------------
   // DATA MEMBERS

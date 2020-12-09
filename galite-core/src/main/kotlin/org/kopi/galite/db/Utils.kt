@@ -44,6 +44,7 @@ class Utils {
       }
       return if (bufpos == 0) "" else String(buffer, 0, bufpos)
     }
+
     fun trailString(input: String): String = TODO()
     fun toSql(date: Date): String = TODO()
 

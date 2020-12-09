@@ -20,7 +20,7 @@ package org.kopi.galite.form
 
 import org.kopi.galite.visual.VActor
 
-abstract class VImportedBlock (form: VForm) : VBlock(form) {
+abstract class VImportedBlock(form: VForm) : VBlock(form) {
 
   // ----------------------------------------------------------------------
   // ACTOR HANDLING

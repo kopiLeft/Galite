@@ -65,13 +65,13 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
     verifyNotInTransaction("DWindow.showApplicationInformation($message)")
     val options = arrayOf<Any>(getString("CLOSE"))
     JOptionPane.showOptionDialog(frame,
-            message,
-            getString("Notice"),
-            JOptionPane.DEFAULT_OPTION,
-            JOptionPane.INFORMATION_MESSAGE,
-            Utils.getImage("info.gif"),
-            options,
-            options[0])
+                                 message,
+                                 getString("Notice"),
+                                 JOptionPane.DEFAULT_OPTION,
+                                 JOptionPane.INFORMATION_MESSAGE,
+                                 Utils.getImage("info.gif"),
+                                 options,
+                                 options[0])
   }
 
   /**

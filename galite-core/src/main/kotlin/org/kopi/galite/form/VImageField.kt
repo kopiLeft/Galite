@@ -161,9 +161,9 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && !Arrays.equals(oldValue, value[t]))) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && !Arrays.equals(oldValue, value[t]))) {
       fireValueChanged(t)
     }
   }
