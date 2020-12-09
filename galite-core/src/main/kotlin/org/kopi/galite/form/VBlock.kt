@@ -2624,7 +2624,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       val id = if (isRecordFetched(recno)) idField.getInt(recno) else -1
 
       for (i in indices!!.indices) {
-        checkUniqueIndex(i, recno, id)
+        checkUniqueIndex(i, recno, id!!)
       }
     }
   }
@@ -2639,7 +2639,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       val column  = if (field.isNull(recno) || !field.hasIndex(index)) {
         null
       } else {
-        field.lookupColumn(0)
+        @Suppress("UNCHECKED_CAST")
+        field.lookupColumn(0) as Column<Any>
       }
       if (column != null) {
         condition.add(Op.build { column eq field.getSql(recno)!! })
