@@ -25,7 +25,7 @@ internal class FaxPrinter private constructor(private val faxHost: String,
                                               var number: String,
                                               private val user: String,
                                               private val id: String)
-               : AbstractPrinter("FaxPrinter $number"), Printer {
+  : AbstractPrinter("FaxPrinter $number"), Printer {
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM

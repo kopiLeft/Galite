@@ -332,7 +332,8 @@ class ExtendedMessageFormat : MessageFormat {
    * @param descriptions The list of available format descriptions.
    * @return The format description if found or null if not.
    */
-  private fun getChoiceFormatDescription(description: String, descriptions: List<FormatDescription>): FormatDescription? {
+  private fun getChoiceFormatDescription(description: String,
+                                         descriptions: List<FormatDescription>): FormatDescription? {
     for (fdescription in descriptions) {
       if (fdescription.description == null || !fdescription.description.contains("choice")) {
         continue
@@ -351,7 +352,8 @@ class ExtendedMessageFormat : MessageFormat {
    * @return The choice pattern.
    */
   private fun toChoicePattern(fdescription: FormatDescription): String {
-    return (MessageFormat("{" + fdescription.info.index + "," + fdescription.description!!.replace("''".toRegex(), "'") + "}").formats[0] as ChoiceFormat).toPattern()
+    return (MessageFormat("{" + fdescription.info.index + "," + fdescription.description!!.replace("''".toRegex(),
+                                                                                                   "'") + "}").formats[0] as ChoiceFormat).toPattern()
   }
 
   // ----------------------------------------------------------------------

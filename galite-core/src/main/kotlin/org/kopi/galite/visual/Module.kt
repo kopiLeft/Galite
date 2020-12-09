@@ -59,7 +59,7 @@ class Module(val id: Int,
    * this object is the name of the class to be executed when this module
    * is called.
    */
-  var objectName : String? = objectName
+  var objectName: String? = objectName
     private set
 
   /**
@@ -178,7 +178,7 @@ class Module(val id: Int,
                                          t.message,
                                          t)
         ApplicationContext.displayError(ApplicationContext.getMenu()!!.getDisplay(),
-                MessageCode.getMessage("VIS-00041"))
+                                        MessageCode.getMessage("VIS-00041"))
         null
       }
     }

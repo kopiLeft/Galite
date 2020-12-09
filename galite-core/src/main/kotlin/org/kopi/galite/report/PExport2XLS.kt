@@ -27,7 +27,14 @@ import org.apache.poi.hssf.util.HSSFColor
 import org.apache.poi.ss.usermodel.Workbook
 import org.kopi.galite.report.UReport.UTable
 
-class PExport2XLS (table: UTable, model: MReport, printConfig: PConfig, title: String) : PExport2Excel(table, model, printConfig, title), Constants {
+class PExport2XLS(table: UTable,
+                  model: MReport,
+                  printConfig: PConfig,
+                  title: String)
+  : PExport2Excel(table,
+                  model,
+                  printConfig,
+                                                                                                      title), Constants {
 
   override fun createWorkbook(): Workbook {
     val wb = HSSFWorkbook()

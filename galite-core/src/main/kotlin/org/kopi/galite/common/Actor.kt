@@ -45,7 +45,7 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
 
   var icon: String? = null
 
-  private fun checkKey(key : Key?) {
+  private fun checkKey(key: Key?) {
     if (key == null) {
       keyModifier = 0
       keyCode = KeyEvent.VK_UNDEFINED

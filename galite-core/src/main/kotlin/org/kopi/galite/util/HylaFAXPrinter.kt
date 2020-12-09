@@ -72,7 +72,7 @@ class HylaFAXPrinter(private val faxHost: String,
       attachments?.let {
         it.forEach { element ->
           val dataSource = element as InputStream
-       // put data to the hylafax server
+          // put data to the hylafax server
           documents.add(faxClient.putTemporary(dataSource))
         }
       }
@@ -82,7 +82,7 @@ class HylaFAXPrinter(private val faxHost: String,
       val job = faxClient.createJob()
 
       // set job properties
-      with(job){
+      with(job) {
         fromUser = user
         notifyAddress = user
         killtime = "000259"

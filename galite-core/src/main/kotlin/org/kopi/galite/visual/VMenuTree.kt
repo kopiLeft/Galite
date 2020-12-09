@@ -335,13 +335,13 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
         }
 
         val module = Module(it[Modules.id],
-                it[Modules.parent],
-                it[Modules.shortName],
-                it[Modules.sourceName],
-                it[Modules.objectName],
-                Module.ACS_PARENT,
-                it[Modules.priority],
-                icon)
+                            it[Modules.parent],
+                            it[Modules.shortName],
+                            it[Modules.sourceName],
+                            it[Modules.objectName],
+                            Module.ACS_PARENT,
+                            it[Modules.priority],
+                            icon)
 
         localModules.add(module)
         items.add(module)
@@ -353,25 +353,32 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   private fun fetchGroupRightsByUserId(modules: List<Module>) {
     when {
       groupName != null -> {
-        fetchRights(modules,
+        fetchRights(
+                modules,
                 (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
-                          GroupParties.user inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName })
+                          GroupParties.user inSubQuery (Groups.slice(
+                                  Groups.id).select { Groups.shortName eq groupName })
                         }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
+        )
       }
       menuTreeUser != null -> {
-        fetchRights(modules,
+        fetchRights(
+                modules,
                 (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
-                          GroupParties.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
+                          GroupParties.user inSubQuery (Users.slice(
+                                  Users.id).select { Users.shortName eq menuTreeUser })
                         }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
+        )
       }
       else -> {
-        fetchRights(modules,
+        fetchRights(
+                modules,
                 (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
@@ -473,13 +480,15 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       val query = if (isSuperUser && menuTreeUser != null) {
 
         Favorites.slice(Favorites.module, Favorites.id)
-                .select { Favorites.user inSubQuery(Users.slice(Users.id).select {Users.shortName eq  menuTreeUser  })
+                .select {
+                  Favorites.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
                 }.orderBy(Favorites.id)
       } else {
         Favorites.slice(Favorites.module, Favorites.id).select { Favorites.user eq getUserID() }.orderBy(Favorites.id)
       }
       query.forEach {
-        if (it[Favorites.module] != 0) {val symbol = it[Modules.symbol] as Int
+        if (it[Favorites.module] != 0) {
+          val symbol = it[Modules.symbol] as Int
           shortcutsID.add(it[Favorites.module])
         }
       }

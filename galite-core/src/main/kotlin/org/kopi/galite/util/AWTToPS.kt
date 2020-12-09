@@ -692,7 +692,13 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
    * @see Image
    * @see ImageObserver
    */
-  override fun drawImage(img: Image, x: Int, y: Int, width: Int, height: Int, bgcolor: Color, observer: ImageObserver): Boolean {
+  override fun drawImage(img: Image,
+                         x: Int,
+                         y: Int,
+                         width: Int,
+                         height: Int,
+                         bgcolor: Color,
+                         observer: ImageObserver): Boolean {
     return doImage(img, x, y, width, height, observer, bgcolor)
   }
 
@@ -821,11 +827,30 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     throw NotImplementedException()
   }
 
-  override fun drawImage(param1: Image, param2: Int, param3: Int, param4: Int, param5: Int, param6: Int, param7: Int, param8: Int, param9: Int, param10: ImageObserver): Boolean {
+  override fun drawImage(param1: Image,
+                         param2: Int,
+                         param3: Int,
+                         param4: Int,
+                         param5: Int,
+                         param6: Int,
+                         param7: Int,
+                         param8: Int,
+                         param9: Int,
+                         param10: ImageObserver): Boolean {
     return drawImage(param1, param2, param3, param4, param5, param10)
   }
 
-  override fun drawImage(param1: Image, param2: Int, param3: Int, param4: Int, param5: Int, param6: Int, param7: Int, param8: Int, param9: Int, param10: Color, param11: ImageObserver): Boolean {
+  override fun drawImage(param1: Image,
+                         param2: Int,
+                         param3: Int,
+                         param4: Int,
+                         param5: Int,
+                         param6: Int,
+                         param7: Int,
+                         param8: Int,
+                         param9: Int,
+                         param10: Color,
+                         param11: ImageObserver): Boolean {
     return drawImage(param1, param2, param3, param4, param5, param11)
   }
 
@@ -1041,7 +1066,13 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     return doImage(PixelConsumer(img), x, y, width, height, observer, bgcolor)
   }
 
-  fun doImage(pc: PixelConsumer, x: Int, y: Int, width: Int, height: Int, observer: ImageObserver?, bgcolor: Color?): Boolean {
+  fun doImage(pc: PixelConsumer,
+              x: Int,
+              y: Int,
+              width: Int,
+              height: Int,
+              observer: ImageObserver?,
+              bgcolor: Color?): Boolean {
     val y = swapCoord(y)
     var width = width
     var height = height
@@ -1116,7 +1147,13 @@ class AWTToPS(private val stream: PrintStream, clone: Boolean) : Graphics() {
     return true
   }
 
-  fun doBWImage(img: Image, x: Int, y: Int, width: Int, height: Int, observer: ImageObserver, bgcolor: Color?): Boolean {
+  fun doBWImage(img: Image,
+                x: Int,
+                y: Int,
+                width: Int,
+                height: Int,
+                observer: ImageObserver,
+                bgcolor: Color?): Boolean {
     // This class fetches the pixels in its constructor.
     var width = width
     var height = height

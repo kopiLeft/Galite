@@ -1198,7 +1198,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     while (i >= 0) {
       if (listeners[i] == BlockRecordListener::class.java) {
-        (listeners[i + 1] as BlockRecordListener).blockRecordChanged(getSortedPosition(record - 1) + 1, localRecordCount)
+        (listeners[i + 1] as BlockRecordListener).blockRecordChanged(getSortedPosition(record - 1) + 1,
+                                                                     localRecordCount)
       }
       i -= 2
     }
@@ -1354,7 +1355,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-            || !isMulti() && activeField == null) {
+                   || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
               .toString() + " recno " + recno.toString() + " current record " + activeRecord
               .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
@@ -1642,7 +1643,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun getSearchColumns(): List<Column<*>>? =
           fields.filter { it.getColumnCount() > 0 }
-            .map { it.getColumn(0)!!.column }
+                  .map { it.getColumn(0)!!.column }
 
   /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
@@ -1784,7 +1785,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         if (query.toList().isEmpty()) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                  arrayOf<Any>(tables!![tableIndex])))
+                                                            arrayOf<Any>(tables!![tableIndex])))
 
         } else {
           var j = 0
@@ -1798,7 +1799,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           if (query.toList().isNotEmpty()) {
 
             throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                    arrayOf<Any>(tables!![tableIndex])))
+                                                              arrayOf<Any>(tables!![tableIndex])))
           }
         }
       }
@@ -2478,7 +2479,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     block           This action should block the UI thread ?
    */
   @Deprecated("Use method performAsyncAction without bool parameter",
-          ReplaceWith("performAsyncAction(action)"))
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2716,7 +2717,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() = form.dBContext
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
-  override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
+  override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
 
@@ -2905,11 +2906,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun helpOnBlock(help: VHelpGenerator) {
     if (!isAlwaysSkipped()) {
       help.helpOnBlock(form.javaClass.name.replace('.', '_'),
-              title,
-              this.help,
-              commands,
-              fields,
-              form.blocks.size == 1)
+                       title,
+                       this.help,
+                       commands,
+                       fields,
+                       form.blocks.size == 1)
     }
   }
 
@@ -3060,6 +3061,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   lateinit var fields: Array<VField> // fields
   protected var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
   protected val triggers = mutableMapOf<Int, Trigger>()
+
   // dynamic data
   var activeRecord = 0 // current record
     get() {

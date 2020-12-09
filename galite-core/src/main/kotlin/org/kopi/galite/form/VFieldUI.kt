@@ -37,8 +37,8 @@ import org.kopi.galite.visual.VExecFailedException
  * @param index     The row controller index.
  */
 abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBlock,
-                                              val model: VField,
-                                              val index: Int = 0)
+                                                            val model: VField,
+                                                            val index: Int = 0)
   : VConstants, ActionHandler, Serializable {
 
   private fun hasEditItem_S(): Boolean = model.list != null && model.list!!.hasShortcut
@@ -82,7 +82,8 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * @param model The chart label sort model.
    * @return The created [UChartLabel]
    */
-  protected abstract fun createChartHeaderLabel(text: String?, help: String?, index: Int, model: OrderModel): UChartLabel
+  protected abstract fun createChartHeaderLabel(text: String?, help: String?, index: Int,
+                                                model: OrderModel): UChartLabel
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
@@ -178,10 +179,10 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       localCommands?.forEachIndexed { index, localCommand ->
         if (localCommand.isActive(getBlock().getMode())) {
           val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS,
-                          getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
+                                                 getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
             try {
               (getBlock().callTrigger(VConstants.TRG_CMDACCESS,
-                      getBlock().fields.size + getBlock().commands!!.size + index + 1) as Boolean)
+                                      getBlock().fields.size + getBlock().commands!!.size + index + 1) as Boolean)
             } catch (e: VException) {
               // consider that the command is active of any error occurs
               true
@@ -207,27 +208,27 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
   }
 
   fun getAllCommands(): Array<Any> {
-      val cmds = arrayListOf<VCommand>()
-      var i = 0
-      while (commands != null && i < commands.size) {
-        cmds.add(commands[i])
-        i++
-      }
-      if (hasEditItem_S()) {
-        cmds.add(model.getForm().cmdEditItem_S)
-      } else if (hasAutofill) {
-        if (model !is VBooleanField || includeBooleanAutofillCommand()) {
-          cmds.add(model.getForm().cmdAutofill)
-        }
-      }
-      if (hasNewItem) {
-        cmds.add(model.getForm().cmdNewItem)
-      }
-      if (hasEditItem) {
-        cmds.add(model.getForm().cmdEditItem)
-      }
-      return cmds.toTypedArray()
+    val cmds = arrayListOf<VCommand>()
+    var i = 0
+    while (commands != null && i < commands.size) {
+      cmds.add(commands[i])
+      i++
     }
+    if (hasEditItem_S()) {
+      cmds.add(model.getForm().cmdEditItem_S)
+    } else if (hasAutofill) {
+      if (model !is VBooleanField || includeBooleanAutofillCommand()) {
+        cmds.add(model.getForm().cmdAutofill)
+      }
+    }
+    if (hasNewItem) {
+      cmds.add(model.getForm().cmdNewItem)
+    }
+    if (hasEditItem) {
+      cmds.add(model.getForm().cmdEditItem)
+    }
+    return cmds.toTypedArray()
+  }
 
   /**
    * Clears all display fields.
@@ -390,12 +391,14 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
           dlDetail = createLabel(model.label, model.toolTip, true)
           if (columnEnd >= 0) {
             (getBlock().display as UMultiBlock).addToDetail(dlDetail,
-                    Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
+                                                            Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
           }
           // field for the value in the detail view
           detailDisplay = createDisplay(dlDetail, model, true)
           (getBlock().display as UMultiBlock).addToDetail(detailDisplay,
-                  Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, (lineEnd - line) * 2 + 1, false))
+                                                          Alignment(column * 2 - 1, line - 1,
+                                                                    (columnEnd - column) * 2 + 1,
+                                                                    (lineEnd - line) * 2 + 1, false))
           detailDisplay!!.setPosition(0)
           detailDisplay!!.setInDetail(true)
         }
@@ -415,10 +418,10 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         blockView.add(dl, MultiFieldAlignment(columnEnd * 2 - 1, line - 1, 1, 1, true))
         displays = arrayOf(createDisplay(dl, model, false))
         blockView.add(displays[0]!!, MultiFieldAlignment(columnEnd * 2 - 1,
-                line,
-                1,
-                lineEnd - line + 1,
-                false))
+                                                         line,
+                                                         1,
+                                                         lineEnd - line + 1,
+                                                         false))
         displays[0]!!.setPosition(0)
         displays[0]!!.updateText()
       } else {
@@ -429,9 +432,11 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         }
         if (displays[0] is UActorField) {
           // an actor field takes the label and the field space
-          blockView.add(displays[0]!!, Alignment(column * 2 - 2, line - 1, (columnEnd - column) * 2 + 2, lineEnd - line + 1, false))
+          blockView.add(displays[0]!!,
+                        Alignment(column * 2 - 2, line - 1, (columnEnd - column) * 2 + 2, lineEnd - line + 1, false))
         } else {
-          blockView.add(displays[0]!!, Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, lineEnd - line + 1, false))
+          blockView.add(displays[0]!!,
+                        Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, lineEnd - line + 1, false))
         }
         displays[0]!!.setPosition(0)
         displays[0]!!.updateText()

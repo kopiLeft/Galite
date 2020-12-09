@@ -30,7 +30,16 @@ import org.kopi.galite.db.Query
 /**
  * This class implements multi-line text fields.
  */
-class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styled: Boolean) : VStringField(width, height, visibleHeight, convert, styled) {
+class VTextField(width: Int,
+                 height: Int,
+                 visibleHeight: Int,
+                 convert: Int,
+                 styled: Boolean)
+  : VStringField(width,
+                 height,
+                 visibleHeight,
+                 convert,
+                 styled) {
 
   override fun getType(): Int = MDL_FLD_EDITOR
 
@@ -65,7 +74,12 @@ class VTextField(width: Int, height: Int, visibleHeight: Int, convert: Int, styl
   override fun setObject(r: Int, v: Any?) {
     if (v is ByteArray?) {
       try {
-        setString(r, java.lang.String(v, if (ApplicationConfiguration.getConfiguration()!!.isUnicodeDatabase()) "UTF-8" else "ISO-8859-1").toString())
+        val charsetName = if (ApplicationConfiguration.getConfiguration()!!.isUnicodeDatabase()) {
+          "UTF-8"
+        } else {
+          "ISO-8859-1"
+        }
+        setString(r, java.lang.String(v, charsetName).toString())
       } catch (e: UnsupportedEncodingException) {
         throw InconsistencyException(e)
       }
