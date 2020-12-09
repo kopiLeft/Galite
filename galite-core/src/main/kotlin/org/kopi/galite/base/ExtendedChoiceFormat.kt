@@ -96,6 +96,6 @@ class ExtendedChoiceFormat : ChoiceFormat {
   private val hasNotNullMarker: Boolean
 
   companion object {
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }

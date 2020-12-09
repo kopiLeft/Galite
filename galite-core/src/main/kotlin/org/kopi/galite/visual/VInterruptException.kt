@@ -23,6 +23,6 @@ package org.kopi.galite.visual
  */
 class VInterruptException : Exception() {
   companion object {
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }

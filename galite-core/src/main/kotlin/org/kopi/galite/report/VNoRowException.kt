@@ -27,6 +27,6 @@ import org.kopi.galite.visual.VRuntimeException
  */
 class VNoRowException(message: String? = null) : VRuntimeException(message) {
   companion object {
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }

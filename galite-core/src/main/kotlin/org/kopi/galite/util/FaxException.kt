@@ -44,6 +44,6 @@ open class FaxException : Exception {
   constructor(cause: Throwable) : super(cause)
 
   companion object {
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }

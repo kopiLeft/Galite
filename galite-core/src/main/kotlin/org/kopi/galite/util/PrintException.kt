@@ -74,6 +74,6 @@ open class PrintException : Exception {
     const val EXC_FATAL = 1
     const val EXC_RETRY = 2
 
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }

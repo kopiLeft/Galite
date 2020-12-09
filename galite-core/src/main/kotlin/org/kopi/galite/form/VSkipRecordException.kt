@@ -27,6 +27,6 @@ import org.kopi.galite.visual.VException
  */
 class VSkipRecordException(message: String? = null) : VException(message) {
   companion object {
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }

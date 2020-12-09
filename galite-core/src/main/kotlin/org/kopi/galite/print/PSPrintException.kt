@@ -39,6 +39,6 @@ class PSPrintException : PrintException {
   constructor(message: String?, cause: Throwable?) : super(message, cause, EXC_FATAL)
 
   companion object {
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }

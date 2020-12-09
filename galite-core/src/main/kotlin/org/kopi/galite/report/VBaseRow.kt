@@ -25,6 +25,6 @@ class VBaseRow(data: Array<Any?>) : VReportRow(data) {
   override fun getLevel(): Int = 0
 
   companion object {
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }

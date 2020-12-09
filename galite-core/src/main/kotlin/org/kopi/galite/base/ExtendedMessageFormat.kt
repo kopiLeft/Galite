@@ -419,6 +419,6 @@ class ExtendedMessageFormat : MessageFormat {
     /*package*/
     val NULL_REPRESENTATION = Any()
 
-    private const  val serialVersionUID = 0L
+    private const val serialVersionUID = 0L
   }
 }
