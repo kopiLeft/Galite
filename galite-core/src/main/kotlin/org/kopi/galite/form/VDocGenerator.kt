@@ -74,8 +74,8 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
                            alone: Boolean) {
     latexPrinter.println("\\subsection{$title}")
     latexPrinter.uncheckedPrintln("\\begin{center}\\includegraphics{images/" +
-            formCode + "_" + title.replace(' ', '_') + ".ps" +
-            "}\\end{center}")
+                                          formCode + "_" + title.replace(' ', '_') + ".ps" +
+                                          "}\\end{center}")
     if (help != null) {
       latexPrinter.println(help)
     }
@@ -144,8 +144,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
           if (command.isActive(VConstants.MOD_UPDATE) &&
                   !(command.isActive(VConstants.MOD_QUERY) &&
                           command.isActive(VConstants.MOD_UPDATE) &&
-                          command.isActive(VConstants.MOD_INSERT)))
-          {
+                          command.isActive(VConstants.MOD_INSERT))) {
             command.helpOnCommand(this)
           }
         }
@@ -159,8 +158,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
           if (command.isActive(VConstants.MOD_INSERT) &&
                   !(command.isActive(VConstants.MOD_QUERY) &&
                           command.isActive(VConstants.MOD_UPDATE) &&
-                          command.isActive(VConstants.MOD_INSERT)))
-          {
+                          command.isActive(VConstants.MOD_INSERT))) {
             command.helpOnCommand(this)
           }
         }
@@ -239,7 +237,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
       sortCommands(commands)
       latexPrinter.println()
       latexPrinter.println("\\begin{description}")
-      commands.forEach {  command ->
+      commands.forEach { command ->
         command.helpOnCommand(this)
       }
       latexPrinter.println("\\end{description}")

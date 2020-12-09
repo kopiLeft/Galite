@@ -228,26 +228,26 @@ object Commands : VConstants {
       try {
         while (true) {
           try {
-              b.fetchRecord(id)
-              break
+            b.fetchRecord(id)
+            break
           } catch (e: VException) {
             try {
-              } catch (abortEx: VException) {
+            } catch (abortEx: VException) {
               throw VExecFailedException(abortEx.message!!, abortEx)
             }
           } catch (e: SQLException) {
             try {
-              } catch (abortEx: SQLException) {
+            } catch (abortEx: SQLException) {
               throw VExecFailedException(abortEx)
             }
           } catch (e: Error) {
             try {
-              } catch (abortEx: Error) {
+            } catch (abortEx: Error) {
               throw InconsistencyException(abortEx)
             }
           } catch (e: RuntimeException) {
             try {
-              } catch (abortEx: RuntimeException) {
+            } catch (abortEx: RuntimeException) {
               throw InconsistencyException(abortEx)
             }
           }
@@ -443,7 +443,8 @@ object Commands : VConstants {
         try {
           b.fetchNextRecord(1)
           return
-        } catch (e: VException) {}
+        } catch (e: VException) {
+        }
         b.clear()
         b.setMode(VConstants.MOD_QUERY)
         return

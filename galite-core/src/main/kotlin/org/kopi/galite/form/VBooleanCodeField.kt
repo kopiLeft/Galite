@@ -39,7 +39,7 @@ open class VBooleanCodeField : VCodeField {
               ident: String,
               source: String,
               names: Array<String>,
-              codes: Array<Boolean?>,
+              codes: Array<Boolean?>
   ) : super(bufferSize, ident, source, names) {
     this.codes = codes
   }
@@ -48,7 +48,7 @@ open class VBooleanCodeField : VCodeField {
               ident: String,
               source: String,
               names: Array<String>,
-              codes: BooleanArray,
+              codes: BooleanArray
   ) : super(bufferSize, ident, source, names) {
     this.codes = arrayOfNulls(codes.size)
     for (i in codes.indices) {

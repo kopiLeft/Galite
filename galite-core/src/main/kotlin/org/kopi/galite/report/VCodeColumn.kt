@@ -40,14 +40,14 @@ abstract class VCodeColumn(ident: String?,
                            width: Int,
                            format: VCellFormat?,
                            private val idents: Array<String>)
-              : VReportColumn(ident,
-                              options,
-                              align,
-                              groups,
-                              function,
-                              width,
-                              1,
-                              format) {
+           : VReportColumn(ident,
+                           options,
+                           align,
+                           groups,
+                           function,
+                           width,
+                           1,
+                           format) {
   /**
    * Compares two objects.
    *

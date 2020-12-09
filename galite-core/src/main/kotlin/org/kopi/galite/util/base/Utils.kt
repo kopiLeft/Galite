@@ -42,7 +42,7 @@ open class Utils {
      * @exception        RuntimeException        the entire token reference
      */
     @Deprecated("Use the verify with the error message",
-            ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
+                ReplaceWith("verify(expression = expression, errorMessage = errorMessage)"))
     fun verify(expression: Boolean) {
       if (!expression) {
         throw InconsistencyException()
@@ -92,7 +92,7 @@ open class Utils {
      */
     fun substring(baseString: String?, beginIndex: Int, endIndex: Int): String =
             baseString?.substring(beginIndex.coerceAtMost(baseString.length),
-                    endIndex.coerceAtMost(baseString.length)).orEmpty()
+                                  endIndex.coerceAtMost(baseString.length)).orEmpty()
 
     /**
      * Creates a typed array from a list.

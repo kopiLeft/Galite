@@ -34,14 +34,14 @@ class VIntegerColumn(ident: String?,
                      function: VCalculateColumn?,
                      width: Int,
                      format: VCellFormat?)
-      : VReportColumn(ident,
-                      options,
-                      align,
-                      groups,
-                      function,
-                      width,
-                      1,
-                      format ?: VIntegerFormat()) {
+     : VReportColumn(ident,
+                     options,
+                     align,
+                     groups,
+                     function,
+                     width,
+                     1,
+                     format ?: VIntegerFormat()) {
 
   /**
    * Compare two objects.

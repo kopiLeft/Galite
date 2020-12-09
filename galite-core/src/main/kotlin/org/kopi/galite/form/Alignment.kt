@@ -31,11 +31,11 @@ import java.io.Serializable
  * @param          useAll          use the whole possible width of the column
  */
 open class Alignment @JvmOverloads constructor(var x: Int,
-                     var y: Int,
-                     var width: Int,
-                     var height: Int,
-                     var alignRight: Boolean,
-                     var useAll: Boolean = false) : Serializable {
+                                               var y: Int,
+                                               var width: Int,
+                                               var height: Int,
+                                               var alignRight: Boolean,
+                                               var useAll: Boolean = false) : Serializable {
   var ALG_LEFT = false
   var ALG_RIGHT = true
 }

@@ -39,7 +39,7 @@ class VBooleanDimension(ident: String, format: VColumnFormat) : VDimension(ident
     // --------------------------------------------------------------------
     // DATA MEMBERS
     // --------------------------------------------------------------------
-    private val trueRep: String =  VlibProperties.getString("true")
+    private val trueRep: String = VlibProperties.getString("true")
     private val falseRep: String = VlibProperties.getString("false")
   }
 }

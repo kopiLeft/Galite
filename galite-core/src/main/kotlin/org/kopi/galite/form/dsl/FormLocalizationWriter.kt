@@ -28,8 +28,8 @@ import org.kopi.galite.common.Menu
 class FormLocalizationWriter : LocalizationWriter() {
 
   fun genForm(title: String?,
-              menus : Array<Menu>,
-              actors : Array<Actor>,
+              menus: Array<Menu>,
+              actors: Array<Actor>,
               pages: Array<FormPage>,
               blocks: Array<FormElement>) {
     val self = Element("form")

@@ -29,7 +29,7 @@ import org.kopi.galite.visual.VActor
 /**
  * Represents a form.
  */
-abstract class Form: Window() {
+abstract class Form : Window() {
 
   /** Form's actors. */
   val formActors = mutableListOf<Actor>()
@@ -71,8 +71,14 @@ abstract class Form: Window() {
    * @param        title                  the title of the block
    * @param        formPage              the page containing the block
    */
-  fun block(buffer: Int, visible: Int, name: String, title: String, formPage: FormPage? = null, init: FormBlock.() -> Unit): FormBlock =
-          insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
+  fun block(
+          buffer: Int,
+          visible: Int,
+          name: String,
+          title: String,
+          formPage: FormPage? = null,
+          init: FormBlock.() -> Unit
+  ): FormBlock = insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
 
   /**
    * Adds a new block to this form.
@@ -80,11 +86,11 @@ abstract class Form: Window() {
    * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
-  fun <T: FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
+  fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
     }
-    if(formPage != null) {
+    if (formPage != null) {
       block.pageNumber = formPage.pageNumber
     }
     block.initialize(this)

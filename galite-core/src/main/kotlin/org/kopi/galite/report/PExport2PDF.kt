@@ -96,10 +96,10 @@ class PExport2PDF(
       }
       head.totalWidth = paperSize.width - printConfig.leftmargin - printConfig.rightmargin
       document = Document(paperSize,
-              printConfig.leftmargin.toFloat(),
-              printConfig.rightmargin.toFloat(),
-              printConfig.topmargin + head.totalHeight + printConfig.headermargin + firstPageHead.totalHeight,
-              printConfig.bottommargin + foot.totalHeight + printConfig.footermargin + 2)
+                          printConfig.leftmargin.toFloat(),
+                          printConfig.rightmargin.toFloat(),
+                          printConfig.topmargin + head.totalHeight + printConfig.headermargin + firstPageHead.totalHeight,
+                          printConfig.bottommargin + foot.totalHeight + printConfig.footermargin + 2)
       // 2 to be sure to print the border
       if (printConfig.reportScale == PConfig.MIN_REPORT_SCALE) {
         scale = getScale(PConfig.MIN_REPORT_SCALE, PConfig.MAX_REPORT_SCALE, 0.1)
@@ -188,9 +188,14 @@ class PExport2PDF(
 
   private fun createHeader(): PdfPTable {
     val head = PdfPTable(1)
+    val text = if ((currentSubtitle == null)) {
+      title
+    } else {
+      title + "  " + getColumnLabel(0) + " : " + currentSubtitle
+    }
 
-    head.addCell(createCell(if ((currentSubtitle == null)) title
-                                else title + "  " + getColumnLabel(0) + " : " + currentSubtitle, 14.0,
+    head.addCell(createCell(text,
+                            14.0,
                             Color.black,
                             Color.white,
                             Constants.ALG_LEFT,
@@ -203,7 +208,10 @@ class PExport2PDF(
     val foot = PdfPTable(2)
 
     foot.addCell(createCell(title + " - " + VlibProperties.getString("print-page") + " " + page + "/" + allPages,
-            7.0, Color.black, Color.white, Constants.ALG_LEFT, false))
+                            7.0,
+                            Color.black,
+                            Color.white,
+                            Constants.ALG_LEFT, false))
     foot.addCell(createCell(Date.now().format("dd.MM.yyyy") + " " + Time.now().format("HH:mm"), 7.0,
                             Color.black,
                             Color.white,
@@ -242,11 +250,11 @@ class PExport2PDF(
   override fun exportHeader(data: Array<String?>) {
     data.forEach {
       datatable!!.addCell(createCell(it!!,
-                          scale,
-                          Color.white,
-                          Color.black,
-                          Constants.ALG_CENTER,
-                          true))
+                                     scale,
+                                     Color.white,
+                                     Color.black,
+                                     Constants.ALG_CENTER,
+                                     true))
     }
     datatable!!.headerRows = 1
   }
@@ -255,7 +263,7 @@ class PExport2PDF(
     exportRow(row, tail, true)
   }
 
-  override  fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
     var cell = 0
 
     datatable!!.defaultCell.borderWidth = BORDER_WIDTH.toFloat()
@@ -263,26 +271,33 @@ class PExport2PDF(
     data.forEachIndexed { index, element ->
       if (element != null) {
         datatable!!.addCell(createCell(element,
-                            scale,
-                            Color.black,
-                            getBackgroundForLevel(level),
-                            alignments[index],
-                            true))
+                                       scale,
+                                       Color.black,
+                                       getBackgroundForLevel(level),
+                                       alignments[index],
+                                       true))
       } else {
         datatable!!.addCell(createCell(" ",
-                                        scale,
-                                        Color.black,
-                                        getBackgroundForLevel(level),
-                                        alignments[index],
-                                        true))
+                                       scale,
+                                       Color.black,
+                                       getBackgroundForLevel(level),
+                                       alignments[index],
+                                       true))
       }
       cell += 1
     }
   }
 
-  private fun createCell(text: String, size: Double, textColor: Color, background: Color, alignment: Int, border: Boolean): PdfPCell {
+  private fun createCell(text: String,
+                         size: Double,
+                         textColor: Color,
+                         background: Color,
+                         alignment: Int,
+                         border: Boolean): PdfPCell {
     val cell: PdfPCell
-    val font = FontFactory.getFont(FontFactory.HELVETICA, size.toFloat(), 0, if (tonerSaveMode()) Color.black else textColor)
+    val font = FontFactory.getFont(FontFactory.HELVETICA, size.toFloat(),
+                                   0,
+                                   if (tonerSaveMode()) Color.black else textColor)
 
     cell = PdfPCell(Paragraph(Chunk(text, font)))
     cell.borderWidth = 1f
@@ -349,55 +364,55 @@ class PExport2PDF(
   override fun formatStringColumn(column: VReportColumn, index: Int) {
     // maximum of length of title AND width of column
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("X", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
+                        Chunk("X", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
     widthSum += widths[index]
   }
 
   override fun formatWeekColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
+                        Chunk("00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatDateColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("00.00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
+                        Chunk("00.00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatMonthColumn(column: VReportColumn, index: Int) {
     widths[index] = 4 + max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
+                            Chunk("00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatFixedColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
+                        Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
     widthSum += widths[index]
   }
 
   override fun formatIntegerColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
+                        Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
     widthSum += widths[index]
   }
 
   override fun formatBooleanColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("false", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
+                        Chunk("false", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatTimeColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("00:00", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
+                        Chunk("00:00", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 
   override fun formatTimestampColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
-            Chunk("00.00.0000 00:00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
+                        Chunk("00.00.0000 00:00.0000", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint)
     widthSum += widths[index]
   }
 

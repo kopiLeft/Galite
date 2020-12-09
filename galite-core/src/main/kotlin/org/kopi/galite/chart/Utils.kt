@@ -42,7 +42,8 @@ object Formatter {
       append(dimensionValue.value.quoteIfNecessary())
       chart.measures.forEach { measure ->
         append(",")
-        append(dimensionValue.measureList.getOrElse(measure,
+        append(dimensionValue.measureList.getOrElse(
+                measure,
                 { throw MissingMeasureException(measure, dimensionValue.value) }
         ))
       }
