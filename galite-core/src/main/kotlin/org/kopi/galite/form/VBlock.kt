@@ -18,15 +18,38 @@
 
 package org.kopi.galite.form
 
+import java.sql.SQLException
+import java.util.EventListener
+
+import javax.swing.event.EventListenerList
+
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.elementAt
+import kotlin.collections.filter
+import kotlin.collections.find
+import kotlin.collections.first
+import kotlin.collections.forEach
+import kotlin.collections.forEachIndexed
+import kotlin.collections.indices
+import kotlin.collections.isNotEmpty
+import kotlin.collections.map
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.toList
+import kotlin.collections.toTypedArray
+import kotlin.math.abs
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.VarCharColumnType
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -46,26 +69,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-import java.sql.SQLException
-import java.util.*
-import javax.swing.event.EventListenerList
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.elementAt
-import kotlin.collections.filter
-import kotlin.collections.find
-import kotlin.collections.first
-import kotlin.collections.forEach
-import kotlin.collections.forEachIndexed
-import kotlin.collections.indices
-import kotlin.collections.isNotEmpty
-import kotlin.collections.map
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
-import kotlin.collections.toList
-import kotlin.collections.toTypedArray
-import kotlin.math.abs
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
