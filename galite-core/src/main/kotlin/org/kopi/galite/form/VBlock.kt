@@ -23,8 +23,20 @@ import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.abs
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
@@ -35,9 +47,9 @@ import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
@@ -45,15 +57,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1576,7 +1579,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Searches field holding TS of block base table
    */
-  fun getTsField(): VField? {
+  val tsField: VField?
+    get() {
     return getBaseTableField("TS")
   }
 
@@ -1780,7 +1784,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     try {
       transaction {
-        val condition: Op<Boolean> = conditions.compoundAnd()
+        val condition = conditions.compoundAnd()
         val query = table.slice(columns).select(condition)
 
         if (query.toList().isEmpty()) {
@@ -2630,8 +2634,80 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    * @exception VException      an exception may be raised by triggers
    */
-  protected fun insertRecord(recno: Int, id: Int) {
-    TODO()
+  protected open fun insertRecord(recno: Int, id: Int) {
+    try {
+      assert(!isMulti() || activeRecord == -1) { "isMulti? ${isMulti()} current record $activeRecord" }
+      clearLookups(recno)
+      if (isMulti()) {
+        activeRecord = recno
+      }
+      callProtectedTrigger(VConstants.TRG_PREINS)
+      for (field in fields) {
+        field.callProtectedTrigger(VConstants.TRG_PREINS)
+      }
+      if (isMulti()) {
+        activeRecord = -1
+      }
+
+      /* for each Lookup-Table of block check if record exists and is unique */
+      selectLookups(recno)
+
+      /* check if unique index constraints are respected by new record */
+      checkUniqueIndices(recno)
+
+      /* fill with next id if not given as argument and not overridden */
+      fillIdField(recno, id)
+
+      if (!blockHasNoUcOrTsField()) {
+        val ucFld = ucField
+        val tsFld = tsField
+
+        assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
+        ucFld?.setInt(recno, 0)
+        tsFld?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
+      }
+
+      val result = mutableListOf<Pair<Column<Any>, Any?>>()
+
+      for (field in fields) {
+        @Suppress("UNCHECKED_CAST")
+        val column = field.lookupColumn(0) as? Column<Any>
+
+        if (column != null) {
+          result.add(column to field.getSql(recno))
+
+          if (field.hasLargeObject(recno)) {
+            if (field.hasBinaryLargeObject(recno)) {
+              result.add(column to field.getLargeObject(recno))
+            } else {
+              result.add(column to field.getLargeObject(recno))
+            }
+          }
+        }
+      }
+      tables!![0].insert { table ->
+        result.forEach {
+          table[it.first] = it.second!!
+        }
+      }
+      setRecordFetched(recno, true)
+      setRecordChanged(recno, false)
+      if (isMulti()) {
+        activeRecord = recno
+      }
+      callProtectedTrigger(VConstants.TRG_POSTINS)
+      for (field in fields) {
+        field.callProtectedTrigger(VConstants.TRG_POSTINS)
+      }
+      if (isMulti()) {
+        activeRecord = -1
+      }
+    } catch (e: VException) {
+      if (isMulti() && form.getActiveBlock() != this) {
+        activeRecord = -1
+      }
+      throw e
+    }
   }
 
   /**
@@ -2644,8 +2720,77 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Updates current record of given block in database.
    */
-  protected fun updateRecord(recno: Int) {
-    TODO()
+  protected open fun updateRecord(recno: Int) {
+    try {
+      assert(!isMulti() || activeRecord == -1) { "isMulti? ${isMulti()} current record $activeRecord" }
+      clearLookups(recno)
+      if (isMulti()) {
+        activeRecord = recno
+      }
+      callProtectedTrigger(VConstants.TRG_PREUPD)
+      for (field in fields) {
+        field.callProtectedTrigger(VConstants.TRG_PREUPD)
+      }
+      if (isMulti()) {
+        activeRecord = -1
+      }
+
+      /* for each lookup-table of block check if record exists and is unique */
+      selectLookups(recno)
+
+      /* check if unique index constraints are respected after update */
+      checkUniqueIndices(recno)
+
+      /* verify that the record has not been changed in the database */
+      checkRecordUnchanged(recno)
+      val idFld = idField
+      val ucFld = ucField
+      val tsFld = tsField
+      val result = mutableListOf<Pair<Column<Any>, Any?>>()
+
+      tsFld?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
+      ucFld?.setInt(recno, ucFld.getInt()!! + 1)
+      for (field in fields) {
+        /* do not update ID field */
+        if (field == idFld) {
+          continue
+        }
+        @Suppress("UNCHECKED_CAST")
+        val column = field.lookupColumn(0) as? Column<Any>
+
+        if (column != null) {
+          result.add(column to field.getSql(recno)!!)
+          if (field.hasLargeObject(recno)) {
+            if (field.hasBinaryLargeObject(recno)) {
+              result.add(column to field.getLargeObject(recno)!!)
+            } else {
+              result.add(column to field.getLargeObject(recno)!!)
+            }
+          }
+        }
+      }
+      tables!![0].update({ idColumn eq  idFld.getInt(recno)!! }) { table ->
+        result.forEach {
+          table[it.first] = it.second!!
+        }
+      }
+      setRecordChanged(recno, false)
+      if (isMulti()) {
+        activeRecord = recno
+      }
+      callProtectedTrigger(VConstants.TRG_POSTUPD)
+      for (field in fields) {
+        field.callProtectedTrigger(VConstants.TRG_POSTUPD)
+      }
+      if (isMulti()) {
+        activeRecord = -1
+      }
+    } catch (e: VException) {
+      if (isMulti() && form.getActiveBlock() != this) {
+        activeRecord = -1
+      }
+      throw e
+    }
   }
 
   /**
