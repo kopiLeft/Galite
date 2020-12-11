@@ -36,7 +36,7 @@ class VBooleanCodeDimension(ident: String,
                             source: String,
                             idents: Array<String>,
                             private val codes: BooleanArray)
-           : VCodeDimension(ident, format, type, source, idents) {
+  : VCodeDimension(ident, format, type, source, idents) {
 
   init {
     if (codes.size > 2) {

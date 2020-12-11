@@ -80,7 +80,7 @@ open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = 
   open fun applyConvertUpper(value: String): String {
     if (!isListDomain()) {
       throw UnsupportedOperationException("ConvertUpper is an unsupported " +
-              "operation on current domain type")
+                                                  "operation on current domain type")
     }
 
     return (type as ListDomain<T>).applyConvertUpper(value)

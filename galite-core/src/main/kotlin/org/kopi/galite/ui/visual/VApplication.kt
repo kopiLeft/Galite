@@ -117,10 +117,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   private fun connectToDatabase(username: String, password: String) {
     dBContext = login(getInitParameter("database")!!,
-            getInitParameter("driver")!!,
-            username,
-            password,
-            getInitParameter("schema")!!)
+                      getInitParameter("driver")!!,
+                      username,
+                      password,
+                      getInitParameter("schema")!!)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -141,7 +141,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override var dBContext: DBContext? = null
 
   override val userName: String
-  get() = dBContext!!.defaultConnection.userName
+    get() = dBContext!!.defaultConnection.userName
 
   override var defaultLocale: Locale? = null
 

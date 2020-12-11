@@ -14,25 +14,57 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.tests.form
 
 import java.util.Locale
 
+import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.Key
 
-object FormWithFields: Form() {
+object FormWithList : DictionaryForm() {
   override val locale = Locale.FRANCE
-  override val title = "form for test fields visibility"
+  override val title = "form for test"
+
+  val action = menu("Action")
   val testPage = page("test page")
-  val testBlock = insertBlock(BlockWithFields, testPage)
+
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
+  val block = insertBlock(BlockSample, testPage) {
+    command(item = list) {
+      this.name = "list"
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery(BlockSample)
+      }
+    }
+  }
+
+  val block2 = insertBlock(BlockSample, testPage) {
+    command(item = list) {
+      this.name = "list"
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery(BlockSample)
+      }
+    }
+  }
 }
 
-object BlockWithFields : FormBlock(1, 1, "Test", "Test block") {
-  val u = table(User)
+object BlockSample : FormBlock(1, 1, "Test", "Test block") {
+  val u = table(Users)
   val i = index(message = "ID should be unique")
 
   val id = hidden(domain = Domain<Int>(20)) {
@@ -40,23 +72,16 @@ object BlockWithFields : FormBlock(1, 1, "Test", "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
-    onInsertSkipped()
-    columns(u.name)
-  }
-  val age = skipped(domain = Domain<Int>(3), position = follow(name)) {
-    label = "age"
-    help = "The user age"
-    onQueryMustFill()
-    columns(u.age) {
-      index = i
+    columns(u.name) {
       priority = 1
     }
   }
 }
 
-fun main() {
-  Application.runForm(formName = FormWithFields)
+fun main(){
+  Application.runForm(formName = FormWithList)
 }

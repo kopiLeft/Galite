@@ -28,8 +28,8 @@ import org.kopi.galite.type.Date
 class VDateDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
   public override fun toString(value: Any?): String =
           when (value) {
-            null ->     CConstants.EMPTY_TEXT
-            is Date ->  value.toString()
-            else ->     value.toString()
+            null -> CConstants.EMPTY_TEXT
+            is Date -> value.toString()
+            else -> value.toString()
           }
 }

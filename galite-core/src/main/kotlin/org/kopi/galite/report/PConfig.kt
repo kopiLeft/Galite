@@ -41,20 +41,20 @@ import java.io.Serializable
  * @param reportScale report scale
  */
 data class PConfig(val papertype: Int = PPaperType.PPT_A4.code,
-              val paperlayout: String = "Landscape",
-              val topmargin: Int = 30,
-              val bottommargin: Int = 30,
-              val leftmargin: Int = 30,
-              val rightmargin: Int = 30,
-              val headermargin: Int = 5,
-              val footermargin: Int = 10,
-              val visibleRows: Boolean = true,
-              val order: Int = Constants.SUM_AT_TAIL,
-              val groupFormfeed: Boolean = false,
-              val grid_H: Double = 0.1,
-              val grid_V: Double = 0.1,
-              val border: Double = 1.0,
-              val reportScale: Double = MIN_REPORT_SCALE) : Serializable {
+                   val paperlayout: String = "Landscape",
+                   val topmargin: Int = 30,
+                   val bottommargin: Int = 30,
+                   val leftmargin: Int = 30,
+                   val rightmargin: Int = 30,
+                   val headermargin: Int = 5,
+                   val footermargin: Int = 10,
+                   val visibleRows: Boolean = true,
+                   val order: Int = Constants.SUM_AT_TAIL,
+                   val groupFormfeed: Boolean = false,
+                   val grid_H: Double = 0.1,
+                   val grid_V: Double = 0.1,
+                   val border: Double = 1.0,
+                   val reportScale: Double = MIN_REPORT_SCALE) : Serializable {
 
   companion object {
     const val MIN_REPORT_SCALE = 3.0

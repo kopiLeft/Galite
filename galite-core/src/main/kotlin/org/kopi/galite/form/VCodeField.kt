@@ -173,7 +173,7 @@ abstract class VCodeField(val bufferSize: Int,
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     if (handler != null) {
       val selected = handler.selectFromList(arrayOf(getListColumn()!!), arrayOf(getCodes()),
-              labels)
+                                            labels)
 
       if (selected != null) {
         /*

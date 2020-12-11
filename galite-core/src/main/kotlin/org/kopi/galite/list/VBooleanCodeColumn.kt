@@ -36,7 +36,7 @@ class VBooleanCodeColumn(
    * Returns the index.of given object
    */
   override fun getObjectIndex(value: Any): Int = codes.indexOfFirst { it == value }.takeUnless { it == -1 }
-  ?: throw InconsistencyException("bad code value $value")
+          ?: throw InconsistencyException("bad code value $value")
 
   override fun getDataType(): KClass<*> {
     return Boolean::class

@@ -38,7 +38,7 @@ import org.kopi.galite.type.Week
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
  */
-abstract class Report: Window() {
+abstract class Report : Window() {
 
   /** Report's fields. */
   val fields = mutableListOf<ReportField<*>>()
@@ -147,11 +147,12 @@ abstract class Report: Window() {
 
   fun MReport.addReportColumns() {
     columns = fields.map {
-      when(it.domain.kClass) {
+      when (it.domain.kClass) {
         Int::class ->
           VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         String::class ->
-          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, it.domain.height ?: 0, null)
+          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0,
+                        it.domain.height ?: 0, null)
         Boolean::class ->
           VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         Date::class, java.util.Date::class ->
@@ -188,56 +189,56 @@ abstract class Report: Window() {
   /** Report model*/
   override val model: VReport
     get() {
-    genLocalization()
+      genLocalization()
 
-    return object : VReport() {
-      /**
-       * Handling triggers
-       */
-      fun handleTriggers(triggers: MutableList<Trigger>) {
-        // BLOCK TRIGGERS
-        triggers.forEach { trigger ->
-          val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
-          for (i in VConstants.TRG_TYPES.indices) {
-            if (trigger.events shr i and 1 > 0) {
-              blockTriggerArray[i] = i
-              super.triggers[i] = trigger
+      return object : VReport() {
+        /**
+         * Handling triggers
+         */
+        fun handleTriggers(triggers: MutableList<Trigger>) {
+          // BLOCK TRIGGERS
+          triggers.forEach { trigger ->
+            val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
+            for (i in VConstants.TRG_TYPES.indices) {
+              if (trigger.events shr i and 1 > 0) {
+                blockTriggerArray[i] = i
+                super.triggers[i] = trigger
+              }
             }
+            super.VKT_Triggers[0] = blockTriggerArray
           }
-          super.VKT_Triggers[0] = blockTriggerArray
+
+          // FIELD TRIGGERS
+          fields.forEach {
+            val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            // TODO : Add field triggers here
+            super.VKT_Triggers.add(fieldTriggerArray)
+          }
+
+          // COMMANDS TRIGGERS
+          commands?.forEach {
+            val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            // TODO : Add commands triggers here
+            super.VKT_Triggers.add(fieldTriggerArray)
+          }
         }
 
-        // FIELD TRIGGERS
-        fields.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-          // TODO : Add field triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
+        override fun init() {
+          source = sourceFile
+
+          if (reportCommands) {
+            addDefaultReportCommands()
+          }
+
+          super.model.addReportColumns()
+          super.model.addReportLines()
+
+          handleTriggers(this@Report.triggers)
         }
 
-        // COMMANDS TRIGGERS
-        commands?.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-          // TODO : Add commands triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
+        override fun add() {
+          // TODO
         }
-      }
-
-      override fun init() {
-        source = sourceFile
-
-        if (reportCommands) {
-          addDefaultReportCommands()
-        }
-
-        super.model.addReportColumns()
-        super.model.addReportLines()
-
-        handleTriggers(this@Report.triggers)
-      }
-
-      override fun add() {
-        // TODO
       }
     }
-  }
 }

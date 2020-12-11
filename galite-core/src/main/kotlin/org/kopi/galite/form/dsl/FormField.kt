@@ -18,6 +18,7 @@
 package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.LocalizationWriter
@@ -60,13 +61,13 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
                                    override val domain: Domain<T>,
                                    private val fieldIndex: Int,
                                    initialAccess: Int,
-                                   var position: FormPosition? = null): Field<T>(domain) {
+                                   var position: FormPosition? = null) : Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   private var options: Int = 0
-  var columns: FormFieldColumns? = null
+  var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command>? = null
   var triggers: Array<Trigger>? = null
@@ -74,7 +75,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   var initialValues = mutableMapOf<Int, T?>()
   var value: T? = null
     get() {
-      return if(vField.block == null) {
+      return if (vField.block == null) {
         initialValues[0]
       } else {
         vField.getObject() as? T
@@ -82,7 +83,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     }
     set(value) {
       field = value
-      if(vField.block == null) {
+      if (vField.block == null) {
         initialValues[0] = value
       } else {
         vField.setObject(value)
@@ -97,7 +98,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    * @param record the record number
    */
   operator fun get(record: Int): T? {
-    return if(vField.block == null) {
+    return if (vField.block == null) {
       initialValues[record]
     } else {
       vField.getObject(record) as? T
@@ -115,7 +116,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   operator fun set(record: Int = 0, value: T) {
     initialValues[record] = value
 
-    if(vField.block != null) {
+    if (vField.block != null) {
       vField.setObject(record, value)
     }
   }
@@ -130,15 +131,16 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    * @param joinColumns columns to use to make join between block tables
    * @param init        initialises the form field column properties (index, priority...)
    */
-  fun columns(vararg joinColumns: Column<*>, init: (FormFieldColumns.() -> Unit)? = null) {
-    val cols = joinColumns.map {
-      FormFieldColumn(it, it.table.tableName, it.name, true, true) // TODO
+  fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    val cols = joinColumns.map { column ->
+      FormFieldColumn(column, column.table.tableName, column.name, this, true, true) // TODO
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
       columns!!.init()
     }
   }
+
   /** changing field visibility in mode query */
   fun onQueryHidden() {
     this.access[VConstants.MOD_QUERY] = VConstants.ACS_HIDDEN
@@ -194,7 +196,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    * The field model based on the field type.
    */
   var vField: VField =
-          when(domain.kClass) {
+          when (domain.kClass) {
             Int::class -> VIntegerField(block.buffer, domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
             String::class -> VStringField(block.buffer,
                                           domain.width ?: 0,
@@ -219,7 +221,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
             options,
             access,
             null, // TODO
-            null, // TODO
+            columns?.getColumnsModels()?.toTypedArray(), // TODO
             columns?.index?.indexNumber ?: 0,
             columns?.priority ?: 0,
             null, // TODO
@@ -273,7 +275,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    */
   fun options(vararg fieldOptions: FieldOption) {
     fieldOptions.forEach { fieldOption ->
-      if(fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
+      if (fieldOption == FieldOption.QUERY_LOWER || fieldOption == FieldOption.QUERY_UPPER) {
         options = options and fieldOption.value.inv()
       }
 
@@ -284,6 +286,20 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
+
+  /**
+   * return table num
+   */
+  fun getTable(name: Table): FormBlockTable {
+    return block.getTable(name)
+  }
+
+  /**
+   * return table num
+   */
+  fun getTableNum(table: FormBlockTable): Int {
+    return block.getTableNum(table)
+  }
 
   /**
    * Returns true if the field is never displayed
@@ -336,9 +352,9 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
 
   fun fetchColumn(table: FormBlockTable): Int {
     if (columns != null) {
-      val cols: Array<FormFieldColumn?>? = columns!!.columns
-      for (i in cols!!.indices) {
-        if (cols[i]!!.corr == table.corr) {
+      val cols = columns!!.columns
+      for (i in cols.indices) {
+        if (cols[i].corr == table.corr) {
           return i
         }
       }

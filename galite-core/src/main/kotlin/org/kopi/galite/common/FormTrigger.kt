@@ -22,6 +22,6 @@ import org.kopi.galite.form.VConstants
 /**
  * This class represents a trigger, ie an action to be executed on events
  */
-class FormTrigger(events: Long, action: Action<*>): Trigger(events, action) {
+class FormTrigger(events: Long, action: Action<*>) : Trigger(events, action) {
   override fun getTriggers(): IntArray = VConstants.TRG_TYPES
 }

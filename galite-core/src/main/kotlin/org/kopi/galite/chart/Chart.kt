@@ -26,7 +26,7 @@ import org.kopi.galite.visual.VWindow
  *
  * @param name the name of the chart. It represents the title
  */
-abstract class Chart(): Window() {
+abstract class Chart() : Window() {
   /** The chart's dimension */
   lateinit var dimension: Dimension<*>
 
@@ -58,8 +58,9 @@ abstract class Chart(): Window() {
     this.measures.add(chartMeasure)
     return chartMeasure
   }
+
   override val model: VWindow by lazy {
-    object: VChart() {
+    object : VChart() {
       override fun init() {
         TODO("Not yet implemented")
       }

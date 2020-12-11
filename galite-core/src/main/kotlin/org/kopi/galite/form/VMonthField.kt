@@ -142,8 +142,8 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
    */
   override fun setMonth(r: Int, v: Month?) {
     if (changedUI
-        || value[r] == null && v != null
-        || value[r] != null && value[r]!! != v) {
+            || value[r] == null && v != null
+            || value[r] != null && value[r]!! != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
@@ -255,9 +255,9 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }

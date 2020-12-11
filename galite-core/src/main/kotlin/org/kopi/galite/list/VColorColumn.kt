@@ -29,11 +29,11 @@ import kotlin.reflect.KClass
 class VColorColumn(title: String,
                    column: String?,
                    sortAscending: Boolean)
-      :VListColumn(title,
-                   column,
-                   VConstants.ALG_LEFT,
-                   7,
-                   sortAscending) {
+  : VListColumn(title,
+                column,
+                VConstants.ALG_LEFT,
+                7,
+                sortAscending) {
 
   // --------------------------------------------------------------------
   // IMPLEMENTATION

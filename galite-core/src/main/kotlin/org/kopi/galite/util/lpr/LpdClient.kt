@@ -300,14 +300,14 @@ internal class LpdClient(var options: LpdOptions) {
   private var connection: Socket? = null
 
   /**
-  * Gets the input stream
-  */
+   * Gets the input stream
+   */
   var inputStream: DataInputStream? = null
     private set
 
   /**
-  * Gets the output stream
-  */
+   * Gets the output stream
+   */
   var outputStream: DataOutputStream? = null
     private set
 

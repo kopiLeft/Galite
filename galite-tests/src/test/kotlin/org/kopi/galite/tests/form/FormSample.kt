@@ -21,6 +21,10 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.chart.Chart
+import org.kopi.galite.common.INIT
+import org.kopi.galite.common.INITFORM
+import org.kopi.galite.common.POSTFORM
+import org.kopi.galite.common.PREFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
@@ -31,9 +35,9 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
 object User: Table() {
-  val id = integer("id")
-  val name = varchar("name", 20)
-  val age = integer("age")
+  val id = integer("ID")
+  val name = varchar("NAME", 20)
+  val age = integer("AGE")
 }
 
 object FormSample: Form() {
@@ -77,6 +81,14 @@ object FormSample: Form() {
 
   val tb3ToTestBlockOptions = insertBlock(TestBlock(), p1) {
     options(BlockOption.NOINSERT)
+  }
+
+  val preform = trigger(INITFORM) {
+    println("init form trigger works")
+  }
+
+  val postform = trigger(POSTFORM) {
+    println("post form trigger works")
   }
 
   init {

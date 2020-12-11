@@ -48,7 +48,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   private val modelListener = EventListenerList()
   private var extraTitle: String? = null
   private var display: UWindow? = null
-  open var actors : Array<VActor?> = arrayOf()
+  open var actors: Array<VActor?> = arrayOf()
   protected lateinit var windowTitle: String
   var smallIcon: Image? = null
   protected var isProtected = false
@@ -58,12 +58,12 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
 
   init {
     f12 = VActor("File",
-            WINDOW_LOCALIZATION_RESOURCE,
-            "GotoShortcuts",
-            WINDOW_LOCALIZATION_RESOURCE,
-            null,
-            KeyEvent.VK_F12,
-            0)
+                 WINDOW_LOCALIZATION_RESOURCE,
+                 "GotoShortcuts",
+                 WINDOW_LOCALIZATION_RESOURCE,
+                 null,
+                 KeyEvent.VK_F12,
+                 0)
     f12.number = Constants.CMD_GOTO_SHORTCUTS
     f12.handler = this
     addActors(arrayOf(f12))
@@ -72,7 +72,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Creates a window with DB context handler
    */
-  protected constructor(ctxt: DBContextHandler): this(ctxt.dBContext)
+  protected constructor(ctxt: DBContextHandler) : this(ctxt.dBContext)
 
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
@@ -147,7 +147,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   }
 
   @Deprecated("use method performAsynAction",
-          ReplaceWith("performAsyncAction(action)"))
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     performAsyncAction(action)
   }
