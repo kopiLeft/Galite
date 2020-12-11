@@ -43,7 +43,7 @@ class VList(private val ident: String,
             val columns: Array<VListColumn>,
             val table: Int,
             val action: Int,
-            val autocompleteType: Int,
+            var autocompleteType: Int,
             val autocompleteLength: Int,
             val hasShortcut: Boolean) : VConstants, Serializable {
 
