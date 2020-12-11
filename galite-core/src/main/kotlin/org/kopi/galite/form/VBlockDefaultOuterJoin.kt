@@ -92,7 +92,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
                     // start of an outer join
                     addToJoinedTables(field.getColumn(j)!!.getTable_())
-                    joinTables.join(joinTable, JoinType.INNER, field.getColumn(tableColumn)!!.column,
+                    joinTables.join(joinTable, JoinType.LEFT, field.getColumn(tableColumn)!!.column,
                                     field.getColumn(j)!!.column,
                                     additionalConstraint)
                   }
@@ -129,24 +129,24 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     fun getFetchRecordCondition(fields: Array<VField>): Op<Boolean>? {
       val fetchRecordCondition = mutableListOf<Op<Boolean>>()
 
-      for (fld in fields) {
+      for (field in fields) {
 
-        if (fld.hasNullableCols()) {
-          for (j in 1 until fld.getColumnCount()) {
+        if (field.hasNullableCols()) {
+          for (j in 1 until field.getColumnCount()) {
 
-            if (!fld.getColumn(j)!!.nullable) {
+            if (!field.getColumn(j)!!.nullable) {
               fetchRecordCondition.add(Op.build {
-                (fld.getColumn(j)!!.column eq fld.getColumn(0)!!.column)
+                (field.getColumn(j)!!.column eq field.getColumn(0)!!.column)
               }
               )
             }
           }
         } else {
-          for (j in 1 until fld.getColumnCount()) {
+          for (j in 1 until field.getColumnCount()) {
 
-            if (!fld.getColumn(j)!!.nullable) {
+            if (!field.getColumn(j)!!.nullable) {
               fetchRecordCondition.add(Op.build {
-                (fld.getColumn(j)!!.column eq fld.getColumn(j - 1)!!.column)
+                (field.getColumn(j)!!.column eq field.getColumn(j - 1)!!.column)
               })
             }
           }
@@ -184,24 +184,24 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     return searchTablesCondition
   }
 
-  fun getSearchCondition(fld: VField): Op<Boolean> {
+  fun getSearchCondition(field: VField): Op<Boolean> {
     val searchCondition = mutableListOf<Op<Boolean>>()
 
-    if (fld.hasNullableCols()) {
-      for (j in 1 until fld.getColumnCount()) {
-        if (!fld.getColumn(j)!!.nullable) {
+    if (field.hasNullableCols()) {
+      for (j in 1 until field.getColumnCount()) {
+        if (!field.getColumn(j)!!.nullable) {
 
           searchCondition.add(Op.build {
-            (fld.getColumn(j)!!.column eq fld.getColumn(0)!!.column)
+            (field.getColumn(j)!!.column eq field.getColumn(0)!!.column)
           })
 
         }
       }
     } else {
-      for (j in 1 until fld.getColumnCount()) {
+      for (j in 1 until field.getColumnCount()) {
 
         searchCondition.add(Op.build {
-          (fld.getColumn(j)!!.column eq fld.getColumn(j - 1)!!.column)
+          (field.getColumn(j)!!.column eq field.getColumn(j - 1)!!.column)
         })
       }
     }
