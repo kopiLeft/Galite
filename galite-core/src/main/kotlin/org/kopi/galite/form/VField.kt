@@ -26,6 +26,7 @@ import javax.swing.event.EventListenerList
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -661,8 +662,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  open fun getSearchCondition(): Op<Boolean>? {
-    TODO()
+  open fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? {
+    // TODO
+    return null
   }
 
   // ----------------------------------------------------------------------
