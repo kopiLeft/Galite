@@ -28,6 +28,7 @@ import kotlin.collections.ArrayList
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.LowerCase
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
@@ -667,8 +668,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  open fun getSearchCondition(): Op<Boolean>? {
+  open fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? {
     TODO()
+    return null
   }
 
   // ----------------------------------------------------------------------
@@ -2034,10 +2036,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-            modeDesc,
-            getTypeName(),
-            getTypeInformation(),
-            names)
+                    modeDesc,
+                    getTypeName(),
+                    getTypeInformation(),
+                    names)
   }
 
   /**

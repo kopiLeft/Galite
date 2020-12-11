@@ -19,6 +19,7 @@
 package org.kopi.galite.list
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
 import java.io.Serializable
 
 /**
@@ -39,7 +40,15 @@ class VColumn(val pos: Int,
    * Returns the position of the table in the array of tables
    * of the field's block
    */
+  @Deprecated("use getTable_()")
   fun getTable(): Int = pos
+
+  /**
+   * Returns the table in the array of tables of the field's block
+   */
+  fun getTable_(): Table {
+    return column.table
+  }
 
   /**
    * Returns the qualified name of the column (i.e. with correlation)
