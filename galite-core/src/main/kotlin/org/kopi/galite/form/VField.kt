@@ -20,40 +20,46 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
+import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
+import kotlin.collections.ArrayList
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.LowerCase
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.Query
+import org.kopi.galite.db.Utils.Companion.toSql
 import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.Week
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.VModel
-import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -1831,69 +1837,50 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @throws VException Visual exceptions related to database errors.
    */
   open fun getSuggestions(query: String?): Array<Array<String?>>? {
-    TODO()
-    /*
     return if (query == null || getAutocompleteType() == VList.AUTOCOMPLETE_NONE) {
       null
     } else {
-      val suggestions: MutableList<Array<String?>>
-
-      suggestions = ArrayList()
-      val qrybuf = buildString {
-        append("SELECT ")
-        for (i in 0 until list!!.columnCount()) {
-          if (i != 0) {
-            append(", ")
-          }
-          append(list!!.getColumn(i).column)
+      val suggestions: MutableList<Array<String?>> = ArrayList()
+      val table = Table(evalListTable())
+      val sliceList = list!!.columns.map {
+        Column<String>(table , it.column!! , VarCharColumnType())
+      }
+      val firstColumn = Column<String>(table , list!!.getColumn(0).column!! , VarCharColumnType())
+      val condition : Op<Boolean> = when (getAutocompleteType()) {
+        VList.AUTOCOMPLETE_CONTAINS -> {
+          Op.build { LowerCase(firstColumn)  like toSql("%${query.toLowerCase()}%") }
         }
-        append(" FROM ")
-        append(evalListTable())
-        append(" WHERE ")
-        append(" {fn LOWER(")
-        append(list!!.getColumn(0).column)
-        append(")}")
-        when (getAutocompleteType()) {
-          VList.AUTOCOMPLETE_CONTAINS -> {
-            append(" LIKE ")
-            append(Utils.toSql("%" + query.toLowerCase() + "%"))
-          }
-          VList.AUTOCOMPLETE_STARTSWITH -> {
-            append(" LIKE ")
-            append(Utils.toSql(query.toLowerCase() + "%"))
+        VList.AUTOCOMPLETE_STARTSWITH -> {
+          Op.build {
+            LowerCase(firstColumn) like toSql("${ query.toLowerCase() } % ") }
           }
           else -> {
             // default should never reached
-            append(" = ")
-            append(Utils.toSql(query))
+            Op.build { LowerCase(firstColumn) eq toSql(query) }
           }
         }
-        append(" ORDER BY 1")
-      }
-      while (true) {
-        try {
-          transaction {
-            exec(qrybuf) {
-              while (it.next()) {
-                var columns: MutableList<String>
 
-                columns = ArrayList()
-                for (i in 0 until list!!.columnCount()) {
-                  columns.add(list!!.getColumn(i).formatObject(it.getObject(i + 1)) as String)
-                }
-                suggestions.add(columns.toTypedArray())
+      val exposedQuery = table.slice(sliceList).select(condition).orderBy(firstColumn)
+
+        try {
+          val columns = mutableListOf<String>()
+          transaction {
+            while (exposedQuery.execute(this)!!.next()){
+              for (i in 0 until list!!.columnCount()) {
+                columns.add(list!!.getColumn(i).formatObject(exposedQuery.first()[sliceList[i+1]]) as String)
               }
+              suggestions.add(columns.toTypedArray())
             }
           }
-          break
+
         } catch (e: SQLException) {
           try {
           } catch (abortEx: SQLException) {
             throw VExecFailedException(abortEx)
           }
-        } catch (error: Error) {
+        } catch (error: java.lang.Error) {
           try {
-          } catch (abortEx: Error) {
+          } catch (abortEx: java.lang.Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (rte: RuntimeException) {
@@ -1902,9 +1889,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             throw VExecFailedException(abortEx)
           }
         }
-      }
+
       suggestions.toTypedArray()
-    }*/
+    }
   }
 
   // ---------------------------------------------------------------------
@@ -1989,10 +1976,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-                       block!!.getFieldPos(this),
-                       label,
-                       lab ?: name,
-                       toolTip)
+              block!!.getFieldPos(this),
+              label,
+              lab ?: name,
+              toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -2047,10 +2034,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-                    modeDesc,
-                    getTypeName(),
-                    getTypeInformation(),
-                    names)
+            modeDesc,
+            getTypeName(),
+            getTypeInformation(),
+            names)
   }
 
   /**
