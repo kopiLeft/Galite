@@ -51,6 +51,16 @@ object FormWithList : DictionaryForm() {
       }
     }
   }
+
+  val block2 = insertBlock(BlockSample, testPage) {
+    command(item = list) {
+      this.name = "list"
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery(BlockSample)
+      }
+    }
+  }
 }
 
 object BlockSample : FormBlock(1, 1, "Test", "Test block") {

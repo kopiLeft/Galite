@@ -23,21 +23,25 @@ import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.abs
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-
+import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -1432,7 +1436,38 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @exception VException      an exception may be raised by triggers
    */
   fun fetchRecord(id: Int) {
-    TODO()
+    val columns = getSearchColumns()
+    val table = getSearchTables_()
+    val condition = mutableListOf<Op<Boolean>>()
+
+    condition.add(Op.build { idColumn eq id  })
+    if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
+      condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
+    }
+
+    try {
+      val result = table!!.slice(columns!!).select(condition.compoundAnd()).single()
+
+      /* set values */
+      var j = 0
+      fields.forEach { field ->
+        if (field.getColumnCount() > 0) {
+          field.setQuery_(result, columns[j])
+          j += 1
+        }
+      }
+    } catch (noSuchElementException: NoSuchElementException) {
+      /* Record does not exist anymore: it was deleted by another user */
+      throw VSkipRecordException()
+    } catch (illegalArgumentException: IllegalArgumentException) {
+      assert(false) { "too many rows" }
+    }
+
+    setRecordFetched(activeRecord, true)
+    setRecordChanged(activeRecord, false)
+    setRecordDeleted(activeRecord, false)
+    callProtectedTrigger(VConstants.TRG_POSTQRY)
+    setMode(VConstants.MOD_UPDATE)
   }
 
   /**
@@ -1581,8 +1616,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   val tsField: VField?
     get() {
-    return getBaseTableField("TS")
-  }
+      return getBaseTableField("TS")
+    }
 
   /**
    * Searches a field of block base table
@@ -1697,8 +1732,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
-  fun getSearchTables_(): Table {
-    TODO()
+  fun getSearchTables_(): Join? {
+    return VBlockDefaultOuterJoin.getSearchTables(this)
   }
 
   /**
@@ -1711,8 +1746,37 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search conditions for database query.
    */
-  fun getSearchConditions_(): Op<Boolean> {
-    TODO()
+  fun getSearchConditions_(): Op<Boolean>? {
+    var buffer: Op<Boolean>? = null
+
+    for (i in fields.indices) {
+      val fld = fields[i]
+      if (fld.getColumnCount() > 0) {
+        val cond = fld.getSearchCondition()
+        if (cond != null) {
+          val expression = when (fld.options and VConstants.FDO_SEARCH_MASK) {
+            VConstants.FDO_SEARCH_NONE -> fld.getColumn(0)!!.column
+            VConstants.FDO_SEARCH_UPPER -> {
+              (fld.getColumn(0)!!.column as Column<String>).upperCase()
+            }
+            VConstants.FDO_SEARCH_LOWER -> {
+              (fld.getColumn(0)!!.column as Column<String>).lowerCase()
+            }
+            else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+          }
+          Op.build {
+            expression.isNull()
+          }
+          buffer = expression.cond()
+        }
+      }
+      /*if (useOracleOuterJoinSyntax()) { TODO ! do we need to keep this?
+        buffer = VBlockOracleOuterJoin.getSearchCondition(fld, buffer)
+      } else {
+        buffer = VBlockDefaultOuterJoin.getSearchCondition(fld)
+      }*/
+    }
+    return buffer
   }
 
   /**
@@ -1776,15 +1840,24 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       if (fields[i] == currentField || fields[i].isLookupKey(tableIndex)) {
         val condition = fields[i].getSearchCondition()
 
+        // TODO: 10/12/2020 FIX this !
+        if (condition == null || fields[i].lookupColumn(tableIndex)!!.condition() !is EqOp) {
+          // at least one key field is not completely specified
+          // no guarantee that a unique value will be fetched
+          // end processing - non-key fields have already been cleared
+          return
+        }
+
+        // TODO: 11/12/2020 FIX this !
         if (condition != null) {
-          conditions.add(condition)
+          conditions.add(fields[i].lookupColumn(tableIndex)!!.condition())
         }
       }
     }
 
     try {
       transaction {
-        val condition = conditions.compoundAnd()
+        val condition: Op<Boolean> = conditions.compoundAnd()
         val query = table.slice(columns).select(condition)
 
         if (query.toList().isEmpty()) {
@@ -1955,14 +2028,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* query from where ? */
-    val tables = getSearchTables_() // TODO ! You can test this by replacing by (val tables = idColumn.table)
-    val conditions = getSearchConditions_() // TODO ! You can test this by commenting this line
+    val tables = getSearchTables_()
+    val conditions = getSearchConditions_()
 
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
     var rows = 0
 
-    for (result in tables.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())) {
+    val query = if(conditions == null) {
+      tables!!.slice(columns).selectAll().orderBy(*orderBys.toTypedArray())
+    } else {
+      tables!!.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())
+    }
+    for (result in query) {
       if (rows == fetchSize) {
         break
       }
