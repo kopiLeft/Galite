@@ -2024,8 +2024,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* query from where ? */
-    val tables = getSearchTables_() // TODO ! You can test this by replacing by (val tables = idColumn.table)
-    val conditions = getSearchConditions_() // TODO ! You can test this by commenting this line
+    val tables = getSearchTables_()
+    val conditions = getSearchConditions_()
 
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
