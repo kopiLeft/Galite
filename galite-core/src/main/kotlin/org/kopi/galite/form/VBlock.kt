@@ -1794,7 +1794,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // get the fields connected to the database with their priorities
       for (field in fields) {
         if (field.getColumnCount() != 0 && field.getPriority() != 0) {
-          columns[elems] = field.getColumn(0)!!.column!!
+
+          columns.add(field.getColumn(0)!!.column)
           priorities[elems] = field.getPriority()
           sizes[elems] = field.width * field.height
           elems += 1
