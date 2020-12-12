@@ -14,15 +14,36 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.tests.chart
 
-package org.kopi.galite.chart
+import org.kopi.galite.chart.Chart
+import java.util.Locale
 
-import java.io.Serializable
+object ChartSample: Chart()  {
+  override val locale = Locale.FRANCE
+  override val title = "chart for test"
 
-/**
- * A chart column.
- */
-abstract class Column : Serializable {
-  /** The column's label */
-  var label: String = ""
+  val measure1 = measure(IntTestType(10)) {
+    label = "measure1"
+  }
+
+  val measure2 = measure(IntTestType(10)) {
+    label = "measure2"
+  }
+
+  val city = dimension(StringTestType(10)) {
+    label = "dimension"
+  }
+
+  init {
+    city.add("Tunis") {
+      this[measure1] = 12
+      this[measure2] = 20
+    }
+
+    city.add("Bizerte") {
+      this[measure1] = 45
+    }
+
+  }
 }

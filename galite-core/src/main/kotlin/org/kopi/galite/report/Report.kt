@@ -29,11 +29,6 @@ import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -45,9 +40,6 @@ abstract class Report : Window() {
 
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
-
-  /** the help text */
-  var help: String? = null
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
@@ -146,28 +138,7 @@ abstract class Report : Window() {
   }
 
   fun MReport.addReportColumns() {
-    columns = fields.map {
-      when (it.domain.kClass) {
-        Int::class ->
-          VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
-        String::class ->
-          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0,
-                        it.domain.height ?: 0, null)
-        Boolean::class ->
-          VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
-        Date::class, java.util.Date::class ->
-          VDateColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
-        Month::class ->
-          VMonthColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
-        Week::class ->
-          VWeekColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
-        Time::class ->
-          VTimeColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
-        Timestamp::class ->
-          VTimestampColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
-        else -> throw RuntimeException("Type ${it.domain.kClass!!.qualifiedName} is not supported")
-      }
-    }.toTypedArray()
+    columns = fields.map { it.model }.toTypedArray()
   }
 
   private fun MReport.addReportLines() {
@@ -175,15 +146,6 @@ abstract class Report : Window() {
       addLine(it.data.values.toTypedArray())
     }
   }
-
-  /**
-   * Returns the qualified source file name where this object is defined.
-   */
-  private val sourceFile: String
-    get() {
-      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
-      return basename + this.javaClass.simpleName
-    }
 
 
   /** Report model*/

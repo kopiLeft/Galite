@@ -23,7 +23,7 @@ package org.kopi.galite.chart
  * @param ident The column identifier.
  * @param format The dimension format.
  */
-class VIntegerDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+class VIntegerDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   override fun toString(value: Any?): String {

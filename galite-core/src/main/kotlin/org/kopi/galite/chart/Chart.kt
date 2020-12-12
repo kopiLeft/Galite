@@ -17,9 +17,14 @@
 
 package org.kopi.galite.chart
 
+import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.VConstants
+import org.kopi.galite.report.Constants
 import org.kopi.galite.visual.VWindow
+import java.io.IOException
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
@@ -28,10 +33,10 @@ import org.kopi.galite.visual.VWindow
  */
 abstract class Chart() : Window() {
   /** The chart's dimension */
-  lateinit var dimension: Dimension<*>
+  lateinit var dimension: ChartDimension<*>
 
   /** The chart's measures */
-  val measures = mutableListOf<Measure<*>>()
+  val measures = mutableListOf<ChartMeasure<*>>()
 
   /**
    * Creates a chart dimension, with the specified [domain], used to store values of type [T] and measures values.
@@ -39,11 +44,31 @@ abstract class Chart() : Window() {
    * @param domain the dimension domain.
    * @param init   used to initialize the domain with measures values.
    */
-  fun <T : Comparable<T>> dimension(domain: Domain<T>, init: Dimension<T>.() -> Unit): Dimension<T> {
-    val chartDimension = Dimension(domain)
+  inline fun <reified T : Comparable<T>> dimension(domain: Domain<T>, init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
+    domain.kClass = T::class
+    val chartDimension = ChartDimension(domain)
     chartDimension.init()
     dimension = chartDimension
     return chartDimension
+  }
+
+  /**
+   * Adds the default chart commands.
+   * TODO!
+   */
+  open fun addDefaultChartCommands() {
+    /*commands.add(Command("Quit", VConstants.MOD_ANY))
+    commands.add(Command("Print", VConstants.MOD_ANY))
+    commands.add(Command("PrintOptions", VConstants.MOD_ANY))
+    commands.add(Command("ExportPNG", VConstants.MOD_ANY))
+    commands.add(Command("ExportPDF", VConstants.MOD_ANY))
+    commands.add(Command("ExportJPEG", VConstants.MOD_ANY))
+    commands.add(Command("ColumnView", VConstants.MOD_ANY))
+    commands.add(Command("BarView", VConstants.MOD_ANY))
+    commands.add(Command("LineView", VConstants.MOD_ANY))
+    commands.add(Command("AreaView", VConstants.MOD_ANY))
+    commands.add(Command("PieView", VConstants.MOD_ANY))
+    commands.add(Command("Help", VConstants.MOD_ANY))*/
   }
 
   /**
@@ -52,21 +77,115 @@ abstract class Chart() : Window() {
    * @param domain the dimension domain.
    * @param init   used to initialize the measure.
    */
-  fun <T> measure(domain: Domain<T>, init: Measure<T>.() -> Unit): Measure<T> where T : Comparable<T>, T : Number {
-    val chartMeasure = Measure(domain)
+  inline fun <reified T> measure(
+          domain: Domain<T>,
+          init: ChartMeasure<T>.() -> Unit
+  ): ChartMeasure<T> where T : Comparable<T>, T : Number {
+    domain.kClass = T::class
+    val chartMeasure = ChartMeasure(domain)
     chartMeasure.init()
     this.measures.add(chartMeasure)
     return chartMeasure
   }
 
+
+  open fun getFields(): List<ChartField<*>> = listOf(dimension) + measures
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!!FIX : comment move file creation to upper level (VKPhylum?)
+   */
+  open fun genLocalization(destination: String? = null) {
+    if (locale != null) {
+      val baseName = this::class.simpleName
+      requireNotNull(baseName)
+      val destination = destination
+              ?: this.javaClass.classLoader.getResource("")?.path +
+              this.javaClass.packageName.replace(".", "/")
+      try {
+        val writer = ChartLocalizationWriter()
+        genLocalization(writer)
+        writer.write(destination, baseName, locale!!)
+      } catch (ioe: IOException) {
+        ioe.printStackTrace()
+        System.err.println("cannot write : $baseName")
+      }
+    }
+  }
+
+  /**
+   * !!! COMMENT ME
+   */
+  fun genLocalization(writer: LocalizationWriter) {
+    (writer as ChartLocalizationWriter).genChart(title,
+                                                 help,
+                                                 getFields())
+  }
+
+  fun VChart.addChartLines() {
+    dimension.values.forEach {
+      addRow(arrayOf(it.value), it.measureList.values.toTypedArray())
+    }
+  }
+
   override val model: VWindow by lazy {
+    genLocalization()
+
     object : VChart() {
+      /**
+       * Handling triggers
+       */
+      fun handleTriggers(triggers: MutableList<Trigger>) {
+        // BLOCK TRIGGERS
+        triggers.forEach { trigger ->
+          val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
+          for (i in VConstants.TRG_TYPES.indices) {
+            if (trigger.events shr i and 1 > 0) {
+              blockTriggerArray[i] = i
+              super.triggers[i] = trigger
+            }
+          }
+          super.VKT_Triggers[0] = blockTriggerArray
+        }
+
+        // DIMENSION TRIGGERS
+        dimensions.forEach {
+          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          // TODO : Add field triggers here
+          super.VKT_Triggers.add(fieldTriggerArray)
+        }
+
+        // MEASURE TRIGGERS
+        measures.forEach {
+          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          // TODO : Add field triggers here
+          super.VKT_Triggers.add(fieldTriggerArray)
+        }
+
+        // COMMANDS TRIGGERS
+        commands?.forEach {
+          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          // TODO : Add commands triggers here
+          super.VKT_Triggers.add(fieldTriggerArray)
+        }
+      }
+
       override fun init() {
-        TODO("Not yet implemented")
+        source = sourceFile
+
+        super.dimensions = listOf(this@Chart.dimension).map { it.model }.toTypedArray()
+        super.measures = this@Chart.measures.map { it.model }.toTypedArray()
+
+
+        addChartLines()
+
+        handleTriggers(this@Chart.triggers)
       }
 
       override fun add() {
-        TODO("Not yet implemented")
+        // TODO
       }
 
     }

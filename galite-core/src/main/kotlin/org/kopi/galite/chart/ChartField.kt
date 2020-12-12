@@ -17,30 +17,25 @@
 
 package org.kopi.galite.chart
 
+import java.io.Serializable
+
+import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.field.Field
 
 /**
- * Represents a one dimension that contains measures [values] to use in chart.
- *
- * @param domain dimension domain.
+ * A chart column.
  */
-open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Column() {
+abstract class ChartField<T : Comparable<T>>(domain: Domain<T>) : Field<T>(domain), Serializable {
+  val ident get() = label!!  // TODO must me resolved from variable name and moved to super class.
 
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
   /**
-   * Dimension values
+   * !!! COMMENT ME
    */
-  val values = mutableListOf<DimensionData<T>>()
-
-  /**
-   * Add a dimension value
-   *
-   * @param value the dimension value
-   */
-  fun add(value: T, init: (DimensionData<T>.() -> Unit)? = null) {
-    val dimensionValue: DimensionData<T> = DimensionData<T>(value)
-    if (init != null) {
-      dimensionValue.init()
-    }
-    values.add(dimensionValue)
+  override fun genLocalization(writer: LocalizationWriter) {
+    (writer as ChartLocalizationWriter).genField(ident, label, help)
   }
 }

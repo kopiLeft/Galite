@@ -58,7 +58,7 @@ import org.kopi.galite.type.Week
  * @param alias                the alias of this field
  */
 class FormField<T : Comparable<T>>(val block: FormBlock,
-                                   override val domain: Domain<T>,
+                                   domain: Domain<T>,
                                    private val fieldIndex: Int,
                                    initialAccess: Int,
                                    var position: FormPosition? = null) : Field<T>(domain) {
@@ -192,6 +192,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
+  // TODO add Fixed types
   /**
    * The field model based on the field type.
    */
