@@ -17,6 +17,8 @@
 package org.kopi.galite.tests.chart
 
 import org.kopi.galite.chart.Chart
+import org.kopi.galite.chart.VChartType
+import org.kopi.galite.common.INITCHART
 import org.kopi.galite.domain.Domain
 import java.util.Locale
 
@@ -34,6 +36,10 @@ object ChartSample: Chart()  {
 
   val city = dimension(Domain<String>(10)) {
     label = "dimension"
+  }
+
+  val init = trigger(INITCHART) {
+    chartType = VChartType.PIE
   }
 
   init {

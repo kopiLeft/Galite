@@ -17,6 +17,11 @@
 
 package org.kopi.galite.chart
 
+import org.kopi.galite.common.Action
+import org.kopi.galite.common.ChartObjectTriggerEvent
+import org.kopi.galite.common.ChartTriggerEvent
+import org.kopi.galite.common.ChartVoidTriggerEvent
+import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
@@ -50,6 +55,50 @@ abstract class Chart() : Window() {
     chartDimension.init()
     dimension = chartDimension
     return chartDimension
+  }
+
+  /**
+   * Adds triggers to this chart
+   *
+   * @param chartTriggerEvents   the trigger events to add
+   * @param method               the method to execute when trigger is called
+   */
+  private fun <T> trigger(chartTriggerEvents: Array<out ChartTriggerEvent>, method: () -> T): Trigger {
+    val event = formEventList(chartTriggerEvents)
+    val chartAction = Action(null, method)
+    val trigger = FormTrigger(event, chartAction)
+    triggers.add(trigger)
+    return trigger
+  }
+
+  private fun formEventList(chartTriggerEvents: Array<out ChartTriggerEvent>): Long {
+    var self = 0L
+
+    chartTriggerEvents.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
+  }
+
+  /**
+   * Adds void triggers to this chart
+   *
+   * @param chartTriggerEvents the trigger events to add
+   * @param method             the method to execute when trigger is called
+   */
+  fun trigger(vararg chartTriggerEvents: ChartVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(chartTriggerEvents, method)
+  }
+
+  /**
+   * Adds void triggers to this chart
+   *
+   * @param chartTriggerEvents the trigger events to add
+   * @param method             the method to execute when trigger is called
+   */
+  fun trigger(vararg chartTriggerEvents: ChartObjectTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(chartTriggerEvents, method)
   }
 
   /**
@@ -130,6 +179,12 @@ abstract class Chart() : Window() {
     }
   }
 
+  var chartType: VChartType
+    get() = (model as VChart).chartType ?: VChartType.DEFAULT
+    set(value) {
+      (model as VChart).setType(value)
+    }
+
   override val model: VWindow by lazy {
     genLocalization()
 
@@ -138,16 +193,16 @@ abstract class Chart() : Window() {
        * Handling triggers
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
-        // BLOCK TRIGGERS
+        // CHART TRIGGERS
         triggers.forEach { trigger ->
-          val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
+          val chartTriggerArray = IntArray(Constants.TRG_TYPES.size)
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
-              blockTriggerArray[i] = i
+              chartTriggerArray[i] = i
               super.triggers[i] = trigger
             }
           }
-          super.VKT_Triggers[0] = blockTriggerArray
+          super.VKT_Triggers[0] = chartTriggerArray
         }
 
         // DIMENSION TRIGGERS
@@ -187,7 +242,6 @@ abstract class Chart() : Window() {
       override fun add() {
         // TODO
       }
-
     }
   }
 }

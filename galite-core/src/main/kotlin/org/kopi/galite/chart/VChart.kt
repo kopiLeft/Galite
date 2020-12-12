@@ -430,10 +430,13 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   // TRIGGER HANDLING
   // --------------------------------------------------------------------
 
-  override fun executeVoidTrigger(VKT_Type: Int) {}
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    triggers[VKT_Type]?.action?.method?.invoke()
+    super.executeVoidTrigger(VKT_Type)
+  }
 
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {

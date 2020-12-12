@@ -37,7 +37,6 @@ abstract class Window {
   internal var triggers = mutableListOf<Trigger>()
   abstract val model: VWindow
 
-
   /**
    * Returns the qualified source file name where this object is defined.
    */

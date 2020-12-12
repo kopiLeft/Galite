@@ -137,10 +137,10 @@ abstract class Form : Window() {
     return trigger(formTriggerEvents, method)
   }
 
-  private fun formEventList(formTriggs: Array<out FormTriggerEvent>): Long {
+  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent>): Long {
     var self = 0L
 
-    formTriggs.forEach { trigger ->
+    formTriggerEvents.forEach { trigger ->
       self = self or (1L shl trigger.event)
     }
 
