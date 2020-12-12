@@ -17,33 +17,39 @@
 package org.kopi.galite.tests.chart
 
 import org.kopi.galite.chart.Chart
+import org.kopi.galite.domain.Domain
 import java.util.Locale
 
 object ChartSample: Chart()  {
   override val locale = Locale.FRANCE
-  override val title = "chart for test"
+  override val title = "area/population per city"
 
-  val measure1 = measure(IntTestType(10)) {
-    label = "measure1"
+  val area = measure(Domain<Int>(10)) {
+    label = "area (ha)"
   }
 
-  val measure2 = measure(IntTestType(10)) {
-    label = "measure2"
+  val population = measure(Domain<Int>(10)) {
+    label = "population"
   }
 
-  val city = dimension(StringTestType(10)) {
+  val city = dimension(Domain<String>(10)) {
     label = "dimension"
   }
 
   init {
     city.add("Tunis") {
-      this[measure1] = 12
-      this[measure2] = 20
+      this[area] = 34600
+      this[population] = 1056247
+    }
+
+    city.add("Kasserine") {
+      this[area] = 806600
+      this[population] = 439243
     }
 
     city.add("Bizerte") {
-      this[measure1] = 45
+      this[population] = 368500
+      this[area] = 568219
     }
-
   }
 }
