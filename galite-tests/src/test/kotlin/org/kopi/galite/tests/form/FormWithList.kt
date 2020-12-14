@@ -58,7 +58,7 @@ object FormWithList : DictionaryForm() {
       this.name = "list"
       action = {
         println("-----------Generating list-----------------")
-        recursiveQuery(BlockWithManyTables)
+        recursiveQuery()
       }
     }
 
@@ -66,7 +66,7 @@ object FormWithList : DictionaryForm() {
       this.name = "save"
       action = {
         println("-----------Saving-----------------")
-        saveBlock(BlockWithManyTables)
+        saveBlock()
       }
     }
   }
@@ -76,7 +76,7 @@ object FormWithList : DictionaryForm() {
       this.name = "list"
       action = {
         println("-----------Generating list-----------------")
-        recursiveQuery(BlockSample)
+        recursiveQuery()
       }
     }
   }

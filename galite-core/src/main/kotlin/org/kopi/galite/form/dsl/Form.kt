@@ -177,10 +177,6 @@ abstract class Form : Window() {
     return menu
   }
 
-  fun saveBlock(formBlock: FormBlock) {
-    Commands.saveBlock(formBlock.vBlock)
-  }
-
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
