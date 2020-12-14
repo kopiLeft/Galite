@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests.form
 
+import org.kopi.galite.db.Modules
+import org.kopi.galite.db.UserRights
 import java.util.Locale
 
 import org.kopi.galite.db.Users
@@ -42,12 +44,30 @@ object FormWithList : DictionaryForm() {
     icon = "list"  // icon is optional here
   }
 
-  val block = insertBlock(BlockSample, testPage) {
+  val save = actor(
+    ident = "save",
+    menu = action,
+    label = "save",
+    help = "save",
+  ) {
+    key = Key.F2   // key is optional here
+    icon = "save"  // icon is optional here
+  }
+
+  val block = insertBlock(BlockWithManyTables, testPage) {
     command(item = list) {
       this.name = "list"
       action = {
         println("-----------Generating list-----------------")
-        recursiveQuery(BlockSample)
+        recursiveQuery(BlockWithManyTables)
+      }
+    }
+
+    command(item = save) {
+      this.name = "save"
+      action = {
+        println("-----------Saving-----------------")
+        saveBlock(BlockWithManyTables)
       }
     }
   }
@@ -65,7 +85,39 @@ object FormWithList : DictionaryForm() {
 
 object BlockSample : FormBlock(1, 1, "Test", "Test block") {
   val u = table(Users)
+
+  val id = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The user id"
+    columns(u.id)
+  }
+
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "name"
+    help = "The user name"
+    columns(u.name) {
+      priority = 1
+    }
+  }
+}
+
+object BlockWithManyTables : FormBlock(1, 20, "Test", "Test block") {
+  val u = table(Users)
+  val m = table(Modules)
+  val r = table(UserRights)
   val i = index(message = "ID should be unique")
+
+  val uid = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The user id"
+    columns(u.id, r.user)
+  }
+
+  val mid = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The module id"
+    columns(m.id, r.module)
+  }
 
   val id = hidden(domain = Domain<Int>(20)) {
     label = "id"

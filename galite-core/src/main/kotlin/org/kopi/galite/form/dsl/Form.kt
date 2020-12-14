@@ -30,6 +30,7 @@ import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Menu
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
+import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
@@ -175,6 +176,10 @@ abstract class Form : Window() {
     val menu = Menu(label)
     menus.add(menu)
     return menu
+  }
+
+  fun saveBlock(formBlock: FormBlock) {
+    Commands.saveBlock(formBlock.vBlock)
   }
 
   // ----------------------------------------------------------------------
