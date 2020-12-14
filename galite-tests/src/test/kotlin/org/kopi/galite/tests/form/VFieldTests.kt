@@ -17,20 +17,27 @@
 package org.kopi.galite.tests.form
 
 import org.jetbrains.exposed.sql.SchemaUtils
-import java.util.Locale
-
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-
 import org.kopi.galite.common.INITFORM
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.VPosition
 import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.list.VColumn
+import org.kopi.galite.list.VList
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.list.VStringColumn
+import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.visual.VCommand
+import java.util.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-object FormObject: Form() {
+object FormObject : Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
@@ -82,37 +89,153 @@ class BlockTest : FormBlock(1, 1, "Test", "Test block") {
 
       userTable.insert {
         it[id] = 0
-        it[name] = "user0"
+        it[name] = "AUDREY"
         it[age] = 23
       }
       userTable.insert {
         it[id] = 1
-        it[name] = "user1"
+        it[name] = "BARBEY"
         it[age] = 23
       }
       userTable.insert {
         it[id] = 2
-        it[name] = "user2"
+        it[name] = "BARBEY1"
         it[age] = 26
       }
       userTable.insert {
         it[id] = 3
-        it[name] = "user3"
+        it[name] = "Fabienne BUGHIN"
         it[age] = 25
       }
       userTable.insert {
-        it[id] = 0
-        it[name] = "user0"
+        it[id] = 4
+        it[name] = "FABIENNE BUGHIN2"
+        it[age] = 23
+      }
+      userTable.insert {
+        it[id] = 5
+        it[name] = "USER0"
+        it[age] = 23
+      }
+      userTable.insert {
+        it[id] = 6
+        it[name] = "user1"
+        it[age] = 23
+      }
+      userTable.insert {
+        it[id] = 7
+        it[name] = "user2"
         it[age] = 23
       }
     }
   }
 }
 
-fun main(){
-  Application.runForm(formName = FormObject)
+class VFieldTests : JApplicationTestBase() {
+  init {
+    Application.runForm(formName = FormObject)
+    val vListColumn = VList("Benutzer",
+            "apps/common/Global", arrayOf<VListColumn>(
+            VStringColumn(null, "NAME", 2, 50, true)),
+            1,
+            -1,
+            0,
+            0,
+            null,
+            false)
 
-  val suggestionsResult = FormSample.model.getBlock(0).fields[1].getSuggestions("A*")
-  FormSample.model.getBlock(0).fields[1].list!!.autocompleteType = 1
-  println(suggestionsResult)
+    FormSample.model.getBlock(0).fields[1].setInfo("name", 1, -1, 0, intArrayOf(4, 4, 4),
+            vListColumn,
+            arrayOf<VColumn?>(
+                    VColumn(0, "NAME", false, false, User.name)
+            ),
+            0, 0, null as Array<VCommand>?, VPosition(1, 1, 2, 2, -1), 2,
+            null)
+
+    FormSample.model.getBlock(0).fields[1].list = vListColumn
+  }
+
+    @Test
+    fun autoCompleteStartsWithTest() {
+      FormSample.model.getBlock(0).fields[1].list!!.autocompleteType = 1
+      var suggestionsResult = FormSample.model.getBlock(0).fields[1].getSuggestions("AUD")
+      var suggestionsResultList = suggestionsResult!!.map {
+        it[0]
+      }
+      println("Starts with AUD")
+      println(suggestionsResultList)
+
+
+      var expectedList = mutableListOf<String>("AUDREY")
+      assertCollectionsEquals(expectedList , suggestionsResultList)
+
+      suggestionsResult = FormSample.model.getBlock(0).fields[1].getSuggestions("BarB")
+      suggestionsResultList = suggestionsResult!!.map {
+        it[0]
+      }
+      println("Starts with BarB")
+      println(suggestionsResultList)
+
+      expectedList = mutableListOf<String>("BARBEY" , "BARBEY1")
+
+      assertCollectionsEquals(expectedList , suggestionsResultList)
+
+      suggestionsResult = FormSample.model.getBlock(0).fields[1].getSuggestions("BARBEY")
+      suggestionsResultList = suggestionsResult!!.map {
+        it[0]
+      }
+      println("Starts with BARBEY")
+      println(suggestionsResultList)
+
+      expectedList = mutableListOf<String>("BARBEY" , "BARBEY1")
+
+      assertCollectionsEquals(expectedList , suggestionsResultList)
+
+      suggestionsResult = FormSample.model.getBlock(0).fields[1].getSuggestions("User")
+      suggestionsResultList = suggestionsResult!!.map {
+        it[0]
+      }
+      println("Starts with User")
+      println(suggestionsResultList)
+
+      expectedList = mutableListOf<String>("USER0" ,"user1" , "user2")
+
+      assertCollectionsEquals(expectedList , suggestionsResultList)
+    }
+
+    @Test
+    fun autoCompleteContainsTest() {
+      FormSample.model.getBlock(0).fields[1].list!!.autocompleteType = 2
+      var suggestionsResult = FormSample.model.getBlock(0).fields[1].getSuggestions("A")
+      var suggestionsResultList = suggestionsResult!!.map {
+        it[0]
+      }
+      println("Contains A")
+      println(suggestionsResultList)
+      var expectedList = mutableListOf( "AUDREY" , "BARBEY" , "BARBEY1" , "Fabienne BUGHIN" , "FABIENNE BUGHIN2")
+
+      assertCollectionsEquals(expectedList , suggestionsResultList)
+
+       suggestionsResult = FormSample.model.getBlock(0).fields[1].getSuggestions("s")
+       suggestionsResultList = suggestionsResult!!.map {
+        it[0]
+      }
+      println("Contains s")
+      println(suggestionsResultList)
+
+      expectedList = mutableListOf("USER0" , "user1" , "user2")
+
+      assertCollectionsEquals(expectedList , suggestionsResultList)
+
+       suggestionsResult = FormSample.model.getBlock(0).fields[1].getSuggestions("0")
+       suggestionsResultList = suggestionsResult!!.map {
+        it[0]
+      }
+      println("Contains 0")
+      println(suggestionsResultList)
+       expectedList = mutableListOf("USER0")
+
+      assertCollectionsEquals(expectedList , suggestionsResultList)
+
+    }
 }

@@ -189,8 +189,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun executeObjectTrigger(VKT_Type: Int): Any {
-    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
+  fun executeObjectTrigger(VKT_Type: Int): Any? {
+    return (triggers[VKT_Type]?.action?.method as? () -> Any)?.invoke()
   }
 
   @Suppress("UNCHECKED_CAST")

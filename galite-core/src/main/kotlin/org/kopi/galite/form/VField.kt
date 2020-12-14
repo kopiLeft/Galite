@@ -1843,7 +1843,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       null
     } else {
       val suggestions: MutableList<Array<String?>> = ArrayList()
-      val table = Table(evalListTable())
+      val table = block?.tables!![0]
       val sliceList = list!!.columns.map {
         Column<String>(table , it.column!! , VarCharColumnType())
       }
@@ -1854,7 +1854,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
         VList.AUTOCOMPLETE_STARTSWITH -> {
           Op.build {
-            LowerCase(firstColumn) like toSql("${ query.toLowerCase() } % ") }
+            LowerCase(firstColumn) like toSql("${ query.toLowerCase() }%") }
           }
           else -> {
             // default should never reached
@@ -1867,12 +1867,18 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           val columns = mutableListOf<String>()
           transaction {
-            while (exposedQuery.execute(this)!!.next()){
+            exposedQuery.forEach {
+              println(it[firstColumn])
+              println("*********Inside VField ***********")
               for (i in 0 until list!!.columnCount()) {
-                columns.add(list!!.getColumn(i).formatObject(exposedQuery.first()[sliceList[i+1]]) as String)
+                columns.add(list!!.getColumn(i).formatObject(exposedQuery.first()[sliceList[i]]) as String)
               }
               suggestions.add(columns.toTypedArray())
             }
+
+           // while (exposedQuery.execute(this)!!.next()){
+
+          //  }
           }
 
         } catch (e: SQLException) {
@@ -2366,7 +2372,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     private set
 
   var list: VList? = null   // list
-    private set
 
   /**
    * Returns the containing block.

@@ -23,7 +23,7 @@ import kotlin.reflect.KClass
 import org.kopi.galite.l10n.ListLocalizer
 
 abstract class VListColumn(
-  var title: String,
+  var title: String?,
   val column: String?,
   private val align: Int,
   val width: Int,
