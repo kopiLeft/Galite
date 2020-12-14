@@ -31,7 +31,8 @@ object FormWithList : DictionaryForm() {
   override val title = "form for test"
 
   val action = menu("Action")
-  val testPage = page("test page")
+  val testPage1 = page("test page1")
+  val testPage2 = page("test page2")
 
   val list = actor(
     ident = "list",
@@ -53,7 +54,7 @@ object FormWithList : DictionaryForm() {
     icon = "save"  // icon is optional here
   }
 
-  val block = insertBlock(BlockWithManyTables, testPage) {
+  val block = insertBlock(BlockWithManyTables, testPage1) {
     command(item = list) {
       this.name = "list"
       action = {
@@ -71,7 +72,7 @@ object FormWithList : DictionaryForm() {
     }
   }
 
-  val block2 = insertBlock(BlockSample, testPage) {
+  val block2 = insertBlock(BlockSample, testPage2) {
     command(item = list) {
       this.name = "list"
       action = {
@@ -127,6 +128,6 @@ object BlockWithManyTables : FormBlock(1, 20, "BlockWithManyTables", "Test block
   }
 }
 
-fun main(){
+fun main() {
   Application.runForm(formName = FormWithList)
 }
