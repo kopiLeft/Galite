@@ -15,11 +15,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.kopi.galite.tests.form
+import java.util.Locale
 
 import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
-import java.util.Locale
-
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
@@ -83,8 +82,9 @@ object FormWithList : DictionaryForm() {
   }
 }
 
-object BlockSample : FormBlock(1, 1, "Test", "Test block") {
+object BlockSample : FormBlock(1, 1, "BlockSample", "Test block") {
   val u = table(Users)
+  val i = index(message = "ID should be unique")
 
   val id = hidden(domain = Domain<Int>(20)) {
     label = "id"
@@ -101,11 +101,10 @@ object BlockSample : FormBlock(1, 1, "Test", "Test block") {
   }
 }
 
-object BlockWithManyTables : FormBlock(1, 20, "Test", "Test block") {
+object BlockWithManyTables : FormBlock(1, 20, "BlockWithManyTables", "Test block") {
   val u = table(Users)
   val m = table(Modules)
   val r = table(UserRights)
-  val i = index(message = "ID should be unique")
 
   val uid = hidden(domain = Domain<Int>(20)) {
     label = "id"
@@ -117,12 +116,6 @@ object BlockWithManyTables : FormBlock(1, 20, "Test", "Test block") {
     label = "id"
     help = "The module id"
     columns(m.id, r.module)
-  }
-
-  val id = hidden(domain = Domain<Int>(20)) {
-    label = "id"
-    help = "The user id"
-    columns(u.id)
   }
 
   val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
