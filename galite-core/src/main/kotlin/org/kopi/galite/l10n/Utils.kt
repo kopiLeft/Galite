@@ -43,7 +43,7 @@ object Utils {
       }
     }
     throw InconsistencyException((if (parent.document == null) "<filename not set>" else parent.document.baseURI)
-            + ": " + type + " " + attribute + " = " + value + " not found")
+                                         + ": " + type + " " + attribute + " = " + value + " not found")
   }
 
   /**
@@ -54,9 +54,9 @@ object Utils {
 
     when {
       childs.isEmpty() -> throw InconsistencyException(parent.document.baseURI + ": "
-              + type + " not found")
+                                                               + type + " not found")
       childs.size > 1 -> throw InconsistencyException(parent.document.baseURI + ": "
-              + type + " not unique")
+                                                              + type + " not unique")
       else -> return childs[0]
     }
   }

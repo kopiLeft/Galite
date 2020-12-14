@@ -26,10 +26,10 @@ import org.kopi.galite.form.VConstants
  * @param item                 the item
  */
 class Command(val item: Actor) {
-  var name : String? = null
+  var name: String? = null
   var action: (() -> Unit)? = null
   lateinit var body: CommandBody
-  var mode : Int = VConstants.MOD_ANY
+  var mode: Int = VConstants.MOD_ANY
     private set
 
   /** function to change the access mode of the command **/

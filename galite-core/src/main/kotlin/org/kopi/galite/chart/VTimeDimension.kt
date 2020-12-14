@@ -18,6 +18,7 @@
 package org.kopi.galite.chart
 
 import org.kopi.galite.type.Time
+
 /**
  * Represents a time chart column.
  *

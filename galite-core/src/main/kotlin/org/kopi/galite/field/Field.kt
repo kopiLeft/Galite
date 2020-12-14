@@ -62,7 +62,7 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>) {
   fun checkValue(value: T): Boolean = when {
     domain.type is ListDomain && (domain.type as ListDomain).checkValue(value) -> true
     domain.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
-            "by this domain type")
+                                                                              "by this domain type")
     else -> throw InvalidValueException(value, label)
   }
 

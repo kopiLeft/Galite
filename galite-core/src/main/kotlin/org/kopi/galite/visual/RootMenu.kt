@@ -120,6 +120,7 @@ class RootMenu(id: Int, name: String) {
   open fun isEmpty(): Boolean {
     return root == null
   }
+
   companion object {
     const val ROOT_MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/RootMenu"
   }

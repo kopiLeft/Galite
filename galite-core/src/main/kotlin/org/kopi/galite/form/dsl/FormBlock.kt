@@ -60,7 +60,11 @@ import org.jetbrains.exposed.sql.Table
  * @param        triggers              the triggers executed by this form
  * @param        fields                the objects that populate the block
  */
-open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FormElement(ident), VConstants {
+open class FormBlock(var buffer: Int,
+                     var visible: Int,
+                     ident: String,
+                     val title: String)
+  : FormElement(ident), VConstants {
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
@@ -163,7 +167,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>,
+                                                  position: FormPosition,
+                                                  init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_MUSTFILL, position)
   }
 
@@ -176,7 +182,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param init    initialization method to initialize the field.
    * @return a VISIT field.
    */
-  inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>> visit(domain: Domain<T>,
+                                               position: FormPosition,
+                                               init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_VISIT, position)
   }
 
@@ -189,7 +197,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param init    initialization method to initialize the field.
    * @return a SKIPPED field.
    */
-  inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>,
+                                                 position: FormPosition,
+                                                 init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_SKIPPED, position)
   }
 
@@ -389,10 +399,10 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    */
   override fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genBlock(ident,
-            title,
-            help,
-            indices.toTypedArray(),
-            blockFields.toTypedArray())
+                                                title,
+                                                help,
+                                                indices.toTypedArray(),
+                                                blockFields.toTypedArray())
   }
 
 
@@ -414,8 +424,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // BLOCK TRIGGERS
+        val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
         triggers.forEach { trigger ->
-          val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
               blockTriggerArray[i] = i
@@ -460,11 +470,11 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
 
         super.commands = blockCommands.map {
           VCommand(it.mode,
-                  this,
-                  usedActors[it.item.ident],
-                  -1,
-                  it.name!!,
-                  it.action
+                   this,
+                   usedActors[it.item.ident],
+                   -1,
+                   it.name!!,
+                   it.action
           )
         }.toTypedArray()
 

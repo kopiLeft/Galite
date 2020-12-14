@@ -35,16 +35,16 @@ class VStringColumn(ident: String?,
                     width: Int,
                     height: Int,
                     format: VCellFormat?)
-     : VReportColumn(ident,
-                     options,
-                     align,
-                     groups,
-                     function,
-                     width,
-                     height,
-                     format) {
+  : VReportColumn(ident,
+                  options,
+                  align,
+                  groups,
+                  function,
+                  width,
+                  height,
+                  format) {
 
-   /**
+  /**
    * Compare two objects.
    *
    * @param    object1    the first operand of the comparison

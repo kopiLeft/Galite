@@ -22,8 +22,8 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.visual.Message
 
-class VTextColumn (title: String, column: String?, align: Int, width: Int, sortAscending: Boolean) :
-        VListColumn(title, column, align, Message.getMessage("text-type").length, sortAscending) {
+class VTextColumn(title: String, column: String?, align: Int, width: Int, sortAscending: Boolean)
+  : VListColumn(title, column, align, Message.getMessage("text-type").length, sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------

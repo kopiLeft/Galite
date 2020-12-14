@@ -20,13 +20,13 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
-import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
@@ -55,6 +55,7 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
+import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -424,8 +425,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * enter a field
    */
   fun enter() {
-    assert(block === getForm().getActiveBlock()) { threadInfo() + "field : " + name + " block : " + block!!.name +
-            " active block : " + getForm().getActiveBlock()!!.name }
+    assert(block === getForm().getActiveBlock()) {
+      threadInfo() + "field : " + name + " block : " + block!!.name +
+              " active block : " + getForm().getActiveBlock()!!.name
+    }
     assert(block!!.activeRecord != -1) { threadInfo() + "current record = " + block!!.activeRecord }
     assert(block!!.activeField == null) { threadInfo() + "current field: " + block!!.activeField }
     block!!.activeField = this
@@ -624,7 +627,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns true if the column is a key of the table with specified correlation.
    */
-  fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable()}?.key ?: false
+  fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
 
   /**
    * Is the field part of given index ?
@@ -643,7 +646,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getSearchType(): Int {
     return if (isNull(block!!.activeRecord)) {
-      when(getSearchOperator()) {
+      when (getSearchOperator()) {
         VConstants.SOP_EQ -> VConstants.STY_NO_COND
         VConstants.SOP_NE -> VConstants.STY_MANY
         else -> VConstants.STY_EXACT
@@ -662,8 +665,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  open fun getSearchCondition(): Op<Boolean>? {
-    TODO()
+  open fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? {
+    // TODO
+    return null
   }
 
   // ----------------------------------------------------------------------
@@ -967,10 +971,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setObject(record, retrieveQuery_(query, column))
   }
 
-  fun setQuery_(record: Int, query: org.jetbrains.exposed.sql.Query, column: Int) {
-    TODO()
-  }
-
   /**
    * Returns the specified tuple column as object of correct type for the field.
    * @param     query           the query holding the tuple
@@ -1092,7 +1092,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun isNull(r: Int): Boolean  = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+  fun isNull(r: Int): Boolean = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
     callSafeTrigger(VConstants.TRG_VALUE) == null
   } else isNullImpl(r)
 
@@ -1429,7 +1429,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Marks the field changed, trails the record if necessary
    */
   fun setChanged(changed: Boolean) {
-    if (changed && block!!.activeRecord!= -1) {
+    if (changed && block!!.activeRecord != -1) {
       block!!.setRecordChanged(block!!.activeRecord, true)
     }
     this.changed = changed
@@ -1471,7 +1471,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
             SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
             transaction {
-              exec(SELECT_IS_IN_LIST) {exists = it.next()}
+              exec(SELECT_IS_IN_LIST) { exists = it.next() }
             }
             if (!alreadyProtected) {
             }
@@ -1577,7 +1577,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           qrybuf = " SELECT   " + colbuf +
                   " FROM     " + evalListTable() +
-                  " WHERE    {fn SUBSTRING(" + list!!.getColumn(0).column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
+                  " WHERE    {fn SUBSTRING(" + list!!.getColumn(
+                  0).column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
                   " ORDER BY 1"
           result = displayQueryList(qrybuf, list!!.columns) as String?
           if (result == null) {
@@ -1737,7 +1738,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   internal fun selectFromList(gotoNextField: Boolean) {
-    val qrybuf =  buildString{
+    val qrybuf = buildString {
       append("SELECT ")
       for (i in 0 until list!!.columnCount()) {
         if (i != 0) {
@@ -1993,10 +1994,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-              block!!.getFieldPos(this),
-              label,
-              lab ?: name,
-              toolTip)
+                       block!!.getFieldPos(this),
+                       label,
+                       lab ?: name,
+                       toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -2051,10 +2052,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-            modeDesc,
-            getTypeName(),
-            getTypeInformation(),
-            names)
+                    modeDesc,
+                    getTypeName(),
+                    getTypeInformation(),
+                    names)
   }
 
   /**
@@ -2325,18 +2326,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * any value
    * @return    the width of this field
    */
-  var width = 0// max # of chars per line
-  protected set
+  var width = 0
+    // max # of chars per line
+    protected set
 
   /**
    * The height of a field is the max number of line needed to display
    * any value
    * @return    the width of this field
    */
-  var height  = 0 // max # of lines
+  var height = 0 // max # of lines
     protected set
 
-  private lateinit var access : IntArray // access in each mode
+  private lateinit var access: IntArray // access in each mode
 
   private var priority = 0  // order in select results
 
@@ -2349,7 +2351,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   lateinit var name: String   // field name (for dumps)
     private set
 
-  var label : String? = null // field label
+  var label: String? = null // field label
     set(label) {
       field = label
       fireLabelChanged()
@@ -2365,7 +2367,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip : String? = null // help text
+  var toolTip: String? = null // help text
     private set
 
   private var index = 0 // The position in parent field array

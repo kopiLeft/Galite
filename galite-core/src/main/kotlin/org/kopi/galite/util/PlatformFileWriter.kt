@@ -34,7 +34,8 @@ class PlatformFileWriter(val dataStream: OutputStream,
    */
   constructor(file: File,
               encoding: String,
-              lineSeparator: String) : this(FileOutputStream(file) , encoding , lineSeparator )
+              lineSeparator: String) : this(FileOutputStream(file), encoding, lineSeparator)
+
   constructor(fileName: String,
               encoding: String,
               lineSeparator: String) : this(File(fileName), encoding, lineSeparator)

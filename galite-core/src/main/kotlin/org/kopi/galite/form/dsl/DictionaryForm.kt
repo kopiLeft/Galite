@@ -22,7 +22,7 @@ import org.kopi.galite.form.VDictionaryForm
 /**
  * Represents a dictionary form.
  */
-abstract class DictionaryForm: Form() {
+abstract class DictionaryForm : Form() {
 
   fun recursiveQuery(formBlock: FormBlock) {
     Commands.recursiveQuery(formBlock.vBlock)

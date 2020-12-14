@@ -14,26 +14,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form.dsl
+package org.kopi.galite.tests.form
 
-import org.kopi.galite.form.VConstants
+import kotlin.test.assertNotNull
 
-/**
- * The field alignment is used to define the localization of the field's content inside the field.
- */
-enum class FieldAlignment(val value: Int) {
-  /**
-   * The value is centered in the field
-   */
-  CENTER(VConstants.ALG_CENTER),
+import org.jetbrains.exposed.sql.selectAll
+import org.junit.Test
+import org.kopi.galite.db.Users
+import org.kopi.galite.form.VBlockDefaultOuterJoin
+import org.kopi.galite.tests.JApplicationTestBase
 
-  /**
-   * The value is displayed at the left inside the field
-   */
-  LEFT(VConstants.ALG_LEFT),
+class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
+  @Test
+  fun getSearchTablesTest() {
+    FormWithList.model
+    val searchTables = VBlockDefaultOuterJoin.getSearchTables(FormWithList.block.vBlock)
 
-  /**
-   * The value is displayed at the right inside the field
-   */
-  RIGHT(VConstants.ALG_RIGHT),
+    assertNotNull(searchTables)
+    val tables = searchTables.selectAll().targets
+    assertCollectionsEquals(arrayListOf(Users), tables)
+  }
 }
