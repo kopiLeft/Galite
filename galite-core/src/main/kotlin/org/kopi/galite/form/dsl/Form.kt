@@ -16,16 +16,25 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.kopi.galite.common.Action
+import java.io.File
+import java.io.IOException
+
 import org.kopi.galite.common.Actor
+import org.kopi.galite.common.BlockTriggerEvent
+import org.kopi.galite.common.FormBooleanTriggerEvent
+import org.kopi.galite.common.FormTrigger
+import org.kopi.galite.common.FormTriggerEvent
+import org.kopi.galite.common.FormVoidTriggerEvent
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Menu
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.VKConstants
 import org.kopi.galite.common.Window
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VDefaultActor
-import java.io.File
-import java.io.IOException
 
 /**
  * Represents a form.
@@ -114,6 +123,50 @@ abstract class Form : Window() {
     block.initialize(this)
     formBlocks.add(block)
     return block
+  }
+
+  /**
+   * Adds triggers to this form
+   *
+   * @param formTriggerEvents    the trigger events to add
+   * @param method               the method to execute when trigger is called
+   */
+  private fun <T> trigger(formTriggerEvents: Array<out FormTriggerEvent>, method: () -> T): Trigger {
+    val event = formEventList(formTriggerEvents)
+    val formAction = Action(null, method)
+    val trigger = FormTrigger(event, formAction)
+    triggers.add(trigger)
+    return trigger
+  }
+
+  /**
+   * Adds void triggers to this form
+   *
+   * @param formTriggerEvents  the trigger events to add
+   * @param method             the method to execute when trigger is called
+   */
+  fun trigger(vararg formTriggerEvents: FormVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(formTriggerEvents, method)
+  }
+
+  /**
+   * Adds boolean triggers to this form
+   *
+   * @param formTriggerEvents the trigger events to add
+   * @param method            the method to execute when trigger is called
+   */
+  fun trigger(vararg formTriggerEvents: FormBooleanTriggerEvent, method: () -> Boolean): Trigger {
+    return trigger(formTriggerEvents, method)
+  }
+
+  private fun formEventList(formTriggs: Array<out FormTriggerEvent>): Long {
+    var self = 0L
+
+    formTriggs.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
   }
 
   /**
@@ -239,7 +292,30 @@ abstract class Form : Window() {
 
     //TODO ----------begin-------------
     this.commands = arrayOf()
-    VKT_Triggers = arrayOf(IntArray(200))
-    //TODO ----------end-------------
+    this.handleTriggers(triggers)
+  }
+
+  /**
+   * Handling form triggers
+   */
+  fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
+    // FORM TRIGGERS
+    val formTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+    triggers.forEach { trigger ->
+      for (i in VConstants.TRG_TYPES.indices) {
+        if (trigger.events shr i and 1 > 0) {
+          formTriggerArray[i] = i
+          formTriggers[i] = trigger
+        }
+      }
+      VKT_Triggers[0] = formTriggerArray
+    }
+
+    // COMMANDS TRIGGERS
+    this@Form.commands.forEach {
+      val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+      // TODO : Add commands triggers here
+      VKT_Triggers.add(fieldTriggerArray)
+    }
   }
 }
