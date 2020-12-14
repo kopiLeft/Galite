@@ -757,10 +757,10 @@ abstract class VForm : VWindow, VConstants {
   // ----------------------------------------------------------------------
   // SHARED DATA MEMBERS
   // ----------------------------------------------------------------------
-  private var autofillActor: VActor? = null
-  private var editItemActor: VActor? = null
-  private var editItemActor_S: VActor? = null
-  private var newItemActor: VActor? = null
+  internal lateinit var autofillActor: VActor
+  internal lateinit var editItemActor: VActor
+  internal lateinit var editItemActor_S: VActor
+  internal lateinit var newItemActor: VActor
 
   // ---------------------------------------------------------------------
   // PREDEFINED COMMANDS
