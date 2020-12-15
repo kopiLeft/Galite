@@ -16,17 +16,12 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VDictionaryForm
 
 /**
  * Represents a dictionary form.
  */
 abstract class DictionaryForm : Form() {
-
-  fun recursiveQuery(formBlock: FormBlock) {
-    Commands.recursiveQuery(formBlock.vBlock)
-  }
 
   /** Form model */
   override val model: VDictionaryForm by lazy {

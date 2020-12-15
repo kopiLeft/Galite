@@ -70,6 +70,6 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
   }
 }
 
-fun main(){
+fun main() {
   Application.runForm(FormWithBlockTrigger)
 }
