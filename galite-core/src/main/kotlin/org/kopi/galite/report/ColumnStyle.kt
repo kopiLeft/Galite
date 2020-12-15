@@ -24,7 +24,7 @@ import java.io.Serializable
 
 import org.kopi.galite.util.base.InconsistencyException
 
-class ColumnStyle : Constants, Serializable {
+class ColumnStyle : Serializable {
 
   var foregroundCode = 0
   var backgroundCode = 0
