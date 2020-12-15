@@ -2661,8 +2661,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun selectLookups(recno: Int) {
     if (tables != null) {
-      for (i in 1 until tables!!.size) {
-        selectLookup(i, recno)
+      for (table in tables!!) {
+        selectLookup(table, recno)
       }
     }
   }
@@ -2675,14 +2675,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     TODO()
   }
 
-  protected fun selectLookup(table: Int, recno: Int) {
-    TODO()
-  }
-
   /*
    *
    */
-  protected fun selectLookup_(table: Table, recno: Int) {
+  protected fun selectLookup(table: Table, recno: Int) {
     val columns = mutableListOf<Column<*>>()
     val conditions = mutableListOf<Op<Boolean>>()
 
