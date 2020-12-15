@@ -17,17 +17,17 @@
 
 package org.kopi.galite.exceptions
 
-import org.kopi.galite.chart.Measure
+import org.kopi.galite.chart.ChartMeasure
 
 import java.lang.IllegalArgumentException
 
 /**
- * Thrown to indicate that a [Measure] value has not been provided to a dimension.
+ * Thrown to indicate that a [ChartMeasure] value has not been provided to a dimension.
  *
  * @param measure        the measure
  * @param dimensionValue the the dimension value
  *
  */
-class MissingMeasureException(measure: Measure<*>, dimensionValue: Comparable<*>?) : IllegalArgumentException() {
+class MissingMeasureException(measure: ChartMeasure<*>, dimensionValue: Comparable<*>?) : IllegalArgumentException() {
   override val message = "Missing measure ${measure.label} for the dimension $dimensionValue"
 }

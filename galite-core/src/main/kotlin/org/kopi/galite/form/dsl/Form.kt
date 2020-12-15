@@ -50,9 +50,6 @@ abstract class Form : Window() {
   /** Form's menus. */
   val menus = mutableListOf<Menu>()
 
-  /** the help text TODO: Move to super class */
-  var help: String? = null
-
   /**
    * Adds a new actor to this form.
    *
@@ -139,10 +136,10 @@ abstract class Form : Window() {
     return trigger(formTriggerEvents, method)
   }
 
-  private fun formEventList(formTriggs: Array<out FormTriggerEvent>): Long {
+  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent>): Long {
     var self = 0L
 
-    formTriggs.forEach { trigger ->
+    formTriggerEvents.forEach { trigger ->
       self = self or (1L shl trigger.event)
     }
 
@@ -222,15 +219,6 @@ abstract class Form : Window() {
                                                formBlocks.toTypedArray()
     )
   }
-
-  /**
-   * Returns the qualified source file name where this object is defined.
-   */
-  protected val sourceFile: String
-    get() {
-      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
-      return basename + this.javaClass.simpleName
-    }
 
   /** Form model */
   override val model: VForm by lazy {

@@ -36,9 +36,7 @@ class FormBlockIndex(val ident: String, val message: String, indexNumber: Int) {
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genBlockIndex(ident, message)
   }

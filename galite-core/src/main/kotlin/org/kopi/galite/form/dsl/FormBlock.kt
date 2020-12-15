@@ -19,6 +19,10 @@ package org.kopi.galite.form.dsl
 
 import java.awt.Point
 
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.BlockBooleanTriggerEvent
@@ -37,8 +41,7 @@ import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VCommand
-
-import org.jetbrains.exposed.sql.Table
+import org.kopi.galite.visual.WindowController
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -79,6 +82,7 @@ open class FormBlock(var buffer: Int,
   private var maxRowPos = 0
   private var maxColumnPos = 0
   private var displayedFields = 0
+  lateinit var form: Form
 
   /** Blocks's fields. */
   val blockFields = mutableListOf<FormField<*>>()
@@ -342,6 +346,7 @@ open class FormBlock(var buffer: Int,
    * @param window        the actual context of analyse
    */
   override fun initialize(window: Window) {
+    this.form = window as Form
     val bottomRight = Point(0, 0)
 
     blockFields.forEach { field ->
@@ -409,9 +414,7 @@ open class FormBlock(var buffer: Int,
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   override fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genBlock(ident,
                                                 title,
@@ -420,6 +423,9 @@ open class FormBlock(var buffer: Int,
                                                 blockFields.toTypedArray())
   }
 
+  fun showChart(chart: Chart) {
+    WindowController.windowController.doNotModal(chart);
+  }
 
   /** The block model */
   lateinit var vBlock: VBlock

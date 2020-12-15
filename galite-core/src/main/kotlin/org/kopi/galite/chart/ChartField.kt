@@ -19,10 +19,23 @@ package org.kopi.galite.chart
 
 import java.io.Serializable
 
+import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.field.Field
+
 /**
  * A chart column.
  */
-abstract class Column : Serializable {
-  /** The column's label */
-  var label: String = ""
+abstract class ChartField<T : Comparable<T>?>(domain: Domain<T>) : Field<T>(domain), Serializable {
+  val ident get() = label!!  // TODO must me resolved from variable name and moved to super class.
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!! COMMENT ME
+   */
+  override fun genLocalization(writer: LocalizationWriter) {
+    (writer as ChartLocalizationWriter).genField(ident, label, help)
+  }
 }
