@@ -32,7 +32,6 @@ import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.LowerCase
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.VarCharColumnType
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -1865,22 +1864,16 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       val exposedQuery = table.slice(sliceList).select(condition).orderBy(firstColumn)
 
         try {
-          val columns = mutableListOf<String>()
           transaction {
             exposedQuery.forEach {
-              println(it[firstColumn])
-              println("*********Inside VField ***********")
+              val columns = mutableListOf<String>()
               for (i in 0 until list!!.columnCount()) {
-                columns.add(list!!.getColumn(i).formatObject(exposedQuery.first()[sliceList[i]]) as String)
+                val aux = list!!.getColumn(i).formatObject(it[sliceList[i]]) as String
+                columns.add(aux)
               }
               suggestions.add(columns.toTypedArray())
             }
-
-           // while (exposedQuery.execute(this)!!.next()){
-
-          //  }
           }
-
         } catch (e: SQLException) {
           try {
           } catch (abortEx: SQLException) {
@@ -1897,7 +1890,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             throw VExecFailedException(abortEx)
           }
         }
-
       suggestions.toTypedArray()
     }
   }
