@@ -152,7 +152,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
           }
         }
       }
-      return if(fetchRecordCondition.isEmpty()) null else fetchRecordCondition.compoundAnd()
+      return if (fetchRecordCondition.isEmpty()) null else fetchRecordCondition.compoundAnd()
     }
   }
 
@@ -176,7 +176,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     // add remaining tables (not joined tables) to the list of tables.
     for (i in 1 until tables!!.size) {
       if (!isJoinedTable(tables!![i])) {
-        searchTablesCondition.join(tables!![i], JoinType.INNER ) {
+        searchTablesCondition.join(tables!![i], JoinType.INNER) {
           fields.map { getSearchCondition(it) }.compoundAnd()
         }
       }

@@ -30,11 +30,11 @@ import org.jetbrains.exposed.sql.Column
  * @param nullable                true if this column is nullable.
  */
 class FormFieldColumn<T : Comparable<T>?>(val column: Column<T>,
-                                         val corr: String,
-                                         private val ident: String,
-                                         private val field: FormField<T>,
-                                         private val isKey: Boolean,
-                                         val nullable: Boolean) {
+                                          val corr: String,
+                                          private val ident: String,
+                                          private val field: FormField<T>,
+                                          private val isKey: Boolean,
+                                          val nullable: Boolean) {
   init {
     initialize()
   }

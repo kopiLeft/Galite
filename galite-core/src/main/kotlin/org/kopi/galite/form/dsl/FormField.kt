@@ -58,10 +58,10 @@ import org.kopi.galite.type.Week
  * @param alias                the alias of this field
  */
 class FormField<T : Comparable<T>?>(val block: FormBlock,
-                                   override val domain: Domain<T>,
-                                   private val fieldIndex: Int,
-                                   initialAccess: Int,
-                                   var position: FormPosition? = null) : Field<T>(domain) {
+                                    override val domain: Domain<T>,
+                                    private val fieldIndex: Int,
+                                    initialAccess: Int,
+                                    var position: FormPosition? = null) : Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
