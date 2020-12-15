@@ -17,6 +17,7 @@
 package org.kopi.galite.tests
 
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.Registry
@@ -25,7 +26,7 @@ import org.kopi.vkopi.lib.ui.swing.visual.JApplication
 /**
  * TestBase class for all tests.
  */
-open class JApplicationTestBase : TestBase() {
+open class JApplicationTestBase : DBSchemaTest() {
   class GaliteRegistry : Registry("Galite", null)
 
   class GaliteApplication() : JApplication(GaliteRegistry()) {

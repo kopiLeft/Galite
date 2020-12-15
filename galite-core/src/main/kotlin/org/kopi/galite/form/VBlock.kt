@@ -1437,7 +1437,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val table = getSearchTables_()
     val condition = mutableListOf<Op<Boolean>>()
 
-    condition.add(Op.build { idColumn eq id  })
+    condition.add(Op.build { idColumn eq id })
     if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
       condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
     }
@@ -2711,18 +2711,17 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
     }
     if (condition.isNotEmpty()) {
-      val query = tables!![0].slice(idColumn).select{ condition.compoundAnd() }
+      try {
+        val result = tables!![0].slice(idColumn).select{ condition.compoundAnd() }.single()
 
-      transaction {
-        if (query.execute(this)!!.next()) {
-          if (query.first()[idColumn] != id) {
-            form.setActiveBlock(this@VBlock)
-            activeRecord = recno
-            gotoFirstField()
-            throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
-          }
-          assert(!query.execute(this)!!.next()) { "too many rows" }
+        if (result[idColumn] != id) {
+          form.setActiveBlock(this@VBlock)
+          activeRecord = recno
+          gotoFirstField()
+          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
         }
+      } catch (illegalArgumentException: IllegalArgumentException) {
+        error("too many rows")
       }
     }
   }
