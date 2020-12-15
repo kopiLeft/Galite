@@ -56,6 +56,6 @@ object FormWithReport : ReportSelectionForm() {
   }
 }
 
-fun main(){
+fun main() {
   Application.runForm(FormWithReport)
 }

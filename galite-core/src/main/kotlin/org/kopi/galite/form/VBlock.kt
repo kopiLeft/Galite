@@ -1482,35 +1482,33 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         continue
       }
       try {
-        while (true) {
+        try {
+          fetchPosition = pos
+          fetchRecord(fetchBuffer[pos])
+          return
+        } catch (e: VException) {
           try {
-            fetchPosition = pos
-            fetchRecord(fetchBuffer[pos])
-            return
-          } catch (e: VException) {
-            try {
-            } catch (abortEx: VException) {
-              throw abortEx
-            }
-          } catch (e: SQLException) {
-            try {
-            } catch (abortEx: DBDeadLockException) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-            } catch (abortEx: DBInterruptionException) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-            } catch (abortEx: SQLException) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: Error) {
-            try {
-            } catch (abortEx: Error) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: RuntimeException) {
-            try {
-            } catch (abortEx: RuntimeException) {
-              throw VExecFailedException(abortEx)
-            }
+          } catch (abortEx: VException) {
+            throw abortEx
+          }
+        } catch (e: SQLException) {
+          try {
+          } catch (abortEx: DBDeadLockException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: DBInterruptionException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: SQLException) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: Error) {
+          try {
+          } catch (abortEx: Error) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: RuntimeException) {
+          try {
+          } catch (abortEx: RuntimeException) {
+            throw VExecFailedException(abortEx)
           }
         }
       } catch (e: VException) {
