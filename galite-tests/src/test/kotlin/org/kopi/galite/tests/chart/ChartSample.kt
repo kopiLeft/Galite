@@ -26,11 +26,11 @@ object ChartSample: Chart()  {
   override val locale = Locale.FRANCE
   override val title = "area/population per city"
 
-  val area = measure(Domain<Int>(10)) {
+  val area = measure(Domain<Int?>(10)) {
     label = "area (ha)"
   }
 
-  val population = measure(Domain<Int>(10)) {
+  val population = measure(Domain<Int?>(10)) {
     label = "population"
   }
 

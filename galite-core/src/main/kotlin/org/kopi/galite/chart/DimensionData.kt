@@ -25,7 +25,7 @@ class DimensionData<T : Comparable<T>?>(val value: T) {
   /**
    * Measures with corresponding values in a dimension value
    */
-  var measureList = mutableMapOf<ChartMeasure<*>, Number>()
+  var measureList = mutableMapOf<ChartMeasure<*>, Number?>()
 
   /**
    * Add a measure with it's value to a dimension value
@@ -33,7 +33,7 @@ class DimensionData<T : Comparable<T>?>(val value: T) {
    * @param measure the measure to add
    * @param measureValue the corresponding value
    */
-  operator fun <V> set(measure: ChartMeasure<V>, measureValue: V) where V : Comparable<V>, V : Number {
+  operator fun <V> set(measure: ChartMeasure<V>, measureValue: V) where V : Comparable<V>?, V : Number? {
     measureList.putIfAbsent(measure, measureValue)
   }
 
@@ -53,7 +53,7 @@ class DimensionData<T : Comparable<T>?>(val value: T) {
    * Get list of measure values
    * @return list of values
    */
-  fun getMeasureValues(): List<Number> = measureList.map {
+  fun getMeasureValues(): List<Number?> = measureList.map {
     it.value
   }
 }

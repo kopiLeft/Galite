@@ -28,6 +28,6 @@ import java.lang.IllegalArgumentException
  * @param dimensionValue the the dimension value
  *
  */
-class MissingMeasureException(measure: ChartMeasure<*>, dimensionValue: Comparable<*>) : IllegalArgumentException() {
+class MissingMeasureException(measure: ChartMeasure<*>, dimensionValue: Comparable<*>?) : IllegalArgumentException() {
   override val message = "Missing measure ${measure.label} for the dimension $dimensionValue"
 }

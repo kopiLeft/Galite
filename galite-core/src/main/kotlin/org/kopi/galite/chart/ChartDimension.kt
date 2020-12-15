@@ -30,7 +30,7 @@ import java.lang.RuntimeException
  *
  * @param domain dimension domain.
  */
-open class ChartDimension<T : Comparable<T>>(domain: Domain<T>) : ChartField<T>(domain) {
+open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>(domain) {
 
   /**
    * Dimension values

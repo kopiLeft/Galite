@@ -26,7 +26,7 @@ import org.kopi.galite.visual.Color
  *
  * @param domain dimension domain.
  */
-open class ChartMeasure<T>(domain: Domain<T>) : ChartField<T>(domain) where T : Comparable<T>, T : Number {
+open class ChartMeasure<T>(domain: Domain<T>) : ChartField<T>(domain) where T : Comparable<T>?, T : Number? {
 
   /**Measure's color in chart */
   lateinit var color: Color

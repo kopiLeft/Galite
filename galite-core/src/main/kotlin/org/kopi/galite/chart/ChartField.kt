@@ -26,7 +26,7 @@ import org.kopi.galite.field.Field
 /**
  * A chart column.
  */
-abstract class ChartField<T : Comparable<T>>(domain: Domain<T>) : Field<T>(domain), Serializable {
+abstract class ChartField<T : Comparable<T>?>(domain: Domain<T>) : Field<T>(domain), Serializable {
   val ident get() = label!!  // TODO must me resolved from variable name and moved to super class.
 
   // ----------------------------------------------------------------------
