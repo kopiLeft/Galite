@@ -128,6 +128,6 @@ class CommandesC(fournisseur: Int?): Chart() {
   override val title: String = "Fournisseur"
 }
 
-fun main(){
+fun main() {
   Application.runForm(formName = FormSample)
 }

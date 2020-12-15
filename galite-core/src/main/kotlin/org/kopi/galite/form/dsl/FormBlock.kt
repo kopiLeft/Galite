@@ -36,6 +36,7 @@ import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.db.Users
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
@@ -395,6 +396,20 @@ open class FormBlock(var buffer: Int,
   fun getTableNum(table: FormBlockTable): Int {
     val indexOfTable = blockTables.indexOf(table)
     return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException()
+  }
+
+  /**
+   * Saves current block (insert or update)
+   */
+  fun saveBlock() {
+    Commands.saveBlock(vBlock)
+  }
+
+  /**
+   * Menu query block, fetches selected record.
+   */
+  fun DictionaryForm.recursiveQuery() {
+    Commands.recursiveQuery(vBlock)
   }
 
   // ----------------------------------------------------------------------

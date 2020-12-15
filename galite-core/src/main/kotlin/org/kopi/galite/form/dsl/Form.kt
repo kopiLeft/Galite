@@ -21,7 +21,6 @@ import java.io.File
 import java.io.IOException
 
 import org.kopi.galite.common.Actor
-import org.kopi.galite.common.BlockTriggerEvent
 import org.kopi.galite.common.FormBooleanTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.FormTriggerEvent
