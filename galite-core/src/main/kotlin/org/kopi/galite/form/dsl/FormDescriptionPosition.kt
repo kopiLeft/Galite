@@ -26,7 +26,7 @@ import org.kopi.galite.form.VPosition
  *
  * @param field                the master field
  */
-class FormDescriptionPosition<T : Comparable<T>>(val field: FormField<T>,
+class FormDescriptionPosition<T : Comparable<T>?>(val field: FormField<T>,
                                                  private var chartPos: Int = -1) : FormPosition() {
 
   /**

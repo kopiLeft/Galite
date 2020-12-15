@@ -26,7 +26,7 @@ import kotlin.reflect.KClass
  * @param height            the height in char of this field
  * @param visibleHeight     the visible height in char of this field.
  */
-open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = null, val visibleHeight: Int? = null) {
+open class Domain<T : Comparable<T>?>(val width: Int? = null, val height: Int? = null, val visibleHeight: Int? = null) {
   /**
    * The type of this domain.
    */
@@ -35,7 +35,7 @@ open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = 
   /**
    * Determines the column data type
    */
-  var kClass: KClass<T>? = null
+  var kClass: KClass<*>? = null
 
   /**
    * Allows to define the possible codes that the domain can take

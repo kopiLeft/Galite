@@ -24,7 +24,7 @@ import org.kopi.galite.domain.Domain
  *
  * @param domain dimension domain.
  */
-open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Column() {
+open class Dimension<T : Comparable<T>?>(domain: Domain<T>? = null) : Column() {
 
   /**
    * Dimension values

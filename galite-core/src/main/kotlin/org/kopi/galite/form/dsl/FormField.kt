@@ -57,7 +57,7 @@ import org.kopi.galite.type.Week
  * @param triggers             the triggers executed by this field
  * @param alias                the alias of this field
  */
-class FormField<T : Comparable<T>>(val block: FormBlock,
+class FormField<T : Comparable<T>?>(val block: FormBlock,
                                    override val domain: Domain<T>,
                                    private val fieldIndex: Int,
                                    initialAccess: Int,
