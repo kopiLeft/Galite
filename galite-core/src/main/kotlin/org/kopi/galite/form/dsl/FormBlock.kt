@@ -34,7 +34,6 @@ import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
-import org.kopi.galite.db.Users
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
@@ -415,9 +414,7 @@ open class FormBlock(var buffer: Int,
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   override fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genBlock(ident,
                                                 title,
@@ -427,11 +424,6 @@ open class FormBlock(var buffer: Int,
   }
 
   fun showChart(chart: Chart) {
-    transaction {
-      Users.selectAll().map {
-        it[Users.id]
-      }
-    }
     WindowController.windowController.doNotModal(chart);
   }
 

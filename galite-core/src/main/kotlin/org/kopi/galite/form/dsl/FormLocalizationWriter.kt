@@ -62,9 +62,6 @@ class FormLocalizationWriter : LocalizationWriter() {
     // do not pop: this is the root element
   }
 
-  /**
-   * FIX:taoufik
-   */
   fun genPage(ident: String?, title: String?) {
     val self = Element("page")
     self.setAttribute("ident", ident)
@@ -73,8 +70,7 @@ class FormLocalizationWriter : LocalizationWriter() {
   }
 
   /**
-   * FIX:taoufik
-   * !!!FIX:taoufik handle NEW PAGE
+   * !!!FIXME handle NEW PAGE
    */
   fun genBlock(name: String?,
                title: String?,
@@ -107,9 +103,6 @@ class FormLocalizationWriter : LocalizationWriter() {
     peekNode(null).addContent(self)
   }
 
-  /**
-   * !!!FIX:taoufik
-   */
   fun genField(ident: String?, label: String?, help: String?) {
     val self = Element("field")
     self.setAttribute("ident", ident)

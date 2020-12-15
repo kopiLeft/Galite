@@ -335,9 +335,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   override fun genLocalization(writer: LocalizationWriter) {
     if (!isInternal) {
       (writer as FormLocalizationWriter).genField(label, label, help)

@@ -57,9 +57,7 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   fun genLocalization(writer: LocalizationWriter) {
     writer.genActorDefinition(ident, label, help)
   }

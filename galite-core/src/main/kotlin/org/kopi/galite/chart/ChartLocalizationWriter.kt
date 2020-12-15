@@ -27,9 +27,7 @@ class ChartLocalizationWriter : LocalizationWriter() {
   // ----------------------------------------------------------------------
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
-  /**
-   *
-   */
+
   fun genChart(title: String?,
                help: String?,
                fields: List<ChartField<*>>) {
@@ -48,9 +46,6 @@ class ChartLocalizationWriter : LocalizationWriter() {
 
   // ----------------------------------------------------------------------
 
-  /**
-   * !!!FIX:taoufik
-   */
   fun genField(ident: String?, label: String?, help: String?) {
     val self = Element("field")
     self.setAttribute("ident", ident)

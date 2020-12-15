@@ -106,6 +106,7 @@ abstract class Chart() : Window() {
    * TODO!
    */
   open fun addDefaultChartCommands() {
+    TODO("Add the above commands")
     /*commands.add(Command("Quit", VConstants.MOD_ANY))
     commands.add(Command("Print", VConstants.MOD_ANY))
     commands.add(Command("PrintOptions", VConstants.MOD_ANY))
@@ -165,7 +166,9 @@ abstract class Chart() : Window() {
   }
 
   /**
-   * !!! COMMENT ME
+   * generates xml localization file for this chart.
+   *
+   * @param writer the localization writer responsible for generating the xml file.
    */
   fun genLocalization(writer: LocalizationWriter) {
     (writer as ChartLocalizationWriter).genChart(title,
@@ -232,7 +235,6 @@ abstract class Chart() : Window() {
 
         super.dimensions = listOf(this@Chart.dimension).map { it.model }.toTypedArray()
         super.measures = this@Chart.measures.map { it.model }.toTypedArray()
-
 
         addChartLines()
 
