@@ -29,7 +29,6 @@ import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Menu
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
-import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
