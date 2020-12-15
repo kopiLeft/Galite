@@ -20,7 +20,7 @@ package org.kopi.galite.chart
 /**
  * Represents the value of a dimension
  */
-class DimensionData<T : Comparable<T>>(val value: T) {
+class DimensionData<T : Comparable<T>?>(val value: T) {
 
   /**
    * Measures with corresponding values in a dimension value

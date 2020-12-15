@@ -30,7 +30,7 @@ import org.kopi.galite.exceptions.InvalidValueException
  * It allows optionally to define a constraint that makes restrictions
  * on the set of allowed values.
  */
-class ListDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
+class ListDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
   var query: Query? = null
 
   /**

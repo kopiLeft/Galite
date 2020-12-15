@@ -756,7 +756,8 @@ abstract class VForm : VWindow, VConstants {
   internal lateinit var pages: Array<String?>
   internal var help: String? = null //the name of this field
   internal val VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
-  internal val formTriggers =  mutableMapOf<Int, Trigger>()
+  internal val formTriggers = mutableMapOf<Int, Trigger>()
+
   // dynamic data
   private val blockMoveAllowed = true
   private var activeBlock: VBlock? = null

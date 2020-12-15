@@ -1437,7 +1437,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val table = getSearchTables_()
     val condition = mutableListOf<Op<Boolean>>()
 
-    condition.add(Op.build { idColumn eq id  })
+    condition.add(Op.build { idColumn eq id })
     if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
       condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
     }
@@ -2029,7 +2029,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val ids = IntArray(fetchSize)
     var rows = 0
 
-    val query = if(conditions == null) {
+    val query = if (conditions == null) {
       tables!!.slice(columns).selectAll().orderBy(*orderBys.toTypedArray())
     } else {
       tables!!.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())

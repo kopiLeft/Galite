@@ -24,7 +24,7 @@ import org.kopi.galite.visual.Color
  *
  * @param domain dimension domain.
  */
-open class Measure<T>(domain: Domain<T>? = null) : Column() where T : Comparable<T>, T : Number {
+open class Measure<T>(domain: Domain<T>? = null) : Column() where T : Comparable<T>?, T : Number {
 
   /**Measure's color in chart */
   lateinit var color: Color

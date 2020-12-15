@@ -39,7 +39,7 @@ abstract class Chart() : Window() {
    * @param domain the dimension domain.
    * @param init   used to initialize the domain with measures values.
    */
-  fun <T : Comparable<T>> dimension(domain: Domain<T>, init: Dimension<T>.() -> Unit): Dimension<T> {
+  fun <T : Comparable<T>?> dimension(domain: Domain<T>, init: Dimension<T>.() -> Unit): Dimension<T> {
     val chartDimension = Dimension(domain)
     chartDimension.init()
     dimension = chartDimension
@@ -52,7 +52,7 @@ abstract class Chart() : Window() {
    * @param domain the dimension domain.
    * @param init   used to initialize the measure.
    */
-  fun <T> measure(domain: Domain<T>, init: Measure<T>.() -> Unit): Measure<T> where T : Comparable<T>, T : Number {
+  fun <T> measure(domain: Domain<T>, init: Measure<T>.() -> Unit): Measure<T> where T : Comparable<T>?, T : Number {
     val chartMeasure = Measure(domain)
     chartMeasure.init()
     this.measures.add(chartMeasure)
