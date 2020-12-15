@@ -110,7 +110,7 @@ class ListDomainTests {
     }
 
     // Creating a field with the domain StringTestType
-    val field = ReportField(StringTestType("A"))
+    val field = ReportField(StringTestType("A").also { it.kClass = String::class })
 
     // test with a valid value
     val checkValid = field.checkValue("Abcdef")

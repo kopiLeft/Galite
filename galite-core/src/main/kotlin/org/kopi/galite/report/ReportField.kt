@@ -20,11 +20,6 @@ package org.kopi.galite.report
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VTrigger
 
@@ -69,29 +64,6 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>) : Field<T>
     }
 
   var groupID = -1
-
-  // TODO add Fixed types
-  val model: VReportColumn =
-          when (domain.kClass) {
-            Int::class ->
-              VIntegerColumn(label, options, align.value, groupID, null, domain.width ?: 0, null)
-            String::class ->
-              VStringColumn(label, options, align.value, groupID, null, domain.width ?: 0,
-                            domain.height ?: 0, null)
-            Boolean::class ->
-              VBooleanColumn(label, options, align.value, groupID, null, domain.width ?: 0, null)
-            Date::class, java.util.Date::class ->
-              VDateColumn(label, options, align.value, groupID, null, domain.width ?: 0, null)
-            Month::class ->
-              VMonthColumn(label, options, align.value, groupID, null, domain.width ?: 0, null)
-            Week::class ->
-              VWeekColumn(label, options, align.value, groupID, null, domain.width ?: 0, null)
-            Time::class ->
-              VTimeColumn(label, options, align.value, groupID, null, domain.width ?: 0, null)
-            Timestamp::class ->
-              VTimestampColumn(label, options, align.value, groupID, null, domain.width ?: 0, null)
-            else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-          }
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
