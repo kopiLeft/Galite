@@ -18,6 +18,8 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
+import org.kopi.galite.db.Modules
+import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
@@ -30,7 +32,8 @@ object FormWithList : DictionaryForm() {
   override val title = "form for test"
 
   val action = menu("Action")
-  val testPage = page("test page")
+  val testPage1 = page("test page1")
+  val testPage2 = page("test page2")
 
   val list = actor(
     ident = "list",
@@ -42,28 +45,46 @@ object FormWithList : DictionaryForm() {
     icon = "list"  // icon is optional here
   }
 
-  val block = insertBlock(BlockSample, testPage) {
+  val save = actor(
+    ident = "save",
+    menu = action,
+    label = "save",
+    help = "save",
+  ) {
+    key = Key.F2   // key is optional here
+    icon = "save"  // icon is optional here
+  }
+
+  val block = insertBlock(BlockWithManyTables, testPage1) {
     command(item = list) {
       this.name = "list"
       action = {
         println("-----------Generating list-----------------")
-        recursiveQuery(BlockSample)
+        recursiveQuery()
+      }
+    }
+
+    command(item = save) {
+      this.name = "save"
+      action = {
+        println("-----------Saving-----------------")
+        saveBlock()
       }
     }
   }
 
-  val block2 = insertBlock(BlockSample, testPage) {
+  val block2 = insertBlock(BlockSample, testPage2) {
     command(item = list) {
       this.name = "list"
       action = {
         println("-----------Generating list-----------------")
-        recursiveQuery(BlockSample)
+        recursiveQuery()
       }
     }
   }
 }
 
-object BlockSample : FormBlock(1, 1, "Test", "Test block") {
+object BlockSample : FormBlock(1, 1, "BlockSample", "Test block") {
   val u = table(Users)
   val i = index(message = "ID should be unique")
 
@@ -85,6 +106,32 @@ object BlockSample : FormBlock(1, 1, "Test", "Test block") {
   }
 }
 
-fun main(){
+object BlockWithManyTables : FormBlock(1, 20, "BlockWithManyTables", "Test block") {
+  val u = table(Users)
+  val m = table(Modules)
+  val r = table(UserRights)
+
+  val uid = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The user id"
+    columns(u.id, r.user)
+  }
+
+  val mid = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The module id"
+    columns(m.id, r.module)
+  }
+
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "name"
+    help = "The user name"
+    columns(u.name) {
+      priority = 1
+    }
+  }
+}
+
+fun main() {
   Application.runForm(formName = FormWithList)
 }

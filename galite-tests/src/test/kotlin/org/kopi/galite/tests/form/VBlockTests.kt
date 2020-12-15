@@ -31,11 +31,12 @@ class VBlockTests : JApplicationTestBase() {
     initDatabase()
 
     FormWithList.model
-    FormWithList.block.id[0] = 1
-    FormWithList.block.name[0] = "administrator"
+    FormWithList.block2.id[0] = 1
+    FormWithList.block2.name[0] = "administrator"
+
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        FormWithList.block.vBlock.checkUniqueIndices(0)
+        FormWithList.block2.vBlock.checkUniqueIndices(0)
       }
     }
     assertEquals("VIS-00014: ID should be unique", vExecFailedException.message)

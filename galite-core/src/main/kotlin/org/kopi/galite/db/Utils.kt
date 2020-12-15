@@ -53,14 +53,14 @@ class Utils {
         NULL_LITERAL
       } else {
         val b = StringBuffer()
-       // b.append('\'')
+       // b.append('\'') TO CHECK LATER !
         for (element in l) {
           if (element == '\'') {
-          //  b.append('\'')
+          //  b.append('\'')  TO CHECK LATER !
           }
           b.append(element)
         }
-       // b.append('\'')
+       // b.append('\'')  TO CHECK LATER !
         b.toString()
       }
     }
