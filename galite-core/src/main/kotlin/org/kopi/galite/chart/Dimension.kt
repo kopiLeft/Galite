@@ -37,7 +37,7 @@ open class Dimension<T : Comparable<T>?>(domain: Domain<T>? = null) : Column() {
    * @param value the dimension value
    */
   fun add(value: T, init: (DimensionData<T>.() -> Unit)? = null) {
-    val dimensionValue: DimensionData<T> = DimensionData<T>(value)
+    val dimensionValue: DimensionData<T> = DimensionData(value)
     if (init != null) {
       dimensionValue.init()
     }
