@@ -173,9 +173,9 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>,
-                                                  position: FormPosition,
-                                                  init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>?> mustFill(domain: Domain<T>,
+                                                   position: FormPosition,
+                                                   init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_MUSTFILL, position)
   }
 
@@ -188,9 +188,9 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a VISIT field.
    */
-  inline fun <reified T : Comparable<T>> visit(domain: Domain<T>,
-                                               position: FormPosition,
-                                               init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>?> visit(domain: Domain<T>,
+                                                position: FormPosition,
+                                                init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_VISIT, position)
   }
 
@@ -203,9 +203,9 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a SKIPPED field.
    */
-  inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>,
-                                                 position: FormPosition,
-                                                 init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>?> skipped(domain: Domain<T>,
+                                                  position: FormPosition,
+                                                  init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_SKIPPED, position)
   }
 
@@ -218,17 +218,17 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T : Comparable<T>> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>?> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_HIDDEN)
   }
 
   /**
    * Initializes a field.
    */
-  inline fun <reified T : Comparable<T>> initField(domain: Domain<T>,
-                                                   init: FormField<T>.() -> Unit,
-                                                   access: Int,
-                                                   position: FormPosition? = null): FormField<T> {
+  inline fun <reified T : Comparable<T>?> initField(domain: Domain<T>,
+                                                    init: FormField<T>.() -> Unit,
+                                                    access: Int,
+                                                    position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
@@ -298,7 +298,7 @@ open class FormBlock(var buffer: Int,
    *
    * @param field                the field
    */
-  fun <T : Comparable<T>> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
+  fun <T : Comparable<T>?> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
 
   /**
    * creates and returns a form block index. It is used to define a value in the database

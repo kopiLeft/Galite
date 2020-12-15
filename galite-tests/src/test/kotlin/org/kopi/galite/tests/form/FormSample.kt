@@ -34,7 +34,7 @@ import org.kopi.galite.form.dsl.Key
 
 object User: Table() {
   val id = integer("ID")
-  val name = varchar("NAME", 20)
+  val name = varchar("NAME", 20).nullable()
   val age = integer("AGE")
 }
 
@@ -104,7 +104,7 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)

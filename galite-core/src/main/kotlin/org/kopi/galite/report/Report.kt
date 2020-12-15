@@ -48,7 +48,7 @@ abstract class Report : Window() {
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
+  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
     val field = ReportField(domain)
     field.init()
@@ -96,7 +96,7 @@ abstract class Report : Window() {
    *
    * @param rowNumber the index of the desired row.
    */
-  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any> = reportRows[rowNumber].data
+  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any?> = reportRows[rowNumber].data
 
   /**
    * Returns rows of data for a specific [field].
