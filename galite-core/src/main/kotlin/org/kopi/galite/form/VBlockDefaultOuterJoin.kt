@@ -27,12 +27,12 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.compoundAnd
 
-open class VBlockDefaultOuterJoin(block: VBlock) {
+class VBlockDefaultOuterJoin(block: VBlock) {
 
   /**
    * constructs an outer join tree.
    */
-  fun getJoinCondition(rootTable: Int, table: Int): Join {
+  private fun getJoinCondition(rootTable: Int, table: Int): Join {
     var joinTables: Join? = null
     var field: VField
 
