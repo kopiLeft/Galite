@@ -20,13 +20,17 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
-import java.lang.reflect.GenericDeclaration
-import java.lang.reflect.TypeVariable
-import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
@@ -51,36 +55,7 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import org.jetbrains.exposed.sql.ExpressionWithColumnType
-import org.jetbrains.exposed.sql.GreaterEqOp
-import org.jetbrains.exposed.sql.GreaterOp
-import org.jetbrains.exposed.sql.IsNotNullOp
-import org.jetbrains.exposed.sql.IsNullOp
-import org.jetbrains.exposed.sql.LessEqOp
-import org.jetbrains.exposed.sql.LessOp
-import org.jetbrains.exposed.sql.LikeOp
-import org.jetbrains.exposed.sql.NeqOp
-import org.jetbrains.exposed.sql.NotLikeOp
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.QueryParameter
-import org.jetbrains.exposed.sql.booleanParam
-import org.jetbrains.exposed.sql.byteParam
-import org.jetbrains.exposed.sql.doubleParam
-import org.jetbrains.exposed.sql.floatParam
-import org.jetbrains.exposed.sql.intParam
-import org.jetbrains.exposed.sql.longParam
-import org.jetbrains.exposed.sql.shortParam
-import org.jetbrains.exposed.sql.stringParam
-import org.jetbrains.exposed.sql.ubyteParam
-import org.jetbrains.exposed.sql.uintParam
-import org.jetbrains.exposed.sql.ulongParam
-import org.jetbrains.exposed.sql.ushortParam
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ComparisonOp
-import org.jetbrains.exposed.sql.EqOp
-import org.jetbrains.exposed.sql.Expression
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -121,7 +96,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     this.list = list
     this.columns = columns
     if (columns == null) {
-      this.columns = arrayOfNulls<VColumn>(0)
+      this.columns = arrayOfNulls(0)
     }
     this.indices = indices
     this.priority = priority
@@ -645,7 +620,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the column name in the table with specified correlation.
    * returns null if the field has no access to this table.
    */
-  fun lookupColumn(corr: Int): String? = columns!!.find { corr == it!!.getTable() }?.name
+  fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
 
   /**
    * Returns true if the column is a key of the table with specified correlation.
@@ -771,8 +746,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  open fun getSearchCondition(): Op<Boolean>? {
-    TODO()
+  open fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? {
+    // TODO
+    return null
   }
 
   // ----------------------------------------------------------------------
@@ -1058,8 +1034,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     setQuery(block!!.currentRecord, query, column)
   }
 
-  fun setQuery_(query: org.jetbrains.exposed.sql.Query, column: Column<*>?) {
-    TODO()
+  fun setQuery_(query: ResultRow, column: Column<*>) {
+    setQuery_(block!!.currentRecord, query, column)
   }
 
   /**
@@ -1070,6 +1046,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun setQuery(record: Int, query: Query, column: Int) {
     setObject(record, retrieveQuery(query, column))
+  }
+
+  fun setQuery_(record: Int, query: ResultRow, column: Column<*>) {
+    setObject(record, retrieveQuery_(query, column))
   }
 
   /**
@@ -1083,7 +1063,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * TODO document! and add needed implementations
    */
-  open fun <T> retrieveQuery_(result: ResultRow, column: Column<T>): Any? = result[column]
+  open fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? = result[column]
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
@@ -1564,34 +1544,31 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       var exists = false
 
       try {
-        while (true) {
-          try {
-            if (!alreadyProtected) {
-            }
-            SELECT_IS_IN_LIST.replace("$2", evalListTable())
-            SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
-            transaction {
-              exec(SELECT_IS_IN_LIST) { exists = it.next() }
-            }
-            if (!alreadyProtected) {
-            }
-            break
-          } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
-          } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+        try {
+          if (!alreadyProtected) {
+          }
+          SELECT_IS_IN_LIST.replace("$2", evalListTable())
+          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
+          SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
+          transaction {
+            exec(SELECT_IS_IN_LIST) { exists = it.next() }
+          }
+          if (!alreadyProtected) {
+          }
+        } catch (e: SQLException) {
+          if (!alreadyProtected) {
+          } else {
+            throw e
+          }
+        } catch (error: Error) {
+          if (!alreadyProtected) {
+          } else {
+            throw error
+          }
+        } catch (rte: RuntimeException) {
+          if (!alreadyProtected) {
+          } else {
+            throw rte
           }
         }
       } catch (e: Throwable) {
@@ -1610,45 +1587,42 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         return
       }
       try {
-        while (true) {
-          try {
-            if (!alreadyProtected) {
-            }
-            SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
-            SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
-            transaction {
-              exec(SELECT_MATCHING_STRINGS) {
-                if (!it.next()) {
-                  count = 0
-                } else {
-                  count = 1
-                  result = it.getString(1)
-                  if (it.next()) {
-                    count = 2
-                  }
+        try {
+          if (!alreadyProtected) {
+          }
+          SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
+          SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
+          SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
+          transaction {
+            exec(SELECT_MATCHING_STRINGS) {
+              if (!it.next()) {
+                count = 0
+              } else {
+                count = 1
+                result = it.getString(1)
+                if (it.next()) {
+                  count = 2
                 }
               }
             }
+          }
 
-            if (!alreadyProtected) {
-            }
-            break
-          } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
-          } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+          if (!alreadyProtected) {
+          }
+        } catch (e: SQLException) {
+          if (!alreadyProtected) {
+          } else {
+            throw e
+          }
+        } catch (error: Error) {
+          if (!alreadyProtected) {
+          } else {
+            throw error
+          }
+        } catch (rte: RuntimeException) {
+          if (!alreadyProtected) {
+          } else {
+            throw rte
           }
         }
       } catch (e: Throwable) {
@@ -1678,8 +1652,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           qrybuf = " SELECT   " + colbuf +
                   " FROM     " + evalListTable() +
-                  " WHERE    {fn SUBSTRING(" + list!!.getColumn(0)
-                  .column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
+                  " WHERE    {fn SUBSTRING(" + list!!.getColumn(
+                  0).column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
                   " ORDER BY 1"
           result = displayQueryList(qrybuf, list!!.columns) as String?
           if (result == null) {
@@ -2468,7 +2442,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip: String? = null // help text
+  var toolTip : String? = null // help text
     private set
 
   private var index = 0 // The position in parent field array
