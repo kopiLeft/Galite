@@ -34,8 +34,11 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
     val searchTables = VBlockDefaultOuterJoin.getSearchTables(FormWithList.block.vBlock)
 
     assertNotNull(searchTables)
+
     val tables = searchTables.selectAll().targets
+
     assertCollectionsEquals(arrayListOf(Users), tables)
+    assertEquals(Users.columns,searchTables.columns)
   }
 
   @Test
