@@ -16,8 +16,7 @@
  */
 package org.kopi.galite.common
 
-interface VKConstants {
-  companion object {
+object VKConstants {
     // ----------------------------------------------------------------------
     // PREDEFINED COMMANDS
     // ----------------------------------------------------------------------
@@ -25,5 +24,4 @@ interface VKConstants {
     val CMD_SHORTCUT: String = "EditItem_S"
     val CMD_NEWITEM: String = "NewItem"
     val CMD_EDITITEM: String = "EditItem"
-  }
 }
