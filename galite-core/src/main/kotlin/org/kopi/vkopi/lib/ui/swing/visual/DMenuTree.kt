@@ -21,7 +21,7 @@ package org.kopi.vkopi.lib.ui.swing.visual
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.db.DBSchema.Favorites
+import org.kopi.galite.db.Favorites
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message.getMessage
 import org.kopi.galite.visual.Module
@@ -65,13 +65,13 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
     verifyNotInTransaction("DWindow.showApplicationInformation($message)")
     val options = arrayOf<Any>(getString("CLOSE"))
     JOptionPane.showOptionDialog(frame,
-            message,
-            getString("Notice"),
-            JOptionPane.DEFAULT_OPTION,
-            JOptionPane.INFORMATION_MESSAGE,
-            Utils.getImage("info.gif"),
-            options,
-            options[0])
+                                 message,
+                                 getString("Notice"),
+                                 JOptionPane.DEFAULT_OPTION,
+                                 JOptionPane.INFORMATION_MESSAGE,
+                                 Utils.getImage("info.gif"),
+                                 options,
+                                 options[0])
   }
 
   /**

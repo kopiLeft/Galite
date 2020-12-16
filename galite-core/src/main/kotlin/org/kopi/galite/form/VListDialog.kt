@@ -81,10 +81,10 @@ class VListDialog(list: Array<VListColumn?>,
   constructor(title: String,
               data: Array<String?>,
               rows: Int = data.size) : this(arrayOf(VStringColumn(title,
-                                                    null,
-                                                    VConstants.ALG_LEFT,
-                                                    getMaxLength(data),
-                                                    true)),
+                                                                  null,
+                                                                  VConstants.ALG_LEFT,
+                                                                  getMaxLength(data),
+                                                                  true)),
                                             arrayOf(data as Array<Any?>),
                                             rows)
 
@@ -111,9 +111,9 @@ class VListDialog(list: Array<VListColumn?>,
    * Displays a dialog box returning position of selected element.
    */
   fun selectFromDialog(window: VWindow?, field: VField?, showSingleEntry: Boolean): Int =
-    display.selectFromDialog((window?.getDisplay())!!,
-                             field?.getDisplay()!!,
-                             showSingleEntry)
+          display.selectFromDialog((window?.getDisplay())!!,
+                                   field?.getDisplay(),
+                                   showSingleEntry)
 
   /**
    * Displays a dialog box returning position of selected element.
@@ -274,7 +274,7 @@ class VListDialog(list: Array<VListColumn?>,
         size = max(size, it.length)
       }
       return VListDialog(arrayOf(VStringColumn("Auswahl", null, 0, size, true)),
-              arrayOf(str as Array<Any?>)).selectFromDialog(window, null, true)
+                         arrayOf(str as Array<Any?>)).selectFromDialog(window, null, true)
     }
 
     /**
@@ -314,7 +314,7 @@ class VListDialog(list: Array<VListColumn?>,
   init {
     if (list.size != data.size) {
       throw InconsistencyException("WRONG NUMBER OF COLUMN OR TITLES: list.length = ${list.size}" +
-              " does not match data.length = ${data.size}")
+                                           " does not match data.length = ${data.size}")
     }
     isSkipFirstLine = skipFirstLine
     count = rows

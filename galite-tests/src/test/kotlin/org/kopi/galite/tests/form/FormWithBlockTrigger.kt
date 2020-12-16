@@ -14,28 +14,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package org.kopi.galite.tests.form
 
 import java.util.Locale
 
 import org.kopi.galite.common.INIT
 import org.kopi.galite.common.PREBLK
-
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
 object FormWithBlockTrigger: Form() {
+
   override val locale = Locale.FRANCE
   override val title = "form for test"
-
   val testPage = page("test page")
-
-  init {
-    menu("Action")
-    insertBlock(BlockWithTrigger1, testPage)
-    insertBlock(BlockWithTrigger2, testPage)
-  }
+  val menu = menu("Action")
+  val firstBlock = insertBlock(BlockWithTrigger1, testPage)
+  val secondVlock = insertBlock(BlockWithTrigger2, testPage)
 }
 
 object BlockWithTrigger1 : FormBlock(1, 1, "Test", "Test block") {
@@ -48,7 +46,7 @@ object BlockWithTrigger1 : FormBlock(1, 1, "Test", "Test block") {
     }
   }
 
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
@@ -65,9 +63,13 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
     }
   }
 
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
   }
+}
+
+fun main() {
+  Application.runForm(FormWithBlockTrigger)
 }

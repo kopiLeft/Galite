@@ -21,7 +21,7 @@ import org.kopi.galite.form.VDictionaryForm
 /**
  * Represents a dictionary form.
  */
-abstract class DictionaryForm: Form() {
+abstract class DictionaryForm : Form() {
 
   /** Form model */
   override val model: VDictionaryForm by lazy {

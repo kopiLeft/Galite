@@ -18,37 +18,27 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import kotlin.test.assertEquals
-
-import org.junit.Test
-import org.kopi.galite.chart.Chart
-
 import org.jetbrains.exposed.sql.Table
 
+import org.kopi.galite.chart.Chart
+import org.kopi.galite.common.INITFORM
+import org.kopi.galite.common.POSTFORM
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.tests.JApplicationTestBase
-
-class FormTests: JApplicationTestBase() {
-
-  @Test
-  fun sourceFormTest() {
-    val formModel = TestForm.model
-    assertEquals(TestForm::class.qualifiedName!!.replace(".", "/"), formModel.source)
-  }
-}
 
 object User: Table() {
-  val id = integer("id")
-  val name = varchar("name", 20)
-  val age = integer("age")
+  val id = integer("ID")
+  val name = varchar("NAME", 20).nullable()
+  val age = integer("AGE")
 }
 
-object TestForm: Form() {
+object FormSample: Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
@@ -87,8 +77,16 @@ object TestForm: Form() {
     }
   }
 
-  val tb3_to_test_block_options = insertBlock(TestBlock(), p1) {
+  val tb3ToTestBlockOptions = insertBlock(TestBlock(), p1) {
     options(BlockOption.NOINSERT)
+  }
+
+  val preform = trigger(INITFORM) {
+    println("init form trigger works")
+  }
+
+  val postform = trigger(POSTFORM) {
+    println("post form trigger works")
   }
 
   init {
@@ -106,10 +104,15 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
+  }
+  val password = mustFill(domain = Domain<String>(20), position = at(2, 1)) {
+    label = "password"
+    help = "The user password"
+    options(FieldOption.NOECHO)
   }
   val age = visit(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
@@ -123,4 +126,8 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
 
 class CommandesC(fournisseur: Int?): Chart() {
   override val title: String = "Fournisseur"
+}
+
+fun main() {
+  Application.runForm(formName = FormSample)
 }

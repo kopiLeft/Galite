@@ -93,8 +93,8 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
    */
   override fun setTimestamp(r: Int, v: Timestamp?) {
     if (changedUI
-        || value[r] == null && v != null
-        || value[r] != null && value[r] != v) {
+            || value[r] == null && v != null
+            || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
@@ -190,9 +190,9 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }

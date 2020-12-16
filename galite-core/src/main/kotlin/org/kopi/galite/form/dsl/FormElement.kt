@@ -52,9 +52,7 @@ abstract class FormElement(val ident: String) {
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   abstract fun genLocalization(writer: LocalizationWriter)
 
   /**

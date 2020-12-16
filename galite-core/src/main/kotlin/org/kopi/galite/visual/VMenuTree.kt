@@ -36,14 +36,14 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.base.Utils
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBSchema.Favorites
-import org.kopi.galite.db.DBSchema.GroupParties
-import org.kopi.galite.db.DBSchema.GroupRights
-import org.kopi.galite.db.DBSchema.Groups
-import org.kopi.galite.db.DBSchema.Modules
-import org.kopi.galite.db.DBSchema.Symbols
-import org.kopi.galite.db.DBSchema.UserRights
-import org.kopi.galite.db.DBSchema.Users
+import org.kopi.galite.db.Favorites
+import org.kopi.galite.db.GroupParties
+import org.kopi.galite.db.GroupRights
+import org.kopi.galite.db.Groups
+import org.kopi.galite.db.Modules
+import org.kopi.galite.db.Symbols
+import org.kopi.galite.db.UserRights
+import org.kopi.galite.db.Users
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.base.InconsistencyException
 
@@ -335,13 +335,13 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
         }
 
         val module = Module(it[Modules.id],
-                it[Modules.parent],
-                it[Modules.shortName],
-                it[Modules.sourceName],
-                it[Modules.objectName],
-                Module.ACS_PARENT,
-                it[Modules.priority],
-                icon)
+                            it[Modules.parent],
+                            it[Modules.shortName],
+                            it[Modules.sourceName],
+                            it[Modules.objectName],
+                            Module.ACS_PARENT,
+                            it[Modules.priority],
+                            icon)
 
         localModules.add(module)
         items.add(module)
@@ -353,26 +353,39 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   private fun fetchGroupRightsByUserId(modules: List<Module>) {
     when {
       groupName != null -> {
-        fetchRights(modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+        fetchRights(
+                modules,
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
-                          GroupParties.user inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName })
+                          GroupParties.user inSubQuery (Groups.slice(
+                                  Groups.id).select { Groups.shortName eq groupName })
                         }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
+        )
       }
       menuTreeUser != null -> {
-        fetchRights(modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+        fetchRights(
+                modules,
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
-                          GroupParties.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
+                          GroupParties.user inSubQuery (Users.slice(
+                                  Users.id).select { Users.shortName eq menuTreeUser })
                         }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
+        )
       }
       else -> {
-        fetchRights(modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+        fetchRights(
+                modules,
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
                           GroupParties.user eq getUserID()
@@ -473,13 +486,15 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       val query = if (isSuperUser && menuTreeUser != null) {
 
         Favorites.slice(Favorites.module, Favorites.id)
-                .select { Favorites.user inSubQuery(Users.slice(Users.id).select {Users.shortName eq  menuTreeUser  })
+                .select {
+                  Favorites.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
                 }.orderBy(Favorites.id)
       } else {
         Favorites.slice(Favorites.module, Favorites.id).select { Favorites.user eq getUserID() }.orderBy(Favorites.id)
       }
       query.forEach {
-        if (it[Favorites.module] != 0) {val symbol = it[Modules.symbol] as Int
+        if (it[Favorites.module] != 0) {
+          val symbol = it[Modules.symbol] as Int
           shortcutsID.add(it[Favorites.module])
         }
       }

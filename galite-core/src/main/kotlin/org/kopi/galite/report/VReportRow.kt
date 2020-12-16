@@ -74,4 +74,8 @@ abstract class VReportRow(val data: Array<Any?>) : DefaultMutableTreeNode() {
       else -> column.compareTo(data, rowData)
     }
   }
+
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }

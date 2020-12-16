@@ -14,18 +14,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.chart
+package org.kopi.galite.tests.form
 
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.Color
+import kotlin.test.assertNotNull
 
-/**
- * Represents a measure used to store numeric values in chart.
- *
- * @param domain dimension domain.
- */
-open class Measure<T>(domain: Domain<T>? = null) : Column() where T : Comparable<T>, T : Number {
+import org.jetbrains.exposed.sql.selectAll
+import org.junit.Test
+import org.kopi.galite.db.Users
+import org.kopi.galite.form.VBlockDefaultOuterJoin
+import org.kopi.galite.tests.JApplicationTestBase
 
-  /**Measure's color in chart */
-  lateinit var color: Color
+class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
+  @Test
+  fun getSearchTablesTest() {
+    FormWithList.model
+    val searchTables = VBlockDefaultOuterJoin.getSearchTables(FormWithList.block.vBlock)
+
+    assertNotNull(searchTables)
+    val tables = searchTables.selectAll().targets
+    assertCollectionsEquals(arrayListOf(Users), tables)
+  }
 }

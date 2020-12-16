@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.kopi.galite.list.VColumn
+
 /**
  * This class define a column list information
  *
@@ -24,18 +26,27 @@ package org.kopi.galite.form.dsl
  * @param index                   the indices of this column
  * @param priority                the priority in sorting
  */
-class FormFieldColumns(internal val columns: Array<FormFieldColumn?>,
-                       var index: FormBlockIndex? = null,
-                       var priority: Int = 0) {
+class FormFieldColumns<T : Comparable<T>?>(internal val columns: Array<FormFieldColumn<T>>,
+                                           var index: FormBlockIndex? = null,
+                                           var priority: Int = 0) {
+
+  /**
+   * Creates and returns the columns' models related to this field
+   */
+  fun getColumnsModels(): List<VColumn> {
+    return columns.map { formFieldColumn ->
+      formFieldColumn.getFormFieldColumnModel()
+    }
+  }
 
   /**
    * Sets the position in an array of fields
    */
-  fun cloneToPos(pos: Int): FormFieldColumns {
-    val clone = arrayOfNulls<FormFieldColumn>(columns.size)
+  fun cloneToPos(pos: Int): FormFieldColumns<T> {
+    val clone = arrayOfNulls<FormFieldColumn<T>>(columns.size)
     for (i in columns.indices) {
-      clone[i] = columns[i]!!.cloneToPos(pos)
+      clone[i] = columns[i].cloneToPos(pos)
     }
-    return FormFieldColumns(clone, index, priority)
+    return FormFieldColumns(clone.requireNoNulls(), index, priority)
   }
 }

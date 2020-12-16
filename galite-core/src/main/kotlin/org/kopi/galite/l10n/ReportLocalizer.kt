@@ -46,7 +46,7 @@ class ReportLocalizer(manager: LocalizationManager, document: Document) : Locali
    */
   fun getFieldLocalizer(ident: String): FieldLocalizer {
     return FieldLocalizer(manager,
-            Utils.lookupChild(root, "field", "ident", ident))
+                          Utils.lookupChild(root, "field", "ident", ident))
   }
 
   // ----------------------------------------------------------------------

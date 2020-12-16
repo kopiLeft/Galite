@@ -17,9 +17,10 @@
 package org.kopi.galite.tests.util
 
 import org.junit.Test
+import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.util.ReflectTool
 import org.kopi.galite.tests.form.TestBlock
-import org.kopi.galite.tests.form.TestForm
+
 import kotlin.test.assertEquals
 
 class ReflectToolTests {
@@ -42,7 +43,7 @@ class ReflectToolTests {
    */
   @Test
   fun reflectToolFormTest() {
-    assertEquals("graph", ReflectTool.formActorAt(TestForm, 0))
-    assertEquals("myMenu", ReflectTool.formMenuAt(TestForm, 0))
+    assertEquals("graph", ReflectTool.formActorAt(FormSample, 0))
+    assertEquals("action", ReflectTool.formMenuAt(FormSample, 0))
   }
 }

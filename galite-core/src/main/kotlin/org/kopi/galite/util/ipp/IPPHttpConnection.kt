@@ -28,7 +28,7 @@ import java.net.Socket
 import java.net.URL
 
 class IPPHttpConnection(private val url: URL) {
- 
+
   // --------------------------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------------------------
@@ -39,7 +39,7 @@ class IPPHttpConnection(private val url: URL) {
     httpRequest.write(IPPOutputStream(os))
     os.flush()
   }
-  
+
   fun receiveResponse(): IPP {
     val httpRequest = IPPHttp(IPPInputStream(inputStream))
 

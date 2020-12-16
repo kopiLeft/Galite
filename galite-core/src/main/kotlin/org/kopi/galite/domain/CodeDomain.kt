@@ -20,7 +20,7 @@ package org.kopi.galite.domain
 /**
  * Represents a code domain.
  */
-class CodeDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
+class CodeDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
   /**
    * Mapping of all values that a domain can take
    */
