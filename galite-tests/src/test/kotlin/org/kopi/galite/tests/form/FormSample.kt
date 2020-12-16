@@ -46,11 +46,11 @@ object FormSample : Form() {
 
   val action = menu("Action")
 
-  val menu = menu("Edit")
+  val edit = menu("Edit")
 
   val autofillitem = actor(
           ident = "Autofill",
-          menu = action,
+          menu = edit,
           label = "Autofill",
           help = "Autofill",
   ) {
