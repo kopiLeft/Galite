@@ -28,6 +28,7 @@ import kotlin.math.abs
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
@@ -1726,9 +1727,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
-  fun getSearchTables_(): Table {
-    TODO()
-  }
+  fun getSearchTables_(): Join? {
+    return VBlockDefaultOuterJoin.getSearchTables(this)  }
 
   /**
    * Returns the search conditions for database query.
