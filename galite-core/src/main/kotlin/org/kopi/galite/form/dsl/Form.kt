@@ -16,11 +16,11 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.kopi.galite.common.Action
-import java.io.File
 import java.io.IOException
 
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
+import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormBooleanTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.FormTriggerEvent
@@ -32,6 +32,7 @@ import org.kopi.galite.common.Window
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
 
 /**
  * Represents a form.
@@ -49,6 +50,9 @@ abstract class Form : Window() {
 
   /** Form's menus. */
   val menus = mutableListOf<Menu>()
+
+  /** Form's commands. */
+  private val formCommands = mutableListOf<Command>()
 
   /**
    * Adds a new actor to this form.
@@ -173,6 +177,19 @@ abstract class Form : Window() {
     return menu
   }
 
+  /**
+   * Adds a new command to this form.
+   *
+   * @param item    the actor linked to the command.
+   * @param init    initialization method.
+   */
+  fun command(item: Actor, init: Command.() -> Unit): Command {
+    val command = Command(item)
+    command.init()
+    formCommands.add(command)
+    return command
+  }
+
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
@@ -255,7 +272,20 @@ abstract class Form : Window() {
     }.toTypedArray()
 
     //TODO ----------begin-------------
-    this.commands = arrayOf()
+    /** Used actors in form*/
+    val usedActors = actors.map { vActor ->
+      vActor?.actorIdent to vActor
+    }.toMap()
+
+    this.commands = formCommands.map {
+      VCommand(it.mode,
+               this,
+               usedActors[it.item.ident],
+               -1,
+               it.name!!,
+               it.action
+      )
+    }.toTypedArray()
     this.handleTriggers(triggers)
   }
 

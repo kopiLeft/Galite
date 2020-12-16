@@ -54,6 +54,23 @@ object FormSample: Form() {
     icon =  "column_chart"  // icon is optional here
   }
 
+  val actor = actor (
+          ident =  "save",
+          menu =   action,
+          label =  "actor for command form",
+          help =   "actor for command form",
+  ) {
+    key  =  Key.F2          // key is optional here
+    icon =  "save"  // icon is optional here
+  }
+
+ val cmd =  command(item = actor) {
+    this.name = "command"
+    action = {
+      println("-----------command Form----------------")
+    }
+  }
+
   val p1 = page("test page")
   val p2 = page("test page2")
 
