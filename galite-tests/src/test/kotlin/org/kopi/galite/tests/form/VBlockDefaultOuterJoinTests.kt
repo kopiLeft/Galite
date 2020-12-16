@@ -16,15 +16,18 @@
  */
 package org.kopi.galite.tests.form
 
-import kotlin.test.assertNotNull
-
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
 import org.kopi.galite.db.Users
 import org.kopi.galite.form.VBlockDefaultOuterJoin
 import org.kopi.galite.tests.JApplicationTestBase
 
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+
 class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
+
   @Test
   fun getSearchTablesTest() {
     FormWithList.model
@@ -33,5 +36,27 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
     assertNotNull(searchTables)
     val tables = searchTables.selectAll().targets
     assertCollectionsEquals(arrayListOf(Users), tables)
+  }
+
+  @Test
+  fun getFetchRecordConditionTest() {
+    connectToDatabase()
+    initDatabase()
+    FormWithList.model
+    val block = FormWithList.block
+    val fetchRecordCondition = VBlockDefaultOuterJoin.getFetchRecordCondition(block.vBlock.fields)
+    assertNotNull(fetchRecordCondition)
+    transaction {
+      val f = fetchRecordCondition.toString()
+      val condition = buildString {
+        append("(${block.r.nameInDatabaseCase()}.${block.r.user.nameInDatabaseCase()}")
+        append(" = ${block.u.nameInDatabaseCase()}.${block.u.id.nameInDatabaseCase()})")
+        append(" AND ")
+        append("(${block.r.nameInDatabaseCase()}.${block.r.module.nameInDatabaseCase()}")
+        append(" = \"MODULE\".")
+        append("${block.m.id.nameInDatabaseCase()})")
+      }
+      assertEquals(condition, fetchRecordCondition.toString())
+    }
   }
 }

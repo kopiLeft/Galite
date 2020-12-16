@@ -108,19 +108,19 @@ object BlockWithManyTables : FormBlock(1, 20, "BlockWithManyTables", "Test block
   val m = table(Modules)
   val r = table(UserRights)
 
-  val uid = hidden(domain = Domain<Int>(20)) {
+  val uid = visit(domain = Domain<Int>(20), position = at(1, 1)) {
     label = "id"
     help = "The user id"
     columns(u.id, r.user)
   }
 
-  val mid = hidden(domain = Domain<Int>(20)) {
+  val mid = visit(domain = Domain<Int>(20), position = at(1, 2)) {
     label = "id"
     help = "The module id"
     columns(m.id, r.module)
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 3)) {
     label = "name"
     help = "The user name"
     columns(u.name) {

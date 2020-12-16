@@ -133,7 +133,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    */
   fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
     val cols = joinColumns.map { column ->
-      FormFieldColumn(column, column.table.tableName, column.name, this, true, true) // TODO
+      FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
