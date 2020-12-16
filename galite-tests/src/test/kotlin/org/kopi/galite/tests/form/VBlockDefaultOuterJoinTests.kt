@@ -42,12 +42,14 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
   fun getFetchRecordConditionTest() {
     connectToDatabase()
     initDatabase()
+
     FormWithList.model
     val block = FormWithList.block
     val fetchRecordCondition = VBlockDefaultOuterJoin.getFetchRecordCondition(block.vBlock.fields)
+
     assertNotNull(fetchRecordCondition)
+
     transaction {
-      val f = fetchRecordCondition.toString()
       val condition = buildString {
         append("(${block.r.nameInDatabaseCase()}.${block.r.user.nameInDatabaseCase()}")
         append(" = ${block.u.nameInDatabaseCase()}.${block.u.id.nameInDatabaseCase()})")
@@ -56,6 +58,7 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
         append(" = \"MODULE\".")
         append("${block.m.id.nameInDatabaseCase()})")
       }
+
       assertEquals(condition, fetchRecordCondition.toString())
     }
   }
