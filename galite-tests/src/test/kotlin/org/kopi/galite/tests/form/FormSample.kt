@@ -34,23 +34,35 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
-object User: Table() {
+object User : Table() {
   val id = integer("ID")
   val name = varchar("NAME", 20)
   val age = integer("AGE")
 }
 
-object FormSample: Form() {
+object FormSample : Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
   val action = menu("Action")
 
-  val graph = actor (
-          ident =  "graph",
-          menu =   action,
-          label =  "Graph for test",
-          help =   "show graph values" ,
+  val menu = menu("Edit")
+
+  val autofillitem = actor(
+          ident = "Autofill",
+          menu = action,
+          label = "Autofill",
+          help = "Autofill",
+  ) {
+    key  =  Key.F12         // key is optional here
+    icon = "column_chart"  // icon is optional here
+  }
+
+  val graph = actor(
+          ident = "graph",
+          menu = action,
+          label = "Graph for test",
+          help = "show graph values",
   ) {
     key  =  Key.F9          // key is optional here
     icon =  "column_chart"  // icon is optional here
@@ -126,10 +138,10 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
   }
 }
 
-class CommandesC(fournisseur: Int?): Chart() {
+class CommandesC(fournisseur: Int?) : Chart() {
   override val title: String = "Fournisseur"
 }
 
-fun main(){
+fun main() {
   Application.runForm(formName = FormSample)
 }
