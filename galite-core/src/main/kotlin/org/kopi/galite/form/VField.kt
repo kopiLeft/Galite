@@ -685,75 +685,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  open fun getSearchCondition_(): Pair<Expression<String>.(t: String) -> Op<Boolean>, Any?>? {
+  open fun getSearchCondition_(column: ExpressionWithColumnType<*>): Op<Boolean>? {
 
-    if (isNull(block!!.activeRecord)) {
-      fun nullCondBuilder(body: (scope: Expression<String>) -> Op<Boolean>): (Expression<String>.(t: String) -> Op<Boolean>) {
-        return (fun Expression<String>.(t: String): Op<Boolean> = body(this))
-      }
-
+    return if (isNull(block!!.activeRecord)) {
       return when (getSearchOperator()) {
         VConstants.SOP_EQ -> null
-        VConstants.SOP_NE -> (nullCondBuilder {
-          IsNotNullOp(it)
-        } to null)
-        else -> (nullCondBuilder {
-          IsNullOp(it)
-        } to null)
+        VConstants.SOP_NE -> Op.build { column.isNotNull() }
+        else -> Op.build { column.isNull() }
       }
     } else {
-
-      var operator: (ExpressionWithColumnType<String>.(t: String) -> Op<Boolean>)? = null
       val operatorName = VConstants.OPERATOR_NAMES[getSearchOperator()]
-      var operand = getSql(block!!.activeRecord)
-
-      fun <T, S1 : T?, S2 : T?> operatorBuilder(body: (scope: ExpressionWithColumnType<in S1>) -> ComparisonOp)
-              : (ExpressionWithColumnType<in S1>.(Any) -> Op<Boolean>)? {
-        return (fun ExpressionWithColumnType<in S1>.(_: Any): Op<Boolean> = body(this))
-      }
-
-      fun <T, S : T?> ExpressionWithColumnType<in S>.wrap(value: T): QueryParameter<T> = when (value) {
-        is Boolean -> booleanParam(value)
-        is Byte -> byteParam(value)
-        is UByte -> ubyteParam(value)
-        is Short -> shortParam(value)
-        is UShort -> ushortParam(value)
-        is Int -> intParam(value)
-        is UInt -> uintParam(value)
-        is Long -> longParam(value)
-        is ULong -> ulongParam(value)
-        is Float -> floatParam(value)
-        is Double -> doubleParam(value)
-        is String -> QueryParameter(value, columnType) // String value should inherit from column
-        else -> QueryParameter(value, columnType)
-      } as QueryParameter<T>
-
-      operator = when (operatorName) {
-        "=" -> operatorBuilder {
-          EqOp(it, it.wrap(operand))
-        }
-        "<" -> operatorBuilder {
-          LessOp(it, it.wrap(operand))
-        }
-        ">" -> operatorBuilder {
-          GreaterOp(it, it.wrap(operand))
-        }
-        "<=" -> operatorBuilder {
-          LessEqOp(it, it.wrap(operand))
-        }
-        ">=" -> operatorBuilder {
-          GreaterEqOp(it, it.wrap(operand))
-        }
-        "<>" -> operatorBuilder {
-          NeqOp(it, it.wrap(operand))
-        }
-        else -> null
-      }
-
-      fun compCondBuilder(body: (scope: ExpressionWithColumnType<String>) -> Op<Boolean>)
-              : (ExpressionWithColumnType<String>.(String) -> Op<Boolean>)? {
-        return (fun ExpressionWithColumnType<String>.(pattern: String): Op<Boolean> = body(this))
-      }
+      var operand = getSql(block!!.activeRecord) as String
 
       when (options and VConstants.FDO_SEARCH_MASK) {
         VConstants.FDO_SEARCH_NONE -> {
@@ -765,29 +707,64 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
       if (operand!!.indexOf('*') == -1) {
         // nothing to change: standard case
+        when (operatorName) {
+          "=" -> Op.build {
+            column as Column<String>
+            column eq operand
+          }
+          "<" -> Op.build {
+            column less operand
+          }
+          ">" -> Op.build {
+            column greater operand
+          }
+          "<=" -> Op.build {
+            column lessEq operand
+          }
+          ">=" -> Op.build {
+            column greaterEq operand
+          }
+          "<>" -> Op.build {
+            column as Column<String>
+            column neq operand
+          }
+          else -> null
+        }?.let {
+          return it
+        }
       } else {
         when (getSearchOperator()) {
           VConstants.SOP_EQ -> {
             operand = operand.replace('*', '%')
-            operator = compCondBuilder {
-              LikeOp(it, stringParam((operand!!)))
+            Op.build {
+              column as Column<String>
+              column like operand
             }
           }
           VConstants.SOP_NE -> {
             operand = operand.replace('*', '%')
-            operator = compCondBuilder {
-              NotLikeOp(it, stringParam(operand!!))
+            Op.build {
+              column as Column<String>
+              column notLike operand
             }
           }
-
-          VConstants.SOP_GE, VConstants.SOP_GT ->           // remove everything after at '*'
+          VConstants.SOP_GE , VConstants.SOP_GT -> {
+            // remove everything after at '*'
             operand = operand.substring(0, operand.indexOf('*')) + "'"
-          VConstants.SOP_LE, VConstants.SOP_LT ->           // replace substring starting at '*' by highest (ascii) char
+            Op.build {
+              column greater operand
+            }
+          }
+          VConstants.SOP_LE , VConstants.SOP_LT -> {
+            // replace substring starting at '*' by highest (ascii) char
             operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
+            Op.build {
+              column less operand
+            }
+          }
           else -> throw InconsistencyException()
-        }
+        }.also { return it }
       }
-      return ((operator as Expression<String>.(t: String) -> Op<Boolean>) to (operand as TypeVariable<GenericDeclaration>?))
     }
   }
 
@@ -2118,10 +2095,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-                       block!!.getFieldPos(this),
-                       label,
-                       lab ?: name,
-                       toolTip)
+              block!!.getFieldPos(this),
+              label,
+              lab ?: name,
+              toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -2176,10 +2153,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-                    modeDesc,
-                    getTypeName(),
-                    getTypeInformation(),
-                    names)
+            modeDesc,
+            getTypeName(),
+            getTypeInformation(),
+            names)
   }
 
   /**

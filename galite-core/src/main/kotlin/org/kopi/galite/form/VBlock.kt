@@ -1734,22 +1734,22 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     fields.forEach { field ->
       if (field.getColumnCount() > 0) {
-        val cond = field.getSearchCondition_()
 
-        cond?.let {
-          val condOperator = field.getSearchCondition_()!!.first
-          val value = field.getSearchCondition_()!!.second
-          val condColumn = Column<String>(tables!![field.getColumn(0)!!.getTable()],
-                                          field.getColumn(0)!!.getQualifiedName(),
-                                          VarCharColumnType())
-          val searchColumn = when (field.options and VConstants.FDO_SEARCH_MASK) {
+        val condColumn = Column<String>(tables!![field.getColumn(0)!!.getTable()],
+                field.getColumn(0)!!.getQualifiedName(),
+                VarCharColumnType())
+        val searchColumn = when (field.options and VConstants.FDO_SEARCH_MASK) {
 
-            VConstants.FDO_SEARCH_NONE -> condColumn
-            VConstants.FDO_SEARCH_UPPER -> condColumn.upperCase()
-            VConstants.FDO_SEARCH_LOWER -> condColumn.lowerCase()
-            else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-          }
-          conditionList.add(Op.build { searchColumn.condOperator(value as String) })
+          VConstants.FDO_SEARCH_NONE -> condColumn
+          VConstants.FDO_SEARCH_UPPER -> condColumn.upperCase()
+          VConstants.FDO_SEARCH_LOWER -> condColumn.lowerCase()
+          else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+        }
+
+        val condition = field.getSearchCondition_(searchColumn)
+
+        condition?.let {
+          conditionList.add(condition)
         }
       }
     }
