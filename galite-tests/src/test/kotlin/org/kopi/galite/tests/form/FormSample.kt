@@ -35,7 +35,7 @@ import org.kopi.galite.form.dsl.Key
 object User: Table() {
   val id = integer("ID")
   val name = varchar("NAME", 20).nullable()
-  val age = integer("AGE")
+  val age = integer("AGE").nullable()
 }
 
 object FormSample: Form() {
@@ -115,7 +115,7 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
 
     options(FieldOption.NOECHO)
   }
-  val age = visit(domain = Domain<Int>(3), position = follow(name)) {
+  val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     minValue = 10

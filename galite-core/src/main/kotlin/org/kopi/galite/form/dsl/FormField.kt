@@ -99,7 +99,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   /**
    * Sets the minimum value of an Int field.
    */
-  var FormField<Int>.minValue : Int
+  var <U> FormField<U>.minValue : Int where U : Comparable<U>?, U : Number?
     get() {
       return min
     }
@@ -110,7 +110,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   /**
    * Sets the maximum value of an Int field.
    */
-  var FormField<Int>.maxValue : Int
+  var <U> FormField<U>.maxValue : Int where U : Comparable<U>?, U : Number?
     get() {
       return max
     }
