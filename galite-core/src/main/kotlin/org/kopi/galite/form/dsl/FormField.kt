@@ -90,16 +90,33 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
       }
     }
 
-  private var minValue : Int = Int.MIN_VALUE
-  private var maxValue : Int = Int.MAX_VALUE
+  /** the minimum value that cannot exceed  */
+  private var min : Int = Int.MIN_VALUE
 
-   fun FormField<Int>.minValue(value : Int) {
-     minValue = value
-   }
+  /** the maximum value that cannot exceed  */
+  private var max : Int = Int.MAX_VALUE
 
-  fun FormField<Int>.maxValue(value : Int) {
-    maxValue = value
+  /**
+   * Sets the minimum value of an Int field.
+   */
+  var FormField<Int>.minValue : Int
+    get() {
+      return min
+    }
+  set(value) {
+    min = value
   }
+
+  /**
+   * Sets the maximum value of an Int field.
+   */
+  var FormField<Int>.maxValue : Int
+    get() {
+      return max
+    }
+    set(value) {
+      max = value
+    }
 
   /**
    * Returns the field value of the current record number [record]
@@ -209,7 +226,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    */
   val vField: VField by lazy {
     when (domain.kClass) {
-      Int::class -> VIntegerField(block.buffer, domain.width ?: 0, minValue, maxValue)
+      Int::class -> VIntegerField(block.buffer, domain.width ?: 0, min, max)
       String::class -> VStringField(block.buffer,
                                     domain.width ?: 0,
                                     domain.height ?: 1,
