@@ -90,6 +90,17 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
       }
     }
 
+  private var minValue : Int = Int.MIN_VALUE
+  private var maxValue : Int = Int.MAX_VALUE
+
+   fun FormField<Int>.minValue(value : Int) {
+     minValue = value
+   }
+
+  fun FormField<Int>.maxValue(value : Int) {
+    maxValue = value
+  }
+
   /**
    * Returns the field value of the current record number [record]
    *
@@ -196,23 +207,24 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   /**
    * The field model based on the field type.
    */
-  var vField: VField =
-          when (domain.kClass) {
-            Int::class -> VIntegerField(block.buffer, domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
-            String::class -> VStringField(block.buffer,
-                                          domain.width ?: 0,
-                                          domain.height ?: 1,
-                                          domain.visibleHeight ?: 1,
-                                          0,  // TODO
-                                          false) // TODO
-            Boolean::class -> VBooleanField(block.buffer)
-            Date::class, java.util.Date::class -> VDateField(block.buffer)
-            Month::class -> VMonthField(block.buffer)
-            Week::class -> VWeekField(block.buffer)
-            Time::class -> VTimeField(block.buffer)
-            Timestamp::class -> VTimestampField(block.buffer)
-            else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-          }
+  val vField: VField by lazy {
+    when (domain.kClass) {
+      Int::class -> VIntegerField(block.buffer, domain.width ?: 0, minValue, maxValue)
+      String::class -> VStringField(block.buffer,
+                                    domain.width ?: 0,
+                                    domain.height ?: 1,
+                                    domain.visibleHeight ?: 1,
+                                    0,  // TODO
+                                    false) // TODO
+      Boolean::class -> VBooleanField(block.buffer)
+      Date::class, java.util.Date::class -> VDateField(block.buffer)
+      Month::class -> VMonthField(block.buffer)
+      Week::class -> VWeekField(block.buffer)
+      Time::class -> VTimeField(block.buffer)
+      Timestamp::class -> VTimestampField(block.buffer)
+      else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+    }
+  }
 
   fun setInfo() {
     vField.setInfo(
