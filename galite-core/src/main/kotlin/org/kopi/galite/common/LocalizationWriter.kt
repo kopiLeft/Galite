@@ -27,6 +27,7 @@ import org.jdom2.Element
 import org.jdom2.output.Format
 import org.jdom2.output.XMLOutputter
 
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -77,6 +78,29 @@ open class LocalizationWriter {
     peekNode(null).addContent(self)
   }
 
+  fun genTypeDefinition(ident: String?, type: Domain<*>) {
+    val self = Element("type")
+    self.setAttribute("ident", ident)
+    pushNode(self)
+    type.genLocalization(this)
+    popNode(self)
+    peekNode(null).addContent(self)
+  }
+
+  fun genType(list: FieldList<*>?) {
+    list?.genLocalization(this)
+  }
+
+  fun <T: Comparable<T>?> genCodeType(codes: List<CodeDescription<T>>) {
+    val self = Element("code")
+    pushNode(self)
+    for (i in codes.indices) {
+      codes[i].genLocalization(this)
+    }
+    popNode(self)
+    peekNode("type").addContent(self)
+  }
+
   /**
    * Creates the localization for a message.
    */
@@ -88,6 +112,16 @@ open class LocalizationWriter {
       self.setAttribute("text", text)
     }
     peekNode(null).addContent(self)
+  }
+
+  fun <T: Comparable<T>?> genFieldList(columns: Array<ListDescription<T>>) {
+    val self = Element("list")
+    pushNode(self)
+    for (i in columns.indices) {
+      columns[i].genLocalization(this)
+    }
+    popNode(self)
+    peekNode("type").addContent(self)
   }
 
   fun genCodeDesc(ident: String, label: String) {

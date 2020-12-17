@@ -21,6 +21,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.junit.Test
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.exceptions.InvalidValueException
 import org.kopi.galite.report.ReportField
 import kotlin.test.assertEquals
@@ -51,7 +52,7 @@ class ListDomainTests {
     val domain = StringTestType()
 
     // test list values
-    val list = domain.getValues()
+    val list = (domain.type as ListDomain<*>).list
     assertEquals(2, list.size)
     assertEquals(TestTable.id, list["id"])
     assertEquals(TestTable.name, list["name"])

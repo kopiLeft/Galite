@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,42 +15,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.common
 
-package org.kopi.galite.domain
-
-import org.kopi.galite.common.CodeDescription
-import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.domain.Domain
 
 /**
- * Represents a code domain.
+ * The description of a list element
+ *
+ * @param title                the title of the column
+ * @param column                the column itself
+ * @param type                the type of the column
  */
-class CodeDomain<T : Comparable<T>?>(ident: String) : Domain<T>(ident = ident) {
-  /**
-   * Mapping of all values that a domain can take
-   */
-  val codes: MutableList<CodeDescription<T>> = mutableListOf()
-
-  override val type = this
-
-  /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a field.
-   *
-   * @param text the text
-   * @param value the value
-   */
-  operator fun set(text: String, value: T) {
-    val codeDescription = CodeDescription("id$${codes.size}", text, value)
-    codes.add(codeDescription)
-  }
+class ListDescription<T: Comparable<T>?>(private val title: String,
+                                         private val column: String,
+                                         val type: Domain<T>) {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
+  /*
    * Generates localization.
    */
-  override fun genLocalization(writer: LocalizationWriter) {
-    writer.genCodeType(codes)
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genListDesc(column, title)
   }
 }

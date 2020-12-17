@@ -17,7 +17,9 @@
 
 package org.kopi.galite.chart
 
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
@@ -52,23 +54,36 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>
 
   // TODO add Fixed types
   val model: VDimension
-    get() = when (domain.kClass) {
-      Int::class ->
-        VIntegerDimension(ident, null)
-      String::class ->
-        VStringDimension(ident, null)
-      Boolean::class ->
-        VBooleanDimension(ident, null)
-      Date::class, java.util.Date::class ->
-        VDateDimension(ident, null)
-      Month::class ->
-        VMonthDimension(ident, null)
-      Week::class ->
-        VWeekDimension(ident, null)
-      Time::class ->
-        VTimeDimension(ident, null)
-      Timestamp::class ->
-        VTimestampDimension(ident, null)
-      else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+    get() = when {
+      domain.type == null -> {
+        when (domain.kClass) {
+          Int::class ->
+            VIntegerDimension(ident, null)
+          String::class ->
+            VStringDimension(ident, null)
+          Boolean::class ->
+            VBooleanDimension(ident, null)
+          Date::class, java.util.Date::class ->
+            VDateDimension(ident, null)
+          Month::class ->
+            VMonthDimension(ident, null)
+          Week::class ->
+            VWeekDimension(ident, null)
+          Time::class ->
+            VTimeDimension(ident, null)
+          Timestamp::class ->
+            VTimestampDimension(ident, null)
+          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+        }
+      }
+      domain.type is CodeDomain -> {
+        TODO()
+      }
+      domain is ListDomain -> {
+        TODO()
+      }
+      else -> {
+        TODO()
+      }
     }
 }

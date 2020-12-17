@@ -17,7 +17,6 @@
 package org.kopi.galite.form.dsl
 
 import org.kopi.galite.common.Action
-import java.io.File
 import java.io.IOException
 
 import org.kopi.galite.common.Actor
@@ -213,6 +212,7 @@ abstract class Form : Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genForm(title,
+                                               formBlocks.map { it.ownDomains }.flatten().toTypedArray(),
                                                menus.toTypedArray(),
                                                formActors.toTypedArray(),
                                                pages.toTypedArray(),

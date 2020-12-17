@@ -36,7 +36,7 @@ abstract class FormElement(val ident: String) {
   /**
    * Returns the qualified source file name where this element is defined.
    */
-  protected val sourceFile: String
+  internal val sourceFile: String
     get() {
       val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
