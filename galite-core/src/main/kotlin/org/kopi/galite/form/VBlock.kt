@@ -2717,7 +2717,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         if (!query.execute(this)!!.next()) {
           activeRecord = recno
-          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf<Any>(table)))
+          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(table)))
         } else {
           fields.forEachIndexed { index, field ->
             if (field.lookupColumn_(table) != null) {
@@ -2726,9 +2726,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
               }
             }
           }
+
           if (query.execute(this)!!.next()) {
             activeRecord = recno
-            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf<Any>(table)))
+            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(table)))
           }
         }
       }
