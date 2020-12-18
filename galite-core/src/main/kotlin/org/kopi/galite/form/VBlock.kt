@@ -1440,7 +1440,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val table = getSearchTables_()
     val condition = mutableListOf<Op<Boolean>>()
 
-    condition.add(Op.build { idColumn eq id  })
+    condition.add(Op.build { idColumn eq id })
     if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
       condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
     }
@@ -2756,14 +2756,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
           if (field.hasLargeObject(recno)) {
             if (field.hasBinaryLargeObject(recno)) {
-              result.add(column to field.getLargeObject(recno))
+              //query.addBlob(fld.getLargeObject(recno))  TODO()
             } else {
-              result.add(column to field.getLargeObject(recno))
+              //query.addClob(fld.getLargeObject(recno))  TODO()
             }
           }
         }
       }
-      tables!![0].insert { table ->
+      val table = tables!![0]
+      table.insert { table ->
         result.forEach {
           table[it.first] = it.second!!
         }
@@ -2840,14 +2841,16 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           result.add(column to field.getSql(recno)!!)
           if (field.hasLargeObject(recno)) {
             if (field.hasBinaryLargeObject(recno)) {
-              result.add(column to field.getLargeObject(recno)!!)
+              //query.addBlob(field.getLargeObject(recno))  TODO()
             } else {
-              result.add(column to field.getLargeObject(recno)!!)
+              //query.addClob(field.getLargeObject(recno))  TODO()
             }
           }
         }
       }
-      tables!![0].update({ idColumn eq  idFld.getInt(recno)!! }) { table ->
+      val table = tables!![0]
+
+      table.update({ idColumn eq idFld.getInt(recno)!! }) { table ->
         result.forEach {
           table[it.first] = it.second!!
         }
