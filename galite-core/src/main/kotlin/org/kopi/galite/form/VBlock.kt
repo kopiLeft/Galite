@@ -2756,14 +2756,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
           if (field.hasLargeObject(recno)) {
             if (field.hasBinaryLargeObject(recno)) {
-              //query.addBlob(fld.getLargeObject(recno))  TODO()
+              TODO()
             } else {
-              //query.addClob(fld.getLargeObject(recno))  TODO()
+              TODO()
             }
           }
         }
       }
       val table = tables!![0]
+
       table.insert { table ->
         result.forEach {
           table[it.first] = it.second!!
@@ -2841,9 +2842,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           result.add(column to field.getSql(recno)!!)
           if (field.hasLargeObject(recno)) {
             if (field.hasBinaryLargeObject(recno)) {
-              //query.addBlob(field.getLargeObject(recno))  TODO()
+              TODO()
             } else {
-              //query.addClob(field.getLargeObject(recno))  TODO()
+              TODO()
             }
           }
         }
