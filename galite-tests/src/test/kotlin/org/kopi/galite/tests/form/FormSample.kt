@@ -22,6 +22,7 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.INITFORM
+import org.kopi.galite.common.POSTCHG
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
@@ -108,6 +109,9 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
     label = "name"
     help = "The user name"
     columns(u.name)
+    trigger(POSTCHG){
+      println("Field changed")
+    }
   }
   val password = mustFill(domain = Domain<String>(20), position = at(2, 1)) {
     label = "password"

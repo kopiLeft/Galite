@@ -19,14 +19,23 @@ package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.FieldTriggerEvent
+import org.kopi.galite.common.FieldVoidTriggerEvent
+import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
 import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.VConstants.Companion.TRG_AUTOLEAVE
+import org.kopi.galite.form.VConstants.Companion.TRG_POSTCHG
+import org.kopi.galite.form.VConstants.Companion.TRG_POSTFLD
+import org.kopi.galite.form.VConstants.Companion.TRG_PREFLD
+import org.kopi.galite.form.VConstants.Companion.TRG_PREVAL
+import org.kopi.galite.form.VConstants.Companion.TRG_VALFLD
 import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VIntegerField
@@ -70,7 +79,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command>? = null
-  var triggers: Array<Trigger>? = null
+  var triggers = mutableListOf<Trigger>()
   var alias: String? = null
   var initialValues = mutableMapOf<Int, T?>()
   var value: T? = null
@@ -192,6 +201,41 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
+  /**
+   * Adds triggers to this form
+   *
+   * @param formTriggerEvents    the trigger events to add
+   * @param method               the method to execute when trigger is called
+   */
+  private fun <T> trigger(fieldTriggerEvents: Array<out FieldTriggerEvent>, method: () -> T): Trigger {
+    val event = fieldEventList(fieldTriggerEvents)
+    val fieldAction = Action(null, method)
+    val trigger = FormTrigger(event, fieldAction)
+    triggers.add(trigger)
+    return trigger
+  }
+
+  /**
+   * Adds void triggers to this field
+   *
+   * @param fieldTriggerEvent  the trigger event to add
+   * @param method             the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  private fun fieldEventList(fieldTriggerEvents: Array<out FieldTriggerEvent>): Long {
+    var self = 0L
+
+    fieldTriggerEvents.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
+  }
+
+
   // TODO add Fixed types
   /**
    * The field model based on the field type.
@@ -213,6 +257,8 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
             Timestamp::class -> VTimestampField(block.buffer)
             else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
           }
+
+
 
   fun setInfo() {
     vField.setInfo(
@@ -265,6 +311,10 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
         block.positionField(position)
       }
     }
+
+    //TRIGGERS
+    this
+
   }
 
   /**
@@ -283,6 +333,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
       options = options or fieldOption.value
     }
   }
+
 
   // ----------------------------------------------------------------------
   // ACCESSORS
@@ -359,5 +410,30 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
       }
     }
     return -1
+  }
+
+  fun VField.checkTriggers(){
+    // TRIGGERS
+    //check that each trigger is used only once
+    var usedTriggers = 0
+
+    for (i in triggers.indices) {
+      if (triggers[i].events and usedTriggers.toLong() > 0) {
+        /*throw PositionedError(triggers[i], FormMessages.TRIGGER_USED_TWICE)*/
+      }
+      usedTriggers = usedTriggers or triggers[i].events.toInt()
+      if (isNeverAccessible
+              && (triggers[i].events
+                      and (1L shl TRG_PREFLD
+                      or (1L shl TRG_POSTFLD)
+                      or (1L shl TRG_POSTCHG)
+                      or (1L shl TRG_PREVAL)
+                      or (1L shl TRG_VALFLD)
+                      or (1L shl TRG_AUTOLEAVE))) > 0) {
+     /*   reportTrouble(CWarning(getTokenReference(),
+                FormMessages.TRIGGER_ON_INACCESSIBLE_FIELD,
+                getIdent()))*/
+      }
+    }
   }
 }

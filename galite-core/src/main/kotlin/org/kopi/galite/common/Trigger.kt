@@ -343,3 +343,25 @@ object POSTCHART : ChartVoidTriggerEvent(CConstants.TRG_POSTCHART)
  * Executed after the chart is closed.
  */
 object CHARTTYPE : ChartObjectTriggerEvent(CConstants.TRG_CHARTTYPE)
+
+///////////////////////////////////////////////////////////////////////////
+// FIELD TRIGGERS
+///////////////////////////////////////////////////////////////////////////
+/**
+ * Field Triggers
+ *
+ * @param event the event of the trigger
+ */
+open class FieldTriggerEvent(val event: Int)
+
+/**
+ * Field void Triggers
+ *
+ * @param event the event of the trigger
+ */
+open class FieldVoidTriggerEvent(event: Int) : FieldTriggerEvent(event)
+
+/**
+ * Executed on field content change
+ */
+object POSTCHG : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
