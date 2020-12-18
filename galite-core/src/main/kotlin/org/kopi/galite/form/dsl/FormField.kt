@@ -231,7 +231,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   /**
    * The field model based on the field type.
    */
-  @Suppress("UNCHECKED_CAST")
   val vField: VField by lazy {
     when {
       domain.type == null -> {

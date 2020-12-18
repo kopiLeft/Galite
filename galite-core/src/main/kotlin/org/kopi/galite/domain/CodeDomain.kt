@@ -25,7 +25,7 @@ import org.kopi.galite.common.LocalizationWriter
  */
 class CodeDomain<T : Comparable<T>?>(ident: String) : Domain<T>(ident = ident) {
   /**
-   * Mapping of all values that a domain can take
+   * Contains all values that a domain can take
    */
   val codes: MutableList<CodeDescription<T>> = mutableListOf()
 

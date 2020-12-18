@@ -78,7 +78,7 @@ open class LocalizationWriter {
     peekNode(null).addContent(self)
   }
 
-  fun genTypeDefinition(ident: String?, type: Domain<*>) {
+  fun genTypeDefinition(ident: String, type: Domain<*>) {
     val self = Element("type")
     self.setAttribute("ident", ident)
     pushNode(self)
@@ -94,8 +94,8 @@ open class LocalizationWriter {
   fun <T: Comparable<T>?> genCodeType(codes: List<CodeDescription<T>>) {
     val self = Element("code")
     pushNode(self)
-    for (i in codes.indices) {
-      codes[i].genLocalization(this)
+    codes.forEach { code ->
+      code.genLocalization(this)
     }
     popNode(self)
     peekNode("type").addContent(self)

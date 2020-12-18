@@ -122,7 +122,6 @@ object ReflectTool {
    * @param        index                    the index of the element requested
    *
    * @return       the element of position index
-   *
    */
   fun elementOfForm(form: Form, kClass: KClass<*>, index: Int): String {
     val formClass = form::class
