@@ -17,7 +17,6 @@
 package org.kopi.galite.form.dsl
 
 import org.kopi.galite.common.Action
-import java.io.File
 import java.io.IOException
 
 import org.kopi.galite.common.Actor
@@ -61,7 +60,7 @@ abstract class Form : Window() {
    * @param label                the label
    * @param help                 the help
    */
-  fun actor(ident: String, menu: Menu, label: String, help: String, init: Actor.() -> Unit): Actor {
+  fun actor(ident: String, menu: Menu, label: String, help: String, init: (Actor.() -> Unit)? = null): Actor {
     val number = when {
       ident == VKConstants.CMD_AUTOFILL -> {
         VForm.CMD_AUTOFILL
@@ -80,7 +79,9 @@ abstract class Form : Window() {
       }
     }
     val actor = Actor(ident, menu, label, help, number)
-    actor.init()
+    if (init != null) {
+      actor.init()
+    }
     formActors.add(actor)
     return actor
   }
@@ -232,6 +233,7 @@ abstract class Form : Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genForm(title,
+                                               formBlocks.map { it.ownDomains }.flatten().toTypedArray(),
                                                menus.toTypedArray(),
                                                formActors.toTypedArray(),
                                                pages.toTypedArray(),

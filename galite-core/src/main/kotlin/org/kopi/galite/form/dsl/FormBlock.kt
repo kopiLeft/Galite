@@ -34,9 +34,12 @@ import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
@@ -90,6 +93,9 @@ open class FormBlock(var buffer: Int,
   /** Blocks's commands. */
   private val blockCommands = mutableListOf<Command>()
 
+  /** Domains of fields added to this block. */
+  val ownDomains = mutableListOf<Domain<*>>()
+
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS
   // ----------------------------------------------------------------------
@@ -133,8 +139,8 @@ open class FormBlock(var buffer: Int,
   /**
    * Adds void trigger to this block.
    *
-   * @param blockTriggers the triggers to add
-   * @param method        the method to execute when trigger is called
+   * @param blockTriggerEvents the triggers to add
+   * @param method             the method to execute when trigger is called
    */
   fun trigger(vararg blockTriggerEvents: BlockVoidTriggerEvent, method: () -> Unit): Trigger {
     return trigger(blockTriggerEvents, method)
@@ -229,6 +235,11 @@ open class FormBlock(var buffer: Int,
                                                     access: Int,
                                                     position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
+    if(domain.type is CodeDomain<T>) {
+      ownDomains.add(domain)
+    } else if(domain.type is ListDomain<T>) {
+      TODO()
+    }
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
     field.setInfo()
@@ -518,7 +529,11 @@ open class FormBlock(var buffer: Int,
           it.table
         }.toTypedArray()
         fields = blockFields.map {
-          it.vField
+          it.vField.also {
+            if(it is VCodeField) {
+              it.source = super.source
+            }
+          }
         }.toTypedArray()
         super.indices = this@FormBlock.indices.map {
           it.ident

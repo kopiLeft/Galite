@@ -46,15 +46,12 @@ object FormSample : Form() {
 
   val edit = menu("Edit")
 
-  val autofillitem = actor(
+  val autoFill = actor(
           ident = "Autofill",
           menu = edit,
           label = "Autofill",
           help = "Autofill",
-  ) {
-    key  =  Key.F12         // key is optional here
-    icon = "column_chart"  // icon is optional here
-  }
+  )
 
   val graph = actor(
           ident = "graph",
