@@ -1,6 +1,6 @@
 # CI workflow
 
-name: CI
+name: Build
 
 # Controls when the action will run. 
 on:
