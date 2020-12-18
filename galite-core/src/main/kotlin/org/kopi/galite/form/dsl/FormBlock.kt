@@ -66,8 +66,8 @@ import org.kopi.galite.visual.WindowController
  */
 open class FormBlock(var buffer: Int,
                      var visible: Int,
-                     ident: String,
-                     val title: String)
+                     val title: String,
+                     ident: String? = null)
   : FormElement(ident), VConstants {
   var border: Int = 0
   var align: FormBlockAlign? = null
