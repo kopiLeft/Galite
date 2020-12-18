@@ -46,7 +46,7 @@ object BlockWithFields : FormBlock(1, 1, "Test block") {
     onInsertSkipped()
     columns(u.name)
   }
-  val age = skipped(domain = Domain<Int>(3), position = follow(name)) {
+  val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     onQueryMustFill()
