@@ -51,9 +51,6 @@ abstract class Form : Window() {
   /** Form's menus. */
   val menus = mutableListOf<Menu>()
 
-  /** Form's commands. */
-  private val formCommands = mutableListOf<Command>()
-
   /**
    * Adds a new actor to this form.
    *
@@ -186,7 +183,7 @@ abstract class Form : Window() {
   fun command(item: Actor, init: Command.() -> Unit): Command {
     val command = Command(item)
     command.init()
-    formCommands.add(command)
+    commands.add(command)
     return command
   }
 
@@ -272,18 +269,13 @@ abstract class Form : Window() {
     }.toTypedArray()
 
     //TODO ----------begin-------------
-    /** Used actors in form*/
-    val usedActors = actors.map { vActor ->
-      vActor?.actorIdent to vActor
-    }.toMap()
-
-    this.commands = formCommands.map {
-      VCommand(it.mode,
+    this.commands = this@Form.commands.map { command ->
+      VCommand(command.mode,
                this,
-               usedActors[it.item.ident],
+               actors.find { it?.actorIdent ==  command.item.ident },
                -1,
-               it.name!!,
-               it.action
+               command.name!!,
+               command.action
       )
     }.toTypedArray()
     this.handleTriggers(triggers)
