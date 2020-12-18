@@ -236,6 +236,8 @@ open class FormBlock(var buffer: Int,
     domain.kClass = T::class
     if(domain.type is CodeDomain<T>) {
       ownDomains.add(domain)
+    } else {
+      TODO()
     }
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()

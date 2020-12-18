@@ -76,7 +76,7 @@ class CodeDomainTests {
     val domain = IntTestType()
 
     // test code values
-    val codes = (domain.type as CodeDomain<*>).codes
+    val codes = domain.type.codes
     assertEquals(2, codes.size)
     assertEquals("id$0", codes[0].ident)
     assertEquals("cde1", codes[0].label)
