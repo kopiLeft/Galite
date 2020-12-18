@@ -32,23 +32,35 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
-object User: Table() {
+object User : Table() {
   val id = integer("ID")
   val name = varchar("NAME", 20).nullable()
-  val age = integer("AGE")
+  val age = integer("AGE").nullable()
 }
 
-object FormSample: Form() {
+object FormSample : Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
   val action = menu("Action")
 
-  val graph = actor (
-          ident =  "graph",
-          menu =   action,
-          label =  "Graph for test",
-          help =   "show graph values" ,
+  val edit = menu("Edit")
+
+  val autofillitem = actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  ) {
+    key  =  Key.F12         // key is optional here
+    icon = "column_chart"  // icon is optional here
+  }
+
+  val graph = actor(
+          ident = "graph",
+          menu = action,
+          label = "Graph for test",
+          help = "show graph values",
   ) {
     key  =  Key.F9          // key is optional here
     icon =  "column_chart"  // icon is optional here
@@ -95,7 +107,7 @@ object FormSample: Form() {
   }
 }
 
-class TestBlock : FormBlock(1, 1, "Test", "Test block") {
+class TestBlock : FormBlock(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -112,11 +124,14 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
   val password = mustFill(domain = Domain<String>(20), position = at(2, 1)) {
     label = "password"
     help = "The user password"
+
     options(FieldOption.NOECHO)
   }
-  val age = visit(domain = Domain<Int>(3), position = follow(name)) {
+  val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
+    minValue = 10
+    maxValue =90
     columns(u.age) {
       index = i
       priority = 1
@@ -124,7 +139,7 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
   }
 }
 
-class CommandesC(fournisseur: Int?): Chart() {
+class CommandesC(fournisseur: Int?) : Chart() {
   override val title: String = "Fournisseur"
 }
 

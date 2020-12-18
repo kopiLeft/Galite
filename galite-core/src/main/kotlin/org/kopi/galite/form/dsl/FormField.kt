@@ -97,6 +97,34 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
       }
     }
 
+  /** the minimum value that cannot exceed  */
+  private var min : Int = Int.MIN_VALUE
+
+  /** the maximum value that cannot exceed  */
+  private var max : Int = Int.MAX_VALUE
+
+  /**
+   * Sets the minimum value of an Int field.
+   */
+  var <U> FormField<U>.minValue : Int where U : Comparable<U>?, U : Number?
+    get() {
+      return min
+    }
+  set(value) {
+    min = value
+  }
+
+  /**
+   * Sets the maximum value of an Int field.
+   */
+  var <U> FormField<U>.maxValue : Int where U : Comparable<U>?, U : Number?
+    get() {
+      return max
+    }
+    set(value) {
+      max = value
+    }
+
   /**
    * Returns the field value of the current record number [record]
    *
@@ -204,59 +232,60 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * The field model based on the field type.
    */
   @Suppress("UNCHECKED_CAST")
-  var vField: VField =
-          when {
-            domain.type == null -> {
-              when (domain.kClass) {
-                Int::class, Long::class -> VIntegerField(block.buffer, domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
-                String::class -> VStringField(block.buffer,
-                                              domain.width ?: 0,
-                                              domain.height ?: 1,
-                                              domain.visibleHeight ?: 1,
-                                              0,  // TODO
-                                              false) // TODO
-                Boolean::class -> VBooleanField(block.buffer)
-                Date::class, java.util.Date::class -> VDateField(block.buffer)
-                Month::class -> VMonthField(block.buffer)
-                Week::class -> VWeekField(block.buffer)
-                Time::class -> VTimeField(block.buffer)
-                Timestamp::class -> VTimestampField(block.buffer)
-                else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-              }
-            }
-            domain.type is CodeDomain -> {
-              val type = domain.type as CodeDomain<*>
-              when (domain.kClass) {
-                Boolean::class -> VBooleanCodeField(block.buffer,
-                                                    type.ident,
-                                                    block.sourceFile,
-                                                    type.codes.map { it.ident }.toTypedArray(),
-                                                    type.codes.map { it.value as? Boolean }.toTypedArray())
-                Fixed::class -> VFixnumCodeField(block.buffer,
-                                                 type.ident,
-                                                 block.sourceFile,
-                                                 type.codes.map { it.ident }.toTypedArray(),
-                                                 type.codes.map { it.value as? Fixed }.toTypedArray())
-                Int::class, Long::class -> VIntegerCodeField(block.buffer,
-                                                             type.ident,
-                                                             block.sourceFile,
-                                                             type.codes.map { it.ident }.toTypedArray(),
-                                                             type.codes.map { it.value as? Int }.toTypedArray())
-                String::class -> VStringCodeField(block.buffer,
-                                                  type.ident,
-                                                  block.sourceFile,
-                                                  type.codes.map { it.ident }.toTypedArray(),
-                                                  type.codes.map { it.value as? String }.toTypedArray())
-                else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-              }
-            }
-            domain is ListDomain -> {
-              TODO()
-            }
-            else -> {
-              TODO()
-            }
-          }
+  val vField: VField by lazy {
+    when {
+      domain.type == null -> {
+        when (domain.kClass) {
+          Int::class, Long::class -> VIntegerField(block.buffer, domain.width ?: 0, min, max)
+          String::class -> VStringField(block.buffer,
+                                        domain.width ?: 0,
+                                        domain.height ?: 1,
+                                        domain.visibleHeight ?: 1,
+                                        0,  // TODO
+                                        false) // TODO
+          Boolean::class -> VBooleanField(block.buffer)
+          Date::class, java.util.Date::class -> VDateField(block.buffer)
+          Month::class -> VMonthField(block.buffer)
+          Week::class -> VWeekField(block.buffer)
+          Time::class -> VTimeField(block.buffer)
+          Timestamp::class -> VTimestampField(block.buffer)
+          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+        }
+      }
+      domain.type is CodeDomain -> {
+        val type = domain.type as CodeDomain<*>
+        when (domain.kClass) {
+          Boolean::class -> VBooleanCodeField(block.buffer,
+                                              type.ident,
+                                              block.sourceFile,
+                                              type.codes.map { it.ident }.toTypedArray(),
+                                              type.codes.map { it.value as? Boolean }.toTypedArray())
+          Fixed::class -> VFixnumCodeField(block.buffer,
+                                           type.ident,
+                                           block.sourceFile,
+                                           type.codes.map { it.ident }.toTypedArray(),
+                                           type.codes.map { it.value as? Fixed }.toTypedArray())
+          Int::class, Long::class -> VIntegerCodeField(block.buffer,
+                                                       type.ident,
+                                                       block.sourceFile,
+                                                       type.codes.map { it.ident }.toTypedArray(),
+                                                       type.codes.map { it.value as? Int }.toTypedArray())
+          String::class -> VStringCodeField(block.buffer,
+                                            type.ident,
+                                            block.sourceFile,
+                                            type.codes.map { it.ident }.toTypedArray(),
+                                            type.codes.map { it.value as? String }.toTypedArray())
+          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+        }
+      }
+      domain is ListDomain -> {
+        TODO()
+      }
+      else -> {
+        TODO()
+      }
+    }
+  }
 
   fun setInfo() {
     vField.setInfo(

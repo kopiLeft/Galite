@@ -14,62 +14,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.common.INIT
-import org.kopi.galite.common.PREBLK
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormWithBlockTrigger: Form() {
-
+object FormWithMultipleBlock : Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
-  val testPage = page("test page")
-  val menu = menu("Action")
-  val firstBlock = insertBlock(BlockWithTrigger1, testPage)
-  val secondVlock = insertBlock(BlockWithTrigger2, testPage)
+  val blockSample = insertBlock(BlockSample)
+  val multipleBlock = insertBlock(MultipleBlock)
 }
 
-object BlockWithTrigger1 : FormBlock(1, 1, "Test block") {
-  val u = table(User)
-  val i = index(message = "ID should be unique")
-
-  init {
-    trigger(PREBLK, INIT) {
-      println("---------------works---------------")
-    }
+object MultipleBlock : FormBlock(100, 100, "Test block") {
+  val id = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The user id"
   }
 
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
-    columns(u.name)
-  }
-}
-
-object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
-  val u = table(User)
-  val i = index(message = "ID should be unique")
-
-  init {
-    trigger(PREBLK) {
-      println("---------------works---------------")
-    }
-  }
-
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
-    label = "name"
-    help = "The user name"
-    columns(u.name)
   }
 }
 
 fun main() {
-  Application.runForm(FormWithBlockTrigger)
+  Application.runForm(FormWithMultipleBlock)
 }

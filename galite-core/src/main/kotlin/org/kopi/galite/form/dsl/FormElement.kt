@@ -29,9 +29,13 @@ import org.kopi.galite.common.Window
  * @param     ident           the identifier of this block
  * @param     shortcut        the shortcut of this block
  */
-abstract class FormElement(val ident: String) {
+abstract class FormElement(ident: String?) {
 
   open lateinit var shortcut: String
+
+  val ident: String = javaClass.name.removePrefix("${javaClass.packageName}.")
+          .substringBeforeLast('$')
+          .substringAfterLast('$')
 
   /**
    * Returns the qualified source file name where this element is defined.

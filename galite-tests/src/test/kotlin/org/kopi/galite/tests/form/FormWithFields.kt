@@ -31,7 +31,7 @@ object FormWithFields: Form() {
   val testBlock = insertBlock(BlockWithFields, testPage)
 }
 
-object BlockWithFields : FormBlock(1, 1, "Test", "Test block") {
+object BlockWithFields : FormBlock(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
