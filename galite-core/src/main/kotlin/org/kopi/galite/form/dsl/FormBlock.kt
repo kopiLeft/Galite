@@ -36,6 +36,7 @@ import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VCodeField
@@ -236,7 +237,7 @@ open class FormBlock(var buffer: Int,
     domain.kClass = T::class
     if(domain.type is CodeDomain<T>) {
       ownDomains.add(domain)
-    } else {
+    } else if(domain.type is ListDomain<T>) {
       TODO()
     }
     val field = FormField(this, domain, blockFields.size, access, position)
