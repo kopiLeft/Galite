@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.tests
 
+import java.util.Locale
+
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
@@ -49,6 +51,9 @@ open class JApplicationTestBase : TestBase() {
     override var isGeneratingHelp: Boolean = false
     override val isNoBugReport: Boolean
       get() = true
+
+    override val defaultLocale: Locale?
+      get() = Locale.FRANCE
 
     init {
       ApplicationConfiguration.setConfiguration(

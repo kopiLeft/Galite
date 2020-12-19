@@ -19,6 +19,9 @@ package org.kopi.galite.domain
 
 import kotlin.reflect.KClass
 
+import org.apache.poi.ss.formula.functions.Fixed
+import org.kopi.galite.common.LocalizationWriter
+
 /**
  * A domain is a data type with predefined list of allowed values.
  *
@@ -26,7 +29,10 @@ import kotlin.reflect.KClass
  * @param height            the height in char of this field
  * @param visibleHeight     the visible height in char of this field.
  */
-open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = null, val visibleHeight: Int? = null) {
+open class Domain<T : Comparable<T>?>(val width: Int? = null,
+                                      val height: Int? = null,
+                                      val visibleHeight: Int? = null,
+                                      val ident: String = "") {
   /**
    * The type of this domain.
    */
@@ -35,7 +41,7 @@ open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = 
   /**
    * Determines the column data type
    */
-  var kClass: KClass<T>? = null
+  var kClass: KClass<*>? = null
 
   /**
    * Allows to define the possible codes that the domain can take
@@ -57,19 +63,6 @@ open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = 
     val listDomain = ListDomain<T>(this::class.java.simpleName)
     listDomain.init()
     return listDomain
-  }
-
-  /**
-   * returns list of code values that can this field get.
-   */
-  fun getValues(): MutableMap<String, *> {
-    return if (isCodeDomain()) {
-      (type as CodeDomain<T>).codes
-    } else if (isListDomain()) {
-      (type as ListDomain<T>).list
-    } else {
-      throw Exception("Unsupported domain type")
-    }
   }
 
   /**
@@ -95,4 +88,20 @@ open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = 
    * returns true if this domain is a list domain, false otherwise
    */
   private fun isListDomain(): Boolean = type is ListDomain<T>
+
+  // ----------------------------------------------------------------------
+  // UTILITIES
+  // ----------------------------------------------------------------------
+  fun hasSize(): Boolean =
+          when(kClass) {
+            Fixed::class, Int::class, Long::class, String::class -> true
+            else -> false
+          }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  open fun genLocalization(writer: LocalizationWriter) {
+    writer.genTypeDefinition(type!!.ident, type!!)
+  }
 }

@@ -29,14 +29,18 @@ import org.kopi.galite.common.Window
  * @param     ident           the identifier of this block
  * @param     shortcut        the shortcut of this block
  */
-abstract class FormElement(val ident: String) {
+abstract class FormElement(ident: String?) {
 
   open lateinit var shortcut: String
+
+  val ident: String = javaClass.name.removePrefix("${javaClass.packageName}.")
+          .substringBeforeLast('$')
+          .substringAfterLast('$')
 
   /**
    * Returns the qualified source file name where this element is defined.
    */
-  protected val sourceFile: String
+  internal val sourceFile: String
     get() {
       val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
@@ -52,9 +56,7 @@ abstract class FormElement(val ident: String) {
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   abstract fun genLocalization(writer: LocalizationWriter)
 
   /**

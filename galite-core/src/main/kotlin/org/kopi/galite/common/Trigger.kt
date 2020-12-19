@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.common
 
+import org.kopi.galite.chart.CConstants
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.report.Constants
 
@@ -276,7 +277,6 @@ object CHANGED : BlockBooleanTriggerEvent(VConstants.TRG_CHANGED)  // Boolean tr
  */
 object ACCESS : BlockVoidTriggerEvent(VConstants.TRG_ACCESS)    // Void trigger
 
-
 ///////////////////////////////////////////////////////////////////////////
 // REPORT TRIGGERS
 ///////////////////////////////////////////////////////////////////////////
@@ -297,3 +297,49 @@ object PREREPORT : ReportTriggerEvent(Constants.TRG_PREREPORT)
  * Executed after the report is closed.
  */
 object POSTREPORT : ReportTriggerEvent(Constants.TRG_POSTREPORT)
+
+///////////////////////////////////////////////////////////////////////////
+// CHART TRIGGERS
+///////////////////////////////////////////////////////////////////////////
+
+/**
+ * Chart Triggers
+ *
+ * @param event the event of the trigger
+ */
+open class ChartTriggerEvent(val event: Int)
+
+/**
+ * Chart Triggers where executed method shouldn't return any thing.
+ *
+ * @param event the event of the trigger
+ */
+open class ChartVoidTriggerEvent(event: Int): ChartTriggerEvent(event)
+
+/**
+ * Chart Triggers where executed method should return an object.
+ *
+ * @param event the event of the trigger
+ */
+open class ChartObjectTriggerEvent(event: Int): ChartTriggerEvent(event)
+
+/**
+ * Executed before the chart is displayed.
+ */
+object PRECHART : ChartVoidTriggerEvent(CConstants.TRG_PRECHART)
+
+/**
+ * Executed at chart initialization.
+ */
+object INITCHART : ChartVoidTriggerEvent(CConstants.TRG_INIT)
+
+/**
+ * Executed after the chart initialization. This trigger should return a fixed type for the chart
+ * [org.kopi.galite.chart.VChartType].
+ */
+object POSTCHART : ChartVoidTriggerEvent(CConstants.TRG_POSTCHART)
+
+/**
+ * Executed after the chart is closed.
+ */
+object CHARTTYPE : ChartObjectTriggerEvent(CConstants.TRG_CHARTTYPE)

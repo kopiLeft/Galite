@@ -27,7 +27,7 @@ import org.kopi.galite.visual.VlibProperties
  * @param ident         The column identifier.
  * @param format        The dimension format.
  */
-class VBooleanDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+class VBooleanDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------

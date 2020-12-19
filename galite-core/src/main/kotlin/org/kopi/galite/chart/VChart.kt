@@ -30,6 +30,7 @@ import kotlin.collections.ArrayList
 import com.lowagie.text.Rectangle
 
 import org.kopi.galite.base.Utils
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.l10n.ChartLocalizer
 import org.kopi.galite.l10n.LocalizationManager
@@ -112,7 +113,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * @param     manager         the manger to use for localization
    */
   protected fun localize(manager: LocalizationManager) {
-    val loc: ChartLocalizer = manager.getChartLocalizer(source!!)
+    val loc: ChartLocalizer = manager.getChartLocalizer(source)
 
     setPageTitle(loc.getTitle())
     help = loc.getHelp()
@@ -372,7 +373,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * @param dimensions The dimension value.
    * @param measures The measures values.
    */
-  protected fun addRow(dimensions: Array<Any?>, measures: Array<Any?>) {
+  internal fun addRow(dimensions: Array<Any?>, measures: Array<Any?>) {
     rows.add(VRow(dimensions, measures))
   }
 
@@ -429,10 +430,13 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   // TRIGGER HANDLING
   // --------------------------------------------------------------------
 
-  override fun executeVoidTrigger(VKT_Type: Int) {}
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    triggers[VKT_Type]?.action?.method?.invoke()
+    super.executeVoidTrigger(VKT_Type)
+  }
 
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (triggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
@@ -582,13 +586,15 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   private var cmdAreaView: VCommand? = null
   private var cmdPieView: VCommand? = null
 
-  override var source: String? = null
+  override lateinit var source: String
   private var built = false
   private var pageTitle = ""
   var help: String? = null
   var chartType: VChartType? = null  // chart type
     private set
-  internal var VKT_Triggers: Array<IntArray>? = null // trigger list
+
+  protected var VKT_Triggers = mutableListOf(IntArray(CConstants.TRG_TYPES.size)) // trigger list
+  protected val triggers = mutableMapOf<Int, Trigger>()
 
   protected var commands: Array<VCommand>? = null // commands
   private val activeCommands: ArrayList<VCommand> = ArrayList()

@@ -19,43 +19,42 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.Key
-import org.kopi.galite.form.dsl.ReportSelectionForm
-import org.kopi.galite.report.Report
-import org.kopi.galite.tests.report.SimpleReport
+import org.kopi.galite.tests.chart.ChartSample
 
-object FormWithReport : ReportSelectionForm() {
+object FormWithChart: Form() {
   override val locale = Locale.FRANCE
-
   override val title = "form for test"
 
   val action = menu("Action")
-  val testPage = page("test page")
-  val report = actor(
-          ident = "report",
-          menu = action,
-          label = "CreateReport",
-          help = "Create report",
+
+  val graph = actor (
+          ident =  "graph",
+          menu =   action,
+          label =  "Graph for test",
+          help =   "show graph values" ,
   ) {
-    key = Key.F8          // key is optional here
-    icon = "preview"  // icon is optional here
+    key  =  Key.F9          // key is optional here
+    icon =  "column_chart"  // icon is optional here
   }
 
-  val block = insertBlock(BlockSample, testPage) {
-    command(item = report) {
-      this.name = "report"
+  val p1 = page("test page")
+  val p2 = page("test page2")
+
+  val tb1 = insertBlock(TestBlock(), p1) {
+    command(item = graph) {
+      this.name = "graphe"
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
-        println("-----------Generating report-----------------")
-        createReport(BlockSample)
+        println("---------------------------------- Generating a chart ----------------------------------")
+        showChart(ChartSample)
       }
     }
   }
-
-  override fun createReport(): Report {
-    return SimpleReport
-  }
 }
 
-fun main() {
-  Application.runForm(FormWithReport)
+fun main(){
+  Application.runForm(formName = FormWithChart)
 }
