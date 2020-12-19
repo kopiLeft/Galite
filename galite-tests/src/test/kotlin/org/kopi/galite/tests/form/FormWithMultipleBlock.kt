@@ -14,25 +14,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.tests.form
 
-package org.kopi.galite.tests.chart
+import java.util.Locale
 
-import org.junit.Test
-import org.kopi.galite.chart.ChartMeasure
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.Color
-import kotlin.test.assertEquals
+import org.kopi.galite.form.dsl.Form
+import org.kopi.galite.form.dsl.FormBlock
 
-class MeasureTests {
+object FormWithMultipleBlock : Form() {
+  override val locale = Locale.FRANCE
+  override val title = "form for test"
+  val blockSample = insertBlock(BlockSample)
+  val multipleBlock = insertBlock(MultipleBlock)
+}
 
-  /**
-   * Test measure class
-   */
-  @Test
-  fun testMeasure() {
-    val measure1 = ChartMeasure(Domain<Int>())
-    measure1.label = "measure 1"
-    measure1.color = Color.RED
-    assertEquals(measure1.color.toString(), "RED")
+object MultipleBlock : FormBlock(100, 100, "Test block") {
+  val id = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The user id"
   }
+
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "name"
+    help = "The user name"
+  }
+}
+
+fun main() {
+  Application.runForm(FormWithMultipleBlock)
 }

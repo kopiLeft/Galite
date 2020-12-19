@@ -50,4 +50,8 @@ class InconsistencyException : RuntimeException {
    * @param        message                the detail message
    */
   constructor(message: String, throwable: Throwable) : super(message, throwable)
+
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }

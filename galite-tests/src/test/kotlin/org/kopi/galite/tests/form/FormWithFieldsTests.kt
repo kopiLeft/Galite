@@ -16,13 +16,10 @@
  */
 package org.kopi.galite.tests.form
 
-import java.util.Locale
-
 import kotlin.test.assertEquals
 
 import org.junit.Test
 
-import org.kopi.galite.domain.Domain
 import org.kopi.galite.tests.JApplicationTestBase
 
 class FormWithFieldsTests: JApplicationTestBase() {

@@ -420,5 +420,7 @@ class ExtendedMessageFormat : MessageFormat {
     // default behavior can't be hacked.
     /*package*/
     val NULL_REPRESENTATION = Any()
+
+    private const val serialVersionUID = 0L
   }
 }

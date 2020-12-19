@@ -25,4 +25,8 @@ package org.kopi.galite.util.lpr
  * @param    code        the exception code
  * @param    message        the associated message
  */
-class LpdException(val code: Int, message: String) : Exception(message)
+class LpdException(val code: Int, message: String) : Exception(message) {
+  companion object {
+    private const val serialVersionUID = 0L
+  }
+}
