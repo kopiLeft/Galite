@@ -15,24 +15,46 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.form.dsl
+package org.kopi.galite.chart
 
+import org.jdom2.Element
 import org.kopi.galite.common.LocalizationWriter
 
 /**
- * A page represents a Tab for each page you create under the form's toolbar.
- * You can put as much blocks you want in each page, the same goes for form without pages.
- *
- * @param ident                the identifier of the page
- * @param title                the page title in default locale
+ * This class implements an  XML localization file generator
  */
-class FormPage(val pageNumber: Int, val ident: String, val title: String) {
+class ChartLocalizationWriter : LocalizationWriter() {
+  // ----------------------------------------------------------------------
+  // IMPLEMENTATIONS
+  // ----------------------------------------------------------------------
+
+  fun genChart(title: String?,
+               help: String?,
+               fields: List<ChartField<*>>) {
+    val self = Element("chart")
+    self.setAttribute("title", title)
+    if (help != null) {
+      self.setAttribute("help", help)
+    }
+    pushNode(self)
+    // coll.genLocalization(this) TODO
+    fields.forEach { field ->
+      field.genLocalization(this)
+    }
+    // do not pop: this is the root element
+  }
 
   // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
 
-  fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genPage(ident, title)
+  fun genField(ident: String?, label: String?, help: String?) {
+    val self = Element("field")
+    self.setAttribute("ident", ident)
+    if (label != null) {
+      self.setAttribute("label", label)
+    }
+    if (help != null) {
+      self.setAttribute("help", help)
+    }
+    peekNode(null).addContent(self)
   }
 }

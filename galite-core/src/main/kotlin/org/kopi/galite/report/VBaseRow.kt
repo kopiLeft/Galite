@@ -23,4 +23,8 @@ class VBaseRow(data: Array<Any?>) : VReportRow(data) {
    * Return the level of the node. For base rows it is always 0
    */
   override fun getLevel(): Int = 0
+
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }

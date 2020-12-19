@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,15 +17,25 @@
 
 package org.kopi.galite.chart
 
+import java.io.Serializable
+
+import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.field.Field
+
 /**
- * Represents an integer chart column.
- * @param ident The column identifier.
- * @param format The dimension format.
+ * A chart column.
  */
-class VIntegerDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
-  // --------------------------------------------------------------------
-  // IMPLEMENTATIONS
-  override fun toString(value: Any?): String {
-    return value?.toString() ?: CConstants.EMPTY_TEXT
+abstract class ChartField<T : Comparable<T>?>(domain: Domain<T>) : Field<T>(domain), Serializable {
+  val ident get() = label!!  // TODO must me resolved from variable name and moved to super class.
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * !!! COMMENT ME
+   */
+  override fun genLocalization(writer: LocalizationWriter) {
+    (writer as ChartLocalizationWriter).genField(ident, label, help)
   }
 }

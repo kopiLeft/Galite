@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,15 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.common
 
-package org.kopi.galite.chart
-
-import java.io.Serializable
-
-/**
- * A chart column.
- */
-abstract class Column : Serializable {
-  /** The column's label */
-  var label: String = ""
+object VKConstants {
+    // ----------------------------------------------------------------------
+    // PREDEFINED COMMANDS
+    // ----------------------------------------------------------------------
+    val CMD_AUTOFILL: String = "Autofill"
+    val CMD_SHORTCUT: String = "EditItem_S"
+    val CMD_NEWITEM: String = "NewItem"
+    val CMD_EDITITEM: String = "EditItem"
 }

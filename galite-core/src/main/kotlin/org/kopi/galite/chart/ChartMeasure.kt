@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.chart
 
+import java.lang.RuntimeException
+
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.visual.Color
 
@@ -24,8 +26,16 @@ import org.kopi.galite.visual.Color
  *
  * @param domain dimension domain.
  */
-open class Measure<T>(domain: Domain<T>? = null) : Column() where T : Comparable<T>, T : Number {
+open class ChartMeasure<T>(domain: Domain<T>) : ChartField<T>(domain) where T : Comparable<T>?, T : Number? {
 
   /**Measure's color in chart */
   lateinit var color: Color
+
+  // TODO add Fixed types
+  val model: VMeasure
+    get() = when (domain.kClass) {
+      Int::class ->
+        VIntegerMeasure(ident, null)
+      else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+    }
 }
