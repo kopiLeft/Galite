@@ -43,17 +43,23 @@ object BlockWithFields : FormBlock(1, 1, "Test block") {
   val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
-    onInsertSkipped()
+    onQuerySkipped()
+    onInsertHidden()
     columns(u.name)
   }
   val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
-    onQueryMustFill()
+    onQueryHidden()
     columns(u.age) {
       index = i
       priority = 1
     }
+  }
+  val lastName = mustFill(domain = Domain<String?>(20), position = at(2, 1)) {
+    label = "lastName"
+    help = "The user last name"
+    columns(u.name)
   }
 }
 
