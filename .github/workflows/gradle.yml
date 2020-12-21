@@ -29,6 +29,6 @@ jobs:
 
       # Runs check task
       - name: Test with Gradle
-        run: |
-          echo ":0.0" >> $DISPLAY
-          ./gradlew --info --stacktrace clean check
+        env:
+          DISPLAY: ":0.0"
+        run: ./gradlew --info --stacktrace clean check
