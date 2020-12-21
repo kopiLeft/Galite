@@ -24,39 +24,31 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormWithFields: Form() {
+object FormWithDomains: Form() {
   override val locale = Locale.FRANCE
-  override val title = "form for test fields visibility"
-  val testPage = page("test page")
-  val testBlock = insertBlock(BlockWithFields, testPage)
+  override val title = "form to test domains"
+  val testBlock = insertBlock(DaysBlock)
 }
 
-object BlockWithFields : FormBlock(1, 1, "Test block") {
-  val u = table(User)
-  val i = index(message = "ID should be unique")
+object DaysBlock : FormBlock(1, 1, "DaysBlock", "Days block") {
+  val day = mustFill(domain = Days, position = at(1, 1)) {
+    label = "day"
+    help = "The day"
+  }
+}
 
-  val id = hidden(domain = Domain<Int>(20)) {
-    label = "id"
-    help = "The user id"
-    columns(u.id)
-  }
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
-    label = "name"
-    help = "The user name"
-    onInsertSkipped()
-    columns(u.name)
-  }
-  val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
-    label = "age"
-    help = "The user age"
-    onQueryMustFill()
-    columns(u.age) {
-      index = i
-      priority = 1
-    }
+object Days: Domain<Int>(20) {
+  override val type = code {
+    this["Sunday"] = 1
+    this["Monday"] = 2
+    this["Tuesday"] = 3
+    this["Wednesday"] = 4
+    this["Thursday"] = 5
+    this["Friday"] = 6
+    this["Saturday"] = 7
   }
 }
 
 fun main() {
-  Application.runForm(formName = FormWithFields)
+  Application.runForm(formName = FormWithDomains)
 }

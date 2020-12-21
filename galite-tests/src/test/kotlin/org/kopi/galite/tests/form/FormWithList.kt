@@ -84,7 +84,7 @@ object FormWithList : DictionaryForm() {
   }
 }
 
-object BlockSample : FormBlock(1, 1, "BlockSample", "Test block") {
+object BlockSample : FormBlock(1, 1, "Test block") {
   val u = table(Users)
   val i = index(message = "ID should be unique")
 
@@ -103,7 +103,7 @@ object BlockSample : FormBlock(1, 1, "BlockSample", "Test block") {
   }
 }
 
-object BlockWithManyTables : FormBlock(1, 20, "BlockWithManyTables", "Test block") {
+object BlockWithManyTables : FormBlock(1, 20, "Test block") {
   val u = table(Users)
   val m = table(Modules)
   val r = table(UserRights)

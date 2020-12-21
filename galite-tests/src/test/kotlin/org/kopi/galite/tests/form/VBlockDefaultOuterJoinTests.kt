@@ -16,6 +16,9 @@
  */
 package org.kopi.galite.tests.form
 
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
@@ -23,9 +26,6 @@ import org.kopi.galite.chart.Formatter.quoteIfNecessary
 import org.kopi.galite.db.Users
 import org.kopi.galite.form.VBlockDefaultOuterJoin
 import org.kopi.galite.tests.JApplicationTestBase
-
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
 

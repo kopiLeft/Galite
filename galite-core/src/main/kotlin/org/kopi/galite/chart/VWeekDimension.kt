@@ -25,7 +25,7 @@ import org.kopi.galite.type.Week
  * @param ident The column identifier.
  * @param format The dimension format.
  */
-class VWeekDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+class VWeekDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
   override fun toString(value: Any?): String {
     return when (value) {
       null -> CConstants.EMPTY_TEXT

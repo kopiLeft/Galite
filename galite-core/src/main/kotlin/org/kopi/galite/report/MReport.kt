@@ -994,6 +994,10 @@ class MReport : Constants, Serializable {
     }
   }
 
+  companion object {
+    private const val serialVersionUID = 0L
+  }
+
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
