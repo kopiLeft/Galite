@@ -31,7 +31,7 @@ class FormWithListTests: JApplicationTestBase() {
   }
 
   @Test
-  fun ensureFormSampleDoesntCrash() {
+  fun ensureFormWithListDoesntCrash() {
     Application.run(formName = FormWithList)
   }
 }

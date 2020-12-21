@@ -31,7 +31,7 @@ class FormWithDomainsTests: JApplicationTestBase() {
   }
 
   @Test
-  fun ensureFormSampleDoesntCrash() {
+  fun ensureFormWithDomainsDoesntCrash() {
     Application.run(formName = FormWithDomains)
   }
 }

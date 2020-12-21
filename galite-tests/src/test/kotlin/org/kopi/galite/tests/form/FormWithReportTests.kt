@@ -31,7 +31,7 @@ class FormWithReportTests: JApplicationTestBase() {
   }
 
   @Test
-  fun ensureFormSampleDoesntCrash() {
+  fun ensureFormWithReportDoesntCrash() {
     Application.run(formName = FormWithReport)
   }
 }

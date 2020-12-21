@@ -31,7 +31,7 @@ class FormWithMultipleBlockTests: JApplicationTestBase() {
   }
 
   @Test
-  fun ensureFormSampleDoesntCrash() {
+  fun ensureFormWithMultipleBlockDoesntCrash() {
     Application.run(formName = FormWithMultipleBlock)
   }
 }

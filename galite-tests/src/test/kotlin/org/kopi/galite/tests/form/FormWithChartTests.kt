@@ -31,7 +31,7 @@ class FormWithChartTests: JApplicationTestBase() {
   }
 
   @Test
-  fun ensureFormSampleDoesntCrash() {
+  fun ensureFormWithChartDoesntCrash() {
     Application.run(formName = FormWithChart)
   }
 }

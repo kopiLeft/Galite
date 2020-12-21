@@ -31,7 +31,7 @@ class FormWithBlockTriggerTests: JApplicationTestBase() {
   }
 
   @Test
-  fun ensureFormSampleDoesntCrash() {
+  fun ensureFormWithBlockTriggerDoesntCrash() {
     Application.run(formName = FormWithBlockTrigger)
   }
 }

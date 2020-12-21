@@ -63,7 +63,7 @@ open class DBSchemaTest : TestBase() {
     @JvmStatic
     fun reset() {
       transaction {
-        dropDBSchemaTables()
+        exec("DROP ALL OBJECTS")
       }
     }
 
