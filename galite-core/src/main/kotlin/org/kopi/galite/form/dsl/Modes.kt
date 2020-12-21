@@ -14,25 +14,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.tests.form
+package org.kopi.galite.form.dsl
 
-import kotlin.test.assertNotNull
+import org.kopi.galite.form.VConstants
 
-import org.jetbrains.exposed.sql.selectAll
-import org.junit.Test
-import org.kopi.galite.db.Users
-import org.kopi.galite.form.VBlockDefaultOuterJoin
-import org.kopi.galite.tests.JApplicationTestBase
-
-class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
-  @Test
-  fun getSearchTablesTest() {
-    FormWithList.model
-    val searchTables = VBlockDefaultOuterJoin.getSearchTables(FormWithList.block.vBlock)
-
-    assertNotNull(searchTables)
-    val tables = searchTables.selectAll().targets
-
-    assertCollectionsEquals(arrayListOf(Users), tables)
-  }
+enum class Modes(val value: Int) {
+  /** mode query */
+  MOD_QUERY(VConstants.MOD_QUERY),
+  /** mode insert */
+  MOD_INSERT(VConstants.MOD_INSERT),
+  /** mode update */
+  MOD_UPDATE(VConstants.MOD_UPDATE)
 }

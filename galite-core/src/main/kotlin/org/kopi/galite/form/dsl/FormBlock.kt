@@ -20,8 +20,6 @@ package org.kopi.galite.form.dsl
 import java.awt.Point
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
@@ -351,6 +349,32 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Changing the visibility of the block.
+   *
+   * Use [Access] to see the list of the access.
+   * Use [Modes] to see the list of the modes.
+   *
+   * @param access the access to set in the block
+   * @param modes the list of modes where the access will be changed
+   */
+  fun changeBlockAccess(access: Access, vararg modes: Modes) {
+    var self = 0
+
+    modes.forEach { mode ->
+      self = self or (1 shl mode.value)
+    }
+    if (self and (1 shl VConstants.MOD_QUERY) != 0) {
+      this.access[VConstants.MOD_QUERY] = access.value
+    }
+    if (self and (1 shl VConstants.MOD_INSERT) != 0) {
+      this.access[VConstants.MOD_INSERT] = access.value
+    }
+    if (self and (1 shl VConstants.MOD_UPDATE) != 0) {
+      this.access[VConstants.MOD_UPDATE] = access.value
+    }
+  }
+
+  /**
    * Make a tuning pass in order to create informations about exported
    * elements such as block fields positions
    *
@@ -512,9 +536,6 @@ open class FormBlock(var buffer: Int,
 
         handleTriggers(this@FormBlock.triggers)
 
-        super.access = intArrayOf(
-                4, 4, 4
-        )
         //TODO ------------end-----------
 
         super.source = source ?: sourceFile
@@ -525,6 +546,7 @@ open class FormBlock(var buffer: Int,
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.name = ident
         super.options = blockOptions
+        super.access = this@FormBlock.access
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()

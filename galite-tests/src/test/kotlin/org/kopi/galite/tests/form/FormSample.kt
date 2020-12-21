@@ -30,7 +30,9 @@ import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 
 object User : Table() {
   val id = integer("ID")
@@ -88,6 +90,10 @@ object FormSample : Form() {
 
   val tb3ToTestBlockOptions = insertBlock(TestBlock(), p1) {
     options(BlockOption.NOINSERT)
+  }
+
+  val tb4ToTestChangeBlockAccess = insertBlock(TestBlock(), p1) {
+    changeBlockAccess(Access.ACS_SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
   }
 
   val preform = trigger(INITFORM) {
