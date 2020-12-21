@@ -120,7 +120,7 @@ object BlockWithManyTables : FormBlock(1, 20, "Test block") {
     columns(m.id, r.module)
   }
 
-  val name = visit(domain = Domain<String>(20), position = at(1, 3)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name) {
