@@ -26,7 +26,8 @@ import org.kopi.galite.form.VPosition
  *
  * @param field                the master field
  */
-class FormDescriptionPosition<T : Comparable<T>>(val field: FormField<T>, private var chartPos: Int = -1) : FormPosition() {
+class FormDescriptionPosition<T : Comparable<T>?>(val field: FormField<T>,
+                                                  private var chartPos: Int = -1) : FormPosition() {
 
   /**
    * Sets chart position to [chartPos]
@@ -84,5 +85,5 @@ class FormDescriptionPosition<T : Comparable<T>>(val field: FormField<T>, privat
    * Creates and returns a VPosition model resolved from this form field position
    */
   override fun getPositionModel(): VPosition =
-    VPosition(getLine(), getLineEnd(), getColumn(), getColumnEnd(), getChartPosition())
+          VPosition(getLine(), getLineEnd(), getColumn(), getColumnEnd(), getChartPosition())
 }

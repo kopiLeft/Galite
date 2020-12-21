@@ -40,16 +40,16 @@ class VBooleanCodeColumn(ident: String?,
                          format: VCellFormat?,
                          names: Array<String>,
                          private val codes: BooleanArray)
-      : VCodeColumn(ident,
-                    type,
-                    source,
-                    options,
-                    align,
-                    groups,
-                    function,
-                    width,
-                    format,
-                    names) {
+  : VCodeColumn(ident,
+                type,
+                source,
+                options,
+                align,
+                groups,
+                function,
+                width,
+                format,
+                names) {
 
   override fun compareTo(object1: Any, object2: Any): Int {
     return if (object1 == object2) 0 else if (java.lang.Boolean.TRUE == object1) 1 else -1

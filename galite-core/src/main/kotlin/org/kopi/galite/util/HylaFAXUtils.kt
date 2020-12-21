@@ -41,8 +41,11 @@ object HylaFAXUtils {
    * RETURNS A ArrayList OF STRINGS
    * ----------------------------------------------------------------------
    */
-  fun readSendQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus>
-    = readQueue(host, port, user, password, "sendq")
+  fun readSendQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus> = readQueue(host,
+                                                                                                               port,
+                                                                                                               user,
+                                                                                                               password,
+                                                                                                               "sendq")
 
   /*
    * ----------------------------------------------------------------------
@@ -50,8 +53,11 @@ object HylaFAXUtils {
    * RETURNS A ArrayList OF FAXSTATUS
    * ----------------------------------------------------------------------
    */
-  fun readDoneQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus>
-    = readQueue(host, port, user, password, "doneq")
+  fun readDoneQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus> = readQueue(host,
+                                                                                                               port,
+                                                                                                               user,
+                                                                                                               password,
+                                                                                                               "doneq")
 
   /*
    * ----------------------------------------------------------------------
@@ -59,8 +65,11 @@ object HylaFAXUtils {
    * RETURNS A ArrayList OF FAXSTATUS
    * ----------------------------------------------------------------------
    */
-  fun readRecQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus>
-    = readQueue(host, port, user, password, "recvq")
+  fun readRecQueue(host: String, port: Int, user: String, password: String): ArrayList<FaxStatus> = readQueue(host,
+                                                                                                              port,
+                                                                                                              user,
+                                                                                                              password,
+                                                                                                              "recvq")
 
   /*
    * ----------------------------------------------------------------------
@@ -177,7 +186,7 @@ object HylaFAXUtils {
       val result = getQueue(host, port, user, password, qname)
 
       Utils.log("Fax", "READ $qname : host $host / user $user")
-     result.forEach { element ->
+      result.forEach { element ->
         try {
           val process = StringTokenizer(element, "|")
 

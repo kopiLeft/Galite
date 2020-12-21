@@ -96,15 +96,15 @@ open class DBSchemaTest : TestBase() {
                        parentName: String = "-1",
                        className: KClass<*>? = null,
                        symbolNumber: Int? = null) {
-      Modules.insert {
-        it[uc] = 0
-        it[ts] = 0
-        it[shortName] = shortname
-        it[parent] = if(parentName != "-1") Modules.select { shortName eq parentName }.single()[id] else -1
-        it[sourceName] = source
-        it[priority] = priorityNumber
-        it[objectName] = if (className != null) className.qualifiedName!! else null
-        it[symbol] = symbolNumber
+    Modules.insert {
+      it[uc] = 0
+      it[ts] = 0
+      it[shortName] = shortname
+      it[parent] = if (parentName != "-1") Modules.select { shortName eq parentName }.single()[id] else -1
+      it[sourceName] = source
+      it[priority] = priorityNumber
+      it[objectName] = if (className != null) className.qualifiedName!! else null
+      it[symbol] = symbolNumber
 
     }
   }
@@ -134,11 +134,11 @@ open class DBSchemaTest : TestBase() {
    */
   fun insertIntoUserRights(userName: String,
                            moduleName: String,
-                           accessUser : Boolean) {
+                           accessUser: Boolean) {
     UserRights.insert {
       it[ts] = 0
-      it[module] = Modules.slice(Modules.id).select{ Modules.shortName eq  moduleName}.single()[Modules.id]
-      it[user] = Users.slice(Users.id).select{ Users.shortName eq  userName}.single()[Users.id]
+      it[module] = Modules.slice(Modules.id).select { Modules.shortName eq moduleName }.single()[Modules.id]
+      it[user] = Users.slice(Users.id).select { Users.shortName eq userName }.single()[Users.id]
       it[access] = accessUser
     }
   }

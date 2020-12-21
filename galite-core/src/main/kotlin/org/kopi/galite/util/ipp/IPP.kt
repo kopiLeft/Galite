@@ -103,7 +103,7 @@ class IPP() {
   }
 
   fun simpleDump() {
-        attributes.forEach {
+    attributes.forEach {
       it.simpleDump()
     }
   }

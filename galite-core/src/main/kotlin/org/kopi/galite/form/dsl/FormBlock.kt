@@ -19,6 +19,10 @@ package org.kopi.galite.form.dsl
 
 import java.awt.Point
 
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.BlockBooleanTriggerEvent
@@ -30,14 +34,17 @@ import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.ListDomain
+import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VCommand
-
-import org.jetbrains.exposed.sql.Table
+import org.kopi.galite.visual.WindowController
 
 /**
  * A block is a set of data which are stocked in the database and shown on a [Form].
@@ -60,7 +67,11 @@ import org.jetbrains.exposed.sql.Table
  * @param        triggers              the triggers executed by this form
  * @param        fields                the objects that populate the block
  */
-open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title: String) : FormElement(ident), VConstants {
+open class FormBlock(var buffer: Int,
+                     var visible: Int,
+                     val title: String,
+                     ident: String? = null)
+  : FormElement(ident), VConstants {
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
@@ -74,12 +85,16 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   private var maxRowPos = 0
   private var maxColumnPos = 0
   private var displayedFields = 0
+  lateinit var form: Form
 
   /** Blocks's fields. */
   val blockFields = mutableListOf<FormField<*>>()
 
   /** Blocks's commands. */
   private val blockCommands = mutableListOf<Command>()
+
+  /** Domains of fields added to this block. */
+  val ownDomains = mutableListOf<Domain<*>>()
 
   // ----------------------------------------------------------------------
   // BLOCK TRIGGERS
@@ -124,8 +139,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
   /**
    * Adds void trigger to this block.
    *
-   * @param blockTriggers the triggers to add
-   * @param method        the method to execute when trigger is called
+   * @param blockTriggerEvents the triggers to add
+   * @param method             the method to execute when trigger is called
    */
   fun trigger(vararg blockTriggerEvents: BlockVoidTriggerEvent, method: () -> Unit): Trigger {
     return trigger(blockTriggerEvents, method)
@@ -163,7 +178,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T : Comparable<T>> mustFill(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>?> mustFill(domain: Domain<T>,
+                                                   position: FormPosition,
+                                                   init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_MUSTFILL, position)
   }
 
@@ -176,7 +193,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param init    initialization method to initialize the field.
    * @return a VISIT field.
    */
-  inline fun <reified T : Comparable<T>> visit(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>?> visit(domain: Domain<T>,
+                                                position: FormPosition,
+                                                init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_VISIT, position)
   }
 
@@ -189,7 +208,9 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param init    initialization method to initialize the field.
    * @return a SKIPPED field.
    */
-  inline fun <reified T : Comparable<T>> skipped(domain: Domain<T>, position: FormPosition, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>?> skipped(domain: Domain<T>,
+                                                  position: FormPosition,
+                                                  init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_SKIPPED, position)
   }
 
@@ -202,20 +223,26 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param init    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T : Comparable<T>> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T : Comparable<T>?> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
     return initField(domain, init, VConstants.ACS_HIDDEN)
   }
 
   /**
    * Initializes a field.
    */
-  inline fun <reified T : Comparable<T>> initField(domain: Domain<T>,
-                                                   init: FormField<T>.() -> Unit,
-                                                   access: Int,
-                                                   position: FormPosition? = null): FormField<T> {
+  inline fun <reified T : Comparable<T>?> initField(domain: Domain<T>,
+                                                    init: FormField<T>.() -> Unit,
+                                                    access: Int,
+                                                    position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
+    if(domain.type is CodeDomain<T>) {
+      ownDomains.add(domain)
+    } else if(domain.type is ListDomain<T>) {
+      TODO()
+    }
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
+    field.initialize(this)
     field.setInfo()
     blockFields.add(field)
     return field
@@ -282,7 +309,7 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    *
    * @param field                the field
    */
-  fun <T : Comparable<T>> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
+  fun <T : Comparable<T>?> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
 
   /**
    * creates and returns a form block index. It is used to define a value in the database
@@ -331,10 +358,10 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
    * @param window        the actual context of analyse
    */
   override fun initialize(window: Window) {
+    this.form = window as Form
     val bottomRight = Point(0, 0)
 
     blockFields.forEach { field ->
-      field.initialize(this)
       if (field.position != null) {
         field.position!!.createRBPoint(bottomRight, field)
       }
@@ -381,20 +408,35 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
     return if (indexOfTable >= -1) indexOfTable else throw InconsistencyException()
   }
 
+  /**
+   * Saves current block (insert or update)
+   */
+  fun saveBlock() {
+    Commands.saveBlock(vBlock)
+  }
+
+  /**
+   * Menu query block, fetches selected record.
+   */
+  fun DictionaryForm.recursiveQuery() {
+    Commands.recursiveQuery(vBlock)
+  }
+
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   override fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genBlock(ident,
-            title,
-            help,
-            indices.toTypedArray(),
-            blockFields.toTypedArray())
+                                                title,
+                                                help,
+                                                indices.toTypedArray(),
+                                                blockFields.toTypedArray())
   }
 
+  fun showChart(chart: Chart) {
+    WindowController.windowController.doNotModal(chart);
+  }
 
   /** The block model */
   lateinit var vBlock: VBlock
@@ -414,8 +456,8 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // BLOCK TRIGGERS
+        val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
         triggers.forEach { trigger ->
-          val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
               blockTriggerArray[i] = i
@@ -460,11 +502,11 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
 
         super.commands = blockCommands.map {
           VCommand(it.mode,
-                  this,
-                  usedActors[it.item.ident],
-                  -1,
-                  it.name!!,
-                  it.action
+                   this,
+                   usedActors[it.item.ident],
+                   -1,
+                   it.name!!,
+                   it.action
           )
         }.toTypedArray()
 
@@ -481,13 +523,18 @@ open class FormBlock(var buffer: Int, var visible: Int, ident: String, val title
         super.pageNumber = this@FormBlock.pageNumber
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
+        super.displayedFields = this@FormBlock.displayedFields
         super.name = ident
         super.options = blockOptions
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()
         fields = blockFields.map {
-          it.vField
+          it.vField.also {
+            if(it is VCodeField) {
+              it.source = super.source
+            }
+          }
         }.toTypedArray()
         super.indices = this@FormBlock.indices.map {
           it.ident

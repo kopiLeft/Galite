@@ -336,7 +336,7 @@ class Fax(var port: Int, var host: String) {
      * existed, a null string is returned */
     if (str == null) {
       throw PROTOException("Fax.check: empty Reply String!!!",
-              EMPTY_REPLY_STRING)
+                           EMPTY_REPLY_STRING)
     }
     val delim: String = if (str[3] == '-') "-" else " "
 
@@ -593,20 +593,20 @@ class Fax(var port: Int, var host: String) {
 
             if (qname != "recvq") {
               queue.addElement(FaxStatus(process.nextToken().trim(),  // ID
-                      process.nextToken().trim(),  // TAG
-                      process.nextToken().trim(),  // USER
-                      process.nextToken().trim(),  // DIALNO
-                      process.nextToken().trim(),  // STATE (CODE)
-                      process.nextToken().trim(),  // PAGES
-                      process.nextToken().trim(),  // DIALS
-                      process.nextToken().trim())) // STATE (TEXT)
+                                         process.nextToken().trim(),  // TAG
+                                         process.nextToken().trim(),  // USER
+                                         process.nextToken().trim(),  // DIALNO
+                                         process.nextToken().trim(),  // STATE (CODE)
+                                         process.nextToken().trim(),  // PAGES
+                                         process.nextToken().trim(),  // DIALS
+                                         process.nextToken().trim())) // STATE (TEXT)
             } else {
               queue.addElement(FaxStatus(process.nextToken().trim(),  // FILENAME %f
-                      process.nextToken().trim(),  // TIME IN %t
-                      process.nextToken().trim(),  // SENDER %s
-                      process.nextToken().trim(),  // PAGES %p
-                      process.nextToken().trim(),  // DURATION %h
-                      process.nextToken().trim())) // ERRORTEXT %e
+                                         process.nextToken().trim(),  // TIME IN %t
+                                         process.nextToken().trim(),  // SENDER %s
+                                         process.nextToken().trim(),  // PAGES %p
+                                         process.nextToken().trim(),  // DURATION %h
+                                         process.nextToken().trim())) // ERRORTEXT %e
             }
           } catch (e: Exception) {
             throw FaxException(e.message!!, e)

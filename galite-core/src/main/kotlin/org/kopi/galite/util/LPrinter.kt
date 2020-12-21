@@ -21,7 +21,7 @@ package org.kopi.galite.util
 /**
  * Local printer
  */
-class LPrinter(val name: String,var command: String) : AbstractPrinter(name) {
+class LPrinter(val name: String, var command: String) : AbstractPrinter(name) {
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM

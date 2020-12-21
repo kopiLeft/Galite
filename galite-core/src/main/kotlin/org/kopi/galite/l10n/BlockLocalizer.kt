@@ -58,8 +58,7 @@ class BlockLocalizer(manager: LocalizationManager,
    * @param             ident           the identifier of the field
    */
   fun getFieldLocalizer(ident: String): FieldLocalizer {
-    return FieldLocalizer(manager,
-            Utils.lookupChild(self, "field", "ident", ident))
+    return FieldLocalizer(manager, Utils.lookupChild(self, "field", "ident", ident))
   }
 
   // ----------------------------------------------------------------------

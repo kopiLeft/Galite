@@ -29,7 +29,7 @@ import org.kopi.galite.util.base.InconsistencyException
 class VFixnumCodeColumn(title: String,
                         column: String?,
                         names: Array<String>,
-                        private val codes: Array<Fixed>,
+                        private val codes: Array<Fixed?>,
                         sortAscending: Boolean)
           : VCodeColumn(title,
                         column,

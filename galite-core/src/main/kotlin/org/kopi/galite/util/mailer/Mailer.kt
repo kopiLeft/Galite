@@ -19,13 +19,13 @@ package org.kopi.galite.util.mailer
 
 class Mailer {
   companion object {
-    fun sendMail(mailHost : String,
-                 recipient : String,
-                 ccRecipient : String?,
-                 bccRecipient : String?,
-                 subject : String,
-                 body : String,
-                 sender : String) {
+    fun sendMail(mailHost: String,
+                 recipient: String,
+                 ccRecipient: String?,
+                 bccRecipient: String?,
+                 subject: String,
+                 body: String,
+                 sender: String) {
       TODO()
     }
   }

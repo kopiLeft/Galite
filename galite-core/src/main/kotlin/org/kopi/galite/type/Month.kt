@@ -39,7 +39,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    *
    * @param     format  the format.
    * @param     locale  the Locale to use.
-   * @see 	    SimpleDateFormat
+   * @see            SimpleDateFormat
    */
   fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
@@ -79,7 +79,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    * subtract
    * @returns the number of month between two Months
    */
-  fun subtract(other: Month?): Int? = other ?.let { subtract(other as? NotNullMonth)  }
+  fun subtract(other: Month?): Int? = other?.let { subtract(other as? NotNullMonth) }
 
   /**
    * subtract
