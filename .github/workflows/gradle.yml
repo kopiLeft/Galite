@@ -29,4 +29,6 @@ jobs:
 
       # Runs check task
       - name: Test with Gradle
-        run: ./gradlew --info --stacktrace clean check
+        run: |
+          echo ':0.0' >> $DISPLAY
+          ./gradlew --info --stacktrace clean check
