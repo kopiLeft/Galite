@@ -179,6 +179,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   /** changing field visibility */
   private fun changeFieldVisibility(access: Int, mode: Int) {
     var self = 0
+
     self = self or (1 shl mode)
     if (self and (1 shl mode) != 0) {
       this.access[mode] = access

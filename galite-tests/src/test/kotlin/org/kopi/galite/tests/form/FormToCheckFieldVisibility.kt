@@ -24,16 +24,15 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormWithFields: Form() {
+object FormToCheckFieldVisibility: Form() {
   override val locale = Locale.FRANCE
-  override val title = "form with fields"
+  override val title = "form for test fields visibility"
   val testPage = page("test page")
-  val testBlock = insertBlock(BlockWithFields, testPage)
+  val testBlock = insertBlock(blockToCheckFieldVisibility, testPage)
 }
 
-object BlockWithFields : FormBlock(1, 1, "Test block") {
+object blockToCheckFieldVisibility : FormBlock(1, 1, "Test block") {
   val u = table(User)
-  val i = index(message = "ID should be unique")
 
   val id = hidden(domain = Domain<Int>(20)) {
     label = "id"
@@ -43,18 +42,40 @@ object BlockWithFields : FormBlock(1, 1, "Test block") {
   val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
+    onQuerySkipped()
+    onInsertHidden()
+    onUpdateSkipped()
     columns(u.name)
   }
   val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
+    onQueryMustFill()
+    onInsertMustFill()
+    onUpdateVisit()
     columns(u.age) {
-      index = i
       priority = 1
     }
+  }
+  val lastName = mustFill(domain = Domain<String?>(20), position = at(2, 1)) {
+    label = "lastName"
+    help = "The user last name"
+  }
+  val gender = visit(domain = Domain<String?>(20), position = at(2, 2)) {
+    label = "gender"
+    help = "The user gender"
+    onQueryHidden()
+    onInsertSkipped()
+    onUpdateMustFill()
+  }
+  val country = skipped(domain = Domain<String?>(20), position = at(3, 1)) {
+    label = "country"
+    help = "The country"
+    onInsertVisit()
+    onUpdateHidden()
   }
 }
 
 fun main() {
-  Application.runForm(formName = FormWithFields)
+  Application.runForm(formName = FormToCheckFieldVisibility)
 }
