@@ -2604,7 +2604,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // do not use getCurrentRecord because getCurrentRecord throws an
     // exception if currentRecord is null.
-    val oldCurrentRecord: Int = currentRecord
+    val oldCurrentRecord: Int = _currentRecord
     returnValue = try {
       currentRecord = activeRecord
       when (VConstants.TRG_TYPES[event]) {
@@ -3178,18 +3178,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   protected lateinit var activeCommands: ArrayList<VCommand> // commands currently active
-  var currentRecord = 0
+  private var _currentRecord = 0
+  var currentRecord
     get(): Int {
       return if (!isMulti()) {
         0
       } else {
-        assert(field in 0 until bufferSize) { "Bad currentRecord $field" }
-        field
+        assert(_currentRecord in 0 until bufferSize) { "Bad currentRecord $_currentRecord" }
+        _currentRecord
       }
     }
     set(rec) {
       if (isMulti()) {
-        field = rec
+        _currentRecord = rec
       }
     }
 
