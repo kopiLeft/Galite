@@ -1527,27 +1527,24 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
     }
 
-    val query = table.slice(columns!!).select(condition.compoundAnd())
+    try {
+      table.slice(columns!!).select(condition.compoundAnd()).single()
+      /* set values */
+      var j = 0
 
-    transaction {
-      if (!query.execute(this)!!.next()) {
-        /* Record does not exist anymore: it was deleted by another user */
-        throw VSkipRecordException()
-      } else {
-        /* set values */
-        var j = 0
-
-        for (field in fields) {
-          if (field.getColumnCount() > 0) {
-            for (result in query) {
-              field.setQuery_(result, columns[j])
-            }
-            j += 1
-          }
+      fields.forEach { field ->
+        if (field.getColumnCount() > 0) {
+          field.setQuery_(table.slice(columns).select(condition.compoundAnd()).single(), columns[j])
+          j += 1
         }
-        assert(!query.execute(this)!!.next()) { "too many rows" }
       }
+    } catch (noSuchElementException :NoSuchElementException) {
+      /* Record does not exist anymore: it was deleted by another user */
+      throw VSkipRecordException()
+    } catch (illegalArgumentException: IllegalArgumentException) {
+      error("too many rows")
     }
+
     setRecordFetched(activeRecord, true)
     setRecordChanged(activeRecord, false)
     setRecordDeleted(activeRecord, false)
