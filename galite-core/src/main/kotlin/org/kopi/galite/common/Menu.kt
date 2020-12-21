@@ -27,9 +27,7 @@ class Menu(val label: String) {
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   fun genLocalization(writer: LocalizationWriter) {
     writer.genMenuDefinition(label, label)
   }

@@ -26,9 +26,9 @@ import org.kopi.galite.list.VColumn
  * @param index                   the indices of this column
  * @param priority                the priority in sorting
  */
-class FormFieldColumns<T : Comparable<T>>(internal val columns: Array<FormFieldColumn<T>>,
-                                          var index: FormBlockIndex? = null,
-                                          var priority: Int = 0) {
+class FormFieldColumns<T : Comparable<T>?>(internal val columns: Array<FormFieldColumn<T>>,
+                                           var index: FormBlockIndex? = null,
+                                           var priority: Int = 0) {
 
   /**
    * Creates and returns the columns' models related to this field

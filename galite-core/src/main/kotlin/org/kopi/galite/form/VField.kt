@@ -1465,34 +1465,31 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       var exists = false
 
       try {
-        while (true) {
-          try {
-            if (!alreadyProtected) {
-            }
-            SELECT_IS_IN_LIST.replace("$2", evalListTable())
-            SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
-            transaction {
-              exec(SELECT_IS_IN_LIST) { exists = it.next() }
-            }
-            if (!alreadyProtected) {
-            }
-            break
-          } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
-          } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+        try {
+          if (!alreadyProtected) {
+          }
+          SELECT_IS_IN_LIST.replace("$2", evalListTable())
+          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
+          SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
+          transaction {
+            exec(SELECT_IS_IN_LIST) { exists = it.next() }
+          }
+          if (!alreadyProtected) {
+          }
+        } catch (e: SQLException) {
+          if (!alreadyProtected) {
+          } else {
+            throw e
+          }
+        } catch (error: Error) {
+          if (!alreadyProtected) {
+          } else {
+            throw error
+          }
+        } catch (rte: RuntimeException) {
+          if (!alreadyProtected) {
+          } else {
+            throw rte
           }
         }
       } catch (e: Throwable) {
@@ -1511,45 +1508,42 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         return
       }
       try {
-        while (true) {
-          try {
-            if (!alreadyProtected) {
-            }
-            SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
-            SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
-            transaction {
-              exec(SELECT_MATCHING_STRINGS) {
-                if (!it.next()) {
-                  count = 0
-                } else {
-                  count = 1
-                  result = it.getString(1)
-                  if (it.next()) {
-                    count = 2
-                  }
+        try {
+          if (!alreadyProtected) {
+          }
+          SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
+          SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
+          SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
+          transaction {
+            exec(SELECT_MATCHING_STRINGS) {
+              if (!it.next()) {
+                count = 0
+              } else {
+                count = 1
+                result = it.getString(1)
+                if (it.next()) {
+                  count = 2
                 }
               }
             }
+          }
 
-            if (!alreadyProtected) {
-            }
-            break
-          } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
-          } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+          if (!alreadyProtected) {
+          }
+        } catch (e: SQLException) {
+          if (!alreadyProtected) {
+          } else {
+            throw e
+          }
+        } catch (error: Error) {
+          if (!alreadyProtected) {
+          } else {
+            throw error
+          }
+        } catch (rte: RuntimeException) {
+          if (!alreadyProtected) {
+          } else {
+            throw rte
           }
         }
       } catch (e: Throwable) {

@@ -21,6 +21,7 @@ import org.jdom2.Element
 import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Menu
+import org.kopi.galite.domain.Domain
 
 /**
  * This class implements an  XML localization file generator
@@ -28,6 +29,7 @@ import org.kopi.galite.common.Menu
 class FormLocalizationWriter : LocalizationWriter() {
 
   fun genForm(title: String?,
+              types: Array<Domain<*>>,
               menus: Array<Menu>,
               actors: Array<Actor>,
               pages: Array<FormPage>,
@@ -36,20 +38,28 @@ class FormLocalizationWriter : LocalizationWriter() {
     self.setAttribute("title", title)
     pushNode(self)
 
-    // menus
-    for (i in menus.indices) {
-      menus[i].genLocalization(this)
-    }
-    // actors
-    for (i in actors.indices) {
-      actors[i].genLocalization(this)
+    // types
+    types.forEach {
+      it.genLocalization(this)
     }
 
-    for (i in pages.indices) {
-      pages[i].genLocalization(this)
+    // menus
+    menus.forEach {
+      it.genLocalization(this)
     }
-    for (i in blocks.indices) {
-      blocks[i].genLocalization(this)
+
+    // actors
+    actors.forEach {
+      it.genLocalization(this)
+    }
+
+    // pages
+    pages.forEach {
+      it.genLocalization(this)
+    }
+
+    blocks.forEach {
+      it.genLocalization(this)
     }
     // do not pop: this is the root element
   }
@@ -62,9 +72,6 @@ class FormLocalizationWriter : LocalizationWriter() {
     // do not pop: this is the root element
   }
 
-  /**
-   * FIX:taoufik
-   */
   fun genPage(ident: String?, title: String?) {
     val self = Element("page")
     self.setAttribute("ident", ident)
@@ -73,8 +80,7 @@ class FormLocalizationWriter : LocalizationWriter() {
   }
 
   /**
-   * FIX:taoufik
-   * !!!FIX:taoufik handle NEW PAGE
+   * !!!FIXME handle NEW PAGE
    */
   fun genBlock(name: String?,
                title: String?,
@@ -107,9 +113,6 @@ class FormLocalizationWriter : LocalizationWriter() {
     peekNode(null).addContent(self)
   }
 
-  /**
-   * !!!FIX:taoufik
-   */
   fun genField(ident: String?, label: String?, help: String?) {
     val self = Element("field")
     self.setAttribute("ident", ident)
