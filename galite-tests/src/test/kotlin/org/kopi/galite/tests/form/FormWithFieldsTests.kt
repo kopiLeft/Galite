@@ -19,7 +19,7 @@ package org.kopi.galite.tests.form
 import kotlin.test.assertEquals
 
 import org.junit.Test
-
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.JApplicationTestBase
 
 class FormWithFieldsTests: JApplicationTestBase() {
@@ -28,5 +28,10 @@ class FormWithFieldsTests: JApplicationTestBase() {
   fun sourceFormTest() {
     val formModel = FormWithFields.model
     assertEquals(FormWithFields::class.qualifiedName!!.replace(".", "/"), formModel.source)
+  }
+
+  @Test
+  fun ensureFormWithFieldsDoesntCrash() {
+    Application.run(formName = FormWithFields)
   }
 }

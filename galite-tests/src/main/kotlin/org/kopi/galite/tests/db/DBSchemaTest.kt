@@ -25,6 +25,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.kopi.galite.tests.TestBase
 import org.kopi.galite.db.Modules
@@ -51,6 +52,18 @@ open class DBSchemaTest : TestBase() {
       Database.connect(testURL, testDriver, testUser, testPassword)
       transaction {
         createDBSchemaTables()
+        insertIntoUsers(testUser, "administrator")
+      }
+    }
+
+    /**
+     * Initializes the test
+     */
+    @AfterClass
+    @JvmStatic
+    fun reset() {
+      transaction {
+        dropDBSchemaTables()
       }
     }
 
@@ -60,6 +73,69 @@ open class DBSchemaTest : TestBase() {
     fun createDBSchemaTables() {
       list_Of_Tables.forEach { table ->
         SchemaUtils.create(table)
+      }
+    }
+
+    /**
+     * Creates DBSchema tables
+     */
+    fun dropDBSchemaTables() {
+      list_Of_Tables.forEach { table ->
+        SchemaUtils.drop(table)
+      }
+    }
+
+    /**
+     * this test insert data into Module table
+     */
+    fun insertIntoModule(shortname: String,
+                         source: String,
+                         priorityNumber: Int,
+                         parentName: String = "-1",
+                         className: KClass<*>? = null,
+                         symbolNumber: Int? = null) {
+      Modules.insert {
+        it[uc] = 0
+        it[ts] = 0
+        it[shortName] = shortname
+        it[parent] = if (parentName != "-1") Modules.select { shortName eq parentName }.single()[id] else -1
+        it[sourceName] = source
+        it[priority] = priorityNumber
+        it[objectName] = if (className != null) className.qualifiedName!! else null
+        it[symbol] = symbolNumber
+      }
+    }
+
+    /**
+     * this test insert data into Users table
+     */
+    fun insertIntoUsers(shortname: String,
+                        userName: String) {
+      Users.insert {
+        it[uc] = 0
+        it[ts] = 0
+        it[shortName] = shortname
+        it[name] = userName
+        it[character] = shortname
+        it[active] = true
+        it[createdOn] = DateTime.now()
+        it[createdBy] = 1
+        it[changedOn] = DateTime.now()
+        it[changedBy] = 1
+      }
+    }
+
+    /**
+     * this test insert data into UserRights table
+     */
+    fun insertIntoUserRights(userName: String,
+                             moduleName: String,
+                             accessUser: Boolean) {
+      UserRights.insert {
+        it[ts] = 0
+        it[module] = Modules.slice(Modules.id).select { Modules.shortName eq moduleName }.single()[Modules.id]
+        it[user] = Users.slice(Users.id).select { Users.shortName eq userName }.single()[Users.id]
+        it[access] = accessUser
       }
     }
   }
@@ -84,62 +160,6 @@ open class DBSchemaTest : TestBase() {
       createDBSchemaTables()
 
       insertIntoUsers(user, "administrator")
-    }
-  }
-
-  /**
-   * this test insert data into Module table
-   */
-  fun insertIntoModule(shortname: String,
-                       source: String,
-                       priorityNumber: Int,
-                       parentName: String = "-1",
-                       className: KClass<*>? = null,
-                       symbolNumber: Int? = null) {
-    Modules.insert {
-      it[uc] = 0
-      it[ts] = 0
-      it[shortName] = shortname
-      it[parent] = if (parentName != "-1") Modules.select { shortName eq parentName }.single()[id] else -1
-      it[sourceName] = source
-      it[priority] = priorityNumber
-      it[objectName] = if (className != null) className.qualifiedName!! else null
-      it[symbol] = symbolNumber
-
-    }
-  }
-
-  /**
-   * this test insert data into Users table
-   */
-  fun insertIntoUsers(shortname: String,
-                      userName: String) {
-    Users.insert {
-      it[uc] = 0
-      it[ts] = 0
-      it[shortName] = shortname
-      it[name] = userName
-      it[character] = shortname
-      it[active] = true
-      it[createdOn] = DateTime.now()
-      it[createdBy] = 1
-      it[changedOn] = DateTime.now()
-      it[changedBy] = 1
-
-    }
-  }
-
-  /**
-   * this test insert data into UserRights table
-   */
-  fun insertIntoUserRights(userName: String,
-                           moduleName: String,
-                           accessUser: Boolean) {
-    UserRights.insert {
-      it[ts] = 0
-      it[module] = Modules.slice(Modules.id).select { Modules.shortName eq moduleName }.single()[Modules.id]
-      it[user] = Users.slice(Users.id).select { Users.shortName eq userName }.single()[Users.id]
-      it[access] = accessUser
     }
   }
 }

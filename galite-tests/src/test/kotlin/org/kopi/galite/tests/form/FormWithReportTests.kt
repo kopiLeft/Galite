@@ -22,16 +22,16 @@ import org.junit.Test
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.JApplicationTestBase
 
-class FormSampleTests: JApplicationTestBase() {
+class FormWithReportTests: JApplicationTestBase() {
 
-    @Test
-    fun sourceFormTest() {
-        val formModel = FormSample.model
-        assertEquals(FormSample::class.qualifiedName!!.replace(".", "/"), formModel.source)
-    }
+  @Test
+  fun sourceFormTest() {
+    val formModel = FormWithReport.model
+    assertEquals(FormWithReport::class.qualifiedName!!.replace(".", "/"), formModel.source)
+  }
 
-    @Test
-    fun ensureFormSampleDoesntCrash() {
-        Application.run(formName = FormSample)
-    }
+  @Test
+  fun ensureFormSampleDoesntCrash() {
+    Application.run(formName = FormWithReport)
+  }
 }
