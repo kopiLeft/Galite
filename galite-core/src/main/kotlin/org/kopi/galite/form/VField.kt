@@ -2069,10 +2069,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-              block!!.getFieldPos(this),
-              label,
-              lab ?: name,
-              toolTip)
+                       block!!.getFieldPos(this),
+                       label,
+                       lab ?: name,
+                       toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
@@ -2127,10 +2127,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       modeDesc = VlibProperties.getString("skipped-long")
     }
     help.helpOnType(modeName,
-            modeDesc,
-            getTypeName(),
-            getTypeInformation(),
-            names)
+                    modeDesc,
+                    getTypeName(),
+                    getTypeInformation(),
+                    names)
   }
 
   /**
@@ -2442,7 +2442,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * It is the first line of the field help
    * @return    the help of this field
    */
-  var toolTip : String? = null // help text
+  var toolTip: String? = null // help text
     private set
 
   private var index = 0 // The position in parent field array

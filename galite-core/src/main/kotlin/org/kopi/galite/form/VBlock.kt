@@ -1360,7 +1360,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-            || !isMulti() && activeField == null) {
+                   || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
               .toString() + " recno " + recno.toString() + " current record " + activeRecord
               .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
@@ -1728,7 +1728,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Returns the tables for database query, with outer joins conditions.
    */
   fun getSearchTables_(): Join? {
-    return VBlockDefaultOuterJoin.getSearchTables(this)  }
+    return VBlockDefaultOuterJoin.getSearchTables(this)
+  }
 
   /**
    * Returns the search conditions for database query.
@@ -2550,7 +2551,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     block           This action should block the UI thread ?
    */
   @Deprecated("Use method performAsyncAction without bool parameter",
-          ReplaceWith("performAsyncAction(action)"))
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2977,11 +2978,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun helpOnBlock(help: VHelpGenerator) {
     if (!isAlwaysSkipped()) {
       help.helpOnBlock(form.javaClass.name.replace('.', '_'),
-              title,
-              this.help,
-              commands,
-              fields,
-              form.blocks.size == 1)
+                       title,
+                       this.help,
+                       commands,
+                       fields,
+                       form.blocks.size == 1)
     }
   }
 
