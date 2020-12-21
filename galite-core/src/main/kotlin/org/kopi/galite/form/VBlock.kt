@@ -1204,7 +1204,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     while (i >= 0) {
       if (listeners[i] == BlockRecordListener::class.java) {
         (listeners[i + 1] as BlockRecordListener).blockRecordChanged(getSortedPosition(record - 1) + 1,
-                localRecordCount)
+                                                                     localRecordCount)
       }
       i -= 2
     }
@@ -1747,9 +1747,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     fields.forEach { field ->
       if (field.getColumnCount() > 0) {
 
-        val condColumn = Column<String>(tables!![field.getColumn(0)!!.getTable()],
-                field.getColumn(0)!!.getQualifiedName(),
-                VarCharColumnType())
+        val condColumn = field.getColumn(0)!!.column as Column<String>
         val searchColumn = when (field.options and VConstants.FDO_SEARCH_MASK) {
 
           VConstants.FDO_SEARCH_NONE -> condColumn
