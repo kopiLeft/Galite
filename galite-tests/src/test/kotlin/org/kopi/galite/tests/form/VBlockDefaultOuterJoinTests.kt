@@ -19,10 +19,12 @@ package org.kopi.galite.tests.form
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
-import org.kopi.galite.chart.Formatter.quoteIfNecessary
 import org.kopi.galite.db.Users
 import org.kopi.galite.form.VBlockDefaultOuterJoin
 import org.kopi.galite.tests.JApplicationTestBase
@@ -55,15 +57,27 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
 
     transaction {
       val condition = buildString {
-        append("(${block.r.nameInDatabaseCase()}.${block.r.user.nameInDatabaseCase()}")
-        append(" = ${block.u.nameInDatabaseCase()}.${block.u.id.nameInDatabaseCase()})")
+        append("(${block.r.nameInDb()}.${block.r.user.nameInDb()}")
+        append(" = ${block.u.nameInDb()}.${block.u.id.nameInDb()})")
         append(" AND ")
-        append("(${block.r.nameInDatabaseCase()}.${block.r.module.nameInDatabaseCase()}")
-        append(" = ${block.m.nameInDatabaseCase().quoteIfNecessary()}.")
-        append("${block.m.id.nameInDatabaseCase()})")
+        append("(${block.r.nameInDb()}.${block.r.module.nameInDb()}")
+        append(" = ${block.m.nameInDb()}.")
+        append("${block.m.id.nameInDb()})")
       }
 
       assertEquals(condition, fetchRecordCondition.toString())
     }
+  }
+
+  fun Table.nameInDb(): String {
+    val identifierManager = TransactionManager.current().db.identifierManager
+
+    return identifierManager.quoteIfNecessary(this.nameInDatabaseCase())
+  }
+
+  fun Column<*>.nameInDb(): String {
+    val identifierManager = TransactionManager.current().db.identifierManager
+
+    return identifierManager.quoteIfNecessary(this.nameInDatabaseCase())
   }
 }
