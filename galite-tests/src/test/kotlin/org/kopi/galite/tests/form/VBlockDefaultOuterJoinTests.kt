@@ -19,6 +19,7 @@ package org.kopi.galite.tests.form
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
+import org.kopi.galite.chart.Formatter.quoteIfNecessary
 import org.kopi.galite.db.Users
 import org.kopi.galite.form.VBlockDefaultOuterJoin
 import org.kopi.galite.tests.JApplicationTestBase
@@ -58,7 +59,7 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
         append(" = ${block.u.nameInDatabaseCase()}.${block.u.id.nameInDatabaseCase()})")
         append(" AND ")
         append("(${block.r.nameInDatabaseCase()}.${block.r.module.nameInDatabaseCase()}")
-        append(" = \"MODULE\".")
+        append(" = ${block.m.nameInDatabaseCase().quoteIfNecessary()}.")
         append("${block.m.id.nameInDatabaseCase()})")
       }
 
