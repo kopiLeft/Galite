@@ -1725,6 +1725,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
+  @Deprecated("use getSearchTables_()")
   fun getSearchTables(): String {
     TODO()
   }
@@ -1739,6 +1740,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search conditions for database query.
    */
+  @Deprecated("use getSearchConditions_()")
   fun getSearchConditions(): String? {
     TODO()
   }

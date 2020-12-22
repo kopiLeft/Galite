@@ -966,6 +966,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use setQuery_(query: ResultRow, column: Column<*>)")
   fun setQuery(query: Query, column: Int) {
     setQuery(block!!.currentRecord, query, column)
   }
@@ -980,6 +981,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use setQuery_(record: Int, query: ResultRow, column: Column<*>)")
   fun setQuery(record: Int, query: Query, column: Int) {
     setObject(record, retrieveQuery(query, column))
   }
@@ -993,6 +995,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use retrieveQuery_(result: ResultRow, column: Column<*>)")
   abstract fun retrieveQuery(query: Query, column: Int): Any?
 
 
