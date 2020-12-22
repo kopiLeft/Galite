@@ -120,10 +120,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     })
   }
 
+  @Deprecated("use fetchColumn(table: Table)")
   fun fetchColumn(table: Int): Int {
     if (columns != null) {
       for (i in columns!!.indices) {
         if (columns!![i]!!.getTable() == table) {
+          return i
+        }
+      }
+    }
+    return -1
+  }
+
+  fun fetchColumn(table: Table): Int {
+    if (columns != null) {
+      for (i in columns!!.indices) {
+        if (columns!![i]!!.getTable_() == table) {
           return i
         }
       }

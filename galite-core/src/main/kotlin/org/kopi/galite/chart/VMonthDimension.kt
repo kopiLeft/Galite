@@ -26,7 +26,7 @@ import org.kopi.galite.type.Month
  * @param ident The column identifier.
  * @param format The month format to be used to format the month value.
  */
-class VMonthDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+class VMonthDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
   override fun toString(value: Any?): String {
     return when (value) {
       null -> CConstants.EMPTY_TEXT
