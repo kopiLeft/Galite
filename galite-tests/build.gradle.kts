@@ -18,6 +18,7 @@
 plugins {
   kotlin("jvm") apply true
   id("org.springframework.boot") version "2.3.3.RELEASE"
+  id("com.vaadin") version "0.17.0.0"
 }
 
 val vaadinVersion = "17.0.0"
@@ -26,6 +27,11 @@ val karibuTestingVersion = "1.2.5"
 val h2Version = "1.4.199"
 val exposedVersion = "0.27.1"
 val postgresNGVersion = "0.8.6"
+val javaxServlet = "4.0.1"
+
+vaadin {
+  pnpmEnable = true
+}
 
 dependencies {
   implementation(project(":galite-core"))
@@ -44,6 +50,7 @@ dependencies {
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
+
   // UI tests dependencies
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
 
@@ -54,6 +61,8 @@ dependencies {
 
   testImplementation("com.h2database", "h2", h2Version)
   testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", postgresNGVersion)
+
+  implementation("javax.servlet", "javax.servlet-api", javaxServlet)
 }
 
 tasks {
