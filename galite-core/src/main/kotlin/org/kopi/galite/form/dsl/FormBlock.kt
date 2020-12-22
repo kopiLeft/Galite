@@ -458,20 +458,22 @@ open class FormBlock(var buffer: Int,
         }
 
         // FIELD TRIGGERS
-          blockFields.forEachIndexed { index , field ->
-            val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        blockFields.forEachIndexed { index, field ->
+          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          if (field.triggers.isNotEmpty()) {
             field.triggers.forEach { fieldTrigger ->
-            for ( i in VConstants.TRG_TYPES.indices){
-              if (fieldTrigger.events shr i and 1 > 0) {
-                fieldTriggerArray[i] = i
-                super.triggers[i] = fieldTrigger
+              for (i in VConstants.TRG_TYPES.indices) {
+                if (fieldTrigger.events shr i and 1 > 0) {
+                  fieldTriggerArray[i] = i
+                  super.triggers[i] = fieldTrigger
+                }
               }
+              super.VKT_Triggers.add(fieldTriggerArray)
             }
-            super.VKT_Triggers[index+1] = fieldTriggerArray
-              //super.VKT_Triggers.add(fieldTriggerArray)
-            }
+          } else {
+            super.VKT_Triggers.add(fieldTriggerArray)
           }
-
+        }
 
         // COMMANDS TRIGGERS
         blockCommands.forEach {
