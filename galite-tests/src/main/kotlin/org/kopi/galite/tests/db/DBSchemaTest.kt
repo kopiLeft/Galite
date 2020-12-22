@@ -33,6 +33,10 @@ import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
 import org.kopi.galite.db.list_Of_Tables
 
+/**
+ * Creates a connection and initializes the database. Useful if your test/demo needs a connection, the initial
+ * structure with necessary tables and a user (it adds the administrator user in [Users] table).
+ */
 open class DBSchemaTest : TestBase() {
 
   companion object {
@@ -57,7 +61,7 @@ open class DBSchemaTest : TestBase() {
     }
 
     /**
-     * Initializes the test
+     * Resets the DB
      */
     @AfterClass
     @JvmStatic
