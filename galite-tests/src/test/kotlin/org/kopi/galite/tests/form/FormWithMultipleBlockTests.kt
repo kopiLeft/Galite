@@ -22,7 +22,7 @@ import org.junit.Test
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.JApplicationTestBase
 
-class FormWithMultipleBlockTests: JApplicationTestBase() {
+class FormWithMultipleBlockTests : JApplicationTestBase() {
 
   @Test
   fun sourceFormTest() {
@@ -33,5 +33,21 @@ class FormWithMultipleBlockTests: JApplicationTestBase() {
   @Test
   fun ensureFormWithMultipleBlockDoesntCrash() {
     Application.run(formName = FormWithMultipleBlock)
+  }
+
+  @Test
+  fun multipleBlockTest() {
+    val formModel = FormWithMultipleBlock.model
+
+    assertEquals(formModel.getBlock(1).bufferSize, 100)
+    assertEquals(formModel.getBlock(1).displaySize, 100)
+    assertEquals(formModel.getBlock(1).displayedFields, 1)
+
+    val nameField = formModel.getBlock(1).fields[1]
+    assertEquals(1, nameField.position!!.column)
+    assertEquals(1, nameField.position!!.columnEnd)
+    assertEquals(1, nameField.position!!.line)
+    assertEquals(1, nameField.position!!.lineEnd)
+    assertEquals(1, nameField.position!!.chartPos)
   }
 }
