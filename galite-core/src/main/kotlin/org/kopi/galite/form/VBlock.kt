@@ -1721,10 +1721,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Tests whether this table has only internal fields.
    */
   fun hasOnlyInternalFields(table: Table): Boolean {
-    for (i in fields.indices) {
-      val fld: VField? = fields[i]
-
-      if (fld!!.fetchColumn(table) != -1 && !fld.isInternal()) {
+    fields.forEach { field ->
+      if (field.fetchColumn(table) != -1 && !field.isInternal()) {
         return false
       }
     }
