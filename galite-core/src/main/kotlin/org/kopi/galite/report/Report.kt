@@ -17,7 +17,6 @@
 
 package org.kopi.galite.report
 
-import java.io.File
 import java.io.IOException
 import java.lang.RuntimeException
 
@@ -46,9 +45,6 @@ abstract class Report : Window() {
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
 
-  /** the help text */
-  var help: String? = null
-
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
    *
@@ -56,7 +52,7 @@ abstract class Report : Window() {
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
+  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
     val field = ReportField(domain)
     field.init()
@@ -104,7 +100,7 @@ abstract class Report : Window() {
    *
    * @param rowNumber the index of the desired row.
    */
-  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any> = reportRows[rowNumber].data
+  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any?> = reportRows[rowNumber].data
 
   /**
    * Returns rows of data for a specific [field].
@@ -145,6 +141,7 @@ abstract class Report : Window() {
                                                    fields)
   }
 
+  // TODO add Fixed types
   fun MReport.addReportColumns() {
     columns = fields.map {
       when (it.domain.kClass) {
@@ -175,15 +172,6 @@ abstract class Report : Window() {
       addLine(it.data.values.toTypedArray())
     }
   }
-
-  /**
-   * Returns the qualified source file name where this object is defined.
-   */
-  private val sourceFile: String
-    get() {
-      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
-      return basename + this.javaClass.simpleName
-    }
 
 
   /** Report model*/

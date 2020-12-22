@@ -1437,7 +1437,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val table = getSearchTables_()
     val condition = mutableListOf<Op<Boolean>>()
 
-    condition.add(Op.build { idColumn eq id  })
+    condition.add(Op.build { idColumn eq id })
     if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
       condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
     }
@@ -1481,35 +1481,33 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         continue
       }
       try {
-        while (true) {
+        try {
+          fetchPosition = pos
+          fetchRecord(fetchBuffer[pos])
+          return
+        } catch (e: VException) {
           try {
-            fetchPosition = pos
-            fetchRecord(fetchBuffer[pos])
-            return
-          } catch (e: VException) {
-            try {
-            } catch (abortEx: VException) {
-              throw abortEx
-            }
-          } catch (e: SQLException) {
-            try {
-            } catch (abortEx: DBDeadLockException) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-            } catch (abortEx: DBInterruptionException) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-            } catch (abortEx: SQLException) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: Error) {
-            try {
-            } catch (abortEx: Error) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: RuntimeException) {
-            try {
-            } catch (abortEx: RuntimeException) {
-              throw VExecFailedException(abortEx)
-            }
+          } catch (abortEx: VException) {
+            throw abortEx
+          }
+        } catch (e: SQLException) {
+          try {
+          } catch (abortEx: DBDeadLockException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: DBInterruptionException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: SQLException) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: Error) {
+          try {
+          } catch (abortEx: Error) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: RuntimeException) {
+          try {
+          } catch (abortEx: RuntimeException) {
+            throw VExecFailedException(abortEx)
           }
         }
       } catch (e: VException) {
@@ -1707,6 +1705,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Tests whether this table has only internal fields.
    */
+  @Deprecated("use hasOnlyInternalFields(table: Table)")
   fun hasOnlyInternalFields(table: Int): Boolean {
     for (i in fields.indices) {
       val fld: VField? = fields[i]
@@ -1717,6 +1716,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
     return true
   }
+
+  /**
+   * Tests whether this table has only internal fields.
+   */
+  fun hasOnlyInternalFields(table: Table): Boolean = fields.all { it.fetchColumn(table) == -1 || it.isInternal() }
 
   /**
    * Returns the tables for database query, with outer joins conditions.
@@ -2090,7 +2094,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val ids = IntArray(fetchSize)
     var rows = 0
 
-    val query = if(conditions == null) {
+    val query = if (conditions == null) {
       tables!!.slice(columns).selectAll().orderBy(*orderBys.toTypedArray())
     } else {
       tables!!.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())
@@ -2665,7 +2669,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // do not use getCurrentRecord because getCurrentRecord throws an
     // exception if currentRecord is null.
-    val oldCurrentRecord: Int = currentRecord
+    val oldCurrentRecord: Int = _currentRecord
     returnValue = try {
       currentRecord = activeRecord
       when (VConstants.TRG_TYPES[event]) {
@@ -2727,8 +2731,42 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  private fun isNullReference(table: Int, recno: Int): Boolean {
-    TODO()
+  private fun isNullReference(table: Table, recno: Int): Boolean {
+    var nullReference: Boolean
+
+    // check if this lookup table has not only internal fields
+    if (hasOnlyInternalFields(table)) {
+      nullReference = false
+    } else {
+      // check if all lookup fields for this table are null.
+      nullReference = true
+
+      for (field in fields) {
+        if (!nullReference) {
+          break
+        }
+        if (field.fetchColumn(table) != -1
+                && !field.isInternal()
+                && !field.isNull(recno)) {
+          nullReference = false
+        }
+      }
+    }
+
+    // this test is useful since we use outer join only for nullable columns.
+    for (field in fields) {
+      if (!nullReference) {
+        break
+      }
+      if (field.isInternal()
+              && field.fetchColumn(0) != -1
+              && field.fetchColumn(table) != -1
+              && !(field.getColumn(field.fetchColumn(table))!!.nullable ||
+                      field.getColumn(field.fetchColumn(0))!!.nullable)) {
+        nullReference = false
+      }
+    }
+    return nullReference
   }
 
   /*
@@ -3239,18 +3277,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   protected lateinit var activeCommands: ArrayList<VCommand> // commands currently active
-  var currentRecord = 0
+  private var _currentRecord = 0
+  var currentRecord
     get(): Int {
       return if (!isMulti()) {
         0
       } else {
-        assert(field in 0 until bufferSize) { "Bad currentRecord $field" }
-        field
+        assert(_currentRecord in 0 until bufferSize) { "Bad currentRecord $_currentRecord" }
+        _currentRecord
       }
     }
     set(rec) {
       if (isMulti()) {
-        field = rec
+        _currentRecord = rec
       }
     }
 
