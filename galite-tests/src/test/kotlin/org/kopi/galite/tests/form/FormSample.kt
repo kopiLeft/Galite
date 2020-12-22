@@ -22,7 +22,7 @@ import org.jetbrains.exposed.sql.Table
 
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.INITFORM
-import org.kopi.galite.common.POSTCHG
+import org.kopi.galite.common.FieldTriggers.POSTCHG
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain

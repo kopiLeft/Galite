@@ -21,10 +21,9 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
-import org.kopi.galite.common.FieldBooleanTriggerEvent
-import org.kopi.galite.common.FieldTriggerEvent
-import org.kopi.galite.common.FieldVoidTriggerEvent
-import org.kopi.galite.common.FormBooleanTriggerEvent
+import org.kopi.galite.common.FieldTriggers.FieldBooleanTriggerEvent
+import org.kopi.galite.common.FieldTriggers.FieldTriggerEvent
+import org.kopi.galite.common.FieldTriggers.FieldVoidTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
