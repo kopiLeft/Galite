@@ -1720,14 +1720,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Tests whether this table has only internal fields.
    */
-  fun hasOnlyInternalFields(table: Table): Boolean {
-    fields.forEach { field ->
-      if (field.fetchColumn(table) != -1 && !field.isInternal()) {
-        return false
-      }
-    }
-    return true
-  }
+  fun hasOnlyInternalFields(table: Table): Boolean = fields.all { it.fetchColumn(table) == -1 || it.isInternal() }
 
   /**
    * Returns the tables for database query, with outer joins conditions.
