@@ -123,7 +123,6 @@ object BlockWithManyTables : FormBlock(1, 20, "Test block") {
   val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
-    onQueryVisit()
     columns(u.name) {
       priority = 1
     }

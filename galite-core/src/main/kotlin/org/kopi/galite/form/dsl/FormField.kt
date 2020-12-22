@@ -176,66 +176,55 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     }
   }
 
-  /** changing field visibility */
-  private fun changeFieldVisibility(access: Int, mode: Int) {
-    var self = 0
-
-    self = self or (1 shl mode)
-    if (self and (1 shl mode) != 0) {
-      this.access[mode] = access
-    }
-  }
-
   /** changing field visibility in mode query */
   fun onQueryHidden() {
-    changeFieldVisibility(VConstants.ACS_HIDDEN, VConstants.MOD_QUERY)
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_HIDDEN
   }
 
   fun onQuerySkipped() {
-    changeFieldVisibility(VConstants.ACS_SKIPPED, VConstants.MOD_QUERY)
-
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_SKIPPED
   }
 
   fun onQueryVisit() {
-    changeFieldVisibility(VConstants.ACS_VISIT, VConstants.MOD_QUERY)
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_VISIT
   }
 
   fun onQueryMustFill() {
-    changeFieldVisibility(VConstants.ACS_MUSTFILL, VConstants.MOD_QUERY)
+    this.access[VConstants.MOD_QUERY] = VConstants.ACS_MUSTFILL
   }
 
   /** changing field visibility in mode insert */
   fun onInsertHidden() {
-    changeFieldVisibility(VConstants.ACS_HIDDEN, VConstants.MOD_INSERT)
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_HIDDEN
   }
 
   fun onInsertSkipped() {
-    changeFieldVisibility(VConstants.ACS_SKIPPED, VConstants.MOD_INSERT)
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_SKIPPED
   }
 
   fun onInsertVisit() {
-    changeFieldVisibility(VConstants.ACS_VISIT, VConstants.MOD_INSERT)
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_VISIT
   }
 
   fun onInsertMustFill() {
-    changeFieldVisibility(VConstants.ACS_MUSTFILL, VConstants.MOD_INSERT)
+    this.access[VConstants.MOD_INSERT] = VConstants.ACS_MUSTFILL
   }
 
   /** changing field visibility in mode update */
   fun onUpdateHidden() {
-    changeFieldVisibility(VConstants.ACS_HIDDEN, VConstants.MOD_UPDATE)
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_HIDDEN
   }
 
   fun onUpdateSkipped() {
-    changeFieldVisibility(VConstants.ACS_SKIPPED, VConstants.MOD_UPDATE)
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_SKIPPED
   }
 
   fun onUpdateVisit() {
-    changeFieldVisibility(VConstants.ACS_VISIT, VConstants.MOD_UPDATE)
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_VISIT
   }
 
   fun onUpdateMustFill() {
-    changeFieldVisibility(VConstants.ACS_MUSTFILL, VConstants.MOD_UPDATE)
+    this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
   // TODO add Fixed types

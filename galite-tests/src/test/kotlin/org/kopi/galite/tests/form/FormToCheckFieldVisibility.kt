@@ -71,6 +71,7 @@ object blockToCheckFieldVisibility : FormBlock(1, 1, "Test block") {
   val country = skipped(domain = Domain<String?>(20), position = at(3, 1)) {
     label = "country"
     help = "The country"
+    onQueryVisit()
     onInsertVisit()
     onUpdateHidden()
   }

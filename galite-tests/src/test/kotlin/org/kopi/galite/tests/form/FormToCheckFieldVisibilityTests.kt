@@ -29,6 +29,6 @@ class FormToCheckFieldVisibilityTests: JApplicationTestBase() {
     assertArrayEquals(intArrayOf(1, 0, 1), FormToCheckFieldVisibility.testBlock.name.access)
     assertArrayEquals(intArrayOf(4, 4, 2), FormToCheckFieldVisibility.testBlock.age.access)
     assertArrayEquals(intArrayOf(0, 1, 4), FormToCheckFieldVisibility.testBlock.gender.access)
-    assertArrayEquals(intArrayOf(1, 2, 0), FormToCheckFieldVisibility.testBlock.country.access)
+    assertArrayEquals(intArrayOf(2, 2, 0), FormToCheckFieldVisibility.testBlock.country.access)
   }
 }

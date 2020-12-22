@@ -40,7 +40,7 @@ object BlockWithFields : FormBlock(1, 1, "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
