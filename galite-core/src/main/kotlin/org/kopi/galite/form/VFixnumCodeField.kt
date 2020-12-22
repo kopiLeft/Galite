@@ -37,7 +37,7 @@ open class VFixnumCodeField(bufferSize: Int,
                             ident: String,
                             source: String,
                             names: Array<String>,
-                            private val codes: Array<Fixed>) : VCodeField(bufferSize, ident, source, names) {
+                            private val codes: Array<Fixed?>) : VCodeField(bufferSize, ident, source, names) {
 
   /**
    * return a list column for list
@@ -66,8 +66,8 @@ open class VFixnumCodeField(bufferSize: Int,
 
     for (i in 0 until block!!.bufferSize) {
       if (block!!.isRecordFilled(i)
-          && !isNull(i)
-          && (!exclude || i != block!!.activeRecord)) {
+              && !isNull(i)
+              && (!exclude || i != block!!.activeRecord)) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }
@@ -149,7 +149,7 @@ open class VFixnumCodeField(bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = if (value[r] == -1) "NULL" else codes[value[r]].toSql()
+  override fun getSqlImpl(r: Int): String = if (value[r] == -1) "NULL" else codes[value[r]]!!.toSql()
 
   /**
    * Returns the data type handled by this field.

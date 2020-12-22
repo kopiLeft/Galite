@@ -59,5 +59,6 @@ abstract class VCodeDimension(ident: String,
       names!![i] = loc.getCodeLabel(idents[i])
     }
   }
+
   protected var names: Array<String?>? = null // array of external representations
 }

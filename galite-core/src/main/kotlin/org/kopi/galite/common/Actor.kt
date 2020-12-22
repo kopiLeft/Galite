@@ -36,7 +36,7 @@ import org.kopi.galite.form.dsl.Key
  * @param icon                the icon
  * @param key                 the shortcut
  */
-class Actor(val ident: String, val menu: Menu, val label: String, val help: String) {
+class Actor(val ident: String, val menu: Menu, val label: String, val help: String, val number: Int) {
   var key: Key? = null
     set(key) {
       checkKey(key)
@@ -45,7 +45,7 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
 
   var icon: String? = null
 
-  private fun checkKey(key : Key?) {
+  private fun checkKey(key: Key?) {
     if (key == null) {
       keyModifier = 0
       keyCode = KeyEvent.VK_UNDEFINED
@@ -57,9 +57,7 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   fun genLocalization(writer: LocalizationWriter) {
     writer.genActorDefinition(ident, label, help)
   }

@@ -97,9 +97,12 @@ class CellStyleCacheManager : Serializable {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun equals(value: Any?): Boolean = if (value is StyleKey) {
-        alignment == value.alignment && dataFormat == value.dataFormat && color == value.color
-      } else super.equals(value)
+    override fun equals(value: Any?): Boolean =
+            if (value is StyleKey) {
+              alignment == value.alignment && dataFormat == value.dataFormat && color == value.color
+            } else {
+              super.equals(value)
+            }
 
     override fun hashCode(): Int = alignment + dataFormat + color.hashCode()
   }

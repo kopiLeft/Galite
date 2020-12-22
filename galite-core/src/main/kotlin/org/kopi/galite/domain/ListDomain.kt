@@ -19,6 +19,7 @@ package org.kopi.galite.domain
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Query
+import org.kopi.galite.common.LocalizationWriter
 
 import org.kopi.galite.exceptions.InvalidValueException
 
@@ -30,7 +31,7 @@ import org.kopi.galite.exceptions.InvalidValueException
  * It allows optionally to define a constraint that makes restrictions
  * on the set of allowed values.
  */
-class ListDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
+class ListDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
   var query: Query? = null
 
   /**
@@ -89,5 +90,18 @@ class ListDomain<T : Comparable<T>>(private val name: String) : Domain<T>() {
   fun checkValue(value: T): Boolean = when {
     check == null || check!!.invoke(value) -> true
     else -> false
+  }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * Generate localization for this type.
+   * When overriden, subclasses MUST call it (because of lists).
+   *
+   * @param     ident           the type name
+   */
+  override fun genLocalization(writer: LocalizationWriter) {
+    // writer.genType(list) TODO: implement list type
   }
 }

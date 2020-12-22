@@ -15,7 +15,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
 import java.io.File
@@ -24,9 +23,12 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.common.Trigger
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.PrintJob
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Constants
 import org.kopi.galite.visual.Action
@@ -42,8 +44,6 @@ import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBContextHandler
 
 abstract class VForm : VWindow, VConstants {
   companion object {
@@ -60,6 +60,7 @@ abstract class VForm : VWindow, VConstants {
       })
     }
   }
+
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
@@ -278,9 +279,9 @@ abstract class VForm : VWindow, VConstants {
       // - can be removed if the method checkUI is removed
       try {
         ApplicationContext.reportTrouble("DForm chechUI " + Thread.currentThread(),
-                "Where is this code used? $action",
-                this.toString(),
-                RuntimeException("CHECKUI: Entered  block " + blocks!![i].name))
+                                         "Where is this code used? $action",
+                                         this.toString(),
+                                         RuntimeException("CHECKUI: Entered  block " + blocks!![i].name))
       } catch (e: Exception) {
         e.printStackTrace()
       }
@@ -455,16 +456,24 @@ abstract class VForm : VWindow, VConstants {
     return VKT_Triggers[index][event] != 0
   }
 
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    formTriggers[VKT_Type]?.action?.method?.invoke()
+    super.executeVoidTrigger(VKT_Type)
+  }
+
+  @Suppress("UNCHECKED_CAST")
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (formTriggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (formTriggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeIntegerTrigger(VKT_Type: Int): Int {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (formTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
   // ----------------------------------------------------------------------
@@ -605,11 +614,11 @@ abstract class VForm : VWindow, VConstants {
       addActors(blocks[i].actors)
     }
     VDocGenerator(p).helpOnForm(getName(),
-            commands,
-            blocks,
-            name,
-            help,
-            code)
+                                commands,
+                                blocks,
+                                name,
+                                help,
+                                code)
   }
 
   fun genHelp(): String? {
@@ -627,11 +636,11 @@ abstract class VForm : VWindow, VConstants {
       localHelp = module.help
     }
     val fileName = VHelpGenerator().helpOnForm(getName(),
-            commands,
-            blocks,
-            description,
-            localHelp,
-            "")
+                                               commands,
+                                               blocks,
+                                               description,
+                                               localHelp,
+                                               "")
     return if (fileName == null) {
       null
     } else {
@@ -736,6 +745,8 @@ abstract class VForm : VWindow, VConstants {
     return (getDisplay() as UForm).printForm()
   }
 
+  val eventList: MutableList<Int> = mutableListOf()
+
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
@@ -744,7 +755,8 @@ abstract class VForm : VWindow, VConstants {
   lateinit var blocks: Array<VBlock>
   internal lateinit var pages: Array<String?>
   internal var help: String? = null //the name of this field
-  internal lateinit var VKT_Triggers: Array<IntArray>
+  internal val VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
+  internal val formTriggers = mutableMapOf<Int, Trigger>()
 
   // dynamic data
   private val blockMoveAllowed = true

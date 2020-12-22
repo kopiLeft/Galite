@@ -27,7 +27,7 @@ import org.kopi.galite.visual.VlibProperties
  * @param ident         The column identifier.
  * @param format        The dimension format.
  */
-class VBooleanDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+class VBooleanDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------
@@ -39,7 +39,7 @@ class VBooleanDimension(ident: String, format: VColumnFormat) : VDimension(ident
     // --------------------------------------------------------------------
     // DATA MEMBERS
     // --------------------------------------------------------------------
-    private val trueRep: String =  VlibProperties.getString("true")
+    private val trueRep: String = VlibProperties.getString("true")
     private val falseRep: String = VlibProperties.getString("false")
   }
 }

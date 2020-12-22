@@ -66,7 +66,7 @@ object MessageCode {
     }
     val src = ApplicationContext.getRegistry().getMessageSource(domain)
             ?: throw InconsistencyException("No message source found for module '"
-                    + domain + "'")
+                                                    + domain + "'")
     return try {
       val manager = LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
 
@@ -76,9 +76,9 @@ object MessageCode {
       (if (withKey) "$key: " else "") + messageFormat.formatMessage(params)
     } catch (e: InconsistencyException) {
       ApplicationContext.reportTrouble("localize MessageCode",
-              "org.kopi.galite.visual.MessageCode.getMessage(String key, Object[] params, boolean withKey)",
-              e.message,
-              e)
+                                       "org.kopi.galite.visual.MessageCode.getMessage(String key, Object[] params, boolean withKey)",
+                                       e.message,
+                                       e)
       System.err.println("ERROR: " + e.message)
       "$key: message for !$key! not found!"
     }

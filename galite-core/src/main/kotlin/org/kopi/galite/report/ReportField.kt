@@ -28,7 +28,7 @@ import org.kopi.galite.visual.VTrigger
  *
  * @param domain      the domain of this field
  */
-class ReportField<T : Comparable<T>>(override val domain: Domain<T>): Field<T>(domain) {
+class ReportField<T : Comparable<T>?>(override val domain: Domain<T>) : Field<T>(domain) {
   /** the ident of this field */
   private val ident: String? get() = label
 
@@ -59,7 +59,7 @@ class ReportField<T : Comparable<T>>(override val domain: Domain<T>): Field<T>(d
   /** Field's help that describes the expected value of an input field */
   override var hidden: Boolean? = false
     set(value) {
-      options = if(value == true) Constants.CLO_HIDDEN else Constants.CLO_VISIBLE
+      options = if (value == true) Constants.CLO_HIDDEN else Constants.CLO_VISIBLE
       field = value
     }
 
