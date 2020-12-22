@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,42 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
-package org.kopi.galite.domain
-
-import org.kopi.galite.common.CodeDescription
-import org.kopi.galite.common.LocalizationWriter
+package org.kopi.galite.common
 
 /**
- * Represents a code domain.
+ * This class represents the description of a code label value pair.
+ *
+ * @param label                the string representation in the default locale
+ * @param value                the value of this element
  */
-class CodeDomain<T : Comparable<T>?>(ident: String) : Domain<T>(ident = ident) {
-  /**
-   * Contains all values that a domain can take
-   */
-  val codes: MutableList<CodeDescription<T>> = mutableListOf()
-
-  override val type = this
-
-  /**
-   * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a field.
-   *
-   * @param text the text
-   * @param value the value
-   */
-  operator fun set(text: String, value: T) {
-    val codeDescription = CodeDescription("id$${codes.size}", text, value)
-    codes.add(codeDescription)
-  }
+class CodeDescription<T: Comparable<T>?>(val ident: String,
+                                         val label: String,
+                                         val value: T) {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
   /**
-   * Generates localization.
+   * Generates ListDesc localization.
    */
-  override fun genLocalization(writer: LocalizationWriter) {
-    writer.genCodeType(codes)
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genCodeDesc(ident, label)
   }
 }

@@ -16,17 +16,25 @@
  */
 package org.kopi.galite.tests.form
 
+import org.junit.Test
+import org.kopi.galite.tests.JApplicationTestBase
 import kotlin.test.assertEquals
 
-import org.junit.Test
-
-import org.kopi.galite.tests.JApplicationTestBase
-
-class FormWithFieldsTests: JApplicationTestBase() {
+class FormWithMultipleBlockTests : JApplicationTestBase() {
 
   @Test
-  fun sourceFormTest() {
-    val formModel = FormWithFields.model
-    assertEquals(FormWithFields::class.qualifiedName!!.replace(".", "/"), formModel.source)
+  fun multipleBlockTest() {
+    val formModel = FormWithMultipleBlock.model
+
+    assertEquals(formModel.getBlock(1).bufferSize, 100)
+    assertEquals(formModel.getBlock(1).displaySize, 100)
+    assertEquals(formModel.getBlock(1).displayedFields, 1)
+
+    val nameField = formModel.getBlock(1).fields[1]
+    assertEquals(1, nameField.position!!.column)
+    assertEquals(1, nameField.position!!.columnEnd)
+    assertEquals(1, nameField.position!!.line)
+    assertEquals(1, nameField.position!!.lineEnd)
+    assertEquals(1, nameField.position!!.chartPos)
   }
 }
