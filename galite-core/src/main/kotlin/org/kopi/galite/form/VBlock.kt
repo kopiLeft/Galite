@@ -18,26 +18,32 @@
 
 package org.kopi.galite.form
 
+import java.sql.SQLException
+import java.util.EventListener
+
+import javax.swing.event.EventListenerList
+
+import kotlin.collections.HashMap
+import kotlin.math.abs
+import kotlin.collections.ArrayList
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.stringLiteral
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBForeignKeyException
 import org.kopi.galite.db.DBInterruptionException
-import org.kopi.galite.db.Users
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
@@ -51,12 +57,6 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-import java.sql.SQLException
-import java.util.*
-import javax.swing.event.EventListenerList
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.math.abs
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1357,7 +1357,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-                   || !isMulti() && activeField == null) {
+             || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
               .toString() + " recno " + recno.toString() + " current record " + activeRecord
               .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
@@ -1645,7 +1645,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun getSearchColumns(): List<Column<*>>? =
           fields.filter { it.getColumnCount() > 0 }
-                  .map { it.getColumn(0)!!.column }
+            .map { it.getColumn(0)!!.column }
 
   /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
@@ -1787,7 +1787,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         if (query.toList().isEmpty()) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                                                            arrayOf<Any>(tables!![tableIndex])))
+                  arrayOf(tables!![tableIndex])))
 
         } else {
           var j = 0
@@ -1801,7 +1801,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           if (query.toList().isNotEmpty()) {
 
             throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                                                              arrayOf<Any>(tables!![tableIndex])))
+                    arrayOf(tables!![tableIndex])))
           }
         }
       }
@@ -2481,7 +2481,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     block           This action should block the UI thread ?
    */
   @Deprecated("Use method performAsyncAction without bool parameter",
-              ReplaceWith("performAsyncAction(action)"))
+           ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2954,11 +2954,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun helpOnBlock(help: VHelpGenerator) {
     if (!isAlwaysSkipped()) {
       help.helpOnBlock(form.javaClass.name.replace('.', '_'),
-                       title,
-                       this.help,
-                       commands,
-                       fields,
-                       form.blocks.size == 1)
+               title,
+               this.help,
+               commands,
+               fields,
+               form.blocks.size == 1)
     }
   }
 
