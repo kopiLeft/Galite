@@ -310,13 +310,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * @param block        the actual form block
    */
   open fun initialize(block: FormBlock) {
-
-    // ACCESS
-    val blockAccess: IntArray = block.access
-    for (i in 0..2) {
-      access[i] = access[i].coerceAtMost(blockAccess[i])
-    }
-
     // TRANSIENT MODE
     if (columns == null && isNeverAccessible) {
       options = options or VConstants.FDO_TRANSIENT

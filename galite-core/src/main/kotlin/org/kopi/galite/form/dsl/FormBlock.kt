@@ -384,6 +384,10 @@ open class FormBlock(var buffer: Int,
       if (field.position != null) {
         field.position!!.createRBPoint(bottomRight, field)
       }
+      // ACCESS
+      for (i in 0..2) {
+        field.access[i] = field.access[i].coerceAtMost(access[i])
+      }
     }
 
     maxRowPos = bottomRight.y
