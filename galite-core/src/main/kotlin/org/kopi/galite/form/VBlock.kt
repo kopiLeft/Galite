@@ -1705,7 +1705,22 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Tests whether this table has only internal fields.
    */
+  @Deprecated("use hasOnlyInternalFields(table: Table)")
   fun hasOnlyInternalFields(table: Int): Boolean {
+    for (i in fields.indices) {
+      val fld: VField? = fields[i]
+
+      if (fld!!.fetchColumn(table) != -1 && !fld.isInternal()) {
+        return false
+      }
+    }
+    return true
+  }
+
+  /**
+   * Tests whether this table has only internal fields.
+   */
+  fun hasOnlyInternalFields(table: Table): Boolean {
     for (i in fields.indices) {
       val fld: VField? = fields[i]
 
@@ -2666,8 +2681,42 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  private fun isNullReference(table: Int, recno: Int): Boolean {
-    TODO()
+  private fun isNullReference(table: Table, recno: Int): Boolean {
+    var nullReference: Boolean
+
+    // check if this lookup table has not only internal fields
+    if (hasOnlyInternalFields(table)) {
+      nullReference = false
+    } else {
+      // check if all lookup fields for this table are null.
+      nullReference = true
+
+      for (field in fields) {
+        if (!nullReference) {
+          break
+        }
+        if (field.fetchColumn(table) != -1
+                && !field.isInternal()
+                && !field.isNull(recno)) {
+          nullReference = false
+        }
+      }
+    }
+
+    // this test is useful since we use outer join only for nullable columns.
+    for (field in fields) {
+      if (!nullReference) {
+        break
+      }
+      if (field.isInternal()
+              && field.fetchColumn(0) != -1
+              && field.fetchColumn(table) != -1
+              && !(field.getColumn(field.fetchColumn(table))!!.nullable ||
+                      field.getColumn(field.fetchColumn(0))!!.nullable)) {
+        nullReference = false
+      }
+    }
+    return nullReference
   }
 
   /*

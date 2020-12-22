@@ -29,6 +29,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
@@ -119,10 +120,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     })
   }
 
+  @Deprecated("use fetchColumn(table: Table)")
   fun fetchColumn(table: Int): Int {
     if (columns != null) {
       for (i in columns!!.indices) {
         if (columns!![i]!!.getTable() == table) {
+          return i
+        }
+      }
+    }
+    return -1
+  }
+
+  fun fetchColumn(table: Table): Int {
+    if (columns != null) {
+      for (i in columns!!.indices) {
+        if (columns!![i]!!.getTable_() == table) {
           return i
         }
       }
