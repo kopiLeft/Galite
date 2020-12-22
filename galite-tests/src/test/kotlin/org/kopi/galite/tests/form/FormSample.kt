@@ -63,7 +63,7 @@ object FormSample : Form() {
     icon =  "column_chart"  // icon is optional here
   }
 
-  val actor = actor (
+  val formActor = actor(
           ident =  "save",
           menu =   action,
           label =  "form Command",
@@ -73,7 +73,7 @@ object FormSample : Form() {
     icon =  "save"  // icon is optional here
   }
 
- val cmd =  command(item = actor) {
+ val cmd = command(item = formActor) {
     this.name = "command"
     action = {
       println("----------- FORM COMMAND ----------------")
