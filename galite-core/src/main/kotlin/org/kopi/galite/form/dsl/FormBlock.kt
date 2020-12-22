@@ -240,6 +240,7 @@ open class FormBlock(var buffer: Int,
     }
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
+    field.initialize(this)
     field.setInfo()
     blockFields.add(field)
     return field
@@ -380,7 +381,6 @@ open class FormBlock(var buffer: Int,
     val bottomRight = Point(0, 0)
 
     blockFields.forEach { field ->
-      field.initialize(this)
       if (field.position != null) {
         field.position!!.createRBPoint(bottomRight, field)
       }
@@ -539,6 +539,7 @@ open class FormBlock(var buffer: Int,
         super.pageNumber = this@FormBlock.pageNumber
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
+        super.displayedFields = this@FormBlock.displayedFields
         super.name = ident
         super.options = blockOptions
         super.access = this@FormBlock.access
