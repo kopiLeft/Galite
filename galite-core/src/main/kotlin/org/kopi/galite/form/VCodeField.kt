@@ -33,7 +33,7 @@ import org.kopi.galite.visual.VlibProperties
  */
 abstract class VCodeField(val bufferSize: Int,
                           val type: String,
-                          val source: String,
+                          var source: String,
                           val idents: Array<String>)
   : VField(1, 1) {
 
@@ -173,7 +173,7 @@ abstract class VCodeField(val bufferSize: Int,
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     if (handler != null) {
       val selected = handler.selectFromList(arrayOf(getListColumn()!!), arrayOf(getCodes()),
-              labels)
+                                            labels)
 
       if (selected != null) {
         /*

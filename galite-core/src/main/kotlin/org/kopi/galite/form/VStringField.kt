@@ -213,9 +213,9 @@ open class VStringField(val bufferSize: Int,
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -256,8 +256,8 @@ open class VStringField(val bufferSize: Int,
      */
 
     fun textToModel(source: String, col: Int, lin: Int = Int.MAX_VALUE): String =
-      // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
-      LineBreaker.textToModel(source, col, lin)
+            // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
+            LineBreaker.textToModel(source, col, lin)
 
     /**
      * Replaces blanks by new-lines
@@ -266,7 +266,7 @@ open class VStringField(val bufferSize: Int,
      * @param    col           the width of the text area
      */
     fun modelToText(source: String, col: Int): String =
-      // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
-      LineBreaker.modelToText(source, col)
+            // depending on the value of FDO_DYNAMIC_NL (ie FIXED ON/OFF)
+            LineBreaker.modelToText(source, col)
   }
 }

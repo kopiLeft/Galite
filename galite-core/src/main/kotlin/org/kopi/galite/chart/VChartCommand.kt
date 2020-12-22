@@ -29,7 +29,7 @@ class VChartCommand(private val chart: VChart, actor: VActor)
 
   override fun setEnabled(enabled: Boolean) {
     if (actor != null) {
-      actor!!.isEnabled =   enabled
+      actor!!.isEnabled = enabled
       actor!!.number = trigger
       actor!!.handler = this
     }

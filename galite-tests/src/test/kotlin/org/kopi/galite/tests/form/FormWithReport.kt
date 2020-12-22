@@ -18,8 +18,7 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
@@ -57,13 +56,6 @@ object FormWithReport : ReportSelectionForm() {
   }
 }
 
-object BlockSample : FormBlock(1, 1, "Test", "Test block") {
-  val u = table(User)
-  val i = index(message = "ID should be unique")
-
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
-    label = "name"
-    help = "The user name"
-    columns(u.name)
-  }
+fun main() {
+  Application.runForm(FormWithReport)
 }

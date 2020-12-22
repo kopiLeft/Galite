@@ -26,6 +26,19 @@ import javax.swing.event.EventListenerList
 import kotlin.collections.HashMap
 import kotlin.math.abs
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.lowerCase
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -35,9 +48,9 @@ import org.kopi.galite.db.DBInterruptionException
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
@@ -46,22 +59,12 @@ import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.VarCharColumnType
-import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
-
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
    * Build everything after construction
    */
   protected fun buildCstr() {
-    activeCommands = ArrayList<VCommand>()
+    activeCommands = ArrayList()
     if (bufferSize == 1) {
       fetchSize = displaySize
       displaySize = 1
@@ -1199,7 +1202,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     while (i >= 0) {
       if (listeners[i] == BlockRecordListener::class.java) {
-        (listeners[i + 1] as BlockRecordListener).blockRecordChanged(getSortedPosition(record - 1) + 1, localRecordCount)
+        (listeners[i + 1] as BlockRecordListener).blockRecordChanged(getSortedPosition(record - 1) + 1,
+                                                                     localRecordCount)
       }
       i -= 2
     }
@@ -1355,7 +1359,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun clearRecordImpl(recno: Int) {
     assert(this !== form.getActiveBlock() || isMulti() && recno != activeRecord
-            || !isMulti() && activeField == null) {
+                   || !isMulti() && activeField == null) {
       ("activeBlock " + form.getActiveBlock()
               .toString() + " recno " + recno.toString() + " current record " + activeRecord
               .toString() + " isMulti? " + isMulti().toString() + " current field " + activeField)
@@ -1429,7 +1433,38 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @exception VException      an exception may be raised by triggers
    */
   fun fetchRecord(id: Int) {
-    TODO()
+    val columns = getSearchColumns()
+    val table = getSearchTables_()
+    val condition = mutableListOf<Op<Boolean>>()
+
+    condition.add(Op.build { idColumn eq id })
+    if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
+      condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
+    }
+
+    try {
+      val result = table!!.slice(columns!!).select(condition.compoundAnd()).single()
+
+      /* set values */
+      var j = 0
+      fields.forEach { field ->
+        if (field.getColumnCount() > 0) {
+          field.setQuery_(result, columns[j])
+          j += 1
+        }
+      }
+    } catch (noSuchElementException: NoSuchElementException) {
+      /* Record does not exist anymore: it was deleted by another user */
+      throw VSkipRecordException()
+    } catch (illegalArgumentException: IllegalArgumentException) {
+      assert(false) { "too many rows" }
+    }
+
+    setRecordFetched(activeRecord, true)
+    setRecordChanged(activeRecord, false)
+    setRecordDeleted(activeRecord, false)
+    callProtectedTrigger(VConstants.TRG_POSTQRY)
+    setMode(VConstants.MOD_UPDATE)
   }
 
   /**
@@ -1446,35 +1481,33 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         continue
       }
       try {
-        while (true) {
+        try {
+          fetchPosition = pos
+          fetchRecord(fetchBuffer[pos])
+          return
+        } catch (e: VException) {
           try {
-            fetchPosition = pos
-            fetchRecord(fetchBuffer[pos])
-            return
-          } catch (e: VException) {
-            try {
-            } catch (abortEx: VException) {
-              throw abortEx
-            }
-          } catch (e: SQLException) {
-            try {
-            } catch (abortEx: DBDeadLockException) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-            } catch (abortEx: DBInterruptionException) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-            } catch (abortEx: SQLException) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: Error) {
-            try {
-            } catch (abortEx: Error) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: RuntimeException) {
-            try {
-            } catch (abortEx: RuntimeException) {
-              throw VExecFailedException(abortEx)
-            }
+          } catch (abortEx: VException) {
+            throw abortEx
+          }
+        } catch (e: SQLException) {
+          try {
+          } catch (abortEx: DBDeadLockException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: DBInterruptionException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: SQLException) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: Error) {
+          try {
+          } catch (abortEx: Error) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: RuntimeException) {
+          try {
+          } catch (abortEx: RuntimeException) {
+            throw VExecFailedException(abortEx)
           }
         }
       } catch (e: VException) {
@@ -1552,17 +1585,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the name of the DB column of the ID field.
    */
-  val idColumn: String
+  @Suppress("UNCHECKED_CAST")
+  val idColumn: Column<Int>
     get() {
-      return idField.lookupColumn(0) ?: throw InconsistencyException()
-    }
-
-  /**
-   * Returns the name of the DB column of the ID field.
-   */
-  val idColumn_: Column<Int>
-    get() {
-      TODO()
+      return idField.lookupColumn(0) as? Column<Int> ?: throw InconsistencyException()
     }
 
   // laurent : return f even if it's null until we add this field in
@@ -1595,8 +1621,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun getBaseTableField(field: String): VField? {
     for (i in fields.indices) {
-      val column: String? = fields[i].lookupColumn(0)
-      if (column != null && column == field) {
+      val column = fields[i].lookupColumn(0)
+      if (column != null && column.name == field) {
         return fields[i]
       }
     }
@@ -1648,22 +1674,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the database columns of block.
    */
-  fun getSearchColumns(): String? {
-    var result: String? = null
-
-    for (i in fields.indices) {
-      val fld: VField? = fields[i]
-      if (fld!!.getColumnCount() > 0) {
-        if (result == null) {
-          result = ""
-        } else {
-          result += ", "
-        }
-        result += fld.getColumn(0)!!.getQualifiedName()
-      }
-    }
-    return result
-  }
+  fun getSearchColumns(): List<Column<*>>? =
+          fields.filter { it.getColumnCount() > 0 }
+                  .map { it.getColumn(0)!!.column }
 
   /**
    * Checks which outer join syntax (JDBC or Oracle) should be used.
@@ -1692,6 +1705,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Tests whether this table has only internal fields.
    */
+  @Deprecated("use hasOnlyInternalFields(table: Table)")
   fun hasOnlyInternalFields(table: Int): Boolean {
     for (i in fields.indices) {
       val fld: VField? = fields[i]
@@ -1704,6 +1718,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
+   * Tests whether this table has only internal fields.
+   */
+  fun hasOnlyInternalFields(table: Table): Boolean = fields.all { it.fetchColumn(table) == -1 || it.isInternal() }
+
+  /**
    * Returns the tables for database query, with outer joins conditions.
    */
   fun getSearchTables(): String {
@@ -1713,8 +1732,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
-  fun getSearchTables_(): Table {
-    TODO()
+  fun getSearchTables_(): Join? {
+    return VBlockDefaultOuterJoin.getSearchTables(this)
   }
 
   /**
@@ -1727,8 +1746,37 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search conditions for database query.
    */
-  fun getSearchConditions_(): Op<Boolean> {
-    TODO()
+  fun getSearchConditions_(): Op<Boolean>? {
+    var buffer: Op<Boolean>? = null
+
+    for (i in fields.indices) {
+      val fld = fields[i]
+      if (fld.getColumnCount() > 0) {
+        val cond = fld.getSearchCondition()
+        if (cond != null) {
+          val expression = when (fld.options and VConstants.FDO_SEARCH_MASK) {
+            VConstants.FDO_SEARCH_NONE -> fld.getColumn(0)!!.column
+            VConstants.FDO_SEARCH_UPPER -> {
+              (fld.getColumn(0)!!.column as Column<String>).upperCase()
+            }
+            VConstants.FDO_SEARCH_LOWER -> {
+              (fld.getColumn(0)!!.column as Column<String>).lowerCase()
+            }
+            else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+          }
+          Op.build {
+            expression.isNull()
+          }
+          buffer = expression.cond()
+        }
+      }
+      /*if (useOracleOuterJoinSyntax()) { TODO ! do we need to keep this?
+        buffer = VBlockOracleOuterJoin.getSearchCondition(fld, buffer)
+      } else {
+        buffer = VBlockDefaultOuterJoin.getSearchCondition(fld)
+      }*/
+    }
+    return buffer
   }
 
   /**
@@ -1770,9 +1818,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   protected fun fetchLookup(tableIndex: Int, currentField: VField) {
-
     val table = object : Table(tables!![tableIndex].tableName) {}
-    val columns = mutableListOf<Column<String>>()
+    val columns = mutableListOf<Column<*>>()
     val conditions = mutableListOf<Op<Boolean>>()
 
     for (i in fields.indices) {
@@ -1787,15 +1834,23 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       val column = fields[i].lookupColumn(tableIndex)
 
       if (column != null) {
-        val col = Column<String>(table, column, VarCharColumnType())
-        columns.add(col)
+        columns.add(column)
       }
 
       if (fields[i] == currentField || fields[i].isLookupKey(tableIndex)) {
         val condition = fields[i].getSearchCondition()
 
+        // TODO: 10/12/2020 FIX this !
+        if (condition == null || fields[i].lookupColumn(tableIndex)!!.condition() !is EqOp) {
+          // at least one key field is not completely specified
+          // no guarantee that a unique value will be fetched
+          // end processing - non-key fields have already been cleared
+          return
+        }
+
+        // TODO: 11/12/2020 FIX this !
         if (condition != null) {
-          conditions.add(condition)
+          conditions.add(fields[i].lookupColumn(tableIndex)!!.condition())
         }
       }
     }
@@ -1806,22 +1861,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val query = table.slice(columns).select(condition)
 
         if (query.toList().isEmpty()) {
-          throw VExecFailedException(MessageCode.getMessage("VIS-00016",
-                  arrayOf<Any>(tables!![tableIndex])))
+          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(tables!![tableIndex])))
 
         } else {
           var j = 0
 
           fields.forEach {
             if (it.lookupColumn(tableIndex) != null) {
-              it.setQuery_(query, it.getColumn(1 + j)!!.column)
+              it.setQuery_(query.first(), it.getColumn(1 + j)!!.column)
               j += 1
             }
           }
           if (query.toList().isNotEmpty()) {
-
-            throw VExecFailedException(MessageCode.getMessage("VIS-00020",
-                    arrayOf<Any>(tables!![tableIndex])))
+            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(tables!![tableIndex])))
           }
         }
       }
@@ -1845,43 +1897,40 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun singleMenuQuery(showSingleEntry: Boolean): Int {
     assert(!isMulti()) { "$name is a multi block" }
-    var dialog: VListDialog?
+    var dialog: VListDialog? = null
 
     try {
-      while (true) {
+      try {
+        dialog = transaction {
+          callProtectedTrigger(VConstants.TRG_PREQRY)
+          buildQueryDialog()
+        }
+      } catch (e: VException) {
         try {
-          dialog = transaction {
-            callProtectedTrigger(VConstants.TRG_PREQRY)
-            buildQueryDialog()
-          }
-          break
-        } catch (e: VException) {
-          try {
-          } catch (abortEx: VException) {
-            throw abortEx
-          }
-        } catch (e: SQLException) {
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          try {
-          } catch (abortEx: Error) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw VExecFailedException(abortEx)
-          }
+        } catch (abortEx: VException) {
+          throw abortEx
+        }
+      } catch (e: SQLException) {
+        try {
+        } catch (abortEx: DBDeadLockException) {
+          throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+        } catch (abortEx: DBInterruptionException) {
+          throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+        } catch (abortEx: SQLException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: Error) {
+        try {
+        } catch (abortEx: Error) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: RuntimeException) {
+        try {
+        } catch (abortEx: RuntimeException) {
+          throw VExecFailedException(abortEx)
         }
       }
-    } catch (e: VException) {
+    } catch (e: Exception) {
       if (e.message != null) {
         form.error(e.message!!)
       }
@@ -1950,11 +1999,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val columns = mutableListOf<Column<*>>()
 
     for (i in 0 until query_cnt) {
-      columns.add(query_tab[i]!!.getColumn(0)!!.column!!)
+      columns.add(query_tab[i]!!.getColumn(0)!!.column)
     }
 
     /* add the DB column of the ID field. */
-    columns.add(idColumn_)
+    columns.add(idColumn)
 
     /* ... and now their order */
     var orderSize = 0
@@ -1986,17 +2035,22 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val ids = IntArray(fetchSize)
     var rows = 0
 
-    for (result in tables.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())) {
+    val query = if (conditions == null) {
+      tables!!.slice(columns).selectAll().orderBy(*orderBys.toTypedArray())
+    } else {
+      tables!!.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())
+    }
+    for (result in query) {
       if (rows == fetchSize) {
         break
       }
 
       /* don't show record with ID = 0 */
-      if (result[idColumn_] == 0) {
+      if (result[idColumn] == 0) {
         continue
       }
 
-      ids[rows] = result[idColumn_]
+      ids[rows] = result[idColumn]
       for (i in 0 until query_cnt) {
         values[i][rows] = query_tab[i]!!.retrieveQuery_(result, columns[i])
       }
@@ -2504,7 +2558,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @param     block           This action should block the UI thread ?
    */
   @Deprecated("Use method performAsyncAction without bool parameter",
-          ReplaceWith("performAsyncAction(action)"))
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     form.performAsyncAction(action)
   }
@@ -2556,7 +2610,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // do not use getCurrentRecord because getCurrentRecord throws an
     // exception if currentRecord is null.
-    val oldCurrentRecord: Int = currentRecord
+    val oldCurrentRecord: Int = _currentRecord
     returnValue = try {
       currentRecord = activeRecord
       when (VConstants.TRG_TYPES[event]) {
@@ -2618,8 +2672,42 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  private fun isNullReference(table: Int, recno: Int): Boolean {
-    TODO()
+  private fun isNullReference(table: Table, recno: Int): Boolean {
+    var nullReference: Boolean
+
+    // check if this lookup table has not only internal fields
+    if (hasOnlyInternalFields(table)) {
+      nullReference = false
+    } else {
+      // check if all lookup fields for this table are null.
+      nullReference = true
+
+      for (field in fields) {
+        if (!nullReference) {
+          break
+        }
+        if (field.fetchColumn(table) != -1
+                && !field.isInternal()
+                && !field.isNull(recno)) {
+          nullReference = false
+        }
+      }
+    }
+
+    // this test is useful since we use outer join only for nullable columns.
+    for (field in fields) {
+      if (!nullReference) {
+        break
+      }
+      if (field.isInternal()
+              && field.fetchColumn(0) != -1
+              && field.fetchColumn(table) != -1
+              && !(field.getColumn(field.fetchColumn(table))!!.nullable ||
+                      field.getColumn(field.fetchColumn(0))!!.nullable)) {
+        nullReference = false
+      }
+    }
+    return nullReference
   }
 
   /*
@@ -2714,7 +2802,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     return if (referenced == null || referencing == null) {
       // use the original exception in this case
       VExecFailedException(exception)
-    } else VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any?>(referencing, referenced)))
+    } else VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf(referencing, referenced)))
     // create a visual exception
   }
 
@@ -2742,7 +2830,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     get() = form.dBContext
     set(value) = throw InconsistencyException("CALL IT ON FORM")
 
-  override fun retryableAbort(reason: Exception): Boolean  = form.retryableAbort(reason)
+  override fun retryableAbort(reason: Exception): Boolean = form.retryableAbort(reason)
 
   override fun retryProtected(): Boolean = form.retryProtected()
 
@@ -2931,11 +3019,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun helpOnBlock(help: VHelpGenerator) {
     if (!isAlwaysSkipped()) {
       help.helpOnBlock(form.javaClass.name.replace('.', '_'),
-              title,
-              this.help,
-              commands,
-              fields,
-              form.blocks.size == 1)
+                       title,
+                       this.help,
+                       commands,
+                       fields,
+                       form.blocks.size == 1)
     }
   }
 
@@ -3086,6 +3174,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   lateinit var fields: Array<VField> // fields
   protected var VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
   protected val triggers = mutableMapOf<Int, Trigger>()
+
   // dynamic data
   var activeRecord = 0 // current record
     get() {
@@ -3129,18 +3218,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   protected lateinit var activeCommands: ArrayList<VCommand> // commands currently active
-  var currentRecord = 0
+  private var _currentRecord = 0
+  var currentRecord
     get(): Int {
       return if (!isMulti()) {
         0
       } else {
-        assert(field in 0 until bufferSize) { "Bad currentRecord $field" }
-        field
+        assert(_currentRecord in 0 until bufferSize) { "Bad currentRecord $_currentRecord" }
+        _currentRecord
       }
     }
     set(rec) {
       if (isMulti()) {
-        field = rec
+        _currentRecord = rec
       }
     }
 

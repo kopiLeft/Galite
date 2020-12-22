@@ -22,6 +22,6 @@ import org.kopi.galite.report.Constants
 /**
  * This class represents a trigger, ie an action to be executed on events
  */
-class ReportTrigger(events: Long, action: Action<*>): Trigger(events, action) {
+class ReportTrigger(events: Long, action: Action<*>) : Trigger(events, action) {
   override fun getTriggers(): IntArray = Constants.TRG_TYPES
 }

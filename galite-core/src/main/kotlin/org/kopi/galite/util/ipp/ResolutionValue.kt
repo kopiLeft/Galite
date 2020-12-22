@@ -51,8 +51,8 @@ class ResolutionValue : IPPValue {
 
   override fun dump() {
     println("\tunits : " + units +
-            "\txres : " + xres +
-            "\tyres : " + yres)
+                    "\txres : " + xres +
+                    "\tyres : " + yres)
   }
 
   // --------------------------------------------------------------------

@@ -141,7 +141,7 @@ open class Time : Type {
     get() = scalar % 60
 
   // !!! TO BE REMOVED
-  fun getSqlTime() : java.sql.Time {
+  fun getSqlTime(): java.sql.Time {
     synchronized(calendar) {
       calendar[Calendar.HOUR_OF_DAY] = scalar / 3600
       calendar[Calendar.MINUTE] = scalar / 60 % 60
@@ -209,8 +209,8 @@ open class Time : Type {
     fun now(): NotNullTime {
       val now = Calendar.getInstance()
       return NotNullTime(now[Calendar.HOUR_OF_DAY],
-              now[Calendar.MINUTE],
-              now[Calendar.SECOND])
+                         now[Calendar.MINUTE],
+                         now[Calendar.SECOND])
     }
 
     /**
@@ -239,8 +239,8 @@ open class Time : Type {
         throw IllegalArgumentException()
       }
       return NotNullTime(cal[Calendar.HOUR_OF_DAY],
-              cal[Calendar.MINUTE],
-              cal[Calendar.SECOND])
+                         cal[Calendar.MINUTE],
+                         cal[Calendar.SECOND])
     }
 
     private val calendar = GregorianCalendar()

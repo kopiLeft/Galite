@@ -8,17 +8,23 @@ import org.kopi.galite.util.base.Options
 open class ConnectionOptions @JvmOverloads constructor(name: String = "Connection") : Options(name) {
   @JvmField
   var database: String? = null
+
   @JvmField
   var driver: String? = null
+
   @JvmField
   var username: String? = null
+
   @JvmField
   var password: String? = null
+
   @JvmField
   var lookupUserId = true
+
   @JvmField
   var trace = 0
   var properties: Array<String?>? = null
+
   @JvmField
   var schema: String? = null
   override fun processOption(code: Int, g: Getopt): Boolean {

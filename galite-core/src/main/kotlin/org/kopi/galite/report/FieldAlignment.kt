@@ -16,9 +16,9 @@
  */
 package org.kopi.galite.report
 
-enum class FieldAlignment(val value: Int){
-  DEFAULT (Constants.ALG_DEFAULT),
-  CENTER (Constants.ALG_CENTER),
-  LEFT (Constants.ALG_LEFT),
-  RIGHT (Constants.ALG_RIGHT),
+enum class FieldAlignment(val value: Int) {
+  DEFAULT(Constants.ALG_DEFAULT),
+  CENTER(Constants.ALG_CENTER),
+  LEFT(Constants.ALG_LEFT),
+  RIGHT(Constants.ALG_RIGHT),
 }

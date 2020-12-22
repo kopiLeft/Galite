@@ -36,14 +36,14 @@ class VTimeColumn(ident: String?,
                   function: VCalculateColumn?,
                   width: Int,
                   format: VCellFormat?)
-      : VReportColumn(ident,
-                      options,
-                      align,
-                      groups,
-                      function,
-                      5,  // width, default time format
-                      1,
-                      format) {
+  : VReportColumn(ident,
+                  options,
+                  align,
+                  groups,
+                  function,
+                  5,  // width, default time format
+                  1,
+                  format) {
   /**
    * Compares two objects.
    *

@@ -14,15 +14,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.tests.form
 
-package org.kopi.galite.chart
+import kotlin.test.assertEquals
 
-import java.io.Serializable
+import org.junit.Test
 
-/**
- * A chart column.
- */
-abstract class Column : Serializable {
-  /** The column's label */
-  var label: String = ""
+import org.kopi.galite.tests.JApplicationTestBase
+
+class FormWithFieldsTests: JApplicationTestBase() {
+
+  @Test
+  fun sourceFormTest() {
+    val formModel = FormWithFields.model
+    assertEquals(FormWithFields::class.qualifiedName!!.replace(".", "/"), formModel.source)
+  }
 }

@@ -26,13 +26,13 @@ class VDefaultReportActor(menuIdent: String,
                           iconName: String,
                           acceleratorKey: Int,
                           acceleratorModifier: Int)
-      : VActor(menuIdent,
-               null,
-               actorIdent,
-               null,
-               null,
-               acceleratorKey,
-               acceleratorModifier) {
+                 : VActor(menuIdent,
+                          null,
+                          actorIdent,
+                          null,
+                          null,
+                          acceleratorKey,
+                          acceleratorModifier) {
 
   init {
     this.iconName = iconName

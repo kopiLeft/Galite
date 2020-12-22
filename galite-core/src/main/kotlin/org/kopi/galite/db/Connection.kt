@@ -79,7 +79,7 @@ class Connection {
    * Returns the user ID
    */
   fun getUserID(): Int {
-    when(user) {
+    when (user) {
       USERID_NO_LOOKUP -> throw InconsistencyException("user id must not be queried")
       USERID_TO_DETERMINE -> throw InconsistencyException("user id not yet determined")
     }
@@ -98,9 +98,9 @@ class Connection {
       } else {
         try {
           transaction {
-            user = DBSchema.Users.slice(DBSchema.Users.id).select {
-              DBSchema.Users.shortName eq userName
-              }.single()[DBSchema.Users.id]
+            user = Users.slice(Users.id).select {
+              Users.shortName eq userName
+            }.single()[Users.id]
           }
         } catch (e: NoSuchElementException) {
           throw SQLException("user unknown")

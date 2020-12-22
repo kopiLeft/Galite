@@ -32,16 +32,16 @@ class VFixnumCodeColumn(ident: String?,
                         format: VCellFormat?,
                         names: Array<String>,
                         codes: Array<NotNullFixed>)
-       : VCodeColumn(ident,
-                     type,
-                     source,
-                     options,
-                     align,
-                     groups,
-                     function,
-                     width,
-                     format,
-                     names) {
+          : VCodeColumn(ident,
+                        type,
+                        source,
+                        options,
+                        align,
+                        groups,
+                        function,
+                        width,
+                        format,
+                        names) {
   /**
    * Get the index of the value.
    */

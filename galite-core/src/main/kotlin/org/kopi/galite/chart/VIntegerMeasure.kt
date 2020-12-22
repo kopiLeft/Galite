@@ -28,7 +28,7 @@ import org.kopi.galite.visual.VColor
  */
 class VIntegerMeasure(ident: String, color: VColor?) : VMeasure(ident, color) {
   override fun toNumber(value: Any?): Number? {
-    return when(value) {
+    return when (value) {
       null -> null
       is Int -> value
       is Number -> value.toInt()
