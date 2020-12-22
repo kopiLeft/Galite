@@ -31,7 +31,8 @@ import org.kopi.galite.visual.VException
 class VPreviewRunner : PreviewRunner {
   override fun run(data: PrintJob, command: String) {
     try {
-      VPreviewWindow().preview(if (data.dataType != PrintJob.DAT_PS) data else AbstractPrinter.convertToGhostscript(data), command)
+      VPreviewWindow().preview(
+              if (data.dataType != PrintJob.DAT_PS) data else AbstractPrinter.convertToGhostscript(data), command)
     } catch (e: VException) {
       throw PSPrintException("PreviewPrinter.PrintTaskImpl::print()", e)
     }

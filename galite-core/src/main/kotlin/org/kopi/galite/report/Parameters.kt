@@ -39,8 +39,8 @@ class Parameters(color: Color) : Serializable {
     val reverseColor = Color(255 - color.red, 255 - color.green, 255 - color.blue)
     for (i in bgcolors.indices) {
       bgcolors[i] = Color(255 - i * reverseColor.red / 17,
-              255 - i * reverseColor.green / 17,
-              255 - i * reverseColor.blue / 17)
+                          255 - i * reverseColor.green / 17,
+                          255 - i * reverseColor.blue / 17)
     }
   }
 

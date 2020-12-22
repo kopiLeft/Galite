@@ -58,7 +58,7 @@ class VIntegerCodeColumn : VCodeColumn {
                   names) {
     this.codes = IntArray(codes.size)
     throw InconsistencyException()
-   }
+  }
 
   /**
    * Constructs a report column description
@@ -107,7 +107,7 @@ class VIntegerCodeColumn : VCodeColumn {
   /**
    * Get the index of the value.
    */
-  override fun getIndex(value : Any): Int {
+  override fun getIndex(value: Any): Int {
     if (fastIndex != -1) {
       return (value as Int) - fastIndex
     }
@@ -145,5 +145,5 @@ class VIntegerCodeColumn : VCodeColumn {
   }
 
   private var fastIndex = -1 // if array = {fastIndex, fastIndex + 1, ...}
-  private lateinit var codes : IntArray // array of internal representations
+  private lateinit var codes: IntArray // array of internal representations
 }

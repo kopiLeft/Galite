@@ -29,7 +29,7 @@ import org.kopi.galite.exceptions.InvalidValueException
  *
  * @param domain the field's domain
  */
-abstract class Field<T : Comparable<T>>(open val domain: Domain<T>) {
+abstract class Field<T : Comparable<T>?>(open val domain: Domain<T>) {
   /** Field's label */
   var label: String? = null
 
@@ -62,21 +62,14 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>) {
   fun checkValue(value: T): Boolean = when {
     domain.type is ListDomain && (domain.type as ListDomain).checkValue(value) -> true
     domain.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
-            "by this domain type")
+                                                                              "by this domain type")
     else -> throw InvalidValueException(value, label)
-  }
-
-  /**
-   * returns list of values that can this field get.
-   */
-  fun getValues(): MutableMap<String, *> {
-    return domain.getValues()
   }
 
   /**
    * Generates localization for this field
    *
-   * @param The localization writer.
+   * @param writer The localization writer.
    */
   abstract fun genLocalization(writer: LocalizationWriter)
 }

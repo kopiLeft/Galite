@@ -23,12 +23,19 @@ import org.kopi.galite.report.VReport
 /**
  * Represents a report selection form.
  */
-abstract class ReportSelectionForm: DictionaryForm() {
+abstract class ReportSelectionForm : DictionaryForm() {
 
   /**
    * create a report for this form
    */
   protected abstract fun createReport(): Report
+
+  /**
+   * create a report for this form
+   */
+  protected fun createReport(formBlock: FormBlock) {
+    model.createReport(formBlock.vBlock)
+  }
 
   /** Form model */
   override val model: VReportSelectionForm by lazy {

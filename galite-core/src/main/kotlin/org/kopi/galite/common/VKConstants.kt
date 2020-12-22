@@ -17,9 +17,12 @@
  */
 package org.kopi.galite.common
 
-/**
- * This class represents an action, ie a method to execute
- */
-class BlockAction<T>(protected var name: String?, method: () -> T) : Action<T>(method) {
-
+object VKConstants {
+    // ----------------------------------------------------------------------
+    // PREDEFINED COMMANDS
+    // ----------------------------------------------------------------------
+    val CMD_AUTOFILL: String = "Autofill"
+    val CMD_SHORTCUT: String = "EditItem_S"
+    val CMD_NEWITEM: String = "NewItem"
+    val CMD_EDITITEM: String = "EditItem"
 }

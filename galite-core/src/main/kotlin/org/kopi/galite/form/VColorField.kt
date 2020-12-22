@@ -216,7 +216,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
     return handler?.let {
       setColor(block!!.activeRecord,
-              handler.selectColor(getColor(block!!.activeRecord)))
+               handler.selectColor(getColor(block!!.activeRecord)))
       true
     } ?: false
   }

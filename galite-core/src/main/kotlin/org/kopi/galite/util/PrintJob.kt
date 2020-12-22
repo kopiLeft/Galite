@@ -82,19 +82,19 @@ class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
    */
   val inputStream: InputStream get() = FileInputStream(dataFile)
 
-  fun getBytes(): ByteArray{
-      val buffer = ByteArray(1024)
-      var length: Int
+  fun getBytes(): ByteArray {
+    val buffer = ByteArray(1024)
+    var length: Int
 
-      // use getInputStream because in creates
-      // the stream if necessary
-      val data = inputStream
-      val output = ByteArrayOutputStream()
-      while (data.read(buffer).also { length = it } != -1) {
-        output.write(buffer, 0, length)
-      }
-      return output.toByteArray()
+    // use getInputStream because in creates
+    // the stream if necessary
+    val data = inputStream
+    val output = ByteArrayOutputStream()
+    while (data.read(buffer).also { length = it } != -1) {
+      output.write(buffer, 0, length)
     }
+    return output.toByteArray()
+  }
 
   fun writeDataToFile(file: File) {
     writeToFile(inputStream, file)

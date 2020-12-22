@@ -45,7 +45,9 @@ class StringValue : IPPValue {
     os.writeString(value)
   }
 
-  override fun dump() { println("\tString : $value") }
+  override fun dump() {
+    println("\tString : $value")
+  }
 
   override fun toString(): String = value
 

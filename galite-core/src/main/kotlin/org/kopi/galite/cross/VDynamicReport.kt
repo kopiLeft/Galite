@@ -77,8 +77,7 @@ class VDynamicReport(block: VBlock) : VReport() {
 
     fields.forEach { field ->
       // Images fields cannot be handled in dynamic reports
-      if (field !is VImageField
-              && (!field.isInternal() || field.name.equals(block.idField.name))) {
+      if (field !is VImageField && (!field.isInternal() || field.name == block.idField.name)) {
         if (field.getColumnCount() > 0 || block.isMulti() && isFetched) {
           processedFields.add(field)
         }
@@ -86,7 +85,7 @@ class VDynamicReport(block: VBlock) : VReport() {
     }
     if (processedFields.isEmpty()) {
       throw InconsistencyException("Can't generate a report, check that this block contains " +
-              "unhidden fields with database columns.")
+                                           "unhidden fields with database columns.")
     }
     return processedFields.toTypedArray()
   }
@@ -110,7 +109,7 @@ class VDynamicReport(block: VBlock) : VReport() {
     var col = 0
 
     fields.forEachIndexed { index, field ->
-      when(field) {
+      when (field) {
         is VStringField ->
           columns[col] = VStringColumn(null,
                                        0,
@@ -352,7 +351,12 @@ class VDynamicReport(block: VBlock) : VReport() {
   // ----------------------------------------------------------------------
   // Default Actors
   // ----------------------------------------------------------------------
-  private fun createActor(menuIdent: String, actorIdent: String, iconIdent: String, key: Int, modifier: Int, trigger: Int) {
+  private fun createActor(menuIdent: String,
+                          actorIdent: String,
+                          iconIdent: String,
+                          key: Int,
+                          modifier: Int,
+                          trigger: Int) {
     actorsDef[number] = VDefaultReportActor(menuIdent, actorIdent, iconIdent, key, modifier)
     actorsDef[number]!!.number = trigger
     number++
