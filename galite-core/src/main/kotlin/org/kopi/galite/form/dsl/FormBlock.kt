@@ -358,18 +358,13 @@ open class FormBlock(var buffer: Int,
    * @param modes the list of modes where the access will be changed
    */
   fun changeBlockAccess(access: Access, vararg modes: Modes) {
-    var self = 0
-
-    modes.forEach { mode ->
-      self = self or (1 shl mode.value)
-    }
-    if (self and (1 shl VConstants.MOD_QUERY) != 0) {
+    if (modes.contains(Modes.MOD_QUERY)) {
       this.access[VConstants.MOD_QUERY] = access.value
     }
-    if (self and (1 shl VConstants.MOD_INSERT) != 0) {
+    if (modes.contains(Modes.MOD_INSERT)) {
       this.access[VConstants.MOD_INSERT] = access.value
     }
-    if (self and (1 shl VConstants.MOD_UPDATE) != 0) {
+    if (modes.contains(Modes.MOD_UPDATE)) {
       this.access[VConstants.MOD_UPDATE] = access.value
     }
   }
