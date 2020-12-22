@@ -2698,7 +2698,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val condition = mutableListOf<Op<Boolean>>()
 
     for (field in fields) {
-      val column  = if (field.isNull(recno) || !field.hasIndex(index)) {e
+      val column  = if (field.isNull(recno) || !field.hasIndex(index)) {
         null
       } else {
         @Suppress("UNCHECKED_CAST")
