@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.tests
 
-import org.junit.After
-import org.junit.Before
 import java.util.Locale
+
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.tests.db.DBSchemaTest
@@ -26,17 +27,16 @@ import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.Registry
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
-
 /**
  * TestBase class for all tests.
  */
 open class JApplicationTestBase : DBSchemaTest() {
-  @Before
+  @BeforeTest
   fun turnOffHeadlessMode() {
     System.setProperty("java.awt.headless", "false")
   }
 
-  @After
+  @AfterTest
   fun turnOnHeadlessMode() {
     System.setProperty("java.awt.headless", "true")
   }
