@@ -21,8 +21,10 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.FieldBooleanTriggerEvent
 import org.kopi.galite.common.FieldTriggerEvent
 import org.kopi.galite.common.FieldVoidTriggerEvent
+import org.kopi.galite.common.FormBooleanTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
@@ -222,6 +224,16 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * @param method             the method to execute when trigger is called
    */
   fun trigger(vararg fieldTriggerEvents: FieldVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds boolean triggers to this field
+   *
+   * @param fieldTriggerEvents the trigger events to add
+   * @param method            the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldBooleanTriggerEvent, method: () -> Boolean): Trigger {
     return trigger(fieldTriggerEvents, method)
   }
 

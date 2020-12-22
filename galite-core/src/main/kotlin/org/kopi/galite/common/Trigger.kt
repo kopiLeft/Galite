@@ -362,6 +362,13 @@ open class FieldTriggerEvent(val event: Int)
 open class FieldVoidTriggerEvent(event: Int) : FieldTriggerEvent(event)
 
 /**
+ * Field boolean Triggers
+ *
+ * @param event the event of the trigger
+ */
+open class FieldBooleanTriggerEvent(event: Int) : FieldTriggerEvent(event)
+
+/**
  * Executed on field content change
  */
 object POSTCHG : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)

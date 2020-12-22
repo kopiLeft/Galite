@@ -443,10 +443,11 @@ open class FormBlock(var buffer: Int,
       /**
        * Handling triggers
        */
-      fun handleTriggers(triggers: MutableList<Trigger>) {
+      fun handleBlockTriggers(blockTriggers: MutableList<Trigger>,
+                              blockFields: MutableList<FormField<*>>) {
         // BLOCK TRIGGERS
         val blockTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-        triggers.forEach { trigger ->
+        blockTriggers.forEach { trigger ->
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
               blockTriggerArray[i] = i
@@ -457,11 +458,20 @@ open class FormBlock(var buffer: Int,
         }
 
         // FIELD TRIGGERS
-        blockFields.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-          // TODO : Add field triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
-        }
+          blockFields.forEachIndexed { index , field ->
+            val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            field.triggers.forEach { fieldTrigger ->
+            for ( i in VConstants.TRG_TYPES.indices){
+              if (fieldTrigger.events shr i and 1 > 0) {
+                fieldTriggerArray[i] = i
+                super.triggers[i] = fieldTrigger
+              }
+            }
+            super.VKT_Triggers[index+1] = fieldTriggerArray
+              //super.VKT_Triggers.add(fieldTriggerArray)
+            }
+          }
+
 
         // COMMANDS TRIGGERS
         blockCommands.forEach {
@@ -499,7 +509,7 @@ open class FormBlock(var buffer: Int,
           )
         }.toTypedArray()
 
-        handleTriggers(this@FormBlock.triggers)
+        handleBlockTriggers(this@FormBlock.triggers , blockFields)
 
         super.access = intArrayOf(
                 4, 4, 4
