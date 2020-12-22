@@ -635,6 +635,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
 
   /**
+   * Returns the column name in the table with specified correlation.
+   * returns null if the field has no access to this table.
+   */
+  fun lookupColumn(corr: Table): Column<*>? = columns!!.find { corr == it!!.getTable_() }?.column
+
+  /**
    * Returns true if the column is a key of the table with specified correlation.
    */
   fun isLookupKey(corr: Int): Boolean = columns!!.find { corr == it!!.getTable() }?.key ?: false
