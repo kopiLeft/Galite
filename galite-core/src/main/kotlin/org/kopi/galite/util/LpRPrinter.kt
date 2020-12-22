@@ -80,7 +80,7 @@ class LpRPrinter(private val name: String,
       return "not yet implemented"
     }
 
-    protected fun readFully(inputStream: InputStream): ByteArray {
+    override fun readFully(inputStream: InputStream): ByteArray {
       val size = inputStream.available()
       val data = ByteArray(size)
       var count = 0

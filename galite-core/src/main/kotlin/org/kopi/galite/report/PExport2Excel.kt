@@ -156,8 +156,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
           cell.setCellValue(orig)
         } else if (orig is Date) {
           setCellValue(cell, orig)
-        } else if (orig is Timestamp
-                   || orig is java.sql.Timestamp) {
+        } else if (orig is Timestamp || orig is java.sql.Timestamp) {
           // date columns can be returned as a timestamp by the jdbc driver.
           cell.setCellValue(data)
           datatype[cellPos] = CellType.STRING.code
@@ -170,8 +169,8 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
           // nothing
         } else {
           throw InconsistencyException("Type not supported: datatype=" + datatype[cellPos]
-                  + "  " + " CellNumber= " + cellPos
-                  + " " + orig.javaClass + " of " + orig)
+                                               + "  " + " CellNumber= " + cellPos
+                                               + " " + orig.javaClass + " of " + orig)
         }
       }
       cell.cellType = CellType.forInt(datatype[cellPos])

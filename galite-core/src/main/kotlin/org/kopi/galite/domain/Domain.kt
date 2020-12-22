@@ -19,12 +19,20 @@ package org.kopi.galite.domain
 
 import kotlin.reflect.KClass
 
+import org.apache.poi.ss.formula.functions.Fixed
+import org.kopi.galite.common.LocalizationWriter
+
 /**
  * A domain is a data type with predefined list of allowed values.
  *
- * @param length the maximum length of the value that can be passed.
+ * @param width             the width in char of this field
+ * @param height            the height in char of this field
+ * @param visibleHeight     the visible height in char of this field.
  */
-open class Domain<T : Comparable<T>>(val length: Int? = null) {
+open class Domain<T : Comparable<T>?>(val width: Int? = null,
+                                      val height: Int? = null,
+                                      val visibleHeight: Int? = null,
+                                      val ident: String = "") {
   /**
    * The type of this domain.
    */
@@ -33,7 +41,7 @@ open class Domain<T : Comparable<T>>(val length: Int? = null) {
   /**
    * Determines the column data type
    */
-  var kClass: KClass<T>? = null
+  var kClass: KClass<*>? = null
 
   /**
    * Allows to define the possible codes that the domain can take
@@ -58,19 +66,6 @@ open class Domain<T : Comparable<T>>(val length: Int? = null) {
   }
 
   /**
-   * returns list of code values that can this field get.
-   */
-  fun getValues(): MutableMap<String, *> {
-    return if (isCodeDomain()) {
-      (type as CodeDomain<T>).codes
-    } else if (isListDomain()) {
-      (type as ListDomain<T>).list
-    } else {
-      throw Exception("Unsupported domain type")
-    }
-  }
-
-  /**
    * Converts domain value to uppercase.
    *
    * @param value domain's value.
@@ -78,7 +73,7 @@ open class Domain<T : Comparable<T>>(val length: Int? = null) {
   open fun applyConvertUpper(value: String): String {
     if (!isListDomain()) {
       throw UnsupportedOperationException("ConvertUpper is an unsupported " +
-              "operation on current domain type")
+                                                  "operation on current domain type")
     }
 
     return (type as ListDomain<T>).applyConvertUpper(value)
@@ -93,4 +88,20 @@ open class Domain<T : Comparable<T>>(val length: Int? = null) {
    * returns true if this domain is a list domain, false otherwise
    */
   private fun isListDomain(): Boolean = type is ListDomain<T>
+
+  // ----------------------------------------------------------------------
+  // UTILITIES
+  // ----------------------------------------------------------------------
+  fun hasSize(): Boolean =
+          when(kClass) {
+            Fixed::class, Int::class, Long::class, String::class -> true
+            else -> false
+          }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  open fun genLocalization(writer: LocalizationWriter) {
+    writer.genTypeDefinition(type!!.ident, type!!)
+  }
 }

@@ -20,26 +20,20 @@ package org.kopi.galite.form
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.db.Query
+import org.kopi.galite.db.Utils
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VWeekColumn
 import org.kopi.galite.type.NotNullWeek
-import org.kopi.galite.db.Utils
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
 
-class VWeekField : VField(7, 1) {
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
+class VWeekField(val bufferSize: Int) : VField(7, 1) {
 
   override fun hasAutofill(): Boolean = true
 
@@ -205,8 +199,8 @@ class VWeekField : VField(7, 1) {
    */
   override fun setWeek(r: Int, v: Week?) {
     if (changedUI
-        || value[r] == null && v != null
-        || value[r] != null && value[r] != v) {
+            || value[r] == null && v != null
+            || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
@@ -235,6 +229,14 @@ class VWeekField : VField(7, 1) {
     } else {
       query.getWeek(column)
     }
+  }
+
+  /**
+   * TODO document!
+   */
+  override fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? {
+    val tmp = result[column] as? Int ?: return null
+    return NotNullWeek(tmp / 100, tmp % 100)
   }
 
   /**
@@ -376,9 +378,9 @@ class VWeekField : VField(7, 1) {
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -411,7 +413,7 @@ class VWeekField : VField(7, 1) {
       super.fillField(handler)
     } else {
 
-       val force = try {
+      val force = try {
         val oldText = getDisplayedValue(true) as? String
 
         checkType(oldText as Any?)
@@ -463,7 +465,7 @@ class VWeekField : VField(7, 1) {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private lateinit var value: Array<Week?>
+  private var value: Array<Week?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
     fun toText(value: Week?): String = value.toString()

@@ -19,20 +19,30 @@ package org.kopi.galite.common
 
 import java.util.Locale
 
-import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
+import org.kopi.galite.visual.VWindow
+import java.io.File
 
 /**
  * This class represents the definition of a window
- *
- * @param where                the token reference of this node
- * @param title                the title of this form
- * @param superName                the type of the form
  */
 abstract class Window {
+  /** the title of this form */
   abstract val title: String
+  /** the window locale */
   open val locale: Locale? = null
-  var options: Int? = null
-  lateinit var commands: Array<VCommand>
-  lateinit var triggers: Array<VTrigger>
+  /** the help text */
+  var help: String? = null
+  internal var options: Int? = null
+  internal var commands = mutableListOf<Command>()
+  internal var triggers = mutableListOf<Trigger>()
+  abstract val model: VWindow
+
+  /**
+   * Returns the qualified source file name where this object is defined.
+   */
+  protected val sourceFile: String
+    get() {
+      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
+      return basename + this.javaClass.simpleName
+    }
 }

@@ -24,19 +24,20 @@ import org.kopi.galite.tests.TestBase
 /**
  * The high level class for all classes containing UI tests
  */
-open class UITestBase: TestBase() {
+open class UITestBase : TestBase() {
   fun setupRoutes() {
     MockVaadin.setup(routes!!)
   }
 
   companion object {
     fun discoverRooterByPackage(packageName: String) {
-      routes  = Routes().autoDiscoverViews(packageName)
+      routes = Routes().autoDiscoverViews(packageName)
     }
 
     fun discoverRooterClass(clazz: Class<*>) {
-      routes  = Routes().autoDiscoverViews(clazz.packageName)
+      routes = Routes().autoDiscoverViews(clazz.packageName)
     }
-    var routes: Routes?  = null
+
+    var routes: Routes? = null
   }
 }

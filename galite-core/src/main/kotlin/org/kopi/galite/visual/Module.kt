@@ -19,6 +19,7 @@
 package org.kopi.galite.visual
 
 import org.kopi.galite.base.Image
+import org.kopi.galite.common.Window
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.l10n.ModuleLocalizer
@@ -58,7 +59,7 @@ class Module(val id: Int,
    * this object is the name of the class to be executed when this module
    * is called.
    */
-  var objectName : String? = objectName
+  var objectName: String? = objectName
     private set
 
   /**
@@ -136,7 +137,8 @@ class Module(val id: Int,
   companion object {
     fun getExecutable(objectName: String?): Executable {
       return try {
-        Class.forName(objectName).newInstance() as Executable
+        (Class.forName(objectName).kotlin.objectInstance as? Window)?.model
+                ?: (Class.forName(objectName).newInstance() as Window).model
       } catch (iae: IllegalAccessException) {
         throw VRuntimeException(iae)
       } catch (ie: InstantiationException) {
@@ -176,7 +178,7 @@ class Module(val id: Int,
                                          t.message,
                                          t)
         ApplicationContext.displayError(ApplicationContext.getMenu()!!.getDisplay(),
-                MessageCode.getMessage("VIS-00041"))
+                                        MessageCode.getMessage("VIS-00041"))
         null
       }
     }

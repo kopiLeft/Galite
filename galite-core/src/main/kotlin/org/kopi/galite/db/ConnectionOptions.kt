@@ -8,35 +8,41 @@ import org.kopi.galite.util.base.Options
 open class ConnectionOptions @JvmOverloads constructor(name: String = "Connection") : Options(name) {
   @JvmField
   var database: String? = null
+
   @JvmField
   var driver: String? = null
+
   @JvmField
   var username: String? = null
+
   @JvmField
   var password: String? = null
+
   @JvmField
   var lookupUserId = true
+
   @JvmField
   var trace = 0
   var properties: Array<String?>? = null
+
   @JvmField
   var schema: String? = null
-  override fun processOption(code: Int, g: Getopt?): Boolean {
+  override fun processOption(code: Int, g: Getopt): Boolean {
     return when (code.toChar()) {
       'b' -> {
-        database = getString(g!!, "")
+        database = getString(g, "")
         true
       }
       'd' -> {
-        driver = getString(g!!, "")
+        driver = getString(g, "")
         true
       }
       'u' -> {
-        username = getString(g!!, "")
+        username = getString(g, "")
         true
       }
       'p' -> {
-        password = getString(g!!, "")
+        password = getString(g, "")
         true
       }
       'U' -> {
@@ -44,15 +50,15 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
         true
       }
       't' -> {
-        trace = getInt(g!!, 1)
+        trace = getInt(g, 1)
         true
       }
       'q' -> {
-        properties = addString(properties, getString(g!!, ""))
+        properties = addString(properties, getString(g, ""))
         true
       }
       's' -> {
-        schema = getString(g!!, "")
+        schema = getString(g, "")
         true
       }
       else -> super.processOption(code, g)
@@ -88,9 +94,9 @@ open class ConnectionOptions @JvmOverloads constructor(name: String = "Connectio
   override val longOptions: Array<LongOpt?>
     get() {
       val parent = super.longOptions
-      val total = arrayOfNulls<LongOpt>(parent!!.size + LONGOPTS.size)
-      System.arraycopy(parent, 0, total, 0, parent!!.size)
-      System.arraycopy(LONGOPTS, 0, total, parent!!.size, LONGOPTS.size)
+      val total = arrayOfNulls<LongOpt>(parent.size + LONGOPTS.size)
+      System.arraycopy(parent, 0, total, 0, parent.size)
+      System.arraycopy(LONGOPTS, 0, total, parent.size, LONGOPTS.size)
       return total
     }
 

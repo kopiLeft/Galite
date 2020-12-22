@@ -36,14 +36,14 @@ class VWeekColumn(ident: String?,
                   function: VCalculateColumn?,
                   width: Int,
                   format: VCellFormat?)
-      : VReportColumn(ident,
-                      options,
-                      align,
-                      groups,
-                      function,
-                      7,  // width, default week format
-                      1,
-                      format) {
+  : VReportColumn(ident,
+                  options,
+                  align,
+                  groups,
+                  function,
+                  7,  // width, default week format
+                  1,
+                  format) {
   /**
    * Compare two objects.
    *
@@ -53,7 +53,7 @@ class VWeekColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int =  (object1 as Week).compareTo(object2 as Week)
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Week).compareTo(object2 as Week)
 
   /**
    * Returns the width of cells in this column in characters

@@ -33,7 +33,7 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
-class VMonthField : VField(7, 1) {
+class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
   override fun hasAutofill(): Boolean = true
 
@@ -41,14 +41,6 @@ class VMonthField : VField(7, 1) {
    * Returns true if this field implements "enumerateValue"
    */
   override fun hasNextPreviousEntry(): Boolean = true
-
-  /**
-   * Just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls<Month>(2 * block!!.bufferSize)
-  }
 
   /**
    * Returns the name of this field
@@ -150,8 +142,8 @@ class VMonthField : VField(7, 1) {
    */
   override fun setMonth(r: Int, v: Month?) {
     if (changedUI
-        || value[r] == null && v != null
-        || value[r] != null && value[r]!! != v) {
+            || value[r] == null && v != null
+            || value[r] != null && value[r]!! != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
@@ -263,9 +255,9 @@ class VMonthField : VField(7, 1) {
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -322,5 +314,5 @@ class VMonthField : VField(7, 1) {
     }
   }
 
-  private lateinit var value: Array<Month?>
+  private var value: Array<Month?> = arrayOfNulls(2 * bufferSize)
 }

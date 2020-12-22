@@ -24,10 +24,10 @@ import org.kopi.galite.common.LocalizationWriter
 /**
  * This class implements an  XML localization file generator
  */
-class ReportLocalizationWriter  : LocalizationWriter() {
+class ReportLocalizationWriter : LocalizationWriter() {
   fun genReport(title: String?,
                 help: String?,
-                fields: MutableList<RField<*>>) {
+                fields: MutableList<ReportField<*>>) {
     val self = Element("report")
 
     self.setAttribute("title", title)

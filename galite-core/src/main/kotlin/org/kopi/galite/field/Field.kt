@@ -21,8 +21,6 @@ import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.exceptions.InvalidValueException
-import org.kopi.galite.form.Align
-import org.kopi.galite.form.VConstants
 
 /**
  * A field represents a visual component that can hold values
@@ -31,17 +29,15 @@ import org.kopi.galite.form.VConstants
  *
  * @param domain the field's domain
  */
-abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
+abstract class Field<T : Comparable<T>?>(open val domain: Domain<T>) {
   /** Field's label */
-  var label: String = ""
+  var label: String? = null
 
   /** Field's help that describes the expected value of an input field */
   var help: String? = null
 
   /** true if the field is hidden, false otherwise */
   open var hidden: Boolean? = false
-
-  var align: Align = Align.DEFAULT
 
   /**
    * Checks if the value passed to the field doesn't exceed the length of the field's domain
@@ -50,10 +46,9 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
    * @return true if the domain is not defined or the value's length doesn't exceed the domain size,
    * and returns false otherwise.
    */
-  fun checkLength(value: T): Boolean = when {
-    domain == null -> true
-    domain!!.length == null -> true
-    else -> value.toString().length <= domain!!.length!!
+  fun checkLength(value: T): Boolean = when (domain.width) {
+    null -> true
+    else -> value.toString().length <= domain.width!!
   }
 
   /**
@@ -65,24 +60,16 @@ abstract class Field<T : Comparable<T>>(open val domain: Domain<T>? = null) {
    * @throws InvalidValueException otherwise
    */
   fun checkValue(value: T): Boolean = when {
-    domain == null -> true
-    domain!!.type is ListDomain && (domain!!.type as ListDomain).checkValue(value) -> true
-    domain!!.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
-            "by this domain type")
+    domain.type is ListDomain && (domain.type as ListDomain).checkValue(value) -> true
+    domain.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
+                                                                              "by this domain type")
     else -> throw InvalidValueException(value, label)
-  }
-
-  /**
-   * returns list of values that can this field get.
-   */
-  fun getValues(): MutableMap<String, *>? {
-    return domain?.getValues()
   }
 
   /**
    * Generates localization for this field
    *
-   * @param The localization writer.
+   * @param writer The localization writer.
    */
   abstract fun genLocalization(writer: LocalizationWriter)
 }

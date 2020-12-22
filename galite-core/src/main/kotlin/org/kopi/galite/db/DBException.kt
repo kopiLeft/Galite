@@ -28,9 +28,10 @@ import java.sql.SQLException
  */
 abstract class DBException(query: String?, val sqlException: SQLException) : SQLException(
         sqlException.message + (if (query != null) {
-                                  "\n---- BEGIN QUERY TRACE ----\n$query\n----  END QUERY TRACE   ----"
-                                }
-                                else { "" }),
+          "\n---- BEGIN QUERY TRACE ----\n$query\n----  END QUERY TRACE   ----"
+        } else {
+          ""
+        }),
         sqlException.sqlState,
         sqlException.errorCode
 ) {

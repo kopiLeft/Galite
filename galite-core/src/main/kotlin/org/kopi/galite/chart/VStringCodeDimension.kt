@@ -35,7 +35,7 @@ class VStringCodeDimension(ident: String,
                            type: String,
                            source: String,
                            idents: Array<String>,
-                           private val codes : Array<String>)
+                           private val codes: Array<String>)
   : VCodeDimension(ident, format, type, source, idents) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS

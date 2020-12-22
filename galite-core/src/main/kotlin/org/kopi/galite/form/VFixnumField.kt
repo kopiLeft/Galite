@@ -39,7 +39,8 @@ import org.kopi.galite.visual.VlibProperties
  * @param    maxval      The max permitted value
  *
  */
-class VFixnumField(private val digits: Int,
+class VFixnumField(val bufferSize: Int,
+                   private val digits: Int,
                    maxScale: Int,
                    val fraction: Boolean,
                    minval: Fixed?,
@@ -58,12 +59,14 @@ class VFixnumField(private val digits: Int,
   /**
    * Constructor
    */
-  constructor(digits: Int,
+  constructor(bufferSize: Int,
+              digits: Int,
               maxScale: Int,
               minval: String?,
               maxval: String?,
               fraction: Boolean)
-          : this(digits,
+          : this(bufferSize,
+                 digits,
                  maxScale,
                  fraction,
                  minval?.let { NotNullFixed(it) },
@@ -74,15 +77,8 @@ class VFixnumField(private val digits: Int,
    * just after loading, construct record
    */
   override fun build() {
-    val size = 2 * block!!.bufferSize
-
     super.build()
-    value = arrayOfNulls(size)
-    currentScale = IntArray(size)
-
-    for (i in 0 until size) {
-      currentScale[i] = maxScale
-    }
+    currentScale = IntArray(2 * bufferSize) { maxScale }
   }
 
   /**
@@ -149,8 +145,8 @@ class VFixnumField(private val digits: Int,
     }
     s.forEach {
       if (!((it in '0'..'9')
-             || (it == '.') || (it == '-') || (it == ' ')
-             || (it == ',') || (it == '/'))) {
+                      || (it == '.') || (it == '-') || (it == ' ')
+                      || (it == ',') || (it == '/'))) {
         return false
       }
     }
@@ -212,8 +208,8 @@ class VFixnumField(private val digits: Int,
 
     for (i in 0 until block!!.bufferSize) {
       if ((!isNullImpl(i)
-           && block!!.isRecordFilled(i)
-           && (!exclude || i != block!!.activeRecord))) {
+                      && block!!.isRecordFilled(i)
+                      && (!exclude || i != block!!.activeRecord))) {
         if (sum == null) {
           sum = NotNullFixed(0.0)
         }
@@ -319,8 +315,8 @@ class VFixnumField(private val digits: Int,
     var v = v
 
     if ((changedUI
-         || (value[r] == null && v != null)
-         || (value[r] != null && value[r] != v))) {
+                    || (value[r] == null && v != null)
+                    || (value[r] != null && value[r] != v))) {
       trail(r)
       if (v != null) {
         if (v.scale != currentScale[r]) {
@@ -458,9 +454,9 @@ class VFixnumField(private val digits: Int,
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (((oldValue != null && value[t] == null)
-              || (oldValue == null && value[t] != null)
-              || (oldValue != null && oldValue != value[t])))) {
+            && (((oldValue != null && value[t] == null)
+                    || (oldValue == null && value[t] != null)
+                    || (oldValue != null && oldValue != value[t])))) {
       fireValueChanged(t)
     }
   }
@@ -585,9 +581,9 @@ class VFixnumField(private val digits: Int,
       }
     }
 
-  private lateinit var value: Array<Fixed?>
+  private var value: Array<Fixed?> = arrayOfNulls(2 * bufferSize)
 
-  protected var criticalMinValue= minval
+  protected var criticalMinValue = minval
 
   protected var criticalMaxValue = maxval
 

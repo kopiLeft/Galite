@@ -14,18 +14,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.chart
+package org.kopi.galite.form.dsl
 
-import org.kopi.galite.domain.Domain
-import org.kopi.galite.visual.Color
+import org.kopi.galite.form.VConstants
 
 /**
- * Represents a measure used to store numeric values in chart.
- *
- * @param domain dimension domain.
+ * The field alignment is used to define the localization of the field's content inside the field.
  */
-open class Measure<T>(domain: Domain<T>? = null) : Column() where T : Comparable<T>, T : Number {
+enum class FieldAlignment(val value: Int) {
+  /**
+   * The value is centered in the field
+   */
+  CENTER(VConstants.ALG_CENTER),
 
-  /**Measure's color in chart */
-  lateinit var color: Color
+  /**
+   * The value is displayed at the left inside the field
+   */
+  LEFT(VConstants.ALG_LEFT),
+
+  /**
+   * The value is displayed at the right inside the field
+   */
+  RIGHT(VConstants.ALG_RIGHT),
 }

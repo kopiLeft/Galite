@@ -14,33 +14,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.chart
 
+import java.lang.RuntimeException
+
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.visual.Color
 
 /**
- * Represents a one dimension that contains measures [values] to use in chart.
+ * Represents a measure used to store numeric values in chart.
  *
  * @param domain dimension domain.
  */
-open class Dimension<T : Comparable<T>>(domain: Domain<T>? = null) : Column() {
+open class ChartMeasure<T>(domain: Domain<T>) : ChartField<T>(domain) where T : Comparable<T>?, T : Number? {
 
-  /**
-   * Dimension values
-   */
-  val values = mutableListOf<DimensionData<T>>()
+  /**Measure's color in chart */
+  lateinit var color: Color
 
-  /**
-   * Add a dimension value
-   *
-   * @param value the dimension value
-   */
-  fun add(value: T, init: (DimensionData<T>.() -> Unit)? = null) {
-    val dimensionValue: DimensionData<T> = DimensionData<T>(value)
-    if (init != null) {
-      dimensionValue.init()
+  // TODO add Fixed types
+  val model: VMeasure
+    get() = when (domain.kClass) {
+      Int::class ->
+        VIntegerMeasure(ident, null)
+      else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
     }
-    values.add(dimensionValue)
-  }
 }

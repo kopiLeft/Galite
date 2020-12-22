@@ -30,7 +30,7 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
-class VTimestampField : VField(10 + 1 + 8, 1) {
+class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
 
   override fun hasAutofill(): Boolean = true
 
@@ -48,14 +48,6 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    * return true if this field implements "enumerateValue"
    */
   override fun hasNextPreviousEntry(): Boolean = true
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
 
   override fun isNumeric(): Boolean = true
 
@@ -101,8 +93,8 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
    */
   override fun setTimestamp(r: Int, v: Timestamp?) {
     if (changedUI
-        || value[r] == null && v != null
-        || value[r] != null && value[r] != v) {
+            || value[r] == null && v != null
+            || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row
@@ -198,9 +190,9 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -248,5 +240,5 @@ class VTimestampField : VField(10 + 1 + 8, 1) {
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-  private lateinit var value: Array<Timestamp?>
+  private var value: Array<Timestamp?> = arrayOfNulls(2 * bufferSize)
 }

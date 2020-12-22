@@ -34,17 +34,10 @@ import org.kopi.galite.visual.VlibProperties
  * @param     minval    the min permitted value
  * @param     maxval    the max permitted value
  */
-class VIntegerField(width: Int,
+class VIntegerField(val bufferSize: Int,
+                    width: Int,
                     val minval: Int,
                     val maxval: Int) : VField(width, 1) {
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
 
   /**
    * return the name of this field
@@ -141,8 +134,8 @@ class VIntegerField(width: Int,
   override fun setInt(r: Int, v: Int?) {
     var v = v
     if (changedUI
-        || value[r] == null && v != null
-        || value[r] != null && value[r] != v) {
+            || value[r] == null && v != null
+            || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary
       trail(r)
       if (v == null) {
@@ -240,9 +233,9 @@ class VIntegerField(width: Int,
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -296,7 +289,7 @@ class VIntegerField(width: Int,
    *
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum() : Int? = computeSum(false)
+  fun computeSum(): Int? = computeSum(false)
 
   /**
    * Returns the sum of every filled records in block
@@ -322,8 +315,8 @@ class VIntegerField(width: Int,
   fun getSum(): Int {
     val sum = computeSum()
 
-      return sum ?: 0
-    }
+    return sum ?: 0
+  }
 
   //----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE
@@ -366,7 +359,7 @@ class VIntegerField(width: Int,
 
   // dynamic data
   // value
-  private lateinit var value: Array<Int?>
+  private var value: Array<Int?> = arrayOfNulls(2 * bufferSize)
   private var criticalMinValue: Int? = minval
   private var criticalMaxValue: Int? = maxval
 }

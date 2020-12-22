@@ -30,8 +30,15 @@ import org.kopi.galite.db.Query
  * @param     ident           the identifier of the type in the source file
  * @param     source          the qualified name of the source file defining the list
  */
-class VStringCodeField(ident: String, source: String, names: Array<String>, private val codes: Array<String?>)
-  : VCodeField(ident, source, names) {
+class VStringCodeField(bufferSize: Int,
+                       ident: String,
+                       source: String,
+                       names: Array<String>,
+                       private val codes: Array<String?>)
+          : VCodeField(bufferSize,
+                       ident,
+                       source,
+                       names) {
 
   /*
    * ----------------------------------------------------------------------
@@ -74,8 +81,8 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
       }
       if (code == -1) {
         throw InconsistencyException("bad code value " + v + "field " + name
-                                     + " for " + getType()
-                                     + " in " + source)
+                                             + " for " + getType()
+                                             + " in " + source)
       }
       setCode(r, code)
     }
@@ -109,7 +116,11 @@ class VStringCodeField(ident: String, source: String, names: Array<String>, priv
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = if (value[r] == -1) "NULL" else org.kopi.galite.db.Utils.toSql(codes[value[r]])
+  override fun getSqlImpl(r: Int): String = if (value[r] == -1) {
+    "NULL"
+  } else {
+    org.kopi.galite.db.Utils.toSql(codes[value[r]])
+  }
 
   /**
    * Returns the data type handled by this field.

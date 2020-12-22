@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual
 
+import org.kopi.galite.common.Window
 import java.io.Serializable
 
 import org.kopi.galite.util.base.InconsistencyException
@@ -71,6 +72,12 @@ abstract class WindowController : Serializable {
    * @param model The [UWindow] model.
    */
   abstract fun doNotModal(model: VWindow)
+
+  /**
+   * Shows the [UWindow] without blocking the executing thread.
+   * @param model The [UWindow] model.
+   */
+  abstract fun doNotModal(model: Window)
 
   //------------------------------------------------------------------
   // DATA MEMBERS

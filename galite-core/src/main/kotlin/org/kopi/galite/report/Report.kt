@@ -17,15 +17,18 @@
 
 package org.kopi.galite.report
 
-import java.io.File
 import java.io.IOException
 import java.lang.RuntimeException
-import java.util.Date
 
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.ReportTrigger
+import org.kopi.galite.common.ReportTriggerEvent
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.Field
+import org.kopi.galite.form.VConstants
+import org.kopi.galite.type.Date
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -34,15 +37,13 @@ import org.kopi.galite.type.Week
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
  */
-abstract class Report: Window() {
+abstract class Report : Window() {
 
   /** Report's fields. */
-  val fields = mutableListOf<RField<*>>()
+  val fields = mutableListOf<ReportField<*>>()
 
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
-
-  var help: String? = null
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
@@ -51,9 +52,9 @@ abstract class Report: Window() {
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>> field(domain: Domain<T>, init: Field<T>.() -> Unit): Field<T> {
+  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
-    val field = RField(domain)
+    val field = ReportField(domain)
     field.init()
     fields.add(field)
     return field
@@ -71,18 +72,42 @@ abstract class Report: Window() {
   }
 
   /**
+   * Adds report trigger to this block.
+   *
+   * @param reportTriggerEvents the trigger events to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg reportTriggerEvents: ReportTriggerEvent, method: () -> Unit): Trigger {
+    val event = reportEventList(reportTriggerEvents)
+    val reportAction = Action(null, method)
+    val trigger = ReportTrigger(event, reportAction)
+    triggers.add(trigger)
+    return trigger
+  }
+
+  private fun reportEventList(reportTriggerEvents: Array<out ReportTriggerEvent>): Long {
+    var self = 0L
+
+    reportTriggerEvents.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
+  }
+
+  /**
    * Returns the row's data.
    *
    * @param rowNumber the index of the desired row.
    */
-  fun getRow(rowNumber: Int): MutableMap<Field<*>, Any> = reportRows[rowNumber].data
+  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any?> = reportRows[rowNumber].data
 
   /**
    * Returns rows of data for a specific [field].
    *
    * @param field the field.
    */
-  fun getRowsForField(field: Field<*>) = reportRows.map { it.data[field] }
+  fun getRowsForField(field: ReportField<*>) = reportRows.map { it.data[field] }
 
   /**
    * Adds default report commands
@@ -116,26 +141,28 @@ abstract class Report: Window() {
                                                    fields)
   }
 
+  // TODO add Fixed types
   fun MReport.addReportColumns() {
     columns = fields.map {
-      when(it.domain?.kClass) {
+      when (it.domain.kClass) {
         Int::class ->
-          VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
+          VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         String::class ->
-          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, it.domain.length ?: 0, null)
+          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0,
+                        it.domain.height ?: 0, null)
         Boolean::class ->
-          VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
-        Date::class ->
-          VDateColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
+          VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+        Date::class, java.util.Date::class ->
+          VDateColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         Month::class ->
-          VMonthColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
+          VMonthColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         Week::class ->
-          VWeekColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
+          VWeekColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         Time::class ->
-          VTimeColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
+          VTimeColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
         Timestamp::class ->
-          VTimestampColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.length ?: 0, null)
-        else -> throw RuntimeException("Type ${it.domain?.kClass!!.qualifiedName} is not supported")
+          VTimestampColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+        else -> throw RuntimeException("Type ${it.domain.kClass!!.qualifiedName} is not supported")
       }
     }.toTypedArray()
   }
@@ -146,35 +173,60 @@ abstract class Report: Window() {
     }
   }
 
-  /**
-   * Returns the qualified source file name where this object is defined.
-   */
-  private val sourceFile: String
-    get() {
-      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
-      return basename + this.javaClass.simpleName
-    }
-
 
   /** Report model*/
-  val reportModel: VReport by lazy {
-    genLocalization()
+  override val model: VReport
+    get() {
+      genLocalization()
 
-    object : VReport() {
-      override fun init() {
-        if (reportCommands) {
-          addDefaultReportCommands()
+      return object : VReport() {
+        /**
+         * Handling triggers
+         */
+        fun handleTriggers(triggers: MutableList<Trigger>) {
+          // BLOCK TRIGGERS
+          triggers.forEach { trigger ->
+            val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
+            for (i in VConstants.TRG_TYPES.indices) {
+              if (trigger.events shr i and 1 > 0) {
+                blockTriggerArray[i] = i
+                super.triggers[i] = trigger
+              }
+            }
+            super.VKT_Triggers[0] = blockTriggerArray
+          }
+
+          // FIELD TRIGGERS
+          fields.forEach {
+            val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            // TODO : Add field triggers here
+            super.VKT_Triggers.add(fieldTriggerArray)
+          }
+
+          // COMMANDS TRIGGERS
+          commands?.forEach {
+            val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            // TODO : Add commands triggers here
+            super.VKT_Triggers.add(fieldTriggerArray)
+          }
         }
 
-        super.model.addReportColumns()
-        super.model.addReportLines()
+        override fun init() {
+          source = sourceFile
 
-        source = sourceFile
-      }
+          if (reportCommands) {
+            addDefaultReportCommands()
+          }
 
-      override fun add() {
-        // TODO
+          super.model.addReportColumns()
+          super.model.addReportLines()
+
+          handleTriggers(this@Report.triggers)
+        }
+
+        override fun add() {
+          // TODO
+        }
       }
     }
-  }
 }
