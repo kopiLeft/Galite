@@ -2711,10 +2711,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     return nullReference
   }
 
-  private fun isNullReference_(table: Table, recno: Int): Boolean {
-    TODO()
-  }
-
   /*
    *
    */
@@ -2723,7 +2719,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val conditions = mutableListOf<Op<Boolean>>()
 
     // set internal fields to null (null reference)
-    if (isNullReference_(table, recno)) {
+    if (isNullReference(table, recno)) {
       fields.forEach { field ->
         if (field.isInternal() && field.lookupColumn_(table) != null) {
           field.setNull(recno)
@@ -2731,7 +2727,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
     } else {
       fields.forEach { field ->
-        val column = field.lookupColumn_(table)
+        val column = field.lookupColumn_(table) as Column<Any>?
 
         if (column != null) {
           columns.add(column)
@@ -2749,29 +2745,23 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
       }
       if (conditions.isEmpty()) {
-        throw InconsistencyException("no conditions for table $table")
+        throw InconsistencyException("no conditions for table ${table.tableName}")
       }
 
-      transaction {
-        val query = table.slice(columns).select(conditions.compoundAnd())
+      try {
+        val result = table.slice(columns).select(conditions.compoundAnd()).single()
 
-        if (!query.execute(this)!!.next()) {
-          activeRecord = recno
-          throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(table)))
-        } else {
-          fields.forEachIndexed { index, field ->
-            if (field.lookupColumn_(table) != null) {
-              query.forEach { result ->
-                field.setQuery_(recno, result, columns[index])
-              }
-            }
-          }
-
-          if (query.execute(this)!!.next()) {
-            activeRecord = recno
-            throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(table)))
+        fields.forEachIndexed { index, field ->
+          if (field.lookupColumn_(table) != null) {
+            field.setQuery_(recno, result, columns[index])
           }
         }
+      } catch (noSuchElementException :NoSuchElementException) {
+        activeRecord = recno
+        throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(table.tableName)))
+      } catch (illegalArgumentException: IllegalArgumentException) {
+        activeRecord = recno
+        throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(table.tableName)))
       }
     }
   }

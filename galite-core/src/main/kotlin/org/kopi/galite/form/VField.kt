@@ -634,7 +634,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
 
-  fun lookupColumn_(corr: Table): Column<Any>? = TODO()
+  fun lookupColumn_(corr: Table): Column<*>? = columns!!.find { corr == it!!.getTable_() }?.column
 
   /**
    * Returns true if the column is a key of the table with specified correlation.
