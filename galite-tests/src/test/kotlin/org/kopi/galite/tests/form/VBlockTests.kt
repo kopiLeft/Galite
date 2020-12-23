@@ -27,14 +27,12 @@ import org.kopi.galite.visual.VExecFailedException
 class VBlockTests : JApplicationTestBase() {
   @Test
   fun selectLookupTest() {
-
     FormWithList.model
     FormWithList.block2.id[0] = 0
     FormWithList.block2.name[0] = "administrator"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        insertIntoUsers("admin", "administrator")
         FormWithList.block2.vBlock.refreshLookup(0)
       }
     }
