@@ -36,6 +36,7 @@ object User: Table() {
   val id = integer("ID")
   val name = varchar("NAME", 20).nullable()
   val age = integer("AGE")
+  val job = varchar("JOB", 20).nullable()
 }
 
 object FormSample: Form() {
@@ -121,6 +122,11 @@ class TestBlock : FormBlock(1, 1, "Test", "Test block") {
       index = i
       priority = 1
     }
+  }
+  val job = visit(domain = Domain<String?>(3), position = follow(age)) {
+    label = "Job"
+    help = "The user job"
+    columns(u.job)
   }
 }
 

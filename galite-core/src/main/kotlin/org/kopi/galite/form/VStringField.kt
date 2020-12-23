@@ -201,7 +201,7 @@ open class VStringField(val bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r]!!)
+  override fun getSqlImpl(r: Int): String =  value[r]!!
 
   /**
    * Copies the value of a record to another

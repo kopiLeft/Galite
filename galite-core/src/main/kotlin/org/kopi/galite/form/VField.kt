@@ -670,7 +670,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     } else {
       val operatorName = VConstants.OPERATOR_NAMES[getSearchOperator()]
-      var operand = getSql(block!!.activeRecord) as String
+      var operand = getSql(block!!.activeRecord)
 
       when (options and VConstants.FDO_SEARCH_MASK) {
         VConstants.FDO_SEARCH_NONE -> {
@@ -725,7 +725,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
           VConstants.SOP_GE , VConstants.SOP_GT -> {
             // remove everything after at '*'
-            operand = operand.substring(0, operand.indexOf('*')) + "'"
+            operand = operand.substring(0, operand.indexOf('*'))
             Op.build {
               column greater operand
             }
@@ -1334,14 +1334,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getSql(r: Int): String? {
+  fun getSql(r: Int): String {
     if (alias != null) {
       return alias!!.getSql(0)
     }
     if (hasTrigger(VConstants.TRG_VALUE)) {
       setObject(r, callSafeTrigger(VConstants.TRG_VALUE))
     }
-    return getSqlImpl(r)
+    return getSqlImpl(r)!!
   }
 
   /**
