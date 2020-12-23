@@ -27,10 +27,13 @@ import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.upperCase
 
 import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
@@ -1737,43 +1740,38 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }*/
   }
+  open fun getSearchCondition_(column: ExpressionWithColumnType<*>): Op<Boolean> {
+    TODO()
+  }
 
   /**
    * Checks that field value exists in list
    */
   internal fun selectFromList(gotoNextField: Boolean) {
-    val qrybuf = buildString {
-      append("SELECT ")
-      for (i in 0 until list!!.columnCount()) {
-        if (i != 0) {
-          append(", ")
-        }
-        append(list!!.getColumn(i).column)
-      }
-      append(" FROM ")
-      append(evalListTable())
-      if (getSearchType() == VConstants.STY_MANY) {
-        append(" WHERE ")
-        when (options and VConstants.FDO_SEARCH_MASK) {
-          VConstants.FDO_SEARCH_NONE -> append(list!!.getColumn(0).column)
-          VConstants.FDO_SEARCH_UPPER -> {
-            append("{fn UPPER(")
-            append(list!!.getColumn(0).column)
-            append(")}")
-          }
-          VConstants.FDO_SEARCH_LOWER -> {
-            append("{fn LOWER(")
-            append(list!!.getColumn(0).column)
-            append(")}")
-          }
-          else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-        }
-        append(" ")
-        append(getSearchCondition())
-      }
-      append(" ORDER BY 1")
+    val cols = mutableListOf<Column<*>>()
+    var column: ExpressionWithColumnType<*>? = null
+
+    list!!.columns.forEach {
+      cols.add(it.column_)
     }
-    val result = displayQueryList(qrybuf.toString(), list!!.columns)
+
+    if (getSearchType() == VConstants.STY_MANY) {
+      column = when (options and VConstants.FDO_SEARCH_MASK) {
+        VConstants.FDO_SEARCH_NONE -> (list!!.getColumn(0).column as Column<String>)
+
+        VConstants.FDO_SEARCH_UPPER -> {
+          (list!!.getColumn(0).column!! as Column<String>).upperCase()
+        }
+        VConstants.FDO_SEARCH_LOWER -> {
+          (list!!.getColumn(0).column!! as Column<String>).upperCase()
+        }
+        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+      }
+    }
+
+    val query = evalListTable_().slice(cols).select(getSearchCondition_(column!!)).orderBy(cols[1])
+
+    val result = displayQueryList(query.toString(), list!!.columns)
 
     if (result == null) {
       throw VExecFailedException() // no message to display
@@ -1928,6 +1926,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } catch (e: VException) {
       throw InconsistencyException()
     }
+  }
+  /**
+   * Returns the list table.
+   */
+  private fun evalListTable_(): Table {
+    return  block!!.executeObjectTrigger(list!!.table) as Table
   }
 
   /**

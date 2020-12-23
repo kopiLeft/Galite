@@ -3122,14 +3122,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
 
   /**
    * Returns the sorted records array.
    * @return The sorted records array.
    */
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
   lateinit var sortedRecords: IntArray
     protected set
 
