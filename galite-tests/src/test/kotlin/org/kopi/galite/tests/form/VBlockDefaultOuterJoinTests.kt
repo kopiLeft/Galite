@@ -46,9 +46,6 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
 
   @Test
   fun getFetchRecordConditionTest() {
-    connectToDatabase()
-    initDatabase()
-
     FormWithList.model
     val block = FormWithList.block
     val fetchRecordCondition = VBlockDefaultOuterJoin.getFetchRecordCondition(block.vBlock.fields)

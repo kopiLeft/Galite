@@ -20,7 +20,6 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
 
-import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.INITFORM
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
@@ -145,10 +144,6 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       priority = 1
     }
   }
-}
-
-class CommandesC(fournisseur: Int?) : Chart() {
-  override val title: String = "Fournisseur"
 }
 
 fun main() {

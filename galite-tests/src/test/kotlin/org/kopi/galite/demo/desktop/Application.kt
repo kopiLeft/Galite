@@ -95,6 +95,13 @@ object Application : DBSchemaTest() {
   fun runForm(formName: Form) {
     connectToDatabase()
     initDatabase()
+    run(formName)
+  }
+
+  /**
+   * Runs the application with a specific form.
+   */
+  fun run(formName: Form) {
     run(arrayOf(
             "-d",
             testDriver,
