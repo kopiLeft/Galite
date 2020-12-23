@@ -85,6 +85,7 @@ object FormWithList : DictionaryForm() {
 }
 
 object BlockSample : FormBlock(1, 1, "Test block") {
+  val m = table(Modules)
   val u = table(Users)
   val i = index(message = "ID should be unique")
 

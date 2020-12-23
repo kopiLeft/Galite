@@ -2667,8 +2667,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun selectLookups(recno: Int) {
     if (tables != null) {
-      for (table in tables!!) {
-        selectLookup(table, recno)
+      for (i in 1 until tables!!.size) {
+        selectLookup(tables!![i], recno)
       }
     }
   }
