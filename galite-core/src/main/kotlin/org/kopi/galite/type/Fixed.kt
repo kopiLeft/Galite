@@ -27,15 +27,13 @@ import java.util.Locale
  * This class represents the fixed type
  */
 class Fixed internal constructor(internal var value: BigDecimal) : Number(), Comparable<Fixed> {
-  internal constructor(b: BigInteger?) : this(BigDecimal(b))
-
-  internal constructor(b: BigInteger?, l: Int) : this(BigDecimal(b))
+  internal constructor(b: BigInteger) : this(BigDecimal(b))
 
   internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
 
   internal constructor(d: Double) : this(BigDecimal(d))
 
-  internal constructor(s: String?) : this(BigDecimal(s))
+  internal constructor(s: String) : this(BigDecimal(s))
   // ----------------------------------------------------------------------
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------
@@ -281,7 +279,7 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
     /**
      * Parse the String arguments and return the corresponding value
      */
-    fun valueOf(value: String?): Fixed {
+    fun valueOf(value: String): Fixed {
       return Fixed(value)
     }
 
@@ -302,3 +300,28 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
     private const val serialVersionUID = 1L
   }
 }
+
+/**
+ * Creates a Fixed type from a BigDecimal
+ */
+fun fixed(bigDecimal: BigDecimal): Fixed = Fixed(bigDecimal)
+
+/**
+ * Creates a Fixed type from a BigInteger
+ */
+fun fixed(bigInteger: BigInteger): Fixed = Fixed(bigInteger)
+
+/**
+ * Creates a Fixed type from a long value and scale
+ */
+fun fixed(value: Long, scale: Int): Fixed = Fixed(value, scale)
+
+/**
+ * Creates a Fixed type from a Double
+ */
+fun fixed(double: Double): Fixed = Fixed(double)
+
+/**
+ * Creates a Fixed type from a String
+ */
+fun fixed(string: String): Fixed = Fixed(string)
