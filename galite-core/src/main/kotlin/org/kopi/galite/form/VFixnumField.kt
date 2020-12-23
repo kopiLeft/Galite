@@ -25,7 +25,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VFixnumColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
@@ -69,8 +68,8 @@ class VFixnumField(val bufferSize: Int,
                  digits,
                  maxScale,
                  fraction,
-                 minval?.let { NotNullFixed(it) },
-                 maxval?.let { NotNullFixed(it) }) {
+                 minval?.let { Fixed(it) },
+                 maxval?.let { Fixed(it) }) {
   }
 
   /**
@@ -90,20 +89,20 @@ class VFixnumField(val bufferSize: Int,
     var nines: Long = 1
 
     if (min == null) {
-      min = NotNullFixed(Int.MIN_VALUE.toDouble())
+      min = Fixed(Int.MIN_VALUE.toDouble())
     }
     if (max == null) {
-      max = NotNullFixed(Int.MAX_VALUE.toDouble())
+      max = Fixed(Int.MAX_VALUE.toDouble())
     }
     for (i in width downTo 2) {
       if (i % 3 != 0) {
         nines *= 10
       }
     }
-    var big: Fixed = NotNullFixed((nines - 1).toDouble())
+    var big = Fixed((nines - 1).toDouble())
 
     big = big.setScale(height)
-    var mbig: Fixed = NotNullFixed(-(nines / 10 - 1).toDouble())
+    var mbig = Fixed(-(nines / 10 - 1).toDouble())
 
     mbig = mbig.setScale(height)
     max = if (max > big) max else big
@@ -211,9 +210,9 @@ class VFixnumField(val bufferSize: Int,
                       && block!!.isRecordFilled(i)
                       && (!exclude || i != block!!.activeRecord))) {
         if (sum == null) {
-          sum = NotNullFixed(0.0)
+          sum = Fixed(0.0)
         }
-        sum = sum.add(getFixed(i) as NotNullFixed)
+        sum = sum + getFixed(i)
       }
     }
     return sum
@@ -226,8 +225,8 @@ class VFixnumField(val bufferSize: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed =
-          computeSum(exclude)?.let { computeSum(exclude) as? NotNullFixed } ?: coalesceValue
+  fun computeSum(exclude: Boolean, coalesceValue: Fixed): Fixed =
+          computeSum(exclude)?.let { computeSum(exclude) } ?: coalesceValue
 
   /**
    * Returns the sum of the field values of all records.
@@ -242,7 +241,7 @@ class VFixnumField(val bufferSize: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(coalesceValue: NotNullFixed): NotNullFixed = computeSum(false, coalesceValue)
+  fun computeSum(coalesceValue: Fixed): Fixed = computeSum(false, coalesceValue)
 
   /**
    * Returns the current scale for the specified record.
@@ -345,7 +344,7 @@ class VFixnumField(val bufferSize: Int,
   override fun setObject(r: Int, v: Any?) {
     // !!! HACK for Oracle
     if (v != null && (v is Int)) {
-      setFixed(r, NotNullFixed(v.toDouble()))
+      setFixed(r, Fixed(v.toDouble()))
     } else {
       setFixed(r, v as Fixed?)
     }
@@ -543,7 +542,7 @@ class VFixnumField(val bufferSize: Int,
   private var fieldMaxScale = maxScale
 
   // dynamic data
-  var minval: Fixed = minval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale).negate()
+  var minval: Fixed = minval?.setScale(maxScale) ?: - calculateUpperBound(digits, maxScale)
     private set
   var maxval: Fixed = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
     private set
@@ -767,7 +766,7 @@ class VFixnumField(val bufferSize: Int,
         if (negative) {
           value = -value
         }
-        NotNullFixed(value, scale)
+        Fixed(value, scale)
       }
     }
 
@@ -777,7 +776,7 @@ class VFixnumField(val bufferSize: Int,
      * @param     digits          the number of total digits.
      * @param     scale           the number of digits representing the fractional part.
      */
-    fun calculateUpperBound(digits: Int, scale: Int): NotNullFixed {
+    fun calculateUpperBound(digits: Int, scale: Int): Fixed {
       val asciiBound: CharArray
 
       if (scale == 0) {
@@ -792,7 +791,7 @@ class VFixnumField(val bufferSize: Int,
         }
         asciiBound[digits - scale] = '.'
       }
-      return NotNullFixed(String(asciiBound))
+      return Fixed(String(asciiBound))
     }
 
     /**
@@ -805,7 +804,7 @@ class VFixnumField(val bufferSize: Int,
      */
     fun computeWidth(digits: Int, scale: Int, minVal: Fixed?, maxVal: Fixed?): Int {
       var upperBound = calculateUpperBound(digits, scale)
-      var lowerBound = upperBound.negate()
+      var lowerBound = - upperBound
       if (minVal != null && minVal > lowerBound) {
         lowerBound = minVal.setScale(scale)
       }

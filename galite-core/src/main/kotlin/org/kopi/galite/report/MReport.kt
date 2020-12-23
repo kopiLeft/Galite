@@ -29,7 +29,7 @@ import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
 
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Fixed
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 
@@ -224,7 +224,7 @@ class MReport : Constants, Serializable {
               0
             } else {
               // !!! wael 20070622 : use 0 unstead of null values.
-              (baseRows[i]!!.getValueAt(paramColumns[j]) as NotNullFixed).toFloat()
+              (baseRows[i]!!.getValueAt(paramColumns[j]) as Fixed).toFloat()
             }
             vm.setValue(params[j],
                         value as Double)
@@ -235,14 +235,14 @@ class MReport : Constants, Serializable {
             max = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
               0F
             } else {
-              (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as Fixed).toFloat()
             }
             // calculate max value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Fixed).toFloat()
               }
               if (tmp > max) {
                 max = tmp
@@ -257,14 +257,14 @@ class MReport : Constants, Serializable {
             min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
               0F
             } else {
-              (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as Fixed).toFloat()
             }
             // calculate min value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Fixed).toFloat()
               }
               if (tmp < min) {
                 min = tmp
@@ -279,7 +279,7 @@ class MReport : Constants, Serializable {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Fixed).toFloat()
               }
               ovr += tmp / baseRows.size
             }
@@ -292,7 +292,7 @@ class MReport : Constants, Serializable {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Fixed).toFloat()
               }
               sum += tmp
             }
@@ -301,11 +301,11 @@ class MReport : Constants, Serializable {
         }
       }
       try {
-        baseRows[i]!!.setValueAt(column, NotNullFixed(x.eval(vm, fm)))
+        baseRows[i]!!.setValueAt(column, Fixed(x.eval(vm, fm)))
       } catch (e: NumberFormatException) {
         // this exception occurs with INFINITE double values. (ex : division by ZERO)
         // return a null value (can not evaluate expression)
-        baseRows[i]!!.setValueAt(column, null as NotNullFixed?)
+        baseRows[i]!!.setValueAt(column, null)
       } catch (e: Exception) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00066"))
       }

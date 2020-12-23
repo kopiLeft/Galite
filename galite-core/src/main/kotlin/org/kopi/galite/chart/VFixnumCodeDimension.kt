@@ -18,7 +18,7 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Fixed
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -37,7 +37,7 @@ class VFixnumCodeDimension(ident: String,
                            type: String,
                            source: String,
                            idents: Array<String>,
-                           private val codes: Array<NotNullFixed>)
+                           private val codes: Array<Fixed>)
           : VCodeDimension(ident,
                            format,
                            type,

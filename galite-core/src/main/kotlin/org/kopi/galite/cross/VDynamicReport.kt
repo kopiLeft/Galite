@@ -61,11 +61,11 @@ import org.kopi.galite.report.VStringColumn
 import org.kopi.galite.report.VTimeColumn
 import org.kopi.galite.report.VTimestampColumn
 import org.kopi.galite.report.VWeekColumn
+import org.kopi.galite.type.Fixed
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.type.NotNullFixed
 
 class VDynamicReport(block: VBlock) : VReport() {
   /**
@@ -237,7 +237,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                            1,
                                            null,
                                            (field as VCodeField).labels,
-                                           (field as VCodeField).getCodes() as Array<NotNullFixed>)
+                                           (field as VCodeField).getCodes() as Array<Fixed>)
         is VBooleanCodeField ->
           columns[col] = VBooleanCodeColumn(null,
                                             null,

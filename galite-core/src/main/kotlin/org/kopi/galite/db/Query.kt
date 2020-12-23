@@ -20,10 +20,10 @@ package org.kopi.galite.db
 
 import java.sql.Blob
 
+import org.kopi.galite.type.Fixed
 import org.kopi.galite.type.NotNullDate
 import org.kopi.galite.type.NotNullTimestamp
 import org.kopi.galite.type.NotNullWeek
-import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.type.NotNullMonth
 import org.kopi.galite.type.NotNullTime
 
@@ -73,7 +73,7 @@ class Query(conn: Connection) {
 
   fun getTimestamp(pos: Int): NotNullTimestamp = TODO()
 
-  fun getFixed(pos: Int): NotNullFixed = TODO()
+  fun getFixed(pos: Int): Fixed = TODO()
 
   fun getTime(pos: Int): NotNullTime = TODO()
 

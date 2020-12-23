@@ -18,7 +18,7 @@
 
 package org.kopi.galite.report
 
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Fixed
 
 /**
  * This class implements predefined report triggers
@@ -86,14 +86,14 @@ object Triggers {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
-        var result = NotNullFixed(0, 2)
+        var result = Fixed(0, 2)
 
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
-          val value = child.getValueAt(column) as NotNullFixed?
+          val value = child.getValueAt(column) as? Fixed
 
           if (value != null) {
-            result = result.add(value)
+            result = result + value
           }
         }
         return result
@@ -133,15 +133,15 @@ object Triggers {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
         var valueFound = false
-        var result = NotNullFixed(0, 2)
+        var result = Fixed(0, 2)
 
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
-          val value = child.getValueAt(column) as NotNullFixed?
+          val value = child.getValueAt(column) as? Fixed
 
           if (value != null) {
             valueFound = true
-            result = result.add(value)
+            result = result + value
           }
         }
         return if (valueFound) result else null
@@ -257,22 +257,22 @@ object Triggers {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val leafCount = row.leafCount
         var notNullLeafCount = 0.0
-        var result = NotNullFixed(0, 2)
+        var result = Fixed(0, 2)
         var leaf = row.firstLeaf as VReportRow
 
         for (i in 0 until leafCount) {
-          val value = leaf.getValueAt(column) as NotNullFixed?
+          val value = leaf.getValueAt(column) as? Fixed
 
           if (value != null) {
-            result = result.add(value)
+            result = result + value
             notNullLeafCount++
           }
           leaf = leaf.nextLeaf as VReportRow
         }
         return if (notNullLeafCount != 0.0) {
-          result.divide(NotNullFixed(notNullLeafCount)).setScale(2)
+          (result / Fixed(notNullLeafCount)).setScale(2)
         } else {
-          NotNullFixed(0, 2)
+          Fixed(0, 2)
         }
       }
     }

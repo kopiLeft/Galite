@@ -24,7 +24,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VFixnumCodeColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -69,9 +68,9 @@ open class VFixnumCodeField(bufferSize: Int,
               && !isNull(i)
               && (!exclude || i != block!!.activeRecord)) {
         if (sum == null) {
-          sum = NotNullFixed(0.0)
+          sum = Fixed(0.0)
         }
-        sum = sum.add(getFixed(i) as NotNullFixed)
+        sum = sum + getFixed(i)
       }
     }
     return sum
@@ -87,10 +86,10 @@ open class VFixnumCodeField(bufferSize: Int,
   /**
    * Returns the sum of every filled records in block.
    */
-  open fun getSum(): NotNullFixed? {
-    val sum: Fixed? = computeSum()
+  open fun getSum(): Fixed {
+    val sum = computeSum()
 
-    return if (sum == null) NotNullFixed(0.0) else sum as NotNullFixed?
+    return sum ?: Fixed(0.0)
   }
 
   /**

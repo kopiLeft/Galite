@@ -18,7 +18,7 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Fixed
 
 /**
  * Represents a fixed chart column.
@@ -40,7 +40,7 @@ class VFixnumDimension(ident: String,
     return if (value == null) {
       CConstants.EMPTY_TEXT
     } else (value as? Int)?.toString()
-            ?: if (value is NotNullFixed) {
+            ?: if (value is Fixed) {
               if (value.scale > maxScale || exactScale) value.setScale(maxScale).toString()
               else value.toString()
             } else {

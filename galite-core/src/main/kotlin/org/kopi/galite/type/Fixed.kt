@@ -15,89 +15,161 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.type
 
-import java.util.Locale
-import java.math.BigInteger
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.math.MathContext
+import java.math.RoundingMode
+import java.util.Locale
 
 /**
  * This class represents the fixed type
  */
-open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
+class Fixed internal constructor(internal var value: BigDecimal) : Number(), Comparable<Fixed> {
+  internal constructor(b: BigInteger?) : this(BigDecimal(b))
 
-  internal constructor(b: BigInteger?) : this(BigDecimal(b)) {}
+  internal constructor(b: BigInteger?, l: Int) : this(BigDecimal(b))
 
-  internal constructor(b: BigInteger?, l: Int) : this(BigDecimal(b)) {}
+  internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
 
-  internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale)) {}
+  internal constructor(d: Double) : this(BigDecimal(d))
 
-  internal constructor(d: Double) : this(BigDecimal(d)) {}
-
-  internal constructor(s: String?) : this(BigDecimal(s)) {}
+  internal constructor(s: String?) : this(BigDecimal(s))
   // ----------------------------------------------------------------------
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------
-  /**
-   * add
-   */
-  fun add(f: NotNullFixed): NotNullFixed = TODO()
 
   /**
-   * divide
+   * add (f1 + f2) operator
    */
-  fun divide(f: NotNullFixed): NotNullFixed = TODO()
-
-  /**
-   * multiply
-   */
-  fun multiply(f: NotNullFixed): NotNullFixed = TODO()
-
-  /**
-   * subtract
-   */
-  fun subtract(f: NotNullFixed): NotNullFixed {
-    if (value!!.compareTo(BigDecimal.ZERO) == 0) {
-      return NotNullFixed((f as Fixed).value!!.negate())
-    } else if ((f as Fixed).value!!.compareTo(BigDecimal.ZERO) == 0) {
-      return NotNullFixed(value!!)
+  operator fun plus(f: Fixed): Fixed {
+    if (value.compareTo(BigDecimal.ZERO) == 0) {
+      return f
+    } else if (f.value.compareTo(BigDecimal.ZERO) == 0) {
+      return Fixed(value)
     }
-    return NotNullFixed(value!!.subtract((f as Fixed).value, MATH_CONTEXT))
+    return Fixed(value.add(f.value, MATH_CONTEXT))
   }
 
   /**
-   * Unary minus
+   * plusAssign (f1 += f2) operator
    */
-  fun negate(): NotNullFixed = NotNullFixed(value!!.negate())
+  operator fun plusAssign(f: Fixed) {
+    if (value.compareTo(BigDecimal.ZERO) == 0) {
+      value = f.value
+    } else if (f.value.compareTo(BigDecimal.ZERO) != 0) {
+      value.add(f.value, MATH_CONTEXT)
+    }
+  }
 
+  /**
+   * divide (f1 / f2) operator
+   */
+  operator fun div(f: Fixed): Fixed {
+    return Fixed(value.divide(f.value, DIV_CONTEXT).plus(MATH_CONTEXT))
+  }
+
+  /**
+   * plusAssign (f1 /= f2) operator
+   */
+  operator fun divAssign(f: Fixed) {
+    value = value.divide(f.value, DIV_CONTEXT).plus(MATH_CONTEXT)
+  }
+
+  /**
+   * multiply (f1 * f2) operator
+   */
+  operator fun times(f: Fixed): Fixed {
+    return Fixed(value.multiply(f.value, MATH_CONTEXT))
+  }
+
+  /**
+   * timesAssign (f1 *= f2) operator
+   */
+  operator fun timesAssign(f: Fixed) {
+    value = value.multiply(f.value, MATH_CONTEXT)
+  }
+
+  /**
+   * subtract (f1 - f2) operator
+   */
+  operator fun minus(f: Fixed): Fixed {
+    if (value.compareTo(BigDecimal.ZERO) == 0) {
+      return Fixed(f.value.negate())
+    } else if (f.value.compareTo(BigDecimal.ZERO) == 0) {
+      return Fixed(value)
+    }
+    return Fixed(value.subtract(f.value, MATH_CONTEXT))
+  }
+
+  /**
+   * minusAssign (f1 -= f2) operator
+   */
+  operator fun minusAssign(f: Fixed) {
+    if (value.compareTo(BigDecimal.ZERO) == 0) {
+      value = f.value.negate()
+    } else if (f.value.compareTo(BigDecimal.ZERO) != 0) {
+      value = value.subtract(f.value, MATH_CONTEXT)
+    }
+  }
+
+  /**
+   * Unary minus (-f) operator
+   */
+  operator fun unaryMinus(): Fixed {
+    return Fixed(value.negate())
+  }
+
+  /**
+   * remainder (f1 % f2) operator
+   */
+  operator fun rem(f: Fixed): Fixed {
+    return Fixed(value.remainder(f.value, MATH_CONTEXT))
+  }
+
+  /**
+   * remAssign (f1 %= f2) operator
+   */
+  operator fun remAssign(f: Fixed) {
+    value = value.remainder(f.value, MATH_CONTEXT)
+  }
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
   // ----------------------------------------------------------------------
   /**
    * setScale
    */
-  fun setScale(v: Int): NotNullFixed = NotNullFixed(value!!.setScale(v, BigDecimal.ROUND_HALF_UP))
+  fun setScale(v: Int): Fixed {
+    return Fixed(value.setScale(v, BigDecimal.ROUND_HALF_UP))
+  }
 
   /**
    * setScale
    */
-  fun setScale(v: Int, d: Int): NotNullFixed = NotNullFixed(value!!.setScale(v, d))
-
+  fun setScale(v: Int, d: Int): Fixed {
+    return Fixed(value.setScale(v, d))
+  }
 
   /**
    * getScale
    */
   val scale: Int
-    get() = value!!.scale()
+    get() = value.scale()
+
+  /**
+   * Returns the fixed as a double
+   */
+  override fun toDouble(): Double {
+    return value.toDouble()
+  }
 
   /**
    * Comparisons
    */
-  operator fun compareTo(other: Fixed): Int = value!!.compareTo(other.value)
-
-  override operator fun compareTo(other: Any?): Int = compareTo(other as? Fixed)
+  override operator fun compareTo(other: Fixed): Int {
+    return value.compareTo(other.value)
+  }
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
@@ -105,62 +177,67 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean = other is Fixed? && value == other?.value
+  override fun equals(other: Any?): Boolean {
+    return other is Fixed &&
+            value == other.value
+  }
 
   /**
    * Format the object depending on the current language
    */
-  override fun toString(): String = toString(Locale.GERMAN)
+  override fun toString(): String {
+    return toString(Locale.GERMAN) // !!!
+  }
 
   /**
    * Format the object depending on the current language
    * @param    locale    the current language
    */
   fun toString(locale: Locale?): String {
-    val str: String = value.toString()
-    val buf = StringBuffer()
+    val str = value.toString()
     var pos = 0
     var dot: Int
 
-    // has minus sign ?
-    if (str[0] == '-') {
-      buf.append('-')
-      pos = 1
-    }
+    return buildString {
+      // has minus sign ?
+      if (str[0] == '-') {
+        append('-')
+        pos = 1
+      }
 
-    // get number of digits in front of the dot
-    if (str.indexOf('.').also { dot = it } == -1) {
-      if (str.indexOf(' ').also { dot = it } == -1) {        // FRACTION DOT IS SPACE
-        dot = str.length
+      // get number of digits in front of the dot
+      if (str.indexOf('.').also { dot = it } == -1) {
+        if (str.indexOf(' ').also { dot = it } == -1) {        // FRACTION DOT IS SPACE
+          dot = str.length
+        }
       }
-    }
-    if (dot - pos <= 3) {
-      buf.append(str.substring(pos, dot))
-      pos = dot
-    } else {
-      when ((dot - pos) % 3) {
-        1 -> {
-          buf.append(str.substring(pos, pos + 1))
-          pos += 1
+      if (dot - pos <= 3) {
+        append(str.substring(pos, dot))
+        pos = dot
+      } else {
+        when ((dot - pos) % 3) {
+          1 -> {
+            append(str.substring(pos, pos + 1))
+            pos += 1
+          }
+          2 -> {
+            append(str.substring(pos, pos + 2))
+            pos += 2
+          }
+          0 -> {
+            append(str.substring(pos, pos + 3))
+            pos += 3
+          }
         }
-        2 -> {
-          buf.append(str.substring(pos, pos + 2))
-          pos += 2
-        }
-        0 -> {
-          buf.append(str.substring(pos, pos + 3))
+        do {
+          append(".").append(str.substring(pos, pos + 3))
           pos += 3
-        }
+        } while (dot - pos > 0)
       }
-      do {
-        buf.append(".").append(str.substring(pos, pos + 3))
-        pos += 3
-      } while (dot - pos > 0)
+      if (str.length > pos) {
+        append(",").append(str.substring(pos + 1))
+      }
     }
-    if (str.length > pos) {
-      buf.append(",").append(str.substring(pos + 1))
-    }
-    return buf.toString()
   }
 
   /**
@@ -171,63 +248,57 @@ open class Fixed(b: BigDecimal?) : Number(), Comparable<Any?> {
   // ----------------------------------------------------------------------
   // IMPLEMENTATION OF NUMBER
   // ----------------------------------------------------------------------
-  /**
-   * Returns the fixed as a byte
-   */
-  override fun toByte(): Byte = value!!.toByte()
+  override fun toInt(): Int {
+    return value.toInt()
+  }
+
+  override fun toLong(): Long {
+    return value.toLong()
+  }
+
+  override fun toShort(): Short {
+    return value.toShort()
+  }
+
+  override fun toFloat(): Float {
+    return value.toFloat()
+  }
+
+  override fun toByte(): Byte {
+    return value.toByte()
+  }
+
+  override fun toChar(): Char {
+    return value.toChar()
+  }
 
   /**
-   * Returns the fixed as a char
+   * The Max scale
    */
-  override fun toChar(): Char = value!!.toChar()
-
-  /**
-   * Returns the fixed as a double
-   */
-  override fun toDouble(): Double = value!!.toDouble()
-
-  /**
-   * Returns the fixed as a float
-   */
-  override fun toFloat(): Float = value!!.toFloat()
-
-  /**
-   * Returns the fixed as a int
-   */
-  override fun toInt(): Int = value!!.toInt()
-
-  /**
-   * Returns the fixed as a long
-   */
-  override fun toLong(): Long = value!!.toLong()
-
-  /**
-   * Returns the fixed as a short
-   */
-  override fun toShort(): Short = value!!.toShort()
-
-  private var value: BigDecimal? = null
-  var maxScale = -1   // the max scale.
+  var maxScale = -1
 
   companion object {
     /**
      * Parse the String arguments and return the corresponding value
      */
-    fun valueOf(value: String): NotNullFixed = NotNullFixed(value)
+    fun valueOf(value: String?): Fixed {
+      return Fixed(value)
+    }
 
     // ----------------------------------------------------------------------
     // DATA MEMBERS
     // ----------------------------------------------------------------------
-    private val MATH_CONTEXT: MathContext = TODO()
-    private val DIV_CONTEXT: Any = TODO()
+    private val MATH_CONTEXT: MathContext = MathContext(0, RoundingMode.HALF_UP)
+    private val DIV_CONTEXT: MathContext = MathContext(30, RoundingMode.HALF_UP)
 
     // ----------------------------------------------------------------------
     // CONSTANTS
     // ----------------------------------------------------------------------
-    val DEFAULT: NotNullFixed = NotNullFixed(0.0)
-  }
+    val DEFAULT: Fixed = Fixed(0.0)
 
-  init {
-    value = b
+    /**
+     * Comment for `serialVersionUID`
+     */
+    private const val serialVersionUID = 1L
   }
 }

@@ -18,7 +18,6 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.type.NotNullFixed
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.type.Fixed
 
@@ -37,7 +36,7 @@ class VFixnumMeasure(ident: String, color: VColor?, private val maxScale: Int) :
     }
     return when (value) {
       is Fixed -> value
-      is Number -> NotNullFixed(value.toLong(), maxScale)
+      is Number -> Fixed(value.toLong(), maxScale)
       else -> null
     }
   }

@@ -19,7 +19,7 @@
 package org.kopi.galite.report
 
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Fixed
 
 class VFixnumCodeColumn(ident: String?,
                         type: String?,
@@ -31,7 +31,7 @@ class VFixnumCodeColumn(ident: String?,
                         width: Int,
                         format: VCellFormat?,
                         names: Array<String>,
-                        codes: Array<NotNullFixed>)
+                        private val codes: Array<Fixed>)
           : VCodeColumn(ident,
                         type,
                         source,
@@ -72,14 +72,7 @@ class VFixnumCodeColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int = (object1 as NotNullFixed)
-          .compareTo(object2 as NotNullFixed)
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  // array of internal representations
-  private val codes: Array<NotNullFixed> = codes
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Fixed)
+          .compareTo(object2 as Fixed)
 
 }
