@@ -52,79 +52,79 @@ class FieldTriggers {
   /**
    * Executed upon entry of field
    */
-  object PREFLD : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object PREFLD : FieldVoidTriggerEvent(VConstants.TRG_PREFLD)
 
   /**
    * is executed upon exit of field
    */
-  object POSTFLD   : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object POSTFLD   : FieldVoidTriggerEvent(VConstants.TRG_POSTFLD)
 
   /**
    * is executed before validating any new entry
    */
-  object PREVAL    : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object PREVAL    : FieldVoidTriggerEvent(VConstants.TRG_PREVAL)
 
   /**
    * is executed after field change and validation
    */
-  object VALFLD    : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object VALFLD    : FieldVoidTriggerEvent(VConstants.TRG_VALFLD)
 
   /**
    *  this is the same trigger as VALFLD
    */
-  object VALIDATE  : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object VALIDATE  : FieldVoidTriggerEvent(VConstants.TRG_VALFLD)
 
   /**
    * Defines the default value of the field to be set if the setDefault() method is called
    * (this method is automatically called when the user choose the insert command)
    */
-  object DEFAULT   : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object DEFAULT   : FieldVoidTriggerEvent(VConstants.TRG_DEFAULT)
 
   /**
    * Not defined actually
    */
-  object FORMAT    : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object FORMAT    : FieldVoidTriggerEvent(VConstants.TRG_FORMAT)
 
   /**
    * ACCESS is a special trigger that defines how a field can be accessed.
    * This trigger must return one of these values
    * ACS_SKIPPED, ACS_HIDDEN, ACS_VISIT or ACS_MUSTFILL.
    */
-  object ACCESS    : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object ACCESS    : FieldVoidTriggerEvent(VConstants.TRG_ACCESS)
 
   /**
    * Equates the value of two fields
    */
-  object VALUE     : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object VALUE     : FieldVoidTriggerEvent(VConstants.TRG_VALUE)
 
   /**
    * Must return a boolean value, if "true" the cursor will move to the next field
    */
-  object AUTOLEAVE : FieldBooleanTriggerEvent(VConstants.TRG_POSTCHG)
+  object AUTOLEAVE : FieldBooleanTriggerEvent(VConstants.TRG_AUTOLEAVE)
 
   /**
    * Executed before inserting a row of the database
    */
-  object PREINS    : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object PREINS    : FieldVoidTriggerEvent(VConstants.TRG_PREINS)
 
   /**
    * Executed before updating a row of the database
    */
-  object PREUPD    : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object PREUPD    : FieldVoidTriggerEvent(VConstants.TRG_PREUPD)
 
   /**
    * Executed before deleting a row of the database
    */
-  object PREDEL    : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object PREDEL    : FieldVoidTriggerEvent(VConstants.TRG_PREDEL)
 
   /**
    * Executed after inserting a row of the database
    */
-  object POSTINS   : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object POSTINS   : FieldVoidTriggerEvent(VConstants.TRG_POSTINS)
 
   /**
    * Executed after updating a row of the database
    */
-  object POSTUPD   : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+  object POSTUPD   : FieldVoidTriggerEvent(VConstants.TRG_POSTUPD)
 
 }
