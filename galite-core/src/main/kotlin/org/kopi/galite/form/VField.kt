@@ -1752,7 +1752,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     var expression: ExpressionWithColumnType<*>? = null
 
     list!!.columns.forEach {
-      columns.add(it.column_)
+      columns.add(it.column_!!)
     }
 
     if (getSearchType() == VConstants.STY_MANY) {

@@ -29,7 +29,7 @@ abstract class VListColumn(
   private val align: Int,
   val width: Int,
   val isSortAscending: Boolean,
-  val column_ : Column<*>
+  val column_ : Column<*>? = null
 ) : VConstants, ObjectFormatter {
 
   /**
