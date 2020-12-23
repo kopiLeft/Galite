@@ -1748,15 +1748,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   internal fun selectFromList(gotoNextField: Boolean) {
-    val cols = mutableListOf<Column<*>>()
-    var column: ExpressionWithColumnType<*>? = null
+    val columns = mutableListOf<Column<*>>()
+    var expression: ExpressionWithColumnType<*>? = null
 
     list!!.columns.forEach {
-      cols.add(it.column_)
+      columns.add(it.column_)
     }
 
     if (getSearchType() == VConstants.STY_MANY) {
-      column = when (options and VConstants.FDO_SEARCH_MASK) {
+      expression = when (options and VConstants.FDO_SEARCH_MASK) {
         VConstants.FDO_SEARCH_NONE -> (list!!.getColumn(0).column as Column<String>)
 
         VConstants.FDO_SEARCH_UPPER -> {
@@ -1769,7 +1769,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }
 
-    val query = evalListTable_().slice(cols).select(getSearchCondition_(column!!)).orderBy(cols[1])
+    val query = evalListTable_().slice(columns).select(getSearchCondition_(expression!!)).orderBy(columns[1])
 
     val result = displayQueryList(query.toString(), list!!.columns)
 
