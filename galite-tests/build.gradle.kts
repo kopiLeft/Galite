@@ -28,7 +28,6 @@ val karibuTestingVersion = "1.2.5"
 val h2Version = "1.4.199"
 val exposedVersion = "0.27.1"
 val postgresNGVersion = "0.8.6"
-val javaxServlet = "4.0.1"
 
 vaadin {
   pnpmEnable = true
