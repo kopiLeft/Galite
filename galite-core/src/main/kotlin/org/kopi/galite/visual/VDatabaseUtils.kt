@@ -32,8 +32,48 @@ import org.kopi.galite.util.base.InconsistencyException
 
 object VDatabaseUtils {
 
-  fun checkForeignKeys_(context: DBContextHandler, id: Int, table: Table){
-    TODO()
+  fun checkForeignKeys_(context: DBContextHandler, id: Int, queryTable: Table){
+
+    transaction {
+      val query1 = References.slice(References.table, References.column, References.action)
+              .select { References.reference eq queryTable.tableName }
+              .orderBy(References.action to SortOrder.DESC)
+      val action = query1.forEach { query1Row ->
+        val auxTable = object : Table(query1Row[References.table]) {
+          var id = integer("ID")
+          val column = integer(query1Row[References.column])
+        }
+        when (query1Row[References.action][0]) {
+          'R' -> transaction {
+            val query2 = auxTable.slice(auxTable.id)
+                    .select { auxTable.column eq id }
+            if (query2.toList()[1] != null) {
+              throw VExecFailedException(MessageCode.getMessage("VIS-00021", arrayOf<Any>(
+                      query1Row[References.column],
+                      query1Row[References.table]
+              )))
+            }
+          }
+
+          'C' -> transaction {
+            val query2 = auxTable.slice(auxTable.id)
+                    .select { auxTable.column eq id }
+            query2.forEach {
+              checkForeignKeys(context, it[auxTable.id], query1Row[References.table])
+            }
+            auxTable.deleteWhere { auxTable.column eq id }
+          }
+
+          'N' -> transaction {
+            auxTable.update({ auxTable.column eq id }) {
+              it[auxTable.column] = 0
+            }
+          }
+          else -> throw InconsistencyException()
+
+        }
+      }
+    }
   }
 
   fun checkForeignKeys(context: DBContextHandler, id: Int, table: String) {

@@ -27,6 +27,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.abs
 
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
@@ -35,7 +36,10 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.upperCase
@@ -3199,7 +3203,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
-  internal var tables: Array<Table>? = null // names of database tables
+  var tables: Array<Table>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
