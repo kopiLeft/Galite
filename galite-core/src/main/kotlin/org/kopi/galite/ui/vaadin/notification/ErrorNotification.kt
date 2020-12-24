@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,15 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.notification
 
-package org.kopi.galite.demo.web
-
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.server.PWA
+import com.vaadin.flow.component.Component
 
 /**
- * Use the @PWA annotation make the application installable on phones, tablets
- * and some desktop browsers.
+ * Error notification component.
+ * @param title the warning notification title.
+ * @param message the warning notification message.
  */
-@PWA(name = "Galite Demo", shortName = "Demo")
-class AppShell : AppShellConfigurator
+class ErrorNotification(title: String, message: String) : VErrorNotification(title, message) {
+  //---------------------------------------------------
+  // ACCESSORS
+  //---------------------------------------------------
+  /**
+   * Sets the error owner.
+   * @param owner The error owner.
+   */
+  fun setOwner(owner: Component) {
+
+  }
+}
