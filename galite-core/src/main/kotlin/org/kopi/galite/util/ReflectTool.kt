@@ -108,7 +108,7 @@ object ReflectTool {
    */
   fun elementOfFormBlock(formBlock: FormBlock, kClass: KClass<*>, index: Int): String {
     val formBlockClass = formBlock::class
-    val list= formBlockClass.memberProperties.filter {
+    val list = formBlockClass.memberProperties.filter {
       it.returnType.jvmErasure.isSubclassOf(kClass)
     }.map { it.name }
     return list[index]
@@ -122,12 +122,11 @@ object ReflectTool {
    * @param        index                    the index of the element requested
    *
    * @return       the element of position index
-   *
    */
   fun elementOfForm(form: Form, kClass: KClass<*>, index: Int): String {
     val formClass = form::class
-    val list =formClass.memberProperties.filter{
-     it.returnType.jvmErasure.isSubclassOf(kClass)
+    val list = formClass.memberProperties.filter {
+      it.returnType.jvmErasure.isSubclassOf(kClass)
     }.map { it.name }
     return list[index]
   }

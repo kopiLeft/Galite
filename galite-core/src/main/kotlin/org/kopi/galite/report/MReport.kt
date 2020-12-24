@@ -192,8 +192,8 @@ class MReport : Constants, Serializable {
           }
           else -> {
             throw VExecFailedException(MessageCode.getMessage("VIS-00061",
-                    "${params[i]}\n",
-                    "Cx, maxCx, minCx, ovrCx, sumCx"))
+                                                              "${params[i]}\n",
+                                                              "Cx, maxCx, minCx, ovrCx, sumCx"))
           }
         }
       } catch (e: NumberFormatException) {
@@ -219,18 +219,31 @@ class MReport : Constants, Serializable {
     for (i in baseRows.indices) {
       for (j in paramColumns.indices) {
         when (functions[j]) {
-          NONE -> vm.setValue(params[j],
-                  (if (baseRows[i]!!.getValueAt(paramColumns[j]) == null) 0 else  // !!! wael 20070622 : use 0 unstead of null values.
-                    (baseRows[i]!!.getValueAt(paramColumns[j]) as NotNullFixed).toFloat()) as Double)
+          NONE -> {
+            val value = if (baseRows[i]!!.getValueAt(paramColumns[j]) == null) {
+              0
+            } else {
+              // !!! wael 20070622 : use 0 unstead of null values.
+              (baseRows[i]!!.getValueAt(paramColumns[j]) as NotNullFixed).toFloat()
+            }
+            vm.setValue(params[j],
+                        value as Double)
+          }
           MAX -> {
             var max: Float
             // init max
-            max = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F
-                  else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+            max = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
+              0F
+            } else {
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+            }
             // calculate max value.
             baseRows.forEach {
-              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
-                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
+                0F
+              } else {
+                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              }
               if (tmp > max) {
                 max = tmp
               }
@@ -241,12 +254,18 @@ class MReport : Constants, Serializable {
             var min: Float
 
             // init max
-            min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) 0F
-                  else (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+            min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
+              0F
+            } else {
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+            }
             // calculate min value.
             baseRows.forEach {
-              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
-                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
+                0F
+              } else {
+                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              }
               if (tmp < min) {
                 min = tmp
               }
@@ -257,8 +276,11 @@ class MReport : Constants, Serializable {
             var ovr: Float = 0f
             // calculate average.
             baseRows.forEach {
-              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
-                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
+                0F
+              } else {
+                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              }
               ovr += tmp / baseRows.size
             }
             vm.setValue(params[j], ovr.toDouble())
@@ -267,8 +289,11 @@ class MReport : Constants, Serializable {
             var sum = 0f
             // calculate sum.
             baseRows.forEach {
-              tmp = if (it!!.getValueAt(paramColumns[j]) == null) 0F
-                    else (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
+                0F
+              } else {
+                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              }
               sum += tmp
             }
             vm.setValue(params[j], sum.toDouble())
@@ -548,9 +573,9 @@ class MReport : Constants, Serializable {
   /**
    * Sorts an array of rows wrt to given column using straight two-way merge sorting.
    *
-   * @param	array		The array to sort
-   * @param	column		The index of the column on which to sort
-   * @param	order		The sorting order (1: ascending, -1: descending)
+   * @param        array                The array to sort
+   * @param        column               The index of the column on which to sort
+   * @param        order                The sorting order (1: ascending, -1: descending)
    */
   private fun sortArray(array: Array<VReportRow?>, column: Int, order: Int) {
     mergeSort(array, column, order, 0, array.size - 1, visibleRows)
@@ -575,8 +600,9 @@ class MReport : Constants, Serializable {
       var t_hi = mid + 1
 
       for (k in lo..hi) {
-        if (t_lo > mid || t_hi <= hi && order * array[t_hi]!!.compareTo(array[t_lo]!!,
-                        column, getModelColumn(column)) < 0) {
+        if (t_lo > mid ||
+                t_hi <= hi &&
+                order * array[t_hi]!!.compareTo(array[t_lo]!!, column, getModelColumn(column)) < 0) {
           scratch!![k] = array[t_hi++]
         } else {
           scratch!![k] = array[t_lo++]
@@ -966,6 +992,10 @@ class MReport : Constants, Serializable {
       }
       i -= 2
     }
+  }
+
+  companion object {
+    private const val serialVersionUID = 0L
   }
 
   // --------------------------------------------------------------------

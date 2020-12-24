@@ -134,8 +134,8 @@ class VIntegerField(val bufferSize: Int,
   override fun setInt(r: Int, v: Int?) {
     var v = v
     if (changedUI
-        || value[r] == null && v != null
-        || value[r] != null && value[r] != v) {
+            || value[r] == null && v != null
+            || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary
       trail(r)
       if (v == null) {
@@ -233,9 +233,9 @@ class VIntegerField(val bufferSize: Int,
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && oldValue != value[t])) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && oldValue != value[t])) {
       fireValueChanged(t)
     }
   }
@@ -289,7 +289,7 @@ class VIntegerField(val bufferSize: Int,
    *
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum() : Int? = computeSum(false)
+  fun computeSum(): Int? = computeSum(false)
 
   /**
    * Returns the sum of every filled records in block
@@ -315,8 +315,8 @@ class VIntegerField(val bufferSize: Int,
   fun getSum(): Int {
     val sum = computeSum()
 
-      return sum ?: 0
-    }
+    return sum ?: 0
+  }
 
   //----------------------------------------------------------------------
   // FORMATTING VALUES WRT FIELD TYPE

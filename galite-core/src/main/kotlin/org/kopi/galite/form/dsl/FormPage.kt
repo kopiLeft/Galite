@@ -31,9 +31,7 @@ class FormPage(val pageNumber: Int, val ident: String, val title: String) {
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genPage(ident, title)
   }

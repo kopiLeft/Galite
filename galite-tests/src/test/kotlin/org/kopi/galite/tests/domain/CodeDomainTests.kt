@@ -18,6 +18,7 @@
 package org.kopi.galite.tests.domain
 
 import org.junit.Test
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.ReportField
 
@@ -47,7 +48,7 @@ class CodeDomainTests {
     }
 
     // Creating a field with the domain StringTestType
-    val field = ReportField(StringTestType())
+    val field = ReportField(StringTestType().also { it.kClass = String::class })
 
     // test with a valid value
     val checkValid = field.checkLength("abcde")
@@ -75,32 +76,14 @@ class CodeDomainTests {
     val domain = IntTestType()
 
     // test code values
-    val codes = domain.getValues()
+    val codes = domain.type.codes
     assertEquals(2, codes.size)
-    assertEquals(1L, codes["cde1"])
-    assertEquals(2L, codes["cde2"])
-  }
-
-  /**
-   * Tests Domain of a type code with redundant code.
-   *
-   * Fails if there is a redundant code
-   */
-  @Test
-  fun domainRedundantCodeTest() {
-    // Declaration of the domain with codes
-    class IntTestType : Domain<Long>(5) {
-      override val type = code {
-        this["cde1"] = 1L
-        this["cde2"] = 2L
-        this["cde1"] = 7L
-      }
-    }
-
-    // Creating the domain IntTestType
-    assertFailsWith<RuntimeException> {
-      IntTestType()
-    }
+    assertEquals("id$0", codes[0].ident)
+    assertEquals("cde1", codes[0].label)
+    assertEquals(1L, codes[0].value)
+    assertEquals("id$1", codes[1].ident)
+    assertEquals("cde2", codes[1].label)
+    assertEquals(2L, codes[1].value)
   }
 
   /**
@@ -143,7 +126,7 @@ class CodeDomainTests {
     }
 
     // Creating a field with the domain StringTestType
-    val field = ReportField(StringTestType())
+    val field = ReportField(StringTestType().also { it.kClass = String::class })
 
     // test check
     assertFailsWith<UnsupportedOperationException> {

@@ -18,13 +18,14 @@
 package org.kopi.galite.chart
 
 import org.kopi.galite.type.Time
+
 /**
  * Represents a time chart column.
  *
  * @param ident The column identifier.
  * @param format The time format to be used to format the time value.
  */
-class VTimeDimension(ident: String, format: VColumnFormat) : VDimension(ident, format) {
+class VTimeDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
   override fun toString(value: Any?): String {
     return when (value) {
       null -> CConstants.EMPTY_TEXT
