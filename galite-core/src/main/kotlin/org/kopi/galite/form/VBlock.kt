@@ -1460,7 +1460,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     // open database query, fetch tuples
-    val query = table!!.slice(columns!!).select(condition!!).orderBy(*orderBy.toTypedArray())
+    var query = table!!.slice(columns!!).selectAll().orderBy(*orderBy.toTypedArray())
+
+    if (condition != null) {
+      query = table.slice(columns).select(condition).orderBy(*orderBy.toTypedArray())
+    }
 
     fetchCount = 0
     for (result in query) {
