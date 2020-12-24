@@ -61,7 +61,7 @@ class BlockTest : FormBlock(1, 1, "Test", "Test block") {
     help = "The user id"
     columns(userTable.id)
   }
-  val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(userTable.name)
@@ -71,7 +71,7 @@ class BlockTest : FormBlock(1, 1, "Test", "Test block") {
     help = "The user password"
     options(FieldOption.NOECHO)
   }
-  val age = visit(domain = Domain<Int>(3), position = follow(name)) {
+  val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     columns(userTable.age) {
