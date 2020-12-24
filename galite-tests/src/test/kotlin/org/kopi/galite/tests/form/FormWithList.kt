@@ -91,12 +91,14 @@ object BlockSample : FormBlock(1, 1, "Test block") {
   val id = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help = "The user id"
+    value = 1
     columns(u.id)
   }
 
   val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
+    value = "user name"
     columns(u.name) {
       priority = 1
     }
@@ -111,20 +113,39 @@ object BlockWithManyTables : FormBlock(1, 20, "Test block") {
   val uid = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help = "The user id"
+    value = 0
     columns(u.id, r.user)
   }
 
   val mid = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help = "The module id"
+    value = 3
     columns(m.id, r.module)
   }
 
   val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
+    value = "user name2"
     columns(u.name) {
       priority = 1
+    }
+
+    val day = mustFill(domain = Days, position = at(1, 1)) {
+      label = "day"
+      help = "The day"
+    }
+  }
+  object Days: Domain<Int>(20) {
+    override val type = org.kopi.galite.tests.form.Days.code {
+      this["Sunday"] = 1
+      this["Monday"] = 2
+      this["Tuesday"] = 3
+      this["Wednesday"] = 4
+      this["Thursday"] = 5
+      this["Friday"] = 6
+      this["Saturday"] = 7
     }
   }
 }
