@@ -27,9 +27,12 @@ import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.StylesInjector
+import org.kopi.galite.ui.vaadin.notification.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notification.ErrorNotification
 import org.kopi.galite.ui.vaadin.notification.InformationNotification
 import org.kopi.galite.ui.vaadin.notification.NotificationListener
 import org.kopi.galite.ui.vaadin.notification.VAbstractNotification
+import org.kopi.galite.ui.vaadin.notification.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
@@ -93,16 +96,45 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     showNotification(dialog)
   }
 
-  override fun error(message: String?) {
+  override fun error(message: String) {
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message)
+    dialog.setOwner(this)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        detachComponent(dialog)
+      }
+    })
+    showNotification(dialog)
 
   }
 
   override fun warn(message: String) {
-
+    val dialog = WarningNotification(VlibProperties.getString("Warning"), message)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        detachComponent(dialog)
+      }
+    })
+    showNotification(dialog)
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    TODO()
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message)
+    dialog.setYesIsDefault(yesIsDefault)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        askAnswer = if (yes) {
+          MessageListener.AWR_YES
+        } else {
+          MessageListener.AWR_NO
+        }
+        detachComponent(dialog)
+      }
+    })
+    // attach the notification to the application.
+    showNotification(dialog)
+
+    return askAnswer
   }
 
   /**

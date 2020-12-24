@@ -29,7 +29,7 @@ interface MessageListener : EventListener {
   /**
    * Displays an error message.
    */
-  fun error(message: String?)
+  fun error(message: String)
 
   /**
    * Displays a warning message.
