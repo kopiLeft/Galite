@@ -16,21 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.visual
+package org.kopi.galite.ui.vaadin.visual
 
-import org.kopi.galite.base.Image
-import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.common.Window
+import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.WindowController
 
-class VImageHandler : ImageHandler() {
-  override fun getImage(image: String): Image {
+class VWindowController : WindowController() {
+  override fun doModal(model: VWindow): Boolean {
     TODO("Not yet implemented")
   }
 
-  override fun getImage(image: ByteArray): Image {
+  override fun doNotModal(model: VWindow) {
     TODO("Not yet implemented")
   }
 
-  override fun getURL(image: String): String {
+  override fun doNotModal(model: Window) {
     TODO("Not yet implemented")
   }
 }
