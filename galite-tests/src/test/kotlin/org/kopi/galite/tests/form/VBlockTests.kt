@@ -27,9 +27,6 @@ import org.kopi.galite.visual.VExecFailedException
 class VBlockTests : JApplicationTestBase() {
   @Test
   fun checkUniqueIndexTest() {
-    connectToDatabase()
-    initDatabase()
-
     FormWithList.model
     FormWithList.block2.id[0] = 1
     FormWithList.block2.name[0] = "administrator"
