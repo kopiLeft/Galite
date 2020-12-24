@@ -24,7 +24,7 @@ import com.vaadin.flow.component.Component
  * @param title the warning notification title.
  * @param message the warning notification message.
  */
-class ErrorNotification(title: String, message: String) : VErrorNotification(title, message) {
+class ErrorNotification(title: String, message: String?) : VErrorNotification(title, message) {
   //---------------------------------------------------
   // ACCESSORS
   //---------------------------------------------------

@@ -96,7 +96,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     showNotification(dialog)
   }
 
-  override fun error(message: String) {
+  override fun error(message: String?) {
     val dialog = ErrorNotification(VlibProperties.getString("Error"), message)
     dialog.setOwner(this)
     dialog.addNotificationListener(object : NotificationListener {
