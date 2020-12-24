@@ -350,7 +350,7 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
-   * Changing the visibility of the block.
+   * This method changes the blocks' visibility.
    *
    * Use [Access] to see the list of the access.
    * Use [Modes] to see the list of the modes.
@@ -358,7 +358,7 @@ open class FormBlock(var buffer: Int,
    * @param access the access to set in the block
    * @param modes the list of modes where the access will be changed
    */
-  fun changeBlockAccess(access: Access, vararg modes: Modes) {
+  fun blockVisibility(access: Access, vararg modes: Modes) {
     if (modes.contains(Modes.MOD_QUERY)) {
       this.access[VConstants.MOD_QUERY] = access.value
     }
