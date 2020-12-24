@@ -15,13 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.welcome
 
-package org.kopi.galite.ui.base
+import com.vaadin.flow.component.ComponentEvent
 
 /**
- * A centralized way to inject styles in the browser page.
- * TODO : use this class to handle report styles.
+ * A welcome screen event that encapsulates the login information.
+ *
+ * @param source The source component.
+ * @param username The user name.
+ * @param password The password.
+ * @param locale The locale.
  */
-class StylesInjector {
+class WelcomeViewEvent(source: WelcomeView,
+                       val username: String,
+                       val password: String,
+                       val locale: String)
+  : ComponentEvent<WelcomeView?>(source, false) {
 
+  /**
+   * Returns the welcome screen component.
+   */
+  val welcomeView: WelcomeView
+    get() = super.getSource() as WelcomeView
 }
