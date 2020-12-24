@@ -26,8 +26,10 @@ import javax.swing.event.EventListenerList
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
@@ -118,10 +120,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     })
   }
 
+  @Deprecated("use fetchColumn(table: Table)")
   fun fetchColumn(table: Int): Int {
     if (columns != null) {
       for (i in columns!!.indices) {
         if (columns!![i]!!.getTable() == table) {
+          return i
+        }
+      }
+    }
+    return -1
+  }
+
+  fun fetchColumn(table: Table): Int {
+    if (columns != null) {
+      for (i in columns!!.indices) {
+        if (columns!![i]!!.getTable_() == table) {
           return i
         }
       }
@@ -618,7 +632,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the column name in the table with specified correlation.
    * returns null if the field has no access to this table.
    */
+  @Deprecated("use lookupColumn(corr: Table)")
   fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
+
+  /**
+   * Returns the column name in the table with specified correlation.
+   * returns null if the field has no access to this table.
+   */
+  fun lookupColumn(corr: Table): Column<*>? = columns!!.find { corr == it!!.getTable_() }?.column
 
   /**
    * Returns true if the column is a key of the table with specified correlation.
@@ -661,8 +682,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the search conditions for this field.
    */
-  open fun getSearchCondition(): Op<Boolean>? {
-    TODO()
+  open fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? {
+    // TODO
+    return null
   }
 
   // ----------------------------------------------------------------------
@@ -944,6 +966,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use setQuery_(query: ResultRow, column: Column<*>)")
   fun setQuery(query: Query, column: Int) {
     setQuery(block!!.currentRecord, query, column)
   }
@@ -958,6 +981,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use setQuery_(record: Int, query: ResultRow, column: Column<*>)")
   fun setQuery(record: Int, query: Query, column: Int) {
     setObject(record, retrieveQuery(query, column))
   }
@@ -971,6 +995,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use retrieveQuery_(result: ResultRow, column: Column<*>)")
   abstract fun retrieveQuery(query: Query, column: Int): Any?
 
 
@@ -1458,34 +1483,31 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       var exists = false
 
       try {
-        while (true) {
-          try {
-            if (!alreadyProtected) {
-            }
-            SELECT_IS_IN_LIST.replace("$2", evalListTable())
-            SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
-            transaction {
-              exec(SELECT_IS_IN_LIST) { exists = it.next() }
-            }
-            if (!alreadyProtected) {
-            }
-            break
-          } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
-          } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+        try {
+          if (!alreadyProtected) {
+          }
+          SELECT_IS_IN_LIST.replace("$2", evalListTable())
+          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
+          SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
+          transaction {
+            exec(SELECT_IS_IN_LIST) { exists = it.next() }
+          }
+          if (!alreadyProtected) {
+          }
+        } catch (e: SQLException) {
+          if (!alreadyProtected) {
+          } else {
+            throw e
+          }
+        } catch (error: Error) {
+          if (!alreadyProtected) {
+          } else {
+            throw error
+          }
+        } catch (rte: RuntimeException) {
+          if (!alreadyProtected) {
+          } else {
+            throw rte
           }
         }
       } catch (e: Throwable) {
@@ -1504,45 +1526,42 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         return
       }
       try {
-        while (true) {
-          try {
-            if (!alreadyProtected) {
-            }
-            SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
-            SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
-            SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
-            transaction {
-              exec(SELECT_MATCHING_STRINGS) {
-                if (!it.next()) {
-                  count = 0
-                } else {
-                  count = 1
-                  result = it.getString(1)
-                  if (it.next()) {
-                    count = 2
-                  }
+        try {
+          if (!alreadyProtected) {
+          }
+          SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
+          SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
+          SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
+          transaction {
+            exec(SELECT_MATCHING_STRINGS) {
+              if (!it.next()) {
+                count = 0
+              } else {
+                count = 1
+                result = it.getString(1)
+                if (it.next()) {
+                  count = 2
                 }
               }
             }
+          }
 
-            if (!alreadyProtected) {
-            }
-            break
-          } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
-              throw e
-            }
-          } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
-              throw rte
-            }
+          if (!alreadyProtected) {
+          }
+        } catch (e: SQLException) {
+          if (!alreadyProtected) {
+          } else {
+            throw e
+          }
+        } catch (error: Error) {
+          if (!alreadyProtected) {
+          } else {
+            throw error
+          }
+        } catch (rte: RuntimeException) {
+          if (!alreadyProtected) {
+          } else {
+            throw rte
           }
         }
       } catch (e: Throwable) {

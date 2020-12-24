@@ -20,7 +20,7 @@ plugins {
 }
 
 val exposedVersion = "0.27.1"
-val vaadinVersion = "17.0.0"
+val vaadinVersion = "18.0.3"
 val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
 val apachePoi = "4.1.2"

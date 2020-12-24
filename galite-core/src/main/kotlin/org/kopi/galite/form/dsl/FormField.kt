@@ -23,19 +23,26 @@ import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.field.Field
+import org.kopi.galite.form.VBooleanCodeField
 import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
+import org.kopi.galite.form.VFixnumCodeField
+import org.kopi.galite.form.VIntegerCodeField
 import org.kopi.galite.form.VIntegerField
 import org.kopi.galite.form.VMonthField
+import org.kopi.galite.form.VStringCodeField
 import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Fixed
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -57,11 +64,11 @@ import org.kopi.galite.type.Week
  * @param triggers             the triggers executed by this field
  * @param alias                the alias of this field
  */
-class FormField<T : Comparable<T>>(val block: FormBlock,
-                                   override val domain: Domain<T>,
-                                   private val fieldIndex: Int,
-                                   initialAccess: Int,
-                                   var position: FormPosition? = null) : Field<T>(domain) {
+class FormField<T : Comparable<T>?>(val block: FormBlock,
+                                    domain: Domain<T>,
+                                    private val fieldIndex: Int,
+                                    initialAccess: Int,
+                                    var position: FormPosition? = null) : Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -88,6 +95,34 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
       } else {
         vField.setObject(value)
       }
+    }
+
+  /** the minimum value that cannot exceed  */
+  private var min : Int = Int.MIN_VALUE
+
+  /** the maximum value that cannot exceed  */
+  private var max : Int = Int.MAX_VALUE
+
+  /**
+   * Sets the minimum value of an Int field.
+   */
+  var <U> FormField<U>.minValue : Int where U : Comparable<U>?, U : Number?
+    get() {
+      return min
+    }
+  set(value) {
+    min = value
+  }
+
+  /**
+   * Sets the maximum value of an Int field.
+   */
+  var <U> FormField<U>.maxValue : Int where U : Comparable<U>?, U : Number?
+    get() {
+      return max
+    }
+    set(value) {
+      max = value
     }
 
   /**
@@ -133,7 +168,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
    */
   fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
     val cols = joinColumns.map { column ->
-      FormFieldColumn(column, column.table.tableName, column.name, this, true, true) // TODO
+      FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
@@ -192,26 +227,64 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
     this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
+  // TODO add Fixed types
   /**
    * The field model based on the field type.
    */
-  var vField: VField =
-          when (domain.kClass) {
-            Int::class -> VIntegerField(block.buffer, domain.width ?: 0, Int.MIN_VALUE, Int.MAX_VALUE)
-            String::class -> VStringField(block.buffer,
-                                          domain.width ?: 0,
-                                          domain.height ?: 1,
-                                          domain.visibleHeight ?: 1,
-                                          0,  // TODO
-                                          false) // TODO
-            Boolean::class -> VBooleanField(block.buffer)
-            Date::class, java.util.Date::class -> VDateField(block.buffer)
-            Month::class -> VMonthField(block.buffer)
-            Week::class -> VWeekField(block.buffer)
-            Time::class -> VTimeField(block.buffer)
-            Timestamp::class -> VTimestampField(block.buffer)
-            else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-          }
+  val vField: VField by lazy {
+    when {
+      domain.type == null -> {
+        when (domain.kClass) {
+          Int::class, Long::class -> VIntegerField(block.buffer, domain.width ?: 0, min, max)
+          String::class -> VStringField(block.buffer,
+                                        domain.width ?: 0,
+                                        domain.height ?: 1,
+                                        domain.visibleHeight ?: 1,
+                                        0,  // TODO
+                                        false) // TODO
+          Boolean::class -> VBooleanField(block.buffer)
+          Date::class, java.util.Date::class -> VDateField(block.buffer)
+          Month::class -> VMonthField(block.buffer)
+          Week::class -> VWeekField(block.buffer)
+          Time::class -> VTimeField(block.buffer)
+          Timestamp::class -> VTimestampField(block.buffer)
+          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+        }
+      }
+      domain.type is CodeDomain -> {
+        val type = domain.type as CodeDomain<*>
+        when (domain.kClass) {
+          Boolean::class -> VBooleanCodeField(block.buffer,
+                                              type.ident,
+                                              block.sourceFile,
+                                              type.codes.map { it.ident }.toTypedArray(),
+                                              type.codes.map { it.value as? Boolean }.toTypedArray())
+          Fixed::class -> VFixnumCodeField(block.buffer,
+                                           type.ident,
+                                           block.sourceFile,
+                                           type.codes.map { it.ident }.toTypedArray(),
+                                           type.codes.map { it.value as? Fixed }.toTypedArray())
+          Int::class, Long::class -> VIntegerCodeField(block.buffer,
+                                                       type.ident,
+                                                       block.sourceFile,
+                                                       type.codes.map { it.ident }.toTypedArray(),
+                                                       type.codes.map { it.value as? Int }.toTypedArray())
+          String::class -> VStringCodeField(block.buffer,
+                                            type.ident,
+                                            block.sourceFile,
+                                            type.codes.map { it.ident }.toTypedArray(),
+                                            type.codes.map { it.value as? String }.toTypedArray())
+          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+        }
+      }
+      domain is ListDomain -> {
+        TODO()
+      }
+      else -> {
+        TODO()
+      }
+    }
+  }
 
   fun setInfo() {
     vField.setInfo(
@@ -334,9 +407,7 @@ class FormField<T : Comparable<T>>(val block: FormBlock,
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  /**
-   * !!!FIX:taoufik
-   */
+
   override fun genLocalization(writer: LocalizationWriter) {
     if (!isInternal) {
       (writer as FormLocalizationWriter).genField(label, label, help)

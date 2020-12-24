@@ -27,15 +27,18 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.abs
 
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.lowerCase
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -46,9 +49,9 @@ import org.kopi.galite.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
@@ -1432,7 +1435,38 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @exception VException      an exception may be raised by triggers
    */
   fun fetchRecord(id: Int) {
-    TODO()
+    val columns = getSearchColumns()
+    val table = getSearchTables_()
+    val condition = mutableListOf<Op<Boolean>>()
+
+    condition.add(Op.build { idColumn eq id })
+    if (VBlockDefaultOuterJoin.getFetchRecordCondition(fields) != null) {
+      condition.add(VBlockDefaultOuterJoin.getFetchRecordCondition(fields)!!)
+    }
+
+    try {
+      val result = table!!.slice(columns!!).select(condition.compoundAnd()).single()
+
+      /* set values */
+      var j = 0
+      fields.forEach { field ->
+        if (field.getColumnCount() > 0) {
+          field.setQuery_(result, columns[j])
+          j += 1
+        }
+      }
+    } catch (noSuchElementException: NoSuchElementException) {
+      /* Record does not exist anymore: it was deleted by another user */
+      throw VSkipRecordException()
+    } catch (illegalArgumentException: IllegalArgumentException) {
+      assert(false) { "too many rows" }
+    }
+
+    setRecordFetched(activeRecord, true)
+    setRecordChanged(activeRecord, false)
+    setRecordDeleted(activeRecord, false)
+    callProtectedTrigger(VConstants.TRG_POSTQRY)
+    setMode(VConstants.MOD_UPDATE)
   }
 
   /**
@@ -1449,35 +1483,33 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         continue
       }
       try {
-        while (true) {
+        try {
+          fetchPosition = pos
+          fetchRecord(fetchBuffer[pos])
+          return
+        } catch (e: VException) {
           try {
-            fetchPosition = pos
-            fetchRecord(fetchBuffer[pos])
-            return
-          } catch (e: VException) {
-            try {
-            } catch (abortEx: VException) {
-              throw abortEx
-            }
-          } catch (e: SQLException) {
-            try {
-            } catch (abortEx: DBDeadLockException) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-            } catch (abortEx: DBInterruptionException) {
-              throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
-            } catch (abortEx: SQLException) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: Error) {
-            try {
-            } catch (abortEx: Error) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: RuntimeException) {
-            try {
-            } catch (abortEx: RuntimeException) {
-              throw VExecFailedException(abortEx)
-            }
+          } catch (abortEx: VException) {
+            throw abortEx
+          }
+        } catch (e: SQLException) {
+          try {
+          } catch (abortEx: DBDeadLockException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: DBInterruptionException) {
+            throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
+          } catch (abortEx: SQLException) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: Error) {
+          try {
+          } catch (abortEx: Error) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: RuntimeException) {
+          try {
+          } catch (abortEx: RuntimeException) {
+            throw VExecFailedException(abortEx)
           }
         }
       } catch (e: VException) {
@@ -1675,6 +1707,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Tests whether this table has only internal fields.
    */
+  @Deprecated("use hasOnlyInternalFields(table: Table)")
   fun hasOnlyInternalFields(table: Int): Boolean {
     for (i in fields.indices) {
       val fld: VField? = fields[i]
@@ -1687,8 +1720,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
+   * Tests whether this table has only internal fields.
+   */
+  fun hasOnlyInternalFields(table: Table): Boolean = fields.all { it.fetchColumn(table) == -1 || it.isInternal() }
+
+  /**
    * Returns the tables for database query, with outer joins conditions.
    */
+  @Deprecated("use getSearchTables_()")
   fun getSearchTables(): String {
     TODO()
   }
@@ -1696,13 +1735,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
-  fun getSearchTables_(): Table {
-    TODO()
+  fun getSearchTables_(): Join? {
+    return VBlockDefaultOuterJoin.getSearchTables(this)
   }
 
   /**
    * Returns the search conditions for database query.
    */
+  @Deprecated("use getSearchConditions_()")
   fun getSearchConditions(): String? {
     TODO()
   }
@@ -1710,8 +1750,37 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search conditions for database query.
    */
-  fun getSearchConditions_(): Op<Boolean> {
-    TODO()
+  fun getSearchConditions_(): Op<Boolean>? {
+    var buffer: Op<Boolean>? = null
+
+    for (i in fields.indices) {
+      val fld = fields[i]
+      if (fld.getColumnCount() > 0) {
+        val cond = fld.getSearchCondition()
+        if (cond != null) {
+          val expression = when (fld.options and VConstants.FDO_SEARCH_MASK) {
+            VConstants.FDO_SEARCH_NONE -> fld.getColumn(0)!!.column
+            VConstants.FDO_SEARCH_UPPER -> {
+              (fld.getColumn(0)!!.column as Column<String>).upperCase()
+            }
+            VConstants.FDO_SEARCH_LOWER -> {
+              (fld.getColumn(0)!!.column as Column<String>).lowerCase()
+            }
+            else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+          }
+          Op.build {
+            expression.isNull()
+          }
+          buffer = expression.cond()
+        }
+      }
+      /*if (useOracleOuterJoinSyntax()) { TODO ! do we need to keep this?
+        buffer = VBlockOracleOuterJoin.getSearchCondition(fld, buffer)
+      } else {
+        buffer = VBlockDefaultOuterJoin.getSearchCondition(fld)
+      }*/
+    }
+    return buffer
   }
 
   /**
@@ -1775,8 +1844,17 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       if (fields[i] == currentField || fields[i].isLookupKey(tableIndex)) {
         val condition = fields[i].getSearchCondition()
 
+        // TODO: 10/12/2020 FIX this !
+        if (condition == null || fields[i].lookupColumn(tableIndex)!!.condition() !is EqOp) {
+          // at least one key field is not completely specified
+          // no guarantee that a unique value will be fetched
+          // end processing - non-key fields have already been cleared
+          return
+        }
+
+        // TODO: 11/12/2020 FIX this !
         if (condition != null) {
-          conditions.add(condition)
+          conditions.add(fields[i].lookupColumn(tableIndex)!!.condition())
         }
       }
     }
@@ -1954,14 +2032,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* query from where ? */
-    val tables = getSearchTables_() // TODO ! You can test this by replacing by (val tables = idColumn.table)
-    val conditions = getSearchConditions_() // TODO ! You can test this by commenting this line
+    val tables = getSearchTables_()
+    val conditions = getSearchConditions_()
 
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
     var rows = 0
 
-    for (result in tables.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())) {
+    val query = if (conditions == null) {
+      tables!!.slice(columns).selectAll().orderBy(*orderBys.toTypedArray())
+    } else {
+      tables!!.slice(columns).select(conditions).orderBy(*orderBys.toTypedArray())
+    }
+    for (result in query) {
       if (rows == fetchSize) {
         break
       }
@@ -2531,7 +2614,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // do not use getCurrentRecord because getCurrentRecord throws an
     // exception if currentRecord is null.
-    val oldCurrentRecord: Int = currentRecord
+    val oldCurrentRecord: Int = _currentRecord
     returnValue = try {
       currentRecord = activeRecord
       when (VConstants.TRG_TYPES[event]) {
@@ -2593,8 +2676,42 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  private fun isNullReference(table: Int, recno: Int): Boolean {
-    TODO()
+  private fun isNullReference(table: Table, recno: Int): Boolean {
+    var nullReference: Boolean
+
+    // check if this lookup table has not only internal fields
+    if (hasOnlyInternalFields(table)) {
+      nullReference = false
+    } else {
+      // check if all lookup fields for this table are null.
+      nullReference = true
+
+      for (field in fields) {
+        if (!nullReference) {
+          break
+        }
+        if (field.fetchColumn(table) != -1
+                && !field.isInternal()
+                && !field.isNull(recno)) {
+          nullReference = false
+        }
+      }
+    }
+
+    // this test is useful since we use outer join only for nullable columns.
+    for (field in fields) {
+      if (!nullReference) {
+        break
+      }
+      if (field.isInternal()
+              && field.fetchColumn(0) != -1
+              && field.fetchColumn(table) != -1
+              && !(field.getColumn(field.fetchColumn(table))!!.nullable ||
+                      field.getColumn(field.fetchColumn(0))!!.nullable)) {
+        nullReference = false
+      }
+    }
+    return nullReference
   }
 
   /*
@@ -3141,18 +3258,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   protected lateinit var activeCommands: ArrayList<VCommand> // commands currently active
-  var currentRecord = 0
+  private var _currentRecord = 0
+  var currentRecord
     get(): Int {
       return if (!isMulti()) {
         0
       } else {
-        assert(field in 0 until bufferSize) { "Bad currentRecord $field" }
-        field
+        assert(_currentRecord in 0 until bufferSize) { "Bad currentRecord $_currentRecord" }
+        _currentRecord
       }
     }
     set(rec) {
       if (isMulti()) {
-        field = rec
+        _currentRecord = rec
       }
     }
 

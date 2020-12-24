@@ -56,4 +56,8 @@ abstract class VException : Exception {
    * @param     cause           the cause  (null value permitted
    */
   constructor(message: String?, cause: Throwable?) : super(message, cause)
+
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }

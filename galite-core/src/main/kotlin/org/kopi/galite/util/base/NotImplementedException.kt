@@ -37,4 +37,8 @@ class NotImplementedException : RuntimeException {
    */
   @Deprecated("use NotImplementedError instead", ReplaceWith("NotImplementedError(message)"))
   constructor(message: String) : super(message)
+
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }
