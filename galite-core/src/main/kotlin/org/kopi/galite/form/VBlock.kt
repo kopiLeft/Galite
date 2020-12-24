@@ -2654,7 +2654,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Deletes current record of given block from database.
    */
-  protected fun deleteRecord(recno: Int) {
+  fun deleteRecord(recno: Int) {
     try {
       assert(!isMulti() || activeRecord == -1) { "isMulti? " + isMulti() + " current record " + activeRecord }
       if (isMulti()) {
