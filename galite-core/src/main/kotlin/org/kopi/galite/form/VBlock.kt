@@ -1959,10 +1959,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     TODO()
   }
 
-  fun getSearchOrder_(): ArrayList<Pair<Column<*>, SortOrder>> {
-    TODO()
-  }
-
   /**
    * Returns the search order for database query.
    */
@@ -1973,15 +1969,15 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     var elems = 0
 
     // get the fields connected to the database with their priorities
-      fields.forEach { field ->
-        if (field.getColumnCount() != 0 && field.getPriority() != 0) {
-
-          columns.add(field.getColumn(0)!!.column)
-          priorities[elems] = field.getPriority()
-          sizes[elems] = field.width * field.height
-          elems += 1
-        }
+    fields.forEach { field ->
+      if (field.getColumnCount() != 0 && field.getPriority() != 0) {
+        // this is a field connected to the database
+        columns.add(field.getColumn(0)!!.column)
+        priorities[elems] = field.getPriority()
+        sizes[elems] = field.width * field.height
+        elems += 1
       }
+    }
 
     // (bubble) sort the fields with respect to their priorities
     for (i in elems - 1 downTo 1) {

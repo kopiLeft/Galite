@@ -25,7 +25,7 @@ class VBlockTests : JApplicationTestBase() {
   @Test
   fun getSearchOrder_Test() {
     FormWithList.model
-    val orderBys = FormWithList.block.vBlock.getSearchOrder_()
+    val orderBys = FormWithList.block3.vBlock.getSearchOrder_()
 
     assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
   }
