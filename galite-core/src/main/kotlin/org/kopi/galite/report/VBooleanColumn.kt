@@ -36,14 +36,14 @@ class VBooleanColumn(ident: String?,
                      function: VCalculateColumn?,
                      width: Int,
                      format: VCellFormat?)
-     : VReportColumn(ident,
-                     options,
-                     align,
-                     groups,
-                     function,
-                     Math.max(VlibProperties.getString("true").length, VlibProperties.getString("false").length),
-                     1,
-                     format ?: VBooleanFormat()) {
+  : VReportColumn(ident,
+                  options,
+                  align,
+                  groups,
+                  function,
+                  Math.max(VlibProperties.getString("true").length, VlibProperties.getString("false").length),
+                  1,
+                  format ?: VBooleanFormat()) {
   /**
    * Compare two objects.
    *
@@ -71,7 +71,7 @@ class VBooleanColumn(ident: String?,
     // --------------------------------------------------------------------
     // DATA MEMBERS
     // --------------------------------------------------------------------
-    private val trueRep  = VlibProperties.getString("true")
+    private val trueRep = VlibProperties.getString("true")
     private val falseRep = VlibProperties.getString("false")
   }
 }

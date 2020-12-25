@@ -18,6 +18,8 @@
 
 package org.kopi.galite.form
 
+import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.Op
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.Arrays
@@ -30,17 +32,9 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VlibProperties
 
-class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
+class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
 
   override fun hasAutofill(): Boolean = true
-
-  /**
-   * just after loading, construct record
-   */
-  override fun build() {
-    super.build()
-    value = arrayOfNulls(2 * block!!.bufferSize)
-  }
 
   /**
    * return the name of this field
@@ -89,7 +83,7 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
   /**
    * Returns the search conditions for this field.
    */
-  override fun getSearchCondition(): String? = null
+  override fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? = null
 
   /**
    * Sets the field value of given record to a null value.
@@ -168,9 +162,9 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
     // inform that value has changed for non backup records
     // only when the value has really changed.
     if (t < block!!.bufferSize
-        && (oldValue != null && value[t] == null
-            || oldValue == null && value[t] != null
-            || oldValue != null && !Arrays.equals(oldValue, value[t]))) {
+            && (oldValue != null && value[t] == null
+                    || oldValue == null && value[t] != null
+                    || oldValue != null && !Arrays.equals(oldValue, value[t]))) {
       fireValueChanged(t)
     }
   }
@@ -229,5 +223,5 @@ class VImageField(val iconWidth: Int, val iconHeight: Int) : VField(1, 1) {
     return false
   }
 
-  private lateinit var value: Array<ByteArray?>
+  private var value: Array<ByteArray?> = arrayOfNulls(2 * bufferSize)
 }

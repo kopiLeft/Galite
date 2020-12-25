@@ -47,7 +47,9 @@ class RangeValue : IPPValue {
     os.writeInteger(upper)
   }
 
-  override fun dump() { println("\tlower : $lower\tupper : $upper") }
+  override fun dump() {
+    println("\tlower : $lower\tupper : $upper")
+  }
 
   override fun toString(): String = "<$lower, $upper>"
 

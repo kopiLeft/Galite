@@ -17,16 +17,14 @@
 
 package org.kopi.galite.report
 
-import org.kopi.galite.field.Field
-
 /**
  * Represents a data row of a [Report].
  *
  * @param reportFields the fields that exists in the report.
  */
-class ReportRow(private val reportFields: MutableList<RField<*>>) {
+class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
   /** A report data row */
-  val data = mutableMapOf<Field<*>, Any>()
+  val data = mutableMapOf<ReportField<*>, Any?>()
 
   /**
    * Returns data value for a specific [field].
@@ -34,7 +32,7 @@ class ReportRow(private val reportFields: MutableList<RField<*>>) {
    * @param field the field.
    * @return  data value for a specific [field].
    */
-  fun getValueOf(field: Field<*>) = data[field]
+  fun getValueOf(field: ReportField<*>) = data[field]
 
   /**
    * Sets a mapping between the values that the domain can take
@@ -43,7 +41,7 @@ class ReportRow(private val reportFields: MutableList<RField<*>>) {
    * @param field the field.
    * @param value the field's value.
    */
-  operator fun <T : Comparable<T>> set(field: Field<T>, value: T) {
+  operator fun <T : Comparable<T>?> set(field: ReportField<T>, value: T) {
     if (field in reportFields) {
       data.putIfAbsent(field, value)
     }

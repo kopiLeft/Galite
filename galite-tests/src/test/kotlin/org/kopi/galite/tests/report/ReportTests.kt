@@ -22,9 +22,14 @@ import java.util.Locale
 import org.jdom2.input.SAXBuilder
 
 import org.junit.Test
+
+import org.kopi.galite.common.POSTREPORT
+import org.kopi.galite.common.PREREPORT
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.tests.VApplicationTestBase
+
 import kotlin.test.assertEquals
 
 class ReportTests: VApplicationTestBase() {
@@ -83,36 +88,44 @@ class ReportTests: VApplicationTestBase() {
     assertEquals("age", ageField.getAttributeValue("label"))
     assertEquals("The user age", ageField.getAttributeValue("help"))
   }
+}
 
-  /**
-   * Simple Report with two fields.
-   */
-  object SimpleReport : Report() {
-    override val locale = Locale.FRANCE
+/**
+ * Simple Report with two fields.
+ */
+object SimpleReport : Report() {
+  override val locale = Locale.FRANCE
 
-    override val title = "SimpleReport"
+  override val title = "SimpleReport"
 
-    override val reportCommands = true
+  val preReport = trigger(PREREPORT) {
+    println("---------PREREPORT TRIGGER-------------")
+  }
 
-    val name = field(Domain<String>(20)) {
-      label = "name"
-      help = "The user name"
+  val postReport = trigger(POSTREPORT) {
+    println("---------POSTREPORT TRIGGER-------------")
+  }
+
+  val name = field(Domain<String>(20)) {
+    label = "name"
+    help = "The user name"
+    align = FieldAlignment.LEFT
+  }
+
+  val age = field(Domain<Int>(3)) {
+    label = "age"
+    help = "The user age"
+    align = FieldAlignment.LEFT
+  }
+
+  init {
+    add {
+      this[name] = "Sami"
+      this[age] = 22
     }
-
-    val age = field(Domain<Int>(3)) {
-      label = "age"
-      help = "The user age"
-    }
-
-    init {
-      add {
-        this[name] = "Sami"
-        this[age] = 22
-      }
-      add {
-        this[name] = "Sofia"
-        this[age] = 23
-      }
+    add {
+      this[name] = "Sofia"
+      this[age] = 23
     }
   }
 }
