@@ -23,17 +23,37 @@ import java.util.EventListener
 
 import javax.swing.event.EventListenerList
 
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.all
+import kotlin.collections.elementAt
+import kotlin.collections.filter
+import kotlin.collections.find
+import kotlin.collections.first
+import kotlin.collections.forEach
+import kotlin.collections.forEachIndexed
+import kotlin.collections.indices
+import kotlin.collections.isNotEmpty
+import kotlin.collections.map
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.single
+import kotlin.collections.toList
+import kotlin.collections.toTypedArray
 import kotlin.math.abs
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.compoundAnd
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -1425,7 +1445,106 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @exception VException      an exception may be raised by triggers
    */
   fun load() {
-    TODO()
+    // get select condition from first record in block
+    if (isMulti()) {
+      activeRecord = 0
+    }
+    callProtectedTrigger(VConstants.TRG_PREQRY)
+
+    // create database query
+    val columns = getSearchColumns()
+    val table = getSearchTables_()
+    val condition = getSearchConditions_()
+    val orderBy = getSearchOrder_()
+
+    if (isMulti()) {
+      activeRecord = -1
+      activeField = null
+    }
+
+    // clear block: it will only hold the retrieved tuples
+    clear()
+
+    // get index of id field in BLOCK
+    val idfld: Int = getFieldIndex(idField)
+
+    // get index of id field in QUERY
+    var idqry = 0
+
+    for (i in 0 until idfld) {
+      if (fields[i].getColumnCount() > 0) {
+        idqry += 1
+      }
+    }
+
+    // open database query, fetch tuples
+    val query =  if (condition != null) {
+      table!!.slice(columns!!).select(condition).orderBy(*orderBy.toTypedArray())
+    } else {
+      table!!.slice(columns!!).selectAll().orderBy(*orderBy.toTypedArray())
+    }
+
+    fetchCount = 0
+
+    for (result in query) {
+      if (fetchCount >= fetchSize) {
+        break
+      }
+
+      if (result[columns[idqry]] == 0) {
+        continue
+      }
+
+      fetchBuffer[fetchCount] = result[columns[idqry]] as Int
+
+      if (fetchCount >= bufferSize) {
+        fetchCount += 1
+      } else {
+        fields.forEachIndexed() { index, field ->
+          if (field.getColumnCount() > 0) {
+            field.setQuery_(fetchCount, result, columns[index])
+          }
+        }
+
+        setRecordFetched(fetchCount, true)
+        setRecordChanged(fetchCount, false)
+        setRecordDeleted(fetchCount, false)
+
+        try {
+          if (isMulti()) {
+            activeRecord = fetchCount
+          }
+          callProtectedTrigger(VConstants.TRG_POSTQRY)
+          if (isMulti()) {
+            activeRecord = -1
+          }
+
+          fetchCount += 1
+        } catch (e: VException) {
+          if (isMulti()) {
+            activeRecord = -1
+          }
+
+          if (e is VSkipRecordException) {
+            clearRecordImpl(fetchCount)
+          } else {
+            clear()
+            throw e
+          }
+        } catch (t: Throwable) {
+          t.printStackTrace()
+        }
+      }
+    }
+
+    fetchPosition = 0
+    // !!! REMOVE setActiveRecord(0);
+    if (!isMulti() && fetchCount == 0) {
+      throw VQueryNoRowException(MessageCode.getMessage("VIS-00022"))
+    } else if (!isMulti()) {
+      setMode(VConstants.MOD_UPDATE)
+    }
+    fireBlockChanged()
   }
 
   /**
@@ -1527,7 +1646,59 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * @exception SQLException            an exception may be raised DB access
    */
   fun save() {
-    TODO()
+    assert(!isMulti() || activeRecord == -1) { "Is multi and activeRecord = $activeRecord" }
+    try {
+      callProtectedTrigger(VConstants.TRG_PRESAVE)
+    } catch (e: VException) {
+      throw InconsistencyException()
+    }
+    if (!isMulti()) {
+      when (getMode()) {
+        VConstants.MOD_INSERT -> insertRecord(0, -1)
+        VConstants.MOD_UPDATE -> updateRecord(0)
+        else -> throw InconsistencyException()
+      }
+    } else {
+      if (isIndexed()) {
+        /* first delete all deleted and changed old records */
+        for (i in 0 until bufferSize) {
+          if (isRecordFetched(i)) {
+            if (isRecordChanged(i)) {
+              tables!![0].deleteWhere{ idColumn eq idField.getInt(i)!!}
+            } else if (isRecordDeleted(i)) {
+              deleteRecord(i)
+            }
+          }
+        }
+      }
+      for (i in 0 until bufferSize) {
+        if (isRecordDeleted(i)) {
+          if (!isRecordFetched(i)) {
+            clearRecordImpl(i)
+          } else {
+            // IF INDEX UPDATE SET THEN RECORD ALREADY DELETED
+            if (!isIndexed()) {
+              deleteRecord(i)
+            }
+          }
+        } else if (isRecordChanged(i)) {
+          try {
+            if (!isRecordFetched(i)) {
+              insertRecord(i, -1)
+            } else {
+              if (isIndexed()) {
+                // !!! update with ID
+                insertRecord(i, idField.getInt(i)!!)
+              } else {
+                updateRecord(i)
+              }
+            }
+          } catch (doNothing: VSkipRecordException) {
+            activeRecord = -1
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -1725,6 +1896,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
+  @Deprecated("use getSearchTables_()")
   fun getSearchTables(): String {
     TODO()
   }
@@ -1739,6 +1911,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search conditions for database query.
    */
+  @Deprecated("use getSearchConditions_()")
   fun getSearchConditions(): String? {
     TODO()
   }
@@ -1783,6 +1956,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Returns the search order for database query.
    */
   fun getSearchOrder(): String? {
+    TODO()
+  }
+
+  fun getSearchOrder_(): ArrayList<Pair<Column<*>, SortOrder>> {
     TODO()
   }
 
@@ -2835,7 +3012,53 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * database.
    */
   protected fun checkRecordUnchanged(recno: Int) {
-    TODO()
+    // Assertion enabled only for tables with ID
+    if (!blockHasNoUcOrTsField()) {
+      val idFld: VField = idField
+      val ucFld: VField? = ucField
+      val tsFld = getTsField()
+      val table = tables!![0]
+      val value = idFld.getInt(recno)
+
+      assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
+
+      val ucColumn = if (ucFld == null) {
+        intLiteral(-1)
+      } else {
+        Column(table, "UC", IntegerColumnType())
+      }
+
+      val tsColumn = if (tsFld == null) {
+        intLiteral(-1)
+      } else {
+        Column(table, "UC", IntegerColumnType())
+      }
+
+      val query = table.slice(ucColumn, tsColumn)
+              .select { idColumn eq value!! }
+
+      if (query.empty()) {
+        activeRecord = recno
+        throw VExecFailedException(MessageCode.getMessage("VIS-00018"))
+      } else {
+        var changed = false
+
+        transaction {
+          if (ucFld != null) {
+            changed = changed or (ucFld.getInt(recno) != query.first()[ucColumn])
+          }
+          if (tsFld != null) {
+            changed = changed or (tsFld.getInt(recno) != query.first()[tsColumn])
+          }
+
+          if (changed) {
+            // record has been updated
+            activeRecord = recno // also valid for single blocks
+            throw VExecFailedException(MessageCode.getMessage("VIS-00017"))
+          }
+        }
+      }
+    }
   }
 
   /**

@@ -416,6 +416,20 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Resets current block
+   */
+  fun resetBlock() {
+    Commands.resetBlock(vBlock)
+  }
+
+  /**
+   * * Loads block from database
+   */
+  fun load() {
+    vBlock.load()
+  }
+
+  /**
    * Menu query block, fetches selected record.
    */
   fun DictionaryForm.recursiveQuery() {
@@ -529,10 +543,10 @@ open class FormBlock(var buffer: Int,
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()
-        fields = blockFields.map {
-          it.vField.also {
-            if(it is VCodeField) {
-              it.source = super.source
+        fields = blockFields.map { formField ->
+          formField.vField.also {
+            if(formField.domain is CodeDomain<*>) {
+              (it as VCodeField).source = super.source
             }
           }
         }.toTypedArray()

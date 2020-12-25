@@ -15,23 +15,33 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.common
 
-package org.kopi.galite.ui.visual
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.html.Div
 
-import org.kopi.galite.common.Window
-import org.kopi.galite.visual.VWindow
-import org.kopi.galite.visual.WindowController
-
-class VWindowController : WindowController() {
-  override fun doModal(model: VWindow): Boolean {
-    TODO("Not yet implemented")
+/**
+ * The main window container.
+ */
+class VMain : Div() {
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+  /**
+   * Sets this main window content.
+   * @param content The window content.
+   */
+  fun setContent(content: Component?) {
+    removeAll()
+    add(content)
   }
-
-  override fun doNotModal(model: VWindow) {
-    TODO("Not yet implemented")
-  }
-
-  override fun doNotModal(model: Window) {
-    TODO("Not yet implemented")
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+  /**
+   * Creates the main component instance.
+   */
+  init {
+    setId("main")
   }
 }
