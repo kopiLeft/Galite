@@ -1487,7 +1487,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     fetchCount = 0
 
     for (result in query) {
-      if (fetchCount < fetchSize) {
+      if (fetchCount > fetchSize) {
         break
       }
 
