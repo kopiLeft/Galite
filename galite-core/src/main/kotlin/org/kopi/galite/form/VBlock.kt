@@ -1664,9 +1664,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         for (i in 0 until bufferSize) {
           if (isRecordFetched(i)) {
             if (isRecordChanged(i)) {
-              transaction {
-                tables!![0].deleteWhere{ idColumn eq idField.getInt(i)!!}
-              }
+              tables!![0].deleteWhere{ idColumn eq idField.getInt(i)!!}
             } else if (isRecordDeleted(i)) {
               deleteRecord(i)
             }
