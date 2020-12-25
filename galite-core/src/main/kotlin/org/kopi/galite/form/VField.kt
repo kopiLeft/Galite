@@ -1616,7 +1616,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
     assert(list != null) { threadInfo() + "list is not null" }
     var id = -1
-   // val table = object : Table(evalListTable()) {
   /*  val table = object : Table(evalListTable()) {
       val id = integer("ID")
       val column = Column<Any>(this , list!!.getColumn(0).column!! , VarCharColumnType() )

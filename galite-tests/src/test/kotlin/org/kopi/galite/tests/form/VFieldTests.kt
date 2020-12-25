@@ -28,6 +28,7 @@ import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VStringColumn
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.VCommand
+import kotlin.test.assertEquals
 
 class VFieldTests : JApplicationTestBase() {
   // test with form sample
@@ -36,7 +37,7 @@ class VFieldTests : JApplicationTestBase() {
   @Test
   fun getListIdTest1() {
     transaction {
-      println(nameField.getListID())
+      assertEquals(nameField.getListID() , 1)
     }
   }
 
@@ -44,8 +45,6 @@ class VFieldTests : JApplicationTestBase() {
     init {
       FormSample.tb1.id.value = 1
       FormSample.tb1.name.value = "AUDREY"
- //     FormSample.tb1.name.value = "Fabienne BUGHIN"
- //     FormSample.tb1.name.value = "FABIENNE BUGHIN2"
 
       val userTable = User
       transaction {
