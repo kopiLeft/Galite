@@ -16,10 +16,10 @@
  */
 package org.kopi.galite.tests.form
 
-import org.joda.time.DateTime
-import org.kopi.galite.common.POSTQRY
 import java.util.Locale
 
+import org.joda.time.DateTime
+import org.kopi.galite.common.POSTQRY
 import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
@@ -40,39 +40,38 @@ object FormWithList : DictionaryForm() {
   val testPage1 = page("test page1")
   val testPage2 = page("test page2")
 
-
   val list = actor(
-          ident = "list",
-          menu = action,
-          label = "list",
-          help = "Display List",
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
   ) {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
   }
 
   val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
+    ident = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
   )
 
   val resetBlock = actor(
-          ident = "reset",
-          menu = reset,
-          label = "break",
-          help = "Reset Block",
+    ident = "reset",
+    menu = reset,
+    label = "break",
+    help = "Reset Block",
   ) {
-    key = Key.RESET   // key is optional here
+    key = Key.F3   // key is optional here
     icon = "break"  // icon is optional here
   }
 
   val save = actor(
-          ident = "save",
-          menu = action,
-          label = "save",
-          help = "save",
+    ident = "save",
+    menu = action,
+    label = "save",
+    help = "save",
   ) {
     key = Key.F2   // key is optional here
     icon = "save"  // icon is optional here
