@@ -343,4 +343,3 @@ object POSTCHART : ChartVoidTriggerEvent(CConstants.TRG_POSTCHART)
  * Executed after the chart is closed.
  */
 object CHARTTYPE : ChartObjectTriggerEvent(CConstants.TRG_CHARTTYPE)
-

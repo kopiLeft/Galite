@@ -55,22 +55,22 @@ class FieldTriggers {
   object PREFLD : FieldVoidTriggerEvent(VConstants.TRG_PREFLD)
 
   /**
-   * is executed upon exit of field
+   * Executed upon exit of field
    */
   object POSTFLD   : FieldVoidTriggerEvent(VConstants.TRG_POSTFLD)
 
   /**
-   * is executed before validating any new entry
+   * Executed before validating any new entry
    */
   object PREVAL    : FieldVoidTriggerEvent(VConstants.TRG_PREVAL)
 
   /**
-   * is executed after field change and validation
+   * Executed after field change and validation
    */
   object VALFLD    : FieldVoidTriggerEvent(VConstants.TRG_VALFLD)
 
   /**
-   *  this is the same trigger as VALFLD
+   * This is the same trigger as VALFLD
    */
   object VALIDATE  : FieldVoidTriggerEvent(VConstants.TRG_VALFLD)
 
@@ -126,5 +126,4 @@ class FieldTriggers {
    * Executed after updating a row of the database
    */
   object POSTUPD   : FieldVoidTriggerEvent(VConstants.TRG_POSTUPD)
-
 }

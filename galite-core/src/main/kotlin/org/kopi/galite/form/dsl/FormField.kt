@@ -31,12 +31,6 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
 import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VConstants.Companion.TRG_AUTOLEAVE
-import org.kopi.galite.form.VConstants.Companion.TRG_POSTCHG
-import org.kopi.galite.form.VConstants.Companion.TRG_POSTFLD
-import org.kopi.galite.form.VConstants.Companion.TRG_PREFLD
-import org.kopi.galite.form.VConstants.Companion.TRG_PREVAL
-import org.kopi.galite.form.VConstants.Companion.TRG_VALFLD
 import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VIntegerField
@@ -269,8 +263,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
             else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
           }
 
-
-
   fun setInfo() {
     vField.setInfo(
             getIdent(),
@@ -322,10 +314,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
         block.positionField(position)
       }
     }
-
-    //TRIGGERS
-    this
-
   }
 
   /**
@@ -344,7 +332,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
       options = options or fieldOption.value
     }
   }
-
 
   // ----------------------------------------------------------------------
   // ACCESSORS
@@ -421,30 +408,5 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
       }
     }
     return -1
-  }
-
-  fun VField.checkTriggers(){
-    // TRIGGERS
-    //check that each trigger is used only once
-    var usedTriggers = 0
-
-    for (i in triggers.indices) {
-      if (triggers[i].events and usedTriggers.toLong() > 0) {
-        /*throw PositionedError(triggers[i], FormMessages.TRIGGER_USED_TWICE)*/
-      }
-      usedTriggers = usedTriggers or triggers[i].events.toInt()
-      if (isNeverAccessible
-              && (triggers[i].events
-                      and (1L shl TRG_PREFLD
-                      or (1L shl TRG_POSTFLD)
-                      or (1L shl TRG_POSTCHG)
-                      or (1L shl TRG_PREVAL)
-                      or (1L shl TRG_VALFLD)
-                      or (1L shl TRG_AUTOLEAVE))) > 0) {
-     /*   reportTrouble(CWarning(getTokenReference(),
-                FormMessages.TRIGGER_ON_INACCESSIBLE_FIELD,
-                getIdent()))*/
-      }
-    }
   }
 }
