@@ -31,6 +31,9 @@ import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.VarCharColumnType
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
@@ -56,6 +59,7 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
+import org.kopi.galite.visual.Module.Companion.getExecutable
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -1471,8 +1475,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           try {
             transaction {
               val auxTable = object : Table(evalListTable()) {
-                val column = varchar(list!!.getColumn(0).column!!,
-                        list!!.getColumn(0).width)
+                val column = varchar(list!!.getColumn(0)!!.column!!,
+                        list!!.getColumn(0)!!.width)
               }
               exists = auxTable.select {
                 auxTable.column eq getSql(block!!.activeRecord).toString()
@@ -1506,8 +1510,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           try {
             transaction {
               val auxTable = object : Table(evalListTable()) {
-                val column = varchar(list!!.getColumn(0).column!!,
-                        list!!.getColumn(0).width)
+                val column = varchar(list!!.getColumn(0)!!.column!!,
+                        list!!.getColumn(0)!!.width)
               }
 
               val substring = auxTable.column.substring(1, getString(block!!.activeRecord).length)
@@ -1518,7 +1522,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                       .orderBy(auxTable.column)
 
               count = query.count().toInt()
-              if (count == 1) result = list!!.getColumn(0).column!!
+              if (count == 1) result = list!!.getColumn(0)!!.column!!
             }
             break
           } catch (e: SQLException) {
@@ -1550,7 +1554,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (i != 0) {
               colbuf += ", "
             }
-            colbuf += list!!.getColumn(i).column
+            colbuf += list!!.getColumn(i)!!.column
             i++
           }
 
@@ -1586,13 +1590,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                         .map {
                           Column(auxTable, it.trim(), VarCharColumnType())
                         }
-                val indexOfColumn = columnList.indexOf(list!!.getColumn(0).column!!)
+                val indexOfColumn = columnList.indexOf(list!!.getColumn(0)!!.column!!)
                 val column = columnList[indexOfColumn]
                 val substring = column.substring(1, fldbuf.length)
 
                 transaction {
-                  val queryResult = auxTable.slice(column , substring)
-                          .select{
+                  val queryResult = auxTable.slice(column, substring)
+                          .select {
                             substring eq fldbuf
                           }
                           .orderBy(columnList[0])
@@ -1657,13 +1661,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                   try {
                     val auxTable = object : Table(evalListTable()) {
                       val id = integer("ID")
-                      val column = varchar(list!!.getColumn(0).column!!,
-                              list!!.getColumn(0).width)
+                      val column = varchar(list!!.getColumn(0)!!.column!!,
+                              list!!.getColumn(0)!!.width)
                     }
 
                     transaction {
                       val queryResult = auxTable.slice(auxTable.column)
-                              .select(auxTable.id eq selected)
+                              .select{ auxTable.id eq selected }
                       // result = query.getObject(1)
                       result = queryResult.filterIndexed { index, resultRow ->
                         index == 1
@@ -1714,7 +1718,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           SELECT_IS_IN_LIST.replace("$2", evalListTable())
-          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
+          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0)!!.column!!)
           SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
           transaction {
             exec(SELECT_IS_IN_LIST) {
@@ -1738,7 +1742,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return id*/
   }
 
-  private fun displayQueryList(queryText: String, columns: Array<VListColumn>): Any? {
+  private fun displayQueryList(queryText: String, columns: Array<VListColumn?>): Any? {
 
     val MAX_LINE_COUNT = 1024
     val SKIP_FIRST_COLUMN = false
@@ -1749,7 +1753,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     val newForm: VDictionary? = when {
       list!!.newForm != null -> {
         // OLD SYNTAX
-        Module.getExecutable(list!!.newForm) as VDictionary
+        getExecutable(list!!.newForm) as VDictionary
       }
       list!!.action != -1 -> {
         // NEW SYNTAX
@@ -1815,7 +1819,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           while (true) {
             try {
-              val SELECT_IS_IN_LIST = " SELECT " + list!!.getColumn(0).column!! +
+              val SELECT_IS_IN_LIST = " SELECT " + list!!.getColumn(0)!!.column!! +
                       " FROM " + evalListTable() + " WHERE    ID = " + selected
 
               transaction {
@@ -1847,22 +1851,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         if (i != 0) {
           append(", ")
         }
-        append(list!!.getColumn(i).column)
+        append(list!!.getColumn(i)!!.column)
       }
       append(" FROM ")
       append(evalListTable())
       if (getSearchType() == VConstants.STY_MANY) {
         append(" WHERE ")
         when (options and VConstants.FDO_SEARCH_MASK) {
-          VConstants.FDO_SEARCH_NONE -> append(list!!.getColumn(0).column)
+          VConstants.FDO_SEARCH_NONE -> append(list!!.getColumn(0)!!.column)
           VConstants.FDO_SEARCH_UPPER -> {
             append("{fn UPPER(")
-            append(list!!.getColumn(0).column)
+            append(list!!.getColumn(0)!!.column)
             append(")}")
           }
           VConstants.FDO_SEARCH_LOWER -> {
             append("{fn LOWER(")
-            append(list!!.getColumn(0).column)
+            append(list!!.getColumn(0)!!.column)
             append(")}")
           }
           else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
@@ -1890,9 +1894,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   internal open fun enumerateValue(desc: Boolean) {
     TODO()
     /*var value: Any? = null
-    val qrybuf: String = " SELECT " + list!!.getColumn(0).column +
+    val qrybuf: String = " SELECT " + list!!.getColumn(0)!!.column +
             " FROM " + evalListTable() +
-            (if (isNull(block!!.activeRecord)) "" else " WHERE " + list!!.getColumn(0).column +
+            (if (isNull(block!!.activeRecord)) "" else " WHERE " + list!!.getColumn(0)!!.column +
                     (if (desc) " > " else " < ").toString() + getSql(block!!.activeRecord)).toString() +
             " ORDER BY 1" + if (desc) "" else " DESC"
 
@@ -1959,7 +1963,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         append(evalListTable())
         append(" WHERE ")
         append(" {fn LOWER(")
-        append(list!!.getColumn(0).column)
+        append(list!!.getColumn(0)!!.column)
         append(")}")
         when (getAutocompleteType()) {
           VList.AUTOCOMPLETE_CONTAINS -> {
@@ -2064,7 +2068,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       while (true) {
         try {
           transaction {
-            exec("SELECT " + list!!.getColumn(0).column!! + " FROM "
+            exec("SELECT " + list!!.getColumn(0)!!.column!! + " FROM "
                     + evalListTable() + " WHERE ID = " + id) {
               result = if (it.next()) {
                 it.getObject(1)
