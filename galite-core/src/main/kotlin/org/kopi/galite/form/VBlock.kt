@@ -18,21 +18,12 @@
 
 package org.kopi.galite.form
 
-import java.sql.SQLException
-import java.util.EventListener
-
-import javax.swing.event.EventListenerList
-
-import kotlin.collections.HashMap
-import kotlin.math.abs
-
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.EqOp
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.compoundAnd
@@ -62,6 +53,28 @@ import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import java.sql.SQLException
+import java.util.*
+import javax.swing.event.EventListenerList
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.all
+import kotlin.collections.elementAt
+import kotlin.collections.filter
+import kotlin.collections.find
+import kotlin.collections.first
+import kotlin.collections.forEach
+import kotlin.collections.forEachIndexed
+import kotlin.collections.indices
+import kotlin.collections.isNotEmpty
+import kotlin.collections.map
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.single
+import kotlin.collections.toList
+import kotlin.collections.toTypedArray
+import kotlin.math.abs
 
 abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHandler {
   /**
@@ -1462,33 +1475,35 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     // open database query, fetch tuples
-    var query = table!!.slice(columns!!).selectAll().orderBy(*orderBy.toTypedArray())
-
-    if (condition != null) {
-      query = table.slice(columns).select(condition).orderBy(*orderBy.toTypedArray())
+    val query =  if (condition != null) {
+      table!!.slice(columns!!).select(condition).orderBy(*orderBy.toTypedArray())
+    } else {
+      table!!.slice(columns!!).selectAll().orderBy(*orderBy.toTypedArray())
     }
 
     fetchCount = 0
-    for (result in query) {
-      if (fetchCount < fetchSize) {
+
+    while (fetchCount < fetchSize) {
+      for (result in query) {
         if (result[columns[idqry]] == 0) {
           continue
         }
+
         fetchBuffer[fetchCount] = result[columns[idqry]] as Int
+
         if (fetchCount >= bufferSize) {
           fetchCount += 1
         } else {
-          var j = 0
-
-          fields.forEach { field ->
+          fields.forEachIndexed() { index, field ->
             if (field.getColumnCount() > 0) {
-              field.setQuery_(fetchCount, result, columns[j])
-              j += 1
+              field.setQuery_(fetchCount, result, columns[index])
             }
           }
+
           setRecordFetched(fetchCount, true)
           setRecordChanged(fetchCount, false)
           setRecordDeleted(fetchCount, false)
+
           try {
             if (isMulti()) {
               activeRecord = fetchCount
@@ -1497,11 +1512,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             if (isMulti()) {
               activeRecord = -1
             }
+
             fetchCount += 1
           } catch (e: VException) {
             if (isMulti()) {
               activeRecord = -1
             }
+
             if (e is VSkipRecordException) {
               clearRecordImpl(fetchCount)
             } else {
@@ -1514,6 +1531,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
       }
     }
+
 
     fetchPosition = 0
     // !!! REMOVE setActiveRecord(0);
