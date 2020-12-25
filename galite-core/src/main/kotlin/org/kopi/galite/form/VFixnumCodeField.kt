@@ -70,7 +70,7 @@ open class VFixnumCodeField(bufferSize: Int,
         if (sum == null) {
           sum = Decimal(0.0)
         }
-        sum = sum + getFixed(i)
+        sum = sum + getDecimal(i)
       }
     }
     return sum
@@ -95,7 +95,7 @@ open class VFixnumCodeField(bufferSize: Int,
   /**
    * Sets the field value of given record to a decimal value.
    */
-  override fun setFixed(r: Int, v: Decimal?) {
+  override fun setDecimal(r: Int, v: Decimal?) {
     if (v == null) {
       setCode(r, -1)
     } else {
@@ -119,7 +119,7 @@ open class VFixnumCodeField(bufferSize: Int,
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setFixed(r, v as? Decimal)
+    setDecimal(r, v as? Decimal)
   }
 
   /**
@@ -131,14 +131,14 @@ open class VFixnumCodeField(bufferSize: Int,
     return if (query.isNull(column)) {
       null
     } else {
-      query.getFixed(column)
+      query.getDecimal(column)
     }
   }
 
   /**
    * Returns the field value of given record as a int value.
    */
-  override fun getFixed(r: Int): Decimal = getObject(r) as Decimal
+  override fun getDecimal(r: Int): Decimal = getObject(r) as Decimal
 
   /**
    * Returns the field value of the current record as an object
@@ -163,7 +163,7 @@ open class VFixnumCodeField(bufferSize: Int,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  override fun formatFixed(value: Decimal): String {
+  override fun formatDecimal(value: Decimal): String {
     var code = -1 // cannot be null
     var i = 0
 

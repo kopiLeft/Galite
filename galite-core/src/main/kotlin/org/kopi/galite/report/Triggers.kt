@@ -82,7 +82,7 @@ object Triggers {
   /**
    * Compute the decimal sum in a report column
    */
-  fun sumFixed(c: VReportColumn): VCalculateColumn {
+  fun sumDecimal(c: VReportColumn): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
@@ -128,7 +128,7 @@ object Triggers {
   /**
    * Compute the decimal sum in a report column
    */
-  fun sumNullFixed(c: VReportColumn): VCalculateColumn {
+  fun sumNullDecimal(c: VReportColumn): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
@@ -252,7 +252,7 @@ object Triggers {
   /**
    * Compute the decimal average in a report column
    */
-  fun avgFixed(c: VReportColumn): VCalculateColumn {
+  fun avgDecimal(c: VReportColumn): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val leafCount = row.leafCount

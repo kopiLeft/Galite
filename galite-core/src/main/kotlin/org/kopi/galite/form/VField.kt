@@ -742,8 +742,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setFixed(v: Decimal?) {
-    setFixed(block!!.currentRecord, v)
+  fun setDecimal(v: Decimal?) {
+    setDecimal(block!!.currentRecord, v)
   }
 
   /**
@@ -855,7 +855,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setFixed(r: Int, v: Decimal?) {
+  open fun setDecimal(r: Int, v: Decimal?) {
     throw InconsistencyException()
   }
 
@@ -1013,7 +1013,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getFixed(): Decimal = getFixed(block!!.currentRecord)
+  fun getDecimal(): Decimal = getDecimal(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a boolean value.
@@ -1134,7 +1134,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getFixed(r: Int): Decimal {
+  open fun getDecimal(r: Int): Decimal {
     throw InconsistencyException()
   }
 

@@ -283,7 +283,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the field value of given record as a bigdecimal value.
    */
-  override fun getFixed(r: Int): org.kopi.galite.type.Decimal {
+  override fun getDecimal(r: Int): org.kopi.galite.type.Decimal {
     throw InconsistencyException()
   }
 
@@ -369,7 +369,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  protected open fun formatFixed(value: org.kopi.galite.type.Decimal): String {
+  protected open fun formatDecimal(value: org.kopi.galite.type.Decimal): String {
     throw InconsistencyException()
   }
 

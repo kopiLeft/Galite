@@ -73,7 +73,7 @@ class Query(conn: Connection) {
 
   fun getTimestamp(pos: Int): NotNullTimestamp = TODO()
 
-  fun getFixed(pos: Int): Decimal = TODO()
+  fun getDecimal(pos: Int): Decimal = TODO()
 
   fun getTime(pos: Int): NotNullTime = TODO()
 

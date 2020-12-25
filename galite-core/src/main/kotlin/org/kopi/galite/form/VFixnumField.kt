@@ -165,7 +165,7 @@ class VFixnumField(val bufferSize: Int,
     } else {
       val v: Decimal?
       try {
-        v = scanFixed(s)
+        v = scanDecimal(s)
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -183,7 +183,7 @@ class VFixnumField(val bufferSize: Int,
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
         }
       }
-      setFixed(rec, v)
+      setDecimal(rec, v)
     }
   }
 
@@ -212,7 +212,7 @@ class VFixnumField(val bufferSize: Int,
         if (sum == null) {
           sum = Decimal(0.0)
         }
-        sum = sum + getFixed(i)
+        sum = sum + getDecimal(i)
       }
     }
     return sum
@@ -303,13 +303,13 @@ class VFixnumField(val bufferSize: Int,
    * Sets the field value of given record to a null value.
    */
   override fun setNull(r: Int) {
-    setFixed(r, null)
+    setDecimal(r, null)
   }
 
   /**
    * Sets the field value of given record to a Decimal value.
    */
-  override fun setFixed(r: Int, v: Decimal?) {
+  override fun setDecimal(r: Int, v: Decimal?) {
     // trails (backup) the record if necessary
     var v = v
 
@@ -344,9 +344,9 @@ class VFixnumField(val bufferSize: Int,
   override fun setObject(r: Int, v: Any?) {
     // !!! HACK for Oracle
     if (v != null && (v is Int)) {
-      setFixed(r, Decimal(v.toDouble()))
+      setDecimal(r, Decimal(v.toDouble()))
     } else {
-      setFixed(r, v as Decimal?)
+      setDecimal(r, v as Decimal?)
     }
   }
 
@@ -360,7 +360,7 @@ class VFixnumField(val bufferSize: Int,
     return if (query.isNull(column)) {
       null
     } else {
-      query.getFixed(column)
+      query.getDecimal(column)
     }
   }
 
@@ -372,7 +372,7 @@ class VFixnumField(val bufferSize: Int,
   /**
    * Returns the field value of given record as a Decimal value.
    */
-  override fun getFixed(r: Int): Decimal = getObject(r) as Decimal
+  override fun getDecimal(r: Int): Decimal = getObject(r) as Decimal
 
   /**
    * Returns the field value of the current record as an object
@@ -395,7 +395,7 @@ class VFixnumField(val bufferSize: Int,
       val v: Decimal?
 
       try {
-        v = scanFixed(s)
+        v = scanDecimal(s)
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -469,7 +469,7 @@ class VFixnumField(val bufferSize: Int,
   /**
    * Returns a string representation of a big decimal value wrt the field type.
    */
-  fun formatFixed(value: Decimal): String {
+  fun formatDecimal(value: Decimal): String {
     return toText(value.setScale(currentScale[block!!.activeRecord]))
   }
 
@@ -591,7 +591,7 @@ class VFixnumField(val bufferSize: Int,
     /**
      * Parses the string argument as a decimal number in human-readable format.
      */
-    private fun scanFixed(str: String?): Decimal? {
+    private fun scanDecimal(str: String?): Decimal? {
       var negative = false
       var state = 0
       var scale = 0

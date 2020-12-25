@@ -24,12 +24,12 @@ import java.math.RoundingMode
 import java.util.Locale
 
 /**
- * This class represents the fixed type
+ * This class represents the decimal type
  */
-class Fixed internal constructor(internal var value: BigDecimal) : Number(), Comparable<Fixed> {
+class Decimal(var value: BigDecimal) : BigDecimal(value.toString()) {
   internal constructor(b: BigInteger) : this(BigDecimal(b))
 
-  internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
+  internal constructor(value: Long, scale: Int) : this(valueOf(value, scale))
 
   internal constructor(d: Double) : this(BigDecimal(d))
 
@@ -41,22 +41,22 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
   /**
    * add (f1 + f2) operator
    */
-  operator fun plus(f: Fixed): Fixed {
-    if (value.compareTo(BigDecimal.ZERO) == 0) {
+  operator fun plus(f: Decimal): Decimal {
+    if (value.compareTo(ZERO) == 0) {
       return f
-    } else if (f.value.compareTo(BigDecimal.ZERO) == 0) {
-      return Fixed(value)
+    } else if (f.value.compareTo(ZERO) == 0) {
+      return Decimal(value)
     }
-    return Fixed(value.add(f.value, MATH_CONTEXT))
+    return Decimal(value.add(f.value, MATH_CONTEXT))
   }
 
   /**
    * plusAssign (f1 += f2) operator
    */
-  operator fun plusAssign(f: Fixed) {
-    if (value.compareTo(BigDecimal.ZERO) == 0) {
+  operator fun plusAssign(f: Decimal) {
+    if (value.compareTo(ZERO) == 0) {
       value = f.value
-    } else if (f.value.compareTo(BigDecimal.ZERO) != 0) {
+    } else if (f.value.compareTo(ZERO) != 0) {
       value.add(f.value, MATH_CONTEXT)
     }
   }
@@ -64,50 +64,50 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
   /**
    * divide (f1 / f2) operator
    */
-  operator fun div(f: Fixed): Fixed {
-    return Fixed(value.divide(f.value, DIV_CONTEXT).plus(MATH_CONTEXT))
+  operator fun div(f: Decimal): Decimal {
+    return Decimal(value.divide(f.value, DIV_CONTEXT).plus(MATH_CONTEXT))
   }
 
   /**
    * plusAssign (f1 /= f2) operator
    */
-  operator fun divAssign(f: Fixed) {
+  operator fun divAssign(f: Decimal) {
     value = value.divide(f.value, DIV_CONTEXT).plus(MATH_CONTEXT)
   }
 
   /**
    * multiply (f1 * f2) operator
    */
-  operator fun times(f: Fixed): Fixed {
-    return Fixed(value.multiply(f.value, MATH_CONTEXT))
+  operator fun times(f: Decimal): Decimal {
+    return Decimal(value.multiply(f.value, MATH_CONTEXT))
   }
 
   /**
    * timesAssign (f1 *= f2) operator
    */
-  operator fun timesAssign(f: Fixed) {
+  operator fun timesAssign(f: Decimal) {
     value = value.multiply(f.value, MATH_CONTEXT)
   }
 
   /**
    * subtract (f1 - f2) operator
    */
-  operator fun minus(f: Fixed): Fixed {
-    if (value.compareTo(BigDecimal.ZERO) == 0) {
-      return Fixed(f.value.negate())
-    } else if (f.value.compareTo(BigDecimal.ZERO) == 0) {
-      return Fixed(value)
+  operator fun minus(f: Decimal): Decimal {
+    if (value.compareTo(ZERO) == 0) {
+      return Decimal(f.value.negate())
+    } else if (f.value.compareTo(ZERO) == 0) {
+      return Decimal(value)
     }
-    return Fixed(value.subtract(f.value, MATH_CONTEXT))
+    return Decimal(value.subtract(f.value, MATH_CONTEXT))
   }
 
   /**
    * minusAssign (f1 -= f2) operator
    */
-  operator fun minusAssign(f: Fixed) {
-    if (value.compareTo(BigDecimal.ZERO) == 0) {
+  operator fun minusAssign(f: Decimal) {
+    if (value.compareTo(ZERO) == 0) {
       value = f.value.negate()
-    } else if (f.value.compareTo(BigDecimal.ZERO) != 0) {
+    } else if (f.value.compareTo(ZERO) != 0) {
       value = value.subtract(f.value, MATH_CONTEXT)
     }
   }
@@ -115,21 +115,21 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
   /**
    * Unary minus (-f) operator
    */
-  operator fun unaryMinus(): Fixed {
-    return Fixed(value.negate())
+  operator fun unaryMinus(): Decimal {
+    return Decimal(value.negate())
   }
 
   /**
    * remainder (f1 % f2) operator
    */
-  operator fun rem(f: Fixed): Fixed {
-    return Fixed(value.remainder(f.value, MATH_CONTEXT))
+  operator fun rem(f: Decimal): Decimal {
+    return Decimal(value.remainder(f.value, MATH_CONTEXT))
   }
 
   /**
    * remAssign (f1 %= f2) operator
    */
-  operator fun remAssign(f: Fixed) {
+  operator fun remAssign(f: Decimal) {
     value = value.remainder(f.value, MATH_CONTEXT)
   }
   // ----------------------------------------------------------------------
@@ -138,15 +138,15 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
   /**
    * setScale
    */
-  fun setScale(v: Int): Fixed {
-    return Fixed(value.setScale(v, BigDecimal.ROUND_HALF_UP))
+  override fun setScale(v: Int): Decimal {
+    return Decimal(value.setScale(v, ROUND_HALF_UP))
   }
 
   /**
    * setScale
    */
-  fun setScale(v: Int, d: Int): Fixed {
-    return Fixed(value.setScale(v, d))
+  override fun setScale(v: Int, d: Int): Decimal {
+    return Decimal(value.setScale(v, d))
   }
 
   /**
@@ -156,7 +156,7 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
     get() = value.scale()
 
   /**
-   * Returns the fixed as a double
+   * Returns the decimal as a double
    */
   override fun toDouble(): Double {
     return value.toDouble()
@@ -165,7 +165,7 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
   /**
    * Comparisons
    */
-  override operator fun compareTo(other: Fixed): Int {
+  operator fun compareTo(other: Decimal): Int {
     return value.compareTo(other.value)
   }
 
@@ -176,7 +176,7 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
    * Compares two objects
    */
   override fun equals(other: Any?): Boolean {
-    return other is Fixed &&
+    return other is Decimal &&
             value == other.value
   }
 
@@ -279,8 +279,8 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
     /**
      * Parse the String arguments and return the corresponding value
      */
-    fun valueOf(value: String): Fixed {
-      return Fixed(value)
+    fun valueOf(value: String): Decimal {
+      return Decimal(value)
     }
 
     // ----------------------------------------------------------------------
@@ -292,7 +292,7 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
     // ----------------------------------------------------------------------
     // CONSTANTS
     // ----------------------------------------------------------------------
-    val DEFAULT: Fixed = Fixed(0.0)
+    val DEFAULT: Decimal = Decimal(0.0)
 
     /**
      * Comment for `serialVersionUID`
@@ -302,26 +302,26 @@ class Fixed internal constructor(internal var value: BigDecimal) : Number(), Com
 }
 
 /**
- * Creates a Fixed type from a BigDecimal
+ * Creates a Decimal type from a BigDecimal
  */
-fun fixed(bigDecimal: BigDecimal): Fixed = Fixed(bigDecimal)
+fun decimal(bigDecimal: BigDecimal): Decimal = Decimal(bigDecimal)
 
 /**
- * Creates a Fixed type from a BigInteger
+ * Creates a Decimal type from a BigInteger
  */
-fun fixed(bigInteger: BigInteger): Fixed = Fixed(bigInteger)
+fun decimal(bigInteger: BigInteger): Decimal = Decimal(bigInteger)
 
 /**
- * Creates a Fixed type from a long value and scale
+ * Creates a Decimal type from a long value and scale
  */
-fun fixed(value: Long, scale: Int): Fixed = Fixed(value, scale)
+fun decimal(value: Long, scale: Int): Decimal = Decimal(value, scale)
 
 /**
- * Creates a Fixed type from a Double
+ * Creates a Decimal type from a Double
  */
-fun fixed(double: Double): Fixed = Fixed(double)
+fun decimal(double: Double): Decimal = Decimal(double)
 
 /**
- * Creates a Fixed type from a String
+ * Creates a Decimal type from a String
  */
-fun fixed(string: String): Fixed = Fixed(string)
+fun decimal(string: String): Decimal = Decimal(string)
