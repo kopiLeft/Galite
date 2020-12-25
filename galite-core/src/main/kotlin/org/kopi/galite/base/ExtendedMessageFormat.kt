@@ -50,10 +50,7 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Formats an object to produce a string. This is equivalent to
-   * <blockquote>
-   * [format][.format]`(obj,
-   * new StringBuffer(), new FieldPosition(0)).toString();`
-  </blockquote> *
+   * [format] (obj, StringBuffer(), FieldPosition(0))
    *
    * @param obj    The object to format
    * @return       Formatted string.

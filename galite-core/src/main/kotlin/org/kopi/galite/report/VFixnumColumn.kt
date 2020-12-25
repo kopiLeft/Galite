@@ -20,7 +20,7 @@ package org.kopi.galite.report
 
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.form.VFixnumField
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 
 /**
  * Represents a report column description
@@ -59,7 +59,7 @@ class VFixnumColumn(ident: String?,
    *           0 if the two operands are equal
    */
   override fun compareTo(object1: Any, object2: Any): Int =
-          (object1 as Fixed).compareTo(object2 as Fixed)
+          (object1 as Decimal).compareTo(object2 as Decimal)
 
   /**
    * Returns the width of cells in this column in characters
@@ -75,7 +75,7 @@ class VFixnumColumn(ident: String?,
       return if (value == null) {
         ""
       } else (value as? Int)?.toString()
-              ?: if (value is Fixed) {
+              ?: if (value is Decimal) {
                 if ((value).scale > maxScale || exactScale) (value).setScale(maxScale).toString() else value.toString()
               } else {
                 throw InconsistencyException("bad type for $value")

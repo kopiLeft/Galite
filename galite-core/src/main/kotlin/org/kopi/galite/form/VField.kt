@@ -39,10 +39,10 @@ import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.Week
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Week
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Date
 import org.kopi.galite.util.base.InconsistencyException
@@ -742,7 +742,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun setFixed(v: Fixed?) {
+  fun setFixed(v: Decimal?) {
     setFixed(block!!.currentRecord, v)
   }
 
@@ -855,7 +855,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun setFixed(r: Int, v: Fixed?) {
+  open fun setFixed(r: Int, v: Decimal?) {
     throw InconsistencyException()
   }
 
@@ -1013,7 +1013,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getFixed(): Fixed = getFixed(block!!.currentRecord)
+  fun getFixed(): Decimal = getFixed(block!!.currentRecord)
 
   /**
    * Returns the field value of the current record as a boolean value.
@@ -1134,7 +1134,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  open fun getFixed(r: Int): Fixed {
+  open fun getFixed(r: Int): Decimal {
     throw InconsistencyException()
   }
 

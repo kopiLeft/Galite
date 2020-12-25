@@ -18,7 +18,7 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VColor
 
@@ -37,7 +37,7 @@ class VFixnumCodeMeasure(ident: String,
                          type: String,
                          source: String,
                          idents: Array<String>,
-                         private val codes: Array<Fixed>)
+                         private val codes: Array<Decimal>)
           : VCodeMeasure(ident,
                          color,
                          type,

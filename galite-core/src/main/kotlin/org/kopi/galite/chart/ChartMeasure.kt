@@ -31,7 +31,7 @@ open class ChartMeasure<T>(domain: Domain<T>) : ChartField<T>(domain) where T : 
   /**Measure's color in chart */
   lateinit var color: Color
 
-  // TODO add Fixed types
+  // TODO add Decimal types
   val model: VMeasure
     get() = when (domain.kClass) {
       Int::class ->

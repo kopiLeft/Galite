@@ -19,7 +19,7 @@
 package org.kopi.galite.chart
 
 import org.kopi.galite.visual.VColor
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 
 /**
  * Represents a decimal measure.
@@ -35,8 +35,8 @@ class VFixnumMeasure(ident: String, color: VColor?, private val maxScale: Int) :
       return null
     }
     return when (value) {
-      is Fixed -> value
-      is Number -> Fixed(value.toLong(), maxScale)
+      is Decimal -> value
+      is Number -> Decimal(value.toLong(), maxScale)
       else -> null
     }
   }

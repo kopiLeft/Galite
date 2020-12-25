@@ -19,7 +19,7 @@
 package org.kopi.galite.report
 
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 
 class VFixnumCodeColumn(ident: String?,
                         type: String?,
@@ -31,7 +31,7 @@ class VFixnumCodeColumn(ident: String?,
                         width: Int,
                         format: VCellFormat?,
                         names: Array<String>,
-                        private val codes: Array<Fixed>)
+                        private val codes: Array<Decimal>)
           : VCodeColumn(ident,
                         type,
                         source,
@@ -72,7 +72,7 @@ class VFixnumCodeColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Fixed)
-          .compareTo(object2 as Fixed)
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Decimal)
+          .compareTo(object2 as Decimal)
 
 }

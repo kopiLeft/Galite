@@ -141,7 +141,7 @@ abstract class Report : Window() {
                                                    fields)
   }
 
-  // TODO add Fixed types
+  // TODO add Decimal types
   fun MReport.addReportColumns() {
     columns = fields.map {
       when (it.domain.kClass) {

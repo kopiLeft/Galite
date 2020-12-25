@@ -18,15 +18,15 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 
 /**
- * Represents a fixed chart column.
+ * Represents a decimal chart column.
  *
  * @param ident       The column identifier.
  * @param format      The dimension format ?
- * @param maxScale    The max scale to be used for the fixed value.
- * @param exactScale  Should we use the max scale column for fixed values having a minor scale ?
+ * @param maxScale    The max scale to be used for the decimal value.
+ * @param exactScale  Should we use the max scale column for decimal values having a minor scale ?
  */
 class VFixnumDimension(ident: String,
                        format: VColumnFormat,
@@ -40,7 +40,7 @@ class VFixnumDimension(ident: String,
     return if (value == null) {
       CConstants.EMPTY_TEXT
     } else (value as? Int)?.toString()
-            ?: if (value is Fixed) {
+            ?: if (value is Decimal) {
               if (value.scale > maxScale || exactScale) value.setScale(maxScale).toString()
               else value.toString()
             } else {

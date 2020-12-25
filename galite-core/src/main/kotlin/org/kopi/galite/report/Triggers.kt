@@ -18,7 +18,7 @@
 
 package org.kopi.galite.report
 
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 
 /**
  * This class implements predefined report triggers
@@ -80,17 +80,17 @@ object Triggers {
   }
 
   /**
-   * Compute the fixed sum in a report column
+   * Compute the decimal sum in a report column
    */
   fun sumFixed(c: VReportColumn): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
-        var result = Fixed(0, 2)
+        var result = Decimal(0, 2)
 
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
-          val value = child.getValueAt(column) as? Fixed
+          val value = child.getValueAt(column) as? Decimal
 
           if (value != null) {
             result = result + value
@@ -126,18 +126,18 @@ object Triggers {
   }
 
   /**
-   * Compute the fixed sum in a report column
+   * Compute the decimal sum in a report column
    */
   fun sumNullFixed(c: VReportColumn): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
         var valueFound = false
-        var result = Fixed(0, 2)
+        var result = Decimal(0, 2)
 
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
-          val value = child.getValueAt(column) as? Fixed
+          val value = child.getValueAt(column) as? Decimal
 
           if (value != null) {
             valueFound = true
@@ -250,18 +250,18 @@ object Triggers {
   }
 
   /**
-   * Compute the fixed average in a report column
+   * Compute the decimal average in a report column
    */
   fun avgFixed(c: VReportColumn): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val leafCount = row.leafCount
         var notNullLeafCount = 0.0
-        var result = Fixed(0, 2)
+        var result = Decimal(0, 2)
         var leaf = row.firstLeaf as VReportRow
 
         for (i in 0 until leafCount) {
-          val value = leaf.getValueAt(column) as? Fixed
+          val value = leaf.getValueAt(column) as? Decimal
 
           if (value != null) {
             result = result + value
@@ -270,9 +270,9 @@ object Triggers {
           leaf = leaf.nextLeaf as VReportRow
         }
         return if (notNullLeafCount != 0.0) {
-          (result / Fixed(notNullLeafCount)).setScale(2)
+          (result / Decimal(notNullLeafCount)).setScale(2)
         } else {
-          Fixed(0, 2)
+          Decimal(0, 2)
         }
       }
     }

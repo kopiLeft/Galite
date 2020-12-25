@@ -19,7 +19,7 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 
 /**
  * Represents a list column.
@@ -38,5 +38,5 @@ class VFixnumColumn(title: String,
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> = Fixed::class
+  override fun getDataType(): KClass<*> = Decimal::class
 }

@@ -38,7 +38,7 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.report.UReport.UTable
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.type.Date
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -144,7 +144,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
       if (datatype[cellPos] == CellType.STRING.code) {
         cell.setCellValue(data.replace('\n', ' '))
       } else {
-        if (orig is Fixed) {
+        if (orig is Decimal) {
           cell.setCellValue(orig.toDouble())
         } else if (orig is Int) {
           if (datatype[cellPos] == CellType.BOOLEAN.code) {

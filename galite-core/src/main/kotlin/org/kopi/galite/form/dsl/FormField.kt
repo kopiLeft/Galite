@@ -42,7 +42,7 @@ import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
 import org.kopi.galite.type.Date
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -227,7 +227,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
-  // TODO add Fixed types
+  // TODO add Decimal types
   /**
    * The field model based on the field type.
    */
@@ -259,11 +259,11 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
                                               block.sourceFile,
                                               type.codes.map { it.ident }.toTypedArray(),
                                               type.codes.map { it.value as? Boolean }.toTypedArray())
-          Fixed::class -> VFixnumCodeField(block.buffer,
+          Decimal::class -> VFixnumCodeField(block.buffer,
                                            type.ident,
                                            block.sourceFile,
                                            type.codes.map { it.ident }.toTypedArray(),
-                                           type.codes.map { it.value as? Fixed }.toTypedArray())
+                                           type.codes.map { it.value as? Decimal }.toTypedArray())
           Int::class, Long::class -> VIntegerCodeField(block.buffer,
                                                        type.ident,
                                                        block.sourceFile,

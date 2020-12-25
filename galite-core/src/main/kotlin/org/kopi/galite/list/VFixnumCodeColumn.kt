@@ -20,7 +20,7 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -29,7 +29,7 @@ import org.kopi.galite.util.base.InconsistencyException
 class VFixnumCodeColumn(title: String,
                         column: String?,
                         names: Array<String>,
-                        private val codes: Array<Fixed?>,
+                        private val codes: Array<Decimal?>,
                         sortAscending: Boolean)
           : VCodeColumn(title,
                         column,
@@ -47,8 +47,8 @@ class VFixnumCodeColumn(title: String,
         return index
       }
     }
-    throw InconsistencyException("bad code value " + value as Fixed)
+    throw InconsistencyException("bad code value " + value as Decimal)
   }
 
-  override fun getDataType(): KClass<*> = Fixed::class
+  override fun getDataType(): KClass<*> = Decimal::class
 }

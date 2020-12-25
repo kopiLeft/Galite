@@ -61,7 +61,7 @@ import org.kopi.galite.report.VStringColumn
 import org.kopi.galite.report.VTimeColumn
 import org.kopi.galite.report.VTimestampColumn
 import org.kopi.galite.report.VWeekColumn
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
@@ -237,7 +237,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                            1,
                                            null,
                                            (field as VCodeField).labels,
-                                           (field as VCodeField).getCodes() as Array<Fixed>)
+                                           (field as VCodeField).getCodes() as Array<Decimal>)
         is VBooleanCodeField ->
           columns[col] = VBooleanCodeColumn(null,
                                             null,
