@@ -1789,14 +1789,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search order for database query.
    */
-  open fun getSearchOrder_():  ArrayList<Pair<Column<*>, SortOrder>> {
+  open fun getSearchOrder_():  MutableList<Pair<Column<*>, SortOrder>> {
     val columns = mutableListOf<Column<*>>()
     val priorities = IntArray(fields.size)
     val sizes = IntArray(fields.size)
     var elems = 0
 
     // get the fields connected to the database with their priorities
-      for (field in fields) {
+      fields.forEach { field ->
         if (field.getColumnCount() != 0 && field.getPriority() != 0) {
 
           columns.add(field.getColumn(0)!!.column)
@@ -1824,7 +1824,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     // build the order by query
-    val orderBy = ArrayList<Pair<Column<*>, SortOrder>>(fields.size)
+    val orderBy = mutableListOf<Pair<Column<*>, SortOrder>>()
     var size = 0
    // val maxCharacters: Int = form.dBContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
    // val maxColumns: Int = form.dBContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO

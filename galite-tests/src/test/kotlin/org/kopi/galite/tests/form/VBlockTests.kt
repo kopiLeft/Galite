@@ -21,7 +21,7 @@ import org.junit.Test
 import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
 
-class VBlock : JApplicationTestBase() {
+class VBlockTests : JApplicationTestBase() {
   @Test
   fun getSearchOrder_Test() {
     FormWithList.model
