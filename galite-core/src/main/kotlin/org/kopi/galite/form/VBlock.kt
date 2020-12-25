@@ -1959,8 +1959,63 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     TODO()
   }
 
-  fun getSearchOrder_(): ArrayList<Pair<Column<*>, SortOrder>> {
-    TODO()
+  /**
+   * Returns the search order for database query.
+   */
+  open fun getSearchOrder_():  MutableList<Pair<Column<*>, SortOrder>> {
+    val columns = mutableListOf<Column<*>>()
+    val priorities = IntArray(fields.size)
+    val sizes = IntArray(fields.size)
+    var elems = 0
+
+    // get the fields connected to the database with their priorities
+    fields.forEach { field ->
+      if (field.getColumnCount() != 0 && field.getPriority() != 0) {
+        // this is a field connected to the database
+        columns.add(field.getColumn(0)!!.column)
+        priorities[elems] = field.getPriority()
+        sizes[elems] = field.width * field.height
+        elems += 1
+      }
+    }
+
+    // (bubble) sort the fields with respect to their priorities
+    for (i in elems - 1 downTo 1) {
+      var swapped = false
+
+      for (j in 0 until i) {
+        if (abs(priorities[j]) < abs(priorities[j + 1])) {
+          columns[j] = columns[j + 1].also {  columns[j + 1] = columns[j] }
+          priorities[j] = priorities[j + 1].also {  priorities[j + 1] = priorities[j]}
+          sizes[j] = sizes[j + 1].also {  sizes[j + 1] = sizes[j]}
+          swapped = true
+        }
+      }
+      if (!swapped) {
+        break
+      }
+    }
+
+    // build the order by query
+    val orderBy = mutableListOf<Pair<Column<*>, SortOrder>>()
+    var size = 0
+   // val maxCharacters: Int = form.dBContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
+   // val maxColumns: Int = form.dBContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO
+
+    for (i in 0 until elems) {
+
+      // control the size (nbr of columns and size of characters in an "order by" clause)
+      /*  if (size + sizes[i] > maxCharacters || i > maxColumns) { //TODO
+        break
+      }*/
+      size += sizes[i]
+      if (priorities[i] < 0) {
+        orderBy.add(columns[i] to SortOrder.DESC)
+      } else {
+        orderBy.add(columns[i] to SortOrder.ASC)
+      }
+    }
+    return orderBy
   }
 
   /**

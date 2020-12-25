@@ -158,7 +158,9 @@ object UsersBlock : FormBlock(1, 1, "Test block") {
   val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
     label = "name"
     help = "name"
-    columns(u.name)
+    columns(u.name) {
+      priority = 1
+    }
   }
 
   val character = visit(domain = Domain<String>(20), position = at(2, 2)) {
