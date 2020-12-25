@@ -41,7 +41,6 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
-
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.db.DBContextHandler
@@ -2779,7 +2778,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * database.
    */
   protected fun checkRecordUnchanged(recno: Int) {
-    //!!! samir 25032008 : Assertion enabled only for tables with ID
+    // Assertion enabled only for tables with ID
     if (!blockHasNoUcOrTsField()) {
       val idFld: VField = idField
       val ucFld: VField? = ucField
