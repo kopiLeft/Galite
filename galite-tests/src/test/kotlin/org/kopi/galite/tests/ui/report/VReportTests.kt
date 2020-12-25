@@ -28,8 +28,8 @@ import org.junit.Test
 
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.ui.base.UITestBase
-import org.kopi.galite.ui.report.VReport
+import org.kopi.galite.tests.ui.vaadin.base.UITestBase
+import org.kopi.galite.ui.vaadin.report.VReport
 
 class VReportTests: UITestBase() {
 

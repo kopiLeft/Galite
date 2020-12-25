@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.visual
+package org.kopi.galite.ui.vaadin.visual
 
 import java.sql.SQLException
 import java.util.Date
@@ -26,7 +26,9 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
-import org.kopi.galite.ui.base.StylesInjector
+import org.kopi.galite.ui.vaadin.base.StylesInjector
+import org.kopi.galite.ui.vaadin.welcome.WelcomeView
+import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
@@ -100,8 +102,21 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // --------------------------------------------------
   // WELCOME VIEW LISTENER IMPLEMENTATION
   // --------------------------------------------------
-  fun onLogin() {
-
+  fun onLogin(event: WelcomeViewEvent) {
+    // reset application locale before.
+    setLocalizationContext(Locale(event.locale.substring(0, 2), event.locale.substring(3, 5)))
+    // now try to connect to database
+    try {
+      connectToDatabase(event.username, event.password)
+      startApplication() // create main window and menu
+      if (welcomeView != null) {
+        welcomeView = null
+        removeAll()
+      }
+    } catch (e: SQLException) { // sets the error if any problem occur.
+      welcomeView!!.setError(e.message)
+    } finally { //push();
+    }
   }
 
   // --------------------------------------------------
@@ -143,7 +158,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val userName: String
     get() = dBContext!!.defaultConnection.userName
 
-  override var defaultLocale: Locale? = null
+  override lateinit var defaultLocale: Locale
 
   override var localizationManager: LocalizationManager? = null
 
@@ -277,7 +292,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Shows the welcome view.
    */
   protected fun gotoWelcomeView() {
-
+    initialize()
+    welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
+    welcomeView!!.setSizeFull() // important to get the full screen size.
+    welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent -> onLogin(event) }
+    add(welcomeView)
   }
 
   /**
@@ -388,6 +407,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   //---------------------------------------------------
   // DATA MEMBEERS
   //---------------------------------------------------
+  private var welcomeView: WelcomeView? = null
   private var askAnswer = 0
   private lateinit var configuration: ApplicationConfiguration
   private var stylesInjector: StylesInjector? = null

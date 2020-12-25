@@ -15,35 +15,52 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.base
 
-package org.kopi.galite.ui.visual
+import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.html.Input
 
-import org.kopi.galite.visual.Application
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.PreviewRunner
+/**
+ * An input text component.
+ */
+class VInputText() : Input(), KeyNotifier {
 
-class VApplicationContext : ApplicationContext() {
-  override fun getApplication(): Application = VApplication.instance
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
 
   /**
-   * Returns the current PreviewRunner.
-   * @return The current PreviewRunner.
+   * Creates the input text component.
    */
-  override fun getPreviewRunner(): PreviewRunner {
-    return previewRunner ?: VPreviewRunner().also { previewRunner = it }
+  init {
+    element.setAttribute("type", "text")
   }
 
   /**
-   * Returns `true` if we are in a web application context.
-   * @return `true` if we are in a web application context.
+   * For children classes.
+   * @param input The input text.
    */
-  override fun isWebApplicationContext(): Boolean {
-    return true
+  protected constructor(input: String?) : this() {
+    value = input
   }
 
   //---------------------------------------------------
-  // DATA MEMBEERS
+  // IMPLEMENTATIONS
   //---------------------------------------------------
-  private var previewRunner: VPreviewRunner? = null
 
+  /**
+   * Sets the input element size.
+   * @param size The element size.
+   */
+  fun setSize(size: Int) {
+    element.setAttribute("size", size.toString() + "")
+  }
+
+  /**
+   * Sets the element name.
+   * @param name The element name.
+   */
+  fun setName(name: String?) {
+    element.setAttribute("name", name)
+  }
 }

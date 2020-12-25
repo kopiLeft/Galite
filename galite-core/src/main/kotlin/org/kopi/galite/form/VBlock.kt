@@ -28,6 +28,7 @@ import kotlin.math.abs
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.EqOp
+import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
@@ -36,6 +37,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -1854,6 +1856,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Tests whether this table has only internal fields.
    */
+  @Deprecated("use hasOnlyInternalFields(table: Table)")
   fun hasOnlyInternalFields(table: Int): Boolean {
     for (i in fields.indices) {
       val fld: VField? = fields[i]
@@ -1866,8 +1869,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   /**
+   * Tests whether this table has only internal fields.
+   */
+  fun hasOnlyInternalFields(table: Table): Boolean = fields.all { it.fetchColumn(table) == -1 || it.isInternal() }
+
+  /**
    * Returns the tables for database query, with outer joins conditions.
    */
+  @Deprecated("use getSearchTables_()")
   fun getSearchTables(): String {
     TODO()
   }
@@ -1882,6 +1891,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search conditions for database query.
    */
+  @Deprecated("use getSearchConditions_()")
   fun getSearchConditions(): String? {
     TODO()
   }
@@ -2819,8 +2829,42 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
   }
 
-  private fun isNullReference(table: Int, recno: Int): Boolean {
-    TODO()
+  private fun isNullReference(table: Table, recno: Int): Boolean {
+    var nullReference: Boolean
+
+    // check if this lookup table has not only internal fields
+    if (hasOnlyInternalFields(table)) {
+      nullReference = false
+    } else {
+      // check if all lookup fields for this table are null.
+      nullReference = true
+
+      for (field in fields) {
+        if (!nullReference) {
+          break
+        }
+        if (field.fetchColumn(table) != -1
+                && !field.isInternal()
+                && !field.isNull(recno)) {
+          nullReference = false
+        }
+      }
+    }
+
+    // this test is useful since we use outer join only for nullable columns.
+    for (field in fields) {
+      if (!nullReference) {
+        break
+      }
+      if (field.isInternal()
+              && field.fetchColumn(0) != -1
+              && field.fetchColumn(table) != -1
+              && !(field.getColumn(field.fetchColumn(table))!!.nullable ||
+                      field.getColumn(field.fetchColumn(0))!!.nullable)) {
+        nullReference = false
+      }
+    }
+    return nullReference
   }
 
   /*
@@ -2889,7 +2933,53 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * database.
    */
   protected fun checkRecordUnchanged(recno: Int) {
-    TODO()
+    // Assertion enabled only for tables with ID
+    if (!blockHasNoUcOrTsField()) {
+      val idFld: VField = idField
+      val ucFld: VField? = ucField
+      val tsFld = getTsField()
+      val table = tables!![0]
+      val value = idFld.getInt(recno)
+
+      assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
+
+      val ucColumn = if (ucFld == null) {
+        intLiteral(-1)
+      } else {
+        Column(table, "UC", IntegerColumnType())
+      }
+
+      val tsColumn = if (tsFld == null) {
+        intLiteral(-1)
+      } else {
+        Column(table, "UC", IntegerColumnType())
+      }
+
+      val query = table.slice(ucColumn, tsColumn)
+              .select { idColumn eq value!! }
+
+      if (query.empty()) {
+        activeRecord = recno
+        throw VExecFailedException(MessageCode.getMessage("VIS-00018"))
+      } else {
+        var changed = false
+
+        transaction {
+          if (ucFld != null) {
+            changed = changed or (ucFld.getInt(recno) != query.first()[ucColumn])
+          }
+          if (tsFld != null) {
+            changed = changed or (tsFld.getInt(recno) != query.first()[tsColumn])
+          }
+
+          if (changed) {
+            // record has been updated
+            activeRecord = recno // also valid for single blocks
+            throw VExecFailedException(MessageCode.getMessage("VIS-00017"))
+          }
+        }
+      }
+    }
   }
 
   /**
