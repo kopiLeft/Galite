@@ -24,7 +24,7 @@ import org.kopi.galite.report.Report
 /**
  * Data table for of a report.
  */
-class VTable() : Grid<ReportRow>() {
+class DTable() : Grid<ReportRow>() {
   init {
     isColumnReorderingAllowed = true
   }

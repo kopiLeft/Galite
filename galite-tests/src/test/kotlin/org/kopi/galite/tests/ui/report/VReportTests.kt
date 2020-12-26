@@ -29,7 +29,7 @@ import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Report
 import org.kopi.galite.tests.ui.vaadin.base.UITestBase
-import org.kopi.galite.ui.vaadin.report.VReport
+import org.kopi.galite.ui.vaadin.report.DReport
 
 class VReportTests: UITestBase() {
 
@@ -57,7 +57,7 @@ class SimpleReportTest : VerticalLayout() {
 
   init {
     val report = SimpleReport()
-    val vreport = VReport(report)
+    val vreport = DReport(report)
     val verticalLayout = VerticalLayout()
     verticalLayout.add(vreport)
     add(verticalLayout)
