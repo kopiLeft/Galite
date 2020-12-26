@@ -1,0 +1,85 @@
+/*
+ * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * $Id: DChart.java 34961 2016-11-04 17:20:49Z hacheni $
+ */
+package org.kopi.galite.ui.vaadin.chart
+
+import com.vaadin.flow.component.Focusable
+import org.kopi.galite.chart.ChartTypeFactory
+import org.kopi.galite.chart.UChart
+import org.kopi.galite.chart.UChartType
+import org.kopi.galite.chart.VChart
+import org.kopi.galite.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.VWindow
+
+/**
+ * Creates a new chart view from its model.
+ * @param model The chart model.
+ */
+class DChart(model: VWindow) : DWindow(model), UChart, Focusable<DChart> {
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+  override fun run() {
+    (getModel() as VChart).initChart()
+    (getModel() as VChart).setMenu()
+    focus()
+  }
+
+  override fun refresh() {
+    TODO()
+  }
+
+  override fun build() {}
+
+  override fun typeChanged() {
+    TODO()
+  }
+
+  override fun setEnabled(enabled: Boolean) {
+    TODO("Not yet implemented")
+  }
+
+  override fun isEnabled(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun focus() {
+    TODO()
+  }
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  override var type: UChartType = TODO()
+    set(newType) {
+      TODO()
+    }
+
+  companion object {
+    init {
+      ChartTypeFactory.chartTypeFactory = VChartTypeFactory()
+    }
+  }
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+
+  init {
+
+  }
+}
