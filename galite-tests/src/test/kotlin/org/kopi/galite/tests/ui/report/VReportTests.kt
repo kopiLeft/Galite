@@ -57,7 +57,7 @@ class SimpleReportTest : VerticalLayout() {
 
   init {
     val report = SimpleReport()
-    val vreport = DReport(report)
+    val vreport = DReport(report.model)
     val verticalLayout = VerticalLayout()
     verticalLayout.add(vreport)
     add(verticalLayout)
