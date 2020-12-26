@@ -27,6 +27,12 @@ import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.StylesInjector
+import org.kopi.galite.ui.vaadin.notification.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notification.ErrorNotification
+import org.kopi.galite.ui.vaadin.notification.InformationNotification
+import org.kopi.galite.ui.vaadin.notification.NotificationListener
+import org.kopi.galite.ui.vaadin.notification.VAbstractNotification
+import org.kopi.galite.ui.vaadin.notification.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
@@ -35,14 +41,16 @@ import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
 import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.PrinterManager
 import org.kopi.galite.visual.Registry
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
 
 /**
@@ -52,30 +60,93 @@ import com.vaadin.flow.router.Route
  */
 @Route("")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application {
+
+  //---------------------------------------------------
+  // DATA MEMBEERS
+  //---------------------------------------------------
+  private var welcomeView: WelcomeView? = null
+  private var askAnswer = 0
+  private lateinit var configuration: ApplicationConfiguration
+  private var stylesInjector: StylesInjector? = null
+
+  // ---------------------------------------------------------------------
+  // Failure cause informations
+  // ---------------------------------------------------------------------
+
+  override val startupTime: Date = Date() // remembers the startup time
+
   init {
     instance = this
     // registry and locale initialization
     initialize()
     gotoWelcomeView()
+    askAnswer = MessageListener.AWR_UNDEF
   }
 
   // ---------------------------------------------------------------------
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
-
+    val dialog = InformationNotification(VlibProperties.getString("Notice"), message)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        detachComponent(dialog)
+      }
+    })
+    showNotification(dialog)
   }
 
   override fun error(message: String?) {
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message)
+    dialog.setOwner(this)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        detachComponent(dialog)
+      }
+    })
+    showNotification(dialog)
 
   }
 
   override fun warn(message: String) {
-
+    val dialog = WarningNotification(VlibProperties.getString("Warning"), message)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        detachComponent(dialog)
+      }
+    })
+    showNotification(dialog)
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    TODO()
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message)
+    dialog.setYesIsDefault(yesIsDefault)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        askAnswer = if (yes) {
+          MessageListener.AWR_YES
+        } else {
+          MessageListener.AWR_NO
+        }
+        detachComponent(dialog)
+      }
+    })
+    // attach the notification to the application.
+    showNotification(dialog)
+
+    return askAnswer
+  }
+
+  /**
+   * Shows a notification.
+   * @param notification The notification to be shown
+   */
+  protected open fun showNotification(notification: VAbstractNotification?) {
+    if (notification == null) {
+      return
+    }
+    notification.locale = defaultLocale.toString()
+    attachComponent(notification)
   }
 
   //---------------------------------------------------------------------
@@ -230,9 +301,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   /**
    * Sets the localization context.
    *
-   *
-   * This aims to set the application [.defaultLocale]
-   * and [.localizationManager] internal attributes.
+   * This aims to set the application [defaultLocale]
+   * and [localizationManager] internal attributes.
    *
    */
   protected fun setLocalizationContext(locale: Locale) {
@@ -403,20 +473,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The alternate locale to be used when no default locale is specified.
    */
   protected abstract val alternateLocale: Locale
-
-  //---------------------------------------------------
-  // DATA MEMBEERS
-  //---------------------------------------------------
-  private var welcomeView: WelcomeView? = null
-  private var askAnswer = 0
-  private lateinit var configuration: ApplicationConfiguration
-  private var stylesInjector: StylesInjector? = null
-
-  // ---------------------------------------------------------------------
-  // Failure cause informations
-  // ---------------------------------------------------------------------
-
-  override val startupTime: Date = Date() // remembers the startup time
 
   companion object {
 
