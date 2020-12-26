@@ -15,39 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.block;
 
-package org.kopi.galite.form
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * The block layout should provides its children
+ * and set a given component in a specified position.
  */
-interface UTextField : UField {
-
+public interface BlockLayout extends HasComponents {
+  
   /**
-   * Returns the text field content.
-   * @return The text field content.
+   * Adds a component to this block layout.
+   * @param component The component to be added.
+   * @param x the x position.
+   * @param y The y position.
+   * @param width the column span width.
+   * @param alignRight Is it right aligned ?
+   * @param useAll Use all available area ?
    */
-  fun getText(): String?
-
-  /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
-   */
-  fun setHasCriticalValue(b: Boolean)
-
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
-
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
+  public void addComponent(Component component, int x, int y, int width, int height, boolean alignRight, boolean useAll);
 }

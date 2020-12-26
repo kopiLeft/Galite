@@ -35,7 +35,7 @@ interface FieldListener : EventListener, Serializable {
    * @return The displayed value in the field.
    * @throws VException May fail when retrieving value.
    */
-  fun getDisplayedValue(trim: Boolean): Any
+  fun getDisplayedValue(trim: Boolean): Any?
 
   /**
    * Returns the current [UField] display.

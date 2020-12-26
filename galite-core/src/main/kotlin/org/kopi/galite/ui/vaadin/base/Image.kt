@@ -15,39 +15,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.base
 
-package org.kopi.galite.form
+import org.kopi.galite.base.Image
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * The vaadin implementation of an image model.
  */
-interface UTextField : UField {
+class Image : Image {
+  //---------------------------------------------------
+  // IMAGE IMPLEMENTATION
+  //---------------------------------------------------
 
-  /**
-   * Returns the text field content.
-   * @return The text field content.
-   */
-  fun getText(): String?
+  override fun getWidth(): Int {
+    return -1
+  }
 
-  /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
-   */
-  fun setHasCriticalValue(b: Boolean)
+  override fun getHeight(): Int {
+    return -1
+  }
 
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
+  override fun getDescription(): String {
+    TODO()
+  }
 
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
+  override fun getScaledInstance(width: Int,
+                                 height: Int,
+                                 hints: Int): Image {
+    // FIXME: return the scaled image from theme images
+    return this
+  }
 }

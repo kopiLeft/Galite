@@ -15,39 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.form
 
-package org.kopi.galite.form
+import org.kopi.galite.form.VField
+import org.kopi.galite.ui.vaadin.field.TextField
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * Text field key navigation.
  */
-interface UTextField : UField {
-
-  /**
-   * Returns the text field content.
-   * @return The text field content.
-   */
-  fun getText(): String?
-
-  /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
-   */
-  fun setHasCriticalValue(b: Boolean)
-
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
-
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
+class KeyNavigator(private val model: VField?, private val box: TextField?) {
+  // TODO
 }

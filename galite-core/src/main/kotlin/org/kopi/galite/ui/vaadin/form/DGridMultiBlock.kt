@@ -15,39 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.form
 
-package org.kopi.galite.form
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.form.Alignment
+import org.kopi.galite.form.UMultiBlock
+import org.kopi.galite.form.VBlock
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * A based Grid multi block implementation
  */
-interface UTextField : UField {
+class DGridMultiBlock(parent: DForm, model: VBlock) : DGridBlock(parent, model), UMultiBlock {
+  override fun switchView(row: Int) {
+    TODO("Not yet implemented")
+  }
 
-  /**
-   * Returns the text field content.
-   * @return The text field content.
-   */
-  fun getText(): String?
-
-  /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
-   */
-  fun setHasCriticalValue(b: Boolean)
-
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
-
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
+  override fun addToDetail(comp: UComponent?, constraint: Alignment) {
+    TODO("Not yet implemented")
+  }
 }

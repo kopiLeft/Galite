@@ -205,12 +205,12 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     if (model.getAccess(model.block!!.activeRecord) > VConstants.ACS_SKIPPED &&
             hasAutofillCommand() &&
             !model.block!!.isChart() && display != null && display!!.getAutofillButton() != null) {
-      display!!.getAutofillButton().setEnabled(autofillCommand!!.isActive(model.block!!.getMode()))
+      display!!.getAutofillButton()!!.setEnabled(autofillCommand!!.isActive(model.block!!.getMode()))
     }
   }
 
-  fun getAllCommands(): Array<Any> {
-    val cmds = arrayListOf<VCommand>()
+  fun getAllCommands(): Array<VCommand> {
+    val cmds = mutableListOf<VCommand>()
     var i = 0
     while (commands != null && i < commands.size) {
       cmds.add(commands[i])
@@ -351,7 +351,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * for boolean field between swing and WEB implementations.
    * @return True if the auto fill command should be present for boolean fields.
    */
-  protected fun includeBooleanAutofillCommand(): Boolean = true
+  protected open fun includeBooleanAutofillCommand(): Boolean = true
 
   // ----------------------------------------------------------------------
   // PROTECTED BUILDING METHODS
@@ -563,7 +563,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       }
     }
     if (detailDisplay != null) {
-      val record: Int = blockView.getModel().activeRecord
+      val record: Int = blockView.model.activeRecord
       // is there no active line, show the same content then the first row
       // in the chart
       var dispLine = if (record >= 0) blockView.getDisplayLine(record) else 0
@@ -634,7 +634,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * This may be used to execute actions after creating the field
    * displays.
    */
-  protected fun fireDisplayCreated() {
+  protected open fun fireDisplayCreated() {
     // to be redefined if needed
   }
 

@@ -741,7 +741,7 @@ abstract class VForm : VWindow, VConstants {
     append("===========================================================\n")
   }
 
-  fun printFormScreen(): PrintJob {
+  fun printFormScreen(): PrintJob? {
     return (getDisplay() as UForm).printForm()
   }
 

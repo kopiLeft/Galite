@@ -15,39 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.actor
 
-package org.kopi.galite.form
+import com.vaadin.flow.component.Component
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * The actor component
+ *
+ * @param caption The actor caption.
+ * @param description The actor help.
+ * @param menu The menu to which this actor belongs to.
+ * @param icon The actor icon.
+ * @param acceleratorKey The accelerator key.
+ * @param modifiersKey The modifiers key.
+ * TODO: Implement this class with appropriate component
  */
-interface UTextField : UField {
+class Actor(caption: String?,
+            description: String?,
+            menu: String,
+            icon: String,
+            acceleratorKey: Int,
+            vararg modifiersKey: Int) : Component() {
 
-  /**
-   * Returns the text field content.
-   * @return The text field content.
-   */
-  fun getText(): String?
-
-  /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
-   */
-  fun setHasCriticalValue(b: Boolean)
-
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
-
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
 }

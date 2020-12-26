@@ -35,5 +35,5 @@ interface BlockListener : EventListener, Serializable {
   fun filterShown()
 
   // please do not use!
-  fun getCurrentDisplay(): UBlock
+  fun getCurrentDisplay(): UBlock?
 }
