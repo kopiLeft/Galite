@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,33 +15,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.ui.vaadin.report
 
-import com.vaadin.flow.component.grid.Grid
-import org.kopi.galite.report.ReportRow
-import org.kopi.galite.report.Report
+import com.vaadin.flow.data.renderer.ClickableRenderer.ItemClickListener
+import org.kopi.galite.report.UReport.UTable
 
 /**
- * Data table for of a report.
+ * The `DTable` is a table implementing the [UTable]
+ * specifications.
+ *
+ * @param model The table model.
  */
-class DTable() : Grid<ReportRow>() {
-  init {
-    isColumnReorderingAllowed = true
+class DTable(val model: VTable) : UTable, ItemClickListener<DTable> {
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+  override fun convertColumnIndexToModel(viewColumnIndex: Int): Int {
+    TODO()
   }
+
+  override fun convertColumnIndexToView(modelColumnIndex: Int): Int {
+    TODO()
+  }
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
 
   /**
-   * Fill table with data from report
-   * @param report report that provides data
+   * The table selected row.
    */
-  fun fillTable(report: Report) {
-    setItems(report.reportRows.map { it })
+  var selectedRow = -1
 
-    report.fields.forEach { field ->
-      addColumn {
-        it.getValueOf(field)
-      }.setHeader(field.label).setSortable(true)
-    }
+  /**
+   * The selected column.
+   */
+  var selectedColumn = -1
+
+  override fun onItemClicked(item: DTable?) {
+    TODO("Not yet implemented")
   }
-
 }
