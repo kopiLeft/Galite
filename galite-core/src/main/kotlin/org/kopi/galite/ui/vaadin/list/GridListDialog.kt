@@ -24,5 +24,5 @@ import com.vaadin.flow.component.HasEnabled
  * A list dialog
  * TODO: Implement this class with appropriate component
  */
-open class GridListDialog : Component(), HasEnabled{
+open class GridListDialog : Component(), HasEnabled {
 }

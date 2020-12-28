@@ -15,19 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form;
+package org.kopi.galite.ui.vaadin.block
 
-import java.io.Serializable;
-import java.util.Date;
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 
 /**
- * Registered objects are notified with actions performed on a date chooser.
+ * The block layout should provides its children
+ * and set a given component in a specified position.
  */
-public interface DateChooserListener extends Serializable {
-
+interface BlockLayout : HasComponents {
   /**
-   * Fired when a date has been chosen.
-   * @param selected The selected date.
+   * Adds a component to this block layout.
+   *
+   * @param component  The component to be added.
+   * @param x          the x position.
+   * @param y          The y position.
+   * @param width      the column span width.
+   * @param alignRight Is it right aligned ?
+   * @param useAll     Use all available area ?
    */
-  public void onClose(Date selected);
+  fun addComponent(component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean, useAll: Boolean)
 }

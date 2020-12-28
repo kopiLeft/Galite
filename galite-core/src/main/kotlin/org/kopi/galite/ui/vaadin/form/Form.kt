@@ -23,7 +23,7 @@ import com.vaadin.flow.component.Component
  * The form component.
  * TODO: Implement this class with appropriate component
  */
-class Form(pageCount: Int, titles: Array<String?>): Component() {
+class Form(pageCount: Int, titles: Array<String?>) : Component() {
 
   /**
    * Adds a block to this form.

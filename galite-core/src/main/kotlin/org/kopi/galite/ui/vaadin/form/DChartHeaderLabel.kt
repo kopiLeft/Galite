@@ -45,7 +45,7 @@ class DChartHeaderLabel internal constructor(text: String?,
     // nothing to do
   }
 
-  override fun isEnabled(): Boolean  = true
+  override fun isEnabled(): Boolean = true
 
   var sortModel = model
 }

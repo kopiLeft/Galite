@@ -36,6 +36,7 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
   override fun addToDetail(comp: UComponent?, constraint: Alignment) {
     TODO("Not yet implemented")
   }
+
   override fun inDetailMode(): Boolean {
     TODO("Not yet implemented")
   }

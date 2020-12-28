@@ -28,7 +28,7 @@ public interface ImageFieldListener extends Serializable {
    * Fired when the image is removed from the field.
    */
   public void onRemove();
-  
+
   /**
    * Fired when the image field is clicked.
    */

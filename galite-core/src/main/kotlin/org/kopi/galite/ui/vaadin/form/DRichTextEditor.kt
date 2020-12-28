@@ -48,6 +48,7 @@ class DRichTextEditor(model: VFieldUI,
   override fun updateText() {
     TODO("Not yet implemented")
   }
+
   override fun updateFocus() {
     TODO("Not yet implemented")
   }
