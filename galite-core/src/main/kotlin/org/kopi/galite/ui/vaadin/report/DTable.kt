@@ -17,8 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.report
 
-import com.vaadin.flow.data.renderer.ClickableRenderer.ItemClickListener
 import org.kopi.galite.report.UReport.UTable
+
+import com.vaadin.flow.data.renderer.ClickableRenderer.ItemClickListener
 
 /**
  * The `DTable` is a table implementing the [UTable]
@@ -27,6 +28,7 @@ import org.kopi.galite.report.UReport.UTable
  * @param model The table model.
  */
 class DTable(val model: VTable) : UTable, ItemClickListener<DTable> {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

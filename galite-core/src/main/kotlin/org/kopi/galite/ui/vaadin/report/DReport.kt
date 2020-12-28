@@ -32,15 +32,12 @@ import org.kopi.galite.ui.vaadin.visual.DWindow
  * @param report The report model.
  */
 class DReport(val report: VReport) : DWindow(report), UReport {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun run() {
     TODO()
-  }
-
-  override fun contentChanged() {
-    TODO("Not yet implemented")
   }
 
   override fun build() {
@@ -49,10 +46,6 @@ class DReport(val report: VReport) : DWindow(report), UReport {
 
   override fun redisplay() {
     TODO()
-  }
-
-  override fun columnMoved(pos: IntArray) {
-    TODO("Not yet implemented")
   }
 
   override fun removeColumn(position: Int) {
@@ -68,6 +61,14 @@ class DReport(val report: VReport) : DWindow(report), UReport {
   }
 
   override fun getTable(): UReport.UTable {
+    TODO("Not yet implemented")
+  }
+
+  override fun contentChanged() {
+    TODO("Not yet implemented")
+  }
+
+  override fun columnMoved(pos: IntArray) {
     TODO("Not yet implemented")
   }
 
