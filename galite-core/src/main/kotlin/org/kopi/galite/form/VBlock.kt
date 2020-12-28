@@ -1925,7 +1925,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     fields.forEach { field ->
       if (field.getColumnCount() > 0) {
-
         val condColumn = field.getColumn(0)!!.column as Column<String>
         val searchColumn = when (field.options and VConstants.FDO_SEARCH_MASK) {
 

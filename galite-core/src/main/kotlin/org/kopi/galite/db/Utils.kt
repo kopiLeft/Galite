@@ -56,7 +56,7 @@ class Utils {
         b.append('\'')
         for (element in l) {
           if (element == '\'') {
-        //    b.append('\'')
+            b.append('\'')
           }
           b.append(element)
         }

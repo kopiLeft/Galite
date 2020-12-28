@@ -127,7 +127,7 @@ class TestBlock : FormBlock(1, 1, "Test block") {
   val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
-    minValue = 10
+    minValue = 0
     maxValue =90
     columns(u.age) {
       index = i

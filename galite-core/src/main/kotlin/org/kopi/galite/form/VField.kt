@@ -705,23 +705,23 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         when (operatorName) {
           "=" -> Op.build {
             column as Column<String>
-            column eq operand
+            column eq operand!!
           }
           "<" -> Op.build {
-            column less operand
+            column less operand!!
           }
           ">" -> Op.build {
-            column greater operand
+            column greater operand!!
           }
           "<=" -> Op.build {
-            column lessEq operand
+            column lessEq operand!!
           }
           ">=" -> Op.build {
-            column greaterEq operand
+            column greaterEq operand!!
           }
           "<>" -> Op.build {
             column as Column<String>
-            column neq operand
+            column neq operand!!
           }
           else -> null
         }?.let {
@@ -733,24 +733,38 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             operand = operand.replace('*', '%')
             Op.build {
               column as Column<String>
-              column like operand
+              column like operand!!
             }
           }
           VConstants.SOP_NE -> {
             operand = operand.replace('*', '%')
             Op.build {
               column as Column<String>
-              column notLike operand
+              column notLike operand!!
             }
           }
-          VConstants.SOP_GE , VConstants.SOP_GT -> {
+          VConstants.SOP_GE -> {
             // remove everything after at '*'
             operand = operand.substring(0, operand.indexOf('*'))
             Op.build {
-              column greater operand
+              column greaterEq operand!!
             }
           }
-          VConstants.SOP_LE , VConstants.SOP_LT -> {
+          VConstants.SOP_GT -> {
+            // remove everything after at '*'
+            operand = operand.substring(0, operand.indexOf('*'))
+            Op.build {
+              column greater operand!!
+            }
+          }
+          VConstants.SOP_LE -> {
+            // replace substring starting at '*' by highest (ascii) char
+            operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
+            Op.build {
+              column lessEq operand!!
+            }
+          }
+          VConstants.SOP_LT -> {
             // replace substring starting at '*' by highest (ascii) char
             operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
             Op.build {
@@ -1357,14 +1371,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getSql(r: Int): String {
+  fun getSql(r: Int): String? {
     if (alias != null) {
       return alias!!.getSql(0)
     }
     if (hasTrigger(VConstants.TRG_VALUE)) {
       setObject(r, callSafeTrigger(VConstants.TRG_VALUE))
     }
-    return getSqlImpl(r)!!
+    return getSqlImpl(r)
   }
 
   /**

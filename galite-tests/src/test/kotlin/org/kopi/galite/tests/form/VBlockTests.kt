@@ -116,7 +116,7 @@ class VBlockTests : JApplicationTestBase() {
     val blockSearchCondition = firstBlock.getSearchConditions_()
     transaction {
       assertEquals(blockSearchCondition.toString(),
-              "(\"USER\".\"NAME\" LIKE '%') AND (\"USER\".AGE >= '11') AND (\"USER\".JOB > 'job')")
+              "(\"USER\".\"NAME\" LIKE '%') AND (\"USER\".AGE >= '11') AND (\"USER\".JOB >= 'job')")
     }
   }
 
