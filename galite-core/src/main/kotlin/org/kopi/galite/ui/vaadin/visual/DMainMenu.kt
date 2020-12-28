@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.visual
 
 import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.visual.VWindow
 
 /**
  * The main application menu. Creates the module menu from a menu tree model.
@@ -28,6 +29,10 @@ class DMainMenu(model: VMenuTree) : DMenu(model) {
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
+  override fun getModel(): VWindow {
+    return model
+  }
+
   override val type: Int
     get() = VMenuTree.MAIN_MENU
 }

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
+import org.kopi.galite.ui.vaadin.menu.ModuleList
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.UMenuTree
@@ -30,7 +31,7 @@ import java.io.File
  *
  * @param model The menu tree model.
  */
-abstract class DMenu protected constructor(val model: VMenuTree) : UMenuTree {
+abstract class DMenu protected constructor(val model: VMenuTree): ModuleList(), UMenuTree {
   //---------------------------------------------------
   // UTILS
   //---------------------------------------------------

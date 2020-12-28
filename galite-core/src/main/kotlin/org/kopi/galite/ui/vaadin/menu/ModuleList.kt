@@ -15,27 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.ui.vaadin.menu
 
-import org.kopi.galite.visual.RootMenu
-import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VWindow
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasEnabled
 
 /**
- * The book mark menu
+ * The module list server side component.
+ * TODO: Implement this class with appropriate component
  */
-class DBookmarkMenu protected constructor(model: VMenuTree) : DMenu(model) {
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  override fun getModel(): VWindow {
-    return model
-  }
+open class ModuleList : Component(), HasEnabled {
 
-  protected fun buildMenu(roots: List<RootMenu?>?) {
-    TODO()
-  }
-
-  override val type: Int
-    get() = VMenuTree.BOOKMARK_MENU
 }
