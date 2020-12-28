@@ -33,7 +33,7 @@ import org.kopi.galite.visual.VlibProperties
  */
 abstract class VCodeField(val bufferSize: Int,
                           val type: String,
-                          val source: String,
+                          var source: String,
                           val idents: Array<String>)
   : VField(1, 1) {
 

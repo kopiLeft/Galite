@@ -17,14 +17,17 @@
 
 package org.kopi.galite.domain
 
+import org.kopi.galite.common.CodeDescription
+import org.kopi.galite.common.LocalizationWriter
+
 /**
  * Represents a code domain.
  */
-class CodeDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
+class CodeDomain<T : Comparable<T>?>(ident: String) : Domain<T>(ident = ident) {
   /**
-   * Mapping of all values that a domain can take
+   * Contains all values that a domain can take
    */
-  val codes: MutableMap<String, T> = mutableMapOf()
+  val codes: MutableList<CodeDescription<T>> = mutableListOf()
 
   override val type = this
 
@@ -36,9 +39,17 @@ class CodeDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
    * @param value the value
    */
   operator fun set(text: String, value: T) {
-    if (text in codes.keys) {
-      throw RuntimeException("$text already exists in domain $name")
-    }
-    codes[text] = value
+    val codeDescription = CodeDescription("id$${codes.size}", text, value)
+    codes.add(codeDescription)
+  }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  /**
+   * Generates localization.
+   */
+  override fun genLocalization(writer: LocalizationWriter) {
+    writer.genCodeType(codes)
   }
 }

@@ -17,9 +17,10 @@
 package org.kopi.galite.tests.form
 
 import kotlin.test.assertEquals
-
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
+import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
 
 class VBlockTests : JApplicationTestBase() {
@@ -117,5 +118,13 @@ class VBlockTests : JApplicationTestBase() {
       assertEquals(blockSearchCondition.toString(),
               "(\"USER\".\"NAME\" LIKE '%') AND (\"USER\".AGE >= '11') AND (\"USER\".JOB > 'job')")
     }
+  }
+
+  @Test
+  fun getSearchOrder_Test() {
+    FormWithList.model
+    val orderBys = FormWithList.block3.vBlock.getSearchOrder_()
+
+    assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
   }
 }

@@ -1,7 +1,8 @@
 # Galite
 Galite Framework
 
-![License](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)
+![license](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)
+![build](https://github.com/kopiLeft/Galite/workflows/Build/badge.svg)
 
 Welcome to **Galite**, the framework of [kopiLeft](https://github.com/kopiLeft) with an expressive elegant syntax based on Kotlin DSL to create great applications.
 

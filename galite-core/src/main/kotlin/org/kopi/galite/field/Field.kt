@@ -67,16 +67,9 @@ abstract class Field<T : Comparable<T>?>(open val domain: Domain<T>) {
   }
 
   /**
-   * returns list of values that can this field get.
-   */
-  fun getValues(): MutableMap<String, *> {
-    return domain.getValues()
-  }
-
-  /**
    * Generates localization for this field
    *
-   * @param The localization writer.
+   * @param writer The localization writer.
    */
   abstract fun genLocalization(writer: LocalizationWriter)
 }

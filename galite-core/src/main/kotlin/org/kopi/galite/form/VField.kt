@@ -20,6 +20,7 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
+import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
@@ -30,6 +31,7 @@ import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.db.Query
@@ -55,7 +57,6 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -120,10 +121,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     })
   }
 
+  @Deprecated("use fetchColumn(table: Table)")
   fun fetchColumn(table: Int): Int {
     if (columns != null) {
       for (i in columns!!.indices) {
         if (columns!![i]!!.getTable() == table) {
+          return i
+        }
+      }
+    }
+    return -1
+  }
+
+  fun fetchColumn(table: Table): Int {
+    if (columns != null) {
+      for (i in columns!!.indices) {
+        if (columns!![i]!!.getTable_() == table) {
           return i
         }
       }
@@ -620,7 +633,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the column name in the table with specified correlation.
    * returns null if the field has no access to this table.
    */
+  @Deprecated("use lookupColumn(corr: Table)")
   fun lookupColumn(corr: Int): Column<*>? = columns!!.find { corr == it!!.getTable() }?.column
+
+  /**
+   * Returns the column name in the table with specified correlation.
+   * returns null if the field has no access to this table.
+   */
+  fun lookupColumn(corr: Table): Column<*>? = columns!!.find { corr == it!!.getTable_() }?.column
 
   /**
    * Returns true if the column is a key of the table with specified correlation.
@@ -1030,6 +1050,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use setQuery_(query: ResultRow, column: Column<*>)")
   fun setQuery(query: Query, column: Int) {
     setQuery(block!!.currentRecord, query, column)
   }
@@ -1044,6 +1065,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use setQuery_(record: Int, query: ResultRow, column: Column<*>)")
   fun setQuery(record: Int, query: Query, column: Int) {
     setObject(record, retrieveQuery(query, column))
   }
@@ -1057,6 +1079,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     query           the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
+  @Deprecated("use retrieveQuery_(result: ResultRow, column: Column<*>)")
   abstract fun retrieveQuery(query: Query, column: Int): Any?
 
 

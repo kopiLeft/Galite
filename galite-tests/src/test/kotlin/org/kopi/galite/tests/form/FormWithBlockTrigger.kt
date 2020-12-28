@@ -36,7 +36,7 @@ object FormWithBlockTrigger: Form() {
   val secondVlock = insertBlock(BlockWithTrigger2, testPage)
 }
 
-object BlockWithTrigger1 : FormBlock(1, 1, "Test", "Test block") {
+object BlockWithTrigger1 : FormBlock(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 

@@ -31,7 +31,7 @@ object FormWithFields: Form() {
   val testBlock = insertBlock(BlockWithFields, testPage)
 }
 
-object BlockWithFields : FormBlock(1, 1, "Test", "Test block") {
+object BlockWithFields : FormBlock(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -46,7 +46,7 @@ object BlockWithFields : FormBlock(1, 1, "Test", "Test block") {
     onInsertSkipped()
     columns(u.name)
   }
-  val age = skipped(domain = Domain<Int>(3), position = follow(name)) {
+  val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     onQueryMustFill()

@@ -17,7 +17,6 @@
 package org.kopi.galite.form.dsl
 
 import org.kopi.galite.common.Action
-import java.io.File
 import java.io.IOException
 
 import org.kopi.galite.common.Actor
@@ -28,10 +27,12 @@ import org.kopi.galite.common.FormVoidTriggerEvent
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Menu
 import org.kopi.galite.common.Trigger
+import org.kopi.galite.common.VKConstants
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VDefaultActor
 
 /**
  * Represents a form.
@@ -59,9 +60,28 @@ abstract class Form : Window() {
    * @param label                the label
    * @param help                 the help
    */
-  fun actor(ident: String, menu: Menu, label: String, help: String, init: Actor.() -> Unit): Actor {
-    val actor = Actor(ident, menu, label, help)
-    actor.init()
+  fun actor(ident: String, menu: Menu, label: String, help: String, init: (Actor.() -> Unit)? = null): Actor {
+    val number = when {
+      ident == VKConstants.CMD_AUTOFILL -> {
+        VForm.CMD_AUTOFILL
+      }
+      ident == VKConstants.CMD_NEWITEM -> {
+        VForm.CMD_NEWITEM
+      }
+      ident == VKConstants.CMD_EDITITEM -> {
+        VForm.CMD_EDITITEM
+      }
+      ident == VKConstants.CMD_SHORTCUT -> {
+        VForm.CMD_EDITITEM_S
+      }
+      else -> {
+        0
+      }
+    }
+    val actor = Actor(ident, menu, label, help, number)
+    if (init != null) {
+      actor.init()
+    }
     formActors.add(actor)
     return actor
   }
@@ -213,6 +233,7 @@ abstract class Form : Window() {
 
   fun genLocalization(writer: LocalizationWriter) {
     (writer as FormLocalizationWriter).genForm(title,
+                                               formBlocks.map { it.ownDomains }.flatten().toTypedArray(),
                                                menus.toTypedArray(),
                                                formActors.toTypedArray(),
                                                pages.toTypedArray(),
@@ -239,9 +260,13 @@ abstract class Form : Window() {
     pages = this@Form.pages.map {
       it.ident
     }.toTypedArray()
-    this.actors = formActors.map {
-      VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
-    }.toTypedArray()
+    this.addActors(formActors.map {
+      if (it.number == 0) {
+        VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
+      } else {
+        VDefaultActor(it.number, it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
+      }
+    }.toTypedArray())
     blocks = formBlocks.map { formBlock ->
       formBlock.getBlockModel(this, source).also { vBlock ->
         vBlock.setInfo(formBlock.pageNumber)
