@@ -2401,11 +2401,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
     return VConstants.ACS_SKIPPED
   }
+
   /**
-   * Updates current access of fields in the defined record.
-   */
-  /**
-   * Updates current access of block fields ind the current Record.
+   * Updates current access of block fields in the current Record.
    */
   @JvmOverloads
   fun updateAccess(record: Int = activeRecord) {
@@ -2455,9 +2453,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     setRecordFetched(activeRecord, value)
   }
 
-  /**
-   *
-   */
   fun setRecordChanged(rec: Int, value: Boolean) {
     val oldValue = recordInfo[rec]
     val newValue: Int
