@@ -15,26 +15,35 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.visual
 
-import org.kopi.galite.preview.VPreviewWindow
-import org.kopi.galite.print.PSPrintException
-import org.kopi.galite.util.AbstractPrinter
-import org.kopi.galite.util.PrintJob
+package org.kopi.galite.ui.vaadin.visual
+
+import org.kopi.galite.visual.Application
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.PreviewRunner
-import org.kopi.galite.visual.VException
 
-/**
- * The `VPreviewRunner` is the vaadin implementation of the
- * [PreviewRunner] specification.
- */
-class VPreviewRunner : PreviewRunner {
-  override fun run(data: PrintJob, command: String) {
-    try {
-      VPreviewWindow().preview(
-              if (data.dataType != PrintJob.DAT_PS) data else AbstractPrinter.convertToGhostscript(data), command)
-    } catch (e: VException) {
-      throw PSPrintException("PreviewPrinter.PrintTaskImpl::print()", e)
-    }
+class VApplicationContext : ApplicationContext() {
+  override fun getApplication(): Application = VApplication.instance
+
+  /**
+   * Returns the current PreviewRunner.
+   * @return The current PreviewRunner.
+   */
+  override fun getPreviewRunner(): PreviewRunner {
+    return previewRunner ?: VPreviewRunner().also { previewRunner = it }
   }
+
+  /**
+   * Returns `true` if we are in a web application context.
+   * @return `true` if we are in a web application context.
+   */
+  override fun isWebApplicationContext(): Boolean {
+    return true
+  }
+
+  //---------------------------------------------------
+  // DATA MEMBEERS
+  //---------------------------------------------------
+  private var previewRunner: VPreviewRunner? = null
+
 }

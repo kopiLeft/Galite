@@ -16,32 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.type
+package org.kopi.galite.ui.vaadin.visual
 
-import java.text.SimpleDateFormat
+import org.kopi.galite.base.Image
+import org.kopi.galite.visual.ImageHandler
 
-open class Timestamp {
-
-  fun compareTo(other: Timestamp): Int = TODO()
-
-  fun add(millis: Long): NotNullTimestamp = TODO()
-
-  /**
-   * Represents the value in sql
-   */
-  open fun toSql(): String? {
-    val tmp = StringBuffer()
-    val micro: String = (timestamp!!.nanos / 1000).toString()
-
-    tmp.append("00000".substring(0, 6 - micro.length))
-    tmp.append(micro)
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
+class VImageHandler : ImageHandler() {
+  override fun getImage(image: String): Image {
+    TODO("Not yet implemented")
   }
 
-  companion object {
-    fun now(): NotNullTimestamp = TODO()
-    fun parse(input: String, format: String): NotNullTimestamp = TODO()
+  override fun getImage(image: ByteArray): Image {
+    TODO("Not yet implemented")
   }
 
-  private val timestamp: java.sql.Timestamp? = null
+  override fun getURL(image: String): String {
+    TODO("Not yet implemented")
+  }
 }

@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,14 +15,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.visual
+package org.kopi.galite.demo.web
 
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.visual.UIFactory
-import org.kopi.galite.visual.VModel
+import com.vaadin.flow.component.page.AppShellConfigurator
+import com.vaadin.flow.server.PWA
 
-class VUIFactory : UIFactory() {
-  override fun createView(model: VModel): UComponent {
-    TODO("Not yet implemented")
-  }
-}
+/**
+ * Use the @PWA annotation make the application installable on phones, tablets
+ * and some desktop browsers.
+ */
+@PWA(name = "Galite Demo", shortName = "Demo")
+class AppShell : AppShellConfigurator

@@ -16,32 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.visual
+package org.kopi.galite.ui.vaadin.base
 
-import java.io.File
-
-import org.kopi.galite.visual.FileHandler
-import org.kopi.galite.visual.UWindow
-
-class VFileHandler : FileHandler() {
-  override fun chooseFile(window: UWindow, defaultName: String): File {
-    TODO("Not yet implemented")
-  }
-
-  override fun chooseFile(window: UWindow, dir: File, defaultName: String): File {
-    TODO("Not yet implemented")
-  }
-
-  override fun openFile(window: UWindow, defaultName: String): File {
-    TODO("Not yet implemented")
-  }
-
-  override fun openFile(window: UWindow, filter: FileFilter): File {
-    TODO("Not yet implemented")
-  }
-
-  override fun openFile(window: UWindow, dir: File, defaultName: String): File {
-    TODO("Not yet implemented")
-  }
+/**
+ * A centralized way to inject styles in the browser page.
+ * TODO : use this class to handle report styles.
+ */
+class StylesInjector {
 
 }

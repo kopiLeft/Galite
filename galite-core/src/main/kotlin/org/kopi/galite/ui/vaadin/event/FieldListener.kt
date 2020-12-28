@@ -15,33 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.event
 
-package org.kopi.galite.type
+import java.io.Serializable
 
-import java.text.SimpleDateFormat
+/**
+ * The field listener that notifies registered objects with
+ * actions performed on a field.
+ */
+interface FieldListener : Serializable {
+  /**
+   * Fired when increment button is clicked.
+   */
+  fun onIncrement()
 
-open class Timestamp {
-
-  fun compareTo(other: Timestamp): Int = TODO()
-
-  fun add(millis: Long): NotNullTimestamp = TODO()
+  /***
+   * Fired when decrement action is fired.
+   */
+  fun onDecrement()
 
   /**
-   * Represents the value in sql
+   * Fired when the field is clicked.
    */
-  open fun toSql(): String? {
-    val tmp = StringBuffer()
-    val micro: String = (timestamp!!.nanos / 1000).toString()
-
-    tmp.append("00000".substring(0, 6 - micro.length))
-    tmp.append(micro)
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
-  }
-
-  companion object {
-    fun now(): NotNullTimestamp = TODO()
-    fun parse(input: String, format: String): NotNullTimestamp = TODO()
-  }
-
-  private val timestamp: java.sql.Timestamp? = null
+  fun onClick()
 }

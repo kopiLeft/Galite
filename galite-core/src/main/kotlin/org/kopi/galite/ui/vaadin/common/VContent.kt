@@ -15,33 +15,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.common
 
-package org.kopi.galite.type
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.html.Div
 
-import java.text.SimpleDateFormat
-
-open class Timestamp {
-
-  fun compareTo(other: Timestamp): Int = TODO()
-
-  fun add(millis: Long): NotNullTimestamp = TODO()
+/**
+ * The main window content component.
+ */
+class VContent : Div() {
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+  /**
+   * Sets the content of this main container.
+   * @param content The main container content.
+   */
+  fun setContent(content: Component?) {
+    removeAll()
+    add(content)
+    isEmpty = false
+  }
 
   /**
-   * Represents the value in sql
+   * Clears the content.
    */
-  open fun toSql(): String? {
-    val tmp = StringBuffer()
-    val micro: String = (timestamp!!.nanos / 1000).toString()
-
-    tmp.append("00000".substring(0, 6 - micro.length))
-    tmp.append(micro)
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
+  fun clearContent() {
+    removeAll()
+    isEmpty = true
   }
 
-  companion object {
-    fun now(): NotNullTimestamp = TODO()
-    fun parse(input: String, format: String): NotNullTimestamp = TODO()
-  }
+  /**
+   * Checks for view content.
+   * @return `true` is content exists.
+   */
+  var isEmpty = true
+    private set
 
-  private val timestamp: java.sql.Timestamp? = null
+  init {
+    setId("content")
+  }
 }

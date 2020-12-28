@@ -15,33 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.base
 
-package org.kopi.galite.type
+import com.vaadin.flow.component.html.Label
 
-import java.text.SimpleDateFormat
+/**
+ * An input label component.
+ */
+class VInputLabel(text: String? = "") : Label(text) {
 
-open class Timestamp {
-
-  fun compareTo(other: Timestamp): Int = TODO()
-
-  fun add(millis: Long): NotNullTimestamp = TODO()
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
 
   /**
-   * Represents the value in sql
+   * This attribute links this label with another form control by id attribute.
    */
-  open fun toSql(): String? {
-    val tmp = StringBuffer()
-    val micro: String = (timestamp!!.nanos / 1000).toString()
-
-    tmp.append("00000".substring(0, 6 - micro.length))
-    tmp.append(micro)
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
+  fun setHtmlFor(target: String?) {
+    element.setAttribute("for", target)
   }
-
-  companion object {
-    fun now(): NotNullTimestamp = TODO()
-    fun parse(input: String, format: String): NotNullTimestamp = TODO()
-  }
-
-  private val timestamp: java.sql.Timestamp? = null
 }

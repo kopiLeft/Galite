@@ -19,6 +19,7 @@ package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
+import org.joda.time.DateTime
 
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.LocalizationWriter
@@ -247,7 +248,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
           Month::class -> VMonthField(block.buffer)
           Week::class -> VWeekField(block.buffer)
           Time::class -> VTimeField(block.buffer)
-          Timestamp::class -> VTimestampField(block.buffer)
+          Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
           else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
         }
       }

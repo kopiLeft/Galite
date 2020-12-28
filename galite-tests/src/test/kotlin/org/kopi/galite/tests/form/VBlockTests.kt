@@ -19,20 +19,33 @@ package org.kopi.galite.tests.form
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
+import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : JApplicationTestBase() {
   @Test
+  fun getSearchOrder_Test() {
+    FormWithList.model
+    val orderBys = FormWithList.block3.vBlock.getSearchOrder_()
+
+    assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
+  }
+
+  @Test
   fun selectLookupTest() {
     FormWithList.model
-    FormWithList.block2.name[0] = "admin"
+    FormWithList.block3.ts[0] = 0
+    FormWithList.block3.shortName[0] = "admin"
+    FormWithList.block3.name[0] = "admin"
+    FormWithList.block3.character[0] = "admin"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        FormWithList.block2.vBlock.refreshLookup(0)
+        FormWithList.block3.vBlock.refreshLookup(0)
       }
     }
 

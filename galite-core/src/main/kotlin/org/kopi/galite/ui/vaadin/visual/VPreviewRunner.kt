@@ -15,33 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.visual
 
-package org.kopi.galite.type
+import org.kopi.galite.preview.VPreviewWindow
+import org.kopi.galite.print.PSPrintException
+import org.kopi.galite.util.AbstractPrinter
+import org.kopi.galite.util.PrintJob
+import org.kopi.galite.visual.PreviewRunner
+import org.kopi.galite.visual.VException
 
-import java.text.SimpleDateFormat
-
-open class Timestamp {
-
-  fun compareTo(other: Timestamp): Int = TODO()
-
-  fun add(millis: Long): NotNullTimestamp = TODO()
-
-  /**
-   * Represents the value in sql
-   */
-  open fun toSql(): String? {
-    val tmp = StringBuffer()
-    val micro: String = (timestamp!!.nanos / 1000).toString()
-
-    tmp.append("00000".substring(0, 6 - micro.length))
-    tmp.append(micro)
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
+/**
+ * The `VPreviewRunner` is the vaadin implementation of the
+ * [PreviewRunner] specification.
+ */
+class VPreviewRunner : PreviewRunner {
+  override fun run(data: PrintJob, command: String) {
+    try {
+      VPreviewWindow().preview(
+              if (data.dataType != PrintJob.DAT_PS) data else AbstractPrinter.convertToGhostscript(data), command)
+    } catch (e: VException) {
+      throw PSPrintException("PreviewPrinter.PrintTaskImpl::print()", e)
+    }
   }
-
-  companion object {
-    fun now(): NotNullTimestamp = TODO()
-    fun parse(input: String, format: String): NotNullTimestamp = TODO()
-  }
-
-  private val timestamp: java.sql.Timestamp? = null
 }

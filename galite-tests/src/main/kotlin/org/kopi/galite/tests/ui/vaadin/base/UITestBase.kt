@@ -15,32 +15,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.ui.report
+package org.kopi.galite.tests.ui.vaadin.base
 
-import com.vaadin.flow.component.grid.Grid
-import org.kopi.galite.report.ReportRow
-import org.kopi.galite.report.Report
+import com.github.mvysny.kaributesting.v10.MockVaadin
+import com.github.mvysny.kaributesting.v10.Routes
+import org.kopi.galite.tests.TestBase
 
 /**
- * Data table for of a report.
+ * The high level class for all classes containing UI tests
  */
-class VTable() : Grid<ReportRow>() {
-  init {
-    isColumnReorderingAllowed = true
+open class UITestBase : TestBase() {
+  fun setupRoutes() {
+    MockVaadin.setup(routes!!)
   }
 
-  /**
-   * Fill table with data from report
-   * @param report report that provides data
-   */
-  fun fillTable(report: Report) {
-    setItems(report.reportRows.map { it })
-
-    report.fields.forEach { field ->
-      addColumn {
-        it.getValueOf(field)
-      }.setHeader(field.label).setSortable(true)
+  companion object {
+    fun discoverRooterByPackage(packageName: String) {
+      routes = Routes().autoDiscoverViews(packageName)
     }
-  }
 
+    fun discoverRooterClass(clazz: Class<*>) {
+      routes = Routes().autoDiscoverViews(clazz.packageName)
+    }
+
+    var routes: Routes? = null
+  }
 }
