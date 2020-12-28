@@ -32,7 +32,7 @@ import org.kopi.galite.visual.Action
  * @param detail Does the field belongs to the detail view ?
  */
 abstract class DObjectField(model: VFieldUI,
-                            label: DLabel,
+                            label: DLabel?,
                             align: Int,
                             options: Int,
                             detail: Boolean) : DField(model, label, align, options, detail), ObjectFieldListener {

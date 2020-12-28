@@ -54,7 +54,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * @param detail Is this field is in detail mode ?
    * @return The [UField] display component of this field.
    */
-  protected abstract fun createDisplay(label: ULabel, model: VField, detail: Boolean): UField
+  protected abstract fun createDisplay(label: ULabel?, model: VField, detail: Boolean): UField
 
   /**
    * Creates a [FieldHandler] for this row controller.
@@ -246,9 +246,8 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * resetLabel
    */
   fun resetLabel() {
-    if (dl != null) {
-      dl!!.init(model.label, model.toolTip)
-    }
+    dl.init(model.label, model.toolTip)
+
     if (dlDetail != null) {
       dl!!.init(model.label, model.toolTip)
     }
@@ -654,7 +653,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
 
   fun getLabel(): ULabel = dl
 
-  fun getDetailLabel(): ULabel = dlDetail
+  fun getDetailLabel(): ULabel? = dlDetail
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -671,7 +670,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
   lateinit var displays: Array<UField?> // the object displayed on screen
     private set
   private lateinit var dl: ULabel // label text
-  private lateinit var dlDetail: ULabel // label text (chart)
+  private var dlDetail: ULabel? = null // label text (chart)
   var detailDisplay: UField? = null // the object displayed on screen (detail)
     private set
   private var line = 0 // USE A VPosition !!!!

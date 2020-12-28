@@ -54,6 +54,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun add(comp: UComponent, constraints: Alignment) {}
+
   override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
     TODO()
   }

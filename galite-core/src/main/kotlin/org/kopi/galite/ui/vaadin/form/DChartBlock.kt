@@ -17,16 +17,18 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
-import org.kopi.galite.form.BlockListener
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.ui.vaadin.block.BlockLayout
+import org.kopi.galite.ui.vaadin.block.BlockListener
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+
+import com.vaadin.flow.component.Component
 
 /**
  * The `DChartBlock` is a [DBlock] representing
@@ -74,11 +76,11 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
     }
   }
 
-  fun onScroll(value: Int) {
+  override fun onScroll(value: Int) {
     TODO()
   }
 
-  fun onActiveRecordChange(record: Int, sortedTopRec: Int) {
+  override fun onActiveRecordChange(record: Int, sortedTopRec: Int) {
     if (record != model.activeRecord) {
       model.form.performAsyncAction(object : Action() {
         override fun execute() {
@@ -161,7 +163,7 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
   //-------------------------------------------------
   private var init = false
 
-  /*
+  /**
    * This flag was added to avoid mutual communication
    * between client and server side when the scroll bar
    * position is changed from the client side.

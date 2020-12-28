@@ -15,24 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.ui.vaadin.block
 
-import org.kopi.galite.form.VFieldUI
+import java.io.Serializable
 
 /**
- * The `DTextEditor` is the UI implementation
- * of a text editor UI component.
- *
- * @param model The row controller.
- * @param label The field label.
- * @param align The field alignment.
- * @param options The field options.
- * @param height The field height.
- * @param detail Does the field belongs to the detail view ?
+ * Registered objects are notified with block performed actions.
  */
-class DTextEditor(model: VFieldUI,
-                  label: DLabel?,
-                  align: Int,
-                  options: Int,
-                  height: Int,
-                  detail: Boolean) : DTextField(model, label, align, options, detail)
+interface BlockListener : Serializable {
+  /**
+   * Fired when the scroll position is changed.
+   * @param value The new scroll position.
+   */
+  fun onScroll(value: Int)
+
+  /**
+   * Fired when the active record is changed from the client side.
+   * @param record The new active record.
+   * @param sortedTopRec The sorted top record.
+   */
+  fun onActiveRecordChange(record: Int, sortedTopRec: Int)
+}

@@ -30,7 +30,7 @@ import org.kopi.galite.form.VFieldUI
  * @param detail is it a detail field view ?
  */
 class DBooleanField(model: VFieldUI,
-                    label: DLabel,
+                    label: DLabel?,
                     align: Int,
                     options: Int,
                     detail: Boolean) : DObjectField(model, label, align, options,

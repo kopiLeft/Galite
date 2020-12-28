@@ -21,7 +21,7 @@ import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.field.ImageFieldListener
 
 class DImageField(model: VFieldUI,
-                  label: DLabel,
+                  label: DLabel?,
                   align: Int,
                   options: Int,
                   width: Int,
@@ -34,6 +34,22 @@ class DImageField(model: VFieldUI,
 
   override fun setBlink(b: Boolean) {
     TODO("Not yet implemented")
+  }
+
+  // ----------------------------------------------------------------------
+  // UI MANAGEMENT
+  // ----------------------------------------------------------------------
+  override fun updateAccess() {
+    label!!.update(model, getPosition())
+  }
+
+  override fun updateText() {
+    TODO("Not yet implemented")
+  }
+
+  override fun updateFocus() {
+    label!!.update(model, getPosition())
+    super.updateFocus()
   }
 
   override fun updateColor() {

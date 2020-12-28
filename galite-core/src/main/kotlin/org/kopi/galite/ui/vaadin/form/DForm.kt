@@ -17,9 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import java.io.File
+
 import org.kopi.galite.form.BlockListener
 import org.kopi.galite.form.BlockRecordListener
-import org.kopi.galite.form.FormListener
 import org.kopi.galite.form.UBlock
 import org.kopi.galite.form.UForm
 import org.kopi.galite.form.VBlock
@@ -28,10 +29,9 @@ import org.kopi.galite.form.VFieldException
 import org.kopi.galite.form.VForm
 import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.util.PrintJob
-import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Action
-import java.io.File
+import org.kopi.galite.visual.VRuntimeException
 
 /**
  * The `DForm` is the vaadin implementation of
@@ -74,14 +74,14 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @return The number of pages.
    */
   val pageCount: Int
-    get() = vForm!!.pages.size
+    get() = vForm.pages.size
 
   /**
    * Returns the title of the specified page.
    * @return The title of the specified page.
    */
   fun getPageTitle(index: Int): String? {
-    return vForm!!.pages.get(index)
+    return vForm.pages[index]
   }
 
   override fun reportError(e: VRuntimeException) {
@@ -113,11 +113,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * Releases the form.
    */
   override fun release() {
-    if (vForm != null) {
-      vForm!!.removeFormListener(this)
-      for (i in blockViews.indices) {
-        vForm!!.getBlock(i).removeBlockListener(blockListener)
-      }
+    vForm.removeFormListener(this)
+    for (i in blockViews.indices) {
+      vForm.getBlock(i).removeBlockListener(blockListener)
     }
     super.release()
   }
@@ -140,67 +138,67 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * Returns the [VForm] model.
    * @return The [VForm] model.
    */
-  val vForm: VForm?
-    get() = super.getModel() as VForm?
+  val vForm: VForm
+    get() = super.getModel() as VForm
 
   override fun run() {
-    vForm!!.prepareForm()
+    vForm.prepareForm()
 
     // initialize the access of the blocks
-    val blockcount = vForm!!.getBlockCount()
+    val blockcount = vForm.getBlockCount()
+
     for (i in 0 until blockcount) {
-      var blockModel = vForm!!.getBlock(i)
-      blockModel.updateBlockAccess()
+      vForm.getBlock(i).updateBlockAccess()
     }
-    vForm!!.executeAfterStart()
+    vForm.executeAfterStart()
   }
 
-  fun onPageSelection(page: Int) {
+  override fun onPageSelection(page: Int) {
     if (currentPage != page) {
       performAsyncAction(object : Action("setSelectedIndex") {
         override fun execute() {
-          vForm!!.gotoPage(page)
+          vForm.gotoPage(page)
         }
       })
     }
   }
 
-  fun gotoNextPosition() {
+  override fun gotoNextPosition() {
     performAsyncAction(object : Action("gotoNextPosition") {
       override fun execute() {
-        vForm!!.getActiveBlock()!!.gotoNextRecord()
+        vForm.getActiveBlock()!!.gotoNextRecord()
       }
     })
   }
 
-  fun gotoPrevPosition() {
+  override fun gotoPrevPosition() {
     performAsyncAction(object : Action("gotoPrevPosition") {
       override fun execute() {
-        vForm!!.getActiveBlock()!!.gotoPrevRecord()
+        vForm.getActiveBlock()!!.gotoPrevRecord()
       }
     })
   }
 
-  fun gotoLastPosition() {
+  override fun gotoLastPosition() {
     performAsyncAction(object : Action("gotoLastPosition") {
       override fun execute() {
-        vForm!!.getActiveBlock()!!.gotoLastRecord()
+        vForm.getActiveBlock()!!.gotoLastRecord()
       }
     })
   }
 
-  fun gotoFirstPosition() {
+  override fun gotoFirstPosition() {
     performAsyncAction(object : Action("gotoFirstPosition") {
       override fun execute() {
-        vForm!!.getActiveBlock()!!.gotoFirstRecord()
+        vForm.getActiveBlock()!!.gotoFirstRecord()
       }
     })
   }
 
-  fun gotoPosition(posno: Int) {
+  override fun gotoPosition(posno: Int) {
     performAsyncAction(object : Action("gotoPosition") {
       override fun execute() {
-        vForm!!.getActiveBlock()!!.gotoRecord(posno - 1)
+        vForm.getActiveBlock()!!.gotoRecord(posno - 1)
       }
     })
   }

@@ -51,7 +51,7 @@ class VPredefinedValueHandler(model: VFieldUI,
    * This method will open the file chooser to select an image.
    * @return the selected image from the user file system
    * @throws VException
-   * @see org.kopi.vkopi.lib.form.PredefinedValueHandler.selectImage
+   * @see org.kopi.galite.form.PredefinedValueHandler.selectImage
    */
   override fun selectImage(): ByteArray {
     TODO()

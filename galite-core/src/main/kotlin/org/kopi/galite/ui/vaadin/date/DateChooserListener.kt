@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.vaadin.date
 
 import java.io.Serializable
-import java.util.*
+import java.util.Date
 
 /**
  * Registered objects are notified with actions performed on a date chooser.

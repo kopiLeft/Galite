@@ -17,9 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.actor.Actor
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled
-import org.kopi.galite.ui.vaadin.actor.Actor
 
 /**
  * The field component. Contains one text input field or other component

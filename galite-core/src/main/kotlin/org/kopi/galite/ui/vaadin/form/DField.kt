@@ -24,8 +24,8 @@ import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VForm
-import org.kopi.galite.ui.vaadin.field.FieldListener
 import org.kopi.galite.ui.vaadin.field.Field
+import org.kopi.galite.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VColor
 
@@ -39,10 +39,10 @@ import org.kopi.galite.visual.VColor
  * @param detail Is it a detail view ?
  */
 abstract class DField(protected val model: VFieldUI,
-                      label: DLabel,
-                      align: Int,
-                      options: Int,
-                      inDetail: Boolean)
+                      protected var label: DLabel?,
+                      protected var align: Int,
+                      protected var options: Int,
+                      private var inDetail: Boolean)
   : Field(model.getIncrementCommand() != null,
           model.getDecrementCommand() != null), UField, FieldListener {
 
@@ -64,10 +64,6 @@ abstract class DField(protected val model: VFieldUI,
   open fun leave() {
     updateFocus()
   }
-
-  //-------------------------------------------------
-  // ACCESSORS
-  //-------------------------------------------------
 
   //-------------------------------------------------
   // ACCESSORS
@@ -101,7 +97,7 @@ abstract class DField(protected val model: VFieldUI,
 
   override fun setInDetail(detail: Boolean) {
     inDetail = detail
-    label!!.setInDetailMode(detail)
+    label!!.isInDetail = detail
   }
 
   /**
@@ -120,7 +116,7 @@ abstract class DField(protected val model: VFieldUI,
    * Returns the row controller.
    * @return The row controller.
    */
-  open fun getRowController(): VFieldUI? {
+  open fun getRowController(): VFieldUI {
     return model
   }
 
@@ -141,9 +137,9 @@ abstract class DField(protected val model: VFieldUI,
 
   override fun updateFocus() {
     if (modelHasFocus()) {
-      val form: VForm = getModel()!!.getForm()
-      form.setInformationText(getModel()!!.toolTip)
-      form.setFieldSearchOperator(getModel()!!.getSearchOperator())
+      val form: VForm = getModel().getForm()
+      form.setInformationText(getModel().toolTip)
+      form.setFieldSearchOperator(getModel().getSearchOperator())
     }
   }
 
@@ -168,9 +164,9 @@ abstract class DField(protected val model: VFieldUI,
 
   /**
    * set blink state
-   * @param b The blink ability.
+   * @param blink The blink ability.
    */
-  abstract override fun setBlink(b: Boolean)
+  abstract override fun setBlink(blink: Boolean)
 
   //-------------------------------------------------
   // PROTECTED UTILS
@@ -221,7 +217,7 @@ abstract class DField(protected val model: VFieldUI,
    */
   protected fun getForegroundAt(at: Int): VColor? {
     return if (model != null) {
-      getModel()!!.getForeground(getBlockView().getRecordFromDisplayLine(at))
+      getModel().getForeground(getBlockView().getRecordFromDisplayLine(at))
     } else {
       null
     }
@@ -234,7 +230,7 @@ abstract class DField(protected val model: VFieldUI,
    */
   protected fun getBackgroundAt(at: Int): VColor? {
     return if (model != null) {
-      getModel()!!.getBackground(getBlockView().getRecordFromDisplayLine(at))
+      getModel().getBackground(getBlockView().getRecordFromDisplayLine(at))
     } else {
       null
     }
@@ -270,17 +266,9 @@ abstract class DField(protected val model: VFieldUI,
   //-------------------------------------------------
   // FIELD IMPLEMENTATION
   //-------------------------------------------------
-
-  //-------------------------------------------------
-  // FIELD IMPLEMENTATION
-  //-------------------------------------------------
   override fun getBlockView(): UBlock {
     return model.blockView
   }
-
-  //-------------------------------------------------
-  // FIELD LISTENER IMPLEMENTATION
-  //-------------------------------------------------
 
   //-------------------------------------------------
   // FIELD LISTENER IMPLEMENTATION
@@ -344,7 +332,6 @@ abstract class DField(protected val model: VFieldUI,
     TODO()
   }
 
-
   override fun gotoPrevRecord() {
     TODO()
   }
@@ -364,19 +351,9 @@ abstract class DField(protected val model: VFieldUI,
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected var label: DLabel? = null
   protected var state = 0 // Display state
   protected var pos = 0
-  protected var options = 0
-  protected var align = 0
   internal var access = 0 // current access of field
-  protected var isEditable // is this field editable
-          = false
-  protected var mouseInside // private events
-          = false
-  private var inDetail = inDetail
+  protected var isEditable = false // is this field editable
+  protected var mouseInside = false // private events
 }

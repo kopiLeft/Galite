@@ -26,7 +26,7 @@ import org.kopi.galite.ui.vaadin.field.TextField
  * of the [UTextField] specifications.
  */
 open class DTextField(model: VFieldUI,
-                      label: DLabel,
+                      label: DLabel?,
                       align: Int,
                       options: Int,
                       detail: Boolean) : DField(model, label, align, options, detail), UTextField {
@@ -46,31 +46,14 @@ open class DTextField(model: VFieldUI,
     TODO()
   }
 
-  override fun getObject(): Any? {
+  // ----------------------------------------------------------------------
+  // DRAWING
+  // ----------------------------------------------------------------------
+  override fun updateAccess() {
     TODO("Not yet implemented")
   }
 
-  override fun getText(): String? {
-    TODO("Not yet implemented")
-  }
-
-  override fun setHasCriticalValue(b: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun addSelectionFocusListener() {
-    TODO("Not yet implemented")
-  }
-
-  override fun removeSelectionFocusListener() {
-    TODO("Not yet implemented")
-  }
-
-  override fun setSelectionAfterUpdateDisabled(disable: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setBlink(b: Boolean) {
+  override fun updateText() {
     TODO("Not yet implemented")
   }
 
@@ -78,4 +61,45 @@ open class DTextField(model: VFieldUI,
     TODO("Not yet implemented")
   }
 
+  override fun updateFocus() {
+    TODO("Not yet implemented")
+  }
+
+  override fun forceFocus() {
+    TODO("Not yet implemented")
+  }
+
+  //---------------------------------------------------
+  // TEXTFIELD IMPLEMENTATION
+  //---------------------------------------------------
+  override fun getText(): String? {
+    TODO("Not yet implemented")
+  }
+
+  override fun setHasCriticalValue(b: Boolean) {
+    // ignore
+  }
+
+  override fun addSelectionFocusListener() {
+    // ignore
+  }
+
+  override fun removeSelectionFocusListener() {
+    // ignore
+  }
+
+  override fun setSelectionAfterUpdateDisabled(disable: Boolean) {
+    TODO("Not yet implemented")
+  }
+
+  //---------------------------------------------------
+  // DFIELD IMPLEMENTATION
+  //---------------------------------------------------
+  override fun getObject(): Any? {
+    TODO("Not yet implemented")
+  }
+
+  override fun setBlink(blink: Boolean) {
+    TODO("Not yet implemented")
+  }
 }

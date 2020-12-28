@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UBlock
@@ -27,7 +26,10 @@ import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.BlockLayout
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+
+import com.vaadin.flow.component.Component
 
 /**
  * The `DBlock` is the vaadin implementation
@@ -44,11 +46,12 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
    * Creates block fields
    */
   protected open fun createFields() {
-    val fields: Array<VField> = model.fields
+    val fields = model.fields
     var index = 0
-    columnViews = arrayOfNulls<VFieldUI>(fields.size)
-    for (i in fields.indices) {
-      columnViews[i] = createFieldDisplays(index, fields[i])
+
+    columnViews = arrayOfNulls(fields.size)
+    fields.forEachIndexed { i, field ->
+      columnViews[i] = createFieldDisplays(index, field)
       if (columnViews[i] != null) {
         index += 1
       }

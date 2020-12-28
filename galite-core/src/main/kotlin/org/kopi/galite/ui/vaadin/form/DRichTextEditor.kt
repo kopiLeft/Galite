@@ -30,7 +30,33 @@ class DRichTextEditor(model: VFieldUI,
                       height: Int,
                       detail: Boolean) : DField(model, label!!, align, options,
                                                 detail), UTextField {
+
+
+  //---------------------------------------------------
+  // IMPLEMENTATION
+  //---------------------------------------------------
+  override fun updateColor() {}
+
   override fun getObject(): Any? {
+    TODO("Not yet implemented")
+  }
+
+  override fun setBlink(blink: Boolean) {
+    TODO("Not yet implemented")
+  }
+
+  override fun updateText() {
+    TODO("Not yet implemented")
+  }
+  override fun updateFocus() {
+    TODO("Not yet implemented")
+  }
+
+  override fun updateAccess() {
+    TODO("Not yet implemented")
+  }
+
+  override fun forceFocus() {
     TODO("Not yet implemented")
   }
 
@@ -38,29 +64,11 @@ class DRichTextEditor(model: VFieldUI,
     TODO("Not yet implemented")
   }
 
-  override fun setHasCriticalValue(b: Boolean) {
-    TODO("Not yet implemented")
-  }
+  override fun setHasCriticalValue(b: Boolean) {}
 
-  override fun addSelectionFocusListener() {
-    TODO("Not yet implemented")
-  }
+  override fun addSelectionFocusListener() {}
 
-  override fun removeSelectionFocusListener() {
-    TODO("Not yet implemented")
-  }
+  override fun removeSelectionFocusListener() {}
 
-  override fun setSelectionAfterUpdateDisabled(disable: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setBlink(b: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  //---------------------------------------------------
-  // IMPLEMENTATION
-  //---------------------------------------------------
-  override fun updateColor() {}
-
+  override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 }

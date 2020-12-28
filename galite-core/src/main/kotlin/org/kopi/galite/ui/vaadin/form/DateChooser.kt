@@ -17,11 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
-import java.util.*
+import org.kopi.galite.type.Date
+
+import com.vaadin.flow.component.Component
 
 /**
  * The `DateChooser` is date selection component.
@@ -29,8 +30,7 @@ import java.util.*
  *
  * TODO: Implement this with appropriate componenet
  */
-class DateChooser(date: Date?,
-                  reference: Component?) : Component(), UComponent, DateChooserListener {
+class DateChooser(date: Date?, reference: Component) : Component(), UComponent, DateChooserListener {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -39,7 +39,7 @@ class DateChooser(date: Date?,
    * @param date The initial date.
    * @return The selected date.
    */
-  private fun doModal(date: Date?): Date? {
+  private fun doModal(date: Date?): Date {
     TODO()
   }
 
@@ -83,7 +83,7 @@ class DateChooser(date: Date?,
   //-------------------------------------------------
   // DATE CHOOSER LISTENER IMPLEMENTATION
   //-------------------------------------------------
-  override fun onClose(selected: Date?) {
+  override fun onClose(selected: java.util.Date?) {
     TODO()
   }
 
@@ -107,7 +107,7 @@ class DateChooser(date: Date?,
      * @param date The initial date.
      * @return The selected date.
      */
-    fun selectDate(date: Date?, reference: Component?): Date? {
+    fun selectDate(date: Date, reference: Component): Date {
       val chooser = DateChooser(date, reference)
       return chooser.doModal(date)
     }

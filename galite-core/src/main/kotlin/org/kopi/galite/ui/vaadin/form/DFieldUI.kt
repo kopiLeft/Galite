@@ -43,36 +43,34 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
   // --------------------------------------------------
   // VFIELDUI IMPLEMENTATION
   // --------------------------------------------------
-  override fun createDisplay(label: ULabel, model: VField, detail: Boolean): UField {
-    var field: DField? = null
-    field = when (model.getType()) {
+  override fun createDisplay(label: ULabel?, model: VField, detail: Boolean): UField {
+    return when (model.getType()) {
       VField.MDL_FLD_EDITOR -> if ((model as VTextField).isStyled) {
-        DRichTextEditor(this, label as DLabel, model.align,
+        DRichTextEditor(this, label as? DLabel, model.align,
                         model.options,
                         (model as VTextField).height, detail)
       } else {
-        DTextEditor(this, label as DLabel, model.align, model.options,
+        DTextEditor(this, label as? DLabel, model.align, model.options,
                     (model as VTextField).height, detail)
       }
       VField.MDL_FLD_TEXT -> if (model is VBooleanField) {
-        DBooleanField(this, label as DLabel, model.align, model.options,
+        DBooleanField(this, label as? DLabel, model.align, model.options,
                       detail)
       } else if (model is VStringField && (model as VStringField).isStyled) {
-        DRichTextEditor(this, label as DLabel, model.align,
+        DRichTextEditor(this, label as? DLabel, model.align,
                         model.options,
                         (model as VStringField).height, detail)
       } else {
-        DTextField(this, label as DLabel, model.align, model.options,
+        DTextField(this, label as? DLabel, model.align, model.options,
                    detail)
       }
-      VField.MDL_FLD_IMAGE -> DImageField(this, label as DLabel, model.align,
+      VField.MDL_FLD_IMAGE -> DImageField(this, label as? DLabel, model.align,
                                           0, (model as VImageField).iconWidth,
                                           (model as VImageField).iconHeight, detail)
-      VField.MDL_FLD_ACTOR -> DActorField(this, label as DLabel, model.align,
+      VField.MDL_FLD_ACTOR -> DActorField(this, label as? DLabel, model.align,
                                           model.options, detail)
       else -> throw InconsistencyException("Type of model " + model.getType().toString() + " not supported.")
     }
-    return field
   }
 
   override fun createFieldHandler(): FieldHandler {
@@ -96,7 +94,7 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
 
   /**
    * If the fields values are set in the model before display creation,
-   * The [org.kopi.vkopi.lib.ui.vaadin.form.DFieldHandler.valueChanged] is not called since the
+   * The [org.kopi.galite.ui.vaadin.form.DFieldHandler.valueChanged] is not called since the
    * listener is not registered yet. We will call the value change event for
    * every block record here to fill out the client side cached values.
    */

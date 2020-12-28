@@ -15,27 +15,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.event
+package org.kopi.galite.ui.vaadin.form
 
 import java.io.Serializable
 
 /**
- * The field listener that notifies registered objects with
- * actions performed on a field.
+ * Registered objects are notified with actions performed
+ * on a form connector.
  */
-interface FieldListener : Serializable {
+interface FormListener : Serializable {
   /**
-   * Fired when increment button is clicked.
+   * Fired when a page is selected inside a form.
+   * @param page The page index.
    */
-  fun onIncrement()
-
-  /***
-   * Fired when decrement action is fired.
-   */
-  fun onDecrement()
+  fun onPageSelection(page: Int)
 
   /**
-   * Fired when the field is clicked.
+   * Requests to go to the next position.
    */
-  fun onClick()
+  fun gotoNextPosition()
+
+  /**
+   * Requests to go to the previous position.
+   */
+  fun gotoPrevPosition()
+
+  /**
+   * Requests to go to the last position.
+   */
+  fun gotoLastPosition()
+
+  /**
+   * Requests to go to the last position.
+   */
+  fun gotoFirstPosition()
+
+  /**
+   * Requests to go to the specified position.
+   * @param posno The position number.
+   */
+  fun gotoPosition(posno: Int)
 }

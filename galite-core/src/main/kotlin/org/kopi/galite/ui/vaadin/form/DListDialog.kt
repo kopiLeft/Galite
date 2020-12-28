@@ -20,34 +20,19 @@ package org.kopi.galite.ui.vaadin.form
 import org.kopi.galite.form.UField
 import org.kopi.galite.form.UListDialog
 import org.kopi.galite.form.VListDialog
+import org.kopi.galite.ui.vaadin.list.GridListDialog
 import org.kopi.galite.visual.UWindow
 
 /**
  * The `DListDialog` is the UI implementation of the
  * [UListDialog] specifications.
  */
-class DListDialog(model: VListDialog) : UListDialog {
+class DListDialog(model: VListDialog) : UListDialog, GridListDialog() {
   override fun selectFromDialog(window: UWindow, field: UField?, showSingleEntry: Boolean): Int {
     TODO("Not yet implemented")
   }
 
   override fun selectFromDialog(window: UWindow, showSingleEntry: Boolean): Int {
-    TODO("Not yet implemented")
-  }
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun isVisible(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setVisible(visible: Boolean) {
     TODO("Not yet implemented")
   }
 }

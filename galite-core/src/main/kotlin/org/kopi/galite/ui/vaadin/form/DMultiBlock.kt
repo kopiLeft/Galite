@@ -21,6 +21,8 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UMultiBlock
 import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VField
+import org.kopi.galite.ui.vaadin.block.BlockLayout
 
 /**
  * The `DMultiBlock` is the UI implementation
@@ -30,11 +32,30 @@ import org.kopi.galite.form.VBlock
  * @param model The block model.
  */
 class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UMultiBlock {
-  override fun switchView(row: Int) {
+
+  override fun addToDetail(comp: UComponent?, constraint: Alignment) {
+    TODO("Not yet implemented")
+  }
+  override fun inDetailMode(): Boolean {
     TODO("Not yet implemented")
   }
 
-  override fun addToDetail(comp: UComponent?, constraint: Alignment) {
+  override fun createLayout(): BlockLayout {
+    TODO("Not yet implemented")
+  }
+
+  override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun blockViewModeEntered(block: VBlock, activeField: VField?) {
+    TODO("Not yet implemented")
+  }
+
+  //---------------------------------------------------
+  // MULTIBLOCK IMPLEMENTATION
+  //---------------------------------------------------
+  override fun switchView(row: Int) {
     TODO("Not yet implemented")
   }
 }

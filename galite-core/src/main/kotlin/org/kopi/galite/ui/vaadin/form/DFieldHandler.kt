@@ -49,7 +49,7 @@ open class DFieldHandler(rowController: VFieldUI) : AbstractFieldHandler(rowCont
   }
 
   override fun enter() {
-    val enterMe = getCurrentDisplay() as DField?
+    val enterMe = getCurrentDisplay() as? DField
     if (enterMe != null) {
       getRowController().resetCommands()
       enterMe.enter(true)
@@ -57,7 +57,7 @@ open class DFieldHandler(rowController: VFieldUI) : AbstractFieldHandler(rowCont
   }
 
   override fun leave() {
-    val leaveMe = getCurrentDisplay() as DField?
+    val leaveMe = getCurrentDisplay() as? DField
     if (leaveMe != null) {
       getRowController().resetCommands()
       leaveMe.leave()

@@ -34,13 +34,6 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  /**
-   * Sets the label in detail mode.
-   * @param mode The detail mode ability.
-   */
-  fun setInDetailMode(mode: Boolean) {
-    isInDetail = mode
-  }
 
   /**
    * Prepares the label's snapshot.
@@ -141,11 +134,9 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     }
 
   /**
-   * Returns `true` is the label is in detail mode.
-   * @return `true` is the label is in detail mode.
+   * `true` is the label is in detail mode.
    */
   var isInDetail = false
-    private set
   private var tooltip: String? = null
 
   companion object {
@@ -157,9 +148,9 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     private fun getDescription(actor: VActor?): String {
       return if (actor!!.acceleratorKey > 0) {
         if (actor.acceleratorModifier == 0) {
-          actor.menuItem.toString() + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
+          actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         } else {
-          actor.menuItem.toString() + " [" + KeyEvent.getKeyModifiersText(
+          actor.menuItem + " [" + KeyEvent.getKeyModifiersText(
                   actor.acceleratorModifier) + "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         }
       } else {

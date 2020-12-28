@@ -28,7 +28,7 @@ import com.vaadin.flow.component.ClickNotifier
  * UI Implementation of an actor field.
  */
 class DActorField(model: VFieldUI,
-                  label: DLabel,
+                  label: DLabel?,
                   align: Int,
                   options: Int,
                   detail: Boolean)

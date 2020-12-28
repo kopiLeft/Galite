@@ -15,24 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.ui.vaadin.list
 
-import org.kopi.galite.form.VFieldUI
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasEnabled
 
 /**
- * The `DTextEditor` is the UI implementation
- * of a text editor UI component.
- *
- * @param model The row controller.
- * @param label The field label.
- * @param align The field alignment.
- * @param options The field options.
- * @param height The field height.
- * @param detail Does the field belongs to the detail view ?
+ * A list dialog
+ * TODO: Implement this class with appropriate component
  */
-class DTextEditor(model: VFieldUI,
-                  label: DLabel?,
-                  align: Int,
-                  options: Int,
-                  height: Int,
-                  detail: Boolean) : DTextField(model, label, align, options, detail)
+open class GridListDialog : Component(), HasEnabled{
+}
