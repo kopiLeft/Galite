@@ -20,6 +20,7 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
+import java.sql.SQLException
 
 import javax.swing.event.EventListenerList
 
@@ -55,7 +56,6 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)

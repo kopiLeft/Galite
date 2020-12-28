@@ -17,11 +17,13 @@
 package org.kopi.galite.tests.form
 
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
+import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.tests.form.User.age
 import org.kopi.galite.tests.form.User.name
@@ -86,5 +88,12 @@ class VBlockTests : JApplicationTestBase() {
         }
       }
     }
+  }
+  @Test
+  fun getSearchOrder_Test() {
+    FormWithList.model
+    val orderBys = FormWithList.block3.vBlock.getSearchOrder_()
+
+    assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
   }
 }
