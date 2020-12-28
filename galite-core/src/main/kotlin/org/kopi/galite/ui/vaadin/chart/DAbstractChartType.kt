@@ -30,7 +30,6 @@ import org.kopi.galite.chart.UChartType
 import org.kopi.galite.chart.VDataSeries
 import org.kopi.galite.chart.VPrintOptions
 
-
 /**
  * Creates a new abstract chart type from a chart title and a data series array.
  * @param title The chart title.
@@ -38,6 +37,7 @@ import org.kopi.galite.chart.VPrintOptions
  */
 abstract class DAbstractChartType protected constructor(private val title: String?,
                                                         private val dataSeries: Array<VDataSeries>) : UChartType {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -143,6 +143,7 @@ abstract class DAbstractChartType protected constructor(private val title: Strin
     val index = rand.nextInt(ADDITIONAL_COLORS.size - 1 + 1)
     return ADDITIONAL_COLORS[index]
   }
+
   //---------------------------------------------------
   // ABSTRACT METHODS
   //---------------------------------------------------
@@ -151,7 +152,9 @@ abstract class DAbstractChartType protected constructor(private val title: Strin
    * @param name The chart data name.
    * @return The chart data to be used.
    */
-  protected abstract fun createChartData(name: String?) /** : ChartData TODO */
+  protected abstract fun createChartData(name: String?)
+  /** : ChartData TODO */
+
   //---------------------------------------------------
   // INNER CLASSES
   //---------------------------------------------------
@@ -161,28 +164,18 @@ abstract class DAbstractChartType protected constructor(private val title: Strin
    *
    * @param name The series name.
    */
-  /*package*/
   class DefaultChartsSeries(name: Comparable<*>) : Serializable {
-    //---------------------------------------
-    // ACCESSORS
-    //---------------------------------------
+
     /**
-     * Returns the series name.
-     * @return The series name.
+     * The series name.
      */
-    //---------------------------------------
-    // DATA MEMBERS
-    //---------------------------------------
     val name = name.toString()
 
     /**
-     * Returns the series values.
-     * @return The series values.
+     * The series values.
      */
     val values: MutableList<Any?>
-    //---------------------------------------
-    // CONSTRUCTOR
-    //---------------------------------------
+
     /**
      * Creates a new Charts series instance.
      */
@@ -347,10 +340,8 @@ abstract class DAbstractChartType protected constructor(private val title: Strin
             Color(245, 245, 245)
     )
   }
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  init {
 
+  init {
+    // TODO
   }
 }

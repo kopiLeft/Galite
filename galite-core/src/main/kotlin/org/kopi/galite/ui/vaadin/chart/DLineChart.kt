@@ -25,6 +25,7 @@ import org.kopi.galite.chart.VDataSeries
  * @param dataSeries The data series model.
  */
 class DLineChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(title, dataSeries) {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

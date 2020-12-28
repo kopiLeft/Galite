@@ -34,6 +34,7 @@ class VChartTypeFactory : ChartTypeFactory() {
       else -> throw InconsistencyException("NO UI IMPLEMENTATION FOR CHART TYPE " + model.name)
     }
     model.setDisplay(view)
+
     return view
   }
 }

@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.chart
 
-import com.vaadin.flow.component.Focusable
 import org.kopi.galite.chart.ChartTypeFactory
 import org.kopi.galite.chart.UChart
 import org.kopi.galite.chart.UChartType
@@ -25,11 +24,14 @@ import org.kopi.galite.chart.VChart
 import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.VWindow
 
+import com.vaadin.flow.component.Focusable
+
 /**
  * Creates a new chart view from its model.
  * @param model The chart model.
  */
 class DChart(model: VWindow) : DWindow(model), UChart, Focusable<DChart> {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
