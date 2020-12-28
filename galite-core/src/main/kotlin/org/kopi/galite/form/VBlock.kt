@@ -54,17 +54,10 @@ import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.EqOp
-import org.jetbrains.exposed.sql.IntegerColumnType
-import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.compoundAnd
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
@@ -79,7 +72,6 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ActionHandler
 import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
