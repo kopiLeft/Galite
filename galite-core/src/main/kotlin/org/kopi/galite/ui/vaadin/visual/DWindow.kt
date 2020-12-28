@@ -27,7 +27,7 @@ import org.kopi.galite.visual.VWindow
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component..
  */
-abstract class DWindow protected constructor(model: VWindow) : Component(), UWindow {
+abstract class DWindow protected constructor(private var model: VWindow) : Component(), UWindow {
   override fun run() {
     TODO("Not yet implemented")
   }

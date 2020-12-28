@@ -32,7 +32,7 @@ import org.kopi.galite.visual.VMenuTree
  *
  * TODO Externalize favorites handling.
  */
-class DMenuTree(val model: VMenuTree) : DWindow(model), UMenuTree {
+class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------------------------
@@ -41,8 +41,8 @@ class DMenuTree(val model: VMenuTree) : DWindow(model), UMenuTree {
    * @param module The module to be added to favorites.
    */
   fun addShortcut(module: Module) {
-    if (!model.getShortcutsID().contains(module.id)) {
-      model.getShortcutsID().add(module.id)
+    if (!getModel().getShortcutsID().contains(module.id)) {
+      getModel().getShortcutsID().add(module.id)
       addShortcutsInDatabase(module.id)
     }
   }
@@ -52,8 +52,8 @@ class DMenuTree(val model: VMenuTree) : DWindow(model), UMenuTree {
    * @param module The module to be removed from favorites.
    */
   fun removeShortcut(module: Module) {
-    if (model.getShortcutsID().contains(module.id)) {
-      model.getShortcutsID().remove(module.id)
+    if (getModel().getShortcutsID().contains(module.id)) {
+      getModel().getShortcutsID().remove(module.id)
       removeShortcutsFromDatabase(module.id)
     }
   }
@@ -76,21 +76,10 @@ class DMenuTree(val model: VMenuTree) : DWindow(model), UMenuTree {
    * Move the focus from the activated frame to favorites frame.
    */
   override fun gotoShortcuts() {}
-  override fun showApplicationInformation(message: String) {
-    TODO("Not yet implemented")
-  }
 
   override fun addSelectedElement() {
     val module = selectedModule
     module?.let { addShortcut(it) }
-  }
-
-  override fun getTree(): UMenuTree.UTree? {
-    TODO("Not yet implemented")
-  }
-
-  override fun getBookmark(): UMenuTree.UBookmarkPanel? {
-    TODO("Not yet implemented")
   }
 
   /**
@@ -127,7 +116,7 @@ class DMenuTree(val model: VMenuTree) : DWindow(model), UMenuTree {
    * Calls the selected form in the tree menu.
    */
   private fun callSelectedForm() {
-    model.performAsyncAction(object : Action("menu_form_started2") {
+    getModel().performAsyncAction(object : Action("menu_form_started2") {
       override fun execute() {
         launchSelectedForm()
       }
@@ -140,8 +129,8 @@ class DMenuTree(val model: VMenuTree) : DWindow(model), UMenuTree {
    * Allowed to call outside the event dispatch thread
    */
   override fun closeWindow() {
-    if (!model.isSuperUser) {
-      model.ask(Message.getMessage("confirm_quit"), false)
+    if (!getModel().isSuperUser) {
+      getModel().ask(Message.getMessage("confirm_quit"), false)
     }
   }
 
@@ -160,5 +149,25 @@ class DMenuTree(val model: VMenuTree) : DWindow(model), UMenuTree {
    */
   private fun getModuleByID(id: Int): Module? {
     TODO()
+  }
+
+  override fun getModel(): VMenuTree {
+    return super.getModel() as VMenuTree
+  }
+
+  // --------------------------------------------------
+  // UMenuTree IMPLEMENTATION
+  // --------------------------------------------------
+  override fun getTree(): UMenuTree.UTree? {
+    TODO("Not yet implemented")
+  }
+
+  override fun getBookmark(): UMenuTree.UBookmarkPanel? {
+    TODO("Not yet implemented")
+  }
+
+
+  override fun showApplicationInformation(message: String) {
+    TODO("Not yet implemented")
   }
 }

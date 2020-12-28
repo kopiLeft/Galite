@@ -19,7 +19,6 @@ package org.kopi.galite.ui.vaadin.visual
 
 import org.kopi.galite.visual.RootMenu
 import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VWindow
 
 /**
  * The book mark menu
@@ -28,11 +27,8 @@ class DBookmarkMenu protected constructor(model: VMenuTree) : DMenu(model) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun getModel(): VWindow {
-    return model
-  }
 
-  protected fun buildMenu(roots: List<RootMenu?>?) {
+  override fun buildMenu(roots: List<RootMenu>) {
     TODO()
   }
 

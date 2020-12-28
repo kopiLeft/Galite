@@ -17,18 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
+import java.awt.event.KeyEvent
+
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
-import java.awt.event.KeyEvent
+
+import com.vaadin.flow.component.ShortcutEventListener
 
 /**
  * The `DActor` is the vaadin implementation of
  * the [UActor]. The actor can be represented by a [Button]
  * if it has a valid icon name.
  *
- * The actor action is handled by a [ShortcutListener] registered
+ * The actor action is handled by a [ShortcutEventListener] registered
  * of the [DWindow] which is the receiver of all actors actions.
  *
  * @param model The actor model.

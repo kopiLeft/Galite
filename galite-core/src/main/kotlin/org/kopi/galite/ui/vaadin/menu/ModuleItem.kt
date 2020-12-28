@@ -15,21 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.ui.vaadin.menu
 
-import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VWindow
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 
 /**
- * The main application menu. Creates the module menu from a menu tree model.
- *
- * @param model The menu tree model.
+ * The module item model.
+ * TODO: Implement this class with appropriate component
  */
-class DMainMenu(model: VMenuTree) : DMenu(model) {
-  //---------------------------------------------------
-  // IMPLEMENTATION
-  //---------------------------------------------------
+open class ModuleItem(id: String,
+                      caption: String?,
+                      description: String?,
+                      isLeaf: Boolean) : Component(), HasComponents {
 
-  override val type: Int
-    get() = VMenuTree.MAIN_MENU
 }

@@ -48,20 +48,28 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
     TODO()
   }
 
-  override fun setTree() {
-    TODO("Not yet implemented")
-  }
-
   override fun removeSelectedItem() {
     TODO()
+  }
+
+  override fun localiseSelectedItem() {
+    TODO("Not yet implemented")
   }
 
   override fun editSelectedItem() {
     TODO("Not yet implemented")
   }
 
-  override fun localiseSelectedItem() {
+  override fun setTree() {
     TODO("Not yet implemented")
+  }
+
+  override fun run() {
+    TODO("Not yet implemented")
+  }
+
+  override fun getModel(): VItemTree {
+    return super.getModel() as VItemTree
   }
 
   override fun getTree(): UItemTree.UTreeComponent {
