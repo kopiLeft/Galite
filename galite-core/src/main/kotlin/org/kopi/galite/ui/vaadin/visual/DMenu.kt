@@ -31,7 +31,7 @@ import java.io.File
  *
  * @param model The menu tree model.
  */
-abstract class DMenu protected constructor(val model: VMenuTree): ModuleList(), UMenuTree {
+abstract class DMenu protected constructor(val model: VMenuTree) : ModuleList(), UMenuTree {
   //---------------------------------------------------
   // UTILS
   //---------------------------------------------------

@@ -36,11 +36,11 @@ import java.awt.event.KeyEvent
  *
  */
 class DActor(private var model: VActor) : Actor(model.menuItem,
-                                    Utils.createTooltip(getDescription(model)),
-                                    model.menuName,
-                                    Utils.getFontAwesomeIcon(model.iconName),
-                                    correctAcceleratorKey(model.acceleratorKey),
-                                    correctAcceleratorModifier(model.acceleratorModifier)), UActor {
+                                                Utils.createTooltip(getDescription(model)),
+                                                model.menuName,
+                                                Utils.getFontAwesomeIcon(model.iconName),
+                                                correctAcceleratorKey(model.acceleratorKey),
+                                                correctAcceleratorModifier(model.acceleratorModifier)), UActor {
   // --------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------
