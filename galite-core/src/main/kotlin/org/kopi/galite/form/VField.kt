@@ -1469,14 +1469,21 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
 
     if (this !is VStringField) {
-      var exists: Boolean = false
+      var exists = false
       try {
         while (true) {
           try {
             transaction {
-              val auxTable = object : Table(evalListTable()) {
+              //UNCOMMENT AFTER TEST
+        /*      val auxTable = object : Table(evalListTable()) {
                 val column = varchar(list!!.getColumn(0)!!.column!!,
                         list!!.getColumn(0)!!.width)
+              }*/
+
+              //TABLE FOR TEST
+              val auxTable = object : Table(block?.tables!![0].tableName){
+                val id = integer("ID")
+                val column = Column<Any>(this , list!!.getColumn(0)!!.column!! , VarCharColumnType() )
               }
               exists = auxTable.select {
                 auxTable.column eq getSql(block!!.activeRecord).toString()
@@ -1509,9 +1516,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         while (true) {
           try {
             transaction {
-              val auxTable = object : Table(evalListTable()) {
+              //UNCOMMENT AFTER TEST
+             /* val auxTable = object : Table(evalListTable()) {
                 val column = varchar(list!!.getColumn(0)!!.column!!,
                         list!!.getColumn(0)!!.width)
+              }*/
+
+              //TABLE FOR TEST
+              val auxTable = object : Table(block?.tables!![0].tableName){
+              val column = Column<String>(this , list!!.getColumn(0)!!.column!! , VarCharColumnType() )
               }
 
               val substring = auxTable.column.substring(1, getString(block!!.activeRecord).length)
@@ -1570,7 +1583,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           var lineCount = 0
           val newForm: VDictionary? = if (list!!.newForm != null) {
             // OLD SYNTAX
-            org.kopi.galite.visual.Module.getExecutable(list!!.newForm) as VDictionary?
+            getExecutable(list!!.newForm) as VDictionary?
           } else (if (list!!.action != -1) {
             // NEW SYNTAX
             block!!.executeObjectTrigger(list!!.action)
@@ -1583,15 +1596,21 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           try {
             while (true) {
               try {
-                val auxTable = object : Table(evalListTable()) {
-                }
+                //UNCOMMENT AFTER TEST
+            /*    val auxTable = object : Table(evalListTable()) {
+                }*/
 
+                //TABLE FOR TEST
+                val auxTable = object : Table(block?.tables!![0].tableName){}
                 val columnList: List<Column<String>> = colbuf.split(", ")
                         .map {
                           Column(auxTable, it.trim(), VarCharColumnType())
                         }
-                val indexOfColumn = columnList.indexOf(list!!.getColumn(0)!!.column!!)
+                val firstColumn = Column<String>(auxTable , list!!.getColumn(0)!!.column!! , VarCharColumnType())
+                val indexOfColumn = columnList.indexOf(firstColumn)
+                println(indexOfColumn)
                 val column = columnList[indexOfColumn]
+                println(column)
                 val substring = column.substring(1, fldbuf.length)
 
                 transaction {
@@ -1601,21 +1620,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                           }
                           .orderBy(columnList[0])
 
-                  //How to get the columns list only in list without substring ?
                   val queryList = queryResult.map {
                     it[column]
                   }
                   lineCount = 0
                   queryList.forEachIndexed { index, resultRow ->
                     loop@ while (lineCount < MAX_LINE_COUNT - 1) {
-                      //Query.isNull() NOT IMPLEMENTED
                       if (index == 0 && resultRow == null) {
                         continue@loop
                       }
                       var i = 0
                       while (i < lines.size) {
-                        //query.getObject NOT IMPLEMENTED
-                        //lines[i][lineCount] = query.getObject(i + if (SKIP_FIRST_COLUMN) 2 else 1)
                         val j = if (SKIP_FIRST_COLUMN) i + 2 else i + 1
                         lines[i][lineCount] = queryList[j]
                         i += 1
@@ -1668,7 +1683,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
                     transaction {
                       val queryResult = auxTable.slice(auxTable.column)
                               .select{ auxTable.id eq selected }
-                      // result = query.getObject(1)
                       result = queryResult.filterIndexed { index, resultRow ->
                         index == 1
                       }
@@ -1742,7 +1756,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return id*/
   }
 
-  private fun displayQueryList(queryText: String, columns: Array<VListColumn?>): Any? {
+  fun displayQueryList(queryText: String, columns: Array<VListColumn?>): Any? {
 
     val MAX_LINE_COUNT = 1024
     val SKIP_FIRST_COLUMN = false
@@ -2489,7 +2503,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     private set
 
   var list: VList? = null   // list
-    private set
 
   /**
    * Returns the containing block.

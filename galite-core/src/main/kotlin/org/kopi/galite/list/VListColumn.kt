@@ -18,17 +18,28 @@
 
 package org.kopi.galite.list
 
+import org.jetbrains.exposed.sql.Column
 import kotlin.reflect.KClass
 
 import org.kopi.galite.l10n.ListLocalizer
 
 abstract class VListColumn(
-  var title: String,
+  var title: String?,
   val column: String?,
   private val align: Int,
   val width: Int,
   val isSortAscending: Boolean
 ) : VConstants, ObjectFormatter {
+
+  constructor( title: String?,
+               column: Column<Any>?,
+               align: Int,
+               width: Int,
+               isSortAscending: Boolean ) : this(title , column?.name , align , width , isSortAscending){
+                 this.tableColumn = column
+               }
+
+  var tableColumn : Column<Any>? = null
 
   /**
    * Returns the column alignment

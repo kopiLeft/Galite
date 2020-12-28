@@ -20,7 +20,7 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
-class VStringColumn(title: String,
+class VStringColumn(title: String?,
                     column: String?,
                     align: Int,
                     width: Int,

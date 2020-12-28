@@ -327,7 +327,7 @@ class VListDialog(list: Array<VListColumn?>,
     }
     translatedIdents = IntArray(idents.size - if (isSkipFirstLine) 1 else 0)
     for (i in sizes.indices) {
-      sizes[i] = max(list[i]!!.width, list[i]!!.title.length)
+      sizes[i] = max(list[i]!!.width, list[i]!!.title!!.length)
       titles[i] = list[i]!!.title
     }
     for (i in translatedIdents.indices) {
