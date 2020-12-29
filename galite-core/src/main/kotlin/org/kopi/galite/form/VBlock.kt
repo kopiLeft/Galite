@@ -3020,7 +3020,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)
       try {
-          tables!![0].deleteWhere { idColumn eq id }
+        tables!![0].deleteWhere { idColumn eq id }
       } catch (e: DBForeignKeyException) {
         activeRecord = recno // also valid for single blocks
         throw convertForeignKeyException(e)

@@ -27,34 +27,6 @@ import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
 
 class VBlockTests : JApplicationTestBase() {
-  private val firstBlock = FormSample.model.getBlock(0)
-    init {
-      val userTable = User
-      transaction {
-        SchemaUtils.create(User)
-        userTable.insert {
-          it[id] = 1
-          it[name] = "AUDREY"
-          it[age] = 23
-          it[ts] = 0
-          it[uc] = 0
-        }
-        userTable.insert {
-          it[id] = 3
-          it[name] = "Fabienne BUGHIN"
-          it[age] = 25
-          it[ts] = 0
-          it[uc] = 0
-        }
-        userTable.insert {
-          it[id] = 4
-          it[name] = "FABIENNE BUGHIN2"
-          it[age] = 23
-          it[ts] = 0
-          it[uc] = 0
-        }
-      }
-    }
 
   @Test
   fun deleteRecordTest() {
@@ -62,6 +34,30 @@ class VBlockTests : JApplicationTestBase() {
     FormSample.tb1.id.value = 1
 
     transaction {
+
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[name] = "AUDREY"
+        it[age] = 23
+        it[ts] = 0
+        it[uc] = 0
+      }
+      User.insert {
+        it[id] = 3
+        it[name] = "Fabienne BUGHIN"
+        it[age] = 25
+        it[ts] = 0
+        it[uc] = 0
+      }
+      User.insert {
+        it[id] = 4
+        it[name] = "FABIENNE BUGHIN2"
+        it[age] = 23
+        it[ts] = 0
+        it[uc] = 0
+      }
+
       val query = User.slice(User.name, User.age).selectAll()
 
       FormSample.tb1.vBlock.deleteRecord(0)
