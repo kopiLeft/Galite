@@ -45,22 +45,22 @@ import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Fixed
 import org.kopi.galite.type.Week
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Date
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.VModel
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -688,7 +688,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Returns the search conditions for this field.
    */
   open fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? {
-    TODO()
+    // TODO
     return null
   }
 
@@ -1896,9 +1896,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           } catch (abortEx: SQLException) {
             throw VExecFailedException(abortEx)
           }
-        } catch (error: java.lang.Error) {
+        } catch (error: Error) {
           try {
-          } catch (abortEx: java.lang.Error) {
+          } catch (abortEx: Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (rte: RuntimeException) {
@@ -1993,10 +1993,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (lab != null) {
       lab = lab.replace(' ', '_')
       help.helpOnField(block!!.title,
-              block!!.getFieldPos(this),
-              label,
-              lab ?: name,
-              toolTip)
+                       block!!.getFieldPos(this),
+                       label,
+                       lab ?: name,
+                       toolTip)
       if (access[VConstants.MOD_UPDATE] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_INSERT] != VConstants.ACS_SKIPPED
               || access[VConstants.MOD_QUERY] != VConstants.ACS_SKIPPED) {
