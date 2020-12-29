@@ -21,6 +21,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * An abstract implementation of notification components such as
@@ -196,5 +197,5 @@ abstract class VAbstractNotification(title: String, message: String?): Component
   private val title: H3? = null
   private val message: VParagraph? = null
   protected var yesIsDefault = false
-
+  protected var buttons: VerticalLayout? = null
 }

@@ -18,32 +18,44 @@
 package org.kopi.galite.ui.vaadin.notification
 
 import com.vaadin.flow.component.KeyPressEvent
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Information type notification component.
  */
 open class VInformationNotification(title: String, message: String) : VAbstractNotification(title, message) {
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
-  override fun setButtons(locale: String?) {
 
+  override fun setButtons(locale: String?) {
+    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE")) {
+        hide()
+        fireOnClose(false)
+      }
+    buttons!!.add(close)
   }
 
   override val iconName: String
     get() = "info-circle"
 
   fun focus() {
-
+    if (close != null) {
+      close!!.focus()
+    }
   }
 
   fun onKeyPress(event: KeyPressEvent) {
-
+    if (close != null && close!!.caption.toLowerCase() === event.code.toString()) {
+      close!!.click()
+    }
   }
 
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
+
   private var close: VInputButton? = null
 }
