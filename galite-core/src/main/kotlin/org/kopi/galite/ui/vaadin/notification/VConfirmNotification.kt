@@ -18,21 +18,42 @@
 package org.kopi.galite.ui.vaadin.notification
 
 import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Confirm type notification component.
  */
 open class VConfirmNotification(title: String, message: String) : VAbstractNotification(title, message) {
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
-  override fun setButtons(locale: String?) {
 
+  override fun setButtons(locale: String?) {
+    ok = VInputButton(LocalizedProperties.getString(locale, "OK")) {
+      hide()
+      fireOnClose(true)
+    }
+    cancel = VInputButton(LocalizedProperties.getString(locale, "NO")) {
+      hide()
+      fireOnClose(false)
+    }
+    buttons.add(ok)
+    buttons.add(cancel)
   }
 
   fun focus() {
-
+    if (yesIsDefault && ok != null) {
+      ok!!.focus()
+      okFocused = true
+      cancelFocused = false
+    } else if (cancel != null) {
+      cancel!!.focus()
+      okFocused = false
+      cancelFocused = true
+    }
   }
 
   override val iconName: String?
@@ -47,7 +68,11 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   }
 
   fun onKeyPress(event: KeyPressEvent) {
-
+    if (cancel != null && event.code.toString() === cancel!!.caption.toLowerCase()) {
+      cancel!!.click()
+    } else if (ok != null && event.code.toString() === ok!!.caption.toLowerCase()) {
+      ok!!.click()
+    }
   }
 
   //------------------------------------------------
@@ -57,4 +82,5 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   private var cancel: VInputButton? = null
   private var okFocused = false
   private var cancelFocused = false
+  protected var buttons = VerticalLayout()
 }

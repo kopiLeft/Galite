@@ -20,10 +20,11 @@ package org.kopi.galite.ui.vaadin.notification
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Paragraph
+import com.vaadin.flow.component.icon.Icon
 
 /**
  * An abstract implementation of notification components such as
- * warnings, errors, confirms and informations.
+ * warnings, errors, confirms and information.
  */
 // TODO : implement this class with appropriate visual component
 abstract class VAbstractNotification(title: String, message: String?): Component() {
@@ -124,20 +125,14 @@ abstract class VAbstractNotification(title: String, message: String?): Component
     return true
   }
 
-  /**
-   * Sets yes is a default answer.
-   * @param yesIsDefault Yes is the default answer.
-   */
-  fun setYesIsDefault(yesIsDefault: Boolean) {
-
-  }
-
   fun clear() {
 
   }
+
   //-------------------------------------------------
   // ABSTRACT METHODS
   //-------------------------------------------------
+
   /**
    * Sets the notification buttons.
    * @param locale The notification locale.
@@ -149,13 +144,16 @@ abstract class VAbstractNotification(title: String, message: String?): Component
    * @return The icon name to be used with this notification.
    */
   protected abstract val iconName: String?
+
   //-------------------------------------------------
   // INNER CLASSES
   //-------------------------------------------------
+
   /**
    * A simple component that wraps a h3 HTML tag.
    */
   private class VH3 : H3() {
+
     /**
      * Sets the inner text for this element.
      * @param text The inner text.
@@ -169,6 +167,7 @@ abstract class VAbstractNotification(title: String, message: String?): Component
    * A simple component that wraps a p html tag.
    */
   private class VParagraph : Paragraph() {
+
     /**
      * Sets the inner HTML for this component element.
      * @param html The component inner HTML.
@@ -188,4 +187,14 @@ abstract class VAbstractNotification(title: String, message: String?): Component
   init {
 
   }
+
+  //-------------------------------------------------
+  // DATA MEMBERS
+  //-------------------------------------------------
+  private val listeners: List<NotificationListener>? = null
+  private val icon: Icon? = null
+  private val title: H3? = null
+  private val message: VParagraph? = null
+  protected var yesIsDefault = false
+
 }
