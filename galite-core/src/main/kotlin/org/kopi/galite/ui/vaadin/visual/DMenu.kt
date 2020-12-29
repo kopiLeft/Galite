@@ -42,9 +42,6 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   //---------------------------------------------------
   // UTILS
   //---------------------------------------------------
-  //---------------------------------------------------
-  // UTILS
-  //---------------------------------------------------
 
   protected open fun buildMenu(roots: List<RootMenu>) {
     for (rootMenu in roots) {
@@ -73,6 +70,7 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   protected open fun toModuleItem(node: DefaultMutableTreeNode, parent: ModuleItem?) {
     val item: ModuleItem
     val module = node.userObject as Module
+
     item = toModuleItem(module, parent)
     modules[module.id] = module
     // build module children
@@ -96,17 +94,13 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
    * @param id
    * @return
    */
-  protected fun getModuleById(id: String?): Module? {
-    return modules[Integer.valueOf(id)]
-  }
+  protected fun getModuleById(id: String?): Module? = modules[Integer.valueOf(id)]
 
   /**
    * Returns the menu model.
    * @return The menu model.
    */
-  override fun getModel(): VMenuTree {
-    return model
-  }
+  override fun getModel(): VMenuTree = model
 
   /**
    * Launches the given [Module].

@@ -19,8 +19,6 @@ package org.kopi.galite.ui.vaadin.base
 
 import org.kopi.galite.base.Utils
 import org.kopi.galite.visual.VColor
-import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * Some vaadin version utilities to obtain images and resources.
@@ -37,7 +35,7 @@ object Utils : Utils() {
     return if (color == null) {
       ""
     } else {
-      "rgb(" + color.red.toString() + "," + color.green.toString() + "," + color.blue.toString() + ")"
+      "rgb(${color.red},${color.green},${color.blue})"
     }
   }
 
@@ -56,21 +54,20 @@ object Utils : Utils() {
 
   /**
    * Creates a HTML tooltip that wraps a string content.
+   *
    * @param content The content (String or html).
-   * @return The decoredted tooltip
+   *
+   * @return The decorated tooltip
    */
-  fun createTooltip(content: String): String {
-    return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>$content</div>"
-  }
+  fun createTooltip(content: String?): String =
+          "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>$content</div>"
 
   /**
    * Returns the equivalent font awesome icon from the given icon name.
    * @param iconName The model icon name.
    * @return The font awesome icon.
    */
-  fun getFontAwesomeIcon(iconName: String?): String? {
-    return pngToFontAwesomeMap[iconName]
-  }
+  fun getFontAwesomeIcon(iconName: String?): String? = pngToFontAwesomeMap[iconName]
 
   /**
    * Returns true if the given two objects are equals.
@@ -100,14 +97,13 @@ object Utils : Utils() {
   // --------------------------------------------------
   // PRIVATE DATA
   // --------------------------------------------------
-  private const val VAADIN_RESOURCE_DIR = "org/kopi/vkopi/lib/ui/vaadin/resource"
+  private const val VAADIN_RESOURCE_DIR = "org/kopi/galite/ui/vaadin"
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
-  private const val RESOURCE_DIR = "org/kopi/vkopi/lib/resource"
+  private const val RESOURCE_DIR = "org/kopi/galite"
   private var pngToFontAwesomeMap = mutableMapOf<String, String>()
 
   init {
-    pngToFontAwesomeMap = HashMap<String, String>()
     pngToFontAwesomeMap["all"] = "hand-paper-o"
     pngToFontAwesomeMap["block"] = "ban"
     pngToFontAwesomeMap["border"] = "cog"

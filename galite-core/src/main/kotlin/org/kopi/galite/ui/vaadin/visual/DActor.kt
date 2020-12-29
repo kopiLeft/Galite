@@ -35,7 +35,6 @@ import com.vaadin.flow.component.ShortcutEventListener
  * of the [DWindow] which is the receiver of all actors actions.
  *
  * @param model The actor model.
-
  *
  */
 class DActor(private var model: VActor) : Actor(model.menuItem,
@@ -68,16 +67,16 @@ class DActor(private var model: VActor) : Actor(model.menuItem,
      * @param model The actor model.
      * @return The actor description.
      */
-    private fun getDescription(model: VActor): String {
+    private fun getDescription(model: VActor): String? {
       return if (model.acceleratorKey > 0) {
         if (model.acceleratorModifier == 0) {
-          model.help.toString() + " [" + KeyEvent.getKeyText(model.acceleratorKey) + "]"
+          model.help + " [" + KeyEvent.getKeyText(model.acceleratorKey) + "]"
         } else {
-          model.help.toString() + " [" + KeyEvent.getKeyModifiersText(
-                  model.acceleratorModifier) + "-" + KeyEvent.getKeyText(model.acceleratorKey) + "]"
+          model.help + " [" + KeyEvent.getKeyModifiersText(model.acceleratorModifier) +
+                  "-" + KeyEvent.getKeyText(model.acceleratorKey) + "]"
         }
       } else {
-        model.help!!
+        model.help
       }
     }
 
@@ -86,9 +85,7 @@ class DActor(private var model: VActor) : Actor(model.menuItem,
      * @param acceleratorKey The original accelerator key.
      * @return The corrected accelerator key.
      */
-    private fun correctAcceleratorKey(acceleratorKey: Int): Int {
-      return if (acceleratorKey == 10) 13 else acceleratorKey
-    }
+    private fun correctAcceleratorKey(acceleratorKey: Int): Int = if (acceleratorKey == 10) 13 else acceleratorKey
 
     /**
      * Returns the corrected modifier accelerator key.

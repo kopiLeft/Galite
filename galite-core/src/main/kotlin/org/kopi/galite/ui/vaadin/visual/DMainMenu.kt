@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.visual
 
 import org.kopi.galite.visual.VMenuTree
-import org.kopi.galite.visual.VWindow
 
 /**
  * The main application menu. Creates the module menu from a menu tree model.

@@ -28,5 +28,5 @@ open class ModuleItem(id: String,
                       caption: String?,
                       description: String?,
                       isLeaf: Boolean) : Component(), HasComponents {
-
+  // TODO
 }

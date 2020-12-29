@@ -78,8 +78,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   override fun gotoShortcuts() {}
 
   override fun addSelectedElement() {
-    val module = selectedModule
-    module?.let { addShortcut(it) }
+    selectedModule?.let { addShortcut(it) }
   }
 
   /**
@@ -165,7 +164,6 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   override fun getBookmark(): UMenuTree.UBookmarkPanel? {
     TODO("Not yet implemented")
   }
-
 
   override fun showApplicationInformation(message: String) {
     TODO("Not yet implemented")

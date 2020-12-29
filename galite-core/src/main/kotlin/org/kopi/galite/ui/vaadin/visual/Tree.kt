@@ -17,16 +17,18 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
-import org.kopi.galite.visual.Item
-import org.kopi.galite.visual.UItemTree
-import java.util.*
 import javax.swing.tree.TreeNode
+
+import org.kopi.galite.visual.Item
+import org.kopi.galite.visual.UItemTree.UTreeComponent
 
 /**
  * The vaadin implementation of an [UTreeComponent].
  */
-class Tree(root: TreeNode, private val isNoEdit: Boolean,
-           private val localised: Boolean) : UItemTree.UTreeComponent {
+class Tree(root: TreeNode,
+           private val isNoEdit: Boolean,
+           private val localised: Boolean)
+  : UTreeComponent {
   override fun collapseRow(row: Int) {
     TODO("Not yet implemented")
   }
@@ -78,5 +80,4 @@ class Tree(root: TreeNode, private val isNoEdit: Boolean,
   override fun setVisible(visible: Boolean) {
     TODO("Not yet implemented")
   }
-
 }

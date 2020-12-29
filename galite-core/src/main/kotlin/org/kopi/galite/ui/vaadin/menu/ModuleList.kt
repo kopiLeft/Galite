@@ -18,12 +18,12 @@
 package org.kopi.galite.ui.vaadin.menu
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.HasComponents
 
 /**
  * The module list server side component.
  * TODO: Implement this class with appropriate component
  */
-open class ModuleList : Component(), HasEnabled {
+open class ModuleList : Component(), HasComponents {
 
 }
