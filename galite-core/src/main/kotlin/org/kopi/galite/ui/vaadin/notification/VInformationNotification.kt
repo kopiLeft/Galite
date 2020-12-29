@@ -35,13 +35,10 @@ open class VInformationNotification(title: String, message: String) : VAbstractN
         hide()
         fireOnClose(false)
       }
-    buttons!!.add(close)
+    content!!.add(close)
   }
 
-  override val iconName: String
-    get() = "info-circle"
-
-  fun focus() {
+ fun focus() {
     if (close != null) {
       close!!.focus()
     }
@@ -58,4 +55,8 @@ open class VInformationNotification(title: String, message: String) : VAbstractN
   //--------------------------------------------------
 
   private var close: VInputButton? = null
+
+  override val iconName: String
+    get() = "info-circle"
+
 }

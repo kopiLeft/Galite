@@ -51,16 +51,26 @@ open class VErrorNotification(title: String, message: String?) : VAbstractNotifi
    * Hides the error details.
    */
   protected fun hideErrorDetails() {
-
+  /*  if (detailsPopup != null) {
+      detailsPopup!!.hide()
+      detailsPopup.clear()
+      detailsPopup.removeFromParent()
+      detailsPopup = null
+    }*/
   }
 
   fun onKeyPress(event: KeyPressEvent) {
-
+    if (close != null && close!!.caption.toLowerCase() === event.code.toString()) {
+      close!!.click()
+    } else if (details != null && details!!.caption.toLowerCase() === event.code.toString()) {
+      details!!.click()
+    }
   }
 
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
+
   private var detailsPopup: VErrorMessagePopup? = null
   private var details: VInputButton? = null
   private var close: VInputButton? = null

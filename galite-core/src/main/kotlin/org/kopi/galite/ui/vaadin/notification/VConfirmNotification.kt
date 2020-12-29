@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.notification
 
 import com.vaadin.flow.component.KeyPressEvent
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
@@ -40,8 +39,8 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
       hide()
       fireOnClose(false)
     }
-    buttons.add(ok)
-    buttons.add(cancel)
+    content!!.add(ok)
+    content.add(cancel)
   }
 
   fun focus() {
@@ -55,10 +54,6 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
       cancelFocused = true
     }
   }
-
-  override val iconName: String?
-    get() = "question-circle"
-
   override fun showGlassPane(): Boolean {
     return true
   }
@@ -78,9 +73,12 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   //------------------------------------------------
   // DATA MEMBERS
   //------------------------------------------------
+
   private var ok: VInputButton? = null
   private var cancel: VInputButton? = null
   private var okFocused = false
   private var cancelFocused = false
-  protected var buttons = VerticalLayout()
+  override val iconName: String?
+    get() = "question-circle"
+
 }

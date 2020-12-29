@@ -19,12 +19,13 @@ package org.kopi.galite.ui.vaadin.notification
 
 import com.vaadin.flow.component.orderedlayout.Scroller
 import org.kopi.galite.ui.vaadin.common.VSpan
+import javax.swing.Popup
 
 /**
  * An error message popup window containing stack trace detail
  * for an server exception.
  */
-class VErrorMessagePopup {
+class VErrorMessagePopup : Popup(){
 
   //---------------------------------------------------
   // IMPLEMENTATION

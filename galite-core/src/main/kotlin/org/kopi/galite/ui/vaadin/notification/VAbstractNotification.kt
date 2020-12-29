@@ -17,18 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.notification
 
-import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Paragraph
 import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.ui.vaadin.base.Styles
+import java.awt.Window
 
 /**
  * An abstract implementation of notification components such as
  * warnings, errors, confirms and information.
  */
-// TODO : implement this class with appropriate visual component
-abstract class VAbstractNotification(title: String, message: String?): Component() {
+abstract class VAbstractNotification(title: String, message: String?): HorizontalLayout() {
 
   /**
    * Localization string.
@@ -69,7 +72,7 @@ abstract class VAbstractNotification(title: String, message: String?): Component
    * @param l The listener to be added.
    */
   fun addNotificationListener(l: NotificationListener) {
-
+    listeners!!.add(l)
   }
 
   /**
@@ -77,7 +80,7 @@ abstract class VAbstractNotification(title: String, message: String?): Component
    * @param l The listener to be removed.
    */
   fun removeNotificationListener(l: NotificationListener) {
-
+    listeners!!.remove(l)
   }
 
   /**
@@ -85,15 +88,19 @@ abstract class VAbstractNotification(title: String, message: String?): Component
    * @param action The user action.
    */
   protected fun fireOnClose(action: Boolean) {
-
+    for (l in listeners!!) {
+      l.onClose(action)
+    }
   }
 
   fun onClose() {
 
   }
+
   //-------------------------------------------------
   // ACCESSORS
   //-------------------------------------------------
+
   /**
    * Sets the notification title.
    * @param title The notification title.
@@ -160,7 +167,7 @@ abstract class VAbstractNotification(title: String, message: String?): Component
      * @param text The inner text.
      */
     override fun setText(text: String?) {
-      // TODO
+          element.text=text
     }
   }
 
@@ -179,23 +186,36 @@ abstract class VAbstractNotification(title: String, message: String?): Component
   }
 
   //-------------------------------------------------
+  // DATA MEMBERS
+  //-------------------------------------------------
+
+  private val listeners: MutableList<NotificationListener>? = null
+  private val listener : ComponentEventListener<KeyPressEvent>? = null
+  private var icon: Icon? = null
+  private val title: H3? = null
+  private var message: VParagraph? = null
+  open var yesIsDefault = false
+  protected open var buttons: Button? = null
+  protected var popup: HorizontalLayout? = null
+  val content: HorizontalLayout? = null
+  private val lastFocusedWindow: Window? = null
+
+  //-------------------------------------------------
   // CONSTRUCTOR
   //-------------------------------------------------
+
   /**
    * Creates a new notification component with table containing
    * a title, a message, an image and buttons location.
    */
   init {
-
+    icon = Icon(iconName)
+    this.message!!.className = Styles.NOTIFICATION_MESSAGE
+    popup!!.add(title)
+    popup!!.add(content)
+    content!!.add(icon)
+    content.add(message)
+    content.add(buttons)
+    // addKeyPressListener(listener)
   }
-
-  //-------------------------------------------------
-  // DATA MEMBERS
-  //-------------------------------------------------
-  private val listeners: List<NotificationListener>? = null
-  private val icon: Icon? = null
-  private val title: H3? = null
-  private val message: VParagraph? = null
-  protected var yesIsDefault = false
-  protected var buttons: VerticalLayout? = null
 }

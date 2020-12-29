@@ -23,6 +23,7 @@ import java.io.Serializable
  * Notifications listener.
  */
 interface NotificationListener : Serializable {
+
   /**
    * Fires the notification close action.
    * @param action the user action.
