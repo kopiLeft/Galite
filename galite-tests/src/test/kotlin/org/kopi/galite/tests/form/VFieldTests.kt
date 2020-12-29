@@ -16,35 +16,22 @@
  */
 package org.kopi.galite.tests.form
 
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
+import kotlin.test.assertFailsWith
 
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.Test
 import org.kopi.galite.form.VFieldException
 import org.kopi.galite.form.VPosition
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
-import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VStringColumn
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VCommand
-import kotlin.test.assertFailsWith
+import org.junit.Test
 
 class VFieldTests : JApplicationTestBase() {
   private val nameField = FormSample.model.getBlock(0).fields[1]
-  private val ageField = FormSample.model.getBlock(0).fields[3]
-
-  @Test
-  fun getCheckListEmptyFieldTest() {
-    assertFailsWith<VFieldException>(MessageCode.getMessage("VIS-00001")) {
-      transaction {
-        //checks if it exists in database ( at least one element )
-        ageField.checkList()
-      }
-    }
-  }
 
   @Test
   fun getCheckListVStringFieldTest1() {
@@ -55,81 +42,38 @@ class VFieldTests : JApplicationTestBase() {
     }
   }
 
-  @Test
-  fun getCheckListVStringFieldTest2() {
-     object {
-      init {
-        val userTable = User
-        transaction {
-          SchemaUtils.create(User)
-          userTable.insert {
-            it[id] = 1
-            it[name] = "AUDREY"
-          }
-          userTable.insert {
-            it[id] = 2
-            it[name] = "Fabienne BUGHIN"
-          }
-          userTable.insert {
-            it[id] = 3
-            it[name] = "FABIENNE BUGHIN2"
-          }
-        }
-      }
-    }
-    //CheckList function works without exceptions in this case .
-      transaction {
-        nameField.checkList()
-      }
-  }
-
 @Test
-  fun getCheckListVStringFieldTest3() {
-     object {
-      init {
-        val userTable = User
-        transaction {
-          SchemaUtils.create(User)
-          userTable.insert {
-            it[id] = 1
-            it[name] = "AUDREY"
-          }
-        userTable.insert {
-            it[id] = 11
-            it[name] = "AUDREY"
-          }
-          userTable.insert {
-            it[id] = 2
-            it[name] = "Fabienne BUGHIN"
-          }
-          userTable.insert {
-            it[id] = 3
-            it[name] = "FABIENNE BUGHIN2"
-          }
-        }
-      }
-    }
-    //result = if (lineCount == 0 && (newForm == null || !isNull(block!!.activeRecord)))
+  fun getCheckListVStringFieldTest2() {
+
     assertFailsWith<VFieldException>(MessageCode.getMessage("VIS-00001")) {
       transaction {
+        User.insert {
+          it[id] = 1
+          it[name] = "AUDREY"
+        }
+        User.insert {
+          it[id] = 11
+          it[name] = "AUDREY"
+        }
+        User.insert {
+          it[id] = 2
+          it[name] = "Fabienne BUGHIN"
+        }
+        User.insert {
+          it[id] = 3
+          it[name] = "FABIENNE BUGHIN2"
+        }
         nameField.checkList()
-      }
-    }
-  }
-
-  companion object{
-    init {
-      FormSample.tb1.id.value = 1
-      FormSample.tb1.name.value = "AUDREY"
-      transaction {
-        SchemaUtils.create(User)
       }
     }
   }
 
   init {
+    FormSample.tb1.id.value = 1
+    FormSample.tb1.name.value = "AUDREY"
+
     val vListColumn = VList("Benutzer",
-            "apps/common/Global", arrayOf<VListColumn?>(
+            "apps/common/Global", arrayOf(
             VStringColumn(null, "NAME", 2, 50, true)),
             1,
             -1,
@@ -140,7 +84,7 @@ class VFieldTests : JApplicationTestBase() {
 
     FormSample.model.getBlock(0).fields[1].setInfo("name", 1, -1, 0, intArrayOf(4, 4, 4),
             vListColumn,
-            arrayOf<VColumn?>(
+            arrayOf(
                     VColumn(0, "NAME", false, false, User.name)
             ),
             0, 0, null as Array<VCommand>?, VPosition(1, 1, 2, 2, -1), 2,
