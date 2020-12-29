@@ -101,6 +101,7 @@ object Utils : Utils() {
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
   private const val RESOURCE_DIR = "org/kopi/galite"
+  val UKN_IMAGE: Image = Image("$THEME_DIR/unknown.png")
   private var pngToFontAwesomeMap = mutableMapOf<String, String>()
 
   init {
