@@ -16,9 +16,12 @@
  */
 package org.kopi.galite.tests.form
 
+import org.jetbrains.exposed.sql.SchemaUtils
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.common.INITFORM
 import org.kopi.galite.common.POSTFORM
@@ -98,8 +101,49 @@ object FormSample : Form() {
   }
 
   init {
-    tb1.age[0] = 5
-    tb1.age.value = 6
+    transaction {
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 0
+        it[name] = "AUDREY"
+        it[age] = 23
+      }
+      User.insert {
+        it[id] = 1
+        it[name] = "BARBEY"
+        it[age] = 23
+      }
+      User.insert {
+        it[id] = 2
+        it[name] = "BARBEY1"
+        it[age] = 26
+      }
+      User.insert {
+        it[id] = 3
+        it[name] = "Fabienne BUGHIN"
+        it[age] = 25
+      }
+      User.insert {
+        it[id] = 4
+        it[name] = "FABIENNE BUGHIN2"
+        it[age] = 23
+      }
+      User.insert {
+        it[id] = 5
+        it[name] = "USER0"
+        it[age] = 23
+      }
+      User.insert {
+        it[id] = 6
+        it[name] = "user1"
+        it[age] = 23
+      }
+      User.insert {
+        it[id] = 7
+        it[name] = "user2"
+        it[age] = 23
+      }
+    }
   }
 }
 

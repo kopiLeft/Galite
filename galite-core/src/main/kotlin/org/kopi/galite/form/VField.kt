@@ -1859,29 +1859,28 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       null
     } else {
       val suggestions: MutableList<Array<String?>> = ArrayList()
-      val table = block?.tables!![0]
+      val table = evalListTable_()
       val sliceList = list!!.columns.map {
         Column<String>(table , it.column!! , VarCharColumnType())
       }
       val firstColumn = Column<String>(table , list!!.getColumn(0).column!! , VarCharColumnType())
       val condition : Op<Boolean> = when (getAutocompleteType()) {
         VList.AUTOCOMPLETE_CONTAINS -> {
-          Op.build { LowerCase(firstColumn)  like toSql("%${query.toLowerCase()}%") }
+          Op.build { LowerCase(firstColumn)  like "%${query.toLowerCase()}%" }
         }
         VList.AUTOCOMPLETE_STARTSWITH -> {
           Op.build {
-            LowerCase(firstColumn) like toSql("${ query.toLowerCase() }%") }
+            LowerCase(firstColumn) like "${ query.toLowerCase() }%" }
           }
           else -> {
             // default should never reached
-            Op.build { LowerCase(firstColumn) eq toSql(query) }
+            Op.build { LowerCase(firstColumn) eq query }
           }
         }
 
       val exposedQuery = table.slice(sliceList).select(condition).orderBy(firstColumn)
 
         try {
-          transaction {
             exposedQuery.forEach {
               val columns = mutableListOf<String>()
               for (i in 0 until list!!.columnCount()) {
@@ -1890,7 +1889,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               }
               suggestions.add(columns.toTypedArray())
             }
-          }
         } catch (e: SQLException) {
           try {
           } catch (abortEx: SQLException) {
@@ -1923,6 +1921,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } catch (e: VException) {
       throw InconsistencyException()
     }
+  }
+
+  /**
+   * Returns the list table.
+   */
+  private fun evalListTable_(): Table {
+    return block?.tables!![0]
   }
 
   /**
