@@ -18,14 +18,6 @@
 
 package org.kopi.galite.form
 
-import java.awt.Color
-import java.io.InputStream
-import java.sql.SQLException
-
-import javax.swing.event.EventListenerList
-
-import kotlin.reflect.KClass
-
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.Op
@@ -35,31 +27,37 @@ import org.jetbrains.exposed.sql.VarCharColumnType
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.kopi.galite.db.Query
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.db.Query
 import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.Week
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.Module
+import org.kopi.galite.visual.Module.Companion.getExecutable
 import org.kopi.galite.visual.VColor
+import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
+import org.kopi.galite.visual.VModel
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
-import org.kopi.galite.visual.VModel
-import org.kopi.galite.visual.Module.Companion.getExecutable
+import java.awt.Color
+import java.io.InputStream
+import java.sql.SQLException
+import javax.swing.event.EventListenerList
+import kotlin.reflect.KClass
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -1483,7 +1481,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
               //TABLE FOR TEST
               val auxTable = object : Table(block?.tables!![0].tableName){
                 val id = integer("ID")
-                val column = Column<Any>(this , list!!.getColumn(0)!!.column!! , VarCharColumnType() )
+                val column = Column<Any>(this, list!!.getColumn(0)!!.column!!, VarCharColumnType())
               }
               exists = auxTable.select {
                 auxTable.column eq getSql(block!!.activeRecord).toString()
@@ -1524,7 +1522,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
               //TABLE FOR TEST
               val auxTable = object : Table(block?.tables!![0].tableName){
-              val column = Column<String>(this , list!!.getColumn(0)!!.column!! , VarCharColumnType() )
+              val column = Column<String>(this, list!!.getColumn(0)!!.column!!, VarCharColumnType())
               }
 
               val substring = auxTable.column.substring(1, getString(block!!.activeRecord).length)
@@ -1597,16 +1595,16 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             while (true) {
               try {
                 //UNCOMMENT AFTER TEST
-            /*    val auxTable = object : Table(evalListTable()) {
+                /*    val auxTable = object : Table(evalListTable()) {
                 }*/
 
                 //TABLE FOR TEST
-                val auxTable = object : Table(block?.tables!![0].tableName){}
+                val auxTable = object : Table(block?.tables!![0].tableName) {}
                 val columnList: List<Column<String>> = colbuf.split(", ")
                         .map {
                           Column(auxTable, it.trim(), VarCharColumnType())
                         }
-                val firstColumn = Column<String>(auxTable , list!!.getColumn(0)!!.column!! , VarCharColumnType())
+                val firstColumn = Column<String>(auxTable, list!!.getColumn(0)!!.column!!, VarCharColumnType())
                 val indexOfColumn = columnList.indexOf(firstColumn)
                 println(indexOfColumn)
                 val column = columnList[indexOfColumn]
@@ -1682,7 +1680,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
                     transaction {
                       val queryResult = auxTable.slice(auxTable.column)
-                              .select{ auxTable.id eq selected }
+                              .select { auxTable.id eq selected }
                       result = queryResult.filterIndexed { index, resultRow ->
                         index == 1
                       }
@@ -1754,6 +1752,93 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
     }
     return id*/
+  }
+
+  fun displayQueryList_(exposedQuery: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>) : Any? {
+
+    val MAX_LINE_COUNT = 1024
+    val SKIP_FIRST_COLUMN = false
+    val SHOW_SINGLE_ENTRY: Boolean
+
+    val lines = Array(columns.size - if (SKIP_FIRST_COLUMN) 1 else 0) { arrayOfNulls<Any>(MAX_LINE_COUNT) }
+    var lineCount = 0
+    val columnsList = columns.mapIndexed { index , column ->
+      Column<Any>( evalListTable_(), columns[index]!!.column!! , VarCharColumnType())
+    }
+
+    val newForm: VDictionary? = if (list!!.newForm != null) {
+      // OLD SYNTAX
+      Module.getExecutable(list!!.newForm) as VDictionary?
+    } else (if (list!!.action != -1) {
+      // NEW SYNTAX
+      block!!.executeObjectTrigger(list!!.action)
+    } else {
+      null // should never happen.
+    }) as VDictionary?
+    SHOW_SINGLE_ENTRY = newForm != null
+
+        try {
+          lineCount = 0
+          exposedQuery.forEach iterator@{ resultRow ->
+            if (lineCount >= MAX_LINE_COUNT - 1 ) return@iterator
+            else {
+              if (resultRow[columnsList[1]] == null) return@iterator
+
+              var i = 0
+              while (i < lines.size) {
+                lines[i][lineCount] = resultRow[columnsList[(i + if (SKIP_FIRST_COLUMN) 2 else 1)]]
+                i += 1
+              }
+              lineCount += 1
+            }
+          }
+        } catch (e: SQLException) {
+        } catch (error: java.lang.Error) {
+        } catch (rte: RuntimeException) {
+        } catch (e: Throwable) {
+      throw VRuntimeException(e)
+    }
+
+    return if (lineCount == 0 && (newForm == null || !isNull(block!!.activeRecord))) {
+      throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
+    } else {
+      val selected: Int
+      if (lineCount == 0 && newForm != null && isNull(block!!.activeRecord)) {
+        selected = newForm.add(getForm())
+      } else {
+        if (lineCount == MAX_LINE_COUNT - 1) {
+          getForm().notice(MessageCode.getMessage("VIS-00028"))
+        }
+        if (lineCount == 1 && !SHOW_SINGLE_ENTRY) {
+          selected = 0
+        } else {
+          val ld = VListDialog(columns, lines, lineCount, newForm!!)
+          selected = ld.selectFromDialog(getForm(), null, this)
+        }
+      }
+      if (selected == -1) {
+        throw VExecFailedException() // no message needed
+      } else if (selected >= lineCount) {
+        // new, retrieve it
+        var result: Any? = null
+            try {
+              val column = Column<Any>(evalListTable_() , list!!.getColumn(0)!!.column!! , VarCharColumnType())
+              val idColumn = Column<Any>(evalListTable_() , "ID" , VarCharColumnType())
+              val query = evalListTable_().slice(column).select{ idColumn eq selected }
+
+              result = query.first()[columnsList[1]]
+            } catch (e: SQLException) {
+            } catch (error: java.lang.Error) {
+            } catch (rte: RuntimeException) {
+            }
+          catch (e: Throwable) {
+          throw VRuntimeException(e)
+        }
+        result
+      } else {
+        lines[0][selected]
+      }
+    }
   }
 
   fun displayQueryList(queryText: String, columns: Array<VListColumn?>): Any? {
@@ -2036,6 +2121,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   // ---------------------------------------------------------------------
   // IMPLEMENTATION
   // ---------------------------------------------------------------------
+  /**
+   * Returns the list table.
+   */
+  private fun evalListTable_(): Table {
+    return block?.tables!![0]
+  }
+
   /**
    * Returns the list table.
    */
