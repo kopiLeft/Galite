@@ -25,7 +25,7 @@ import javax.swing.Popup
  * An error message popup window containing stack trace detail
  * for an server exception.
  */
-class VErrorMessagePopup : Popup() {
+class VErrorMessagePopup {
 
   //---------------------------------------------------
   // IMPLEMENTATION
