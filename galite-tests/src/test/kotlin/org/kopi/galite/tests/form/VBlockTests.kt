@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.form
 
 import kotlin.test.assertEquals
+
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
@@ -30,7 +31,6 @@ class VBlockTests : JApplicationTestBase() {
   @Test
   fun getSearchConditionsTest1() {
     // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
-    connectToDatabase()
     FormSample.tb1.name.value = "myName"
     FormSample.tb1.age.value = 6
     FormSample.tb1.job.value = "jobValue"
@@ -50,7 +50,6 @@ class VBlockTests : JApplicationTestBase() {
       fields[4].setSearchOperator(1)
     }
 
-    connectToDatabase()
     FormSample.tb1.name.value = "myName*"
     FormSample.tb1.age.value = 8
     FormSample.tb1.job.value = "jobValue"
@@ -69,7 +68,6 @@ class VBlockTests : JApplicationTestBase() {
       fields[3].setSearchOperator(2)
       fields[4].setSearchOperator(2)
     }
-    connectToDatabase()
     FormSample.tb1.name.value = "*myName"
     FormSample.tb1.age.value = 9
     FormSample.tb1.job.value = "jobValue"
@@ -89,7 +87,6 @@ class VBlockTests : JApplicationTestBase() {
       fields[3].setSearchOperator(3)
       fields[4].setSearchOperator(3)
     }
-    connectToDatabase()
     FormSample.tb1.name.value = "my*Name"
     FormSample.tb1.age.value = 10
     FormSample.tb1.job.value = "jobValue"
@@ -108,7 +105,6 @@ class VBlockTests : JApplicationTestBase() {
       fields[3].setSearchOperator(4)
       fields[4].setSearchOperator(4)
     }
-    connectToDatabase()
     FormSample.tb1.name.value = "*"
     FormSample.tb1.age.value = 11
     FormSample.tb1.job.value = "job*Value"
