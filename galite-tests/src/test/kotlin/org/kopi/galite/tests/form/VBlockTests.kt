@@ -16,6 +16,9 @@
  */
 package org.kopi.galite.tests.form
 
+import org.jetbrains.exposed.sql.SortOrder
+import org.kopi.galite.db.Users
+
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -26,14 +29,22 @@ import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : JApplicationTestBase() {
   @Test
+  fun getSearchOrder_Test() {
+    FormWithList.model
+    val orderBys = FormWithList.block3.vBlock.getSearchOrder_()
+
+    assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
+  }
+
+  @Test
   fun checkUniqueIndexTest() {
     FormWithList.model
-    FormWithList.block2.id[0] = 1
-    FormWithList.block2.name[0] = "administrator"
+    FormWithList.block3.id[0] = 1
+    FormWithList.block3.name[0] = "administrator"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        FormWithList.block2.vBlock.checkUniqueIndices(0)
+        FormWithList.block3.vBlock.checkUniqueIndices(0)
       }
     }
     assertEquals("VIS-00014: ID should be unique", vExecFailedException.message)
