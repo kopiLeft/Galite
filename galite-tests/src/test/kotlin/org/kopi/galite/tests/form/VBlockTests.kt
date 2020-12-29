@@ -25,42 +25,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
 import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
-import org.kopi.galite.tests.form.User.age
-import org.kopi.galite.tests.form.User.name
 
 class VBlockTests : JApplicationTestBase() {
   private val firstBlock = FormSample.model.getBlock(0)
-
-  @Test
-  fun deleteRecordTest1() {
-    FormSample.tb1.id.value = 1
-    FormSample.tb1.name.value = "myFirstName"
-    FormSample.tb1.age.value = 1
-    FormSample.tb1.name.value = "mySecondName"
-    FormSample.tb1.age.value = 2
-    FormSample.tb1.name.value = "myThirdName"
-    FormSample.tb1.age.value = 3
-
-    transaction {
-      val query = User.slice(User.name, User.age).selectAll()
-      val recordList = query.map {
-        mutableListOf(it[name], it[age])
-      }
-
-      assertCollectionsEquals(recordList, mutableListOf(mutableListOf("AUDREY", 23),
-              mutableListOf("Fabienne BUGHIN", 25),
-              mutableListOf("FABIENNE BUGHIN2", 23)))
-
-      firstBlock.deleteRecord(0)
-      val deleteRecordList = query.map {
-        mutableListOf(it[name], it[age])
-      }
-      assertCollectionsEquals(deleteRecordList, mutableListOf(mutableListOf("Fabienne BUGHIN", 25),
-              mutableListOf("FABIENNE BUGHIN2", 23)))
-    }
-  }
-
-  companion object {
     init {
       val userTable = User
       transaction {
@@ -88,7 +55,25 @@ class VBlockTests : JApplicationTestBase() {
         }
       }
     }
+
+  @Test
+  fun deleteRecordTest() {
+    FormSample.model
+    FormSample.tb1.id.value = 1
+
+    transaction {
+      val query = User.slice(User.name, User.age).selectAll()
+
+      FormSample.tb1.vBlock.deleteRecord(0)
+      val deleteRecordList = query.map {
+        mutableListOf(it[User.name], it[User.age])
+      }
+
+      assertCollectionsEquals(deleteRecordList, mutableListOf(mutableListOf("Fabienne BUGHIN", 25),
+              mutableListOf("FABIENNE BUGHIN2", 23)))
+    }
   }
+
   @Test
   fun getSearchOrder_Test() {
     FormWithList.model

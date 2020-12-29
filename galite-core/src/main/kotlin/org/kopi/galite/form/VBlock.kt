@@ -3003,13 +3003,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         activeRecord = recno
       }
       callProtectedTrigger(TRG_PREDEL)
-      for (i in fields.indices) {
-        fields[i].callProtectedTrigger(TRG_PREDEL)
+      fields.forEach {
+        it.callProtectedTrigger(TRG_PREDEL)
       }
       if (isMulti()) {
         activeRecord = -1
       }
-      val id: Int = idField.getInt(recno)!!
+      val id = idField.getInt(recno)!!
 
       if (id == 0) {
         activeRecord = recno
@@ -3020,16 +3020,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)
       try {
-        transaction {
           tables!![0].deleteWhere { idColumn eq id }
-        }
       } catch (e: DBForeignKeyException) {
         activeRecord = recno // also valid for single blocks
         throw convertForeignKeyException(e)
       }
       clearRecord(recno)
     } catch (e: VException) {
-      if (isMulti() && form.getActiveBlock() !== this) {
+      if (isMulti() && form.getActiveBlock() != this) {
         activeRecord = -1
       }
       throw e
@@ -3470,7 +3468,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var title: String = "" // block title
   var alignment: BlockAlignment? = null
   protected var help: String? = null // the help on this block
-  var tables: Array<Table>? = null // names of database tables
+  internal var tables: Array<Table>? = null // names of database tables
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
