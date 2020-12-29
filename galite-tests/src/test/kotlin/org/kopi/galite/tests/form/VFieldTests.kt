@@ -18,6 +18,8 @@ package org.kopi.galite.tests.form
 
 import kotlin.test.assertFailsWith
 
+import org.junit.Test
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.form.VFieldException
@@ -28,7 +30,6 @@ import org.kopi.galite.list.VStringColumn
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VCommand
-import org.junit.Test
 
 class VFieldTests : JApplicationTestBase() {
   private val nameField = FormSample.model.getBlock(0).fields[1]
@@ -69,6 +70,9 @@ class VFieldTests : JApplicationTestBase() {
   }
 
   init {
+    transaction {
+      SchemaUtils.create(User)
+    }
     FormSample.tb1.id.value = 1
     FormSample.tb1.name.value = "AUDREY"
 
