@@ -15,36 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.base
+package org.kopi.galite.ui.vaadin.menu
 
-import org.kopi.galite.base.Image
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 
 /**
- * The vaadin implementation of an image model.
- *
- * @param resource The resource file attached to this image.
+ * The module list server side component.
+ * TODO: Implement this class with appropriate component
  */
-class Image(val resource: String) : Image {
-  //---------------------------------------------------
-  // IMAGE IMPLEMENTATION
-  //---------------------------------------------------
+open class ModuleList : Component(), HasComponents {
 
-  override fun getWidth(): Int {
-    return -1
-  }
-
-  override fun getHeight(): Int {
-    return -1
-  }
-
-  override fun getDescription(): String {
-    TODO()
-  }
-
-  override fun getScaledInstance(width: Int,
-                                 height: Int,
-                                 hints: Int): Image {
-    // FIXME: return the scaled image from theme images
-    return this
-  }
 }

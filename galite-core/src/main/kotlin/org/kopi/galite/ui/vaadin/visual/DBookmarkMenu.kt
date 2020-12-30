@@ -15,36 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.base
+package org.kopi.galite.ui.vaadin.visual
 
-import org.kopi.galite.base.Image
+import org.kopi.galite.visual.RootMenu
+import org.kopi.galite.visual.VMenuTree
 
 /**
- * The vaadin implementation of an image model.
- *
- * @param resource The resource file attached to this image.
+ * The book mark menu
  */
-class Image(val resource: String) : Image {
+class DBookmarkMenu protected constructor(model: VMenuTree) : DMenu(model) {
   //---------------------------------------------------
-  // IMAGE IMPLEMENTATION
+  // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  override fun getWidth(): Int {
-    return -1
-  }
-
-  override fun getHeight(): Int {
-    return -1
-  }
-
-  override fun getDescription(): String {
+  override fun buildMenu(roots: List<RootMenu>) {
     TODO()
   }
 
-  override fun getScaledInstance(width: Int,
-                                 height: Int,
-                                 hints: Int): Image {
-    // FIXME: return the scaled image from theme images
-    return this
-  }
+  override val type: Int
+    get() = VMenuTree.BOOKMARK_MENU
 }
