@@ -266,7 +266,7 @@ class VItemTree(rootName: String?,
   /**
    * The removed items list.
    */
-  val removedItems: List<Item> = ArrayList()
+  val removedItems = mutableListOf<Item>()
 
   init {
     rootName?.let { setTitle(it) }
