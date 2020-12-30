@@ -217,13 +217,13 @@ abstract class Form : Window() {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
-      val destination = destination
+      val localizationDestination = destination
               ?: this.javaClass.classLoader.getResource("")?.path +
               this.javaClass.packageName.replace(".", "/")
       try {
         val writer = FormLocalizationWriter()
         genLocalization(writer)
-        writer.write(destination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale!!)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")
@@ -287,7 +287,7 @@ abstract class Form : Window() {
   /**
    * Handling form triggers
    */
-  fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
+  private fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
     // FORM TRIGGERS
     val formTriggerArray = IntArray(VConstants.TRG_TYPES.size)
     triggers.forEach { trigger ->

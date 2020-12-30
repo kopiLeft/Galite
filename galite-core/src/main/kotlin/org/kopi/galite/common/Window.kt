@@ -26,7 +26,7 @@ import java.io.File
  * This class represents the definition of a window
  */
 abstract class Window {
-  /** the title of this form */
+  /** the title of this window */
   abstract val title: String
   /** the window locale */
   open val locale: Locale? = null

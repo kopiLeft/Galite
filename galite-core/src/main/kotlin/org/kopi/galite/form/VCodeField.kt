@@ -96,8 +96,8 @@ abstract class VCodeField(val bufferSize: Int,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    var s = o as? String
+  override fun checkType(rec: Int, s: Any?) {
+    var s = s as? String
 
     if (s == "") {
       setNull(rec)
@@ -133,17 +133,14 @@ abstract class VCodeField(val bufferSize: Int,
           val selected: Int
           val selectedToModel: IntArray
           val codes: Array<Any?>
-          var count: Int = 0
-          run {
-            var i = 0
 
-            while (i < labels.size) {
-              if (labels[i].toLowerCase().startsWith(s)) {
-                count++
-              }
-              i++
+          var count = 0
+          labels.forEach { label ->
+            if (label.toLowerCase().startsWith(s)) {
+              count++
             }
           }
+
           codes = arrayOfNulls(count)
           selectedToModel = IntArray(count)
           var j = 0
@@ -396,8 +393,8 @@ abstract class VCodeField(val bufferSize: Int,
    *
    * @param     parent         the caller localizer
    */
-  override fun localize(parent: FieldLocalizer?) {
-    val loc = parent!!.manager.getTypeLocalizer(source, type)
+  override fun localize(loc: FieldLocalizer?) {
+    val loc = loc!!.manager.getTypeLocalizer(source, type)
 
     val labels = arrayOfNulls<String>(idents.size)
 
@@ -428,7 +425,7 @@ abstract class VCodeField(val bufferSize: Int,
       var res = 0
 
       for (i in labels.indices) {
-        res = Math.max(labels[i].length, res)
+        res = labels[i].length.coerceAtLeast(res)
       }
       return res
     }

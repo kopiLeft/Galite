@@ -31,7 +31,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   /**
    * Constructs a Month from a Date
    */
-  internal constructor(date: Date) : this(date.year, date.month) {}
+  internal constructor(date: Date) : this(date.year, date.month)
 
   /**
    * Formats the month according to the given format using the default

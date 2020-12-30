@@ -21,8 +21,8 @@ object VKConstants {
     // ----------------------------------------------------------------------
     // PREDEFINED COMMANDS
     // ----------------------------------------------------------------------
-    val CMD_AUTOFILL: String = "Autofill"
-    val CMD_SHORTCUT: String = "EditItem_S"
-    val CMD_NEWITEM: String = "NewItem"
-    val CMD_EDITITEM: String = "EditItem"
+    const val CMD_AUTOFILL: String = "Autofill"
+    const val CMD_SHORTCUT: String = "EditItem_S"
+    const val CMD_NEWITEM: String = "NewItem"
+    const val CMD_EDITITEM: String = "EditItem"
 }

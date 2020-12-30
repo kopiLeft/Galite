@@ -214,7 +214,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     parent         the caller localizer
    */
   fun localize(parent: BlockLocalizer) {
-    val loc = parent.getFieldLocalizer(name!!)
+    val loc = parent.getFieldLocalizer(name)
 
     label = loc.getLabel()
     toolTip = loc.getHelp()
@@ -1783,7 +1783,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
       append(" ORDER BY 1")
     }
-    val result = displayQueryList(qrybuf.toString(), list!!.columns)
+    val result = displayQueryList(qrybuf, list!!.columns)
 
     if (result == null) {
       throw VExecFailedException() // no message to display

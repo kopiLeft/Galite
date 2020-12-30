@@ -111,20 +111,20 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
   }
 
   override fun exportHeader(data: Array<String?>) {
-    val titlerow = sheet!!.createRow(0)
+    val titleRow = sheet!!.createRow(0)
     var cellPos = 0
 
     data.forEach {
-      titlerow.createCell(cellPos++).setCellValue(it)
+      titleRow.createCell(cellPos++).setCellValue(it)
     }
   }
 
-  protected override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
     val row = sheet!!.createRow(rowNumber + 1)
     val color = getBackgroundForLevel(level)
     var cellPos = 0
 
-    data.forEachIndexed() { index, element ->
+    data.forEachIndexed { index, element ->
       val cell: Cell = row.createCell(cellPos)
       val cellStyle: CellStyle = cellStyleCacheManager.getStyle(this,
                                                                 workbook!!,

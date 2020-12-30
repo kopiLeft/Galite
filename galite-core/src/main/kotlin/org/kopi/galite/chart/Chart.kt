@@ -17,6 +17,8 @@
 
 package org.kopi.galite.chart
 
+import java.io.IOException
+
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.ChartObjectTriggerEvent
 import org.kopi.galite.common.ChartTriggerEvent
@@ -29,14 +31,17 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.report.Constants
 import org.kopi.galite.visual.VWindow
-import java.io.IOException
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
  *
- * @param name the name of the chart. It represents the title
+ * In fact, all you have to do to create a chart is to define the dimensions you need and their measures,
+ * then you will have to write a constructor that will load data into these fields.
+ *
+ * With this Charts, you will also be able to print or export the created chart to different file formats.
+ *
  */
-abstract class Chart() : Window() {
+abstract class Chart : Window() {
   /** The chart's dimension */
   lateinit var dimension: ChartDimension<*>
 
@@ -145,19 +150,19 @@ abstract class Chart() : Window() {
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
   /**
-   * !!!FIX : comment move file creation to upper level (VKPhylum?)
+   * !!!FIX : comment move file creation to upper level
    */
   open fun genLocalization(destination: String? = null) {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
-      val destination = destination
+      val localizationDestination = destination
               ?: this.javaClass.classLoader.getResource("")?.path +
               this.javaClass.packageName.replace(".", "/")
       try {
         val writer = ChartLocalizationWriter()
         genLocalization(writer)
-        writer.write(destination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale!!)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")

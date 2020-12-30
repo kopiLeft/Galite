@@ -55,6 +55,6 @@ class Parameters(color: Color) : Serializable {
    * Returns the foreground color which corresponds to the level
    */
   fun getForeground(level: Int): Color {
-    return if (level >= fgcolors.size) Color.black else fgcolors[level]!!
+    return if (level >= fgcolors.size) Color.black else fgcolors[level]
   }
 }

@@ -41,7 +41,7 @@ class VBooleanColumn(ident: String?,
                   align,
                   groups,
                   function,
-                  Math.max(VlibProperties.getString("true").length, VlibProperties.getString("false").length),
+                  VlibProperties.getString("true").length.coerceAtLeast(VlibProperties.getString("false").length),
                   1,
                   format ?: VBooleanFormat()) {
   /**

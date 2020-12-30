@@ -34,7 +34,7 @@ class PSPrintException : PrintException {
    * Constructs a new exception with the specified detail message and cause.
    *
    * @param     message                the associated message
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted)
    */
   constructor(message: String?, cause: Throwable?) : super(message, cause, EXC_FATAL)
 

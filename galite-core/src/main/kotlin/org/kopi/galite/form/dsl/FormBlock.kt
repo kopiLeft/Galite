@@ -20,8 +20,6 @@ package org.kopi.galite.form.dsl
 import java.awt.Point
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
@@ -87,10 +85,10 @@ open class FormBlock(var buffer: Int,
   private var displayedFields = 0
   lateinit var form: Form
 
-  /** Blocks's fields. */
+  /** Block's fields. */
   val blockFields = mutableListOf<FormField<*>>()
 
-  /** Blocks's commands. */
+  /** Block's commands. */
   private val blockCommands = mutableListOf<Command>()
 
   /** Domains of fields added to this block. */
@@ -103,7 +101,7 @@ open class FormBlock(var buffer: Int,
   /**
    * Adds triggers to this form block. The block triggers are the same as form triggers on the block level.
    * There are actually a set of block triggers you can use to execute actions once they are fired.
-   * see [BlockTrigger] to get the list of supported triggers.
+   * objects extending [BlockTriggerEvent] are the supported triggers.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
@@ -375,7 +373,7 @@ open class FormBlock(var buffer: Int,
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
 
-  fun positionField(field: FormField<*>): FormPosition? {
+  fun positionField(field: FormField<*>): FormPosition {
     return FormCoordinatePosition(++displayedFields)
   }
 
@@ -449,7 +447,7 @@ open class FormBlock(var buffer: Int,
   }
 
   fun showChart(chart: Chart) {
-    WindowController.windowController.doNotModal(chart);
+    WindowController.windowController.doNotModal(chart)
   }
 
   /** The block model */
@@ -459,9 +457,9 @@ open class FormBlock(var buffer: Int,
   fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
 
     fun getFieldsCommands(): List<Command> {
-      return blockFields.map {
+      return blockFields.mapNotNull {
         it.commands
-      }.filterNotNull().flatten()
+      }.flatten()
     }
 
     return object : VBlock(vForm) {

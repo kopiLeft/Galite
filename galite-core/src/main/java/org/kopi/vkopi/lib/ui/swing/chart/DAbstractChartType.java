@@ -104,11 +104,11 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
     if (getChart() == null) {
       return;
     } else {
-      PPaperType	paper = PPaperType.Companion.getPaperTypeFromCode(options.getPapertype());
+      PPaperType	paper = PPaperType.Companion.getPaperTypeFromCode(options.getPaperType());
       int		width;
       int 		height;
 
-      if (options.getPaperlayout().equals("Landscape")) {
+      if (options.getPaperLayout().equals("Landscape")) {
         width = paper.getHeight();
         height = paper.getWidth();
       } else {
@@ -119,10 +119,10 @@ public abstract class DAbstractChartType extends ChartPanel implements UChartTyp
       writeAsPDF(destination,
 	         width,
 	         height,
-	         options.getLeftmargin(),
-	         options.getRightmargin(),
-	         options.getTopmargin(),
-	         options.getBottommargin(),
+	         options.getLeftMargin(),
+	         options.getRightMargin(),
+	         options.getTopMargin(),
+	         options.getBottomMargin(),
 	         new DefaultFontMapper());
     }
   }

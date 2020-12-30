@@ -39,7 +39,7 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
   open val type: Domain<T>? = null
 
   /**
-   * Determines the column data type
+   * Determines the field data type
    */
   var kClass: KClass<*>? = null
 
