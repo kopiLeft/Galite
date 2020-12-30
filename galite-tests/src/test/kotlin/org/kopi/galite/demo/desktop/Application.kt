@@ -123,13 +123,3 @@ object Application : DBSchemaTest() {
     ))
   }
 }
-
-@Route("a")
-class A : VerticalLayout() {
-  init {
-    val dialog = VConfirmNotification("title","test test")
-    val button = Button("Open dialog")
-    button.addClickListener { dialog.open() }
-    add(button, dialog)
-  }
-}
