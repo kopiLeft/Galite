@@ -2955,7 +2955,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       val id = if (isRecordFetched(recno)) idField.getInt(recno) else -1
 
       for (i in indices!!.indices) {
-        checkUniqueIndex(i, recno, id)
+        checkUniqueIndex(i, recno, id!!)
       }
     }
   }
@@ -2963,8 +2963,34 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /*
    * Checks unique index constraints
    */
-  protected fun checkUniqueIndex(idx: Int, recno: Int, id: Int?) {
-    TODO()
+  protected open fun checkUniqueIndex(index: Int, recno: Int, id: Int) {
+    val condition = mutableListOf<Op<Boolean>>()
+
+    for (field in fields) {
+      val column  = if (field.isNull(recno) || !field.hasIndex(index)) {
+        null
+      } else {
+        @Suppress("UNCHECKED_CAST")
+        field.lookupColumn(0) as? Column<Any>
+      }
+      if (column != null) {
+        condition.add(Op.build { column eq field.getSql(recno)!! })
+      }
+    }
+    if (condition.isNotEmpty()) {
+      try {
+        val result = tables!![0].slice(idColumn).select{ condition.compoundAnd() }.single()
+
+        if (result[idColumn] != id) {
+          form.setActiveBlock(this@VBlock)
+          activeRecord = recno
+          gotoFirstField()
+          throw VExecFailedException(MessageCode.getMessage("VIS-00014", arrayOf<Any>(indices!![index])))
+        }
+      } catch (illegalArgumentException: IllegalArgumentException) {
+        error("too many rows")
+      }
+    }
   }
 
   /**

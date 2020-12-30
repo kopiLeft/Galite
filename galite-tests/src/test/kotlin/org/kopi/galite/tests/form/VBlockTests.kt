@@ -16,15 +16,18 @@
  */
 package org.kopi.galite.tests.form
 
+import kotlin.test.assertFailsWith
+import kotlin.test.assertEquals
+
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
-
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
 import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : JApplicationTestBase() {
 
@@ -66,7 +69,7 @@ class VBlockTests : JApplicationTestBase() {
       }
 
       assertCollectionsEquals(deleteRecordList, mutableListOf(mutableListOf("Fabienne BUGHIN", 25),
-              mutableListOf("FABIENNE BUGHIN2", 23)))
+                                                              mutableListOf("FABIENNE BUGHIN2", 23)))
     }
   }
 
@@ -76,5 +79,19 @@ class VBlockTests : JApplicationTestBase() {
     val orderBys = FormWithList.block3.vBlock.getSearchOrder_()
 
     assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
+  }
+
+  @Test
+  fun checkUniqueIndexTest() {
+    FormWithList.model
+    FormWithList.block3.id[0] = 1
+    FormWithList.block3.name[0] = "administrator"
+
+    val vExecFailedException = assertFailsWith<VExecFailedException> {
+      transaction {
+        FormWithList.block3.vBlock.checkUniqueIndices(0)
+      }
+    }
+    assertEquals("VIS-00014: ID should be unique", vExecFailedException.message)
   }
 }
