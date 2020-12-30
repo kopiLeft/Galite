@@ -15,16 +15,36 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.base
 
-import org.kopi.galite.report.MReport
+import org.kopi.galite.base.Image
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
+ * The vaadin implementation of an image model.
  *
- * @param model The table model.
+ * @param resource The resource file attached to this image.
  */
-class VTable(private val model: MReport) {
+class Image(val resource: String) : Image {
+  //---------------------------------------------------
+  // IMAGE IMPLEMENTATION
+  //---------------------------------------------------
 
+  override fun getWidth(): Int {
+    return -1
+  }
+
+  override fun getHeight(): Int {
+    return -1
+  }
+
+  override fun getDescription(): String {
+    TODO()
+  }
+
+  override fun getScaledInstance(width: Int,
+                                 height: Int,
+                                 hints: Int): Image {
+    // FIXME: return the scaled image from theme images
+    return this
+  }
 }

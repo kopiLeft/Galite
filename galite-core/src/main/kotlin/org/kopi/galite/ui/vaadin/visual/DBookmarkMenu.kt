@@ -15,16 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.visual
 
-import org.kopi.galite.report.MReport
+import org.kopi.galite.visual.RootMenu
+import org.kopi.galite.visual.VMenuTree
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
- *
- * @param model The table model.
+ * The book mark menu
  */
-class VTable(private val model: MReport) {
+class DBookmarkMenu protected constructor(model: VMenuTree) : DMenu(model) {
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
 
+  override fun buildMenu(roots: List<RootMenu>) {
+    TODO()
+  }
+
+  override val type: Int
+    get() = VMenuTree.BOOKMARK_MENU
 }

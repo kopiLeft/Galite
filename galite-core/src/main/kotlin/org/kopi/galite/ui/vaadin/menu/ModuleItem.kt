@@ -15,16 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.menu
 
-import org.kopi.galite.report.MReport
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
- *
- * @param model The table model.
+ * The module item model.
+ * TODO: Implement this class with appropriate component
  */
-class VTable(private val model: MReport) {
-
+open class ModuleItem(id: String,
+                      caption: String?,
+                      description: String?,
+                      isLeaf: Boolean) : Component(), HasComponents {
+  // TODO
 }

@@ -15,16 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.visual
 
-import org.kopi.galite.report.MReport
+import org.kopi.galite.visual.VHelpViewer
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
+ * The `DHelpViewer` is used to display help information.
  *
- * @param model The table model.
+ *
+ * The help view is used by the UI factory to create vaadin view version
+ * of the the [VHelpViewer] model.
+ *
  */
-class VTable(private val model: MReport) {
-
+class DHelpViewer(model: VHelpViewer) : DWindow(model) {
+  override fun run() {
+    TODO()
+  }
 }

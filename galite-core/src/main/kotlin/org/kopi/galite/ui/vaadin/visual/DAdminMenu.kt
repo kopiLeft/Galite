@@ -15,16 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.visual
 
-import org.kopi.galite.report.MReport
+import org.kopi.galite.visual.VMenuTree
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
+ * A module menu implementation that uses the menu tree
+ * model. This will not display a menu tree but an horizontal
+ * menu with vertical sub menus drops.
  *
- * @param model The table model.
+ * @param model The menu tree model.
  */
-class VTable(private val model: MReport) {
+class DAdminMenu(model: VMenuTree) : DMenu(model) {
+  //---------------------------------------------------
+  // IMPLEMENTATION
+  //---------------------------------------------------
 
+  override val type: Int
+    get() = VMenuTree.ADMIN_MENU
 }

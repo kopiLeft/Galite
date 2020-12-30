@@ -26,8 +26,6 @@ import org.kopi.galite.visual.VWindow
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
- * The vaadin implementation is based on lightweight components regarding to client side
- * and reduce the window load time.
  */
 abstract class DWindow protected constructor(model: VWindow) : Component(), UWindow {
   override fun run() {

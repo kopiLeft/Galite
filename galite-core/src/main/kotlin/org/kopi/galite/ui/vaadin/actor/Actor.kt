@@ -15,16 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.actor
 
-import org.kopi.galite.report.MReport
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasEnabled
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
+ * The actor component
  *
- * @param model The table model.
+ * @param caption The actor caption.
+ * @param description The actor help.
+ * @param menu The menu to which this actor belongs to.
+ * @param icon The actor icon.
+ * @param acceleratorKey The accelerator key.
+ * @param modifiersKey The modifiers key.
+ * TODO: Implement this class with appropriate component
  */
-class VTable(private val model: MReport) {
+open class Actor(caption: String?,
+                 description: String?,
+                 menu: String,
+                 icon: String?,
+                 acceleratorKey: Int,
+                 vararg modifiersKey: Int) : Component(), HasEnabled {
 
 }
