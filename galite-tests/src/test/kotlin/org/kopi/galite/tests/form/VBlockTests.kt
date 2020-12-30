@@ -16,12 +16,60 @@
  */
 package org.kopi.galite.tests.form
 
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
+
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
 import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
 
 class VBlockTests : JApplicationTestBase() {
+
+  @Test
+  fun deleteRecordTest() {
+    FormSample.model
+    FormSample.tb1.id.value = 1
+
+    transaction {
+
+      SchemaUtils.create(User)
+      User.insert {
+        it[id] = 1
+        it[name] = "AUDREY"
+        it[age] = 23
+        it[ts] = 0
+        it[uc] = 0
+      }
+      User.insert {
+        it[id] = 3
+        it[name] = "Fabienne BUGHIN"
+        it[age] = 25
+        it[ts] = 0
+        it[uc] = 0
+      }
+      User.insert {
+        it[id] = 4
+        it[name] = "FABIENNE BUGHIN2"
+        it[age] = 23
+        it[ts] = 0
+        it[uc] = 0
+      }
+
+      val query = User.slice(User.name, User.age).selectAll()
+
+      FormSample.tb1.vBlock.deleteRecord(0)
+      val deleteRecordList = query.map {
+        mutableListOf(it[User.name], it[User.age])
+      }
+
+      assertCollectionsEquals(deleteRecordList, mutableListOf(mutableListOf("Fabienne BUGHIN", 25),
+              mutableListOf("FABIENNE BUGHIN2", 23)))
+    }
+  }
+
   @Test
   fun getSearchOrder_Test() {
     FormWithList.model
