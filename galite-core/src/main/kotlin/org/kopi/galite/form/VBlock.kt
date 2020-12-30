@@ -51,13 +51,13 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.db.DBContext
@@ -65,6 +65,7 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBForeignKeyException
 import org.kopi.galite.db.DBInterruptionException
+import org.kopi.galite.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
@@ -76,6 +77,7 @@ import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.VDatabaseUtils
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
@@ -3020,8 +3022,42 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Deletes current record of given block from database.
    */
-  protected fun deleteRecord(recno: Int) {
-    TODO()
+  fun deleteRecord(recno: Int) {
+    try {
+      assert(!isMulti() || activeRecord == -1) { "isMulti? " + isMulti() + " current record " + activeRecord }
+      if (isMulti()) {
+        activeRecord = recno
+      }
+      callProtectedTrigger(TRG_PREDEL)
+      fields.forEach {
+        it.callProtectedTrigger(TRG_PREDEL)
+      }
+      if (isMulti()) {
+        activeRecord = -1
+      }
+      val id = idField.getInt(recno)!!
+
+      if (id == 0) {
+        activeRecord = recno
+        throw VExecFailedException(MessageCode.getMessage("VIS-00019"))
+      }
+      VDatabaseUtils.checkForeignKeys_(form, id, tables!![0])
+
+      /* verify that the record has not been changed in the database */
+      checkRecordUnchanged(recno)
+      try {
+        tables!![0].deleteWhere { idColumn eq id }
+      } catch (e: DBForeignKeyException) {
+        activeRecord = recno // also valid for single blocks
+        throw convertForeignKeyException(e)
+      }
+      clearRecord(recno)
+    } catch (e: VException) {
+      if (isMulti() && form.getActiveBlock() != this) {
+        activeRecord = -1
+      }
+      throw e
+    }
   }
 
   /**

@@ -15,36 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.base
+package org.kopi.galite.ui.vaadin.visual
 
-import org.kopi.galite.base.Image
+import org.kopi.galite.visual.VMenuTree
 
 /**
- * The vaadin implementation of an image model.
+ * A module menu implementation that uses the menu tree
+ * model. This will not display a menu tree but an horizontal
+ * menu with vertical sub menus drops.
  *
- * @param resource The resource file attached to this image.
+ * @param model The menu tree model.
  */
-class Image(val resource: String) : Image {
+class DAdminMenu(model: VMenuTree) : DMenu(model) {
   //---------------------------------------------------
-  // IMAGE IMPLEMENTATION
+  // IMPLEMENTATION
   //---------------------------------------------------
 
-  override fun getWidth(): Int {
-    return -1
-  }
-
-  override fun getHeight(): Int {
-    return -1
-  }
-
-  override fun getDescription(): String {
-    TODO()
-  }
-
-  override fun getScaledInstance(width: Int,
-                                 height: Int,
-                                 hints: Int): Image {
-    // FIXME: return the scaled image from theme images
-    return this
-  }
+  override val type: Int
+    get() = VMenuTree.ADMIN_MENU
 }
