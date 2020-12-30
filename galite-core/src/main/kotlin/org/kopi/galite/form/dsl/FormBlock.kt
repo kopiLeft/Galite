@@ -233,9 +233,9 @@ open class FormBlock(var buffer: Int,
                                                     access: Int,
                                                     position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
-    if(domain.type is CodeDomain<T>) {
+    if (domain.type is CodeDomain<T>) {
       ownDomains.add(domain)
-    } else if(domain.type is ListDomain<T>) {
+    } else if (domain.type is ListDomain<T>) {
       TODO()
     }
     val field = FormField(this, domain, blockFields.size, access, position)
@@ -543,7 +543,7 @@ open class FormBlock(var buffer: Int,
         }.toTypedArray()
         fields = blockFields.map { formField ->
           formField.vField.also {
-            if(formField.domain is CodeDomain<*>) {
+            if (formField.domain is CodeDomain<*>) {
               (it as VCodeField).source = super.source
             }
           }

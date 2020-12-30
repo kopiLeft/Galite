@@ -1485,7 +1485,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     // open database query, fetch tuples
-    val query =  if (condition != null) {
+    val query = if (condition != null) {
       table!!.slice(columns).select(condition).orderBy(*orderBy.toTypedArray())
     } else {
       table!!.slice(columns).selectAll().orderBy(*orderBy.toTypedArray())
@@ -1671,7 +1671,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         for (i in 0 until bufferSize) {
           if (isRecordFetched(i)) {
             if (isRecordChanged(i)) {
-              tables!![0].deleteWhere{ idColumn eq idField.getInt(i)!!}
+              tables!![0].deleteWhere { idColumn eq idField.getInt(i)!! }
             } else if (isRecordDeleted(i)) {
               deleteRecord(i)
             }
@@ -1961,7 +1961,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search order for database query.
    */
-  open fun getSearchOrder_():  MutableList<Pair<Column<*>, SortOrder>> {
+  open fun getSearchOrder_(): MutableList<Pair<Column<*>, SortOrder>> {
     val columns = mutableListOf<Column<*>>()
     val priorities = IntArray(fields.size)
     val sizes = IntArray(fields.size)
@@ -1984,9 +1984,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       for (j in 0 until i) {
         if (abs(priorities[j]) < abs(priorities[j + 1])) {
-          columns[j] = columns[j + 1].also {  columns[j + 1] = columns[j] }
-          priorities[j] = priorities[j + 1].also {  priorities[j + 1] = priorities[j]}
-          sizes[j] = sizes[j + 1].also {  sizes[j + 1] = sizes[j]}
+          columns[j] = columns[j + 1].also { columns[j + 1] = columns[j] }
+          priorities[j] = priorities[j + 1].also { priorities[j + 1] = priorities[j] }
+          sizes[j] = sizes[j + 1].also { sizes[j + 1] = sizes[j] }
           swapped = true
         }
       }
@@ -1998,8 +1998,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // build the order by query
     val orderBy = mutableListOf<Pair<Column<*>, SortOrder>>()
     var size = 0
-   // val maxCharacters: Int = form.dBContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
-   // val maxColumns: Int = form.dBContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO
+    // val maxCharacters: Int = form.dBContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
+    // val maxColumns: Int = form.dBContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO
 
     for (i in 0 until elems) {
 

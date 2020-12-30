@@ -28,8 +28,10 @@ import java.io.File
 abstract class Window {
   /** the title of this window */
   abstract val title: String
+
   /** the window locale */
   open val locale: Locale? = null
+
   /** the help text */
   var help: String? = null
   internal var options: Int? = null

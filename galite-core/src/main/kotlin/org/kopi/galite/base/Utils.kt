@@ -208,7 +208,9 @@ open class Utils : org.kopi.galite.util.base.Utils() {
     fun getVersion(): Array<String> {
       try {
         val list = ArrayList<String>()
-        val data = DataInputStream(requireNotNull(Utils::class.java.classLoader.getResourceAsStream("$APPLICATION_DIR/version")))
+        val data = DataInputStream(
+                requireNotNull(Utils::class.java.classLoader.getResourceAsStream("$APPLICATION_DIR/version"))
+        )
         while (data.available() != 0) {
           list.add(data.readLine())
         }

@@ -30,13 +30,13 @@ import org.jetbrains.exposed.sql.Table
  * @param autocompleteLength  TODO: add doc
  * @param access              true if this field is only an access to a form
  */
-class FieldList<T: Comparable<T>?>(val type: String,
-                                   val table: Table,
-                                   val action: (() -> Unit)?,
-                                   val columns: Array<ListDescription<T>>,
-                                   val autocompleteType: Int,
-                                   val autocompleteLength: Int,
-                                   val access: Boolean) {
+class FieldList<T : Comparable<T>?>(val type: String,
+                                    val table: Table,
+                                    val action: (() -> Unit)?,
+                                    val columns: Array<ListDescription<T>>,
+                                    val autocompleteType: Int,
+                                    val autocompleteLength: Int,
+                                    val access: Boolean) {
 
   /**
    * Returns `true` if the list has a list action.

@@ -18,11 +18,11 @@
 package org.kopi.galite.common
 
 object VKConstants {
-    // ----------------------------------------------------------------------
-    // PREDEFINED COMMANDS
-    // ----------------------------------------------------------------------
-    const val CMD_AUTOFILL: String = "Autofill"
-    const val CMD_SHORTCUT: String = "EditItem_S"
-    const val CMD_NEWITEM: String = "NewItem"
-    const val CMD_EDITITEM: String = "EditItem"
+  // ----------------------------------------------------------------------
+  // PREDEFINED COMMANDS
+  // ----------------------------------------------------------------------
+  const val CMD_AUTOFILL: String = "Autofill"
+  const val CMD_SHORTCUT: String = "EditItem_S"
+  const val CMD_NEWITEM: String = "NewItem"
+  const val CMD_EDITITEM: String = "EditItem"
 }

@@ -54,7 +54,8 @@ abstract class Chart : Window() {
    * @param domain the dimension domain.
    * @param init   used to initialize the domain with measures values.
    */
-  inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>, init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
+  inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
+                                                    init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
     domain.kClass = T::class
     val chartDimension = ChartDimension(domain)
     chartDimension.init()

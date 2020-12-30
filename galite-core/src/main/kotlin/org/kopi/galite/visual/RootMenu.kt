@@ -67,9 +67,9 @@ class RootMenu(id: Int, name: String) {
    * @return The local root tree node.
    */
   internal fun createTree(modules: Array<Module>,
-                           root: Module,
-                           force: Boolean,
-                           isSuperUser: Boolean): DefaultMutableTreeNode? {
+                          root: Module,
+                          force: Boolean,
+                          isSuperUser: Boolean): DefaultMutableTreeNode? {
     var force = force
 
     if (root.accessibility == Module.ACS_TRUE || isSuperUser) {
