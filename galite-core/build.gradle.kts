@@ -43,6 +43,8 @@ dependencies {
             .forEach { group -> exclude(group = group) }
   }
 
+  implementation("com.vaadin","vaadin-confirm-dialog-flow","18.0.3")
+
   // Itext dependency
   implementation("com.lowagie", "itext", itextVersion)
 

@@ -18,17 +18,20 @@
 package org.kopi.galite.ui.vaadin.notification
 
 import com.vaadin.flow.component.KeyPressEvent
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Error type notification component.
  */
-open class VErrorNotification(title: String, message: String?) : VAbstractNotification(title, message) {
+open class VErrorNotification(title: String, message: String) : VAbstractNotification(title, message) {
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
   override fun setButtons(locale: String?) {
-
+    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
+    close!!.addClickListener{ close() }
+    buttons!!.add(close!!)
   }
 
   fun focus() {
@@ -51,12 +54,10 @@ open class VErrorNotification(title: String, message: String?) : VAbstractNotifi
    * Hides the error details.
    */
   protected fun hideErrorDetails() {
-  /*  if (detailsPopup != null) {
+    if (detailsPopup != null) {
       detailsPopup!!.hide()
-      detailsPopup.clear()
-      detailsPopup.removeFromParent()
       detailsPopup = null
-    }*/
+    }
   }
 
   fun onKeyPress(event: KeyPressEvent) {

@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.notification
 
-import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.KeyPressEvent
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
@@ -32,11 +31,9 @@ open class VWarningNotification(title: String, message: String) : VAbstractNotif
   //-------------------------------------------------
 
   override fun setButtons(locale: String?) {
-    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE")) {
-        hide()
-        fireOnClose(false)
-      }
-    content!!.add(close)
+    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
+    close!!.addClickListener{close()}
+    buttons!!.add(close!!)
   }
 
   fun focus() {

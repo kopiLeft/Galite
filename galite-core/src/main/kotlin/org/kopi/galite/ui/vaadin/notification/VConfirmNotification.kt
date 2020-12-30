@@ -31,16 +31,12 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   //-------------------------------------------------
 
   override fun setButtons(locale: String?) {
-    ok = VInputButton(LocalizedProperties.getString(locale, "OK")) {
-      hide()
-      fireOnClose(true)
-    }
-    cancel = VInputButton(LocalizedProperties.getString(locale, "NO")) {
-      hide()
-      fireOnClose(false)
-    }
-    content!!.add(ok)
-    content.add(cancel)
+    ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
+    ok!!.addClickListener { show() }
+    buttons!!.add(ok!!)
+    cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
+    cancel!!.addClickListener { close() }
+    buttons!!.add(cancel!!)
   }
 
   fun focus() {

@@ -17,6 +17,9 @@
 
 package org.kopi.galite.demo.desktop
 
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.router.Route
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -26,6 +29,7 @@ import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
+import org.kopi.galite.ui.vaadin.notification.VConfirmNotification
 
 val testLocale: Locale = Locale.FRANCE
 
@@ -117,5 +121,15 @@ object Application : DBSchemaTest() {
             "-f",
             formName::class.qualifiedName!!
     ))
+  }
+}
+
+@Route("a")
+class A : VerticalLayout() {
+  init {
+    val dialog = VConfirmNotification("title","test test")
+    val button = Button("Open dialog")
+    button.addClickListener { dialog.open() }
+    add(button, dialog)
   }
 }

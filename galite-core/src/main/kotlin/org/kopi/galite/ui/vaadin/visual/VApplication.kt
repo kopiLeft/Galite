@@ -87,16 +87,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
+    /*
     val dialog = InformationNotification(VlibProperties.getString("Notice"), message)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
       }
     })
-    showNotification(dialog)
+    showNotification(dialog)*/ TODO()
   }
 
   override fun error(message: String?) {
+    /*
     val dialog = ErrorNotification(VlibProperties.getString("Error"), message)
     dialog.setOwner(this)
     dialog.addNotificationListener(object : NotificationListener {
@@ -105,20 +107,22 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       }
     })
     showNotification(dialog)
-
+*/ TODO()
   }
 
   override fun warn(message: String) {
+    /*
     val dialog = WarningNotification(VlibProperties.getString("Warning"), message)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
       }
     })
-    showNotification(dialog)
+    showNotification(dialog)*/ TODO()
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
+    /*
     val dialog = ConfirmNotification(VlibProperties.getString("Question"), message)
     dialog.yesIsDefault = yesIsDefault
     dialog.addNotificationListener(object : NotificationListener {
@@ -134,7 +138,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     // attach the notification to the application.
     showNotification(dialog)
 
-    return askAnswer
+    return askAnswer */ TODO()
   }
 
   /**

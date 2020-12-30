@@ -31,11 +31,9 @@ open class VInformationNotification(title: String, message: String) : VAbstractN
   //-------------------------------------------------
 
   override fun setButtons(locale: String?) {
-    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE")) {
-        hide()
-        fireOnClose(false)
-      }
-    content!!.add(close)
+    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
+    close!!.addClickListener { close() }
+    buttons!!.add(close!!)
   }
 
  fun focus() {
