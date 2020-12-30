@@ -33,10 +33,10 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   override fun setButtons(locale: String?) {
     ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
     ok!!.addClickListener { show() }
-    buttons!!.add(ok!!)
+    buttons.add(ok!!)
     cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
     cancel!!.addClickListener { close() }
-    buttons!!.add(cancel!!)
+    buttons.add(cancel!!)
   }
 
   fun focus() {
@@ -50,6 +50,7 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
       cancelFocused = true
     }
   }
+
   override fun showGlassPane(): Boolean {
     return true
   }

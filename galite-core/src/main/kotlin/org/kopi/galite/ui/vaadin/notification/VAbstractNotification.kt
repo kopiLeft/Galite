@@ -97,16 +97,16 @@ abstract class VAbstractNotification(): Dialog() {
    * Sets the notification title.
    * @param title The notification title.
    */
-  fun setNotificationTitle(title: String?) {
-    this.title!!.text = title
+  fun setNotificationTitle(title: String) {
+    this.title.text = title
   }
 
   /**
    * Sets the notification message.
    * @param text The notification message.
    */
-  fun setNotificationMessage(text: String?) {
-    this.message!!.text = text
+  fun setNotificationMessage(text: String) {
+    this.message.text = text
   }
 
   /**
@@ -123,15 +123,6 @@ abstract class VAbstractNotification(): Dialog() {
    */
   protected open fun goBackToLastFocusedWindow(): Boolean {
     return true
-  }
-
-  fun clear() {
-    super.remove()
-    listeners = null
-    title = null
-    message = null
-    buttons = null
-    dialog = null
   }
 
   //-------------------------------------------------
@@ -186,40 +177,40 @@ abstract class VAbstractNotification(): Dialog() {
   // DATA MEMBERS
   //-------------------------------------------------
   private var listeners : MutableList<ComponentEventListener<ClickEvent<VInputButton>>>? = null
-  private var icon: Icon? = null
-  private var title: Label? = null
-  private var message: Label? = null
+  private var icon: Icon
+  private var title: Label
+  private var message: Label
   open var yesIsDefault = false
-  protected var buttons: MutableList<VInputButton>? = null
-  var dialog: ConfirmDialog? = null
+  protected var buttons: MutableList<VInputButton> = mutableListOf()
+  var dialog = ConfirmDialog()
 
   //-------------------------------------------------
   // CONSTRUCTORS
   //-------------------------------------------------
 
   init {
-    dialog!!.className = Styles.NOTIFICATION
+    dialog.className = Styles.NOTIFICATION
     element.setAttribute("hideFocus", "true")
     element.style["outline"] = "0px"
     title = Label()
     val header = HorizontalLayout()
     header.add(title)
-    buttons!!.forEach {
+    buttons.forEach {
       it.className = Styles.NOTIFICATION_BUTTONS
     }
     icon = Icon()
     message = Label()
-    message!!.className= Styles.NOTIFICATION_MESSAGE
+    message.className= Styles.NOTIFICATION_MESSAGE
     val content = VerticalLayout()
     content.add(icon)
     content.add(message)
     val footer = HorizontalLayout()
-    buttons!!.forEach {
+    buttons.forEach {
       footer.add(it)
     }
-    dialog!!.add(header)
-    dialog!!.add(content)
-    dialog!!.add(footer)
+    dialog.add(header)
+    dialog.add(content)
+    dialog.add(footer)
     add(dialog)
   }
 
@@ -227,9 +218,8 @@ abstract class VAbstractNotification(): Dialog() {
    * Creates a new notification component with a popup containing
    * a title, a message, an icon and buttons location.
    */
-  constructor(title: String, message: String, listener: ComponentEventListener<ClickEvent<VInputButton>>? = null) : this() {
+  constructor(title: String, message: String) : this() {
     setNotificationTitle(title)
     setNotificationMessage(message)
-    addNotificationListener(listener!!)
   }
 }

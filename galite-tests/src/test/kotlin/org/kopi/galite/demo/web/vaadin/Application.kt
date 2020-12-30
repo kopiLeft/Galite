@@ -69,22 +69,18 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
 @Route("a")
 class A : VerticalLayout() {
   init {
-    val dialog = VConfirmNotification("title","test test")
-    dialog.dialog = ConfirmDialog("Question",
+    val d = VConfirmNotification("title","test test")
+    d.dialog = ConfirmDialog("Question",
                                "Quitter : Êtes-vous sûr ?",
                                "Oui",
-                               this::onPublish,
-                               "Non",
-                               this::onCancel)
-    dialog.setButtons("")
-    dialog.ok = VInputButton("ok")
-    dialog.cancel = VInputButton("cancel")
-    val button = Button("Open dialog")
-    dialog.ok!!.addClickListener { dialog.open() }
-    dialog.cancel!!.addClickListener { dialog.close() }
-    add(button, dialog)
+                               this::onPublish)
+    d.ok = VInputButton("ok")
+    d.ok!!.addClickListener { d.open() }
+    d.cancel = VInputButton("cancel")
+    d.cancel!!.addClickListener { d.close() }
+    val button = Button("Open Dialog") { _ -> d.show() }
+    add(button, d)
   }
   private fun onPublish(event: ConfirmDialog.ConfirmEvent) {}
-  private fun onCancel(event: ConfirmDialog.CancelEvent) {}
 }
 
