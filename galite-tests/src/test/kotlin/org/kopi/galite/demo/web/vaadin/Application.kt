@@ -16,10 +16,16 @@
  */
 package org.kopi.galite.demo.web.vaadin
 
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.router.Route
 import java.util.Locale
 
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.tests.VApplicationTestBase
+import org.kopi.galite.ui.vaadin.base.VInputButton
+import org.kopi.galite.ui.vaadin.notification.VConfirmNotification
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -59,3 +65,26 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
     }
   }
 }
+
+@Route("a")
+class A : VerticalLayout() {
+  init {
+    val dialog = VConfirmNotification("title","test test")
+    dialog.dialog = ConfirmDialog("Question",
+                               "Quitter : Êtes-vous sûr ?",
+                               "Oui",
+                               this::onPublish,
+                               "Non",
+                               this::onCancel)
+    dialog.setButtons("")
+    dialog.ok = VInputButton("ok")
+    dialog.cancel = VInputButton("cancel")
+    val button = Button("Open dialog")
+    dialog.ok!!.addClickListener { dialog.open() }
+    dialog.cancel!!.addClickListener { dialog.close() }
+    add(button, dialog)
+  }
+  private fun onPublish(event: ConfirmDialog.ConfirmEvent) {}
+  private fun onCancel(event: ConfirmDialog.CancelEvent) {}
+}
+

@@ -70,8 +70,8 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   // DATA MEMBERS
   //------------------------------------------------
 
-  private var ok: VInputButton? = null
-  private var cancel: VInputButton? = null
+  var ok: VInputButton? = null
+  var cancel: VInputButton? = null
   private var okFocused = false
   private var cancelFocused = false
   override val iconName: String?

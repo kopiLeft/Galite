@@ -56,6 +56,8 @@ dependencies {
 
   implementation("org.jdom", "jdom2", jdomVersion)
 
+  implementation("com.vaadin","vaadin-confirm-dialog-flow","18.0.3")
+
   // Exposed dependencies
   testImplementation ("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
 
