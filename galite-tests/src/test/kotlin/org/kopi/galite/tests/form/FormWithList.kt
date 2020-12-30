@@ -113,13 +113,16 @@ object BlockSample : FormBlock(1, 1, "Test block") {
   val id = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help = "The user id"
-    columns(u.id)
+    columns(u.id) {
+      index = i
+    }
   }
 
   val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name) {
+      index = i
       priority = 1
     }
   }
@@ -128,6 +131,8 @@ object BlockSample : FormBlock(1, 1, "Test block") {
 object UsersBlock : FormBlock(1, 1, "Test block") {
   val m = table(Modules)
   val u = table(Users)
+  val unique = index(message = "ID should be unique")
+
   init {
     trigger(POSTQRY) {
       BlockWithManyTables.uid[0] = id.value!!
@@ -137,7 +142,9 @@ object UsersBlock : FormBlock(1, 1, "Test block") {
   val id = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help = "The user id"
-    columns(BlockSample.u.id)
+    columns(Users.id) {
+      index = unique
+    }
   }
   val uc = visit(domain = Domain<Int>(20), position = at(1, 2)) {
     label = "uc"
