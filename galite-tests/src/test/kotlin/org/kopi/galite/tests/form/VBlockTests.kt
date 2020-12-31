@@ -84,14 +84,31 @@ class VBlockTests : JApplicationTestBase() {
   @Test
   fun checkUniqueIndexTest() {
     FormWithList.model
-    FormWithList.block3.id[0] = 1
-    FormWithList.block3.name[0] = "administrator"
+    FormWithList.block.uid[0] = 1
+    FormWithList.block.name[0] = "administrator"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        FormWithList.block3.vBlock.checkUniqueIndices(0)
+        FormWithList.block.vBlock.checkUniqueIndices(0)
       }
     }
     assertEquals("VIS-00014: ID should be unique", vExecFailedException.message)
+  }
+
+  @Test
+  fun selectLookupTest() {
+    FormWithList.model
+    FormWithList.block3.ts[0] = 0
+    FormWithList.block3.shortName[0] = "admin"
+    FormWithList.block3.name[0] = "admin"
+    FormWithList.block3.character[0] = "admin"
+
+    val vExecFailedException = assertFailsWith<VExecFailedException> {
+      transaction {
+        FormWithList.block3.vBlock.refreshLookup(0)
+      }
+    }
+
+    assertEquals("VIS-00016: Aucune valeur appropriée dans KOPI_USERS.", vExecFailedException.message)
   }
 }

@@ -65,6 +65,7 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.DBForeignKeyException
 import org.kopi.galite.db.DBInterruptionException
+import org.kopi.galite.db.Utils
 import org.kopi.galite.form.VConstants.Companion.TRG_PREDEL
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VListColumn
@@ -2001,8 +2002,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // build the order by query
     val orderBy = mutableListOf<Pair<Column<*>, SortOrder>>()
     var size = 0
-   // val maxCharacters: Int = form.dBContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
-   // val maxColumns: Int = form.dBContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO
+    // val maxCharacters: Int = form.dBContext.defaultConnection.getMaximumCharactersCountInOrderBy()  //TODO
+    // val maxColumns: Int = form.dBContext.defaultConnection.getMaximumColumnsInOrderBy() //TODO
 
     for (i in 0 until elems) {
 
@@ -2896,7 +2897,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected fun selectLookups(recno: Int) {
     if (tables != null) {
       for (i in 1 until tables!!.size) {
-        selectLookup(i, recno)
+        selectLookup(tables!![i], recno)
       }
     }
   }
@@ -2942,8 +2943,56 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /*
    *
    */
-  protected fun selectLookup(table: Int, recno: Int) {
-    TODO()
+  protected fun selectLookup(table: Table, recno: Int) {
+    val columns = mutableListOf<Column<*>>()
+    val conditions = mutableListOf<Op<Boolean>>()
+
+    // set internal fields to null (null reference)
+    if (isNullReference(table, recno)) {
+      fields.forEach { field ->
+        if (field.isInternal() && field.lookupColumn(table) != null) {
+          field.setNull(recno)
+        }
+      }
+    } else {
+      fields.forEach { field ->
+        val column = field.lookupColumn(table) as Column<Any>?
+
+        if (column != null) {
+          columns.add(column)
+          if (!field.isInternal() || !field.isNull(recno)) {
+            val sql = field.getSql(recno)
+
+            if (sql != "?") { // dont lookup for blobs...
+              if (field.getSql(recno).equals(Utils.NULL_LITERAL)) {
+                conditions.add(Op.build { column.isNull() })
+              } else {
+                conditions.add(Op.build { column eq field.getSql(recno)!! })
+              }
+            }
+          }
+        }
+      }
+      if (conditions.isEmpty()) {
+        throw InconsistencyException("no conditions for table ${table.tableName}")
+      }
+
+      try {
+        val result = table.slice(columns).select(conditions.compoundAnd()).single()
+
+        fields.forEachIndexed { index, field ->
+          if (field.lookupColumn(table) != null) {
+            field.setQuery_(recno, result, columns[index])
+          }
+        }
+      } catch (noSuchElementException :NoSuchElementException) {
+        activeRecord = recno
+        throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(table.tableName)))
+      } catch (illegalArgumentException: IllegalArgumentException) {
+        activeRecord = recno
+        throw VExecFailedException(MessageCode.getMessage("VIS-00020", arrayOf(table.tableName)))
+      }
+    }
   }
 
   /*
@@ -2977,6 +3026,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         condition.add(Op.build { column eq field.getSql(recno)!! })
       }
     }
+
     if (condition.isNotEmpty()) {
       try {
         val result = tables!![0].slice(idColumn).select{ condition.compoundAnd() }.single()
