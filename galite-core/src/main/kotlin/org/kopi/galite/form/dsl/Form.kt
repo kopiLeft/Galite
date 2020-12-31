@@ -16,10 +16,11 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.kopi.galite.common.Action
 import java.io.IOException
 
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
+import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormBooleanTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.FormTriggerEvent
@@ -33,6 +34,7 @@ import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VDefaultActor
+import org.kopi.galite.visual.VCommand
 
 /**
  * Represents a form.
@@ -193,6 +195,19 @@ abstract class Form : Window() {
     return menu
   }
 
+  /**
+   * Adds a new command to this form.
+   *
+   * @param item    the actor linked to the command.
+   * @param init    initialization method.
+   */
+  fun command(item: Actor, init: Command.() -> Unit): Command {
+    val command = Command(item)
+    command.init()
+    commands.add(command)
+    return command
+  }
+
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
@@ -280,7 +295,15 @@ abstract class Form : Window() {
     }.toTypedArray()
 
     //TODO ----------begin-------------
-    this.commands = arrayOf()
+    this.commands = this@Form.commands.map { command ->
+      VCommand(command.mode,
+               this,
+               actors.find { it?.actorIdent ==  command.item.ident },
+               -1,
+               command.name!!,
+               command.action
+      )
+    }.toTypedArray()
     this.handleTriggers(triggers)
   }
 
