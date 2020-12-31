@@ -207,11 +207,14 @@ object BlockWithManyTables : FormBlock(20, 20, "Test block") {
   val u = table(Users)
   val m = table(Modules)
   val r = table(UserRights)
+  val unique = index(message = "ID should be unique")
 
   val uid = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help = "The user id"
-    columns(u.id, r.user)
+    columns(u.id, r.user) {
+      index = unique
+    }
   }
 
   val mid = hidden(domain = Domain<Int>(20)) {
@@ -224,6 +227,12 @@ object BlockWithManyTables : FormBlock(20, 20, "Test block") {
     label = "module"
     help = "module"
     columns(r.module)
+  }
+
+  val name = visit(domain = Domain<String>(20), position = at(1, 2)) {
+    label = "name"
+    help = "name"
+    columns(u.name)
   }
 }
 
