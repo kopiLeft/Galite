@@ -2950,13 +2950,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     // set internal fields to null (null reference)
     if (isNullReference(table, recno)) {
       fields.forEach { field ->
-        if (field.isInternal() && field.lookupColumn_(table) != null) {
+        if (field.isInternal() && field.lookupColumn(table) != null) {
           field.setNull(recno)
         }
       }
     } else {
       fields.forEach { field ->
-        val column = field.lookupColumn_(table) as Column<Any>?
+        val column = field.lookupColumn(table) as Column<Any>?
 
         if (column != null) {
           columns.add(column)
@@ -2981,7 +2981,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val result = table.slice(columns).select(conditions.compoundAnd()).single()
 
         fields.forEachIndexed { index, field ->
-          if (field.lookupColumn_(table) != null) {
+          if (field.lookupColumn(table) != null) {
             field.setQuery_(recno, result, columns[index])
           }
         }

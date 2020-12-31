@@ -30,11 +30,13 @@ open class Timestamp {
    * Represents the value in sql
    */
   open fun toSql(): String? {
-    val tmp = StringBuffer()
+
     val micro: String = (timestamp!!.nanos / 1000).toString()
 
-    tmp.append("00000".substring(0, 6 - micro.length))
-    tmp.append(micro)
+    val tmp = buildString {
+      append("00000".substring(0, 6 - micro.length))
+      append(micro)
+    }
     return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
   }
 
