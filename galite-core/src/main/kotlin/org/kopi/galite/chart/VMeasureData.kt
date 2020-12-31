@@ -22,9 +22,9 @@ import java.io.Serializable
 
 /**
  * A measure data.
- * @param name The measure name.
- * @param name The measure value.
+ * @param name  The measure name.
+ * @param value The measure value.
  */
-class VMeasureData(val name: String?, val value: Number?) : Serializable {
+class VMeasureData(val name: String, val value: Number?) : Serializable {
 
 }
