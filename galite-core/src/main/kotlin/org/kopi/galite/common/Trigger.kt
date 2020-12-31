@@ -321,7 +321,7 @@ open class ChartVoidTriggerEvent(event: Int): ChartTriggerEvent(event)
  *
  * @param event the event of the trigger
  */
-open class ChartObjectTriggerEvent(event: Int): ChartTriggerEvent(event)
+open class ChartTypeTriggerEvent(event: Int): ChartTriggerEvent(event)
 
 /**
  * Executed before the chart is displayed.
@@ -337,9 +337,9 @@ object INITCHART : ChartVoidTriggerEvent(CConstants.TRG_INIT)
  * Executed after the chart initialization. This trigger should return a fixed type for the chart
  * [org.kopi.galite.chart.VChartType].
  */
-object POSTCHART : ChartVoidTriggerEvent(CConstants.TRG_POSTCHART)
+object CHARTTYPE : ChartTypeTriggerEvent(CConstants.TRG_CHARTTYPE)
 
 /**
  * Executed after the chart is closed.
  */
-object CHARTTYPE : ChartObjectTriggerEvent(CConstants.TRG_CHARTTYPE)
+object POSTCHART : ChartVoidTriggerEvent(CConstants.TRG_POSTCHART)

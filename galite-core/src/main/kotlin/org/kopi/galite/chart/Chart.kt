@@ -18,8 +18,8 @@
 package org.kopi.galite.chart
 
 import org.kopi.galite.common.Action
-import org.kopi.galite.common.ChartObjectTriggerEvent
 import org.kopi.galite.common.ChartTriggerEvent
+import org.kopi.galite.common.ChartTypeTriggerEvent
 import org.kopi.galite.common.ChartVoidTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
@@ -97,7 +97,7 @@ abstract class Chart() : Window() {
    * @param chartTriggerEvents the trigger events to add
    * @param method             the method to execute when trigger is called
    */
-  fun trigger(vararg chartTriggerEvents: ChartObjectTriggerEvent, method: () -> Unit): Trigger {
+  fun trigger(vararg chartTriggerEvents: ChartTypeTriggerEvent, method: () -> VChartType): Trigger {
     return trigger(chartTriggerEvents, method)
   }
 

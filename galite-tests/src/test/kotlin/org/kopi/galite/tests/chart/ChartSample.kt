@@ -18,6 +18,7 @@ package org.kopi.galite.tests.chart
 
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.chart.VChartType
+import org.kopi.galite.common.CHARTTYPE
 import org.kopi.galite.common.INITCHART
 import org.kopi.galite.domain.Domain
 import java.util.Locale
@@ -38,8 +39,14 @@ object ChartSample: Chart()  {
     label = "dimension"
   }
 
+  // You can either change the chart type in INIT or CHARTTYPE trigger
   val init = trigger(INITCHART) {
-    chartType = VChartType.PIE
+    chartType = VChartType.COLUMN
+  }
+
+  // This is the type that will be taken because CHARTTYPE is executed after INIT
+  val type = trigger(CHARTTYPE) {
+    VChartType.PIE
   }
 
   init {
