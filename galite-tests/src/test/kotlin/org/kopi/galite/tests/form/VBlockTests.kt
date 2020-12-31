@@ -74,14 +74,6 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  fun getSearchOrder_Test() {
-    FormWithList.model
-    val orderBys = FormWithList.block3.vBlock.getSearchOrder_()
-
-    assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
-  }
-
-  @Test
   fun checkUniqueIndexTest() {
     FormWithList.model
     FormWithList.block.uid[0] = 1
@@ -110,5 +102,116 @@ class VBlockTests : JApplicationTestBase() {
     }
 
     assertEquals("VIS-00016: Aucune valeur appropriée dans KOPI_USERS.", vExecFailedException.message)
+  }
+
+  @Test
+  fun getSearchConditionsTest1() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    FormSample.tb1.uc.value = 0
+    FormSample.tb1.ts.value = 0
+    FormSample.tb1.name.value = "myName"
+    FormSample.tb1.age.value = 6
+    FormSample.tb1.job.value = "jobValue"
+
+    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions_()
+    transaction {
+      assertEquals(blockSearchCondition.toString(), "(\"USER\".TS = '0') AND (\"USER\".UC = '0') AND " +
+                   "(\"USER\".\"NAME\" = 'myName') AND (\"USER\".AGE = '6') AND (\"USER\".JOB = 'jobValue')")
+    }
+  }
+
+  @Test
+  fun getSearchConditionsTest2() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    with(FormSample.tb1.vBlock) {
+      fields[5].setSearchOperator(1)
+      fields[6].setSearchOperator(1)
+    }
+
+    FormSample.tb1.uc.value = 0
+    FormSample.tb1.ts.value = 0
+    FormSample.tb1.name.value = "myName*"
+    FormSample.tb1.age.value = 8
+    FormSample.tb1.job.value = "jobValue"
+    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions_()
+
+    transaction {
+      assertEquals(blockSearchCondition.toString(), "(\"USER\".TS = '0') AND (\"USER\".UC = '0') AND " +
+                           "(\"USER\".\"NAME\" LIKE 'myName%') AND (\"USER\".AGE < '8') AND (\"USER\".JOB < 'jobValue')")
+    }
+  }
+
+  @Test
+  fun getSearchConditionsTest3() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    with(FormSample.tb1.vBlock) {
+      fields[5].setSearchOperator(2)
+      fields[6].setSearchOperator(2)
+    }
+    FormSample.tb1.uc.value = 0
+    FormSample.tb1.ts.value = 0
+    FormSample.tb1.name.value = "*myName"
+    FormSample.tb1.age.value = 9
+    FormSample.tb1.job.value = "jobValue"
+
+    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions_()
+    transaction {
+      assertEquals(blockSearchCondition.toString(),"(\"USER\".TS = '0') AND (\"USER\".UC = '0') AND " +
+                   "(\"USER\".\"NAME\" LIKE '%myName') AND (\"USER\".AGE > '9') AND (\"USER\".JOB > 'jobValue')")
+    }
+  }
+
+  @Test
+  fun getSearchConditionsTest4() {
+
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    with(FormSample.tb1.vBlock) {
+      fields[5].setSearchOperator(3)
+      fields[6].setSearchOperator(3)
+    }
+    FormSample.tb1.uc.value = 0
+    FormSample.tb1.ts.value = 0
+    FormSample.tb1.name.value = "my*Name"
+    FormSample.tb1.age.value = 10
+    FormSample.tb1.job.value = "jobValue"
+
+    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions_()
+    transaction {
+      assertEquals(blockSearchCondition.toString(), "(\"USER\".TS = '0') AND (\"USER\".UC = '0') AND " +
+                   "(\"USER\".\"NAME\" LIKE 'my%Name') AND (\"USER\".AGE <= '10') AND (\"USER\".JOB <= 'jobValue')")
+    }
+  }
+
+  @Test
+  fun getSearchConditionsTest5() {
+    // OPERATOR_NAMES = arrayOf("=", "<", ">", "<=", ">=", "<>")
+    FormSample.model
+    with(FormSample.tb1.vBlock) {
+      fields[5].setSearchOperator(4)
+      fields[6].setSearchOperator(4)
+    }
+    FormSample.tb1.uc.value = 0
+    FormSample.tb1.ts.value = 0
+    FormSample.tb1.name.value = "*"
+    FormSample.tb1.age.value = 11
+    FormSample.tb1.job.value = "job*Value"
+
+    val blockSearchCondition = FormSample.tb1.vBlock.getSearchConditions_()
+    transaction {
+      assertEquals(blockSearchCondition.toString(), "(\"USER\".TS = '0') AND (\"USER\".UC = '0') AND " +
+                   "(\"USER\".\"NAME\" LIKE '%') AND (\"USER\".AGE >= '11') AND (\"USER\".JOB >= 'job')")
+    }
+  }
+
+  @Test
+  fun getSearchOrder_Test() {
+    FormWithList.model
+    val orderBys = FormWithList.block3.vBlock.getSearchOrder_()
+
+    assertCollectionsEquals(arrayListOf(Users.name to SortOrder.ASC), orderBys)
   }
 }

@@ -1923,36 +1923,31 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Returns the search conditions for database query.
    */
   fun getSearchConditions_(): Op<Boolean>? {
-    var buffer: Op<Boolean>? = null
+    val conditionList: MutableList<Op<Boolean>> = mutableListOf()
 
-    for (i in fields.indices) {
-      val fld = fields[i]
-      if (fld.getColumnCount() > 0) {
-        val cond = fld.getSearchCondition()
-        if (cond != null) {
-          val expression = when (fld.options and VConstants.FDO_SEARCH_MASK) {
-            VConstants.FDO_SEARCH_NONE -> fld.getColumn(0)!!.column
-            VConstants.FDO_SEARCH_UPPER -> {
-              (fld.getColumn(0)!!.column as Column<String>).upperCase()
-            }
-            VConstants.FDO_SEARCH_LOWER -> {
-              (fld.getColumn(0)!!.column as Column<String>).lowerCase()
-            }
-            else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-          }
-          Op.build {
-            expression.isNull()
-          }
-          buffer = expression.cond()
+    fields.forEach { field ->
+      if (field.getColumnCount() > 0) {
+        val condColumn = field.getColumn(0)!!.column as Column<String>
+        val searchColumn = when (field.options and VConstants.FDO_SEARCH_MASK) {
+
+          VConstants.FDO_SEARCH_NONE -> condColumn
+          VConstants.FDO_SEARCH_UPPER -> condColumn.upperCase()
+          VConstants.FDO_SEARCH_LOWER -> condColumn.lowerCase()
+          else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+        }
+
+        val condition = field.getSearchCondition_(searchColumn)
+
+        condition?.let {
+          conditionList.add(condition)
         }
       }
-      /*if (useOracleOuterJoinSyntax()) { TODO ! do we need to keep this?
-        buffer = VBlockOracleOuterJoin.getSearchCondition(fld, buffer)
-      } else {
-        buffer = VBlockDefaultOuterJoin.getSearchCondition(fld)
-      }*/
     }
-    return buffer
+    return if (conditionList.isEmpty()) {
+      null
+    } else {
+      conditionList.compoundAnd()
+    }
   }
 
   /**
