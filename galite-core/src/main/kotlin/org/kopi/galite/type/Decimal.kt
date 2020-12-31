@@ -26,10 +26,10 @@ import java.util.Locale
 /**
  * This class represents the decimal type
  */
-class Decimal(var value: BigDecimal) : BigDecimal(value.toString()) {
+class Decimal(var value: BigDecimal) : Number(), Comparable<BigDecimal> {
   internal constructor(b: BigInteger) : this(BigDecimal(b))
 
-  internal constructor(value: Long, scale: Int) : this(valueOf(value, scale))
+  internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
 
   internal constructor(d: Double) : this(BigDecimal(d))
 
@@ -42,9 +42,9 @@ class Decimal(var value: BigDecimal) : BigDecimal(value.toString()) {
    * add (f1 + f2) operator
    */
   operator fun plus(f: Decimal): Decimal {
-    if (value.compareTo(ZERO) == 0) {
+    if (value.compareTo(BigDecimal.ZERO) == 0) {
       return f
-    } else if (f.value.compareTo(ZERO) == 0) {
+    } else if (f.value.compareTo(BigDecimal.ZERO) == 0) {
       return Decimal(value)
     }
     return Decimal(value.add(f.value, MATH_CONTEXT))
@@ -54,9 +54,9 @@ class Decimal(var value: BigDecimal) : BigDecimal(value.toString()) {
    * plusAssign (f1 += f2) operator
    */
   operator fun plusAssign(f: Decimal) {
-    if (value.compareTo(ZERO) == 0) {
+    if (value.compareTo(BigDecimal.ZERO) == 0) {
       value = f.value
-    } else if (f.value.compareTo(ZERO) != 0) {
+    } else if (f.value.compareTo(BigDecimal.ZERO) != 0) {
       value.add(f.value, MATH_CONTEXT)
     }
   }
@@ -93,9 +93,9 @@ class Decimal(var value: BigDecimal) : BigDecimal(value.toString()) {
    * subtract (f1 - f2) operator
    */
   operator fun minus(f: Decimal): Decimal {
-    if (value.compareTo(ZERO) == 0) {
+    if (value.compareTo(BigDecimal.ZERO) == 0) {
       return Decimal(f.value.negate())
-    } else if (f.value.compareTo(ZERO) == 0) {
+    } else if (f.value.compareTo(BigDecimal.ZERO) == 0) {
       return Decimal(value)
     }
     return Decimal(value.subtract(f.value, MATH_CONTEXT))
@@ -105,9 +105,9 @@ class Decimal(var value: BigDecimal) : BigDecimal(value.toString()) {
    * minusAssign (f1 -= f2) operator
    */
   operator fun minusAssign(f: Decimal) {
-    if (value.compareTo(ZERO) == 0) {
+    if (value.compareTo(BigDecimal.ZERO) == 0) {
       value = f.value.negate()
-    } else if (f.value.compareTo(ZERO) != 0) {
+    } else if (f.value.compareTo(BigDecimal.ZERO) != 0) {
       value = value.subtract(f.value, MATH_CONTEXT)
     }
   }
@@ -138,14 +138,14 @@ class Decimal(var value: BigDecimal) : BigDecimal(value.toString()) {
   /**
    * setScale
    */
-  override fun setScale(v: Int): Decimal {
-    return Decimal(value.setScale(v, ROUND_HALF_UP))
+  fun setScale(v: Int): Decimal {
+    return Decimal(value.setScale(v, RoundingMode.HALF_UP))
   }
 
   /**
    * setScale
    */
-  override fun setScale(v: Int, d: Int): Decimal {
+  fun setScale(v: Int, d: Int): Decimal {
     return Decimal(value.setScale(v, d))
   }
 
@@ -162,11 +162,16 @@ class Decimal(var value: BigDecimal) : BigDecimal(value.toString()) {
     return value.toDouble()
   }
 
-  /**
-   * Comparisons
-   */
+  // ----------------------------------------------------------------------
+  // COMPARISONS
+  // ----------------------------------------------------------------------
+
   operator fun compareTo(other: Decimal): Int {
     return value.compareTo(other.value)
+  }
+
+  override fun compareTo(other: BigDecimal): Int {
+    return value.compareTo(other)
   }
 
   // ----------------------------------------------------------------------
