@@ -33,6 +33,8 @@ import org.kopi.galite.form.dsl.Key
 
 object User : Table() {
   val id = integer("ID")
+  val uc = integer("UC")
+  val ts = integer("TS")
   val name = varchar("NAME", 20).nullable()
   val age = integer("AGE").nullable()
   val job = varchar("JOB", 20).nullable()
@@ -61,6 +63,23 @@ object FormSample : Form() {
   ) {
     key  =  Key.F9          // key is optional here
     icon =  "column_chart"  // icon is optional here
+  }
+
+  val formActor = actor(
+          ident =  "save",
+          menu =   action,
+          label =  "form Command",
+          help =   "actor to test form command",
+  ) {
+    key  =  Key.F2          // key is optional here
+    icon =  "save"  // icon is optional here
+  }
+
+ val cmd = command(item = formActor) {
+    this.name = "command"
+    action = {
+      println("----------- FORM COMMAND ----------------")
+    }
   }
 
   val p1 = page("test page")
@@ -112,6 +131,18 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     label = "id"
     help = "The user id"
     columns(u.id)
+  }
+  val ts = hidden(domain = Domain<Int>(20)) {
+    label = "ts"
+    help = "The user ts"
+    value = 0
+    columns(u.ts)
+  }
+  val uc = hidden(domain = Domain<Int>(20)) {
+    label = "uc"
+    help = "The user uc"
+    value = 0
+    columns(u.uc)
   }
   val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"

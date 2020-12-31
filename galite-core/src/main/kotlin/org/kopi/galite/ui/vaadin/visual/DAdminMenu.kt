@@ -15,35 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.visual
 
-package org.kopi.galite.type
+import org.kopi.galite.visual.VMenuTree
 
-import java.text.SimpleDateFormat
+/**
+ * A module menu implementation that uses the menu tree
+ * model. This will not display a menu tree but an horizontal
+ * menu with vertical sub menus drops.
+ *
+ * @param model The menu tree model.
+ */
+class DAdminMenu(model: VMenuTree) : DMenu(model) {
+  //---------------------------------------------------
+  // IMPLEMENTATION
+  //---------------------------------------------------
 
-open class Timestamp {
-
-  fun compareTo(other: Timestamp): Int = TODO()
-
-  fun add(millis: Long): NotNullTimestamp = TODO()
-
-  /**
-   * Represents the value in sql
-   */
-  open fun toSql(): String? {
-
-    val micro: String = (timestamp!!.nanos / 1000).toString()
-
-    val tmp = buildString {
-      append("00000".substring(0, 6 - micro.length))
-      append(micro)
-    }
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
-  }
-
-  companion object {
-    fun now(): NotNullTimestamp = TODO()
-    fun parse(input: String, format: String): NotNullTimestamp = TODO()
-  }
-
-  private val timestamp: java.sql.Timestamp? = null
+  override val type: Int
+    get() = VMenuTree.ADMIN_MENU
 }

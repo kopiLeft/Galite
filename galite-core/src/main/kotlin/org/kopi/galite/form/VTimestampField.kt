@@ -178,7 +178,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r])
+  override fun getSqlImpl(r: Int): String? = Utils.toSql(value[r])
 
   /**
    * Copies the value of a record to another

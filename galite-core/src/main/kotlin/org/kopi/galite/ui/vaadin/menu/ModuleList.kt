@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,21 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.menu
 
-package org.kopi.galite.ui.vaadin.report
-
-import org.kopi.galite.ui.vaadin.common.Window
-import org.kopi.galite.report.Report
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 
 /**
- * Visual class for a report.
+ * The module list server side component.
+ * TODO: Implement this class with appropriate component
  */
-class VReport(val report: Report) : Window() {
-  /**Report's data table */
-  private val table = VTable()
+open class ModuleList : Component(), HasComponents {
 
-  init {
-    table.fillTable(report)
-    add(table)
-  }
 }

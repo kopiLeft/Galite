@@ -15,35 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.actor
 
-package org.kopi.galite.type
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasEnabled
 
-import java.text.SimpleDateFormat
+/**
+ * The actor component
+ *
+ * @param caption The actor caption.
+ * @param description The actor help.
+ * @param menu The menu to which this actor belongs to.
+ * @param icon The actor icon.
+ * @param acceleratorKey The accelerator key.
+ * @param modifiersKey The modifiers key.
+ * TODO: Implement this class with appropriate component
+ */
+open class Actor(caption: String?,
+                 description: String?,
+                 menu: String,
+                 icon: String?,
+                 acceleratorKey: Int,
+                 vararg modifiersKey: Int) : Component(), HasEnabled {
 
-open class Timestamp {
-
-  fun compareTo(other: Timestamp): Int = TODO()
-
-  fun add(millis: Long): NotNullTimestamp = TODO()
-
-  /**
-   * Represents the value in sql
-   */
-  open fun toSql(): String? {
-
-    val micro: String = (timestamp!!.nanos / 1000).toString()
-
-    val tmp = buildString {
-      append("00000".substring(0, 6 - micro.length))
-      append(micro)
-    }
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
-  }
-
-  companion object {
-    fun now(): NotNullTimestamp = TODO()
-    fun parse(input: String, format: String): NotNullTimestamp = TODO()
-  }
-
-  private val timestamp: java.sql.Timestamp? = null
 }

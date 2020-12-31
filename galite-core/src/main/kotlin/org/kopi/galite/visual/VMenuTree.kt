@@ -207,8 +207,8 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       CMD_QUIT -> currentDisplay.closeWindow()
       CMD_OPEN -> currentDisplay.launchSelectedForm()
       CMD_SHOW -> {
-        currentDisplay.getBookmark().show()
-        currentDisplay.getBookmark().toFront()
+        currentDisplay.getBookmark()!!.show()
+        currentDisplay.getBookmark()!!.toFront()
       }
       CMD_ADD -> {
         currentDisplay.addSelectedElement()
@@ -218,8 +218,8 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
         currentDisplay.removeSelectedElement()
         currentDisplay.setMenu()
       }
-      CMD_FOLD -> currentDisplay.getTree().collapseRow(currentDisplay.getTree().selectionRow)
-      CMD_UNFOLD -> currentDisplay.getTree().expandRow(currentDisplay.getTree().selectionRow)
+      CMD_FOLD -> currentDisplay.getTree()!!.collapseRow(currentDisplay.getTree()!!.selectionRow)
+      CMD_UNFOLD -> currentDisplay.getTree()!!.expandRow(currentDisplay.getTree()!!.selectionRow)
       CMD_INFORMATION -> {
         val versionArray = Utils.getVersion()
         var version = ""
@@ -596,7 +596,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
    */
   fun getRoots(): List<RootMenu> = listOf(*ROOT_MENUS)
 
-  fun getShortcutsID(): List<Int> = shortcutsID
+  fun getShortcutsID(): MutableList<Int> = shortcutsID
 
   override fun getType(): Int = Constants.MDL_MENU_TREE
 

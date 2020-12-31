@@ -66,8 +66,8 @@ class Utils {
     }
 
     fun toSql(t: Time?): String = TODO()
-    fun toSql(d: Int?): String = d.toString()
-    fun toSql(t: Timestamp?): String = TODO()
+    fun toSql(d: Int?): String = d?.toString() ?: NULL_LITERAL
+    fun toSql(t: Timestamp?): String? = if(t == null)  NULL_LITERAL else t.toSql()
     fun toSql(t: Week?): String = TODO()
     fun toSql(m: Month?): String = TODO()
 
