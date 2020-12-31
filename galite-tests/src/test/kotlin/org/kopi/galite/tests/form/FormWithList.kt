@@ -79,7 +79,6 @@ object FormWithList : DictionaryForm() {
 
   val block3 = insertBlock(UsersBlock, testPage1) {
     command(item = list) {
-      this.name = "list"
       action = {
         println("-----------Generating list-----------------")
         recursiveQuery()
@@ -87,14 +86,12 @@ object FormWithList : DictionaryForm() {
     }
 
     command(item = resetBlock) {
-      this.name = "break"
       action = {
         resetBlock()
       }
     }
 
     command(item = save) {
-      this.name = "save"
       action = {
         println("-----------Saving-----------------")
         saveBlock()

@@ -17,25 +17,103 @@
  */
 package org.kopi.galite.common
 
+import java.io.File
 import java.util.Locale
 
+import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.VWindow
-import java.io.File
 
 /**
  * This class represents the definition of a window
  */
 abstract class Window {
-  /** the title of this form */
+  /** The title of this form */
   abstract val title: String
-  /** the window locale */
+
+  /** The window locale */
   open val locale: Locale? = null
-  /** the help text */
+
+  /** The help text */
   var help: String? = null
+
+  /** The window options */
   internal var options: Int? = null
+
+  /** Actors added to this window */
+  internal val actors = mutableListOf<Actor>()
+
+  /** Commands added to this window */
   internal var commands = mutableListOf<Command>()
+
+  /** Triggers added to this window */
   internal var triggers = mutableListOf<Trigger>()
+
+  /** The model generated from this class. */
   abstract val model: VWindow
+
+  /** Menus added to this window */
+  internal val menus = mutableListOf<Menu>()
+
+  /**
+   * Adds a new menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
+   *
+   * @param label                the menu label in default locale
+   * @return                     the menu. It is used later to adding actors to this menu by specifying
+   * the menu name in the actor definition.
+   */
+  fun menu(label: String): Menu {
+    val menu = Menu(label)
+    menus.add(menu)
+    return menu
+  }
+
+  /**
+   * Adds a new actor to this form.
+   *
+   * An Actor is an item to be linked to a command.
+   *
+   * @param menu                 the containing menu
+   * @param label                the label
+   * @param help                 the help
+   */
+  fun actor(ident: String, menu: Menu, label: String, help: String, init: (Actor.() -> Unit)? = null): Actor {
+    val number = when {
+      ident == VKConstants.CMD_AUTOFILL -> {
+        VForm.CMD_AUTOFILL
+      }
+      ident == VKConstants.CMD_NEWITEM -> {
+        VForm.CMD_NEWITEM
+      }
+      ident == VKConstants.CMD_EDITITEM -> {
+        VForm.CMD_EDITITEM
+      }
+      ident == VKConstants.CMD_SHORTCUT -> {
+        VForm.CMD_EDITITEM_S
+      }
+      else -> {
+        0
+      }
+    }
+    val actor = Actor(ident, menu, label, help, number)
+    if (init != null) {
+      actor.init()
+    }
+    actors.add(actor)
+    return actor
+  }
+
+  /**
+   * Adds a new command to this window.
+   *
+   * @param item    the actor linked to the command.
+   * @param init    initialization method.
+   */
+  fun command(item: Actor, init: Command.() -> Unit): Command {
+    val command = Command(item)
+    command.init()
+    commands.add(command)
+    return command
+  }
 
   /**
    * Returns the qualified source file name where this object is defined.

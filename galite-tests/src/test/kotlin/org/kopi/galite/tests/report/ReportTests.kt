@@ -26,6 +26,7 @@ import org.junit.Test
 import org.kopi.galite.common.POSTREPORT
 import org.kopi.galite.common.PREREPORT
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.tests.VApplicationTestBase
@@ -104,6 +105,24 @@ object SimpleReport : Report() {
 
   val postReport = trigger(POSTREPORT) {
     println("---------POSTREPORT TRIGGER-------------")
+  }
+
+  val action = menu("Action")
+
+  val greeting = actor(
+          ident = "greeting",
+          menu = action,
+          label = "Greeting",
+          help = "Click me to show greeting",
+  ) {
+    key  =  Key.F1          // key is optional here
+    icon =  "ask"  // icon is optional here
+  }
+
+  val cmd = command(item = greeting) {
+    action = {
+      println("----------- Hello Galite ----------------")
+    }
   }
 
   val name = field(Domain<String>(20)) {

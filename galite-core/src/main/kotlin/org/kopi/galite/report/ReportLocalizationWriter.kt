@@ -18,8 +18,9 @@
 package org.kopi.galite.report
 
 import org.jdom2.Element
-
+import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Menu
 
 /**
  * This class implements an  XML localization file generator
@@ -27,7 +28,9 @@ import org.kopi.galite.common.LocalizationWriter
 class ReportLocalizationWriter : LocalizationWriter() {
   fun genReport(title: String?,
                 help: String?,
-                fields: MutableList<ReportField<*>>) {
+                fields: MutableList<ReportField<*>>,
+                menus: MutableList<Menu>,
+                actors: MutableList<Actor>) {
     val self = Element("report")
 
     self.setAttribute("title", title)
@@ -36,6 +39,17 @@ class ReportLocalizationWriter : LocalizationWriter() {
     }
     pushNode(self)
     // coll.genLocalization(this) TODO
+
+    // Menus
+    menus.forEach {
+      it.genLocalization(this)
+    }
+
+    // Actors
+    actors.forEach {
+      it.genLocalization(this)
+    }
+
     fields.forEach { field ->
       field.genLocalization(this)
     }
