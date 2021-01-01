@@ -438,11 +438,7 @@ open class FormBlock(var buffer: Int,
   // ----------------------------------------------------------------------
 
   override fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genBlock(ident,
-                                                title,
-                                                help,
-                                                indices.toTypedArray(),
-                                                blockFields.toTypedArray())
+    (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, blockFields)
   }
 
   fun showChart(chart: Chart) {

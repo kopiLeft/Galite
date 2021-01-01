@@ -173,13 +173,8 @@ abstract class Form : Window() {
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genForm(title,
-                                               formBlocks.map { it.ownDomains }.flatten().toTypedArray(),
-                                               menus.toTypedArray(),
-                                               actors.toTypedArray(),
-                                               pages.toTypedArray(),
-                                               formBlocks.toTypedArray()
-    )
+    (writer as FormLocalizationWriter)
+            .genForm(title, formBlocks.map { it.ownDomains }.flatten(), menus, actors, pages, formBlocks)
   }
 
   /** Form model */
