@@ -139,14 +139,16 @@ abstract class Report : Window() {
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as ReportLocalizationWriter).genReport(title,
-                                                   help,
-                                                   fields)
+    (writer as ReportLocalizationWriter).genReport(title, help, fields, menus, actors)
   }
 
   // TODO add Fixed types
   fun MReport.addReportColumns() {
     columns = fields.map {
+      if(it.group != null) {
+        it.groupID = fields.indexOf(it.group!!())
+      }
+
       when (it.domain.kClass) {
         Int::class ->
           VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
@@ -215,6 +217,13 @@ abstract class Report : Window() {
         }
 
         override fun init() {
+          this.addActors(this@Report.actors.map { actor ->
+            actor.buildModel(sourceFile)
+          }.toTypedArray())
+          this.commands = this@Report.commands.map { command ->
+            command.buildModel(this, actors)
+          }.toTypedArray()
+
           source = sourceFile
 
           if (reportCommands) {

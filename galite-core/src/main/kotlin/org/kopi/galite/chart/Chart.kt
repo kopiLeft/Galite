@@ -17,9 +17,11 @@
 
 package org.kopi.galite.chart
 
+import java.io.IOException
+
 import org.kopi.galite.common.Action
-import org.kopi.galite.common.ChartObjectTriggerEvent
 import org.kopi.galite.common.ChartTriggerEvent
+import org.kopi.galite.common.ChartTypeTriggerEvent
 import org.kopi.galite.common.ChartVoidTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
@@ -29,7 +31,6 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.report.Constants
 import org.kopi.galite.visual.VWindow
-import java.io.IOException
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
@@ -100,7 +101,7 @@ abstract class Chart() : Window() {
    * @param chartTriggerEvents the trigger events to add
    * @param method             the method to execute when trigger is called
    */
-  fun trigger(vararg chartTriggerEvents: ChartObjectTriggerEvent, method: () -> Unit): Trigger {
+  fun trigger(vararg chartTriggerEvents: ChartTypeTriggerEvent, method: () -> VChartType): Trigger {
     return trigger(chartTriggerEvents, method)
   }
 
@@ -174,9 +175,7 @@ abstract class Chart() : Window() {
    * @param writer the localization writer responsible for generating the xml file.
    */
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as ChartLocalizationWriter).genChart(title,
-                                                 help,
-                                                 getFields())
+    (writer as ChartLocalizationWriter).genChart(title, help, getFields(), menus, actors)
   }
 
   fun VChart.addChartLines() {
@@ -234,6 +233,13 @@ abstract class Chart() : Window() {
       }
 
       override fun init() {
+        this.addActors(this@Chart.actors.map { actor ->
+          actor.buildModel(sourceFile)
+        }.toTypedArray())
+        this.commands = this@Chart.commands.map { command ->
+          command.buildModel(this, actors)
+        }.toTypedArray()
+
         source = sourceFile
 
         super.dimensions = listOf(this@Chart.dimension).map { it.model }.toTypedArray()

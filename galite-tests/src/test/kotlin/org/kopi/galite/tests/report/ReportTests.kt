@@ -26,6 +26,7 @@ import org.junit.Test
 import org.kopi.galite.common.POSTREPORT
 import org.kopi.galite.common.PREREPORT
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.tests.VApplicationTestBase
@@ -49,13 +50,13 @@ class ReportTests: VApplicationTestBase() {
   @Test
   fun reportDataTest() {
     val rows = SimpleReport.getRowsForField(SimpleReport.name)
-    assertEquals(listOf("Sami", "Sofia"), rows)
+    assertEquals(listOf("Sami", "Sofia", "Sofia"), rows)
 
     val firstRow = SimpleReport.getRow(0)
-    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22), firstRow)
+    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22, SimpleReport.profession to "p"), firstRow)
 
     val secondRow = SimpleReport.getRow(1)
-    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23), secondRow)
+    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23, SimpleReport.profession to "p1"), secondRow)
   }
 
   /**
@@ -76,11 +77,17 @@ class ReportTests: VApplicationTestBase() {
     val document = builder.build(generatedFile)
 
     // Check that generated xml file contains fields localization
-    val rootElement = document.rootElement
-    val nameField   = rootElement.children[0]
-    val ageField    = rootElement.children[1]
+    val rootElement   = document.rootElement
+    val actionMenu    = rootElement.children[0]
+    val greetingActor = rootElement.children[1]
+    val nameField     = rootElement.children[2]
+    val ageField      = rootElement.children[3]
     assertEquals("report", rootElement.name)
     assertEquals("SimpleReport", rootElement.getAttributeValue("title"))
+    assertEquals("Action", actionMenu.getAttributeValue("ident"))
+    assertEquals("Action", actionMenu.getAttributeValue("label"))
+    assertEquals("greeting", greetingActor.getAttributeValue("ident"))
+    assertEquals("Greeting", greetingActor.getAttributeValue("label"))
     assertEquals("name", nameField.getAttributeValue("ident"))
     assertEquals("name", nameField.getAttributeValue("label"))
     assertEquals("The user name", nameField.getAttributeValue("help"))
@@ -106,26 +113,58 @@ object SimpleReport : Report() {
     println("---------POSTREPORT TRIGGER-------------")
   }
 
+  val action = menu("Action")
+
+  val greeting = actor(
+          ident = "greeting",
+          menu = action,
+          label = "Greeting",
+          help = "Click me to show greeting",
+  ) {
+    key  =  Key.F1          // key is optional here
+    icon =  "ask"  // icon is optional here
+  }
+
+  val cmd = command(item = greeting) {
+    action = {
+      println("----------- Hello Galite ----------------")
+    }
+  }
+
   val name = field(Domain<String>(20)) {
     label = "name"
     help = "The user name"
     align = FieldAlignment.LEFT
+    group = { profession }
   }
 
   val age = field(Domain<Int>(3)) {
     label = "age"
     help = "The user age"
     align = FieldAlignment.LEFT
+    group = { profession }
+  }
+
+  val profession = field(Domain<String>(20)) {
+    label = "profession"
+    help = "The user profession"
   }
 
   init {
     add {
       this[name] = "Sami"
       this[age] = 22
+      this[profession] = "p"
     }
     add {
       this[name] = "Sofia"
       this[age] = 23
+      this[profession] = "p1"
+    }
+    add {
+      this[name] = "Sofia"
+      this[age] = 23
+      this[profession] = "p2"
     }
   }
 }

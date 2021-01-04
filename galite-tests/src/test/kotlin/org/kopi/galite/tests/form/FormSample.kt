@@ -19,7 +19,6 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
-
 import org.kopi.galite.common.INITFORM
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
@@ -75,8 +74,7 @@ object FormSample : Form() {
     icon =  "save"  // icon is optional here
   }
 
- val cmd = command(item = formActor) {
-    this.name = "command"
+  val cmd = command(item = formActor) {
     action = {
       println("----------- FORM COMMAND ----------------")
     }
@@ -87,7 +85,6 @@ object FormSample : Form() {
 
   val tb1 = insertBlock(TestBlock(), p1) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
@@ -97,7 +94,6 @@ object FormSample : Form() {
 
   val tb2 = insertBlock(TestBlock(), p2) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
