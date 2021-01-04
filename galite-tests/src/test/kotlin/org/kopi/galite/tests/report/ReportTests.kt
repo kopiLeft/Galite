@@ -110,22 +110,36 @@ object SimpleReport : Report() {
     label = "name"
     help = "The user name"
     align = FieldAlignment.LEFT
+    group = { profession }
   }
 
   val age = field(Domain<Int>(3)) {
     label = "age"
     help = "The user age"
     align = FieldAlignment.LEFT
+    group = { profession }
+  }
+
+  val profession = field(Domain<String>(20)) {
+    label = "profession"
+    help = "The user profession"
   }
 
   init {
     add {
       this[name] = "Sami"
       this[age] = 22
+      this[profession] = "p"
     }
     add {
       this[name] = "Sofia"
       this[age] = 23
+      this[profession] = "p1"
+    }
+    add {
+      this[name] = "Sofia"
+      this[age] = 23
+      this[profession] = "p2"
     }
   }
 }

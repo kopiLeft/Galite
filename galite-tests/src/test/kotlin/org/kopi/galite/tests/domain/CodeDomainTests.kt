@@ -18,7 +18,6 @@
 package org.kopi.galite.tests.domain
 
 import org.junit.Test
-import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.ReportField
 
