@@ -170,11 +170,15 @@ abstract class Report : Window() {
   }
 
   private fun MReport.addReportLines() {
+
     reportRows.forEach {
-      addLine(it.data.values.toTypedArray())
+      val list = fields.map { field ->
+        it.data[field]
+      }
+
+      addLine(list.toTypedArray())
     }
   }
-
 
   /** Report model*/
   override val model: VReport

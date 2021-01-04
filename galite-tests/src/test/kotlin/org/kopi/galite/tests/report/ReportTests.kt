@@ -154,17 +154,17 @@ object SimpleReport : Report() {
     add {
       this[name] = "Sami"
       this[age] = 22
-      this[profession] = "p"
+      this[profession] = "Journalist"
     }
     add {
       this[name] = "Sofia"
       this[age] = 23
-      this[profession] = "p1"
+      this[profession] = "Dentist"
     }
     add {
-      this[name] = "Sofia"
       this[age] = 23
-      this[profession] = "p2"
+      this[profession] = "Baker"
+      this[name] = "Saif"
     }
   }
 }
