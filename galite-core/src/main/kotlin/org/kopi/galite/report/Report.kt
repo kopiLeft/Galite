@@ -170,7 +170,6 @@ abstract class Report : Window() {
   }
 
   private fun MReport.addReportLines() {
-
     reportRows.forEach {
       val list = fields.map { field ->
         it.data[field]
