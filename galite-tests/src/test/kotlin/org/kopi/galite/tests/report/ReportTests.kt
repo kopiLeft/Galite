@@ -53,10 +53,13 @@ class ReportTests: VApplicationTestBase() {
     assertEquals(listOf("Sami", "Sofia", "Sofia"), rows)
 
     val firstRow = SimpleReport.getRow(0)
-    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22, SimpleReport.profession to "p"), firstRow)
+    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22, SimpleReport.profession to "Journalist"), firstRow)
 
     val secondRow = SimpleReport.getRow(1)
-    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23, SimpleReport.profession to "p1"), secondRow)
+    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23, SimpleReport.profession to "Dentist"), secondRow)
+
+    val thirdRow = SimpleReport.getRow(2)
+    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 25, SimpleReport.profession to "Baker"), thirdRow)
   }
 
   /**
@@ -137,14 +140,13 @@ object SimpleReport : Report() {
     label = "name"
     help = "The user name"
     align = FieldAlignment.LEFT
-    group = { profession }
+    group = { age }
   }
 
   val age = field(Domain<Int>(3)) {
     label = "age"
     help = "The user age"
     align = FieldAlignment.LEFT
-    group = { profession }
   }
 
   val profession = field(Domain<String>(20)) {
@@ -156,17 +158,17 @@ object SimpleReport : Report() {
     add {
       this[name] = "Sami"
       this[age] = 22
-      this[profession] = "p"
+      this[profession] = "Journalist"
     }
     add {
       this[name] = "Sofia"
       this[age] = 23
-      this[profession] = "p1"
+      this[profession] = "Dentist"
     }
     add {
+      this[age] = 25
+      this[profession] = "Baker"
       this[name] = "Sofia"
-      this[age] = 23
-      this[profession] = "p2"
     }
   }
 }
