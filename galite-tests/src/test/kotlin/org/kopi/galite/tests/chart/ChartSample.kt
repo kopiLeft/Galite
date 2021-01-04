@@ -16,16 +16,36 @@
  */
 package org.kopi.galite.tests.chart
 
+import java.util.Locale
+
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.chart.VChartType
 import org.kopi.galite.common.CHARTTYPE
 import org.kopi.galite.common.INITCHART
 import org.kopi.galite.domain.Domain
-import java.util.Locale
+import org.kopi.galite.form.dsl.Key
 
 object ChartSample: Chart()  {
   override val locale = Locale.FRANCE
   override val title = "area/population per city"
+
+  val action = menu("Action")
+
+  val greeting = actor(
+          ident = "greeting",
+          menu = action,
+          label = "Greeting",
+          help = "Click me to show greeting",
+  ) {
+    key  =  Key.F1          // key is optional here
+    icon =  "ask"  // icon is optional here
+  }
+
+  val cmd = command(item = greeting) {
+    action = {
+      println("----------- Hello Galite ----------------")
+    }
+  }
 
   val area = measure(Domain<Int?>(10)) {
     label = "area (ha)"
