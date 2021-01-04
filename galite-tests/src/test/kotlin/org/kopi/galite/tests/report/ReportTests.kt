@@ -49,13 +49,13 @@ class ReportTests: VApplicationTestBase() {
   @Test
   fun reportDataTest() {
     val rows = SimpleReport.getRowsForField(SimpleReport.name)
-    assertEquals(listOf("Sami", "Sofia"), rows)
+    assertEquals(listOf("Sami", "Sofia", "Sofia"), rows)
 
     val firstRow = SimpleReport.getRow(0)
-    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22), firstRow)
+    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22, SimpleReport.profession to "p"), firstRow)
 
     val secondRow = SimpleReport.getRow(1)
-    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23), secondRow)
+    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23, SimpleReport.profession to "p1"), secondRow)
   }
 
   /**
