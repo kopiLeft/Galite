@@ -128,6 +128,8 @@ object SimpleReport : Report() {
   val cmd = command(item = greeting) {
     action = {
       println("----------- Hello Galite ----------------")
+      println("----------- I will show you help ----------------")
+      model.showHelp()
     }
   }
 
