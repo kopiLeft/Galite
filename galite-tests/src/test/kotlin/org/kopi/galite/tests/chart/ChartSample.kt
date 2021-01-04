@@ -28,6 +28,7 @@ import org.kopi.galite.form.dsl.Key
 object ChartSample: Chart()  {
   override val locale = Locale.FRANCE
   override val title = "area/population per city"
+  override val help = "This chart presents the area/population per city"
 
   val action = menu("Action")
 

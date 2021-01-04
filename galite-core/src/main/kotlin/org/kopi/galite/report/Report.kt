@@ -45,6 +45,9 @@ abstract class Report : Window() {
   /** Report's data rows. */
   val reportRows = mutableListOf<ReportRow>()
 
+  /** the help text */
+  open val help: String? = null
+
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
    *

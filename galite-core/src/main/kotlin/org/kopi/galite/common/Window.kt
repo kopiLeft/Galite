@@ -33,9 +33,6 @@ abstract class Window {
   /** The window locale */
   open val locale: Locale? = null
 
-  /** The help text */
-  var help: String? = null
-
   /** The window options */
   internal var options: Int? = null
 

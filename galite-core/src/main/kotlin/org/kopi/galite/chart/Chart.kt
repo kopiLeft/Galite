@@ -44,6 +44,9 @@ abstract class Chart() : Window() {
   /** The chart's measures */
   val measures = mutableListOf<ChartMeasure<*>>()
 
+  /** the help text */
+  open val help: String? = null
+
   /**
    * Creates a chart dimension, with the specified [domain], used to store values of type [T] and measures values.
    *
