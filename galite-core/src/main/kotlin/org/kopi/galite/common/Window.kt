@@ -63,6 +63,7 @@ abstract class Window {
    */
   fun menu(label: String): Menu {
     val menu = Menu(label)
+
     menus.add(menu)
     return menu
   }
@@ -77,24 +78,26 @@ abstract class Window {
    * @param help                 the help
    */
   fun actor(ident: String, menu: Menu, label: String, help: String, init: (Actor.() -> Unit)? = null): Actor {
-    val number = when {
-      ident == VKConstants.CMD_AUTOFILL -> {
+    val number = when (ident) {
+      VKConstants.CMD_AUTOFILL -> {
         VForm.CMD_AUTOFILL
       }
-      ident == VKConstants.CMD_NEWITEM -> {
+      VKConstants.CMD_NEWITEM -> {
         VForm.CMD_NEWITEM
       }
-      ident == VKConstants.CMD_EDITITEM -> {
+      VKConstants.CMD_EDITITEM -> {
         VForm.CMD_EDITITEM
       }
-      ident == VKConstants.CMD_SHORTCUT -> {
+      VKConstants.CMD_SHORTCUT -> {
         VForm.CMD_EDITITEM_S
       }
       else -> {
         0
       }
     }
+
     val actor = Actor(ident, menu, label, help, number)
+
     if (init != null) {
       actor.init()
     }
@@ -110,6 +113,7 @@ abstract class Window {
    */
   fun command(item: Actor, init: Command.() -> Unit): Command {
     val command = Command(item)
+
     command.init()
     commands.add(command)
     return command

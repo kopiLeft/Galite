@@ -44,13 +44,13 @@ class ChartLocalizationWriter : LocalizationWriter() {
     // coll.genLocalization(this) TODO
 
     // Menus
-    menus.forEach {
-      it.genLocalization(this)
+    menus.forEach { menu ->
+      menu.genLocalization(this)
     }
 
     // Actors
-    actors.forEach {
-      it.genLocalization(this)
+    actors.forEach { actor ->
+      actor.genLocalization(this)
     }
 
     // Fields

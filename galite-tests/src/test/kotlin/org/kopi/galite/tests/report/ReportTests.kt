@@ -77,11 +77,11 @@ class ReportTests: VApplicationTestBase() {
     val document = builder.build(generatedFile)
 
     // Check that generated xml file contains fields localization
-    val rootElement = document.rootElement
-    val actionMenu   = rootElement.children[0]
-    val greetingActor   = rootElement.children[1]
-    val nameField   = rootElement.children[2]
-    val ageField    = rootElement.children[3]
+    val rootElement   = document.rootElement
+    val actionMenu    = rootElement.children[0]
+    val greetingActor = rootElement.children[1]
+    val nameField     = rootElement.children[2]
+    val ageField      = rootElement.children[3]
     assertEquals("report", rootElement.name)
     assertEquals("SimpleReport", rootElement.getAttributeValue("title"))
     assertEquals("Action", actionMenu.getAttributeValue("ident"))
