@@ -144,6 +144,10 @@ abstract class Report : Window() {
   // TODO add Fixed types
   fun MReport.addReportColumns() {
     columns = fields.map {
+      if(it.group != null) {
+        it.groupID = fields.indexOf(it.group!!())
+      }
+
       when (it.domain.kClass) {
         Int::class ->
           VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)

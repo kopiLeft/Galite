@@ -26,7 +26,7 @@ import org.kopi.galite.visual.VTrigger
 /**
  * This class represents the definition of a report field
  *
- * @param domain      the domain of this field
+ * @param domain      The domain of this field
  */
 class ReportField<T : Comparable<T>?>(override val domain: Domain<T>) : Field<T>(domain) {
   /** the ident of this field */
@@ -35,17 +35,26 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>) : Field<T>
   /** the options of the field */
   var options: Int = 0
 
-  /** the grouping column */
-  var group: String? = null
+  /**
+   * The fields you want to be grouped by the actual field. This creates clickable groups in your report.
+   *
+   * Example :
+   *
+   * val Customers = field()
+   * val InvoiceNum = field() {
+   *  group = Articles
+   * }
+   *
+   * In this report, you can click on the InvoiceNum field to group customers.
+   *
+   */
+  var group: (() -> ReportField<*>)? = null
 
   /** the commands accessible in this field */
   lateinit var commands: Array<VCommand>
 
   /** the triggers executed by this field */
   lateinit var triggers: Array<VTrigger>
-
-  /** Returns the parent model */
-  var report: VReport? = null
 
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.DEFAULT
