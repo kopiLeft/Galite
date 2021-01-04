@@ -55,6 +55,6 @@ object FormWithChart: Form() {
   }
 }
 
-fun main(){
+fun main() {
   Application.runForm(formName = FormWithChart)
 }

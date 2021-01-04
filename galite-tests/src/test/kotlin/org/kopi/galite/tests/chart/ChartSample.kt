@@ -25,6 +25,7 @@ import java.util.Locale
 object ChartSample: Chart()  {
   override val locale = Locale.FRANCE
   override val title = "area/population per city"
+  override val help = "This chart presents the area/population per city"
 
   val area = measure(Domain<Int?>(10)) {
     label = "area (ha)"

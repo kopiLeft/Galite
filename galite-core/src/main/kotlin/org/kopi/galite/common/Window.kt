@@ -30,8 +30,6 @@ abstract class Window {
   abstract val title: String
   /** the window locale */
   open val locale: Locale? = null
-  /** the help text */
-  var help: String? = null
   internal var options: Int? = null
   internal var commands = mutableListOf<Command>()
   internal var triggers = mutableListOf<Trigger>()
