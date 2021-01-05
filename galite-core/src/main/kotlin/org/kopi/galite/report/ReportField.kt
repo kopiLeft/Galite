@@ -100,7 +100,7 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>,
   }
 
   /**
-   * TODO: Actually not available.
+   * Changes the values of this field in a specific format.
    *
    * @param method    The method to execute when compute trigger is executed.
    */
