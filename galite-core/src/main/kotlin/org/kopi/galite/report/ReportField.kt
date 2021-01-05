@@ -17,11 +17,13 @@
  */
 package org.kopi.galite.report
 
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.ReportTrigger
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
 import org.kopi.galite.visual.VCommand
-import org.kopi.galite.visual.VTrigger
 
 /**
  * This class represents the definition of a report field
@@ -54,7 +56,13 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>) : Field<T>
   lateinit var commands: Array<VCommand>
 
   /** the triggers executed by this field */
-  lateinit var triggers: Array<VTrigger>
+  internal val triggers = mutableListOf<Trigger>()
+
+  /** compute trigger */
+  var computeTrigger: Trigger? = null
+
+  /** format trigger */
+  var formatTrigger: Trigger? = null
 
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.DEFAULT
@@ -71,6 +79,31 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>) : Field<T>
       options = if (value == true) Constants.CLO_HIDDEN else Constants.CLO_VISIBLE
       field = value
     }
+
+  /**
+   * executed when the report is displayed and can be used to compute expressions on the report columns and show
+   * the result.
+   *
+   * @param method    The method to execute when compute trigger is executed.
+   */
+  fun compute(method: () -> VCalculateColumn): ReportTrigger {
+    val fieldAction = Action(null, method)
+    return ReportTrigger(0L or (1L shl Constants.TRG_COMPUTE), fieldAction).also {
+      computeTrigger = it
+    }
+  }
+
+  /**
+   * TODO: Actually not available.
+   *
+   * @param method    The method to execute when compute trigger is executed.
+   */
+  fun format(method: () -> Unit): ReportTrigger {
+    val fieldAction = Action(null, method)
+    return ReportTrigger(0L or (1L shl Constants.TRG_FORMAT), fieldAction).also {
+      formatTrigger = it
+    }
+  }
 
   var groupID = -1
 

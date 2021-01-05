@@ -21,8 +21,10 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.PConfig
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.VCCDepthFirstCircuitN
 
 import org.kopi.galite.report.VReport
+import org.kopi.galite.report.VReportRow
 import org.kopi.galite.tests.VApplicationTestBase
 import org.kopi.galite.visual.VActor
 import java.awt.event.KeyEvent
@@ -121,6 +123,22 @@ class VReportTests: VApplicationTestBase() {
     val age = field(Domain<Int>(3)) {
       label = "age"
       help = "The user age"
+    }
+
+    val computed = field(Domain<Int>(4)) {
+      label = "age2"
+      help = "The age x 2"
+      compute {
+        object : VCCDepthFirstCircuitN() {
+          override fun evalNode(row: VReportRow, column: Int): Any {
+            return row.getValueAt(column) as Int * 2
+          }
+
+          override fun evalLeaf(row: VReportRow, column: Int): Any {
+            return evalNode(row, column)
+          }
+        }
+      }
     }
 
     init {

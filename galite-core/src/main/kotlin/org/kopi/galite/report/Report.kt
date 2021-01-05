@@ -149,24 +149,30 @@ abstract class Report : Window() {
         it.groupID = fields.indexOf(it.group!!())
       }
 
+      val function: VCalculateColumn? = if (it.computeTrigger != null) {
+        it.computeTrigger!!.action.method() as VCalculateColumn
+      } else {
+        null
+      }
+
       when (it.domain.kClass) {
         Int::class ->
-          VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VIntegerColumn(it.label, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, null)
         String::class ->
-          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0,
+          VStringColumn(it.label, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
                         it.domain.height ?: 0, null)
         Boolean::class ->
-          VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VBooleanColumn(it.label, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, null)
         Date::class, java.util.Date::class ->
-          VDateColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VDateColumn(it.label, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, null)
         Month::class ->
-          VMonthColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VMonthColumn(it.label, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, null)
         Week::class ->
-          VWeekColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VWeekColumn(it.label, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, null)
         Time::class ->
-          VTimeColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VTimeColumn(it.label, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, null)
         Timestamp::class ->
-          VTimestampColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VTimestampColumn(it.label, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, null)
         else -> throw RuntimeException("Type ${it.domain.kClass!!.qualifiedName} is not supported")
       }
     }.toTypedArray()
@@ -207,6 +213,9 @@ abstract class Report : Window() {
           // FIELD TRIGGERS
           fields.forEach {
             val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            if(it.computeTrigger != null) {
+              fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
+            }
             // TODO : Add field triggers here
             super.VKT_Triggers.add(fieldTriggerArray)
           }
