@@ -21,8 +21,10 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.PConfig
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.VCCDepthFirstCircuitN
 
 import org.kopi.galite.report.VReport
+import org.kopi.galite.report.VReportRow
 import org.kopi.galite.tests.VApplicationTestBase
 import org.kopi.galite.visual.VActor
 import java.awt.event.KeyEvent

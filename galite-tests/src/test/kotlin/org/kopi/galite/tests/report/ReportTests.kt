@@ -29,6 +29,8 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.Triggers
+import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.tests.VApplicationTestBase
 
 import kotlin.test.assertEquals
@@ -73,6 +75,7 @@ class ReportTests: VApplicationTestBase() {
 
     val sourceFilePath = SimpleReport.javaClass.classLoader.getResource("").path +
             this.javaClass.packageName.replace(".", "/") + File.separatorChar
+    SimpleReport.initFields()
     SimpleReport.genLocalization()
 
     val generatedFile = File("${sourceFilePath}/SimpleReport-${SimpleReport.locale}.xml")
@@ -140,13 +143,24 @@ object SimpleReport : Report() {
     label = "name"
     help = "The user name"
     align = FieldAlignment.LEFT
-    group = { age }
+    group = age
+    format {
+      object : VCellFormat() {
+        override fun format(value: Any?): String {
+          return (value as String).toUpperCase()
+        }
+      }
+    }
   }
 
   val age = field(Domain<Int>(3)) {
     label = "age"
     help = "The user age"
     align = FieldAlignment.LEFT
+    compute {
+      // Computes the average of ages
+      Triggers.avgInteger(this)
+    }
   }
 
   val profession = field(Domain<String>(20)) {

@@ -55,10 +55,10 @@ abstract class Report : Window() {
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
+  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
+                                                noinline init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
-    val field = ReportField(domain, "ANM_${fields.size}")
-    field.init()
+    val field = ReportField(domain, "ANM_${fields.size}", init)
     fields.add(field)
     return field
   }
@@ -146,27 +146,39 @@ abstract class Report : Window() {
   fun MReport.addReportColumns() {
     columns = fields.map {
       if(it.group != null) {
-        it.groupID = fields.indexOf(it.group!!())
+        it.groupID = fields.indexOf(it.group)
+      }
+
+      val function: VCalculateColumn? = if (it.computeTrigger != null) {
+        it.computeTrigger!!.action.method() as VCalculateColumn
+      } else {
+        null
+      }
+
+      val format: VCellFormat? = if (it.formatTrigger != null) {
+        it.formatTrigger!!.action.method() as VCellFormat
+      } else {
+        null
       }
 
       when (it.domain.kClass) {
         Int::class ->
-          VIntegerColumn(it.ident, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VIntegerColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         String::class ->
-          VStringColumn(it.ident, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0,
-                        it.domain.height ?: 0, null)
+          VStringColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
+                        it.domain.height ?: 0, format)
         Boolean::class ->
-          VBooleanColumn(it.ident, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VBooleanColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Date::class, java.util.Date::class ->
-          VDateColumn(it.ident, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VDateColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Month::class ->
-          VMonthColumn(it.ident, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VMonthColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Week::class ->
-          VWeekColumn(it.ident, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VWeekColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Time::class ->
-          VTimeColumn(it.ident, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VTimeColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Timestamp::class ->
-          VTimestampColumn(it.ident, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VTimestampColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         else -> throw RuntimeException("Type ${it.domain.kClass!!.qualifiedName} is not supported")
       }
     }.toTypedArray()
@@ -182,9 +194,17 @@ abstract class Report : Window() {
     }
   }
 
+  fun initFields() {
+    fields.forEach {
+      it.initialize()
+    }
+  }
+
   /** Report model*/
   override val model: VReport
     get() {
+      initFields()
+
       genLocalization()
 
       return object : VReport() {
@@ -207,6 +227,12 @@ abstract class Report : Window() {
           // FIELD TRIGGERS
           fields.forEach {
             val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            if(it.computeTrigger != null) {
+              fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
+            }
+            if(it.formatTrigger != null) {
+              fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+            }
             // TODO : Add field triggers here
             super.VKT_Triggers.add(fieldTriggerArray)
           }
