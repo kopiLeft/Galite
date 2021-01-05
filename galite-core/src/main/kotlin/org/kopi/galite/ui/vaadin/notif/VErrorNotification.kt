@@ -65,7 +65,7 @@ open class VErrorNotification(title: String, message: String) : VAbstractNotific
       details = Details("Show details",
                         Text("details here"))
     }
-    close.addClickListener{ close() }
+    close.addClickListener{  hide()  }
     close.width = "20%"
     close.height = "50%"
   }
@@ -92,7 +92,6 @@ open class VErrorNotification(title: String, message: String) : VAbstractNotific
     super.message = Label(message)
     details.element.setAttribute("aria-label", "Click me")
     details.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
-    close.addClickListener { close() }
     super.initialize(title, message, locale)
   }
 }

@@ -53,7 +53,8 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   override fun setButtons(locale: String) {
     ok =  VInputButton(LocalizedProperties.getString(locale, "OK"))
     cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
-    cancel.addClickListener { super.close() }
+    cancel.addClickListener { hide() }
+    ok.addClickListener { open() }
     ok.width = "20%"
     ok.height = "50%"
     cancel.width = "20%"
@@ -68,7 +69,7 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
     get() = "question-circle"
   private var ok = VInputButton()
   private var cancel = VInputButton()
-  val listener: ComponentEventListener<ClickEvent<Button>>? = null
+  var listener: ComponentEventListener<ClickEvent<Button>>? = null
 
   //--------------------------------------------------
   // CONSTRUCTOR
@@ -80,8 +81,6 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   init {
     super.title = Label(title)
     super.message = Label(message)
-    ok.addClickListener { open() }
-    cancel.addClickListener { close() }
     super.initialize(title, message, locale)
   }
 }

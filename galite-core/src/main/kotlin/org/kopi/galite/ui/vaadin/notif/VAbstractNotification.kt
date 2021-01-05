@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Label
@@ -53,6 +55,30 @@ abstract class VAbstractNotification : Dialog() {
     init(locale)
     setNotificationTitle(title)
     setNotificationMessage(message)
+  }
+
+  /**
+   * Closes the notification panel.
+   */
+  override fun close() {
+    hide()
+  }
+
+  /**
+   * Hides the notification dialog.
+   */
+  protected open fun hide() {
+    super.close()
+  }
+
+  /**
+   * Fires a close event.
+   * @param action The user action.
+   */
+  protected open fun fireOnClose(action: Boolean) {
+    for (l in listeners) {
+      l.onClose(action)
+    }
   }
 
   //-------------------------------------------------

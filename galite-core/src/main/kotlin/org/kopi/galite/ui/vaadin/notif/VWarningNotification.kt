@@ -48,7 +48,7 @@ open class VWarningNotification(title: String, message: String) : VAbstractNotif
 
   override fun setButtons(locale: String) {
     close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
-    close.addClickListener { super.close() }
+    close.addClickListener {  hide()  }
     close.width = "20%"
     close.height = "50%"
   }

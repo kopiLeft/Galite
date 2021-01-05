@@ -49,7 +49,7 @@ open class VInformationNotification(title: String, message: String) : VAbstractN
 
   override fun setButtons(locale: String) {
     close =  VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
-    close.addClickListener { close() }
+    close.addClickListener {  hide()  }
     close.width = "20%"
     close.height = "50%"
   }

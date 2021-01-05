@@ -68,7 +68,7 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
 }
 
 @Route("a")
-class A : VerticalLayout() {
+class ConfirmNotificationUI : VerticalLayout() {
   val confirmationDialog = ConfirmNotification("Question", "Quitter : Êtes-vous sûr ?")
   init {
     confirmationDialog.locale = "en_GB"
@@ -78,7 +78,7 @@ class A : VerticalLayout() {
 }
 
 @Route("b")
-class B : VerticalLayout() {
+class WarningNotificationUI : VerticalLayout() {
   val warningDialog = WarningNotification("Warning", "Message warning")
 
   init {
@@ -89,7 +89,7 @@ class B : VerticalLayout() {
 }
 
 @Route("c")
-class C : VerticalLayout() {
+class ErrorNotificationUI : VerticalLayout() {
   val errorDialog = ErrorNotification("Erreur", "Message d'erreur")
 
   init {
@@ -100,7 +100,7 @@ class C : VerticalLayout() {
 }
 
 @Route("d")
-class D : VerticalLayout() {
+class InformationNotificationUI : VerticalLayout() {
   val infoDialog = InformationNotification("Info", "Message d'information")
 
   init {
