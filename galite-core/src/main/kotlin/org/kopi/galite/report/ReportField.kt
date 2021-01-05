@@ -98,7 +98,7 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>, internal v
    *
    * @param method    The method to execute when compute trigger is executed.
    */
-  fun format(method: () -> Unit): ReportTrigger {
+  fun format(method: () -> VCellFormat): ReportTrigger {
     val fieldAction = Action(null, method)
     return ReportTrigger(0L or (1L shl Constants.TRG_FORMAT), fieldAction).also {
       formatTrigger = it

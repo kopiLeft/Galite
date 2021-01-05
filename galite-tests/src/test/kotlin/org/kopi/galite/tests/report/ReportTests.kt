@@ -29,6 +29,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.tests.VApplicationTestBase
 
 import kotlin.test.assertEquals
@@ -152,6 +153,14 @@ object SimpleReport : Report() {
   val profession = field(Domain<String>(20)) {
     label = "profession"
     help = "The user profession"
+    format {
+      object : VCellFormat() {
+        override fun format(value: Any?): String {
+          println("+++++++++++++++++++-------------------")
+          return (value as String).toUpperCase()
+        }
+      }
+    }
   }
 
   init {
