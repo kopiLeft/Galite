@@ -33,7 +33,7 @@ import org.kopi.galite.visual.VCommand
  */
 class ReportField<T : Comparable<T>?>(override val domain: Domain<T>, internal val ident: String) : Field<T>(domain) {
   /** the options of the field */
-  var options: Int = 0
+  internal var options: Int = 0
 
   /**
    * The fields you want to be grouped by the actual field. This creates clickable groups in your report.
@@ -50,6 +50,9 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>, internal v
    */
   var group: (() -> ReportField<*>)? = null
 
+  /** the alignment of the text */
+  var align: FieldAlignment = FieldAlignment.DEFAULT
+
   /** the commands accessible in this field */
   lateinit var commands: Array<VCommand>
 
@@ -57,13 +60,12 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>, internal v
   internal val triggers = mutableListOf<Trigger>()
 
   /** compute trigger */
-  var computeTrigger: Trigger? = null
+  internal var computeTrigger: Trigger? = null
 
   /** format trigger */
-  var formatTrigger: Trigger? = null
+  internal var formatTrigger: Trigger? = null
 
-  /** the alignment of the text */
-  var align: FieldAlignment = FieldAlignment.DEFAULT
+  internal var groupID = -1
 
   /**
    * true if the field is hidden, false otherwise
@@ -102,8 +104,6 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>, internal v
       formatTrigger = it
     }
   }
-
-  var groupID = -1
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
