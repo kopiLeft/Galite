@@ -67,7 +67,7 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
   }
 }
 
-@Route("a")
+@Route("confirm")
 class ConfirmNotificationUI : VerticalLayout() {
   val confirmationDialog = ConfirmNotification("Question", "Quitter : Êtes-vous sûr ?")
   init {
@@ -77,7 +77,7 @@ class ConfirmNotificationUI : VerticalLayout() {
   }
 }
 
-@Route("b")
+@Route("warning")
 class WarningNotificationUI : VerticalLayout() {
   val warningDialog = WarningNotification("Warning", "Message warning")
 
@@ -88,7 +88,7 @@ class WarningNotificationUI : VerticalLayout() {
   }
 }
 
-@Route("c")
+@Route("error")
 class ErrorNotificationUI : VerticalLayout() {
   val errorDialog = ErrorNotification("Erreur", "Message d'erreur")
 
@@ -99,7 +99,7 @@ class ErrorNotificationUI : VerticalLayout() {
   }
 }
 
-@Route("d")
+@Route("information")
 class InformationNotificationUI : VerticalLayout() {
   val infoDialog = InformationNotification("Info", "Message d'information")
 
