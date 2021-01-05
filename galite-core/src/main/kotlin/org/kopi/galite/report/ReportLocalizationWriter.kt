@@ -56,7 +56,7 @@ class ReportLocalizationWriter : LocalizationWriter() {
     // do not pop: this is the root element
   }
 
-  fun genField(ident: String?, label: String?, help: String?) {
+  fun genField(ident: String, label: String?, help: String?) {
     val self = Element("field")
     self.setAttribute("ident", ident)
     if (label != null) {
