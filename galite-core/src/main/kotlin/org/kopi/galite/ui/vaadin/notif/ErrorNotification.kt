@@ -15,18 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
-
-import java.io.Serializable
+package org.kopi.galite.ui.vaadin.notif
 
 /**
- * Notifications listener.
+ * Error notification component.
+ * @param title the warning notification title.
+ * @param message the warning notification message.
  */
-interface NotificationListener : Serializable {
-
-  /**
-   * Fires the notification close action.
-   * @param action the user action.
-   */
-  fun onClose(action: Boolean)
-}
+class ErrorNotification(title: String, message: String) : VErrorNotification(title, message)

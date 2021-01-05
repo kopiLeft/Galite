@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.notif
 
 import com.vaadin.flow.component.orderedlayout.Scroller
 import org.kopi.galite.ui.vaadin.common.VSpan
@@ -25,7 +25,7 @@ import javax.swing.Popup
  * An error message popup window containing stack trace detail
  * for an server exception.
  */
-class VErrorMessagePopup : Popup(){
+class VErrorMessagePopup : Popup() {
 
   //---------------------------------------------------
   // IMPLEMENTATION

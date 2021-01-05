@@ -17,15 +17,16 @@
 package org.kopi.galite.demo.web.vaadin
 
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
 import java.util.Locale
 
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.tests.VApplicationTestBase
-import org.kopi.galite.ui.vaadin.base.VInputButton
-import org.kopi.galite.ui.vaadin.notification.VConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -68,19 +69,44 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
 
 @Route("a")
 class A : VerticalLayout() {
+  val confirmationDialog = ConfirmNotification("Question", "Quitter : Êtes-vous sûr ?")
   init {
-    val d = VConfirmNotification("title","test test")
-    d.dialog = ConfirmDialog("Question",
-                               "Quitter : Êtes-vous sûr ?",
-                               "Oui",
-                               this::onPublish)
-    d.ok = VInputButton("ok")
-    d.ok!!.addClickListener { d.open() }
-    d.cancel = VInputButton("cancel")
-    d.cancel!!.addClickListener { d.close() }
-    val button = Button("Open Dialog") { _ -> d.show() }
-    add(button, d)
+    confirmationDialog.locale = "en_GB"
+    val button = Button("Open Dialog") { _ -> confirmationDialog.open() }
+    add(button)
   }
-  private fun onPublish(event: ConfirmDialog.ConfirmEvent) {}
+}
+
+@Route("b")
+class B : VerticalLayout() {
+  val warningDialog = WarningNotification("Warning", "Message warning")
+
+  init {
+    warningDialog.locale = "en_GB"
+    val button = Button("Open Dialog") { _ -> warningDialog.open() }
+    add(button)
+  }
+}
+
+@Route("c")
+class C : VerticalLayout() {
+  val errorDialog = ErrorNotification("Erreur", "Message d'erreur")
+
+  init {
+    errorDialog.locale = "en_GB"
+    val button = Button("Open Dialog") { _ -> errorDialog.open() }
+    add(button)
+  }
+}
+
+@Route("d")
+class D : VerticalLayout() {
+  val infoDialog = InformationNotification("Info", "Message d'information")
+
+  init {
+    infoDialog.locale = "en_GB"
+    val button = Button("Open Dialog") { _ -> infoDialog.open() }
+    add(button)
+  }
 }
 
