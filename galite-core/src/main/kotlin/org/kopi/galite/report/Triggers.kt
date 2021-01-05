@@ -104,7 +104,7 @@ object Triggers {
   /**
    * Compute the integer sum in a report column
    */
-  fun sumNullInteger(c: VReportColumn): VCalculateColumn {
+  fun <T> sumNullInteger(c: ReportField<T>): VCalculateColumn where T: Comparable<T>, T: Number {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
@@ -177,7 +177,7 @@ object Triggers {
   /**
    * Compute the integer average in a report column
    */
-  fun avgInteger(c: VReportColumn): VCalculateColumn {
+  fun <T> avgInteger(c: ReportField<T>): VCalculateColumn where T: Comparable<T>, T: Number {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
@@ -200,7 +200,7 @@ object Triggers {
    * Compute the integer sum in a report column and the the value
    * in the leaves with a serial number
    */
-  fun serialInteger(c: VReportColumn): VCalculateColumn {
+  fun <T> serialInteger(c: ReportField<T>): VCalculateColumn where T: Comparable<T>, T: Number {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount

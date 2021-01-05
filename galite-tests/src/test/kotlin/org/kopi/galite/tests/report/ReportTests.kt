@@ -29,9 +29,8 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
-import org.kopi.galite.report.VCCDepthFirstCircuitN
+import org.kopi.galite.report.Triggers
 import org.kopi.galite.report.VCellFormat
-import org.kopi.galite.report.VReportRow
 import org.kopi.galite.tests.VApplicationTestBase
 
 import kotlin.test.assertEquals
@@ -144,17 +143,6 @@ object SimpleReport : Report() {
     help = "The user name"
     align = FieldAlignment.LEFT
     group = { age }
-  }
-
-  val age = field(Domain<Int>(3)) {
-    label = "age"
-    help = "The user age"
-    align = FieldAlignment.LEFT
-  }
-
-  val profession = field(Domain<String>(20)) {
-    label = "profession"
-    help = "The user profession"
     format {
       object : VCellFormat() {
         override fun format(value: Any?): String {
@@ -164,20 +152,19 @@ object SimpleReport : Report() {
     }
   }
 
-  val computed = field(Domain<Int>(4)) {
-    label = "age2"
-    help = "The age x 2"
+  val age = field(Domain<Int>(3)) {
+    label = "age"
+    help = "The user age"
+    align = FieldAlignment.LEFT
     compute {
-      object : VCCDepthFirstCircuitN() {
-        override fun evalNode(row: VReportRow, column: Int): Any {
-          return row.getValueAt(column) as Int * 2
-        }
-
-        override fun evalLeaf(row: VReportRow, column: Int): Any {
-          return evalNode(row, column)
-        }
-      }
+      // Computes the average of ages
+      Triggers.avgInteger(this)
     }
+  }
+
+  val profession = field(Domain<String>(20)) {
+    label = "profession"
+    help = "The user profession"
   }
 
   init {

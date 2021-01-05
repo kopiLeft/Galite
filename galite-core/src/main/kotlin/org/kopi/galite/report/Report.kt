@@ -155,7 +155,7 @@ abstract class Report : Window() {
         null
       }
 
-      val format: VCellFormat? = if (it.computeTrigger != null) {
+      val format: VCellFormat? = if (it.formatTrigger != null) {
         it.formatTrigger!!.action.method() as VCellFormat
       } else {
         null
