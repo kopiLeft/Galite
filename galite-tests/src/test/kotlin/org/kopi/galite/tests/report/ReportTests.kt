@@ -142,7 +142,7 @@ object SimpleReport : Report() {
     label = "name"
     help = "The user name"
     align = FieldAlignment.LEFT
-    group = { age }
+    group = age
     format {
       object : VCellFormat() {
         override fun format(value: Any?): String {

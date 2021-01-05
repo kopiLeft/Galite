@@ -31,7 +31,9 @@ import org.kopi.galite.visual.VCommand
  * @param domain      The domain of this field.
  * @param ident       The identifier of this field, used to identify the field the localization file.
  */
-class ReportField<T : Comparable<T>?>(override val domain: Domain<T>, internal val ident: String) : Field<T>(domain) {
+class ReportField<T : Comparable<T>?>(override val domain: Domain<T>,
+                                      internal val ident: String,
+                                      val init: ReportField<T>.() -> Unit) : Field<T>(domain) {
   /** the options of the field */
   internal var options: Int = 0
 
@@ -48,7 +50,7 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>, internal v
    * In this report, you can click on the InvoiceNum field to group customers.
    *
    */
-  var group: (() -> ReportField<*>)? = null
+  var group: ReportField<*>? = null
 
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.DEFAULT
@@ -79,6 +81,10 @@ class ReportField<T : Comparable<T>?>(override val domain: Domain<T>, internal v
       options = if (value == true) Constants.CLO_HIDDEN else Constants.CLO_VISIBLE
       field = value
     }
+
+  fun initialize() {
+    init()
+  }
 
   /**
    * executed when the report is displayed and can be used to compute expressions on the report columns and show

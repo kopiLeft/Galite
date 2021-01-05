@@ -55,10 +55,10 @@ abstract class Report : Window() {
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
+  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
+                                                noinline init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
-    val field = ReportField(domain, "ANM_${fields.size}")
-    field.init()
+    val field = ReportField(domain, "ANM_${fields.size}", init)
     fields.add(field)
     return field
   }
@@ -146,7 +146,7 @@ abstract class Report : Window() {
   fun MReport.addReportColumns() {
     columns = fields.map {
       if(it.group != null) {
-        it.groupID = fields.indexOf(it.group!!())
+        it.groupID = fields.indexOf(it.group)
       }
 
       val function: VCalculateColumn? = if (it.computeTrigger != null) {
@@ -197,6 +197,10 @@ abstract class Report : Window() {
   /** Report model*/
   override val model: VReport
     get() {
+      fields.forEach {
+        it.initialize()
+      }
+
       genLocalization()
 
       return object : VReport() {
