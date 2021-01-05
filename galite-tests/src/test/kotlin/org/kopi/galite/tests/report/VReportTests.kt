@@ -125,22 +125,6 @@ class VReportTests: VApplicationTestBase() {
       help = "The user age"
     }
 
-    val computed = field(Domain<Int>(4)) {
-      label = "age2"
-      help = "The age x 2"
-      compute {
-        object : VCCDepthFirstCircuitN() {
-          override fun evalNode(row: VReportRow, column: Int): Any {
-            return row.getValueAt(column) as Int * 2
-          }
-
-          override fun evalLeaf(row: VReportRow, column: Int): Any {
-            return evalNode(row, column)
-          }
-        }
-      }
-    }
-
     init {
       add {
         this[id] = 1

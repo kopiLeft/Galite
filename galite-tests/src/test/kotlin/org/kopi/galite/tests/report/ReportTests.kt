@@ -29,7 +29,9 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.VCCDepthFirstCircuitN
 import org.kopi.galite.report.VCellFormat
+import org.kopi.galite.report.VReportRow
 import org.kopi.galite.tests.VApplicationTestBase
 
 import kotlin.test.assertEquals
@@ -156,8 +158,23 @@ object SimpleReport : Report() {
     format {
       object : VCellFormat() {
         override fun format(value: Any?): String {
-          println("+++++++++++++++++++-------------------")
           return (value as String).toUpperCase()
+        }
+      }
+    }
+  }
+
+  val computed = field(Domain<Int>(4)) {
+    label = "age2"
+    help = "The age x 2"
+    compute {
+      object : VCCDepthFirstCircuitN() {
+        override fun evalNode(row: VReportRow, column: Int): Any {
+          return row.getValueAt(column) as Int * 2
+        }
+
+        override fun evalLeaf(row: VReportRow, column: Int): Any {
+          return evalNode(row, column)
         }
       }
     }
