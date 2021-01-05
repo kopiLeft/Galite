@@ -194,12 +194,16 @@ abstract class Report : Window() {
     }
   }
 
+  fun initFields() {
+    fields.forEach {
+      it.initialize()
+    }
+  }
+
   /** Report model*/
   override val model: VReport
     get() {
-      fields.forEach {
-        it.initialize()
-      }
+      initFields()
 
       genLocalization()
 

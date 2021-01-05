@@ -75,6 +75,7 @@ class ReportTests: VApplicationTestBase() {
 
     val sourceFilePath = SimpleReport.javaClass.classLoader.getResource("").path +
             this.javaClass.packageName.replace(".", "/") + File.separatorChar
+    SimpleReport.initFields()
     SimpleReport.genLocalization()
 
     val generatedFile = File("${sourceFilePath}/SimpleReport-${SimpleReport.locale}.xml")
