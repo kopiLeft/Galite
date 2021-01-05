@@ -91,10 +91,10 @@ class ReportTests: VApplicationTestBase() {
     assertEquals("Action", actionMenu.getAttributeValue("label"))
     assertEquals("greeting", greetingActor.getAttributeValue("ident"))
     assertEquals("Greeting", greetingActor.getAttributeValue("label"))
-    assertEquals("name", nameField.getAttributeValue("ident"))
+    assertEquals("ANM_0", nameField.getAttributeValue("ident"))
     assertEquals("name", nameField.getAttributeValue("label"))
     assertEquals("The user name", nameField.getAttributeValue("help"))
-    assertEquals("age", ageField.getAttributeValue("ident"))
+    assertEquals("ANM_1", ageField.getAttributeValue("ident"))
     assertEquals("age", ageField.getAttributeValue("label"))
     assertEquals("The user age", ageField.getAttributeValue("help"))
   }

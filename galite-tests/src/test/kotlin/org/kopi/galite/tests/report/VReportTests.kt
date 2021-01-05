@@ -83,7 +83,7 @@ class VReportTests: VApplicationTestBase() {
     val name = model.columns[1]!!
 
     // Columns checks
-    assertEquals("name", name.ident)
+    assertEquals("ANM_1", name.ident)
     assertEquals("name", name.label)
     assertEquals("The user name", name.help)
     assertEquals(Constants.CLO_VISIBLE, name.options)
