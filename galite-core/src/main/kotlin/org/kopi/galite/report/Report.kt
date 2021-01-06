@@ -192,7 +192,7 @@ abstract class Report : Window() {
          * Handling triggers
          */
         fun handleTriggers(triggers: MutableList<Trigger>) {
-          // BLOCK TRIGGERS
+          // REPORT TRIGGERS
           triggers.forEach { trigger ->
             val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
             for (i in VConstants.TRG_TYPES.indices) {

@@ -22,12 +22,6 @@ import org.jetbrains.exposed.sql.Table
 import org.joda.time.DateTime
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
-import org.kopi.galite.common.FieldBooleanTriggerEvent
-import org.kopi.galite.common.FieldIntTriggerEvent
-import org.kopi.galite.common.FieldObjectTriggerEvent
-import org.kopi.galite.common.FieldProtectedTriggerEvent
-import org.kopi.galite.common.FieldTriggerEvent
-import org.kopi.galite.common.FieldVoidTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
@@ -35,6 +29,12 @@ import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.field.Field
+import org.kopi.galite.field.FieldBooleanTriggerEvent
+import org.kopi.galite.field.FieldIntTriggerEvent
+import org.kopi.galite.field.FieldObjectTriggerEvent
+import org.kopi.galite.field.FieldProtectedTriggerEvent
+import org.kopi.galite.field.FieldTriggerEvent
+import org.kopi.galite.field.FieldVoidTriggerEvent
 import org.kopi.galite.form.VBooleanCodeField
 import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants

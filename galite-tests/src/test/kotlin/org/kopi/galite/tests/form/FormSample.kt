@@ -19,11 +19,13 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.FieldTriggers
 import org.kopi.galite.common.INITFORM
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.field.ACCESS
+import org.kopi.galite.field.ACTION
+import org.kopi.galite.field.POSTCHG
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.BlockOption
@@ -151,7 +153,7 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     help = "The user password"
 
     options(FieldOption.NOECHO)
-    trigger(FieldTriggers.ACCESS) {
+    trigger(ACCESS) {
       if (name.value == "hidden") {
         VConstants.ACS_HIDDEN
       } else {
@@ -168,7 +170,7 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       index = i
       priority = 1
     }
-    trigger(FieldTriggers.POSTCHG) {
+    trigger(POSTCHG) {
       println("value changed !!")
       name.value = "Sami"
     }
@@ -177,7 +179,7 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     label = "Job"
     help = "The user job"
     columns(u.job)
-    trigger(FieldTriggers.ACTION) {
+    trigger(ACTION) {
       println("Action on field !!")
     }
   }
