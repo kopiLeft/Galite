@@ -50,7 +50,7 @@ abstract class WindowController : Serializable {
    */
   protected fun getWindowBuilder(model: VWindow): WindowBuilder? =
           if (model.getType() > builder.size || builder[model.getType()] == null) {
-            // programm should never reach here.
+            // program should never reach here.
             Thread.dumpStack()
             throw InconsistencyException("WindowController: WindowBuilder not found")
           } else {

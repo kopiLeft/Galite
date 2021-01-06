@@ -21,8 +21,10 @@ import org.kopi.galite.base.Image
 
 /**
  * The vaadin implementation of an image model.
+ *
+ * @param resource The resource file attached to this image.
  */
-class Image : Image {
+class Image(val resource: String) : Image {
   //---------------------------------------------------
   // IMAGE IMPLEMENTATION
   //---------------------------------------------------

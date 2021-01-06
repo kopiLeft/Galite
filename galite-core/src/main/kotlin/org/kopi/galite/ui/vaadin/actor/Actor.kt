@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.actor
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasEnabled
 
 /**
  * The actor component
@@ -30,11 +31,11 @@ import com.vaadin.flow.component.Component
  * @param modifiersKey The modifiers key.
  * TODO: Implement this class with appropriate component
  */
-class Actor(caption: String?,
-            description: String?,
-            menu: String,
-            icon: String,
-            acceleratorKey: Int,
-            vararg modifiersKey: Int) : Component() {
+open class Actor(caption: String?,
+                 description: String?,
+                 menu: String,
+                 icon: String?,
+                 acceleratorKey: Int,
+                 vararg modifiersKey: Int) : Component(), HasEnabled {
 
 }

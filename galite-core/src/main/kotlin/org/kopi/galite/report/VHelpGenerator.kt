@@ -112,9 +112,4 @@ class VHelpGenerator : VHelpGenerator() {
       printer.println("<P>$help</P>")
     }
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  override lateinit var printer: PrintWriter
 }

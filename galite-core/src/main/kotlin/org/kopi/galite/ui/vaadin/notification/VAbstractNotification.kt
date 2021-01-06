@@ -26,7 +26,7 @@ import com.vaadin.flow.component.html.Paragraph
  * warnings, errors, confirms and informations.
  */
 // TODO : implement this class with appropriate visual component
-abstract class VAbstractNotification(title: String, message: String?): Component() {
+abstract class VAbstractNotification(title: String, message: String?) : Component() {
 
   /**
    * Localization string.

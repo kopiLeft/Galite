@@ -17,10 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import java.util.Hashtable
+
 import org.kopi.galite.base.Utils
 import org.kopi.galite.visual.VColor
-import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * Some vaadin version utilities to obtain images and resources.
@@ -156,7 +156,7 @@ object Utils : Utils() {
    * @return The font awesome icon.
    */
   fun getFontAwesomeIcon(iconName: String): String? {
-    return pngToFontAwesomeMap!![iconName]
+    return pngToFontAwesomeMap[iconName]
   }
 
   /**
@@ -187,16 +187,15 @@ object Utils : Utils() {
   // --------------------------------------------------
   // PRIVATE DATA
   // --------------------------------------------------
-  private const val VAADIN_RESOURCE_DIR = "org/kopi/vkopi/lib/ui/vaadin/resource"
+  private const val VAADIN_RESOURCE_DIR = "org/kopi/galite/ui/vaadin"
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
-  private const val RESOURCE_DIR = "org/kopi/vkopi/lib/resource"
-  val UKN_IMAGE: Image = TODO()
+  private const val RESOURCE_DIR = "org/kopi/galite"
+  val UKN_IMAGE: Image = Image("$THEME_DIR/unknown.png")
   private val cache: Hashtable<String, Image?> = Hashtable<String, Image?>()
   private var pngToFontAwesomeMap = mutableMapOf<String, String>()
 
   init {
-    pngToFontAwesomeMap = HashMap<String, String>()
     pngToFontAwesomeMap["all"] = "hand-paper-o"
     pngToFontAwesomeMap["block"] = "ban"
     pngToFontAwesomeMap["border"] = "cog"

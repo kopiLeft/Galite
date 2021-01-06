@@ -132,11 +132,11 @@ class VLoginWindow : Div() {
    */
   fun setLocale(locale: String?) {
     doInit(LocalizedProperties.getString(locale, "welcomeText"),
-            LocalizedProperties.getString(locale, "informationText"),
-            LocalizedProperties.getString(locale, "usernameLabel"),
-            LocalizedProperties.getString(locale, "passwordLabel"),
-            LocalizedProperties.getString(locale, "languageLabel"),
-            LocalizedProperties.getString(locale, "loginText"))
+           LocalizedProperties.getString(locale, "informationText"),
+           LocalizedProperties.getString(locale, "usernameLabel"),
+           LocalizedProperties.getString(locale, "passwordLabel"),
+           LocalizedProperties.getString(locale, "languageLabel"),
+           LocalizedProperties.getString(locale, "loginText"))
   }
 
   /**

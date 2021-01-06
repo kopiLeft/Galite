@@ -94,8 +94,8 @@ class VList(private val ident: String,
   }
 
   companion object {
-    val AUTOCOMPLETE_NONE = 0
-    val AUTOCOMPLETE_STARTSWITH = 1
-    val AUTOCOMPLETE_CONTAINS = 2
+    const val AUTOCOMPLETE_NONE = 0
+    const val AUTOCOMPLETE_STARTSWITH = 1
+    const val AUTOCOMPLETE_CONTAINS = 2
   }
 }

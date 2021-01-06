@@ -106,7 +106,7 @@ class VFixnumColumn(ident: String?,
     maxScale = scale
   }
 
-  var formula = null
+  var formula: String? = null
   var maxScale = 0
     private set
 }

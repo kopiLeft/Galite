@@ -221,13 +221,12 @@ class MReport : Constants, Serializable {
         when (functions[j]) {
           NONE -> {
             val value = if (baseRows[i]!!.getValueAt(paramColumns[j]) == null) {
-              0
+              0.0
             } else {
-              // !!! wael 20070622 : use 0 unstead of null values.
-              (baseRows[i]!!.getValueAt(paramColumns[j]) as NotNullFixed).toFloat()
+              // !!! wael 20070622 : use 0 instead of null values.
+              (baseRows[i]!!.getValueAt(paramColumns[j]) as NotNullFixed).toDouble()
             }
-            vm.setValue(params[j],
-                        value as Double)
+            vm.setValue(params[j], value)
           }
           MAX -> {
             var max: Float
@@ -273,7 +272,7 @@ class MReport : Constants, Serializable {
             vm.setValue(params[j], min.toDouble())
           }
           OVR -> {
-            var ovr: Float = 0f
+            var ovr = 0f
             // calculate average.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
@@ -320,11 +319,9 @@ class MReport : Constants, Serializable {
   }
 
   /**
-   * Build the base row table + intialisation
+   * Build the base row table + initialisation
    */
   internal fun build() {
-    var columnCount = columns.size
-
     // build accessible columns
     if (userRows!!.size == 0) {
       throw VNoRowException(MessageCode.getMessage("VIS-00015"))
@@ -334,7 +331,7 @@ class MReport : Constants, Serializable {
     userRows = null
 
     // build working tables
-    columnCount = getAccessibleColumnCount()
+    val columnCount = getAccessibleColumnCount()
     displayOrder = IntArray(columnCount)
     reverseOrder = IntArray(columnCount)
     displayLevels = IntArray(columnCount)
@@ -705,7 +702,7 @@ class MReport : Constants, Serializable {
 
   private fun sortTree(tree: VReportRow?, column: Int, order: Int) {
 
-    // place the childs of the root in an array
+    // place the children of the root in an array
     val rowTab: Array<VReportRow?> = arrayOfNulls(tree!!.childCount)
 
     for (i in 0 until tree.childCount) {
@@ -715,7 +712,7 @@ class MReport : Constants, Serializable {
     // sort the array wrt to column: if already sorted, invert order
     sortArray(rowTab, column, order)
 
-    // re-add the rows as childs
+    // re-add the rows as children
     tree.removeAllChildren()
     for (i in rowTab.indices) {
       tree.add(rowTab[i])
@@ -855,7 +852,7 @@ class MReport : Constants, Serializable {
 
     // rebuild column mapping from model to display
     displayOrder.forEachIndexed { index, element ->
-      reverseOrder[displayOrder[index]] = index
+      reverseOrder[element] = index
     }
     createTree()
   }
@@ -911,7 +908,7 @@ class MReport : Constants, Serializable {
    * @return    the name of the column
    */
   fun getColumnName(column: Int): String {
-    val label: String? = accessibleColumns[column]!!.label
+    val label = accessibleColumns[column]!!.label
 
     if (label == null || label.isEmpty()) {
       return ""

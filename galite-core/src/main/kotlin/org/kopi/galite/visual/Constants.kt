@@ -23,7 +23,7 @@ interface Constants {
     // --------------------------------------------------------------------
     // MODEL TYPES
     // --------------------------------------------------------------------
-    const val MDL_UNKOWN = 0
+    const val MDL_UNKNOWN = 0
     const val MDL_HELP = 5
     const val MDL_FORM = 10
     const val MDL_REPORT = 20
