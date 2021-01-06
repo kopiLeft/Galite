@@ -19,6 +19,7 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
+import org.kopi.galite.common.FieldTriggers
 import org.kopi.galite.common.INITFORM
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
@@ -150,6 +151,13 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     help = "The user password"
 
     options(FieldOption.NOECHO)
+    trigger(FieldTriggers.ACCESS) {
+      if (name.value == "hidden") {
+        VConstants.ACS_HIDDEN
+      } else {
+        VConstants.ACS_SKIPPED
+      }
+    }
   }
   val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
@@ -160,11 +168,18 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       index = i
       priority = 1
     }
+    trigger(FieldTriggers.POSTCHG) {
+      println("value changed !!")
+      name.value = "Sami"
+    }
   }
-  val job = visit(domain = Domain<String?>(3), position = follow(age)) {
+  val job = visit(domain = Domain<String?>(20), position = at(3, 1)) {
     label = "Job"
     help = "The user job"
     columns(u.job)
+    trigger(FieldTriggers.ACTION) {
+      println("Action on field !!")
+    }
   }
 }
 

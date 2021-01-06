@@ -20,8 +20,15 @@ package org.kopi.galite.form.dsl
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.joda.time.DateTime
-
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.FieldBooleanTriggerEvent
+import org.kopi.galite.common.FieldIntTriggerEvent
+import org.kopi.galite.common.FieldObjectTriggerEvent
+import org.kopi.galite.common.FieldProtectedTriggerEvent
+import org.kopi.galite.common.FieldTriggerEvent
+import org.kopi.galite.common.FieldVoidTriggerEvent
+import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.CodeDomain
@@ -78,7 +85,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command>? = null
-  var triggers: Array<Trigger>? = null
+  var triggers = mutableListOf<Trigger>()
   var alias: String? = null
   var initialValues = mutableMapOf<Int, T?>()
   var value: T? = null
@@ -226,6 +233,81 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
 
   fun onUpdateMustFill() {
     this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
+  }
+
+  /**
+   * Adds triggers to this field
+   *
+   * @param fieldTriggerEvents    the trigger events to add
+   * @param method                the method to execute when trigger is called
+   */
+  private fun <T> trigger(fieldTriggerEvents: Array<out FieldTriggerEvent>, method: () -> T): Trigger {
+    val event = fieldEventList(fieldTriggerEvents)
+    val fieldAction = Action(null, method)
+    val trigger = FormTrigger(event, fieldAction)
+
+    triggers.add(trigger)
+    return trigger
+  }
+
+  private fun fieldEventList(fieldTriggerEvents: Array<out FieldTriggerEvent>): Long {
+    var self = 0L
+
+    fieldTriggerEvents.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
+  }
+
+  /**
+   * Adds void triggers to this field
+   *
+   * @param fieldTriggerEvents  the trigger event to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds boolean triggers to this field
+   *
+   * @param fieldTriggerEvents  the trigger events to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldBooleanTriggerEvent, method: () -> Boolean): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds protected triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldProtectedTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds object triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldObjectTriggerEvent, method: () -> Any): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds int triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldIntTriggerEvent, method: () -> Int): Trigger {
+    return trigger(fieldTriggerEvents, method)
   }
 
   // TODO add Fixed types
