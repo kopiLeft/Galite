@@ -38,8 +38,8 @@ class Item(val id: Int,
 
   init {
     if (icon != null) {
-      this.icon = ImageHandler.imageHandler?.getImage(icon)
-      smallIcon = ImageHandler.imageHandler?.getImage(icon)
+      this.icon = ImageHandler.imageHandler.getImage(icon)
+      smallIcon = ImageHandler.imageHandler.getImage(icon)
       if (smallIcon == null) {
         smallIcon = smallIcon?.getScaledInstance(16, 16, Image.SCALE_SMOOTH)
       }
@@ -49,7 +49,7 @@ class Item(val id: Int,
   /**
    * Sets the current item name
    */
-  fun getFormattedName(localised: Boolean): String? {
+  fun getFormattedName(localised: Boolean): String {
     return if (localised && id != -1) {
       "[" + name + "]  " + if (localisedName != null) localisedName else "........"
     } else {
@@ -74,13 +74,13 @@ class Item(val id: Int,
   // ---------------------------------------------------------------------
   // COMPARABLE IMPLEMENTATION
   // ---------------------------------------------------------------------
-  override operator fun compareTo(item: Item): Int {
-    return if (id == item.id
-            && parent == item.parent
-            && name == item.name
-            && localisedName == item.localisedName
-            && description == item.description
-            && selected == item.selected
-            && defaultItem == item.defaultItem) 1 else -1
+  override operator fun compareTo(other: Item): Int {
+    return if (id == other.id
+            && parent == other.parent
+            && name == other.name
+            && localisedName == other.localisedName
+            && description == other.description
+            && selected == other.selected
+            && defaultItem == other.defaultItem) 1 else -1
   }
 }

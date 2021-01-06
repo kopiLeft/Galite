@@ -73,7 +73,7 @@ class IPP() {
     var lastGroup = -1
 
     while (atts.hasNext()) {
-      val attribute = atts.next() as IPPAttribute
+      val attribute = atts.next()
 
       size += attribute.getSize(lastGroup)
       lastGroup = attribute.group

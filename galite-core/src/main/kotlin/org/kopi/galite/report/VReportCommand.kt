@@ -76,10 +76,10 @@ class VReportCommand(val report: VReport,
   /**
    * Performs a void trigger
    *
-   * @param    type    the number of the trigger
+   * @param    VKT_Type    the number of the trigger
    */
-  override fun executeVoidTrigger(type: Int) {
-    when (type) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    when (VKT_Type) {
       Constants.CMD_QUIT -> report.close()
       Constants.CMD_PRINT -> {
         val pm: PrintManager = DefaultPrintManager.getPrintManager()

@@ -32,7 +32,7 @@ abstract class VCCDepthFirstCircuitN : VCalculateColumn() {
   /**
    * Evaluates leafs
    */
-  fun evalLeaf(row: VReportRow, column: Int): Any? = null
+  open fun evalLeaf(row: VReportRow, column: Int): Any? = null
 
   /**
    * Add calculated data into the report row

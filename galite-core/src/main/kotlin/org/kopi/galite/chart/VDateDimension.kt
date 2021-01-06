@@ -22,6 +22,7 @@ import org.kopi.galite.type.Date
 
 /**
  * Represents a date chart column.
+ *
  * @param ident The column identifier.
  * @param format The date format to be used to format the date value.
  */

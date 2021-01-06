@@ -42,7 +42,7 @@ open class Registry(val domain: String, private var parents: Array<Registry>?) {
    */
   private fun buildDependencies(dependencies: Hashtable<String, String>) {
     if (!dependencies.containsKey(domain)) {
-      dependencies.put(domain, this.javaClass.getPackage().name + ".Messages")
+      dependencies[domain] = this.javaClass.getPackage().name + ".Messages"
     }
     if (parents != null) {
       parents!!.forEach {

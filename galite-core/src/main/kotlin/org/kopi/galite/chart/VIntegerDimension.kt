@@ -26,6 +26,7 @@ package org.kopi.galite.chart
 class VIntegerDimension(ident: String, format: VColumnFormat?) : VDimension(ident, format) {
   // --------------------------------------------------------------------
   // IMPLEMENTATIONS
+  // --------------------------------------------------------------------
   override fun toString(value: Any?): String {
     return value?.toString() ?: CConstants.EMPTY_TEXT
   }

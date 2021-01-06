@@ -32,14 +32,14 @@ open class FaxException : Exception {
    * Constructs a new exception with the specified detail message and cause.
    *
    * @param        message                the associated message
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted)
    */
   constructor(message: String, cause: Throwable) : super(message, cause)
 
   /**
    * Constructs a new exception with the specified detail message and cause.
    *
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted)
    */
   constructor(cause: Throwable) : super(cause)
 

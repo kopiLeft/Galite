@@ -140,11 +140,11 @@ class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
     const val DAT_PS = 2
 
     // A5, A4, A3, Letter and Legal page format (portrait)
-    val FORMAT_A5 = PageSize.A5
-    val FORMAT_A4 = PageSize.A4
-    val FORMAT_A3 = PageSize.A3
-    val FORMAT_LETTER = PageSize.LETTER
-    val FORMAT_LEGAL = PageSize.LEGAL
+    val FORMAT_A5: Rectangle = PageSize.A5
+    val FORMAT_A4: Rectangle = PageSize.A4
+    val FORMAT_A3: Rectangle = PageSize.A3
+    val FORMAT_LETTER: Rectangle = PageSize.LETTER
+    val FORMAT_LEGAL: Rectangle = PageSize.LEGAL
 
     // A5, A4, A3, Letter and Legal page format (landscape)
     val FORMAT_A5_R = Rectangle(PageSize.A5.rotate().width, PageSize.A5.rotate().height)

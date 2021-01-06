@@ -29,11 +29,11 @@ import org.kopi.galite.domain.Domain
 class FormLocalizationWriter : LocalizationWriter() {
 
   fun genForm(title: String?,
-              types: Array<Domain<*>>,
-              menus: Array<Menu>,
-              actors: Array<Actor>,
-              pages: Array<FormPage>,
-              blocks: Array<FormElement>) {
+              types: List<Domain<*>>,
+              menus: List<Menu>,
+              actors: List<Actor>,
+              pages: List<FormPage>,
+              blocks: List<FormElement>) {
     val self = Element("form")
     self.setAttribute("title", title)
     pushNode(self)
@@ -85,8 +85,8 @@ class FormLocalizationWriter : LocalizationWriter() {
   fun genBlock(name: String?,
                title: String?,
                help: String?,
-               indices: Array<FormBlockIndex>,
-               fields: Array<FormField<*>>) {
+               indices: List<FormBlockIndex>,
+               fields: List<FormField<*>>) {
     val self = Element("block")
     self.setAttribute("name", name)
     if (title != null) {

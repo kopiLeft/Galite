@@ -34,17 +34,18 @@ import java.util.ArrayList
 import java.util.Date
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
  * loading of image
  * usage:
  * To load image first in Application directory, then in default directory:
- * Utils.getImage("name");
+ * Utils.getImage("name")
  * To load default images (that appear in resources/org/kopi/galite)
- * Utils.getDefaultImage("name");
+ * Utils.getDefaultImage("name")
  * To load Application images (that appear in resources)
- * Utils.getApplicationImage("name");
+ * Utils.getApplicationImage("name")
  *
  */
 open class Utils : org.kopi.galite.util.base.Utils() {
@@ -170,7 +171,7 @@ open class Utils : org.kopi.galite.util.base.Utils() {
       // to use always the same file.
       val filename: String = System.getProperty("java.io.tmpdir") + File.separator + "kopi.log"
       try {
-        val writer: PrintWriter = PrintWriter(FileWriter(filename, true))
+        val writer = PrintWriter(FileWriter(filename, true))
         writer.println()
         writer.println()
         writer.println(Date().toString() + "\t" + mod + "\t" + text + "   ")
@@ -207,7 +208,9 @@ open class Utils : org.kopi.galite.util.base.Utils() {
     fun getVersion(): Array<String> {
       try {
         val list = ArrayList<String>()
-        val data = DataInputStream(Utils::class.java.classLoader.getResourceAsStream("$APPLICATION_DIR/version")!!)
+        val data = DataInputStream(
+                requireNotNull(Utils::class.java.classLoader.getResourceAsStream("$APPLICATION_DIR/version"))
+        )
         while (data.available() != 0) {
           list.add(data.readLine())
         }

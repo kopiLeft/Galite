@@ -36,5 +36,5 @@ interface PredefinedValueHandler : Serializable {
   fun selectDate(date: Date): Date
 
   @Throws(VExecFailedException::class)
-  fun selectImage(): ByteArray
+  fun selectImage(): ByteArray?
 }

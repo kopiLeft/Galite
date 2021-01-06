@@ -46,9 +46,7 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>
    */
   fun add(value: T, init: DimensionData<T>.() -> Unit) {
     val dimensionValue = DimensionData<T>(value)
-    if (init != null) {
-      dimensionValue.init()
-    }
+    dimensionValue.init()
     values.add(dimensionValue)
   }
 

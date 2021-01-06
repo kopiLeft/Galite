@@ -37,7 +37,7 @@ class PExport2XLSX(table: UTable,
     return SXSSFWorkbook(XSSFWorkbook(), 10000, false)
   }
 
-  override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
+  override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color {
     return XSSFColor(color)
   }
 }

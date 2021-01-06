@@ -31,7 +31,8 @@ class VFixnumCodeColumn(ident: String?,
                         width: Int,
                         format: VCellFormat?,
                         names: Array<String>,
-                        codes: Array<NotNullFixed>)
+                        // array of internal representations
+                        private val codes: Array<NotNullFixed>)
           : VCodeColumn(ident,
                         type,
                         source,
@@ -45,13 +46,13 @@ class VFixnumCodeColumn(ident: String?,
   /**
    * Get the index of the value.
    */
-  override fun getIndex(o: Any): Int {
+  override fun getIndex(value: Any): Int {
     for (i in codes.indices) {
-      if (o == codes[i]) {
+      if (value == codes[i]) {
         return i
       }
     }
-    throw InconsistencyException(">>>>$o")
+    throw InconsistencyException(">>>>$value")
   }
 
   /**
@@ -74,12 +75,4 @@ class VFixnumCodeColumn(ident: String?,
    */
   override fun compareTo(object1: Any, object2: Any): Int = (object1 as NotNullFixed)
           .compareTo(object2 as NotNullFixed)
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  // array of internal representations
-  private val codes: Array<NotNullFixed> = codes
-
 }

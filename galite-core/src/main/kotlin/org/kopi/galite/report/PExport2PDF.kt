@@ -107,7 +107,7 @@ class PExport2PDF(
         scale = printConfig.reportScale
         formatColumns()
       }
-      val tempFile: File = Utils.getTempFile("kopiexport", "pdf")
+      val tempFile = Utils.getTempFile("kopiexport", "pdf")
       val writer = PdfWriter.getInstance(document, FileOutputStream(tempFile))
 
       writer.pageEvent = object : PdfPageEventHelper() {
@@ -427,7 +427,7 @@ class PExport2PDF(
   private val widths: FloatArray = FloatArray(columnCount)
 
   companion object {
-    private val BORDER_PADDING = 1
-    private val BORDER_WIDTH = 1
+    private const val BORDER_PADDING = 1
+    private const val BORDER_WIDTH = 1
   }
 }
