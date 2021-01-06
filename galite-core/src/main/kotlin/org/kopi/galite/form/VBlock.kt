@@ -59,6 +59,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.common.Trigger
@@ -3088,14 +3089,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val column = field.lookupColumn(0) as? Column<Any>
 
         if (column != null) {
-          result.add(column to field.getSql(recno))
-
-          if (field.hasLargeObject(recno)) {
-            if (field.hasBinaryLargeObject(recno)) {
-              TODO()
-            } else {
-              TODO()
+          if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
+            if (field.getLargeObject(recno) != null) {
+              result.add(column to ExposedBlob(field.getLargeObject(recno)!!.readAllBytes()))
             }
+          } else {
+            result.add(column to field.getSql(recno))
           }
         }
       }
@@ -3175,13 +3174,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val column = field.lookupColumn(0) as? Column<Any>
 
         if (column != null) {
-          result.add(column to field.getSql(recno)!!)
-          if (field.hasLargeObject(recno)) {
-            if (field.hasBinaryLargeObject(recno)) {
-              TODO()
-            } else {
-              TODO()
+          if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
+            if (field.getLargeObject(recno) != null) {
+              result.add(column to ExposedBlob(field.getLargeObject(recno)!!.readAllBytes()))
             }
+          } else {
+            result.add(column to field.getSql(recno))
           }
         }
       }
