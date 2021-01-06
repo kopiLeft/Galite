@@ -19,6 +19,7 @@ package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
+import org.joda.time.DateTime
 
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.LocalizationWriter
@@ -98,26 +99,26 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     }
 
   /** the minimum value that cannot exceed  */
-  private var min : Int = Int.MIN_VALUE
+  private var min: Int = Int.MIN_VALUE
 
   /** the maximum value that cannot exceed  */
-  private var max : Int = Int.MAX_VALUE
+  private var max: Int = Int.MAX_VALUE
 
   /**
    * Sets the minimum value of an Int field.
    */
-  var <U> FormField<U>.minValue : Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.minValue: Int where U : Comparable<U>?, U : Number?
     get() {
       return min
     }
-  set(value) {
-    min = value
-  }
+    set(value) {
+      min = value
+    }
 
   /**
    * Sets the maximum value of an Int field.
    */
-  var <U> FormField<U>.maxValue : Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.maxValue: Int where U : Comparable<U>?, U : Number?
     get() {
       return max
     }
@@ -168,7 +169,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    */
   fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
     val cols = joinColumns.map { column ->
-      FormFieldColumn(column, column.table.tableName, column.name, this, true, true) // TODO
+      FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
@@ -247,7 +248,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
           Month::class -> VMonthField(block.buffer)
           Week::class -> VWeekField(block.buffer)
           Time::class -> VTimeField(block.buffer)
-          Timestamp::class -> VTimestampField(block.buffer)
+          Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
           else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
         }
       }

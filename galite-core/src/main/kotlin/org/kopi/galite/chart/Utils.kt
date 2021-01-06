@@ -55,7 +55,7 @@ object Formatter {
   /**
    * Adds quote to receiver if it is not quoted.
    */
-  fun <T> T.quoteIfNecessary(): String {
+  private fun <T> T.quoteIfNecessary(): String {
     val stringRepresentation = this.toString()
 
     return if (!stringRepresentation.startsWith("\"") && !stringRepresentation.endsWith("\""))

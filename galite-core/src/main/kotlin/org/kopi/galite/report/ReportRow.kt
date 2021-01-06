@@ -27,16 +27,16 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
   val data = mutableMapOf<ReportField<*>, Any?>()
 
   /**
-   * Returns data value for a specific [field].
+   * Returns data value for a specific [ReportField].
    *
    * @param field the field.
-   * @return  data value for a specific [field].
+   * @return  data value for a specific [ReportField].
    */
   fun getValueOf(field: ReportField<*>) = data[field]
 
   /**
    * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [Field].
+   * and a corresponding text to be displayed in a [ReportField].
    *
    * @param field the field.
    * @param value the field's value.

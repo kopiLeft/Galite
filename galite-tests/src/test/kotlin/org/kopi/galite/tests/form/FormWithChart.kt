@@ -45,7 +45,6 @@ object FormWithChart: Form() {
 
   val tb1 = insertBlock(TestBlock(), p1) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- Generating a chart ----------------------------------")
@@ -55,6 +54,6 @@ object FormWithChart: Form() {
   }
 }
 
-fun main(){
+fun main() {
   Application.runForm(formName = FormWithChart)
 }

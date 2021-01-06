@@ -143,12 +143,9 @@ class VBlockDefaultOuterJoin(block: VBlock) {
           }
         } else {
           for (j in 1 until field.getColumnCount()) {
-
-            if (!field.getColumn(j)!!.nullable) {
-              fetchRecordCondition.add(Op.build {
-                (field.getColumn(j)!!.column eq field.getColumn(j - 1)!!.column)
-              })
-            }
+            fetchRecordCondition.add(Op.build {
+              (field.getColumn(j)!!.column eq field.getColumn(j - 1)!!.column)
+            })
           }
         }
       }

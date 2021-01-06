@@ -17,33 +17,40 @@
 
 plugins {
   kotlin("jvm") apply true
-  id("org.springframework.boot") version "2.3.3.RELEASE"
+  id("org.springframework.boot") version "2.4.0"
+  id("io.spring.dependency-management") version "1.0.10.RELEASE"
+  id("com.vaadin") version "0.17.0.1"
 }
 
-val vaadinVersion = "17.0.0"
+val vaadinVersion = "18.0.3"
 val jdomVersion = "2.0.5"
 val karibuTestingVersion = "1.2.5"
 val h2Version = "1.4.199"
 val exposedVersion = "0.27.1"
 val postgresNGVersion = "0.8.6"
 
+vaadin {
+  pnpmEnable = true
+}
+
 dependencies {
   implementation(project(":galite-core"))
 
   implementation(kotlin("test-junit"))
 
-  implementation("com.vaadin", "vaadin-core", vaadinVersion) {
+  implementation("com.vaadin", "vaadin-core") {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
             "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
-  implementation("com.vaadin", "vaadin-spring-boot-starter", vaadinVersion) {
+  implementation("com.vaadin", "vaadin-spring-boot-starter") {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
             "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
+
   // UI tests dependencies
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
 
@@ -59,5 +66,11 @@ dependencies {
 tasks {
   compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+  }
+}
+
+dependencyManagement {
+  imports {
+    mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
   }
 }

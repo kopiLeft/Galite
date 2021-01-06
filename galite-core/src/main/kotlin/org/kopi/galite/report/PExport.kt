@@ -96,9 +96,9 @@ abstract class PExport(val table: UTable,
   }
 
   private fun addTree(row: VReportRow) {
-    val restrictedrow = printConfig.visibleRows
+    val restrictedRow = printConfig.visibleRows
 
-    if (row.visible || !restrictedrow) {
+    if (row.visible || !restrictedRow) {
       if (printConfig.groupFormfeed && row.level == maxLevel - 1) {
         val column: VReportColumn? = model.getAccessibleColumn(firstVisibleColumn)
 
@@ -125,8 +125,8 @@ abstract class PExport(val table: UTable,
 
   protected fun exportRow(row: VReportRow, tail: Boolean, lineBreak: Boolean) {
     var index = 0
-    val newrow = arrayOfNulls<String>(columnCount)
-    val newrowOrig = arrayOfNulls<Any>(columnCount)
+    val newRow = arrayOfNulls<String>(columnCount)
+    val newRowOrig = arrayOfNulls<Any>(columnCount)
     val alignments = IntArray(columnCount)
 
     for (i in 0 until model.getAccessibleColumnCount()) {
@@ -136,15 +136,15 @@ abstract class PExport(val table: UTable,
       if (!column!!.folded && column.visible // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || i != firstVisibleColumn)) {
         if (row.level < model.getDisplayLevels(model.getReverseOrder(visibleColumn))) {
-          newrow[index] = null
-          newrowOrig[index] = null
+          newRow[index] = null
+          newRowOrig[index] = null
         } else {
-          newrow[index] = if (lineBreak) {
+          newRow[index] = if (lineBreak) {
             column.formatWithLineBreaker(row.getValueAt(visibleColumn))
           } else {
             column.format(row.getValueAt(visibleColumn))
           }
-          newrowOrig[index] = row.getValueAt(visibleColumn)
+          newRowOrig[index] = row.getValueAt(visibleColumn)
         }
         alignments[index] = column.align
         index += 1
@@ -166,12 +166,12 @@ abstract class PExport(val table: UTable,
                   && (!printConfig.groupFormfeed || i != firstVisibleColumn)) {
             if (row.level < model.getDisplayLevels(model.getReverseOrder(visibleColumn)) &&
                     parent.level >= model.getDisplayLevels(model.getReverseOrder(visibleColumn))) {
-              newrow[index] = if (lineBreak) {
+              newRow[index] = if (lineBreak) {
                 column.formatWithLineBreaker(row.getValueAt(visibleColumn))
               } else {
                 column.format(row.getValueAt(visibleColumn))
               }
-              newrowOrig[index] = row.getValueAt(visibleColumn)
+              newRowOrig[index] = row.getValueAt(visibleColumn)
             }
             index += 1
           }
@@ -180,7 +180,7 @@ abstract class PExport(val table: UTable,
         parent = parent.parent as VReportRow
       }
     }
-    exportRow(row.level - minLevel, newrow, newrowOrig, alignments)
+    exportRow(row.level - minLevel, newRow, newRowOrig, alignments)
   }
 
   fun export(file: File) {
@@ -193,7 +193,7 @@ abstract class PExport(val table: UTable,
 
   protected abstract fun startGroup(subTitle: String?)
 
-  protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignment: IntArray)
+  protected abstract fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray)
 
   protected abstract fun exportHeader(data: Array<String?>)
 

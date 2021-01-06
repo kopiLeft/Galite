@@ -80,16 +80,16 @@ open class VActor(var menuIdent: String,
   // ----------------------------------------------------------------------
   override fun hashCode(): Int = actorIdent.hashCode() * actorIdent.hashCode()
 
-  override fun equals(obj: Any?): Boolean {
-    return if (obj !is VActor) {
+  override fun equals(other: Any?): Boolean {
+    return if (other !is VActor) {
       false
     } else {
-      menuName == obj.menuName
-              && menuItem == obj.menuItem
-              && ((iconName == null && obj.iconName == null)
+      menuName == other.menuName
+              && menuItem == other.menuItem
+              && ((iconName == null && other.iconName == null)
               || (iconName != null
-              && obj.iconName != null
-              && iconName == obj.iconName))
+              && other.iconName != null
+              && iconName == other.iconName))
     }
   }
 

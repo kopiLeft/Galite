@@ -56,8 +56,8 @@ class Connection {
    * Creates a connection with Exposed and opens it.
    *
    * @param        url             the URL of the database to connect to
-   * @param        user            the name of the database user
-   * @param        pass            the password of the database user
+   * @param        userName        the name of the database user
+   * @param        password        the password of the database user
    * @param        lookupUserId    lookup user id in table of users ?
    * @param        schema          the database schema to set as current schema
    */

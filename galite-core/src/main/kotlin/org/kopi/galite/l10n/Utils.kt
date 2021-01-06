@@ -50,14 +50,14 @@ object Utils {
    * Returns the child with specified type.
    */
   fun lookupChild(parent: Element, type: String): Element {
-    val childs: List<Element> = parent.getChildren(type)
+    val children: List<Element> = parent.getChildren(type)
 
     when {
-      childs.isEmpty() -> throw InconsistencyException(parent.document.baseURI + ": "
-                                                               + type + " not found")
-      childs.size > 1 -> throw InconsistencyException(parent.document.baseURI + ": "
-                                                              + type + " not unique")
-      else -> return childs[0]
+      children.isEmpty() -> throw InconsistencyException(parent.document.baseURI + ": "
+                                                                 + type + " not found")
+      children.size > 1 -> throw InconsistencyException(parent.document.baseURI + ": "
+                                                                + type + " not unique")
+      else -> return children[0]
     }
   }
 }

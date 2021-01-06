@@ -18,7 +18,9 @@
 package org.kopi.galite.chart
 
 import org.jdom2.Element
+import org.kopi.galite.common.Actor
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.common.Menu
 
 /**
  * This class implements an  XML localization file generator
@@ -30,7 +32,9 @@ class ChartLocalizationWriter : LocalizationWriter() {
 
   fun genChart(title: String?,
                help: String?,
-               fields: List<ChartField<*>>) {
+               fields: List<ChartField<*>>,
+               menus: MutableList<Menu>,
+               actors: MutableList<Actor>) {
     val self = Element("chart")
     self.setAttribute("title", title)
     if (help != null) {
@@ -38,6 +42,18 @@ class ChartLocalizationWriter : LocalizationWriter() {
     }
     pushNode(self)
     // coll.genLocalization(this) TODO
+
+    // Menus
+    menus.forEach { menu ->
+      menu.genLocalization(this)
+    }
+
+    // Actors
+    actors.forEach { actor ->
+      actor.genLocalization(this)
+    }
+
+    // Fields
     fields.forEach { field ->
       field.genLocalization(this)
     }
