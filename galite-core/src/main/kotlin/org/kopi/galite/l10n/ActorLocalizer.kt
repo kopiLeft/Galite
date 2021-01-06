@@ -50,7 +50,7 @@ class ActorLocalizer(document: Document, ident: String) {
 
   init {
     val root: Element = document.rootElement
-    val names = listOf("form", "insert")
+    val names = listOf("form", "report", "chart", "insert") // FIXME: Do we steel need insert root element?
 
     if (root.name !in names) {
       throw InconsistencyException("bad root element $root")

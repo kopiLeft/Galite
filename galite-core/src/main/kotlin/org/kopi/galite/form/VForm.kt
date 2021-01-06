@@ -692,15 +692,17 @@ abstract class VForm : VWindow, VConstants {
     }
     // form-level commands
     commands.forEachIndexed { index, command ->
-      if (enable && hasTrigger(VConstants.TRG_CMDACCESS, index + 1)) {
-        val active: Boolean = try {
-          callTrigger(VConstants.TRG_CMDACCESS, index + 1) as Boolean
-        } catch (e: VException) {
-          // consider the command as active if trigger call fails.
-          true
+      if (command.trigger != -1) {
+        if (enable && hasTrigger(VConstants.TRG_CMDACCESS, index + 1)) {
+          val active: Boolean = try {
+            callTrigger(VConstants.TRG_CMDACCESS, index + 1) as Boolean
+          } catch (e: VException) {
+            // consider the command as active if trigger call fails.
+            true
+          }
+          // The command is enabled if its access trigger returns <code>true</true>
+          enable = active
         }
-        // The command is enabled if its access trigger returns <code>true</true>
-        enable = active
       }
       command.setEnabled(enable)
     }

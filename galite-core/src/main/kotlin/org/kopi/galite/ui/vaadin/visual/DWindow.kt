@@ -18,16 +18,16 @@
 package org.kopi.galite.ui.vaadin.visual
 
 import java.io.File
+
+import com.vaadin.flow.component.Component
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VWindow
 
-import com.vaadin.flow.component.Component
-
 /**
- * The `DWindow` is an abstract implementation of an [UWindow] component..
+ * The `DWindow` is an abstract implementation of an [UWindow] component.
  */
-abstract class DWindow protected constructor(private var model: VWindow) : Component(), UWindow {
+abstract class DWindow protected constructor(model: VWindow) : Component(), UWindow {
   override fun run() {
     TODO("Not yet implemented")
   }

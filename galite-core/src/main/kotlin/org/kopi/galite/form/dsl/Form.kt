@@ -16,75 +16,29 @@
  */
 package org.kopi.galite.form.dsl
 
-import org.kopi.galite.common.Action
 import java.io.IOException
 
-import org.kopi.galite.common.Actor
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.FormBooleanTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.FormTriggerEvent
 import org.kopi.galite.common.FormVoidTriggerEvent
 import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Menu
 import org.kopi.galite.common.Trigger
-import org.kopi.galite.common.VKConstants
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VDefaultActor
 
 /**
  * Represents a form.
  */
 abstract class Form : Window() {
 
-  /** Form's actors. */
-  val formActors = mutableListOf<Actor>()
-
   /** Form's blocks. */
   val formBlocks = mutableListOf<FormBlock>()
 
   /** Form's pages. */
   val pages = mutableListOf<FormPage>()
-
-  /** Form's menus. */
-  val menus = mutableListOf<Menu>()
-
-  /**
-   * Adds a new actor to this form.
-   *
-   * An Actor is an item to be linked to a command.
-   *
-   * @param menu                 the containing menu
-   * @param label                the label
-   * @param help                 the help
-   */
-  fun actor(ident: String, menu: Menu, label: String, help: String, init: (Actor.() -> Unit)? = null): Actor {
-    val number = when {
-      ident == VKConstants.CMD_AUTOFILL -> {
-        VForm.CMD_AUTOFILL
-      }
-      ident == VKConstants.CMD_NEWITEM -> {
-        VForm.CMD_NEWITEM
-      }
-      ident == VKConstants.CMD_EDITITEM -> {
-        VForm.CMD_EDITITEM
-      }
-      ident == VKConstants.CMD_SHORTCUT -> {
-        VForm.CMD_EDITITEM_S
-      }
-      else -> {
-        0
-      }
-    }
-    val actor = Actor(ident, menu, label, help, number)
-    if (init != null) {
-      actor.init()
-    }
-    formActors.add(actor)
-    return actor
-  }
 
   /**
    * Adds a new block to this form.
@@ -180,19 +134,6 @@ abstract class Form : Window() {
     return page
   }
 
-  /**
-   * Adds a new menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
-   *
-   * @param label                the menu label in default locale
-   * @return                     the menu. It is used later to adding actors to this menu by specifying
-   * the menu name in the actor definition.
-   */
-  fun menu(label: String): Menu {
-    val menu = Menu(label)
-    menus.add(menu)
-    return menu
-  }
-
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
@@ -232,13 +173,8 @@ abstract class Form : Window() {
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genForm(title,
-                                               formBlocks.map { it.ownDomains }.flatten().toTypedArray(),
-                                               menus.toTypedArray(),
-                                               formActors.toTypedArray(),
-                                               pages.toTypedArray(),
-                                               formBlocks.toTypedArray()
-    )
+    (writer as FormLocalizationWriter)
+            .genForm(title, formBlocks.map { it.ownDomains }.flatten(), menus, actors, pages, formBlocks)
   }
 
   /** Form model */
@@ -249,9 +185,6 @@ abstract class Form : Window() {
       override fun init() {
         initialize()
       }
-
-      init {
-      }
     }
   }
 
@@ -260,13 +193,15 @@ abstract class Form : Window() {
     pages = this@Form.pages.map {
       it.ident
     }.toTypedArray()
-    this.addActors(formActors.map {
-      if (it.number == 0) {
-        VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
-      } else {
-        VDefaultActor(it.number, it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
-      }
+    this.addActors(this@Form.actors.map { actor ->
+      actor.buildModel(sourceFile)
     }.toTypedArray())
+    this.commands = this@Form.commands.map { command ->
+      command.buildModel(this, actors)
+    }.toTypedArray()
+
+    this.handleTriggers(triggers)
+
     blocks = formBlocks.map { formBlock ->
       formBlock.getBlockModel(this, source).also { vBlock ->
         vBlock.setInfo(formBlock.pageNumber)
@@ -278,10 +213,6 @@ abstract class Form : Window() {
         }
       }
     }.toTypedArray()
-
-    //TODO ----------begin-------------
-    this.commands = arrayOf()
-    this.handleTriggers(triggers)
   }
 
   /**

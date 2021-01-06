@@ -119,7 +119,7 @@ class VStringCodeField(bufferSize: Int,
   override fun getSqlImpl(r: Int): String = if (value[r] == -1) {
     "NULL"
   } else {
-    org.kopi.galite.db.Utils.toSql(codes[value[r]])
+    codes[value[r]]!!
   }
 
   /**

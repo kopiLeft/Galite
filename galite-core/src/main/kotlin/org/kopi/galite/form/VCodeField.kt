@@ -334,7 +334,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  abstract override fun getSqlImpl(r: Int): String
+  abstract override fun getSqlImpl(r: Int): String?
 
   /**
    * Copies the value of a record to another

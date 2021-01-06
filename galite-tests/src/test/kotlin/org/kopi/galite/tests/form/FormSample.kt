@@ -19,7 +19,6 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
-
 import org.kopi.galite.common.INITFORM
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
@@ -33,8 +32,11 @@ import org.kopi.galite.form.dsl.Key
 
 object User : Table() {
   val id = integer("ID")
+  val uc = integer("UC")
+  val ts = integer("TS")
   val name = varchar("NAME", 20).nullable()
   val age = integer("AGE").nullable()
+  val job = varchar("JOB", 20).nullable()
 }
 
 object FormSample : Form() {
@@ -62,12 +64,27 @@ object FormSample : Form() {
     icon =  "column_chart"  // icon is optional here
   }
 
+  val formActor = actor(
+          ident =  "save",
+          menu =   action,
+          label =  "form Command",
+          help =   "actor to test form command",
+  ) {
+    key  =  Key.F2          // key is optional here
+    icon =  "save"  // icon is optional here
+  }
+
+  val cmd = command(item = formActor) {
+    action = {
+      println("----------- FORM COMMAND ----------------")
+    }
+  }
+
   val p1 = page("test page")
   val p2 = page("test page2")
 
   val tb1 = insertBlock(TestBlock(), p1) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
@@ -77,7 +94,6 @@ object FormSample : Form() {
 
   val tb2 = insertBlock(TestBlock(), p2) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
@@ -112,6 +128,18 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     help = "The user id"
     columns(u.id)
   }
+  val ts = hidden(domain = Domain<Int>(20)) {
+    label = "ts"
+    help = "The user ts"
+    value = 0
+    columns(u.ts)
+  }
+  val uc = hidden(domain = Domain<Int>(20)) {
+    label = "uc"
+    help = "The user uc"
+    value = 0
+    columns(u.uc)
+  }
   val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
@@ -126,12 +154,17 @@ class TestBlock : FormBlock(1, 1, "Test block") {
   val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
-    minValue = 10
+    minValue = 0
     maxValue =90
     columns(u.age) {
       index = i
       priority = 1
     }
+  }
+  val job = visit(domain = Domain<String?>(3), position = follow(age)) {
+    label = "Job"
+    help = "The user job"
+    columns(u.job)
   }
 }
 

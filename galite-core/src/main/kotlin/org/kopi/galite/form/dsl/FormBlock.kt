@@ -41,7 +41,6 @@ import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.WindowController
 
 /**
@@ -439,11 +438,7 @@ open class FormBlock(var buffer: Int,
   // ----------------------------------------------------------------------
 
   override fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genBlock(ident,
-                                                title,
-                                                help,
-                                                indices.toTypedArray(),
-                                                blockFields.toTypedArray())
+    (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, blockFields)
   }
 
   fun showChart(chart: Chart) {
@@ -507,20 +502,6 @@ open class FormBlock(var buffer: Int,
 
       init {
         //TODO ----------begin-------------
-        /** Used actors in form*/
-        val usedActors = form.actors.map { vActor ->
-          vActor?.actorIdent to vActor
-        }.toMap()
-
-        super.commands = blockCommands.map {
-          VCommand(it.mode,
-                   this,
-                   usedActors[it.item.ident],
-                   -1,
-                   it.name!!,
-                   it.action
-          )
-        }.toTypedArray()
 
         handleTriggers(this@FormBlock.triggers)
 
@@ -536,6 +517,9 @@ open class FormBlock(var buffer: Int,
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.displayedFields = this@FormBlock.displayedFields
+        super.commands = blockCommands.map { command ->
+          command.buildModel(this, form.actors)
+        }.toTypedArray()
         super.name = ident
         super.options = blockOptions
         super.tables = blockTables.map {

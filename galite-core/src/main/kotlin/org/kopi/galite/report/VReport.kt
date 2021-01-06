@@ -497,7 +497,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   /**
    * Calls trigger for given event, returns last trigger called 's value.
    */
-  protected fun callTrigger(event: Int, index: Int = 0): Any? {
+  internal fun callTrigger(event: Int, index: Int = 0): Any? {
     return when (Constants.TRG_TYPES[event]) {
       Constants.TRG_VOID -> {
         executeVoidTrigger(VKT_Triggers[index][event])
