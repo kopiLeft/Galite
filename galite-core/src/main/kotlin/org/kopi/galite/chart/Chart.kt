@@ -216,22 +216,30 @@ abstract class Chart : Window() {
         }
 
         // DIMENSION TRIGGERS
-        dimensions.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        this@Chart.dimension.also {
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+
+          if(it.formatTrigger != null) {
+            fieldTriggerArray[CConstants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+          }
           // TODO : Add field triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
         // MEASURE TRIGGERS
-        measures.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        this@Chart.measures.forEach {
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+
+          if(it.colorTrigger != null) {
+            fieldTriggerArray[CConstants.TRG_COLOR] = it.colorTrigger!!.events.toInt()
+          }
           // TODO : Add field triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
         // COMMANDS TRIGGERS
         commands?.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
           // TODO : Add commands triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }

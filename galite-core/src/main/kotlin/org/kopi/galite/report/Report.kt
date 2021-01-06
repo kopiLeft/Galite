@@ -226,7 +226,7 @@ abstract class Report : Window() {
 
           // FIELD TRIGGERS
           fields.forEach {
-            val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
             if(it.computeTrigger != null) {
               fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
             }
@@ -239,7 +239,7 @@ abstract class Report : Window() {
 
           // COMMANDS TRIGGERS
           commands?.forEach {
-            val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+            val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
             // TODO : Add commands triggers here
             super.VKT_Triggers.add(fieldTriggerArray)
           }
