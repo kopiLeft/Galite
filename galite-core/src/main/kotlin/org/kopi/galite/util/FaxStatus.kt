@@ -33,7 +33,7 @@ class FaxStatus {
   private var dials: String? = null
   private var state: String? = null
   private var filename: String? = null
-  private var incomingtime: String? = null
+  private var incomingTime: String? = null
   private var sender: String? = null
   private var duration: String? = null
 
@@ -68,13 +68,13 @@ class FaxStatus {
   // CONSTRUCTOR FOR INCOMING FAXES
   // ----------------------------------------------------------------------
   constructor(filename: String,
-              incomingtime: String,
+              incomingTime: String,
               sender: String,
               pages: String,
               duration: String,
               text: String) {
     this.filename = if (filename.isEmpty()) null else filename
-    this.incomingtime = if (incomingtime.isEmpty()) null else incomingtime
+    this.incomingTime = if (incomingTime.isEmpty()) null else incomingTime
     this.sender = if (sender.isEmpty()) null else sender
     this.pages = if (pages.isEmpty()) null else pages
     this.duration = if (duration.isEmpty()) null else duration
@@ -87,23 +87,20 @@ class FaxStatus {
    * If no ID is found Return -1
    */
   fun getTagId(): Int {
-    var startpos = 0
-    var id = -1
     if (tag == null) {
       return -1
     }
-    startpos = tag!!.indexOfFirst { it >= '0' && it <= '9' }
+    val startPos = tag!!.indexOfFirst { it in '0'..'9' }
 
-    id = try {
-      Integer.valueOf(tag!!.substring(startpos)).toInt()
+    return try {
+      Integer.valueOf(tag!!.substring(startPos)).toInt()
     } catch (e: Exception) {
       return -1
     }
-    return id
   }
 
   /**
-   * Returns True if tag starts with tagstr
+   * Returns True if tag starts with [tagstr]
    */
   fun isTagged(tagstr: String): Boolean {
     return if (tag == null) {

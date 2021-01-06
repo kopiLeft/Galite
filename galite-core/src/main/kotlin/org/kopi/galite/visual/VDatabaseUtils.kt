@@ -77,6 +77,7 @@ object VDatabaseUtils {
   }
 
   fun checkForeignKeys(context: DBContextHandler, id: Int, table: String) {
+    // FIXME : this should be re-implemented
     transaction {
 
       val query1 = References.slice(References.table, References.column, References.action)
@@ -121,6 +122,7 @@ object VDatabaseUtils {
   }
 
   fun deleteRecords(context: DBContextHandler, table: String, condition: String?) {
+    // FIXME : this should be re-implemented
     transaction {
       val auxTable = object : Table(table) {
         var id = integer("ID")

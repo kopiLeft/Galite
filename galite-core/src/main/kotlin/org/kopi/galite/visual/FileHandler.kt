@@ -42,7 +42,7 @@ abstract class FileHandler {
    * @param defaultName The file default name.
    * @return The chosen file.
    */
-  abstract fun chooseFile(window: UWindow, dir: File, defaultName: String): File
+  abstract fun chooseFile(window: UWindow, dir: File, defaultName: String): File?
 
   /**
    * Shows a dialog box to open a file with a given default name.

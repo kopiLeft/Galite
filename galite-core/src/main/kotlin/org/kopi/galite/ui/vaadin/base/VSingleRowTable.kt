@@ -41,7 +41,7 @@ class VSingleRowTable : Component(), HasComponents {
     Objects.requireNonNull(elements, "Elements should not be null")
     for (element in elements) {
       Objects.requireNonNull(element,
-              "element to add cannot be null")
+                             "element to add cannot be null")
       td.appendChild(element)
     }
   }
@@ -54,7 +54,7 @@ class VSingleRowTable : Component(), HasComponents {
     Objects.requireNonNull(components, "Components should not be null")
     for (component in components) {
       Objects.requireNonNull(component,
-              "Component to add cannot be null")
+                             "Component to add cannot be null")
       td.appendChild(component.element)
     }
   }

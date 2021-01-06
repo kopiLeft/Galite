@@ -24,7 +24,7 @@ import java.sql.SQLException
  * Constructor
  *
  * @param     query                   the sql query which generated the exception
- * @param     sQLException            the original SQLException
+ * @param     sqlException            the original SQLException
  */
 abstract class DBException(query: String?, val sqlException: SQLException) : SQLException(
         sqlException.message + (if (query != null) {

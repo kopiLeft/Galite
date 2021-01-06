@@ -99,26 +99,26 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     }
 
   /** the minimum value that cannot exceed  */
-  private var min : Int = Int.MIN_VALUE
+  private var min: Int = Int.MIN_VALUE
 
   /** the maximum value that cannot exceed  */
-  private var max : Int = Int.MAX_VALUE
+  private var max: Int = Int.MAX_VALUE
 
   /**
    * Sets the minimum value of an Int field.
    */
-  var <U> FormField<U>.minValue : Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.minValue: Int where U : Comparable<U>?, U : Number?
     get() {
       return min
     }
-  set(value) {
-    min = value
-  }
+    set(value) {
+      min = value
+    }
 
   /**
    * Sets the maximum value of an Int field.
    */
-  var <U> FormField<U>.maxValue : Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.maxValue: Int where U : Comparable<U>?, U : Number?
     get() {
       return max
     }

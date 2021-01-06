@@ -75,11 +75,11 @@ class VHelpViewer : VWindow() {
   /**
    * Performs the appropriate action.
    *
-   * @param        key                the number of the actor.
+   * @param        VKT_Type                the number of the actor.
    * @return        true if an action was found for the specified number
    */
-  override fun executeVoidTrigger(key: Int) {
-    when (key) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    when (VKT_Type) {
       CMD_QUIT -> close(0)
     }
   }

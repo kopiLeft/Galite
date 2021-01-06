@@ -75,9 +75,8 @@ class IPPInputStream(private val inputStream: InputStream) {
 
   fun readString(length: Int): String {
     val buf = ByteArray(length)
-    var nread = 0
+    val nread = inputStream.read(buf, 0, length)
 
-    nread = inputStream.read(buf, 0, length)
     if (nread != length) {
       throw IOException("Error reading socket: unexpected end of transmission")
     }

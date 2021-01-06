@@ -314,14 +314,14 @@ open class ChartTriggerEvent(val event: Int)
  *
  * @param event the event of the trigger
  */
-open class ChartVoidTriggerEvent(event: Int): ChartTriggerEvent(event)
+open class ChartVoidTriggerEvent(event: Int) : ChartTriggerEvent(event)
 
 /**
  * Chart Triggers where executed method should return an object.
  *
  * @param event the event of the trigger
  */
-open class ChartTypeTriggerEvent(event: Int): ChartTriggerEvent(event)
+open class ChartTypeTriggerEvent(event: Int) : ChartTriggerEvent(event)
 
 /**
  * Executed before the chart is displayed.

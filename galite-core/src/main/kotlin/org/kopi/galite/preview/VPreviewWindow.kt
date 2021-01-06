@@ -46,7 +46,7 @@ open class VPreviewWindow : VWindow() {
     private const val PREVIEW_LOCALIZATION_RESOURCE = "org/kopi/galite/Preview"
 
     // the following commands *MUST* be in the same order than
-    // in 'actors' field set in the contructor of the current class.
+    // in 'actors' field set in the constructor of the current class.
     const val CMD_QUIT = 0
     const val CMD_FIRST = 1
     const val CMD_LEFT = 2
@@ -99,7 +99,7 @@ open class VPreviewWindow : VWindow() {
 
   private fun createImagesFromPostscript() {
     try {
-      val resolution: Int = (72f * height / printJob!!.getHeight()) as Int
+      val resolution: Int = (72f * height / printJob!!.getHeight()).toInt()
       val p = Runtime.getRuntime().exec(command +
                                                 " -q" +
                                                 " -sOutputFile=" + imageFile + "%d.JPG" +
@@ -132,10 +132,10 @@ open class VPreviewWindow : VWindow() {
   /**
    * Performs the appropriate action.
    *
-   * @param        actor                the number of the actor.
+   * @param   VKT_Type    the number of the actor.
    */
-  override fun executeVoidTrigger(key: Int) {
-    when (key) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    when (VKT_Type) {
       CMD_QUIT -> getDisplay()!!.closeWindow()
       CMD_FIRST -> {
         setWaitInfo(VlibProperties.getString("WAIT"))
@@ -282,7 +282,7 @@ open class VPreviewWindow : VWindow() {
   }
 
   override fun getTitle(): String {
-    return windowTitle!!
+    return windowTitle
   }
 
   // ---------------------------------------------------------------------
@@ -305,7 +305,7 @@ open class VPreviewWindow : VWindow() {
 
   init {
     setTitle(VlibProperties.getString("Preview"))
-    addActors(arrayOf<VActor>(
+    addActors(arrayOf(
             VActor("File",
                    PREVIEW_LOCALIZATION_RESOURCE,
                    "Close",

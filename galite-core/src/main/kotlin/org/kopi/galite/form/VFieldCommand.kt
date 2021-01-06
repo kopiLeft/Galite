@@ -71,10 +71,10 @@ class VFieldCommand(private val form: VForm,
   /**
    * Performs a void trigger
    *
-   * @param    type    the number of the trigger
+   * @param    VKT_Type    the number of the trigger
    */
-  override fun executeVoidTrigger(type: Int) {
-    when (type) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    when (VKT_Type) {
       VForm.CMD_AUTOFILL ->
         form.getActiveBlock()!!.activeField!!.predefinedFill()
       VForm.CMD_EDITITEM, VForm.CMD_EDITITEM_S ->

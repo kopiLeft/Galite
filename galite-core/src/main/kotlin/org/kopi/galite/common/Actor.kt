@@ -35,16 +35,16 @@ import org.kopi.galite.visual.VDefaultActor
  * @param menu                the containing menu
  * @param label               the label
  * @param help                the help
- * @param icon                the icon
- * @param key                 the shortcut
  */
 class Actor(val ident: String, val menu: Menu, val label: String, val help: String, val number: Int) {
+  // The shortcut key
   var key: Key? = null
     set(key) {
       checkKey(key)
       field = key
     }
 
+  // The actor icon
   var icon: String? = null
   var keyCode = 0
   var keyModifier = 0

@@ -221,12 +221,12 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   }
 
   override fun createPrintJob(): PrintJob {
-    val exporter: PExport2PDF = PExport2PDF((getDisplay() as UReport).getTable(),
-                                            model,
-                                            printOptions,
-                                            pageTitle,
-                                            firstPageHeader,
-                                            Message.getMessage("toner_save_mode") == "true")
+    val exporter = PExport2PDF((getDisplay() as UReport).getTable(),
+                               model,
+                               printOptions,
+                               pageTitle,
+                               firstPageHeader,
+                               Message.getMessage("toner_save_mode") == "true")
     val printJob: PrintJob = exporter.export()
 
     printJob.documentType = getDocumentType()
@@ -500,11 +500,11 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   internal fun callTrigger(event: Int, index: Int = 0): Any? {
     return when (Constants.TRG_TYPES[event]) {
       Constants.TRG_VOID -> {
-        executeVoidTrigger(VKT_Triggers!![index][event])
+        executeVoidTrigger(VKT_Triggers[index][event])
         null
       }
-      Constants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers!![index][event])
-      Constants.TRG_BOOLEAN -> executeBooleanTrigger(VKT_Triggers!![index][event])
+      Constants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers[index][event])
+      Constants.TRG_BOOLEAN -> executeBooleanTrigger(VKT_Triggers[index][event])
       else -> throw InconsistencyException("BAD TYPE" + Constants.TRG_TYPES[event])
     }
   }
@@ -512,7 +512,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   /**
    * Returns true iff there is trigger associated with given event.
    */
-  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
+  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != 0
 
   fun setMenu() {
     if (!built) {
@@ -577,7 +577,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
       null
     } else {
       try {
-        surl.append(File(fileName).toURL().toString())
+        surl.append(File(fileName).toURI().toURL().toString())
       } catch (mue: MalformedURLException) {
         throw InconsistencyException(mue)
       }

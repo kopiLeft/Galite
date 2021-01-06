@@ -29,7 +29,7 @@ class VImageColumn(title: String, column: String?, sortAscending: Boolean)
    */
   override fun formatObject(value: Any?): Any = when (value) {
     null -> VConstants.EMPTY_TEXT
-    else -> ImageHandler.imageHandler!!.getImage(value as ByteArray)
+    else -> ImageHandler.imageHandler.getImage(value as ByteArray)
   }
 
   override fun getDataType(): KClass<*> {

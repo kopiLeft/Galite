@@ -98,7 +98,6 @@ open class Utils {
      * Creates a typed array from a list.
      *
      * @param        list                the list containing the elements
-     * @param        type                the type of the elements
      */
     fun toArray(list: List<*>): Array<*> = list.toTypedArray()
   }
