@@ -23,6 +23,9 @@ import org.kopi.galite.common.INITFORM
 import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.field.ACCESS
+import org.kopi.galite.field.ACTION
+import org.kopi.galite.field.POSTCHG
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.BlockOption
@@ -150,6 +153,13 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     help = "The user password"
 
     options(FieldOption.NOECHO)
+    trigger(ACCESS) {
+      if (name.value == "hidden") {
+        VConstants.ACS_HIDDEN
+      } else {
+        VConstants.ACS_SKIPPED
+      }
+    }
   }
   val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
@@ -160,11 +170,18 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       index = i
       priority = 1
     }
+    trigger(POSTCHG) {
+      println("value changed !!")
+      name.value = "Sami"
+    }
   }
-  val job = visit(domain = Domain<String?>(3), position = follow(age)) {
+  val job = visit(domain = Domain<String?>(20), position = at(3, 1)) {
     label = "Job"
     help = "The user job"
     columns(u.job)
+    trigger(ACTION) {
+      println("Action on field !!")
+    }
   }
 }
 
