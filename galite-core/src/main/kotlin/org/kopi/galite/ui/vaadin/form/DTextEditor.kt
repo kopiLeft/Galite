@@ -15,39 +15,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.form
 
-package org.kopi.galite.form
+import org.kopi.galite.form.VFieldUI
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * The `DTextEditor` is the UI implementation
+ * of a text editor UI component.
+ *
+ * @param model The row controller.
+ * @param label The field label.
+ * @param align The field alignment.
+ * @param options The field options.
+ * @param height The field height.
+ * @param detail Does the field belongs to the detail view ?
  */
-interface UTextField : UField {
-
-  /**
-   * Returns the text field content.
-   * @return The text field content.
-   */
-  fun getText(): String?
-
-  /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
-   */
-  fun setHasCriticalValue(b: Boolean)
-
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
-
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
-}
+class DTextEditor(model: VFieldUI,
+                  label: DLabel?,
+                  align: Int,
+                  options: Int,
+                  height: Int,
+                  detail: Boolean) : DTextField(model, label, align, options, detail)

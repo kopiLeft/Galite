@@ -19,10 +19,12 @@ package org.kopi.galite.ui.vaadin.visual
 
 import java.io.File
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.UWindow
+import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
+
+import com.vaadin.flow.component.Component
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
@@ -110,5 +112,13 @@ abstract class DWindow protected constructor(model: VWindow) : Component(), UWin
 
   override fun fileProduced(file: File, name: String) {
     TODO("Not yet implemented")
+  }
+
+  open fun reportError(e: VRuntimeException) {
+    TODO()
+  }
+
+  open fun release() {
+    TODO()
   }
 }

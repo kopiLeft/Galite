@@ -15,39 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.date
 
-package org.kopi.galite.form
+import java.io.Serializable
+import java.util.Date
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * Registered objects are notified with actions performed on a date chooser.
  */
-interface UTextField : UField {
-
+interface DateChooserListener : Serializable {
   /**
-   * Returns the text field content.
-   * @return The text field content.
+   * Fired when a date has been chosen.
+   * @param selected The selected date.
    */
-  fun getText(): String?
-
-  /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
-   */
-  fun setHasCriticalValue(b: Boolean)
-
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
-
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
+  fun onClose(selected: Date?)
 }

@@ -15,39 +15,48 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.field
 
-package org.kopi.galite.form
+import java.io.Serializable
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * The object field listener that informs registered objects
+ * about actions performed on an object field.
  */
-interface UTextField : UField {
+interface ObjectFieldListener : Serializable {
 
   /**
-   * Returns the text field content.
-   * @return The text field content.
+   * Performs a request to go to the next field.
    */
-  fun getText(): String?
+  fun gotoNextField()
 
   /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
+   * Performs a request to go to the previous field.
    */
-  fun setHasCriticalValue(b: Boolean)
+  fun gotoPrevField()
 
   /**
-   * Adds selection focus listener
+   * Performs a request to go to the next block.
    */
-  fun addSelectionFocusListener()
+  fun gotoNextBlock()
 
   /**
-   * Removes selection focus Listener
+   * Performs a request to go to the previous record.
    */
-  fun removeSelectionFocusListener()
+  fun gotoPrevRecord()
 
   /**
-   * Disables / Enables the selection after the update operation.
+   * Performs a request to go to the next record.
    */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
+  fun gotoNextRecord()
+
+  /**
+   * Performs a request to go to the first record.
+   */
+  fun gotoFirstRecord()
+
+  /**
+   * Performs a request to go to the last field.
+   */
+  fun gotoLastRecord()
 }

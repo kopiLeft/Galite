@@ -15,39 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.field;
 
-package org.kopi.galite.form
+import java.io.Serializable;
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * Registered objects are notified with actions performed on an image field.
  */
-interface UTextField : UField {
+public interface ImageFieldListener extends Serializable {
 
   /**
-   * Returns the text field content.
-   * @return The text field content.
+   * Fired when the image is removed from the field.
    */
-  fun getText(): String?
+  public void onRemove();
 
   /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
+   * Fired when the image field is clicked.
    */
-  fun setHasCriticalValue(b: Boolean)
-
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
-
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
+  public void onImageClick();
 }

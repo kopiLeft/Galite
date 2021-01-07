@@ -15,39 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.list
 
-package org.kopi.galite.form
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasEnabled
 
 /**
- * `UTextField` is the top-level interface that must be implemented
- * by all text fields.
+ * A list dialog
+ * TODO: Implement this class with appropriate component
  */
-interface UTextField : UField {
-
-  /**
-   * Returns the text field content.
-   * @return The text field content.
-   */
-  fun getText(): String?
-
-  /**
-   * Sets if the field has a critical value.
-   * @param b The critical value state.
-   */
-  fun setHasCriticalValue(b: Boolean)
-
-  /**
-   * Adds selection focus listener
-   */
-  fun addSelectionFocusListener()
-
-  /**
-   * Removes selection focus Listener
-   */
-  fun removeSelectionFocusListener()
-
-  /**
-   * Disables / Enables the selection after the update operation.
-   */
-  fun setSelectionAfterUpdateDisabled(disable: Boolean)
+open class GridListDialog : Component(), HasEnabled {
 }

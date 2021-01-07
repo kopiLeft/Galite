@@ -52,7 +52,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     }
   }
 
-  override fun getDisplayedValue(trim: Boolean): Any {
+  override fun getDisplayedValue(trim: Boolean): Any? {
     return when (val field = getCurrentDisplay()) {
       null -> {
         "" // having null pointer exception when display is not defined
@@ -63,9 +63,9 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
         if (!trim) {
           text
         } else if (getModel().height == 1) {
-          Utils.trimString(text)
+          Utils.trimString(text!!)
         } else {
-          Utils.trailString(text)
+          Utils.trailString(text!!)
         }
       }
       else -> {
