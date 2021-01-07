@@ -20,7 +20,7 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
-
+import java.sql.SQLException
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
@@ -31,6 +31,7 @@ import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
@@ -58,7 +59,6 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
-import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -1757,19 +1757,19 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     if (getSearchType() == VConstants.STY_MANY) {
       expression = when (options and VConstants.FDO_SEARCH_MASK) {
-        VConstants.FDO_SEARCH_NONE -> (list!!.getColumn(0).column as Column<String>)
+        VConstants.FDO_SEARCH_NONE -> (list!!.getColumn(0).column_ as Column<String>)
 
         VConstants.FDO_SEARCH_UPPER -> {
-          (list!!.getColumn(0).column!! as Column<String>).upperCase()
+          (list!!.getColumn(0).column_!! as Column<String>).upperCase()
         }
         VConstants.FDO_SEARCH_LOWER -> {
-          (list!!.getColumn(0).column!! as Column<String>).upperCase()
+          (list!!.getColumn(0).column_!! as Column<String>).lowerCase()
         }
         else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
       }
     }
 
-    val query = evalListTable_().slice(columns).select(getSearchCondition_(expression!!)).orderBy(columns[1])
+    val query = evalListTable_().slice(columns).select(getSearchCondition_(expression!!)).orderBy(list!!.getColumn(0).column_!!)
 
     val result = displayQueryList(query.toString(), list!!.columns)
 
