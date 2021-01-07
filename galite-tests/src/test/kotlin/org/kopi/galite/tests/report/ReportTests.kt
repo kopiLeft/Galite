@@ -31,6 +31,7 @@ import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.Triggers
 import org.kopi.galite.report.VCellFormat
+import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.VApplicationTestBase
 
 import kotlin.test.assertEquals
@@ -86,8 +87,8 @@ class ReportTests: VApplicationTestBase() {
     val rootElement   = document.rootElement
     val actionMenu    = rootElement.children[0]
     val greetingActor = rootElement.children[1]
-    val nameField     = rootElement.children[2]
-    val ageField      = rootElement.children[3]
+    val nameField     = rootElement.children[6]
+    val ageField      = rootElement.children[7]
     assertEquals("report", rootElement.name)
     assertEquals("SimpleReport", rootElement.getAttributeValue("title"))
     assertEquals("Action", actionMenu.getAttributeValue("ident"))
@@ -129,6 +130,70 @@ object SimpleReport : Report() {
   ) {
     key  =  Key.F1          // key is optional here
     icon =  "ask"  // icon is optional here
+  }
+
+  val csv = actor(
+          ident = "CSV",
+          menu = action,
+          label = "CSV",
+          help = "Obtenir le format CSV",
+  ) {
+    key  =  Key.F8          // key is optional here
+    icon =  "export"  // icon is optional here
+  }
+
+  val xls = actor(
+          ident = "XLS",
+          menu = action,
+          label = "XLS",
+          help = "Obtenir le format Excel (XLS)",
+  ) {
+    key  =  Key.SHIFT_F8          // key is optional here
+    icon =  "export"  // icon is optional here
+  }
+
+  val xlsx = actor(
+          ident = "XLSX",
+          menu = action,
+          label = "XLSX",
+          help = "Obtenir le format Excel (XLSX)",
+  ) {
+    key  =  Key.SHIFT_F8          // key is optional here
+    icon =  "export"  // icon is optional here
+  }
+
+  val pdf = actor(
+          ident = "PDF",
+          menu = action,
+          label = "PDF",
+          help = "Obtenir le format PDF",
+  ) {
+    key  =  Key.F9          // key is optional here
+    icon =  "export"  // icon is optional here
+  }
+
+  val cmdCSV = command(item = csv) {
+    action = {
+      model.export(VReport.TYP_CSV)
+    }
+  }
+
+  val cmdPDF = command(item = pdf) {
+    action = {
+      model.export(VReport.TYP_PDF)
+    }
+  }
+
+  val cmdXLS = command(item = xls) {
+    action = {
+      model.export(VReport.TYP_XLS)
+    }
+  }
+
+  val cmdXLSX = command(item = xlsx) {
+    action = {
+      model.export(VReport.TYP_XLSX)
+    }
   }
 
   val cmd = command(item = greeting) {

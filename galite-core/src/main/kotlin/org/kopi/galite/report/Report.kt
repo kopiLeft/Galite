@@ -201,13 +201,12 @@ abstract class Report : Window() {
   }
 
   /** Report model*/
-  override val model: VReport
-    get() {
+  override val model: VReport by lazy {
       initFields()
 
       genLocalization()
 
-      return object : VReport() {
+      object : VReport() {
         /**
          * Handling triggers
          */
