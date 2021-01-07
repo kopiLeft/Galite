@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.notif
 
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -24,16 +24,17 @@ import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
- * Warning type notification component.
+ * Information type notification component.
  */
-open class VWarningNotification(title: String, message: String) : VAbstractNotification() {
+open class VInformationNotification(title: String, message: String) : VAbstractNotification() {
+
 
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
 
   /**
-   * Creates the warning notification footer.
+   * Creates the information notification footer.
    */
   override fun createFooter() {
     val footer = HorizontalLayout()
@@ -47,7 +48,7 @@ open class VWarningNotification(title: String, message: String) : VAbstractNotif
   }
 
   override fun setButtons(locale: String) {
-    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
+    close =  VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener {  hide()  }
     close.width = "20%"
     close.height = "50%"
@@ -57,21 +58,21 @@ open class VWarningNotification(title: String, message: String) : VAbstractNotif
   // DATA MEMBERS
   //--------------------------------------------------
 
-  override val iconName: String?
-    get() = "exclamation-circle"
-
-  private var close = VInputButton()
+  var close = VInputButton()
+  override val iconName: String
+    get() = "info-circle"
 
   //--------------------------------------------------
   // CONSTRUCTOR
   //--------------------------------------------------
 
   /**
-   * Creates the warning widget.
+   * Creates the information widget.
    */
   init {
     super.title = Label(title)
     super.message = Label(message)
     super.initialize(title, message, locale)
   }
+
 }
