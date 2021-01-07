@@ -17,34 +17,61 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
-
-import com.vaadin.flow.component.KeyPressEvent
 
 /**
  * Warning type notification component.
  */
-open class VWarningNotification(title: String, message: String) : VAbstractNotification(title, message) {
+open class VWarningNotification(title: String, message: String) : VAbstractNotification() {
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
-  override fun setButtons(locale: String?) {
 
+  /**
+   * Creates the warning notification footer.
+   */
+  override fun createFooter() {
+    val footer = HorizontalLayout()
+    footer.add(close)
+    footer.isSpacing = true
+    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+    footer.style.set("background-color", "AliceBlue")
+    footer.width = "99%"
+    footer.height = "35%"
+    add(footer)
   }
 
-  protected override val iconName: String
-    get() = "warning"
-
-  fun focus() {
-
-  }
-
-  fun onKeyPress(event: KeyPressEvent) {
-
+  override fun setButtons(locale: String) {
+    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
+    close.addClickListener { hide() }
+    close.width = "20%"
+    close.height = "50%"
   }
 
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  private var close: VInputButton? = null
+
+  override val iconName: String?
+    get() = "exclamation-circle"
+
+  private var close = VInputButton()
+
+  //--------------------------------------------------
+  // CONSTRUCTOR
+  //--------------------------------------------------
+
+  /**
+   * Creates the warning widget.
+   */
+  init {
+    super.title = Label(title)
+    super.message = Label(message)
+    super.initialize(title, message, locale)
+  }
 }

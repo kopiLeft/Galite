@@ -17,175 +17,168 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.html.H3
-import com.vaadin.flow.component.html.Paragraph
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * An abstract implementation of notification components such as
- * warnings, errors, confirms and informations.
+ * warnings, errors, confirms and information.
  */
-// TODO : implement this class with appropriate visual component
-abstract class VAbstractNotification(title: String, message: String?) : Component() {
+abstract class VAbstractNotification : Dialog() {
 
   /**
-   * Localization string.
+   * Creates a new notification widget with a window containing
+   * a title, a message, an image and buttons location.
    */
-  var locale: String? = null
-
-  /**
-   * Initializes the notification panel.
-   * @param connection  The application connection.
-   */
-  fun init() {
-
+  fun init(locale: String) {
+    setButtons(locale)
+    element.setAttribute("hideFocus", "true")
+    element.style["outline"] = "0px"
+    this.width = "30%"
+    this.height = "25%"
+    createHeader()
+    createContent()
+    createFooter()
   }
 
   /**
-   * Shows the notification popup.
+   * Initializes the notification panel.
    */
-  fun show(locale: String?) {
-
+  fun initialize(title: String, message: String, locale: String) {
+    init(locale)
+    setNotificationTitle(title)
+    setNotificationMessage(message)
   }
 
   /**
    * Closes the notification panel.
    */
-  fun close() {
-
+  override fun close() {
+    hide()
   }
 
   /**
    * Hides the notification dialog.
    */
-  protected fun hide() {
-
-  }
-
-  /**
-   * Registers a new notification listener.
-   * @param l The listener to be added.
-   */
-  fun addNotificationListener(l: NotificationListener) {
-
-  }
-
-  /**
-   * Removes a new notification listener.
-   * @param l The listener to be removed.
-   */
-  fun removeNotificationListener(l: NotificationListener) {
-
+  protected open fun hide() {
+    super.close()
   }
 
   /**
    * Fires a close event.
    * @param action The user action.
    */
-  protected fun fireOnClose(action: Boolean) {
-
+  protected open fun fireOnClose(action: Boolean) {
+    for (l in listeners) {
+      l.onClose(action)
+    }
   }
 
-  fun onClose() {
-
-  }
   //-------------------------------------------------
   // ACCESSORS
   //-------------------------------------------------
+
   /**
    * Sets the notification title.
    * @param title The notification title.
    */
-  fun setNotificationTitle(title: String?) {
-
+  fun setNotificationTitle(title: String) {
+    this.title.text = title
   }
 
   /**
    * Sets the notification message.
-   * @param text The notification message.
+   * @param message The notification message.
    */
-  fun setNotificationMessage(text: String?) {
-
+  fun setNotificationMessage(message: String) {
+    this.message.text = message
   }
 
   /**
-   * Shows an optional glass pane.
-   * @return `true` if a glass pane should be shown
+   * Creates the notification header.
    */
-  protected open fun showGlassPane(): Boolean {
-    return false
+  fun createHeader() {
+    val close = Button()
+    close.icon = VaadinIcon.CLOSE.create()
+    close.addClickListener { close() }
+    val header = HorizontalLayout()
+    header.add(this.title, close)
+    header.setFlexGrow(1.0, this.title)
+    header.isPadding = true
+    header.alignItems = FlexComponent.Alignment.CENTER
+    header.style.set("background-color", "DarkSeaGreen")
+    header.width = "99%"
+    header.height = "25%"
+    add(header)
   }
 
   /**
-   * Should we go back to the last focused field when the notification is closed ?
-   * @return `true` if we should go back to the last focused field when the notification is closed.
+   * Creates the notification content.
    */
-  protected open fun goBackToLastFocusedWindow(): Boolean {
-    return true
+  fun createContent() {
+    val content = HorizontalLayout()
+    this.icon = Icon(iconName)
+    content.isPadding = true
+    content.style.set("background-color", "AliceBlue")
+    content.add(icon, message)
+    content.alignItems = FlexComponent.Alignment.CENTER
+    content.width = "99%"
+    content.height = "35%"
+    add(content)
   }
 
   /**
-   * Sets yes is a default answer.
-   * @param yesIsDefault Yes is the default answer.
+   * Creates the notification footer.
    */
-  fun setYesIsDefault(yesIsDefault: Boolean) {
-
+  open fun createFooter() {
+    val footer = HorizontalLayout()
+    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+    footer.width = "99%"
+    add(footer)
   }
 
-  fun clear() {
+  /**
+   * Registers a new notification listener.
+   * @param l The listener to be added.
+   */
+  open fun addNotificationListener(l: NotificationListener) {
+    listeners.add(l)
+  }
 
+  /**
+   * Removes a new notification listener.
+   * @param l The listener to be removed.
+   */
+  open fun removeNotificationListener(l: NotificationListener) {
+    listeners.remove(l)
   }
   //-------------------------------------------------
   // ABSTRACT METHODS
   //-------------------------------------------------
+
   /**
    * Sets the notification buttons.
    * @param locale The notification locale.
    */
-  abstract fun setButtons(locale: String?)
+  abstract fun setButtons(locale: String)
+
+  //-------------------------------------------------
+  // DATA MEMBERS
+  //-------------------------------------------------
 
   /**
-   * Returns the icon name to be used with this notification.
-   * @return The icon name to be used with this notification.
+   * Represents the icon name to be used with this notification.
    */
   protected abstract val iconName: String?
-  //-------------------------------------------------
-  // INNER CLASSES
-  //-------------------------------------------------
-  /**
-   * A simple component that wraps a h3 HTML tag.
-   */
-  private class VH3 : H3() {
-    /**
-     * Sets the inner text for this element.
-     * @param text The inner text.
-     */
-    override fun setText(text: String?) {
-      // TODO
-    }
-  }
+  open var title = Label()
+  open var message = Label()
+  open var icon: Icon? = null
+  var locale: String = "fr_FR"
+  private val listeners = mutableListOf<NotificationListener>()
 
-  /**
-   * A simple component that wraps a p html tag.
-   */
-  private class VParagraph : Paragraph() {
-    /**
-     * Sets the inner HTML for this component element.
-     * @param html The component inner HTML.
-     */
-    fun setHtml(html: String?) {
-      element.setProperty("innerHTML", html)
-    }
-  }
-
-  //-------------------------------------------------
-  // CONSTRUCTOR
-  //-------------------------------------------------
-  /**
-   * Creates a new notification component with table containing
-   * a title, a message, an image and buttons location.
-   */
-  init {
-
-  }
 }

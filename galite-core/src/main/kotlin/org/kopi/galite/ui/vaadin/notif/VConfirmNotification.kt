@@ -17,44 +17,70 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Confirm type notification component.
  */
-open class VConfirmNotification(title: String, message: String) : VAbstractNotification(title, message) {
-  //-------------------------------------------------
-  // IMPLEMENTATION
-  //-------------------------------------------------
-  override fun setButtons(locale: String?) {
+open class VConfirmNotification(title: String, message: String) : VAbstractNotification() {
 
+//-------------------------------------------------
+// IMPLEMENTATION
+//-------------------------------------------------
+
+  /**
+   * Creates the confirmation notification footer.
+   */
+  override fun createFooter() {
+    val footer = HorizontalLayout()
+    footer.add(ok)
+    footer.add(cancel)
+    footer.isSpacing = true
+    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+    footer.style.set("background-color", "AliceBlue")
+    footer.width = "99%"
+    footer.height = "35%"
+    add(footer)
   }
 
-  fun focus() {
-
+  override fun setButtons(locale: String) {
+    ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
+    cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
+    cancel.addClickListener { hide() }
+    ok.addClickListener { open() }
+    ok.width = "20%"
+    ok.height = "50%"
+    cancel.width = "20%"
+    cancel.height = "50%"
   }
+
+//------------------------------------------------
+// DATA MEMBERS
+//------------------------------------------------
 
   override val iconName: String?
     get() = "question-circle"
+  private var ok = VInputButton()
+  private var cancel = VInputButton()
+  var listener: ComponentEventListener<ClickEvent<Button>>? = null
 
-  override fun showGlassPane(): Boolean {
-    return true
+//--------------------------------------------------
+// CONSTRUCTOR
+//--------------------------------------------------
+
+  /**
+   * Creates the confirmation widget.
+   */
+  init {
+    super.title = Label(title)
+    super.message = Label(message)
+    super.initialize(title, message, locale)
   }
-
-  override fun goBackToLastFocusedWindow(): Boolean {
-    return true
-  }
-
-  fun onKeyPress(event: KeyPressEvent) {
-
-  }
-
-  //------------------------------------------------
-  // DATA MEMBERS
-  //------------------------------------------------
-  private var ok: VInputButton? = null
-  private var cancel: VInputButton? = null
-  private var okFocused = false
-  private var cancelFocused = false
 }

@@ -16,10 +16,17 @@
  */
 package org.kopi.galite.demo.web.vaadin
 
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.router.Route
 import java.util.Locale
 
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.tests.VApplicationTestBase
+import org.kopi.galite.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -57,5 +64,48 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
     } catch (exception: Throwable) {
       null
     }
+  }
+}
+
+@Route("confirm")
+class ConfirmNotificationUI : VerticalLayout() {
+  val confirmationDialog = ConfirmNotification("Question", "Quitter : Êtes-vous sûr ?")
+  init {
+    confirmationDialog.locale = "en_GB"
+    val button = Button("Open Dialog") { _ -> confirmationDialog.open() }
+    add(button)
+  }
+}
+
+@Route("warning")
+class WarningNotificationUI : VerticalLayout() {
+  val warningDialog = WarningNotification("Warning", "Message warning")
+
+  init {
+    warningDialog.locale = "en_GB"
+    val button = Button("Open Dialog") { _ -> warningDialog.open() }
+    add(button)
+  }
+}
+
+@Route("error")
+class ErrorNotificationUI : VerticalLayout() {
+  val errorDialog = ErrorNotification("Erreur", "Message d'erreur")
+
+  init {
+    errorDialog.locale = "en_GB"
+    val button = Button("Open Dialog") { _ -> errorDialog.open() }
+    add(button)
+  }
+}
+
+@Route("information")
+class InformationNotificationUI : VerticalLayout() {
+  val infoDialog = InformationNotification("Info", "Message d'information")
+
+  init {
+    infoDialog.locale = "en_GB"
+    val button = Button("Open Dialog") { _ -> infoDialog.open() }
+    add(button)
   }
 }

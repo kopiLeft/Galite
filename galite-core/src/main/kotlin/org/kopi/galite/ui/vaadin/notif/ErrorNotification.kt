@@ -17,22 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import com.vaadin.flow.component.Component
-
 /**
  * Error notification component.
  * @param title the warning notification title.
  * @param message the warning notification message.
  */
-class ErrorNotification(title: String, message: String?) : VErrorNotification(title, message) {
-  //---------------------------------------------------
-  // ACCESSORS
-  //---------------------------------------------------
-  /**
-   * Sets the error owner.
-   * @param owner The error owner.
-   */
-  fun setOwner(owner: Component) {
-
-  }
-}
+class ErrorNotification(title: String, message: String) : VErrorNotification(title, message)

@@ -97,8 +97,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun error(message: String?) {
-    val dialog = ErrorNotification(VlibProperties.getString("Error"), message)
-    dialog.setOwner(this)
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message!!)
+    // dialog.setOwner(this)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
@@ -120,7 +120,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
     val dialog = ConfirmNotification(VlibProperties.getString("Question"), message)
-    dialog.setYesIsDefault(yesIsDefault)
+    // dialog.setYesIsDefault(yesIsDefault)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         askAnswer = if (yes) {

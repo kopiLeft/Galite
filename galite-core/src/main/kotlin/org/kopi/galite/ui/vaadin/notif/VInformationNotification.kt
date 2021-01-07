@@ -17,33 +17,61 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Information type notification component.
  */
-open class VInformationNotification(title: String, message: String) : VAbstractNotification(title, message) {
+open class VInformationNotification(title: String, message: String) : VAbstractNotification() {
+
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
-  override fun setButtons(locale: String?) {
 
+  /**
+   * Creates the information notification footer.
+   */
+  override fun createFooter() {
+    val footer = HorizontalLayout()
+    footer.add(close)
+    footer.isSpacing = true
+    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+    footer.style.set("background-color", "AliceBlue")
+    footer.width = "99%"
+    footer.height = "35%"
+    add(footer)
   }
 
-  override val iconName: String
-    get() = "info-circle"
-
-  fun focus() {
-
-  }
-
-  fun onKeyPress(event: KeyPressEvent) {
-
+  override fun setButtons(locale: String) {
+    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
+    close.addClickListener { hide() }
+    close.width = "20%"
+    close.height = "50%"
   }
 
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  private var close: VInputButton? = null
+
+  var close = VInputButton()
+  override val iconName: String
+    get() = "info-circle"
+
+  //--------------------------------------------------
+  // CONSTRUCTOR
+  //--------------------------------------------------
+
+  /**
+   * Creates the information widget.
+   */
+  init {
+    super.title = Label(title)
+    super.message = Label(message)
+    super.initialize(title, message, locale)
+  }
 }

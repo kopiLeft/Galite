@@ -17,20 +17,29 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+
+import com.vaadin.flow.component.orderedlayout.Scroller
 import org.kopi.galite.ui.vaadin.common.VSpan
+import javax.swing.Popup
 
 /**
  * An error message popup window containing stack trace detail
  * for an server exception.
  */
-class VErrorMessagePopup {
+class VErrorMessagePopup : Popup() {
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
+
   /**
    * Creates the window content.
    */
   protected fun createContent() {
+    scroller.className = "error-details"
+    message = VSpan()
+    message!!.className = "details-message"
+    scroller.content = message
   }
 
   /**
@@ -41,10 +50,16 @@ class VErrorMessagePopup {
     this.message!!.setHtml(message)
   }
 
+  fun setPixelSize(width: Int, height: Int) {
+    scroller.width = width.toString()
+    scroller.height = height.toString()
+  }
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   private var message: VSpan? = null
+  private val scroller = Scroller()
 
   //---------------------------------------------------
   // CONSTRUCTORS

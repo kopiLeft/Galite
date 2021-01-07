@@ -17,54 +17,81 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import com.vaadin.flow.component.KeyPressEvent
+
+import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.Text
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.details.Details
+import com.vaadin.flow.component.details.DetailsVariant
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Error type notification component.
  */
-open class VErrorNotification(title: String, message: String?) : VAbstractNotification(title, message) {
+open class VErrorNotification(title: String, message: String) : VAbstractNotification() {
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
-  override fun setButtons(locale: String?) {
-
-  }
-
-  fun focus() {
-
-  }
-
-  override val iconName: String?
-    get() = "exclamation-circle"
 
   /**
-   * Shows the error details. This is a related
-   * to the component component error set for this
-   * error notification.
+   * Creates the error notification footer.
    */
-  protected fun showErrorDetails() {
-
+  override fun createFooter() {
+    val footer = HorizontalLayout()
+    footer.add(details)
+    footer.add(close)
+    footer.isSpacing = true
+    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
+    footer.style.set("background-color", "AliceBlue")
+    footer.width = "99%"
+    footer.height = "35%"
+    footer.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, details)
+    footer.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, close)
+    add(footer)
   }
 
-  /**
-   * Hides the error details.
-   */
-  protected fun hideErrorDetails() {
-
-  }
-
-  fun onKeyPress(event: KeyPressEvent) {
-
+  override fun setButtons(locale: String) {
+    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
+    if (locale == "fr_FR") {
+      details = Details("Afficher les détails",
+                        Text("Les détails ici"))
+    } else if (locale == "en_GB") {
+      details = Details("Show details",
+                        Text("details here"))
+    }
+    close.addClickListener { hide() }
+    close.width = "20%"
+    close.height = "50%"
   }
 
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  private var detailsPopup: VErrorMessagePopup? = null
-  private var details: VInputButton? = null
-  private var close: VInputButton? = null
 
-  private var closeFocused = false
-  private var detailsFocused = false
+  var details = Details()
+  var close = VInputButton()
+  val listener: ComponentEventListener<ClickEvent<Button>>? = null
+  override val iconName: String
+    get() = "warning"
+
+  //-------------------------------------------------
+  // CONSTRUCTOR
+  //-------------------------------------------------
+
+  /**
+   * Creates the error widget.
+   */
+  init {
+    super.title = Label(title)
+    super.message = Label(message)
+    details.element.setAttribute("aria-label", "Click me")
+    details.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
+    super.initialize(title, message, locale)
+  }
 }
