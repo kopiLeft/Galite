@@ -156,7 +156,7 @@ object LocalizedProperties {
    */
   private val germanProperties: HashMap<String, String>
     get() {
-      val properties = HashMap<String, String> ()
+      val properties = HashMap<String, String>()
       properties["OK"] = "Ja"
       properties["CLOSE"] = "Schließen"
       properties["CANCEL"] = "Abbrechen"

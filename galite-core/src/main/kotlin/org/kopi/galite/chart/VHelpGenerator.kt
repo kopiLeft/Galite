@@ -40,7 +40,7 @@ class VHelpGenerator : VHelpGenerator() {
    */
   fun helpOnChart(name: String,
                   commands: Array<VCommand>?,
-                  columns: Array<VColumn?>?,
+                  columns: Array<VColumn>,
                   help: String?): String? {
     return try {
       val file = Utils.getTempFile(name, "htm")
@@ -69,8 +69,8 @@ class VHelpGenerator : VHelpGenerator() {
       printer.println("</TD>")
       printer.println("<TD>")
       printer.println("<DL>")
-      columns!!.forEach { column ->
-        column!!.helpOnColumn(this)
+      columns.forEach { column ->
+        column.helpOnColumn(this)
       }
       printer.println("</DL>")
       printer.println("</TD>")

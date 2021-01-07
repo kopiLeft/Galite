@@ -25,16 +25,14 @@ import org.kopi.galite.list.VBooleanCodeColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 
-
-/**
- *
- * @param     ident           the identifier of the type in the source file
- * @param     source          the qualified name of the source file defining the list
- * @param     names           the names of the fields
- * @param     codes           the codes of the fields
- */
 open class VBooleanCodeField : VCodeField {
 
+  /**
+   * @param     ident           the identifier of the type in the source file
+   * @param     source          the qualified name of the source file defining the list
+   * @param     names           the names of the fields
+   * @param     codes           the codes of the fields
+   */
   constructor(bufferSize: Int,
               ident: String,
               source: String,
@@ -44,6 +42,13 @@ open class VBooleanCodeField : VCodeField {
     this.codes = codes
   }
 
+
+  /**
+   * @param     ident           the identifier of the type in the source file
+   * @param     source          the qualified name of the source file defining the list
+   * @param     names           the names of the fields
+   * @param     codes           the codes of the fields
+   */
   constructor(bufferSize: Int,
               ident: String,
               source: String,

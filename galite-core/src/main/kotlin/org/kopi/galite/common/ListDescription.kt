@@ -26,9 +26,9 @@ import org.kopi.galite.domain.Domain
  * @param column                the column itself
  * @param type                the type of the column
  */
-class ListDescription<T: Comparable<T>?>(private val title: String,
-                                         private val column: String,
-                                         val type: Domain<T>) {
+class ListDescription<T : Comparable<T>?>(private val title: String,
+                                          private val column: String,
+                                          val type: Domain<T>) {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

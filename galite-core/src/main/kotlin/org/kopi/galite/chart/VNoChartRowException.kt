@@ -41,7 +41,7 @@ class VNoChartRowException : VRuntimeException {
    * Creates a new no row exception.
    * @param exec The exception cause.
    */
-  constructor(exc: Throwable) : super(exc)
+  constructor(exec: Throwable) : super(exec)
 
   /**
    * Creates a new no row exception.

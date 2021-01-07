@@ -97,9 +97,8 @@ class ListDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
   // ----------------------------------------------------------------------
   /**
    * Generate localization for this type.
-   * When overriden, subclasses MUST call it (because of lists).
+   * When overridden, subclasses MUST call it (because of lists).
    *
-   * @param     ident           the type name
    */
   override fun genLocalization(writer: LocalizationWriter) {
     // writer.genType(list) TODO: implement list type

@@ -146,7 +146,7 @@ abstract class VDictionaryForm : VForm, VDictionary {
     }
     block!!.setRecordChanged(0, false)
     for (i in fields.indices) {
-      fields[i].setSearchOperator((savedState!!.elementAt(i) as Int).toInt())
+      fields[i].setSearchOperator(savedState!!.elementAt(i).toInt())
     }
   }
 

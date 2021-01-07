@@ -29,9 +29,9 @@ import org.kopi.galite.report.UReport.UTable
 
 class PExport2CSV(table: UTable,
                   model: MReport,
-                  pconfig: PConfig,
+                  pConfig: PConfig,
                   title: String)
-  : PExport(table, model, pconfig, title), Constants {
+  : PExport(table, model, pConfig, title), Constants {
 
   override fun export(stream: OutputStream) {
     try {
@@ -56,12 +56,12 @@ class PExport2CSV(table: UTable,
   private fun writeData(data: Array<String?>) {
     try {
       var first = true
-      for (i in data.indices) {
+      data.forEach { element ->
         if (!first) {
           writer.write("\t")
         }
-        if (data[i] != null) {
-          writer.write(data[i])
+        if (element != null) {
+          writer.write(element)
         }
         first = false
       }

@@ -23,9 +23,9 @@ package org.kopi.galite.common
  * @param label                the string representation in the default locale
  * @param value                the value of this element
  */
-class CodeDescription<T: Comparable<T>?>(val ident: String,
-                                         val label: String,
-                                         val value: T) {
+class CodeDescription<T : Comparable<T>?>(val ident: String,
+                                          val label: String,
+                                          val value: T) {
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

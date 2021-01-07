@@ -28,7 +28,7 @@ class VFileHandler : FileHandler() {
     TODO("Not yet implemented")
   }
 
-  override fun chooseFile(window: UWindow, dir: File, defaultName: String): File {
+  override fun chooseFile(window: UWindow, dir: File, defaultName: String): File? {
     TODO("Not yet implemented")
   }
 

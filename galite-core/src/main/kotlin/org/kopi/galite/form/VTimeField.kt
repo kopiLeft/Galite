@@ -79,13 +79,13 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    if (o as? String == "") {
+  override fun checkType(rec: Int, s: Any?) {
+    if (s as? String == "") {
       setNull(rec)
     } else {
       var hours = -1
       var minutes = 0
-      val buffer = (o as? String) + '\u0000'
+      val buffer = (s as? String) + '\u0000'
       var bp = 0
       var state = 1
 

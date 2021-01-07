@@ -20,7 +20,7 @@ package org.kopi.galite.report
 
 abstract class VCalculateColumn {
   /**
-   * Intialisation of the calculation
+   * Initialisation of the calculation
    */
   abstract fun init()
 

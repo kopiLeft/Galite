@@ -53,11 +53,10 @@ abstract class VCodeMeasure protected constructor(ident: String,
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
-  protected override fun localize(parent: FieldLocalizer) {
-    val loc = parent.manager.getTypeLocalizer(source, type)
-    names = arrayOfNulls(idents.size)
-    for (i in names!!.indices) {
-      names!![i] = loc.getCodeLabel(idents[i])
+  override fun localize(loc: FieldLocalizer) {
+    val localizer = loc.manager.getTypeLocalizer(source, type)
+    names = Array(idents.size) { i ->
+      localizer.getCodeLabel(idents[i])
     }
   }
 
