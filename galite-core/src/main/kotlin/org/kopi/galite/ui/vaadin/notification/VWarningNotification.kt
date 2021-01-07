@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notif
+package org.kopi.galite.ui.vaadin.notification
 
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -24,17 +24,16 @@ import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
- * Information type notification component.
+ * Warning type notification component.
  */
-open class VInformationNotification(title: String, message: String) : VAbstractNotification() {
-
+open class VWarningNotification(title: String, message: String) : VAbstractNotification() {
 
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
 
   /**
-   * Creates the information notification footer.
+   * Creates the warning notification footer.
    */
   override fun createFooter() {
     val footer = HorizontalLayout()
@@ -48,7 +47,7 @@ open class VInformationNotification(title: String, message: String) : VAbstractN
   }
 
   override fun setButtons(locale: String) {
-    close =  VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
+    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener {  hide()  }
     close.width = "20%"
     close.height = "50%"
@@ -58,21 +57,21 @@ open class VInformationNotification(title: String, message: String) : VAbstractN
   // DATA MEMBERS
   //--------------------------------------------------
 
-  var close = VInputButton()
-  override val iconName: String
-    get() = "info-circle"
+  override val iconName: String?
+    get() = "exclamation-circle"
+
+  private var close = VInputButton()
 
   //--------------------------------------------------
   // CONSTRUCTOR
   //--------------------------------------------------
 
   /**
-   * Creates the information widget.
+   * Creates the warning widget.
    */
   init {
     super.title = Label(title)
     super.message = Label(message)
     super.initialize(title, message, locale)
   }
-
 }

@@ -15,11 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notif
+package org.kopi.galite.ui.vaadin.notification
 
 /**
- * Warning notification component.
+ * Information notification component.
+ *
  * @param title the warning notification title.
  * @param message the warning notification message.
  */
-class WarningNotification(title: String, message: String) : VWarningNotification(title, message)
+class InformationNotification(title: String, message: String) : VInformationNotification(title, message)
