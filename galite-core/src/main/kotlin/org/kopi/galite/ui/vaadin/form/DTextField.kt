@@ -30,6 +30,7 @@ open class DTextField(model: VFieldUI,
                       align: Int,
                       options: Int,
                       detail: Boolean) : DField(model, label, align, options, detail), UTextField {
+
   // --------------------------------------------------
   // CREATE FIELD UI
   // --------------------------------------------------

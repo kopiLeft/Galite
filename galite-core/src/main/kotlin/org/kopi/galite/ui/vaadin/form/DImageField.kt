@@ -26,8 +26,9 @@ class DImageField(model: VFieldUI,
                   options: Int,
                   width: Int,
                   height: Int,
-                  detail: Boolean) : DObjectField(model, label, align, options,
-                                                  detail), ImageFieldListener {
+                  detail: Boolean)
+  : DObjectField(model, label, align, options, detail), ImageFieldListener {
+
   override fun getObject(): Any? {
     TODO("Not yet implemented")
   }

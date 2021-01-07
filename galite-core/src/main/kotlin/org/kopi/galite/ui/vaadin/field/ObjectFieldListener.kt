@@ -24,6 +24,7 @@ import java.io.Serializable
  * about actions performed on an object field.
  */
 interface ObjectFieldListener : Serializable {
+
   /**
    * Performs a request to go to the next field.
    */

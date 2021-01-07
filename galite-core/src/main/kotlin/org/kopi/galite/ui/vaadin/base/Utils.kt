@@ -26,6 +26,7 @@ import org.kopi.galite.visual.VColor
  * Some vaadin version utilities to obtain images and resources.
  */
 object Utils : Utils() {
+
   //---------------------------------------------------
   // UTILS
   //---------------------------------------------------
@@ -34,7 +35,7 @@ object Utils : Utils() {
    * @param img Must be an image from resource theme path separator is "/"
    * @return An Image or null if not found.
    */
-  fun getImage(image: String): Image? {
+  fun getImage(image: String): Image {
     var img: Image? = cache[image]
     if (img == null) {
       img = getImageImpl(image)
@@ -146,7 +147,7 @@ object Utils : Utils() {
    * @param content The content (String or html).
    * @return The decoredted tooltip
    */
-  fun createTooltip(content: String): String {
+  fun createTooltip(content: String?): String {
     return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>$content</div>"
   }
 
@@ -155,7 +156,7 @@ object Utils : Utils() {
    * @param iconName The model icon name.
    * @return The font awesome icon.
    */
-  fun getFontAwesomeIcon(iconName: String): String? {
+  fun getFontAwesomeIcon(iconName: String?): String? {
     return pngToFontAwesomeMap[iconName]
   }
 
@@ -191,8 +192,8 @@ object Utils : Utils() {
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
   private const val RESOURCE_DIR = "org/kopi/galite"
-  val UKN_IMAGE: Image = Image("$THEME_DIR/unknown.png")
-  private val cache: Hashtable<String, Image?> = Hashtable<String, Image?>()
+  val UKN_IMAGE = Image("$THEME_DIR/unknown.png")
+  private val cache = Hashtable<String, Image>()
   private var pngToFontAwesomeMap = mutableMapOf<String, String>()
 
   init {

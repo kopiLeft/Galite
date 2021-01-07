@@ -24,6 +24,7 @@ import java.util.*
  * Registered objects are notified with actions performed on a date chooser.
  */
 interface DateChooserListener : Serializable {
+
   /**
    * Fired when a date has been chosen.
    *

@@ -23,6 +23,7 @@ import java.io.Serializable
  * Registered objects are notified with block performed actions.
  */
 interface BlockListener : Serializable {
+
   /**
    * Fired when the scroll position is changed.
    * @param value The new scroll position.

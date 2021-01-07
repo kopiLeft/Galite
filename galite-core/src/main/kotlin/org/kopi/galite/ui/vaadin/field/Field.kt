@@ -31,6 +31,7 @@ import com.vaadin.flow.component.HasEnabled
  * TODO: Implement this class with appropriate component
  */
 open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Component(), HasEnabled {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

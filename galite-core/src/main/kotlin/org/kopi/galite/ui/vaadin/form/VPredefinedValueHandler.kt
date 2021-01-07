@@ -35,6 +35,7 @@ import java.awt.Color
 class VPredefinedValueHandler(model: VFieldUI,
                               form: VForm,
                               field: VField) : AbstractPredefinedValueHandler(model, form, field) {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

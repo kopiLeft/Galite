@@ -34,6 +34,7 @@ class DChartHeaderLabel internal constructor(text: String?,
                                              help: String?,
                                              var fieldIndex: Int,
                                              model: VBlock.OrderModel) : DLabel(text, help), UChartLabel {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

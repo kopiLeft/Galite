@@ -84,12 +84,13 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
       sortedRecToDisplay[i] = -1
       i++
     }
-    while (cnt < model.displaySize && i < model.bufferSize) {
 
+    while (cnt < model.displaySize && i < model.bufferSize) {
       // sortedRecToDisplay: view pos not real record number
       sortedRecToDisplay[i] = if (model.isSortedRecordDeleted(i)) -1 else cnt++
       i++
     }
+
     while (i < model.bufferSize) {
       sortedRecToDisplay[i] = -1
       i++
@@ -137,6 +138,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   protected open fun refresh(force: Boolean) {
     var redisplay = false
     val recno: Int // row in view
+
     if (!model.isMulti()) {
       return
     }
@@ -151,6 +153,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
       }
       return
     }
+
     if (recno < sortedToprec) {
       // record to be displayed is above screen => redisplay
       sortedToprec = recno
@@ -170,6 +173,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
     } else {
       var displine = 0
       var i = sortedToprec
+
       while (i < recno) {
         if (!model.isSortedRecordDeleted(i)) {
           displine += 1
@@ -202,7 +206,9 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
         redisplay = true
       }
     }
+
     rebuildCachedInfos()
+
     if (redisplay) {
       for (i in columnViews.indices) {
         if (columnViews[i] != null) {
@@ -381,8 +387,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   protected val displayedFields: Int = model.displayedFields
 
   // cached infos
-  protected var sortedToprec // first record displayed
-          = 0
+  protected var sortedToprec = 0 // first record displayed
   private val sortedRecToDisplay: IntArray
   private val displayToSortedRec: IntArray
   //------------------------------------------------

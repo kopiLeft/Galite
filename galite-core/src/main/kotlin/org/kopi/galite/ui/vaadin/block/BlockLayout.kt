@@ -25,6 +25,7 @@ import com.vaadin.flow.component.HasComponents
  * and set a given component in a specified position.
  */
 interface BlockLayout : HasComponents {
+
   /**
    * Adds a component to this block layout.
    *

@@ -38,6 +38,7 @@ import com.vaadin.flow.component.Component
  * @param model The block model.
  */
 open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), BlockListener {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -118,7 +119,7 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
          * @throws VException Visual errors.
          */
         private val isActiveBlock: Boolean
-          private get() = (model.form.getActiveBlock() != null
+          get() = (model.form.getActiveBlock() != null
                   && model.form.getActiveBlock() === model)
 
         /**
@@ -169,9 +170,10 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
    * position is changed from the client side.
    * Thus, scroll bar position is not changed by server
    * side when it is changed from the client side
-   * @see {@link #refresh(boolean)
+   * @see refresh(boolean)
    */
   private var scrolling = false
+
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------

@@ -24,6 +24,7 @@ import java.io.Serializable
  * actions performed on a field.
  */
 interface FieldListener : Serializable {
+
   /**
    * Fired when increment button is clicked.
    */

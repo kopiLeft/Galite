@@ -29,8 +29,8 @@ import org.kopi.galite.ui.vaadin.block.BlockLayout
 /**
  * Grid based chart block implementation.
  */
-open class DGridBlock(parent: DForm, model: VBlock)
-  : DBlock(parent, model) {
+open class DGridBlock(parent: DForm, model: VBlock) : DBlock(parent, model) {
+
   // --------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------

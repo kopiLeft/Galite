@@ -31,6 +31,7 @@ import com.vaadin.flow.component.Component
  * TODO: Implement this with appropriate componenet
  */
 class DateChooser(date: Date?, reference: Component) : Component(), UComponent, DateChooserListener {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

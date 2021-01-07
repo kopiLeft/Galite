@@ -36,6 +36,7 @@ abstract class DObjectField(model: VFieldUI,
                             align: Int,
                             options: Int,
                             detail: Boolean) : DField(model, label, align, options, detail), ObjectFieldListener {
+
   // --------------------------------------------------
   // UI MANAGEMENT
   // --------------------------------------------------

@@ -28,9 +28,8 @@ class DRichTextEditor(model: VFieldUI,
                       align: Int,
                       options: Int,
                       height: Int,
-                      detail: Boolean) : DField(model, label!!, align, options,
-                                                detail), UTextField {
-
+                      detail: Boolean)
+  : DField(model, label!!, align, options, detail), UTextField {
 
   //---------------------------------------------------
   // IMPLEMENTATION

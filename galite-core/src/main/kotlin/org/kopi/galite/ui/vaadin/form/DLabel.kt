@@ -31,10 +31,10 @@ import org.kopi.galite.visual.VActor
  * @param help The label help.
  */
 open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-
   /**
    * Prepares the label's snapshot.
    * @param activ The field state.
@@ -43,7 +43,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     // TODO
   }
 
-  override fun init(text: String?, toolTip: String?) {
+  override fun init(text: String?, help: String?) {
     TODO()
   }
 
@@ -117,17 +117,13 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     }
     return description
   }
-  /**
-   * Returns the info text.
-   * @return The info text.
-   */
-  /**
-   * Sets the info text.
-   * @param info The info text.
-   */
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  /**
+   * The info text.
+   */
   var infoText: String? = null
     set(info) {
       TODO()

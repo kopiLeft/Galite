@@ -17,10 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
+import org.kopi.galite.form.BlockListener
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled
-import org.kopi.galite.form.BlockListener
-import java.util.*
 
 /**
  * The server side component of a simple block.
@@ -30,6 +30,7 @@ import java.util.*
  * TODO: implement Block with appropriate component
  */
 abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

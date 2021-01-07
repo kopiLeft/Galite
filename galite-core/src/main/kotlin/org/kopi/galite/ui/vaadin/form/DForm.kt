@@ -255,6 +255,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     val f = File(file)
     fileProduced(f, f.name)
   }
+
   //---------------------------------------------------
   // INNER CLASSES
   //---------------------------------------------------
@@ -263,6 +264,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * implementation of the [BlockListener]
    */
   private inner class BlockAccessHandler : BlockListener {
+
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
@@ -290,6 +292,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * implementation of the [BlockRecordListener]
    */
   private inner class BlockRecordHandler : BlockRecordListener {
+
     //---------------------------------------
     // IMPLEMENTATION
     //---------------------------------------
@@ -297,6 +300,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
       TODO()
     }
   }
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
