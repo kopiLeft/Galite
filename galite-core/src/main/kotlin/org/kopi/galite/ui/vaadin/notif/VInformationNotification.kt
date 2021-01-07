@@ -15,15 +15,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.notif
 
 import com.vaadin.flow.component.KeyPressEvent
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
- * Confirm type notification component.
+ * Information type notification component.
  */
-open class VConfirmNotification(title: String, message: String) : VAbstractNotification(title, message) {
+open class VInformationNotification(title: String, message: String) : VAbstractNotification(title, message) {
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
@@ -31,30 +31,19 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
 
   }
 
+  override val iconName: String
+    get() = "info-circle"
+
   fun focus() {
 
-  }
-
-  override val iconName: String?
-    get() = "question-circle"
-
-  override fun showGlassPane(): Boolean {
-    return true
-  }
-
-  override fun goBackToLastFocusedWindow(): Boolean {
-    return true
   }
 
   fun onKeyPress(event: KeyPressEvent) {
 
   }
 
-  //------------------------------------------------
+  //--------------------------------------------------
   // DATA MEMBERS
-  //------------------------------------------------
-  private var ok: VInputButton? = null
-  private var cancel: VInputButton? = null
-  private var okFocused = false
-  private var cancelFocused = false
+  //--------------------------------------------------
+  private var close: VInputButton? = null
 }

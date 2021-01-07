@@ -15,41 +15,36 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.notif
 
-import org.kopi.galite.ui.vaadin.common.VSpan
+import org.kopi.galite.ui.vaadin.base.VInputButton
+
+import com.vaadin.flow.component.KeyPressEvent
 
 /**
- * An error message popup window containing stack trace detail
- * for an server exception.
+ * Warning type notification component.
  */
-class VErrorMessagePopup {
-  //---------------------------------------------------
+open class VWarningNotification(title: String, message: String) : VAbstractNotification(title, message) {
+  //-------------------------------------------------
   // IMPLEMENTATION
-  //---------------------------------------------------
-  /**
-   * Creates the window content.
-   */
-  protected fun createContent() {
+  //-------------------------------------------------
+  override fun setButtons(locale: String?) {
+
   }
 
-  /**
-   * Sets the error message.
-   * @param message The error message.
-   */
-  fun setMessage(message: String?) {
-    this.message!!.setHtml(message)
+  protected override val iconName: String
+    get() = "warning"
+
+  fun focus() {
+
   }
 
-  //---------------------------------------------------
+  fun onKeyPress(event: KeyPressEvent) {
+
+  }
+
+  //--------------------------------------------------
   // DATA MEMBERS
-  //---------------------------------------------------
-  private var message: VSpan? = null
-
-  //---------------------------------------------------
-  // CONSTRUCTORS
-  //---------------------------------------------------
-  init {
-    createContent()
-  }
+  //--------------------------------------------------
+  private var close: VInputButton? = null
 }
