@@ -91,11 +91,12 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
       sheet!!.setColumnWidth(i, widths[i].toInt())
     }
 
-    sheet?.repeatingColumns = CellRangeAddress.valueOf("0:" + (columnCount - 1))
-    sheet?.repeatingRows = CellRangeAddress.valueOf("0:0")
+    sheet?.repeatingColumns = CellRangeAddress(-1, -1, 0, columnCount - 1)
+    sheet?.repeatingRows = CellRangeAddress(0, 0, -1, -1)
 
     val footer = sheet!!.footer
     val header = sheet!!.header
+
     header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
 
     footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
