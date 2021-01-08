@@ -1574,25 +1574,20 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         while(true) {
           try {
-            if (!alreadyProtected) { }
             val column = Column<String>(evalListTable_(), list!!.getColumn(0).column!!, VarCharColumnType())
 
             exists = !evalListTable_().select { column eq getSql(block!!.activeRecord)!! }.empty()
-            if (!alreadyProtected) { }
             break
           } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
+            if (alreadyProtected) {
               throw e
             }
           } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
+            if (alreadyProtected) {
               throw error
             }
           } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
+            if (alreadyProtected) {
               throw rte
             }
           }
@@ -1615,7 +1610,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         while(true) {
           try {
-            if (!alreadyProtected) { }
             val column = Column<String>(evalListTable_(), list!!.getColumn(0).column!!, VarCharColumnType())
             val query = evalListTable_().slice(column).select {
               column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
@@ -1624,22 +1618,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             count = query.count().toInt()
             if(count > 0) result = query.first()[column]
             if(count > 2) count = 2
-
-            if (!alreadyProtected) { }
             break
           } catch (e: SQLException) {
-            if (!alreadyProtected) {
-            } else {
+            if (alreadyProtected) {
               throw e
             }
           } catch (error: Error) {
-            if (!alreadyProtected) {
-            } else {
+            if (alreadyProtected) {
               throw error
             }
           } catch (rte: RuntimeException) {
-            if (!alreadyProtected) {
-            } else {
+            if (alreadyProtected) {
               throw rte
             }
           }
