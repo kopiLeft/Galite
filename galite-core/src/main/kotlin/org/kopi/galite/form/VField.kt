@@ -1757,14 +1757,21 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     if (getSearchType() == VConstants.STY_MANY) {
       expression = when (options and VConstants.FDO_SEARCH_MASK) {
-        VConstants.FDO_SEARCH_NONE -> (list!!.getColumn(0).column_ as Column<String>)
+        VConstants.FDO_SEARCH_NONE -> {
+          @Suppress("UNCHECKED_CAST")
+          list!!.getColumn(0).column_ as Column<String>
+        }
 
         VConstants.FDO_SEARCH_UPPER -> {
-          (list!!.getColumn(0).column_!! as Column<String>).upperCase()
+          @Suppress("UNCHECKED_CAST")
+          (list!!.getColumn(0).column_ as Column<String>).upperCase()
         }
-        VConstants.FDO_SEARCH_LOWER -> {
-          (list!!.getColumn(0).column_!! as Column<String>).lowerCase()
+
+        VConstants.FDO_SEARCH_LOWER ->  {
+          @Suppress("UNCHECKED_CAST")
+          (list!!.getColumn(0).column_ as Column<String>).lowerCase()
         }
+
         else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
       }
     }
