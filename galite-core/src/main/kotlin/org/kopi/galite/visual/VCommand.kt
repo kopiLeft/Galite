@@ -77,19 +77,15 @@ open class VCommand(private var mode: Int,
   }
 
   fun performAction() {
-    with(actor!!) {
-      number = trigger
-      handler = handler
-      performAction()
-    }
+    actor!!.number = trigger
+    actor!!.handler = handler
+    actor!!.performAction()
   }
 
   fun performBasicAction() {
-    with(actor!!) {
-      number = trigger
-      handler = handler
-      performBasicAction()
-    }
+    actor!!.number = trigger
+    actor!!.handler = handler
+    actor!!.performBasicAction()
   }
 
   /**

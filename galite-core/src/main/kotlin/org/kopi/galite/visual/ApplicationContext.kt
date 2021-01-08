@@ -260,7 +260,7 @@ abstract class ApplicationContext {
           writer.println("Exception:           ")
           reason.printStackTrace(writer)
           failureID = try {
-            val write: CharArrayWriter = CharArrayWriter()
+            val write = CharArrayWriter()
             reason.printStackTrace(PrintWriter(write))
             " " + write.toString().hashCode()
           } catch (e: Exception) {
@@ -279,7 +279,7 @@ abstract class ApplicationContext {
         }
         if (logFile != null && writeLog) {
           try {
-            val writer: PrintWriter = PrintWriter(FileWriter(logFile, true))
+            val writer = PrintWriter(FileWriter(logFile, true))
             writer.println()
             writer.println()
             try {

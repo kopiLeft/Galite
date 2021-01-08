@@ -66,7 +66,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {}
+  override fun checkType(rec: Int, s: Any?) {}
 
   override fun getType(): Int = MDL_FLD_IMAGE
 

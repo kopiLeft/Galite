@@ -36,7 +36,7 @@ abstract class VListColumn(
    * Returns the column alignment
    */
   override fun getAlign(): Int {
-    return align;
+    return align
   }
 
   /**

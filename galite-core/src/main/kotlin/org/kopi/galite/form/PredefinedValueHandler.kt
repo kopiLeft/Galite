@@ -31,10 +31,10 @@ interface PredefinedValueHandler : Serializable {
 
   fun selectFromList(list: Array<VListColumn?>, values: Array<Array<Any?>>, predefinedValues: Array<String>): String?
 
-  fun selectColor(color: Color): Color
+  fun selectColor(color: Color): Color?
 
   fun selectDate(date: Date): Date
 
   @Throws(VExecFailedException::class)
-  fun selectImage(): ByteArray
+  fun selectImage(): ByteArray?
 }

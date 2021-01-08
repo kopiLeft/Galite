@@ -19,7 +19,7 @@
 package org.kopi.galite.visual
 
 /**
- * This class is a package redefinition of RuntimeException that remaind
+ * This class is a package redefinition of RuntimeException that remained
  * of a stack of exception
  * Warning: Throwing such an exception will always generate a FATAL ERROR
  * and will close the current form.

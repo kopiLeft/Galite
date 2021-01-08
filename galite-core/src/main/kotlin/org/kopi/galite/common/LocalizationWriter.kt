@@ -91,7 +91,7 @@ open class LocalizationWriter {
     list?.genLocalization(this)
   }
 
-  fun <T: Comparable<T>?> genCodeType(codes: List<CodeDescription<T>>) {
+  fun <T : Comparable<T>?> genCodeType(codes: List<CodeDescription<T>>) {
     val self = Element("code")
     pushNode(self)
     codes.forEach { code ->
@@ -114,7 +114,7 @@ open class LocalizationWriter {
     peekNode(null).addContent(self)
   }
 
-  fun <T: Comparable<T>?> genFieldList(columns: Array<ListDescription<T>>) {
+  fun <T : Comparable<T>?> genFieldList(columns: Array<ListDescription<T>>) {
     val self = Element("list")
     pushNode(self)
     for (i in columns.indices) {

@@ -83,7 +83,7 @@ class LineBreaker : Utils() {
             if (source != null) buildString {
               val length = source.length
               for (start in 0 until length step col) {
-                val line = source.substring(start, Math.min(start + col, length))
+                val line = source.substring(start, (start + col).coerceAtMost(length))
                 var last = -1
                 var i = line.length - 1
                 while (last == -1 && i >= 0) {

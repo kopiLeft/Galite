@@ -46,7 +46,7 @@ class HylaFAXPrinter(private val faxHost: String,
   /**
    * Print a file and return the output of the command
    */
-  override fun print(printdata: PrintJob): String {
+  override fun print(data: PrintJob): String {
     // get down to business, send the FAX already
 
     // List with names of temporary files on the server side
@@ -66,7 +66,7 @@ class HylaFAXPrinter(private val faxHost: String,
       }
 
       // add fax document
-      documents.add(faxClient.putTemporary(printdata.inputStream))
+      documents.add(faxClient.putTemporary(data.inputStream))
 
       // put attachments to server
       attachments?.let {

@@ -25,25 +25,25 @@ import java.io.Serializable
  * Print options
  *
  * // Paper
- * @param papertype   differents formats of paper
- * @param paperlayout the layout of the paper (Portrait or Landscape)
+ * @param paperType   different formats of paper
+ * @param paperLayout the layout of the paper (Portrait or Landscape)
  * // Margins
- * @param topmargin    top sheet margin in points
- * @param bottommargin bottom sheet margin in points
- * @param leftmargin   left sheet margin in points
- * @param rightmargin  right sheet margin in points
- * @param headermargin header sheet margin in points
- * @param footermargin footer sheet margin in points
+ * @param topMargin    top sheet margin in points
+ * @param bottomMargin bottom sheet margin in points
+ * @param leftMargin   left sheet margin in points
+ * @param rightMargin  right sheet margin in points
+ * @param headerMargin header sheet margin in points
+ * @param footerMargin footer sheet margin in points
  * @param imageWidth   The image width to be used when exporting as image format.
  * @param imageHeight  The image height to be used when exporting as image format.
  */
-class VPrintOptions(val papertype: Int = PPaperType.PPT_A4.code,
-                    val paperlayout: String = "Landscape",
-                    val topmargin: Int = 30,
-                    val bottommargin: Int = 30,
-                    val leftmargin: Int = 30,
-                    val rightmargin: Int = 30,
-                    val headermargin: Int = 5,
-                    val footermargin: Int = 10,
+class VPrintOptions(val paperType: Int = PPaperType.PPT_A4.code,
+                    val paperLayout: String = "Landscape",
+                    val topMargin: Int = 30,
+                    val bottomMargin: Int = 30,
+                    val leftMargin: Int = 30,
+                    val rightMargin: Int = 30,
+                    val headerMargin: Int = 5,
+                    val footerMargin: Int = 10,
                     val imageWidth: Int = 900,
                     val imageHeight: Int = 500) : Serializable

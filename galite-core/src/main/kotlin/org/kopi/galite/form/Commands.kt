@@ -530,7 +530,7 @@ object Commands : VConstants {
    */
   fun insertLine(b: VBlock) {
     assert(b.isMulti()) { "The command InsertLine can be used only with a multi block." }
-    assert(b == b.form.getActiveBlock()) { b.name.toString() + " is not the active block. (" + b.form.getActiveBlock()?.name + ")" }
+    assert(b == b.form.getActiveBlock()) { b.name + " is not the active block. (" + b.form.getActiveBlock()?.name + ")" }
     val recno: Int = b.activeRecord
 
     b.leaveRecord(true)

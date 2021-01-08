@@ -20,8 +20,6 @@ package org.kopi.galite.form.dsl
 import java.awt.Point
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
@@ -43,7 +41,6 @@ import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.WindowController
 
 /**
@@ -87,10 +84,10 @@ open class FormBlock(var buffer: Int,
   private var displayedFields = 0
   lateinit var form: Form
 
-  /** Blocks's fields. */
+  /** Block's fields. */
   val blockFields = mutableListOf<FormField<*>>()
 
-  /** Blocks's commands. */
+  /** Block's commands. */
   private val blockCommands = mutableListOf<Command>()
 
   /** Domains of fields added to this block. */
@@ -103,7 +100,7 @@ open class FormBlock(var buffer: Int,
   /**
    * Adds triggers to this form block. The block triggers are the same as form triggers on the block level.
    * There are actually a set of block triggers you can use to execute actions once they are fired.
-   * see [BlockTrigger] to get the list of supported triggers.
+   * objects extending [BlockTriggerEvent] are the supported triggers.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
@@ -235,9 +232,9 @@ open class FormBlock(var buffer: Int,
                                                     access: Int,
                                                     position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
-    if(domain.type is CodeDomain<T>) {
+    if (domain.type is CodeDomain<T>) {
       ownDomains.add(domain)
-    } else if(domain.type is ListDomain<T>) {
+    } else if (domain.type is ListDomain<T>) {
       TODO()
     }
     val field = FormField(this, domain, blockFields.size, access, position)
@@ -375,7 +372,7 @@ open class FormBlock(var buffer: Int,
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
 
-  fun positionField(field: FormField<*>): FormPosition? {
+  fun positionField(field: FormField<*>): FormPosition {
     return FormCoordinatePosition(++displayedFields)
   }
 
@@ -416,6 +413,20 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Resets current block
+   */
+  fun resetBlock() {
+    Commands.resetBlock(vBlock)
+  }
+
+  /**
+   * * Loads block from database
+   */
+  fun load() {
+    vBlock.load()
+  }
+
+  /**
    * Menu query block, fetches selected record.
    */
   fun DictionaryForm.recursiveQuery() {
@@ -427,15 +438,11 @@ open class FormBlock(var buffer: Int,
   // ----------------------------------------------------------------------
 
   override fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genBlock(ident,
-                                                title,
-                                                help,
-                                                indices.toTypedArray(),
-                                                blockFields.toTypedArray())
+    (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, blockFields)
   }
 
   fun showChart(chart: Chart) {
-    WindowController.windowController.doNotModal(chart);
+    WindowController.windowController.doNotModal(chart)
   }
 
   /** The block model */
@@ -445,9 +452,9 @@ open class FormBlock(var buffer: Int,
   fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
 
     fun getFieldsCommands(): List<Command> {
-      return blockFields.map {
+      return blockFields.mapNotNull {
         it.commands
-      }.filterNotNull().flatten()
+      }.flatten()
     }
 
     return object : VBlock(vForm) {
@@ -468,9 +475,17 @@ open class FormBlock(var buffer: Int,
         }
 
         // FIELD TRIGGERS
-        blockFields.forEach {
+        blockFields.forEach { field ->
           val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-          // TODO : Add field triggers here
+
+            field.triggers.forEach { trigger ->
+              for (i in VConstants.TRG_TYPES.indices) {
+                if (trigger.events shr i and 1 > 0) {
+                  fieldTriggerArray[i] = i
+                  super.triggers[i] = trigger
+                }
+              }
+            }
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
@@ -495,20 +510,6 @@ open class FormBlock(var buffer: Int,
 
       init {
         //TODO ----------begin-------------
-        /** Used actors in form*/
-        val usedActors = form.actors.map { vActor ->
-          vActor?.actorIdent to vActor
-        }.toMap()
-
-        super.commands = blockCommands.map {
-          VCommand(it.mode,
-                   this,
-                   usedActors[it.item.ident],
-                   -1,
-                   it.name!!,
-                   it.action
-          )
-        }.toTypedArray()
 
         handleTriggers(this@FormBlock.triggers)
 
@@ -524,15 +525,18 @@ open class FormBlock(var buffer: Int,
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.displayedFields = this@FormBlock.displayedFields
+        super.commands = blockCommands.map { command ->
+          command.buildModel(this, form.actors)
+        }.toTypedArray()
         super.name = ident
         super.options = blockOptions
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()
-        fields = blockFields.map {
-          it.vField.also {
-            if(it is VCodeField) {
-              it.source = super.source
+        fields = blockFields.map { formField ->
+          formField.vField.also {
+            if (formField.domain is CodeDomain<*>) {
+              (it as VCodeField).source = super.source
             }
           }
         }.toTypedArray()

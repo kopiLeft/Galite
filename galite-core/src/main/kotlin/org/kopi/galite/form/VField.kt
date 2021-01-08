@@ -20,7 +20,7 @@ package org.kopi.galite.form
 
 import java.awt.Color
 import java.io.InputStream
-import java.sql.SQLException
+
 import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
@@ -59,6 +59,7 @@ import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VModel
+import java.sql.SQLException
 
 /**
  * A field is a column in the the database (a list of rows)
@@ -217,7 +218,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @param     parent         the caller localizer
    */
   fun localize(parent: BlockLocalizer) {
-    val loc = parent.getFieldLocalizer(name!!)
+    val loc = parent.getFieldLocalizer(name)
 
     label = loc.getLabel()
     toolTip = loc.getHelp()
@@ -671,6 +672,103 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         if (getSearchOperator() == VConstants.SOP_EQ) VConstants.STY_EXACT else VConstants.STY_MANY
       } else {
         VConstants.STY_MANY
+      }
+    }
+  }
+
+  open fun getSearchCondition_(column: ExpressionWithColumnType<*>): Op<Boolean>? {
+
+    return if (isNull(block!!.activeRecord)) {
+      return when (getSearchOperator()) {
+        VConstants.SOP_EQ -> null
+        VConstants.SOP_NE -> Op.build { column.isNotNull() }
+        else -> Op.build { column.isNull() }
+      }
+    } else {
+      val operatorName = VConstants.OPERATOR_NAMES[getSearchOperator()]
+      var operand = getSql(block!!.activeRecord)
+
+      when (options and VConstants.FDO_SEARCH_MASK) {
+        VConstants.FDO_SEARCH_NONE -> {
+        }
+        VConstants.FDO_SEARCH_UPPER -> operand = operand!!.toUpperCase()
+        VConstants.FDO_SEARCH_LOWER -> operand = operand!!.toLowerCase()
+        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+      }
+
+      if (operand!!.indexOf('*') == -1) {
+        // nothing to change: standard case
+        when (operatorName) {
+          "=" -> Op.build {
+            column as Column<String>
+            column eq operand!!
+          }
+          "<" -> Op.build {
+            column less operand!!
+          }
+          ">" -> Op.build {
+            column greater operand!!
+          }
+          "<=" -> Op.build {
+            column lessEq operand!!
+          }
+          ">=" -> Op.build {
+            column greaterEq operand!!
+          }
+          "<>" -> Op.build {
+            column as Column<String>
+            column neq operand!!
+          }
+          else -> null
+        }?.let {
+          return it
+        }
+      } else {
+        when (getSearchOperator()) {
+          VConstants.SOP_EQ -> {
+            operand = operand.replace('*', '%')
+            Op.build {
+              column as Column<String>
+              column like operand!!
+            }
+          }
+          VConstants.SOP_NE -> {
+            operand = operand.replace('*', '%')
+            Op.build {
+              column as Column<String>
+              column notLike operand!!
+            }
+          }
+          VConstants.SOP_GE -> {
+            // remove everything after at '*'
+            operand = operand.substring(0, operand.indexOf('*'))
+            Op.build {
+              column greaterEq operand!!
+            }
+          }
+          VConstants.SOP_GT -> {
+            // remove everything after at '*'
+            operand = operand.substring(0, operand.indexOf('*'))
+            Op.build {
+              column greater operand!!
+            }
+          }
+          VConstants.SOP_LE -> {
+            // replace substring starting at '*' by highest (ascii) char
+            operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
+            Op.build {
+              column lessEq operand!!
+            }
+          }
+          VConstants.SOP_LT -> {
+            // replace substring starting at '*' by highest (ascii) char
+            operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
+            Op.build {
+              column less operand
+            }
+          }
+          else -> throw InconsistencyException()
+        }.also { return it }
       }
     }
   }
@@ -1740,9 +1838,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }*/
   }
-  open fun getSearchCondition_(column: ExpressionWithColumnType<*>): Op<Boolean> {
-    TODO()
-  }
 
   /**
    * Checks that field value exists in list
@@ -1776,7 +1871,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }
 
-    val query = evalListTable_().slice(columns).select(getSearchCondition_(expression!!)).orderBy(list!!.getColumn(0).column_!!)
+    val query = evalListTable_().slice(columns).select(getSearchCondition_(expression!!)!!).orderBy(list!!.getColumn(0).column_!!)
 
     val result = displayQueryList(query.toString(), list!!.columns)
 

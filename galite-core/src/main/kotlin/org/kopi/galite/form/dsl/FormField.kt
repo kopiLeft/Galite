@@ -19,14 +19,22 @@ package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-
+import org.joda.time.DateTime
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.field.Field
+import org.kopi.galite.field.FieldBooleanTriggerEvent
+import org.kopi.galite.field.FieldIntTriggerEvent
+import org.kopi.galite.field.FieldObjectTriggerEvent
+import org.kopi.galite.field.FieldProtectedTriggerEvent
+import org.kopi.galite.field.FieldTriggerEvent
+import org.kopi.galite.field.FieldVoidTriggerEvent
 import org.kopi.galite.form.VBooleanCodeField
 import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
@@ -77,7 +85,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command>? = null
-  var triggers: Array<Trigger>? = null
+  var triggers = mutableListOf<Trigger>()
   var alias: String? = null
   var initialValues = mutableMapOf<Int, T?>()
   var value: T? = null
@@ -98,26 +106,26 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     }
 
   /** the minimum value that cannot exceed  */
-  private var min : Int = Int.MIN_VALUE
+  private var min: Int = Int.MIN_VALUE
 
   /** the maximum value that cannot exceed  */
-  private var max : Int = Int.MAX_VALUE
+  private var max: Int = Int.MAX_VALUE
 
   /**
    * Sets the minimum value of an Int field.
    */
-  var <U> FormField<U>.minValue : Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.minValue: Int where U : Comparable<U>?, U : Number?
     get() {
       return min
     }
-  set(value) {
-    min = value
-  }
+    set(value) {
+      min = value
+    }
 
   /**
    * Sets the maximum value of an Int field.
    */
-  var <U> FormField<U>.maxValue : Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.maxValue: Int where U : Comparable<U>?, U : Number?
     get() {
       return max
     }
@@ -227,6 +235,81 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
+  /**
+   * Adds triggers to this field
+   *
+   * @param fieldTriggerEvents    the trigger events to add
+   * @param method                the method to execute when trigger is called
+   */
+  private fun <T> trigger(fieldTriggerEvents: Array<out FieldTriggerEvent>, method: () -> T): Trigger {
+    val event = fieldEventList(fieldTriggerEvents)
+    val fieldAction = Action(null, method)
+    val trigger = FormTrigger(event, fieldAction)
+
+    triggers.add(trigger)
+    return trigger
+  }
+
+  private fun fieldEventList(fieldTriggerEvents: Array<out FieldTriggerEvent>): Long {
+    var self = 0L
+
+    fieldTriggerEvents.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
+  }
+
+  /**
+   * Adds void triggers to this field
+   *
+   * @param fieldTriggerEvents  the trigger event to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds boolean triggers to this field
+   *
+   * @param fieldTriggerEvents  the trigger events to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldBooleanTriggerEvent, method: () -> Boolean): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds protected triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldProtectedTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds object triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldObjectTriggerEvent, method: () -> Any): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds int triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldIntTriggerEvent, method: () -> Int): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
   // TODO add Fixed types
   /**
    * The field model based on the field type.
@@ -247,7 +330,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
           Month::class -> VMonthField(block.buffer)
           Week::class -> VWeekField(block.buffer)
           Time::class -> VTimeField(block.buffer)
-          Timestamp::class -> VTimestampField(block.buffer)
+          Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
           else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
         }
       }

@@ -36,7 +36,7 @@ class PropertyException : Exception {
   /**
    * Constructs a new exception with the specified cause and a detail message
    *
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted)
    */
   constructor(cause: Throwable) : super(cause)
 
@@ -44,7 +44,7 @@ class PropertyException : Exception {
    * Constructs a new exception with the specified detail message and cause.
    *
    * @param        message                the associated message
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted)
    */
   constructor(message: String, cause: Throwable) : super(message, cause)
 

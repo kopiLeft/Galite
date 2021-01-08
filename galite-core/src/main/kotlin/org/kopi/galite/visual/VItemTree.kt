@@ -23,7 +23,6 @@ import java.util.Locale
 
 import javax.swing.tree.TreeNode
 
-import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
 import org.kopi.galite.l10n.LocalizationManager
@@ -42,7 +41,7 @@ import org.kopi.galite.util.base.InconsistencyException
  *        4 : Multi selection with default value
  * @param isLocalised if true, enable item localisation
  * @param itemTreeManager the tree save manager
- * @param isRemoveDescendantsAllowed if true, remove item descendants when removig item
+ * @param isRemoveDescendantsAllowed if true, remove item descendants when removing item
  * @param nameLength max length of item name
  * @param localisedNameLength max length of item localisation
  * @param descriptionLength max length of item description
@@ -121,7 +120,7 @@ class VItemTree(rootName: String?,
   /**
    * Returns the actor having the given number.
    */
-  override fun getActor(number: Int): VActor = treeActors[number]!!
+  override fun getActor(at: Int): VActor = treeActors[at]!!
 
   /**
    * Creates a new actor
@@ -183,7 +182,7 @@ class VItemTree(rootName: String?,
         itemTreeManager.save()
         unsetWaitInfo()
         isChanged = false
-        currentDisplay?.setTree();
+        currentDisplay?.setTree()
       }
       else -> super.executeVoidTrigger(key)
     }
@@ -266,7 +265,7 @@ class VItemTree(rootName: String?,
   /**
    * The removed items list.
    */
-  val removedItems: List<Item> = ArrayList()
+  val removedItems = mutableListOf<Item>()
 
   init {
     rootName?.let { setTitle(it) }

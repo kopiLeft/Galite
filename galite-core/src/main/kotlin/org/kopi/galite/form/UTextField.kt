@@ -28,7 +28,7 @@ interface UTextField : UField {
    * Returns the text field content.
    * @return The text field content.
    */
-  fun getText(): String
+  fun getText(): String?
 
   /**
    * Sets if the field has a critical value.

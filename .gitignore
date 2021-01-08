@@ -31,3 +31,15 @@ hs_err_pid*
 # Gradle
 .gradle
 build
+
+# Files by vaadin-gradle-plugin
+galite-tests/node_modules/
+galite-tests/out
+galite-tests/package.json
+galite-tests/pnpmfile.js
+galite-tests/pnpm-lock.yaml
+galite-tests/target
+galite-tests/tsconfig.json
+galite-tests/types.d.ts
+galite-tests/webpack.config.js
+galite-tests/webpack.generated.js
