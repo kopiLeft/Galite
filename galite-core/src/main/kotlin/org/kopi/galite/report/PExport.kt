@@ -154,9 +154,9 @@ abstract class PExport(val table: UTable,
       // if the sums are at the end, at the the first row of the group
       // the group information
       var child = row
-      var parent = row.parent as VReportRow
+      var parent = row.parent as? VReportRow
 
-      while (parent.firstChild === child) {
+      while (parent != null && parent.firstChild === child) {
         index = 0
         for (i in 0 until model.getAccessibleColumnCount()) {
           val visibleColumn: Int = table.convertColumnIndexToModel(i)
@@ -177,7 +177,7 @@ abstract class PExport(val table: UTable,
           }
         }
         child = parent
-        parent = parent.parent as VReportRow
+        parent = parent.parent as? VReportRow
       }
     }
     exportRow(row.level - minLevel, newRow, newRowOrig, alignments)
