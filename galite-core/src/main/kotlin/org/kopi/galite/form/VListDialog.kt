@@ -50,7 +50,7 @@ class VListDialog(list: Array<VListColumn?>,
   constructor(list: Array<VListColumn?>,
               data: Array<Array<Any?>>,
               rows: Int,
-              newForm: VDictionary) : this(list, data, makeIdentArray(rows), rows, false) {
+              newForm: VDictionary?) : this(list, data, makeIdentArray(rows), rows, false) {
     this.newForm = newForm
   }
 
