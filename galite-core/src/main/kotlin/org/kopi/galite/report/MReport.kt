@@ -748,9 +748,9 @@ class MReport : Constants, Serializable {
       var currentRow = visibleRows!![row]
 
       while (currentRow!!.level < level) {
-        currentRow = currentRow.parent as VReportRow
+        currentRow = currentRow.parent as? VReportRow
       }
-      if (currentRow is VGroupRow) !currentRow.isUnfolded(level) else true
+      if (currentRow is VGroupRow?) !currentRow.isUnfolded(level) else true
     } else {
       false
     }
@@ -807,9 +807,9 @@ class MReport : Constants, Serializable {
       var currentRow = visibleRows!![row]
 
       while (currentRow!!.level < level) {
-        currentRow = currentRow.parent as VReportRow
+        currentRow = currentRow.parent as? VReportRow
       }
-      if (currentRow is VGroupRow) {
+      if (currentRow is VGroupRow?) {
         currentRow.setChildNodesInvisible(level)
       }
       updateTableModel()
