@@ -20,12 +20,14 @@ import java.util.Locale
 
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.chart.VChartType
+import org.kopi.galite.chart.VColumnFormat
 import org.kopi.galite.common.CHARTTYPE
 import org.kopi.galite.common.INITCHART
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.visual.VColor
 
-object ChartSample: Chart()  {
+object ChartSample: Chart() {
   override val locale = Locale.FRANCE
   override val title = "area/population per city"
   override val help = "This chart presents the area/population per city"
@@ -50,6 +52,10 @@ object ChartSample: Chart()  {
 
   val area = measure(Domain<Int?>(10)) {
     label = "area (ha)"
+
+    color {
+      VColor.GREEN
+    }
   }
 
   val population = measure(Domain<Int?>(10)) {
@@ -58,6 +64,14 @@ object ChartSample: Chart()  {
 
   val city = dimension(Domain<String>(10)) {
     label = "dimension"
+
+    format {
+      object : VColumnFormat() {
+        override fun format(value: Any?): String {
+          return (value as String).toUpperCase()
+        }
+      }
+    }
   }
 
   // You can either change the chart type in INIT or CHARTTYPE trigger
