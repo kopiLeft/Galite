@@ -26,7 +26,7 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.report.Report
 import org.kopi.galite.tests.ui.vaadin.base.UITestBase
 import org.kopi.galite.ui.vaadin.report.DReport
@@ -93,8 +93,8 @@ class SimpleReportTest : VerticalLayout() {
   /**
    * String type Domain
    */
-  class StringTestType : Domain<String>(5) {
-    override val type = code {
+  class StringTestType : CodeDomain<String>() {
+    init {
       this["cde1"] = "test1"
     }
   }
@@ -102,8 +102,8 @@ class SimpleReportTest : VerticalLayout() {
   /**
    * Long type Domain
    */
-  class LongTestType : Domain<Long>(5) {
-    override val type = code {
+  class LongTestType : CodeDomain<Long>() {
+    init {
       this["cde1"] = 1
     }
   }

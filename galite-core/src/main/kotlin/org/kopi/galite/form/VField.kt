@@ -27,6 +27,7 @@ import javax.swing.event.EventListenerList
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
@@ -1584,8 +1585,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           if (!alreadyProtected) {
           }
-          SELECT_IS_IN_LIST.replace("$2", evalListTable())
-          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
+          // SELECT_IS_IN_LIST.replace("$2", evalListTable()) TODO
+          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!.name) // TODO
           SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
           transaction {
             exec(SELECT_IS_IN_LIST) { exists = it.next() }
@@ -1627,8 +1628,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           if (!alreadyProtected) {
           }
-          SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
-          SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
+          // SELECT_MATCHING_STRINGS.replace("$2", evalListTable()) TODO
+          SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!.name) // TODO
           SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
           transaction {
             exec(SELECT_MATCHING_STRINGS) {
@@ -2030,9 +2031,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the list table.
    */
-  private fun evalListTable(): String {
+  private fun evalListTable(): ColumnSet {
     return try {
-      block!!.executeObjectTrigger(list!!.table) as String
+      list!!.table
     } catch (e: VException) {
       throw InconsistencyException()
     }

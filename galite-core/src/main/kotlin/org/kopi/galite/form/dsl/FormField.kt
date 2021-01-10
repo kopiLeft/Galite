@@ -37,6 +37,7 @@ import org.kopi.galite.field.FieldTriggerEvent
 import org.kopi.galite.field.FieldVoidTriggerEvent
 import org.kopi.galite.form.VBooleanCodeField
 import org.kopi.galite.form.VBooleanField
+import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
@@ -316,7 +317,33 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    */
   val vField: VField by lazy {
     when {
-      domain.type == null -> {
+      domain is CodeDomain -> {
+        val type = domain as CodeDomain<*>
+        when (domain.kClass) {
+          Boolean::class -> VBooleanCodeField(block.buffer,
+                                              domain.ident,
+                                              block.sourceFile,
+                                              type.codes.map { it.ident }.toTypedArray(),
+                                              type.codes.map { it.value as? Boolean }.toTypedArray())
+          Fixed::class -> VFixnumCodeField(block.buffer,
+                                           domain.ident,
+                                           block.sourceFile,
+                                           type.codes.map { it.ident }.toTypedArray(),
+                                           type.codes.map { it.value as? Fixed }.toTypedArray())
+          Int::class, Long::class -> VIntegerCodeField(block.buffer,
+                                                       domain.ident,
+                                                       block.sourceFile,
+                                                       type.codes.map { it.ident }.toTypedArray(),
+                                                       type.codes.map { it.value as? Int }.toTypedArray())
+          String::class -> VStringCodeField(block.buffer,
+                                            domain.ident,
+                                            block.sourceFile,
+                                            type.codes.map { it.ident }.toTypedArray(),
+                                            type.codes.map { it.value as? String }.toTypedArray())
+          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+        }
+      }
+      else -> {
         when (domain.kClass) {
           Int::class, Long::class -> VIntegerField(block.buffer, domain.width ?: 0, min, max)
           String::class -> VStringField(block.buffer,
@@ -334,49 +361,27 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
           else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
         }
       }
-      domain.type is CodeDomain -> {
-        val type = domain.type as CodeDomain<*>
-        when (domain.kClass) {
-          Boolean::class -> VBooleanCodeField(block.buffer,
-                                              type.ident,
-                                              block.sourceFile,
-                                              type.codes.map { it.ident }.toTypedArray(),
-                                              type.codes.map { it.value as? Boolean }.toTypedArray())
-          Fixed::class -> VFixnumCodeField(block.buffer,
-                                           type.ident,
-                                           block.sourceFile,
-                                           type.codes.map { it.ident }.toTypedArray(),
-                                           type.codes.map { it.value as? Fixed }.toTypedArray())
-          Int::class, Long::class -> VIntegerCodeField(block.buffer,
-                                                       type.ident,
-                                                       block.sourceFile,
-                                                       type.codes.map { it.ident }.toTypedArray(),
-                                                       type.codes.map { it.value as? Int }.toTypedArray())
-          String::class -> VStringCodeField(block.buffer,
-                                            type.ident,
-                                            block.sourceFile,
-                                            type.codes.map { it.ident }.toTypedArray(),
-                                            type.codes.map { it.value as? String }.toTypedArray())
-          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-        }
-      }
-      domain is ListDomain -> {
-        TODO()
-      }
-      else -> {
-        TODO()
-      }
     }
   }
 
-  fun setInfo() {
+  fun setInfo(source: String) {
+    val list = if(domain is ListDomain) {
+      (domain as ListDomain).list.buildListModel(source)
+    } else {
+      null
+    }
+
+    if(domain is CodeDomain) {
+      (vField as VCodeField).source = source
+    }
+
     vField.setInfo(
             getIdent(),
             fieldIndex,
             posInArray,
             options,
             access,
-            null, // TODO
+            list, // TODO
             columns?.getColumnsModels()?.toTypedArray(), // TODO
             columns?.index?.indexNumber ?: 0,
             columns?.priority ?: 0,

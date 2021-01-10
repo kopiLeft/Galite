@@ -20,7 +20,7 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
@@ -37,8 +37,8 @@ object DaysBlock : FormBlock(1, 1, "DaysBlock", "Days block") {
   }
 }
 
-object Days: Domain<Int>(20) {
-  override val type = code {
+object Days: CodeDomain<Int>() {
+  init {
     this["Sunday"] = 1
     this["Monday"] = 2
     this["Tuesday"] = 3
