@@ -24,7 +24,7 @@ import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormWithDomains: Form() {
+object FormWithCodeDomains: Form() {
   override val locale = Locale.FRANCE
   override val title = "form to test domains"
   val testBlock = insertBlock(DaysBlock)
@@ -50,5 +50,5 @@ object Days: CodeDomain<Int>() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithDomains)
+  Application.runForm(formName = FormWithCodeDomains)
 }

@@ -17,15 +17,17 @@
 
 package org.kopi.galite.tests.form
 
-import org.jetbrains.exposed.sql.select
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.select
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.AutoComplete
 import org.kopi.galite.domain.ListDomain
+import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.Key
 
 object FormWithListDomains: Form() {
   override val locale = Locale.FRANCE
@@ -49,7 +51,7 @@ object UsersList: ListDomain<Int>(20) {
   )
 
   override val access = {
-    FormWithList
+    SomeDictionnaryForm
   }
 
   val autoComplete = complete(AutoComplete.LEFT, 10)
@@ -62,6 +64,32 @@ object UsersList: ListDomain<Int>(20) {
     this["ZEICHEN"] = Users.character
     this["TELEFON"] = Users.phone
     this["EMAIL"] = Users.email
+  }
+}
+
+object SomeDictionnaryForm : DictionaryForm() {
+  override val locale = Locale.FRANCE
+  override val title = "form for test"
+
+  val action = menu("Action")
+
+  val list = actor(
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
+  val block = insertBlock(UsersBlock) {
+    command(item = list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
   }
 }
 

@@ -103,8 +103,8 @@ object FormWithList : DictionaryForm() {
 }
 
 object BlockSample : FormBlock(1, 1, "Test block") {
-  val m = table(Modules)
   val u = table(Users)
+  val m = table(Modules)
   val i = index(message = "ID should be unique")
 
   val id = hidden(domain = Domain<Int>(20)) {
@@ -126,7 +126,6 @@ object BlockSample : FormBlock(1, 1, "Test block") {
 }
 
 object UsersBlock : FormBlock(1, 1, "Test block") {
-  val m = table(Modules)
   val u = table(Users)
   val unique = index(message = "ID should be unique")
 
@@ -139,7 +138,7 @@ object UsersBlock : FormBlock(1, 1, "Test block") {
   val id = hidden(domain = Domain<Int>(20)) {
     label = "id"
     help = "The user id"
-    columns(Users.id) {
+    columns(u.id) {
       index = unique
     }
   }

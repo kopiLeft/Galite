@@ -1772,7 +1772,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   @Suppress("UNCHECKED_CAST")
   val idColumn: Column<Int>
     get() {
-      return idField.lookupColumn(0) as? Column<Int> ?: throw InconsistencyException()
+      return idField.lookupColumn(tables!![0]) as? Column<Int> ?: throw InconsistencyException()
     }
 
   // laurent : return f even if it's null until we add this field in
