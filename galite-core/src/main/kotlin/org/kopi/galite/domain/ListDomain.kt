@@ -21,6 +21,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.QueryAlias
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.alias
 import org.kopi.galite.common.FieldList
 import org.kopi.galite.common.ListDescription
@@ -38,12 +39,23 @@ import org.kopi.galite.list.VList
  * on the set of allowed values.
  */
 abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
-                                          height: Int? = null,
-                                          visibleHeight: Int? = null)
+                                              height: Int? = null,
+                                              visibleHeight: Int? = null)
   : Domain<T>(width, height, visibleHeight) {
 
+  /**
+   * The statement to select list data. It can get an instance of [ColumnSet] (like a [Table])
+   * or a query using [query] method.
+   *
+   * @sample org.kopi.galite.tests.form.UsersList
+   */
   abstract val table: ColumnSet
 
+  /**
+   * The field list action. Used to select list data from a form.
+   *
+   * @sample org.kopi.galite.tests.form.UsersList
+   */
   open val access: (() -> VDictionary)? = null
 
   /**
@@ -53,6 +65,9 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
 
   private var convertUpper = false
 
+  /**
+   * The list of elements added to this list domain. Each element describes a column and the title assigned to it.
+   */
   val columns = mutableListOf<ListDescription>()
 
   /**

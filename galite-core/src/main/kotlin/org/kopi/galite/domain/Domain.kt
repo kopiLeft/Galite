@@ -33,7 +33,7 @@ import org.kopi.galite.form.VConstants
 open class Domain<T : Comparable<T>?>(val width: Int? = null,
                                       val height: Int? = null,
                                       val visibleHeight: Int? = null) {
-  open val ident = this::class.java.simpleName
+  val ident: String = this::class.java.simpleName
 
   /**
    * Determines the field data type
@@ -65,11 +65,11 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
    * Returns the default alignment
    */
   val defaultAlignment: Int
-  get() = if(kClass == Fixed::class) {
-    VConstants.ALG_RIGHT
-  } else {
-    VConstants.ALG_LEFT
-  }
+    get() = if (kClass == Fixed::class) {
+      VConstants.ALG_RIGHT
+    } else {
+      VConstants.ALG_LEFT
+    }
 
   // ----------------------------------------------------------------------
   // UTILITIES

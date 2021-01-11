@@ -365,13 +365,13 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   }
 
   fun setInfo(source: String) {
-    val list = if(domain is ListDomain) {
+    val list = if (domain is ListDomain) {
       (domain as ListDomain).list.buildListModel(source)
     } else {
       null
     }
 
-    if(domain is CodeDomain) {
+    if (domain is CodeDomain) {
       (vField as VCodeField).source = source
     }
 

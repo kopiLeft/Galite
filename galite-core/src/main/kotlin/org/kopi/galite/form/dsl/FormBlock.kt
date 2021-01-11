@@ -476,14 +476,14 @@ open class FormBlock(var buffer: Int,
         blockFields.forEach { field ->
           val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
 
-            field.triggers.forEach { trigger ->
-              for (i in VConstants.TRG_TYPES.indices) {
-                if (trigger.events shr i and 1 > 0) {
-                  fieldTriggerArray[i] = i
-                  super.triggers[i] = trigger
-                }
+          field.triggers.forEach { trigger ->
+            for (i in VConstants.TRG_TYPES.indices) {
+              if (trigger.events shr i and 1 > 0) {
+                fieldTriggerArray[i] = i
+                super.triggers[i] = trigger
               }
             }
+          }
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
