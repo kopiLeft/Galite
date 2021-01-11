@@ -118,7 +118,7 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
   /**
    * Defines the auto-complete mechanism.
    *
-   * @param autocompleteType    the auto-complete type. See [Autocomplete] to get the supported types.
+   * @param autocompleteType    the auto-complete type. See [AutoComplete] to get the supported types.
    * @param autocompleteLength  the auto-complete length.
    */
   fun complete(autocompleteType: AutoComplete, autocompleteLength: Int) {

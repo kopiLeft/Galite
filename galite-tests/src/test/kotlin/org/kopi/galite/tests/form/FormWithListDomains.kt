@@ -30,12 +30,31 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
 object FormWithListDomains: Form() {
+  val edit = menu("Edit")
+  val autoFill = actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  )
+  val newItem = actor(
+          ident = "NewItem",
+          menu = edit,
+          label = "NewItem",
+          help = "NewItem",
+  )
+  val editItem = actor(
+          ident = "EditItem",
+          menu = edit,
+          label = "EditItem",
+          help = "EditItem",
+  )
   override val locale = Locale.FRANCE
   override val title = "form to test list domains"
   val testBlock = insertBlock(UsersListBlock)
 }
 
-object UsersListBlock : FormBlock(1, 1, "UsersListBlock", "UsersListBlock") {
+object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
   val user = mustFill(domain = UsersList, position = at(1, 1)) {
     label = "user"
     help = "The user"

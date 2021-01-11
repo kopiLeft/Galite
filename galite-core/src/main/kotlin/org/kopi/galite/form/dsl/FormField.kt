@@ -366,7 +366,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
 
   fun setInfo(source: String) {
     val list = if (domain is ListDomain) {
-      (domain as ListDomain).list.buildListModel(source)
+      domain.list.buildListModel(source)
     } else {
       null
     }
