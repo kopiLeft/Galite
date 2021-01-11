@@ -136,20 +136,20 @@ object UsersBlock : FormBlock(1, 1, "Test block") {
     }
   }
   val id = hidden(domain = Domain<Int>(20)) {
-    label = "id"
+    label = "ID"
     help = "The user id"
     columns(u.id) {
       index = unique
     }
   }
   val uc = visit(domain = Domain<Int>(20), position = at(1, 2)) {
-    label = "uc"
+    label = "UC"
     help = "uc"
     columns(u.uc)
   }
 
   val ts = visit(domain = Domain<Int>(20), position = at(1, 3)) {
-    label = "ts"
+    label = "TS"
     help = "ts"
     columns(u.ts)
   }

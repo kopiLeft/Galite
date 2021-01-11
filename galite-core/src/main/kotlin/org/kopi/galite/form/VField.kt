@@ -2458,8 +2458,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   private var indices = 0  // bitset of unique indices
 
   /**
-   * The name of the field is the ident in the galite language
-   * @return    the name of this field
+   * The name of the field is the ident.
+   *
+   * @return    the name of this field.
    */
   lateinit var name: String   // field name (for dumps)
     private set
