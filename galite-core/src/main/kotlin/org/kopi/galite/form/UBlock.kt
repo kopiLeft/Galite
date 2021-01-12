@@ -27,10 +27,9 @@ import org.kopi.galite.base.UComponent
 interface UBlock : UComponent, BlockListener {
 
   /**
-   * Returns the block model
-   * @return The [VBlock] of this `UBlock`
+   * The block model of this `UBlock`
    */
-  fun getModel(): VBlock
+  val model: VBlock
 
   /**
    * Returns the form view of the block

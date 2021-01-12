@@ -15,27 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.event
-
-import java.io.Serializable
+package org.kopi.galite.ui.vaadin.label
 
 /**
- * The field listener that notifies registered objects with
- * actions performed on a field.
+ * The server side of the sortable label component.
+ * TODO: Implement this class with appropriate component
  */
-interface FieldListener : Serializable {
-  /**
-   * Fired when increment button is clicked.
-   */
-  fun onIncrement()
+open class SortableLabel(text: String?) : Label() {
 
-  /***
-   * Fired when decrement action is fired.
-   */
-  fun onDecrement()
-
-  /**
-   * Fired when the field is clicked.
-   */
-  fun onClick()
 }

@@ -35,7 +35,7 @@ interface UForm : UWindow, FormListener {
    * @param block the [VBlock] model.
    * @return The [UBlock] view.
    */
-  fun getBlockView(block: VBlock): UBlock?
+  fun getBlockView(block: VBlock?): UBlock?
 
   /**
    * Returns the print job of the form view.
@@ -43,7 +43,7 @@ interface UForm : UWindow, FormListener {
    * @throws VException operation may fail
    */
   @Throws(VException::class)
-  fun printForm(): PrintJob
+  fun printForm(): PrintJob?
 
   /**
    * Prepares the snapshot.
