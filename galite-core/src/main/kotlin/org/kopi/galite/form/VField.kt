@@ -1712,11 +1712,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    * !!! TRY TO MERGE WITH checkList ???
    */
-  fun getListID(): Int {
-    TODO()
-    /*val SELECT_IS_IN_LIST = " SELECT  ID                      " +
-            " FROM    $2                      " +
-            " WHERE   $1 = $3"
+  open fun getListID(): Int {
+    val idColumn = Column<Int>(evalListTable_() , "ID" , IntegerColumnType())
+    val column = Column<Any>(evalListTable_() , list!!.getColumn(0).column!! , IntegerColumnType())
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
     assert(list != null) { threadInfo() + "list ist not null" }
@@ -1725,19 +1723,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       while (true) {
         try {
-          SELECT_IS_IN_LIST.replace("$2", evalListTable())
-          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
-          SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
-          transaction {
-            exec(SELECT_IS_IN_LIST) {
-              if (it.next()) {
-                id = it.getInt(1)
-              }
-            }
+          val query = evalListTable_().slice(idColumn).select { column eq getSql(block!!.activeRecord)!! }
+
+          if (!query.empty()) {
+            id = query.first()[idColumn]
           }
           break
         } catch (e: SQLException) {
-        } catch (error: Error) {
+        } catch (error: java.lang.Error) {
         } catch (rte: RuntimeException) {
         }
       }
@@ -1747,7 +1740,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (id == -1) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00001"))
     }
-    return id*/
+    return id
   }
 
   private fun displayQueryList(queryText: String, columns: Array<VListColumn>): Any? {
