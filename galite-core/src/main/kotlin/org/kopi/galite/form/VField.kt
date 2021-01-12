@@ -33,6 +33,7 @@ import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.VarCharColumnType
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.base.UComponent
@@ -51,6 +52,7 @@ import org.kopi.galite.type.Week
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.VColor
 import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.VException
@@ -1743,20 +1745,27 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   private fun displayQueryList(queryText: String, columns: Array<VListColumn>): Any? {
     TODO()
-    /*val MAX_LINE_COUNT = 1024
+  }
+
+  private fun displayQueryList_(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
+    val columnsList = columns.map { vListColumn ->
+      Column<Any?>(evalListTable_(), vListColumn!!.column!! , VarCharColumnType())
+    }
+    val MAX_LINE_COUNT = 1024
     val SKIP_FIRST_COLUMN = false
     val SHOW_SINGLE_ENTRY: Boolean
-    val lines = Array(columns.size - if (SKIP_FIRST_COLUMN) 1 else 0) { arrayOfNulls<Any>(MAX_LINE_COUNT) }
+    val lines = Array(columns.size - if (SKIP_FIRST_COLUMN) 1 else 0) {
+      arrayOfNulls<Any>(MAX_LINE_COUNT)
+    }
     var lineCount = 0
-
     val newForm: VDictionary? = when {
       list!!.newForm != null -> {
         // OLD SYNTAX
-        Module.getExecutable(list!!.newForm) as VDictionary
+        Module.getExecutable(list!!.newForm) as VDictionary?
       }
       list!!.action != -1 -> {
         // NEW SYNTAX
-        block!!.executeObjectTrigger(list!!.action) as VDictionary?
+        block!!.executeObjectTrigger(list!!.action) as VDictionary
       }
       else -> {
         null // should never happen.
@@ -1767,25 +1776,25 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       while (true) {
         try {
-          transaction {
-            exec(queryText) {
-              lineCount = 0
-              while (it.next() && lineCount < MAX_LINE_COUNT - 1) {
-                if (it.getObject(1) == null) {
-                  continue
-                }
-                var i = 0
-                while (i < lines.size) {
-                  lines[i][lineCount] = it.getObject(i + if (SKIP_FIRST_COLUMN) 2 else 1)
-                  i += 1
-                }
-                lineCount += 1
-              }
+          lineCount = 0
+          for (result in query) {
+            if (lineCount >= MAX_LINE_COUNT - 1) {
+              break
             }
+            if(result[columnsList[0]] == null) {
+              continue
+            }
+            var i = 0
+
+            while (i < lines.size) {
+              lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 2 else 1]]
+              i += 1
+            }
+            lineCount += 1
           }
           break
         } catch (e: SQLException) {
-        } catch (error: Error) {
+        } catch (error: java.lang.Error) {
         } catch (rte: RuntimeException) {
         }
       }
@@ -1809,24 +1818,23 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           ld.selectFromDialog(getForm(), null, this)
         }
       }
+
       if (selected == -1) {
         throw VExecFailedException() // no message needed
       } else if (selected >= lineCount) {
         // new, retrieve it
-        var result: Any? = null
+        var result: Any?
 
         try {
           while (true) {
             try {
-              val SELECT_IS_IN_LIST = " SELECT " + list!!.getColumn(0).column!! +
-                      " FROM " + evalListTable() + " WHERE    ID = " + selected
+              val column = Column<String>(evalListTable_(), list!!.getColumn(0).column!!, VarCharColumnType())
+              val idColumn = Column<Int>(evalListTable_(), "ID", IntegerColumnType())
 
-              transaction {
-                exec(SELECT_IS_IN_LIST) {result = it.getObject(1)}
-              }
+              result = evalListTable_().slice(column).select { idColumn eq  selected }.first()[column]
               break
             } catch (e: SQLException) {
-            } catch (error: Error) {
+            } catch (error: java.lang.Error) {
             } catch (rte: RuntimeException) {
             }
           }
@@ -1837,7 +1845,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       } else {
         lines[0][selected]
       }
-    }*/
+    }
   }
 
   /**
