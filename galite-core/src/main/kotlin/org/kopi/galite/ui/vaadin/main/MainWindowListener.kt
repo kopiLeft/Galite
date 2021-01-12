@@ -15,23 +15,37 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.ui.vaadin.main
 
-import org.kopi.galite.visual.RootMenu
-import org.kopi.galite.visual.VMenuTree
+import java.io.Serializable
 
 /**
- * The book mark menu
+ * Registered objects are notified about actions happening
+ * in the main application window.
  */
-class DBookmarkMenu(model: VMenuTree) : DMenu(model) {
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
+interface MainWindowListener : Serializable {
+  /**
+   * Fired when the administration link is clicked.
+   */
+  fun onAdmin()
 
-  override fun buildMenu(roots: List<RootMenu>) {
-    TODO()
-  }
+  /**
+   * Fired when the support link is clicked.
+   */
+  fun onSupport()
 
-  override val type: Int
-    get() = VMenuTree.BOOKMARK_MENU
+  /**
+   * Fired when the help link is clicked.
+   */
+  fun onHelp()
+
+  /**
+   * Fired when the logout link is clicked.
+   */
+  fun onLogout()
+
+  /**
+   * Fired when the connected user link is clicked.
+   */
+  fun onUser()
 }

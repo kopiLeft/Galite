@@ -15,23 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.visual
+package org.kopi.galite.ui.vaadin.preview
 
-import org.kopi.galite.visual.RootMenu
-import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.preview.VPreviewWindow
+import org.kopi.galite.ui.vaadin.visual.DWindow
 
 /**
- * The book mark menu
+ * The `DPreviewWindow` is the ui implementation of the [VPreviewWindow].
  */
-class DBookmarkMenu(model: VMenuTree) : DMenu(model) {
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-
-  override fun buildMenu(roots: List<RootMenu>) {
+class DPreviewWindow(val model: VPreviewWindow) : DWindow(model) {
+  // TODO
+  override fun run() {
     TODO()
   }
-
-  override val type: Int
-    get() = VMenuTree.BOOKMARK_MENU
 }
