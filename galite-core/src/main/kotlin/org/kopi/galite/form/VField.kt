@@ -27,13 +27,13 @@ import javax.swing.event.EventListenerList
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.VarCharColumnType
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.substring
 import org.kopi.galite.base.UComponent
@@ -1576,7 +1576,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         while(true) {
           try {
-            val column = Column<String>(evalListTable_(), list!!.getColumn(0).column!!, VarCharColumnType())
+            val column = list!!.getColumn(0).column as Column<String>
 
             exists = !evalListTable_().select { column eq getSql(block!!.activeRecord)!! }.empty()
             break
@@ -1612,7 +1612,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         while(true) {
           try {
-            val column = Column<String>(evalListTable_(), list!!.getColumn(0).column!!, VarCharColumnType())
+            val column = list!!.getColumn(0).column as Column<String>
             val query = evalListTable_().slice(column).select {
               column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
             }.orderBy(column)
@@ -1653,13 +1653,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           val columns = mutableListOf<Column<*>>()
 
           while (i < list!!.columnCount()) {
-            val column = Column<String>(evalListTable_(), list!!.getColumn(i).column!!, VarCharColumnType())
+            val column = list!!.getColumn(i).column!!
 
             columns.add(column)
             i++
           }
 
-          val column = Column<String>(evalListTable_(), list!!.getColumn(0).column!!, VarCharColumnType())
+          val column = list!!.getColumn(0).column as Column<String>
           val query = evalListTable_().slice(columns).select {
             column.substring(1, condition.length) eq condition
           }.orderBy(columns[0])
@@ -1683,7 +1683,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getListID(): Int {
     val idColumn = Column<Int>(evalListTable_() , "ID" , IntegerColumnType())
-    val column = Column<Any>(evalListTable_() , list!!.getColumn(0).column!! , IntegerColumnType())
+    val column = list!!.getColumn(0).column as Column<String>
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
     assert(list != null) { threadInfo() + "list ist not null" }
@@ -1718,7 +1718,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   private fun displayQueryList_(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
     val columnsList = columns.map { vListColumn ->
-      Column<Any?>(evalListTable_(), vListColumn!!.column!! , VarCharColumnType())
+      vListColumn!!.column
     }
     val MAX_LINE_COUNT = 1024
     val SKIP_FIRST_COLUMN = false
@@ -1732,9 +1732,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         // OLD SYNTAX
         Module.getExecutable(list!!.newForm) as VDictionary?
       }
-      list!!.action != -1 -> {
+      list!!.action != null -> {
         // NEW SYNTAX
-        block!!.executeObjectTrigger(list!!.action) as VDictionary
+        list!!.action!!()
       }
       else -> {
         null // should never happen.
@@ -1750,13 +1750,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (lineCount >= MAX_LINE_COUNT - 1) {
               break
             }
-            if(result[columnsList[0]] == null) {
+            if(result[columnsList[0]!!] == null) {
               continue
             }
             var i = 0
 
             while (i < lines.size) {
-              lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 2 else 1]]
+              lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 2 else 1]!!]
               i += 1
             }
             lineCount += 1
@@ -1797,7 +1797,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           while (true) {
             try {
-              val column = Column<String>(evalListTable_(), list!!.getColumn(0).column!!, VarCharColumnType())
+              val column = list!!.getColumn(0).column!!
               val idColumn = Column<Int>(evalListTable_(), "ID", IntegerColumnType())
 
               result = evalListTable_().slice(column).select { idColumn eq  selected }.first()[column]
@@ -2001,9 +2001,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the list table.
    */
-  private fun evalListTable(): String {
+  private fun evalListTable(): ColumnSet {
     return try {
-      block!!.executeObjectTrigger(list!!.table) as String
+      list!!.table
     } catch (e: VException) {
       throw InconsistencyException()
     }
@@ -2433,8 +2433,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   private var indices = 0  // bitset of unique indices
 
   /**
-   * The name of the field is the ident in the galite language
-   * @return    the name of this field
+   * The name of the field is the ident.
+   *
+   * @return    the name of this field.
    */
   lateinit var name: String   // field name (for dumps)
     private set

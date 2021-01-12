@@ -18,10 +18,17 @@
 package org.kopi.galite.domain
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.QueryAlias
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.alias
+import org.kopi.galite.common.FieldList
+import org.kopi.galite.common.ListDescription
 import org.kopi.galite.common.LocalizationWriter
-
 import org.kopi.galite.exceptions.InvalidValueException
+import org.kopi.galite.form.VDictionary
+import org.kopi.galite.list.VList
 
 /**
  * Represents a list domain.
@@ -31,17 +38,47 @@ import org.kopi.galite.exceptions.InvalidValueException
  * It allows optionally to define a constraint that makes restrictions
  * on the set of allowed values.
  */
-class ListDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
-  var query: Query? = null
+abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
+                                              height: Int? = null,
+                                              visibleHeight: Int? = null)
+  : Domain<T>(width, height, visibleHeight) {
 
   /**
-   * Override it if you want to define a constraint that the domain values ​​must verify.
+   * The statement to select list data. It can get an instance of [ColumnSet] (like a [Table])
+   * or a query using [query] method.
+   *
+   * @sample org.kopi.galite.tests.form.UsersList
+   */
+  abstract val table: ColumnSet
+
+  /**
+   * The field list action. Used to select list data from a form.
+   *
+   * @sample org.kopi.galite.tests.form.UsersList
+   */
+  open val access: (() -> VDictionary)? = null
+
+  /**
+   * Override it if you want to define a constraint that the domain values must verify.
    */
   var check: ((value: T) -> Boolean)? = null
 
-  override val type = this
-
   private var convertUpper = false
+
+  /**
+   * The list of elements added to this list domain. Each element describes a column and the title assigned to it.
+   */
+  val columns = mutableListOf<ListDescription>()
+
+  /**
+   * the auto-complete type. [VList.AUTOCOMPLETE_NONE] is the default
+   */
+  private var autocompleteType = VList.AUTOCOMPLETE_NONE
+
+  /**
+   * the auto-complete length
+   */
+  private var autocompleteLength = 0
 
   /**
    * Sets a mapping between the values that the domain can take
@@ -50,34 +87,20 @@ class ListDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
    * @param text the text
    * @param value the value
    */
-  operator fun <V : Comparable<V>> set(text: String, value: Column<V>) {
-    if (text in list.keys) {
-      throw RuntimeException("$text already exists in domain $name")
-    }
-    list[text] = value
+  operator fun set(text: String, value: Column<*>) {
+    columns.add(ListDescription(text, value, this))
   }
 
   /**
    * Mapping of all values that a domain can take
    */
-  val list: MutableMap<String, Any> = mutableMapOf()
+  lateinit var list: FieldList<T>
 
   /**
    * Transforms values in capital letters.
    */
   fun Domain<String>.convertUpper() {
     convertUpper = true
-  }
-
-  /**
-   * Applies a transformation on the value.
-   *
-   * @param value passed value
-   * @return value after transformation
-   */
-  override fun applyConvertUpper(value: String): String = when {
-    convertUpper -> value.toUpperCase()
-    else -> value
   }
 
   /**
@@ -92,6 +115,26 @@ class ListDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
     else -> false
   }
 
+  /**
+   * Defines the auto-complete mechanism.
+   *
+   * @param autocompleteType    the auto-complete type. See [AutoComplete] to get the supported types.
+   * @param autocompleteLength  the auto-complete length.
+   */
+  fun complete(autocompleteType: AutoComplete, autocompleteLength: Int) {
+    this.autocompleteType = autocompleteType.value
+    this.autocompleteLength = autocompleteLength
+  }
+
+  /**
+   * Creates a [QueryAlias] that can be quarried as a [ColumnSet] from a [Query]
+   *
+   * @param query the query
+   */
+  fun query(query: Query): QueryAlias {
+    return query.alias("syn__0__")
+  }
+
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
@@ -100,7 +143,15 @@ class ListDomain<T : Comparable<T>?>(private val name: String) : Domain<T>() {
    * When overridden, subclasses MUST call it (because of lists).
    *
    */
-  override fun genLocalization(writer: LocalizationWriter) {
-    // writer.genType(list) TODO: implement list type
+  override fun genTypeLocalization(writer: LocalizationWriter) {
+    list = FieldList(ident,
+                     table,
+                     access,
+                     columns,
+                     autocompleteType,
+                     autocompleteLength,
+                     access != null
+    )
+    writer.genType(list)
   }
 }

@@ -17,6 +17,8 @@
 
 package org.kopi.galite.chart
 
+import java.lang.RuntimeException
+
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.ChartTrigger
 import org.kopi.galite.common.Trigger
@@ -28,7 +30,6 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
-import java.lang.RuntimeException
 
 /**
  * Represents a one dimension that contains measures [values] to use in chart.
@@ -80,7 +81,13 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>
       }
 
       return when {
-        domain.type == null -> {
+        domain is CodeDomain -> {
+          TODO()
+        }
+        domain is ListDomain -> {
+          TODO()
+        }
+        else -> {
           when (domain.kClass) {
             Int::class ->
               VIntegerDimension(ident, format)
@@ -100,15 +107,6 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>
               VTimestampDimension(ident, format)
             else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
           }
-        }
-        domain.type is CodeDomain -> {
-          TODO()
-        }
-        domain is ListDomain -> {
-          TODO()
-        }
-        else -> {
-          TODO()
         }
       }
     }
