@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Label
@@ -29,7 +31,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * An abstract implementation of notification components such as
  * warnings, errors, confirms and information.
  */
-abstract class VAbstractNotification : Dialog() {
+abstract class VAbstractNotification : Dialog(), Focusable<VAbstractNotification> {
 
   /**
    * Creates a new notification widget with a window containing
@@ -45,6 +47,10 @@ abstract class VAbstractNotification : Dialog() {
     createContent()
     createFooter()
   }
+
+  abstract fun onEnterEvent(keyDownEvent: ShortcutEvent?)
+  abstract fun onRightEvent(keyDownEvent: ShortcutEvent?)
+  abstract fun onLeftEvent(keyDownEvent: ShortcutEvent?)
 
   /**
    * Initializes the notification panel.
@@ -106,9 +112,8 @@ abstract class VAbstractNotification : Dialog() {
     val close = Button()
     close.icon = VaadinIcon.CLOSE.create()
     close.addClickListener { close() }
-    val header = HorizontalLayout()
-    header.add(this.title, close)
-    header.setFlexGrow(1.0, this.title)
+    header.add(title, close)
+    header.setFlexGrow(1.0, title)
     header.isPadding = true
     header.alignItems = FlexComponent.Alignment.CENTER
     header.style.set("background-color", "DarkSeaGreen")
@@ -121,8 +126,7 @@ abstract class VAbstractNotification : Dialog() {
    * Creates the notification content.
    */
   fun createContent() {
-    val content = HorizontalLayout()
-    this.icon = Icon(iconName)
+    icon = Icon(iconName)
     content.isPadding = true
     content.style.set("background-color", "AliceBlue")
     content.add(icon, message)
@@ -136,7 +140,6 @@ abstract class VAbstractNotification : Dialog() {
    * Creates the notification footer.
    */
   open fun createFooter() {
-    val footer = HorizontalLayout()
     footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
     footer.width = "99%"
     add(footer)
@@ -157,6 +160,7 @@ abstract class VAbstractNotification : Dialog() {
   open fun removeNotificationListener(l: NotificationListener) {
     listeners.remove(l)
   }
+
   //-------------------------------------------------
   // ABSTRACT METHODS
   //-------------------------------------------------
@@ -180,5 +184,8 @@ abstract class VAbstractNotification : Dialog() {
   open var icon: Icon? = null
   var locale: String = "fr_FR"
   private val listeners = mutableListOf<NotificationListener>()
-
+  protected val yesIsDefault = true
+  val header = HorizontalLayout()
+  val content = HorizontalLayout()
+  val footer = HorizontalLayout()
 }

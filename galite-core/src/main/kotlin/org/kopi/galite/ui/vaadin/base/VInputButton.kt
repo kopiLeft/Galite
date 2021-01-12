@@ -40,7 +40,7 @@ class VInputButton(caption: String? = null) : Input(), ClickNotifier<VInputButto
       value = caption
     }
     className = Styles.INPUT_BUTTON
-    element.setAttribute("hideFocus", "true")
+   // element.setAttribute("hideFocus", "false")
     element.style["outline"] = "0px"
   }
 

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -52,6 +53,18 @@ open class VInformationNotification(title: String, message: String) : VAbstractN
     close.addClickListener { hide() }
     close.width = "20%"
     close.height = "50%"
+  }
+
+  override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
+    close.click()
+  }
+
+  override fun onRightEvent(keyDownEvent: ShortcutEvent?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onLeftEvent(keyDownEvent: ShortcutEvent?) {
+    TODO("Not yet implemented")
   }
 
   //--------------------------------------------------

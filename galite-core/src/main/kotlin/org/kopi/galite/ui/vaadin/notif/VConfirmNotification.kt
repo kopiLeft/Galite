@@ -19,6 +19,9 @@ package org.kopi.galite.ui.vaadin.notif
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.ShortcutEvent
+import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -35,11 +38,35 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
 // IMPLEMENTATION
 //-------------------------------------------------
 
+  override fun setButtons(locale: String) {
+    element.setAttribute("hideFocus", "true")
+    ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
+    cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
+    cancel!!.addClickListener { hide() }
+    ok!!.addClickListener { open() }
+    ok!!.width = "20%"
+    ok!!.height = "50%"
+    cancel!!.width = "20%"
+    cancel!!.height = "50%"
+  }
+
+  override fun focus() {
+    if (yesIsDefault && ok != null) {
+      ok!!.focus()
+      okFocused = true
+      cancelFocused = false
+    } else if (cancel != null) {
+      cancel!!.focus()
+      okFocused = false
+      cancelFocused = true
+    }
+  }
+
   /**
    * Creates the confirmation notification footer.
    */
   override fun createFooter() {
-    val footer = HorizontalLayout()
+    element.setAttribute("hideFocus", "true")
     footer.add(ok)
     footer.add(cancel)
     footer.isSpacing = true
@@ -50,30 +77,41 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
     add(footer)
   }
 
-  override fun setButtons(locale: String) {
-    ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
-    cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
-    cancel.addClickListener { hide() }
-    ok.addClickListener { open() }
-    ok.width = "20%"
-    ok.height = "50%"
-    cancel.width = "20%"
-    cancel.height = "50%"
+  override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
+    cancel!!.click()
+    cancelFocused = true
+    okFocused = false
   }
 
-//------------------------------------------------
-// DATA MEMBERS
-//------------------------------------------------
+  override fun onRightEvent(keyDownEvent: ShortcutEvent?) {
+    cancel!!.focus()
+    okFocused = false
+    cancelFocused = true
+
+  }
+
+  override fun onLeftEvent(keyDownEvent: ShortcutEvent?) {
+    ok!!.focus()
+    okFocused = true
+    cancelFocused = false
+  }
+
+
+  //------------------------------------------------
+  // DATA MEMBERS
+  //------------------------------------------------
 
   override val iconName: String?
     get() = "question-circle"
-  private var ok = VInputButton()
-  private var cancel = VInputButton()
+  var ok: VInputButton? = null
+  private var cancel: VInputButton? = null
   var listener: ComponentEventListener<ClickEvent<Button>>? = null
+  var okFocused = false
+  var cancelFocused = false
 
-//--------------------------------------------------
-// CONSTRUCTOR
-//--------------------------------------------------
+  //--------------------------------------------------
+  // CONSTRUCTOR
+  //--------------------------------------------------
 
   /**
    * Creates the confirmation widget.

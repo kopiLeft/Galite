@@ -17,10 +17,24 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.ShortcutEvent
+import com.vaadin.flow.component.Shortcuts
+
 /**
  * Confirm notification component.
  *
  * @param title the warning notification title.
  * @param message the warning notification message.
  */
-class ConfirmNotification(title: String, message: String) : VConfirmNotification(title, message)
+class ConfirmNotification(title: String, message: String) : VConfirmNotification(title, message) {
+  /**
+   * Creates the confirmation widget.
+   */
+  init {
+   element.setAttribute("hideFocus",true)
+    Shortcuts.addShortcutListener(this,
+                                  { keyDownEvent: ShortcutEvent? -> onEnterEvent(keyDownEvent) }, Key.ENTER)
+            .listenOn(this)
+  }
+}

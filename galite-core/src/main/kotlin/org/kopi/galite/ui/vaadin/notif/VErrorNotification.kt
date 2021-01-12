@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.notif
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.details.Details
@@ -65,9 +66,21 @@ open class VErrorNotification(title: String, message: String) : VAbstractNotific
       details = Details("Show details",
                         Text("details here"))
     }
-    close.addClickListener { hide() }
-    close.width = "20%"
-    close.height = "50%"
+    close!!.addClickListener { hide() }
+    close!!.width = "20%"
+    close!!.height = "50%"
+  }
+
+  override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
+    close!!.click()
+  }
+
+  override fun onRightEvent(keyDownEvent: ShortcutEvent?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onLeftEvent(keyDownEvent: ShortcutEvent?) {
+    TODO("Not yet implemented")
   }
 
   //--------------------------------------------------
@@ -75,7 +88,7 @@ open class VErrorNotification(title: String, message: String) : VAbstractNotific
   //--------------------------------------------------
 
   var details = Details()
-  var close = VInputButton()
+  var close : VInputButton? = null
   val listener: ComponentEventListener<ClickEvent<Button>>? = null
   override val iconName: String
     get() = "warning"
