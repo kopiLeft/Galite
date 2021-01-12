@@ -42,7 +42,7 @@ import org.kopi.galite.l10n.LocalizationManager
 class VList(private val ident: String,
             private val source: String,
             val newForm: String?,
-            val columns: Array<VListColumn>,
+            val columns: Array<VListColumn?>,
             val table: ColumnSet,
             val action: (() -> VDictionary)?,
             val autocompleteType: Int,
@@ -51,7 +51,7 @@ class VList(private val ident: String,
 
   constructor(ident: String,
               source: String,
-              columns: Array<VListColumn>,
+              columns: Array<VListColumn?>,
               table: ColumnSet,
               action: (() -> VDictionary)?,
               autocompleteType: Int,
@@ -76,7 +76,7 @@ class VList(private val ident: String,
   /**
    * Returns the column at index.
    */
-  fun getColumn(pos: Int): VListColumn = columns[pos]
+  fun getColumn(pos: Int): VListColumn = columns[pos]!!
 
   /**
    * Returns `true` if the list has auto complete support.
@@ -91,7 +91,7 @@ class VList(private val ident: String,
   fun localize(manager: LocalizationManager) {
     val loc: ListLocalizer = manager.getListLocalizer(source, ident)
     columns.forEach { column ->
-      column.localize(loc)
+      column!!.localize(loc)
     }
   }
 
