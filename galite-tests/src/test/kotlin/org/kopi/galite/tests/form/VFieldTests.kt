@@ -26,6 +26,7 @@ import org.junit.Test
 import org.kopi.galite.form.VFieldException
 import org.kopi.galite.form.VPosition
 import org.kopi.galite.list.VColumn
+import org.kopi.galite.list.VIntegerColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VStringColumn
 import org.kopi.galite.tests.JApplicationTestBase
@@ -68,17 +69,101 @@ class VFieldTests : JApplicationTestBase() {
     }
 
     var listID : Int = -1
-      transaction {
-        User.insert {
-          it[id] = 1
-          it[name] = "name"
-          it[age] = 23
-          it[ts] = 0
-          it[uc] = 0
-        }
-        listID = FormSample.tb1.name.vField.getListID()
+    transaction {
+      User.insert {
+        it[id] = 1
+        it[name] = "name"
+        it[age] = 23
+        it[ts] = 0
+        it[uc] = 0
       }
+      listID = FormSample.tb1.name.vField.getListID()
+    }
 
     assertEquals(1, listID)
+  }
+
+  @Test
+  fun checkListVStringFieldTest() {
+    FormSample.model
+
+    val vListColumn = VList("test",
+                            "apps/common/Global", arrayOf(
+            VStringColumn("test", "NAME", 2, 50, true)),
+                            1,
+                            -1,
+                            0,
+                            0,
+                            null,
+                            false)
+
+    FormSample.tb1.name.vField.setInfo("name",
+                                       1,
+                                       -1,
+                                       0,
+                                       intArrayOf(4, 4, 4),
+                                       vListColumn,
+                                       arrayOf(VColumn(0, "NAME", false, false, User.name)),
+                                       0,
+                                       0,
+                                       null,
+                                       VPosition(1, 1, 2, 2, -1),
+                                       2,
+                                       null)
+
+    FormSample.tb1.uc.value = 0
+    FormSample.tb1.ts.value = 0
+    FormSample.tb1.name.value = "test"
+    FormSample.tb1.age.value = 11
+    FormSample.tb1.job.value = "job"
+
+    assertFailsWith<VFieldException>(MessageCode.getMessage("VIS-00001")) {
+      transaction {
+        SchemaUtils.create(User)
+        FormSample.tb1.vBlock.fields[3].validate()
+      }
+    }
+  }
+
+  @Test
+  fun checkListVIntegerFieldTest() {
+    FormSample.model
+
+    val vListColumn = VList("test",
+                            "apps/common/Global", arrayOf(
+            VIntegerColumn("test", "AGE", 2, 50, true)),
+                            1,
+                            -1,
+                            0,
+                            0,
+                            null,
+                            false)
+
+    FormSample.tb1.age.vField.setInfo("age",
+                                      1,
+                                      -1,
+                                      0,
+                                      intArrayOf(4, 4, 4),
+                                      vListColumn,
+                                      arrayOf(VColumn(0, "AGE", false, false, User.age)),
+                                      0,
+                                      0,
+                                      null,
+                                      VPosition(1, 1, 2, 2, -1),
+                                      2,
+                                      null)
+
+    FormSample.tb1.uc.value = 0
+    FormSample.tb1.ts.value = 0
+    FormSample.tb1.name.value = "test"
+    FormSample.tb1.age.value = 11
+    FormSample.tb1.job.value = "job"
+
+    assertFailsWith<VFieldException>(MessageCode.getMessage("VIS-00001")) {
+      transaction {
+        SchemaUtils.create(User)
+        FormSample.tb1.vBlock.fields[5].validate()
+      }
+    }
   }
 }
