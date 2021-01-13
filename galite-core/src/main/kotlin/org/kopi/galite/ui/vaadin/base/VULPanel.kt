@@ -18,10 +18,11 @@
 package org.kopi.galite.ui.vaadin.base
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.Tag
 
 /**
  * A complex panel that wraps an unordered list inside.
  */
 @Tag(Tag.UL)
-class VULPanel : Component()
+class VULPanel : Component(), HasComponents
