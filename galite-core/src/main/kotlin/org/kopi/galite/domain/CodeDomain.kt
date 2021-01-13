@@ -23,13 +23,12 @@ import org.kopi.galite.common.LocalizationWriter
 /**
  * Represents a code domain.
  */
-class CodeDomain<T : Comparable<T>?>(ident: String) : Domain<T>(ident = ident) {
+open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
+
   /**
    * Contains all values that a domain can take
    */
   val codes: MutableList<CodeDescription<T>> = mutableListOf()
-
-  override val type = this
 
   /**
    * Sets a mapping between the values that the domain can take
@@ -49,7 +48,7 @@ class CodeDomain<T : Comparable<T>?>(ident: String) : Domain<T>(ident = ident) {
   /**
    * Generates localization.
    */
-  override fun genLocalization(writer: LocalizationWriter) {
+  override fun genTypeLocalization(writer: LocalizationWriter) {
     writer.genCodeType(codes)
   }
 }

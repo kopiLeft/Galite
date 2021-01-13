@@ -37,7 +37,6 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
@@ -232,15 +231,14 @@ open class FormBlock(var buffer: Int,
                                                     access: Int,
                                                     position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
-    if (domain.type is CodeDomain<T>) {
+    if (domain is CodeDomain<T>) {
       ownDomains.add(domain)
-    } else if (domain.type is ListDomain<T>) {
-      TODO()
+    } else if (domain is ListDomain<T>) {
+      ownDomains.add(domain)
     }
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
     field.initialize(this)
-    field.setInfo()
     blockFields.add(field)
     return field
   }
@@ -478,14 +476,14 @@ open class FormBlock(var buffer: Int,
         blockFields.forEach { field ->
           val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
 
-            field.triggers.forEach { trigger ->
-              for (i in VConstants.TRG_TYPES.indices) {
-                if (trigger.events shr i and 1 > 0) {
-                  fieldTriggerArray[i] = i
-                  super.triggers[i] = trigger
-                }
+          field.triggers.forEach { trigger ->
+            for (i in VConstants.TRG_TYPES.indices) {
+              if (trigger.events shr i and 1 > 0) {
+                fieldTriggerArray[i] = i
+                super.triggers[i] = trigger
               }
             }
+          }
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
@@ -506,6 +504,9 @@ open class FormBlock(var buffer: Int,
       }
 
       override fun setInfo() {
+        blockFields.forEach {
+          it.setInfo(super.source)
+        }
       }
 
       init {
@@ -534,11 +535,7 @@ open class FormBlock(var buffer: Int,
           it.table
         }.toTypedArray()
         fields = blockFields.map { formField ->
-          formField.vField.also {
-            if (formField.domain is CodeDomain<*>) {
-              (it as VCodeField).source = super.source
-            }
-          }
+          formField.vField
         }.toTypedArray()
         super.indices = this@FormBlock.indices.map {
           it.ident

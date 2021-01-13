@@ -20,6 +20,8 @@ package org.kopi.galite.list
 
 import java.io.Serializable
 
+import org.jetbrains.exposed.sql.ColumnSet
+import org.kopi.galite.form.VDictionary
 import org.kopi.galite.form.VForm
 import org.kopi.galite.l10n.ListLocalizer
 import org.kopi.galite.l10n.LocalizationManager
@@ -27,11 +29,11 @@ import org.kopi.galite.l10n.LocalizationManager
 /**
  * Represents a list
  *
- * @param     ident             the identifier of the list type
- * @param     source            the qualified name of the source file defining the list
- * @param     newForm           the new form name
- * @param     columns           the list columns
- * @param     table             the trigger ID for the evaluation of the table
+ * @param     ident               the identifier of the list type
+ * @param     source              the qualified name of the source file defining the list
+ * @param     newForm             the new form name TODO: remove this as it is the old syntax
+ * @param     columns             the list columns
+ * @param     table               the statement to select data
  * @param     action              the list action
  * @param     autocompleteType    the auto complete type.
  * @param     autocompleteLength  the auto complete length.
@@ -40,18 +42,18 @@ import org.kopi.galite.l10n.LocalizationManager
 class VList(private val ident: String,
             private val source: String,
             val newForm: String?,
-            val columns: Array<VListColumn>,
-            val table: Int,
-            val action: Int,
+            val columns: Array<VListColumn?>,
+            val table: ColumnSet,
+            val action: (() -> VDictionary)?,
             val autocompleteType: Int,
             val autocompleteLength: Int,
             val hasShortcut: Boolean) : VConstants, Serializable {
 
   constructor(ident: String,
               source: String,
-              columns: Array<VListColumn>,
-              table: Int,
-              action: Int,
+              columns: Array<VListColumn?>,
+              table: ColumnSet,
+              action: (() -> VDictionary)?,
               autocompleteType: Int,
               autocompleteLength: Int,
               newForm: Class<VForm>?,
@@ -74,7 +76,7 @@ class VList(private val ident: String,
   /**
    * Returns the column at index.
    */
-  fun getColumn(pos: Int): VListColumn = columns[pos]
+  fun getColumn(pos: Int): VListColumn = columns[pos]!!
 
   /**
    * Returns `true` if the list has auto complete support.
@@ -89,7 +91,7 @@ class VList(private val ident: String,
   fun localize(manager: LocalizationManager) {
     val loc: ListLocalizer = manager.getListLocalizer(source, ident)
     columns.forEach { column ->
-      column.localize(loc)
+      column!!.localize(loc)
     }
   }
 

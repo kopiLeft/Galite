@@ -21,9 +21,10 @@ package org.kopi.galite.list
 import kotlin.math.max
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.visual.VlibProperties
 
-class VBooleanColumn(title: String, column: String?, sortAscending: Boolean) :
+class VBooleanColumn(title: String, column: Column<*>?, sortAscending: Boolean) :
         VListColumn(title, column, VConstants.ALG_LEFT, max(trueRep.length, falseRep.length), sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION

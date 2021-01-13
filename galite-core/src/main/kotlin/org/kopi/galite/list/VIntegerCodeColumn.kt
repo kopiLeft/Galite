@@ -20,10 +20,11 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.util.base.InconsistencyException
 
 class VIntegerCodeColumn(title: String,
-                         column: String?,
+                         column: Column<*>?,
                          names: Array<String>,
                          private val codes: Array<Int?>,
                          sortAscending: Boolean)

@@ -1772,7 +1772,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   @Suppress("UNCHECKED_CAST")
   val idColumn: Column<Int>
     get() {
-      return idField.lookupColumn(0) as? Column<Int> ?: throw InconsistencyException()
+      return idField.lookupColumn(tables!![0]) as? Column<Int> ?: throw InconsistencyException()
     }
 
   // laurent : return f even if it's null until we add this field in
@@ -2983,7 +2983,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             field.setQuery_(recno, result, columns[index])
           }
         }
-      } catch (noSuchElementException :NoSuchElementException) {
+      } catch (noSuchElementException: NoSuchElementException) {
         activeRecord = recno
         throw VExecFailedException(MessageCode.getMessage("VIS-00016", arrayOf(table.tableName)))
       } catch (illegalArgumentException: IllegalArgumentException) {
@@ -3014,7 +3014,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val condition = mutableListOf<Op<Boolean>>()
 
     for (field in fields) {
-      val column  = if (field.isNull(recno) || !field.hasIndex(index)) {
+      val column = if (field.isNull(recno) || !field.hasIndex(index)) {
         null
       } else {
         @Suppress("UNCHECKED_CAST")
@@ -3027,7 +3027,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     if (condition.isNotEmpty()) {
       try {
-        val result = tables!![0].slice(idColumn).select{ condition.compoundAnd() }.single()
+        val result = tables!![0].slice(idColumn).select { condition.compoundAnd() }.single()
 
         if (result[idColumn] != id) {
           form.setActiveBlock(this@VBlock)

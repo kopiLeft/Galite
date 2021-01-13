@@ -27,15 +27,15 @@ import javax.swing.event.EventListenerList
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.VarCharColumnType
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.substring
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.Query
 import org.kopi.galite.l10n.BlockLocalizer
@@ -1564,51 +1564,34 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       // Oracle doesn't force the value to be in the list
       return
     }
-    val SELECT_IS_IN_LIST = " SELECT   1                                      " +
-            " FROM     $2                                     " +
-            " WHERE    $1 = $3"
 
-    val SELECT_MATCHING_STRINGS = " SELECT   $1                                     " +
-            " FROM     $2                                     " +
-            " WHERE    {fn SUBSTRING($1, 1, {fn LENGTH(#3)})} = #3    " +
-            " ORDER BY 1"
-
-    if (isNull(block!!.activeRecord)) {
-      return
-    }
-    if (list == null) {
+    if (isNull(block!!.activeRecord) || list == null) {
       return
     }
     val alreadyProtected: Boolean = getForm().inTransaction()
+
     if (this !is VStringField) {
       var exists = false
 
       try {
-        try {
-          if (!alreadyProtected) {
-          }
-          SELECT_IS_IN_LIST.replace("$2", evalListTable())
-          SELECT_IS_IN_LIST.replace("$1", list!!.getColumn(0).column!!)
-          SELECT_IS_IN_LIST.replace("$3", getSql(block!!.activeRecord)!!)
-          transaction {
-            exec(SELECT_IS_IN_LIST) { exists = it.next() }
-          }
-          if (!alreadyProtected) {
-          }
-        } catch (e: SQLException) {
-          if (!alreadyProtected) {
-          } else {
-            throw e
-          }
-        } catch (error: Error) {
-          if (!alreadyProtected) {
-          } else {
-            throw error
-          }
-        } catch (rte: RuntimeException) {
-          if (!alreadyProtected) {
-          } else {
-            throw rte
+        while(true) {
+          try {
+            val column = list!!.getColumn(0).column as Column<String>
+
+            exists = !evalListTable_().select { column eq getSql(block!!.activeRecord)!! }.empty()
+            break
+          } catch (e: SQLException) {
+            if (alreadyProtected) {
+              throw e
+            }
+          } catch (error: Error) {
+            if (alreadyProtected) {
+              throw error
+            }
+          } catch (rte: RuntimeException) {
+            if (alreadyProtected) {
+              throw rte
+            }
           }
         }
       } catch (e: Throwable) {
@@ -1621,48 +1604,35 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } else {
       var count = 0
       var result: String? = null
-      val fldbuf = getSql(block!!.activeRecord)!!
+      val condition = getSql(block!!.activeRecord)!!
 
-      if (fldbuf.indexOf('*') > 0) {
+      if (condition.indexOf('*') > 0) {
         return
       }
       try {
-        try {
-          if (!alreadyProtected) {
-          }
-          SELECT_MATCHING_STRINGS.replace("$2", evalListTable())
-          SELECT_MATCHING_STRINGS.replace("$1", list!!.getColumn(0).column!!)
-          SELECT_MATCHING_STRINGS.replace("$3", getSql(block!!.activeRecord)!!)
-          transaction {
-            exec(SELECT_MATCHING_STRINGS) {
-              if (!it.next()) {
-                count = 0
-              } else {
-                count = 1
-                result = it.getString(1)
-                if (it.next()) {
-                  count = 2
-                }
-              }
-            }
-          }
+        while(true) {
+          try {
+            val column = list!!.getColumn(0).column as Column<String>
+            val query = evalListTable_().slice(column).select {
+              column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
+            }.orderBy(column)
 
-          if (!alreadyProtected) {
-          }
-        } catch (e: SQLException) {
-          if (!alreadyProtected) {
-          } else {
-            throw e
-          }
-        } catch (error: Error) {
-          if (!alreadyProtected) {
-          } else {
-            throw error
-          }
-        } catch (rte: RuntimeException) {
-          if (!alreadyProtected) {
-          } else {
-            throw rte
+            count = query.count().toInt()
+            if(count > 0) result = query.first()[column]
+            if(count > 2) count = 2
+            break
+          } catch (e: SQLException) {
+            if (alreadyProtected) {
+              throw e
+            }
+          } catch (error: Error) {
+            if (alreadyProtected) {
+              throw error
+            }
+          } catch (rte: RuntimeException) {
+            if (alreadyProtected) {
+              throw rte
+            }
           }
         }
       } catch (e: Throwable) {
@@ -1679,27 +1649,26 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         2 -> if (result == getString(block!!.activeRecord)) {
           return
         } else {
-          val qrybuf: String
-          var colbuf = ""
           var i = 0
+          val columns = mutableListOf<Column<*>>()
 
           while (i < list!!.columnCount()) {
-            if (i != 0) {
-              colbuf += ", "
-            }
-            colbuf += list!!.getColumn(i).column
+            val column = list!!.getColumn(i).column!!
+
+            columns.add(column)
             i++
           }
-          qrybuf = " SELECT   " + colbuf +
-                  " FROM     " + evalListTable() +
-                  " WHERE    {fn SUBSTRING(" + list!!.getColumn(
-                  0).column + ", 1, {fn LENGTH(" + fldbuf + ")})} = " + fldbuf +
-                  " ORDER BY 1"
-          result = displayQueryList(qrybuf, list!!.columns) as String?
+
+          val column = list!!.getColumn(0).column as Column<String>
+          val query = evalListTable_().slice(columns).select {
+            column.substring(1, condition.length) eq condition
+          }.orderBy(columns[0])
+
+          result = displayQueryList_(query, list!!.columns) as String?
           if (result == null) {
             throw VExecFailedException() // no message to display
           } else {
-            setString(block!!.activeRecord, result!!)
+            setString(block!!.activeRecord, result)
             return
           }
         }
@@ -1714,7 +1683,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getListID(): Int {
     val idColumn = Column<Int>(evalListTable_() , "ID" , IntegerColumnType())
-    val column = Column<Any>(evalListTable_() , list!!.getColumn(0).column!! , IntegerColumnType())
+    val column = list!!.getColumn(0).column as Column<String>
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
     assert(list != null) { threadInfo() + "list ist not null" }
@@ -1743,13 +1712,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return id
   }
 
-  private fun displayQueryList(queryText: String, columns: Array<VListColumn>): Any? {
+  private fun displayQueryList(queryText: String, columns: Array<VListColumn?>): Any? {
     TODO()
   }
 
   private fun displayQueryList_(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
     val columnsList = columns.map { vListColumn ->
-      Column<Any?>(evalListTable_(), vListColumn!!.column!! , VarCharColumnType())
+      vListColumn!!.column
     }
     val MAX_LINE_COUNT = 1024
     val SKIP_FIRST_COLUMN = false
@@ -1763,9 +1732,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         // OLD SYNTAX
         Module.getExecutable(list!!.newForm) as VDictionary?
       }
-      list!!.action != -1 -> {
+      list!!.action != null -> {
         // NEW SYNTAX
-        block!!.executeObjectTrigger(list!!.action) as VDictionary
+        list!!.action!!()
       }
       else -> {
         null // should never happen.
@@ -1781,13 +1750,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             if (lineCount >= MAX_LINE_COUNT - 1) {
               break
             }
-            if(result[columnsList[0]] == null) {
+            if(result[columnsList[0]!!] == null) {
               continue
             }
             var i = 0
 
             while (i < lines.size) {
-              lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 2 else 1]]
+              lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 2 else 1]!!]
               i += 1
             }
             lineCount += 1
@@ -1828,7 +1797,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           while (true) {
             try {
-              val column = Column<String>(evalListTable_(), list!!.getColumn(0).column!!, VarCharColumnType())
+              val column = list!!.getColumn(0).column!!
               val idColumn = Column<Int>(evalListTable_(), "ID", IntegerColumnType())
 
               result = evalListTable_().slice(column).select { idColumn eq  selected }.first()[column]
@@ -2032,9 +2001,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Returns the list table.
    */
-  private fun evalListTable(): String {
+  private fun evalListTable(): ColumnSet {
     return try {
-      block!!.executeObjectTrigger(list!!.table) as String
+      list!!.table
     } catch (e: VException) {
       throw InconsistencyException()
     }
@@ -2464,8 +2433,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   private var indices = 0  // bitset of unique indices
 
   /**
-   * The name of the field is the ident in the galite language
-   * @return    the name of this field
+   * The name of the field is the ident.
+   *
+   * @return    the name of this field.
    */
   lateinit var name: String   // field name (for dumps)
     private set
