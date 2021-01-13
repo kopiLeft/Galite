@@ -28,7 +28,7 @@ import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.shared.Registration
 
 /**
- * Widget that contains the opened windows
+ * Component that contains the opened windows
  * in the current application session.
  * By clicking on the link, a popup will be shown that contains
  * the opened windows and then the user can switch between them.
@@ -99,11 +99,11 @@ class VWindows : Div(), HasEnabled {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  val windowsLink: VULPanel
-  val inner: VLIPanel
-  val anchor: Anchor
-  val label: Span
-  val icon: Icon
+  private val windowsLink: VULPanel
+  private val inner: VLIPanel
+  private val anchor: Anchor
+  private val label: Span
+  private val icon: Icon
   private var enabled = false
 
   override fun setEnabled(enabled: Boolean) {
@@ -120,7 +120,7 @@ class VWindows : Div(), HasEnabled {
   //---------------------------------------------------
 
   /**
-   * Creates the opened windows handler widget.
+   * Creates the opened windows handler component.
    */
   init {
     setId("windows")
