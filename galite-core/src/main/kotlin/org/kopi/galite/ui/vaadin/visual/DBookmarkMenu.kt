@@ -23,7 +23,7 @@ import org.kopi.galite.visual.VMenuTree
 /**
  * The book mark menu
  */
-class DBookmarkMenu protected constructor(model: VMenuTree) : DMenu(model) {
+class DBookmarkMenu(model: VMenuTree) : DMenu(model) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

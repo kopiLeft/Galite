@@ -15,15 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
+package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.html.Div
 
 /**
- * The module list server side component.
- * TODO: Implement this class with appropriate component
+ * The main window container widget.
+ * This component will be responsible of displaying only one window.
+ * That's why deck panel is used.
+ * The control of the displayed widget will be from outside.
  */
-open class ModuleList : Div(), HasComponents {
-
+internal class VWindowContainer : Div() {
+  // TODO
+  init {
+    text = "TODO: VWindowContainer"
+  }
 }

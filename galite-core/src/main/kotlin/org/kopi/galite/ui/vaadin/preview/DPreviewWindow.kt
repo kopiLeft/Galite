@@ -15,15 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
+package org.kopi.galite.ui.vaadin.preview
 
-import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.html.Div
+import org.kopi.galite.preview.VPreviewWindow
+import org.kopi.galite.ui.vaadin.visual.DWindow
 
 /**
- * The module list server side component.
- * TODO: Implement this class with appropriate component
+ * The `DPreviewWindow` is the ui implementation of the [VPreviewWindow].
  */
-open class ModuleList : Div(), HasComponents {
-
+class DPreviewWindow(val model: VPreviewWindow) : DWindow(model) {
+  // TODO
+  override fun run() {
+    TODO()
+  }
 }

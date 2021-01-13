@@ -15,15 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
+package org.kopi.galite.ui.vaadin.base
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.Tag
 
 /**
- * The module list server side component.
- * TODO: Implement this class with appropriate component
+ * A complex panel that wraps an unordered list inside.
  */
-open class ModuleList : Div(), HasComponents {
-
-}
+@Tag(Tag.UL)
+class VULPanel : Component(), HasComponents
