@@ -16,10 +16,13 @@
  */
 package org.kopi.galite.demo.web.vaadin
 
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.router.Route
 import java.util.Locale
 
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.tests.VApplicationTestBase
+import org.kopi.galite.ui.vaadin.main.VWindows
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -57,5 +60,14 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
     } catch (exception: Throwable) {
       null
     }
+  }
+}
+
+@Route("vwindows")
+class VwindowsTest : VerticalLayout() {
+  val a = VWindows()
+
+  init {
+    add(a)
   }
 }
