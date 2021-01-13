@@ -15,15 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
+package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.html.Div
 
 /**
- * The module list server side component.
- * TODO: Implement this class with appropriate component
+ * The welcome text widget.
+ * Contains also the logout button to disconnect from application.
  */
-open class ModuleList : Div(), HasComponents {
+class VWelcome : Div() {
+  fun init() {
 
+  }
 }

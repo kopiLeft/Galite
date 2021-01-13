@@ -15,15 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
+package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.html.Div
 
 /**
- * The module list server side component.
- * TODO: Implement this class with appropriate component
+ * Component that contains the opened windows
+ * in the current application session.
+ * By clicking on the link, a popup will be shown that contains
+ * the opened windows and then the user can switch between them.
  */
-open class ModuleList : Div(), HasComponents {
-
+class VWindows : Div(), HasEnabled {
+  // TODO
+  init {
+    text = "TODO: WindowsComponent"
+  }
 }

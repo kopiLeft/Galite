@@ -17,14 +17,20 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import java.util.Locale
+
+import kotlin.collections.MutableList
+
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import org.kopi.galite.ui.vaadin.menu.ModuleList
 
-import java.util.Locale
-
 /**
- * The main application window.
+ * Main application window composed of a header and content.
+ * The content.
+ * This main window will have a full size to fit with the browser
+ * screen size.
  *
  * @param locale The application locale.
  * @param logo The application logo
@@ -32,7 +38,7 @@ import java.util.Locale
  */
 class MainWindow(locale: Locale,
                  val logo: String,
-                 val href: String) : VerticalLayout() {
+                 val href: String) : Focusable<MainWindow>, VerticalLayout() {
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
@@ -82,10 +88,6 @@ class MainWindow(locale: Locale,
     components.addAll(menus!!)
     components.addAll(windows)
     return components.iterator()
-  }
-
-  fun replaceComponent(oldComponent: Component?, newComponent: Component?) {
-    // cannot replace component.
   }
 
   /**

@@ -191,7 +191,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     setLocalizationContext(Locale(event.locale.substring(0, 2), event.locale.substring(3, 5)))
     // now try to connect to database
     try {
-      // connectToDatabase(event.username, event.password) FIXME: uncomment this.
+      connectToDatabase(event.username, event.password)
       startApplication() // create main window and menu
       if (welcomeView != null) {
         welcomeView = null
@@ -213,14 +213,19 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param username The login user name.
    * @param password The login password.
    * @throws SQLException When cannot connect to database.
-   * @see .login
+   * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    dBContext = login(getInitParameter("database")!!,
+    /*dBContext = login(getInitParameter("database")!!, FIXME: uncomment this.
                       getInitParameter("driver")!!,
                       username,
                       password,
-                      getInitParameter("schema")!!)
+                      getInitParameter("schema")!!)*/
+    dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+                      "org.h2.Driver",
+                      "admin",
+                      "admin",
+                      null)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
