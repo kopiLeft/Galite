@@ -36,6 +36,7 @@ open class Application : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {
   DBApplication.connectToDatabase()
+  DBSchemaTest.reset()
   DBApplication.initDatabase()
   DBApplication.initModules()
   DBApplication.initUserRights()
