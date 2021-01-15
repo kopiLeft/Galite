@@ -2061,6 +2061,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     changed = true // if you edit the value it's like if you change it
   }
 
+  /**
+   * Finds and returns the column in this [ColumnSet] corresponding to the [column] from the original table
+   *
+   * @param column The column in the original table
+   */
   private fun ColumnSet.resolveColumn(column: Column<*>): Column<*> {
     return when (this) {
       is Table -> {
