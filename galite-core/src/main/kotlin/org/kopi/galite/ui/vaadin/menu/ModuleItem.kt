@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.menu
 
+import org.kopi.galite.ui.vaadin.base.VAnchorPanel
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasStyle
@@ -24,7 +26,6 @@ import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.dom.ElementFactory
-import org.kopi.galite.ui.vaadin.base.VAnchorPanel
 
 /**
  * The module item model.

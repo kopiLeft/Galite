@@ -37,9 +37,6 @@ open class ModuleListMenu(val root: Boolean) :
   var focusOnHover = true
   private var shownChildMenu: ModuleListMenu? = null
   private var selectedItem: ModuleItem? = null
-
-
-  /*package*/
   var vertical = false
 
 

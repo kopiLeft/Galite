@@ -17,22 +17,20 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.contextmenu.MenuItem
+import com.vaadin.flow.component.tabs.Tabs
 
 /**
- * The opened windows display component.
- * This component will be the responsible of displaying
- * the open windows menu.
+ * The already opened windows menu.
+ * The menu aims to show the opened windows by the user.
+ * From this menu, the user can switch to another window.
  */
-class VWindowsDisplay : Div() {
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-
-  private val menu = VWindowsMenu(true)
+class VWindowsMenu(val vertical: Boolean) : Tabs() {
 
   init {
-    add(menu)
-    className = "k-windows-menu-container"
+    orientation = if(vertical) Orientation.VERTICAL else Orientation.HORIZONTAL
+    // Make sure that CSS styles specified for the default Menu classes
+    // do not affect this menu
+    className = "k-windowsMenu"
   }
 }
