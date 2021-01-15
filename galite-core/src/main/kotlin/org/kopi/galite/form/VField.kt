@@ -36,6 +36,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.base.UComponent
@@ -1825,6 +1826,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   internal fun selectFromList(gotoNextField: Boolean) {
     val columns = mutableListOf<Column<*>>()
     var expression: ExpressionWithColumnType<*>? = null
+    val condition = getSearchCondition_(expression!!)
 
     list!!.columns.forEach {
       columns.add(it!!.column!!)
@@ -1851,7 +1853,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       }
     }
 
-    val query = evalListTable_().slice(columns).select(getSearchCondition_(expression!!)!!).orderBy(list!!.getColumn(0).column!!)
+    val query = if (condition == null) {
+      evalListTable_().slice(columns).selectAll().orderBy(list!!.getColumn(0).column!!)
+    }
+    else {
+      evalListTable_().slice(columns).select(getSearchCondition_(expression)!!).orderBy(list!!.getColumn(0).column!!)
+    }
 
     val result = displayQueryList_(query, list!!.columns)
 
