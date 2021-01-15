@@ -36,6 +36,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.substring
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.Query
 import org.kopi.galite.l10n.BlockLocalizer
@@ -2040,36 +2041,32 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun setValueID(id: Int) {
-    TODO()
-    /*
     var result: Any? = null
 
     try {
-      while (true) {
-        try {
-          transaction {
-            exec("SELECT " + list!!.getColumn(0).column!! + " FROM "
-                    + evalListTable() + " WHERE ID = " + id) {
-              result = if (it.next()) {
-                it.getObject(1)
-              } else {
-                null
-              }
-            }
-          }
-          break
-        } catch (e: SQLException) {
-        } catch (error: Error) {
-        } catch (rte: RuntimeException) {
-        }
+      transaction {
+        val table= evalListTable()
+        val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
+        val firstRecord = table.slice(table.resolveColumn(list!!.getColumn(0).column!!)).select {
+          idColumn eq id
+        }.firstOrNull()
+        result = firstRecord?.get(idColumn)
       }
     } catch (e: Throwable) {
       throw VRuntimeException(e)
     }
     setObject(block!!.activeRecord, result)
     changed = true // if you edit the value it's like if you change it
-    */
+  }
+
+  fun ColumnSet.resolveColumn(column: Column<*>): Column<*> {
+    return if(this is Table) {
+      column
+    } else {
+      columns.single { it.name == column.name }
+    }
   }
 
   // ----------------------------------------------------------------------
