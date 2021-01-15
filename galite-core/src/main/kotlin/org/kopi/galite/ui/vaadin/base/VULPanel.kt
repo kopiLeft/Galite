@@ -15,32 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.base
 
-package org.kopi.galite.list
-
-import java.awt.Color
-
-import kotlin.reflect.KClass
-
-import org.jetbrains.exposed.sql.Column
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.Tag
 
 /**
- * laurent :<br></br>
- * NOTICE : This class was copied from VImageColumn and was not test
+ * A complex panel that wraps an unordered list inside.
  */
-class VColorColumn(title: String,
-                   column: Column<*>?,
-                   sortAscending: Boolean)
-  : VListColumn(title,
-                column,
-                VConstants.ALG_LEFT,
-                7,
-                sortAscending) {
-
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> {
-    return Color::class
-  }
-}
+@Tag(Tag.UL)
+class VULPanel : Component(), HasComponents

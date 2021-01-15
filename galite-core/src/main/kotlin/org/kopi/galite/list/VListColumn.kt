@@ -18,18 +18,17 @@
 
 package org.kopi.galite.list
 
-import org.jetbrains.exposed.sql.Column
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.l10n.ListLocalizer
 
 abstract class VListColumn(
   var title: String,
-  val column: String?,
+  val column: Column<*>?,
   private val align: Int,
   val width: Int,
   val isSortAscending: Boolean,
-  val column_ : Column<*>? = null
 ) : VConstants, ObjectFormatter {
 
   /**
@@ -62,6 +61,6 @@ abstract class VListColumn(
    * @param     loc
    */
   fun localize(loc: ListLocalizer) {
-    title = loc.getColumnTitle(column!!)
+    title = loc.getColumnTitle(column!!.name)
   }
 }

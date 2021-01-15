@@ -25,7 +25,7 @@ import kotlin.test.assertEquals
 class VImageColumnTests {
   @Test
   fun vColorColumnTests() {
-    val vImageColumn = VImageColumn("title", "column", true)
+    val vImageColumn = VImageColumn("title", null, true)
 
     assertEquals("", vImageColumn.formatObject(null))
     assertEquals(ByteArray::class, vImageColumn.getDataType())

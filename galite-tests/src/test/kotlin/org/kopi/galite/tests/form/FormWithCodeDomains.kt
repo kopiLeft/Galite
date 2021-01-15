@@ -20,11 +20,18 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
-import org.kopi.galite.domain.Domain
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormWithDomains: Form() {
+object FormWithCodeDomains: Form() {
+  val edit = menu("Edit")
+  val autoFill = FormWithCodeDomains.actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  )
   override val locale = Locale.FRANCE
   override val title = "form to test domains"
   val testBlock = insertBlock(DaysBlock)
@@ -37,8 +44,8 @@ object DaysBlock : FormBlock(1, 1, "DaysBlock", "Days block") {
   }
 }
 
-object Days: Domain<Int>(20) {
-  override val type = code {
+object Days: CodeDomain<Int>() {
+  init {
     this["Sunday"] = 1
     this["Monday"] = 2
     this["Tuesday"] = 3
@@ -50,5 +57,5 @@ object Days: Domain<Int>(20) {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithDomains)
+  Application.runForm(formName = FormWithCodeDomains)
 }

@@ -15,32 +15,37 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.main
 
-package org.kopi.galite.list
-
-import java.awt.Color
-
-import kotlin.reflect.KClass
-
-import org.jetbrains.exposed.sql.Column
+import java.io.Serializable
 
 /**
- * laurent :<br></br>
- * NOTICE : This class was copied from VImageColumn and was not test
+ * Registered objects are notified about actions happening
+ * in the main application window.
  */
-class VColorColumn(title: String,
-                   column: Column<*>?,
-                   sortAscending: Boolean)
-  : VListColumn(title,
-                column,
-                VConstants.ALG_LEFT,
-                7,
-                sortAscending) {
+interface MainWindowListener : Serializable {
+  /**
+   * Fired when the administration link is clicked.
+   */
+  fun onAdmin()
 
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> {
-    return Color::class
-  }
+  /**
+   * Fired when the support link is clicked.
+   */
+  fun onSupport()
+
+  /**
+   * Fired when the help link is clicked.
+   */
+  fun onHelp()
+
+  /**
+   * Fired when the logout link is clicked.
+   */
+  fun onLogout()
+
+  /**
+   * Fired when the connected user link is clicked.
+   */
+  fun onUser()
 }

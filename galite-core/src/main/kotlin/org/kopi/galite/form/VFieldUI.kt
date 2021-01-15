@@ -709,7 +709,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     hasAutofill = model.hasAutofill() && !hasAutofillCommand()
     commands = cmd
     if (model.list != null) {
-      if (model.list!!.newForm != null || model.list!!.action != -1) {
+      if (model.list!!.newForm != null || model.list!!.action != null) {
         hasNewItem = true
         hasEditItem = hasNewItem
       }

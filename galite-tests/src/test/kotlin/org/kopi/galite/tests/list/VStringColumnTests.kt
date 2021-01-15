@@ -27,7 +27,7 @@ class VStringColumnTests {
 
   @Test
   fun vStringColumnTests() {
-    val vStringColumn = VStringColumn("title", "column", 1, 2, true)
+    val vStringColumn = VStringColumn("title", null, 1, 2, true)
 
     assertEquals("", vStringColumn.formatObject(null))
     assertEquals("St...ring", vStringColumn.formatObject("String"))

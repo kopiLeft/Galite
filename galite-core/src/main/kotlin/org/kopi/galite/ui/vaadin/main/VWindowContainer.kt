@@ -15,32 +15,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.main
 
-package org.kopi.galite.list
-
-import java.awt.Color
-
-import kotlin.reflect.KClass
-
-import org.jetbrains.exposed.sql.Column
+import com.vaadin.flow.component.html.Div
 
 /**
- * laurent :<br></br>
- * NOTICE : This class was copied from VImageColumn and was not test
+ * The main window container widget.
+ * This component will be responsible of displaying only one window.
+ * That's why deck panel is used.
+ * The control of the displayed widget will be from outside.
  */
-class VColorColumn(title: String,
-                   column: Column<*>?,
-                   sortAscending: Boolean)
-  : VListColumn(title,
-                column,
-                VConstants.ALG_LEFT,
-                7,
-                sortAscending) {
-
-  // --------------------------------------------------------------------
-  // IMPLEMENTATION
-  // --------------------------------------------------------------------
-  override fun getDataType(): KClass<*> {
-    return Color::class
+internal class VWindowContainer : Div() {
+  // TODO
+  init {
+    text = "TODO: VWindowContainer"
   }
 }
