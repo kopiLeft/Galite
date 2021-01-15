@@ -1822,9 +1822,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
-  /**
-   * Checks that field value exists in list
-   */
   internal fun selectFromList(gotoNextField: Boolean) {
     val columns = mutableListOf<Column<*>>()
     var expression: ExpressionWithColumnType<*>? = null
