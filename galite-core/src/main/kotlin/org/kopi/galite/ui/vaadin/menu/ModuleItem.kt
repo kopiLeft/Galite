@@ -49,14 +49,14 @@ open class ModuleItem : Component(), HasComponents, HasStyle {
    * The sub-menu associated with this item.
    */
   var subMenu: ModuleListMenu? = null
-  set(value) {
+    set(value) {
       field = value
       if (parentMenu != null) {
         value!!.autoOpen = true
         value.isAnimationEnabled = parentMenu!!.isAnimationEnabled
         value.focusOnHover = parentMenu!!.focusOnHover
       }
-  }
+    }
 
   /**
    * Builds the item content.

@@ -17,9 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import org.kopi.galite.ui.vaadin.common.VCaption
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
-import org.kopi.galite.ui.vaadin.common.VCaption
 
 /**
  * The main window container component.
@@ -41,7 +42,7 @@ internal class VWindowContainer : Div() {
 
   init {
     val captionWrapper = Div()
-    className= "k-window-container"
+    className = "k-window-container"
     pane.className = "k-container-pane"
     caption = VCaption(false)
     caption.className = "k-window-caption"

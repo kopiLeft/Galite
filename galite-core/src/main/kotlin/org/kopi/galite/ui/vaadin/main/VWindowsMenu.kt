@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.tabs.Tabs
 
 /**
@@ -28,7 +27,7 @@ import com.vaadin.flow.component.tabs.Tabs
 class VWindowsMenu(val vertical: Boolean) : Tabs() {
 
   init {
-    orientation = if(vertical) Orientation.VERTICAL else Orientation.HORIZONTAL
+    orientation = if (vertical) Orientation.VERTICAL else Orientation.HORIZONTAL
     // Make sure that CSS styles specified for the default Menu classes
     // do not affect this menu
     className = "k-windowsMenu"

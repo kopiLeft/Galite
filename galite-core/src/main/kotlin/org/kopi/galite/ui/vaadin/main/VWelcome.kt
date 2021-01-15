@@ -17,12 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import java.awt.Component
+
 import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
 import org.kopi.galite.ui.vaadin.menu.ModuleListMenu
 
 import com.vaadin.flow.component.html.Div
-import java.awt.Component
 
 /**
  * The welcome text widget.

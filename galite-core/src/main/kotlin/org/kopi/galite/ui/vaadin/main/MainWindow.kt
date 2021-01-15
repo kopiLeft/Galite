@@ -21,6 +21,12 @@ import java.util.Locale
 
 import kotlin.collections.MutableList
 
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.common.VContent
+import org.kopi.galite.ui.vaadin.common.VHeader
+import org.kopi.galite.ui.vaadin.common.VMain
+import org.kopi.galite.ui.vaadin.menu.ModuleList
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasStyle
@@ -30,11 +36,6 @@ import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.contextmenu.MenuItem
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.common.VContent
-import org.kopi.galite.ui.vaadin.common.VHeader
-import org.kopi.galite.ui.vaadin.common.VMain
-import org.kopi.galite.ui.vaadin.menu.ModuleList
 
 /**
  * Main application window composed of a header and content.

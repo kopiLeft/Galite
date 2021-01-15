@@ -22,7 +22,6 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.Tag
-import java.util.*
 
 /**
  * The module list menu bar.
@@ -49,8 +48,8 @@ open class ModuleListMenu(val root: Boolean) :
     element.setAttribute("hideFocus", "true")
     // Deselect items when blurring without a child menu.
     addBlurListener {
-        if (shownChildMenu == null) {
-          selectItem(null)
+      if (shownChildMenu == null) {
+        selectItem(null)
       }
     }
     tabIndex = 0
