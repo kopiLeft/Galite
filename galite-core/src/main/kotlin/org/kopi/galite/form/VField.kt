@@ -32,6 +32,7 @@ import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
@@ -2043,16 +2044,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   @Suppress("UNCHECKED_CAST")
   fun setValueID(id: Int) {
-    var result: Any? = null
-
-    try {
+    val result = try {
       transaction {
         val table= evalListTable()
         val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
         val firstRecord = table.slice(table.resolveColumn(list!!.getColumn(0).column!!)).select {
           idColumn eq id
         }.firstOrNull()
-        result = firstRecord?.get(idColumn)
+
+        firstRecord?.get(idColumn)
       }
     } catch (e: Throwable) {
       throw VRuntimeException(e)
@@ -2061,11 +2061,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     changed = true // if you edit the value it's like if you change it
   }
 
-  fun ColumnSet.resolveColumn(column: Column<*>): Column<*> {
-    return if(this is Table) {
-      column
-    } else {
-      columns.single { it.name == column.name }
+  private fun ColumnSet.resolveColumn(column: Column<*>): Column<*> {
+    return when (this) {
+      is Table -> {
+        column
+      }
+      is QueryAlias -> {
+        get(column)
+      }
+      else -> {
+        columns.single { it.name == column.name }
+      }
     }
   }
 
