@@ -53,6 +53,10 @@ import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.PropertySource
+
 
 /**
  * The entry point for all Galite WEB applications.
@@ -60,6 +64,8 @@ import org.kopi.galite.visual.WindowController
  * @param registry The [Registry] object.
  */
 @Route("")
+@Configuration
+@PropertySource("classpath:application.properties")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
   //---------------------------------------------------
@@ -70,6 +76,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var askAnswer = 0
   private lateinit var configuration: ApplicationConfiguration
   private var stylesInjector: StylesInjector? = null
+
+  @Value("\${database}")
+  private val myProperty: String? = null
+
+  @Value("\${driver}")
+  private val driver: String? = null
+
+  @Value("\${schema}")
+  private val schema: String? = null
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -215,17 +230,17 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @throws SQLException When cannot connect to database.
    * @see login
    */
-  private fun connectToDatabase(username: String, password: String) {
-    /*dBContext = login(getInitParameter("database")!!, FIXME: uncomment this.
-                      getInitParameter("driver")!!,
+  private fun connectToDatabase(@Value("\${username}") username: String, @Value("\${password}") password: String) {
+    dBContext = login(myProperty!!,
+                      driver!!,
                       username,
                       password,
-                      getInitParameter("schema")!!)*/
-    dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-                      "org.h2.Driver",
-                      "admin",
-                      "admin",
-                      null)
+                      schema)
+    dBContext = login(myProperty,
+                      driver,
+                      username,
+                      password,
+                      schema)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
