@@ -37,6 +37,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
@@ -1824,36 +1825,40 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
+  @Suppress("UNCHECKED_CAST")
   internal fun selectFromList(gotoNextField: Boolean) {
     val columns = mutableListOf<Column<*>>()
-    var expression: ExpressionWithColumnType<*>? = null
 
     list!!.columns.forEach {
       columns.add(it!!.column!!)
     }
 
-    if (getSearchType() == VConstants.STY_MANY) {
-      expression = when (options and VConstants.FDO_SEARCH_MASK) {
+    val searchCondition = if (getSearchType() == VConstants.STY_MANY) {
+      val expression = when (options and VConstants.FDO_SEARCH_MASK) {
         VConstants.FDO_SEARCH_NONE -> {
-          @Suppress("UNCHECKED_CAST")
-          list!!.getColumn(0).column as Column<String>
+          list!!.getColumn(0).column as Column<*>
         }
 
         VConstants.FDO_SEARCH_UPPER -> {
-          @Suppress("UNCHECKED_CAST")
           (list!!.getColumn(0).column as Column<String>).upperCase()
         }
 
         VConstants.FDO_SEARCH_LOWER ->  {
-          @Suppress("UNCHECKED_CAST")
           (list!!.getColumn(0).column as Column<String>).lowerCase()
         }
 
         else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
       }
+      getSearchCondition_(expression)
+    } else {
+      null
     }
 
-    val query = evalListTable_().slice(columns).select(getSearchCondition_(expression!!)!!).orderBy(list!!.getColumn(0).column!!)
+    val query = if(searchCondition == null) {
+      evalListTable_().slice(columns).selectAll().orderBy(list!!.getColumn(0).column!!)
+    } else {
+      evalListTable_().slice(columns).select(searchCondition).orderBy(list!!.getColumn(0).column!!)
+    }
 
     val result = displayQueryList_(query, list!!.columns)
 
