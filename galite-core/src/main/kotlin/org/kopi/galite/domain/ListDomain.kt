@@ -84,11 +84,11 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
    * Sets a mapping between the values that the domain can take
    * and a corresponding text to be displayed in a field.
    *
-   * @param text the text
+   * @receiver the text
    * @param value the value
    */
-  operator fun set(text: String, value: Column<*>) {
-    columns.add(ListDescription(text, value, this))
+  infix fun String.keyOf(value: Column<*>) {
+    columns.add(ListDescription(this, value, this@ListDomain))
   }
 
   /**

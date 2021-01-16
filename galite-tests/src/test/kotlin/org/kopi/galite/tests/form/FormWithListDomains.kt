@@ -78,35 +78,35 @@ object UsersList: ListDomain<Int>(20) {
     SomeDictionnaryForm
   }
 
-  val autoComplete = complete(AutoComplete.LEFT, 10)
+  val autoComplete = complete(AutoComplete.LEFT, 1)
 
   init {
-    this["ID"] = Users.id
-    this["UC"] = Users.uc
-    this["TS"] = Users.ts
-    this["KURZNAME"] = Users.shortName
-    this["ZEICHEN"] = Users.character
-    this["TELEFON"] = Users.phone
-    this["EMAIL"] = Users.email
+    "ID" keyOf Users.id
+    "UC" keyOf Users.uc
+    "TS" keyOf Users.ts
+    "KURZNAME" keyOf Users.shortName
+    "ZEICHEN" keyOf Users.character
+    "TELEFON" keyOf Users.phone
+    "EMAIL" keyOf Users.email
   }
 }
 
-object Module: ListDomain<Int>(20) {
+object Module: ListDomain<String>(20) {
 
   override val table = Modules
 
-  val autoComplete = complete(AutoComplete.LEFT, 3)
+  val autoComplete = complete(AutoComplete.LEFT, 2)
 
   init {
-    this["ID"] = Modules.id
-    this["UC"] = Modules.uc
-    this["TS"] = Modules.ts
-    this["KURZNAME"] = Modules.shortName
-    this["VATER"] = Modules.parent
-    this["QUELLE"] = Modules.sourceName
-    this["PRIORITAET"] = Modules.priority
-    this["OBJEKT"] = Modules.objectName
-    this["SYMBOL"] = Modules.symbol
+    "KURZNAME" keyOf Modules.shortName
+    "UC" keyOf Modules.uc
+    "ID" keyOf Modules.id
+    "TS" keyOf Modules.ts
+    "VATER" keyOf Modules.parent
+    "QUELLE" keyOf Modules.sourceName
+    "PRIORITAET" keyOf Modules.priority
+    "OBJEKT" keyOf Modules.objectName
+    "SYMBOL" keyOf Modules.symbol
   }
 }
 
