@@ -32,11 +32,16 @@ import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.substring
+import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.Query
@@ -1576,24 +1581,29 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       var exists = false
 
       try {
-        while(true) {
-          try {
-            val column = list!!.getColumn(0).column as Column<String>
+        try {
+          val column = list!!.getColumn(0).column as Column<String>
 
+          val transaction = TransactionManager.currentOrNull()
+          if (transaction != null) {
             exists = !evalListTable_().select { column eq getSql(block!!.activeRecord)!! }.empty()
-            break
-          } catch (e: SQLException) {
-            if (alreadyProtected) {
-              throw e
+          } else {
+            transaction {
+              exists = !evalListTable_().select { column eq getSql(block!!.activeRecord)!! }.empty()
             }
-          } catch (error: Error) {
-            if (alreadyProtected) {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (alreadyProtected) {
-              throw rte
-            }
+          }
+
+        } catch (e: SQLException) {
+          if (alreadyProtected) {
+            throw e
+          }
+        } catch (error: Error) {
+          if (alreadyProtected) {
+            throw error
+          }
+        } catch (rte: RuntimeException) {
+          if (alreadyProtected) {
+            throw rte
           }
         }
       } catch (e: Throwable) {
@@ -1612,29 +1622,35 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         return
       }
       try {
-        while(true) {
-          try {
-            val column = list!!.getColumn(0).column as Column<String>
-            val query = evalListTable_().slice(column).select {
-              column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
-            }.orderBy(column)
+        try {
+          val column = list!!.getColumn(0).column as Column<String>
+          val query = evalListTable_().slice(column).select {
+            column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
+          }.orderBy(column)
 
+          val transaction = TransactionManager.currentOrNull()
+          if (transaction != null) {
             count = query.count().toInt()
-            if(count > 0) result = query.first()[column]
-            if(count > 2) count = 2
-            break
-          } catch (e: SQLException) {
-            if (alreadyProtected) {
-              throw e
+            if (count > 0) result = query.first()[column]
+            if (count > 2) count = 2
+          } else {
+            transaction {
+              count = query.count().toInt()
+              if (count > 0) result = query.first()[column]
+              if (count > 2) count = 2
             }
-          } catch (error: Error) {
-            if (alreadyProtected) {
-              throw error
-            }
-          } catch (rte: RuntimeException) {
-            if (alreadyProtected) {
-              throw rte
-            }
+          }
+        } catch (e: SQLException) {
+          if (alreadyProtected) {
+            throw e
+          }
+        } catch (error: Error) {
+          if (alreadyProtected) {
+            throw error
+          }
+        } catch (rte: RuntimeException) {
+          if (alreadyProtected) {
+            throw rte
           }
         }
       } catch (e: Throwable) {
@@ -1684,7 +1700,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * !!! TRY TO MERGE WITH checkList ???
    */
   open fun getListID(): Int {
-    val idColumn = Column<Int>(evalListTable_() , "ID" , IntegerColumnType())
+    val idColumn = Column<Int>(evalListTable_(), "ID", IntegerColumnType())
     val column = list!!.getColumn(0).column as Column<String>
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
@@ -1745,14 +1761,14 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
     SHOW_SINGLE_ENTRY = newForm != null
     try {
-      while (true) {
-        try {
+      try {
+        transaction {
           lineCount = 0
           for (result in query) {
             if (lineCount >= MAX_LINE_COUNT - 1) {
               break
             }
-            if(result[columnsList[0]!!] == null) {
+            if (result[columnsList[0]!!] == null) {
               continue
             }
             var i = 0
@@ -1763,11 +1779,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             }
             lineCount += 1
           }
-          break
-        } catch (e: SQLException) {
-        } catch (error: java.lang.Error) {
-        } catch (rte: RuntimeException) {
         }
+      } catch (e: SQLException) {
+      } catch (error: java.lang.Error) {
+      } catch (rte: RuntimeException) {
       }
     } catch (e: Throwable) {
       throw VRuntimeException(e)
@@ -1797,17 +1812,16 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         var result: Any?
 
         try {
-          while (true) {
-            try {
+          result = try {
+            transaction {
               val column = list!!.getColumn(0).column!!
               val idColumn = Column<Int>(evalListTable_(), "ID", IntegerColumnType())
 
-              result = evalListTable_().slice(column).select { idColumn eq  selected }.first()[column]
-              break
-            } catch (e: SQLException) {
-            } catch (error: java.lang.Error) {
-            } catch (rte: RuntimeException) {
+              evalListTable_().slice(column).select { idColumn eq selected }.first()[column]
             }
+          } catch (e: SQLException) {
+          } catch (error: java.lang.Error) {
+          } catch (rte: RuntimeException) {
           }
         } catch (e: Throwable) {
           throw VRuntimeException(e)
@@ -1822,36 +1836,40 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   /**
    * Checks that field value exists in list
    */
+  @Suppress("UNCHECKED_CAST")
   internal fun selectFromList(gotoNextField: Boolean) {
     val columns = mutableListOf<Column<*>>()
-    var expression: ExpressionWithColumnType<*>? = null
 
     list!!.columns.forEach {
       columns.add(it!!.column!!)
     }
 
-    if (getSearchType() == VConstants.STY_MANY) {
-      expression = when (options and VConstants.FDO_SEARCH_MASK) {
+    val searchCondition = if (getSearchType() == VConstants.STY_MANY) {
+      val expression = when (options and VConstants.FDO_SEARCH_MASK) {
         VConstants.FDO_SEARCH_NONE -> {
-          @Suppress("UNCHECKED_CAST")
-          list!!.getColumn(0).column as Column<String>
+          list!!.getColumn(0).column as Column<*>
         }
 
         VConstants.FDO_SEARCH_UPPER -> {
-          @Suppress("UNCHECKED_CAST")
           (list!!.getColumn(0).column as Column<String>).upperCase()
         }
 
-        VConstants.FDO_SEARCH_LOWER ->  {
-          @Suppress("UNCHECKED_CAST")
+        VConstants.FDO_SEARCH_LOWER -> {
           (list!!.getColumn(0).column as Column<String>).lowerCase()
         }
 
         else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
       }
+      getSearchCondition_(expression)
+    } else {
+      null
     }
 
-    val query = evalListTable_().slice(columns).select(getSearchCondition_(expression!!)!!).orderBy(list!!.getColumn(0).column!!)
+    val query = if (searchCondition == null) {
+      evalListTable_().slice(columns).selectAll().orderBy(list!!.getColumn(0).column!!)
+    } else {
+      evalListTable_().slice(columns).select(searchCondition).orderBy(list!!.getColumn(0).column!!)
+    }
 
     val result = displayQueryList_(query, list!!.columns)
 
@@ -2041,36 +2059,42 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun setValueID(id: Int) {
-    TODO()
-    /*
-    var result: Any? = null
+    val result = try {
+      transaction {
+        val table = evalListTable()
+        val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
+        val firstRecord = table.slice(table.resolveColumn(list!!.getColumn(0).column!!)).select {
+          idColumn eq id
+        }.firstOrNull()
 
-    try {
-      while (true) {
-        try {
-          transaction {
-            exec("SELECT " + list!!.getColumn(0).column!! + " FROM "
-                    + evalListTable() + " WHERE ID = " + id) {
-              result = if (it.next()) {
-                it.getObject(1)
-              } else {
-                null
-              }
-            }
-          }
-          break
-        } catch (e: SQLException) {
-        } catch (error: Error) {
-        } catch (rte: RuntimeException) {
-        }
+        firstRecord?.get(idColumn)
       }
     } catch (e: Throwable) {
       throw VRuntimeException(e)
     }
     setObject(block!!.activeRecord, result)
     changed = true // if you edit the value it's like if you change it
-    */
+  }
+
+  /**
+   * Finds and returns the column in this [ColumnSet] corresponding to the [column] from the original table
+   *
+   * @param column The column in the original table
+   */
+  private fun ColumnSet.resolveColumn(column: Column<*>): Column<*> {
+    return when (this) {
+      is Table -> {
+        column
+      }
+      is QueryAlias -> {
+        get(column)
+      }
+      else -> {
+        columns.single { it.name == column.name }
+      }
+    }
   }
 
   // ----------------------------------------------------------------------

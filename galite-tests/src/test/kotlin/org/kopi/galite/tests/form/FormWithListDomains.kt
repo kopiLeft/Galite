@@ -51,7 +51,7 @@ object FormWithListDomains: Form() {
   )
   override val locale = Locale.FRANCE
   override val title = "form to test list domains"
-  val testBlock = insertBlock(UsersListBlock)
+  val userListBlock = insertBlock(UsersListBlock)
 }
 
 object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
@@ -65,7 +65,7 @@ object UsersList: ListDomain<Int>(20) {
 
   override val table = query(
           Users.select {
-            Users.id greater 2
+            Users.id greater 0
           }
   )
 
