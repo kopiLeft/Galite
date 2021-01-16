@@ -20,6 +20,7 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
+import org.kopi.galite.db.Modules
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.AutoComplete
@@ -59,6 +60,10 @@ object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
     label = "user"
     help = "The user"
   }
+  val module = mustFill(domain = Module, position = at(2, 1)) {
+    label = "module"
+    help = "The module"
+  }
 }
 
 object UsersList: ListDomain<Int>(20) {
@@ -83,6 +88,25 @@ object UsersList: ListDomain<Int>(20) {
     this["ZEICHEN"] = Users.character
     this["TELEFON"] = Users.phone
     this["EMAIL"] = Users.email
+  }
+}
+
+object Module: ListDomain<Int>(20) {
+
+  override val table = Modules
+
+  val autoComplete = complete(AutoComplete.LEFT, 3)
+
+  init {
+    this["ID"] = Modules.id
+    this["UC"] = Modules.uc
+    this["TS"] = Modules.ts
+    this["KURZNAME"] = Modules.shortName
+    this["VATER"] = Modules.parent
+    this["QUELLE"] = Modules.sourceName
+    this["PRIORITAET"] = Modules.priority
+    this["OBJEKT"] = Modules.objectName
+    this["SYMBOL"] = Modules.symbol
   }
 }
 
@@ -113,5 +137,7 @@ object SomeDictionnaryForm : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithListDomains)
+  Application.runForm(formName = FormWithListDomains) {
+    initModules()
+  }
 }

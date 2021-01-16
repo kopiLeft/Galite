@@ -111,7 +111,7 @@ class VListDialog(list: Array<VListColumn?>,
    * Displays a dialog box returning position of selected element.
    */
   fun selectFromDialog(window: VWindow?, field: VField?, showSingleEntry: Boolean): Int =
-          display.selectFromDialog((window?.getDisplay())!!,
+          display.selectFromDialog(window?.getDisplay(),
                                    field?.getDisplay(),
                                    showSingleEntry)
 

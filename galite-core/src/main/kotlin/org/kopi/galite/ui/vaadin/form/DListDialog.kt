@@ -28,7 +28,7 @@ import org.kopi.galite.visual.UWindow
  * [UListDialog] specifications.
  */
 class DListDialog(model: VListDialog) : UListDialog, GridListDialog() {
-  override fun selectFromDialog(window: UWindow, field: UField?, showSingleEntry: Boolean): Int {
+  override fun selectFromDialog(window: UWindow?, field: UField?, showSingleEntry: Boolean): Int {
     TODO("Not yet implemented")
   }
 
