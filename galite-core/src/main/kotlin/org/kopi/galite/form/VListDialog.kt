@@ -50,7 +50,7 @@ class VListDialog(list: Array<VListColumn?>,
   constructor(list: Array<VListColumn?>,
               data: Array<Array<Any?>>,
               rows: Int,
-              newForm: VDictionary) : this(list, data, makeIdentArray(rows), rows, false) {
+              newForm: VDictionary?) : this(list, data, makeIdentArray(rows), rows, false) {
     this.newForm = newForm
   }
 
@@ -150,7 +150,7 @@ class VListDialog(list: Array<VListColumn?>,
               value1 && !(value2 as Boolean)
             }
             is Date -> {
-              (value1 as Date) > value2 as? Date
+              value1 > value2 as? Date
             }
             else -> {
               false

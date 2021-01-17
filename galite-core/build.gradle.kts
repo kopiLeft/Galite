@@ -20,11 +20,10 @@ plugins {
 }
 
 val exposedVersion = "0.27.1"
-val vaadinVersion = "17.0.0"
+val vaadinVersion = "18.0.3"
 val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
 val apachePoi = "4.1.2"
-val apacheOoxml = "3.9"
 val graphbuilder = "1.02"
 val hylafaxVersion = "1.0.0"
 val jFreeChartVersion = "1.0.19"
@@ -53,7 +52,7 @@ dependencies {
   implementation("org.apache.poi", "poi", apachePoi)
 
   // Apache OOxml
-  implementation("org.apache.poi", "poi-ooxml", apacheOoxml)
+  implementation("org.apache.poi", "poi-ooxml", apachePoi)
 
   // Graphbuilder dependency
   implementation("com.github.virtuald", "curvesapi", graphbuilder)

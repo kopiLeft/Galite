@@ -18,9 +18,11 @@
 
 package org.kopi.galite.list
 
+import org.jetbrains.exposed.sql.Column
+
 abstract class VCodeColumn(
   title: String,
-  column: String?,
+  column: Column<*>?,
   protected val names: Array<String>,
   sortAscending: Boolean
 ) : VListColumn(title, column, VConstants.ALG_LEFT, getMaxWidth(names), sortAscending) {

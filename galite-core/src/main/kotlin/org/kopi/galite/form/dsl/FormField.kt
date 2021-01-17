@@ -21,15 +21,25 @@ import java.math.BigDecimal
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
+import org.joda.time.DateTime
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.field.Field
+import org.kopi.galite.field.FieldBooleanTriggerEvent
+import org.kopi.galite.field.FieldIntTriggerEvent
+import org.kopi.galite.field.FieldObjectTriggerEvent
+import org.kopi.galite.field.FieldProtectedTriggerEvent
+import org.kopi.galite.field.FieldTriggerEvent
+import org.kopi.galite.field.FieldVoidTriggerEvent
 import org.kopi.galite.form.VBooleanCodeField
 import org.kopi.galite.form.VBooleanField
+import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
@@ -79,7 +89,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
   var commands: MutableList<Command>? = null
-  var triggers: Array<Trigger>? = null
+  var triggers = mutableListOf<Trigger>()
   var alias: String? = null
   var initialValues = mutableMapOf<Int, T?>()
   var value: T? = null
@@ -245,11 +255,112 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   }
 
   /**
+   * Adds triggers to this field
+   *
+   * @param fieldTriggerEvents    the trigger events to add
+   * @param method                the method to execute when trigger is called
+   */
+  private fun <T> trigger(fieldTriggerEvents: Array<out FieldTriggerEvent>, method: () -> T): Trigger {
+    val event = fieldEventList(fieldTriggerEvents)
+    val fieldAction = Action(null, method)
+    val trigger = FormTrigger(event, fieldAction)
+
+    triggers.add(trigger)
+    return trigger
+  }
+
+  private fun fieldEventList(fieldTriggerEvents: Array<out FieldTriggerEvent>): Long {
+    var self = 0L
+
+    fieldTriggerEvents.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
+  }
+
+  /**
+   * Adds void triggers to this field
+   *
+   * @param fieldTriggerEvents  the trigger event to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds boolean triggers to this field
+   *
+   * @param fieldTriggerEvents  the trigger events to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldBooleanTriggerEvent, method: () -> Boolean): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds protected triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldProtectedTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds object triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldObjectTriggerEvent, method: () -> Any): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
+   * Adds int triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldIntTriggerEvent, method: () -> Int): Trigger {
+    return trigger(fieldTriggerEvents, method)
+  }
+
+  /**
    * The field model based on the field type.
    */
   val vField: VField by lazy {
     when {
-      domain.type == null -> {
+      domain is CodeDomain -> {
+        val type = domain as CodeDomain<*>
+        when (domain.kClass) {
+          Boolean::class -> VBooleanCodeField(block.buffer,
+                                              domain.ident,
+                                              block.sourceFile,
+                                              type.codes.map { it.ident }.toTypedArray(),
+                                              type.codes.map { it.value as? Boolean }.toTypedArray())
+          Decimal::class -> VFixnumCodeField(block.buffer,
+                                           domain.ident,
+                                           block.sourceFile,
+                                           type.codes.map { it.ident }.toTypedArray(),
+                                           type.codes.map { it.value as? Fixed }.toTypedArray())
+          Int::class, Long::class -> VIntegerCodeField(block.buffer,
+                                                       domain.ident,
+                                                       block.sourceFile,
+                                                       type.codes.map { it.ident }.toTypedArray(),
+                                                       type.codes.map { it.value as? Int }.toTypedArray())
+          String::class -> VStringCodeField(block.buffer,
+                                            domain.ident,
+                                            block.sourceFile,
+                                            type.codes.map { it.ident }.toTypedArray(),
+                                            type.codes.map { it.value as? String }.toTypedArray())
+          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+        }
+      }
+      else -> {
         when (domain.kClass) {
           Int::class, Long::class -> VIntegerField(block.buffer,
                                                    domain.width ?: 0,
@@ -276,49 +387,27 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
           else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
         }
       }
-      domain.type is CodeDomain -> {
-        val type = domain.type as CodeDomain<*>
-        when (domain.kClass) {
-          Boolean::class -> VBooleanCodeField(block.buffer,
-                                              type.ident,
-                                              block.sourceFile,
-                                              type.codes.map { it.ident }.toTypedArray(),
-                                              type.codes.map { it.value as? Boolean }.toTypedArray())
-          Decimal::class -> VFixnumCodeField(block.buffer,
-                                           type.ident,
-                                           block.sourceFile,
-                                           type.codes.map { it.ident }.toTypedArray(),
-                                           type.codes.map { it.value as? Decimal }.toTypedArray())
-          Int::class, Long::class -> VIntegerCodeField(block.buffer,
-                                                       type.ident,
-                                                       block.sourceFile,
-                                                       type.codes.map { it.ident }.toTypedArray(),
-                                                       type.codes.map { it.value as? Int }.toTypedArray())
-          String::class -> VStringCodeField(block.buffer,
-                                            type.ident,
-                                            block.sourceFile,
-                                            type.codes.map { it.ident }.toTypedArray(),
-                                            type.codes.map { it.value as? String }.toTypedArray())
-          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-        }
-      }
-      domain is ListDomain -> {
-        TODO()
-      }
-      else -> {
-        TODO()
-      }
     }
   }
 
-  fun setInfo() {
+  fun setInfo(source: String) {
+    val list = if (domain is ListDomain) {
+      domain.list.buildListModel(source)
+    } else {
+      null
+    }
+
+    if (domain is CodeDomain) {
+      (vField as VCodeField).source = source
+    }
+
     vField.setInfo(
             getIdent(),
             fieldIndex,
             posInArray,
             options,
             access,
-            null, // TODO
+            list, // TODO
             columns?.getColumnsModels()?.toTypedArray(), // TODO
             columns?.index?.indexNumber ?: 0,
             columns?.priority ?: 0,

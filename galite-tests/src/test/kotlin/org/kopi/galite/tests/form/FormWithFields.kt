@@ -26,7 +26,7 @@ import org.kopi.galite.form.dsl.FormBlock
 
 object FormWithFields: Form() {
   override val locale = Locale.FRANCE
-  override val title = "form for test fields visibility"
+  override val title = "form with fields"
   val testPage = page("test page")
   val testBlock = insertBlock(BlockWithFields, testPage)
 }
@@ -40,16 +40,14 @@ object BlockWithFields : FormBlock(1, 1, "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String?>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
-    onInsertSkipped()
     columns(u.name)
   }
   val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
-    onQueryMustFill()
     columns(u.age) {
       index = i
       priority = 1

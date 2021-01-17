@@ -49,7 +49,7 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
    * @param level level to test
    */
   fun isUnfolded(level: Int): Boolean {
-    for (i in 0 until getChildCount()) {
+    for (i in 0 until childCount) {
       val child = getChildAt(i) as VReportRow
       if (child.level > level) {
         if ((child as VGroupRow).isUnfolded(level)) {
@@ -70,7 +70,7 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
    * @param level level to be set visible
    */
   fun setChildNodesVisible(level: Int) {
-    for (i in 0 until getChildCount()) {
+    for (i in 0 until childCount) {
       val child = getChildAt(i) as VReportRow
       child.visible = true
       if (getLevel() > level + 1) {
@@ -88,7 +88,7 @@ class VGroupRow(data: Array<Any?>, private val level: Int) : VReportRow(data) {
     for (i in 0 until childCount) {
       val child = getChildAt(i) as VReportRow
       when {
-        child.getLevel() > level ->
+        child.level > level ->
           (child as VGroupRow).setChildNodesInvisible(level)
         child is VGroupRow ->
           child.setChildNodesInvisible()

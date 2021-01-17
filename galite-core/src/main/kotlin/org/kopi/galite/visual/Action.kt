@@ -18,8 +18,9 @@
 
 package org.kopi.galite.visual
 
-import kotlinx.coroutines.Runnable
 import kotlin.jvm.Throws
+
+import kotlinx.coroutines.Runnable
 
 abstract class Action @JvmOverloads constructor(val name: String? = null) : Runnable {
 

@@ -30,14 +30,14 @@ interface UMenuTree : UWindow {
    *
    * @return a [UTree]
    */
-  fun getTree(): UTree
+  fun getTree(): UTree?
 
   /**
    * Returns The favorites panel
    *
    * @return a [UBookmarkPanel]
    */
-  fun getBookmark(): UBookmarkPanel
+  fun getBookmark(): UBookmarkPanel?
 
   /**
    * This method launches the selected form in the menu tree and throws

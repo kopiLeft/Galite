@@ -23,12 +23,12 @@ import java.io.Serializable
 /**
  * Column format
  */
-class VColumnFormat : Serializable {
+open class VColumnFormat : Serializable {
   /**
    * Returns the formatted value of the object.
    *
    * @param value The object to be formatted.
    * @return The formatted value.
    */
-  fun format(value: Any?): String = value?.toString() ?: CConstants.EMPTY_TEXT
+  open fun format(value: Any?): String = value?.toString() ?: CConstants.EMPTY_TEXT
 }

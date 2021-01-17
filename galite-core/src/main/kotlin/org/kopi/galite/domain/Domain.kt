@@ -21,6 +21,7 @@ import kotlin.reflect.KClass
 
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.type.Decimal
+import org.kopi.galite.form.VConstants
 
 /**
  * A domain is a data type with predefined list of allowed values.
@@ -31,9 +32,7 @@ import org.kopi.galite.type.Decimal
  */
 open class Domain<T : Comparable<T>?>(val width: Int? = null,
                                       val height: Int? = null,
-                                      val visibleHeight: Int? = null,
-                                      val ident: String = "") {
-
+                                      val visibleHeight: Int? = null) {
   companion object {
     operator fun <T: Decimal> invoke(width: Int, scale: Int): Domain<Decimal> =
             Domain(width, scale, null)
@@ -41,13 +40,10 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
 
   private var isFraction = false
 
-  /**
-   * The type of this domain.
-   */
-  open val type: Domain<T>? = null
+  val ident: String = this::class.java.simpleName
 
   /**
-   * Determines the column data type
+   * Determines the field data type
    */
   var kClass: KClass<*>? = null
 
@@ -57,51 +53,36 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
    * @param init used to initialize the code domain
    */
   fun code(init: CodeDomain<T>.() -> Unit): CodeDomain<T> {
-    val codeDomain = CodeDomain<T>(this::class.java.simpleName)
+    val codeDomain = CodeDomain<T>()
     codeDomain.init()
     return codeDomain
   }
 
   /**
-   * Allows to define the possible codes that the domain can take
-   *
-   * @param init used to initialize the list domain
-   */
-  fun list(init: ListDomain<T>.() -> Unit): ListDomain<T> {
-    val listDomain = ListDomain<T>(this::class.java.simpleName)
-    listDomain.init()
-    return listDomain
-  }
-
-  /**
-   * Converts domain value to uppercase.
-   *
-   * @param value domain's value.
-   */
-  open fun applyConvertUpper(value: String): String {
-    if (!isListDomain()) {
-      throw UnsupportedOperationException("ConvertUpper is an unsupported " +
-                                                  "operation on current domain type")
-    }
-
-    return (type as ListDomain<T>).applyConvertUpper(value)
-  }
-
-  /**
    * returns true if this domain is a code domain, false otherwise
    */
-  private fun isCodeDomain(): Boolean = type is CodeDomain<T>
+  private fun isCodeDomain(): Boolean = this is CodeDomain<T>
 
   /**
    * returns true if this domain is a list domain, false otherwise
    */
-  private fun isListDomain(): Boolean = type is ListDomain<T>
+  private fun isListDomain(): Boolean = this is ListDomain<T>
+
+  /**
+   * Returns the default alignment
+   */
+  val defaultAlignment: Int
+    get() = if (kClass == Fixed::class) {
+      VConstants.ALG_RIGHT
+    } else {
+      VConstants.ALG_LEFT
+    }
 
   // ----------------------------------------------------------------------
   // UTILITIES
   // ----------------------------------------------------------------------
   fun hasSize(): Boolean =
-          when(kClass) {
+          when (kClass) {
             Decimal::class, Int::class, Long::class, String::class -> true
             else -> false
           }
@@ -109,7 +90,11 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
-  open fun genLocalization(writer: LocalizationWriter) {
-    writer.genTypeDefinition(type!!.ident, type!!)
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genTypeDefinition(ident, this)
+  }
+
+  open fun genTypeLocalization(writer: LocalizationWriter) {
+    // DO NOTHING !
   }
 }

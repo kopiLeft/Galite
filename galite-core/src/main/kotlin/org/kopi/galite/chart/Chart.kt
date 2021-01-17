@@ -17,9 +17,11 @@
 
 package org.kopi.galite.chart
 
+import java.io.IOException
+
 import org.kopi.galite.common.Action
-import org.kopi.galite.common.ChartObjectTriggerEvent
 import org.kopi.galite.common.ChartTriggerEvent
+import org.kopi.galite.common.ChartTypeTriggerEvent
 import org.kopi.galite.common.ChartVoidTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
@@ -27,21 +29,26 @@ import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
-import org.kopi.galite.report.Constants
 import org.kopi.galite.visual.VWindow
-import java.io.IOException
 
 /**
  * Represents a chart that contains a [dimension] and a list of [measures].
  *
- * @param name the name of the chart. It represents the title
+ * In fact, all you have to do to create a chart is to define the dimensions you need and their measures,
+ * then you will have to write a constructor that will load data into these fields.
+ *
+ * With this Charts, you will also be able to print or export the created chart to different file formats.
+ *
  */
-abstract class Chart() : Window() {
+abstract class Chart : Window() {
   /** The chart's dimension */
   lateinit var dimension: ChartDimension<*>
 
   /** The chart's measures */
   val measures = mutableListOf<ChartMeasure<*>>()
+
+  /** the help text */
+  open val help: String? = null
 
   /**
    * Creates a chart dimension, with the specified [domain], used to store values of type [T] and measures values.
@@ -49,7 +56,8 @@ abstract class Chart() : Window() {
    * @param domain the dimension domain.
    * @param init   used to initialize the domain with measures values.
    */
-  inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>, init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
+  inline fun <reified T : Comparable<T>?> dimension(domain: Domain<T>,
+                                                    init: ChartDimension<T>.() -> Unit): ChartDimension<T> {
     domain.kClass = T::class
     val chartDimension = ChartDimension(domain)
     chartDimension.init()
@@ -97,7 +105,7 @@ abstract class Chart() : Window() {
    * @param chartTriggerEvents the trigger events to add
    * @param method             the method to execute when trigger is called
    */
-  fun trigger(vararg chartTriggerEvents: ChartObjectTriggerEvent, method: () -> Unit): Trigger {
+  fun trigger(vararg chartTriggerEvents: ChartTypeTriggerEvent, method: () -> VChartType): Trigger {
     return trigger(chartTriggerEvents, method)
   }
 
@@ -145,19 +153,19 @@ abstract class Chart() : Window() {
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
   /**
-   * !!!FIX : comment move file creation to upper level (VKPhylum?)
+   * !!!FIX : comment move file creation to upper level
    */
   open fun genLocalization(destination: String? = null) {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
-      val destination = destination
+      val localizationDestination = destination
               ?: this.javaClass.classLoader.getResource("")?.path +
               this.javaClass.packageName.replace(".", "/")
       try {
         val writer = ChartLocalizationWriter()
         genLocalization(writer)
-        writer.write(destination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale!!)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")
@@ -171,9 +179,7 @@ abstract class Chart() : Window() {
    * @param writer the localization writer responsible for generating the xml file.
    */
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as ChartLocalizationWriter).genChart(title,
-                                                 help,
-                                                 getFields())
+    (writer as ChartLocalizationWriter).genChart(title, help, getFields(), menus, actors)
   }
 
   fun VChart.addChartLines() {
@@ -198,7 +204,7 @@ abstract class Chart() : Window() {
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // CHART TRIGGERS
         triggers.forEach { trigger ->
-          val chartTriggerArray = IntArray(Constants.TRG_TYPES.size)
+          val chartTriggerArray = IntArray(CConstants.TRG_TYPES.size)
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
               chartTriggerArray[i] = i
@@ -209,28 +215,43 @@ abstract class Chart() : Window() {
         }
 
         // DIMENSION TRIGGERS
-        dimensions.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        this@Chart.dimension.also {
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+
+          if(it.formatTrigger != null) {
+            fieldTriggerArray[CConstants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+          }
           // TODO : Add field triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
         // MEASURE TRIGGERS
-        measures.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        this@Chart.measures.forEach {
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+
+          if(it.colorTrigger != null) {
+            fieldTriggerArray[CConstants.TRG_COLOR] = it.colorTrigger!!.events.toInt()
+          }
           // TODO : Add field triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
         // COMMANDS TRIGGERS
         commands?.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
           // TODO : Add commands triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
       }
 
       override fun init() {
+        this.addActors(this@Chart.actors.map { actor ->
+          actor.buildModel(sourceFile)
+        }.toTypedArray())
+        this.commands = this@Chart.commands.map { command ->
+          command.buildModel(this, actors)
+        }.toTypedArray()
+
         source = sourceFile
 
         super.dimensions = listOf(this@Chart.dimension).map { it.model }.toTypedArray()

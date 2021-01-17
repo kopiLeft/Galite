@@ -17,18 +17,54 @@
  */
 package org.kopi.galite.common
 
+import java.lang.RuntimeException
+
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.list.VBooleanColumn
+import org.kopi.galite.list.VDateColumn
+import org.kopi.galite.list.VIntegerColumn
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.list.VMonthColumn
+import org.kopi.galite.list.VStringColumn
+import org.kopi.galite.list.VTimeColumn
+import org.kopi.galite.list.VTimestampColumn
+import org.kopi.galite.list.VWeekColumn
+import org.kopi.galite.type.Date
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 
 /**
  * The description of a list element
  *
- * @param title                the title of the column
+ * @param title                 the title of the column
  * @param column                the column itself
- * @param type                the type of the column
+ * @param domain                the domain of the column
  */
-class ListDescription<T: Comparable<T>?>(private val title: String,
-                                         private val column: String,
-                                         val type: Domain<T>) {
+class ListDescription(val title: String,
+                      val column: Column<*>,
+                      val domain: Domain<*>) {
+
+  fun buildModel(): VListColumn {
+    return when(domain.kClass) {
+      Int::class, Long::class -> VIntegerColumn(title, column, domain.defaultAlignment, domain.width!!, true)
+      String::class -> VStringColumn(title, column, domain.defaultAlignment, domain.width!!, true)
+      Boolean::class -> VBooleanColumn(title, column, true)
+      Date::class, java.util.Date::class ->
+        VDateColumn(title, column, true)
+      Month::class ->
+        VMonthColumn(title, column, true)
+      Week::class ->
+        VWeekColumn(title, column, true)
+      Time::class ->
+        VTimeColumn(title, column, true)
+      Timestamp::class ->
+        VTimestampColumn(title, column, true)
+      else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+    }
+  }
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

@@ -31,6 +31,7 @@ class VFixnumCodeColumn(ident: String?,
                         width: Int,
                         format: VCellFormat?,
                         names: Array<String>,
+                        // array of internal representations
                         private val codes: Array<Decimal>)
           : VCodeColumn(ident,
                         type,
@@ -45,13 +46,13 @@ class VFixnumCodeColumn(ident: String?,
   /**
    * Get the index of the value.
    */
-  override fun getIndex(o: Any): Int {
+  override fun getIndex(value: Any): Int {
     for (i in codes.indices) {
-      if (o == codes[i]) {
+      if (value == codes[i]) {
         return i
       }
     }
-    throw InconsistencyException(">>>>$o")
+    throw InconsistencyException(">>>>$value")
   }
 
   /**

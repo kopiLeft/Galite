@@ -109,8 +109,8 @@ class VColor : Serializable {
 
   override fun hashCode(): Int = rGB
 
-  override fun equals(obj: Any?): Boolean =
-          obj is VColor && obj.rGB == rGB
+  override fun equals(other: Any?): Boolean =
+          other is VColor && other.rGB == rGB
 
   override fun toString(): String =
           javaClass.name + "[r=" + red + ",g=" + green + ",b=" + blue + "]"
