@@ -18,8 +18,8 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.visual.VColor
 import org.kopi.galite.type.Decimal
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a decimal measure.

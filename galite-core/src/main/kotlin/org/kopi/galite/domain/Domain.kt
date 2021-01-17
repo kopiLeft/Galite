@@ -20,8 +20,8 @@ package org.kopi.galite.domain
 import kotlin.reflect.KClass
 
 import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.type.Decimal
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.type.Decimal
 
 /**
  * A domain is a data type with predefined list of allowed values.

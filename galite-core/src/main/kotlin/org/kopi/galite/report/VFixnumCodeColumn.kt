@@ -75,5 +75,4 @@ class VFixnumCodeColumn(ident: String?,
    */
   override fun compareTo(object1: Any, object2: Any): Int = (object1 as Decimal)
           .compareTo(object2 as Decimal)
-
 }

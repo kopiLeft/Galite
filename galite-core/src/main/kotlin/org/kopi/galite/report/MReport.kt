@@ -18,16 +18,20 @@
 
 package org.kopi.galite.report
 
+import java.io.Serializable
+
+import javax.swing.event.EventListenerList
+
+import kotlin.math.max
+
 import com.graphbuilder.math.Expression
 import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
+
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
-import java.io.Serializable
-import javax.swing.event.EventListenerList
-import kotlin.math.max
 
 class MReport : Constants, Serializable {
   fun computeColumnWidth(column: Int): Int {
@@ -237,7 +241,7 @@ class MReport : Constants, Serializable {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as Decimal)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
               }
               if (tmp > max) {
                 max = tmp
@@ -252,14 +256,14 @@ class MReport : Constants, Serializable {
             min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
               0F
             } else {
-              (baseRows[0]!!.getValueAt(paramColumns[j]) as Decimal)!!.toFloat()
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as Decimal).toFloat()
             }
             // calculate min value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as Decimal)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
               }
               if (tmp < min) {
                 min = tmp
@@ -274,7 +278,7 @@ class MReport : Constants, Serializable {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as Decimal)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
               }
               ovr += tmp / baseRows.size
             }
@@ -287,7 +291,7 @@ class MReport : Constants, Serializable {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as Decimal)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
               }
               sum += tmp
             }
@@ -574,14 +578,12 @@ class MReport : Constants, Serializable {
     mergeSort(array, column, order, 0, array.size - 1, visibleRows)
   }
 
-  private fun mergeSort(
-          array: Array<VReportRow?>,
-          column: Int,
-          order: Int,
-          lo: Int,
-          hi: Int,
-          scratch: Array<VReportRow?>?,
-  ) {
+  private fun mergeSort(array: Array<VReportRow?>,
+                        column: Int,
+                        order: Int,
+                        lo: Int,
+                        hi: Int,
+                        scratch: Array<VReportRow?>?) {
     // a one-element array is always sorted
     if (lo < hi) {
       val mid = (lo + hi) / 2
