@@ -52,9 +52,7 @@ class VCaption(val onlyAnchor: Boolean) : Composite<Component>(), HasStyle {
     return if (onlyAnchor) {
       anchor
     } else {
-      val span = Span()
-      span.add(anchor)
-      span
+      Span().also { it.add(anchor) }
     }
   }
   //---------------------------------------------------

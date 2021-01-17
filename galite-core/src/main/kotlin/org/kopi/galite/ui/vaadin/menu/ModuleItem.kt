@@ -81,7 +81,6 @@ open class ModuleItem : Component(), HasComponents, HasStyle {
     }
   }
 
-
   /**
    * Sets the selection style ability.
    * @param selected The selection style ability.

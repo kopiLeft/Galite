@@ -25,8 +25,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  */
 class VHeader : HorizontalLayout() {
   //---------------------------------------------------
-// DATA MEMBERS
-//---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
   /**
    * Sets the main menu component.
    *

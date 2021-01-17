@@ -56,7 +56,6 @@ open class ModuleListMenu(val root: Boolean) :
 
   }
 
-
   /**
    * Select the given VModuleItem, which must be a direct child of this MenuBar.
    *
