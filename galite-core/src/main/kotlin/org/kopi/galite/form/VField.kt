@@ -26,6 +26,7 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Alias
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Expression
@@ -2083,6 +2084,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         column
       }
       is QueryAlias -> {
+        get(column)
+      }
+      is Alias<*> -> {
         get(column)
       }
       else -> {
