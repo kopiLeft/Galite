@@ -26,7 +26,7 @@ import java.util.Locale
 /**
  * This class represents the decimal type
  */
-class Decimal(var value: BigDecimal) : Number(), Comparable<BigDecimal> {
+class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   internal constructor(b: BigInteger) : this(BigDecimal(b))
 
   internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
@@ -166,12 +166,8 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<BigDecimal> {
   // COMPARISONS
   // ----------------------------------------------------------------------
 
-  operator fun compareTo(other: Decimal): Int {
+  override operator fun compareTo(other: Decimal): Int {
     return value.compareTo(other.value)
-  }
-
-  override fun compareTo(other: BigDecimal): Int {
-    return value.compareTo(other)
   }
 
   // ----------------------------------------------------------------------

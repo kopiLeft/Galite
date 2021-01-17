@@ -44,11 +44,7 @@ class VFixnumField(val bufferSize: Int,
                    val fraction: Boolean,
                    minval: Decimal?,
                    maxval: Decimal?)
-  : VField(computeWidth(digits,
-                        maxScale,
-                        minval,
-                        maxval),
-           1) {
+  : VField(computeWidth(digits, maxScale, minval, maxval), 1) {
   /*
    * ----------------------------------------------------------------------
    * Constructor / build
@@ -530,7 +526,9 @@ class VFixnumField(val bufferSize: Int,
   }
 
   private fun setHasCriticalValue(critical: Boolean) {
-    getDisplay().let { (it as UTextField).setHasCriticalValue(critical) }
+    getDisplay()?.let {
+      (it as UTextField).setHasCriticalValue(critical)
+    }
   }
 
   /*

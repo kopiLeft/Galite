@@ -33,6 +33,14 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
                                       val height: Int? = null,
                                       val visibleHeight: Int? = null,
                                       val ident: String = "") {
+
+  companion object {
+    operator fun <T: Decimal> invoke(width: Int, scale: Int): Domain<Decimal> =
+            Domain(width, scale, null)
+  }
+
+  private var isFraction = false
+
   /**
    * The type of this domain.
    */
