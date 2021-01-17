@@ -34,6 +34,7 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -1580,14 +1581,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
       try {
         try {
-          val column = list!!.getColumn(0).column as Column<String>
+          val table = evalListTable()
+          val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<String>
+
+          val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord)!! }
 
           val transaction = TransactionManager.currentOrNull()
           if (transaction != null) {
-            exists = !evalListTable().select { column eq getSql(block!!.activeRecord)!! }.empty()
+            exists = !query.empty()
           } else {
             transaction {
-              exists = !evalListTable().select { column eq getSql(block!!.activeRecord)!! }.empty()
+              exists = !query.empty()
             }
           }
 
@@ -1699,7 +1703,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getListID(): Int {
     val table = evalListTable()
-    val column = list!!.getColumn(0).column as Column<String>
+    val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<String>
     val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
@@ -1707,18 +1711,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     var id = -1
 
     try {
-      while (true) {
-        try {
-          val query = evalListTable().slice(idColumn).select { column eq getSql(block!!.activeRecord)!! }
+      try {
+        transaction {
+          val query = table.slice(idColumn).select { column eq getSql(block!!.activeRecord)!! }
 
           if (!query.empty()) {
             id = query.first()[idColumn]
           }
-          break
-        } catch (e: SQLException) {
-        } catch (error: java.lang.Error) {
-        } catch (rte: RuntimeException) {
         }
+      } catch (e: SQLException) {
       }
     } catch (e: Throwable) {
       throw VExecFailedException(e)
