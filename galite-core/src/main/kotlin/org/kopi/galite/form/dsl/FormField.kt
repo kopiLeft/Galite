@@ -346,7 +346,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
                                            domain.ident,
                                            block.sourceFile,
                                            type.codes.map { it.ident }.toTypedArray(),
-                                           type.codes.map { it.value as? Fixed }.toTypedArray())
+                                           type.codes.map { it.value as? Decimal }.toTypedArray())
           Int::class, Long::class -> VIntegerCodeField(block.buffer,
                                                        domain.ident,
                                                        block.sourceFile,

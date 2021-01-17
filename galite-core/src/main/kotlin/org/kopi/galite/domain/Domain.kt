@@ -72,7 +72,7 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
    * Returns the default alignment
    */
   val defaultAlignment: Int
-    get() = if (kClass == Fixed::class) {
+    get() = if (kClass == Decimal::class) {
       VConstants.ALG_RIGHT
     } else {
       VConstants.ALG_LEFT

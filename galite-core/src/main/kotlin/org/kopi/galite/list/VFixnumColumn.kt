@@ -19,6 +19,7 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.type.Decimal
 
 /**

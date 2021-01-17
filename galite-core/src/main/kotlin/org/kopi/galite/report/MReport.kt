@@ -18,20 +18,16 @@
 
 package org.kopi.galite.report
 
-import java.io.Serializable
-
-import javax.swing.event.EventListenerList
-
-import kotlin.math.max
-
 import com.graphbuilder.math.Expression
 import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
-
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
+import java.io.Serializable
+import javax.swing.event.EventListenerList
+import kotlin.math.max
 
 class MReport : Constants, Serializable {
   fun computeColumnWidth(column: Int): Int {
@@ -224,7 +220,7 @@ class MReport : Constants, Serializable {
               0.0
             } else {
               // !!! wael 20070622 : use 0 instead of null values.
-              (baseRows[i]!!.getValueAt(paramColumns[j]) as Decimal).toFloat()
+              (baseRows[i]!!.getValueAt(paramColumns[j]) as Decimal).toDouble()
             }
             vm.setValue(params[j], value)
           }
@@ -304,8 +300,7 @@ class MReport : Constants, Serializable {
       } catch (e: NumberFormatException) {
         // this exception occurs with INFINITE double values. (ex : division by ZERO)
         // return a null value (can not evaluate expression)
-        bas
-        t(column, null)
+        baseRows[i]!!.setValueAt(column, null)
       } catch (e: Exception) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00066"))
       }
@@ -579,12 +574,14 @@ class MReport : Constants, Serializable {
     mergeSort(array, column, order, 0, array.size - 1, visibleRows)
   }
 
-  private fun mergeSort(array: Array<VReportRow?>,
-                        column: Int,
-                        order: Int,
-                        lo: Int,
-                        hi: Int,
-                        scratch: Array<VReportRow?>?) {
+  private fun mergeSort(
+          array: Array<VReportRow?>,
+          column: Int,
+          order: Int,
+          lo: Int,
+          hi: Int,
+          scratch: Array<VReportRow?>?,
+  ) {
     // a one-element array is always sorted
     if (lo < hi) {
       val mid = (lo + hi) / 2

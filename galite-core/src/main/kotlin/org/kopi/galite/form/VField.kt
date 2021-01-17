@@ -51,6 +51,7 @@ import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
