@@ -84,12 +84,8 @@ class VFixnumField(val bufferSize: Int,
     var max = maxval
     var nines: Long = 1
 
-    if (min == null) {
-      min = Decimal(Int.MIN_VALUE.toDouble())
-    }
-    if (max == null) {
-      max = Decimal(Int.MAX_VALUE.toDouble())
-    }
+    min = Decimal(Int.MIN_VALUE.toDouble())
+    max = Decimal(Int.MAX_VALUE.toDouble())
     for (i in width downTo 2) {
       if (i % 3 != 0) {
         nines *= 10
@@ -169,10 +165,10 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale > scale) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
-        if (minval != null && v.compareTo(minval) == -1) {
+        if (v.compareTo(minval) == -1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval)))
         }
-        if (maxval != null && v.compareTo(maxval) == 1) {
+        if (v.compareTo(maxval) == 1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval)))
         }
         if (toText(v.setScale(maxScale)).length > width) {
@@ -317,9 +313,9 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale != currentScale[r]) {
           v = v.setScale(currentScale[r])
         }
-        if (minval != null && v.compareTo(minval) == -1) {
+        if (v.compareTo(minval) == -1) {
           v = minval
-        } else if (maxval != null && v.compareTo(maxval) == 1) {
+        } else if (v.compareTo(maxval) == 1) {
           v = maxval
         }
       }
@@ -399,10 +395,10 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale > scale) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
-        if (minval != null && v.compareTo(minval) == -1) {
+        if (v.compareTo(minval) == -1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval)))
         }
-        if (maxval != null && v.compareTo(maxval) == 1) {
+        if (v.compareTo(maxval) == 1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval)))
         }
         if (toText(v.setScale(maxScale)).length > width) {
@@ -540,9 +536,9 @@ class VFixnumField(val bufferSize: Int,
   private var fieldMaxScale = maxScale
 
   // dynamic data
-  var minval: Decimal = minval?.setScale(maxScale) ?: - calculateUpperBound(digits, maxScale)
+  var minval = minval?.setScale(maxScale) ?: - calculateUpperBound(digits, maxScale)
     private set
-  var maxval: Decimal = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
+  var maxval = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
     private set
 
   // number of digits after dot

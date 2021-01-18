@@ -27,6 +27,7 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.type.Decimal
 
 object Product : Table() {
+  val name = varchar("NAME", 10)
   val price = decimal("PRICE", 10, 5)
 }
 
@@ -40,15 +41,21 @@ object FormWithSpecialTypes : Form() {
 class BlockWithSpecialTypes : FormBlock(1, 1, "Test block") {
   val p = table(Product)
 
-  val id = visit(domain = Domain<Decimal>(width = 10, scale = 5), position = at(1, 1)) {
-    label = "id"
-    help = "The user id"
+  val price = visit(domain = Domain<Decimal>(width = 10, scale = 5), position = at(1, 1)) {
+    label = "price"
+    help = "The price"
     minValue = Decimal.valueOf("1.9")
     columns(p.price)
   }
 
+  val name = visit(domain = Domain<String>(width = 10), position = at(1, 2)) {
+    label = "name"
+    help = "The product name"
+    columns(p.name)
+  }
+
   init {
-    id.value = Decimal.valueOf("2")
+    price.value = Decimal.valueOf("2")
   }
 }
 

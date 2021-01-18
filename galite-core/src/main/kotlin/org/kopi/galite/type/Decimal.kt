@@ -64,9 +64,7 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   /**
    * divide (f1 / f2) operator
    */
-  operator fun div(f: Decimal): Decimal {
-    return Decimal(value.divide(f.value, DIV_CONTEXT).plus(MATH_CONTEXT))
-  }
+  operator fun div(f: Decimal): Decimal = Decimal(value.divide(f.value, DIV_CONTEXT).plus(MATH_CONTEXT))
 
   /**
    * plusAssign (f1 /= f2) operator
@@ -78,9 +76,7 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   /**
    * multiply (f1 * f2) operator
    */
-  operator fun times(f: Decimal): Decimal {
-    return Decimal(value.multiply(f.value, MATH_CONTEXT))
-  }
+  operator fun times(f: Decimal): Decimal = Decimal(value.multiply(f.value, MATH_CONTEXT))
 
   /**
    * timesAssign (f1 *= f2) operator
@@ -122,9 +118,7 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   /**
    * remainder (f1 % f2) operator
    */
-  operator fun rem(f: Decimal): Decimal {
-    return Decimal(value.remainder(f.value, MATH_CONTEXT))
-  }
+  operator fun rem(f: Decimal): Decimal = Decimal(value.remainder(f.value, MATH_CONTEXT))
 
   /**
    * remAssign (f1 %= f2) operator
@@ -138,16 +132,12 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   /**
    * setScale
    */
-  fun setScale(v: Int): Decimal {
-    return Decimal(value.setScale(v, RoundingMode.HALF_UP))
-  }
+  fun setScale(v: Int): Decimal = Decimal(value.setScale(v, RoundingMode.HALF_UP))
 
   /**
    * setScale
    */
-  fun setScale(v: Int, d: Int): Decimal {
-    return Decimal(value.setScale(v, d))
-  }
+  fun setScale(v: Int, d: Int): Decimal = Decimal(value.setScale(v, d))
 
   /**
    * getScale
@@ -158,17 +148,13 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   /**
    * Returns the decimal as a double
    */
-  override fun toDouble(): Double {
-    return value.toDouble()
-  }
+  override fun toDouble(): Double = value.toDouble()
 
   // ----------------------------------------------------------------------
   // COMPARISONS
   // ----------------------------------------------------------------------
 
-  override operator fun compareTo(other: Decimal): Int {
-    return value.compareTo(other.value)
-  }
+  override operator fun compareTo(other: Decimal): Int = value.compareTo(other.value)
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
@@ -176,17 +162,14 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   /**
    * Compares two objects
    */
-  override fun equals(other: Any?): Boolean {
-    return other is Decimal &&
-            value == other.value
-  }
+  override fun equals(other: Any?): Boolean =
+          other is Decimal &&
+                  value == other.value
 
   /**
    * Format the object depending on the current language
    */
-  override fun toString(): String {
-    return toString(Locale.GERMAN) // !!!
-  }
+  override fun toString(): String = toString(Locale.GERMAN) // !!!
 
   /**
    * Format the object depending on the current language
@@ -247,29 +230,17 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   // ----------------------------------------------------------------------
   // IMPLEMENTATION OF NUMBER
   // ----------------------------------------------------------------------
-  override fun toInt(): Int {
-    return value.toInt()
-  }
+  override fun toInt(): Int = value.toInt()
 
-  override fun toLong(): Long {
-    return value.toLong()
-  }
+  override fun toLong(): Long = value.toLong()
 
-  override fun toShort(): Short {
-    return value.toShort()
-  }
+  override fun toShort(): Short = value.toShort()
 
-  override fun toFloat(): Float {
-    return value.toFloat()
-  }
+  override fun toFloat(): Float = value.toFloat()
 
-  override fun toByte(): Byte {
-    return value.toByte()
-  }
+  override fun toByte(): Byte = value.toByte()
 
-  override fun toChar(): Char {
-    return value.toChar()
-  }
+  override fun toChar(): Char = value.toChar()
 
   /**
    * The Max scale
@@ -280,9 +251,7 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
     /**
      * Parse the String arguments and return the corresponding value
      */
-    fun valueOf(value: String): Decimal {
-      return Decimal(value)
-    }
+    fun valueOf(value: String): Decimal = Decimal(value)
 
     // ----------------------------------------------------------------------
     // DATA MEMBERS
