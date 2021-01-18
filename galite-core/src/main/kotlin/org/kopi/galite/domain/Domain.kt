@@ -19,9 +19,9 @@ package org.kopi.galite.domain
 
 import kotlin.reflect.KClass
 
-import org.apache.poi.ss.formula.functions.Fixed
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.type.Decimal
 
 /**
  * A domain is a data type with predefined list of allowed values.
@@ -33,6 +33,13 @@ import org.kopi.galite.form.VConstants
 open class Domain<T : Comparable<T>?>(val width: Int? = null,
                                       val height: Int? = null,
                                       val visibleHeight: Int? = null) {
+  companion object {
+    operator fun <T: Decimal> invoke(width: Int, scale: Int): Domain<Decimal> =
+            Domain(width, scale, null)
+  }
+
+  private var isFraction = false
+
   val ident: String = this::class.java.simpleName
 
   /**
@@ -65,7 +72,7 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
    * Returns the default alignment
    */
   val defaultAlignment: Int
-    get() = if (kClass == Fixed::class) {
+    get() = if (kClass == Decimal::class) {
       VConstants.ALG_RIGHT
     } else {
       VConstants.ALG_LEFT
@@ -76,7 +83,7 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
   // ----------------------------------------------------------------------
   fun hasSize(): Boolean =
           when (kClass) {
-            Fixed::class, Int::class, Long::class, String::class -> true
+            Decimal::class, Int::class, Long::class, String::class -> true
             else -> false
           }
 

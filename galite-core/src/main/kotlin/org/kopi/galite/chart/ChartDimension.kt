@@ -71,7 +71,7 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>
     values.add(dimensionValue)
   }
 
-  // TODO add Fixed types
+  // TODO add Decimal types
   val model: VDimension
     get() {
       val format: VColumnFormat? = if (formatTrigger != null) {

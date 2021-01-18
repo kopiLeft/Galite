@@ -115,7 +115,7 @@
   <property key="week-type-field" value="هذا الموقع يجب  أن  يحتوي على أسبوع  ايزو (أسبوع .سنة)"/>
   <property key="boolean-type-field" value="هذا الموقع يجب  أن يحتوي على قيمة بوليانية (صواب أو خطأ )"/>
   <property key="integer-type-field" value="هذا  الموقع يجب أن يحتوي على عدد صحيح (0) و (1)"/>
-  <property key="fixed-type-field" value="" />
+  <property key="decimal-type-field" value="" />
   <property key="code-type-field" value="هذا  الموقع يجب أن يحتوي على قيم مقترحة (F2)"/>
   <property key="image-type-field" value="" />
   <property key="color-type-field" value="" />
@@ -127,7 +127,7 @@
   <property key="String" value="نص"/>
   <property key="StringArea" value="نص"/>
   <property key="Text" value="نص"/>
-  <property key="Fixed" value="عدد"/>
+  <property key="Decimal" value="عدد"/>
   <property key="Long" value="كامل"/>
   <property key="Date" value="تاريخ"/>
   <property key="Month" value="شهر"/>
@@ -141,7 +141,7 @@
   <property key="StringArea-long" value="هذا الموقع يجب أن يملأ بنص به (0)حرف و (1)سطر على الأكثر"/>
   <property key="String-long" value="هذا الموقع يجب أن يملأ بنص به أكثر من(0) حرف"/>
   <property key="Text-long" value="هذا الموقع يجب أن  يملأ بنص  بأي حجم"/>
-  <property key="Fixed-long" value="هذا الموقع يجب أن  يملأ بعدد بين(0) و(1)"/>
+  <property key="Decimal-long" value="هذا الموقع يجب أن  يملأ بعدد بين(0) و(1)"/>
   <property key="Long-long" value="هذا الموقع يجب  أن يملأ بعدد صحيح بين (0) و ()1"/>
   <property key="Date-long" value="هذا الموقع يجب أن يحتوي تاريخ (يوم.شهر .سنة )"/>
   <property key="Month-long" value="هذا الموقع يجب أن يحتوي على شهر(شهر. سنة)"/>

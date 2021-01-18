@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.form.dsl
 
+import java.math.BigDecimal
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.joda.time.DateTime
@@ -42,6 +44,7 @@ import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFixnumCodeField
+import org.kopi.galite.form.VFixnumField
 import org.kopi.galite.form.VIntegerCodeField
 import org.kopi.galite.form.VIntegerField
 import org.kopi.galite.form.VMonthField
@@ -51,7 +54,7 @@ import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
 import org.kopi.galite.type.Date
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -107,15 +110,15 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     }
 
   /** the minimum value that cannot exceed  */
-  private var min: Int = Int.MIN_VALUE
+  private var min : T? = null
 
   /** the maximum value that cannot exceed  */
-  private var max: Int = Int.MAX_VALUE
+  private var max : T? = null
 
   /**
    * Sets the minimum value of an Int field.
    */
-  var <U> FormField<U>.minValue: Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.minValue : U? where U : Comparable<U>?, U : Number?
     get() {
       return min
     }
@@ -126,7 +129,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   /**
    * Sets the maximum value of an Int field.
    */
-  var <U> FormField<U>.maxValue: Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.maxValue : U? where U : Comparable<U>?, U : Number?
     get() {
       return max
     }
@@ -176,6 +179,21 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * @param init        initialises the form field column properties (index, priority...)
    */
   fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  @JvmName("decimalColumns")
+  fun FormField<Decimal>.columns(vararg joinColumns: Column<BigDecimal>, init: (FormFieldColumns<Decimal>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  private fun <S> initColumn(vararg joinColumns: Column<S>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
       FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
     }
@@ -311,7 +329,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     return trigger(fieldTriggerEvents, method)
   }
 
-  // TODO add Fixed types
   /**
    * The field model based on the field type.
    */
@@ -325,11 +342,11 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
                                               block.sourceFile,
                                               type.codes.map { it.ident }.toTypedArray(),
                                               type.codes.map { it.value as? Boolean }.toTypedArray())
-          Fixed::class -> VFixnumCodeField(block.buffer,
-                                           domain.ident,
-                                           block.sourceFile,
-                                           type.codes.map { it.ident }.toTypedArray(),
-                                           type.codes.map { it.value as? Fixed }.toTypedArray())
+          Decimal::class -> VFixnumCodeField(block.buffer,
+                                             domain.ident,
+                                             block.sourceFile,
+                                             type.codes.map { it.ident }.toTypedArray(),
+                                             type.codes.map { it.value as? Decimal }.toTypedArray())
           Int::class, Long::class -> VIntegerCodeField(block.buffer,
                                                        domain.ident,
                                                        block.sourceFile,
@@ -345,13 +362,22 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
       }
       else -> {
         when (domain.kClass) {
-          Int::class, Long::class -> VIntegerField(block.buffer, domain.width ?: 0, min, max)
+          Int::class, Long::class -> VIntegerField(block.buffer,
+                                                   domain.width ?: 0,
+                                                   min as? Int ?: Int.MIN_VALUE,
+                                                   max as? Int ?: Int.MAX_VALUE)
           String::class -> VStringField(block.buffer,
                                         domain.width ?: 0,
                                         domain.height ?: 1,
                                         domain.visibleHeight ?: 1,
                                         0,  // TODO
                                         false) // TODO
+          Decimal::class -> VFixnumField(block.buffer,
+                                         domain.width!!,
+                                         domain.height ?: 6,
+                                         domain.height == null,
+                                         min as? Decimal,
+                                         max as? Decimal)
           Boolean::class -> VBooleanField(block.buffer)
           Date::class, java.util.Date::class -> VDateField(block.buffer)
           Month::class -> VMonthField(block.buffer)

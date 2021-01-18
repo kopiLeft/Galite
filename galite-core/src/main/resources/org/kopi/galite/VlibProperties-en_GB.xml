@@ -115,7 +115,7 @@
   <property key="week-type-field" value="This field must be filled by a week (WW.YYYY)." />
   <property key="boolean-type-field" value="This field must be filled by a boolean (yes or no)." />
   <property key="integer-type-field" value="This field must be filled by an integer between {0} and {1}." />
-  <property key="fixed-type-field" value="This field must be filled by an integer between {0} and {1}." />
+  <property key="decimal-type-field" value="This field must be filled by an integer between {0} and {1}." />
   <property key="code-type-field" value="This field must be filled by one of the proposed values (F2)." />
   <property key="image-type-field" value="" />
   <property key="color-type-field" value="" />
@@ -127,7 +127,7 @@
   <property key="String" value="String" />
   <property key="StringArea" value="String" />
   <property key="Text" value="Text" />
-  <property key="Fixed" value="Fixed" />
+  <property key="Decimal" value="Decimal" />
   <property key="Long" value="Long" />
   <property key="Date" value="Date" />
   <property key="Month" value="Week" />
@@ -141,7 +141,7 @@
   <property key="StringArea-long" value="This field must be filled by a text not longer than {0} character and with less than {1} line." />
   <property key="String-long" value="This field must be filled by a string not longer than {0} character" />
   <property key="Text-long" value="This field can be filled by any text" />
-  <property key="Fixed-long" value="This field must be filled by an number between {0} and {1}" />
+  <property key="Decimal-long" value="This field must be filled by an number between {0} and {1}" />
   <property key="Long-long" value="This field must be filled by an integer between {0} and {1}" />
   <property key="Date-long" value="This field must be filled by a date (DD.MM.YYYY)" />
   <property key="Month-long" value="This field must be filled by a month (MM.YYYY)" />

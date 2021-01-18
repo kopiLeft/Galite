@@ -24,8 +24,7 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VFixnumColumn
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
@@ -43,13 +42,9 @@ class VFixnumField(val bufferSize: Int,
                    private val digits: Int,
                    maxScale: Int,
                    val fraction: Boolean,
-                   minval: Fixed?,
-                   maxval: Fixed?)
-  : VField(computeWidth(digits,
-                        maxScale,
-                        minval,
-                        maxval),
-           1) {
+                   minval: Decimal?,
+                   maxval: Decimal?)
+  : VField(computeWidth(digits, maxScale, minval, maxval), 1) {
   /*
    * ----------------------------------------------------------------------
    * Constructor / build
@@ -69,8 +64,8 @@ class VFixnumField(val bufferSize: Int,
                  digits,
                  maxScale,
                  fraction,
-                 minval?.let { NotNullFixed(it) },
-                 maxval?.let { NotNullFixed(it) }) {
+                 minval?.let { Decimal(it) },
+                 maxval?.let { Decimal(it) }) {
   }
 
   /**
@@ -89,32 +84,28 @@ class VFixnumField(val bufferSize: Int,
     var max = maxval
     var nines: Long = 1
 
-    if (min == null) {
-      min = NotNullFixed(Int.MIN_VALUE.toDouble())
-    }
-    if (max == null) {
-      max = NotNullFixed(Int.MAX_VALUE.toDouble())
-    }
+    min = Decimal(Int.MIN_VALUE.toDouble())
+    max = Decimal(Int.MAX_VALUE.toDouble())
     for (i in width downTo 2) {
       if (i % 3 != 0) {
         nines *= 10
       }
     }
-    var big: Fixed = NotNullFixed((nines - 1).toDouble())
+    var big = Decimal((nines - 1).toDouble())
 
     big = big.setScale(height)
-    var mbig: Fixed = NotNullFixed(-(nines / 10 - 1).toDouble())
+    var mbig = Decimal(-(nines / 10 - 1).toDouble())
 
     mbig = mbig.setScale(height)
     max = if (max > big) max else big
     min = if (min < mbig) min else mbig
-    return VlibProperties.getString("fixed-type-field", arrayOf(min, max))
+    return VlibProperties.getString("decimal-type-field", arrayOf(min, max))
   }
 
   /**
    * return the name of this field
    */
-  override fun getTypeName(): String = VlibProperties.getString("Fixed")
+  override fun getTypeName(): String = VlibProperties.getString("Decimal")
 
   override fun isNumeric(): Boolean = true
 
@@ -164,9 +155,9 @@ class VFixnumField(val bufferSize: Int,
     if ((s == "")) {
       setNull(rec)
     } else {
-      val v: Fixed?
+      val v: Decimal?
       try {
-        v = scanFixed(s)
+        v = scanDecimal(s)
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -174,24 +165,24 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale > scale) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
-        if (minval != null && v.compareTo(minval) == -1) {
+        if (v.compareTo(minval) == -1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval)))
         }
-        if (maxval != null && v.compareTo(maxval) == 1) {
+        if (v.compareTo(maxval) == 1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval)))
         }
         if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
         }
       }
-      setFixed(rec, v)
+      setDecimal(rec, v)
     }
   }
 
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> = Fixed::class
+  override fun getDataType(): KClass<*> = Decimal::class
 
   // ----------------------------------------------------------------------
   // FIELD VALUE ACCESS
@@ -203,17 +194,17 @@ class VFixnumField(val bufferSize: Int,
    * @param     exclude         exclude the current record
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(exclude: Boolean): Fixed? {
-    var sum: Fixed? = null
+  fun computeSum(exclude: Boolean): Decimal? {
+    var sum: Decimal? = null
 
     for (i in 0 until block!!.bufferSize) {
       if ((!isNullImpl(i)
                       && block!!.isRecordFilled(i)
                       && (!exclude || i != block!!.activeRecord))) {
         if (sum == null) {
-          sum = NotNullFixed(0.0)
+          sum = Decimal(0.0)
         }
-        sum = sum.add(getFixed(i) as NotNullFixed)
+        sum = sum + getDecimal(i)
       }
     }
     return sum
@@ -226,15 +217,15 @@ class VFixnumField(val bufferSize: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(exclude: Boolean, coalesceValue: NotNullFixed): NotNullFixed =
-          computeSum(exclude)?.let { computeSum(exclude) as? NotNullFixed } ?: coalesceValue
+  fun computeSum(exclude: Boolean, coalesceValue: Decimal): Decimal =
+          computeSum(exclude)?.let { computeSum(exclude) } ?: coalesceValue
 
   /**
    * Returns the sum of the field values of all records.
    *
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(): Fixed? = computeSum(false)
+  fun computeSum(): Decimal? = computeSum(false)
 
   /**
    * Returns the sum of every filled records in block
@@ -242,7 +233,7 @@ class VFixnumField(val bufferSize: Int,
    * @param     coalesceValue   the value to take if all fields are empty
    * @return    the sum of the field values or coalesceValue if none is filled.
    */
-  fun computeSum(coalesceValue: NotNullFixed): NotNullFixed = computeSum(false, coalesceValue)
+  fun computeSum(coalesceValue: Decimal): Decimal = computeSum(false, coalesceValue)
 
   /**
    * Returns the current scale for the specified record.
@@ -304,13 +295,13 @@ class VFixnumField(val bufferSize: Int,
    * Sets the field value of given record to a null value.
    */
   override fun setNull(r: Int) {
-    setFixed(r, null)
+    setDecimal(r, null)
   }
 
   /**
-   * Sets the field value of given record to a Fixed value.
+   * Sets the field value of given record to a Decimal value.
    */
-  override fun setFixed(r: Int, v: Fixed?) {
+  override fun setDecimal(r: Int, v: Decimal?) {
     // trails (backup) the record if necessary
     var v = v
 
@@ -322,9 +313,9 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale != currentScale[r]) {
           v = v.setScale(currentScale[r])
         }
-        if (minval != null && v.compareTo(minval) == -1) {
+        if (v.compareTo(minval) == -1) {
           v = minval
-        } else if (maxval != null && v.compareTo(maxval) == 1) {
+        } else if (v.compareTo(maxval) == 1) {
           v = maxval
         }
       }
@@ -345,9 +336,9 @@ class VFixnumField(val bufferSize: Int,
   override fun setObject(r: Int, v: Any?) {
     // !!! HACK for Oracle
     if (v != null && (v is Int)) {
-      setFixed(r, NotNullFixed(v.toDouble()))
+      setDecimal(r, Decimal(v.toDouble()))
     } else {
-      setFixed(r, v as Fixed?)
+      setDecimal(r, v as Decimal?)
     }
   }
 
@@ -361,7 +352,7 @@ class VFixnumField(val bufferSize: Int,
     return if (query.isNull(column)) {
       null
     } else {
-      query.getFixed(column)
+      query.getDecimal(column)
     }
   }
 
@@ -371,9 +362,9 @@ class VFixnumField(val bufferSize: Int,
   override fun isNullImpl(r: Int): Boolean = value[r] == null
 
   /**
-   * Returns the field value of given record as a Fixed value.
+   * Returns the field value of given record as a Decimal value.
    */
-  override fun getFixed(r: Int): Fixed = getObject(r) as Fixed
+  override fun getDecimal(r: Int): Decimal = getObject(r) as Decimal
 
   /**
    * Returns the field value of the current record as an object
@@ -384,7 +375,7 @@ class VFixnumField(val bufferSize: Int,
     if (o == null) {
       return ""
     }
-    return toText((o as Fixed).setScale(currentScale[0]))
+    return toText((o as Decimal).setScale(currentScale[0]))
   }
 
   override fun toObject(s: String): Any? {
@@ -393,10 +384,10 @@ class VFixnumField(val bufferSize: Int,
     if ((s == "")) {
       return null
     } else {
-      val v: Fixed?
+      val v: Decimal?
 
       try {
-        v = scanFixed(s)
+        v = scanDecimal(s)
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
@@ -404,10 +395,10 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale > scale) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
-        if (minval != null && v.compareTo(minval) == -1) {
+        if (v.compareTo(minval) == -1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval)))
         }
-        if (maxval != null && v.compareTo(maxval) == 1) {
+        if (v.compareTo(maxval) == 1) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval)))
         }
         if (toText(v.setScale(maxScale)).length > width) {
@@ -470,14 +461,14 @@ class VFixnumField(val bufferSize: Int,
   /**
    * Returns a string representation of a big decimal value wrt the field type.
    */
-  fun formatFixed(value: Fixed): String {
+  fun formatDecimal(value: Decimal): String {
     return toText(value.setScale(currentScale[block!!.activeRecord]))
   }
 
   /**
    * Returns the string representation in human-readable format.
    */
-  fun toText(v: Fixed): String {
+  fun toText(v: Decimal): String {
     return if (!fraction) {
       v.toString()
     } else {
@@ -531,7 +522,9 @@ class VFixnumField(val bufferSize: Int,
   }
 
   private fun setHasCriticalValue(critical: Boolean) {
-    getDisplay().let { (it as UTextField).setHasCriticalValue(critical) }
+    getDisplay()?.let {
+      (it as UTextField).setHasCriticalValue(critical)
+    }
   }
 
   /*
@@ -543,9 +536,9 @@ class VFixnumField(val bufferSize: Int,
   private var fieldMaxScale = maxScale
 
   // dynamic data
-  var minval: Fixed = minval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale).negate()
+  var minval = minval?.setScale(maxScale) ?: - calculateUpperBound(digits, maxScale)
     private set
-  var maxval: Fixed = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
+  var maxval = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
     private set
 
   // number of digits after dot
@@ -581,7 +574,7 @@ class VFixnumField(val bufferSize: Int,
       }
     }
 
-  private var value: Array<Fixed?> = arrayOfNulls(2 * bufferSize)
+  private var value: Array<Decimal?> = arrayOfNulls(2 * bufferSize)
 
   protected var criticalMinValue = minval
 
@@ -590,9 +583,9 @@ class VFixnumField(val bufferSize: Int,
   companion object {
 
     /**
-     * Parses the string argument as a fixed number in human-readable format.
+     * Parses the string argument as a decimal number in human-readable format.
      */
-    private fun scanFixed(str: String?): Fixed? {
+    private fun scanDecimal(str: String?): Decimal? {
       var negative = false
       var state = 0
       var scale = 0
@@ -762,12 +755,12 @@ class VFixnumField(val bufferSize: Int,
         else -> throw NumberFormatException()
       }
       return if (value == 0L) {
-        Fixed.DEFAULT
+        Decimal.DEFAULT
       } else {
         if (negative) {
           value = -value
         }
-        NotNullFixed(value, scale)
+        Decimal(value, scale)
       }
     }
 
@@ -777,7 +770,7 @@ class VFixnumField(val bufferSize: Int,
      * @param     digits          the number of total digits.
      * @param     scale           the number of digits representing the fractional part.
      */
-    fun calculateUpperBound(digits: Int, scale: Int): NotNullFixed {
+    fun calculateUpperBound(digits: Int, scale: Int): Decimal {
       val asciiBound: CharArray
 
       if (scale == 0) {
@@ -792,7 +785,7 @@ class VFixnumField(val bufferSize: Int,
         }
         asciiBound[digits - scale] = '.'
       }
-      return NotNullFixed(String(asciiBound))
+      return Decimal(String(asciiBound))
     }
 
     /**
@@ -803,9 +796,9 @@ class VFixnumField(val bufferSize: Int,
      * @param     minVal          the minimal value the fixnum field can get.
      * @param     maxVal          the maximal value the fixnum field can get.
      */
-    fun computeWidth(digits: Int, scale: Int, minVal: Fixed?, maxVal: Fixed?): Int {
+    fun computeWidth(digits: Int, scale: Int, minVal: Decimal?, maxVal: Decimal?): Int {
       var upperBound = calculateUpperBound(digits, scale)
-      var lowerBound = upperBound.negate()
+      var lowerBound = - upperBound
       if (minVal != null && minVal > lowerBound) {
         lowerBound = minVal.setScale(scale)
       }
@@ -816,9 +809,9 @@ class VFixnumField(val bufferSize: Int,
     }
 
     /**
-     * Computes the number of digits of a fixed field : FIXED(width, scale)
+     * Computes the number of digits of a decimal field : Decimal(width, scale)
      *
-     * @param     width           the width of the fixed field.
+     * @param     width           the width of the decimal field.
      * @param     scale           the number of digits representing the fractional part.
      */
     fun computeDigits(width: Int, scale: Int): Int {
