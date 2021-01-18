@@ -16,40 +16,63 @@
  */
 package org.kopi.galite.type
 
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+import org.kopi.galite.util.base.InconsistencyException
 import java.util.Locale
-import java.util.Arrays
 
 /**
  * This class represents image types
  */
-class Image(val width: Int, val height: Int, var byteArray: ByteArray?) : Type() {
+class Image(val width: Int, val height: Int, var value: ExposedBlob) : Comparable<Image> {
 
-  override fun equals(other: Any?): Boolean = other is Image?
-                                              && width == other?.width
-                                              && height == other?.height
-                                              && byteArray === other?.byteArray
+  /**
+   * Compares two objects
+   */
+  override fun equals(other: Any?): Boolean {
+    return other is Image &&
+            width == other.width &&
+            height == other.height &&
+            value == other.value
+  }
 
-  override fun toString(locale: Locale): String {
+  /**
+   * Format the object depending on the current language
+   */
+  override fun toString(): String {
+    return toString(Locale.GERMAN) // !!!
+  }
+
+  /**
+   * Format the object depending on the current language
+   * @param    locale    the current language
+   */
+  fun toString(locale: Locale?): String {
     val strBuilder = StringBuilder()
     return strBuilder.append(width)
                      .append(',')
                      .append(height)
                      .append(',')
-                     .append(byteArray).toString()
+                     .append(value).toString()
   }
 
-  override fun toSql(): String {
-    TODO("Not yet implemented")
-  }
+  /**
+   * Represents the value in sql
+   */
+  fun toSql(): String = value.toString()
 
   /**
    * Compares to another image.
    * TODO Do we need to compare two images?
    */
-  operator fun compareTo(other: Image): Int {
-    return Arrays.compare(byteArray, other.byteArray)
+  override operator fun compareTo(other: Image): Int {
+    throw InconsistencyException("Error while calling this method")
   }
 
-  override fun compareTo(other: Any?): Int = compareTo(other as? Image)
+  companion object {
 
+    /**
+     * Comment for `serialVersionUID`
+     */
+    private const val serialVersionUID = 1L
+  }
 }

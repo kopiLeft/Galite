@@ -19,6 +19,7 @@ package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.joda.time.DateTime
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
@@ -41,8 +42,8 @@ import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
-import org.kopi.galite.form.VImageField
 import org.kopi.galite.form.VFixnumCodeField
+import org.kopi.galite.form.VImageField
 import org.kopi.galite.form.VIntegerCodeField
 import org.kopi.galite.form.VIntegerField
 import org.kopi.galite.form.VMonthField
@@ -178,6 +179,21 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * @param init        initialises the form field column properties (index, priority...)
    */
   fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  @JvmName("imageColumns")
+  fun FormField<Image>.columns(vararg joinColumns: Column<ExposedBlob>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  private fun <S> initColumn(vararg joinColumns: Column<S>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
       FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
     }
@@ -360,6 +376,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
           Week::class -> VWeekField(block.buffer)
           Time::class -> VTimeField(block.buffer)
           Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
+          Image::class -> VImageField(block.buffer,domain.width!!,domain.height!!)
           else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
         }
       }
