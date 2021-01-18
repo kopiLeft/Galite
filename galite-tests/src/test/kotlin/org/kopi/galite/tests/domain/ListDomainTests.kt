@@ -42,8 +42,8 @@ class ListDomainTests {
       override val table = query(TestTable.selectAll())
 
       init {
-        this["name"] =  TestTable.name
-        this["id"] =    TestTable.id
+        "name" keyOf TestTable.name
+        "id" keyOf TestTable.id
       }
     }
 
@@ -75,8 +75,8 @@ class ListDomainTests {
           it.startsWith(param)
         }
 
-        this["id"] =    TestTable.id
-        this["name"] =  TestTable.name
+        "id" keyOf TestTable.id
+        "name" keyOf TestTable.name
       }
     }
 

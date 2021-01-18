@@ -20,6 +20,7 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
+import org.kopi.galite.db.Modules
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.AutoComplete
@@ -59,6 +60,10 @@ object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
     label = "user"
     help = "The user"
   }
+  val module = mustFill(domain = Module, position = at(2, 1)) {
+    label = "module"
+    help = "The module"
+  }
 }
 
 object UsersList: ListDomain<Int>(20) {
@@ -73,16 +78,35 @@ object UsersList: ListDomain<Int>(20) {
     SomeDictionnaryForm
   }
 
-  val autoComplete = complete(AutoComplete.LEFT, 10)
+  val autoComplete = complete(AutoComplete.LEFT, 1)
 
   init {
-    this["ID"] = Users.id
-    this["UC"] = Users.uc
-    this["TS"] = Users.ts
-    this["KURZNAME"] = Users.shortName
-    this["ZEICHEN"] = Users.character
-    this["TELEFON"] = Users.phone
-    this["EMAIL"] = Users.email
+    "ID" keyOf Users.id
+    "UC" keyOf Users.uc
+    "TS" keyOf Users.ts
+    "KURZNAME" keyOf Users.shortName
+    "ZEICHEN" keyOf Users.character
+    "TELEFON" keyOf Users.phone
+    "EMAIL" keyOf Users.email
+  }
+}
+
+object Module: ListDomain<String>(20) {
+
+  override val table = Modules
+
+  val autoComplete = complete(AutoComplete.LEFT, 2)
+
+  init {
+    "KURZNAME" keyOf Modules.shortName
+    "UC" keyOf Modules.uc
+    "ID" keyOf Modules.id
+    "TS" keyOf Modules.ts
+    "VATER" keyOf Modules.parent
+    "QUELLE" keyOf Modules.sourceName
+    "PRIORITAET" keyOf Modules.priority
+    "OBJEKT" keyOf Modules.objectName
+    "SYMBOL" keyOf Modules.symbol
   }
 }
 
@@ -113,5 +137,7 @@ object SomeDictionnaryForm : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithListDomains)
+  Application.runForm(formName = FormWithListDomains) {
+    initModules()
+  }
 }

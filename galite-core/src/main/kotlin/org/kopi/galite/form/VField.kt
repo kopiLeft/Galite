@@ -26,16 +26,16 @@ import javax.swing.event.EventListenerList
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Alias
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
-import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -1582,14 +1582,17 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
       try {
         try {
-          val column = list!!.getColumn(0).column as Column<String>
+          val table = evalListTable()
+          val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<String>
+
+          val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord)!! }
 
           val transaction = TransactionManager.currentOrNull()
           if (transaction != null) {
-            exists = !evalListTable_().select { column eq getSql(block!!.activeRecord)!! }.empty()
+            exists = !query.empty()
           } else {
             transaction {
-              exists = !evalListTable_().select { column eq getSql(block!!.activeRecord)!! }.empty()
+              exists = !query.empty()
             }
           }
 
@@ -1624,7 +1627,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         try {
           val column = list!!.getColumn(0).column as Column<String>
-          val query = evalListTable_().slice(column).select {
+          val query = evalListTable().slice(column).select {
             column.substring(1, getString(block!!.activeRecord).length) eq getString(block!!.activeRecord)
           }.orderBy(column)
 
@@ -1678,7 +1681,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           }
 
           val column = list!!.getColumn(0).column as Column<String>
-          val query = evalListTable_().slice(columns).select {
+          val query = evalListTable().slice(columns).select {
             column.substring(1, condition.length) eq condition
           }.orderBy(columns[0])
 
@@ -1697,29 +1700,27 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   /**
    * Checks that field value exists in list
-   * !!! TRY TO MERGE WITH checkList ???
+   * !!! TODO: TRY TO MERGE WITH checkList ???
    */
   open fun getListID(): Int {
-    val idColumn = Column<Int>(evalListTable_(), "ID", IntegerColumnType())
-    val column = list!!.getColumn(0).column as Column<String>
+    val table = evalListTable()
+    val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<String>
+    val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
     assert(list != null) { threadInfo() + "list ist not null" }
     var id = -1
 
     try {
-      while (true) {
-        try {
-          val query = evalListTable_().slice(idColumn).select { column eq getSql(block!!.activeRecord)!! }
+      try {
+        transaction {
+          val query = table.slice(idColumn).select { column eq getSql(block!!.activeRecord)!! }
 
           if (!query.empty()) {
             id = query.first()[idColumn]
           }
-          break
-        } catch (e: SQLException) {
-        } catch (error: java.lang.Error) {
-        } catch (rte: RuntimeException) {
         }
+      } catch (e: SQLException) {
       }
     } catch (e: Throwable) {
       throw VExecFailedException(e)
@@ -1774,15 +1775,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             var i = 0
 
             while (i < lines.size) {
-              lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 2 else 1]!!]
+              lines[i][lineCount] = result[columnsList[i + if (SKIP_FIRST_COLUMN) 1 else 0]!!]
               i += 1
             }
             lineCount += 1
           }
         }
       } catch (e: SQLException) {
-      } catch (error: java.lang.Error) {
-      } catch (rte: RuntimeException) {
       }
     } catch (e: Throwable) {
       throw VRuntimeException(e)
@@ -1814,10 +1813,11 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         try {
           result = try {
             transaction {
+              val table = evalListTable()
               val column = list!!.getColumn(0).column!!
-              val idColumn = Column<Int>(evalListTable_(), "ID", IntegerColumnType())
+              val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
 
-              evalListTable_().slice(column).select { idColumn eq selected }.first()[column]
+              table.slice(column).select { idColumn eq selected }.first()[column]
             }
           } catch (e: SQLException) {
           } catch (error: java.lang.Error) {
@@ -1866,9 +1866,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
 
     val query = if (searchCondition == null) {
-      evalListTable_().slice(columns).selectAll().orderBy(list!!.getColumn(0).column!!)
+      evalListTable().slice(columns).selectAll().orderBy(list!!.getColumn(0).column!!)
     } else {
-      evalListTable_().slice(columns).select(searchCondition).orderBy(list!!.getColumn(0).column!!)
+      evalListTable().slice(columns).select(searchCondition).orderBy(list!!.getColumn(0).column!!)
     }
 
     val result = displayQueryList_(query, list!!.columns)
@@ -2028,11 +2028,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  private fun evalListTable_(): Table {
-    //TODO()
-    return block?.tables!![0]
-  }
-
   /**
    * Calls trigger for given event.
    */
@@ -2089,6 +2084,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         column
       }
       is QueryAlias -> {
+        get(column)
+      }
+      is Alias<*> -> {
         get(column)
       }
       else -> {
