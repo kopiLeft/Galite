@@ -78,8 +78,8 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    val s = o as? String
+  override fun checkType(rec: Int, s: Any?) {
+    val s = s as? String
 
     if (s == "") {
       setNull(rec)
@@ -89,7 +89,6 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   }
 
   private fun parseDate(rec: Int, s: String?) {
-    var day = 0
     var month = 0
     var year = -2
     val tokens = StringTokenizer(s, "/.#")
@@ -97,7 +96,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     if (!tokens.hasMoreTokens()) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
     }
-    day = stringToInt(tokens.nextToken())
+    val day = stringToInt(tokens.nextToken())
 
     if (tokens.hasMoreTokens()) {
       month = stringToInt(tokens.nextToken())
@@ -211,7 +210,6 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     if (s == "") {
       return null
     }
-    var day = 0
     var month = 0
     var year = -2
     val tokens = StringTokenizer(s, "/.#")
@@ -219,7 +217,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     if (!tokens.hasMoreTokens()) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
     }
-    day = stringToInt(tokens.nextToken())
+    val day = stringToInt(tokens.nextToken())
     if (tokens.hasMoreTokens()) {
       month = stringToInt(tokens.nextToken())
     }
@@ -339,9 +337,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     return if (list != null) {
       super.fillField(handler)
     } else {
-      var force = false
-
-      force = try {
+      val force = try {
         val oldText = getDisplayedValue(true) as? String
         checkType(oldText)
         val newText = getText(block!!.activeRecord)

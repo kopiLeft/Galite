@@ -31,7 +31,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   /**
    * Constructs a Month from a Date
    */
-  internal constructor(date: Date) : this(date.year, date.month) {}
+  internal constructor(date: Date) : this(date.year, date.month)
 
   /**
    * Formats the month according to the given format using the default
@@ -39,7 +39,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    *
    * @param     format  the format.
    * @param     locale  the Locale to use.
-   * @see 	    SimpleDateFormat
+   * @see            SimpleDateFormat
    */
   fun format(format: String, locale: Locale = Locale.getDefault()): String {
     val cal = GregorianCalendar()
@@ -79,7 +79,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    * subtract
    * @returns the number of month between two Months
    */
-  fun subtract(other: Month?): Int? = other ?.let { subtract(other as? NotNullMonth)  }
+  fun subtract(other: Month?): Int? = other?.let { subtract(other as? NotNullMonth) }
 
   /**
    * subtract
@@ -101,10 +101,11 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   operator fun compareTo(other: Month): Int {
     val v1 = scalar
     val v2 = other.scalar
+
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any): Int = compareTo(other as Month)
+  override operator fun compareTo(other: Any?): Int = compareTo(other as? Month)
 
   /**
    * Returns the year of the month (by example 1999 or may be 2000 on year after)

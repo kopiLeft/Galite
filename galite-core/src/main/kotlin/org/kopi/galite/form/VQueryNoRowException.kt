@@ -21,8 +21,12 @@ package org.kopi.galite.form
 import org.kopi.galite.visual.VException
 
 /**
- * This class represents exceptions occuring during execution process.
+ * This class represents exceptions occurring during execution process.
  *
  * @param message the associated message. It's optional.
  */
-class VQueryNoRowException(message: String? = null) : VException(message)
+class VQueryNoRowException(message: String? = null) : VException(message) {
+  companion object {
+    private const val serialVersionUID = 0L
+  }
+}

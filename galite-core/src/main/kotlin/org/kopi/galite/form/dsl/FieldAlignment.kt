@@ -21,7 +21,7 @@ import org.kopi.galite.form.VConstants
 /**
  * The field alignment is used to define the localization of the field's content inside the field.
  */
-enum class FieldAlignment(val value: Int){
+enum class FieldAlignment(val value: Int) {
   /**
    * The value is centered in the field
    */

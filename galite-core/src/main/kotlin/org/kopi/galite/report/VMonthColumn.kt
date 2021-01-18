@@ -35,13 +35,13 @@ class VMonthColumn(ident: String?,
                    function: VCalculateColumn?,
                    width: Int,
                    format: VCellFormat?) : VReportColumn(ident,
-        options,
-        align,
-        groups,
-        function,
-        width,
-        1,
-        format) {
+                                                         options,
+                                                         align,
+                                                         groups,
+                                                         function,
+                                                         width,
+                                                         1,
+                                                         format) {
   /**
    * Compare two objects.
    *

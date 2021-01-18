@@ -50,6 +50,6 @@ class Image(val width: Int, val height: Int, var byteArray: ByteArray?) : Type()
     return Arrays.compare(byteArray, other.byteArray)
   }
 
-  override fun compareTo(other: Any): Int = compareTo(other as Image)
+  override fun compareTo(other: Any?): Int = compareTo(other as? Image)
 
 }

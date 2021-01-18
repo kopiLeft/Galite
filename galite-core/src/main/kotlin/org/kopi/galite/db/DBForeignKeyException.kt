@@ -39,7 +39,7 @@ class DBForeignKeyException : DBConstraintException {
    * @param     original                the original SQLException
    * @param     constraint              the violated constraint
    */
-  constructor(query: String, original: SQLException, constraint: String) : super(query, original, constraint) {}
+  constructor(query: String, original: SQLException, constraint: String) : super(query, original, constraint)
 
   /**
    * Creates a new `DBForeignKeyException` that indicates the tables in relation.
@@ -62,13 +62,13 @@ class DBForeignKeyException : DBConstraintException {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  var referencedTable : String? = null // The referenced table
+  var referencedTable: String? = null // The referenced table
     private set
 
   /**
    * Returns the referencing table in this FK exception.
    */
-  var referencingTable : String? = null // The referencing table
+  var referencingTable: String? = null // The referencing table
     private set
 
 }

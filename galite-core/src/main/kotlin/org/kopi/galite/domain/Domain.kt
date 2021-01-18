@@ -19,6 +19,10 @@ package org.kopi.galite.domain
 
 import kotlin.reflect.KClass
 
+import org.apache.poi.ss.formula.functions.Fixed
+import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.form.VConstants
+
 /**
  * A domain is a data type with predefined list of allowed values.
  *
@@ -26,16 +30,15 @@ import kotlin.reflect.KClass
  * @param height            the height in char of this field
  * @param visibleHeight     the visible height in char of this field.
  */
-open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = null, val visibleHeight: Int? = null) {
-  /**
-   * The type of this domain.
-   */
-  open val type: Domain<T>? = null
+open class Domain<T : Comparable<T>?>(val width: Int? = null,
+                                      val height: Int? = null,
+                                      val visibleHeight: Int? = null) {
+  val ident: String = this::class.java.simpleName
 
   /**
-   * Determines the column data type
+   * Determines the field data type
    */
-  var kClass: KClass<T>? = null
+  var kClass: KClass<*>? = null
 
   /**
    * Allows to define the possible codes that the domain can take
@@ -43,56 +46,48 @@ open class Domain<T : Comparable<T>>(val width: Int? = null, val height: Int? = 
    * @param init used to initialize the code domain
    */
   fun code(init: CodeDomain<T>.() -> Unit): CodeDomain<T> {
-    val codeDomain = CodeDomain<T>(this::class.java.simpleName)
+    val codeDomain = CodeDomain<T>()
     codeDomain.init()
     return codeDomain
   }
 
   /**
-   * Allows to define the possible codes that the domain can take
-   *
-   * @param init used to initialize the list domain
-   */
-  fun list(init: ListDomain<T>.() -> Unit): ListDomain<T> {
-    val listDomain = ListDomain<T>(this::class.java.simpleName)
-    listDomain.init()
-    return listDomain
-  }
-
-  /**
-   * returns list of code values that can this field get.
-   */
-  fun getValues(): MutableMap<String, *> {
-    return if (isCodeDomain()) {
-      (type as CodeDomain<T>).codes
-    } else if (isListDomain()) {
-      (type as ListDomain<T>).list
-    } else {
-      throw Exception("Unsupported domain type")
-    }
-  }
-
-  /**
-   * Converts domain value to uppercase.
-   *
-   * @param value domain's value.
-   */
-  open fun applyConvertUpper(value: String): String {
-    if (!isListDomain()) {
-      throw UnsupportedOperationException("ConvertUpper is an unsupported " +
-              "operation on current domain type")
-    }
-
-    return (type as ListDomain<T>).applyConvertUpper(value)
-  }
-
-  /**
    * returns true if this domain is a code domain, false otherwise
    */
-  private fun isCodeDomain(): Boolean = type is CodeDomain<T>
+  private fun isCodeDomain(): Boolean = this is CodeDomain<T>
 
   /**
    * returns true if this domain is a list domain, false otherwise
    */
-  private fun isListDomain(): Boolean = type is ListDomain<T>
+  private fun isListDomain(): Boolean = this is ListDomain<T>
+
+  /**
+   * Returns the default alignment
+   */
+  val defaultAlignment: Int
+    get() = if (kClass == Fixed::class) {
+      VConstants.ALG_RIGHT
+    } else {
+      VConstants.ALG_LEFT
+    }
+
+  // ----------------------------------------------------------------------
+  // UTILITIES
+  // ----------------------------------------------------------------------
+  fun hasSize(): Boolean =
+          when (kClass) {
+            Fixed::class, Int::class, Long::class, String::class -> true
+            else -> false
+          }
+
+  // ----------------------------------------------------------------------
+  // XML LOCALIZATION GENERATION
+  // ----------------------------------------------------------------------
+  fun genLocalization(writer: LocalizationWriter) {
+    writer.genTypeDefinition(ident, this)
+  }
+
+  open fun genTypeLocalization(writer: LocalizationWriter) {
+    // DO NOTHING !
+  }
 }

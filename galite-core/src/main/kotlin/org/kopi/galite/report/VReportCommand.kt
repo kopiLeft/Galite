@@ -27,7 +27,9 @@ import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.PrinterManager
 import org.kopi.galite.visual.VHelpGenerator
 
-class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
+class VReportCommand(val report: VReport,
+                     actor: VActor)
+  : VCommand(0xFFFF, null, actor, actor.number, actor.actorIdent), ActionHandler {
   /**
    * Returns the actor
    */
@@ -74,10 +76,10 @@ class VReportCommand(val report: VReport, actor: VActor) : VCommand(0xFFFF, null
   /**
    * Performs a void trigger
    *
-   * @param    type    the number of the trigger
+   * @param    VKT_Type    the number of the trigger
    */
-  override fun executeVoidTrigger(type: Int) {
-    when (type) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    when (VKT_Type) {
       Constants.CMD_QUIT -> report.close()
       Constants.CMD_PRINT -> {
         val pm: PrintManager = DefaultPrintManager.getPrintManager()

@@ -42,7 +42,8 @@ object Formatter {
       append(dimensionValue.value.quoteIfNecessary())
       chart.measures.forEach { measure ->
         append(",")
-        append(dimensionValue.measureList.getOrElse(measure,
+        append(dimensionValue.measureList.getOrElse(
+                measure,
                 { throw MissingMeasureException(measure, dimensionValue.value) }
         ))
       }
@@ -54,7 +55,7 @@ object Formatter {
   /**
    * Adds quote to receiver if it is not quoted.
    */
-  fun <T> T.quoteIfNecessary(): String {
+  private fun <T> T.quoteIfNecessary(): String {
     val stringRepresentation = this.toString()
 
     return if (!stringRepresentation.startsWith("\"") && !stringRepresentation.endsWith("\""))

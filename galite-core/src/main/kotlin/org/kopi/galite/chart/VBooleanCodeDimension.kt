@@ -36,7 +36,7 @@ class VBooleanCodeDimension(ident: String,
                             source: String,
                             idents: Array<String>,
                             private val codes: BooleanArray)
-           : VCodeDimension(ident, format, type, source, idents) {
+  : VCodeDimension(ident, format, type, source, idents) {
 
   init {
     if (codes.size > 2) {
@@ -47,7 +47,7 @@ class VBooleanCodeDimension(ident: String,
   // ----------------------------------------------------------------------
   // IMPLEMENTATIONS
   // ----------------------------------------------------------------------
-  protected override fun getIndex(value: Any?): Int {
+  override fun getIndex(value: Any?): Int {
     return if ((value as? Boolean) == codes[0]) 0 else 1
   }
 }

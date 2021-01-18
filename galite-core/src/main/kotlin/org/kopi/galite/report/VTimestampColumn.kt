@@ -36,14 +36,14 @@ class VTimestampColumn(ident: String?,
                        function: VCalculateColumn?,
                        width: Int,
                        format: VCellFormat?)
-      : VReportColumn(ident,
-                      options,
-                      align,
-                      groups,
-                      function,
-                      10 + 1 + 8,  // width, default timestamp format (date + space + time)
-                      1,
-                      format) {
+       : VReportColumn(ident,
+                       options,
+                       align,
+                       groups,
+                       function,
+                       10 + 1 + 8,  // width, default timestamp format (date + space + time)
+                       1,
+                       format) {
   /**
    * Compares two objects.
    *

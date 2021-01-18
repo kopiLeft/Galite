@@ -52,12 +52,12 @@ abstract class VCodeDimension(ident: String,
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
-  override fun localize(parent: FieldLocalizer) {
-    val loc = parent.manager.getTypeLocalizer(source, type)
-    names = arrayOfNulls(idents.size)
-    for (i in names!!.indices) {
-      names!![i] = loc.getCodeLabel(idents[i])
+  override fun localize(loc: FieldLocalizer) {
+    val localizer = loc.manager.getTypeLocalizer(source, type)
+    names = Array(idents.size) { i ->
+      localizer.getCodeLabel(idents[i])
     }
   }
+
   protected var names: Array<String?>? = null // array of external representations
 }

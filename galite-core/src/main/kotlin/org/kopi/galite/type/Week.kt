@@ -69,7 +69,7 @@ open class Week : Type {
    * subtract
    * @returns the number of weeks between two Weeks
    */
-  fun subtract(other: Week?): Int?  = other ?.let { subtract(other as? NotNullWeek) }
+  fun subtract(other: Week?): Int? = other?.let { subtract(other as? NotNullWeek) }
 
   /**
    * subtract
@@ -94,9 +94,8 @@ open class Week : Type {
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any): Int =
-          compareTo(other as Week)
-          // week to start at 1
+  override operator fun compareTo(other: Any?): Int =
+          compareTo(other as? Week) // week to start at 1
 
   /**
    * Returns the week number (starts at 1, ends at 53)

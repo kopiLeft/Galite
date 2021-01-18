@@ -37,7 +37,8 @@ class ListLocalizer(manager: LocalizationManager,
    *
    * @param             column          the identifier of the column
    */
-  fun getColumnTitle(column: String): String = Utils.lookupChild(self, "listdesc", "column", column).getAttributeValue("title")
+  fun getColumnTitle(column: String): String =
+          Utils.lookupChild(self, "listdesc", "column", column).getAttributeValue("title")
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS

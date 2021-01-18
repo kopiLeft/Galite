@@ -77,8 +77,7 @@ class VDynamicReport(block: VBlock) : VReport() {
 
     fields.forEach { field ->
       // Images fields cannot be handled in dynamic reports
-      if (field !is VImageField
-              && (!field.isInternal() || field.name.equals(block.idField.name))) {
+      if (field !is VImageField && (!field.isInternal() || field.name == block.idField.name)) {
         if (field.getColumnCount() > 0 || block.isMulti() && isFetched) {
           processedFields.add(field)
         }
@@ -86,7 +85,7 @@ class VDynamicReport(block: VBlock) : VReport() {
     }
     if (processedFields.isEmpty()) {
       throw InconsistencyException("Can't generate a report, check that this block contains " +
-              "unhidden fields with database columns.")
+                                           "unhidden fields with database columns.")
     }
     return processedFields.toTypedArray()
   }
@@ -110,7 +109,7 @@ class VDynamicReport(block: VBlock) : VReport() {
     var col = 0
 
     fields.forEachIndexed { index, field ->
-      when(field) {
+      when (field) {
         is VStringField ->
           columns[col] = VStringColumn(null,
                                        0,
@@ -147,7 +146,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                        null)
         is VIntegerField ->
           // hidden field ID of the block will represent the last column in the report.
-          if (field.name.equals(block.idField.name) && field.isInternal()) {
+          if (field.name == block.idField.name && field.isInternal()) {
             idColumn = fields.size - 1
             columns[fields.size - 1] = VIntegerColumn(null,
                                                       0,
@@ -160,7 +159,7 @@ class VDynamicReport(block: VBlock) : VReport() {
             // next column will have the position col.
             col -= 1
           } else {
-            if (field.name.equals(block.idField.name)) {
+            if (field.name == block.idField.name) {
               idColumn = index
             }
             columns[col] = VIntegerColumn(null,
@@ -254,13 +253,13 @@ class VDynamicReport(block: VBlock) : VReport() {
         else -> throw InconsistencyException("Error: unknown field type.")
       }
       // add labels for columns.
-      if (!field.name.equals(block.idField.name)) {
+      if (field.name != block.idField.name) {
         val columnLabel = if (field.label != null) {
           field.label!!.trim()
         } else {
           field.name
         }
-        columns[col]!!.label = columnLabel!!
+        columns[col]!!.label = columnLabel
       }
       col++
     }
@@ -271,13 +270,13 @@ class VDynamicReport(block: VBlock) : VReport() {
           block.currentRecord = i
           val list = ArrayList<Any?>()
           for (j in fields.indices) {
-            if (!fields[j].name.equals(block.idField.name)) {
+            if (fields[j].name != block.idField.name) {
               list.add(fields[j].getObject())
             }
           }
           // add ID field in the end.
           for (j in fields.indices) {
-            if (fields[j].name.equals(block.idField.name)) {
+            if (fields[j].name == block.idField.name) {
               list.add(fields[j].getObject())
               break
             }
@@ -352,7 +351,12 @@ class VDynamicReport(block: VBlock) : VReport() {
   // ----------------------------------------------------------------------
   // Default Actors
   // ----------------------------------------------------------------------
-  private fun createActor(menuIdent: String, actorIdent: String, iconIdent: String, key: Int, modifier: Int, trigger: Int) {
+  private fun createActor(menuIdent: String,
+                          actorIdent: String,
+                          iconIdent: String,
+                          key: Int,
+                          modifier: Int,
+                          trigger: Int) {
     actorsDef[number] = VDefaultReportActor(menuIdent, actorIdent, iconIdent, key, modifier)
     actorsDef[number]!!.number = trigger
     number++
@@ -372,12 +376,12 @@ class VDynamicReport(block: VBlock) : VReport() {
    * return the report column group for the given table.
    */
   private fun getColumnGroups(table: Int): Int {
-    val flds = block.fields
-    for (i in flds.indices) {
-      if (flds[i].isInternal() && flds[i].getColumnCount() > 1) {
-        val col: Int = flds[i].fetchColumn(table)
-        if (col != -1 && flds[i].getColumn(col)!!.name == block.idField.name) {
-          if (flds[i].fetchColumn(0) != -1) {
+    val fields = block.fields
+    for (i in fields.indices) {
+      if (fields[i].isInternal() && fields[i].getColumnCount() > 1) {
+        val col: Int = fields[i].fetchColumn(table)
+        if (col != -1 && fields[i].getColumn(col)!!.name == block.idField.name) {
+          if (fields[i].fetchColumn(0) != -1) {
             // group with the Id of the block.
             return idColumn
           }

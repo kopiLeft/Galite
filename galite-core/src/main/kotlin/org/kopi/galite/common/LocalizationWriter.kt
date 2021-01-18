@@ -26,7 +26,8 @@ import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.output.Format
 import org.jdom2.output.XMLOutputter
-
+import org.jetbrains.exposed.sql.Column
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -77,6 +78,29 @@ open class LocalizationWriter {
     peekNode(null).addContent(self)
   }
 
+  fun genTypeDefinition(ident: String, type: Domain<*>) {
+    val self = Element("type")
+    self.setAttribute("ident", ident)
+    pushNode(self)
+    type.genTypeLocalization(this)
+    popNode(self)
+    peekNode(null).addContent(self)
+  }
+
+  fun genType(list: FieldList<*>?) {
+    list?.genLocalization(this)
+  }
+
+  fun <T : Comparable<T>?> genCodeType(codes: List<CodeDescription<T>>) {
+    val self = Element("code")
+    pushNode(self)
+    codes.forEach { code ->
+      code.genLocalization(this)
+    }
+    popNode(self)
+    peekNode("type").addContent(self)
+  }
+
   /**
    * Creates the localization for a message.
    */
@@ -90,6 +114,16 @@ open class LocalizationWriter {
     peekNode(null).addContent(self)
   }
 
+  fun genFieldList(columns: MutableList<ListDescription>) {
+    val self = Element("list")
+    pushNode(self)
+    for (i in columns.indices) {
+      columns[i].genLocalization(this)
+    }
+    popNode(self)
+    peekNode("type").addContent(self)
+  }
+
   fun genCodeDesc(ident: String, label: String) {
     val self = Element("codedesc")
 
@@ -98,10 +132,10 @@ open class LocalizationWriter {
     peekNode("code").addContent(self)
   }
 
-  fun genListDesc(column: String, title: String) {
+  fun genListDesc(column: Column<*>, title: String) {
     val self = Element("listdesc")
 
-    self.setAttribute("column", column)
+    self.setAttribute("column", column.name)
     self.setAttribute("title", title)
     peekNode("list").addContent(self)
   }

@@ -66,7 +66,8 @@ open class VActor(var menuIdent: String,
        *
        * @return `true` if this not a reset action.
        */
-      override fun isCancellable(): Boolean = !("quit".equals(actorIdent, ignoreCase = true) || "break".equals(actorIdent, ignoreCase = true))
+      override fun isCancellable(): Boolean =
+              !("quit".equals(actorIdent, ignoreCase = true) || "break".equals(actorIdent, ignoreCase = true))
     }, false)
   }
 
@@ -79,16 +80,16 @@ open class VActor(var menuIdent: String,
   // ----------------------------------------------------------------------
   override fun hashCode(): Int = actorIdent.hashCode() * actorIdent.hashCode()
 
-  override fun equals(obj: Any?): Boolean {
-    return if (obj !is VActor) {
+  override fun equals(other: Any?): Boolean {
+    return if (other !is VActor) {
       false
     } else {
-      menuName == obj.menuName
-              && menuItem == obj.menuItem
-              && ((iconName == null && obj.iconName == null)
-                   || (iconName != null
-                       && obj.iconName != null
-                       && iconName == obj.iconName))
+      menuName == other.menuName
+              && menuItem == other.menuItem
+              && ((iconName == null && other.iconName == null)
+              || (iconName != null
+              && other.iconName != null
+              && iconName == other.iconName))
     }
   }
 
@@ -147,7 +148,9 @@ open class VActor(var menuIdent: String,
   // --------------------------------------------------------------------
   var isEnabled: Boolean
     get() = display != null && display!!.isEnabled() // Checks whether the actor is enabled
-    set(enabled) { display?.setEnabled(enabled) }    // Enables/disables the actor.
+    set(enabled) {
+      display?.setEnabled(enabled)
+    }    // Enables/disables the actor.
   lateinit var menuName: String
   lateinit var menuItem: String
   private var display: UActor? = null

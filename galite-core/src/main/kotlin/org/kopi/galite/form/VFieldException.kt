@@ -33,11 +33,15 @@ class VFieldException(val field: VField,
   : VExecFailedException(message) {
 
   /**
-   * Returns the field where the error occure
+   * Returns the field where the error occur
    */
   fun resetValue() {
     if (newValue != null) {
       field.setObject(field.block!!.activeRecord, newValue)
     }
+  }
+
+  companion object {
+    private const val serialVersionUID = 0L
   }
 }

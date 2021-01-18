@@ -46,7 +46,7 @@ open class VPreviewWindow : VWindow() {
     private const val PREVIEW_LOCALIZATION_RESOURCE = "org/kopi/galite/Preview"
 
     // the following commands *MUST* be in the same order than
-    // in 'actors' field set in the contructor of the current class.
+    // in 'actors' field set in the constructor of the current class.
     const val CMD_QUIT = 0
     const val CMD_FIRST = 1
     const val CMD_LEFT = 2
@@ -99,16 +99,16 @@ open class VPreviewWindow : VWindow() {
 
   private fun createImagesFromPostscript() {
     try {
-      val resolution: Int = (72f * height / printJob!!.getHeight()) as Int
+      val resolution: Int = (72f * height / printJob!!.getHeight()).toInt()
       val p = Runtime.getRuntime().exec(command +
-              " -q" +
-              " -sOutputFile=" + imageFile + "%d.JPG" +
-              " -sDEVICE=jpeg" +
-              " -r" + resolution + "x" + resolution +
-              " -g" + width + "x" + height +
-              " -dNOPAUSE" +
-              " " + printFile +
-              " -c quit ")
+                                                " -q" +
+                                                " -sOutputFile=" + imageFile + "%d.JPG" +
+                                                " -sDEVICE=jpeg" +
+                                                " -r" + resolution + "x" + resolution +
+                                                " -g" + width + "x" + height +
+                                                " -dNOPAUSE" +
+                                                " " + printFile +
+                                                " -c quit ")
       p.waitFor()
     } catch (e: Exception) {
       fatalError(this, "VPreviewWindow.preview(File ...)", e)
@@ -132,10 +132,10 @@ open class VPreviewWindow : VWindow() {
   /**
    * Performs the appropriate action.
    *
-   * @param        actor                the number of the actor.
+   * @param   VKT_Type    the number of the actor.
    */
-  override fun executeVoidTrigger(key: Int) {
-    when (key) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    when (VKT_Type) {
       CMD_QUIT -> getDisplay()!!.closeWindow()
       CMD_FIRST -> {
         setWaitInfo(VlibProperties.getString("WAIT"))
@@ -282,7 +282,7 @@ open class VPreviewWindow : VWindow() {
   }
 
   override fun getTitle(): String {
-    return windowTitle!!
+    return windowTitle
   }
 
   // ---------------------------------------------------------------------
@@ -305,77 +305,77 @@ open class VPreviewWindow : VWindow() {
 
   init {
     setTitle(VlibProperties.getString("Preview"))
-    addActors(arrayOf<VActor>(
+    addActors(arrayOf(
             VActor("File",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "Close",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "quit",
-                    KeyEvent.VK_ESCAPE,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "Close",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "quit",
+                   KeyEvent.VK_ESCAPE,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PageFirst",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "pageFirst",
-                    KeyEvent.VK_HOME,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PageFirst",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "pageFirst",
+                   KeyEvent.VK_HOME,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PageLeft",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "pageLeft",
-                    KeyEvent.VK_PAGE_UP,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PageLeft",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "pageLeft",
+                   KeyEvent.VK_PAGE_UP,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PageRight",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "pageRight",
-                    KeyEvent.VK_PAGE_DOWN,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PageRight",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "pageRight",
+                   KeyEvent.VK_PAGE_DOWN,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PageLast",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "pageLast",
-                    KeyEvent.VK_END,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PageLast",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "pageLast",
+                   KeyEvent.VK_END,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PreviewFit",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "zoomoptimal",
-                    KeyEvent.VK_F5,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PreviewFit",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "zoomoptimal",
+                   KeyEvent.VK_F5,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PreviewFitWidth",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "zoomwidth",
-                    KeyEvent.VK_F8,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PreviewFitWidth",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "zoomwidth",
+                   KeyEvent.VK_F8,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PreviewFitHeight",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "zoomheight",
-                    KeyEvent.VK_F9,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PreviewFitHeight",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "zoomheight",
+                   KeyEvent.VK_F9,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PreviewPlus",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "zoomplus",
-                    KeyEvent.VK_F6,
-                    0),
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PreviewPlus",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "zoomplus",
+                   KeyEvent.VK_F6,
+                   0),
             VActor("Action",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "PreviewMinus",
-                    PREVIEW_LOCALIZATION_RESOURCE,
-                    "zoomminus",
-                    KeyEvent.VK_F7,
-                    0)
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "PreviewMinus",
+                   PREVIEW_LOCALIZATION_RESOURCE,
+                   "zoomminus",
+                   KeyEvent.VK_F7,
+                   0)
     ))
 
     // localize the preview using the default locale

@@ -17,7 +17,6 @@
 
 package org.kopi.galite.report
 
-import java.io.File
 import java.io.IOException
 import java.lang.RuntimeException
 
@@ -38,7 +37,7 @@ import org.kopi.galite.type.Week
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
  */
-abstract class Report: Window() {
+abstract class Report : Window() {
 
   /** Report's fields. */
   val fields = mutableListOf<ReportField<*>>()
@@ -47,7 +46,7 @@ abstract class Report: Window() {
   val reportRows = mutableListOf<ReportRow>()
 
   /** the help text */
-  var help: String? = null
+  open val help: String? = null
 
   /**
    * creates and returns a field. It uses [init] method to initialize the field.
@@ -56,10 +55,10 @@ abstract class Report: Window() {
    * @param init    initialization method.
    * @return a field.
    */
-  inline fun <reified T : Comparable<T>> field(domain: Domain<T>, init: ReportField<T>.() -> Unit): ReportField<T> {
+  inline fun <reified T : Comparable<T>?> field(domain: Domain<T>,
+                                                noinline init: ReportField<T>.() -> Unit): ReportField<T> {
     domain.kClass = T::class
-    val field = ReportField(domain)
-    field.init()
+    val field = ReportField(domain, "ANM_${fields.size}", init)
     fields.add(field)
     return field
   }
@@ -104,7 +103,7 @@ abstract class Report: Window() {
    *
    * @param rowNumber the index of the desired row.
    */
-  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any> = reportRows[rowNumber].data
+  fun getRow(rowNumber: Int): MutableMap<ReportField<*>, Any?> = reportRows[rowNumber].data
 
   /**
    * Returns rows of data for a specific [field].
@@ -126,12 +125,12 @@ abstract class Report: Window() {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
-      val destination = destination
+      val localizationDestination = destination
               ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.packageName.replace(".", "/")
       try {
         val writer = ReportLocalizationWriter()
         genLocalization(writer)
-        writer.write(destination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale!!)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")
@@ -140,30 +139,46 @@ abstract class Report: Window() {
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as ReportLocalizationWriter).genReport(title,
-                                                   help,
-                                                   fields)
+    (writer as ReportLocalizationWriter).genReport(title, help, fields, menus, actors)
   }
 
+  // TODO add Fixed types
   fun MReport.addReportColumns() {
     columns = fields.map {
-      when(it.domain.kClass) {
+      if(it.group != null) {
+        it.groupID = fields.indexOf(it.group)
+      }
+
+      val function: VCalculateColumn? = if (it.computeTrigger != null) {
+        it.computeTrigger!!.action.method() as VCalculateColumn
+      } else {
+        null
+      }
+
+      val format: VCellFormat? = if (it.formatTrigger != null) {
+        it.formatTrigger!!.action.method() as VCellFormat
+      } else {
+        null
+      }
+
+      when (it.domain.kClass) {
         Int::class ->
-          VIntegerColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VIntegerColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         String::class ->
-          VStringColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, it.domain.height ?: 0, null)
+          VStringColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
+                        it.domain.height ?: 0, format)
         Boolean::class ->
-          VBooleanColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VBooleanColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Date::class, java.util.Date::class ->
-          VDateColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VDateColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Month::class ->
-          VMonthColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VMonthColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Week::class ->
-          VWeekColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VWeekColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Time::class ->
-          VTimeColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VTimeColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Timestamp::class ->
-          VTimestampColumn(it.label, it.options, it.align.value, it.groupID, null, it.domain.width ?: 0, null)
+          VTimestampColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         else -> throw RuntimeException("Type ${it.domain.kClass!!.qualifiedName} is not supported")
       }
     }.toTypedArray()
@@ -171,73 +186,87 @@ abstract class Report: Window() {
 
   private fun MReport.addReportLines() {
     reportRows.forEach {
-      addLine(it.data.values.toTypedArray())
+      val list = fields.map { field ->
+        it.data[field]
+      }
+
+      addLine(list.toTypedArray())
     }
   }
 
-  /**
-   * Returns the qualified source file name where this object is defined.
-   */
-  private val sourceFile: String
-    get() {
-      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
-      return basename + this.javaClass.simpleName
+  fun initFields() {
+    fields.forEach {
+      it.initialize()
     }
-
+  }
 
   /** Report model*/
-  override val model: VReport
-    get() {
-    genLocalization()
+  override val model: VReport by lazy {
+      initFields()
 
-    return object : VReport() {
-      /**
-       * Handling triggers
-       */
-      fun handleTriggers(triggers: MutableList<Trigger>) {
-        // BLOCK TRIGGERS
-        triggers.forEach { trigger ->
-          val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
-          for (i in VConstants.TRG_TYPES.indices) {
-            if (trigger.events shr i and 1 > 0) {
-              blockTriggerArray[i] = i
-              super.triggers[i] = trigger
+      genLocalization()
+
+      object : VReport() {
+        /**
+         * Handling triggers
+         */
+        fun handleTriggers(triggers: MutableList<Trigger>) {
+          // REPORT TRIGGERS
+          triggers.forEach { trigger ->
+            val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
+            for (i in VConstants.TRG_TYPES.indices) {
+              if (trigger.events shr i and 1 > 0) {
+                blockTriggerArray[i] = i
+                super.triggers[i] = trigger
+              }
             }
+            super.VKT_Triggers[0] = blockTriggerArray
           }
-          super.VKT_Triggers[0] = blockTriggerArray
+
+          // FIELD TRIGGERS
+          fields.forEach {
+            val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+            if(it.computeTrigger != null) {
+              fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
+            }
+            if(it.formatTrigger != null) {
+              fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+            }
+            // TODO : Add field triggers here
+            super.VKT_Triggers.add(fieldTriggerArray)
+          }
+
+          // COMMANDS TRIGGERS
+          commands?.forEach {
+            val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+            // TODO : Add commands triggers here
+            super.VKT_Triggers.add(fieldTriggerArray)
+          }
         }
 
-        // FIELD TRIGGERS
-        fields.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-          // TODO : Add field triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
+        override fun init() {
+          this.addActors(this@Report.actors.map { actor ->
+            actor.buildModel(sourceFile)
+          }.toTypedArray())
+          this.commands = this@Report.commands.map { command ->
+            command.buildModel(this, actors)
+          }.toTypedArray()
+
+          source = sourceFile
+
+          if (reportCommands) {
+            addDefaultReportCommands()
+          }
+
+          super.model.addReportColumns()
+          super.model.addReportLines()
+
+          handleTriggers(this@Report.triggers)
         }
 
-        // COMMANDS TRIGGERS
-        commands?.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-          // TODO : Add commands triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
+        override fun add() {
+          // TODO
         }
-      }
-
-      override fun init() {
-        source = sourceFile
-
-        if (reportCommands) {
-          addDefaultReportCommands()
-        }
-
-        super.model.addReportColumns()
-        super.model.addReportLines()
-
-        handleTriggers(this@Report.triggers)
-      }
-
-      override fun add() {
-        // TODO
       }
     }
-  }
 }

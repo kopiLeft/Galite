@@ -20,24 +20,25 @@ package org.kopi.galite.tests
 import java.util.Locale
 
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.ui.visual.VApplication
+import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.Registry
 
 /**
  * TestBase class for all tests.
  */
 open class VApplicationTestBase : TestBase() {
-  class GaliteRegistry: Registry("Galite", null)
+  class GaliteRegistry : Registry("Galite", null)
 
-  class GaliteApplication: VApplication(GaliteRegistry()) {
+  class GaliteApplication : VApplication(GaliteRegistry()) {
     override val sologanImage get() = "slogan.png"
     override val logoImage get() = "logo_kopi.png"
     override val logoHref get() = "http://"
     override val alternateLocale get() = Locale("de", "AT")
-    override val supportedLocales get() =
-      arrayOf(Locale.FRANCE,
-              Locale("de", "AT"),
-              Locale("ar", "TN"))
+    override val supportedLocales
+      get() =
+        arrayOf(Locale.FRANCE,
+                Locale("de", "AT"),
+                Locale("ar", "TN"))
 
     override fun login(
             database: String,

@@ -29,17 +29,17 @@ import java.util.Locale
  * An extended implementation of the message format that allows to
  * handle a specific syntax of choice format :
  *
- * {argument-number <b>?</b>, choice, 0#<b>null case</b> | 1#<b>not null case</b>}
+ * {argument-number **?**, choice, 0#**null case** | 1#**not null case**}
  *
  * The question marks says if the argument should be tested on null value. If yes
- * the {@link ExtendedChoiceFormat} implementation guarantees to return 1 when the
+ * the [ExtendedChoiceFormat] implementation guarantees to return 1 when the
  * object is not null and 0 if the object is null.
  *
  * The parse strategy was copied from the org.apache.commons.text.ExtendedMessageFormat.
  * The implementation was adapted to our needs.
  *
- * It is safer to call new {@link #formatMessage(String, Object[])} method instead of calling
- * {@link #format(Object)} method. behavior is not ensured.
+ * It is safer to call new [.formatMessage] method instead of calling
+ * [format] method. behavior is not ensured.
  */
 class ExtendedMessageFormat : MessageFormat {
   // ----------------------------------------------------------------------
@@ -50,14 +50,11 @@ class ExtendedMessageFormat : MessageFormat {
 
   /**
    * Formats an object to produce a string. This is equivalent to
-   * <blockquote>
-   * [format][.format]`(obj,
-   * new StringBuffer(), new FieldPosition(0)).toString();`
-  </blockquote> *
+   * [format] (obj, StringBuffer(), FieldPosition(0)).toString()
    *
-   * @param obj    The object to format
-   * @return       Formatted string.
-   * @exception IllegalArgumentException if the Format cannot format the given
+   * @param obj     The object to format
+   * @return        Formatted string.
+   * @exception     IllegalArgumentException if the Format cannot format the given
    * object
    */
   fun formatMessage(obj: Array<Any?>?): String = format(toNullRepresentation(obj))
@@ -67,11 +64,12 @@ class ExtendedMessageFormat : MessageFormat {
   /**
    * Transforms the internal elements of the given array to their
    * null representation if the element is null.
+   *
    * @param obj The source object array.
    * @return The transformed object array or null if the source object
    * is already null.
    */
-  protected fun toNullRepresentation(obj: Array<Any?>?): Array<Any?>? {
+  internal fun toNullRepresentation(obj: Array<Any?>?): Array<Any?>? {
     val newObjects: Array<Any?>?
     if (obj == null) {
       newObjects = null
@@ -250,7 +248,7 @@ class ExtendedMessageFormat : MessageFormat {
    * @param pos current position
    */
   private fun seekNonWs(pattern: String, pos: ParsePosition) {
-    var len = 0
+    var len: Int
     val buffer = pattern.toCharArray()
     do {
       len = isWsMatch(buffer, pos.index)
@@ -276,7 +274,7 @@ class ExtendedMessageFormat : MessageFormat {
    * @param pattern pattern to parse
    * @param pos current parse position
    * @param appendTo optional StringBuilder to append
-   * @return `appendTo`
+   * @return [appendTo]
    */
   private fun appendQuotedString(pattern: String,
                                  pos: ParsePosition,
@@ -332,13 +330,14 @@ class ExtendedMessageFormat : MessageFormat {
    * @param descriptions The list of available format descriptions.
    * @return The format description if found or null if not.
    */
-  private fun getChoiceFormatDescription(description: String, descriptions: List<FormatDescription>): FormatDescription? {
-    for (fdescription in descriptions) {
-      if (fdescription.description == null || !fdescription.description.contains("choice")) {
+  private fun getChoiceFormatDescription(description: String,
+                                         descriptions: List<FormatDescription>): FormatDescription? {
+    for (fDescription in descriptions) {
+      if (fDescription.description == null || !fDescription.description.contains("choice")) {
         continue
       }
-      if (toChoicePattern(fdescription) == description) {
-        return fdescription
+      if (toChoicePattern(fDescription) == description) {
+        return fDescription
       }
     }
     return null
@@ -347,20 +346,21 @@ class ExtendedMessageFormat : MessageFormat {
   /**
    * Converts the given choice format description to a choice pattern.
    *
-   * @param fdescription The choice format description.
+   * @param fDescription The choice format description.
    * @return The choice pattern.
    */
-  private fun toChoicePattern(fdescription: FormatDescription): String {
-    return (MessageFormat("{" + fdescription.info.index + "," + fdescription.description!!.replace("''".toRegex(), "'") + "}").formats[0] as ChoiceFormat).toPattern()
+  private fun toChoicePattern(fDescription: FormatDescription): String {
+    val pattern = "{" +
+            fDescription.info.index + "," + fDescription.description!!.replace("''".toRegex(), "'") +
+            "}"
+    return (MessageFormat(pattern).formats[0] as ChoiceFormat).toPattern()
   }
 
   // ----------------------------------------------------------------------
   // INNER CLASSES
   // ----------------------------------------------------------------------
-  /*package*/
   internal class ArgumentInfo(internal val index: Int, internal val hasNotNullMarker: Boolean)
 
-  /*package*/
   internal class FormatDescription(internal val description: String?, internal val info: ArgumentInfo)
 
   companion object {
@@ -370,17 +370,13 @@ class ExtendedMessageFormat : MessageFormat {
     /**
      * Creates a MessageFormat with the given pattern and uses it
      * to format the given arguments. This is equivalent to
-     * <blockquote>
-     * `(new [MessageFormat][.MessageFormat](pattern)).[format][.format](arguments, new StringBuffer(), null).toString()`
-    </blockquote> *
+     * [format] (arguments, StringBuffer(), null).toString()
      *
-     * @param pattern   the pattern string
-     * @param arguments object(s) to format
-     * @return the formatted string
-     * @exception IllegalArgumentException if the pattern is invalid,
-     * or if an argument in the `arguments` array
-     * is not of the type expected by the format element(s)
-     * that use it.
+     * @param pattern     the pattern string
+     * @param arguments   object(s) to format
+     * @return            the formatted string
+     * @exception IllegalArgumentException if the pattern is invalid, or if an argument in the `arguments` array
+     * is not of the type expected by the format element(s) that use it.
      */
     fun formatMessage(pattern: String, arguments: Array<Any?>?): String {
       val temp = ExtendedMessageFormat(pattern)
@@ -400,12 +396,12 @@ class ExtendedMessageFormat : MessageFormat {
     private const val NOT_NULL_MARKER = '?'
 
     /**
-     * A right side squigly brace.
+     * A right side squiggly brace.
      */
     private const val END_FE = '}'
 
     /**
-     * A left side squigly brace.
+     * A left side squiggly brace.
      */
     private const val START_FE = '{'
 
@@ -418,5 +414,7 @@ class ExtendedMessageFormat : MessageFormat {
     // default behavior can't be hacked.
     /*package*/
     val NULL_REPRESENTATION = Any()
+
+    private const val serialVersionUID = 0L
   }
 }

@@ -22,18 +22,20 @@ import java.awt.Color
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
+
 /**
  * laurent :<br></br>
  * NOTICE : This class was copied from VImageColumn and was not test
  */
 class VColorColumn(title: String,
-                   column: String?,
+                   column: Column<*>?,
                    sortAscending: Boolean)
-      :VListColumn(title,
-                   column,
-                   VConstants.ALG_LEFT,
-                   7,
-                   sortAscending) {
+  : VListColumn(title,
+                column,
+                VConstants.ALG_LEFT,
+                7,
+                sortAscending) {
 
   // --------------------------------------------------------------------
   // IMPLEMENTATION

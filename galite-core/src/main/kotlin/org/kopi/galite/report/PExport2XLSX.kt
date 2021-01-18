@@ -27,13 +27,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 import org.kopi.galite.report.UReport.UTable
 
-class PExport2XLSX (table: UTable, model: MReport, printConfig: PConfig, title: String) : PExport2Excel(table, model, printConfig, title), Constants {
+class PExport2XLSX(table: UTable,
+                   model: MReport,
+                   printConfig: PConfig,
+                   title: String)
+  : PExport2Excel(table, model, printConfig, title), Constants {
 
   override fun createWorkbook(): Workbook {
     return SXSSFWorkbook(XSSFWorkbook(), 10000, false)
   }
 
-  override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color? {
+  override fun createFillForegroundColor(color: Color): org.apache.poi.ss.usermodel.Color {
     return XSSFColor(color)
   }
 }

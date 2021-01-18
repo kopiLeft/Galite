@@ -25,7 +25,7 @@ internal class FaxPrinter private constructor(private val faxHost: String,
                                               var number: String,
                                               private val user: String,
                                               private val id: String)
-               : AbstractPrinter("FaxPrinter $number"), Printer {
+  : AbstractPrinter("FaxPrinter $number"), Printer {
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
@@ -34,9 +34,9 @@ internal class FaxPrinter private constructor(private val faxHost: String,
   /**
    * Print a file and return the output of the command
    */
-  override fun print(printdata: PrintJob): String {
+  override fun print(data: PrintJob): String {
     try {
-      Fax.fax(faxHost, printdata.inputStream, user, number, id)
+      Fax.fax(faxHost, data.inputStream, user, number, id)
     } catch (e: Exception) {
       e.printStackTrace()
     }

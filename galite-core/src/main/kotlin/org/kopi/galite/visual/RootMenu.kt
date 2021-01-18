@@ -66,10 +66,10 @@ class RootMenu(id: Int, name: String) {
    * @param isSuperUser Is the connected user is a super user ?
    * @return The local root tree node.
    */
-  protected fun createTree(modules: Array<Module>,
-                           root: Module,
-                           force: Boolean,
-                           isSuperUser: Boolean): DefaultMutableTreeNode? {
+  internal fun createTree(modules: Array<Module>,
+                          root: Module,
+                          force: Boolean,
+                          isSuperUser: Boolean): DefaultMutableTreeNode? {
     var force = force
 
     if (root.accessibility == Module.ACS_TRUE || isSuperUser) {
@@ -109,7 +109,7 @@ class RootMenu(id: Int, name: String) {
   /**
    * return the identifier of the menu
    */
-  open fun getId(): Int {
+  fun getId(): Int {
     return rootModule.id
   }
 
@@ -117,9 +117,10 @@ class RootMenu(id: Int, name: String) {
    * Returns true if this root menu does not contain any module.
    * @return True if this root menu does not contain any module.
    */
-  open fun isEmpty(): Boolean {
+  fun isEmpty(): Boolean {
     return root == null
   }
+
   companion object {
     const val ROOT_MENU_LOCALIZATION_RESOURCE = "org/kopi/galite/RootMenu"
   }

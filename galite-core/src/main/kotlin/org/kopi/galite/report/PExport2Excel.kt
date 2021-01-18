@@ -91,11 +91,12 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
       sheet!!.setColumnWidth(i, widths[i].toInt())
     }
 
-    sheet?.repeatingColumns = CellRangeAddress.valueOf("0:" + (columnCount - 1))
-    sheet?.repeatingRows = CellRangeAddress.valueOf("0:0")
+    sheet?.repeatingColumns = CellRangeAddress(-1, -1, 0, columnCount - 1)
+    sheet?.repeatingRows = CellRangeAddress(0, 0, -1, -1)
 
     val footer = sheet!!.footer
     val header = sheet!!.header
+
     header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
 
     footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
@@ -111,20 +112,20 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
   }
 
   override fun exportHeader(data: Array<String?>) {
-    val titlerow = sheet!!.createRow(0)
+    val titleRow = sheet!!.createRow(0)
     var cellPos = 0
 
     data.forEach {
-      titlerow.createCell(cellPos++).setCellValue(it)
+      titleRow.createCell(cellPos++).setCellValue(it)
     }
   }
 
-  protected override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
     val row = sheet!!.createRow(rowNumber + 1)
     val color = getBackgroundForLevel(level)
     var cellPos = 0
 
-    data.forEachIndexed() { index, element ->
+    data.forEachIndexed { index, element ->
       val cell: Cell = row.createCell(cellPos)
       val cellStyle: CellStyle = cellStyleCacheManager.getStyle(this,
                                                                 workbook!!,
@@ -156,8 +157,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
           cell.setCellValue(orig)
         } else if (orig is Date) {
           setCellValue(cell, orig)
-        } else if (orig is Timestamp
-                   || orig is java.sql.Timestamp) {
+        } else if (orig is Timestamp || orig is java.sql.Timestamp) {
           // date columns can be returned as a timestamp by the jdbc driver.
           cell.setCellValue(data)
           datatype[cellPos] = CellType.STRING.code
@@ -170,8 +170,8 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
           // nothing
         } else {
           throw InconsistencyException("Type not supported: datatype=" + datatype[cellPos]
-                  + "  " + " CellNumber= " + cellPos
-                  + " " + orig.javaClass + " of " + orig)
+                                               + "  " + " CellNumber= " + cellPos
+                                               + " " + orig.javaClass + " of " + orig)
         }
       }
       cell.cellType = CellType.forInt(datatype[cellPos])

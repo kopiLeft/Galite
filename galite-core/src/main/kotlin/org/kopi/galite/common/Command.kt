@@ -18,6 +18,9 @@
 package org.kopi.galite.common
 
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.visual.ActionHandler
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VCommand
 
 /**
  * This class represent a command, ie a link between an actor and
@@ -25,12 +28,9 @@ import org.kopi.galite.form.VConstants
  *
  * @param item                 the item
  */
-class Command(val item: Actor) {
-  var name : String? = null
+class Command(val item: Actor, var mode: Int = VConstants.MOD_ANY) {
   var action: (() -> Unit)? = null
   lateinit var body: CommandBody
-  var mode : Int = VConstants.MOD_ANY
-    private set
 
   /** function to change the access mode of the command **/
   fun mode(vararg access: Int) {
@@ -39,4 +39,16 @@ class Command(val item: Actor) {
       mode = mode or (1 shl item)
     }
   }
+
+  /**
+   * Builds the command model [VCommand] from information provided by this command.
+   */
+  internal fun buildModel(handler: ActionHandler, formActors: Array<VActor?>) : VCommand =
+          VCommand(mode,
+                   handler,
+                   formActors.find { it?.actorIdent ==  item.ident },
+                   -1,
+                   item.ident,
+                   action
+          )
 }

@@ -16,51 +16,29 @@
  */
 package org.kopi.galite.form.dsl
 
-import java.io.File
 import java.io.IOException
 
-import org.kopi.galite.common.Actor
+import org.kopi.galite.common.Action
+import org.kopi.galite.common.FormBooleanTriggerEvent
+import org.kopi.galite.common.FormTrigger
+import org.kopi.galite.common.FormTriggerEvent
+import org.kopi.galite.common.FormVoidTriggerEvent
 import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Menu
+import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
-import org.kopi.galite.visual.VActor
 
 /**
  * Represents a form.
  */
-abstract class Form: Window() {
-
-  /** Form's actors. */
-  val formActors = mutableListOf<Actor>()
+abstract class Form : Window() {
 
   /** Form's blocks. */
   val formBlocks = mutableListOf<FormBlock>()
 
   /** Form's pages. */
   val pages = mutableListOf<FormPage>()
-
-  /** Form's menus. */
-  val menus = mutableListOf<Menu>()
-
-  /** the help text TODO: Move to super class */
-  var help: String? = null
-
-  /**
-   * Adds a new actor to this form.
-   *
-   * An Actor is an item to be linked to a command.
-   *
-   * @param menu                 the containing menu
-   * @param label                the label
-   * @param help                 the help
-   */
-  fun actor(ident: String, menu: Menu, label: String, help: String, init: Actor.() -> Unit): Actor {
-    val actor = Actor(ident, menu, label, help)
-    actor.init()
-    formActors.add(actor)
-    return actor
-  }
 
   /**
    * Adds a new block to this form.
@@ -71,8 +49,14 @@ abstract class Form: Window() {
    * @param        title                  the title of the block
    * @param        formPage              the page containing the block
    */
-  fun block(buffer: Int, visible: Int, name: String, title: String, formPage: FormPage? = null, init: FormBlock.() -> Unit): FormBlock =
-          insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
+  fun block(
+          buffer: Int,
+          visible: Int,
+          name: String,
+          title: String,
+          formPage: FormPage? = null,
+          init: FormBlock.() -> Unit
+  ): FormBlock = insertBlock(FormBlock(buffer, visible, name, title), formPage, init)
 
   /**
    * Adds a new block to this form.
@@ -80,16 +64,60 @@ abstract class Form: Window() {
    * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
-  fun <T: FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
+  fun <T : FormBlock> insertBlock(block: T, formPage: FormPage? = null, init: (T.() -> Unit)? = null): T {
     if (init != null) {
       block.init()
     }
-    if(formPage != null) {
+    if (formPage != null) {
       block.pageNumber = formPage.pageNumber
     }
     block.initialize(this)
     formBlocks.add(block)
     return block
+  }
+
+  /**
+   * Adds triggers to this form
+   *
+   * @param formTriggerEvents    the trigger events to add
+   * @param method               the method to execute when trigger is called
+   */
+  private fun <T> trigger(formTriggerEvents: Array<out FormTriggerEvent>, method: () -> T): Trigger {
+    val event = formEventList(formTriggerEvents)
+    val formAction = Action(null, method)
+    val trigger = FormTrigger(event, formAction)
+    triggers.add(trigger)
+    return trigger
+  }
+
+  /**
+   * Adds void triggers to this form
+   *
+   * @param formTriggerEvents  the trigger events to add
+   * @param method             the method to execute when trigger is called
+   */
+  fun trigger(vararg formTriggerEvents: FormVoidTriggerEvent, method: () -> Unit): Trigger {
+    return trigger(formTriggerEvents, method)
+  }
+
+  /**
+   * Adds boolean triggers to this form
+   *
+   * @param formTriggerEvents the trigger events to add
+   * @param method            the method to execute when trigger is called
+   */
+  fun trigger(vararg formTriggerEvents: FormBooleanTriggerEvent, method: () -> Boolean): Trigger {
+    return trigger(formTriggerEvents, method)
+  }
+
+  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent>): Long {
+    var self = 0L
+
+    formTriggerEvents.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
   }
 
   /**
@@ -104,19 +132,6 @@ abstract class Form: Window() {
     val page = FormPage(pages.size, "Id\$${pages.size}", title)
     pages.add(page)
     return page
-  }
-
-  /**
-   * Adds a new menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
-   *
-   * @param label                the menu label in default locale
-   * @return                     the menu. It is used later to adding actors to this menu by specifying
-   * the menu name in the actor definition.
-   */
-  fun menu(label: String): Menu {
-    val menu = Menu(label)
-    menus.add(menu)
-    return menu
   }
 
   // ----------------------------------------------------------------------
@@ -143,13 +158,13 @@ abstract class Form: Window() {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
-      val destination = destination
+      val localizationDestination = destination
               ?: this.javaClass.classLoader.getResource("")?.path +
               this.javaClass.packageName.replace(".", "/")
       try {
         val writer = FormLocalizationWriter()
         genLocalization(writer)
-        writer.write(destination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale!!)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")
@@ -158,22 +173,9 @@ abstract class Form: Window() {
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genForm(title,
-                                               menus.toTypedArray(),
-                                               formActors.toTypedArray(),
-                                               pages.toTypedArray(),
-                                               formBlocks.toTypedArray()
-    )
+    (writer as FormLocalizationWriter)
+            .genForm(title, formBlocks.map { it.ownDomains }.flatten(), menus, actors, pages, formBlocks)
   }
-
-  /**
-   * Returns the qualified source file name where this object is defined.
-   */
-  protected val sourceFile: String
-    get() {
-      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
-      return basename + this.javaClass.simpleName
-    }
 
   /** Form model */
   override val model: VForm by lazy {
@@ -183,9 +185,6 @@ abstract class Form: Window() {
       override fun init() {
         initialize()
       }
-
-      init {
-      }
     }
   }
 
@@ -194,9 +193,15 @@ abstract class Form: Window() {
     pages = this@Form.pages.map {
       it.ident
     }.toTypedArray()
-    this.actors = formActors.map {
-      VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
+    this.addActors(this@Form.actors.map { actor ->
+      actor.buildModel(sourceFile)
+    }.toTypedArray())
+    this.commands = this@Form.commands.map { command ->
+      command.buildModel(this, actors)
     }.toTypedArray()
+
+    this.handleTriggers(triggers)
+
     blocks = formBlocks.map { formBlock ->
       formBlock.getBlockModel(this, source).also { vBlock ->
         vBlock.setInfo(formBlock.pageNumber)
@@ -208,10 +213,29 @@ abstract class Form: Window() {
         }
       }
     }.toTypedArray()
+  }
 
-    //TODO ----------begin-------------
-    this.commands = arrayOf()
-    VKT_Triggers = arrayOf(IntArray(200))
-    //TODO ----------end-------------
+  /**
+   * Handling form triggers
+   */
+  private fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
+    // FORM TRIGGERS
+    val formTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+    triggers.forEach { trigger ->
+      for (i in VConstants.TRG_TYPES.indices) {
+        if (trigger.events shr i and 1 > 0) {
+          formTriggerArray[i] = i
+          formTriggers[i] = trigger
+        }
+      }
+      VKT_Triggers[0] = formTriggerArray
+    }
+
+    // COMMANDS TRIGGERS
+    this@Form.commands.forEach {
+      val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+      // TODO : Add commands triggers here
+      VKT_Triggers.add(fieldTriggerArray)
+    }
   }
 }

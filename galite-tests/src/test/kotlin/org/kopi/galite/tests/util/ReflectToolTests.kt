@@ -31,7 +31,7 @@ class ReflectToolTests {
   @Test
   fun reflectToolBlockTest() {
     val testBlock = TestBlock()
-    assertEquals("name", ReflectTool.blockFieldAt(testBlock, 2))
+    assertEquals("job", ReflectTool.blockFieldAt(testBlock, 2))
     assertEquals("id", ReflectTool.blockFieldAt(testBlock, 1))
     assertEquals("age", ReflectTool.blockFieldAt(testBlock, 0))
     assertEquals("i", ReflectTool.blockIndexAt(testBlock, 0))
@@ -43,7 +43,7 @@ class ReflectToolTests {
    */
   @Test
   fun reflectToolFormTest() {
-    assertEquals("graph", ReflectTool.formActorAt(FormSample, 0))
-    assertEquals("myMenu", ReflectTool.formMenuAt(FormSample, 0))
+    assertEquals("autoFill", ReflectTool.formActorAt(FormSample, 0))
+    assertEquals("action", ReflectTool.formMenuAt(FormSample, 0))
   }
 }

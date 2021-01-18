@@ -22,52 +22,35 @@ import java.util.Locale
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.type.Image
+import org.kopi.galite.form.dsl.FormBlock
 
 object FormWithFields: Form() {
   override val locale = Locale.FRANCE
-  override val title = "form for test fields visibility"
-
+  override val title = "form with fields"
   val testPage = page("test page")
+  val testBlock = insertBlock(BlockWithFields, testPage)
+}
 
-  init {
-    val testBlock = block(1, 1, "Test", "Test block", testPage) {
-      val u = table(User)
-      val i = index(message = "ID should be unique")
+object BlockWithFields : FormBlock(1, 1, "Test block") {
+  val u = table(User)
+  val i = index(message = "ID should be unique")
 
-      val id = hidden(domain = Domain<Int>(20)) {
-        label = "id"
-        help = "The user id"
-        columns(u.id)
-      }
-      val name = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
-        label = "name"
-        help = "The user name"
-        onQuerySkipped()
-        columns(u.name)
-      }
-      val age = mustFill(domain = Domain<Int>(3), position = follow(name)) {
-        label = "age"
-        help = "The user age"
-        onQueryHidden()
-        columns(u.age) {
-          index = i
-          priority = 1
-        }
-      }
-      val image = visit(domain = Domain<Image>(800, 500, 800),
-                        position = at(10, 10)) {
-        label = "image"
-        help = "The user image"
-      }
-    }
-    val testBlock2 = block(1, 1, "Test2", "Test block2", testPage) {
-
-      val totalAge = visit(Domain<Int>(3), position = at(1, 1)) {
-        label = "Total"
-        help = "total user age"
-        onQueryMustFill()
-      }
+  val id = hidden(domain = Domain<Int>(20)) {
+    label = "id"
+    help = "The user id"
+    columns(u.id)
+  }
+  val name = visit(domain = Domain<String?>(20), position = at(1, 1)) {
+    label = "name"
+    help = "The user name"
+    columns(u.name)
+  }
+  val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
+    label = "age"
+    help = "The user age"
+    columns(u.age) {
+      index = i
+      priority = 1
     }
   }
 }

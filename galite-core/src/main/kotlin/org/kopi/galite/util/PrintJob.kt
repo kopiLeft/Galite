@@ -82,19 +82,19 @@ class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
    */
   val inputStream: InputStream get() = FileInputStream(dataFile)
 
-  fun getBytes(): ByteArray{
-      val buffer = ByteArray(1024)
-      var length: Int
+  fun getBytes(): ByteArray {
+    val buffer = ByteArray(1024)
+    var length: Int
 
-      // use getInputStream because in creates
-      // the stream if necessary
-      val data = inputStream
-      val output = ByteArrayOutputStream()
-      while (data.read(buffer).also { length = it } != -1) {
-        output.write(buffer, 0, length)
-      }
-      return output.toByteArray()
+    // use getInputStream because in creates
+    // the stream if necessary
+    val data = inputStream
+    val output = ByteArrayOutputStream()
+    while (data.read(buffer).also { length = it } != -1) {
+      output.write(buffer, 0, length)
     }
+    return output.toByteArray()
+  }
 
   fun writeDataToFile(file: File) {
     writeToFile(inputStream, file)
@@ -140,11 +140,11 @@ class PrintJob(var dataFile: File, var delete: Boolean, var format: Rectangle) {
     const val DAT_PS = 2
 
     // A5, A4, A3, Letter and Legal page format (portrait)
-    val FORMAT_A5 = PageSize.A5
-    val FORMAT_A4 = PageSize.A4
-    val FORMAT_A3 = PageSize.A3
-    val FORMAT_LETTER = PageSize.LETTER
-    val FORMAT_LEGAL = PageSize.LEGAL
+    val FORMAT_A5: Rectangle = PageSize.A5
+    val FORMAT_A4: Rectangle = PageSize.A4
+    val FORMAT_A3: Rectangle = PageSize.A3
+    val FORMAT_LETTER: Rectangle = PageSize.LETTER
+    val FORMAT_LEGAL: Rectangle = PageSize.LEGAL
 
     // A5, A4, A3, Letter and Legal page format (landscape)
     val FORMAT_A5_R = Rectangle(PageSize.A5.rotate().width, PageSize.A5.rotate().height)

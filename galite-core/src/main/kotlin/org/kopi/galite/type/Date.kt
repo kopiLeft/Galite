@@ -40,16 +40,16 @@ open class Date : Type {
     synchronized(calendar) {
       calendar.time = date
       scalar = gregorianToJulian(calendar[Calendar.YEAR],
-              calendar[Calendar.MONTH] + 1,
-              calendar[Calendar.DAY_OF_MONTH])
+                                 calendar[Calendar.MONTH] + 1,
+                                 calendar[Calendar.DAY_OF_MONTH])
     }
   }
 
   internal constructor(calendar: Calendar?) {
     if (calendar != null) {
       scalar = gregorianToJulian(calendar[Calendar.YEAR],
-              calendar[Calendar.MONTH] + 1,
-              calendar[Calendar.DAY_OF_MONTH])
+                                 calendar[Calendar.MONTH] + 1,
+                                 calendar[Calendar.DAY_OF_MONTH])
     }
   }
 
@@ -126,7 +126,7 @@ open class Date : Type {
   /**
    * Returns the day number (starts at 1, ends at 7)
    */
-  open fun getWeekday() : Int {
+  open fun getWeekday(): Int {
     synchronized(calendar) {
       val gregorian = julianToGregorian(scalar)
 
@@ -177,7 +177,7 @@ open class Date : Type {
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
-  override operator fun compareTo(other: Any): Int = compareTo(other as Date)
+  override operator fun compareTo(other: Any?): Int = compareTo(other as? Date)
 
   /**
    * Format the object depending on the current language
@@ -232,8 +232,8 @@ open class Date : Type {
       val now = Calendar.getInstance()
 
       return NotNullDate(now[Calendar.YEAR],
-              now[Calendar.MONTH] + 1,
-              now[Calendar.DAY_OF_MONTH])
+                         now[Calendar.MONTH] + 1,
+                         now[Calendar.DAY_OF_MONTH])
     }
 
     /**
@@ -252,9 +252,10 @@ open class Date : Type {
      * @param     format  the format of the date
      * @param     locale  the Locale to use
      */
-    fun parse(input: String,
-              format: String,
-              locale: Locale,
+    fun parse(
+            input: String,
+            format: String,
+            locale: Locale,
     ): NotNullDate {
       val cal = GregorianCalendar()
 
@@ -265,8 +266,8 @@ open class Date : Type {
         throw IllegalArgumentException(e.message)
       }
       return NotNullDate(cal[Calendar.YEAR],
-              cal[Calendar.MONTH] + 1,
-              cal[Calendar.DAY_OF_MONTH])
+                         cal[Calendar.MONTH] + 1,
+                         cal[Calendar.DAY_OF_MONTH])
     }
 
     // --------------------------------------------------------------------

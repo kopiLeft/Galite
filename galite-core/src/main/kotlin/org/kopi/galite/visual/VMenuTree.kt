@@ -160,15 +160,15 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   /**
    * Enables or disable the given actor
    */
-  override fun setActorEnabled(actor: Int, enabled: Boolean) {
-    treeActors[actor]!!.handler = this
-    treeActors[actor]!!.isEnabled = enabled
+  override fun setActorEnabled(position: Int, enabled: Boolean) {
+    treeActors[position]!!.handler = this
+    treeActors[position]!!.isEnabled = enabled
   }
 
   /**
    * Returns the actor having the given number.
    */
-  override fun getActor(number: Int): VActor = treeActors[number]!!
+  override fun getActor(at: Int): VActor = treeActors[at]!!
 
   /**
    * Returns the ID of the current user
@@ -197,18 +197,18 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   /**
    * Performs the appropriate action.
    *
-   * @param   key           the number of the actor.
+   * @param   VKT_Type           the number of the actor.
    * @return  true if an action was found for the specified number
    */
-  override fun executeVoidTrigger(key: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
     val currentDisplay = getDisplay()
 
-    when (key) {
+    when (VKT_Type) {
       CMD_QUIT -> currentDisplay.closeWindow()
       CMD_OPEN -> currentDisplay.launchSelectedForm()
       CMD_SHOW -> {
-        currentDisplay.getBookmark().show()
-        currentDisplay.getBookmark().toFront()
+        currentDisplay.getBookmark()!!.show()
+        currentDisplay.getBookmark()!!.toFront()
       }
       CMD_ADD -> {
         currentDisplay.addSelectedElement()
@@ -218,8 +218,8 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
         currentDisplay.removeSelectedElement()
         currentDisplay.setMenu()
       }
-      CMD_FOLD -> currentDisplay.getTree().collapseRow(currentDisplay.getTree().selectionRow)
-      CMD_UNFOLD -> currentDisplay.getTree().expandRow(currentDisplay.getTree().selectionRow)
+      CMD_FOLD -> currentDisplay.getTree()!!.collapseRow(currentDisplay.getTree()!!.selectionRow)
+      CMD_UNFOLD -> currentDisplay.getTree()!!.expandRow(currentDisplay.getTree()!!.selectionRow)
       CMD_INFORMATION -> {
         val versionArray = Utils.getVersion()
         var version = ""
@@ -239,7 +239,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       }
       CMD_HELP -> {
       }
-      else -> super.executeVoidTrigger(key)
+      else -> super.executeVoidTrigger(VKT_Type)
     }
   }
 
@@ -335,13 +335,13 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
         }
 
         val module = Module(it[Modules.id],
-                it[Modules.parent],
-                it[Modules.shortName],
-                it[Modules.sourceName],
-                it[Modules.objectName],
-                Module.ACS_PARENT,
-                it[Modules.priority],
-                icon)
+                            it[Modules.parent],
+                            it[Modules.shortName],
+                            it[Modules.sourceName],
+                            it[Modules.objectName],
+                            Module.ACS_PARENT,
+                            it[Modules.priority],
+                            icon)
 
         localModules.add(module)
         items.add(module)
@@ -353,26 +353,39 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   private fun fetchGroupRightsByUserId(modules: List<Module>) {
     when {
       groupName != null -> {
-        fetchRights(modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+        fetchRights(
+                modules,
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
-                          GroupParties.user inSubQuery (Groups.slice(Groups.id).select { Groups.shortName eq groupName })
+                          GroupParties.user inSubQuery (Groups.slice(
+                                  Groups.id).select { Groups.shortName eq groupName })
                         }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
+        )
       }
       menuTreeUser != null -> {
-        fetchRights(modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+        fetchRights(
+                modules,
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
-                          GroupParties.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
+                          GroupParties.user inSubQuery (Users.slice(
+                                  Users.id).select { Users.shortName eq menuTreeUser })
                         }
-                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct())
+                        .orderBy(Modules.priority to SortOrder.ASC, Modules.id to SortOrder.ASC).withDistinct()
+        )
       }
       else -> {
-        fetchRights(modules,
-                (Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }), { id }, { GroupRights.module }))
+        fetchRights(
+                modules,
+                Modules.innerJoin(GroupRights.innerJoin(GroupParties, { group }, { group }),
+                                  { id },
+                                  { GroupRights.module })
                         .slice(Modules.id, GroupRights.access, Modules.priority)
                         .select {
                           GroupParties.user eq getUserID()
@@ -473,13 +486,15 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       val query = if (isSuperUser && menuTreeUser != null) {
 
         Favorites.slice(Favorites.module, Favorites.id)
-                .select { Favorites.user inSubQuery(Users.slice(Users.id).select {Users.shortName eq  menuTreeUser  })
+                .select {
+                  Favorites.user inSubQuery (Users.slice(Users.id).select { Users.shortName eq menuTreeUser })
                 }.orderBy(Favorites.id)
       } else {
         Favorites.slice(Favorites.module, Favorites.id).select { Favorites.user eq getUserID() }.orderBy(Favorites.id)
       }
       query.forEach {
-        if (it[Favorites.module] != 0) {val symbol = it[Modules.symbol] as Int
+        if (it[Favorites.module] != 0) {
+          val symbol = it[Modules.symbol] as Int
           shortcutsID.add(it[Favorites.module])
         }
       }
@@ -545,12 +560,12 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   /**
    * Sets the title of the frame
    */
-  override fun setTitle(s: String) {
-    if (s != null) {
-      if (s.contains(VlibProperties.getString("program_menu"))) {
-        super.setTitle(s)
+  override fun setTitle(title: String) {
+    if (title != null) {
+      if (title.contains(VlibProperties.getString("program_menu"))) {
+        super.setTitle(title)
       } else {
-        super.setTitle(s + " - " + VlibProperties.getString("program_menu"))
+        super.setTitle(title + " - " + VlibProperties.getString("program_menu"))
       }
     } else {
       super.setTitle(VlibProperties.getString("program_menu"))
@@ -581,7 +596,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
    */
   fun getRoots(): List<RootMenu> = listOf(*ROOT_MENUS)
 
-  fun getShortcutsID(): List<Int> = shortcutsID
+  fun getShortcutsID(): MutableList<Int> = shortcutsID
 
   override fun getType(): Int = Constants.MDL_MENU_TREE
 

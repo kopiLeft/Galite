@@ -48,7 +48,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   private val modelListener = EventListenerList()
   private var extraTitle: String? = null
   private var display: UWindow? = null
-  open var actors : Array<VActor?> = arrayOf()
+  open var actors: Array<VActor?> = arrayOf()
   protected lateinit var windowTitle: String
   var smallIcon: Image? = null
   protected var isProtected = false
@@ -58,12 +58,12 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
 
   init {
     f12 = VActor("File",
-            WINDOW_LOCALIZATION_RESOURCE,
-            "GotoShortcuts",
-            WINDOW_LOCALIZATION_RESOURCE,
-            null,
-            KeyEvent.VK_F12,
-            0)
+                 WINDOW_LOCALIZATION_RESOURCE,
+                 "GotoShortcuts",
+                 WINDOW_LOCALIZATION_RESOURCE,
+                 null,
+                 KeyEvent.VK_F12,
+                 0)
     f12.number = Constants.CMD_GOTO_SHORTCUTS
     f12.handler = this
     addActors(arrayOf(f12))
@@ -72,7 +72,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * Creates a window with DB context handler
    */
-  protected constructor(ctxt: DBContextHandler): this(ctxt.dBContext)
+  protected constructor(ctxt: DBContextHandler) : this(ctxt.dBContext)
 
   // ----------------------------------------------------------------------
   // DISPLAY INTERFACE
@@ -142,12 +142,12 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * -) THIS method should need be used to fix the model
    */
   open fun executedAction(action: Action) {
-    // overrriden in VForm
+    // overridden in VForm
     // nothing to do here
   }
 
-  @Deprecated("use method performAsynAction",
-          ReplaceWith("performAsyncAction(action)"))
+  @Deprecated("use method performAsyncAction",
+              ReplaceWith("performAsyncAction(action)"))
   override fun performAction(action: Action, block: Boolean) {
     performAsyncAction(action)
   }
@@ -367,11 +367,11 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   /**
    * setWaitInfo
    */
-  fun setWaitDialog(message: String, maxtime: Int) {
+  fun setWaitDialog(message: String, maxTime: Int) {
     val listeners = modelListener.listenerList
     for (i in listeners.size - 2 downTo 0 step 2) {
       if (listeners[i] == WaitDialogListener::class.java) {
-        (listeners[i + 1] as WaitDialogListener).setWaitDialog(message, maxtime)
+        (listeners[i + 1] as WaitDialogListener).setWaitDialog(message, maxTime)
       }
     }
   }
@@ -415,7 +415,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   // ----------------------------------------------------------------------
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
-  open fun getType(): Int = Constants.MDL_UNKOWN
+  open fun getType(): Int = Constants.MDL_UNKNOWN
 
   open fun enableCommands() {
     f12.isEnabled = (true)
@@ -465,7 +465,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   override fun retryProtected(): Boolean = ask(MessageCode.getMessage("VIS-00039"))
 
   /**
-   * return wether this object handle a transaction at this time
+   * return whether this object handle a transaction at this time
    */
   override fun inTransaction(): Boolean = isProtected
 
@@ -482,15 +482,6 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   // ----------------------------------------------------------------------
   // MESSAGES HANDLING
   // ----------------------------------------------------------------------
-  /**
-   * Formats the message having the given identifier from the given source.
-   *
-   * @param     ident the message identifier
-   * @param     param message parameter
-   * @return    the requested message
-   */
-  protected fun formatMessage(ident: String, param: Any? = null): String? =
-          formatMessage(ident, param, null)
 
   /**
    * Formats the message having the given identifier from the given source.
@@ -500,7 +491,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * @param     param1 the second message parameter
    * @return    the requested message
    */
-  protected fun formatMessage(ident: String, param1: Any?, param2: Any?): String? =
+  protected fun formatMessage(ident: String, param1: Any?, param2: Any? = null): String? =
           formatMessage(ident, arrayOf(param1, param2))
 
   /**

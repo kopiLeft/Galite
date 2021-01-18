@@ -41,14 +41,14 @@ class VFixnumColumn(ident: String?,
                     digits: Int,
                     maxScale: Int,
                     format: VCellFormat?)
-      : VReportColumn(ident,
-                      options,
-                      align,
-                      groups,
-                      function,
-                      VFixnumField.computeWidth(digits, maxScale, null, null),
-                      1,
-                      format ?: VFixedFormat(maxScale, true)) {
+    : VReportColumn(ident,
+                    options,
+                    align,
+                    groups,
+                    function,
+                    VFixnumField.computeWidth(digits, maxScale, null, null),
+                    1,
+                    format ?: VFixedFormat(maxScale, true)) {
   /**
    * Compare two objects.
    *
@@ -106,7 +106,7 @@ class VFixnumColumn(ident: String?,
     maxScale = scale
   }
 
-  var formula = null
+  var formula: String? = null
   var maxScale = 0
     private set
 }

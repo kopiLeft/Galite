@@ -43,7 +43,9 @@ class LangValue : IPPValue {
     os.writeString(value)
   }
 
-  override fun dump() {println("\tcharset : $charset\tvalue : $value") }
+  override fun dump() {
+    println("\tcharset : $charset\tvalue : $value")
+  }
 
   override fun toString(): String = value
 

@@ -19,20 +19,21 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.type.Month
 
 /**
  * Represents a list column.
  */
 class VMonthColumn(title: String,
-                   column: String?,
+                   column: Column<*>?,
                    sortAscending:
                    Boolean)
-      : VListColumn(title,
-                    column,
-                    VConstants.ALG_LEFT,
-                    7,
-                    sortAscending) {
+     : VListColumn(title,
+                   column,
+                   VConstants.ALG_LEFT,
+                   7,
+                   sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------------------------

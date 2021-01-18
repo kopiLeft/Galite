@@ -21,7 +21,7 @@ package org.kopi.galite.util
 /**
  * Local printer
  */
-class LPrinter(val name: String,var command: String) : AbstractPrinter(name) {
+class LPrinter(val name: String, var command: String) : AbstractPrinter(name) {
 
   // ----------------------------------------------------------------------
   // PRINTING WITH AN INPUTSTREAM
@@ -29,12 +29,12 @@ class LPrinter(val name: String,var command: String) : AbstractPrinter(name) {
 
   override fun print(data: PrintJob): String {
     val process = Runtime.getRuntime().exec(command)
-    val data = data.inputStream
+    val printData = data.inputStream
     val buffer = ByteArray(1024)
     val output = process.outputStream
     var length: Int
 
-    while (data.read(buffer).also { length = it } != -1) {
+    while (printData.read(buffer).also { length = it } != -1) {
       output.write(buffer, 0, length)
     }
     output.close()

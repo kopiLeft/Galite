@@ -69,11 +69,11 @@ class RootItem(id: Int, name: String) {
    */
   protected fun createTree(items: Array<Item>, root: Item): DefaultMutableTreeNode? {
     var self: DefaultMutableTreeNode? = null
-    var childsCount = 0
+    var childrenCount = 0
 
     items.forEach {
       if (it.parent == root.id) {
-        childsCount++
+        childrenCount++
         it.level = root.level + 1
         val node: DefaultMutableTreeNode? = createTree(items, it)
 
@@ -85,7 +85,7 @@ class RootItem(id: Int, name: String) {
         }
       }
     }
-    return if (childsCount == 0) {
+    return if (childrenCount == 0) {
       DefaultMutableTreeNode(root)
     } else {
       self

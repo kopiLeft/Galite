@@ -76,7 +76,7 @@ open class VChartType protected constructor(val ordinal: Int, val name: String) 
    */
   internal fun fillMeasures(dataSeries: VDataSeries, chart: VChart, row: VRow) {
     for (i in 0 until row.getMeasuresCount()) {
-      val vMeasureData = VMeasureData(chart.getMeasure(i).label, chart.getMeasure(i).toNumber(row.getMeasureAt(i)))
+      val vMeasureData = VMeasureData(chart.getMeasure(i).label!!, chart.getMeasure(i).toNumber(row.getMeasureAt(i)))
       dataSeries.measures.add(vMeasureData)
     }
   }

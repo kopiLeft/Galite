@@ -15,7 +15,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.form
 
 import java.io.File
@@ -24,9 +23,12 @@ import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
-import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.common.Trigger
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.util.PrintJob
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Constants
 import org.kopi.galite.visual.Action
@@ -42,8 +44,6 @@ import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.WindowBuilder
 import org.kopi.galite.visual.WindowController
-import org.kopi.galite.db.DBContext
-import org.kopi.galite.db.DBContextHandler
 
 abstract class VForm : VWindow, VConstants {
   companion object {
@@ -60,6 +60,7 @@ abstract class VForm : VWindow, VConstants {
       })
     }
   }
+
   // ----------------------------------------------------------------------
   // CONSTRUCTOR
   // ----------------------------------------------------------------------
@@ -158,7 +159,7 @@ abstract class VForm : VWindow, VConstants {
   }
 
   /**
-   * implemented for compatiblity with old gui
+   * implemented for compatibility with old gui
    * used in tib/Artikel.vf
    */
   @Deprecated("")
@@ -178,8 +179,8 @@ abstract class VForm : VWindow, VConstants {
   /**
    * addCommand in menu
    */
-  override fun addActors(actors: Array<VActor>?) {
-    actors?.forEach { actor ->
+  override fun addActors(actorDefs: Array<VActor>?) {
+    actorDefs?.forEach { actor ->
       if (actor is VDefaultActor) {
         when (actor.code) {
           CMD_AUTOFILL -> autofillActor = actor
@@ -189,7 +190,7 @@ abstract class VForm : VWindow, VConstants {
         }
       }
     }
-    super.addActors(actors)
+    super.addActors(actorDefs)
   }
 
   fun setTextOnFieldLeave(): Boolean = false
@@ -265,30 +266,30 @@ abstract class VForm : VWindow, VConstants {
     // !!! fixes model (if left in a bad state)
     if (activeBlock == null) {
       var i = 0
-      while (i < blocks!!.size) {
-        if (blocks!![i].isAccessible) {
+      while (i < blocks.size) {
+        if (blocks[i].isAccessible) {
           break
         }
         i++
       }
-      assert(i < blocks!!.size) { threadInfo() + "No accessible block" }
-      blocks!![i].enter()
+      assert(i < blocks.size) { threadInfo() + "No accessible block" }
+      blocks[i].enter()
       // lackner 2003.07.31
       // - inserted to get information about the usage of this code
       // - can be removed if the method checkUI is removed
       try {
-        ApplicationContext.reportTrouble("DForm chechUI " + Thread.currentThread(),
-                "Where is this code used? $action",
-                this.toString(),
-                RuntimeException("CHECKUI: Entered  block " + blocks!![i].name))
+        ApplicationContext.reportTrouble("DForm checkUI " + Thread.currentThread(),
+                                         "Where is this code used? $action",
+                                         this.toString(),
+                                         RuntimeException("CHECKUI: Entered  block " + blocks[i].name))
       } catch (e: Exception) {
         e.printStackTrace()
       }
     }
     // !! end of model fix
     for (i in blocks.indices) {
-      blocks!![i].checkBlock()
-      blocks!![i].updateBlockAccess()
+      blocks[i].checkBlock()
+      blocks[i].updateBlockAccess()
       //      blocks[i].checkCommands();
     }
   }
@@ -302,9 +303,9 @@ abstract class VForm : VWindow, VConstants {
   fun gotoPage(target: Int) {
     var block: VBlock? = null
     var i = 0
-    while (block == null && i < blocks!!.size) {
-      if (blocks!![i].pageNumber == target && blocks!![i].isAccessible) {
-        block = blocks!![i]
+    while (block == null && i < blocks.size) {
+      if (blocks[i].pageNumber == target && blocks[i].isAccessible) {
+        block = blocks[i]
       }
       i++
     }
@@ -336,13 +337,13 @@ abstract class VForm : VWindow, VConstants {
     var index = getBlockIndex(activeBlock!!)
     var target: VBlock? = null
     var i = 0
-    while (target == null && i < blocks!!.size - 1) {
+    while (target == null && i < blocks.size - 1) {
       index += 1
-      if (index == blocks!!.size) {
+      if (index == blocks.size) {
         index = 0
       }
-      if (blocks!![index].isAccessible) {
-        target = blocks!![index]
+      if (blocks[index].isAccessible) {
+        target = blocks[index]
       }
       i += 1
     }
@@ -355,14 +356,14 @@ abstract class VForm : VWindow, VConstants {
   fun enterBlock() {
     assert(activeBlock == null) { "active block = $activeBlock" }
     var i = 0
-    while (i < blocks!!.size) {
-      if (blocks!![i].isAccessible) {
+    while (i < blocks.size) {
+      if (blocks[i].isAccessible) {
         break
       }
       i++
     }
-    assert(i < blocks!!.size) { threadInfo() + "no accessible block" }
-    gotoBlock(blocks!![i])
+    assert(i < blocks.size) { threadInfo() + "no accessible block" }
+    gotoBlock(blocks[i])
   }
 
   /**
@@ -424,7 +425,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * create a list of items and return id of selected one or -1
    * @param        showUniqueItem        open a list if there is only one item also
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by string formaters
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by string formatters
    */
   fun singleMenuQuery(parent: VWindow, showUniqueItem: Boolean): Int {
     dBContext = parent.dBContext
@@ -455,16 +456,24 @@ abstract class VForm : VWindow, VConstants {
     return VKT_Triggers[index][event] != 0
   }
 
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    formTriggers[VKT_Type]?.action?.method?.invoke()
+    super.executeVoidTrigger(VKT_Type)
+  }
+
+  @Suppress("UNCHECKED_CAST")
   fun executeObjectTrigger(VKT_Type: Int): Any {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (formTriggers[VKT_Type]?.action?.method as () -> Any).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeBooleanTrigger(VKT_Type: Int): Boolean {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (formTriggers[VKT_Type]?.action?.method as () -> Boolean).invoke()
   }
 
+  @Suppress("UNCHECKED_CAST")
   fun executeIntegerTrigger(VKT_Type: Int): Int {
-    throw InconsistencyException("SHOULD BE REDEFINED")
+    return (formTriggers[VKT_Type]?.action?.method as () -> Int).invoke()
   }
 
   // ----------------------------------------------------------------------
@@ -519,8 +528,8 @@ abstract class VForm : VWindow, VConstants {
    */
   fun getBlock(name: String): VBlock? {
     for (i in blocks.indices) {
-      if (name == blocks!![i].name) {
-        return blocks!![i]
+      if (name == blocks[i].name) {
+        return blocks[i]
       }
     }
     return null
@@ -570,7 +579,7 @@ abstract class VForm : VWindow, VConstants {
   protected fun initialise() {
     callTrigger(VConstants.TRG_INIT)
     for (i in blocks.indices) {
-      blocks!![i].initialise()
+      blocks[i].initialise()
     }
   }
 
@@ -579,7 +588,7 @@ abstract class VForm : VWindow, VConstants {
    */
   protected fun getBlockIndex(blk: VBlock): Int {
     for (i in blocks.indices) {
-      if (blk === blocks!![i]) {
+      if (blk === blocks[i]) {
         return i
       }
     }
@@ -605,11 +614,11 @@ abstract class VForm : VWindow, VConstants {
       addActors(blocks[i].actors)
     }
     VDocGenerator(p).helpOnForm(getName(),
-            commands,
-            blocks,
-            name,
-            help,
-            code)
+                                commands,
+                                blocks,
+                                name,
+                                help,
+                                code)
   }
 
   fun genHelp(): String? {
@@ -627,16 +636,16 @@ abstract class VForm : VWindow, VConstants {
       localHelp = module.help
     }
     val fileName = VHelpGenerator().helpOnForm(getName(),
-            commands,
-            blocks,
-            description,
-            localHelp,
-            "")
+                                               commands,
+                                               blocks,
+                                               description,
+                                               localHelp,
+                                               "")
     return if (fileName == null) {
       null
     } else {
       try {
-        surl.append(File(fileName).toURL().toString())
+        surl.append(File(fileName).toURI().toURL().toString())
       } catch (mue: MalformedURLException) {
         throw InconsistencyException(mue)
       }
@@ -647,7 +656,7 @@ abstract class VForm : VWindow, VConstants {
           anchor = field.name
         }
         anchor.replace(' ', '_')
-        surl.append("#" + field.block!!.title!!.replace(' ', '_') + anchor)
+        surl.append("#" + field.block!!.title.replace(' ', '_') + anchor)
       }
       surl.toString()
     }
@@ -683,15 +692,17 @@ abstract class VForm : VWindow, VConstants {
     }
     // form-level commands
     commands.forEachIndexed { index, command ->
-      if (enable && hasTrigger(VConstants.TRG_CMDACCESS, index + 1)) {
-        val active: Boolean = try {
-          callTrigger(VConstants.TRG_CMDACCESS, index + 1) as Boolean
-        } catch (e: VException) {
-          // consider the command as active if trigger call fails.
-          true
+      if (command.trigger != -1) {
+        if (enable && hasTrigger(VConstants.TRG_CMDACCESS, index + 1)) {
+          val active: Boolean = try {
+            callTrigger(VConstants.TRG_CMDACCESS, index + 1) as Boolean
+          } catch (e: VException) {
+            // consider the command as active if trigger call fails.
+            true
+          }
+          // The command is enabled if its access trigger returns <code>true</true>
+          enable = active
         }
-        // The command is enabled if its access trigger returns <code>true</true>
-        enable = active
       }
       command.setEnabled(enable)
     }
@@ -716,9 +727,9 @@ abstract class VForm : VWindow, VConstants {
       // support better message
       if (blocks != null) {
         for (i in blocks.indices) {
-          val block: VBlock = blocks!![i]
+          val block: VBlock = blocks[i]
           if (block != null) {
-            append(blocks!![i].toString())
+            append(blocks[i].toString())
           } else {
             append("Block ")
             append(i)
@@ -732,9 +743,11 @@ abstract class VForm : VWindow, VConstants {
     append("===========================================================\n")
   }
 
-  fun printFormScreen(): PrintJob {
+  fun printFormScreen(): PrintJob? {
     return (getDisplay() as UForm).printForm()
   }
+
+  val eventList: MutableList<Int> = mutableListOf()
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -744,7 +757,8 @@ abstract class VForm : VWindow, VConstants {
   lateinit var blocks: Array<VBlock>
   internal lateinit var pages: Array<String?>
   internal var help: String? = null //the name of this field
-  internal lateinit var VKT_Triggers: Array<IntArray>
+  internal val VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
+  internal val formTriggers = mutableMapOf<Int, Trigger>()
 
   // dynamic data
   private val blockMoveAllowed = true

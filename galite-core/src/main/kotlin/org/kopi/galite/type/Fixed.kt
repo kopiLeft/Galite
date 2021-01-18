@@ -28,15 +28,15 @@ import java.math.MathContext
  */
 open class Fixed(b: BigDecimal?) : Number(), Comparable<Any> {
 
-  internal constructor(b: BigInteger?) : this(BigDecimal(b)) {}
+  internal constructor(b: BigInteger?) : this(BigDecimal(b))
 
-  internal constructor(b: BigInteger?, l: Int) : this(BigDecimal(b)) {}
+  internal constructor(b: BigInteger?, l: Int) : this(BigDecimal(b))
 
-  internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale)) {}
+  internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
 
-  internal constructor(d: Double) : this(BigDecimal(d)) {}
+  internal constructor(d: Double) : this(BigDecimal(d))
 
-  internal constructor(s: String?) : this(BigDecimal(s)) {}
+  internal constructor(s: String?) : this(BigDecimal(s))
   // ----------------------------------------------------------------------
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------

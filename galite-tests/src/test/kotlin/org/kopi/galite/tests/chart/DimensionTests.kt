@@ -18,8 +18,9 @@
 package org.kopi.galite.tests.chart
 
 import org.junit.Test
-import org.kopi.galite.chart.Dimension
-import org.kopi.galite.chart.Measure
+import org.kopi.galite.chart.ChartDimension
+import org.kopi.galite.chart.ChartMeasure
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.visual.Color
 import java.time.Month
 import kotlin.test.assertEquals
@@ -32,8 +33,8 @@ class DimensionTests {
    */
   @Test
   fun monthDimensionTest() {
-    val monthDimension = Dimension<Month>()
-    val measure1 = Measure<Double>()
+    val monthDimension = ChartDimension(Domain<Month>())
+    val measure1 = ChartMeasure(Domain<Double>())
     measure1.label = "measure 1"
     measure1.color = Color.RED
     monthDimension.add(Month.JANUARY) {
@@ -57,9 +58,9 @@ class DimensionTests {
    */
   @Test
   fun intDimensionTest() {
-    val intDimension = Dimension<Int>()
-    val measure1 = Measure<Int>()
-    val measure2 = Measure<Int>()
+    val intDimension = ChartDimension(Domain<Int>())
+    val measure1 = ChartMeasure(Domain<Int>())
+    val measure2 = ChartMeasure(Domain<Int>())
 
     intDimension.add((0..10).random()) {
       this[measure1] = 50

@@ -65,7 +65,7 @@ interface UField : UComponent {
    * Returns the auto fill button.
    * @return The auto fill button.
    */
-  fun getAutofillButton(): UComponent
+  fun getAutofillButton(): UComponent?
 
   /**
    * Sets is the field is in detail view.
@@ -109,5 +109,5 @@ interface UField : UComponent {
    * Returns the field content.
    * @return The field value.
    */
-  fun getObject(): Any
+  fun getObject(): Any?
 }

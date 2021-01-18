@@ -18,9 +18,10 @@
 
 package org.kopi.galite.chart
 
+import java.io.Serializable
+
 import org.kopi.galite.l10n.ChartLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
-import java.io.Serializable
 
 /**
  * Creates a new chart column from its identifier.

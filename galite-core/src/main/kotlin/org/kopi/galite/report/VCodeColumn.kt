@@ -40,14 +40,14 @@ abstract class VCodeColumn(ident: String?,
                            width: Int,
                            format: VCellFormat?,
                            private val idents: Array<String>)
-              : VReportColumn(ident,
-                              options,
-                              align,
-                              groups,
-                              function,
-                              width,
-                              1,
-                              format) {
+           : VReportColumn(ident,
+                           options,
+                           align,
+                           groups,
+                           function,
+                           width,
+                           1,
+                           format) {
   /**
    * Compares two objects.
    *
@@ -80,14 +80,14 @@ abstract class VCodeColumn(ident: String?,
   /**
    * Localizes this field
    *
-   * @param     parent         the caller localizer
+   * @param     parentLocalizer         the caller localizer
    */
-  protected override fun localize(parent: FieldLocalizer) {
-    val loc: TypeLocalizer = parent.manager.getTypeLocalizer(source, type)
-    names = arrayOfNulls(idents.size)
-    for (i in names!!.indices) {
-      names!![i] = loc.getCodeLabel(idents[i])
-      this.width = max(this.width, names!![i]!!.length)
+  override fun localize(parentLocalizer: FieldLocalizer) {
+    val loc: TypeLocalizer = parentLocalizer.manager.getTypeLocalizer(source, type)
+    names = Array(idents.size) { i ->
+      val label = loc.getCodeLabel(idents[i])
+      this.width = max(this.width, label.length)
+      label
     }
   }
 

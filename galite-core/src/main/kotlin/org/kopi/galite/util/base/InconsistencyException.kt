@@ -27,7 +27,7 @@ class InconsistencyException : RuntimeException {
    * Constructs am InconsistencyException with no specified detail message.
    */
   @Deprecated("Use the constructor with the message or build it with the exception which cause this case.",
-          ReplaceWith("InconsistencyException(message = errorMessage)"))
+              ReplaceWith("InconsistencyException(message = errorMessage)"))
   constructor() : super()
 
   /**
@@ -50,4 +50,8 @@ class InconsistencyException : RuntimeException {
    * @param        message                the detail message
    */
   constructor(message: String, throwable: Throwable) : super(message, throwable)
+
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }

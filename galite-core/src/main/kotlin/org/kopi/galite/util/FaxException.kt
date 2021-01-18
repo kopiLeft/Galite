@@ -26,20 +26,24 @@ open class FaxException : Exception {
    *
    * @param        message                the associated message
    */
-  constructor(message: String) : super(message) {}
+  constructor(message: String) : super(message)
 
   /**
    * Constructs a new exception with the specified detail message and cause.
    *
    * @param        message                the associated message
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted)
    */
-  constructor(message: String, cause: Throwable) : super(message, cause) {}
+  constructor(message: String, cause: Throwable) : super(message, cause)
 
   /**
    * Constructs a new exception with the specified detail message and cause.
    *
-   * @param     cause           the cause  (null value permited
+   * @param     cause           the cause  (null value permitted)
    */
-  constructor(cause: Throwable) : super(cause) {}
+  constructor(cause: Throwable) : super(cause)
+
+  companion object {
+    private const val serialVersionUID = 0L
+  }
 }

@@ -56,8 +56,8 @@ class Connection {
    * Creates a connection with Exposed and opens it.
    *
    * @param        url             the URL of the database to connect to
-   * @param        user            the name of the database user
-   * @param        pass            the password of the database user
+   * @param        userName        the name of the database user
+   * @param        password        the password of the database user
    * @param        lookupUserId    lookup user id in table of users ?
    * @param        schema          the database schema to set as current schema
    */
@@ -79,7 +79,7 @@ class Connection {
    * Returns the user ID
    */
   fun getUserID(): Int {
-    when(user) {
+    when (user) {
       USERID_NO_LOOKUP -> throw InconsistencyException("user id must not be queried")
       USERID_TO_DETERMINE -> throw InconsistencyException("user id not yet determined")
     }
@@ -100,7 +100,7 @@ class Connection {
           transaction {
             user = Users.slice(Users.id).select {
               Users.shortName eq userName
-              }.single()[Users.id]
+            }.single()[Users.id]
           }
         } catch (e: NoSuchElementException) {
           throw SQLException("user unknown")

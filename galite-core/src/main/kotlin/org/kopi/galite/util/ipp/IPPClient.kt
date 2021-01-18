@@ -28,14 +28,14 @@ class IPPClient(private val hostname: String,
                 private val user: String) {
 
   fun print(file: InputStream, nbCopies: Int, attributes: Array<String>?) {
-    val mediaAttributes: MutableList<String>? = mutableListOf()
-    val optionalAttributes: MutableList<String>? = mutableListOf()
+    val mediaAttributes = mutableListOf<String>()
+    val optionalAttributes = mutableListOf<String>()
 
     attributes?.forEach {
       if (it.indexOf('=') != -1) {
-        optionalAttributes!!.add(it)
+        optionalAttributes.add(it)
       } else {
-        mediaAttributes!!.add(it)
+        mediaAttributes.add(it)
       }
     }
 
@@ -60,32 +60,32 @@ class IPPClient(private val hostname: String,
     req.setRequest(1, IPPConstants.OPS_PRINT_JOB)
 
     att = IPPAttribute(IPPConstants.TAG_OPERATION,
-            IPPConstants.TAG_CHARSET,
-            "attributes-charset")
+                       IPPConstants.TAG_CHARSET,
+                       "attributes-charset")
     att.addValue(StringValue("utf-8"))
     req.addAttribute(att)
     att = IPPAttribute(IPPConstants.TAG_OPERATION,
-            IPPConstants.TAG_LANGUAGE,
-            "attributes-natural-language")
+                       IPPConstants.TAG_LANGUAGE,
+                       "attributes-natural-language")
     att.addValue(StringValue("en"))
     req.addAttribute(att)
 
     att = IPPAttribute(IPPConstants.TAG_OPERATION,
-            IPPConstants.TAG_URI,
-            "printer-uri")
+                       IPPConstants.TAG_URI,
+                       "printer-uri")
     att.addValue(StringValue("ipp://" + hostname + ":" + port +
-            "/printers/" + printer))
+                                     "/printers/" + printer))
     req.addAttribute(att)
 
     att = IPPAttribute(IPPConstants.TAG_OPERATION,
-            IPPConstants.TAG_NAME,
-            "requesting-user-name")
+                       IPPConstants.TAG_NAME,
+                       "requesting-user-name")
     att.addValue(StringValue(user))
     req.addAttribute(att)
 
     att = IPPAttribute(IPPConstants.TAG_JOB,
-            IPPConstants.TAG_INTEGER,
-            "copies")
+                       IPPConstants.TAG_INTEGER,
+                       "copies")
     // workaround LETTERHEAD lackner 13.01.2004
     // send each kopi as an own job
     // for e.g. a letterhead on every copy (milavec)
@@ -96,8 +96,8 @@ class IPPClient(private val hostname: String,
 
     if (mediaAttributes != null && mediaAttributes.isNotEmpty()) {
       att = IPPAttribute(IPPConstants.TAG_JOB,
-              IPPConstants.TAG_KEYWORD,
-              "media")
+                         IPPConstants.TAG_KEYWORD,
+                         "media")
 
       mediaAttributes.forEach {
         att.addValue(StringValue(it))
@@ -110,8 +110,8 @@ class IPPClient(private val hostname: String,
       val attributeName = optionalAttribute.substring(0, optionalAttribute.indexOf("="))
       val attributeValue = optionalAttribute.substring(optionalAttribute.indexOf("=") + 1, optionalAttribute.length)
       att = IPPAttribute(IPPConstants.TAG_JOB,
-              IPPConstants.TAG_NAME,
-              attributeName)
+                         IPPConstants.TAG_NAME,
+                         attributeName)
       att.addValue(StringValue(attributeValue))
       req.addAttribute(att)
     }
@@ -176,28 +176,28 @@ class IPPClient(private val hostname: String,
     req.setRequest(1, IPPConstants.OPS_GET_PRINTER_ATTRIBUTES)
 
     var att = IPPAttribute(IPPConstants.TAG_OPERATION,
-            IPPConstants.TAG_CHARSET,
-            "attributes-charset")
+                           IPPConstants.TAG_CHARSET,
+                           "attributes-charset")
     att.addValue(StringValue("iso-8859-1"))
     //att.addValue(new StringValue("utf-8"));
     req.addAttribute(att)
 
     att = IPPAttribute(IPPConstants.TAG_OPERATION,
-            IPPConstants.TAG_LANGUAGE,
-            "attributes-natural-language")
+                       IPPConstants.TAG_LANGUAGE,
+                       "attributes-natural-language")
     att.addValue(StringValue("en"))
     req.addAttribute(att)
 
     att = IPPAttribute(IPPConstants.TAG_OPERATION,
-            IPPConstants.TAG_URI,
-            "printer-uri")
+                       IPPConstants.TAG_URI,
+                       "printer-uri")
     att.addValue(StringValue("ipp://" + hostname + ":" + port +
-            "/printers/" + printer))
+                                     "/printers/" + printer))
     req.addAttribute(att)
 
     att = IPPAttribute(IPPConstants.TAG_OPERATION,
-            IPPConstants.TAG_NAME,
-            "printer-name")
+                       IPPConstants.TAG_NAME,
+                       "printer-name")
     att.addValue(StringValue(printer))
     req.addAttribute(att)
 

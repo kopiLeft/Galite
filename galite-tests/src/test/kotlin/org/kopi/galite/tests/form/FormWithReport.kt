@@ -43,7 +43,6 @@ object FormWithReport : ReportSelectionForm() {
 
   val block = insertBlock(BlockSample, testPage) {
     command(item = report) {
-      this.name = "report"
       action = {
         println("-----------Generating report-----------------")
         createReport(BlockSample)
@@ -56,6 +55,6 @@ object FormWithReport : ReportSelectionForm() {
   }
 }
 
-fun main(){
+fun main() {
   Application.runForm(FormWithReport)
 }

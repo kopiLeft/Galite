@@ -252,15 +252,15 @@ abstract class ApplicationContext {
           writer.println("Java Ext. Direct.:   " + System.getProperty("java.ext.dirs", ""))
           writer.println()
           writer.println("Memory Usage:        total = " + Runtime.getRuntime().totalMemory()
-                  + "  free = " + Runtime.getRuntime().freeMemory()
-                  + "  used = " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()))
+                                 + "  free = " + Runtime.getRuntime().freeMemory()
+                                 + "  used = " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()))
           writer.println()
           writer.println("Catched at:          $place")
           writer.println("Message:             " + reason.message)
           writer.println("Exception:           ")
           reason.printStackTrace(writer)
           failureID = try {
-            val write: CharArrayWriter = CharArrayWriter()
+            val write = CharArrayWriter()
             reason.printStackTrace(PrintWriter(write))
             " " + write.toString().hashCode()
           } catch (e: Exception) {
@@ -270,16 +270,16 @@ abstract class ApplicationContext {
           writer.println("Information:         $data")
           writer.flush()
           Mailer.sendMail(smtpServer,
-                  recipient,
-                  cc,
-                  bcc,
-                  "[ERROR] $applicationName$failureID",
-                  buffer.toString(),
-                  sender)
+                          recipient,
+                          cc,
+                          bcc,
+                          "[ERROR] $applicationName$failureID",
+                          buffer.toString(),
+                          sender)
         }
         if (logFile != null && writeLog) {
           try {
-            val writer: PrintWriter = PrintWriter(FileWriter(logFile, true))
+            val writer = PrintWriter(FileWriter(logFile, true))
             writer.println()
             writer.println()
             try {
@@ -318,8 +318,8 @@ abstract class ApplicationContext {
           while (addresses.hasMoreElements()) {
             val address = addresses.nextElement()
             writer.println("                     "
-                    + address.hostAddress + " "
-                    + address.canonicalHostName)
+                                   + address.hostAddress + " "
+                                   + address.canonicalHostName)
           }
         }
       } catch (e: SocketException) {

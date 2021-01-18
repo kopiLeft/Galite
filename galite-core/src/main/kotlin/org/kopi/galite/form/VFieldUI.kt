@@ -37,8 +37,8 @@ import org.kopi.galite.visual.VExecFailedException
  * @param index     The row controller index.
  */
 abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBlock,
-                                              val model: VField,
-                                              val index: Int = 0)
+                                                            val model: VField,
+                                                            val index: Int = 0)
   : VConstants, ActionHandler, Serializable {
 
   private fun hasEditItem_S(): Boolean = model.list != null && model.list!!.hasShortcut
@@ -54,7 +54,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * @param detail Is this field is in detail mode ?
    * @return The [UField] display component of this field.
    */
-  protected abstract fun createDisplay(label: ULabel, model: VField, detail: Boolean): UField
+  protected abstract fun createDisplay(label: ULabel?, model: VField, detail: Boolean): UField
 
   /**
    * Creates a [FieldHandler] for this row controller.
@@ -82,7 +82,10 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * @param model The chart label sort model.
    * @return The created [UChartLabel]
    */
-  protected abstract fun createChartHeaderLabel(text: String?, help: String?, index: Int, model: OrderModel): UChartLabel
+  protected abstract fun createChartHeaderLabel(text: String?,
+                                                help: String?,
+                                                index: Int,
+                                                model: OrderModel): UChartLabel
   // ----------------------------------------------------------------------
   // ACCESSORS
   // ----------------------------------------------------------------------
@@ -178,10 +181,10 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       localCommands?.forEachIndexed { index, localCommand ->
         if (localCommand.isActive(getBlock().getMode())) {
           val active = if (getBlock().hasTrigger(VConstants.TRG_CMDACCESS,
-                          getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
+                                                 getBlock().fields.size + getBlock().commands!!.size + index + 1)) {
             try {
               (getBlock().callTrigger(VConstants.TRG_CMDACCESS,
-                      getBlock().fields.size + getBlock().commands!!.size + index + 1) as Boolean)
+                                      getBlock().fields.size + getBlock().commands!!.size + index + 1) as Boolean)
             } catch (e: VException) {
               // consider that the command is active of any error occurs
               true
@@ -202,32 +205,32 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     if (model.getAccess(model.block!!.activeRecord) > VConstants.ACS_SKIPPED &&
             hasAutofillCommand() &&
             !model.block!!.isChart() && display != null && display!!.getAutofillButton() != null) {
-      display!!.getAutofillButton().setEnabled(autofillCommand!!.isActive(model.block!!.getMode()))
+      display!!.getAutofillButton()!!.setEnabled(autofillCommand!!.isActive(model.block!!.getMode()))
     }
   }
 
-  fun getAllCommands(): Array<Any> {
-      val cmds = arrayListOf<VCommand>()
-      var i = 0
-      while (commands != null && i < commands.size) {
-        cmds.add(commands[i])
-        i++
-      }
-      if (hasEditItem_S()) {
-        cmds.add(model.getForm().cmdEditItem_S)
-      } else if (hasAutofill) {
-        if (model !is VBooleanField || includeBooleanAutofillCommand()) {
-          cmds.add(model.getForm().cmdAutofill)
-        }
-      }
-      if (hasNewItem) {
-        cmds.add(model.getForm().cmdNewItem)
-      }
-      if (hasEditItem) {
-        cmds.add(model.getForm().cmdEditItem)
-      }
-      return cmds.toTypedArray()
+  fun getAllCommands(): Array<VCommand> {
+    val cmds = mutableListOf<VCommand>()
+    var i = 0
+    while (commands != null && i < commands.size) {
+      cmds.add(commands[i])
+      i++
     }
+    if (hasEditItem_S()) {
+      cmds.add(model.getForm().cmdEditItem_S)
+    } else if (hasAutofill) {
+      if (model !is VBooleanField || includeBooleanAutofillCommand()) {
+        cmds.add(model.getForm().cmdAutofill)
+      }
+    }
+    if (hasNewItem) {
+      cmds.add(model.getForm().cmdNewItem)
+    }
+    if (hasEditItem) {
+      cmds.add(model.getForm().cmdEditItem)
+    }
+    return cmds.toTypedArray()
+  }
 
   /**
    * Clears all display fields.
@@ -243,9 +246,8 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * resetLabel
    */
   fun resetLabel() {
-    if (dl != null) {
-      dl!!.init(model.label, model.toolTip)
-    }
+    dl.init(model.label, model.toolTip)
+
     if (dlDetail != null) {
       dl!!.init(model.label, model.toolTip)
     }
@@ -348,7 +350,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * for boolean field between swing and WEB implementations.
    * @return True if the auto fill command should be present for boolean fields.
    */
-  protected fun includeBooleanAutofillCommand(): Boolean = true
+  protected open fun includeBooleanAutofillCommand(): Boolean = true
 
   // ----------------------------------------------------------------------
   // PROTECTED BUILDING METHODS
@@ -390,12 +392,14 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
           dlDetail = createLabel(model.label, model.toolTip, true)
           if (columnEnd >= 0) {
             (getBlock().display as UMultiBlock).addToDetail(dlDetail,
-                    Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
+                                                            Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
           }
           // field for the value in the detail view
           detailDisplay = createDisplay(dlDetail, model, true)
           (getBlock().display as UMultiBlock).addToDetail(detailDisplay,
-                  Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, (lineEnd - line) * 2 + 1, false))
+                                                          Alignment(column * 2 - 1, line - 1,
+                                                                    (columnEnd - column) * 2 + 1,
+                                                                    (lineEnd - line) * 2 + 1, false))
           detailDisplay!!.setPosition(0)
           detailDisplay!!.setInDetail(true)
         }
@@ -415,10 +419,10 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         blockView.add(dl, MultiFieldAlignment(columnEnd * 2 - 1, line - 1, 1, 1, true))
         displays = arrayOf(createDisplay(dl, model, false))
         blockView.add(displays[0]!!, MultiFieldAlignment(columnEnd * 2 - 1,
-                line,
-                1,
-                lineEnd - line + 1,
-                false))
+                                                         line,
+                                                         1,
+                                                         lineEnd - line + 1,
+                                                         false))
         displays[0]!!.setPosition(0)
         displays[0]!!.updateText()
       } else {
@@ -429,9 +433,11 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         }
         if (displays[0] is UActorField) {
           // an actor field takes the label and the field space
-          blockView.add(displays[0]!!, Alignment(column * 2 - 2, line - 1, (columnEnd - column) * 2 + 2, lineEnd - line + 1, false))
+          blockView.add(displays[0]!!,
+                        Alignment(column * 2 - 2, line - 1, (columnEnd - column) * 2 + 2, lineEnd - line + 1, false))
         } else {
-          blockView.add(displays[0]!!, Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, lineEnd - line + 1, false))
+          blockView.add(displays[0]!!,
+                        Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, lineEnd - line + 1, false))
         }
         displays[0]!!.setPosition(0)
         displays[0]!!.updateText()
@@ -556,7 +562,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       }
     }
     if (detailDisplay != null) {
-      val record: Int = blockView.getModel().activeRecord
+      val record: Int = blockView.model.activeRecord
       // is there no active line, show the same content then the first row
       // in the chart
       var dispLine = if (record >= 0) blockView.getDisplayLine(record) else 0
@@ -627,7 +633,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * This may be used to execute actions after creating the field
    * displays.
    */
-  protected fun fireDisplayCreated() {
+  protected open fun fireDisplayCreated() {
     // to be redefined if needed
   }
 
@@ -647,7 +653,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
 
   fun getLabel(): ULabel = dl
 
-  fun getDetailLabel(): ULabel = dlDetail
+  fun getDetailLabel(): ULabel? = dlDetail
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -664,7 +670,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
   lateinit var displays: Array<UField?> // the object displayed on screen
     private set
   private lateinit var dl: ULabel // label text
-  private lateinit var dlDetail: ULabel // label text (chart)
+  private var dlDetail: ULabel? = null // label text (chart)
   var detailDisplay: UField? = null // the object displayed on screen (detail)
     private set
   private var line = 0 // USE A VPosition !!!!
@@ -703,7 +709,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     hasAutofill = model.hasAutofill() && !hasAutofillCommand()
     commands = cmd
     if (model.list != null) {
-      if (model.list!!.newForm != null || model.list!!.action != -1) {
+      if (model.list!!.newForm != null || model.list!!.action != null) {
         hasNewItem = true
         hasEditItem = hasNewItem
       }
