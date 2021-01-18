@@ -152,7 +152,8 @@ class WelcomeView(locale: Locale,
   /**
    * Focus on the first field in the login panel.
    */
-  fun focus() { //loginWindow.focus(); TODO
+  fun focus() {
+    loginWindow!!.focus()
   }
 
   fun clear() { //super.clear();
@@ -188,11 +189,11 @@ class WelcomeView(locale: Locale,
     main = VMain()
     loginWindow = VLoginWindow()
     addToNavbar(header)
-    setContent(main)
+    content = main
     header!!.setMainMenu(VEmptyModuleList())
     val content = VContent()
     main!!.setContent(content)
-    val loginView: VLoginView = VLoginView()
+    val loginView = VLoginView()
     loginView.setLoginWindow(loginWindow)
     content.setContent(loginView)
     setHref(href)

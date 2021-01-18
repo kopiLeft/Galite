@@ -25,6 +25,7 @@ import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.shared.Registration
 
 /**
@@ -128,7 +129,7 @@ class VWindows : Div(), HasEnabled {
     inner = VLIPanel()
     anchor = Anchor()
     label = Span()
-    icon = Icon()
+    icon = Icon(VaadinIcon.COPY_O)
     windowsLink.add(inner)
     anchor.href = "#"
     windowsLink.setId("windows_link")
@@ -137,7 +138,6 @@ class VWindows : Div(), HasEnabled {
     add(windowsLink)
     anchor.add(label)
     anchor.add(icon)
-    icon.element.setAttribute("name", "clone")
     hideLabel()
   }
 }

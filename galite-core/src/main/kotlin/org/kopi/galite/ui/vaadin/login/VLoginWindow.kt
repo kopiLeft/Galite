@@ -143,7 +143,7 @@ class VLoginWindow : Div() {
    * Focus on the first field in the login box.
    */
   fun focus() {
-    //  loginBox.focus(); TODO
+    loginBox.focus()
   }
 
   //---------------------------------------------------

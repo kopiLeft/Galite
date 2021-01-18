@@ -18,15 +18,15 @@
 package org.kopi.galite.ui.vaadin.common
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * The window header component.
  */
-class VHeader : Div() {
+class VHeader : HorizontalLayout() {
   //---------------------------------------------------
-// DATA MEMBERS
-//---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
   /**
    * Sets the main menu component.
    *

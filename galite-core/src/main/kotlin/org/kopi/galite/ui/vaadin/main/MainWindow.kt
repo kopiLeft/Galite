@@ -21,10 +21,21 @@ import java.util.Locale
 
 import kotlin.collections.MutableList
 
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.common.VContent
+import org.kopi.galite.ui.vaadin.common.VHeader
+import org.kopi.galite.ui.vaadin.common.VMain
+import org.kopi.galite.ui.vaadin.menu.ModuleList
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import org.kopi.galite.ui.vaadin.menu.ModuleList
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.ShortcutEvent
+import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.component.applayout.AppLayout
+import com.vaadin.flow.component.contextmenu.MenuItem
 
 /**
  * Main application window composed of a header and content.
@@ -36,9 +47,52 @@ import org.kopi.galite.ui.vaadin.menu.ModuleList
  * @param logo The application logo
  * @param href The logo link.
  */
-class MainWindow(locale: Locale,
-                 val logo: String,
-                 val href: String) : Focusable<MainWindow>, VerticalLayout() {
+class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, Focusable<MainWindow> {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+
+  private val listeners = mutableListOf<MainWindowListener>()
+  private val main = VMain()
+  private var menus: MutableList<ModuleList>? = null
+  private val header = VHeader()
+  private val windowsLink = VWindows()
+  private val welcome = VWelcome()
+  private val content = VContent()
+  private val container = VWindowContainer()
+  private val locale: String? = null
+  private var windowsList = mutableListOf<Component>()
+  private val windows = mutableMapOf<Component, MenuItem>()
+  private val windowsMenu = VWindowsDisplay()
+  private var currentWindow: Component? = null
+  private val originalWindowTitle: String? = null
+
+  init {
+    className = Styles.MAIN_WINDOW
+    setHref(href)
+    setLogo(logo)
+    setTarget("_blank")
+
+    content.setContent(container)
+    addToNavbar(header)
+    header.setWindows(windowsLink)
+    header.setWelcome(welcome)
+    main.setContent(content)
+    main.width = "100%"
+    main.height = "100%"
+    content.width = "100%"
+    content.height = "100%"
+    setContent(main)
+    Shortcuts.addShortcutListener(this, this::goToPreviousPage, Key.PAGE_UP, KeyModifier.of("Alt"))
+    Shortcuts.addShortcutListener(this, this::goToNextPage, Key.PAGE_DOWN, KeyModifier.of("Alt"))
+    instance = this
+  }
+
+  companion object {
+    private var instance: MainWindow? = null
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
@@ -51,7 +105,7 @@ class MainWindow(locale: Locale,
       menus = ArrayList()
     }
     menus!!.add(moduleList)
-    add(moduleList)
+    main.add(moduleList)
   }
 
   /**
@@ -59,8 +113,8 @@ class MainWindow(locale: Locale,
    * @param window The window to be added.
    */
   fun addWindow(window: Component) {
-    windows.add(window)
-    add(window)
+    windowsList.add(window)
+    main.add(window)
   }
 
   /**
@@ -69,7 +123,7 @@ class MainWindow(locale: Locale,
    */
   fun removeWindow(window: Component) {
     if (equals(window.parent)) {
-      windows.remove(window)
+      windowsList.remove(window)
       remove(window)
       /*if (window is PopupWindow) { TODO
         (window as PopupWindow).fireOnClose() // fire close event
@@ -83,10 +137,9 @@ class MainWindow(locale: Locale,
   var connectedUser: String? = null
 
   operator fun iterator(): Iterator<Component> {
-    val components: MutableList<Component>
-    components = ArrayList<Component>()
+    val components = mutableListOf<Component>()
     components.addAll(menus!!)
-    components.addAll(windows)
+    components.addAll(windowsList)
     return components.iterator()
   }
 
@@ -151,10 +204,64 @@ class MainWindow(locale: Locale,
     }
   }
 
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var menus: MutableList<ModuleList>? = null
-  private var windows = mutableListOf<Component>()
-  private val listeners = mutableListOf<MainWindowListener>()
+
+  /**
+   * Sets the href for the anchor element.
+   * @param href the href
+   */
+  fun setHref(href: String?) {
+    header.setHref(href)
+  }
+
+  /**
+   * Sets the target frame.
+   * @param target The target frame.
+   */
+  fun setTarget(target: String?) {
+    header.setTarget(target)
+  }
+
+  /**
+   * Sets the company logo image.
+   * @param url The image URL.
+   * @param alt The alternate text.
+   */
+  fun setImage(url: String?, alt: String?) {
+    header.setImage(url!!, alt)
+  }
+
+  /**
+   * Sets the company logo image.
+   *
+   * @param logo The logo image URL.
+   * @param alt  The alternate text.
+   */
+  fun setLogo(logo: String?, alt: String? = null) {
+    if (logo != null) {
+      header.setImage(logo, alt)
+    }
+  }
+
+  /**
+   * Shows the next window
+   */
+  fun goToNextPage(event: ShortcutEvent) {
+    gotoWindow(true)
+  }
+
+  /**
+   * Shows the previous window
+   */
+  fun goToPreviousPage(event: ShortcutEvent) {
+    gotoWindow(false)
+  }
+
+  /**
+   * Shows the next or previous window according to a flag
+   * @param next Should we goto the next window ?
+   * Otherwise, it is the previous window that must be shown.
+   */
+  protected fun gotoWindow(next: Boolean) {
+    // TODO
+  }
 }

@@ -17,6 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import java.awt.Component
+
+import org.kopi.galite.ui.vaadin.menu.ModuleItem
+import org.kopi.galite.ui.vaadin.menu.ModuleList
+import org.kopi.galite.ui.vaadin.menu.ModuleListMenu
+
 import com.vaadin.flow.component.html.Div
 
 /**
@@ -24,7 +30,101 @@ import com.vaadin.flow.component.html.Div
  * Contains also the logout button to disconnect from application.
  */
 class VWelcome : Div() {
-  fun init() {
 
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  // menues
+  private var userMenu = ModuleListMenu(true)
+  private var adminMenu = ModuleListMenu(true)
+  private var bookmarksMenu = ModuleListMenu(true)
+  private var workspaceContextMenu = ModuleListMenu(true)
+
+  // items
+  private var userItem: ModuleItem = ModuleItem()
+  private var adminItem = ModuleItem()
+  private var bookmarksItem = ModuleItem()
+  private var workspaceContextItem = ModuleItem()
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+  /**
+   * Creates the welcome text widget.
+   */
+  init {
+    setId("welcome")
+    userMenu.addItem(userItem, false, true)
+    adminMenu.addItem(adminItem, false, true)
+    bookmarksMenu.addItem(bookmarksItem, false, true)
+    workspaceContextMenu.addItem(workspaceContextItem, false, true)
+    add(workspaceContextMenu)
+    add(bookmarksMenu)
+    add(adminMenu)
+    add(userMenu)
+    userMenu.autoOpen = false
+    adminMenu.autoOpen = false
+    bookmarksMenu.autoOpen = false
+    workspaceContextMenu.autoOpen = false
+    userMenu.setId("user_menu")
+    adminMenu.setId("admin_menu")
+    bookmarksMenu.setId("bookmarks_menu")
+    workspaceContextMenu.setId("wrkcontext_menu")
+  }
+
+  /**
+   * Sets the user menu.
+   * @param menu The menu widget.
+   */
+  fun setUserMenu(menu: ModuleList) {
+    userItem.root = false
+    userItem.buildContent()
+    userItem.setIcon("user")
+    if (menu.menu != null) {
+      userItem.subMenu = menu.menu
+    }
+  }
+
+  /**
+   * Sets the connected user.
+   * @param username The user name.
+   */
+  fun setConnectedUser(username: String?) {
+    userItem.caption = username
+  }
+
+  /**
+   * Sets the admin menu.
+   * @param menu The menu widget.
+   */
+  fun setAdminMenu(menu: ModuleList) {
+    adminItem.root = false
+    adminItem.buildContent()
+    adminItem.setIcon("cog")
+    if (menu.menu != null) {
+      adminItem.subMenu = menu.menu
+    }
+  }
+
+  /**
+   * Sets the bookmarks menu.
+   * @param menu The menu widget.
+   */
+  fun setBookmarksMenu(menu: ModuleList) {
+    bookmarksItem.root = false
+    bookmarksItem.buildContent()
+    bookmarksItem.setIcon("star")
+    if (menu.menu != null) {
+      bookmarksItem.subMenu = menu.menu
+    }
+  }
+
+  /**
+   * Sets the workspace context menu.
+   * @param menu The menu widget.
+   */
+  fun setWorkspaceContextItemMenu(menu: Component) {
+    workspaceContextItem.root = false
+    workspaceContextItem.buildContent()
+    workspaceContextItem.setIcon("map-marker")
   }
 }
