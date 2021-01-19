@@ -142,7 +142,7 @@ abstract class Report : Window() {
     (writer as ReportLocalizationWriter).genReport(title, help, fields, menus, actors)
   }
 
-  // TODO add Fixed types
+  // TODO add Decimal types
   fun MReport.addReportColumns() {
     columns = fields.map {
       if(it.group != null) {

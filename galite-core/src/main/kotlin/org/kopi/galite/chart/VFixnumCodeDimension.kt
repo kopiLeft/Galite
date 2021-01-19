@@ -18,11 +18,11 @@
 
 package org.kopi.galite.chart
 
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
- * Represents a fixed code chart column.
+ * Represents a decimal code chart column.
  *
  * @param ident         The column identifier.
  * @param isDimension   Is it a dimension column ?
@@ -37,7 +37,7 @@ class VFixnumCodeDimension(ident: String,
                            type: String,
                            source: String,
                            idents: Array<String>,
-                           private val codes: Array<NotNullFixed>)
+                           private val codes: Array<Decimal>)
           : VCodeDimension(ident,
                            format,
                            type,

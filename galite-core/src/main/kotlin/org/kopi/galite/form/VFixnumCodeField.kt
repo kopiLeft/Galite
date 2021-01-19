@@ -23,8 +23,7 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VFixnumCodeColumn
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.util.base.InconsistencyException
 
 /**
@@ -37,7 +36,7 @@ open class VFixnumCodeField(bufferSize: Int,
                             ident: String,
                             source: String,
                             names: Array<String>,
-                            private val codes: Array<Fixed?>) : VCodeField(bufferSize, ident, source, names) {
+                            private val codes: Array<Decimal?>) : VCodeField(bufferSize, ident, source, names) {
 
   /**
    * return a list column for list
@@ -61,17 +60,17 @@ open class VFixnumCodeField(bufferSize: Int,
    * @param     exclude         exclude the current record
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(exclude: Boolean): Fixed? {
-    var sum: Fixed? = null
+  fun computeSum(exclude: Boolean): Decimal? {
+    var sum: Decimal? = null
 
     for (i in 0 until block!!.bufferSize) {
       if (block!!.isRecordFilled(i)
               && !isNull(i)
               && (!exclude || i != block!!.activeRecord)) {
         if (sum == null) {
-          sum = NotNullFixed(0.0)
+          sum = Decimal(0.0)
         }
-        sum = sum.add(getFixed(i) as NotNullFixed)
+        sum = sum + getDecimal(i)
       }
     }
     return sum
@@ -82,21 +81,21 @@ open class VFixnumCodeField(bufferSize: Int,
    *
    * @return    the sum of the field values, null if none is filled.
    */
-  fun computeSum(): Fixed? = computeSum(false)
+  fun computeSum(): Decimal? = computeSum(false)
 
   /**
    * Returns the sum of every filled records in block.
    */
-  open fun getSum(): NotNullFixed? {
-    val sum: Fixed? = computeSum()
+  open fun getSum(): Decimal {
+    val sum = computeSum()
 
-    return if (sum == null) NotNullFixed(0.0) else sum as NotNullFixed?
+    return sum ?: Decimal(0.0)
   }
 
   /**
-   * Sets the field value of given record to a fixed value.
+   * Sets the field value of given record to a decimal value.
    */
-  override fun setFixed(r: Int, v: Fixed?) {
+  override fun setDecimal(r: Int, v: Decimal?) {
     if (v == null) {
       setCode(r, -1)
     } else {
@@ -120,7 +119,7 @@ open class VFixnumCodeField(bufferSize: Int,
    * Warning:	This method will become inaccessible to users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setFixed(r, v as? Fixed)
+    setDecimal(r, v as? Decimal)
   }
 
   /**
@@ -132,14 +131,14 @@ open class VFixnumCodeField(bufferSize: Int,
     return if (query.isNull(column)) {
       null
     } else {
-      query.getFixed(column)
+      query.getDecimal(column)
     }
   }
 
   /**
    * Returns the field value of given record as a int value.
    */
-  override fun getFixed(r: Int): Fixed = getObject(r) as Fixed
+  override fun getDecimal(r: Int): Decimal = getObject(r) as Decimal
 
   /**
    * Returns the field value of the current record as an object
@@ -154,7 +153,7 @@ open class VFixnumCodeField(bufferSize: Int,
   /**
    * Returns the data type handled by this field.
    */
-  override fun getDataType(): KClass<*> = Fixed::class
+  override fun getDataType(): KClass<*> = Decimal::class
 
   /*
    * ----------------------------------------------------------------------
@@ -164,7 +163,7 @@ open class VFixnumCodeField(bufferSize: Int,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  override fun formatFixed(value: Fixed): String {
+  override fun formatDecimal(value: Decimal): String {
     var code = -1 // cannot be null
     var i = 0
 

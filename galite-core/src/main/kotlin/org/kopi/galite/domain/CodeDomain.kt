@@ -37,8 +37,8 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
    * @param text the text
    * @param value the value
    */
-  operator fun set(text: String, value: T) {
-    val codeDescription = CodeDescription("id$${codes.size}", text, value)
+  infix fun String.keyOf(value: T) {
+    val codeDescription = CodeDescription("id$${codes.size}", this, value)
     codes.add(codeDescription)
   }
 

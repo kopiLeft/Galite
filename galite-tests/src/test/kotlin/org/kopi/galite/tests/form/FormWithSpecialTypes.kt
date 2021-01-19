@@ -24,35 +24,61 @@ import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Image
 
-object Users : Table() {
-  val name = varchar("name", 10)
+object Product : Table() {
+  val name = varchar("NAME", 10)
+  val price = decimal("PRICE", 10, 5)
   val image = blob("image")
+
 }
 
 object FormWithSpecialTypes : Form() {
   override val locale = Locale.FRANCE
   override val title = "form for test"
 
+  val edit = menu("Edit")
+
+  val autofillitem = actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  ) {
+    key  =  Key.F12         // key is optional here
+    icon = "column_chart"  // icon is optional here
+  }
+
   val blockWithSpecialTypes = insertBlock(BlockWithSpecialTypes())
 }
 
 class BlockWithSpecialTypes : FormBlock(1, 1, "Test block") {
-  val u = table(Users)
+  val p = table(Product)
 
-  val name = mustFill(domain = Domain<String>(width = 10), position = at(1, 1)) {
+  val price = visit(domain = Domain<Decimal>(width = 10, scale = 5), position = at(1, 1)) {
+    label = "price"
+    help = "The price"
+    minValue = Decimal.valueOf("1.9")
+    columns(p.price)
+  }
+
+  val name = visit(domain = Domain<String>(width = 10), position = at(1, 2)) {
     label = "name"
-    help = "The user name"
-    columns(u.name)
+    help = "The product name"
+    columns(p.name)
   }
 
-  val image = visit(domain = Domain<Image>(width = 100, height = 100 ), position = at(1, 2)) {
+  val image = visit(domain = Domain<Image>(width = 100, height = 100 ), position = at(1, 3)) {
     label = "image"
-    help = "The user image"
-    columns(u.image)
+    help = "The product image"
+    columns(p.image)
   }
 
+  init {
+    price.value = Decimal.valueOf("2")
+  }
 }
 
 fun main() {

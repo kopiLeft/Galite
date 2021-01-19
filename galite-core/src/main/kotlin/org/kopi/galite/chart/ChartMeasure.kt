@@ -50,7 +50,7 @@ open class ChartMeasure<T>(domain: Domain<T>) : ChartField<T>(domain) where T : 
     }
   }
 
-  // TODO add Fixed types
+  // TODO add Decimal types
   val model: VMeasure
     get() {
       val color: VColor? = if (colorTrigger != null) {

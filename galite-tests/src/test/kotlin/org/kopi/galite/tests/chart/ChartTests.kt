@@ -166,12 +166,12 @@ class ChartTests : TestBase() {
 
 class StringTestType(val param: Int) : CodeDomain<String>() {
   init {
-    this["cde1"] = "1"
+    "cde1" keyOf "1"
   }
 }
 
 class IntTestType(val param: Int) : CodeDomain<Int>() {
   init {
-    this["cde1"] = 1
+    "cde1" keyOf 1
   }
 }
