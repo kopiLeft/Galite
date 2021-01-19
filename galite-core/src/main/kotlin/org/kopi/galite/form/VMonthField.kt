@@ -27,7 +27,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VMonthColumn
 import org.kopi.galite.type.Month
-import org.kopi.galite.type.NotNullMonth
 import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
@@ -100,7 +99,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           }
 
           if (isMonth(month, year)) {
-            setMonth(rec, NotNullMonth(year, month))
+            setMonth(rec, Month(year, month))
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -114,7 +113,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           val year = GregorianCalendar()[Calendar.YEAR]
 
           if (isMonth(month, year)) {
-            setMonth(rec, NotNullMonth(year, month))
+            setMonth(rec, Month(year, month))
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -208,7 +207,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           }
 
           if (isMonth(month, year)) {
-            NotNullMonth(year, month)
+            Month(year, month)
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -222,7 +221,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           val year = GregorianCalendar()[Calendar.YEAR]
 
           if (isMonth(month, year)) {
-            NotNullMonth(year, month)
+            Month(year, month)
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }

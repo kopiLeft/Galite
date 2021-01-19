@@ -26,7 +26,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.db.Utils
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VWeekColumn
-import org.kopi.galite.type.NotNullWeek
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
@@ -169,7 +168,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
     }
     when {
       year == -1 -> {
-        val now: NotNullWeek = Week.now()
+        val now: Week = Week.now()
 
         year = now.year
       }
@@ -180,7 +179,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
         year += 1900
       }
     }
-    setWeek(rec, NotNullWeek(year, week))
+    setWeek(rec, Week(year, week))
   }
 
   // ----------------------------------------------------------------------
@@ -236,7 +235,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
    */
   override fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? {
     val tmp = result[column] as? Int ?: return null
-    return NotNullWeek(tmp / 100, tmp % 100)
+    return Week(tmp / 100, tmp % 100)
   }
 
   /**
@@ -342,7 +341,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
     }
     when {
       year == -1 -> {
-        val now: NotNullWeek = Week.now()
+        val now: Week = Week.now()
 
         year = now.year
       }
@@ -353,7 +352,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
         year += 1900
       }
     }
-    return NotNullWeek(year, week)
+    return Week(year, week)
   }
 
   /**
@@ -426,7 +425,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
       if (handler == null || force) {
         setWeek(block!!.activeRecord, Week.now())
       } else {
-        setWeek(block!!.activeRecord, NotNullWeek(handler.selectDate(getWeek(block!!.activeRecord).getFirstDay())))
+        setWeek(block!!.activeRecord, Week(handler.selectDate(getWeek(block!!.activeRecord).getFirstDay())))
       }
       true
     }

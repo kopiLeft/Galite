@@ -18,14 +18,14 @@
 
 package org.kopi.galite.db
 
+import org.kopi.galite.type.Date
 import java.sql.Blob
 
 import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.type.NotNullTimestamp
-import org.kopi.galite.type.NotNullWeek
-import org.kopi.galite.type.NotNullMonth
-import org.kopi.galite.type.NotNullTime
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 
 class Query(conn: Connection) {
 
@@ -41,7 +41,7 @@ class Query(conn: Connection) {
     TODO()
   }
 
-  fun getWeek(pos: Int): NotNullWeek = TODO()
+  fun getWeek(pos: Int): Week = TODO()
 
   fun getString(pos: Int): String = TODO()
 
@@ -65,17 +65,17 @@ class Query(conn: Connection) {
 
   fun isNull(column: Int): Boolean = TODO()
 
-  fun getDate(pos: Int): NotNullDate = TODO()
+  fun getDate(pos: Int): Date = TODO()
 
   fun getBoolean(column: Int): Boolean = TODO()
 
   fun getObject(pos: Int): Any = TODO()
 
-  fun getTimestamp(pos: Int): NotNullTimestamp = TODO()
+  fun getTimestamp(pos: Int): Timestamp = TODO()
 
   fun getDecimal(pos: Int): Decimal = TODO()
 
-  fun getTime(pos: Int): NotNullTime = TODO()
+  fun getTime(pos: Int): Time = TODO()
 
-  fun getMonth(pos: Int): NotNullMonth = TODO()
+  fun getMonth(pos: Int): Month = TODO()
 }

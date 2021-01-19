@@ -23,7 +23,6 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimeColumn
-import org.kopi.galite.type.NotNullTime
 import org.kopi.galite.type.Time
 import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
@@ -164,7 +163,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         if (!isTime(hours, minutes)) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
         }
-        setTime(rec, NotNullTime(hours, minutes))
+        setTime(rec, Time(hours, minutes))
       }
     }
   }
@@ -320,7 +319,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         if (!isTime(hours, minutes)) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
         }
-        NotNullTime(hours, minutes)
+        Time(hours, minutes)
       }
     }
   }

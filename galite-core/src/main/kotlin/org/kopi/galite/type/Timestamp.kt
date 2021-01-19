@@ -15,35 +15,158 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.type
 
+import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.*
 
-open class Timestamp {
+/**
+ * This class represents kopi timestamp types
+ */
+class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp>() {
 
-  fun compareTo(other: Timestamp): Int = TODO()
+  constructor(image: String) : this(java.sql.Timestamp.valueOf(image))
 
-  fun add(millis: Long): NotNullTimestamp = TODO()
+  constructor(millis: Long) : this(java.sql.Timestamp(millis))
+
+  constructor(calendar: Calendar) : this(java.sql.Timestamp(calendar.timeInMillis))
+
+  /**
+   * Formats the timestamp according to the given format and locale
+   *
+   * @param     format  the format. see SimpleDateFormat
+   * @param     locale  the locale to use
+   */
+  fun format(format: String, locale: Locale = Locale.getDefault()): String {
+    return SimpleDateFormat(format, locale).format(sqlTimestamp)
+  }
+
+  /**
+   * create an instance of calendar to represent timestamp.
+   */
+  fun toCalendar(): GregorianCalendar {
+    val calendar = GregorianCalendar()
+    calendar.clear()
+    calendar.timeInMillis = sqlTimestamp.time
+    return calendar
+  }
+
+  // ----------------------------------------------------------------------
+  // DEFAULT OPERATIONS
+  // ----------------------------------------------------------------------
+  fun add(millis: Long): Timestamp {
+    return Timestamp(sqlTimestamp.time + millis)
+  }
+  // ----------------------------------------------------------------------
+  // OTHER OPERATIONS
+  // ----------------------------------------------------------------------
+  /**
+   * Compares to another time.
+   *
+   * @param        other        the second operand of the comparison
+   * @return        -1 if the first operand is smaller than the second
+   * 1 if the second operand if smaller than the first
+   * 0 if the two operands are equal
+   */
+  override operator fun compareTo(other: Timestamp): Int {
+    return sqlTimestamp.compareTo(other.sqlTimestamp)
+  }
+
+  // ----------------------------------------------------------------------
+  // TYPE IMPLEMENTATION
+  // ----------------------------------------------------------------------
+  /**
+   * Compares two objects
+   */
+  override fun equals(other: Any?): Boolean {
+    return other is Timestamp &&
+            other.sqlTimestamp.equals(sqlTimestamp)
+  }
+
+  /**
+   * Format the object depending on the current language
+   * @param        locale        the current language
+   */
+  override fun toString(locale: Locale): String {
+    val tmp = StringBuffer(normal.format(sqlTimestamp))
+    val nanos = sqlTimestamp.nanos
+    when {
+      nanos >= 100 -> {
+        tmp.append(nanos)
+      }
+      nanos >= 10 -> {
+        tmp.append("0$nanos")
+      }
+      else -> {
+        tmp.append("00$nanos")
+      }
+    }
+    return tmp.toString()
+  }
 
   /**
    * Represents the value in sql
    */
-  open fun toSql(): String? {
-
-    val micro: String = (timestamp!!.nanos / 1000).toString()
-
+  override fun toSql(): String {
+    val micro = (sqlTimestamp.nanos / 1000).toString()
     val tmp = buildString {
       append("00000".substring(0, 6 - micro.length))
       append(micro)
     }
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(timestamp)
+    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(
+            sqlTimestamp)
+  }
+
+  override fun hashCode(): Int {
+    return sqlTimestamp.hashCode()
   }
 
   companion object {
-    fun now(): NotNullTimestamp = TODO()
-    fun parse(input: String, format: String): NotNullTimestamp = TODO()
-  }
+    /**
+     * now's timestamp
+     */
+    fun now(): Timestamp {
+      return Timestamp(System.currentTimeMillis())
+    }
 
-  private val timestamp: java.sql.Timestamp? = null
+    /**
+     * Parse the string to build the corresponding timestamp using the
+     * default Locale
+     *
+     * @param     input   the timestamp to parse
+     * @param     format  the format of the timestamp
+     */
+    fun parse(input: String, format: String): Timestamp {
+      return parse(input, format, Locale.getDefault())
+    }
+
+    /**
+     * Parse the string to build the corresponding timestamp
+     *
+     * @param     input   the timestamp to parse
+     * @param     format  the format of the timestamp
+     * @param     locale  the Locale to use
+     */
+    fun parse(
+            input: String,
+            format: String,
+            locale: Locale,
+    ): Timestamp {
+      val cal = GregorianCalendar()
+      try {
+        cal.time = SimpleDateFormat(format, locale).parse(input)
+      } catch (e: ParseException) {
+        e.printStackTrace()
+        throw IllegalArgumentException(e.message)
+      }
+      return Timestamp(cal.timeInMillis)
+    }
+
+    // --------------------------------------------------------------------
+    // DATA MEMBERS
+    // --------------------------------------------------------------------
+    val DEFAULT = Timestamp(0)
+    private val normal = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+  }
 }
