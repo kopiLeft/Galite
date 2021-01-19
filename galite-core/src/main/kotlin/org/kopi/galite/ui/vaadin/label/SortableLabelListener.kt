@@ -15,32 +15,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.block
+package org.kopi.galite.ui.vaadin.label
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasComponents
+import java.io.Serializable
 
 /**
- * The block layout should provides its children
- * and set a given component in a specified position.
+ * Registered objects are notified with sort performed
+ * on table column
  */
-interface BlockLayout : HasComponents {
-
+interface SortableLabelListener : Serializable {
   /**
-   * Adds a component to this block layout.
-   *
-   * @param component  The component to be added.
-   * @param x          the x position.
-   * @param y          The y position.
-   * @param width      the column span width.
-   * @param alignRight Is it right aligned ?
-   * @param useAll     Use all available area ?
+   * Fired when a sort should be performed to the given index.
+   * @param mode The sort mode.
    */
-  fun addComponent(component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean, useAll: Boolean)
-
-  /**
-   * Handles the layout visibility according to fields and header visibilities.
-   */
-  fun handleLayoutVisibility()
-
+  fun onSort(mode: Int)
 }

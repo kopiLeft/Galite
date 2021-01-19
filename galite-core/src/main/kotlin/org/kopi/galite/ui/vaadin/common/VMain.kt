@@ -27,6 +27,7 @@ class VMain : Div() {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+
   /**
    * Sets this main window content.
    * @param content The window content.
@@ -35,9 +36,11 @@ class VMain : Div() {
     removeAll()
     add(content)
   }
+
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
+
   /**
    * Creates the main component instance.
    */

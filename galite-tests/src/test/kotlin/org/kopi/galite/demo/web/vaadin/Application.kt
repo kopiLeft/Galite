@@ -16,6 +16,9 @@
  */
 package org.kopi.galite.demo.web.vaadin
 
+import com.github.mvysny.kaributesting.v10.label
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.router.Route
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -24,6 +27,8 @@ import org.kopi.galite.tests.VApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
+import org.kopi.galite.ui.vaadin.label.Label
+import org.kopi.galite.ui.vaadin.label.SortableLabel
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration

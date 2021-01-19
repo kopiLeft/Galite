@@ -27,8 +27,9 @@ import com.vaadin.flow.component.html.Image
  */
 class VLogo : VAnchorPanel() {
   //---------------------------------------------------
-// IMPLEMENTATIONS
-//---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+
   /**
    * Sets the logo image.
    * @param url The image URL
@@ -47,9 +48,11 @@ class VLogo : VAnchorPanel() {
   // DATA MEMBERS
   //---------------------------------------------------
   private val image = Image()
+
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
+
   /**
    * Creates the logo component instance.
    */
