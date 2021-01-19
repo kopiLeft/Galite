@@ -34,7 +34,7 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
                                       val height: Int? = null,
                                       val visibleHeight: Int? = null) {
   companion object {
-    operator fun <T: Decimal> invoke(width: Int, scale: Int): Domain<Decimal> =
+    operator fun <T: Decimal?> invoke(width: Int, scale: Int): Domain<Decimal> =
             Domain(width, scale, null)
   }
 

@@ -252,22 +252,22 @@ object Triggers {
   /**
    * Compute the decimal average in a report column
    */
-  fun avgDecimal(c: VReportColumn): VCalculateColumn {
+  fun avgDecimal(c: ReportField<Decimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val leafCount = row.leafCount
         var notNullLeafCount = 0.0
         var result = Decimal(0, 2)
-        var leaf = row.firstLeaf as VReportRow
+        var leaf = row.firstLeaf as? VReportRow
 
         for (i in 0 until leafCount) {
-          val value = leaf.getValueAt(column) as? Decimal
+          val value = leaf!!.getValueAt(column) as? Decimal
 
           if (value != null) {
             result = result + value
             notNullLeafCount++
           }
-          leaf = leaf.nextLeaf as VReportRow
+          leaf = leaf.nextLeaf as? VReportRow
         }
         return if (notNullLeafCount != 0.0) {
           (result / Decimal(notNullLeafCount)).setScale(2)
