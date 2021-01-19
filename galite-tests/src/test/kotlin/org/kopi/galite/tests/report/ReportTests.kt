@@ -33,6 +33,8 @@ import org.kopi.galite.report.Triggers
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.VApplicationTestBase
+import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.decimal
 
 import kotlin.test.assertEquals
 
@@ -233,21 +235,34 @@ object SimpleReport : Report() {
     help = "The user profession"
   }
 
+  val salary = field(Domain<Decimal>(width = 10, scale = 5)) {
+    label = "age"
+    help = "The user age"
+    align = FieldAlignment.LEFT
+    compute {
+      // Computes the average of ages
+      Triggers.avgDecimal(this)
+    }
+  }
+
   init {
     add {
       this[name] = "Sami"
       this[age] = 22
       this[profession] = "Journalist"
+      this[salary] = decimal("2000")
     }
     add {
       this[name] = "Sofia"
       this[age] = 23
       this[profession] = "Dentist"
+      this[salary] = decimal("2000.55")
     }
     add {
       this[age] = 25
       this[profession] = "Baker"
       this[name] = "Sofia"
+      this[salary] = decimal("2000.55")
     }
   }
 }

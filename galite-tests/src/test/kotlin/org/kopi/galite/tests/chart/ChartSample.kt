@@ -25,6 +25,8 @@ import org.kopi.galite.common.CHARTTYPE
 import org.kopi.galite.common.INITCHART
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.decimal
 import org.kopi.galite.visual.VColor
 
 object ChartSample: Chart() {
@@ -50,7 +52,7 @@ object ChartSample: Chart() {
     }
   }
 
-  val area = measure(Domain<Int?>(10)) {
+  val area = measure(Domain<Decimal?>(width = 10, scale = 5)) {
     label = "area (ha)"
 
     color {
@@ -86,18 +88,18 @@ object ChartSample: Chart() {
 
   init {
     city.add("Tunis") {
-      this[area] = 34600
+      this[area] = decimal("34600")
       this[population] = 1056247
     }
 
     city.add("Kasserine") {
-      this[area] = 806600
+      this[area] = decimal("806600")
       this[population] = 439243
     }
 
     city.add("Bizerte") {
       this[population] = 368500
-      this[area] = 568219
+      this[area] = decimal("568219")
     }
   }
 }

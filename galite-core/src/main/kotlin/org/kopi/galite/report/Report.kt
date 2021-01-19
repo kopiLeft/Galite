@@ -29,6 +29,7 @@ import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.type.Date
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -167,6 +168,9 @@ abstract class Report : Window() {
         String::class ->
           VStringColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
                         it.domain.height ?: 0, format)
+        Decimal::class ->
+          VFixnumColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
+                             it.domain.height ?: 0, format)
         Boolean::class ->
           VBooleanColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Date::class, java.util.Date::class ->
