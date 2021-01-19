@@ -21,13 +21,9 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
-import com.vaadin.flow.component.textfield.Autocomplete
-import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.dom.Element
-
 import org.kopi.galite.ui.vaadin.base.Styles
 
-class VInputTextField : TextField() {
+class VInputTextField : com.vaadin.componentfactory.Autocomplete() {
 
   var hasAutocomplete = false
   private var valueBeforeEdit = ""
@@ -36,11 +32,9 @@ class VInputTextField : TextField() {
 
   /**
    * Protected constructor to use to create other types of fields.
-   * @param node The node element.
    */
   init {
-    className = Styles.TEXT_INPUT
-    this.addKeyPressListener { event: KeyPressEvent? -> onKeyPress(event) }
+    element.classList.add(Styles.TEXT_INPUT)
     Shortcuts.addShortcutListener(this,
                                   { keyPasteEvent: ShortcutEvent? -> onBrowserEvent(keyPasteEvent) },
                                   Key.PASTE)
@@ -52,9 +46,9 @@ class VInputTextField : TextField() {
             .listenOn(this)
 
     if (hasAutocomplete) {
-      this.autocomplete = Autocomplete.ON
+      element.setProperty("autocomplete", "on")
     } else {
-      this.autocomplete = Autocomplete.OFF
+      element.setProperty("autocomplete", "off")
     }
   }
 
@@ -76,10 +70,11 @@ class VInputTextField : TextField() {
   fun setText(text: String?) {
     // set record to synchronize view and model even field is not focused
     var text = text
+
     setRecord()
     // set only valid inputs
     if (validationStrategy is NoeditValidationStrategy
-            || validationStrategy!!.validate(text, maxLength)) {
+            || validationStrategy!!.validate(text, element.getProperty("maxlength", 0.0).toInt())) {
       if (text == null) {
         text = "" // avoid NullPointerException
       }
@@ -136,15 +131,15 @@ class VInputTextField : TextField() {
    * Returns the field max length.
    * @return The field max length.
    */
-  override fun getMaxLength(): Int {
-    return this.maxLength
+  fun getMaxLength(): Int {
+    return element.getProperty("maxlength", 0.0).toInt()
   }
 
   /**
    * Sets the text zone max length.
    * @param maxLength The max length.
    */
-  override fun setMaxLength(maxLength: Int) {
+  fun setMaxLength(maxLength: Int) {
     updateMaxLength(maxLength)
   }
 
@@ -157,7 +152,7 @@ class VInputTextField : TextField() {
    */
   protected fun updateMaxLength(maxLength: Int) {
     if (maxLength >= 0) {
-      this.maxLength = maxLength
+      element.setProperty("maxlength", maxLength.toDouble())
     } else {
       element.removeAttribute("maxLength")
     }
@@ -170,7 +165,7 @@ class VInputTextField : TextField() {
    */
   protected fun setMaxLengthToElement(newMaxLength: Int) {
     if (newMaxLength >= 0) {
-      element.setAttribute("maxLength", newMaxLength.toString())
+      element.setProperty("maxLength", newMaxLength.toDouble())
     } else {
       element.removeAttribute("maxLength")
     }
@@ -182,14 +177,5 @@ class VInputTextField : TextField() {
    */
   fun updateFieldContent(text: String?) {
     this.value = text
-  }
-
-
-  fun autoCompelete(name : String) {
-    this.apply {
-      element.setAttribute("name", name)
-      element.appendChild(Element("input").setAttribute("slot", "input"))
-
-    }
   }
 }

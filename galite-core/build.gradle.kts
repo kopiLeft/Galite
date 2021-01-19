@@ -29,6 +29,12 @@ val hylafaxVersion = "1.0.0"
 val jFreeChartVersion = "1.0.19"
 val getoptVersion = "1.0.13"
 
+repositories {
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
+
 dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
@@ -42,6 +48,7 @@ dependencies {
             .forEach { group -> exclude(group = group) }
   }
 
+  implementation("com.vaadin.componentfactory", "autocomplete", "2.3.1")
   // Itext dependency
   implementation("com.lowagie", "itext", itextVersion)
 
