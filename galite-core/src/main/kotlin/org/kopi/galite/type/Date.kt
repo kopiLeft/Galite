@@ -225,8 +225,8 @@ open class Date : Type<Date> {
       val now = Calendar.getInstance()
 
       return Date(now[Calendar.YEAR],
-                         now[Calendar.MONTH] + 1,
-                         now[Calendar.DAY_OF_MONTH])
+                  now[Calendar.MONTH] + 1,
+                  now[Calendar.DAY_OF_MONTH])
     }
 
     /**
@@ -259,8 +259,8 @@ open class Date : Type<Date> {
         throw IllegalArgumentException(e.message)
       }
       return Date(cal[Calendar.YEAR],
-                         cal[Calendar.MONTH] + 1,
-                         cal[Calendar.DAY_OF_MONTH])
+                  cal[Calendar.MONTH] + 1,
+                  cal[Calendar.DAY_OF_MONTH])
     }
 
     // --------------------------------------------------------------------
