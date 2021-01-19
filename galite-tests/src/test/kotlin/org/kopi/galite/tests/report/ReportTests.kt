@@ -58,13 +58,13 @@ class ReportTests: VApplicationTestBase() {
     assertEquals(listOf("Sami", "Sofia", "Sofia"), rows)
 
     val firstRow = SimpleReport.getRow(0)
-    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22, SimpleReport.profession to "Journalist"), firstRow)
+    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22, SimpleReport.profession to "Journalist", SimpleReport.salary to decimal("2000")), firstRow)
 
     val secondRow = SimpleReport.getRow(1)
-    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23, SimpleReport.profession to "Dentist"), secondRow)
+    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23, SimpleReport.profession to "Dentist", SimpleReport.salary to decimal("2000.55")), secondRow)
 
     val thirdRow = SimpleReport.getRow(2)
-    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 25, SimpleReport.profession to "Baker"), thirdRow)
+    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 25, SimpleReport.profession to "Baker", SimpleReport.salary to decimal("2000.55")), thirdRow)
   }
 
   /**
