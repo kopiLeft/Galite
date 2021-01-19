@@ -22,6 +22,12 @@ plugins {
   id("com.vaadin") version "0.17.0.1"
 }
 
+repositories {
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
+
 val vaadinVersion = "18.0.3"
 val jdomVersion = "2.0.5"
 val karibuTestingVersion = "1.2.5"
