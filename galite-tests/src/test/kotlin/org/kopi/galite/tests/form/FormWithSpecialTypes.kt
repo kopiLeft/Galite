@@ -50,16 +50,6 @@ object FormWithSpecialTypes : Form() {
   val action = menu("Action")
   val edit = menu("Edit")
 
-  val list = actor(
-          ident = "list",
-          menu = action,
-          label = "list",
-          help = "Display List",
-  ) {
-    key = Key.F1   // key is optional here
-    icon = "list"  // icon is optional here
-  }
-
   val save = actor(
           ident = "save",
           menu = action,
@@ -93,7 +83,6 @@ object FormWithSpecialTypes : Form() {
           p.selectAll().forEach {
             println("IMG -----------")
             println(it[p.image])
-            println(String(it[p.image].bytes))
           }
         }
       }
