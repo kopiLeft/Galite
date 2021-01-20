@@ -16,14 +16,13 @@
  */
 package org.kopi.galite.tests.form
 
-import org.jetbrains.exposed.sql.SchemaUtils
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.common.INIT
-import org.kopi.galite.common.PREBLK
+
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
