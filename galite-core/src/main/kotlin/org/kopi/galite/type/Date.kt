@@ -30,13 +30,13 @@ import java.util.regex.Pattern
 /**
  * This class represents date types
  */
-open class Date : Type {
+open class Date : Type<Date> {
 
-  internal constructor(year: Int, month: Int, day: Int) {
+  constructor(year: Int, month: Int, day: Int) {
     scalar = gregorianToJulian(year, month, day)
   }
 
-  internal constructor(date: java.sql.Date) {
+  constructor(date: java.sql.Date) {
     synchronized(calendar) {
       calendar.time = date
       scalar = gregorianToJulian(calendar[Calendar.YEAR],
@@ -142,17 +142,12 @@ open class Date : Type {
   /**
    * Returns a Date with the specified number of days added to this Date.
    */
-  fun add(days: Int): NotNullDate = NotNullDate(scalar + days)
+  fun add(days: Int): Date = Date(scalar + days)
 
   /**
    * Returns the number of days between two dates.
    */
-  fun subtract(other: Date?): Int? = if (other == null) null else subtract(other as NotNullDate)
-
-  /**
-   * Returns the number of days between two dates.
-   */
-  fun subtract(other: NotNullDate): Int = scalar - (other as Date).scalar
+  fun subtract(other: Date): Int = scalar - (other).scalar
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
@@ -170,14 +165,12 @@ open class Date : Type {
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  operator fun compareTo(other: Date): Int {
+  override operator fun compareTo(other: Date): Int {
     val v1 = scalar
     val v2 = other.scalar
 
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
-
-  override operator fun compareTo(other: Any?): Int = compareTo(other as? Date)
 
   /**
    * Format the object depending on the current language
@@ -228,12 +221,12 @@ open class Date : Type {
     /**
      * Today's date
      */
-    fun now(): NotNullDate {
+    fun now(): Date {
       val now = Calendar.getInstance()
 
-      return NotNullDate(now[Calendar.YEAR],
-                         now[Calendar.MONTH] + 1,
-                         now[Calendar.DAY_OF_MONTH])
+      return Date(now[Calendar.YEAR],
+                  now[Calendar.MONTH] + 1,
+                  now[Calendar.DAY_OF_MONTH])
     }
 
     /**
@@ -243,7 +236,7 @@ open class Date : Type {
      * @param     input   the date to parse
      * @param     format  the format of the date
      */
-    fun parse(input: String, format: String): NotNullDate = parse(input, format, Locale.getDefault())
+    fun parse(input: String, format: String): Date = parse(input, format, Locale.getDefault())
 
     /**
      * Parse the string to build the corresponding date
@@ -256,7 +249,7 @@ open class Date : Type {
             input: String,
             format: String,
             locale: Locale,
-    ): NotNullDate {
+    ): Date {
       val cal = GregorianCalendar()
 
       try {
@@ -265,9 +258,9 @@ open class Date : Type {
         e.printStackTrace()
         throw IllegalArgumentException(e.message)
       }
-      return NotNullDate(cal[Calendar.YEAR],
-                         cal[Calendar.MONTH] + 1,
-                         cal[Calendar.DAY_OF_MONTH])
+      return Date(cal[Calendar.YEAR],
+                  cal[Calendar.MONTH] + 1,
+                  cal[Calendar.DAY_OF_MONTH])
     }
 
     // --------------------------------------------------------------------
@@ -326,11 +319,15 @@ open class Date : Type {
     }
 
     private val calendar = GregorianCalendar()
-    private val ORIGIN = NotNullDate(1970, 1, 1)
-    val DEFAULT = NotNullDate(0)
+    private val ORIGIN = Date(1970, 1, 1)
+    val DEFAULT = Date(0)
 
     init {
       calendar.minimalDaysInFirstWeek = 4
     }
+  }
+
+  override fun hashCode(): Int {
+    return scalar.hashCode()
   }
 }

@@ -27,13 +27,13 @@ import java.util.Locale
  * This class represents the decimal type
  */
 class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
-  internal constructor(b: BigInteger) : this(BigDecimal(b))
+  constructor(b: BigInteger) : this(BigDecimal(b))
 
-  internal constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
+  constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
 
-  internal constructor(d: Double) : this(BigDecimal(d))
+  constructor(d: Double) : this(BigDecimal(d))
 
-  internal constructor(s: String) : this(BigDecimal(s))
+  constructor(s: String) : this(BigDecimal(s))
   // ----------------------------------------------------------------------
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------
@@ -242,6 +242,13 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
 
   override fun toChar(): Char = value.toChar()
 
+  override fun hashCode(): Int {
+    value.hashCode()
+    var result = value.hashCode()
+    result = 31 * result + maxScale
+    return result
+  }
+
   /**
    * The Max scale
    */
@@ -270,28 +277,3 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
     private const val serialVersionUID = 1L
   }
 }
-
-/**
- * Creates a Decimal type from a BigDecimal
- */
-fun decimal(bigDecimal: BigDecimal): Decimal = Decimal(bigDecimal)
-
-/**
- * Creates a Decimal type from a BigInteger
- */
-fun decimal(bigInteger: BigInteger): Decimal = Decimal(bigInteger)
-
-/**
- * Creates a Decimal type from a long value and scale
- */
-fun decimal(value: Long, scale: Int): Decimal = Decimal(value, scale)
-
-/**
- * Creates a Decimal type from a Double
- */
-fun decimal(double: Double): Decimal = Decimal(double)
-
-/**
- * Creates a Decimal type from a String
- */
-fun decimal(string: String): Decimal = Decimal(string)
