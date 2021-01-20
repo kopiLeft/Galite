@@ -21,6 +21,7 @@ import java.math.BigDecimal
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.joda.time.DateTime
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
@@ -45,6 +46,7 @@ import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFixnumCodeField
 import org.kopi.galite.form.VFixnumField
+import org.kopi.galite.form.VImageField
 import org.kopi.galite.form.VIntegerCodeField
 import org.kopi.galite.form.VIntegerField
 import org.kopi.galite.form.VMonthField
@@ -55,6 +57,7 @@ import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.Image
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -190,6 +193,17 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    */
   @JvmName("decimalColumns")
   fun FormField<Decimal>.columns(vararg joinColumns: Column<BigDecimal>, init: (FormFieldColumns<Decimal>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  @JvmName("imageColumns")
+  fun FormField<Image>.columns(vararg joinColumns: Column<ExposedBlob>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
     initColumn(*joinColumns, init = init)
   }
 
@@ -384,6 +398,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
           Week::class -> VWeekField(block.buffer)
           Time::class -> VTimeField(block.buffer)
           Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
+          Image::class -> VImageField(block.buffer,domain.width!!,domain.height!!)
           else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
         }
       }
