@@ -22,6 +22,7 @@ import java.sql.SQLException
 import java.util.Locale
 import java.util.ResourceBundle
 import java.util.Date
+import java.util.MissingResourceException
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -217,16 +218,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    dBContext = login(DatabaseProperties(defaultLocale)["url"],
-                      DatabaseProperties(defaultLocale)["driver"],
-                      DatabaseProperties(defaultLocale)["username"],
-                      DatabaseProperties(defaultLocale)["password"],
-                      DatabaseProperties(defaultLocale)["schema"])
-    dBContext = login(DatabaseProperties(defaultLocale)["url"],
-                      DatabaseProperties(defaultLocale)["driver"],
-                      DatabaseProperties(defaultLocale)["username"],
-                      DatabaseProperties(defaultLocale)["password"],
-                      DatabaseProperties(defaultLocale)["schema"])
+    dBContext = login(getParameter("url"),
+                      getParameter("driver"),
+                      getParameter("username"),
+                      getParameter("password"),
+                      getParameter("schema"))
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -250,7 +246,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override lateinit var defaultLocale: Locale
 
-  private val databaseProperties: ResourceBundle = ResourceBundle.getBundle("application", defaultLocale)
+  open var resourceFile = "application"
+
+  private val databaseProperties = ResourceBundle.getBundle(resourceFile)
+
 
   override var localizationManager: LocalizationManager? = null
 
@@ -262,11 +261,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // UTILS
   // --------------------------------------------------
 
-  operator fun get(key: String): String {
-    if (databaseProperties.containsKey(key)) {
+  fun getParameter(key: String): String {
+    try {
       return databaseProperties.getString(key)
+    } catch (e: MissingResourceException) {
+      throw MissingResourceException("\$Key doesn't exist", e.className, e.key)
     }
-    return "!{$key}!";
   }
 
   /**
