@@ -24,7 +24,6 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.common.INIT
 import org.kopi.galite.common.PREBLK
-
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
@@ -81,7 +80,7 @@ object FormWithSpecialTypes : Form() {
           SchemaUtils.create(p)
           saveBlock()
           p.selectAll().forEach {
-            println("IMG -----------")
+            println("Image successfully inserted!")
             println(it[p.image])
           }
         }
@@ -130,12 +129,10 @@ class BlockWithSpecialTypes : FormBlock(1, 1, "Test block") {
 
   init {
     price.value = Decimal.valueOf("2")
-    trigger(PREBLK, INIT) {
-      println("---------------works---------------")
-      id.value = 1
-      uc.value = 0
-      ts.value = 0
-    }
+    id.value = 1
+    uc.value = 0
+    ts.value = 0
+
   }
 }
 
