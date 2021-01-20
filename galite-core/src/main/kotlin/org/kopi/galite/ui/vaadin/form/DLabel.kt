@@ -17,13 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import java.awt.event.KeyEvent
-
 import org.kopi.galite.form.ULabel
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.label.SortableLabel
 import org.kopi.galite.visual.VActor
+import java.awt.event.KeyEvent
 
 /**
  * Creates a new `DLabel` instance.
@@ -35,6 +35,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+
   /**
    * Prepares the label's snapshot.
    * @param activ The field state.
@@ -43,8 +44,12 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     // TODO
   }
 
-  override fun init(text: String?, help: String?) {
-    TODO()
+  override fun init(text: String?, toolTip: String?) {
+    this.tooltip = toolTip
+    element.text = text
+    if (toolTip != null) {
+      element.text = Utils.createTooltip(toolTip)
+    }
   }
 
   /**
@@ -53,7 +58,28 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * @param row The field row.
    */
   fun update(model: VFieldUI, row: Int) {
-    TODO()
+    updateStyles(model.model.getAccess(row), model.model.hasFocus())
+    if (model.model.getAccess(row) == VConstants.ACS_SKIPPED) {
+      // Only show base help on a skipped field
+      // Actors are not shown since they are not active.
+      if (tooltip != null) {
+        element.text = Utils.createTooltip(tooltip)
+      }
+    } else {
+      val description = buildDescription(model, tooltip)
+      if (description != null) {
+        element.text = Utils.createTooltip(description)
+      }
+    }
+    if (model.model.getAccess(row) == VConstants.ACS_HIDDEN) {
+      if (element.isVisible) {
+        isVisible = false
+      }
+    } else {
+      if (!element.isVisible) {
+        isVisible = true
+      }
+    }
   }
 
   /**
@@ -85,8 +111,9 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * Returns the label text.
    * @return The label text.
    */
-  val text: String
-    get() = TODO()
+  override fun getText(): String? {
+    return element.text
+  }
 
   /**
    * Builds full field description.
@@ -121,18 +148,25 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  private var infoText: String? = null
+
   /**
-   * The info text.
+   * Returns the info text.
+   * @return The info text.
    */
-  var infoText: String? = null
-    set(info) {
-      TODO()
-    }
+  open fun getInfoText(): String? {
+    return infoText
+  }
+
+  override fun setInfoText(info: String?) {
+    infoText = info
+    super@DLabel.setInfoText(info)
+  }
 
   /**
    * `true` is the label is in detail mode.
    */
-  var isInDetail = false
+  var detailMode = false
   private var tooltip: String? = null
 
   companion object {
@@ -153,5 +187,19 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
         actor.menuItem
       }
     }
+  }
+
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+
+  /**
+   * Creates a new `DLabel` instance.
+   * @param text The label text.
+   * @param help The label help.
+   */
+  init {
+    setSortable(false)
+    init(text, help)
   }
 }

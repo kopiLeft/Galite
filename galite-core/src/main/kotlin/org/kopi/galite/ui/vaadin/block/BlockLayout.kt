@@ -37,4 +37,10 @@ interface BlockLayout : HasComponents {
    * @param useAll     Use all available area ?
    */
   fun addComponent(component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean, useAll: Boolean)
+
+  /**
+   * Handles the layout visibility according to fields and header visibilities.
+   */
+  fun handleLayoutVisibility()
+
 }

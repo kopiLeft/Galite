@@ -73,10 +73,10 @@ open class DFieldHandler(rowController: VFieldUI) : AbstractFieldHandler(rowCont
     val operator: Int = getModel().getSearchOperator()
     val info: String? = if (operator == VConstants.SOP_EQ) null else VConstants.OPERATOR_NAMES.get(operator)
     if (getRowController().getLabel() != null) {
-      (getRowController().getLabel() as DLabel).infoText = info
+      (getRowController().getLabel() as DLabel).setInfoText(info)
     }
     if (getRowController().getDetailLabel() != null) {
-      (getRowController().getDetailLabel() as DLabel).infoText = info
+      (getRowController().getDetailLabel() as DLabel).setInfoText(info)
     }
   }
 

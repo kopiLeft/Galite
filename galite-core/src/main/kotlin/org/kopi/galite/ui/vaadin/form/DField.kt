@@ -97,7 +97,7 @@ abstract class DField(protected val model: VFieldUI,
 
   override fun setInDetail(detail: Boolean) {
     inDetail = detail
-    label!!.isInDetail = detail
+    label!!.detailMode = detail
   }
 
   /**
