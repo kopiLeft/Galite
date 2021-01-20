@@ -3129,7 +3129,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    */
   protected fun fillIdField(recno: Int, id: Int) {
-    TODO()
+    if (id == -1) {
+      // id = KopiUtils.getNextTableId(form.getDBContext().getDefaultConnection(), tables!![0])
+    }
+
+    idField.setInt(recno, id)
   }
 
   /**
