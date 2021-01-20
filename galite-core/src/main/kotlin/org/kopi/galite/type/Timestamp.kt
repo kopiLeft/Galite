@@ -17,16 +17,19 @@
  */
 package org.kopi.galite.type
 
+import java.util.Calendar
+import java.util.GregorianCalendar
+import java.util.Locale
+
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * This class represents kopi timestamp types
  */
 class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp>() {
 
-  constructor(image: String) : this(java.sql.Timestamp.valueOf(image))
+  constructor(string: String) : this(java.sql.Timestamp.valueOf(string))
 
   constructor(millis: Long) : this(java.sql.Timestamp(millis))
 
@@ -47,6 +50,7 @@ class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp>() {
    */
   fun toCalendar(): GregorianCalendar {
     val calendar = GregorianCalendar()
+
     calendar.clear()
     calendar.timeInMillis = sqlTimestamp.time
     return calendar

@@ -81,6 +81,7 @@ open class Week(var scalar: Int) : Type<Week>() {
   override operator fun compareTo(other: Week): Int {
     val v1 = scalar
     val v2 = other.scalar
+
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
 
@@ -170,6 +171,7 @@ open class Week(var scalar: Int) : Type<Week>() {
      */
     fun now(): Week {
       val now = Calendar.getInstance()
+
       return Week(now[Calendar.YEAR], now[Calendar.WEEK_OF_YEAR])
     }
 

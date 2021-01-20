@@ -19,6 +19,8 @@ package org.kopi.galite.tests.report
 import java.io.File
 import java.util.Locale
 
+import kotlin.test.assertEquals
+
 import org.jdom2.input.SAXBuilder
 
 import org.junit.Test
@@ -33,8 +35,6 @@ import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.VApplicationTestBase
 import org.kopi.galite.type.Decimal
-
-import kotlin.test.assertEquals
 
 class ReportTests: VApplicationTestBase() {
 
