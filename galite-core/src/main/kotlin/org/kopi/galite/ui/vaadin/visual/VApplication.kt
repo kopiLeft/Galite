@@ -19,8 +19,9 @@
 package org.kopi.galite.ui.vaadin.visual
 
 import java.sql.SQLException
-import java.util.Date
 import java.util.Locale
+import java.util.ResourceBundle
+import java.util.Date
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -53,10 +54,6 @@ import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.PropertySource
-
 
 /**
  * The entry point for all Galite WEB applications.
@@ -64,8 +61,6 @@ import org.springframework.context.annotation.PropertySource
  * @param registry The [Registry] object.
  */
 @Route("")
-@Configuration
-@PropertySource("classpath:application.properties")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
   //---------------------------------------------------
@@ -76,15 +71,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var askAnswer = 0
   private lateinit var configuration: ApplicationConfiguration
   private var stylesInjector: StylesInjector? = null
-
-  @Value("\${database}")
-  private val myProperty: String? = null
-
-  @Value("\${driver}")
-  private val driver: String? = null
-
-  @Value("\${schema}")
-  private val schema: String? = null
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -230,17 +216,17 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @throws SQLException When cannot connect to database.
    * @see login
    */
-  private fun connectToDatabase(@Value("\${username}") username: String, @Value("\${password}") password: String) {
-    dBContext = login(myProperty!!,
-                      driver!!,
-                      username,
-                      password,
-                      schema)
-    dBContext = login(myProperty,
-                      driver,
-                      username,
-                      password,
-                      schema)
+  private fun connectToDatabase(username: String, password: String) {
+    dBContext = login(DatabaseProperties(defaultLocale)["url"],
+                      DatabaseProperties(defaultLocale)["driver"],
+                      DatabaseProperties(defaultLocale)["username"],
+                      DatabaseProperties(defaultLocale)["password"],
+                      DatabaseProperties(defaultLocale)["schema"])
+    dBContext = login(DatabaseProperties(defaultLocale)["url"],
+                      DatabaseProperties(defaultLocale)["driver"],
+                      DatabaseProperties(defaultLocale)["username"],
+                      DatabaseProperties(defaultLocale)["password"],
+                      DatabaseProperties(defaultLocale)["schema"])
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -264,6 +250,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override lateinit var defaultLocale: Locale
 
+  private val databaseProperties: ResourceBundle = ResourceBundle.getBundle("application", defaultLocale)
+
   override var localizationManager: LocalizationManager? = null
 
   override fun displayError(parent: UComponent, message: String) {
@@ -273,6 +261,14 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   //---------------------------------------------------
   // UTILS
   // --------------------------------------------------
+
+  operator fun get(key: String): String {
+    if (databaseProperties.containsKey(key)) {
+      return databaseProperties.getString(key)
+    }
+    return "!{$key}!";
+  }
+
   /**
    * Attaches the given component to the application.
    * @param component The component to be attached.

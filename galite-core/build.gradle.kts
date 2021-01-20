@@ -66,7 +66,4 @@ dependencies {
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", getoptVersion)
 
-  implementation("org.springframework","spring-context","5.0.6.RELEASE")
-
-  implementation("org.springframework.boot","spring-boot-configuration-processor","2.4.1")
 }
