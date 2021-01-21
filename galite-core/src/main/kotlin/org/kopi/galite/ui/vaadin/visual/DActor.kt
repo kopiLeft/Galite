@@ -17,14 +17,17 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
+import java.awt.Event
 import java.awt.event.KeyEvent
+
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.ShortcutEventListener
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
-
-import com.vaadin.flow.component.ShortcutEventListener
 
 /**
  * The `DActor` is the vaadin implementation of
@@ -55,7 +58,7 @@ class DActor(private var model: VActor) : Actor(model.menuItem,
   }
 
   override fun setEnabled(enabled: Boolean) {
-    TODO()
+    super.setEnabled(enabled)
   }
 
   companion object {
@@ -85,15 +88,23 @@ class DActor(private var model: VActor) : Actor(model.menuItem,
      * @param acceleratorKey The original accelerator key.
      * @return The corrected accelerator key.
      */
-    private fun correctAcceleratorKey(acceleratorKey: Int): Int = if (acceleratorKey == 10) 13 else acceleratorKey
+    private fun correctAcceleratorKey(acceleratorKey: Int): Key = if (acceleratorKey == 10)
+      Key.UNIDENTIFIED else Key.of(org.kopi.galite.form.dsl.Key.fromInt(acceleratorKey).toString())
 
     /**
      * Returns the corrected modifier accelerator key.
      * @param acceleratorModifier The original modifier accelerator key.
      * @return The corrected modifier accelerator key.
      */
-    private fun correctAcceleratorModifier(acceleratorModifier: Int): Int {
-      TODO()
+    private fun correctAcceleratorModifier(acceleratorModifier: Int): KeyModifier {
+      var correctAcceleratorModifier = KeyModifier.of("Unidentified")
+      when (acceleratorModifier) {
+        Event.SHIFT_MASK -> correctAcceleratorModifier = KeyModifier.of("Shift")
+        Event.ALT_MASK -> correctAcceleratorModifier = KeyModifier.of("Alt")
+        Event.CTRL_MASK -> correctAcceleratorModifier = KeyModifier.of("Control")
+        Event.META_MASK -> correctAcceleratorModifier = KeyModifier.of("Meta")
+      }
+      return correctAcceleratorModifier
     }
   }
 }

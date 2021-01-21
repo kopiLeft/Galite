@@ -43,5 +43,9 @@ enum class Key(val value: Int) {
   SHIFT_F10(KeyEvent.VK_F10),
   SHIFT_F11(KeyEvent.VK_F11),
   SHIFT_F12(KeyEvent.VK_F12),
-  ESCAPE(KeyEvent.VK_ESCAPE),
+  ESCAPE(KeyEvent.VK_ESCAPE);
+
+  companion object {
+    fun fromInt(value: Int) = values().first { it.value == value }
+  }
 }
