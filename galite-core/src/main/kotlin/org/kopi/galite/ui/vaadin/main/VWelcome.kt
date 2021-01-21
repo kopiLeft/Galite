@@ -33,17 +33,17 @@ class VWelcome : HorizontalLayout() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  // menues
-  private var userMenu = ModuleListMenu()
-  private var adminMenu = ModuleListMenu()
-  private var bookmarksMenu = ModuleListMenu()
-  private var workspaceContextMenu = ModuleListMenu()
+  // menus
+  private val userMenu = ModuleListMenu()
+  private val adminMenu = ModuleListMenu()
+  private val bookmarksMenu = ModuleListMenu()
+  private val workspaceContextMenu = ModuleListMenu()
 
   // items
-  private var userItem: ModuleItem = ModuleItem(VaadinIcon.USER)
-  private var adminItem = ModuleItem(VaadinIcon.COG)
-  private var bookmarksItem = ModuleItem(VaadinIcon.STAR)
-  private var workspaceContextItem = ModuleItem(VaadinIcon.MAP_MARKER)
+  private val userItem = ModuleItem(VaadinIcon.USER)
+  private val adminItem = ModuleItem(VaadinIcon.COG)
+  private val bookmarksItem = ModuleItem(VaadinIcon.STAR)
+  private val workspaceContextItem = ModuleItem(VaadinIcon.MAP_MARKER)
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
