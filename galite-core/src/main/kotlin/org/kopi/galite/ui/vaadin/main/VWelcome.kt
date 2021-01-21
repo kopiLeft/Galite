@@ -48,7 +48,7 @@ class VWelcome : HorizontalLayout() {
   // CONSTRUCTOR
   //---------------------------------------------------
   /**
-   * Creates the welcome text widget.
+   * Creates the welcome text component.
    */
   init {
     setId("welcome")
@@ -74,10 +74,9 @@ class VWelcome : HorizontalLayout() {
 
   /**
    * Sets the user menu.
-   * @param menu The menu widget.
+   * @param menu The menu component.
    */
   fun setUserMenu(menu: ModuleList) {
-    userItem.buildContent()
     userItem.subMenu = menu.menu
   }
 
@@ -91,27 +90,17 @@ class VWelcome : HorizontalLayout() {
 
   /**
    * Sets the admin menu.
-   * @param menu The menu widget.
+   * @param menu The menu component.
    */
   fun setAdminMenu(menu: ModuleList) {
-    adminItem.buildContent()
     adminItem.subMenu = menu.menu
   }
 
   /**
    * Sets the bookmarks menu.
-   * @param menu The menu widget.
+   * @param menu The menu component.
    */
   fun setBookmarksMenu(menu: ModuleList) {
-    bookmarksItem.buildContent()
     bookmarksItem.subMenu = menu.menu
-  }
-
-  /**
-   * Sets the workspace context menu.
-   * @param menu The menu widget.
-   */
-  fun setWorkspaceContextItemMenu() {
-    workspaceContextItem.buildContent()
   }
 }

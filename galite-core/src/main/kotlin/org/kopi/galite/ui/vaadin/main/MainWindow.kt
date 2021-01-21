@@ -150,7 +150,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setBookmarksMenu(menu: ModuleList) {
     welcome.setBookmarksMenu(menu)
-    welcome.setWorkspaceContextItemMenu()
   }
 
   /**

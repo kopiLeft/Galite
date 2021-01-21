@@ -38,18 +38,7 @@ open class ModuleItem(val vaadinIcon: VaadinIcon? = null,
 
   var parentMenu: ModuleListMenu? = null
 
-  /**
-   * The sub-menu associated with this item.
-   */
-  var subMenu: ModuleListMenu? = null
-    set(value) {
-      field = value
-    }
-
-  /**
-   * Builds the item content.
-   */
-  open fun buildContent() {
+  init {
     if(help != null) {
       element.setAttribute("help", help)
     }
@@ -58,6 +47,14 @@ open class ModuleItem(val vaadinIcon: VaadinIcon? = null,
       add(Icon(vaadinIcon))
     }
   }
+
+  /**
+   * The sub-menu associated with this item.
+   */
+  var subMenu: ModuleListMenu? = null
+    set(value) {
+      field = value
+    }
 
   /**
    * Sets the item caption.
