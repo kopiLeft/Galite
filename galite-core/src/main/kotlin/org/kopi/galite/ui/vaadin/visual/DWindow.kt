@@ -24,12 +24,12 @@ import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 
-import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.html.Div
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
  */
-abstract class DWindow protected constructor(model: VWindow) : Component(), UWindow {
+abstract class DWindow protected constructor(model: VWindow) : Div(), UWindow {
   override fun run() {
     TODO("Not yet implemented")
   }

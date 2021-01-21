@@ -17,34 +17,33 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import java.awt.Component
-
 import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
 import org.kopi.galite.ui.vaadin.menu.ModuleListMenu
 
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * The welcome text widget.
  * Contains also the logout button to disconnect from application.
  */
-class VWelcome : Div() {
+class VWelcome : HorizontalLayout() {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   // menues
-  private var userMenu = ModuleListMenu(true)
-  private var adminMenu = ModuleListMenu(true)
-  private var bookmarksMenu = ModuleListMenu(true)
-  private var workspaceContextMenu = ModuleListMenu(true)
+  private var userMenu = ModuleListMenu()
+  private var adminMenu = ModuleListMenu()
+  private var bookmarksMenu = ModuleListMenu()
+  private var workspaceContextMenu = ModuleListMenu()
 
   // items
-  private var userItem: ModuleItem = ModuleItem()
-  private var adminItem = ModuleItem()
-  private var bookmarksItem = ModuleItem()
-  private var workspaceContextItem = ModuleItem()
+  private var userItem: ModuleItem = ModuleItem(VaadinIcon.USER)
+  private var adminItem = ModuleItem(VaadinIcon.COG)
+  private var bookmarksItem = ModuleItem(VaadinIcon.STAR)
+  private var workspaceContextItem = ModuleItem(VaadinIcon.MAP_MARKER)
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
@@ -53,18 +52,20 @@ class VWelcome : Div() {
    */
   init {
     setId("welcome")
-    userMenu.addItem(userItem, false, true)
-    adminMenu.addItem(adminItem, false, true)
-    bookmarksMenu.addItem(bookmarksItem, false, true)
-    workspaceContextMenu.addItem(workspaceContextItem, false, true)
-    add(workspaceContextMenu)
-    add(bookmarksMenu)
-    add(adminMenu)
+
+    //TODO : move this to css file
+    style.set("margin-left", "auto")
+    style.set("margin-right", "var(--lumo-space-m)")
+    // TODO- end
+
+    userMenu.addItem(userItem)
+    adminMenu.addItem(adminItem)
+    bookmarksMenu.addItem(bookmarksItem)
+    workspaceContextMenu.addItem(workspaceContextItem)
     add(userMenu)
-    userMenu.autoOpen = false
-    adminMenu.autoOpen = false
-    bookmarksMenu.autoOpen = false
-    workspaceContextMenu.autoOpen = false
+    add(adminMenu)
+    add(bookmarksMenu)
+    add(workspaceContextMenu)
     userMenu.setId("user_menu")
     adminMenu.setId("admin_menu")
     bookmarksMenu.setId("bookmarks_menu")
@@ -76,20 +77,16 @@ class VWelcome : Div() {
    * @param menu The menu widget.
    */
   fun setUserMenu(menu: ModuleList) {
-    userItem.root = false
     userItem.buildContent()
-    userItem.setIcon("user")
-    if (menu.menu != null) {
-      userItem.subMenu = menu.menu
-    }
+    userItem.subMenu = menu.menu
   }
 
   /**
    * Sets the connected user.
    * @param username The user name.
    */
-  fun setConnectedUser(username: String?) {
-    userItem.caption = username
+  fun setConnectedUser(username: String) {
+    userItem.setCaption(username)
   }
 
   /**
@@ -97,12 +94,8 @@ class VWelcome : Div() {
    * @param menu The menu widget.
    */
   fun setAdminMenu(menu: ModuleList) {
-    adminItem.root = false
     adminItem.buildContent()
-    adminItem.setIcon("cog")
-    if (menu.menu != null) {
-      adminItem.subMenu = menu.menu
-    }
+    adminItem.subMenu = menu.menu
   }
 
   /**
@@ -110,21 +103,15 @@ class VWelcome : Div() {
    * @param menu The menu widget.
    */
   fun setBookmarksMenu(menu: ModuleList) {
-    bookmarksItem.root = false
     bookmarksItem.buildContent()
-    bookmarksItem.setIcon("star")
-    if (menu.menu != null) {
-      bookmarksItem.subMenu = menu.menu
-    }
+    bookmarksItem.subMenu = menu.menu
   }
 
   /**
    * Sets the workspace context menu.
    * @param menu The menu widget.
    */
-  fun setWorkspaceContextItemMenu(menu: Component) {
-    workspaceContextItem.root = false
+  fun setWorkspaceContextItemMenu() {
     workspaceContextItem.buildContent()
-    workspaceContextItem.setIcon("map-marker")
   }
 }

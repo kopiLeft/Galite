@@ -31,6 +31,8 @@ import org.kopi.galite.visual.RootMenu
 import org.kopi.galite.visual.UMenuTree
 import org.kopi.galite.visual.VMenuTree
 
+import com.vaadin.flow.component.contextmenu.MenuItem
+
 /**
  * A module menu implementation that uses the menu tree
  * model. This will not display a menu tree but an horizontal
@@ -39,6 +41,23 @@ import org.kopi.galite.visual.VMenuTree
  * @param model The menu tree model.
  */
 abstract class DMenu protected constructor(private val model: VMenuTree) : ModuleList(), UMenuTree {
+
+  /**
+   * Returns the type associated with this menu.
+   * This is the ID of a root menu provided by the
+   * menu tree model.
+   * @return The type of this menu.
+   */
+  abstract val type: Int
+
+  protected val modules = hashMapOf<Int, Module>()
+
+  init {
+    model.setDisplay(this)
+    // directly build menu content.
+    buildMenu(model.getRoots())
+  }
+
   //---------------------------------------------------
   // UTILS
   //---------------------------------------------------
@@ -56,7 +75,7 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
    * @param root The menu bar root item.
    * @param parent The parent menu item.
    */
-  protected open fun buildModuleMenu(root: TreeNode?, parent: ModuleItem?) {
+  protected open fun buildModuleMenu(root: TreeNode?, parent: MenuItem?) {
     for (i in 0 until root!!.childCount) {
       toModuleItem(root.getChildAt(i) as DefaultMutableTreeNode, parent)
     }
@@ -67,11 +86,10 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
    * @param node The [DefaultMutableTreeNode] object.
    * @param parent The parent [ModuleItem] that holds the created menu item.
    */
-  protected open fun toModuleItem(node: DefaultMutableTreeNode, parent: ModuleItem?) {
-    val item: ModuleItem
+  protected open fun toModuleItem(node: DefaultMutableTreeNode, parent: MenuItem?) {
     val module = node.userObject as Module
 
-    item = toModuleItem(module, parent)
+    val item = toModuleItem(module, parent)
     modules[module.id] = module
     // build module children
     for (i in 0 until node.childCount) {
@@ -85,8 +103,13 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
    * @param parent The parent [ModuleItem] that holds the created menu item.
    * @return The created item for the given module.
    */
-  protected open fun toModuleItem(module: Module?, parent: ModuleItem?): ModuleItem {
-    TODO()
+  protected open fun toModuleItem(module: Module, parent: MenuItem?): MenuItem {
+    return if (parent != null) {
+      parent.subMenu.addItem(module.description)
+    } else {
+      // add it as a root module
+      addItem(module.description, module.help)
+    }
   }
 
   /**
@@ -169,19 +192,4 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun showApplicationInformation(message: String) {}
-  // --------------------------------------------------
-  // ABSTRACT METHODS
-  // --------------------------------------------------
-  /**
-   * Returns the type associated with this menu.
-   * This is the ID of a root menu provided by the
-   * menu tree model.
-   * @return The type of this menu.
-   */
-  abstract val type: Int
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  protected val modules = hashMapOf<Int, Module>()
 }

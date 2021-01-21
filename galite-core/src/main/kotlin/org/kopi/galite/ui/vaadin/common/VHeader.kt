@@ -32,7 +32,7 @@ class VHeader : HorizontalLayout() {
    *
    * @param moduleList The module list component.
    */
-  fun setMainMenu(moduleList: Component?) {
+  fun setMainMenu(moduleList: Component) {
     addComponentAtIndex(1, moduleList)
   }
 
@@ -41,7 +41,7 @@ class VHeader : HorizontalLayout() {
    *
    * @param windows The link component
    */
-  fun setWindows(windows: Component?) {
+  fun setWindows(windows: Component) {
     add(windows)
   }
 
@@ -50,7 +50,7 @@ class VHeader : HorizontalLayout() {
    *
    * @param welcome The welcome component.
    */
-  fun setWelcome(welcome: Component?) {
+  fun setWelcome(welcome: Component) {
     addComponentAtIndex(1, welcome)
   }
 
@@ -68,7 +68,7 @@ class VHeader : HorizontalLayout() {
    *
    * @param target The target frame.
    */
-  fun setTarget(target: String?) {
+  fun setTarget(target: String) {
     logo.setTarget(target)
   }
 
@@ -94,6 +94,7 @@ class VHeader : HorizontalLayout() {
    */
   init {
     setId("header")
+    setWidthFull()
     add(logo)
   }
 }

@@ -64,7 +64,7 @@ class WelcomeView(locale: Locale,
    * Sets the target frame.
    * @param target The target frame.
    */
-  fun setTarget(target: String?) {
+  fun setTarget(target: String) {
     header!!.setTarget(target)
   }
 

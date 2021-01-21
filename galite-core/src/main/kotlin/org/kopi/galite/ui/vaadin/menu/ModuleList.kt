@@ -18,15 +18,51 @@
 package org.kopi.galite.ui.vaadin.menu
 
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.html.Div
 
 /**
- * The module list server side component.
- * TODO: Implement this class with appropriate component
+ * The Module list Component.
  */
 open class ModuleList : Div(), HasComponents {
+
+  private var isMain = false
+
+  /**
+   * The root menu of this module list.
+   */
+  var menu: ModuleListMenu = ModuleListMenu()
+    set(value) {
+      removeAll()
+      field = value;
+      add(field); // add it to container.
+    }
+
+  init {
+    setId("moduleList")
+    add(menu); // add it to container.
+  }
+
   //---------------------------------------------------
-  // DATA MEMBERS
+  // IMPLEMENTATIONS
   //---------------------------------------------------
-  val menu: ModuleListMenu? = null
+
+  /**
+   * Adds Item to this menu bar
+   *
+   * @param caption the module caption
+   */
+  fun addItem(caption: String, help: String?): MenuItem {
+    val moduleItem = ModuleItem(help = help)
+    moduleItem.setCaption(caption)
+    return menu.addItem(moduleItem)
+  }
+
+  /**
+   * Sets this module list to handle main menu
+   * @param isMain Should handle main menu ?
+   */
+  fun setMain(isMain: Boolean) {
+    this.isMain = isMain
+  }
 }
