@@ -17,33 +17,36 @@
  */
 package org.kopi.galite.ui.vaadin.menu
 
-import org.kopi.galite.ui.vaadin.base.VAnchorPanel
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.Tag
-import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.HasText
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.dom.ElementFactory
 
 /**
  * The module item model.
+ *
+ * @param vaadinIcon The icon to add to this item.
+ * @param help       The help text.
  */
-@Tag(Tag.LI)
-open class ModuleItem : Component(), HasComponents, HasStyle {
-  var itemId: String? = null
-  var caption: String? = null
-  var description: String? = null
-  var isLeaf: Boolean? = null
+open class ModuleItem(val vaadinIcon: VaadinIcon? = null,
+                      val help: String? = null)
+  : Div(), HasComponents, HasStyle {
 
-  private val tab = Span()
-  protected val anchor = VAnchorPanel().also { it.setHref("#") }
-  private var icon: Icon? = null
-
-  var root = false
-  var shortcutNavigation = false
   var parentMenu: ModuleListMenu? = null
+
+  init {
+    if(help != null) {
+      element.setAttribute("help", help)
+    }
+
+    if(vaadinIcon != null) {
+      add(Icon(vaadinIcon))
+    }
+  }
 
   /**
    * The sub-menu associated with this item.
@@ -51,68 +54,25 @@ open class ModuleItem : Component(), HasComponents, HasStyle {
   var subMenu: ModuleListMenu? = null
     set(value) {
       field = value
-      if (parentMenu != null) {
-        value!!.autoOpen = true
-        value.isAnimationEnabled = parentMenu!!.isAnimationEnabled
-        value.focusOnHover = parentMenu!!.focusOnHover
-      }
     }
 
   /**
-   * Builds the item content.
+   * Sets the item caption.
+   * @param caption The item caption.
    */
-  open fun buildContent() {
-    super.removeAll()
-    if (root && !shortcutNavigation) {
-      // add all tabs
-      add(tab)
-      tab.className = "root"
-      tab.add(anchor)
-    } else if (shortcutNavigation) {
-      anchor.removeAll()
-      val strong = VStrongPanel()
-      icon = Icon()
-      strong.add(anchor)
-      anchor.add(icon)
-      add(strong)
+  open fun setCaption(caption: String) {
+    if(vaadinIcon != null) {
+      val stringPanel = VStrongPanel().also {
+        it.text = caption
+      }
+      add(stringPanel)
     } else {
-      // only add central anchor
-      add(anchor)
-    }
-  }
-
-  /**
-   * Sets the selection style ability.
-   * @param selected The selection style ability.
-   */
-  open fun setSelectionStyle(selected: Boolean) {
-    if (root) {
-      if (!selected) {
-        tab.classNames.remove("selected")
-      } else {
-        tab.className = "selected"
-      }
-    } else {
-      if (selected) {
-        className = "selected"
-      } else {
-        classNames.remove("selected")
-      }
-    }
-  }
-
-  /**
-   * Sets the icon name.
-   * @param name The icon name.
-   */
-  open fun setIcon(name: String?) {
-    if (shortcutNavigation && icon != null) {
-      icon = Icon(name)
+      text = caption
     }
   }
 
   /**
    * A simple component that wraps a strong element inside.
    */
-  private class VStrongPanel : Component(ElementFactory.createStrong()), HasComponents
+  private class VStrongPanel : Component(ElementFactory.createStrong()), HasComponents, HasText
 }

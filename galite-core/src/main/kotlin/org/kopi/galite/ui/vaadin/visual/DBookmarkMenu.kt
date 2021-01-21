@@ -29,7 +29,17 @@ class DBookmarkMenu(model: VMenuTree) : DMenu(model) {
   //---------------------------------------------------
 
   override fun buildMenu(roots: List<RootMenu>) {
-    TODO()
+    if (getModel().getShortcutsID().isNotEmpty()) {
+      getModel().getShortcutsID().forEach { shortcutId ->
+        val id: Int = shortcutId
+        getModel().moduleArray.forEach { module ->
+          if (module.id == id) {
+            toModuleItem(module, null)
+            modules[module.id] = module
+          }
+        }
+      }
+    }
   }
 
   override val type: Int

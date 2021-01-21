@@ -26,6 +26,11 @@ import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
 import org.kopi.galite.ui.vaadin.common.VMain
 import org.kopi.galite.ui.vaadin.menu.ModuleList
+import org.kopi.galite.ui.vaadin.visual.DAdminMenu
+import org.kopi.galite.ui.vaadin.visual.DBookmarkMenu
+import org.kopi.galite.ui.vaadin.visual.DMainMenu
+import org.kopi.galite.ui.vaadin.visual.DMenu
+import org.kopi.galite.ui.vaadin.visual.DUserMenu
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
@@ -54,7 +59,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   //---------------------------------------------------
 
   private val listeners = mutableListOf<MainWindowListener>()
-  private val main = VMain()
   private var menus: MutableList<ModuleList>? = null
   private val header = VHeader()
   private val windowsLink = VWindows()
@@ -69,6 +73,8 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   private val originalWindowTitle: String? = null
 
   init {
+    val main = VMain()
+
     className = Styles.MAIN_WINDOW
     setHref(href)
     setLogo(logo)
@@ -76,8 +82,8 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
 
     content.setContent(container)
     addToNavbar(header)
-    header.setWindows(windowsLink)
     header.setWelcome(welcome)
+    welcome.add(windowsLink)
     main.setContent(content)
     main.width = "100%"
     main.height = "100%"
@@ -100,21 +106,50 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    * Adds a menu to this main window.
    * @param moduleList The module menu to be added
    */
-  fun addMenu(moduleList: ModuleList) {
+  fun addMenu(moduleList: DMenu) {
     if (menus == null) {
       menus = ArrayList()
     }
     menus!!.add(moduleList)
-    main.add(moduleList)
+
+    when (moduleList) {
+      is DMainMenu -> setMainMenu(moduleList)
+      is DUserMenu -> setUserMenu(moduleList)
+      is DAdminMenu -> setAdminMenu(moduleList)
+      is DBookmarkMenu -> setBookmarksMenu(moduleList)
+    }
   }
 
   /**
-   * Adds a window to this main window.
-   * @param window The window to be added.
+   * Sets the main menu component.
+   * @param moduleList The module list widget.
    */
-  fun addWindow(window: Component) {
-    windowsList.add(window)
-    main.add(window)
+  fun setMainMenu(moduleList: ModuleList) {
+    header.setMainMenu(moduleList)
+  }
+
+  /**
+   * Sets the user menu attached to this main window.
+   * @param moduleList The user menu.
+   */
+  fun setUserMenu(moduleList: ModuleList) {
+    welcome.setUserMenu(moduleList)
+  }
+
+  /**
+   * Sets the admin menu attached to this main window.
+   * @param moduleList The admin menu.
+   */
+  fun setAdminMenu(moduleList: ModuleList) {
+    welcome.setAdminMenu(moduleList)
+  }
+
+  /**
+   * Sets the bookmarks menu attached to this main window.
+   * @param menu The favorites menu.
+   */
+  fun setBookmarksMenu(menu: ModuleList) {
+    welcome.setBookmarksMenu(menu)
   }
 
   /**
@@ -134,14 +169,12 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   /**
    * The connected user name.
    */
-  var connectedUser: String? = null
+  var connectedUser: String = ""
+    set(value) {
+      field = value
 
-  operator fun iterator(): Iterator<Component> {
-    val components = mutableListOf<Component>()
-    components.addAll(menus!!)
-    components.addAll(windowsList)
-    return components.iterator()
-  }
+      welcome.setConnectedUser(value)
+    }
 
   /**
    * Adds a main window listener.
@@ -217,7 +250,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    * Sets the target frame.
    * @param target The target frame.
    */
-  fun setTarget(target: String?) {
+  fun setTarget(target: String) {
     header.setTarget(target)
   }
 
