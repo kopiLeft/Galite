@@ -19,13 +19,11 @@ package org.kopi.galite.ui.vaadin.notif
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
-import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.html.H3
+import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
@@ -39,7 +37,6 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
 //-------------------------------------------------
 
   override fun setButtons(locale: String) {
-    element.setAttribute("hideFocus", "true")
     ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
     cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
     cancel!!.addClickListener { hide() }
@@ -50,31 +47,15 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
     cancel!!.height = "50%"
   }
 
-  override fun focus() {
-    if (yesIsDefault && ok != null) {
-      ok!!.focus()
-      okFocused = true
-      cancelFocused = false
-    } else if (cancel != null) {
-      cancel!!.focus()
-      okFocused = false
-      cancelFocused = true
-    }
-  }
-
   /**
    * Creates the confirmation notification footer.
    */
   override fun createFooter() {
-    element.setAttribute("hideFocus", "true")
     footer.add(ok)
     footer.add(cancel)
     footer.isSpacing = true
     footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    footer.style.set("background-color", "AliceBlue")
-    footer.width = "99%"
-    footer.height = "35%"
-    add(footer)
+    super.setFooter(footer)
   }
 
   override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
@@ -117,8 +98,8 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
    * Creates the confirmation widget.
    */
   init {
-    super.title = Label(title)
-    super.message = Label(message)
+    super.title = H3(title)
+    super.message = Span(message)
     super.initialize(title, message, locale)
   }
 }

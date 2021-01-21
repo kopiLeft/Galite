@@ -18,7 +18,8 @@
 package org.kopi.galite.ui.vaadin.notif
 
 import com.vaadin.flow.component.ShortcutEvent
-import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.html.H3
+import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
@@ -41,10 +42,7 @@ open class VWarningNotification(title: String, message: String) : VAbstractNotif
     footer.add(close)
     footer.isSpacing = true
     footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    footer.style.set("background-color", "AliceBlue")
-    footer.width = "99%"
-    footer.height = "35%"
-    add(footer)
+    super.setFooter(footer)
   }
 
   override fun setButtons(locale: String) {
@@ -83,8 +81,8 @@ open class VWarningNotification(title: String, message: String) : VAbstractNotif
    * Creates the warning widget.
    */
   init {
-    super.title = Label(title)
-    super.message = Label(message)
+    super.title = H3(title)
+    super.message = Span(message)
     super.initialize(title, message, locale)
   }
 }

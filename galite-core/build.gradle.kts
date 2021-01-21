@@ -19,6 +19,12 @@ plugins {
   kotlin("jvm") apply true
 }
 
+repositories {
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
+
 val exposedVersion = "0.27.1"
 val vaadinVersion = "18.0.3"
 val itextVersion = "2.1.5"
@@ -66,4 +72,6 @@ dependencies {
 
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", getoptVersion)
+
+  implementation("com.vaadin.componentfactory","enhanced-dialog","1.0.4")
 }

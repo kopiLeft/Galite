@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.ShortcutEvent
@@ -25,9 +24,9 @@ import com.vaadin.flow.component.Text
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.details.Details
 import com.vaadin.flow.component.details.DetailsVariant
-import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.html.H3
+import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
@@ -44,17 +43,13 @@ open class VErrorNotification(title: String, message: String) : VAbstractNotific
    * Creates the error notification footer.
    */
   override fun createFooter() {
-    val footer = HorizontalLayout()
     footer.add(details)
     footer.add(close)
     footer.isSpacing = true
     footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    footer.style.set("background-color", "AliceBlue")
-    footer.width = "99%"
-    footer.height = "35%"
     footer.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, details)
     footer.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, close)
-    add(footer)
+    super.setFooter(footer)
   }
 
   override fun setButtons(locale: String) {
@@ -101,8 +96,8 @@ open class VErrorNotification(title: String, message: String) : VAbstractNotific
    * Creates the error widget.
    */
   init {
-    super.title = Label(title)
-    super.message = Label(message)
+    super.title = H3(title)
+    super.message = Span(message)
     details.element.setAttribute("aria-label", "Click me")
     details.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
     super.initialize(title, message, locale)

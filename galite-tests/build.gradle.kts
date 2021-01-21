@@ -33,6 +33,12 @@ vaadin {
   pnpmEnable = true
 }
 
+repositories {
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
+
 dependencies {
   implementation(project(":galite-core"))
 
@@ -61,6 +67,8 @@ dependencies {
 
   testImplementation("com.h2database", "h2", h2Version)
   testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", postgresNGVersion)
+
+  implementation("com.vaadin.componentfactory","enhanced-dialog","1.0.4")
 }
 
 tasks {

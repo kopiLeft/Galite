@@ -17,11 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.html.H3
+import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -31,7 +33,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * An abstract implementation of notification components such as
  * warnings, errors, confirms and information.
  */
-abstract class VAbstractNotification : Dialog(), Focusable<VAbstractNotification> {
+abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNotification> {
 
   /**
    * Creates a new notification widget with a window containing
@@ -39,10 +41,6 @@ abstract class VAbstractNotification : Dialog(), Focusable<VAbstractNotification
    */
   fun init(locale: String) {
     setButtons(locale)
-    element.setAttribute("hideFocus", "true")
-    element.style["outline"] = "0px"
-    this.width = "30%"
-    this.height = "25%"
     createHeader()
     createContent()
     createFooter()
@@ -56,6 +54,10 @@ abstract class VAbstractNotification : Dialog(), Focusable<VAbstractNotification
    * Initializes the notification panel.
    */
   fun initialize(title: String, message: String, locale: String) {
+    super.setDraggable(true)
+    super.setResizable(true)
+    super.setModal(false)
+    super.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
     init(locale)
     setNotificationTitle(title)
     setNotificationMessage(message)
@@ -112,14 +114,11 @@ abstract class VAbstractNotification : Dialog(), Focusable<VAbstractNotification
     val close = Button()
     close.icon = VaadinIcon.CLOSE.create()
     close.addClickListener { close() }
-    header.add(title, close)
     header.setFlexGrow(1.0, title)
     header.isPadding = true
     header.alignItems = FlexComponent.Alignment.CENTER
-    header.style.set("background-color", "DarkSeaGreen")
-    header.width = "99%"
-    header.height = "25%"
-    add(header)
+    header.add(title,close)
+    super.setHeader(header)
   }
 
   /**
@@ -127,13 +126,10 @@ abstract class VAbstractNotification : Dialog(), Focusable<VAbstractNotification
    */
   fun createContent() {
     icon = Icon(iconName)
-    content.isPadding = true
-    content.style.set("background-color", "AliceBlue")
-    content.add(icon, message)
-    content.alignItems = FlexComponent.Alignment.CENTER
-    content.width = "99%"
-    content.height = "35%"
-    add(content)
+    content.isSpacing = true
+    content.addComponentAsFirst(icon)
+    content.add(message)
+    super.setContent(content)
   }
 
   /**
@@ -141,8 +137,7 @@ abstract class VAbstractNotification : Dialog(), Focusable<VAbstractNotification
    */
   open fun createFooter() {
     footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    footer.width = "99%"
-    add(footer)
+    super.setFooter(footer)
   }
 
   /**
@@ -179,8 +174,8 @@ abstract class VAbstractNotification : Dialog(), Focusable<VAbstractNotification
    * Represents the icon name to be used with this notification.
    */
   protected abstract val iconName: String?
-  open var title = Label()
-  open var message = Label()
+  open var title = H3()
+  open var message = Span()
   open var icon: Icon? = null
   var locale: String = "fr_FR"
   private val listeners = mutableListOf<NotificationListener>()
