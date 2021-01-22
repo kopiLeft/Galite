@@ -17,108 +17,117 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
-import java.io.File
-
+import com.vaadin.flow.component.html.Div
 import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
-
-import com.vaadin.flow.component.html.Div
+import java.io.File
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
  */
-abstract class DWindow protected constructor(model: VWindow) : Div(), UWindow {
+abstract class DWindow protected constructor(private val model: VWindow) : Div(), UWindow {
+  val returnCode: Int
+    get() = TODO()
+
+  /**
+   * The current application instance.
+   */
+  val application: VApplication
+    get() =  ApplicationContext.applicationContext.getApplication() as VApplication
+
   override fun run() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun getModel(): VWindow {
-    TODO("Not yet implemented")
+    return model
   }
 
   override fun setTitle(title: String) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun setInformationText(text: String?) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun setTotalJobs(totalJobs: Int) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun setCurrentJob(currentJob: Int) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun updateWaitDialogMessage(message: String) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun closeWindow() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun setWindowFocusEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun performBasicAction(action: Action) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
+    // TODO
+    return true
   }
 
   override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun performAsyncAction(action: Action) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun modelClosed(type: Int) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun setWaitDialog(message: String, maxtime: Int) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun unsetWaitDialog() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun setWaitInfo(message: String) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun unsetWaitInfo() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun unsetProgressDialog() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun fileProduced(file: File, name: String) {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   open fun reportError(e: VRuntimeException) {
-    TODO()
+    // TODO
   }
 
   open fun release() {
-    TODO()
+    // TODO
   }
 }

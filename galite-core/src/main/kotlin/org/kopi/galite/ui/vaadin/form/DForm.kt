@@ -38,6 +38,37 @@ import org.kopi.galite.visual.VRuntimeException
  * the [UForm] specifications.
  */
 class DForm(model: VForm) : DWindow(model), UForm, FormListener {
+
+  /**
+   * The current page index.
+   */
+  var currentPage = -1
+  private var content: Form = Form(pageCount, model.pages)
+  private var blockListener: BlockListener = BlockAccessHandler()
+  private var blockViews: Array<DBlock?>
+  private var blockRecordHandler = BlockRecordHandler()
+
+  init {
+    content = Form(pageCount, model.pages)
+    // content.locale = application.defaultLocale TODO
+    model.addFormListener(this)
+    // content.addFormListener(this) TODO
+    getModel().setDisplay(this)
+    val blockCount = vForm.getBlockCount()
+    blockViews = arrayOfNulls(blockCount)
+    for (i in 0 until blockCount) {
+      var blockModel = vForm.getBlock(i)
+      if (!blockModel.isInternal) {
+        var blockView = createViewForBlock(blockModel)
+        blockViews[i] = blockView
+        addBlock(blockView, blockModel.pageNumber)
+      }
+      blockModel.addBlockListener(blockListener)
+    }
+   // setContent(content) TODO
+    getModel().enableCommands()
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -106,7 +137,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @param i The page index.
    */
   fun gotoPage(i: Int) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -272,7 +303,23 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     override fun blockChanged() {}
     override fun blockCleared() {}
     override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
-      TODO()
+      if (pageCount == 1) {
+        return
+      }
+      //enable/disable tab of pages
+      val pageNumber = block.pageNumber
+      val blocks = vForm.blocks
+      if (newAccess) {
+        // content.setEnabled(true, pageNumber) TODO
+      } else {
+        // tab is visible (another visible block there?)
+        for (i in blocks.indices) {
+          if (pageNumber == blocks[i].pageNumber && blocks[i].isAccessible) {
+            return
+          }
+        }
+        // content.setEnabled(false, pageNumber) TODO
+      }
     }
 
     override fun blockViewModeLeaved(block: VBlock, actviceField: VField?) {}
@@ -297,19 +344,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // IMPLEMENTATION
     //---------------------------------------
     override fun blockRecordChanged(current: Int, count: Int) {
-      TODO()
+      // TODO
     }
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  /**
-   * The current page index.
-   */
-  var currentPage = -1
-  private val content: Form = Form(pageCount, model.pages)
-  private val blockListener: BlockListener = TODO()
-  private val blockViews: Array<DBlock?>
-  private val blockRecordHandler: BlockRecordHandler
 }

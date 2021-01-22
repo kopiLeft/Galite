@@ -15,24 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.form
+package org.kopi.galite.ui.vaadin.window
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.html.Div
+import java.io.Serializable
 
 /**
- * The form component.
+ * A generic close listener for notifying with a close event.
  */
-class Form(pageCount: Int, titles: Array<String?>) : Div() {
-
+interface CloseListener : Serializable {
   /**
-   * Adds a block to this form.
-   * @param block The block to be added.
-   * @param page The page index.
-   * @param isFollow Is it a follow block ?
-   * @param isChart Is it a chart block ?
+   * Fired when a dialog or a popup is closed.
    */
-  fun addBlock(block: Component?, page: Int, isFollow: Boolean, isChart: Boolean) {
-    // TODO
-  }
+  fun onClose()
 }
