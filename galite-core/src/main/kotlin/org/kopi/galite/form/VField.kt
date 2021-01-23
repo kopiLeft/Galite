@@ -2480,7 +2480,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @return    the help of this field
    */
   var toolTip: String? = null // help text
-    private set
+    internal set
 
   private var index = 0 // The position in parent field array
 

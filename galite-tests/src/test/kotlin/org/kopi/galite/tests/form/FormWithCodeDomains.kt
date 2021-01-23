@@ -26,7 +26,7 @@ import org.kopi.galite.form.dsl.FormBlock
 
 object FormWithCodeDomains: Form() {
   val edit = menu("Edit")
-  val autoFill = FormWithCodeDomains.actor(
+  val autoFill = actor(
           ident = "Autofill",
           menu = edit,
           label = "Autofill",

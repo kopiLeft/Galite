@@ -26,7 +26,8 @@ class VBooleanField(bufferSize: Int) : VBooleanCodeField(bufferSize,
                                                          "boolean",
                                                          GENERAL_LOCALIZATION_RESOURCE,
                                                          booleanNames,
-                                                         booleanCodes) {
+                                                         booleanCodes,
+                                                         true) {
 
   /**
    * return the name of this field

@@ -29,6 +29,7 @@ class Menu(val label: String) {
   // ----------------------------------------------------------------------
 
   fun genLocalization(writer: LocalizationWriter) {
+    // FIXME : change first parameter label to ident
     writer.genMenuDefinition(label, label)
   }
 }

@@ -21,6 +21,7 @@ package org.kopi.galite.visual
 import java.awt.Frame
 import java.awt.event.KeyEvent
 import java.io.File
+import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
@@ -55,6 +56,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
   open val source: String? = null // The localization source of this window.
+  open lateinit var locale: Locale
 
   init {
     f12 = VActor("File",
@@ -287,7 +289,9 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    */
   fun localizeActors(manager: LocalizationManager) {
     actors.forEach {
-      it!!.localize(manager)
+      if(ApplicationContext.getDefaultLocale() != locale || !it!!.userActor) {
+        it!!.localize(manager)
+      }
     }
   }
 
