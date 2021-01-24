@@ -85,8 +85,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     header.setWelcome(welcome)
     welcome.add(windowsLink)
     main.setContent(content)
-    main.width = "100%"
-    main.height = "100%"
+    main.setSizeFull()
     content.width = "100%"
     content.height = "100%"
     setContent(main)
@@ -150,6 +149,15 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setBookmarksMenu(menu: ModuleList) {
     welcome.setBookmarksMenu(menu)
+  }
+
+  /**
+   * Adds a window to this main window.
+   * @param window The window to be added.
+   */
+  fun addWindow(window: Component) {
+    windowsList.add(window)
+    content.add(window)
   }
 
   /**
