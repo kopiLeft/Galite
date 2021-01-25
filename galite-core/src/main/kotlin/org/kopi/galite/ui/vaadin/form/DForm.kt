@@ -57,15 +57,15 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     val blockCount = vForm.getBlockCount()
     blockViews = arrayOfNulls(blockCount)
     for (i in 0 until blockCount) {
-      var blockModel = vForm.getBlock(i)
+      val blockModel = vForm.getBlock(i)
       if (!blockModel.isInternal) {
-        var blockView = createViewForBlock(blockModel)
+        val blockView = createViewForBlock(blockModel)
         blockViews[i] = blockView
         addBlock(blockView, blockModel.pageNumber)
       }
       blockModel.addBlockListener(blockListener)
     }
-   // setContent(content) TODO
+    setContent(content)
     getModel().enableCommands()
   }
 
@@ -111,7 +111,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * Returns the title of the specified page.
    * @return The title of the specified page.
    */
-  fun getPageTitle(index: Int): String? {
+  fun getPageTitle(index: Int): String {
     return vForm.pages[index]
   }
 
@@ -137,7 +137,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @param i The page index.
    */
   fun gotoPage(i: Int) {
-    // TODO
+    content.gotoPage(i)
   }
 
   /**

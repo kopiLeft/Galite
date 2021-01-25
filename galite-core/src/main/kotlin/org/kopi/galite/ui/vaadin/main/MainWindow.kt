@@ -157,7 +157,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun addWindow(window: Component) {
     windowsList.add(window)
-    content.add(window)
+    content.setContent(window)
   }
 
   /**
