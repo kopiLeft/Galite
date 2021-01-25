@@ -37,11 +37,11 @@ open class VBooleanCodeField : VCodeField {
               ident: String,
               source: String,
               names: Array<String>,
-              codes: Array<Boolean?>
-  ) : super(bufferSize, ident, source, names) {
+              codes: Array<Boolean?>,
+              localizedByGalite: Boolean = false
+  ) : super(bufferSize, ident, source, names, localizedByGalite) {
     this.codes = codes
   }
-
 
   /**
    * @param     ident           the identifier of the type in the source file

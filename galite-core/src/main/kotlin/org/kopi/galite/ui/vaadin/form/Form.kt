@@ -18,12 +18,12 @@
 package org.kopi.galite.ui.vaadin.form
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.html.Div
 
 /**
  * The form component.
- * TODO: Implement this class with appropriate component
  */
-class Form(pageCount: Int, titles: Array<String?>) : Component() {
+class Form(pageCount: Int, titles: Array<String?>) : Div() {
 
   /**
    * Adds a block to this form.
@@ -33,6 +33,6 @@ class Form(pageCount: Int, titles: Array<String?>) : Component() {
    * @param isChart Is it a chart block ?
    */
   fun addBlock(block: Component?, page: Int, isFollow: Boolean, isChart: Boolean) {
-    TODO()
+    // TODO
   }
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,22 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.ui.vaadin.window
+
+import java.io.Serializable
 
 /**
- * A menu represents an entry to the menu bar in the top of the form,
- * you can add actors to this menu later by specifying the menu name in the actor definition.
- *
- * @param label                the menu label in default locale
+ * A generic close listener for notifying with a close event.
  */
-class Menu(val label: String) {
-
-  // ----------------------------------------------------------------------
-  // XML LOCALIZATION GENERATION
-  // ----------------------------------------------------------------------
-
-  fun genLocalization(writer: LocalizationWriter) {
-    // FIXME : change first parameter label to ident
-    writer.genMenuDefinition(label, label)
-  }
+interface CloseListener : Serializable {
+  /**
+   * Fired when a dialog or a popup is closed.
+   */
+  fun onClose()
 }

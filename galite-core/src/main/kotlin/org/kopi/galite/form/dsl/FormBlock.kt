@@ -542,6 +542,8 @@ open class FormBlock(var buffer: Int,
         //TODO ------------end-----------
 
         super.source = source ?: sourceFile
+        super.title = this@FormBlock.title
+        super.help = this@FormBlock.help
         super.bufferSize = buffer
         super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
@@ -561,6 +563,9 @@ open class FormBlock(var buffer: Int,
           formField.vField
         }.toTypedArray()
         super.indices = this@FormBlock.indices.map {
+          it.message
+        }.toTypedArray()
+        super.indicesIdents = this@FormBlock.indices.map {
           it.ident
         }.toTypedArray()
       }

@@ -53,7 +53,7 @@ open class JApplicationTestBase : DBSchemaTest() {
     override val isNoBugReport: Boolean
       get() = true
 
-    override val defaultLocale: Locale?
+    override val defaultLocale: Locale
       get() = Locale.FRANCE
 
     init {

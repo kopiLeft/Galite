@@ -34,7 +34,8 @@ import org.kopi.galite.visual.VlibProperties
 abstract class VCodeField(val bufferSize: Int,
                           val type: String,
                           var source: String,
-                          val idents: Array<String>)
+                          val idents: Array<String>,
+                          val localizedByGalite: Boolean = false)
   : VField(1, 1) {
 
   override fun hasAutofill(): Boolean = true
@@ -402,10 +403,13 @@ abstract class VCodeField(val bufferSize: Int,
       labels[i] = loc.getCodeLabel(idents[i])
     }
 
-    this.labels = labels.requireNoNulls()
-    setDimension(getMaxWidth(this.labels), 1)
+    initLabels(labels.requireNoNulls())
   }
 
+  fun initLabels(labels: Array<String>) {
+    this.labels = labels
+    setDimension(getMaxWidth(this.labels), 1)
+  }
 
   /**
    * represents the name of this field

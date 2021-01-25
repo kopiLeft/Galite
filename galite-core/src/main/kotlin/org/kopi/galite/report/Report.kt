@@ -19,6 +19,7 @@ package org.kopi.galite.report
 
 import java.io.IOException
 import java.lang.RuntimeException
+import java.util.Locale
 
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.LocalizationWriter
@@ -34,6 +35,7 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a report that contains fields [fields] and displays a table of [reportRows].
@@ -146,7 +148,7 @@ abstract class Report : Window() {
   // TODO add Decimal types
   fun MReport.addReportColumns() {
     columns = fields.map {
-      if(it.group != null) {
+      if (it.group != null) {
         it.groupID = fields.indexOf(it.group)
       }
 
@@ -170,7 +172,7 @@ abstract class Report : Window() {
                         it.domain.height ?: 0, format)
         Decimal::class ->
           VFixnumColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0,
-                             it.domain.height ?: 0, format)
+                        it.domain.height ?: 0, format)
         Boolean::class ->
           VBooleanColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         Date::class, java.util.Date::class ->
@@ -206,71 +208,73 @@ abstract class Report : Window() {
 
   /** Report model*/
   override val model: VReport by lazy {
-      initFields()
+    initFields()
 
-      genLocalization()
+    genLocalization()
 
-      object : VReport() {
-        /**
-         * Handling triggers
-         */
-        fun handleTriggers(triggers: MutableList<Trigger>) {
-          // REPORT TRIGGERS
-          triggers.forEach { trigger ->
-            val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
-            for (i in VConstants.TRG_TYPES.indices) {
-              if (trigger.events shr i and 1 > 0) {
-                blockTriggerArray[i] = i
-                super.triggers[i] = trigger
-              }
+    object : VReport() {
+      override var locale: Locale = this@Report.locale ?: ApplicationContext.getDefaultLocale()
+
+      /**
+       * Handling triggers
+       */
+      fun handleTriggers(triggers: MutableList<Trigger>) {
+        // REPORT TRIGGERS
+        triggers.forEach { trigger ->
+          val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
+          for (i in VConstants.TRG_TYPES.indices) {
+            if (trigger.events shr i and 1 > 0) {
+              blockTriggerArray[i] = i
+              super.triggers[i] = trigger
             }
-            super.VKT_Triggers[0] = blockTriggerArray
           }
-
-          // FIELD TRIGGERS
-          fields.forEach {
-            val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
-            if(it.computeTrigger != null) {
-              fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
-            }
-            if(it.formatTrigger != null) {
-              fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
-            }
-            // TODO : Add field triggers here
-            super.VKT_Triggers.add(fieldTriggerArray)
-          }
-
-          // COMMANDS TRIGGERS
-          commands?.forEach {
-            val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
-            // TODO : Add commands triggers here
-            super.VKT_Triggers.add(fieldTriggerArray)
-          }
+          super.VKT_Triggers[0] = blockTriggerArray
         }
 
-        override fun init() {
-          this.addActors(this@Report.actors.map { actor ->
-            actor.buildModel(sourceFile)
-          }.toTypedArray())
-          this.commands = this@Report.commands.map { command ->
-            command.buildModel(this, actors)
-          }.toTypedArray()
-
-          source = sourceFile
-
-          if (reportCommands) {
-            addDefaultReportCommands()
+        // FIELD TRIGGERS
+        fields.forEach {
+          val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+          if (it.computeTrigger != null) {
+            fieldTriggerArray[Constants.TRG_COMPUTE] = it.computeTrigger!!.events.toInt()
           }
-
-          super.model.addReportColumns()
-          super.model.addReportLines()
-
-          handleTriggers(this@Report.triggers)
+          if (it.formatTrigger != null) {
+            fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+          }
+          // TODO : Add field triggers here
+          super.VKT_Triggers.add(fieldTriggerArray)
         }
 
-        override fun add() {
-          // TODO
+        // COMMANDS TRIGGERS
+        commands?.forEach {
+          val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
+          // TODO : Add commands triggers here
+          super.VKT_Triggers.add(fieldTriggerArray)
         }
       }
+
+      override fun init() {
+        this.addActors(this@Report.actors.map { actor ->
+          actor.buildModel(sourceFile)
+        }.toTypedArray())
+        this.commands = this@Report.commands.map { command ->
+          command.buildModel(this, actors)
+        }.toTypedArray()
+
+        source = sourceFile
+
+        if (reportCommands) {
+          addDefaultReportCommands()
+        }
+
+        super.model.addReportColumns()
+        super.model.addReportLines()
+
+        handleTriggers(this@Report.triggers)
+      }
+
+      override fun add() {
+        // TODO
+      }
     }
+  }
 }

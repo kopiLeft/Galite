@@ -29,6 +29,8 @@ import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.RootMenu
 import org.kopi.galite.visual.UMenuTree
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VMenuTree
 
 import com.vaadin.flow.component.contextmenu.MenuItem
@@ -104,12 +106,20 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
    * @return The created item for the given module.
    */
   protected open fun toModuleItem(module: Module, parent: MenuItem?): MenuItem {
-    return if (parent != null) {
+    val menu = if (parent != null) {
       parent.subMenu.addItem(module.description)
     } else {
       // add it as a root module
       addItem(module.description, module.help)
     }
+
+    if(module.objectName != null) {
+      menu.addClickListener {
+        launchModule(module)
+      }
+    }
+
+    return menu
   }
 
   /**
@@ -130,7 +140,16 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
    * @param module The module to be launched.
    */
   protected fun launchModule(module: Module) {
-    TODO()
+    performAsyncAction(object : Action("menu_form_started2") {
+      override fun execute() {
+        try {
+          setWaitInfo(VlibProperties.getString("menu_form_started"))
+          module.run(model.dBContext!!)
+        } finally {
+          unsetWaitInfo()
+        }
+      }
+    })
   }
 
   /**
@@ -161,18 +180,24 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun performAsyncAction(action: Action) {
-    TODO()
+    Thread {
+      try {
+        action.execute()
+      } catch (e: VException) {
+        application.error(e.message)
+      }
+    }.start()
   }
 
   override fun modelClosed(type: Int) {}
   override fun setWaitDialog(message: String, maxtime: Int) {}
   override fun unsetWaitDialog() {}
   override fun setWaitInfo(message: String) {
-    TODO()
+    // TODO
   }
 
   override fun unsetWaitInfo() {
-    TODO()
+    // TODO
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {}
