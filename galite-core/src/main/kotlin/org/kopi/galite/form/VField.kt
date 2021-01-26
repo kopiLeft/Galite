@@ -29,11 +29,15 @@ import kotlin.reflect.KClass
 import org.jetbrains.exposed.sql.Alias
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
+import org.jetbrains.exposed.sql.EqOp
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.GreaterEqOp
 import org.jetbrains.exposed.sql.GreaterOp
+import org.jetbrains.exposed.sql.LessEqOp
+import org.jetbrains.exposed.sql.LessOp
 import org.jetbrains.exposed.sql.LikeOp
+import org.jetbrains.exposed.sql.NeqOp
 import org.jetbrains.exposed.sql.NotLikeOp
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.QueryAlias
@@ -740,33 +744,32 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             GreaterOp(column, stringOperandLiteral)
           }
           VConstants.SOP_LE -> Op.build {
-            column lessEq operand
+            LessEqOp(column, stringOperandLiteral)
           }
           VConstants.SOP_LT -> Op.build {
-            column less operand
+            LessOp(column, stringOperandLiteral)
           }
           else -> throw InconsistencyException()
         }
       } else {
-        operand as Comparable<T>
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            column eq column.wrap(operand)
+            EqOp(column, column.wrap(operand))
           }
           VConstants.SOP_NE -> Op.build {
-            column neq column.wrap(operand)
+            NeqOp(column, column.wrap(operand))
           }
           VConstants.SOP_GE -> Op.build {
-            column greaterEq column.wrap(operand)
+            GreaterEqOp(column, column.wrap(operand))
           }
           VConstants.SOP_GT -> Op.build {
-            column greater column.wrap(operand)
+            GreaterOp(column, column.wrap(operand))
           }
           VConstants.SOP_LE -> Op.build {
-            column lessEq column.wrap(operand)
+            LessEqOp(column, column.wrap(operand))
           }
           VConstants.SOP_LT -> Op.build {
-            column less column.wrap(operand)
+            LessOp(column, column.wrap(operand))
           }
           else -> throw InconsistencyException()
         }
