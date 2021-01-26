@@ -31,6 +31,10 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnSet
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
+import org.jetbrains.exposed.sql.GreaterEqOp
+import org.jetbrains.exposed.sql.GreaterOp
+import org.jetbrains.exposed.sql.LikeOp
+import org.jetbrains.exposed.sql.NotLikeOp
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
@@ -699,18 +703,18 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         else -> Op.build { column.isNull() }
       }
     } else {
-      val operand = getSql(block!!.activeRecord) as? T
+      val operand = getSql(block!!.activeRecord)
 
       if (operand is String && operand.indexOf('*') != -1) {
         val stringOperand = when (getSearchOperator()) {
           VConstants.SOP_EQ, VConstants.SOP_NE -> operand.replace('*', '%')
           VConstants.SOP_GE, VConstants.SOP_GT -> {
             // remove everything after at '*'
-            operand.substring(0, operand.indexOf('*')) + "'"
+            operand.substring(0, operand.indexOf('*'))
           }
           VConstants.SOP_LE, VConstants.SOP_LT -> {
             // replace substring starting at '*' by highest (ascii) char
-            operand.substring(0, operand.indexOf('*')) + "\u00ff'"
+            operand.substring(0, operand.indexOf('*')) + "\u00ff"
           }
           else -> throw InconsistencyException()
         }
@@ -724,16 +728,16 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            column eq stringOperandLiteral
+            LikeOp(column, stringOperandLiteral)
           }
           VConstants.SOP_NE -> Op.build {
-            column neq stringOperandLiteral
+            NotLikeOp(column, stringOperandLiteral)
           }
           VConstants.SOP_GE -> Op.build {
-            column greaterEq stringOperandLiteral
+            GreaterEqOp(column, stringOperandLiteral)
           }
           VConstants.SOP_GT -> Op.build {
-            column greater stringOperandLiteral
+            GreaterOp(column, stringOperandLiteral)
           }
           VConstants.SOP_LE -> Op.build {
             column lessEq operand
@@ -747,22 +751,22 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         operand as Comparable<T>
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            column eq operand
+            column eq column.wrap(operand)
           }
           VConstants.SOP_NE -> Op.build {
-            column neq operand
+            column neq column.wrap(operand)
           }
           VConstants.SOP_GE -> Op.build {
-            column greaterEq operand
+            column greaterEq column.wrap(operand)
           }
           VConstants.SOP_GT -> Op.build {
-            column greater operand
+            column greater column.wrap(operand)
           }
           VConstants.SOP_LE -> Op.build {
-            column lessEq operand
+            column lessEq column.wrap(operand)
           }
           VConstants.SOP_LT -> Op.build {
-            column less operand
+            column less column.wrap(operand)
           }
           else -> throw InconsistencyException()
         }
