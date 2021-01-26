@@ -29,6 +29,12 @@ val h2Version = "1.4.199"
 val exposedVersion = "0.27.1"
 val postgresNGVersion = "0.8.6"
 
+repositories {
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
+
 vaadin {
   pnpmEnable = true
 }
@@ -52,6 +58,9 @@ dependencies {
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
 
   implementation("org.jdom", "jdom2", jdomVersion)
+
+  // collapse dependencies
+  implementation("com.github.appreciated", "iron-collapse", "2.0.1")
 
   // Exposed dependencies
   testImplementation ("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
