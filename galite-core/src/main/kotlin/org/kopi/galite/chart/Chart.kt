@@ -22,7 +22,6 @@ import java.io.IOException
 import java.util.Locale
 
 import org.kopi.galite.common.Action
-import org.kopi.galite.common.ChartTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
@@ -129,6 +128,37 @@ abstract class Chart : Window() {
 
 
   open fun getFields(): List<ChartField<*>> = listOf(dimension) + measures
+
+  ///////////////////////////////////////////////////////////////////////////
+  // CHART TRIGGERS EVENTS
+  ///////////////////////////////////////////////////////////////////////////
+  /**
+   * Chart Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class ChartTriggerEvent<T>(val event: Int)
+
+  /**
+   * Executed before the chart is displayed.
+   */
+  val PRECHART = ChartTriggerEvent<Unit>(CConstants.TRG_PRECHART)
+
+  /**
+   * Executed at chart initialization.
+   */
+  val INITCHART = ChartTriggerEvent<Unit>(CConstants.TRG_INIT)
+
+  /**
+   * Executed after the chart initialization. This trigger should return a fixed type for the chart
+   * [org.kopi.galite.chart.VChartType].
+   */
+  val CHARTTYPE = ChartTriggerEvent<VChartType>(CConstants.TRG_CHARTTYPE)
+
+  /**
+   * Executed after the chart is closed.
+   */
+  val POSTCHART = ChartTriggerEvent<Unit>(CConstants.TRG_POSTCHART)
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

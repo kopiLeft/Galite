@@ -21,10 +21,6 @@ import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.ACCESS
-import org.kopi.galite.field.VALUE
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 

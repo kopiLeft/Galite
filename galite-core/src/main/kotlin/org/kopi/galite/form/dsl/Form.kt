@@ -20,7 +20,6 @@ import java.io.IOException
 
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.FormTrigger
-import org.kopi.galite.common.FormTriggerEvent
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
@@ -112,6 +111,52 @@ abstract class Form : Window() {
     pages.add(page)
     return page
   }
+
+  ///////////////////////////////////////////////////////////////////////////
+  // FORM TRIGGERS EVENTS
+  ///////////////////////////////////////////////////////////////////////////
+  /**
+   * Form Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class FormTriggerEvent<T>(val event: Int)
+
+  /**
+   * executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command
+   */
+  val INIT = FormTriggerEvent<Unit>(VConstants.TRG_INIT) // void trigger
+
+  /**
+   * executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command
+   */
+  val PREFORM = FormTriggerEvent<Unit>(VConstants.TRG_PREFORM)       // void trigger
+
+  /**
+   * executed when closing the form
+   */
+  val POSTFORM = FormTriggerEvent<Unit>(VConstants.TRG_POSTFORM)     // void trigger
+
+  /**
+   * executed upon ResetForm command
+   */
+  val RESET = FormTriggerEvent<Boolean>(VConstants.TRG_RESET)        // Boolean trigger
+
+  /**
+   * a special trigger that returns a boolean value of whether the form have been changed or not,
+   * you can use it to bypass the system control for changes this way :
+   *
+   * trigger(CHANGED) {
+   *   false
+   * }
+   */
+  val CHANGED  = FormTriggerEvent<Boolean>(VConstants.TRG_CHANGED)    // Boolean trigger
+
+  /**
+   * executed when quitting the form
+   * actually not available
+   */
+  val QUITFORM = FormTriggerEvent<Boolean>(VConstants.TRG_QUITFORM)  // Boolean trigger
 
   // ----------------------------------------------------------------------
   // ACCESSORS

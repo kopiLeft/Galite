@@ -31,9 +31,6 @@ import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.field.Field
-import org.kopi.galite.field.FieldProtectedTriggerEvent
-import org.kopi.galite.field.FieldTriggerEvent
-import org.kopi.galite.field.FieldTypeTriggerEvent
 import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
@@ -421,6 +418,128 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    */
   open val posInArray: Int
     get() = -1
+
+  ///////////////////////////////////////////////////////////////////////////
+  // FORM FIELD TRIGGERS EVENTS
+  ///////////////////////////////////////////////////////////////////////////
+  /**
+   * ACCESS is a special trigger that defines how a field can be accessed.
+   * This trigger must return one of these values:
+   * [Access.SKIPPED], [Access.HIDDEN], [Access.VISIT] or [Access.MUSTFILL].
+   */
+  val ACCESS = FieldTriggerEvent<Access>(VConstants.TRG_FLDACCESS)
+
+  /**
+   * Not defined actually
+   */
+  val FORMAT = FieldTriggerEvent<Unit>(VConstants.TRG_FORMAT)
+
+  /**
+   * Must return a boolean value, if "true" the cursor will move to the next field
+   */
+  val AUTOLEAVE = FieldTriggerEvent<Boolean>(VConstants.TRG_AUTOLEAVE)
+
+  /**
+   * Defines the default value of the field to be set if the setDefault() method is called
+   * (this method is automatically called when the user choose the insert command)
+   */
+  val DEFAULT = FieldTriggerEvent<Unit>(VConstants.TRG_DEFAULT)
+
+  /**
+   * Executed on field content change
+   */
+  val POSTCHG = FieldTriggerEvent<Unit>(VConstants.TRG_POSTCHG)
+
+  /**
+   * Executed before dropping file
+   */
+  val PREDROP = FieldTriggerEvent<Unit>(VConstants.TRG_PREDROP)
+
+  /**
+   * Executed after dropping file
+   */
+  val POSTDROP = FieldTriggerEvent<Unit>(VConstants.TRG_POSTDROP)
+
+  /**
+   * Executed upon exit of field
+   */
+  val POSTFLD = FieldTriggerEvent<Unit>(VConstants.TRG_POSTFLD)
+
+  /**
+   * Executed after inserting a row of the database
+   */
+  val POSTINS = FieldProtectedTriggerEvent(VConstants.TRG_POSTINS)
+
+  /**
+   * Executed after updating a row of the database
+   */
+  val POSTUPD = FieldProtectedTriggerEvent(VConstants.TRG_POSTUPD)
+
+  /**
+   * Executed before deleting a row of the database
+   */
+  val PREDEL = FieldProtectedTriggerEvent(VConstants.TRG_PREDEL)
+
+  /**
+   * Executed upon entry of field
+   */
+  val PREFLD = FieldTriggerEvent<Unit>(VConstants.TRG_PREFLD)
+
+  /**
+   * Executed before inserting a row of the database
+   */
+  val PREINS = FieldProtectedTriggerEvent(VConstants.TRG_PREINS)
+
+  /**
+   * Executed before updating a row of the database
+   */
+  val PREUPD = FieldProtectedTriggerEvent(VConstants.TRG_PREUPD)
+
+  /**
+   * Executed before validating any new entry
+   */
+  val PREVAL = FieldTriggerEvent<Unit>(VConstants.TRG_PREVAL)
+
+  /**
+   * Executed after field change and validation
+   */
+  val VALFLD = FieldTriggerEvent<Unit>(VConstants.TRG_VALFLD)
+
+  /**
+   * This is the same trigger as VALFLD
+   */
+  val VALIDATE = FieldTriggerEvent<Unit>(VConstants.TRG_VALFLD)
+
+  /**
+   * Equates the value of two fields
+   */
+  val VALUE = FieldTypeTriggerEvent(VConstants.TRG_VALUE)
+
+  /**
+   * Make field clickable and execute an action
+   */
+  val ACTION = FieldTriggerEvent<Unit>(VConstants.TRG_ACTION)
+
+  /**
+   * Field Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class FieldTriggerEvent<T>(val event: Int)
+
+  /**
+   * Field protected Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class FieldProtectedTriggerEvent(event: Int) : FieldTriggerEvent<Unit>(event)
+
+  /**
+   * Field object Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class FieldTypeTriggerEvent(event: Int) : FieldTriggerEvent<Any>(event)
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

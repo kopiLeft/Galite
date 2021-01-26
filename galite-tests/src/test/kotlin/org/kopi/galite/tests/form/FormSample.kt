@@ -19,13 +19,8 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.INITFORM
-import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.ACCESS
-import org.kopi.galite.field.ACTION
-import org.kopi.galite.field.POSTCHG
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.BlockOption
@@ -114,7 +109,7 @@ object FormSample : Form() {
     blockVisibility(Access.SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
   }
 
-  val preform = trigger(INITFORM) {
+  val preform = trigger(INIT) {
     println("init form trigger works")
   }
 
