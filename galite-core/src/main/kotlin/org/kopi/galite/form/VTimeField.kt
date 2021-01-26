@@ -24,7 +24,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimeColumn
 import org.kopi.galite.type.Time
-import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -332,7 +331,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r])
+  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else value[r]!!.toSql()  // TODO("NOT SUPPORTED YET")
 
   /**
    * Copies the value of a record to another

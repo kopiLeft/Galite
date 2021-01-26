@@ -23,7 +23,6 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VIntegerCodeColumn
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.db.Utils
 import org.kopi.galite.util.base.InconsistencyException
 
 class VIntegerCodeField : VCodeField {
@@ -133,7 +132,7 @@ class VIntegerCodeField : VCodeField {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? = Utils.toSql(if (value[r] == -1) null else codes[value[r]])
+  override fun getSqlImpl(r: Int): Int? = if (value[r] == -1) null else codes[value[r]]
 
   /**
    * Returns the data type handled by this field.

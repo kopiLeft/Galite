@@ -529,7 +529,7 @@ object Commands : VConstants {
    * Sets the search operator for the current field
    */
   fun setSearchOperator(b: VBlock) {
-    val f: VField? = b.activeField
+    val f = b.activeField
 
     if (f != null) {
       val v: Int = VListDialog(VlibProperties.getString("search_operator"), arrayOf(

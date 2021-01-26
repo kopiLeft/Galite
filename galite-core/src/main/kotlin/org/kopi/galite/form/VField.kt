@@ -39,6 +39,7 @@ import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.stringLiteral
 import org.jetbrains.exposed.sql.substring
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -682,7 +683,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } else {
       val buffer = getSql(block!!.activeRecord)
 
-      if (buffer!!.indexOf('*') == -1) {
+      if (buffer.toString().indexOf('*') == -1) {
         if (getSearchOperator() == VConstants.SOP_EQ) VConstants.STY_EXACT else VConstants.STY_MANY
       } else {
         VConstants.STY_MANY
@@ -690,99 +691,81 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  open fun getSearchCondition_(column: ExpressionWithColumnType<*>): Op<Boolean>? {
-
-    return if (isNull(block!!.activeRecord)) {
+  open fun <T> getSearchCondition_(column: ExpressionWithColumnType<T>): Op<Boolean>? {
+    if (isNull(block!!.activeRecord)) {
       return when (getSearchOperator()) {
         VConstants.SOP_EQ -> null
         VConstants.SOP_NE -> Op.build { column.isNotNull() }
         else -> Op.build { column.isNull() }
       }
     } else {
-      val operatorName = VConstants.OPERATOR_NAMES[getSearchOperator()]
-      var operand = getSql(block!!.activeRecord)
+      val operand = getSql(block!!.activeRecord) as? T
 
-      when (options and VConstants.FDO_SEARCH_MASK) {
-        VConstants.FDO_SEARCH_NONE -> {
-        }
-        VConstants.FDO_SEARCH_UPPER -> operand = operand!!.toUpperCase()
-        VConstants.FDO_SEARCH_LOWER -> operand = operand!!.toLowerCase()
-        else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
-      }
-
-      if (operand!!.indexOf('*') == -1) {
-        // nothing to change: standard case
-        when (operatorName) {
-          "=" -> Op.build {
-            column as Column<String>
-            column eq operand!!
-          }
-          "<" -> Op.build {
-            column less operand!!
-          }
-          ">" -> Op.build {
-            column greater operand!!
-          }
-          "<=" -> Op.build {
-            column lessEq operand!!
-          }
-          ">=" -> Op.build {
-            column greaterEq operand!!
-          }
-          "<>" -> Op.build {
-            column as Column<String>
-            column neq operand!!
-          }
-          else -> null
-        }?.let {
-          return it
-        }
-      } else {
-        when (getSearchOperator()) {
-          VConstants.SOP_EQ -> {
-            operand = operand.replace('*', '%')
-            Op.build {
-              column as Column<String>
-              column like operand!!
-            }
-          }
-          VConstants.SOP_NE -> {
-            operand = operand.replace('*', '%')
-            Op.build {
-              column as Column<String>
-              column notLike operand!!
-            }
-          }
-          VConstants.SOP_GE -> {
+      if (operand is String && operand.indexOf('*') != -1) {
+        val stringOperand = when (getSearchOperator()) {
+          VConstants.SOP_EQ, VConstants.SOP_NE -> operand.replace('*', '%')
+          VConstants.SOP_GE, VConstants.SOP_GT -> {
             // remove everything after at '*'
-            operand = operand.substring(0, operand.indexOf('*'))
-            Op.build {
-              column greaterEq operand!!
-            }
+            operand.substring(0, operand.indexOf('*')) + "'"
           }
-          VConstants.SOP_GT -> {
-            // remove everything after at '*'
-            operand = operand.substring(0, operand.indexOf('*'))
-            Op.build {
-              column greater operand!!
-            }
-          }
-          VConstants.SOP_LE -> {
+          VConstants.SOP_LE, VConstants.SOP_LT -> {
             // replace substring starting at '*' by highest (ascii) char
-            operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
-            Op.build {
-              column lessEq operand!!
-            }
-          }
-          VConstants.SOP_LT -> {
-            // replace substring starting at '*' by highest (ascii) char
-            operand = operand.substring(0, operand.indexOf('*')) + "\u00ff'"
-            Op.build {
-              column less operand
-            }
+            operand.substring(0, operand.indexOf('*')) + "\u00ff'"
           }
           else -> throw InconsistencyException()
-        }.also { return it }
+        }
+
+        val stringOperandLiteral = when (options and VConstants.FDO_SEARCH_MASK) {
+          VConstants.FDO_SEARCH_NONE -> stringLiteral(stringOperand)
+          VConstants.FDO_SEARCH_UPPER -> stringLiteral(stringOperand).upperCase()
+          VConstants.FDO_SEARCH_LOWER -> stringLiteral(stringOperand).lowerCase()
+          else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
+        }
+
+        return when (getSearchOperator()) {
+          VConstants.SOP_EQ -> Op.build {
+            column eq stringOperandLiteral
+          }
+          VConstants.SOP_NE -> Op.build {
+            column neq stringOperandLiteral
+          }
+          VConstants.SOP_GE -> Op.build {
+            column greaterEq stringOperandLiteral
+          }
+          VConstants.SOP_GT -> Op.build {
+            column greater stringOperandLiteral
+          }
+          VConstants.SOP_LE -> Op.build {
+            column lessEq operand
+          }
+          VConstants.SOP_LT -> Op.build {
+            column less operand
+          }
+          else -> throw InconsistencyException()
+        }
+      } else {
+        operand as Comparable<T>
+        return when (getSearchOperator()) {
+          VConstants.SOP_EQ -> Op.build {
+            column eq operand
+          }
+          VConstants.SOP_NE -> Op.build {
+            column neq operand
+          }
+          VConstants.SOP_GE -> Op.build {
+            column greaterEq operand
+          }
+          VConstants.SOP_GT -> Op.build {
+            column greater operand
+          }
+          VConstants.SOP_LE -> Op.build {
+            column lessEq operand
+          }
+          VConstants.SOP_LT -> Op.build {
+            column less operand
+          }
+          else -> throw InconsistencyException()
+        }
       }
     }
   }
@@ -1213,7 +1196,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getSql(): String? = getSql(block!!.currentRecord)
+  fun getSql(): Any? = getSql(block!!.currentRecord)
 
   /**
    * Is the field value of given record null ?
@@ -1381,7 +1364,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun getSql(r: Int): String? {
+  fun getSql(r: Int): Any? {
     if (alias != null) {
       return alias!!.getSql(0)
     }
@@ -1396,7 +1379,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  abstract fun getSqlImpl(r: Int): String?
+  abstract fun getSqlImpl(r: Int): Any?
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -1583,9 +1566,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       try {
         try {
           val table = evalListTable()
-          val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<String>
+          val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<Any?>
 
-          val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord)!! }
+          val query = table.slice(intLiteral(1)).select { column eq getSql(block!!.activeRecord) }
 
           val transaction = TransactionManager.currentOrNull()
           if (transaction != null) {
@@ -1619,9 +1602,9 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } else {
       var count = 0
       var result: String? = null
-      val condition = getSql(block!!.activeRecord)!!
+      val condition = getSql(block!!.activeRecord)
 
-      if (condition.indexOf('*') > 0) {
+      if (condition.toString().indexOf('*') > 0) {
         return
       }
       try {
@@ -1682,7 +1665,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
           val column = list!!.getColumn(0).column as Column<String>
           val query = evalListTable().slice(columns).select {
-            column.substring(1, condition.length) eq condition
+            column.substring(1, condition.toString().length) eq condition.toString()
           }.orderBy(columns[0])
 
           result = displayQueryList_(query, list!!.columns) as String?
@@ -1704,7 +1687,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    */
   open fun getListID(): Int {
     val table = evalListTable()
-    val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<String>
+    val column = table.resolveColumn(list!!.getColumn(0).column!!) as Column<Any?>
     val idColumn = table.columns.find { it.name == "ID" } as Column<Int>
 
     assert(!isNull(block!!.activeRecord)) { threadInfo() + " is null" }
@@ -1714,7 +1697,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     try {
       try {
         transaction {
-          val query = table.slice(idColumn).select { column eq getSql(block!!.activeRecord)!! }
+          val query = table.slice(idColumn).select { column eq getSql(block!!.activeRecord) }
 
           if (!query.empty()) {
             id = query.first()[idColumn]
@@ -1847,7 +1830,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     val searchCondition = if (getSearchType() == VConstants.STY_MANY) {
       val expression = when (options and VConstants.FDO_SEARCH_MASK) {
         VConstants.FDO_SEARCH_NONE -> {
-          list!!.getColumn(0).column as Column<*>
+          list!!.getColumn(0).column as Column<Any?>
         }
 
         VConstants.FDO_SEARCH_UPPER -> {

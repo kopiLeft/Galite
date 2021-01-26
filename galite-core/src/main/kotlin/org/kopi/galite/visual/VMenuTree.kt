@@ -495,7 +495,6 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       }
       query.forEach {
         if (it[Favorites.module] != 0) {
-          val symbol = it[Modules.symbol] as Int
           shortcutsID.add(it[Favorites.module])
         }
       }

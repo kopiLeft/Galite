@@ -43,5 +43,5 @@ abstract class Type<T> : Comparable<T> {
   /**
    * Represents the value in sql
    */
-  abstract fun toSql(): String
+  abstract fun toSql(): Any
 }

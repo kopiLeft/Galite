@@ -158,7 +158,8 @@ open class Week(var scalar: Int) : Type<Week>() {
   override fun toSql(): String {
     val year = scalar / 53
     val week = scalar % 53 + 1
-    return "{fn WEEK($year, $week)}"
+    //return "{fn WEEK($year, $week)}"
+    TODO("NOT SUPPORTED YET")
   }
 
   override fun hashCode(): Int {
