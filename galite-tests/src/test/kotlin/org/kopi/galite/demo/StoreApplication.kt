@@ -26,6 +26,8 @@ import org.joda.time.DateTime
 import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.tests.db.DBSchemaTest
+import org.kopi.galite.tests.form.FormSample
+import org.kopi.galite.tests.form.FormWithFields
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -46,7 +48,7 @@ object Product : Table("Products") {
   val idPdt = integer("ID Product").autoIncrement()
   val designation = varchar("DESIGNATION", 50)
   val category = varchar("CATEGORIE", 30)
-  val taxName = varchar("PRODUCT TAX NAME", 100).references(TaxRule.taxName)
+  val taxName = varchar("PRODUCT TAX NAME", 20).references(TaxRule.taxName)
   val price = integer("UNIT PRICE EXCLUDING VAT")
   val photo = blob("Product PHOTO").nullable()
 
@@ -84,7 +86,7 @@ object Command : Table("COMMANDS") {
   val numCmd = integer("COMMAND NUMBER").autoIncrement()
   val idClt = integer("ID_CLT_CMD").references(Client.idClt)
   val dateCmd = varchar("COMMAND DATE", 25)
-  val numBill = integer("NUM_BILL_CMD").references(Bill.numBill)
+  val numBill = integer("NUM_BILL_CMD")
   val paymentMethod = varchar("PAYMENT METHOD", 50)
   val statusCmd = varchar("COMMAND STATUS", 30)
 
@@ -104,7 +106,7 @@ object Bill : Table("BILLS") {
 
 object TaxRule : Table("TAX RULE") {
   val idTaxe = integer("TAX ID").autoIncrement()
-  val taxName = varchar("TAX NAME", 100)
+  val taxName = varchar("TAX NAME", 20)
   val rate = integer("TAX RATE IN %%")
 
   override val primaryKey = PrimaryKey(idTaxe)
@@ -115,13 +117,14 @@ open class StoreApplication : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {
   connectToDatabase()
+  DBSchemaTest.reset()
   initDatabase()
   initModules()
   initUserRights()
   addClients()
+  addTaxRule()
   addProducts()
   addFourns()
-  addTaxRule()
   addStock()
   addCmds()
   addBills()
@@ -165,8 +168,8 @@ fun initModules() {
   transaction {
     DBSchemaTest.insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
     DBSchemaTest.insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
-    DBSchemaTest.insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", ClientForm::class)
-    DBSchemaTest.insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", ProductForm::class)
+    DBSchemaTest.insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", FormSample::class)
+    DBSchemaTest.insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", FormWithFields::class)
   }
 }
 
@@ -178,6 +181,7 @@ fun initUserRights(user: String = DBSchemaTest.connectedUser) {
     DBSchemaTest.insertIntoUserRights(user, "2010", true)
   }
 }
+
 
 fun addClients() {
   transaction {
@@ -216,28 +220,28 @@ fun addProducts() {
     Product.insert {
       it[idPdt] = 0
       it[designation] = "designation Product 0"
-      it[category] = "pullovers"
+      it[category] = "cat 1"
       it[taxName] = "tax 1"
       it[price] = 263
     }
     Product.insert {
       it[idPdt] = 1
       it[designation] = "designation Product 1"
-      it[category] = "shoes"
-      it[taxName] = "tax 1"
+      it[category] = "cat 2"
+      it[taxName] = "tax 2"
       it[price] = 314
     }
     Product.insert {
       it[idPdt] = 2
       it[designation] = "designation Product 2"
-      it[category] = "shirts"
+      it[category] = "cat3"
       it[taxName] = "tax 2"
       it[price] = 180
     }
     Product.insert {
       it[idPdt] = 3
       it[designation] = "designation Product 3"
-      it[category] = "shoes"
+      it[category] = "cat 1"
       it[taxName] = "tax 3"
       it[price] = 65
     }
@@ -250,6 +254,7 @@ fun addFourns() {
       it[idProvider] = 0
       it[nameProvider] = "Radhia Jouini"
       it[tel] = 21203506
+      it[address] = "address provider 1"
       it[description] = " description du Provider ayant l'id 0 "
       it[postalCode] = 2000
     }
@@ -257,6 +262,7 @@ fun addFourns() {
       it[idProvider] = 1
       it[nameProvider] = "Sarra Boubaker"
       it[tel] = 99806234
+      it[address] = "address provider 2"
       it[description] = " description du Provider ayant l'id 1 "
       it[postalCode] = 3005
     }
@@ -264,8 +270,17 @@ fun addFourns() {
       it[idProvider] = 2
       it[nameProvider] = "Hamida Zaoueche"
       it[tel] = 55896321
+      it[address] = "address provider 3"
       it[description] = " description du fournisseur ayant l'id 2 "
       it[postalCode] = 6008
+    }
+    Provider.insert {
+      it[idProvider] = 3
+      it[nameProvider] = "Seif Markzi"
+      it[tel] = 23254789
+      it[address] = "address provider 4"
+      it[description] = " description du fournisseur ayant l'id 3 "
+      it[postalCode] = 2006
     }
 
   }
@@ -280,22 +295,22 @@ fun addTaxRule() {
     }
     TaxRule.insert {
       it[idTaxe] = 1
-      it[taxName] = "tax 1"
+      it[taxName] = "tax 2"
       it[rate] = 22
     }
     TaxRule.insert {
       it[idTaxe] = 2
-      it[taxName] = "tax 2"
+      it[taxName] = "tax 3"
       it[rate] = 13
     }
     TaxRule.insert {
       it[idTaxe] = 3
-      it[taxName] = "tax 3"
+      it[taxName] = "tax 4"
       it[rate] = 9
     }
     TaxRule.insert {
       it[idTaxe] = 4
-      it[taxName] = "tax 4"
+      it[taxName] = "tax 5"
       it[rate] = 20
     }
   }
@@ -381,7 +396,7 @@ fun addCmds() {
       it[numCmd] = 2
       it[idClt] = 1
       it[dateCmd] = "20/01/2021"
-      it[numBill] = 1
+      it[numBill] = 2
       it[paymentMethod] = "carte"
       it[statusCmd] = "en_cours"
     }
@@ -389,7 +404,7 @@ fun addCmds() {
       it[numCmd] = 3
       it[idClt] = 2
       it[dateCmd] = "13/05/2020"
-      it[numBill] = 2
+      it[numBill] = 3
       it[paymentMethod] = "espece"
       it[statusCmd] = "en_cours"
     }

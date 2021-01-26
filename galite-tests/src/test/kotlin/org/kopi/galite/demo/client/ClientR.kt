@@ -12,7 +12,7 @@ import java.util.Locale
  * Simple Report with two fields.
  */
 object ClientR : Report() {
-  override val locale = Locale.ENGLISH
+  override val locale = Locale.FRANCE
 
   override val title = "ClientReport"
 

@@ -25,10 +25,10 @@ import org.kopi.galite.report.Report
 import java.util.Locale
 
 object ClientForm : ReportSelectionForm() {
-  override val locale = Locale.ENGLISH
-  val action = menu("Action")
+  override val locale = Locale.FRANCE
   override val title = "client form"
   val page = page("page")
+  val action = menu("act")
   val report = actor(
           ident = "report",
           menu = action,

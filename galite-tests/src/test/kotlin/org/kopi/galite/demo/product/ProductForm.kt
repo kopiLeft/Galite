@@ -31,6 +31,13 @@ object ProductForm : ReportSelectionForm() {
   override val title = "product form"
   val page = page("page")
   val action = menu("Action")
+  val edit = menu("Edit")
+  val autoFill = actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  )
   val report = actor(
           ident = "report",
           menu = action,

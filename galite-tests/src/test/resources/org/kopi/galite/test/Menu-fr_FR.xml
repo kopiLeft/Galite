@@ -6,4 +6,6 @@
     <module ident="1000" label="Achat" help="Menu 2" />
     <module ident="2009" label="Test form" help="Test form" />
     <module ident="2010" label="test fields visibility" help="form for test fields visibility" />
+    <module ident="2011" label="client label" help="client form" />
+    <module ident="2012" label="product label" help="product form" />
 </modules>
