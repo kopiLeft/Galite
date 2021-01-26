@@ -19,10 +19,8 @@ package org.kopi.galite.form.dsl
 import java.io.IOException
 
 import org.kopi.galite.common.Action
-import org.kopi.galite.common.FormBooleanTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.FormTriggerEvent
-import org.kopi.galite.common.FormVoidTriggerEvent
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
@@ -83,7 +81,7 @@ abstract class Form : Window() {
    * @param formTriggerEvents    the trigger events to add
    * @param method               the method to execute when trigger is called
    */
-  private fun <T> trigger(formTriggerEvents: Array<out FormTriggerEvent>, method: () -> T): Trigger {
+  fun <T> trigger(vararg formTriggerEvents: FormTriggerEvent<T>, method: () -> T): Trigger {
     val event = formEventList(formTriggerEvents)
     val formAction = Action(null, method)
     val trigger = FormTrigger(event, formAction)
@@ -91,27 +89,7 @@ abstract class Form : Window() {
     return trigger
   }
 
-  /**
-   * Adds void triggers to this form
-   *
-   * @param formTriggerEvents  the trigger events to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg formTriggerEvents: FormVoidTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(formTriggerEvents, method)
-  }
-
-  /**
-   * Adds boolean triggers to this form
-   *
-   * @param formTriggerEvents the trigger events to add
-   * @param method            the method to execute when trigger is called
-   */
-  fun trigger(vararg formTriggerEvents: FormBooleanTriggerEvent, method: () -> Boolean): Trigger {
-    return trigger(formTriggerEvents, method)
-  }
-
-  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent>): Long {
+  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent<*>>): Long {
     var self = 0L
 
     formTriggerEvents.forEach { trigger ->

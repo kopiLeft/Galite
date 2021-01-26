@@ -27,33 +27,11 @@ import org.kopi.galite.report.Constants
  * @param action       the action to perform
  */
 abstract class Trigger(val events: Long, val action: Action<*>) {
-  private var type = 0
-
-  init {
-    initialize()
-  }
 
   /**
    * Return trigger array
    */
   abstract fun getTriggers(): IntArray
-
-  /**
-   * Initializes the trigger type
-   */
-  fun initialize() {
-    type = -1
-    val trgTypes = getTriggers()
-    trgTypes.forEachIndexed { index, trgType ->
-      if (events shr index and 1 > 0) {
-        if (type == -1) {
-          type = trgType
-        } else if (trgType != type) {
-          // throw PositionedError(getTokenReference(), BaseMessages.TRIGGER_DIFFERENT_RETURN, TRG_NAMES.get(i)) TODO
-        }
-      }
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -65,41 +43,27 @@ abstract class Trigger(val events: Long, val action: Action<*>) {
  *
  * @param event the event of the trigger
  */
-open class FormTriggerEvent(val event: Int)
-
-/**
- * Form void Triggers
- *
- * @param event the event of the trigger
- */
-open class FormVoidTriggerEvent(event: Int) : FormTriggerEvent(event)
-
-/**
- * Form boolean Triggers
- *
- * @param event the event of the trigger
- */
-open class FormBooleanTriggerEvent(event: Int) : FormTriggerEvent(event)
+open class FormTriggerEvent<T>(val event: Int)
 
 /**
  * executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command
  */
-object INITFORM : FormVoidTriggerEvent(VConstants.TRG_INIT)             // void trigger
+object INITFORM : FormTriggerEvent<Unit>(VConstants.TRG_INIT)             // void trigger
 
 /**
  * executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command
  */
-object PREFORM : FormVoidTriggerEvent(VConstants.TRG_PREFORM)       // void trigger
+object PREFORM : FormTriggerEvent<Unit>(VConstants.TRG_PREFORM)       // void trigger
 
 /**
  * executed when closing the form
  */
-object POSTFORM : FormVoidTriggerEvent(VConstants.TRG_POSTFORM)     // void trigger
+object POSTFORM : FormTriggerEvent<Unit>(VConstants.TRG_POSTFORM)     // void trigger
 
 /**
  * executed upon ResetForm command
  */
-object RESETFORM : FormBooleanTriggerEvent(VConstants.TRG_RESET)        // Boolean trigger
+object RESETFORM : FormTriggerEvent<Boolean>(VConstants.TRG_RESET)        // Boolean trigger
 
 /**
  * a special trigger that returns a boolean value of whether the form have been changed or not,
@@ -109,13 +73,13 @@ object RESETFORM : FormBooleanTriggerEvent(VConstants.TRG_RESET)        // Boole
  *   false
  * }
  */
-object CHANGEDFORM : FormBooleanTriggerEvent(VConstants.TRG_CHANGED)    // Boolean trigger
+object CHANGEDFORM : FormTriggerEvent<Boolean>(VConstants.TRG_CHANGED)    // Boolean trigger
 
 /**
  * executed when quitting the form
  * actually not available
  */
-object QUITFORM : FormBooleanTriggerEvent(VConstants.TRG_QUITFORM)  // Boolean trigger
+object QUITFORM : FormTriggerEvent<Boolean>(VConstants.TRG_QUITFORM)  // Boolean trigger
 
 ///////////////////////////////////////////////////////////////////////////
 // BLOCK TRIGGERS
