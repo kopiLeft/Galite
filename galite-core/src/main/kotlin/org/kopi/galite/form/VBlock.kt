@@ -2214,7 +2214,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       /* skip fields with fixed value */
       if (!field.isNull(activeRecord) &&
               field.getSearchOperator() == VConstants.SOP_EQ &&
-              !field.getSql(activeRecord)!!.contains('*')) {
+              !field.getSql(activeRecord)!!.toString().contains('*')) {
         continue
       }
       query_tab[query_cnt++] = field
@@ -2968,7 +2968,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             val sql = field.getSql(recno)
 
             if (sql != "?") { // dont lookup for blobs...
-              if (field.getSql(recno).equals(Utils.NULL_LITERAL)) {
+              if (field.getSql(recno)!!.equals(Utils.NULL_LITERAL)) {
                 conditions.add(Op.build { column.isNull() })
               } else {
                 conditions.add(Op.build { column eq field.getSql(recno)!! })

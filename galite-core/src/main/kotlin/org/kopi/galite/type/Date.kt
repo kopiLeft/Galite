@@ -193,11 +193,10 @@ open class Date : Type<Date> {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): String {
+  override fun toSql(): java.sql.Date {
     val gregorian = julianToGregorian(scalar)
 
-    return buildString {
-      append("{d '")
+    val date = buildString {
       append(gregorian[0])
       append('-')
       append(gregorian[1] / 10)
@@ -205,8 +204,9 @@ open class Date : Type<Date> {
       append('-')
       append(gregorian[2] / 10)
       append(gregorian[2] % 10)
-      append("'}")
     }
+
+    return java.sql.Date.valueOf(date)
   }
 
   // --------------------------------------------------------------------

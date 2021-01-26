@@ -23,6 +23,7 @@ import java.util.Locale
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.Instant
 
 /**
  * This class represents kopi timestamp types
@@ -112,14 +113,8 @@ class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp>() {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): String {
-    val micro = (sqlTimestamp.nanos / 1000).toString()
-    val tmp = buildString {
-      append("00000".substring(0, 6 - micro.length))
-      append(micro)
-    }
-    return SimpleDateFormat("'{ts '''yyyy'-'MM'-'dd' 'HH':'mm':'ss'.$tmp''}'").format(
-            sqlTimestamp)
+  override fun toSql(): Instant {
+    return sqlTimestamp.toInstant()
   }
 
   override fun hashCode(): Int {

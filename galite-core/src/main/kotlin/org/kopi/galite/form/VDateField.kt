@@ -26,7 +26,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
-import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -268,10 +267,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    return if (value[r] == null) "NULL"
-    else Utils.toSql(value[r]!!)
-  }
+  override fun getSqlImpl(r: Int): java.sql.Date? = if (value[r] == null) null else value[r]!!.toSql()
 
   /**
    * Copies the value of a record to another

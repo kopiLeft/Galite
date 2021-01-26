@@ -225,7 +225,7 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   /**
    * Represents the value in sql
    */
-  fun toSql(): String = value.toString()
+  fun toSql(): BigDecimal = value
 
   // ----------------------------------------------------------------------
   // IMPLEMENTATION OF NUMBER

@@ -23,7 +23,7 @@ import java.util.Locale
 /**
  * This class represents image types
  */
-class Image(val width: Int, val height: Int, var value: ExposedBlob) : Comparable<Image> {
+class Image(val width: Int, val height: Int, var value: ExposedBlob) : Type<Image>() {
 
   /**
    * Compares two objects
@@ -46,7 +46,7 @@ class Image(val width: Int, val height: Int, var value: ExposedBlob) : Comparabl
    * Format the object depending on the current language
    * @param    locale    the current language
    */
-  fun toString(locale: Locale?): String {
+  override fun toString(locale: Locale): String {
     val strBuilder = StringBuilder()
     return strBuilder.append(width)
                      .append(',')
@@ -58,7 +58,7 @@ class Image(val width: Int, val height: Int, var value: ExposedBlob) : Comparabl
   /**
    * Represents the value in sql
    */
-  fun toSql(): String = value.toString()
+  override fun toSql(): ExposedBlob = value
 
   /**
    * Compares to another image.
