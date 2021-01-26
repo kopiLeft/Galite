@@ -20,107 +20,94 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.jodatime.CurrentDateTime
 import org.jetbrains.exposed.sql.jodatime.date
-import org.jetbrains.exposed.sql.jodatime.datetime
-
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 import org.kopi.galite.demo.client.ClientForm
-import org.kopi.galite.demo.produit.ProduitForm
+import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 object Client : Table("CLIENTS") {
-  val idClt = integer("ID CLIENT").autoIncrement()
-  val nomClt = varchar("NOM", 25).uniqueIndex()
-  val prenomClt = varchar("PRENOM", 25)
-  val adresseClt = varchar("ADRESSE", 255)
-  val ageClt = integer("AGE")
-  val villeClt = varchar("VILLE", 255)
-  val codePostalClt = integer("CODEPOSTAL")
+  val idClt = integer("CLIENT ID").autoIncrement()
+  val nameClt = varchar("CLIENT NAME", 25)
+  val fstnameClt = varchar("CLIENT FIRSTNAME", 25)
+  val addressClt = varchar("CLIENT ADDRESS", 50)
+  val ageClt = integer("CLIENT AGE")
+  val cityClt = varchar("CLIENT CITY", 30)
+  val postalCodeClt = integer("CLIENT POSTAL CODE")
 
   override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
 }
 
-object Produit : Table("PRODUITS") {
-  val idPdt = integer("ID PRODUIT").autoIncrement()
-  val designation = varchar("DESIGNATION", 100)
-  val categorie = varchar("CATEGORIE", 30)
-  val nomTaxe = varchar("REGLETAXEPDT", 100).references(RegleTaxe.nomTaxe)
-  val prixUHT = integer("PRIX UHT")
-  val photo = blob("PHOTO").nullable()
+object Product : Table("Products") {
+  val idPdt = integer("ID Product").autoIncrement()
+  val designation = varchar("DESIGNATION", 50)
+  val category = varchar("CATEGORIE", 30)
+  val taxName = varchar("PRODUCT TAX NAME", 100).references(TaxRule.taxName)
+  val price = integer("UNIT PRICE EXCLUDING VAT")
+  val photo = blob("Product PHOTO").nullable()
 
   override val primaryKey = PrimaryKey(idPdt)
 }
 
 object Stock : Table("STOCK") {
-  val idStckPdt = integer("IDSTXKPDT").references(Produit.idPdt)
-  val idStckFourn = integer("IDSTXKFOURN").references(Fournisseur.idFourn)
-  val minAlerte = integer("MINALERTE")
+  val idStckPdt = integer("IDSTXKPDT").references(Product.idPdt)
+  val idStckProv = integer("IDSTXKFOURN").references(Provider.idProvider)
+  val minAlert = integer("The MIN VALUE ALERT")
 
-  override val primaryKey = PrimaryKey(idStckPdt, idStckFourn)
+  override val primaryKey = PrimaryKey(idStckPdt, idStckProv)
 }
 
-object Fournisseur : Table("FOURNISSEURS") {
-  val idFourn = integer("IDFOURN").autoIncrement()
-  val nomFourn = varchar("NOMFOURNISSEUR", 50)
-  val tel = integer("TELEPHONE")
-  val description = varchar("DESCRIPTION", 255).nullable()
-  val adresse = varchar("ADRESSE", 70)
-  val codePostal = integer("CODEPOSTAL")
-  val logo = blob("LOGO").nullable()
+object Provider : Table("PROVIDERS") {
+  val idProvider = integer("PROVIDER ID").autoIncrement()
+  val nameProvider = varchar("PROVIDER NAME", 50)
+  val tel = integer("PROVIDER PHONE")
+  val description = varchar("PROVIDER DESCRIPTION", 255).nullable()
+  val address = varchar("PROVIDER ADDRESS ", 70)
+  val postalCode = integer("PROVIDER POSTAL CODE")
+  val logo = blob("PROVIDER COMPANY LOGO").nullable()
 
-  override val primaryKey = PrimaryKey(idFourn)
+  override val primaryKey = PrimaryKey(idProvider)
 }
 
-object FactureProduit : Table("FACTUREPRODUIT") {
-  val idFPdt = integer("ID_FACTURE_PDT").references(Produit.idPdt)
-  val quantite = integer("QUANTITE")
+object BillProduct : Table("BILL PRODUCT") {
+  val idBPdt = integer("BILL PRODUCT ID").references(Product.idPdt)
+  val quantity = integer("QUANTITY")
 
-  override val primaryKey = PrimaryKey(idFPdt)
+  override val primaryKey = PrimaryKey(idBPdt)
 }
 
-object Commande : Table("COMMANDES") {
-  val numCmd = integer("NUM_CMD").autoIncrement()
+object Command : Table("COMMANDS") {
+  val numCmd = integer("COMMAND NUMBER").autoIncrement()
   val idClt = integer("ID_CLT_CMD").references(Client.idClt)
-  val dateCmd = varchar("DATE_COMMANDE", 25)
-  val numFact = integer("NUM_FACT_CMD").references(Facture.numFact)
-  val moyenPaiement = varchar("MOYEN_PAIEMENT", 50)
-  val etatCmd = varchar("ETAT_CMD", 30)
+  val dateCmd = varchar("COMMAND DATE", 25)
+  val numBill = integer("NUM_BILL_CMD").references(Bill.numBill)
+  val paymentMethod = varchar("PAYMENT METHOD", 50)
+  val statusCmd = varchar("COMMAND STATUS", 30)
 
   override val primaryKey = PrimaryKey(numCmd)
 
 }
 
-object Facture : Table("FACTURES") {
-  val numFact = integer("NUM_FACT")
-  val adresseFact = varchar("ADRESSE_FACTURATION", 30)
-  val dateFact = date("DATE_FACTURATION")
-  val montant = integer("MONTANT_TOTAL_A_PAYER")
-  val refCmd = integer("REFERENCE_COMMANDE").references(Commande.numCmd)
+object Bill : Table("BILLS") {
+  val numBill = integer("BILL NUMBER")
+  val addressBill = varchar("BILL ADDRESS", 30)
+  val dateBill = date("BILL DATE")
+  val amount = integer("AMOUNT TO PAY")
+  val refCmd = integer("COMMAND REFERENCE").references(Command.numCmd)
 
-  override val primaryKey = PrimaryKey(numFact)
+  override val primaryKey = PrimaryKey(numBill)
 }
 
-object RegleTaxe : Table("REGLETAXE") {
-  val idTaxe = integer("ID_TAXE").autoIncrement()
-  val nomTaxe = varchar("REGLE_TAXE", 100)
-  val taux = integer("TAUX_TAXE_EN_%")
+object TaxRule : Table("TAX RULE") {
+  val idTaxe = integer("TAX ID").autoIncrement()
+  val taxName = varchar("TAX NAME", 100)
+  val rate = integer("TAX RATE IN %%")
 
   override val primaryKey = PrimaryKey(idTaxe)
-}
-
-object Paiement : Table("PAIEMENT") {
-  val idTransaction = integer("ID_TRANSACTION")
-  val moyenDePaiement = varchar("MOYEN_DE_PAIEMENT", 30)
-  val montant = integer("MONTANT_A_PAYER")
-  val datePaiement = date("DATE_PAIEMENT")
-  val heurePaiement = datetime("HEURE_PAIEMENT").defaultExpression(CurrentDateTime())
-
-  override val primaryKey = PrimaryKey(idTransaction)
 }
 
 @SpringBootApplication
@@ -128,18 +115,17 @@ open class StoreApplication : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {
   connectToDatabase()
-  createStoreTables()
-  DBSchemaTest.reset()
   initDatabase()
   initModules()
+  initUserRights()
   addClients()
   addProducts()
   addFourns()
-  addRegleTaxe()
+  addTaxRule()
   addStock()
   addCmds()
-  addFactures()
-  addFacturePrdt()
+  addBills()
+  addBillPrdt()
   runApplication<StoreApplication>(*args)
 }
 
@@ -148,9 +134,12 @@ fun main(args: Array<String>) {
  */
 fun initDatabase(user: String = DBSchemaTest.connectedUser) {
   transaction {
+    DBSchemaTest.createDBSchemaTables()
+    DBSchemaTest.insertIntoUsers(user, "administrator")
     createStoreTables()
   }
 }
+
 
 fun connectToDatabase(url: String = DBSchemaTest.testURL,
                       driver: String = DBSchemaTest.testDriver,
@@ -169,17 +158,18 @@ fun createStoreTables() {
   }
 }
 
-val list_Of_StoreTables = listOf(Client, Produit, Stock, Fournisseur, Paiement,
-                                 Facture, RegleTaxe, Commande, FactureProduit)
+val list_Of_StoreTables = listOf(Client, Product, Stock, Provider,
+                                 Bill, TaxRule, Command, BillProduct)
 
 fun initModules() {
   transaction {
     DBSchemaTest.insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
     DBSchemaTest.insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
     DBSchemaTest.insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", ClientForm::class)
-    DBSchemaTest.insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", ProduitForm::class)
+    DBSchemaTest.insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", ProductForm::class)
   }
 }
+
 fun initUserRights(user: String = DBSchemaTest.connectedUser) {
   transaction {
     DBSchemaTest.insertIntoUserRights(user, "2000", true)
@@ -193,152 +183,152 @@ fun addClients() {
   transaction {
     Client.insert {
       it[idClt] = 0
-      it[nomClt] = "Salah"
-      it[prenomClt] = "Mohamed"
-      it[adresseClt] = "10,Rue du Lac"
-      it[villeClt] = "Megrine"
-      it[codePostalClt] = 2001
+      it[nameClt] = "Salah"
+      it[fstnameClt] = "Mohamed"
+      it[addressClt] = "10,Rue du Lac"
+      it[cityClt] = "Megrine"
+      it[postalCodeClt] = 2001
       it[ageClt] = 40
     }
     Client.insert {
       it[idClt] = 1
-      it[nomClt] = "Guesmi"
-      it[prenomClt] = "Khaled"
-      it[adresseClt] = "14,Rue Mongi Slim"
-      it[villeClt] = "Tunis"
-      it[codePostalClt] = 6000
+      it[nameClt] = "Guesmi"
+      it[fstnameClt] = "Khaled"
+      it[addressClt] = "14,Rue Mongi Slim"
+      it[cityClt] = "Tunis"
+      it[postalCodeClt] = 6000
       it[ageClt] = 35
     }
     Client.insert {
       it[idClt] = 2
-      it[nomClt] = "Bouaroua"
-      it[prenomClt] = "Ahmed"
-      it[adresseClt] = "10,Rue du Lac"
-      it[villeClt] = "Mourouj"
-      it[codePostalClt] = 5003
-      it[ageClt] = 35
+      it[nameClt] = "Bouaroua"
+      it[fstnameClt] = "Ahmed"
+      it[addressClt] = "10,Rue du Lac"
+      it[cityClt] = "Mourouj"
+      it[postalCodeClt] = 5003
+      it[ageClt] = 22
     }
   }
 }
 
 fun addProducts() {
   transaction {
-    Produit.insert {
+    Product.insert {
       it[idPdt] = 0
-      it[designation] = "designation Produit 0"
-      it[categorie] = "categorie 0"
-      it[nomTaxe] = "Regle Taxe 0"
-      it[prixUHT] = 263
+      it[designation] = "designation Product 0"
+      it[category] = "pullovers"
+      it[taxName] = "tax 1"
+      it[price] = 263
     }
-    Produit.insert {
+    Product.insert {
       it[idPdt] = 1
-      it[designation] = "designation Produit 1"
-      it[categorie] = "categorie 2"
-      it[nomTaxe] = "Regle Taxe 1"
-      it[prixUHT] = 314
+      it[designation] = "designation Product 1"
+      it[category] = "shoes"
+      it[taxName] = "tax 1"
+      it[price] = 314
     }
-    Produit.insert {
+    Product.insert {
       it[idPdt] = 2
-      it[designation] = "designation Produit 2"
-      it[categorie] = "categorie 2"
-      it[nomTaxe] = "Regle Taxe 0"
-      it[prixUHT] = 180
+      it[designation] = "designation Product 2"
+      it[category] = "shirts"
+      it[taxName] = "tax 2"
+      it[price] = 180
     }
-    Produit.insert {
+    Product.insert {
       it[idPdt] = 3
-      it[designation] = "designation Produit 3"
-      it[categorie] = "categorie 3"
-      it[nomTaxe] = "Regle Taxe 2"
-      it[prixUHT] = 65
+      it[designation] = "designation Product 3"
+      it[category] = "shoes"
+      it[taxName] = "tax 3"
+      it[price] = 65
     }
   }
 }
 
 fun addFourns() {
   transaction {
-    Fournisseur.insert {
-      it[idFourn] = 0
-      it[nomFourn] = "Radhia Jouini"
+    Provider.insert {
+      it[idProvider] = 0
+      it[nameProvider] = "Radhia Jouini"
       it[tel] = 21203506
-      it[description] = " description du fournisseur ayant l'id 0 "
-      it[codePostal] = 2000
+      it[description] = " description du Provider ayant l'id 0 "
+      it[postalCode] = 2000
     }
-    Fournisseur.insert {
-      it[idFourn] = 1
-      it[nomFourn] = "Sarra Boubaker"
+    Provider.insert {
+      it[idProvider] = 1
+      it[nameProvider] = "Sarra Boubaker"
       it[tel] = 99806234
-      it[description] = " description du fournisseur ayant l'id 1 "
-      it[codePostal] = 3005
+      it[description] = " description du Provider ayant l'id 1 "
+      it[postalCode] = 3005
     }
-    Fournisseur.insert {
-      it[idFourn] = 2
-      it[nomFourn] = "Hamida Zaoueche"
+    Provider.insert {
+      it[idProvider] = 2
+      it[nameProvider] = "Hamida Zaoueche"
       it[tel] = 55896321
       it[description] = " description du fournisseur ayant l'id 2 "
-      it[codePostal] = 6008
+      it[postalCode] = 6008
     }
 
   }
 }
 
-fun addRegleTaxe() {
+fun addTaxRule() {
   transaction {
-    RegleTaxe.insert {
+    TaxRule.insert {
       it[idTaxe] = 0
-      it[nomTaxe] = "Regle Taxe 0"
-      it[taux] = 19
+      it[taxName] = "tax 1"
+      it[rate] = 19
     }
-    RegleTaxe.insert {
+    TaxRule.insert {
       it[idTaxe] = 1
-      it[nomTaxe] = "Regle Taxe 1"
-      it[taux] = 22
+      it[taxName] = "tax 1"
+      it[rate] = 22
     }
-    RegleTaxe.insert {
+    TaxRule.insert {
       it[idTaxe] = 2
-      it[nomTaxe] = "Regle Taxe 2"
-      it[taux] = 13
+      it[taxName] = "tax 2"
+      it[rate] = 13
     }
-    RegleTaxe.insert {
+    TaxRule.insert {
       it[idTaxe] = 3
-      it[nomTaxe] = "Regle Taxe 3"
-      it[taux] = 9
+      it[taxName] = "tax 3"
+      it[rate] = 9
     }
-    RegleTaxe.insert {
+    TaxRule.insert {
       it[idTaxe] = 4
-      it[nomTaxe] = "Regle Taxe 4"
-      it[taux] = 20
+      it[taxName] = "tax 4"
+      it[rate] = 20
     }
   }
 }
 
-fun addFactures() {
+fun addBills() {
   transaction {
-    Facture.insert {
-      it[numFact] = 0
-      it[adresseFact] = "adresse facture 0"
-      it[dateFact] = DateTime()
-      it[montant] = 453
+    Bill.insert {
+      it[numBill] = 0
+      it[addressBill] = "adresse facture 0"
+      it[dateBill] = DateTime()
+      it[amount] = 453
       it[refCmd] = 0
     }
-    Facture.insert {
-      it[numFact] = 1
-      it[adresseFact] = "adresse facture 1"
-      it[dateFact] = DateTime()
-      it[montant] = 600
+    Bill.insert {
+      it[numBill] = 1
+      it[addressBill] = "adresse facture 1"
+      it[dateBill] = DateTime()
+      it[amount] = 600
       it[refCmd] = 1
     }
-    Facture.insert {
-      it[numFact] = 2
-      it[adresseFact] = "adresse facture 2"
-      it[dateFact] = DateTime()
-      it[montant] = 870
+    Bill.insert {
+      it[numBill] = 2
+      it[addressBill] = "adresse facture 2"
+      it[dateBill] = DateTime()
+      it[amount] = 870
       it[refCmd] = 2
     }
-    Facture.insert {
-      it[numFact] = 3
-      it[adresseFact] = "adresse facture 3"
-      it[dateFact] = DateTime()
-      it[montant] = 999
+    Bill.insert {
+      it[numBill] = 3
+      it[addressBill] = "adresse facture 3"
+      it[dateBill] = DateTime()
+      it[amount] = 999
       it[refCmd] = 3
     }
   }
@@ -348,82 +338,82 @@ fun addStock() {
   transaction {
     Stock.insert {
       it[idStckPdt] = 0
-      it[idStckFourn] = 0
-      it[minAlerte] = 50
+      it[idStckProv] = 0
+      it[minAlert] = 50
     }
     Stock.insert {
       it[idStckPdt] = 1
-      it[idStckFourn] = 1
-      it[minAlerte] = 100
+      it[idStckProv] = 1
+      it[minAlert] = 100
     }
     Stock.insert {
       it[idStckPdt] = 2
-      it[idStckFourn] = 2
-      it[minAlerte] = 50
+      it[idStckProv] = 2
+      it[minAlert] = 50
     }
     Stock.insert {
       it[idStckPdt] = 3
-      it[idStckFourn] = 3
-      it[minAlerte] = 20
+      it[idStckProv] = 3
+      it[minAlert] = 20
     }
   }
 }
 
 fun addCmds() {
   transaction {
-    Commande.insert {
+    Command.insert {
       it[numCmd] = 0
       it[idClt] = 0
       it[dateCmd] = "01/01/2020"
-      it[numFact] = 0
-      it[moyenPaiement] = "cheque"
-      it[etatCmd] = "en_cours"
+      it[numBill] = 0
+      it[paymentMethod] = "cheque"
+      it[statusCmd] = "en_cours"
     }
-    Commande.insert {
+    Command.insert {
       it[numCmd] = 1
       it[idClt] = 0
       it[dateCmd] = "01/01/2020"
-      it[numFact] = 1
-      it[moyenPaiement] = "cheque"
-      it[etatCmd] = "en_cours"
+      it[numBill] = 1
+      it[paymentMethod] = "cheque"
+      it[statusCmd] = "en_cours"
     }
-    Commande.insert {
+    Command.insert {
       it[numCmd] = 2
       it[idClt] = 1
       it[dateCmd] = "20/01/2021"
-      it[numFact] = 1
-      it[moyenPaiement] = "carte"
-      it[etatCmd] = "en_cours"
+      it[numBill] = 1
+      it[paymentMethod] = "carte"
+      it[statusCmd] = "en_cours"
     }
-    Commande.insert {
+    Command.insert {
       it[numCmd] = 3
       it[idClt] = 2
       it[dateCmd] = "13/05/2020"
-      it[numFact] = 2
-      it[moyenPaiement] = "espece"
-      it[etatCmd] = "en_cours"
+      it[numBill] = 2
+      it[paymentMethod] = "espece"
+      it[statusCmd] = "en_cours"
     }
   }
 }
 
 
-fun addFacturePrdt() {
+fun addBillPrdt() {
   transaction {
-    FactureProduit.insert {
-      it[idFPdt] = 0
-      it[quantite] = 10
+    BillProduct.insert {
+      it[idBPdt] = 0
+      it[quantity] = 10
     }
-    FactureProduit.insert {
-      it[idFPdt] = 1
-      it[quantite] = 3
+    BillProduct.insert {
+      it[idBPdt] = 1
+      it[quantity] = 3
     }
-    FactureProduit.insert {
-      it[idFPdt] = 2
-      it[quantite] = 1
+    BillProduct.insert {
+      it[idBPdt] = 2
+      it[quantity] = 1
     }
-    FactureProduit.insert {
-      it[idFPdt] = 3
-      it[quantite] = 2
+    BillProduct.insert {
+      it[idBPdt] = 3
+      it[quantity] = 2
     }
   }
 }
