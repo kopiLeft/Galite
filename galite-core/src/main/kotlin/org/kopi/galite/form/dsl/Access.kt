@@ -20,11 +20,11 @@ import org.kopi.galite.form.VConstants
 
 enum class Access(val value: Int) {
   /** access hidden */
-  ACS_HIDDEN(VConstants.ACS_HIDDEN),
+  HIDDEN(VConstants.ACS_HIDDEN),
   /** access skipped */
-  ACS_SKIPPED(VConstants.ACS_SKIPPED),
+  SKIPPED(VConstants.ACS_SKIPPED),
   /** access visit */
-  ACS_VISIT(VConstants.ACS_VISIT),
+  VISIT(VConstants.ACS_VISIT),
   /** access mustfill */
-  ACS_MUSTFILL(VConstants.ACS_MUSTFILL)
+  MUSTFILL(VConstants.ACS_MUSTFILL)
 }

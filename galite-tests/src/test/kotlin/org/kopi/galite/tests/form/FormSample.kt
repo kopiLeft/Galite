@@ -111,7 +111,7 @@ object FormSample : Form() {
   }
 
   val tb4ToTestChangeBlockAccess = insertBlock(TestBlock(), p1) {
-    blockVisibility(Access.ACS_SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
+    blockVisibility(Access.SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
   }
 
   val preform = trigger(INITFORM) {
@@ -161,9 +161,9 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     options(FieldOption.NOECHO)
     trigger(ACCESS) {
       if (name.value == "hidden") {
-        VConstants.ACS_HIDDEN
+        Access.HIDDEN
       } else {
-        VConstants.ACS_SKIPPED
+        Access.SKIPPED
       }
     }
   }

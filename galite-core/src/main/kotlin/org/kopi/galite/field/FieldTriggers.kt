@@ -18,49 +18,50 @@
 package org.kopi.galite.field
 
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.Access
 
 /**
  * ACCESS is a special trigger that defines how a field can be accessed.
- * This trigger must return one of these values
- * ACS_SKIPPED, ACS_HIDDEN, ACS_VISIT or ACS_MUSTFILL.
+ * This trigger must return one of these values:
+ * [Access.SKIPPED], [Access.HIDDEN], [Access.VISIT] or [Access.MUSTFILL].
  */
-object ACCESS : FieldIntTriggerEvent(VConstants.TRG_FLDACCESS)
+object ACCESS : FieldTriggerEvent<Access>(VConstants.TRG_FLDACCESS)
 
 /**
  * Not defined actually
  */
-object FORMAT : FieldVoidTriggerEvent(VConstants.TRG_FORMAT)
+object FORMAT : FieldTriggerEvent<Unit>(VConstants.TRG_FORMAT)
 
 /**
  * Must return a boolean value, if "true" the cursor will move to the next field
  */
-object AUTOLEAVE : FieldBooleanTriggerEvent(VConstants.TRG_AUTOLEAVE)
+object AUTOLEAVE : FieldTriggerEvent<Boolean>(VConstants.TRG_AUTOLEAVE)
 
 /**
  * Defines the default value of the field to be set if the setDefault() method is called
  * (this method is automatically called when the user choose the insert command)
  */
-object DEFAULT : FieldVoidTriggerEvent(VConstants.TRG_DEFAULT)
+object DEFAULT : FieldTriggerEvent<Unit>(VConstants.TRG_DEFAULT)
 
 /**
  * Executed on field content change
  */
-object POSTCHG : FieldVoidTriggerEvent(VConstants.TRG_POSTCHG)
+object POSTCHG : FieldTriggerEvent<Unit>(VConstants.TRG_POSTCHG)
 
 /**
  * Executed before dropping file
  */
-object PREDROP : FieldVoidTriggerEvent(VConstants.TRG_PREDROP)
+object PREDROP : FieldTriggerEvent<Unit>(VConstants.TRG_PREDROP)
 
 /**
  * Executed after dropping file
  */
-object POSTDROP : FieldVoidTriggerEvent(VConstants.TRG_POSTDROP)
+object POSTDROP : FieldTriggerEvent<Unit>(VConstants.TRG_POSTDROP)
 
 /**
  * Executed upon exit of field
  */
-object POSTFLD : FieldVoidTriggerEvent(VConstants.TRG_POSTFLD)
+object POSTFLD : FieldTriggerEvent<Unit>(VConstants.TRG_POSTFLD)
 
 /**
  * Executed after inserting a row of the database
@@ -80,7 +81,7 @@ object PREDEL : FieldProtectedTriggerEvent(VConstants.TRG_PREDEL)
 /**
  * Executed upon entry of field
  */
-object PREFLD : FieldVoidTriggerEvent(VConstants.TRG_PREFLD)
+object PREFLD : FieldTriggerEvent<Unit>(VConstants.TRG_PREFLD)
 
 /**
  * Executed before inserting a row of the database
@@ -95,66 +96,45 @@ object PREUPD : FieldProtectedTriggerEvent(VConstants.TRG_PREUPD)
 /**
  * Executed before validating any new entry
  */
-object PREVAL : FieldVoidTriggerEvent(VConstants.TRG_PREVAL)
+object PREVAL : FieldTriggerEvent<Unit>(VConstants.TRG_PREVAL)
 
 /**
  * Executed after field change and validation
  */
-object VALFLD : FieldVoidTriggerEvent(VConstants.TRG_VALFLD)
+object VALFLD : FieldTriggerEvent<Unit>(VConstants.TRG_VALFLD)
 
 /**
  * This is the same trigger as VALFLD
  */
-object VALIDATE : FieldVoidTriggerEvent(VConstants.TRG_VALFLD)
+object VALIDATE : FieldTriggerEvent<Unit>(VConstants.TRG_VALFLD)
 
 /**
  * Equates the value of two fields
  */
-object VALUE : FieldObjectTriggerEvent(VConstants.TRG_VALUE)
+object VALUE : FieldTypeTriggerEvent(VConstants.TRG_VALUE)
 
 /**
  * Make field clickable and execute an action
  */
-object ACTION : FieldVoidTriggerEvent(VConstants.TRG_ACTION)
+object ACTION : FieldTriggerEvent<Unit>(VConstants.TRG_ACTION)
 
 /**
  * Field Triggers
  *
  * @param event the event of the trigger
  */
-open class FieldTriggerEvent(val event: Int)
-
-/**
- * Field void Triggers
- *
- * @param event the event of the trigger
- */
-open class FieldVoidTriggerEvent(event: Int) : FieldTriggerEvent(event)
-
-/**
- * Field boolean Triggers
- *
- * @param event the event of the trigger
- */
-open class FieldBooleanTriggerEvent(event: Int) : FieldTriggerEvent(event)
+open class FieldTriggerEvent<T>(val event: Int)
 
 /**
  * Field protected Triggers
  *
  * @param event the event of the trigger
  */
-open class FieldProtectedTriggerEvent(event: Int) : FieldTriggerEvent(event)
+open class FieldProtectedTriggerEvent(event: Int) : FieldTriggerEvent<Unit>(event)
 
 /**
  * Field object Triggers
  *
  * @param event the event of the trigger
  */
-open class FieldObjectTriggerEvent(event: Int) : FieldTriggerEvent(event)
-
-/**
- * Field init Triggers
- *
- * @param event the event of the trigger
- */
-open class FieldIntTriggerEvent(event: Int) : FieldTriggerEvent(event)
+open class FieldTypeTriggerEvent(event: Int) : FieldTriggerEvent<Any>(event)

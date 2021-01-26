@@ -31,12 +31,9 @@ import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.field.Field
-import org.kopi.galite.field.FieldBooleanTriggerEvent
-import org.kopi.galite.field.FieldIntTriggerEvent
-import org.kopi.galite.field.FieldObjectTriggerEvent
 import org.kopi.galite.field.FieldProtectedTriggerEvent
 import org.kopi.galite.field.FieldTriggerEvent
-import org.kopi.galite.field.FieldVoidTriggerEvent
+import org.kopi.galite.field.FieldTypeTriggerEvent
 import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
@@ -254,7 +251,28 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * @param fieldTriggerEvents    the trigger events to add
    * @param method                the method to execute when trigger is called
    */
-  private fun <T> trigger(fieldTriggerEvents: Array<out FieldTriggerEvent>, method: () -> T): Trigger {
+  fun <T> trigger(vararg fieldTriggerEvents: FieldTriggerEvent<T>, method: () -> T): Trigger =
+          initTrigger(fieldTriggerEvents, method)
+
+  /**
+   * Adds protected triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldProtectedTriggerEvent, method: () -> Unit): Trigger =
+          initTrigger(fieldTriggerEvents, method)
+
+  /**
+   * Adds protected triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldTypeTriggerEvent, method: () -> T): Trigger =
+          initTrigger(fieldTriggerEvents, method)
+
+  fun <T> initTrigger(fieldTriggerEvents: Array<out FieldTriggerEvent<*>>, method: () -> T) : Trigger {
     val event = fieldEventList(fieldTriggerEvents)
     val fieldAction = Action(null, method)
     val trigger = FormTrigger(event, fieldAction)
@@ -263,7 +281,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     return trigger
   }
 
-  private fun fieldEventList(fieldTriggerEvents: Array<out FieldTriggerEvent>): Long {
+  private fun fieldEventList(fieldTriggerEvents: Array<out FieldTriggerEvent<*>>): Long {
     var self = 0L
 
     fieldTriggerEvents.forEach { trigger ->
@@ -271,56 +289,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     }
 
     return self
-  }
-
-  /**
-   * Adds void triggers to this field
-   *
-   * @param fieldTriggerEvents  the trigger event to add
-   * @param method              the method to execute when trigger is called
-   */
-  fun trigger(vararg fieldTriggerEvents: FieldVoidTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(fieldTriggerEvents, method)
-  }
-
-  /**
-   * Adds boolean triggers to this field
-   *
-   * @param fieldTriggerEvents  the trigger events to add
-   * @param method              the method to execute when trigger is called
-   */
-  fun trigger(vararg fieldTriggerEvents: FieldBooleanTriggerEvent, method: () -> Boolean): Trigger {
-    return trigger(fieldTriggerEvents, method)
-  }
-
-  /**
-   * Adds protected triggers to this block.
-   *
-   * @param fieldTriggerEvents  the triggers to add
-   * @param method              the method to execute when trigger is called
-   */
-  fun trigger(vararg fieldTriggerEvents: FieldProtectedTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(fieldTriggerEvents, method)
-  }
-
-  /**
-   * Adds object triggers to this block.
-   *
-   * @param fieldTriggerEvents  the triggers to add
-   * @param method              the method to execute when trigger is called
-   */
-  fun trigger(vararg fieldTriggerEvents: FieldObjectTriggerEvent, method: () -> Any): Trigger {
-    return trigger(fieldTriggerEvents, method)
-  }
-
-  /**
-   * Adds int triggers to this block.
-   *
-   * @param fieldTriggerEvents  the triggers to add
-   * @param method              the method to execute when trigger is called
-   */
-  fun trigger(vararg fieldTriggerEvents: FieldIntTriggerEvent, method: () -> Int): Trigger {
-    return trigger(fieldTriggerEvents, method)
   }
 
   /**

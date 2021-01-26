@@ -21,6 +21,10 @@ import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.field.ACCESS
+import org.kopi.galite.field.VALUE
+import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
@@ -28,10 +32,12 @@ object FormWithFields: Form() {
   override val locale = Locale.FRANCE
   override val title = "form with fields"
   val testPage = page("test page")
-  val testBlock = insertBlock(BlockWithFields, testPage)
+  val testPagse = page("test pagde")
+  val testBlock = insertBlock(BlockWithFields(), testPage)
+  val testBlocsk = insertBlock(BlockWithFields(), testPagse)
 }
 
-object BlockWithFields : FormBlock(1, 1, "Test block") {
+class BlockWithFields : FormBlock(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -44,6 +50,9 @@ object BlockWithFields : FormBlock(1, 1, "Test block") {
     label = "name"
     help = "The user name"
     columns(u.name)
+    trigger(VALUE) {
+      "example"
+    }
   }
   val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
