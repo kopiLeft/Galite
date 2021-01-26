@@ -18,6 +18,7 @@
 package org.kopi.galite.common
 
 import org.kopi.galite.chart.CConstants
+import org.kopi.galite.chart.VChartType
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.report.Constants
 
@@ -90,42 +91,14 @@ object QUITFORM : FormTriggerEvent<Boolean>(VConstants.TRG_QUITFORM)  // Boolean
  *
  * @param event the event of the trigger
  */
-open class BlockTriggerEvent(val event: Int)
+open class BlockTriggerEvent<T>(val event: Int)
 
 /**
  * Block protected Triggers
  *
  * @param event the event of the trigger
  */
-open class BlockProtectedTriggerEvent(event: Int) : BlockTriggerEvent(event)
-
-/**
- * Block void Triggers
- *
- * @param event the event of the trigger
- */
-open class BlockVoidTriggerEvent(event: Int) : BlockTriggerEvent(event)
-
-/**
- * Block boolean Triggers
- *
- * @param event the event of the trigger
- */
-open class BlockBooleanTriggerEvent(event: Int) : BlockTriggerEvent(event)
-
-/**
- * Block Int Triggers
- *
- * @param event the event of the trigger
- */
-open class BlockIntTriggerEvent(event: Int) : BlockTriggerEvent(event)
-
-/**
- * Block object Triggers
- *
- * @param event the event of the trigger
- */
-open class BlockObjectTriggerEvent(event: Int) : BlockTriggerEvent(event)
+open class BlockProtectedTriggerEvent(event: Int) : BlockTriggerEvent<Unit>(event)
 
 /**
  * executed before querying the database
@@ -175,49 +148,49 @@ object PRESAVE : BlockProtectedTriggerEvent(VConstants.TRG_PRESAVE)  // protecte
 /**
  * executed upon record entry
  */
-object PREREC : BlockVoidTriggerEvent(VConstants.TRG_PREREC)    // void trigger
+object PREREC : BlockTriggerEvent<Unit>(VConstants.TRG_PREREC)    // void trigger
 
 /**
  * executed upon record exit
  */
-object POSTREC : BlockVoidTriggerEvent(VConstants.TRG_POSTREC)  // void trigger
+object POSTREC : BlockTriggerEvent<Unit>(VConstants.TRG_POSTREC)  // void trigger
 
 /**
  * executed upon block entry
  */
-object PREBLK : BlockVoidTriggerEvent(VConstants.TRG_PREBLK)    // void trigger
+object PREBLK : BlockTriggerEvent<Unit>(VConstants.TRG_PREBLK)    // void trigger
 
 /**
  * executed upon block exit
  */
-object POSTBLK : BlockVoidTriggerEvent(VConstants.TRG_POSTBLK)  // void trigger
+object POSTBLK : BlockTriggerEvent<Unit>(VConstants.TRG_POSTBLK)  // void trigger
 
 /**
  * executed upon block validation
  */
-object VALBLK : BlockVoidTriggerEvent(VConstants.TRG_VALBLK)    // void trigger
+object VALBLK : BlockTriggerEvent<Unit>(VConstants.TRG_VALBLK)    // void trigger
 
 /**
  * executed upon record validation
  */
-object VALREC : BlockVoidTriggerEvent(VConstants.TRG_VALREC)    // void trigger
+object VALREC : BlockTriggerEvent<Unit>(VConstants.TRG_VALREC)    // void trigger
 
 /**
  * is executed when the block is in the InsertMode. This trigger becomes active when
  * the user presses the key F4. It will then enable the system to load standard values
  * which will be proposed to the user if he wishes to enter new data.
  */
-object DEFAULT : BlockVoidTriggerEvent(VConstants.TRG_DEFAULT)  // void trigger
+object DEFAULT : BlockTriggerEvent<Unit>(VConstants.TRG_DEFAULT)  // void trigger
 
 /**
  * executed upon block initialization
  */
-object INIT : BlockVoidTriggerEvent(VConstants.TRG_INIT)        // void trigger
+object INIT : BlockTriggerEvent<Unit>(VConstants.TRG_INIT)        // void trigger
 
 /**
  * executed upon Reset command (ResetForm)
  */
-object RESET : BlockBooleanTriggerEvent(VConstants.TRG_RESET)      // Boolean trigger
+object RESET : BlockTriggerEvent<Boolean>(VConstants.TRG_RESET)      // Boolean trigger
 
 /**
  * a special trigger that returns a boolean value of whether the block have been changed or not,
@@ -228,7 +201,7 @@ object RESET : BlockBooleanTriggerEvent(VConstants.TRG_RESET)      // Boolean tr
  * }
  *
  */
-object CHANGED : BlockBooleanTriggerEvent(VConstants.TRG_CHANGED)  // Boolean trigger
+object CHANGED : BlockTriggerEvent<Boolean>(VConstants.TRG_CHANGED)  // Boolean trigger
 
 /**
  * defines whether a block can or not be accessed, it must always return a boolean value.
@@ -239,7 +212,7 @@ object CHANGED : BlockBooleanTriggerEvent(VConstants.TRG_CHANGED)  // Boolean tr
  * }
  *
  */
-object ACCESS : BlockVoidTriggerEvent(VConstants.TRG_ACCESS)    // Void trigger
+object ACCESS : BlockTriggerEvent<Unit>(VConstants.TRG_ACCESS)    // Void trigger
 
 ///////////////////////////////////////////////////////////////////////////
 // REPORT TRIGGERS
@@ -250,17 +223,17 @@ object ACCESS : BlockVoidTriggerEvent(VConstants.TRG_ACCESS)    // Void trigger
  *
  * @param event the event of the trigger
  */
-open class ReportTriggerEvent(val event: Int)
+open class ReportTriggerEvent<T>(val event: Int)
 
 /**
  * Executed before the report is displayed.
  */
-object PREREPORT : ReportTriggerEvent(Constants.TRG_PREREPORT)
+object PREREPORT : ReportTriggerEvent<Unit>(Constants.TRG_PREREPORT)
 
 /**
  * Executed after the report is closed.
  */
-object POSTREPORT : ReportTriggerEvent(Constants.TRG_POSTREPORT)
+object POSTREPORT : ReportTriggerEvent<Unit>(Constants.TRG_POSTREPORT)
 
 ///////////////////////////////////////////////////////////////////////////
 // CHART TRIGGERS
@@ -271,39 +244,25 @@ object POSTREPORT : ReportTriggerEvent(Constants.TRG_POSTREPORT)
  *
  * @param event the event of the trigger
  */
-open class ChartTriggerEvent(val event: Int)
-
-/**
- * Chart Triggers where executed method shouldn't return any thing.
- *
- * @param event the event of the trigger
- */
-open class ChartVoidTriggerEvent(event: Int) : ChartTriggerEvent(event)
-
-/**
- * Chart Triggers where executed method should return an object.
- *
- * @param event the event of the trigger
- */
-open class ChartTypeTriggerEvent(event: Int) : ChartTriggerEvent(event)
+open class ChartTriggerEvent<T>(val event: Int)
 
 /**
  * Executed before the chart is displayed.
  */
-object PRECHART : ChartVoidTriggerEvent(CConstants.TRG_PRECHART)
+object PRECHART : ChartTriggerEvent<Unit>(CConstants.TRG_PRECHART)
 
 /**
  * Executed at chart initialization.
  */
-object INITCHART : ChartVoidTriggerEvent(CConstants.TRG_INIT)
+object INITCHART : ChartTriggerEvent<Unit>(CConstants.TRG_INIT)
 
 /**
  * Executed after the chart initialization. This trigger should return a fixed type for the chart
  * [org.kopi.galite.chart.VChartType].
  */
-object CHARTTYPE : ChartTypeTriggerEvent(CConstants.TRG_CHARTTYPE)
+object CHARTTYPE : ChartTriggerEvent<VChartType>(CConstants.TRG_CHARTTYPE)
 
 /**
  * Executed after the chart is closed.
  */
-object POSTCHART : ChartVoidTriggerEvent(CConstants.TRG_POSTCHART)
+object POSTCHART : ChartTriggerEvent<Unit>(CConstants.TRG_POSTCHART)

@@ -19,10 +19,10 @@ package org.kopi.galite.chart
 
 import java.io.IOException
 
+import java.util.Locale
+
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.ChartTriggerEvent
-import org.kopi.galite.common.ChartTypeTriggerEvent
-import org.kopi.galite.common.ChartVoidTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
@@ -72,7 +72,7 @@ abstract class Chart : Window() {
    * @param chartTriggerEvents   the trigger events to add
    * @param method               the method to execute when trigger is called
    */
-  private fun <T> trigger(chartTriggerEvents: Array<out ChartTriggerEvent>, method: () -> T): Trigger {
+  fun <T> trigger(vararg chartTriggerEvents: ChartTriggerEvent<T>, method: () -> T): Trigger {
     val event = formEventList(chartTriggerEvents)
     val chartAction = Action(null, method)
     val trigger = FormTrigger(event, chartAction)
@@ -80,7 +80,7 @@ abstract class Chart : Window() {
     return trigger
   }
 
-  private fun formEventList(chartTriggerEvents: Array<out ChartTriggerEvent>): Long {
+  private fun formEventList(chartTriggerEvents: Array<out ChartTriggerEvent<*>>): Long {
     var self = 0L
 
     chartTriggerEvents.forEach { trigger ->
@@ -88,26 +88,6 @@ abstract class Chart : Window() {
     }
 
     return self
-  }
-
-  /**
-   * Adds void triggers to this chart
-   *
-   * @param chartTriggerEvents the trigger events to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg chartTriggerEvents: ChartVoidTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(chartTriggerEvents, method)
-  }
-
-  /**
-   * Adds void triggers to this chart
-   *
-   * @param chartTriggerEvents the trigger events to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg chartTriggerEvents: ChartTypeTriggerEvent, method: () -> VChartType): Trigger {
-    return trigger(chartTriggerEvents, method)
   }
 
   /**
@@ -199,9 +179,7 @@ abstract class Chart : Window() {
     genLocalization()
 
     object : VChart() {
-      init {
-        locale = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
-      }
+      override var locale: Locale = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
 
       /**
        * Handling triggers

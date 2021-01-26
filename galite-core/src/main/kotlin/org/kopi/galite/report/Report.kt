@@ -83,7 +83,7 @@ abstract class Report : Window() {
    * @param reportTriggerEvents the trigger events to add
    * @param method              the method to execute when trigger is called
    */
-  fun trigger(vararg reportTriggerEvents: ReportTriggerEvent, method: () -> Unit): Trigger {
+  fun <T> trigger(vararg reportTriggerEvents: ReportTriggerEvent<T>, method: () -> T): Trigger {
     val event = reportEventList(reportTriggerEvents)
     val reportAction = Action(null, method)
     val trigger = ReportTrigger(event, reportAction)
@@ -91,7 +91,7 @@ abstract class Report : Window() {
     return trigger
   }
 
-  private fun reportEventList(reportTriggerEvents: Array<out ReportTriggerEvent>): Long {
+  private fun reportEventList(reportTriggerEvents: Array<out ReportTriggerEvent<*>>): Long {
     var self = 0L
 
     reportTriggerEvents.forEach { trigger ->
