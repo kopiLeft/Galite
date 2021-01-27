@@ -17,13 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
-import com.vaadin.flow.component.html.Div
+import java.io.File
+
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
-import java.io.File
+
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.html.Div
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
@@ -129,5 +132,13 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
 
   open fun release() {
     // TODO
+  }
+
+  /**
+   * Sets the window content.
+   * @param content The window content.
+   */
+  open fun setContent(content: Component) {
+    add(content)
   }
 }
