@@ -20,17 +20,15 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.jodatime.date
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
-import org.kopi.galite.demo.client.ClientForm
-import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
+import org.kopi.galite.type.Decimal
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
+import java.math.BigDecimal
 
 object Client : Table("CLIENTS") {
   val idClt = integer("CLIENT ID").autoIncrement()
@@ -78,6 +76,8 @@ object Provider : Table("PROVIDERS") {
 object BillProduct : Table("BILL PRODUCT") {
   val idBPdt = integer("BILL PRODUCT ID").references(Product.idPdt)
   val quantity = integer("QUANTITY")
+  val amountHT = integer("AMOUNT HT")
+  val amountTTC = decimal("amount TTC", 9, 3).references(Bill.amountTTC)
 
   override val primaryKey = PrimaryKey(idBPdt)
 }
@@ -86,7 +86,6 @@ object Command : Table("COMMANDS") {
   val numCmd = integer("COMMAND NUMBER").autoIncrement()
   val idClt = integer("ID_CLT_CMD").references(Client.idClt)
   val dateCmd = varchar("COMMAND DATE", 25)
-  val numBill = integer("NUM_BILL_CMD")
   val paymentMethod = varchar("PAYMENT METHOD", 50)
   val statusCmd = varchar("COMMAND STATUS", 30)
 
@@ -95,10 +94,10 @@ object Command : Table("COMMANDS") {
 }
 
 object Bill : Table("BILLS") {
-  val numBill = integer("BILL NUMBER")
+  val numBill = integer("BILL NUMBER").autoIncrement()
   val addressBill = varchar("BILL ADDRESS", 30)
-  val dateBill = date("BILL DATE")
-  val amount = integer("AMOUNT TO PAY")
+  val dateBill = varchar("BILL DATE", 25)
+  val amountTTC = decimal("AMOUNT TO PAY", 9, 3)
   val refCmd = integer("COMMAND REFERENCE").references(Command.numCmd)
 
   override val primaryKey = PrimaryKey(numBill)
@@ -127,8 +126,8 @@ fun main(args: Array<String>) {
   addFourns()
   addStock()
   addCmds()
-  addBills()
   addBillPrdt()
+  addBills()
   runApplication<StoreApplication>(*args)
 }
 
@@ -321,29 +320,29 @@ fun addBills() {
     Bill.insert {
       it[numBill] = 0
       it[addressBill] = "adresse facture 0"
-      it[dateBill] = DateTime()
-      it[amount] = 453
+      it[dateBill] = "13/09/20018"
+      it[amountTTC] = Decimal.valueOf("3129.7").value
       it[refCmd] = 0
     }
     Bill.insert {
       it[numBill] = 1
       it[addressBill] = "adresse facture 1"
-      it[dateBill] = DateTime()
-      it[amount] = 600
+      it[dateBill] = "16/02/2020"
+      it[amountTTC] = BigDecimal(Decimal.valueOf("1149.24").toDouble())
       it[refCmd] = 1
     }
     Bill.insert {
       it[numBill] = 2
       it[addressBill] = "adresse facture 2"
-      it[dateBill] = DateTime()
-      it[amount] = 870
+      it[dateBill] = "13/05/2019"
+      it[amountTTC] = Decimal.valueOf("219.6").value
       it[refCmd] = 2
     }
     Bill.insert {
       it[numBill] = 3
       it[addressBill] = "adresse facture 3"
-      it[dateBill] = DateTime()
-      it[amount] = 999
+      it[dateBill] = "12/01/2019"
+      it[amountTTC] = Decimal.valueOf("146.9").value
       it[refCmd] = 3
     }
   }
@@ -380,7 +379,6 @@ fun addCmds() {
       it[numCmd] = 0
       it[idClt] = 0
       it[dateCmd] = "01/01/2020"
-      it[numBill] = 0
       it[paymentMethod] = "cheque"
       it[statusCmd] = "en_cours"
     }
@@ -388,7 +386,6 @@ fun addCmds() {
       it[numCmd] = 1
       it[idClt] = 0
       it[dateCmd] = "01/01/2020"
-      it[numBill] = 1
       it[paymentMethod] = "cheque"
       it[statusCmd] = "en_cours"
     }
@@ -396,7 +393,6 @@ fun addCmds() {
       it[numCmd] = 2
       it[idClt] = 1
       it[dateCmd] = "20/01/2021"
-      it[numBill] = 2
       it[paymentMethod] = "carte"
       it[statusCmd] = "en_cours"
     }
@@ -404,7 +400,6 @@ fun addCmds() {
       it[numCmd] = 3
       it[idClt] = 2
       it[dateCmd] = "13/05/2020"
-      it[numBill] = 3
       it[paymentMethod] = "espece"
       it[statusCmd] = "en_cours"
     }
@@ -417,18 +412,26 @@ fun addBillPrdt() {
     BillProduct.insert {
       it[idBPdt] = 0
       it[quantity] = 10
+      it[amountHT] = 2630
+      it[amountTTC] = Decimal.valueOf("3129.7").value
     }
     BillProduct.insert {
       it[idBPdt] = 1
       it[quantity] = 3
+      it[amountHT] = 942
+      it[amountTTC] = Decimal.valueOf("1149.24").value
     }
     BillProduct.insert {
       it[idBPdt] = 2
       it[quantity] = 1
+      it[amountHT] = 180
+      it[amountTTC] =  Decimal.valueOf("219.6").value
     }
     BillProduct.insert {
       it[idBPdt] = 3
       it[quantity] = 2
+      it[amountHT] = 130
+      it[amountTTC] =  Decimal.valueOf("146.9").value
     }
   }
 }
