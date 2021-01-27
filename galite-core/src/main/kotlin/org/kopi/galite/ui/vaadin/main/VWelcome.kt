@@ -52,12 +52,6 @@ class VWelcome : HorizontalLayout() {
    */
   init {
     setId("welcome")
-
-    //TODO : move this to css file
-    style.set("margin-left", "auto")
-    style.set("margin-right", "var(--lumo-space-m)")
-    // TODO- end
-
     userMenu.addItem(userItem)
     adminMenu.addItem(adminItem)
     bookmarksMenu.addItem(bookmarksItem)
