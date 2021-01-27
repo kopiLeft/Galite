@@ -170,10 +170,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref)
     mainWindow!!.addMainWindowListener(this)
     mainWindow!!.connectedUser = userName
-    mainWindow!!.addMenu(DMainMenu(menu))
-    mainWindow!!.addMenu(DUserMenu(menu))
-    mainWindow!!.addMenu(DAdminMenu(menu))
-    mainWindow!!.addMenu(DBookmarkMenu(menu))
+    mainWindow!!.setMainMenu(DMainMenu(menu))
+    mainWindow!!.setUserMenu(DUserMenu(menu))
+    mainWindow!!.setAdminMenu(DAdminMenu(menu))
+    mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu))
     mainWindow!!.addDetachListener { event ->
         closeConnection()
     }

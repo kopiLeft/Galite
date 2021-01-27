@@ -23,10 +23,10 @@ import com.vaadin.flow.component.menubar.MenuBarVariant
 /**
  * The module list menu bar.
  */
-class ModuleListMenu : MenuBar() {
+class WelcomeListMenu : MenuBar() {
 
   init {
-    addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_PRIMARY)
+    addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_TERTIARY_INLINE)
   }
 
 }
