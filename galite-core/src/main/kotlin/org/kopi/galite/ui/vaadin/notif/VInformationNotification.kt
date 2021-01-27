@@ -22,6 +22,7 @@ import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
@@ -29,7 +30,6 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
  * Information type notification component.
  */
 open class VInformationNotification(title: String, message: String) : VAbstractNotification() {
-
 
   //-------------------------------------------------
   // IMPLEMENTATION

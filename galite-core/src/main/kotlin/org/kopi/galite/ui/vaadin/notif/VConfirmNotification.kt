@@ -24,6 +24,7 @@ import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
+
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
@@ -84,8 +85,8 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
 
   override val iconName: String?
     get() = "question-circle"
-  var ok: VInputButton? = null
-  private var cancel: VInputButton? = null
+  var ok = VInputButton()
+  private var cancel = VInputButton()
   var listener: ComponentEventListener<ClickEvent<Button>>? = null
   var okFocused = false
   var cancelFocused = false

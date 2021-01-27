@@ -29,14 +29,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
-import com.vaadin.componentfactory.EnhancedDialog
-import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.H3
-import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.Route
-
 
 @SpringBootApplication
 open class Application : SpringBootServletInitializer()

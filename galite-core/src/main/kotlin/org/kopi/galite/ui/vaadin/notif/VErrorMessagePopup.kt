@@ -17,10 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-
+import javax.swing.Popup
 import com.vaadin.flow.component.orderedlayout.Scroller
 import org.kopi.galite.ui.vaadin.common.VSpan
-import javax.swing.Popup
 
 /**
  * An error message popup window containing stack trace detail

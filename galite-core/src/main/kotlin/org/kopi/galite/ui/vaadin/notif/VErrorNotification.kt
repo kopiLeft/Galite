@@ -27,6 +27,7 @@ import com.vaadin.flow.component.details.DetailsVariant
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
+
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
 
@@ -83,7 +84,7 @@ open class VErrorNotification(title: String, message: String) : VAbstractNotific
   //--------------------------------------------------
 
   var details = Details()
-  var close : VInputButton? = null
+  var close = VInputButton()
   val listener: ComponentEventListener<ClickEvent<Button>>? = null
   override val iconName: String
     get() = "warning"

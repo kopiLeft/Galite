@@ -17,8 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import java.util.Locale
+
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
+
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.button.Button
@@ -113,11 +116,12 @@ abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNoti
   fun createHeader() {
     val close = Button()
     close.icon = VaadinIcon.CLOSE.create()
+
     close.addClickListener { close() }
     header.setFlexGrow(1.0, title)
     header.isPadding = true
     header.alignItems = FlexComponent.Alignment.CENTER
-    header.add(title,close)
+    header.add(title, close)
     super.setHeader(header)
   }
 
@@ -177,7 +181,7 @@ abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNoti
   open var title = H3()
   open var message = Span()
   open var icon: Icon? = null
-  var locale: String = "fr_FR"
+  var locale: String = Locale.FRANCE.toString()
   private val listeners = mutableListOf<NotificationListener>()
   protected val yesIsDefault = true
   val header = HorizontalLayout()
