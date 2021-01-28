@@ -22,16 +22,21 @@ import org.kopi.galite.demo.Bill
 import org.kopi.galite.demo.Command
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.ReportSelectionForm
+import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
 
-object BillForm : Form() {
+object BillForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
+
   override val title = "bill form"
+
   val page = page("page")
+
   val action = menu("act")
+
   val report = actor(
           ident = "report",
           menu = action,
@@ -41,7 +46,18 @@ object BillForm : Form() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
-  val tb1 = insertBlock(BlockBill, page)
+
+  val tb1 = insertBlock(BlockBill, page) {
+    command(item = report) {
+      action = {
+        createReport(BlockBill)
+      }
+    }
+  }
+
+  override fun createReport(): Report {
+    return BillR
+  }
 }
 
 object BlockBill : FormBlock(1, 1, "block bill") {
@@ -53,25 +69,25 @@ object BlockBill : FormBlock(1, 1, "block bill") {
     help = "The bill number"
     columns(u.numBill)
   }
-  val addressBill = mustFill(domain = Domain<String>(30), position = at(2, 1)) {
+  val addressBill = mustFill(domain = Domain<String>(30), position = at(1, 1)) {
     label = "bill address"
     help = "The bill address"
     columns(u.addressBill)
   }
-  val dateBill = mustFill(domain = Domain<String>(25), position = at(1, 1)) {
-    label = "client id"
-    help = "The client id"
+  val dateBill = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
+    label = "bill date"
+    help = "The bill date"
     columns(u.dateBill)
   }
-  val amountTTC = visit(domain = Domain<Decimal>(20), position = at(4, 1)) {
+  val amountTTC = visit(domain = Domain<Decimal>(20), position = at(3, 1)) {
     label = "bill amount to pay"
     help = "bill amount to pay"
     columns(u.amountTTC)
   }
-  val refCmd = visit(domain = Domain<Int>(20), position = at(5, 1)) {
+  val refCmd = visit(domain = Domain<Int>(20), position = at(4, 1)) {
     label = "command reference"
     help = "The command reference"
-    columns(u.refCmd,v.numCmd)
+    columns(u.refCmd, v.numCmd)
   }
 }
 

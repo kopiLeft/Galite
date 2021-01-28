@@ -14,7 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.client
+package org.kopi.galite.demo.bill
 
 import java.util.Locale
 
@@ -22,13 +22,11 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
-import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
+import org.kopi.galite.type.Decimal
+import java.math.BigDecimal
 
-/**
- * Simple Report with two fields.
- */
-object ClientR : Report() {
+object BillR : Report() {
   override val locale = Locale.FRANCE
 
   override val title = "ClientReport"
@@ -99,86 +97,63 @@ object ClientR : Report() {
     }
   }
 
-  val nameClt = field(Domain<String>(25)) {
-    label = "name client"
-    help = "The client name"
-    align = FieldAlignment.LEFT
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
-    }
-  }
-
-  val fstnameClt = field(Domain<String>(25)) {
-    label = "client firstname"
-    help = "The client firstname"
-    align = FieldAlignment.LEFT
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
-    }
-  }
-  val addressClt = field(Domain<String>(50)) {
-    label = "client address"
-    help = "The client address"
-    align = FieldAlignment.LEFT
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
-    }
-  }
-
-  val ageClt = field(Domain<Int>(2)) {
-    label = "client age"
-    help = "The client age"
+  val numBill = field(Domain<Int>(25)) {
+    label = "bill number"
+    help = "The bill number"
     align = FieldAlignment.LEFT
   }
 
-  val cityClt = field(Domain<String>(50)) {
-    label = "client city"
-    help = "The client city"
+  val addressBill = field(Domain<String>(25)) {
+    label = "bill address"
+    help = "The bill address"
+    align = FieldAlignment.LEFT
+  }
+  val dateBill = field(Domain<String>(25)) {
+    label = "bill date"
+    help = "The bill date"
     align = FieldAlignment.LEFT
   }
 
-  val postalCodeClt = field(Domain<Int>(2)) {
-    label = "client postal code"
-    help = "The client postal code"
+  val amountTTC = field(Domain<Decimal>(2)) {
+    label = "AMOUNT TTC TO PAY"
+    help = "The amount TTC to pay"
+    align = FieldAlignment.LEFT
+  }
+
+  val refCmd = field(Domain<Int>(50)) {
+    label = "command reference city"
+    help = "The command reference"
     align = FieldAlignment.LEFT
   }
 
   init {
     add {
-      this[nameClt] = "Salah"
-      this[fstnameClt] = "Mohamed"
-      this[addressClt] = "10,Rue du Lac"
-      this[cityClt] = "Megrine"
-      this[postalCodeClt] = 2001
-      this[ageClt] = 40
+      this[numBill] = 0
+      this[addressBill] = "addresse facture 0"
+      this[dateBill] = "13/09/20018"
+      this[amountTTC] = Decimal(Decimal.valueOf("3129.7").toDouble())
+      this[refCmd] = 0
     }
     add {
-      this[nameClt] = "Guesmi"
-      this[fstnameClt] = "Khaled"
-      this[addressClt] = "14,Rue Mongi Slim"
-      this[cityClt] = "Tunis"
-      this[postalCodeClt] = 6000
-      this[ageClt] = 35
+      this[numBill] = 1
+      this[addressBill] = "addresse facture 1"
+      this[dateBill] = "16/02/2020"
+      this[amountTTC] =Decimal(Decimal.valueOf("1149.24").toDouble())
+      this[refCmd] = 1
     }
     add {
-      this[nameClt] = "Bouaroua"
-      this[fstnameClt] = "Ahmed"
-      this[addressClt] = "10,Rue du Lac"
-      this[cityClt] = "Mourouj"
-      this[postalCodeClt] = 5003
-      this[ageClt] = 22
+      this[numBill] = 2
+      this[addressBill] = "addresse facture 2"
+      this[dateBill] = "13/05/2019"
+      this[amountTTC] = Decimal(Decimal.valueOf("219.6").toDouble())
+      this[refCmd] = 2
+    }
+    add {
+      this[numBill] = 3
+      this[addressBill] = "addresse facture 3"
+      this[dateBill] = "10,Rue du Lac"
+      this[amountTTC] = Decimal(Decimal.valueOf("146.9").toDouble())
+      this[refCmd] = 3
     }
   }
 }
