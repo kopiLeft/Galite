@@ -255,10 +255,10 @@ fun addTaxRule(id: Int, taxName: String, rate: Int) {
 }
 
 fun addBills() {
-  addBill(0, "addresse facture 0", "13/09/20018", Decimal.valueOf("3129.7").value, 0)
-  addBill(1, "addresse facture 1", "16/02/2020", Decimal.valueOf("1149.24").value, 1)
-  addBill(2, "addresse facture 2", "13/05/2019", Decimal.valueOf("219.6").value, 2)
-  addBill(3, "addresse facture 3", "12/01/2019", Decimal.valueOf("146.9").value, 3)
+  addBill(0, "addresse facture 0", "13/09/20018", Decimal("3129.7").value, 0)
+  addBill(1, "addresse facture 1", "16/02/2020", Decimal("1149.24").value, 1)
+  addBill(2, "addresse facture 2", "13/05/2019", Decimal("219.6").value, 2)
+  addBill(3, "addresse facture 3", "12/01/2019", Decimal("146.9").value, 3)
 }
 
 fun addBill(num: Int, address: String, date: String, amount: BigDecimal, ref: Int) {
@@ -304,10 +304,10 @@ fun addCmd(num: Int, id: Int, date: String, payment: String, status: String) {
 }
 
 fun addBillPrdts() {
-  addBillPrdt(0, 10, 2630, Decimal.valueOf("3129.7").value)
-  addBillPrdt(1, 3, 942, Decimal.valueOf("1149.24").value)
-  addBillPrdt(2, 1, 180, Decimal.valueOf("219.6").value)
-  addBillPrdt(3, 2, 130, Decimal.valueOf("146.9").value)
+  addBillPrdt(0, 10, 2630, Decimal("3129.7").value)
+  addBillPrdt(1, 3, 942, Decimal("1149.24").value)
+  addBillPrdt(2, 1, 180, Decimal("219.6").value)
+  addBillPrdt(3, 2, 130, Decimal("146.9").value)
 }
 
 fun addBillPrdt(id: Int, quantity: Int, amountHT: Int, amountTTC: BigDecimal) {

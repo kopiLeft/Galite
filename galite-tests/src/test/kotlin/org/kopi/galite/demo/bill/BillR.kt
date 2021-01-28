@@ -130,28 +130,28 @@ object BillR : Report() {
       this[numBill] = 0
       this[addressBill] = "addresse facture 0"
       this[dateBill] = "13/09/20018"
-      this[amountTTC] = Decimal(Decimal.valueOf("3129.7").toDouble())
+      this[amountTTC] = Decimal("3129.7")
       this[refCmd] = 0
     }
     add {
       this[numBill] = 1
       this[addressBill] = "addresse facture 1"
       this[dateBill] = "16/02/2020"
-      this[amountTTC] =Decimal(Decimal.valueOf("1149.24").toDouble())
+      this[amountTTC] = Decimal("1149.24")
       this[refCmd] = 1
     }
     add {
       this[numBill] = 2
       this[addressBill] = "addresse facture 2"
       this[dateBill] = "13/05/2019"
-      this[amountTTC] = Decimal(Decimal.valueOf("219.6").toDouble())
+      this[amountTTC] = Decimal("219.6")
       this[refCmd] = 2
     }
     add {
       this[numBill] = 3
       this[addressBill] = "addresse facture 3"
       this[dateBill] = "10,Rue du Lac"
-      this[amountTTC] = Decimal(Decimal.valueOf("146.9").toDouble())
+      this[amountTTC] = Decimal("146.9")
       this[refCmd] = 3
     }
   }
