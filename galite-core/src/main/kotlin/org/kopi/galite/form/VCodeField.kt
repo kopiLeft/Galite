@@ -19,6 +19,7 @@
 package org.kopi.galite.form
 
 import org.kopi.galite.l10n.FieldLocalizer
+import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VList
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
@@ -392,10 +393,19 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Localizes this field
    *
-   * @param     parent         the caller localizer
+   * @param     loc         the caller localizer
    */
-  override fun localize(loc: FieldLocalizer?) {
-    val loc = loc!!.manager.getTypeLocalizer(source, type)
+  override fun localize(loc: FieldLocalizer) {
+    localize(loc.manager)
+  }
+
+  /**
+   * Localizes this field
+   *
+   * @param     manager         the localizer manager
+   */
+  fun localize(manager: LocalizationManager) {
+    val loc = manager.getTypeLocalizer(source, type)
 
     val labels = arrayOfNulls<String>(idents.size)
 

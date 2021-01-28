@@ -19,7 +19,7 @@ package org.kopi.galite.ui.vaadin.main
 
 import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.ui.vaadin.menu.ModuleListMenu
+import org.kopi.galite.ui.vaadin.menu.WelcomeListMenu
 
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -34,10 +34,10 @@ class VWelcome : HorizontalLayout() {
   // DATA MEMBERS
   //---------------------------------------------------
   // menus
-  private val userMenu = ModuleListMenu()
-  private val adminMenu = ModuleListMenu()
-  private val bookmarksMenu = ModuleListMenu()
-  private val workspaceContextMenu = ModuleListMenu()
+  private val userMenu = WelcomeListMenu()
+  private val adminMenu = WelcomeListMenu()
+  private val bookmarksMenu = WelcomeListMenu()
+  private val workspaceContextMenu = WelcomeListMenu()
 
   // items
   private val userItem = ModuleItem(VaadinIcon.USER)
@@ -52,12 +52,6 @@ class VWelcome : HorizontalLayout() {
    */
   init {
     setId("welcome")
-
-    //TODO : move this to css file
-    style.set("margin-left", "auto")
-    style.set("margin-right", "var(--lumo-space-m)")
-    // TODO- end
-
     userMenu.addItem(userItem)
     adminMenu.addItem(adminItem)
     bookmarksMenu.addItem(bookmarksItem)
@@ -77,7 +71,7 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setUserMenu(menu: ModuleList) {
-    userItem.subMenu = menu.menu
+    // TODO
   }
 
   /**
@@ -93,7 +87,7 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setAdminMenu(menu: ModuleList) {
-    adminItem.subMenu = menu.menu
+    // TODO
   }
 
   /**
@@ -101,6 +95,6 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setBookmarksMenu(menu: ModuleList) {
-    bookmarksItem.subMenu = menu.menu
+    // TODO
   }
 }

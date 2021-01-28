@@ -64,6 +64,8 @@ open class CodeDomain<T : Comparable<T>?> : Domain<T>() {
                                           codes.map { it.ident }.toTypedArray(),
                                           codes.map { it.value as? String }.toTypedArray())
         else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }.also { field ->
+        field.initLabels(codes.map { it.label }.toTypedArray())
       }
     }
   }

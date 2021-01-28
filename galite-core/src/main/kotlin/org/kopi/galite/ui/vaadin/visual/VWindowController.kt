@@ -59,7 +59,7 @@ class VWindowController : WindowController() {
                   || model is VMenuTree) {
             showNotModalPopupWindow(application, view, model.getTitle())
           } else {
-            application.addWindow(view)
+            application.addWindow(view, model.getTitle())
           }
         }
       } catch (e: VException) {
@@ -81,7 +81,7 @@ class VWindowController : WindowController() {
                   || model.model is VMenuTree) {
             showNotModalPopupWindow(application, view, model.title)
           } else {
-            application.addWindow(view)
+            application.addWindow(view, model.model.getTitle())
           }
         }
       } catch (e: VException) {
@@ -99,13 +99,10 @@ class VWindowController : WindowController() {
    * @param title The window title.
    */
   protected fun showNotModalPopupWindow(
-          application: VApplication?,
+          application: VApplication,
           view: DWindow,
           title: String,
   ) {
-    if (application == null) {
-      return
-    }
     val popup = PopupWindow()
     popup.setModal(false)
     popup.setContent(view)

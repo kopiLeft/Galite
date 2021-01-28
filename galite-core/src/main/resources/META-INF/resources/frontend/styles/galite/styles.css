@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,18 +14,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
-
-import com.vaadin.flow.component.menubar.MenuBar
-import com.vaadin.flow.component.menubar.MenuBarVariant
 
 /**
- * The module list menu bar.
+ ***************************************************************************************************
+ * List of all variables that controls the colors, borders and shadows used in application styles
+ ***************************************************************************************************
  */
-class ModuleListMenu : MenuBar() {
 
-  init {
-    addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_PRIMARY)
-  }
-
+#header #welcome {
+    margin-left: auto;
+    margin-right: var(--lumo-space-m);
 }

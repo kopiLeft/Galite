@@ -59,7 +59,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   //---------------------------------------------------
 
   private val listeners = mutableListOf<MainWindowListener>()
-  private var menus: MutableList<ModuleList>? = null
+  private var menus = mutableListOf<ModuleList>()
   private val header = VHeader()
   private val windowsLink = VWindows()
   private val welcome = VWelcome()
@@ -101,23 +101,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
-  /**
-   * Adds a menu to this main window.
-   * @param moduleList The module menu to be added
-   */
-  fun addMenu(moduleList: DMenu) {
-    if (menus == null) {
-      menus = ArrayList()
-    }
-    menus!!.add(moduleList)
-
-    when (moduleList) {
-      is DMainMenu -> setMainMenu(moduleList)
-      is DUserMenu -> setUserMenu(moduleList)
-      is DAdminMenu -> setAdminMenu(moduleList)
-      is DBookmarkMenu -> setBookmarksMenu(moduleList)
-    }
-  }
 
   /**
    * Sets the main menu component.
@@ -125,6 +108,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setMainMenu(moduleList: ModuleList) {
     header.setMainMenu(moduleList)
+    menus.add(moduleList)
   }
 
   /**
@@ -133,6 +117,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setUserMenu(moduleList: ModuleList) {
     welcome.setUserMenu(moduleList)
+    menus.add(moduleList)
   }
 
   /**
@@ -141,6 +126,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setAdminMenu(moduleList: ModuleList) {
     welcome.setAdminMenu(moduleList)
+    menus.add(moduleList)
   }
 
   /**
@@ -149,15 +135,17 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setBookmarksMenu(menu: ModuleList) {
     welcome.setBookmarksMenu(menu)
+    menus.add(menu)
   }
 
   /**
    * Adds a window to this main window.
    * @param window The window to be added.
    */
-  fun addWindow(window: Component) {
+  fun addWindow(window: Component, title: String) {
     windowsList.add(window)
-    content.setContent(window)
+    container.addWindow(window, title)
+    container.showWindow(window)
   }
 
   /**
