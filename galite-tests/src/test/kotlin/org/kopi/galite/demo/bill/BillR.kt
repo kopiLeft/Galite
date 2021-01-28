@@ -24,7 +24,6 @@ import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 import org.kopi.galite.type.Decimal
-import java.math.BigDecimal
 
 object BillR : Report() {
   override val locale = Locale.FRANCE
