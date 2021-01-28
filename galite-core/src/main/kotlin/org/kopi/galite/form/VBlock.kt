@@ -196,9 +196,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
     fields.forEach {
       if (!it.isInternal()) {
-        if(ApplicationContext.getDefaultLocale() != locale || (it is VCodeField && it.localizedByGalite)) {
+        if(ApplicationContext.getDefaultLocale() != locale) {
           val loc = manager.getBlockLocalizer(source, name)
           it.localize(loc)
+        }
+        if(it is VCodeField && it.localizedByGalite) {
+          it.localize(manager)
         }
       }
     }
