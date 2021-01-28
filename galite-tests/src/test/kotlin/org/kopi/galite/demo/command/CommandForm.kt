@@ -49,7 +49,7 @@ object BlockCommand : FormBlock(1, 1, "block command") {
   val v = table(Client)
 
   val numCmd = hidden(domain = Domain<Int>(20)) {
-    label = "COMMAND NUMBER"
+    label = "command number"
     help = "The command number"
     columns(u.numCmd)
   }
@@ -63,12 +63,12 @@ object BlockCommand : FormBlock(1, 1, "block command") {
     help = "The command date"
     columns(u.dateCmd)
   }
-  val paymentMethod = visit(domain = Payment, position = at(4, 1)) {
+  val paymentMethod = visit(domain = Payment, position = at(3, 1)) {
     label = "payment method"
     help = "The payment method"
     columns(u.paymentMethod)
   }
-  val statusCmd = visit(domain = CommandStatus, position = at(5, 1)) {
+  val statusCmd = visit(domain = CommandStatus, position = at(4, 1)) {
     label = "command status"
     help = "The command status"
     columns(u.statusCmd)

@@ -53,7 +53,7 @@ object ClientForm : ReportSelectionForm() {
   }
 }
 
-object BlockClient : FormBlock(1, 1, "Test block") {
+object BlockClient : FormBlock(1, 1, "Client block") {
   val u = table(org.kopi.galite.demo.Client)
 
   val idClt = hidden(domain = Domain<Int>(20)) {

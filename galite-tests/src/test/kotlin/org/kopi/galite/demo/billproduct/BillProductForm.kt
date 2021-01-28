@@ -50,17 +50,17 @@ object BlockBillProduct : FormBlock(1, 1, "block bill product") {
     help = "The bill product id"
     columns(u.idBPdt, v.idPdt)
   }
-  val quantity = mustFill(domain = Domain<Int>(30), position = at(2, 1)) {
+  val quantity = mustFill(domain = Domain<Int>(30), position = at(1, 1)) {
     label = "quantity"
     help = "quantity"
     columns(u.quantity)
   }
-  val amountHT = visit(domain = Domain<Int>(20), position = at(4, 1)) {
+  val amountHT = visit(domain = Domain<Int>(20), position = at(2, 1)) {
     label = "amount HT"
     help = "amount HT"
     columns(u.amountHT)
   }
-  val amountTTC = visit(domain = Domain<Decimal>(20), position = at(5, 1)) {
+  val amountTTC = visit(domain = Domain<Decimal>(20), position = at(3, 1)) {
     label = "amount TTC"
     help = "amount TTC"
     columns(u.amountTTC,w.amountTTC)
