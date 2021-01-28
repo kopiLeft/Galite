@@ -16,19 +16,22 @@
  */
 package org.kopi.galite.demo
 
+import java.math.BigDecimal
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.type.Decimal
+
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
-import java.math.BigDecimal
 
 object Client : Table("CLIENTS") {
   val idClt = integer("CLIENT ID").autoIncrement()
@@ -77,7 +80,7 @@ object BillProduct : Table("BILL PRODUCT") {
   val idBPdt = integer("BILL PRODUCT ID").references(Product.idPdt)
   val quantity = integer("QUANTITY")
   val amountHT = integer("AMOUNT HT")
-  val amountTTC = decimal("amount TTC", 9, 3).references(Bill.amountTTC)
+  val amountTTC = decimal("amount TTC", 9, 3)
 
   override val primaryKey = PrimaryKey(idBPdt)
 }
@@ -97,7 +100,7 @@ object Bill : Table("BILLS") {
   val numBill = integer("BILL NUMBER").autoIncrement()
   val addressBill = varchar("BILL ADDRESS", 30)
   val dateBill = varchar("BILL DATE", 25)
-  val amountTTC = decimal("AMOUNT TO PAY", 9, 3)
+  val amountTTC = decimal("AMOUNT TO PAY", 9, 3).references(BillProduct.amountTTC)
   val refCmd = integer("COMMAND REFERENCE").references(Command.numCmd)
 
   override val primaryKey = PrimaryKey(numBill)
@@ -425,13 +428,13 @@ fun addBillPrdt() {
       it[idBPdt] = 2
       it[quantity] = 1
       it[amountHT] = 180
-      it[amountTTC] =  Decimal.valueOf("219.6").value
+      it[amountTTC] = Decimal.valueOf("219.6").value
     }
     BillProduct.insert {
       it[idBPdt] = 3
       it[quantity] = 2
       it[amountHT] = 130
-      it[amountTTC] =  Decimal.valueOf("146.9").value
+      it[amountTTC] = Decimal.valueOf("146.9").value
     }
   }
 }

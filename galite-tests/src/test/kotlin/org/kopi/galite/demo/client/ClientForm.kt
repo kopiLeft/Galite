@@ -16,13 +16,14 @@
  */
 package org.kopi.galite.demo.client
 
+import java.util.Locale
+
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import java.util.Locale
 
 object ClientForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE

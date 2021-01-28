@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.demo.command
 
+import java.util.Locale
+
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Command
 import org.kopi.galite.demo.desktop.Application
@@ -24,7 +26,6 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
-import java.util.Locale
 
 object CommandForm : Form() {
   override val locale = Locale.FRANCE

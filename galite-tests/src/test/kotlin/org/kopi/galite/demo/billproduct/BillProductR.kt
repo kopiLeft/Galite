@@ -16,13 +16,14 @@
  */
 package org.kopi.galite.demo.billproduct
 
+import java.util.Locale
+
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 import org.kopi.galite.type.Decimal
-import java.util.*
 
 object BillProductR : Report() {
 

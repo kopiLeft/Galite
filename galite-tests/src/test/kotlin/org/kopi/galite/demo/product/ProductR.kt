@@ -1,12 +1,13 @@
 package org.kopi.galite.demo.product
 
+import java.util.Locale
+
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
-import java.util.Locale
 
 /**
  * Simple Report with two fields.

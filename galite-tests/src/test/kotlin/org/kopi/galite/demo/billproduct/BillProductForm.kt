@@ -1,20 +1,17 @@
 package org.kopi.galite.demo.billproduct
 
+import java.util.Locale
+
 import org.kopi.galite.demo.Bill
 import org.kopi.galite.demo.BillProduct
 import org.kopi.galite.demo.Product
-import org.kopi.galite.demo.client.BlockClient
-import org.kopi.galite.demo.client.ClientForm
-import org.kopi.galite.demo.client.ClientR
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
-import java.util.Locale
 
 object BillProductForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
@@ -30,10 +27,10 @@ object BillProductForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
-  val tb1 = insertBlock(BlockBill, page){
+  val tb1 = insertBlock(BlockBillProduct, page){
     command(item = report) {
       action = {
-        createReport(BlockBill)
+        createReport(BlockBillProduct)
       }
     }
   }
@@ -43,7 +40,7 @@ object BillProductForm : ReportSelectionForm() {
   }
 }
 
-object BlockBill : FormBlock(1, 1, "block bill product") {
+object BlockBillProduct : FormBlock(1, 1, "block bill product") {
   val u = table(BillProduct)
   val v = table(Product)
   val w = table(Bill)

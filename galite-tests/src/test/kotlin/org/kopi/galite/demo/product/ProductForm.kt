@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.demo.product
 
+import java.util.Locale
+
 import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.CodeDomain
@@ -24,7 +26,6 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import java.util.Locale
 
 object ProductForm : ReportSelectionForm() {
   override val locale = Locale.ENGLISH
