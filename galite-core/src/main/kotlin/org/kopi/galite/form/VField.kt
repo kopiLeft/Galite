@@ -54,6 +54,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.Query
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
 import org.kopi.galite.list.VColumn
@@ -590,7 +591,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         block!!.activeRecord = current
         try {
           block!!.activeField = this
-          accessTemp = (callTrigger(VConstants.TRG_FLDACCESS) as Int).toInt()
+          accessTemp = (callTrigger(VConstants.TRG_FLDACCESS) as Access).value
           block!!.activeField = old
         } catch (e: Exception) {
           e.printStackTrace()
