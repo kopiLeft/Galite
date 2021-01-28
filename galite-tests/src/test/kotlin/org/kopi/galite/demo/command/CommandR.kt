@@ -14,28 +14,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.bill
+package org.kopi.galite.demo.command
 
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.kopi.galite.demo.Bill
+import org.kopi.galite.demo.Command
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 
 /**
- * Bill Report
+ * Command Report
  */
-object BillR : Report() {
+object CommandR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "BillReport"
+  override val title = "CommandReport"
 
   val action = menu("Action")
 
@@ -103,46 +103,65 @@ object BillR : Report() {
     }
   }
 
-  val numBill = field(Domain<Int>(25)) {
-    label = "bill number"
-    help = "The bill number"
+  val numCmd = field(Domain<Int>(25)) {
+    label = "command number"
+    help = "The command number"
+    align = FieldAlignment.LEFT
+
+  }
+
+  val idClt = field(Domain<Int>(25)) {
+    label = "command client id"
+    help = "The command client id"
+    align = FieldAlignment.LEFT
+
+  }
+  val dateCmd = field(Domain<String>(50)) {
+    label = "command date"
+    help = "The command date"
     align = FieldAlignment.LEFT
   }
 
-  val addressBill = field(Domain<String>(25)) {
-    label = "bill address"
-    help = "The bill address"
-    align = FieldAlignment.LEFT
-  }
-  val dateBill = field(Domain<String>(25)) {
-    label = "bill date"
-    help = "The bill date"
+  val paymentMethod = field(Payment) {
+    label = "payment method"
+    help = "The payment method"
     align = FieldAlignment.LEFT
   }
 
-  val amountTTC = field(Domain<Decimal>(2)) {
-    label = "AMOUNT TTC TO PAY"
-    help = "The amount TTC to pay"
+  val statusCmd = field(CommandStatus) {
+    label = "command status"
+    help = "The command status"
     align = FieldAlignment.LEFT
   }
 
-  val refCmd = field(Domain<Int>(50)) {
-    label = "command reference city"
-    help = "The command reference"
-    align = FieldAlignment.LEFT
+  object Payment : CodeDomain<String>() {
+    init {
+      "cash" keyOf "cash"
+      "check" keyOf "check"
+      "bank card" keyOf "bank card"
+    }
   }
 
-  val q = Bill.selectAll()
+  object CommandStatus : CodeDomain<String>() {
+    init {
+      "In preparation" keyOf "in preparation"
+      "available" keyOf "available"
+      "delivered" keyOf "delivered"
+      "canceled" keyOf "canceled"
+    }
+  }
+
+  val q = Command.selectAll()
 
   init {
     transaction {
       q.forEach { result ->
         add {
-          this[numBill] = result[Bill.numBill]
-          this[addressBill] = result[Bill.addressBill]
-          this[dateBill] = result[Bill.dateBill]
-          this[amountTTC] = Decimal(result[Bill.amountTTC])
-          this[refCmd] = result[Bill.refCmd]
+          this[numCmd] = result[Command.numCmd]
+          this[idClt] = result[Command.idClt]
+          this[dateCmd] = result[Command.dateCmd]
+          this[paymentMethod] = result[Command.paymentMethod]
+          this[statusCmd] = result[Command.statusCmd]
         }
       }
     }

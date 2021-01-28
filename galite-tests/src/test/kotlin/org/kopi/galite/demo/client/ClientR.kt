@@ -18,6 +18,10 @@ package org.kopi.galite.demo.client
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.demo.Client
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -26,7 +30,7 @@ import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 
 /**
- * Simple Report with two fields.
+ * Client Report
  */
 object ClientR : Report() {
   override val locale = Locale.FRANCE
@@ -155,30 +159,20 @@ object ClientR : Report() {
     align = FieldAlignment.LEFT
   }
 
+  val q = Client.selectAll()
+
   init {
-    add {
-      this[nameClt] = "Salah"
-      this[fstnameClt] = "Mohamed"
-      this[addressClt] = "10,Rue du Lac"
-      this[cityClt] = "Megrine"
-      this[postalCodeClt] = 2001
-      this[ageClt] = 40
-    }
-    add {
-      this[nameClt] = "Guesmi"
-      this[fstnameClt] = "Khaled"
-      this[addressClt] = "14,Rue Mongi Slim"
-      this[cityClt] = "Tunis"
-      this[postalCodeClt] = 6000
-      this[ageClt] = 35
-    }
-    add {
-      this[nameClt] = "Bouaroua"
-      this[fstnameClt] = "Ahmed"
-      this[addressClt] = "10,Rue du Lac"
-      this[cityClt] = "Mourouj"
-      this[postalCodeClt] = 5003
-      this[ageClt] = 22
+    transaction {
+      q.forEach { result ->
+        add {
+          this[nameClt] = result[Client.nameClt]
+          this[fstnameClt] = result[Client.fstnameClt]
+          this[addressClt] = result[Client.addressClt]
+          this[cityClt] = result[Client.cityClt]
+          this[postalCodeClt] = result[Client.postalCodeClt]
+          this[ageClt] = result[Client.ageClt]
+        }
+      }
     }
   }
 }

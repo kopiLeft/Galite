@@ -18,16 +18,18 @@ package org.kopi.galite.demo.command
 
 import java.util.Locale
 
+import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Command
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.ReportSelectionForm
+import org.kopi.galite.report.Report
 
-object CommandForm : Form() {
+object CommandForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "command form"
   val page = page("page")
@@ -41,7 +43,17 @@ object CommandForm : Form() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
-  val tb1 = insertBlock(BlockCommand, page)
+  val tb1 = insertBlock(BlockCommand, page){
+    command(item = ClientForm.report) {
+      action = {
+        createReport(BlockCommand)
+      }
+    }
+  }
+
+  override fun createReport(): Report {
+    return CommandR
+  }
 }
 
 object BlockCommand : FormBlock(1, 1, "block command") {
@@ -63,12 +75,12 @@ object BlockCommand : FormBlock(1, 1, "block command") {
     help = "The command date"
     columns(u.dateCmd)
   }
-  val paymentMethod = visit(domain = Payment, position = at(3, 1)) {
+  val paymentMethod = mustFill(domain = Payment, position = at(3, 1)) {
     label = "payment method"
     help = "The payment method"
     columns(u.paymentMethod)
   }
-  val statusCmd = visit(domain = CommandStatus, position = at(4, 1)) {
+  val statusCmd = mustFill(domain = CommandStatus, position = at(4, 1)) {
     label = "command status"
     help = "The command status"
     columns(u.statusCmd)
@@ -86,6 +98,7 @@ object CommandStatus: CodeDomain<String>() {
     "In preparation" keyOf "in preparation"
     "available" keyOf "available"
     "delivered" keyOf  "delivered"
+    "canceled"  keyOf  "canceled"
   }
 }
 fun main() {

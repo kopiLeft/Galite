@@ -18,10 +18,10 @@ package org.kopi.galite.demo.billproduct
 
 import java.util.Locale
 
+import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Bill
 import org.kopi.galite.demo.BillProduct
 import org.kopi.galite.demo.Product
-import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key

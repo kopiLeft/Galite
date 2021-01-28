@@ -18,17 +18,18 @@ package org.kopi.galite.demo.product
 
 import java.util.Locale
 
+import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Product
-import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
+import org.kopi.galite.type.Image
 
 object ProductForm : ReportSelectionForm() {
-  override val locale = Locale.ENGLISH
+  override val locale = Locale.FRANCE
   override val title = "product form"
   val page = page("page")
   val action = menu("Action")
@@ -90,32 +91,29 @@ object BlockProduct : FormBlock(1, 1, "product block") {
     help = "The product price"
     columns(u.price)
   }
-/*
   val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
     label = "product image"
     help = "The product image"
-    columns(u.photo)
   }
-*/
 }
 
-object Category: CodeDomain<String>() {
+object Category : CodeDomain<String>() {
   init {
     "shoes" keyOf "cat 1"
     "shirts" keyOf "cat 2"
-    "glasses" keyOf  "cat 3"
+    "glasses" keyOf "cat 3"
     "pullovers" keyOf "cat 4"
     "jeans" keyOf "cat 5"
   }
 }
 
-object Tax: CodeDomain<String>() {
+object Tax : CodeDomain<String>() {
   init {
-    "Taux 19%"  keyOf "tax 1"
-    "Taux 9%" keyOf  "tax 2"
+    "Taux 19%" keyOf "tax 1"
+    "Taux 9%" keyOf "tax 2"
     "Taux 13%" keyOf "tax 3"
     "Taux 22%" keyOf "tax 4"
-    "Taux 11%"  keyOf "tax 5"
+    "Taux 11%" keyOf "tax 5"
   }
 }
 

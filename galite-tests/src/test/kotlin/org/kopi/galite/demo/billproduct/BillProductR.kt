@@ -18,6 +18,10 @@ package org.kopi.galite.demo.billproduct
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.demo.BillProduct
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -25,6 +29,9 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 import org.kopi.galite.type.Decimal
 
+/**
+ * Products Bill Report
+ */
 object BillProductR : Report() {
 
   override val locale = Locale.FRANCE
@@ -124,6 +131,17 @@ object BillProductR : Report() {
     align = FieldAlignment.LEFT
   }
 
+  val q = BillProduct.selectAll()
+
   init {
+    transaction {
+      q.forEach { result ->
+        add {
+          this[quantity] = result[BillProduct.quantity]
+          this[amountHT] = result[BillProduct.amountHT]
+          this[amountTTC] = Decimal(result[BillProduct.amountTTC])
+        }
+      }
+    }
   }
 }

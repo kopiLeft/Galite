@@ -18,12 +18,19 @@ package org.kopi.galite.demo.stock
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.demo.Stock
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 
+/**
+ * STock Report
+ */
 object StockR : Report() {
   override val locale = Locale.FRANCE
 
@@ -111,26 +118,17 @@ object StockR : Report() {
     align = FieldAlignment.LEFT
   }
 
+  val q = Stock.selectAll()
+
   init {
-    add {
-      this[idStckPdt] = 0
-      this[idStckProv] = 0
-      this[minAlert] = 50
-    }
-    add {
-      this[idStckPdt] = 1
-      this[idStckProv] = 1
-      this[minAlert] = 100
-    }
-    add {
-      this[idStckPdt] = 2
-      this[idStckProv] = 2
-      this[minAlert] = 50
-    }
-    add {
-      this[idStckPdt] = 3
-      this[idStckProv] = 3
-      this[minAlert] = 20
+    transaction {
+      q.forEach { result ->
+        add {
+          this[idStckPdt] = result[Stock.idStckPdt]
+          this[idStckProv] = result[Stock.idStckProv]
+          this[minAlert] = result[Stock.minAlert]
+        }
+      }
     }
   }
 }

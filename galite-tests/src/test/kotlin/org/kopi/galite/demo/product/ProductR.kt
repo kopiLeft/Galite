@@ -1,7 +1,27 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.demo.product
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.demo.Product
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -10,7 +30,7 @@ import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 
 /**
- * Simple Report with two fields.
+ * Product Report
  */
 object ProductR : Report() {
   override val locale = Locale.FRANCE
@@ -123,25 +143,18 @@ object ProductR : Report() {
     help = "The product unit price excluding VAT"
     align = FieldAlignment.LEFT
   }
+  val q = Product.selectAll()
 
   init {
-    add {
-      this[designation] = "Salah"
-      this[category] = "shoes"
-      this[taxName] = "Taux 9%"
-      this[price] = 200
-    }
-    add {
-      this[designation] = "Salah"
-      this[category] = "shirts"
-      this[taxName] = "Taux 19%"
-      this[price] = 250
-    }
-    add {
-      this[designation] = "Salah"
-      this[category] = "pullovers"
-      this[taxName] = "Taux 19%"
-      this[price] = 222
+    transaction {
+      q.forEach { result ->
+        add {
+          this[designation] = result[Product.designation]
+          this[category] = result[Product.category]
+          this[taxName] = result[Product.taxName]
+          this[price] = result[Product.price]
+        }
+      }
     }
   }
 }

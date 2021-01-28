@@ -14,20 +14,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.client
+package org.kopi.galite.demo.taxrule
 
 import java.util.Locale
 
 import org.kopi.galite.demo.Application
+import org.kopi.galite.demo.TaxRule
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object ClientForm : ReportSelectionForm() {
+object TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "client form"
+  override val title = "TaxRule form"
   val page = page("page")
   val action = menu("act")
   val report = actor(
@@ -40,60 +41,39 @@ object ClientForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
-  val block = insertBlock(BlockClient, page) {
+  val block = insertBlock(TaxRuleBlock, page) {
     command(item = report) {
       action = {
-        createReport(BlockClient)
+        createReport(TaxRuleBlock)
       }
     }
   }
 
   override fun createReport(): Report {
-    return ClientR
+    return TaxRuleR
   }
 }
 
-object BlockClient : FormBlock(1, 1, "Client block") {
-  val u = table(org.kopi.galite.demo.Client)
+object TaxRuleBlock : FormBlock(1, 1, "tax rule block") {
+  val u = table(TaxRule)
 
-  val idClt = hidden(domain = Domain<Int>(20)) {
-    label = "client id"
-    help = "The client id"
-    columns(u.idClt)
+  val idTaxe = hidden(domain = Domain<Int>(20)) {
+    label = "tax id"
+    help = "The tax id"
+    columns(u.idTaxe)
   }
-  val nameClt = mustFill(domain = Domain<String>(25), position = at(1, 1)) {
-    label = "client name"
-    help = "The client name"
-    columns(u.nameClt)
+  val taxName = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "tax name"
+    help = "The tax name"
+    columns(u.taxName)
   }
-  val fstnameClt = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
-    label = "client firstname"
-    help = "The client firstname"
-    columns(u.fstnameClt)
-  }
-  val addressClt = visit(domain = Domain<String>(50), position = at(3, 1)) {
-    label = "client address"
-    help = "The client address"
-    columns(u.addressClt)
-  }
-  val ageClt = visit(domain = Domain<Int>(2), position = at(4, 1)) {
-    label = "client age"
-    help = "The client age"
-    columns(u.ageClt)
-  }
-  val cityClt = visit(domain = Domain<String>(30), position = at(5, 1)) {
-    label = "client city"
-    help = "The client city"
-    columns(u.cityClt)
-  }
-
-  val postalCodeClt = visit(domain = Domain<Int>(20), position = at(6, 1)) {
-    label = "client postal code"
-    help = "The client postal code"
-    columns(u.postalCodeClt)
+  val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
+    label = "tax rate in %"
+    help = "tax rate in %"
+    columns(u.rate)
   }
 }
 
 fun main() {
-  Application.runForm(formName = ClientForm)
+  Application.runForm(formName = TaxRuleForm)
 }

@@ -14,28 +14,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.bill
+package org.kopi.galite.demo.taxrule
 
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.kopi.galite.demo.Bill
+import org.kopi.galite.demo.TaxRule
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 
 /**
- * Bill Report
+ * Tax Rules Report
  */
-object BillR : Report() {
+object TaxRuleR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "BillReport"
+  override val title = "TaxRule Report"
 
   val action = menu("Action")
 
@@ -103,46 +102,26 @@ object BillR : Report() {
     }
   }
 
-  val numBill = field(Domain<Int>(25)) {
-    label = "bill number"
-    help = "The bill number"
+  val taxName = field(Domain<String>(50)) {
+    label = "tax name"
+    help = "The tax name"
     align = FieldAlignment.LEFT
   }
 
-  val addressBill = field(Domain<String>(25)) {
-    label = "bill address"
-    help = "The bill address"
-    align = FieldAlignment.LEFT
-  }
-  val dateBill = field(Domain<String>(25)) {
-    label = "bill date"
-    help = "The bill date"
+  val rate = field(Domain<Int>(25)) {
+    label = "tax rate in %"
+    help = "tax rate in %"
     align = FieldAlignment.LEFT
   }
 
-  val amountTTC = field(Domain<Decimal>(2)) {
-    label = "AMOUNT TTC TO PAY"
-    help = "The amount TTC to pay"
-    align = FieldAlignment.LEFT
-  }
-
-  val refCmd = field(Domain<Int>(50)) {
-    label = "command reference city"
-    help = "The command reference"
-    align = FieldAlignment.LEFT
-  }
-
-  val q = Bill.selectAll()
+  val q = TaxRule.selectAll()
 
   init {
     transaction {
       q.forEach { result ->
         add {
-          this[numBill] = result[Bill.numBill]
-          this[addressBill] = result[Bill.addressBill]
-          this[dateBill] = result[Bill.dateBill]
-          this[amountTTC] = Decimal(result[Bill.amountTTC])
-          this[refCmd] = result[Bill.refCmd]
+          this[taxName] = result[TaxRule.taxName]
+          this[rate] = result[TaxRule.rate]
         }
       }
     }
