@@ -21,8 +21,6 @@ import java.util.Locale
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.chart.VChartType
 import org.kopi.galite.chart.VColumnFormat
-import org.kopi.galite.common.CHARTTYPE
-import org.kopi.galite.common.INITCHART
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.type.Decimal

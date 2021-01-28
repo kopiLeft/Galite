@@ -24,7 +24,6 @@ import java.util.Locale
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.ReportTrigger
-import org.kopi.galite.common.ReportTriggerEvent
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
@@ -83,7 +82,7 @@ abstract class Report : Window() {
    * @param reportTriggerEvents the trigger events to add
    * @param method              the method to execute when trigger is called
    */
-  fun trigger(vararg reportTriggerEvents: ReportTriggerEvent, method: () -> Unit): Trigger {
+  fun <T> trigger(vararg reportTriggerEvents: ReportTriggerEvent<T>, method: () -> T): Trigger {
     val event = reportEventList(reportTriggerEvents)
     val reportAction = Action(null, method)
     val trigger = ReportTrigger(event, reportAction)
@@ -91,7 +90,7 @@ abstract class Report : Window() {
     return trigger
   }
 
-  private fun reportEventList(reportTriggerEvents: Array<out ReportTriggerEvent>): Long {
+  private fun reportEventList(reportTriggerEvents: Array<out ReportTriggerEvent<*>>): Long {
     var self = 0L
 
     reportTriggerEvents.forEach { trigger ->
@@ -119,6 +118,26 @@ abstract class Report : Window() {
    * Adds default report commands
    */
   open val reportCommands = false
+
+  ///////////////////////////////////////////////////////////////////////////
+  // REPORT TRIGGERS
+  ///////////////////////////////////////////////////////////////////////////
+  /**
+   * Block Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class ReportTriggerEvent<T>(val event: Int)
+
+  /**
+   * Executed before the report is displayed.
+   */
+  val PREREPORT = ReportTriggerEvent<Unit>(Constants.TRG_PREREPORT)
+
+  /**
+   * Executed after the report is closed.
+   */
+  val POSTREPORT = ReportTriggerEvent<Unit>(Constants.TRG_POSTREPORT)
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

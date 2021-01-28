@@ -24,8 +24,6 @@ import kotlin.test.assertEquals
 import org.jdom2.input.SAXBuilder
 
 import org.junit.Test
-import org.kopi.galite.common.POSTREPORT
-import org.kopi.galite.common.PREREPORT
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment

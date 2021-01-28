@@ -19,7 +19,6 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.joda.time.DateTime
-import org.kopi.galite.common.POSTQRY
 import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users

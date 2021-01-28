@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,17 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.common
+package org.kopi.galite.demo.stock
 
-/**
- * This class represents a trigger, ie an action to be executed on events
- * @param events        the event of the trigger
- * @param action       the action to perform
- */
-abstract class Trigger(val events: Long, val action: Action<*>) {
-
-  /**
-   * Return trigger array
-   */
-  abstract fun getTriggers(): IntArray
+class StockForm {
 }

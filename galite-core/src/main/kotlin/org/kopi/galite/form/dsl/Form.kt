@@ -19,10 +19,7 @@ package org.kopi.galite.form.dsl
 import java.io.IOException
 
 import org.kopi.galite.common.Action
-import org.kopi.galite.common.FormBooleanTriggerEvent
 import org.kopi.galite.common.FormTrigger
-import org.kopi.galite.common.FormTriggerEvent
-import org.kopi.galite.common.FormVoidTriggerEvent
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
@@ -83,7 +80,7 @@ abstract class Form : Window() {
    * @param formTriggerEvents    the trigger events to add
    * @param method               the method to execute when trigger is called
    */
-  private fun <T> trigger(formTriggerEvents: Array<out FormTriggerEvent>, method: () -> T): Trigger {
+  fun <T> trigger(vararg formTriggerEvents: FormTriggerEvent<T>, method: () -> T): Trigger {
     val event = formEventList(formTriggerEvents)
     val formAction = Action(null, method)
     val trigger = FormTrigger(event, formAction)
@@ -91,27 +88,7 @@ abstract class Form : Window() {
     return trigger
   }
 
-  /**
-   * Adds void triggers to this form
-   *
-   * @param formTriggerEvents  the trigger events to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg formTriggerEvents: FormVoidTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(formTriggerEvents, method)
-  }
-
-  /**
-   * Adds boolean triggers to this form
-   *
-   * @param formTriggerEvents the trigger events to add
-   * @param method            the method to execute when trigger is called
-   */
-  fun trigger(vararg formTriggerEvents: FormBooleanTriggerEvent, method: () -> Boolean): Trigger {
-    return trigger(formTriggerEvents, method)
-  }
-
-  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent>): Long {
+  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent<*>>): Long {
     var self = 0L
 
     formTriggerEvents.forEach { trigger ->
@@ -134,6 +111,52 @@ abstract class Form : Window() {
     pages.add(page)
     return page
   }
+
+  ///////////////////////////////////////////////////////////////////////////
+  // FORM TRIGGERS EVENTS
+  ///////////////////////////////////////////////////////////////////////////
+  /**
+   * Form Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class FormTriggerEvent<T>(val event: Int)
+
+  /**
+   * executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command
+   */
+  val INIT = FormTriggerEvent<Unit>(VConstants.TRG_INIT) // void trigger
+
+  /**
+   * executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command
+   */
+  val PREFORM = FormTriggerEvent<Unit>(VConstants.TRG_PREFORM)       // void trigger
+
+  /**
+   * executed when closing the form
+   */
+  val POSTFORM = FormTriggerEvent<Unit>(VConstants.TRG_POSTFORM)     // void trigger
+
+  /**
+   * executed upon ResetForm command
+   */
+  val RESET = FormTriggerEvent<Boolean>(VConstants.TRG_RESET)        // Boolean trigger
+
+  /**
+   * a special trigger that returns a boolean value of whether the form have been changed or not,
+   * you can use it to bypass the system control for changes this way :
+   *
+   * trigger(CHANGED) {
+   *   false
+   * }
+   */
+  val CHANGED  = FormTriggerEvent<Boolean>(VConstants.TRG_CHANGED)    // Boolean trigger
+
+  /**
+   * executed when quitting the form
+   * actually not available
+   */
+  val QUITFORM = FormTriggerEvent<Boolean>(VConstants.TRG_QUITFORM)  // Boolean trigger
 
   // ----------------------------------------------------------------------
   // ACCESSORS
