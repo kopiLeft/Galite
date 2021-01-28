@@ -17,36 +17,28 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.Text
-import com.vaadin.flow.component.contextmenu.SubMenu
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.menubar.MenuBar
+import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.componentfactory.theme.EnhancedDialogVariant
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * The already opened windows menu.
  * The menu aims to show the opened windows by the user.
  * From this menu, the user can switch to another window.
  */
-class VWindowsMenu(vWindowsMenuItem: VWindowsMenuItem) : MenuBar() {
+class VWindowsMenu : EnhancedDialog() {
 
-  fun add(menu: String) {
-    subMenu.addItem(menu) { selected.text = menu }
+  fun addItem(item : Component) {
+    items.add(item)
+    this.setContent(items)
   }
-
-  fun add(menu: VWindowsMenuItem) {
-    subMenu.addItem(menu.text) { selected.text = menu.text }
-  }
- //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  /**
-   * Returns the number of items.
-   * @return The number of items.
-   */
-  val numItems: Int
-    get() = items.size// The index of the currently selected item can only be
-  // obtained if the menu is showing.
-
 
   //---------------------------------------------------
   // CONSTRUCTOR
@@ -54,9 +46,17 @@ class VWindowsMenu(vWindowsMenuItem: VWindowsMenuItem) : MenuBar() {
   init {
     // Make sure that CSS styles specified for the default Menu classes
     // do not affect this menu
-   element.setAttribute("name", "k-windowsMenu")
+    this.width = "5%"
+    this.height = "60%"
+    val headerIcon = Icon(VaadinIcon.COPY_O)
+    val headerText = Label("Changer de fenêtre")
+    val header = HorizontalLayout()
+
+    header.add(headerText, headerIcon)
+    header.alignItems = FlexComponent.Alignment.END
+    this.setHeader(header)
+    this.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
   }
-  private val subMenu : SubMenu = this.addItem(vWindowsMenuItem).subMenu
-  private val selected = Text("")
-  val message = Div(Text("Selected: "), selected)
+
+  private var items = VerticalLayout()
 }

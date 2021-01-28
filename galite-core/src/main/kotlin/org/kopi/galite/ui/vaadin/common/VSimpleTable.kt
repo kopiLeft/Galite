@@ -22,11 +22,12 @@ import java.util.Objects
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.dom.Element
 
 @Tag("table")
-open class VSimpleTable : Component(), HasComponents, HasSize {
+open class VSimpleTable : Component(), HasComponents, HasSize, HasStyle {
   //---------------------------------------------------
 // IMPLEMENTATIONS
 //---------------------------------------------------
@@ -93,8 +94,8 @@ open class VSimpleTable : Component(), HasComponents, HasSize {
   var lastTR: Element
   var lastTd: Element? = null
   //---------------------------------------------------
-// CONSTRUCTOR
-//---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
   /**
    * Creates the login table instance.
    */

@@ -34,7 +34,8 @@ import org.kopi.galite.visual.VlibProperties
 abstract class VCodeField(val bufferSize: Int,
                           val type: String,
                           var source: String,
-                          val idents: Array<String>)
+                          val idents: Array<String>,
+                          val localizedByGalite: Boolean = false)
   : VField(1, 1) {
 
   override fun hasAutofill(): Boolean = true
@@ -280,7 +281,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the field value of given record as a bigdecimal value.
    */
-  override fun getFixed(r: Int): org.kopi.galite.type.Fixed {
+  override fun getDecimal(r: Int): org.kopi.galite.type.Decimal {
     throw InconsistencyException()
   }
 
@@ -334,7 +335,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  abstract override fun getSqlImpl(r: Int): String?
+  abstract override fun getSqlImpl(r: Int): Any?
 
   /**
    * Copies the value of a record to another
@@ -366,7 +367,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  protected open fun formatFixed(value: org.kopi.galite.type.Fixed): String {
+  protected open fun formatDecimal(value: org.kopi.galite.type.Decimal): String {
     throw InconsistencyException()
   }
 
@@ -402,10 +403,13 @@ abstract class VCodeField(val bufferSize: Int,
       labels[i] = loc.getCodeLabel(idents[i])
     }
 
-    this.labels = labels.requireNoNulls()
-    setDimension(getMaxWidth(this.labels), 1)
+    initLabels(labels.requireNoNulls())
   }
 
+  fun initLabels(labels: Array<String>) {
+    this.labels = labels
+    setDimension(getMaxWidth(this.labels), 1)
+  }
 
   /**
    * represents the name of this field

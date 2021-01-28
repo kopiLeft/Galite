@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,28 +14,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.form.dsl
 
-package org.kopi.galite.type
+import org.kopi.galite.form.VConstants
 
-/**
- * This class represents the month types
- */
-class NotNullMonth : Month {
-  /**
-   * Constructs a Month with a year and a month in this year
-   */
-  constructor(year: Int, month: Int) : super(year, month)
-
-  /**
-   * Constructs a Month from a Date
-   */
-  constructor(date: Date) : super(date)
-
-  companion object {
-    fun castToNotNull(value: Month): NotNullMonth = value as NotNullMonth
-  }
-
-  fun getInt(column: Int): Int {
-    TODO()
-  }
+enum class Modes(val value: Int) {
+  /** mode query */
+  MOD_QUERY(VConstants.MOD_QUERY),
+  /** mode insert */
+  MOD_INSERT(VConstants.MOD_INSERT),
+  /** mode update */
+  MOD_UPDATE(VConstants.MOD_UPDATE)
 }

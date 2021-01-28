@@ -84,17 +84,24 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
    * Sets a mapping between the values that the domain can take
    * and a corresponding text to be displayed in a field.
    *
-   * @param text the text
+   * @receiver the text
    * @param value the value
    */
-  operator fun set(text: String, value: Column<*>) {
-    columns.add(ListDescription(text, value, this))
+  infix fun String.keyOf(value: Column<*>) {
+    columns.add(ListDescription(this, value, this@ListDomain))
   }
 
   /**
    * Mapping of all values that a domain can take
    */
-  lateinit var list: FieldList<T>
+  val list: FieldList<T>
+    get() = FieldList(ident,
+                      table,
+                      access,
+                      columns,
+                      autocompleteType,
+                      autocompleteLength,
+                      access != null)
 
   /**
    * Transforms values in capital letters.
@@ -144,14 +151,6 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
    *
    */
   override fun genTypeLocalization(writer: LocalizationWriter) {
-    list = FieldList(ident,
-                     table,
-                     access,
-                     columns,
-                     autocompleteType,
-                     autocompleteLength,
-                     access != null
-    )
     writer.genType(list)
   }
 }

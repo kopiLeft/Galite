@@ -15,26 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.menu
 
-package org.kopi.galite.type
+import com.vaadin.flow.component.menubar.MenuBar
 
 /**
- * This class represents the week types
+ * The module list menu bar.
  */
-class NotNullWeek : Week {
-  /**
-   * Constructs a Week with a year and a week in this year.
-   */
-  constructor(year: Int, week: Int) : super(year, week)
+open class ModuleListMenu : MenuBar() {
 
-  /**
-   * Constructs a Week from a Date.
-   */
-  constructor(date: Date) : super(date)
+  init {
 
-  companion object {
-    fun castToNotNull(value: Week): NotNullWeek {
-      return value as NotNullWeek
-    }
   }
+
 }

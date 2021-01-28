@@ -22,11 +22,18 @@ import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
 
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.Route
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.StylesInjector
+import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.main.MainWindowListener
 import org.kopi.galite.ui.vaadin.notification.ConfirmNotification
 import org.kopi.galite.ui.vaadin.notification.ErrorNotification
 import org.kopi.galite.ui.vaadin.notification.InformationNotification
@@ -49,21 +56,19 @@ import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.router.Route
-
 /**
  * The entry point for all Galite WEB applications.
  *
  * @param registry The [Registry] object.
  */
+@Push
 @Route("")
-abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application {
+abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
   //---------------------------------------------------
   // DATA MEMBEERS
   //---------------------------------------------------
+  private var mainWindow: MainWindow? = null
   private var welcomeView: WelcomeView? = null
   private var askAnswer = 0
   private lateinit var configuration: ApplicationConfiguration
@@ -157,7 +162,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun startApplication() {
-
+    menu = VMenuTree(dBContext!!)
+    menu.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
+    mainWindow = MainWindow(defaultLocale, logoImage, logoHref)
+    mainWindow!!.addMainWindowListener(this)
+    mainWindow!!.connectedUser = userName
+    mainWindow!!.addMenu(DMainMenu(menu))
+    mainWindow!!.addMenu(DUserMenu(menu))
+    mainWindow!!.addMenu(DAdminMenu(menu))
+    mainWindow!!.addMenu(DBookmarkMenu(menu))
+    mainWindow!!.addDetachListener { event ->
+        closeConnection()
+    }
   }
 
   override fun allowQuit(): Boolean =
@@ -184,6 +200,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
         welcomeView = null
         removeAll()
       }
+      add(mainWindow)
     } catch (e: SQLException) { // sets the error if any problem occur.
       welcomeView!!.setError(e.message)
     } finally { //push();
@@ -199,14 +216,19 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param username The login user name.
    * @param password The login password.
    * @throws SQLException When cannot connect to database.
-   * @see .login
+   * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    dBContext = login(getInitParameter("database")!!,
+    /*dBContext = login(getInitParameter("database")!!, FIXME: uncomment this.
                       getInitParameter("driver")!!,
                       username,
                       password,
-                      getInitParameter("schema")!!)
+                      getInitParameter("schema")!!)*/
+    dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+                      "org.h2.Driver",
+                      "admin",
+                      "admin",
+                      null)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -219,8 +241,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val isNoBugReport: Boolean
     get() = java.lang.Boolean.parseBoolean(getInitParameter("nobugreport"))
 
-  override val menu: VMenuTree
-    get() = TODO()
+  override lateinit var menu: VMenuTree
 
   override var isGeneratingHelp: Boolean = false
 
@@ -286,8 +307,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Attaches a window to this application.
    * @param window The window to be added.
    */
-  fun addWindow(window: Component) {
-
+  fun <T> addWindow(window: T) where T: Component, T: HasSize {
+    if (mainWindow != null) {
+      ui.ifPresent { myUi ->
+        myUi.access {
+          window.setSizeFull()
+          mainWindow!!.addWindow(window)
+        }
+      }
+    }
   }
 
   /**
@@ -391,24 +419,24 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   //---------------------------------------------------
   // MAIN WINDOW LISTENER IMPLEMENTATION
   // --------------------------------------------------
-  fun onAdmin() {
+  override fun onAdmin() {
     // TODO
   }
 
-  fun onSupport() {
+  override fun onSupport() {
     // TODO
   }
 
-  fun onHelp() {
+  override fun onHelp() {
     // TODO
   }
 
-  fun onLogout() {
+  override fun onLogout() {
     // close database connection and show welcome view
     logout()
   }
 
-  fun onUser() {
+  override fun onUser() {
     // TODO
   }
 

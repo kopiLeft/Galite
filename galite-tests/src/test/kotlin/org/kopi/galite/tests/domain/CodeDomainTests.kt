@@ -37,8 +37,8 @@ class CodeDomainTests {
     // Declaration of the domain with codes
     class IntTestType : CodeDomain<Long>() {
       init {
-        this["cde1"] = 1L
-        this["cde2"] = 2L
+        "cde1" keyOf 1L
+        "cde2" keyOf 2L
       }
     }
 
@@ -67,7 +67,7 @@ class CodeDomainTests {
     // Declaration of the domain with length
     class StringTestType : CodeDomain<String>() {
       init {
-        this["cde1"] = "1"
+        "cde1" keyOf "1"
       }
     }
 

@@ -15,27 +15,37 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.main
 
-package org.kopi.galite.type
-
-import java.util.Calendar
+import java.io.Serializable
 
 /**
- * This class represents date types
+ * Registered objects are notified about actions happening
+ * in the main application window.
  */
-class NotNullDate : Date {
-  constructor(year: Int, month: Int, day: Int) : super(year, month, day)
-  constructor(date: java.sql.Date) : super(date)
-  constructor(image: String) : super(image)
-  constructor(calendar: Calendar) : super(calendar)
+interface MainWindowListener : Serializable {
+  /**
+   * Fired when the administration link is clicked.
+   */
+  fun onAdmin()
 
   /**
-   * Constructs a Date from a scalar representation.
-   * DO NOT USE OUTSIDE OF THE LIBRARY
+   * Fired when the support link is clicked.
    */
-  constructor(scalar: Int) : super(scalar)
+  fun onSupport()
 
-  companion object {
-    fun castToNotNull(value: Date): NotNullDate = value as NotNullDate
-  }
+  /**
+   * Fired when the help link is clicked.
+   */
+  fun onHelp()
+
+  /**
+   * Fired when the logout link is clicked.
+   */
+  fun onLogout()
+
+  /**
+   * Fired when the connected user link is clicked.
+   */
+  fun onUser()
 }

@@ -53,12 +53,10 @@ import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import org.kopi.galite.type.Month;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
 import org.kopi.galite.visual.VlibProperties;
 import org.kopi.galite.type.Date;
-import org.kopi.galite.type.NotNullDate;
-import org.kopi.galite.type.NotNullMonth;
-import org.kopi.galite.type.NotNullWeek;
 import org.kopi.galite.type.Week;
 
 /**
@@ -242,10 +240,10 @@ public class DateChooser extends JPanel implements ActionListener {
   }
 
   private void incrementMonth(int count) {
-    NotNullMonth	m = new NotNullMonth(selectedDate).add(count);
+    Month	m = new Month(selectedDate).add(count);
 
     if (selectedDate.getDay() < m.getLastDay().getDay()) {
-      selectedDate = new NotNullDate(m.getYear(), m.getMonth(), selectedDate.getDay());
+      selectedDate = new Date(m.getYear(), m.getMonth(), selectedDate.getDay());
     } else {
       selectedDate = m.getLastDay();
     }
@@ -259,11 +257,11 @@ public class DateChooser extends JPanel implements ActionListener {
    * Returns the number of days in the specified month
    */
   /*package*/ static int getDaysInMonth(Date d) {
-    return new NotNullMonth(d).getLastDay().getDay();
+    return new Month(d).getLastDay().getDay();
   }
 
   private void updateCalendar() {
-    firstDay = new NotNullDate(selectedDate.getYear(), selectedDate.getMonth(), 1).getWeekday();
+    firstDay = new Date(selectedDate.getYear(), selectedDate.getMonth(), 1).getWeekday();
 
     yearLabel.setText(String.valueOf(selectedDate.getYear()));
     monthLabel.setText(MONTH_NAMES[selectedDate.getMonth() - 1]);
@@ -497,7 +495,7 @@ public class DateChooser extends JPanel implements ActionListener {
           int	day = (7 * y) + x - (dp - 1);
 
           if (day >= 1 && day <= DateChooser.getDaysInMonth(selectedDate)) {
-            CalendarPane.this.dateChooser.setSelectedDate(new NotNullDate(selectedDate.getYear(), selectedDate.getMonth(), day));
+            CalendarPane.this.dateChooser.setSelectedDate(new Date(selectedDate.getYear(), selectedDate.getMonth(), day));
             CalendarPane.this.dateChooser.refresh();
             CalendarPane.this.dateChooser.setOkay(true);
             CalendarPane.this.dateChooser.dispose();
@@ -558,7 +556,7 @@ public class DateChooser extends JPanel implements ActionListener {
       // Print the number of the week just for the last line (value for the column KW)
       // if the last week of the month finish the the next month
       if (x == 7 || d == DateChooser.getDaysInMonth(dateChooser.getSelectedDate())) {
-        Week		week = new NotNullWeek(new NotNullDate(dateChooser.getSelectedDate().getYear(), dateChooser.getSelectedDate().getMonth(), d));
+        Week		week = new Week(new Date(dateChooser.getSelectedDate().getYear(), dateChooser.getSelectedDate().getMonth(), d));
 
         gc.setColor(WEEK_NUMBER_COLOR);
         // x0 + 1 : to put the text a litle more on the right

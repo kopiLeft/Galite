@@ -29,6 +29,7 @@ import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VWindow
 
 /**
@@ -198,6 +199,10 @@ abstract class Chart : Window() {
     genLocalization()
 
     object : VChart() {
+      init {
+        locale = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
+      }
+
       /**
        * Handling triggers
        */

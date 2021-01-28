@@ -95,7 +95,7 @@ class SimpleReportTest : VerticalLayout() {
    */
   class StringTestType : CodeDomain<String>() {
     init {
-      this["cde1"] = "test1"
+      "cde1" keyOf "test1"
     }
   }
 
@@ -104,7 +104,7 @@ class SimpleReportTest : VerticalLayout() {
    */
   class LongTestType : CodeDomain<Long>() {
     init {
-      this["cde1"] = 1
+      "cde1" keyOf 1
     }
   }
 }

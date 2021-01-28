@@ -347,6 +347,27 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * This method changes the blocks' visibility.
+   *
+   * Use [Access] to see the list of the access.
+   * Use [Modes] to see the list of the modes.
+   *
+   * @param access the access to set in the block
+   * @param modes the list of modes where the access will be changed
+   */
+  fun blockVisibility(access: Access, vararg modes: Modes) {
+    if (modes.contains(Modes.MOD_QUERY)) {
+      this.access[VConstants.MOD_QUERY] = access.value
+    }
+    if (modes.contains(Modes.MOD_INSERT)) {
+      this.access[VConstants.MOD_INSERT] = access.value
+    }
+    if (modes.contains(Modes.MOD_UPDATE)) {
+      this.access[VConstants.MOD_UPDATE] = access.value
+    }
+  }
+
+  /**
    * Make a tuning pass in order to create informations about exported
    * elements such as block fields positions
    *
@@ -359,6 +380,10 @@ open class FormBlock(var buffer: Int,
     blockFields.forEach { field ->
       if (field.position != null) {
         field.position!!.createRBPoint(bottomRight, field)
+      }
+      // ACCESS
+      for (i in 0..2) {
+        field.access[i] = field.access[i].coerceAtMost(access[i])
       }
     }
 
@@ -514,12 +539,11 @@ open class FormBlock(var buffer: Int,
 
         handleTriggers(this@FormBlock.triggers)
 
-        super.access = intArrayOf(
-                4, 4, 4
-        )
         //TODO ------------end-----------
 
         super.source = source ?: sourceFile
+        super.title = this@FormBlock.title
+        super.help = this@FormBlock.help
         super.bufferSize = buffer
         super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
@@ -531,6 +555,7 @@ open class FormBlock(var buffer: Int,
         }.toTypedArray()
         super.name = ident
         super.options = blockOptions
+        super.access = this@FormBlock.access
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()
@@ -538,6 +563,9 @@ open class FormBlock(var buffer: Int,
           formField.vField
         }.toTypedArray()
         super.indices = this@FormBlock.indices.map {
+          it.message
+        }.toTypedArray()
+        super.indicesIdents = this@FormBlock.indices.map {
           it.ident
         }.toTypedArray()
       }

@@ -26,7 +26,7 @@ import org.kopi.galite.form.dsl.FormBlock
 
 object FormWithCodeDomains: Form() {
   val edit = menu("Edit")
-  val autoFill = FormWithCodeDomains.actor(
+  val autoFill = actor(
           ident = "Autofill",
           menu = edit,
           label = "Autofill",
@@ -46,13 +46,13 @@ object DaysBlock : FormBlock(1, 1, "DaysBlock", "Days block") {
 
 object Days: CodeDomain<Int>() {
   init {
-    this["Sunday"] = 1
-    this["Monday"] = 2
-    this["Tuesday"] = 3
-    this["Wednesday"] = 4
-    this["Thursday"] = 5
-    this["Friday"] = 6
-    this["Saturday"] = 7
+    "Sunday" keyOf 1
+    "Monday" keyOf 2
+    "Tuesday" keyOf 3
+    "Wednesday" keyOf 4
+    "Thursday" keyOf 5
+    "Friday" keyOf 6
+    "Saturday" keyOf 7
   }
 }
 

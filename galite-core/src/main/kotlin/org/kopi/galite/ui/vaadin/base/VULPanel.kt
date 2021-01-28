@@ -15,28 +15,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.base
 
-package org.kopi.galite.type
-
-import java.util.Calendar
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.Tag
 
 /**
- * This class represents the time types
+ * A complex panel that wraps an unordered list inside.
  */
-class NotNullTime : Time {
-  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
-  constructor(hours: Int, minutes: Int) : super(hours, minutes)
-  constructor(time: java.sql.Time) : super(time)
-  constructor(image: String) : super(image)
-  constructor(calendar: Calendar) : super(calendar)
-
-  /**
-   * Constructs a time from a scalar representation.
-   * DO NOT USE OUTSIDE OF THE LIBRARY
-   */
-  constructor(scalar: Int) : super(scalar)
-
-  companion object {
-    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
-  }
-}
+@Tag(Tag.UL)
+class VULPanel : Component(), HasComponents

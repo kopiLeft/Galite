@@ -17,11 +17,30 @@
 
 package org.kopi.galite.domain
 
+import org.joda.time.DateTime
 import kotlin.reflect.KClass
 
-import org.apache.poi.ss.formula.functions.Fixed
 import org.kopi.galite.common.LocalizationWriter
+import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.VDateField
+import org.kopi.galite.form.VField
+import org.kopi.galite.form.VFixnumField
+import org.kopi.galite.form.VImageField
+import org.kopi.galite.form.VIntegerField
+import org.kopi.galite.form.VMonthField
+import org.kopi.galite.form.VStringField
+import org.kopi.galite.form.VTimeField
+import org.kopi.galite.form.VTimestampField
+import org.kopi.galite.form.VWeekField
+import org.kopi.galite.form.dsl.FormField
+import org.kopi.galite.type.Date
+import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.Image
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Time
+import org.kopi.galite.type.Timestamp
+import org.kopi.galite.type.Week
 
 /**
  * A domain is a data type with predefined list of allowed values.
@@ -33,6 +52,13 @@ import org.kopi.galite.form.VConstants
 open class Domain<T : Comparable<T>?>(val width: Int? = null,
                                       val height: Int? = null,
                                       val visibleHeight: Int? = null) {
+  companion object {
+    operator fun <T: Decimal?> invoke(width: Int, scale: Int): Domain<Decimal> =
+            Domain(width, scale, null)
+  }
+
+  private var isFraction = false
+
   val ident: String = this::class.java.simpleName
 
   /**
@@ -41,14 +67,37 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
   var kClass: KClass<*>? = null
 
   /**
-   * Allows to define the possible codes that the domain can take
-   *
-   * @param init used to initialize the code domain
+   * Builds the form field model
    */
-  fun code(init: CodeDomain<T>.() -> Unit): CodeDomain<T> {
-    val codeDomain = CodeDomain<T>()
-    codeDomain.init()
-    return codeDomain
+  open fun buildFieldModel(formField: FormField<T>): VField {
+    return with(formField) {
+      when (kClass) {
+        Int::class, Long::class -> VIntegerField(block.buffer,
+                                                 width ?: 0,
+                                                 min as? Int ?: Int.MIN_VALUE,
+                                                 max as? Int ?: Int.MAX_VALUE)
+        String::class -> VStringField(block.buffer,
+                                      width ?: 0,
+                                      height ?: 1,
+                                      visibleHeight ?: 1,
+                                      0,  // TODO
+                                      false) // TODO
+        Decimal::class -> VFixnumField(block.buffer,
+                                       width!!,
+                                       height ?: 6,
+                                       height == null,
+                                       min as? Decimal,
+                                       max as? Decimal)
+        Boolean::class -> VBooleanField(block.buffer)
+        Date::class, java.util.Date::class -> VDateField(block.buffer)
+        Month::class -> VMonthField(block.buffer)
+        Week::class -> VWeekField(block.buffer)
+        Time::class -> VTimeField(block.buffer)
+        Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
+        Image::class -> VImageField(block.buffer, width!!, height!!)
+        else -> throw RuntimeException("Type ${kClass!!.qualifiedName} is not supported")
+      }
+    }
   }
 
   /**
@@ -65,7 +114,7 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
    * Returns the default alignment
    */
   val defaultAlignment: Int
-    get() = if (kClass == Fixed::class) {
+    get() = if (kClass == Decimal::class) {
       VConstants.ALG_RIGHT
     } else {
       VConstants.ALG_LEFT
@@ -76,7 +125,7 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
   // ----------------------------------------------------------------------
   fun hasSize(): Boolean =
           when (kClass) {
-            Fixed::class, Int::class, Long::class, String::class -> true
+            Decimal::class, Int::class, Long::class, String::class -> true
             else -> false
           }
 

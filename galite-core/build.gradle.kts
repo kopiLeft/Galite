@@ -29,6 +29,12 @@ val hylafaxVersion = "1.0.0"
 val jFreeChartVersion = "1.0.19"
 val getoptVersion = "1.0.13"
 
+repositories {
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
+
 dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
@@ -65,4 +71,7 @@ dependencies {
 
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", getoptVersion)
+
+  //Enhanced Dialog
+  implementation("com.vaadin.componentfactory","enhanced-dialog","1.0.4")
 }

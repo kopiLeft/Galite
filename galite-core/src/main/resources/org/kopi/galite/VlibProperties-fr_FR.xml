@@ -115,7 +115,7 @@
   <property key="week-type-field" value="Ce champ doit contenir une semaine ISO (SS.AAAA)." />
   <property key="boolean-type-field" value="Ce champ doit contenir une valeur booléenne (vrai ou faux)." />
   <property key="integer-type-field" value="Ce champ doit contenir un entier entre {0} et {1}." />
-  <property key="fixed-type-field" value="" />
+  <property key="decimal-type-field" value="" />
   <property key="code-type-field" value="Ce champ doit être rempli avec une des valeurs proposées (F2)." />
   <property key="image-type-field" value="" />
   <property key="color-type-field" value="" />
@@ -127,7 +127,7 @@
   <property key="String" value="Texte" />
   <property key="StringArea" value="Texte" />
   <property key="Text" value="Texte" />
-  <property key="Fixed" value="Nombre" />
+  <property key="Decimal" value="Nombre" />
   <property key="Long" value="Entier" />
   <property key="Date" value="Date" />
   <property key="Month" value="Mois" />
@@ -141,7 +141,7 @@
   <property key="StringArea-long" value="Ce champ doit être rempli par un texte de moins de {0} caracteres et de {1} lignes au plus" />
   <property key="String-long" value="Ce champ doit être rempli par un texte de au plus {0} caracteres" />
   <property key="Text-long" value="Ce champ peut être rempli par un texte de taille quelconque" />
-  <property key="Fixed-long" value="Ce champ doit être rempli par un nombre entre {0} et {1}" />
+  <property key="Decimal-long" value="Ce champ doit être rempli par un nombre entre {0} et {1}" />
   <property key="Long-long" value="Ce champ doit être rempli par un entier entre {0} et {1}" />
   <property key="Date-long" value="Ce champ doit contenir une date (JJ.MM.AAAA)" />
   <property key="Month-long" value="Ce champ doit contenir un mois (MM.AAAA)" />

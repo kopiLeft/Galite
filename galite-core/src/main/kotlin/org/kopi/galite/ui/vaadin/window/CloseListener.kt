@@ -15,8 +15,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.window
 
-package org.kopi.galite.type
+import java.io.Serializable
 
-class NotNullTimestamp : Timestamp() {
+/**
+ * A generic close listener for notifying with a close event.
+ */
+interface CloseListener : Serializable {
+  /**
+   * Fired when a dialog or a popup is closed.
+   */
+  fun onClose()
 }

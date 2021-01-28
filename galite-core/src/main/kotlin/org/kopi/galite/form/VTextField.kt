@@ -120,13 +120,6 @@ class VTextField(width: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    TODO()
-  }
-
-  /**
-   * Returns the SQL representation of field value of given record.
-   */
   override fun hasLargeObject(r: Int): Boolean {
     TODO()
   }

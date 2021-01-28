@@ -28,6 +28,7 @@ import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a form.
@@ -179,8 +180,6 @@ abstract class Form : Window() {
 
   /** Form model */
   override val model: VForm by lazy {
-    genLocalization()
-
     object : VForm() {
       override fun init() {
         initialize()
@@ -190,7 +189,12 @@ abstract class Form : Window() {
 
   fun VForm.initialize() {
     source = sourceFile
+    locale = this@Form.locale ?: ApplicationContext.getDefaultLocale()
+    setTitle(title)
     pages = this@Form.pages.map {
+      it.title
+    }.toTypedArray()
+    pagesIdents = this@Form.pages.map {
       it.ident
     }.toTypedArray()
     this.addActors(this@Form.actors.map { actor ->

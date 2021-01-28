@@ -17,9 +17,11 @@
  */
 package org.kopi.galite.form.dsl
 
+import java.math.BigDecimal
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import org.joda.time.DateTime
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormTrigger
@@ -35,27 +37,11 @@ import org.kopi.galite.field.FieldObjectTriggerEvent
 import org.kopi.galite.field.FieldProtectedTriggerEvent
 import org.kopi.galite.field.FieldTriggerEvent
 import org.kopi.galite.field.FieldVoidTriggerEvent
-import org.kopi.galite.form.VBooleanCodeField
-import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFixnumCodeField
-import org.kopi.galite.form.VIntegerCodeField
-import org.kopi.galite.form.VIntegerField
-import org.kopi.galite.form.VMonthField
-import org.kopi.galite.form.VStringCodeField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.form.VTimeField
-import org.kopi.galite.form.VTimestampField
-import org.kopi.galite.form.VWeekField
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
+import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.Image
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -107,15 +93,15 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     }
 
   /** the minimum value that cannot exceed  */
-  private var min: Int = Int.MIN_VALUE
+  internal var min : T? = null
 
   /** the maximum value that cannot exceed  */
-  private var max: Int = Int.MAX_VALUE
+  internal var max : T? = null
 
   /**
    * Sets the minimum value of an Int field.
    */
-  var <U> FormField<U>.minValue: Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.minValue : U? where U : Comparable<U>?, U : Number?
     get() {
       return min
     }
@@ -126,7 +112,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   /**
    * Sets the maximum value of an Int field.
    */
-  var <U> FormField<U>.maxValue: Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.maxValue : U? where U : Comparable<U>?, U : Number?
     get() {
       return max
     }
@@ -176,6 +162,32 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * @param init        initialises the form field column properties (index, priority...)
    */
   fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  @JvmName("decimalColumns")
+  fun FormField<Decimal>.columns(vararg joinColumns: Column<BigDecimal>, init: (FormFieldColumns<Decimal>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  /**
+   * Assigns [columns] to this field.
+   *
+   * @param joinColumns columns to use to make join between block tables
+   * @param init        initialises the form field column properties (index, priority...)
+   */
+  @JvmName("imageColumns")
+  fun FormField<Image>.columns(vararg joinColumns: Column<ExposedBlob>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+    initColumn(*joinColumns, init = init)
+  }
+
+  private fun <S> initColumn(vararg joinColumns: Column<S>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
       FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
     }
@@ -311,56 +323,13 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     return trigger(fieldTriggerEvents, method)
   }
 
-  // TODO add Fixed types
   /**
    * The field model based on the field type.
    */
   val vField: VField by lazy {
-    when {
-      domain is CodeDomain -> {
-        val type = domain as CodeDomain<*>
-        when (domain.kClass) {
-          Boolean::class -> VBooleanCodeField(block.buffer,
-                                              domain.ident,
-                                              block.sourceFile,
-                                              type.codes.map { it.ident }.toTypedArray(),
-                                              type.codes.map { it.value as? Boolean }.toTypedArray())
-          Fixed::class -> VFixnumCodeField(block.buffer,
-                                           domain.ident,
-                                           block.sourceFile,
-                                           type.codes.map { it.ident }.toTypedArray(),
-                                           type.codes.map { it.value as? Fixed }.toTypedArray())
-          Int::class, Long::class -> VIntegerCodeField(block.buffer,
-                                                       domain.ident,
-                                                       block.sourceFile,
-                                                       type.codes.map { it.ident }.toTypedArray(),
-                                                       type.codes.map { it.value as? Int }.toTypedArray())
-          String::class -> VStringCodeField(block.buffer,
-                                            domain.ident,
-                                            block.sourceFile,
-                                            type.codes.map { it.ident }.toTypedArray(),
-                                            type.codes.map { it.value as? String }.toTypedArray())
-          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-        }
-      }
-      else -> {
-        when (domain.kClass) {
-          Int::class, Long::class -> VIntegerField(block.buffer, domain.width ?: 0, min, max)
-          String::class -> VStringField(block.buffer,
-                                        domain.width ?: 0,
-                                        domain.height ?: 1,
-                                        domain.visibleHeight ?: 1,
-                                        0,  // TODO
-                                        false) // TODO
-          Boolean::class -> VBooleanField(block.buffer)
-          Date::class, java.util.Date::class -> VDateField(block.buffer)
-          Month::class -> VMonthField(block.buffer)
-          Week::class -> VWeekField(block.buffer)
-          Time::class -> VTimeField(block.buffer)
-          Timestamp::class, DateTime::class -> VTimestampField(block.buffer)
-          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-        }
-      }
+    domain.buildFieldModel(this).also {
+      it.label = label
+      it.toolTip = help
     }
   }
 
@@ -398,13 +367,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * @param block        the actual form block
    */
   open fun initialize(block: FormBlock) {
-
-    // ACCESS
-    val blockAccess: IntArray = block.access
-    for (i in 0..2) {
-      access[i] = access[i].coerceAtMost(blockAccess[i])
-    }
-
     // TRANSIENT MODE
     if (columns == null && isNeverAccessible) {
       options = options or VConstants.FDO_TRANSIENT

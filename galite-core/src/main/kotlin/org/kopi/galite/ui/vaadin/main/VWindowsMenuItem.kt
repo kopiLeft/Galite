@@ -17,15 +17,19 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.contextmenu.ContextMenu
-import com.vaadin.flow.component.contextmenu.MenuItem
-import com.vaadin.flow.function.SerializableRunnable
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.button.Button
 
 /**
  * Class for menu items in the already opened windows menu.
  */
-class VWindowsMenuItem(contextMenu : ContextMenu,
-                       contentReset : SerializableRunnable? = null) : MenuItem(contextMenu, contentReset) {
+class VWindowsMenuItem(window: Component) : Button() {
+
+  init {
+    addClickListener {
+      //TODO()
+    }
+  }
 
   companion object {
     //---------------------------------------------------

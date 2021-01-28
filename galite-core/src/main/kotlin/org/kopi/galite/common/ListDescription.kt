@@ -17,24 +17,21 @@
  */
 package org.kopi.galite.common
 
+import org.jetbrains.exposed.sql.AutoIncColumnType
+import org.jetbrains.exposed.sql.BooleanColumnType
 import java.lang.RuntimeException
 
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.IDateColumnType
+import org.jetbrains.exposed.sql.IntegerColumnType
+import org.jetbrains.exposed.sql.LongColumnType
+import org.jetbrains.exposed.sql.StringColumnType
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.list.VBooleanColumn
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VIntegerColumn
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.list.VMonthColumn
 import org.kopi.galite.list.VStringColumn
-import org.kopi.galite.list.VTimeColumn
-import org.kopi.galite.list.VTimestampColumn
-import org.kopi.galite.list.VWeekColumn
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
 
 /**
  * The description of a list element
@@ -48,20 +45,18 @@ class ListDescription(val title: String,
                       val domain: Domain<*>) {
 
   fun buildModel(): VListColumn {
-    return when(domain.kClass) {
-      Int::class, Long::class -> VIntegerColumn(title, column, domain.defaultAlignment, domain.width!!, true)
-      String::class -> VStringColumn(title, column, domain.defaultAlignment, domain.width!!, true)
-      Boolean::class -> VBooleanColumn(title, column, true)
-      Date::class, java.util.Date::class ->
+    val type = if(column.columnType is AutoIncColumnType) {
+      (column.columnType as AutoIncColumnType).delegate
+    } else {
+      column.columnType
+    }
+
+    return when(type) {
+      is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.defaultAlignment, domain.width!!, true)
+      is StringColumnType -> VStringColumn(title, column, domain.defaultAlignment, domain.width!!, true)
+      is BooleanColumnType -> VBooleanColumn(title, column, true)
+      is IDateColumnType, ->
         VDateColumn(title, column, true)
-      Month::class ->
-        VMonthColumn(title, column, true)
-      Week::class ->
-        VWeekColumn(title, column, true)
-      Time::class ->
-        VTimeColumn(title, column, true)
-      Timestamp::class ->
-        VTimestampColumn(title, column, true)
       else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
     }
   }

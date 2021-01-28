@@ -29,6 +29,12 @@ val h2Version = "1.4.199"
 val exposedVersion = "0.27.1"
 val postgresNGVersion = "0.8.6"
 
+repositories {
+  maven {
+    url = uri("https://maven.vaadin.com/vaadin-addons")
+  }
+}
+
 vaadin {
   pnpmEnable = true
 }
@@ -39,17 +45,17 @@ dependencies {
   implementation(kotlin("test-junit"))
 
   implementation("com.vaadin", "vaadin-core") {
-    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
-            .forEach { group -> exclude(group = group) }
+    excludeWebJars()
   }
   implementation("com.vaadin", "vaadin-spring-boot-starter") {
-    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
-            .forEach { group -> exclude(group = group) }
+    excludeWebJars()
   }
+  implementation("org.springframework.boot", "spring-boot-devtools") {
+    excludeWebJars()
+  }
+
+  //Enhanced Dialog
+  implementation("com.vaadin.componentfactory","enhanced-dialog","1.0.4")
 
   // UI tests dependencies
   implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
@@ -73,4 +79,11 @@ dependencyManagement {
   imports {
     mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
   }
+}
+
+fun ExternalModuleDependency.excludeWebJars() {
+  listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+         "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+         "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+          .forEach { group -> exclude(group = group) }
 }
