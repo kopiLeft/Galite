@@ -39,7 +39,6 @@ abstract class ReportSelectionForm : DictionaryForm() {
 
   /** Form model */
   override val model: VReportSelectionForm by lazy {
-    genLocalization()
     object : VReportSelectionForm() {
       override fun init() {
         initialize()

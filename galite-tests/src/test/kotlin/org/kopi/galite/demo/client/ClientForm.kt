@@ -53,7 +53,7 @@ object ClientForm : ReportSelectionForm() {
   }
 }
 
-object BlockClient : FormBlock(1, 1, "Test block") {
+object BlockClient : FormBlock(1, 1, "Clients") {
   val u = table(org.kopi.galite.demo.Client)
 
   val idClt = hidden(domain = Domain<Int>(20)) {
@@ -76,7 +76,7 @@ object BlockClient : FormBlock(1, 1, "Test block") {
     help = "The client address"
     columns(u.addressClt)
   }
-  val ageClt = visit(domain = Domain<Int>(2), position = at(4, 1)) {
+  val ageClt = visit(domain = Domain<Int>(3), position = at(4, 1)) {
     label = "client age"
     help = "The client age"
     columns(u.ageClt)
