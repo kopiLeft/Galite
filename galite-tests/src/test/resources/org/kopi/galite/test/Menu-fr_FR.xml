@@ -16,4 +16,8 @@
          <module ident="5001" label="Bill product" help="Bill of products" />
     <module ident="6000" label="Stock" help="Stock management" />
          <module ident="6001" label="Stock" help="Stock management" />
+    <module ident="7000" label="TaxRule" help="Tax Rules management" />
+         <module ident="7001" label="TaxRule" help="Tax Rules management" />
+    <module ident="8000" label="Provider" help="Providers management" />
+         <module ident="8001" label="Provider" help="Providers management" />
 </modules>

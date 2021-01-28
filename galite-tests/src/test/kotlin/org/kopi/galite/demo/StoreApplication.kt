@@ -26,7 +26,9 @@ import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.demo.command.CommandForm
 import org.kopi.galite.demo.product.ProductForm
+import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
+import org.kopi.galite.demo.taxrule.TaxRuleForm
 import org.kopi.galite.form.dsl.Form
 
 import org.kopi.galite.tests.db.DBSchemaTest
@@ -199,6 +201,10 @@ fun initModules() {
     DBSchemaTest.insertIntoModule("5001", "org/kopi/galite/test/Menu", 401, "5000", BillProductForm::class)
     DBSchemaTest.insertIntoModule("6000", "org/kopi/galite/test/Menu", 500)
     DBSchemaTest.insertIntoModule("6001", "org/kopi/galite/test/Menu", 501, "6000", StockForm::class)
+    DBSchemaTest.insertIntoModule("7000", "org/kopi/galite/test/Menu", 600)
+    DBSchemaTest.insertIntoModule("7001", "org/kopi/galite/test/Menu", 601, "7000", TaxRuleForm::class)
+    DBSchemaTest.insertIntoModule("8000", "org/kopi/galite/test/Menu", 700)
+    DBSchemaTest.insertIntoModule("8001", "org/kopi/galite/test/Menu", 701, "8000", ProviderForm::class)
   }
 }
 
@@ -219,6 +225,10 @@ fun initUserRights(user: String = DBSchemaTest.connectedUser) {
     DBSchemaTest.insertIntoUserRights(user, "5001", true)
     DBSchemaTest.insertIntoUserRights(user, "6000", true)
     DBSchemaTest.insertIntoUserRights(user, "6001", true)
+    DBSchemaTest.insertIntoUserRights(user, "7000", true)
+    DBSchemaTest.insertIntoUserRights(user, "7001", true)
+    DBSchemaTest.insertIntoUserRights(user, "8000", true)
+    DBSchemaTest.insertIntoUserRights(user, "8001", true)
   }
 }
 
