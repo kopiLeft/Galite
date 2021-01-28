@@ -14,7 +14,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.bill
+package org.kopi.galite.demo.stock
 
 import java.util.Locale
 
@@ -23,12 +23,11 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 
-object BillR : Report() {
+object StockR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "BillReport"
+  override val title = "StockReport"
 
   val action = menu("Action")
 
@@ -96,63 +95,42 @@ object BillR : Report() {
     }
   }
 
-  val numBill = field(Domain<Int>(25)) {
-    label = "bill number"
-    help = "The bill number"
+  val idStckPdt = field(Domain<Int>(25)) {
+    label = "product id"
+    help = "product id"
     align = FieldAlignment.LEFT
   }
-
-  val addressBill = field(Domain<String>(25)) {
-    label = "bill address"
-    help = "The bill address"
+  val idStckProv = field(Domain<Int>(25)) {
+    label = "provider id"
+    help = "provider id"
     align = FieldAlignment.LEFT
   }
-  val dateBill = field(Domain<String>(25)) {
-    label = "bill date"
-    help = "The bill date"
-    align = FieldAlignment.LEFT
-  }
-
-  val amountTTC = field(Domain<Decimal>(2)) {
-    label = "AMOUNT TTC TO PAY"
-    help = "The amount TTC to pay"
-    align = FieldAlignment.LEFT
-  }
-
-  val refCmd = field(Domain<Int>(50)) {
-    label = "command reference city"
-    help = "The command reference"
+  val minAlert = field(Domain<Int>(25)) {
+    label = "min alert stock"
+    help = "min alert stock"
     align = FieldAlignment.LEFT
   }
 
   init {
     add {
-      this[numBill] = 0
-      this[addressBill] = "addresse facture 0"
-      this[dateBill] = "13/09/20018"
-      this[amountTTC] = Decimal("3129.7")
-      this[refCmd] = 0
+      this[idStckPdt] = 0
+      this[idStckProv] = 0
+      this[minAlert] = 50
     }
     add {
-      this[numBill] = 1
-      this[addressBill] = "addresse facture 1"
-      this[dateBill] = "16/02/2020"
-      this[amountTTC] = Decimal("1149.24")
-      this[refCmd] = 1
+      this[idStckPdt] = 1
+      this[idStckProv] = 1
+      this[minAlert] = 100
     }
     add {
-      this[numBill] = 2
-      this[addressBill] = "addresse facture 2"
-      this[dateBill] = "13/05/2019"
-      this[amountTTC] = Decimal("219.6")
-      this[refCmd] = 2
+      this[idStckPdt] = 2
+      this[idStckProv] = 2
+      this[minAlert] = 50
     }
     add {
-      this[numBill] = 3
-      this[addressBill] = "addresse facture 3"
-      this[dateBill] = "10,Rue du Lac"
-      this[amountTTC] = Decimal("146.9")
-      this[refCmd] = 3
+      this[idStckPdt] = 3
+      this[idStckProv] = 3
+      this[minAlert] = 20
     }
   }
 }

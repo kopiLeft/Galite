@@ -43,7 +43,7 @@ object BillProductForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
-  val tb1 = insertBlock(BlockBillProduct, page){
+  val tb1 = insertBlock(BlockBillProduct, page) {
     command(item = report) {
       action = {
         createReport(BlockBillProduct)
@@ -79,7 +79,7 @@ object BlockBillProduct : FormBlock(1, 1, "block bill product") {
   val amountTTC = visit(domain = Domain<Decimal>(20), position = at(3, 1)) {
     label = "amount TTC"
     help = "amount TTC"
-    columns(u.amountTTC,w.amountTTC)
+    columns(u.amountTTC, w.amountTTC)
   }
 }
 
