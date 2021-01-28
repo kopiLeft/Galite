@@ -123,14 +123,16 @@ fun main(args: Array<String>) {
   initDatabase()
   initModules()
   initUserRights()
-  addClients()
-  addTaxRule()
-  addProducts()
-  addFourns()
-  addStock()
-  addCmds()
-  addBillPrdt()
-  addBills()
+  transaction {
+    addClients()
+    addTaxRules()
+    addProducts()
+    addFourns()
+    addStocks()
+    addCmds()
+    addBillPrdts()
+    addBills()
+  }
   runApplication<StoreApplication>(*args)
 }
 
@@ -144,7 +146,6 @@ fun initDatabase(user: String = DBSchemaTest.connectedUser) {
     createStoreTables()
   }
 }
-
 
 fun connectToDatabase(url: String = DBSchemaTest.testURL,
                       driver: String = DBSchemaTest.testDriver,
@@ -184,257 +185,136 @@ fun initUserRights(user: String = DBSchemaTest.connectedUser) {
   }
 }
 
-
 fun addClients() {
-  transaction {
-    Client.insert {
-      it[idClt] = 0
-      it[nameClt] = "Salah"
-      it[fstnameClt] = "Mohamed"
-      it[addressClt] = "10,Rue du Lac"
-      it[cityClt] = "Megrine"
-      it[postalCodeClt] = 2001
-      it[ageClt] = 40
-    }
-    Client.insert {
-      it[idClt] = 1
-      it[nameClt] = "Guesmi"
-      it[fstnameClt] = "Khaled"
-      it[addressClt] = "14,Rue Mongi Slim"
-      it[cityClt] = "Tunis"
-      it[postalCodeClt] = 6000
-      it[ageClt] = 35
-    }
-    Client.insert {
-      it[idClt] = 2
-      it[nameClt] = "Bouaroua"
-      it[fstnameClt] = "Ahmed"
-      it[addressClt] = "10,Rue du Lac"
-      it[cityClt] = "Mourouj"
-      it[postalCodeClt] = 5003
-      it[ageClt] = 22
-    }
+  addClient(0, "Salah", "Mohamed", "10,Rue du Lac", "Megrine", 2001, 40)
+  addClient(1, "Guesmi", "Khaled", "14,Rue Mongi Slim", "Tunis", 6000, 35)
+  addClient(2, "Bouaroua", "Ahmed", "10,Rue du Lac", "Mourouj", 5003, 22)
+}
+
+fun addClient(id: Int, name: String, fstName: String, address: String, city: String, postalCode: Int, age: Int) {
+  Client.insert {
+    it[idClt] = id
+    it[nameClt] = name
+    it[fstnameClt] = fstName
+    it[addressClt] = address
+    it[cityClt] = city
+    it[postalCodeClt] = postalCode
+    it[ageClt] = age
   }
 }
 
 fun addProducts() {
-  transaction {
-    Product.insert {
-      it[idPdt] = 0
-      it[designation] = "designation Product 0"
-      it[category] = "cat 1"
-      it[taxName] = "tax 1"
-      it[price] = 263
-    }
-    Product.insert {
-      it[idPdt] = 1
-      it[designation] = "designation Product 1"
-      it[category] = "cat 2"
-      it[taxName] = "tax 2"
-      it[price] = 314
-    }
-    Product.insert {
-      it[idPdt] = 2
-      it[designation] = "designation Product 2"
-      it[category] = "cat3"
-      it[taxName] = "tax 2"
-      it[price] = 180
-    }
-    Product.insert {
-      it[idPdt] = 3
-      it[designation] = "designation Product 3"
-      it[category] = "cat 1"
-      it[taxName] = "tax 3"
-      it[price] = 65
-    }
+  addProduct(0, "designation Product 0", "cat 1", "tax 1", 263)
+  addProduct(1, "designation Product 1", "cat 2", "tax 2", 314)
+  addProduct(2, "designation Product 2", "cat 3", "tax 2", 180)
+  addProduct(3, "designation Product 3", "cat 1", "tax 3", 65)
+}
+
+fun addProduct(id: Int, designation: String, category: String, taxName: String, price: Int) {
+  Product.insert {
+    it[idPdt] = id
+    it[Product.designation] = designation
+    it[Product.category] = category
+    it[Product.taxName] = taxName
+    it[Product.price] = price
   }
 }
 
 fun addFourns() {
-  transaction {
-    Provider.insert {
-      it[idProvider] = 0
-      it[nameProvider] = "Radhia Jouini"
-      it[tel] = 21203506
-      it[address] = "address provider 1"
-      it[description] = " description du Provider ayant l'id 0 "
-      it[postalCode] = 2000
-    }
-    Provider.insert {
-      it[idProvider] = 1
-      it[nameProvider] = "Sarra Boubaker"
-      it[tel] = 99806234
-      it[address] = "address provider 2"
-      it[description] = " description du Provider ayant l'id 1 "
-      it[postalCode] = 3005
-    }
-    Provider.insert {
-      it[idProvider] = 2
-      it[nameProvider] = "Hamida Zaoueche"
-      it[tel] = 55896321
-      it[address] = "address provider 3"
-      it[description] = " description du fournisseur ayant l'id 2 "
-      it[postalCode] = 6008
-    }
-    Provider.insert {
-      it[idProvider] = 3
-      it[nameProvider] = "Seif Markzi"
-      it[tel] = 23254789
-      it[address] = "address provider 4"
-      it[description] = " description du fournisseur ayant l'id 3 "
-      it[postalCode] = 2006
-    }
+  addFourn(0, "Radhia Jouini", 21203506, "address provider 1", "description du Provider ayant l'id 0", 2000)
+  addFourn(1, "Sarra Boubaker", 99806234, "address provider 2", " description du Provider ayant l'id 1", 3005)
+  addFourn(2, "Hamida Zaoueche", 55896321, "address provider 3", " description du Provider ayant l'id 2", 6008)
+  addFourn(3, "Seif Markzi", 23254789, "address provider 4", " description du Provider ayant l'id 3", 2006)
+}
 
+fun addFourn(id: Int, name: String, tel: Int, address: String, description: String, postalCode: Int) {
+  Provider.insert {
+    it[idProvider] = id
+    it[nameProvider] = name
+    it[Provider.tel] = tel
+    it[Provider.address] = address
+    it[Provider.description] = description
+    it[Provider.postalCode] = postalCode
   }
 }
 
-fun addTaxRule() {
-  transaction {
-    TaxRule.insert {
-      it[idTaxe] = 0
-      it[taxName] = "tax 1"
-      it[rate] = 19
-    }
-    TaxRule.insert {
-      it[idTaxe] = 1
-      it[taxName] = "tax 2"
-      it[rate] = 22
-    }
-    TaxRule.insert {
-      it[idTaxe] = 2
-      it[taxName] = "tax 3"
-      it[rate] = 13
-    }
-    TaxRule.insert {
-      it[idTaxe] = 3
-      it[taxName] = "tax 4"
-      it[rate] = 9
-    }
-    TaxRule.insert {
-      it[idTaxe] = 4
-      it[taxName] = "tax 5"
-      it[rate] = 20
-    }
+fun addTaxRules() {
+  addTaxRule(0, "tax 1", 19)
+  addTaxRule(1, "tax 2", 22)
+  addTaxRule(2, "tax 3", 13)
+  addTaxRule(3, "tax 4", 9)
+  addTaxRule(4, "tax 5", 20)
+}
+
+fun addTaxRule(id: Int, taxName: String, rate: Int) {
+  TaxRule.insert {
+    it[idTaxe] = id
+    it[TaxRule.taxName] = taxName
+    it[TaxRule.rate] = rate
   }
 }
 
 fun addBills() {
-  transaction {
-    Bill.insert {
-      it[numBill] = 0
-      it[addressBill] = "adresse facture 0"
-      it[dateBill] = "13/09/20018"
-      it[amountTTC] = Decimal.valueOf("3129.7").value
-      it[refCmd] = 0
-    }
-    Bill.insert {
-      it[numBill] = 1
-      it[addressBill] = "adresse facture 1"
-      it[dateBill] = "16/02/2020"
-      it[amountTTC] = BigDecimal(Decimal.valueOf("1149.24").toDouble())
-      it[refCmd] = 1
-    }
-    Bill.insert {
-      it[numBill] = 2
-      it[addressBill] = "adresse facture 2"
-      it[dateBill] = "13/05/2019"
-      it[amountTTC] = Decimal.valueOf("219.6").value
-      it[refCmd] = 2
-    }
-    Bill.insert {
-      it[numBill] = 3
-      it[addressBill] = "adresse facture 3"
-      it[dateBill] = "12/01/2019"
-      it[amountTTC] = Decimal.valueOf("146.9").value
-      it[refCmd] = 3
-    }
+  addBill(0, "addresse facture 0", "13/09/20018", Decimal.valueOf("3129.7").value, 0)
+  addBill(1, "addresse facture 1", "16/02/2020", Decimal.valueOf("1149.24").value, 1)
+  addBill(2, "addresse facture 2", "13/05/2019", Decimal.valueOf("219.6").value, 2)
+  addBill(3, "addresse facture 3", "12/01/2019", Decimal.valueOf("146.9").value, 3)
+}
+
+fun addBill(num: Int, address: String, date: String, amount: BigDecimal, ref: Int) {
+  Bill.insert {
+    it[numBill] = num
+    it[addressBill] = address
+    it[dateBill] = date
+    it[amountTTC] = amount
+    it[refCmd] = ref
   }
 }
 
-fun addStock() {
-  transaction {
-    Stock.insert {
-      it[idStckPdt] = 0
-      it[idStckProv] = 0
-      it[minAlert] = 50
-    }
-    Stock.insert {
-      it[idStckPdt] = 1
-      it[idStckProv] = 1
-      it[minAlert] = 100
-    }
-    Stock.insert {
-      it[idStckPdt] = 2
-      it[idStckProv] = 2
-      it[minAlert] = 50
-    }
-    Stock.insert {
-      it[idStckPdt] = 3
-      it[idStckProv] = 3
-      it[minAlert] = 20
-    }
+fun addStocks() {
+  addStock(0, 0, 50)
+  addStock(1, 1, 100)
+  addStock(2, 2, 50)
+  addStock(3, 3, 20)
+}
+
+fun addStock(id: Int, idStck: Int, minAlerte: Int) {
+  Stock.insert {
+    it[idStckPdt] = id
+    it[idStckProv] = idStck
+    it[minAlert] = minAlerte
   }
 }
 
 fun addCmds() {
-  transaction {
-    Command.insert {
-      it[numCmd] = 0
-      it[idClt] = 0
-      it[dateCmd] = "01/01/2020"
-      it[paymentMethod] = "cheque"
-      it[statusCmd] = "en_cours"
-    }
-    Command.insert {
-      it[numCmd] = 1
-      it[idClt] = 0
-      it[dateCmd] = "01/01/2020"
-      it[paymentMethod] = "cheque"
-      it[statusCmd] = "en_cours"
-    }
-    Command.insert {
-      it[numCmd] = 2
-      it[idClt] = 1
-      it[dateCmd] = "20/01/2021"
-      it[paymentMethod] = "carte"
-      it[statusCmd] = "en_cours"
-    }
-    Command.insert {
-      it[numCmd] = 3
-      it[idClt] = 2
-      it[dateCmd] = "13/05/2020"
-      it[paymentMethod] = "espece"
-      it[statusCmd] = "en_cours"
-    }
+  addCmd(0, 0, "01/01/2020", "cheque", "en_cours")
+  addCmd(1, 0, "01/01/2020", "cheque", "en_cours")
+  addCmd(2, 1, "20/01/2021", "carte", "en_cours")
+  addCmd(3, 2, "13/05/2021", "espece", "en_cours")
+}
+
+fun addCmd(num: Int, id: Int, date: String, payment: String, status: String) {
+  Command.insert {
+    it[numCmd] = num
+    it[idClt] = id
+    it[dateCmd] = date
+    it[paymentMethod] = payment
+    it[statusCmd] = status
   }
 }
 
+fun addBillPrdts() {
+  addBillPrdt(0, 10, 2630, Decimal.valueOf("3129.7").value)
+  addBillPrdt(1, 3, 942, Decimal.valueOf("1149.24").value)
+  addBillPrdt(2, 1, 180, Decimal.valueOf("219.6").value)
+  addBillPrdt(3, 2, 130, Decimal.valueOf("146.9").value)
+}
 
-fun addBillPrdt() {
-  transaction {
-    BillProduct.insert {
-      it[idBPdt] = 0
-      it[quantity] = 10
-      it[amountHT] = 2630
-      it[amountTTC] = Decimal.valueOf("3129.7").value
-    }
-    BillProduct.insert {
-      it[idBPdt] = 1
-      it[quantity] = 3
-      it[amountHT] = 942
-      it[amountTTC] = Decimal.valueOf("1149.24").value
-    }
-    BillProduct.insert {
-      it[idBPdt] = 2
-      it[quantity] = 1
-      it[amountHT] = 180
-      it[amountTTC] = Decimal.valueOf("219.6").value
-    }
-    BillProduct.insert {
-      it[idBPdt] = 3
-      it[quantity] = 2
-      it[amountHT] = 130
-      it[amountTTC] = Decimal.valueOf("146.9").value
-    }
+fun addBillPrdt(id: Int, quantity: Int, amountHT: Int, amountTTC: BigDecimal) {
+  BillProduct.insert {
+    it[idBPdt] = id
+    it[BillProduct.quantity] = quantity
+    it[BillProduct.amountHT] = amountHT
+    it[BillProduct.amountTTC] = amountTTC
   }
 }
