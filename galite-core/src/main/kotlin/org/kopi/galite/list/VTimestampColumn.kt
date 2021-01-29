@@ -20,13 +20,14 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.type.Timestamp
 
 /**
  * Represents a list column.
  */
 class VTimestampColumn(title: String,
-                       column: String?,
+                       column: Column<*>?,
                        sortAscending: Boolean)
           : VListColumn(title,
                         column,
@@ -47,7 +48,7 @@ class VTimestampColumn(title: String,
     // this is work around to display the timestamp in yyyy-MM-dd hh:mm:ss format
     // The proper way is to change the method Timestamp#toString(Locale) but this
     // will affect the SQL representation of the timestamp value.
-    return stringValue.substring(0, Math.min(19, stringValue.length))
+    return stringValue.substring(0, 19.coerceAtMost(stringValue.length))
   }
 
   override fun getDataType(): KClass<*> = Timestamp::class

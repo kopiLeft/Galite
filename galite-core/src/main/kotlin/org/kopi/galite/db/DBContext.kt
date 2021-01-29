@@ -20,15 +20,12 @@ package org.kopi.galite.db
 
 import org.jetbrains.exposed.sql.SqlLogger
 import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * The database context
- *
- * @param defaultConnection The underlying default connection.
  */
-class DBContext() {
+class DBContext {
 
   /**
    * Create a connection. Connects to database and logs on.
@@ -85,5 +82,5 @@ class DBContext() {
   /** Connection currently opened */
   lateinit var connection: Connection
     private set
-  lateinit var defaultConnection: Connection
+  lateinit var defaultConnection: Connection //  The underlying default connection.
 }

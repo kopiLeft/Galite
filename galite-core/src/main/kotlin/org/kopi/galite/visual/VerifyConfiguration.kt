@@ -35,9 +35,9 @@ class VerifyConfiguration private constructor() {
 
     // get Hostname
     try {
-      val inetAdress = InetAddress.getLocalHost()
+      val inetAddress = InetAddress.getLocalHost()
 
-      hostname = inetAdress.canonicalHostName
+      hostname = inetAddress.canonicalHostName
       writer.println(formatMessage("Getting hostname ", false))
     } catch (e: UnknownHostException) {
       hostname = "unknown"

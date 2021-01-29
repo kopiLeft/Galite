@@ -113,6 +113,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
     private set
   private val items = mutableListOf<Module>()
   private val shortcutsID = mutableListOf<Int>()
+  override var locale: Locale = ApplicationContext.getDefaultLocale()
 
   // ----------------------------------------------------------------------
   // CONSTRUCTORS
@@ -160,15 +161,15 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   /**
    * Enables or disable the given actor
    */
-  override fun setActorEnabled(actor: Int, enabled: Boolean) {
-    treeActors[actor]!!.handler = this
-    treeActors[actor]!!.isEnabled = enabled
+  override fun setActorEnabled(position: Int, enabled: Boolean) {
+    treeActors[position]!!.handler = this
+    treeActors[position]!!.isEnabled = enabled
   }
 
   /**
    * Returns the actor having the given number.
    */
-  override fun getActor(number: Int): VActor = treeActors[number]!!
+  override fun getActor(at: Int): VActor = treeActors[at]!!
 
   /**
    * Returns the ID of the current user
@@ -197,13 +198,13 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   /**
    * Performs the appropriate action.
    *
-   * @param   key           the number of the actor.
+   * @param   VKT_Type           the number of the actor.
    * @return  true if an action was found for the specified number
    */
-  override fun executeVoidTrigger(key: Int) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
     val currentDisplay = getDisplay()
 
-    when (key) {
+    when (VKT_Type) {
       CMD_QUIT -> currentDisplay.closeWindow()
       CMD_OPEN -> currentDisplay.launchSelectedForm()
       CMD_SHOW -> {
@@ -239,7 +240,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       }
       CMD_HELP -> {
       }
-      else -> super.executeVoidTrigger(key)
+      else -> super.executeVoidTrigger(VKT_Type)
     }
   }
 
@@ -494,7 +495,6 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
       }
       query.forEach {
         if (it[Favorites.module] != 0) {
-          val symbol = it[Modules.symbol] as Int
           shortcutsID.add(it[Favorites.module])
         }
       }
@@ -560,12 +560,12 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
   /**
    * Sets the title of the frame
    */
-  override fun setTitle(s: String) {
-    if (s != null) {
-      if (s.contains(VlibProperties.getString("program_menu"))) {
-        super.setTitle(s)
+  override fun setTitle(title: String) {
+    if (title != null) {
+      if (title.contains(VlibProperties.getString("program_menu"))) {
+        super.setTitle(title)
       } else {
-        super.setTitle(s + " - " + VlibProperties.getString("program_menu"))
+        super.setTitle(title + " - " + VlibProperties.getString("program_menu"))
       }
     } else {
       super.setTitle(VlibProperties.getString("program_menu"))

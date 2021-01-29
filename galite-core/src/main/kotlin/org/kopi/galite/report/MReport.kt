@@ -29,7 +29,7 @@ import com.graphbuilder.math.ExpressionTree
 import com.graphbuilder.math.FuncMap
 import com.graphbuilder.math.VarMap
 
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 
@@ -221,13 +221,12 @@ class MReport : Constants, Serializable {
         when (functions[j]) {
           NONE -> {
             val value = if (baseRows[i]!!.getValueAt(paramColumns[j]) == null) {
-              0
+              0.0
             } else {
-              // !!! wael 20070622 : use 0 unstead of null values.
-              (baseRows[i]!!.getValueAt(paramColumns[j]) as NotNullFixed).toFloat()
+              // !!! wael 20070622 : use 0 instead of null values.
+              (baseRows[i]!!.getValueAt(paramColumns[j]) as Decimal).toDouble()
             }
-            vm.setValue(params[j],
-                        value as Double)
+            vm.setValue(params[j], value)
           }
           MAX -> {
             var max: Float
@@ -235,14 +234,14 @@ class MReport : Constants, Serializable {
             max = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
               0F
             } else {
-              (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as Decimal?)!!.toFloat()
             }
             // calculate max value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
               }
               if (tmp > max) {
                 max = tmp
@@ -257,14 +256,14 @@ class MReport : Constants, Serializable {
             min = if (baseRows[0]!!.getValueAt(paramColumns[j]) == null) {
               0F
             } else {
-              (baseRows[0]!!.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+              (baseRows[0]!!.getValueAt(paramColumns[j]) as Decimal).toFloat()
             }
             // calculate min value.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
               }
               if (tmp < min) {
                 min = tmp
@@ -273,13 +272,13 @@ class MReport : Constants, Serializable {
             vm.setValue(params[j], min.toDouble())
           }
           OVR -> {
-            var ovr: Float = 0f
+            var ovr = 0f
             // calculate average.
             baseRows.forEach {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
               }
               ovr += tmp / baseRows.size
             }
@@ -292,7 +291,7 @@ class MReport : Constants, Serializable {
               tmp = if (it!!.getValueAt(paramColumns[j]) == null) {
                 0F
               } else {
-                (it.getValueAt(paramColumns[j]) as NotNullFixed?)!!.toFloat()
+                (it.getValueAt(paramColumns[j]) as Decimal).toFloat()
               }
               sum += tmp
             }
@@ -301,11 +300,11 @@ class MReport : Constants, Serializable {
         }
       }
       try {
-        baseRows[i]!!.setValueAt(column, NotNullFixed(x.eval(vm, fm)))
+        baseRows[i]!!.setValueAt(column, Decimal(x.eval(vm, fm)))
       } catch (e: NumberFormatException) {
         // this exception occurs with INFINITE double values. (ex : division by ZERO)
         // return a null value (can not evaluate expression)
-        baseRows[i]!!.setValueAt(column, null as NotNullFixed?)
+        baseRows[i]!!.setValueAt(column, null)
       } catch (e: Exception) {
         throw VExecFailedException(MessageCode.getMessage("VIS-00066"))
       }
@@ -320,11 +319,9 @@ class MReport : Constants, Serializable {
   }
 
   /**
-   * Build the base row table + intialisation
+   * Build the base row table + initialisation
    */
   internal fun build() {
-    var columnCount = columns.size
-
     // build accessible columns
     if (userRows!!.size == 0) {
       throw VNoRowException(MessageCode.getMessage("VIS-00015"))
@@ -334,7 +331,7 @@ class MReport : Constants, Serializable {
     userRows = null
 
     // build working tables
-    columnCount = getAccessibleColumnCount()
+    val columnCount = getAccessibleColumnCount()
     displayOrder = IntArray(columnCount)
     reverseOrder = IntArray(columnCount)
     displayLevels = IntArray(columnCount)
@@ -705,7 +702,7 @@ class MReport : Constants, Serializable {
 
   private fun sortTree(tree: VReportRow?, column: Int, order: Int) {
 
-    // place the childs of the root in an array
+    // place the children of the root in an array
     val rowTab: Array<VReportRow?> = arrayOfNulls(tree!!.childCount)
 
     for (i in 0 until tree.childCount) {
@@ -715,7 +712,7 @@ class MReport : Constants, Serializable {
     // sort the array wrt to column: if already sorted, invert order
     sortArray(rowTab, column, order)
 
-    // re-add the rows as childs
+    // re-add the rows as children
     tree.removeAllChildren()
     for (i in rowTab.indices) {
       tree.add(rowTab[i])
@@ -751,9 +748,9 @@ class MReport : Constants, Serializable {
       var currentRow = visibleRows!![row]
 
       while (currentRow!!.level < level) {
-        currentRow = currentRow.parent as VReportRow
+        currentRow = currentRow.parent as? VReportRow
       }
-      if (currentRow is VGroupRow) !currentRow.isUnfolded(level) else true
+      if (currentRow is VGroupRow?) !currentRow.isUnfolded(level) else true
     } else {
       false
     }
@@ -810,9 +807,9 @@ class MReport : Constants, Serializable {
       var currentRow = visibleRows!![row]
 
       while (currentRow!!.level < level) {
-        currentRow = currentRow.parent as VReportRow
+        currentRow = currentRow.parent as? VReportRow
       }
-      if (currentRow is VGroupRow) {
+      if (currentRow is VGroupRow?) {
         currentRow.setChildNodesInvisible(level)
       }
       updateTableModel()
@@ -855,7 +852,7 @@ class MReport : Constants, Serializable {
 
     // rebuild column mapping from model to display
     displayOrder.forEachIndexed { index, element ->
-      reverseOrder[displayOrder[index]] = index
+      reverseOrder[element] = index
     }
     createTree()
   }
@@ -911,7 +908,7 @@ class MReport : Constants, Serializable {
    * @return    the name of the column
    */
   fun getColumnName(column: Int): String {
-    val label: String? = accessibleColumns[column]!!.label
+    val label = accessibleColumns[column]!!.label
 
     if (label == null || label.isEmpty()) {
       return ""

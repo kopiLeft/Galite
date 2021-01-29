@@ -159,7 +159,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = if (value[r] == null) "NULL" else "?"
+  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else "?"
 
   /**
    * Copies the value of a record to another

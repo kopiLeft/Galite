@@ -15,27 +15,48 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.event
+package org.kopi.galite.ui.vaadin.field
 
 import java.io.Serializable
 
 /**
- * The field listener that notifies registered objects with
- * actions performed on a field.
+ * The object field listener that informs registered objects
+ * about actions performed on an object field.
  */
-interface FieldListener : Serializable {
-  /**
-   * Fired when increment button is clicked.
-   */
-  fun onIncrement()
-
-  /***
-   * Fired when decrement action is fired.
-   */
-  fun onDecrement()
+interface ObjectFieldListener : Serializable {
 
   /**
-   * Fired when the field is clicked.
+   * Performs a request to go to the next field.
    */
-  fun onClick()
+  fun gotoNextField()
+
+  /**
+   * Performs a request to go to the previous field.
+   */
+  fun gotoPrevField()
+
+  /**
+   * Performs a request to go to the next block.
+   */
+  fun gotoNextBlock()
+
+  /**
+   * Performs a request to go to the previous record.
+   */
+  fun gotoPrevRecord()
+
+  /**
+   * Performs a request to go to the next record.
+   */
+  fun gotoNextRecord()
+
+  /**
+   * Performs a request to go to the first record.
+   */
+  fun gotoFirstRecord()
+
+  /**
+   * Performs a request to go to the last field.
+   */
+  fun gotoLastRecord()
 }

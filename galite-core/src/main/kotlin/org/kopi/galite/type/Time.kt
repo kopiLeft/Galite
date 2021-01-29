@@ -28,12 +28,12 @@ import java.util.Locale
 /**
  * This class represents the time types
  */
-open class Time : Type {
-  internal constructor(hours: Int, minutes: Int, seconds: Int = 0) {
+open class Time : Type<Time> {
+  constructor(hours: Int, minutes: Int, seconds: Int = 0) {
     scalar = (hours * 3600 + minutes * 60 + seconds) % (3600 * 24)
   }
 
-  internal constructor(time: java.sql.Time) {
+  constructor(time: java.sql.Time) {
     var hours: Int
     var minutes: Int
     var seconds: Int
@@ -47,9 +47,9 @@ open class Time : Type {
     scalar = (hours * 3600 + minutes * 60 + seconds) % (3600 * 24)
   }
 
-  internal constructor(image: String) : this(java.sql.Time.valueOf(image))
+  constructor(string: String) : this(java.sql.Time.valueOf(string))
 
-  internal constructor(calendar: Calendar?) {
+  constructor(calendar: Calendar?) {
     if (calendar != null) {
       val hours: Int = calendar[Calendar.HOUR_OF_DAY]
       val minutes: Int = calendar[Calendar.MINUTE]
@@ -98,8 +98,8 @@ open class Time : Type {
   // ----------------------------------------------------------------------
   // DEFAULT OPERATIONS
   // ----------------------------------------------------------------------
-  fun add(seconds: Int): NotNullTime {
-    return NotNullTime(scalar + seconds)
+  fun add(seconds: Int): Time {
+    return Time(scalar + seconds)
   }
 
   // ----------------------------------------------------------------------
@@ -113,14 +113,12 @@ open class Time : Type {
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  operator fun compareTo(other: Time): Int {
+  override operator fun compareTo(other: Time): Int {
     val v1 = scalar
     val v2 = other.scalar
 
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
-
-  override operator fun compareTo(other: Any?): Int = compareTo(other as? Time)
 
   /**
    * Returns the hour represented by this object.
@@ -177,6 +175,7 @@ open class Time : Type {
 
   /**
    * Represents the value in sql
+   * TODO: Time is not supported yet
    */
   override fun toSql(): String {
     val hours = scalar / 3600
@@ -184,7 +183,6 @@ open class Time : Type {
     val seconds = scalar % 60
 
     return buildString {
-      append("{t '")
       append(hours / 10)
       append(hours % 10)
       append(':')
@@ -193,8 +191,11 @@ open class Time : Type {
       append(':')
       append(seconds / 10)
       append(seconds % 10)
-      append("'}")
     }
+  }
+
+  override fun hashCode(): Int {
+    return scalar
   }
 
   /**
@@ -206,11 +207,11 @@ open class Time : Type {
     /**
      * Current time
      */
-    fun now(): NotNullTime {
+    fun now(): Time {
       val now = Calendar.getInstance()
-      return NotNullTime(now[Calendar.HOUR_OF_DAY],
-                         now[Calendar.MINUTE],
-                         now[Calendar.SECOND])
+      return Time(now[Calendar.HOUR_OF_DAY],
+                  now[Calendar.MINUTE],
+                  now[Calendar.SECOND])
     }
 
     /**
@@ -220,7 +221,7 @@ open class Time : Type {
      * @param     input   the time parse
      * @param     format  the format of the date
      */
-    fun parse(input: String, format: String): NotNullTime = parse(input, format, Locale.getDefault())
+    fun parse(input: String, format: String): Time = parse(input, format, Locale.getDefault())
 
     /**
      * Parse the string to build the corresponding time using the
@@ -230,7 +231,7 @@ open class Time : Type {
      * @param     format  the format of the date
      * @param     locale  the Locale to use
      */
-    fun parse(input: String, format: String, locale: Locale): NotNullTime {
+    fun parse(input: String, format: String, locale: Locale): Time {
       val cal = GregorianCalendar()
 
       try {
@@ -238,9 +239,9 @@ open class Time : Type {
       } catch (e: ParseException) {
         throw IllegalArgumentException()
       }
-      return NotNullTime(cal[Calendar.HOUR_OF_DAY],
-                         cal[Calendar.MINUTE],
-                         cal[Calendar.SECOND])
+      return Time(cal[Calendar.HOUR_OF_DAY],
+                  cal[Calendar.MINUTE],
+                  cal[Calendar.SECOND])
     }
 
     private val calendar = GregorianCalendar()

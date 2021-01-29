@@ -16,10 +16,15 @@
  */
 package org.kopi.galite.chart
 
+import org.kopi.galite.common.Action
+import org.kopi.galite.common.ChartTrigger
+import org.kopi.galite.common.Trigger
 import java.lang.RuntimeException
 
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.Color
+import org.kopi.galite.visual.VColor
 
 /**
  * Represents a measure used to store numeric values in chart.
@@ -31,11 +36,34 @@ open class ChartMeasure<T>(domain: Domain<T>) : ChartField<T>(domain) where T : 
   /**Measure's color in chart */
   lateinit var color: Color
 
-  // TODO add Fixed types
+  /** Color trigger */
+  internal var colorTrigger: Trigger? = null
+
+  /**
+   * Called to specify a measure color. The trigger should return a [VColor] instance.
+   *
+   * @param method    The method to execute when compute trigger is executed.
+   */
+  fun color(method: () -> VColor): ChartTrigger {
+    val fieldAction = Action(null, method)
+    return ChartTrigger(0L or (1L shl CConstants.TRG_COLOR), fieldAction).also {
+      colorTrigger = it
+    }
+  }
+
+  // TODO add Decimal types
   val model: VMeasure
-    get() = when (domain.kClass) {
-      Int::class ->
-        VIntegerMeasure(ident, null)
-      else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+    get() {
+      val color: VColor? = if (colorTrigger != null) {
+        colorTrigger!!.action.method() as VColor
+      } else {
+        null
+      }
+
+      return when (domain.kClass) {
+        Int::class -> VIntegerMeasure(ident, color)
+        Decimal::class -> VFixnumMeasure(ident, color, domain.height!!)
+        else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+      }
     }
 }

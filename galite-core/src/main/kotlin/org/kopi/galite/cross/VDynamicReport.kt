@@ -61,11 +61,11 @@ import org.kopi.galite.report.VStringColumn
 import org.kopi.galite.report.VTimeColumn
 import org.kopi.galite.report.VTimestampColumn
 import org.kopi.galite.report.VWeekColumn
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VExecFailedException
-import org.kopi.galite.type.NotNullFixed
 
 class VDynamicReport(block: VBlock) : VReport() {
   /**
@@ -146,7 +146,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                        null)
         is VIntegerField ->
           // hidden field ID of the block will represent the last column in the report.
-          if (field.name.equals(block.idField.name) && field.isInternal()) {
+          if (field.name == block.idField.name && field.isInternal()) {
             idColumn = fields.size - 1
             columns[fields.size - 1] = VIntegerColumn(null,
                                                       0,
@@ -159,7 +159,7 @@ class VDynamicReport(block: VBlock) : VReport() {
             // next column will have the position col.
             col -= 1
           } else {
-            if (field.name.equals(block.idField.name)) {
+            if (field.name == block.idField.name) {
               idColumn = index
             }
             columns[col] = VIntegerColumn(null,
@@ -237,7 +237,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                            1,
                                            null,
                                            (field as VCodeField).labels,
-                                           (field as VCodeField).getCodes() as Array<NotNullFixed>)
+                                           (field as VCodeField).getCodes() as Array<Decimal>)
         is VBooleanCodeField ->
           columns[col] = VBooleanCodeColumn(null,
                                             null,
@@ -253,13 +253,13 @@ class VDynamicReport(block: VBlock) : VReport() {
         else -> throw InconsistencyException("Error: unknown field type.")
       }
       // add labels for columns.
-      if (!field.name.equals(block.idField.name)) {
+      if (field.name != block.idField.name) {
         val columnLabel = if (field.label != null) {
           field.label!!.trim()
         } else {
           field.name
         }
-        columns[col]!!.label = columnLabel!!
+        columns[col]!!.label = columnLabel
       }
       col++
     }
@@ -270,13 +270,13 @@ class VDynamicReport(block: VBlock) : VReport() {
           block.currentRecord = i
           val list = ArrayList<Any?>()
           for (j in fields.indices) {
-            if (!fields[j].name.equals(block.idField.name)) {
+            if (fields[j].name != block.idField.name) {
               list.add(fields[j].getObject())
             }
           }
           // add ID field in the end.
           for (j in fields.indices) {
-            if (fields[j].name.equals(block.idField.name)) {
+            if (fields[j].name == block.idField.name) {
               list.add(fields[j].getObject())
               break
             }
@@ -376,12 +376,12 @@ class VDynamicReport(block: VBlock) : VReport() {
    * return the report column group for the given table.
    */
   private fun getColumnGroups(table: Int): Int {
-    val flds = block.fields
-    for (i in flds.indices) {
-      if (flds[i].isInternal() && flds[i].getColumnCount() > 1) {
-        val col: Int = flds[i].fetchColumn(table)
-        if (col != -1 && flds[i].getColumn(col)!!.name == block.idField.name) {
-          if (flds[i].fetchColumn(0) != -1) {
+    val fields = block.fields
+    for (i in fields.indices) {
+      if (fields[i].isInternal() && fields[i].getColumnCount() > 1) {
+        val col: Int = fields[i].fetchColumn(table)
+        if (col != -1 && fields[i].getColumn(col)!!.name == block.idField.name) {
+          if (fields[i].fetchColumn(0) != -1) {
             // group with the Id of the block.
             return idColumn
           }

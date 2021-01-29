@@ -27,7 +27,7 @@ import java.util.Vector
  */
 abstract class GroupHandler {
   private var key: Any? = null
-  private val elems = Vector<Any>()
+  private val elements = Vector<Any>()
 
   fun add(key: Any?, value: Any) {
     if (key == null) {
@@ -35,26 +35,26 @@ abstract class GroupHandler {
     }
     if (key != this.key) {
       if (this.key != null) {
-        foot(this.key, elems)
+        foot(this.key, elements)
       }
       this.key = key
       head(key, value)
-      elems.setSize(0)
+      elements.setSize(0)
     }
     body(key, value)
-    elems.addElement(value)
+    elements.addElement(value)
   }
 
   fun close() {
-    if (elems.size > 0) {
-      foot(key, elems)
+    if (elements.size > 0) {
+      foot(key, elements)
     }
     key = null
-    elems.setSize(0)
+    elements.setSize(0)
   }
 
   /**
-   * This method is called at the begining of a new group, with the new key
+   * This method is called at the beginning of a new group, with the new key
    */
   abstract fun head(key: Any?, elem: Any)
 

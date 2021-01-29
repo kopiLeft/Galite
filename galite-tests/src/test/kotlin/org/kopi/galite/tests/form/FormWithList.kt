@@ -19,7 +19,6 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.joda.time.DateTime
-import org.kopi.galite.common.POSTQRY
 import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
@@ -79,7 +78,6 @@ object FormWithList : DictionaryForm() {
 
   val block3 = insertBlock(UsersBlock, testPage1) {
     command(item = list) {
-      this.name = "list"
       action = {
         println("-----------Generating list-----------------")
         recursiveQuery()
@@ -87,14 +85,12 @@ object FormWithList : DictionaryForm() {
     }
 
     command(item = resetBlock) {
-      this.name = "break"
       action = {
         resetBlock()
       }
     }
 
     command(item = save) {
-      this.name = "save"
       action = {
         println("-----------Saving-----------------")
         saveBlock()
@@ -106,8 +102,8 @@ object FormWithList : DictionaryForm() {
 }
 
 object BlockSample : FormBlock(1, 1, "Test block") {
-  val m = table(Modules)
   val u = table(Users)
+  val m = table(Modules)
   val i = index(message = "ID should be unique")
 
   val id = hidden(domain = Domain<Int>(20)) {
@@ -129,7 +125,6 @@ object BlockSample : FormBlock(1, 1, "Test block") {
 }
 
 object UsersBlock : FormBlock(1, 1, "Test block") {
-  val m = table(Modules)
   val u = table(Users)
   val unique = index(message = "ID should be unique")
 
@@ -140,20 +135,20 @@ object UsersBlock : FormBlock(1, 1, "Test block") {
     }
   }
   val id = hidden(domain = Domain<Int>(20)) {
-    label = "id"
+    label = "ID"
     help = "The user id"
-    columns(Users.id) {
+    columns(u.id) {
       index = unique
     }
   }
   val uc = visit(domain = Domain<Int>(20), position = at(1, 2)) {
-    label = "uc"
+    label = "UC"
     help = "uc"
     columns(u.uc)
   }
 
   val ts = visit(domain = Domain<Int>(20), position = at(1, 3)) {
-    label = "ts"
+    label = "TS"
     help = "ts"
     columns(u.ts)
   }

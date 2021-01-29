@@ -115,7 +115,7 @@
   <property key="week-type-field" value="Dieses Feld muß eine Wochenangabe im Format WW.JJJJ enthalten." />
   <property key="boolean-type-field" value="Dieses Feld muß JA oder NEIN enthalten." />
   <property key="integer-type-field" value="Dieses Feld muß mit einem Ganzzahlenwert zwischen {0} und {1} gefüllt werden." />
-  <property key="fixed-type-field" value="Dieses Feld muß mit einem Fixkommawert zwischen {0} und {1} gefüllt werden." />
+  <property key="decimal-type-field" value="Dieses Feld muß mit einem Fixkommawert zwischen {0} und {1} gefüllt werden." />
   <property key="code-type-field" value="Dieses Feld kann nur mit einem der vorgeschlagenen Werte gefüllt werden." />
   <property key="image-type-field" value="Das ist ein Feld vom Typ Image mit einer Dimension von {0}x{1} Pixeln" />
   <property key="color-type-field" value="Das ist ein Feld vom Typ Farbe" />
@@ -127,7 +127,7 @@
   <property key="String" value="Text" />
   <property key="StringArea" value="Text" />
   <property key="Text" value="Text" />
-  <property key="Fixed" value="Zahl" />
+  <property key="Decimal" value="Zahl" />
   <property key="Long" value="Ganzzahl" />
   <property key="Date" value="Datum" />
   <property key="Month" value="Monat" />
@@ -141,7 +141,7 @@
   <property key="StringArea-long" value="Dieses Feld kann eine Zeichenkette enthalten, die nicht länger als {0} Zeichen und kürzer als {1} Zeile(n) ist." />
   <property key="String-long" value="Dieses Feld kann eine Zeichenkette enthalten, die nicht länger als {0} Zeichen ist" />
   <property key="Text-long" value="Dieses Feld kann eine beliebige Zeichenkette enthalten" />
-  <property key="Fixed-long" value="Dieses Feld kann einen beliebigen Zahlenwert zwischen {0} und {1} enthalten" />
+  <property key="Decimal-long" value="Dieses Feld kann einen beliebigen Zahlenwert zwischen {0} und {1} enthalten" />
   <property key="Long-long" value="Dieses Feld kann einen beliebigen Ganzzahlenwert zwischen {0} und {1} enthalten" />
   <property key="Date-long" value="Dieses Feld kann ein Datum im Format TT.MM.JJJJ enthalten" />
   <property key="Month-long" value="Dieses Feld kann ein Monat im Format MM.JJJJ enthalten" />

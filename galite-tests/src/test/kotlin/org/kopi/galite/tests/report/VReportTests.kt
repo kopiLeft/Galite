@@ -21,8 +21,10 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.PConfig
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.VCCDepthFirstCircuitN
 
 import org.kopi.galite.report.VReport
+import org.kopi.galite.report.VReportRow
 import org.kopi.galite.tests.VApplicationTestBase
 import org.kopi.galite.visual.VActor
 import java.awt.event.KeyEvent
@@ -83,7 +85,7 @@ class VReportTests: VApplicationTestBase() {
     val name = model.columns[1]!!
 
     // Columns checks
-    assertEquals("name", name.ident)
+    assertEquals("ANM_1", name.ident)
     assertEquals("name", name.label)
     assertEquals("The user name", name.help)
     assertEquals(Constants.CLO_VISIBLE, name.options)

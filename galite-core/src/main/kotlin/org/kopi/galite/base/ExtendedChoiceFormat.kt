@@ -49,17 +49,17 @@ class ExtendedChoiceFormat : ChoiceFormat {
   // ----------------------------------------------------------------------
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
-  /*
- * @see java.text.NumberFormat
- */
+  /**
+   * @see java.text.NumberFormat
+   */
   override fun format(argument: Any, toAppendTo: StringBuffer, pos: FieldPosition): StringBuffer {
     // a null test is performed before :
     // false --> 0
     // true --> 1
-    return if (argument is Boolean || hasNotNullMarker && !(argument is Number)) {
+    return if (argument is Boolean || hasNotNullMarker && argument !is Number) {
       formatObject(argument, toAppendTo, pos)
     } else {
-      // default behavior so number instances should pass here including fixed values
+      // default behavior so number instances should pass here including decimal values
       super.format(argument, toAppendTo, pos)
     }
   }

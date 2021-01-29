@@ -92,9 +92,10 @@ object Application : DBSchemaTest() {
   /**
    * Used to run the application and show a specific form.
    */
-  fun runForm(formName: Form) {
+  fun runForm(formName: Form, init: (Application.() -> Unit)? = null) {
     connectToDatabase()
     initDatabase()
+    init?.invoke(this)
     run(formName)
   }
 

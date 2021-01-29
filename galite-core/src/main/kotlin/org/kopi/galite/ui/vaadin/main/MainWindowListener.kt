@@ -15,26 +15,37 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.main
 
-package org.kopi.galite.type
+import java.io.Serializable
 
 /**
- * This class represents the week types
+ * Registered objects are notified about actions happening
+ * in the main application window.
  */
-class NotNullWeek : Week {
+interface MainWindowListener : Serializable {
   /**
-   * Constructs a Week with a year and a week in this year.
+   * Fired when the administration link is clicked.
    */
-  constructor(year: Int, week: Int) : super(year, week)
+  fun onAdmin()
 
   /**
-   * Constructs a Week from a Date.
+   * Fired when the support link is clicked.
    */
-  constructor(date: Date) : super(date)
+  fun onSupport()
 
-  companion object {
-    fun castToNotNull(value: Week): NotNullWeek {
-      return value as NotNullWeek
-    }
-  }
+  /**
+   * Fired when the help link is clicked.
+   */
+  fun onHelp()
+
+  /**
+   * Fired when the logout link is clicked.
+   */
+  fun onLogout()
+
+  /**
+   * Fired when the connected user link is clicked.
+   */
+  fun onUser()
 }

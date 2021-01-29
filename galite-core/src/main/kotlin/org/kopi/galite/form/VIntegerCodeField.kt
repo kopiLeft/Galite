@@ -23,18 +23,16 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VIntegerCodeColumn
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.db.Utils
 import org.kopi.galite.util.base.InconsistencyException
 
-/**
- *
- * @param     ident           the identifier of the type in the source file
- * @param     source          the qualified name of the source file defining the list
- * @param     names           the names of the fields
- * @param     codes           the codes of the fields
- */
 class VIntegerCodeField : VCodeField {
 
+  /**
+   * @param     ident           the identifier of the type in the source file
+   * @param     source          the qualified name of the source file defining the list
+   * @param     names           the names of the fields
+   * @param     codes           the codes of the fields
+   */
   constructor(bufferSize: Int,
               ident: String,
               source: String,
@@ -43,6 +41,12 @@ class VIntegerCodeField : VCodeField {
     this.codes = codes
   }
 
+  /**
+   * @param     ident           the identifier of the type in the source file
+   * @param     source          the qualified name of the source file defining the list
+   * @param     names           the names of the fields
+   * @param     codes           the codes of the fields
+   */
   constructor(bufferSize: Int,
               ident: String,
               source: String,
@@ -128,7 +132,7 @@ class VIntegerCodeField : VCodeField {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String? = Utils.toSql(if (value[r] == -1) null else codes[value[r]])
+  override fun getSqlImpl(r: Int): Int? = if (value[r] == -1) null else codes[value[r]]
 
   /**
    * Returns the data type handled by this field.

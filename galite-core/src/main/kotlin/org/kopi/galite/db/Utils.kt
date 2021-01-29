@@ -31,14 +31,13 @@ class Utils {
       var bufpos = 0
       var state = 0
       for (element in input) {
-        val c = element
-        if (Character.isWhitespace(c)) {
+        if (Character.isWhitespace(element)) {
           state = if (state == 0) 0 else 2
         } else {
           if (state == 2) {
             buffer[bufpos++] = ' '
           }
-          buffer[bufpos++] = c
+          buffer[bufpos++] = element
           state = 1
         }
       }
@@ -67,7 +66,7 @@ class Utils {
 
     fun toSql(t: Time?): String = TODO()
     fun toSql(d: Int?): String = d?.toString() ?: NULL_LITERAL
-    fun toSql(t: Timestamp?): String? = if(t == null)  NULL_LITERAL else t.toSql()
+    fun toSql(t: Timestamp?): String? = TODO()
     fun toSql(t: Week?): String = TODO()
     fun toSql(m: Month?): String = TODO()
 

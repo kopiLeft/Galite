@@ -19,9 +19,6 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
-
-import org.kopi.galite.common.INITFORM
-import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
@@ -29,7 +26,9 @@ import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 
 object User : Table() {
   val id = integer("ID")
@@ -75,8 +74,7 @@ object FormSample : Form() {
     icon =  "save"  // icon is optional here
   }
 
- val cmd = command(item = formActor) {
-    this.name = "command"
+  val cmd = command(item = formActor) {
     action = {
       println("----------- FORM COMMAND ----------------")
     }
@@ -87,7 +85,6 @@ object FormSample : Form() {
 
   val tb1 = insertBlock(TestBlock(), p1) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
@@ -97,7 +94,6 @@ object FormSample : Form() {
 
   val tb2 = insertBlock(TestBlock(), p2) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
@@ -109,7 +105,11 @@ object FormSample : Form() {
     options(BlockOption.NOINSERT)
   }
 
-  val preform = trigger(INITFORM) {
+  val tb4ToTestChangeBlockAccess = insertBlock(TestBlock(), p1) {
+    blockVisibility(Access.SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
+  }
+
+  val preform = trigger(INIT) {
     println("init form trigger works")
   }
 
@@ -131,7 +131,6 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     label = "id"
     help = "The user id"
     columns(u.id)
-    droppable("csv")
   }
   val ts = hidden(domain = Domain<Int>(20)) {
     label = "ts"
@@ -155,6 +154,13 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     help = "The user password"
 
     options(FieldOption.NOECHO)
+    trigger(ACCESS) {
+      if (name.value == "hidden") {
+        Access.HIDDEN
+      } else {
+        Access.SKIPPED
+      }
+    }
   }
   val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
     label = "age"
@@ -165,12 +171,19 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       index = i
       priority = 1
     }
-    droppable("csv","xls")
+    trigger(POSTCHG) {
+      println("value changed !!")
+      name.value = "Sami"
+    }
   }
-  val job = visit(domain = Domain<String?>(3), position = follow(age)) {
+  val job = visit(domain = Domain<String?>(20), position = at(3, 1)) {
     label = "Job"
     help = "The user job"
     columns(u.job)
+    droppable("csv","xls","pdf")
+    trigger(ACTION) {
+      println("Action on field !!")
+    }
   }
 }
 

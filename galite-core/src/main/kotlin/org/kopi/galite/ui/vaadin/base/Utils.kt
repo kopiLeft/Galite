@@ -17,14 +17,104 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import java.util.Hashtable
+
 import org.kopi.galite.base.Utils
 import org.kopi.galite.visual.VColor
 
 /**
  * Some vaadin version utilities to obtain images and resources.
- * FIXME: The implementation in other PR
  */
 object Utils : Utils() {
+
+  //---------------------------------------------------
+  // UTILS
+  //---------------------------------------------------
+  /**
+   * Returns image from theme
+   * @param img Must be an image from resource theme path separator is "/"
+   * @return An Image or null if not found.
+   */
+  fun getImage(image: String): Image {
+    var img: Image? = cache[image]
+    if (img == null) {
+      img = getImageImpl(image)
+      cache[image] = img
+    }
+    return img
+  }
+
+  /**
+   * Returns image from theme.
+   * @param img Must be an image from resource directory path separator is "/"
+   * @return An Image or null if not found.
+   */
+  private fun getImageImpl(img: String): Image {
+    var icon: Image? = getDefaultImage(img)
+    if (icon == null) {
+      icon = getKopiResourceImage(img)
+    }
+    if (icon == null) {
+      icon = getApplicationImage(img)
+    }
+    if (icon == null) {
+      System.err.println("Utils ==> cant load: $img")
+      return UKN_IMAGE
+    }
+    return icon
+  }
+
+  /**
+   * Returns image from theme.
+   * @param img Must be an image from resource directory path separator is "/"
+   * @return An imageIcon or null if not found
+   */
+  fun getDefaultImage(img: String): Image? {
+    return getImageFromResource(VAADIN_RESOURCE_DIR, img)
+  }
+
+  /**
+   * Returns image from theme.
+   * @param img Must be an image from resource application directory
+   * path separator is "/"
+   * @return An Image or null if not found
+   */
+  fun getApplicationImage(img: String): Image? {
+    return getImageFromResource(APPLICATION_DIR, img)
+  }
+
+  /**
+   * Returns an image from kopi resources.
+   * @param img Must be an image from resource application directory
+   * path separator is "/"
+   * @return An Image or null if not found
+   */
+  fun getKopiResourceImage(img: String): Image? {
+    return getImageFromResource(RESOURCE_DIR, img)
+  }
+
+  /**
+   * Return image from resources or null if not found.
+   * @param directory The image directory.
+   * @param name The image name.
+   * @return An Image or null if not found
+   */
+  fun getImageFromResource(directory: String, name: String): Image? {
+    TODO()
+  }
+
+  /**
+   * Returns the corresponding CSS color of a given [VColor].
+   * @param color The color model.
+   * @return The CSS color.
+   */
+  fun getCSSColor(color: VColor?): String {
+    return if (color == null) {
+      "inherit;"
+    } else {
+      "rgb(" + color.red.toString() + "," + color.green.toString() + "," + color.blue.toString() + ") ;"
+    }
+  }
 
   /**
    * Returns the string representation of the given [VColor].
@@ -35,7 +125,7 @@ object Utils : Utils() {
     return if (color == null) {
       ""
     } else {
-      "rgb(${color.red},${color.green},${color.blue})"
+      "rgb(" + color.red.toString() + "," + color.green.toString() + "," + color.blue.toString() + ")"
     }
   }
 
@@ -54,20 +144,21 @@ object Utils : Utils() {
 
   /**
    * Creates a HTML tooltip that wraps a string content.
-   *
    * @param content The content (String or html).
-   *
-   * @return The decorated tooltip
+   * @return The decoredted tooltip
    */
-  fun createTooltip(content: String?): String =
-          "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>$content</div>"
+  fun createTooltip(content: String?): String {
+    return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>$content</div>"
+  }
 
   /**
    * Returns the equivalent font awesome icon from the given icon name.
    * @param iconName The model icon name.
    * @return The font awesome icon.
    */
-  fun getFontAwesomeIcon(iconName: String?): String? = pngToFontAwesomeMap[iconName]
+  fun getFontAwesomeIcon(iconName: String?): String? {
+    return pngToFontAwesomeMap[iconName]
+  }
 
   /**
    * Returns true if the given two objects are equals.
@@ -101,7 +192,8 @@ object Utils : Utils() {
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
   private const val RESOURCE_DIR = "org/kopi/galite"
-  val UKN_IMAGE: Image = Image("$THEME_DIR/unknown.png")
+  val UKN_IMAGE = Image("$THEME_DIR/unknown.png")
+  private val cache = Hashtable<String, Image>()
   private var pngToFontAwesomeMap = mutableMapOf<String, String>()
 
   init {

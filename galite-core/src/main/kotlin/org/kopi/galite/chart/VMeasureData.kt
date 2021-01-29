@@ -25,6 +25,4 @@ import java.io.Serializable
  * @param name  The measure name.
  * @param value The measure value.
  */
-class VMeasureData(val name: String, val value: Number?) : Serializable {
-
-}
+class VMeasureData(val name: String, val value: Number?) : Serializable

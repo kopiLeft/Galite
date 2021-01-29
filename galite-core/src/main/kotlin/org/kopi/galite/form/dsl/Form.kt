@@ -19,74 +19,24 @@ package org.kopi.galite.form.dsl
 import java.io.IOException
 
 import org.kopi.galite.common.Action
-import org.kopi.galite.common.Actor
-import org.kopi.galite.common.Command
-import org.kopi.galite.common.FormBooleanTriggerEvent
 import org.kopi.galite.common.FormTrigger
-import org.kopi.galite.common.FormTriggerEvent
-import org.kopi.galite.common.FormVoidTriggerEvent
 import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.common.Menu
 import org.kopi.galite.common.Trigger
-import org.kopi.galite.common.VKConstants
 import org.kopi.galite.common.Window
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
-import org.kopi.galite.visual.VActor
-import org.kopi.galite.visual.VDefaultActor
-import org.kopi.galite.visual.VCommand
+import org.kopi.galite.visual.ApplicationContext
 
 /**
  * Represents a form.
  */
 abstract class Form : Window() {
 
-  /** Form's actors. */
-  val formActors = mutableListOf<Actor>()
-
   /** Form's blocks. */
   val formBlocks = mutableListOf<FormBlock>()
 
   /** Form's pages. */
   val pages = mutableListOf<FormPage>()
-
-  /** Form's menus. */
-  val menus = mutableListOf<Menu>()
-
-  /**
-   * Adds a new actor to this form.
-   *
-   * An Actor is an item to be linked to a command.
-   *
-   * @param menu                 the containing menu
-   * @param label                the label
-   * @param help                 the help
-   */
-  fun actor(ident: String, menu: Menu, label: String, help: String, init: (Actor.() -> Unit)? = null): Actor {
-    val number = when {
-      ident == VKConstants.CMD_AUTOFILL -> {
-        VForm.CMD_AUTOFILL
-      }
-      ident == VKConstants.CMD_NEWITEM -> {
-        VForm.CMD_NEWITEM
-      }
-      ident == VKConstants.CMD_EDITITEM -> {
-        VForm.CMD_EDITITEM
-      }
-      ident == VKConstants.CMD_SHORTCUT -> {
-        VForm.CMD_EDITITEM_S
-      }
-      else -> {
-        0
-      }
-    }
-    val actor = Actor(ident, menu, label, help, number)
-    if (init != null) {
-      actor.init()
-    }
-    formActors.add(actor)
-    return actor
-  }
 
   /**
    * Adds a new block to this form.
@@ -130,7 +80,7 @@ abstract class Form : Window() {
    * @param formTriggerEvents    the trigger events to add
    * @param method               the method to execute when trigger is called
    */
-  private fun <T> trigger(formTriggerEvents: Array<out FormTriggerEvent>, method: () -> T): Trigger {
+  fun <T> trigger(vararg formTriggerEvents: FormTriggerEvent<T>, method: () -> T): Trigger {
     val event = formEventList(formTriggerEvents)
     val formAction = Action(null, method)
     val trigger = FormTrigger(event, formAction)
@@ -138,27 +88,7 @@ abstract class Form : Window() {
     return trigger
   }
 
-  /**
-   * Adds void triggers to this form
-   *
-   * @param formTriggerEvents  the trigger events to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg formTriggerEvents: FormVoidTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(formTriggerEvents, method)
-  }
-
-  /**
-   * Adds boolean triggers to this form
-   *
-   * @param formTriggerEvents the trigger events to add
-   * @param method            the method to execute when trigger is called
-   */
-  fun trigger(vararg formTriggerEvents: FormBooleanTriggerEvent, method: () -> Boolean): Trigger {
-    return trigger(formTriggerEvents, method)
-  }
-
-  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent>): Long {
+  private fun formEventList(formTriggerEvents: Array<out FormTriggerEvent<*>>): Long {
     var self = 0L
 
     formTriggerEvents.forEach { trigger ->
@@ -182,31 +112,51 @@ abstract class Form : Window() {
     return page
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+  // FORM TRIGGERS EVENTS
+  ///////////////////////////////////////////////////////////////////////////
   /**
-   * Adds a new menu to this form. Defining a menu means adding an entry to the menu bar in the top of the form
+   * Form Triggers
    *
-   * @param label                the menu label in default locale
-   * @return                     the menu. It is used later to adding actors to this menu by specifying
-   * the menu name in the actor definition.
+   * @param event the event of the trigger
    */
-  fun menu(label: String): Menu {
-    val menu = Menu(label)
-    menus.add(menu)
-    return menu
-  }
+  open class FormTriggerEvent<T>(val event: Int)
 
   /**
-   * Adds a new command to this form.
-   *
-   * @param item    the actor linked to the command.
-   * @param init    initialization method.
+   * executed when initializing the form and before the PREFORM Trigger, also executed at ResetForm command
    */
-  fun command(item: Actor, init: Command.() -> Unit): Command {
-    val command = Command(item)
-    command.init()
-    commands.add(command)
-    return command
-  }
+  val INIT = FormTriggerEvent<Unit>(VConstants.TRG_INIT) // void trigger
+
+  /**
+   * executed before the form is displayed and after the INIT Trigger, not executed at ResetForm command
+   */
+  val PREFORM = FormTriggerEvent<Unit>(VConstants.TRG_PREFORM)       // void trigger
+
+  /**
+   * executed when closing the form
+   */
+  val POSTFORM = FormTriggerEvent<Unit>(VConstants.TRG_POSTFORM)     // void trigger
+
+  /**
+   * executed upon ResetForm command
+   */
+  val RESET = FormTriggerEvent<Boolean>(VConstants.TRG_RESET)        // Boolean trigger
+
+  /**
+   * a special trigger that returns a boolean value of whether the form have been changed or not,
+   * you can use it to bypass the system control for changes this way :
+   *
+   * trigger(CHANGED) {
+   *   false
+   * }
+   */
+  val CHANGED  = FormTriggerEvent<Boolean>(VConstants.TRG_CHANGED)    // Boolean trigger
+
+  /**
+   * executed when quitting the form
+   * actually not available
+   */
+  val QUITFORM = FormTriggerEvent<Boolean>(VConstants.TRG_QUITFORM)  // Boolean trigger
 
   // ----------------------------------------------------------------------
   // ACCESSORS
@@ -232,13 +182,13 @@ abstract class Form : Window() {
     if (locale != null) {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
-      val destination = destination
+      val localizationDestination = destination
               ?: this.javaClass.classLoader.getResource("")?.path +
               this.javaClass.packageName.replace(".", "/")
       try {
         val writer = FormLocalizationWriter()
         genLocalization(writer)
-        writer.write(destination, baseName, locale!!)
+        writer.write(localizationDestination, baseName, locale!!)
       } catch (ioe: IOException) {
         ioe.printStackTrace()
         System.err.println("cannot write : $baseName")
@@ -247,41 +197,38 @@ abstract class Form : Window() {
   }
 
   fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genForm(title,
-                                               formBlocks.map { it.ownDomains }.flatten().toTypedArray(),
-                                               menus.toTypedArray(),
-                                               formActors.toTypedArray(),
-                                               pages.toTypedArray(),
-                                               formBlocks.toTypedArray()
-    )
+    (writer as FormLocalizationWriter)
+            .genForm(title, formBlocks.map { it.ownDomains }.flatten(), menus, actors, pages, formBlocks)
   }
 
   /** Form model */
   override val model: VForm by lazy {
-    genLocalization()
-
     object : VForm() {
       override fun init() {
         initialize()
-      }
-
-      init {
       }
     }
   }
 
   fun VForm.initialize() {
     source = sourceFile
+    locale = this@Form.locale ?: ApplicationContext.getDefaultLocale()
+    setTitle(title)
     pages = this@Form.pages.map {
+      it.title
+    }.toTypedArray()
+    pagesIdents = this@Form.pages.map {
       it.ident
     }.toTypedArray()
-    this.addActors(formActors.map {
-      if (it.number == 0) {
-        VActor(it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
-      } else {
-        VDefaultActor(it.number, it.menu.label, sourceFile, it.ident, sourceFile, it.icon, it.keyCode, it.keyModifier)
-      }
+    this.addActors(this@Form.actors.map { actor ->
+      actor.buildModel(sourceFile)
     }.toTypedArray())
+    this.commands = this@Form.commands.map { command ->
+      command.buildModel(this, actors)
+    }.toTypedArray()
+
+    this.handleTriggers(triggers)
+
     blocks = formBlocks.map { formBlock ->
       formBlock.getBlockModel(this, source).also { vBlock ->
         vBlock.setInfo(formBlock.pageNumber)
@@ -293,24 +240,12 @@ abstract class Form : Window() {
         }
       }
     }.toTypedArray()
-
-    //TODO ----------begin-------------
-    this.commands = this@Form.commands.map { command ->
-      VCommand(command.mode,
-               this,
-               actors.find { it?.actorIdent ==  command.item.ident },
-               -1,
-               command.name!!,
-               command.action
-      )
-    }.toTypedArray()
-    this.handleTriggers(triggers)
   }
 
   /**
    * Handling form triggers
    */
-  fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
+  private fun VForm.handleTriggers(triggers: MutableList<Trigger>) {
     // FORM TRIGGERS
     val formTriggerArray = IntArray(VConstants.TRG_TYPES.size)
     triggers.forEach { trigger ->

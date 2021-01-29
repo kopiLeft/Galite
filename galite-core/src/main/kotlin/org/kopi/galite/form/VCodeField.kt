@@ -19,6 +19,7 @@
 package org.kopi.galite.form
 
 import org.kopi.galite.l10n.FieldLocalizer
+import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VList
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
@@ -34,7 +35,8 @@ import org.kopi.galite.visual.VlibProperties
 abstract class VCodeField(val bufferSize: Int,
                           val type: String,
                           var source: String,
-                          val idents: Array<String>)
+                          val idents: Array<String>,
+                          val localizedByGalite: Boolean = false)
   : VField(1, 1) {
 
   override fun hasAutofill(): Boolean = true
@@ -96,8 +98,8 @@ abstract class VCodeField(val bufferSize: Int,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    var s = o as? String
+  override fun checkType(rec: Int, s: Any?) {
+    var s = s as? String
 
     if (s == "") {
       setNull(rec)
@@ -133,17 +135,14 @@ abstract class VCodeField(val bufferSize: Int,
           val selected: Int
           val selectedToModel: IntArray
           val codes: Array<Any?>
-          var count: Int = 0
-          run {
-            var i = 0
 
-            while (i < labels.size) {
-              if (labels[i].toLowerCase().startsWith(s)) {
-                count++
-              }
-              i++
+          var count = 0
+          labels.forEach { label ->
+            if (label.toLowerCase().startsWith(s)) {
+              count++
             }
           }
+
           codes = arrayOfNulls(count)
           selectedToModel = IntArray(count)
           var j = 0
@@ -283,7 +282,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the field value of given record as a bigdecimal value.
    */
-  override fun getFixed(r: Int): org.kopi.galite.type.Fixed {
+  override fun getDecimal(r: Int): org.kopi.galite.type.Decimal {
     throw InconsistencyException()
   }
 
@@ -337,7 +336,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  abstract override fun getSqlImpl(r: Int): String?
+  abstract override fun getSqlImpl(r: Int): Any?
 
   /**
    * Copies the value of a record to another
@@ -369,7 +368,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns a string representation of a bigdecimal value wrt the field type.
    */
-  protected open fun formatFixed(value: org.kopi.galite.type.Fixed): String {
+  protected open fun formatDecimal(value: org.kopi.galite.type.Decimal): String {
     throw InconsistencyException()
   }
 
@@ -394,10 +393,19 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Localizes this field
    *
-   * @param     parent         the caller localizer
+   * @param     loc         the caller localizer
    */
-  override fun localize(parent: FieldLocalizer?) {
-    val loc = parent!!.manager.getTypeLocalizer(source, type)
+  override fun localize(loc: FieldLocalizer) {
+    localize(loc.manager)
+  }
+
+  /**
+   * Localizes this field
+   *
+   * @param     manager         the localizer manager
+   */
+  fun localize(manager: LocalizationManager) {
+    val loc = manager.getTypeLocalizer(source, type)
 
     val labels = arrayOfNulls<String>(idents.size)
 
@@ -405,10 +413,13 @@ abstract class VCodeField(val bufferSize: Int,
       labels[i] = loc.getCodeLabel(idents[i])
     }
 
-    this.labels = labels.requireNoNulls()
-    setDimension(getMaxWidth(this.labels), 1)
+    initLabels(labels.requireNoNulls())
   }
 
+  fun initLabels(labels: Array<String>) {
+    this.labels = labels
+    setDimension(getMaxWidth(this.labels), 1)
+  }
 
   /**
    * represents the name of this field
@@ -428,7 +439,7 @@ abstract class VCodeField(val bufferSize: Int,
       var res = 0
 
       for (i in labels.indices) {
-        res = Math.max(labels[i].length, res)
+        res = labels[i].length.coerceAtLeast(res)
       }
       return res
     }

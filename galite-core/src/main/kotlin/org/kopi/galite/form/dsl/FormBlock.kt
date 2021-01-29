@@ -20,15 +20,9 @@ package org.kopi.galite.form.dsl
 import java.awt.Point
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
-import org.kopi.galite.common.BlockBooleanTriggerEvent
-import org.kopi.galite.common.BlockProtectedTriggerEvent
-import org.kopi.galite.common.BlockTriggerEvent
-import org.kopi.galite.common.BlockVoidTriggerEvent
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
@@ -39,11 +33,9 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.visual.VCommand
 import org.kopi.galite.visual.WindowController
 
 /**
@@ -75,23 +67,24 @@ open class FormBlock(var buffer: Int,
   var border: Int = 0
   var align: FormBlockAlign? = null
   val help: String? = null
-  var blockOptions: Int = 0
-  var blockTables: MutableList<FormBlockTable> = mutableListOf()
-  var indices: MutableList<FormBlockIndex> = mutableListOf()
-  var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
+  private var blockOptions: Int = 0
+  private var blockTables: MutableList<FormBlockTable> = mutableListOf()
+  private var indices: MutableList<FormBlockIndex> = mutableListOf()
+  internal var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
+  private lateinit var commands: Array<Command?>
+  private val triggers = mutableListOf<Trigger>()
   var dropListMap = HashMap<String, String>()
-  lateinit var commands: Array<Command?>
-  val triggers = mutableListOf<Trigger>()
+  var dropList : MutableList<String>? = null
   private var maxRowPos = 0
   private var maxColumnPos = 0
   private var displayedFields = 0
   lateinit var form: Form
-  var dropList : MutableList<String>? = null
-  /** Blocks's fields. */
+
+  /** Block's fields. */
   val blockFields = mutableListOf<FormField<*>>()
 
-  /** Blocks's commands. */
-  val blockCommands = mutableListOf<Command>()
+  /** Block's commands. */
+  private val blockCommands = mutableListOf<Command>()
 
   /** Domains of fields added to this block. */
   val ownDomains = mutableListOf<Domain<*>>()
@@ -100,41 +93,16 @@ open class FormBlock(var buffer: Int,
   // BLOCK TRIGGERS
   // ----------------------------------------------------------------------
 
-  fun addDropList(dropList: MutableList<String>, field: FormField<*>): String? {
-    for (i in dropList.indices) {
-      val extension = dropList[i].toLowerCase()
-      if (dropListMap[extension] != null) {
-        return extension
-      }
-      dropListMap.put(extension, field.getIdent())
-    }
-    return null
-  }
   /**
    * Adds triggers to this form block. The block triggers are the same as form triggers on the block level.
    * There are actually a set of block triggers you can use to execute actions once they are fired.
-   * see [BlockTrigger] to get the list of supported triggers.
+   * objects extending [BlockTriggerEvent] are the supported triggers.
    *
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  private fun <T> trigger(blockTriggers: Array<out BlockTriggerEvent>, method: () -> T): Trigger {
-    val event = blockEventList(blockTriggers)
-    val blockAction = Action(null, method)
-    val trigger = FormTrigger(event, blockAction)
-    triggers.add(trigger)
-    return trigger
-  }
-
-  private fun blockEventList(blockTriggers: Array<out BlockTriggerEvent>): Long {
-    var self = 0L
-
-    blockTriggers.forEach { trigger ->
-      self = self or (1L shl trigger.event)
-    }
-
-    return self
-  }
+  fun <T> trigger(vararg blockTriggers: BlockTriggerEvent<T>, method: () -> T): Trigger =
+          initTrigger(blockTriggers, method)
 
   /**
    * Adds protected triggers to this block.
@@ -142,28 +110,25 @@ open class FormBlock(var buffer: Int,
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun trigger(vararg blockTriggers: BlockProtectedTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(blockTriggers, method)
+  fun trigger(vararg blockTriggers: BlockProtectedTriggerEvent, method: () -> Unit): Trigger =
+          initTrigger(blockTriggers, method)
+
+  fun <T> initTrigger(blockTriggers: Array<out BlockTriggerEvent<*>>, method: () -> T) : Trigger {
+    val event = blockEventList(blockTriggers)
+    val blockAction = Action(null, method)
+    val trigger = FormTrigger(event, blockAction)
+    triggers.add(trigger)
+    return trigger
   }
 
-  /**
-   * Adds void trigger to this block.
-   *
-   * @param blockTriggerEvents the triggers to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg blockTriggerEvents: BlockVoidTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(blockTriggerEvents, method)
-  }
+  private fun blockEventList(blockTriggers: Array<out BlockTriggerEvent<*>>): Long {
+    var self = 0L
 
-  /**
-   * Adds boolean triggers to this block.
-   *
-   * @param blockTriggers the triggers to add
-   * @param method        the method to execute when trigger is called
-   */
-  fun trigger(vararg blockTriggers: BlockBooleanTriggerEvent, method: () -> Boolean): Trigger {
-    return trigger(blockTriggers, method)
+    blockTriggers.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
   }
 
   /**
@@ -245,15 +210,14 @@ open class FormBlock(var buffer: Int,
                                                     access: Int,
                                                     position: FormPosition? = null): FormField<T> {
     domain.kClass = T::class
-    if(domain.type is CodeDomain<T>) {
+    if (domain is CodeDomain<T>) {
       ownDomains.add(domain)
-    } else if(domain.type is ListDomain<T>) {
-      TODO()
+    } else if (domain is ListDomain<T>) {
+      ownDomains.add(domain)
     }
     val field = FormField(this, domain, blockFields.size, access, position)
     field.init()
     field.initialize(this)
-    field.setInfo()
     if (dropList == null) {
       blockFields.add(field)
     } else {
@@ -269,7 +233,6 @@ open class FormBlock(var buffer: Int,
         }
       }
     }
-    blockFields.add(field)
     return field
   }
 
@@ -377,6 +340,27 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * This method changes the blocks' visibility.
+   *
+   * Use [Access] to see the list of the access.
+   * Use [Modes] to see the list of the modes.
+   *
+   * @param access the access to set in the block
+   * @param modes the list of modes where the access will be changed
+   */
+  fun blockVisibility(access: Access, vararg modes: Modes) {
+    if (modes.contains(Modes.MOD_QUERY)) {
+      this.access[VConstants.MOD_QUERY] = access.value
+    }
+    if (modes.contains(Modes.MOD_INSERT)) {
+      this.access[VConstants.MOD_INSERT] = access.value
+    }
+    if (modes.contains(Modes.MOD_UPDATE)) {
+      this.access[VConstants.MOD_UPDATE] = access.value
+    }
+  }
+
+  /**
    * Make a tuning pass in order to create informations about exported
    * elements such as block fields positions
    *
@@ -390,6 +374,10 @@ open class FormBlock(var buffer: Int,
       if (field.position != null) {
         field.position!!.createRBPoint(bottomRight, field)
       }
+      // ACCESS
+      for (i in 0..2) {
+        field.access[i] = field.access[i].coerceAtMost(access[i])
+      }
     }
 
     maxRowPos = bottomRight.y
@@ -400,7 +388,7 @@ open class FormBlock(var buffer: Int,
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
 
-  fun positionField(field: FormField<*>): FormPosition? {
+  fun positionField(field: FormField<*>): FormPosition {
     return FormCoordinatePosition(++displayedFields)
   }
 
@@ -461,20 +449,158 @@ open class FormBlock(var buffer: Int,
     Commands.recursiveQuery(vBlock)
   }
 
+  fun addDropList(dropList: MutableList<String>, field: FormField<*>): String? {
+    for (i in dropList.indices) {
+      val extension = dropList[i].toLowerCase()
+      if (dropListMap[extension] != null) {
+        return extension
+      }
+      dropListMap.put(extension, field.getIdent())
+    }
+    return null
+  }
+
+  // ----------------------------------------------------------------------
+  // BLOCK TRIGGERS EVENTS
+  // ----------------------------------------------------------------------
+  /**
+   * Block Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class BlockTriggerEvent<T>(val event: Int)
+
+  /**
+   * Block protected Triggers
+   *
+   * @param event the event of the trigger
+   */
+  class BlockProtectedTriggerEvent(event: Int) : BlockTriggerEvent<Unit>(event)
+
+  /**
+   * executed before querying the database
+   */
+  val PREQRY = BlockProtectedTriggerEvent(VConstants.TRG_PREQRY)    // protected trigger
+
+  /**
+   * executed after querying the database
+   */
+  val POSTQRY =  BlockProtectedTriggerEvent(VConstants.TRG_POSTQRY)  // protected trigger
+
+  /**
+   * executed before a row is deleted
+   */
+  val PREDEL = BlockProtectedTriggerEvent(VConstants.TRG_PREDEL)    // protected trigger
+
+  /**
+   * executed after a row is deleted
+   */
+  val POSTDEL = BlockProtectedTriggerEvent(VConstants.TRG_POSTDEL)  // protected trigger
+
+  /**
+   * executed before a row is inserted
+   */
+  val PREINS = BlockProtectedTriggerEvent(VConstants.TRG_PREINS)    // protected trigger
+
+  /**
+   * executed after a row is inserted
+   */
+  val POSTINS = BlockProtectedTriggerEvent(VConstants.TRG_POSTINS)  // protected trigger
+
+  /**
+   * executed before a row is updated
+   */
+  val PREUPD = BlockProtectedTriggerEvent(VConstants.TRG_PREUPD)    // protected trigger
+
+  /**
+   * executed after a row is updated
+   */
+  val POSTUPD = BlockProtectedTriggerEvent(VConstants.TRG_POSTUPD)  // protected trigger
+
+  /**
+   * executed before saving a row
+   */
+  val PRESAVE = BlockProtectedTriggerEvent(VConstants.TRG_PRESAVE)  // protected trigger
+
+  /**
+   * executed upon record entry
+   */
+  val PREREC = BlockTriggerEvent<Unit>(VConstants.TRG_PREREC)    // void trigger
+
+  /**
+   * executed upon record exit
+   */
+  val POSTREC = BlockTriggerEvent<Unit>(VConstants.TRG_POSTREC)  // void trigger
+
+  /**
+   * executed upon block entry
+   */
+  val PREBLK = BlockTriggerEvent<Unit>(VConstants.TRG_PREBLK)    // void trigger
+
+  /**
+   * executed upon block exit
+   */
+  val POSTBLK = BlockTriggerEvent<Unit>(VConstants.TRG_POSTBLK)  // void trigger
+
+  /**
+   * executed upon block validation
+   */
+  val VALBLK = BlockTriggerEvent<Unit>(VConstants.TRG_VALBLK)    // void trigger
+
+  /**
+   * executed upon record validation
+   */
+  val VALREC = BlockTriggerEvent<Unit>(VConstants.TRG_VALREC)    // void trigger
+
+  /**
+   * is executed when the block is in the InsertMode. This trigger becomes active when
+   * the user presses the key F4. It will then enable the system to load standard values
+   * which will be proposed to the user if he wishes to enter new data.
+   */
+  val DEFAULT = BlockTriggerEvent<Unit>(VConstants.TRG_DEFAULT)  // void trigger
+
+  /**
+   * executed upon block initialization
+   */
+  val INIT = BlockTriggerEvent<Unit>(VConstants.TRG_INIT)        // void trigger
+
+  /**
+   * executed upon Reset command (ResetForm)
+   */
+  val RESET = BlockTriggerEvent<Boolean>(VConstants.TRG_RESET)      // Boolean trigger
+
+  /**
+   * a special trigger that returns a boolean value of whether the block have been changed or not,
+   * you can use it to bypass the system control for changes by returning false in the trigger's method:
+   *
+   * trigger(CHANGED) {
+   *   false
+   * }
+   *
+   */
+  val CHANGED = BlockTriggerEvent<Boolean>(VConstants.TRG_CHANGED)  // Boolean trigger
+
+  /**
+   * defines whether a block can or not be accessed, it must always return a boolean value.
+   *
+   * trigger(ACCESS) {
+   *   Block.mode == MOD_QUERY  // Tests if the block is in query mode,
+   *                               //this block is only accessible on query mode
+   * }
+   *
+   */
+  val ACCESS = BlockTriggerEvent<Boolean>(VConstants.TRG_ACCESS)    // Void trigger
+
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
 
   override fun genLocalization(writer: LocalizationWriter) {
-    (writer as FormLocalizationWriter).genBlock(ident,
-                                                title,
-                                                help,
-                                                indices.toTypedArray(),
-                                                blockFields.toTypedArray())
+    (writer as FormLocalizationWriter).genBlock(ident, title, help, indices, blockFields)
   }
 
   fun showChart(chart: Chart) {
-    WindowController.windowController.doNotModal(chart);
+    WindowController.windowController.doNotModal(chart)
   }
 
   /** The block model */
@@ -484,9 +610,9 @@ open class FormBlock(var buffer: Int,
   fun getBlockModel(vForm: VForm, source: String? = null): VBlock {
 
     fun getFieldsCommands(): List<Command> {
-      return blockFields.map {
+      return blockFields.mapNotNull {
         it.commands
-      }.filterNotNull().flatten()
+      }.flatten()
     }
 
     return object : VBlock(vForm) {
@@ -507,9 +633,17 @@ open class FormBlock(var buffer: Int,
         }
 
         // FIELD TRIGGERS
-        blockFields.forEach {
+        blockFields.forEach { field ->
           val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
-          // TODO : Add field triggers here
+
+          field.triggers.forEach { trigger ->
+            for (i in VConstants.TRG_TYPES.indices) {
+              if (trigger.events shr i and 1 > 0) {
+                fieldTriggerArray[i] = i
+                super.triggers[i] = trigger
+              }
+            }
+          }
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
@@ -530,55 +664,44 @@ open class FormBlock(var buffer: Int,
       }
 
       override fun setInfo() {
+        blockFields.forEach {
+          it.setInfo(super.source)
+        }
       }
 
       init {
         //TODO ----------begin-------------
-        /** Used actors in form*/
-        val usedActors = form.actors.map { vActor ->
-          vActor?.actorIdent to vActor
-        }.toMap()
-
-        super.commands = blockCommands.map {
-          VCommand(it.mode,
-                   this,
-                   usedActors[it.item.ident],
-                   -1,
-                   it.name!!,
-                   it.action
-          )
-        }.toTypedArray()
 
         handleTriggers(this@FormBlock.triggers)
 
-        super.access = intArrayOf(
-                4, 4, 4
-        )
         //TODO ------------end-----------
 
         super.source = source ?: sourceFile
+        super.title = this@FormBlock.title
+        super.help = this@FormBlock.help
         super.bufferSize = buffer
         super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.displayedFields = this@FormBlock.displayedFields
+        super.commands = blockCommands.map { command ->
+          command.buildModel(this, form.actors)
+        }.toTypedArray()
         super.name = ident
         super.options = blockOptions
-        this@FormBlock.dropListMap.forEach{
-          super.dropListMap.put(it.key,it.value)
-        }
+        super.access = this@FormBlock.access
         super.tables = blockTables.map {
           it.table
         }.toTypedArray()
         fields = blockFields.map { formField ->
-          formField.vField.also {
-            if(formField.domain is CodeDomain<*>) {
-              (it as VCodeField).source = super.source
-            }
-          }
+          formField.vField
         }.toTypedArray()
         super.indices = this@FormBlock.indices.map {
+          it.message
+        }.toTypedArray()
+        super.indicesIdents = this@FormBlock.indices.map {
+          it.ident
           it.ident
         }.toTypedArray()
       }

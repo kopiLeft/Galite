@@ -19,14 +19,54 @@ package org.kopi.galite.ui.vaadin.menu
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.HasText
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.dom.ElementFactory
 
 /**
  * The module item model.
- * TODO: Implement this class with appropriate component
+ *
+ * @param vaadinIcon The icon to add to this item.
+ * @param help       The help text.
  */
-open class ModuleItem(id: String,
-                      caption: String?,
-                      description: String?,
-                      isLeaf: Boolean) : Component(), HasComponents {
-  // TODO
+class ModuleItem(val vaadinIcon: VaadinIcon? = null,
+                      val help: String? = null)
+  : Div(), HasComponents, HasStyle {
+
+  var parentMenu: ModuleListMenu? = null
+
+  init {
+    style["cursor"] = "pointer"
+
+    if(help != null) {
+      element.setAttribute("help", help)
+    }
+
+    if(vaadinIcon != null) {
+      add(Icon(vaadinIcon))
+    }
+  }
+
+  /**
+   * Sets the item caption.
+   * @param caption The item caption.
+   */
+  open fun setCaption(caption: String) {
+    if(vaadinIcon != null) {
+      val stringPanel = VStrongPanel().also {
+        it.text = caption
+      }
+      addComponentAsFirst(stringPanel)
+    } else {
+      text = caption
+    }
+  }
+
+  /**
+   * A simple component that wraps a strong element inside.
+   */
+  private class VStrongPanel : Component(ElementFactory.createStrong()), HasComponents, HasText
 }

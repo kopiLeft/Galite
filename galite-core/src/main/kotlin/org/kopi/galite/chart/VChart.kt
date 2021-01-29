@@ -135,9 +135,9 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     return try {
       val printJob: PrintJob
       val file = Utils.getTempFile("galite", "pdf")
-      val paper = PPaperType.getPaperTypeFromCode(printOptions.papertype)
+      val paper = PPaperType.getPaperTypeFromCode(printOptions.paperType)
 
-      val page = if (printOptions.paperlayout == "Landscape") {
+      val page = if (printOptions.paperLayout == "Landscape") {
         Rectangle(paper.height.toFloat(), paper.width.toFloat())
       } else {
         Rectangle(paper.width.toFloat(), paper.height.toFloat())
@@ -215,27 +215,25 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     }
     // all commands are by default enabled
     activeCommands.clear()
-    if (commands != null) {
-      commands!!.forEachIndexed { i, it ->
-        when (it.getIdent()) {
-          "BarView" -> {
-            cmdBarView = it
-          }
-          "ColumnView" -> {
-            cmdColumnView = it
-          }
-          "LineView" -> {
-            cmdLineView = it
-          }
-          "AreaView" -> {
-            cmdAreaView = it
-          }
-          "PieView" -> {
-            cmdPieView = it
-          }
-          else -> {
-            setCommandEnabled(it, getColumnCount() + i + 1, true)
-          }
+    commands?.forEachIndexed { i, it ->
+      when (it.getIdent()) {
+        "BarView" -> {
+          cmdBarView = it
+        }
+        "ColumnView" -> {
+          cmdColumnView = it
+        }
+        "LineView" -> {
+          cmdLineView = it
+        }
+        "AreaView" -> {
+          cmdAreaView = it
+        }
+        "PieView" -> {
+          cmdPieView = it
+        }
+        else -> {
+          setCommandEnabled(it, getColumnCount() + i + 1, true)
         }
       }
     }
@@ -302,9 +300,9 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
       TYP_JPEG -> ".jpeg"
       else -> throw InconsistencyException("Export type unknown")
     }
-    val file: File? = FileHandler.fileHandler!!.chooseFile(getDisplay()!!,
-                                                           ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
-                                                           "chart$ext")
+    val file = FileHandler.fileHandler!!.chooseFile(getDisplay()!!,
+                                                    ApplicationConfiguration.getConfiguration()!!.getDefaultDirectory(),
+                                                    "chart$ext")
     if (file != null) {
       try {
         export(file, type)
@@ -325,8 +323,8 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     var exported = false
 
     setWaitInfo(VlibProperties.getString("export-message"))
-    exported = try {
-      when (type) {
+    try {
+      exported = when (type) {
         TYP_PDF -> {
           (getDisplay() as UChart).type.exportToPDF(destination, printOptions)
           true
@@ -462,10 +460,10 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   protected fun callTrigger(event: Int, index: Int = 0): Any? {
     return when (CConstants.TRG_TYPES[event]) {
       CConstants.TRG_VOID -> {
-        executeVoidTrigger(VKT_Triggers!![index][event])
+        executeVoidTrigger(VKT_Triggers[index][event])
         null
       }
-      CConstants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers!![index][event])
+      CConstants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers[index][event])
       else -> throw InconsistencyException("BAD TYPE" + CConstants.TRG_TYPES[event])
     }
   }
@@ -473,7 +471,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
   /**
    * Returns true if there is trigger associated with given event.
    */
-  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
+  internal fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != 0
 
   /**
    * Returns the dimension column.
@@ -530,15 +528,17 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * Returns the chart columns.
    * @return the chart columns.
    */
-  internal open fun getColumns(): Array<VColumn?>? {
+  internal open fun getColumns(): Array<VColumn> {
     val columns: Array<VColumn?> = arrayOfNulls(getColumnCount())
+
     dimensions.forEachIndexed { i, it ->
       columns[i] = it
     }
     measures.forEachIndexed { i, it ->
       columns[i + dimensions.size] = it
     }
-    return columns
+
+    return columns.requireNoNulls()
   }
 
   // ----------------------------------------------------------------------
@@ -555,7 +555,7 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
       null
     } else {
       try {
-        surl.append(File(fileName).toURL().toString())
+        surl.append(File(fileName).toURI().toURL().toString())
       } catch (mue: MalformedURLException) {
         throw InconsistencyException(mue)
       }

@@ -126,11 +126,11 @@ class Module(val id: Int,
     }
   }
 
-  override fun compareTo(module: Module): Int {
-    return if (priority == module.priority) {
-      description.compareTo(module.description)
+  override fun compareTo(other: Module): Int {
+    return if (priority == other.priority) {
+      description.compareTo(other.description)
     } else {
-      priority - module.priority
+      priority - other.priority
     }
   }
 
@@ -155,11 +155,11 @@ class Module(val id: Int,
                   description: String,
                   icon: Image? = null): Executable? {
       return try {
-        val i = ApplicationContext.getDefaults()
         if (ApplicationContext.getDefaults().isDebugModeEnabled()) {
           System.gc()
           Thread.yield()
         }
+
         val form: Executable = getExecutable(objectName)
 
         if (form is VWindow) {
@@ -172,6 +172,7 @@ class Module(val id: Int,
         v.printStackTrace()
         throw v
       } catch (t: Throwable) {
+        throw t // TODO: To be removed
         ApplicationContext.reportTrouble("Form loading",
                                          "Module.startForm(DBContext ctxt, " +
                                                  "String object, String description, ImageIcon icon)",

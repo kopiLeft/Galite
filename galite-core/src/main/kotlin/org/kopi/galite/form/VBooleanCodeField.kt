@@ -25,25 +25,30 @@ import org.kopi.galite.list.VBooleanCodeColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.util.base.InconsistencyException
 
-
-/**
- *
- * @param     ident           the identifier of the type in the source file
- * @param     source          the qualified name of the source file defining the list
- * @param     names           the names of the fields
- * @param     codes           the codes of the fields
- */
 open class VBooleanCodeField : VCodeField {
 
+  /**
+   * @param     ident           the identifier of the type in the source file
+   * @param     source          the qualified name of the source file defining the list
+   * @param     names           the names of the fields
+   * @param     codes           the codes of the fields
+   */
   constructor(bufferSize: Int,
               ident: String,
               source: String,
               names: Array<String>,
-              codes: Array<Boolean?>
-  ) : super(bufferSize, ident, source, names) {
+              codes: Array<Boolean?>,
+              localizedByGalite: Boolean = false
+  ) : super(bufferSize, ident, source, names, localizedByGalite) {
     this.codes = codes
   }
 
+  /**
+   * @param     ident           the identifier of the type in the source file
+   * @param     source          the qualified name of the source file defining the list
+   * @param     names           the names of the fields
+   * @param     codes           the codes of the fields
+   */
   constructor(bufferSize: Int,
               ident: String,
               source: String,
@@ -101,7 +106,7 @@ open class VBooleanCodeField : VCodeField {
    * Warning:	This method will become inaccessible to galite users in next release
    */
   override fun setObject(r: Int, v: Any?) {
-    setBoolean(r, v as Boolean)
+    setBoolean(r, v as? Boolean)
   }
 
   /**
@@ -132,11 +137,11 @@ open class VBooleanCodeField : VCodeField {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
+  override fun getSqlImpl(r: Int): Boolean? {
     return if (value[r] == -1) {
-      "NULL"
+      null
     } else {
-      if (codes[value[r]]!!) "{fn TRUE}" else "{fn FALSE}"
+      codes[value[r]]
     }
   }
 

@@ -19,13 +19,10 @@ package org.kopi.galite.tests.domain
 
 import org.junit.Test
 import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.ReportField
 
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 /**
  * Contains tests of code-domain creation and manipulation
@@ -33,42 +30,15 @@ import kotlin.test.assertTrue
 class CodeDomainTests {
 
   /**
-   * Tests the creation of a simple domain with length
-   *
-   * succeed if you respect domain length.
-   * fails if you exceed domain length.
-   */
-  @Test
-  fun simpleDomainWithLengthTest() {
-    // Declaration of the domain with length
-    class StringTestType : Domain<String>(5) {
-      override val type = code {
-        this["cde1"] = "1"
-      }
-    }
-
-    // Creating a field with the domain StringTestType
-    val field = ReportField(StringTestType().also { it.kClass = String::class })
-
-    // test with a valid value
-    val checkValid = field.checkLength("abcde")
-    assertTrue(checkValid)
-
-    // test with an invalid value
-    val checkInvalid = field.checkLength("abcdef")
-    assertFalse(checkInvalid)
-  }
-
-  /**
    * Tests the creation of a domain of a type code.
    */
   @Test
   fun domainCodeTest() {
     // Declaration of the domain with codes
-    class IntTestType : Domain<Long>(5) {
-      override val type = code {
-        this["cde1"] = 1L
-        this["cde2"] = 2L
+    class IntTestType : CodeDomain<Long>() {
+      init {
+        "cde1" keyOf 1L
+        "cde2" keyOf 2L
       }
     }
 
@@ -76,7 +46,7 @@ class CodeDomainTests {
     val domain = IntTestType()
 
     // test code values
-    val codes = domain.type.codes
+    val codes = domain.codes
     assertEquals(2, codes.size)
     assertEquals("id$0", codes[0].ident)
     assertEquals("cde1", codes[0].label)
@@ -84,30 +54,6 @@ class CodeDomainTests {
     assertEquals("id$1", codes[1].ident)
     assertEquals("cde2", codes[1].label)
     assertEquals(2L, codes[1].value)
-  }
-
-  /**
-   * Tests applying convertUpper on Code Domain
-   *
-   * must fails with UnsupportedOperationException because convertUpper
-   * is used only with List Domain
-   */
-  @Test
-  fun applyConvertUpperOnCodeDomainTest() {
-    // Declaration of the domain with length
-    class StringTestType : Domain<String>(5) {
-      override val type = code {
-        this["cde1"] = "1"
-      }
-    }
-
-    // Creating an instance of the domain StringTestType
-    val domain = StringTestType()
-
-    // test converted value
-    assertFailsWith<UnsupportedOperationException> {
-      domain.applyConvertUpper("Abcdef")
-    }
   }
 
   /**
@@ -119,14 +65,14 @@ class CodeDomainTests {
   @Test
   fun applyConvertCheckOnCodeDomainTest() {
     // Declaration of the domain with length
-    class StringTestType : Domain<String>(5) {
-      override val type = code {
-        this["cde1"] = "1"
+    class StringTestType : CodeDomain<String>() {
+      init {
+        "cde1" keyOf "1"
       }
     }
 
     // Creating a field with the domain StringTestType
-    val field = ReportField(StringTestType().also { it.kClass = String::class })
+    val field = ReportField(StringTestType().also { it.kClass = String::class }, "", {})
 
     // test check
     assertFailsWith<UnsupportedOperationException> {

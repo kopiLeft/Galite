@@ -27,11 +27,10 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VMonthColumn
 import org.kopi.galite.type.Month
-import org.kopi.galite.type.NotNullMonth
-import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
+import java.sql.Date
 
 class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
@@ -81,8 +80,8 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    val s = o as String
+  override fun checkType(rec: Int, s: Any?) {
+    val s = s as String
 
     if (s == "") {
       setNull(rec)
@@ -100,7 +99,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           }
 
           if (isMonth(month, year)) {
-            setMonth(rec, NotNullMonth(year, month))
+            setMonth(rec, Month(year, month))
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -114,7 +113,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           val year = GregorianCalendar()[Calendar.YEAR]
 
           if (isMonth(month, year)) {
-            setMonth(rec, NotNullMonth(year, month))
+            setMonth(rec, Month(year, month))
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -208,7 +207,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           }
 
           if (isMonth(month, year)) {
-            NotNullMonth(year, month)
+            Month(year, month)
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -222,7 +221,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
           val year = GregorianCalendar()[Calendar.YEAR]
 
           if (isMonth(month, year)) {
-            NotNullMonth(year, month)
+            Month(year, month)
           } else {
             throw VFieldException(this, MessageCode.getMessage("VIS-00005"))
           }
@@ -243,7 +242,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r])
+  override fun getSqlImpl(r: Int): Date? = if(value[r] == null) null else value[r]!!.toSql()
 
   /**
    * Copies the value of a record to another

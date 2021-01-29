@@ -15,28 +15,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.form
 
-package org.kopi.galite.type
-
-import java.util.Calendar
+import java.io.Serializable
 
 /**
- * This class represents the time types
+ * Registered objects are notified with actions performed
+ * on a form connector.
  */
-class NotNullTime : Time {
-  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
-  constructor(hours: Int, minutes: Int) : super(hours, minutes)
-  constructor(time: java.sql.Time) : super(time)
-  constructor(image: String) : super(image)
-  constructor(calendar: Calendar) : super(calendar)
+interface FormListener : Serializable {
+  /**
+   * Fired when a page is selected inside a form.
+   * @param page The page index.
+   */
+  fun onPageSelection(page: Int)
 
   /**
-   * Constructs a time from a scalar representation.
-   * DO NOT USE OUTSIDE OF THE LIBRARY
+   * Requests to go to the next position.
    */
-  constructor(scalar: Int) : super(scalar)
+  fun gotoNextPosition()
 
-  companion object {
-    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
-  }
+  /**
+   * Requests to go to the previous position.
+   */
+  fun gotoPrevPosition()
+
+  /**
+   * Requests to go to the last position.
+   */
+  fun gotoLastPosition()
+
+  /**
+   * Requests to go to the last position.
+   */
+  fun gotoFirstPosition()
+
+  /**
+   * Requests to go to the specified position.
+   * @param posno The position number.
+   */
+  fun gotoPosition(posno: Int)
 }

@@ -39,7 +39,7 @@ class DBForeignKeyException : DBConstraintException {
    * @param     original                the original SQLException
    * @param     constraint              the violated constraint
    */
-  constructor(query: String, original: SQLException, constraint: String) : super(query, original, constraint) {}
+  constructor(query: String, original: SQLException, constraint: String) : super(query, original, constraint)
 
   /**
    * Creates a new `DBForeignKeyException` that indicates the tables in relation.

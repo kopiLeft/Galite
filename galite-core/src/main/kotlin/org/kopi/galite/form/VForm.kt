@@ -159,7 +159,7 @@ abstract class VForm : VWindow, VConstants {
   }
 
   /**
-   * implemented for compatiblity with old gui
+   * implemented for compatibility with old gui
    * used in tib/Artikel.vf
    */
   @Deprecated("")
@@ -179,8 +179,8 @@ abstract class VForm : VWindow, VConstants {
   /**
    * addCommand in menu
    */
-  override fun addActors(actors: Array<VActor>?) {
-    actors?.forEach { actor ->
+  override fun addActors(actorDefs: Array<VActor>?) {
+    actorDefs?.forEach { actor ->
       if (actor is VDefaultActor) {
         when (actor.code) {
           CMD_AUTOFILL -> autofillActor = actor
@@ -190,7 +190,7 @@ abstract class VForm : VWindow, VConstants {
         }
       }
     }
-    super.addActors(actors)
+    super.addActors(actorDefs)
   }
 
   fun setTextOnFieldLeave(): Boolean = false
@@ -219,14 +219,16 @@ abstract class VForm : VWindow, VConstants {
    * @param     manager         the manger to use for localization
    */
   private fun localize(manager: LocalizationManager) {
-    val loc = manager.getFormLocalizer(source)
+    if(ApplicationContext.getDefaultLocale() != locale) {
+      val loc = manager.getFormLocalizer(source)
 
-    setTitle(loc.getTitle())
-    for (i in pages.indices) {
-      pages[i] = loc.getPage(i)
+      setTitle(loc.getTitle())
+      for (i in pages.indices) {
+        pages[i] = loc.getPage(i)
+      }
     }
     blocks.forEach { block ->
-      block.localize(manager)
+      block.localize(manager, locale)
     }
   }
 
@@ -266,30 +268,30 @@ abstract class VForm : VWindow, VConstants {
     // !!! fixes model (if left in a bad state)
     if (activeBlock == null) {
       var i = 0
-      while (i < blocks!!.size) {
-        if (blocks!![i].isAccessible) {
+      while (i < blocks.size) {
+        if (blocks[i].isAccessible) {
           break
         }
         i++
       }
-      assert(i < blocks!!.size) { threadInfo() + "No accessible block" }
-      blocks!![i].enter()
+      assert(i < blocks.size) { threadInfo() + "No accessible block" }
+      blocks[i].enter()
       // lackner 2003.07.31
       // - inserted to get information about the usage of this code
       // - can be removed if the method checkUI is removed
       try {
-        ApplicationContext.reportTrouble("DForm chechUI " + Thread.currentThread(),
+        ApplicationContext.reportTrouble("DForm checkUI " + Thread.currentThread(),
                                          "Where is this code used? $action",
                                          this.toString(),
-                                         RuntimeException("CHECKUI: Entered  block " + blocks!![i].name))
+                                         RuntimeException("CHECKUI: Entered  block " + blocks[i].name))
       } catch (e: Exception) {
         e.printStackTrace()
       }
     }
     // !! end of model fix
     for (i in blocks.indices) {
-      blocks!![i].checkBlock()
-      blocks!![i].updateBlockAccess()
+      blocks[i].checkBlock()
+      blocks[i].updateBlockAccess()
       //      blocks[i].checkCommands();
     }
   }
@@ -303,9 +305,9 @@ abstract class VForm : VWindow, VConstants {
   fun gotoPage(target: Int) {
     var block: VBlock? = null
     var i = 0
-    while (block == null && i < blocks!!.size) {
-      if (blocks!![i].pageNumber == target && blocks!![i].isAccessible) {
-        block = blocks!![i]
+    while (block == null && i < blocks.size) {
+      if (blocks[i].pageNumber == target && blocks[i].isAccessible) {
+        block = blocks[i]
       }
       i++
     }
@@ -337,13 +339,13 @@ abstract class VForm : VWindow, VConstants {
     var index = getBlockIndex(activeBlock!!)
     var target: VBlock? = null
     var i = 0
-    while (target == null && i < blocks!!.size - 1) {
+    while (target == null && i < blocks.size - 1) {
       index += 1
-      if (index == blocks!!.size) {
+      if (index == blocks.size) {
         index = 0
       }
-      if (blocks!![index].isAccessible) {
-        target = blocks!![index]
+      if (blocks[index].isAccessible) {
+        target = blocks[index]
       }
       i += 1
     }
@@ -356,14 +358,14 @@ abstract class VForm : VWindow, VConstants {
   fun enterBlock() {
     assert(activeBlock == null) { "active block = $activeBlock" }
     var i = 0
-    while (i < blocks!!.size) {
-      if (blocks!![i].isAccessible) {
+    while (i < blocks.size) {
+      if (blocks[i].isAccessible) {
         break
       }
       i++
     }
-    assert(i < blocks!!.size) { threadInfo() + "no accessible block" }
-    gotoBlock(blocks!![i])
+    assert(i < blocks.size) { threadInfo() + "no accessible block" }
+    gotoBlock(blocks[i])
   }
 
   /**
@@ -425,7 +427,7 @@ abstract class VForm : VWindow, VConstants {
   /**
    * create a list of items and return id of selected one or -1
    * @param        showUniqueItem        open a list if there is only one item also
-   * @exception        org.kopi.galite.visual.VException        an exception may be raised by string formaters
+   * @exception        org.kopi.galite.visual.VException        an exception may be raised by string formatters
    */
   fun singleMenuQuery(parent: VWindow, showUniqueItem: Boolean): Int {
     dBContext = parent.dBContext
@@ -528,8 +530,8 @@ abstract class VForm : VWindow, VConstants {
    */
   fun getBlock(name: String): VBlock? {
     for (i in blocks.indices) {
-      if (name == blocks!![i].name) {
-        return blocks!![i]
+      if (name == blocks[i].name) {
+        return blocks[i]
       }
     }
     return null
@@ -579,7 +581,7 @@ abstract class VForm : VWindow, VConstants {
   protected fun initialise() {
     callTrigger(VConstants.TRG_INIT)
     for (i in blocks.indices) {
-      blocks!![i].initialise()
+      blocks[i].initialise()
     }
   }
 
@@ -588,7 +590,7 @@ abstract class VForm : VWindow, VConstants {
    */
   protected fun getBlockIndex(blk: VBlock): Int {
     for (i in blocks.indices) {
-      if (blk === blocks!![i]) {
+      if (blk === blocks[i]) {
         return i
       }
     }
@@ -645,7 +647,7 @@ abstract class VForm : VWindow, VConstants {
       null
     } else {
       try {
-        surl.append(File(fileName).toURL().toString())
+        surl.append(File(fileName).toURI().toURL().toString())
       } catch (mue: MalformedURLException) {
         throw InconsistencyException(mue)
       }
@@ -656,7 +658,7 @@ abstract class VForm : VWindow, VConstants {
           anchor = field.name
         }
         anchor.replace(' ', '_')
-        surl.append("#" + field.block!!.title!!.replace(' ', '_') + anchor)
+        surl.append("#" + field.block!!.title.replace(' ', '_') + anchor)
       }
       surl.toString()
     }
@@ -727,9 +729,9 @@ abstract class VForm : VWindow, VConstants {
       // support better message
       if (blocks != null) {
         for (i in blocks.indices) {
-          val block: VBlock = blocks!![i]
+          val block: VBlock = blocks[i]
           if (block != null) {
-            append(blocks!![i].toString())
+            append(blocks[i].toString())
           } else {
             append("Block ")
             append(i)
@@ -743,7 +745,7 @@ abstract class VForm : VWindow, VConstants {
     append("===========================================================\n")
   }
 
-  fun printFormScreen(): PrintJob {
+  fun printFormScreen(): PrintJob? {
     return (getDisplay() as UForm).printForm()
   }
 
@@ -755,7 +757,8 @@ abstract class VForm : VWindow, VConstants {
   // static (from DSL) data
   override var source: String? = null // qualified name of source file
   lateinit var blocks: Array<VBlock>
-  internal lateinit var pages: Array<String?>
+  internal lateinit var pages: Array<String>
+  internal lateinit var pagesIdents: Array<String>
   internal var help: String? = null //the name of this field
   internal val VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
   internal val formTriggers = mutableMapOf<Int, Trigger>()

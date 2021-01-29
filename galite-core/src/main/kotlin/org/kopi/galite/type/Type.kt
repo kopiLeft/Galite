@@ -23,7 +23,7 @@ import java.util.Locale
 /**
  * This class is the super-class for types
  */
-abstract class Type : Comparable<Any?> {
+abstract class Type<T> : Comparable<T> {
   /**
    * Compares two objects
    */
@@ -43,5 +43,5 @@ abstract class Type : Comparable<Any?> {
   /**
    * Represents the value in sql
    */
-  abstract fun toSql(): String
+  abstract fun toSql(): Any
 }
