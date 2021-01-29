@@ -30,7 +30,7 @@ class FormWithMultipleBlockTests : JApplicationTestBase() {
     assertEquals(formModel.getBlock(1).displaySize, 100)
     assertEquals(formModel.getBlock(1).displayedFields, 1)
 
-    val nameField = formModel.getBlock(1).fields[2]
+    val nameField = formModel.getBlock(1).fields[1]
     assertEquals(1, nameField.position!!.column)
     assertEquals(1, nameField.position!!.columnEnd)
     assertEquals(1, nameField.position!!.line)
