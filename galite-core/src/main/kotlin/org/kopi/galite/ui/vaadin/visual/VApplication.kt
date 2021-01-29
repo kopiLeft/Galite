@@ -22,9 +22,6 @@ import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.router.Route
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
@@ -54,18 +51,27 @@ import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
 
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.Route
+
 /**
  * The entry point for all Galite WEB applications.
  *
  * @param registry The [Registry] object.
  */
+@Push
 @Route("")
+@CssImport("./styles/galite/styles.css")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
   //---------------------------------------------------
   // DATA MEMBEERS
   //---------------------------------------------------
-  private lateinit var mainWindow: MainWindow
+  private var mainWindow: MainWindow? = null
   private var welcomeView: WelcomeView? = null
   private var askAnswer = 0
   private lateinit var configuration: ApplicationConfiguration
@@ -162,13 +168,13 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     menu = VMenuTree(dBContext!!)
     menu.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref)
-    mainWindow.addMainWindowListener(this)
-    mainWindow.connectedUser = userName
-    mainWindow.addMenu(DMainMenu(menu))
-    mainWindow.addMenu(DUserMenu(menu))
-    mainWindow.addMenu(DAdminMenu(menu))
-    mainWindow.addMenu(DBookmarkMenu(menu))
-    mainWindow.addDetachListener { event ->
+    mainWindow!!.addMainWindowListener(this)
+    mainWindow!!.connectedUser = userName
+    mainWindow!!.setMainMenu(DMainMenu(menu))
+    mainWindow!!.setUserMenu(DUserMenu(menu))
+    mainWindow!!.setAdminMenu(DAdminMenu(menu))
+    mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu))
+    mainWindow!!.addDetachListener { event ->
         closeConnection()
     }
   }
@@ -304,8 +310,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Attaches a window to this application.
    * @param window The window to be added.
    */
-  fun addWindow(window: Component) {
-
+  fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
+    if (mainWindow != null) {
+      ui.ifPresent { myUi ->
+        myUi.access {
+          window.setSizeFull()
+          mainWindow!!.addWindow(window, title)
+        }
+      }
+    }
   }
 
   /**

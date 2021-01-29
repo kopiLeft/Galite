@@ -19,13 +19,8 @@ package org.kopi.galite.tests.form
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
-import org.kopi.galite.common.INITFORM
-import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.field.ACCESS
-import org.kopi.galite.field.ACTION
-import org.kopi.galite.field.POSTCHG
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.BlockOption
@@ -111,10 +106,10 @@ object FormSample : Form() {
   }
 
   val tb4ToTestChangeBlockAccess = insertBlock(TestBlock(), p1) {
-    blockVisibility(Access.ACS_SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
+    blockVisibility(Access.SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
   }
 
-  val preform = trigger(INITFORM) {
+  val preform = trigger(INIT) {
     println("init form trigger works")
   }
 
@@ -161,9 +156,9 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     options(FieldOption.NOECHO)
     trigger(ACCESS) {
       if (name.value == "hidden") {
-        VConstants.ACS_HIDDEN
+        Access.HIDDEN
       } else {
-        VConstants.ACS_SKIPPED
+        Access.SKIPPED
       }
     }
   }

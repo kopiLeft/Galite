@@ -94,7 +94,14 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
   /**
    * Mapping of all values that a domain can take
    */
-  lateinit var list: FieldList<T>
+  val list: FieldList<T>
+    get() = FieldList(ident,
+                      table,
+                      access,
+                      columns,
+                      autocompleteType,
+                      autocompleteLength,
+                      access != null)
 
   /**
    * Transforms values in capital letters.
@@ -144,14 +151,6 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
    *
    */
   override fun genTypeLocalization(writer: LocalizationWriter) {
-    list = FieldList(ident,
-                     table,
-                     access,
-                     columns,
-                     autocompleteType,
-                     autocompleteLength,
-                     access != null
-    )
     writer.genType(list)
   }
 }

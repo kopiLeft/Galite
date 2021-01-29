@@ -109,7 +109,7 @@ interface Application : MessageListener {
   /**
    * The application default [Locale].
    */
-  val defaultLocale: Locale?
+  val defaultLocale: Locale
 
   /**
    * The application [LocalizationManager].

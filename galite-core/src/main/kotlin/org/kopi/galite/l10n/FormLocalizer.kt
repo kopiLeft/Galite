@@ -49,6 +49,21 @@ class FormLocalizer(document: Document) {
     throw InconsistencyException("page $position not found")
   }
 
+  /**
+   * Returns the value of the page child.
+   *
+   * @param             ident                the identifier of the page
+   */
+  fun getPage(ident: String): String {
+    val pages: List<Element> = root.getChildren("page")
+    pages.forEach {
+      if (it.getAttributeValue("ident") == ident) {
+        return it.getAttributeValue("title")
+      }
+    }
+    throw InconsistencyException("page $ident not found")
+  }
+
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------

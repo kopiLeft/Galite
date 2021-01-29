@@ -154,11 +154,12 @@ open class Month(year: Int, month: Int) : Type<Month>() {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): String {
+  override fun toSql(): java.sql.Date {
     val year = scalar / 12
     val month = scalar % 12 + 1
 
-    return "{fn MONTH($year, $month)}"
+    //return "{fn MONTH($year, $month)}" TODO
+    return getDate().toSql()
   }
 
   override fun hashCode(): Int {

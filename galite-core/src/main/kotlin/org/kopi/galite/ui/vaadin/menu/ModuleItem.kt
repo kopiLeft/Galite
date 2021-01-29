@@ -32,13 +32,15 @@ import com.vaadin.flow.dom.ElementFactory
  * @param vaadinIcon The icon to add to this item.
  * @param help       The help text.
  */
-open class ModuleItem(val vaadinIcon: VaadinIcon? = null,
+class ModuleItem(val vaadinIcon: VaadinIcon? = null,
                       val help: String? = null)
   : Div(), HasComponents, HasStyle {
 
   var parentMenu: ModuleListMenu? = null
 
   init {
+    style["cursor"] = "pointer"
+
     if(help != null) {
       element.setAttribute("help", help)
     }
@@ -49,14 +51,6 @@ open class ModuleItem(val vaadinIcon: VaadinIcon? = null,
   }
 
   /**
-   * The sub-menu associated with this item.
-   */
-  var subMenu: ModuleListMenu? = null
-    set(value) {
-      field = value
-    }
-
-  /**
    * Sets the item caption.
    * @param caption The item caption.
    */
@@ -65,7 +59,7 @@ open class ModuleItem(val vaadinIcon: VaadinIcon? = null,
       val stringPanel = VStrongPanel().also {
         it.text = caption
       }
-      add(stringPanel)
+      addComponentAsFirst(stringPanel)
     } else {
       text = caption
     }

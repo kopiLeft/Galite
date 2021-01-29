@@ -71,8 +71,12 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
    */
   internal fun buildModel(sourceFile: String) : VActor =
           if (number == 0) {
-            VActor(menu.label, sourceFile, ident, sourceFile, icon, keyCode, keyModifier)
+            VActor(menu.label, sourceFile, ident, sourceFile, icon, keyCode, keyModifier, true)
           } else {
-            VDefaultActor(number, menu.label, sourceFile, ident, sourceFile, icon, keyCode, keyModifier)
+            VDefaultActor(number, menu.label, sourceFile, ident, sourceFile, icon, keyCode, keyModifier, true)
+          }.also {
+            it.menuName = menu.label
+            it.menuItem = label
+            it.help = help
           }
 }

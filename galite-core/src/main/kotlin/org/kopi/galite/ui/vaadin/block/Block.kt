@@ -21,6 +21,7 @@ import org.kopi.galite.form.BlockListener
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.html.Div
 
 /**
  * The server side component of a simple block.
@@ -29,7 +30,7 @@ import com.vaadin.flow.component.HasEnabled
  *
  * TODO: implement Block with appropriate component
  */
-abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
+abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -38,8 +39,9 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * Sets the block title.
    * @param title The block title.
    */
-  fun setTitle(title: String?) {
-    TODO()
+  override fun setTitle(title: String?) {
+    super.setTitle(title)
+    // TODO
   }
 
   /**
@@ -47,7 +49,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param bufferSize The block buffer size.
    */
   fun setBufferSize(bufferSize: Int) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -55,7 +57,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param displaySize The display size.
    */
   fun setDisplaySize(displaySize: Int) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -63,7 +65,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param sortedRecords The sorted records.
    */
   open fun setSortedRecords(sortedRecords: IntArray) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -71,7 +73,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param noMove The no move option.
    */
   fun setNoMove(noMove: Boolean) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -79,7 +81,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param noChart The no chart ability.
    */
   fun setNoChart(noChart: Boolean) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -87,7 +89,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param detail Should be switch to the detail view ?
    */
   fun switchView(detail: Boolean) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -98,7 +100,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param value The scroll position.
    */
   fun updateScroll(pageSize: Int, maxValue: Int, enable: Boolean, value: Int) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -106,7 +108,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param isAnimationEnabled Is animation enabled.
    */
   fun setAnimationEnabled(isAnimationEnabled: Boolean) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -149,7 +151,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param value The new scroll position.
    */
   protected fun fireOnScroll(value: Int) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -158,7 +160,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param sortedTopRec The top sorted record.
    */
   protected fun fireOnActiveRecordChange(record: Int, sortedTopRec: Int) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -166,7 +168,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param record The new active record.
    */
   protected open fun fireActiveRecordChanged(record: Int) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -183,7 +185,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param info The record info value.
    */
   protected open fun fireRecordInfoChanged(rec: Int, info: Int) {
-    TODO()
+    // TODO
   }
 
   /**
@@ -193,7 +195,7 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * @param value The new record value.
    */
   internal open fun fireValueChanged(col: Int, rec: Int, value: String?) {
-    TODO()
+    // TODO
   }
 
   //---------------------------------------------------
@@ -209,10 +211,6 @@ abstract class Block(private val droppable: Boolean) : Component(), HasEnabled {
    * Returns the block layout.
    * @return the block layout.
    */
-  var layout: BlockLayout? = null
-    get() {
-      TODO()
-    }
-    private set
-  private val listeners: MutableList<BlockListener> = ArrayList<BlockListener>()
+  private var layout: BlockLayout? = null
+  private val listeners = mutableListOf<BlockListener>()
 }

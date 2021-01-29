@@ -23,10 +23,6 @@ import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Actor
-import org.kopi.galite.common.BlockBooleanTriggerEvent
-import org.kopi.galite.common.BlockProtectedTriggerEvent
-import org.kopi.galite.common.BlockTriggerEvent
-import org.kopi.galite.common.BlockVoidTriggerEvent
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
@@ -104,23 +100,8 @@ open class FormBlock(var buffer: Int,
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  private fun <T> trigger(blockTriggers: Array<out BlockTriggerEvent>, method: () -> T): Trigger {
-    val event = blockEventList(blockTriggers)
-    val blockAction = Action(null, method)
-    val trigger = FormTrigger(event, blockAction)
-    triggers.add(trigger)
-    return trigger
-  }
-
-  private fun blockEventList(blockTriggers: Array<out BlockTriggerEvent>): Long {
-    var self = 0L
-
-    blockTriggers.forEach { trigger ->
-      self = self or (1L shl trigger.event)
-    }
-
-    return self
-  }
+  fun <T> trigger(vararg blockTriggers: BlockTriggerEvent<T>, method: () -> T): Trigger =
+          initTrigger(blockTriggers, method)
 
   /**
    * Adds protected triggers to this block.
@@ -128,28 +109,25 @@ open class FormBlock(var buffer: Int,
    * @param blockTriggers the triggers to add
    * @param method        the method to execute when trigger is called
    */
-  fun trigger(vararg blockTriggers: BlockProtectedTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(blockTriggers, method)
+  fun trigger(vararg blockTriggers: BlockProtectedTriggerEvent, method: () -> Unit): Trigger =
+          initTrigger(blockTriggers, method)
+
+  fun <T> initTrigger(blockTriggers: Array<out BlockTriggerEvent<*>>, method: () -> T) : Trigger {
+    val event = blockEventList(blockTriggers)
+    val blockAction = Action(null, method)
+    val trigger = FormTrigger(event, blockAction)
+    triggers.add(trigger)
+    return trigger
   }
 
-  /**
-   * Adds void trigger to this block.
-   *
-   * @param blockTriggerEvents the triggers to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg blockTriggerEvents: BlockVoidTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(blockTriggerEvents, method)
-  }
+  private fun blockEventList(blockTriggers: Array<out BlockTriggerEvent<*>>): Long {
+    var self = 0L
 
-  /**
-   * Adds boolean triggers to this block.
-   *
-   * @param blockTriggers the triggers to add
-   * @param method        the method to execute when trigger is called
-   */
-  fun trigger(vararg blockTriggers: BlockBooleanTriggerEvent, method: () -> Boolean): Trigger {
-    return trigger(blockTriggers, method)
+    blockTriggers.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
   }
 
   /**
@@ -457,6 +435,137 @@ open class FormBlock(var buffer: Int,
   }
 
   // ----------------------------------------------------------------------
+  // BLOCK TRIGGERS EVENTS
+  // ----------------------------------------------------------------------
+  /**
+   * Block Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class BlockTriggerEvent<T>(val event: Int)
+
+  /**
+   * Block protected Triggers
+   *
+   * @param event the event of the trigger
+   */
+  class BlockProtectedTriggerEvent(event: Int) : BlockTriggerEvent<Unit>(event)
+
+  /**
+   * executed before querying the database
+   */
+  val PREQRY = BlockProtectedTriggerEvent(VConstants.TRG_PREQRY)    // protected trigger
+
+  /**
+   * executed after querying the database
+   */
+  val POSTQRY =  BlockProtectedTriggerEvent(VConstants.TRG_POSTQRY)  // protected trigger
+
+  /**
+   * executed before a row is deleted
+   */
+  val PREDEL = BlockProtectedTriggerEvent(VConstants.TRG_PREDEL)    // protected trigger
+
+  /**
+   * executed after a row is deleted
+   */
+  val POSTDEL = BlockProtectedTriggerEvent(VConstants.TRG_POSTDEL)  // protected trigger
+
+  /**
+   * executed before a row is inserted
+   */
+  val PREINS = BlockProtectedTriggerEvent(VConstants.TRG_PREINS)    // protected trigger
+
+  /**
+   * executed after a row is inserted
+   */
+  val POSTINS = BlockProtectedTriggerEvent(VConstants.TRG_POSTINS)  // protected trigger
+
+  /**
+   * executed before a row is updated
+   */
+  val PREUPD = BlockProtectedTriggerEvent(VConstants.TRG_PREUPD)    // protected trigger
+
+  /**
+   * executed after a row is updated
+   */
+  val POSTUPD = BlockProtectedTriggerEvent(VConstants.TRG_POSTUPD)  // protected trigger
+
+  /**
+   * executed before saving a row
+   */
+  val PRESAVE = BlockProtectedTriggerEvent(VConstants.TRG_PRESAVE)  // protected trigger
+
+  /**
+   * executed upon record entry
+   */
+  val PREREC = BlockTriggerEvent<Unit>(VConstants.TRG_PREREC)    // void trigger
+
+  /**
+   * executed upon record exit
+   */
+  val POSTREC = BlockTriggerEvent<Unit>(VConstants.TRG_POSTREC)  // void trigger
+
+  /**
+   * executed upon block entry
+   */
+  val PREBLK = BlockTriggerEvent<Unit>(VConstants.TRG_PREBLK)    // void trigger
+
+  /**
+   * executed upon block exit
+   */
+  val POSTBLK = BlockTriggerEvent<Unit>(VConstants.TRG_POSTBLK)  // void trigger
+
+  /**
+   * executed upon block validation
+   */
+  val VALBLK = BlockTriggerEvent<Unit>(VConstants.TRG_VALBLK)    // void trigger
+
+  /**
+   * executed upon record validation
+   */
+  val VALREC = BlockTriggerEvent<Unit>(VConstants.TRG_VALREC)    // void trigger
+
+  /**
+   * is executed when the block is in the InsertMode. This trigger becomes active when
+   * the user presses the key F4. It will then enable the system to load standard values
+   * which will be proposed to the user if he wishes to enter new data.
+   */
+  val DEFAULT = BlockTriggerEvent<Unit>(VConstants.TRG_DEFAULT)  // void trigger
+
+  /**
+   * executed upon block initialization
+   */
+  val INIT = BlockTriggerEvent<Unit>(VConstants.TRG_INIT)        // void trigger
+
+  /**
+   * executed upon Reset command (ResetForm)
+   */
+  val RESET = BlockTriggerEvent<Boolean>(VConstants.TRG_RESET)      // Boolean trigger
+
+  /**
+   * a special trigger that returns a boolean value of whether the block have been changed or not,
+   * you can use it to bypass the system control for changes by returning false in the trigger's method:
+   *
+   * trigger(CHANGED) {
+   *   false
+   * }
+   *
+   */
+  val CHANGED = BlockTriggerEvent<Boolean>(VConstants.TRG_CHANGED)  // Boolean trigger
+
+  /**
+   * defines whether a block can or not be accessed, it must always return a boolean value.
+   *
+   * trigger(ACCESS) {
+   *   Block.mode == MOD_QUERY  // Tests if the block is in query mode,
+   *                               //this block is only accessible on query mode
+   * }
+   *
+   */
+  val ACCESS = BlockTriggerEvent<Boolean>(VConstants.TRG_ACCESS)    // Void trigger
+
+  // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
   // ----------------------------------------------------------------------
 
@@ -542,6 +651,8 @@ open class FormBlock(var buffer: Int,
         //TODO ------------end-----------
 
         super.source = source ?: sourceFile
+        super.title = this@FormBlock.title
+        super.help = this@FormBlock.help
         super.bufferSize = buffer
         super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
@@ -561,6 +672,9 @@ open class FormBlock(var buffer: Int,
           formField.vField
         }.toTypedArray()
         super.indices = this@FormBlock.indices.map {
+          it.message
+        }.toTypedArray()
+        super.indicesIdents = this@FormBlock.indices.map {
           it.ident
         }.toTypedArray()
       }
