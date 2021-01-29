@@ -68,13 +68,13 @@ object FormSample : Form() {
   }
 
   val formActor = actor(
-          ident = "save",
-          menu = action,
-          label = "form Command",
-          help = "actor to test form command",
+          ident =  "save",
+          menu =   action,
+          label =  "form Command",
+          help =   "actor to test form command",
   ) {
-    key = Key.F2          // key is optional here
-    icon = "save"  // icon is optional here
+    key  =  Key.F2          // key is optional here
+    icon =  "save"  // icon is optional here
   }
 
   val cmd = command(item = formActor) {
