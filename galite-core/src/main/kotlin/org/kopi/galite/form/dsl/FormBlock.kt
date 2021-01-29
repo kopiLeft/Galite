@@ -702,7 +702,6 @@ open class FormBlock(var buffer: Int,
         }.toTypedArray()
         super.indicesIdents = this@FormBlock.indices.map {
           it.ident
-          it.ident
         }.toTypedArray()
       }
     }.also {
