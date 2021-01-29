@@ -44,7 +44,6 @@ abstract class DictionaryForm : VDictionary, Form() {
 
   /** Form model */
   override val model: VDictionaryForm by lazy {
-    genLocalization()
     object : VDictionaryForm() {
       override fun init() {
         initialize()

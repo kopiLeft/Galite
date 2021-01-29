@@ -252,7 +252,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    * @param     loc         the caller localizer
    */
-  protected open fun localize(loc: FieldLocalizer?) {
+  internal open fun localize(loc: FieldLocalizer) {
     // by default nothing to do
   }
 

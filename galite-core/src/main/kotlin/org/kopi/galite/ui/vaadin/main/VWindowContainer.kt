@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.main
 import org.kopi.galite.ui.vaadin.common.VCaption
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 
 /**
@@ -32,14 +33,15 @@ internal class VWindowContainer : Div() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private val widgetToIndexMap = mutableMapOf<Component, Int>()
-  private val widgetToCaptionMap = mutableMapOf<Component, String>()
+  private val windowToCaptionMap = mutableMapOf<Component, String>()
+  private var previousWindow : Component? = null
+  private var currentWindow : Component? = null
   private val pane = Div()
   private val caption: VCaption
+
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
-
   init {
     val captionWrapper = Div()
     className = "k-window-container"
@@ -57,32 +59,31 @@ internal class VWindowContainer : Div() {
   //---------------------------------------------------
   /**
    * Adds the specified window to this container.
-   * @param window The window widget.
+   * @param window The window component.
    * @param title the window caption.
    */
   fun addWindow(window: Component, title: String) {
     // first add the window to the container
     pane.add(window)
-    // now map the window widget to its index
-    widgetToIndexMap[window] = pane.element.childCount - 1
-    widgetToCaptionMap[window] = title
+    // now map the window component to its index
+    windowToCaptionMap[window] = title
   }
 
   /**
    * Removes the given window from the container.
    * @param window The window to be removed.
-   * @return The new shown widget or `null` if no window is shown.
+   * @return The new shown component or `null` if no window is shown.
    */
   fun removeWindow(window: Component): Component? {
-    // look for internal map.
-    caption.setCaption("") // reset window caption
-    widgetToCaptionMap.remove(window)
-    val index = widgetToIndexMap.remove(window)
-    if (index != null) {
-      TODO()
-    } else {
-      TODO()
+    val caption = windowToCaptionMap.remove(window)
+    if (caption != null) {
+      pane.remove(window)
+      if (windowToCaptionMap.isNotEmpty() && previousWindow != null) {
+        // show previous window in the list
+        return showWindow(previousWindow!!)
+      }
     }
+
     return null
   }
 
@@ -92,24 +93,32 @@ internal class VWindowContainer : Div() {
    * @param title The new title.
    */
   fun updateWindowTitle(window: Component, title: String) {
-    widgetToCaptionMap[window] = title
+    windowToCaptionMap[window] = title
     TODO()
   }
 
   /**
-   * Shows the given window in this container.
+   * Shows the given window in this container. This causes the currently- visible
+   * window to be hidden
+   *
    * @param window The window to be shown.
    * @return The new shown widget or `null` if no window is shown.
    */
-  fun showWindow(window: Component?): Component? {
-    if (window == null) {
-      // no window, give up
-      return null
+  fun showWindow(window: Component): Component? {
+    // show only if we find a mapping or the component in the pane dom
+    if (windowToCaptionMap.contains(window) || pane.children.toArray().contains(window)) {
+      if(currentWindow != window) {
+
+        previousWindow = currentWindow
+        previousWindow?.isVisible = false
+        currentWindow = window
+
+        caption.setCaption(windowToCaptionMap[window])
+        UI.getCurrent().page.setTitle(caption.getCaption())
+      }
+      return window
     }
 
-    // look for internal map.
-    var index = widgetToIndexMap.remove(window)
-    TODO()
     return null
   }
 

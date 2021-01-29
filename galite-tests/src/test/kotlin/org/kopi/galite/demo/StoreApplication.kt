@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.demo
 
+import java.math.BigDecimal
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
@@ -39,7 +41,6 @@ import org.kopi.galite.type.Decimal
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
-import java.math.BigDecimal
 
 object Client : Table("CLIENTS") {
   val idClt = integer("CLIENT ID").autoIncrement()
