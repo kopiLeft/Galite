@@ -16,6 +16,9 @@
  */
 package org.kopi.galite.tests.form
 
+import java.io.File
+import java.util.Locale
+
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
@@ -28,8 +31,6 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.visual.FileHandler
-import java.io.File
-import java.util.*
 
 object User : Table() {
   val id = integer("ID")
