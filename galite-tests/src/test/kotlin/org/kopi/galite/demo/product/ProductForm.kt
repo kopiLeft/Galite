@@ -28,7 +28,7 @@ import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
 object ProductForm : ReportSelectionForm() {
-  override val locale = Locale.ENGLISH
+  override val locale = Locale.FRANCE
   override val title = "product form"
   val page = page("page")
   val action = menu("Action")
