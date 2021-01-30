@@ -31,6 +31,10 @@ open class DTextField(model: VFieldUI,
                       options: Int,
                       detail: Boolean) : DField(model, label, align, options, detail), UTextField {
 
+  init {
+    setTextField(TextField())
+  }
+
   // --------------------------------------------------
   // CREATE FIELD UI
   // --------------------------------------------------
@@ -51,23 +55,23 @@ open class DTextField(model: VFieldUI,
   // DRAWING
   // ----------------------------------------------------------------------
   override fun updateAccess() {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 
   override fun updateText() {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 
   override fun updateColor() {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 
   override fun updateFocus() {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 
   override fun forceFocus() {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 
   //---------------------------------------------------

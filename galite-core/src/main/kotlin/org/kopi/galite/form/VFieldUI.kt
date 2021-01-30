@@ -249,7 +249,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     dl.init(model.label, model.toolTip)
 
     if (dlDetail != null) {
-      dl!!.init(model.label, model.toolTip)
+      dl.init(model.label, model.toolTip)
     }
   }
 

@@ -17,14 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.label
 
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.html.Label
 
 /**
  * The label server component.
  * TODO: Implement this class with appropriate component
  */
-open class Label : Component(), HasEnabled {
+open class Label : Label(), HasEnabled {
 
   /**
    * Sets the field label to be mandatory.
