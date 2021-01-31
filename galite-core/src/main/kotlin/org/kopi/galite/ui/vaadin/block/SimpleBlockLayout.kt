@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.block
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.html.Div
 import org.kopi.galite.ui.vaadin.form.DField
 
 /**
@@ -99,11 +100,11 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
 
   override fun layout() {
     // Responsive steps
-    /*setResponsiveSteps(
-            *Array(col/2) {
-              ResponsiveStep("" + (25 + 7 * it) + "em", it + 1, ResponsiveStep.LabelsPosition.TOP)
+    setResponsiveSteps(
+            *Array(col) {
+              ResponsiveStep("" + (15 + 5 * it) + "em", it + 1, ResponsiveStep.LabelsPosition.TOP)
             }
-    )*/
+    )
 
     if (align != null) {
       // aligned blocks will be handled differently
@@ -120,6 +121,8 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
                                  aligns!![x][y]!!.height.coerceAtMost(getAllocatedHeight(x, y)))
             setAlignment(aligns!![x][y]!!.y, aligns!![x][y]!!.x, aligns!![x][y]!!.alignRight)*/
             add(components!![x][y])
+          } else {
+            add(Div())
           }
         }
       }

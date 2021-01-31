@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.field
 
 import com.vaadin.flow.component.HasEnabled
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
@@ -27,18 +26,11 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
  *
  * @param label the text field label, if it's null it will create a field without label.
  */
-open class TextField(label: String? = null) : Div(), HasEnabled {
-  val textField = TextField()
+open class TextField(label: String? = null) : TextField(), HasEnabled {
 
   init {
-    setContent(textField)
-    textField.label = label
-    textField.addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.MATERIAL_ALWAYS_FLOAT_LABEL)
+    setWidthFull()
+    setLabel(label)
+    addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.MATERIAL_ALWAYS_FLOAT_LABEL)
   }
-
-  private fun setContent(textField: TextField) {
-    removeAll()
-    add(textField)
-  }
-
 }

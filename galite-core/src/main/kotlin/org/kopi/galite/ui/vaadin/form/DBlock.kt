@@ -417,8 +417,8 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   }
 
   override fun createLayout(): BlockLayout {
-    // label + field => 2 + lines
-    val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos)
+    // label + field => fldNumber + lines
+    val layout = SimpleBlockLayout(DFieldUI.fldNumber * maxColumnPos, maxRowPos)
     if (model.alignment != null) {
       layout.setBlockAlignment(formView.getBlockView(model.alignment!!.block) as Component,
                                model.alignment!!.targets,
