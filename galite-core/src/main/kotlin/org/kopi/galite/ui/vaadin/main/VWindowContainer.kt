@@ -23,6 +23,8 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 
+import org.kopi.galite.ui.vaadin.window.VActorPanel
+
 /**
  * The main window container component.
  * This component will be responsible of displaying only one window.
@@ -38,6 +40,7 @@ internal class VWindowContainer : Div() {
   private var currentWindow : Component? = null
   private val pane = Div()
   private val caption: VCaption
+  val actors = VActorPanel()
 
   //---------------------------------------------------
   // CONSTRUCTOR
@@ -46,6 +49,7 @@ internal class VWindowContainer : Div() {
     val captionWrapper = Div()
     className = "k-window-container"
     pane.className = "k-container-pane"
+    pane.add(actors)
     caption = VCaption(false)
     caption.className = "k-window-caption"
     captionWrapper.setId("session")

@@ -45,7 +45,6 @@ class VActorPanel : MenuBar() {
    * @param actor The actor to be added.
    */
   fun addActor(actor: Component) {
-  actor.element.setAttribute("className", "test")
     this.addItem(actor)
   }
 }
