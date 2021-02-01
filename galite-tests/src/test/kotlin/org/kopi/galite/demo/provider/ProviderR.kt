@@ -34,7 +34,7 @@ import org.kopi.galite.report.VReport
 object ProviderR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "ProviderReport"
+  override val title = "Providers_Report"
 
   val action = menu("Action")
 
@@ -103,7 +103,7 @@ object ProviderR : Report() {
   }
 
   val nameProvider = field(Domain<String>(50)) {
-    label = "provider name"
+    label = "Name"
     help = "The provider name"
     align = FieldAlignment.LEFT
     format {
@@ -116,13 +116,13 @@ object ProviderR : Report() {
   }
 
   val tel = field(Domain<Int>(25)) {
-    label = "provider phone"
-    help = "The provider phone"
+    label = "Phone number"
+    help = "The provider phone number"
     align = FieldAlignment.LEFT
   }
 
   val description = field(Domain<String>(255)) {
-    label = "provider description"
+    label = "Description"
     help = "The provider description"
     align = FieldAlignment.LEFT
     format {
@@ -135,14 +135,14 @@ object ProviderR : Report() {
   }
 
   val address = field(Domain<String>(70)) {
-    label = "provider address"
+    label = "Address"
     help = "The provider address"
     align = FieldAlignment.LEFT
   }
 
   val postalCode = field(Domain<Int>(50)) {
-    label = "provider postal code"
-    help = "The provider postal code"
+    label = "Zip code"
+    help = "The provider zip code"
     align = FieldAlignment.LEFT
   }
 

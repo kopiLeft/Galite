@@ -29,8 +29,8 @@ import org.kopi.galite.type.Image
 
 object ProviderForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "Provider form"
-  val page = page("page")
+  override val title = "Providers"
+  val page = page("Provider")
   val action = menu("act")
   val report = actor(
           ident = "report",
@@ -55,45 +55,45 @@ object ProviderForm : ReportSelectionForm() {
   }
 }
 
-object BlockProvider : FormBlock(1, 1, "Provider block") {
+object BlockProvider : FormBlock(1, 1, "Providers") {
   val u = table(Provider)
 
   val idProvider = hidden(domain = Domain<Int>(20)) {
-    label = "provider id"
-    help = "The provider id"
+    label = "ID"
+    help = "The provider ID"
     columns(u.idProvider)
   }
   val nameProvider = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
-    label = "provider name"
+    label = "Name"
     help = "The provider name"
     columns(u.nameProvider)
   }
   val tel = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
-    label = "PROVIDER PHONE"
-    help = "The PROVIDER PHONE"
+    label = "Phone number"
+    help = "The provider phone number"
     columns(u.tel)
   }
   val description = visit(domain = Domain<String>(50), position = at(3, 1)) {
-    label = "PROVIDER DESCRIPTION"
-    help = "PROVIDER DESCRIPTION"
+    label = "Description"
+    help = "The provider description"
     columns(u.description)
   }
-
   val address = visit(domain = Domain<String>(50), position = at(4, 1)) {
-    label = "PROVIDER ADDRESS"
-    help = "THE PROVIDER ADDRESS"
+    label = "Address"
+    help = "The provider address"
     columns(u.address)
   }
   val postalCode = visit(domain = Domain<Int>(30), position = at(5, 1)) {
-    label = "PROVIDER POSTAL CODE"
-    help = "PROVIDER POSTAL CODE"
+    label = "Zip code"
+    help = "The provider zip code"
     columns(u.postalCode)
   }
-
+  /*
   val logo = visit(domain = Domain<Image?>(20), position = at(6, 1)) {
-    label = "provider company logo"
-    help = "provider company logo"
-  }
+    label = "Provider company logo"
+    help = "The provider company logo"
+    columns(u.logo)
+  }*/
 }
 
 fun main() {

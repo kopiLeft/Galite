@@ -31,8 +31,8 @@ import org.kopi.galite.report.Report
 
 object CommandForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "command form"
-  val page = page("page")
+  override val title = "Commands"
+  val page = page("Command")
   val action = menu("act")
   val report = actor(
           ident = "report",
@@ -43,7 +43,7 @@ object CommandForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
-  val tb1 = insertBlock(BlockCommand, page){
+  val tb1 = insertBlock(BlockCommand, page) {
     command(item = ClientForm.report) {
       action = {
         createReport(BlockCommand)
@@ -56,51 +56,54 @@ object CommandForm : ReportSelectionForm() {
   }
 }
 
-object BlockCommand : FormBlock(1, 1, "block command") {
+object BlockCommand : FormBlock(1, 1, "Commands") {
   val u = table(Command)
   val v = table(Client)
 
   val numCmd = hidden(domain = Domain<Int>(20)) {
-    label = "command number"
+    label = "Number"
     help = "The command number"
     columns(u.numCmd)
   }
   val idClt = mustFill(domain = Domain<Int>(25), position = at(1, 1)) {
-    label = "client id"
-    help = "The client id"
+    label = "Client ID"
+    help = "The client ID"
     columns(u.idClt, v.idClt)
   }
   val dateCmd = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
-    label = "command date"
+    label = "Command date"
     help = "The command date"
     columns(u.dateCmd)
   }
   val paymentMethod = mustFill(domain = Payment, position = at(3, 1)) {
-    label = "payment method"
+    label = "Payment method"
     help = "The payment method"
     columns(u.paymentMethod)
   }
   val statusCmd = mustFill(domain = CommandStatus, position = at(4, 1)) {
-    label = "command status"
+    label = "Command status"
     help = "The command status"
     columns(u.statusCmd)
   }
 }
-object Payment: CodeDomain<String>() {
+
+object Payment : CodeDomain<String>() {
   init {
     "cash" keyOf "cash"
     "check" keyOf "check"
-    "bank card" keyOf  "bank card"
+    "bank card" keyOf "bank card"
   }
 }
-object CommandStatus: CodeDomain<String>() {
+
+object CommandStatus : CodeDomain<String>() {
   init {
     "In preparation" keyOf "in preparation"
     "available" keyOf "available"
-    "delivered" keyOf  "delivered"
-    "canceled"  keyOf  "canceled"
+    "delivered" keyOf "delivered"
+    "canceled" keyOf "canceled"
   }
 }
+
 fun main() {
   Application.runForm(formName = CommandForm)
 }

@@ -35,7 +35,7 @@ import org.kopi.galite.report.VReport
 object ClientR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "ClientReport"
+  override val title = "Clients_Report"
 
   val action = menu("Action")
 
@@ -103,9 +103,9 @@ object ClientR : Report() {
     }
   }
 
-  val nameClt = field(Domain<String>(25)) {
-    label = "name client"
-    help = "The client name"
+  val fstnameClt = field(Domain<String>(25)) {
+    label = "First Name"
+    help = "The client first name"
     align = FieldAlignment.LEFT
     format {
       object : VCellFormat() {
@@ -116,9 +116,9 @@ object ClientR : Report() {
     }
   }
 
-  val fstnameClt = field(Domain<String>(25)) {
-    label = "client firstname"
-    help = "The client firstname"
+  val nameClt = field(Domain<String>(25)) {
+    label = "Last Name"
+    help = "The client last name"
     align = FieldAlignment.LEFT
     format {
       object : VCellFormat() {
@@ -128,8 +128,9 @@ object ClientR : Report() {
       }
     }
   }
+
   val addressClt = field(Domain<String>(50)) {
-    label = "client address"
+    label = "Address"
     help = "The client address"
     align = FieldAlignment.LEFT
     format {
@@ -142,20 +143,20 @@ object ClientR : Report() {
   }
 
   val ageClt = field(Domain<Int>(2)) {
-    label = "client age"
+    label = "Age"
     help = "The client age"
     align = FieldAlignment.LEFT
   }
 
   val cityClt = field(Domain<String>(50)) {
-    label = "client city"
+    label = "City"
     help = "The client city"
     align = FieldAlignment.LEFT
   }
 
   val postalCodeClt = field(Domain<Int>(2)) {
-    label = "client postal code"
-    help = "The client postal code"
+    label = "Zip code"
+    help = "The client zip code"
     align = FieldAlignment.LEFT
   }
 

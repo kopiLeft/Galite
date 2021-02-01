@@ -35,7 +35,7 @@ import org.kopi.galite.report.VReport
 object ProductR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "ProductReport"
+  override val title = "Products_Report"
 
   val action = menu("Action")
 
@@ -114,7 +114,7 @@ object ProductR : Report() {
   }
 
   val designation = field(Domain<String>(50)) {
-    label = "product designation"
+    label = "Designation"
     help = "The product designation"
     align = FieldAlignment.LEFT
     format {
@@ -127,19 +127,19 @@ object ProductR : Report() {
   }
 
   val category = field(Category) {
-    label = "product category"
+    label = "Category"
     help = "The product category"
     align = FieldAlignment.LEFT
   }
 
   val taxName = field(Tax) {
-    label = "product tax name"
+    label = "Tax"
     help = "The product tax name"
     align = FieldAlignment.LEFT
   }
 
   val price = field(Domain<Int>(20)) {
-    label = "product price"
+    label = "Price"
     help = "The product unit price excluding VAT"
     align = FieldAlignment.LEFT
   }

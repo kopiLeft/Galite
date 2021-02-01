@@ -34,7 +34,7 @@ import org.kopi.galite.report.VReport
 object StockR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "StockReport"
+  override val title = "Stocks_Report"
 
   val action = menu("Action")
 
@@ -103,18 +103,18 @@ object StockR : Report() {
   }
 
   val idStckPdt = field(Domain<Int>(25)) {
-    label = "product id"
-    help = "product id"
+    label = "Product_ID"
+    help = "The product ID"
     align = FieldAlignment.LEFT
   }
   val idStckProv = field(Domain<Int>(25)) {
-    label = "provider id"
-    help = "provider id"
+    label = "Provider_ID"
+    help = "The provider id"
     align = FieldAlignment.LEFT
   }
   val minAlert = field(Domain<Int>(25)) {
-    label = "min alert stock"
-    help = "min alert stock"
+    label = "Min Alert"
+    help = "The stock's min alert"
     align = FieldAlignment.LEFT
   }
 

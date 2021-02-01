@@ -36,7 +36,7 @@ object BillProductR : Report() {
 
   override val locale = Locale.FRANCE
 
-  override val title = "Bill Product report"
+  override val title = "Bill Product Report"
 
   val action = menu("Action")
 
@@ -115,19 +115,19 @@ object BillProductR : Report() {
   }
 
   val quantity = field(Domain<Int>(25)) {
-    label = "quantity"
-    help = "quantity"
+    label = "Quantity"
+    help = "The quantity"
     align = FieldAlignment.LEFT
   }
 
   val amountHT = field(Domain<Int>(25)) {
-    label = "amountHT"
-    help = "amountHT"
+    label = "Amount before tax"
+    help = "The amount before tax to pay"
 
   }
   val amountTTC = field(Domain<Decimal>(50)) {
-    label = "amountTTC"
-    help = "amountTTC"
+    label = "Amount all taxes included"
+    help = "The amount all taxes included to pay"
     align = FieldAlignment.LEFT
   }
 

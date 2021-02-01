@@ -43,50 +43,50 @@ import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 object Client : Table("CLIENTS") {
-  val idClt = integer("CLIENT ID").autoIncrement()
-  val nameClt = varchar("CLIENT NAME", 25)
-  val fstnameClt = varchar("CLIENT FIRSTNAME", 25)
-  val addressClt = varchar("CLIENT ADDRESS", 50)
-  val ageClt = integer("CLIENT AGE")
-  val cityClt = varchar("CLIENT CITY", 30)
-  val postalCodeClt = integer("CLIENT POSTAL CODE")
+  val idClt = integer("CLIENT_ID").autoIncrement()
+  val nameClt = varchar("CLIENT_NAME", 25)
+  val fstnameClt = varchar("CLIENT_FIRSTNAME", 25)
+  val addressClt = varchar("CLIENT_ADDRESS", 50)
+  val ageClt = integer("CLIENT_AGE")
+  val cityClt = varchar("CLIENT_CITY", 30)
+  val postalCodeClt = integer("CLIENT_ZIP")
 
   override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
 }
 
 object Product : Table("Products") {
-  val idPdt = integer("ID Product").autoIncrement()
+  val idPdt = integer("ID_Product").autoIncrement()
   val designation = varchar("DESIGNATION", 50)
-  val category = varchar("CATEGORIE", 30)
-  val taxName = varchar("PRODUCT TAX NAME", 20).references(TaxRule.taxName)
-  val price = integer("UNIT PRICE EXCLUDING VAT")
-  val photo = blob("Product PHOTO").nullable()
+  val category = varchar("CATEGORy", 30)
+  val taxName = varchar("PRODUCT_TAX", 20).references(TaxRule.taxName)
+  val price = integer("UNIT_PRICE_EXCLUDING_VAT")
+  val photo = blob("Product_PHOTO").nullable()
 
   override val primaryKey = PrimaryKey(idPdt)
 }
 
 object Stock : Table("STOCK") {
-  val idStckPdt = integer("IDSTXKPDT").references(Product.idPdt)
-  val idStckProv = integer("IDSTXKFOURN").references(Provider.idProvider)
-  val minAlert = integer("The MIN VALUE ALERT")
+  val idStckPdt = integer("Product_ID").references(Product.idPdt)
+  val idStckProv = integer("Provider_ID").references(Provider.idProvider)
+  val minAlert = integer("MIN_VALUE_ALERT")
 
   override val primaryKey = PrimaryKey(idStckPdt, idStckProv)
 }
 
 object Provider : Table("PROVIDERS") {
-  val idProvider = integer("PROVIDER ID").autoIncrement()
-  val nameProvider = varchar("PROVIDER NAME", 50)
-  val tel = integer("PROVIDER PHONE")
-  val description = varchar("PROVIDER DESCRIPTION", 70)
-  val address = varchar("PROVIDER ADDRESS ", 70)
-  val postalCode = integer("PROVIDER POSTAL CODE")
-  val logo = blob("PROVIDER COMPANY LOGO").nullable()
+  val idProvider = integer("PROVIDER_ID").autoIncrement()
+  val nameProvider = varchar("PROVIDER_NAME", 50)
+  val tel = integer("PROVIDER_PHONE")
+  val description = varchar("PROVIDER_DESCRIPTION", 70)
+  val address = varchar("PROVIDER_ADDRESS ", 70)
+  val postalCode = integer("PROVIDER_SIP")
+  val logo = blob("PROVIDER_COMPANY_LOGO").nullable()
 
   override val primaryKey = PrimaryKey(idProvider)
 }
 
-object BillProduct : Table("BILL PRODUCT") {
-  val idBPdt = integer("BILL PRODUCT ID").references(Product.idPdt)
+object BillProduct : Table("BILL_PRODUCT") {
+  val idBPdt = integer("BILL_PRODUCT_ID").references(Product.idPdt)
   val quantity = integer("QUANTITY")
   val amountHT = integer("AMOUNT HT")
   val amountTTC = decimal("amount TTC", 9, 3)
@@ -95,30 +95,30 @@ object BillProduct : Table("BILL PRODUCT") {
 }
 
 object Command : Table("COMMANDS") {
-  val numCmd = integer("COMMAND NUMBER").autoIncrement()
-  val idClt = integer("ID_CLT_CMD").references(Client.idClt)
-  val dateCmd = varchar("COMMAND DATE", 25)
-  val paymentMethod = varchar("PAYMENT METHOD", 50)
-  val statusCmd = varchar("COMMAND STATUS", 30)
+  val numCmd = integer("COMMAND_NUMBER").autoIncrement()
+  val idClt = integer("ID_CLIENT").references(Client.idClt)
+  val dateCmd = varchar("COMMAND_DATE", 25)
+  val paymentMethod = varchar("PAYMENT_METHOD", 50)
+  val statusCmd = varchar("COMMAND_STATUS", 30)
 
   override val primaryKey = PrimaryKey(numCmd)
 
 }
 
 object Bill : Table("BILLS") {
-  val numBill = integer("BILL NUMBER").autoIncrement()
-  val addressBill = varchar("BILL ADDRESS", 30)
-  val dateBill = varchar("BILL DATE", 25)
-  val amountTTC = decimal("AMOUNT TO PAY", 9, 3).references(BillProduct.amountTTC)
-  val refCmd = integer("COMMAND REFERENCE").references(Command.numCmd)
+  val numBill = integer("BILL_NUMBER").autoIncrement()
+  val addressBill = varchar("BILL_ADDRESS", 30)
+  val dateBill = varchar("BILL_DATE", 25)
+  val amountTTC = decimal("AMOUNT_TO_PAY", 9, 3).references(BillProduct.amountTTC)
+  val refCmd = integer("COMMAND_REFERENCE").references(Command.numCmd)
 
   override val primaryKey = PrimaryKey(numBill)
 }
 
-object TaxRule : Table("TAX RULE") {
-  val idTaxe = integer("TAX ID").autoIncrement()
-  val taxName = varchar("TAX NAME", 20)
-  val rate = integer("TAX RATE IN %%")
+object TaxRule : Table("TAX_RULE") {
+  val idTaxe = integer("TAX_ID").autoIncrement()
+  val taxName = varchar("TAX_NAME", 20)
+  val rate = integer("TAX_RATE_IN_%")
 
   override val primaryKey = PrimaryKey(idTaxe)
 }

@@ -30,8 +30,8 @@ import org.kopi.galite.type.Image
 
 object ProductForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "product form"
-  val page = page("page")
+  override val title = "Products"
+  val page = page("Product")
   val action = menu("Action")
   val edit = menu("Edit")
   val autoFill = actor(
@@ -63,36 +63,36 @@ object ProductForm : ReportSelectionForm() {
   }
 }
 
-object BlockProduct : FormBlock(1, 1, "product block") {
+object BlockProduct : FormBlock(1, 1, "Products") {
   val u = table(Product)
 
   val idPdt = hidden(domain = Domain<Int>(20)) {
-    label = "product id"
-    help = "The product id"
+    label = "ID"
+    help = "The product ID"
     columns(u.idPdt)
   }
   val designation = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
-    label = "product designation"
+    label = "Designation"
     help = "The product designation"
     columns(u.designation)
   }
   val category = mustFill(domain = Category, position = at(2, 1)) {
-    label = "product category"
+    label = "Category"
     help = "The product category"
     columns(u.category)
   }
   val taxName = mustFill(domain = Tax, position = at(3, 1)) {
-    label = "Product tax name"
+    label = "Tax"
     help = "The product tax name"
     columns(u.taxName)
   }
   val price = visit(domain = Domain<Int>(20), position = at(4, 1)) {
-    label = "product price"
-    help = "The product price"
+    label = "Price"
+    help = "The product unit price excluding VAT"
     columns(u.price)
   }
   val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
-    label = "product image"
+    label = "Image"
     help = "The product image"
   }
 }
@@ -109,11 +109,12 @@ object Category : CodeDomain<String>() {
 
 object Tax : CodeDomain<String>() {
   init {
-    "Taux 19%" keyOf "tax 1"
-    "Taux 9%" keyOf "tax 2"
-    "Taux 13%" keyOf "tax 3"
-    "Taux 22%" keyOf "tax 4"
-    "Taux 11%" keyOf "tax 5"
+    "0%"  keyOf "tax 0"
+    "19%" keyOf "tax 1"
+    "9%" keyOf "tax 2"
+    "13%" keyOf "tax 3"
+    "22%" keyOf "tax 4"
+    "11%" keyOf "tax 5"
   }
 }
 

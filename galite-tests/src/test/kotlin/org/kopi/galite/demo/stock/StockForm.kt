@@ -21,7 +21,7 @@ import java.util.Locale
 import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.Provider
 import org.kopi.galite.demo.Stock
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.demo.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -30,8 +30,8 @@ import org.kopi.galite.report.Report
 
 object StockForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "stock form"
-  val page = page("page")
+  override val title = "Stocks"
+  val page = page("Stock")
   val action = menu("Action")
   val edit = menu("Edit")
   val autoFill = actor(
@@ -63,24 +63,24 @@ object StockForm : ReportSelectionForm() {
   }
 }
 
-object StockBlock : FormBlock(1, 1, "product block") {
+object StockBlock : FormBlock(1, 1, "Stock") {
   val u = table(Stock)
   val v = table(Product)
   val w = table(Provider)
 
   val idStckPdt = hidden(domain = Domain<Int>(20)) {
-    label = "product id"
-    help = "product id"
+    label = "Product_ID"
+    help = "The product ID"
     columns(u.idStckPdt, v.idPdt)
   }
   val idStckProv = hidden(domain = Domain<Int>(20)) {
-    label = "provider id"
-    help = "provider id"
+    label = "Provider_ID"
+    help = "The provider id"
     columns(u.idStckProv, w.idProvider)
   }
   val minAlert = mustFill(domain = Domain<Int>(20), position = at(1, 1)) {
-    label = "min alert"
-    help = "min alert"
+    label = "Min Alert"
+    help = "The stock's min alert"
     columns(u.idStckProv, w.idProvider)
   }
 }

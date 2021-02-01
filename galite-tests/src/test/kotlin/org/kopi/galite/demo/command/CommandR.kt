@@ -35,7 +35,7 @@ import org.kopi.galite.report.VReport
 object CommandR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "CommandReport"
+  override val title = "Commands_Report"
 
   val action = menu("Action")
 
@@ -104,32 +104,32 @@ object CommandR : Report() {
   }
 
   val numCmd = field(Domain<Int>(25)) {
-    label = "command number"
+    label = "Command number"
     help = "The command number"
     align = FieldAlignment.LEFT
 
   }
 
   val idClt = field(Domain<Int>(25)) {
-    label = "command client id"
-    help = "The command client id"
+    label = "Client ID"
+    help = "The command client ID"
     align = FieldAlignment.LEFT
 
   }
   val dateCmd = field(Domain<String>(50)) {
-    label = "command date"
+    label = "Command date"
     help = "The command date"
     align = FieldAlignment.LEFT
   }
 
   val paymentMethod = field(Payment) {
-    label = "payment method"
+    label = "Payment method"
     help = "The payment method"
     align = FieldAlignment.LEFT
   }
 
   val statusCmd = field(CommandStatus) {
-    label = "command status"
+    label = "Command status"
     help = "The command status"
     align = FieldAlignment.LEFT
   }

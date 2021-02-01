@@ -34,7 +34,7 @@ import org.kopi.galite.report.VReport
 object TaxRuleR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "TaxRule Report"
+  override val title = "TaxRules_Report"
 
   val action = menu("Action")
 
@@ -103,14 +103,14 @@ object TaxRuleR : Report() {
   }
 
   val taxName = field(Domain<String>(50)) {
-    label = "tax name"
+    label = "Name"
     help = "The tax name"
     align = FieldAlignment.LEFT
   }
 
   val rate = field(Domain<Int>(25)) {
-    label = "tax rate in %"
-    help = "tax rate in %"
+    label = "Rate in %"
+    help = "The tax rate in %"
     align = FieldAlignment.LEFT
   }
 

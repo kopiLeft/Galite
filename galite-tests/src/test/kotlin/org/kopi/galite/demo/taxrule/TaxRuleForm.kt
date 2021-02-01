@@ -28,8 +28,8 @@ import org.kopi.galite.report.Report
 
 object TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "TaxRule form"
-  val page = page("page")
+  override val title = "TaxRules"
+  val page = page("TaxRule")
   val action = menu("act")
   val report = actor(
           ident = "report",
@@ -54,22 +54,22 @@ object TaxRuleForm : ReportSelectionForm() {
   }
 }
 
-object TaxRuleBlock : FormBlock(1, 1, "tax rule block") {
+object TaxRuleBlock : FormBlock(1, 1, "TaxRule") {
   val u = table(TaxRule)
 
   val idTaxe = hidden(domain = Domain<Int>(20)) {
-    label = "tax id"
-    help = "The tax id"
+    label = "ID"
+    help = "The tax ID"
     columns(u.idTaxe)
   }
   val taxName = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
-    label = "tax name"
+    label = "Name"
     help = "The tax name"
     columns(u.taxName)
   }
   val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
-    label = "tax rate in %"
-    help = "tax rate in %"
+    label = "Rate in %"
+    help = "The tax rate in %"
     columns(u.rate)
   }
 }

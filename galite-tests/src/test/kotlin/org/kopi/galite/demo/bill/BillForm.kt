@@ -30,8 +30,8 @@ import org.kopi.galite.type.Decimal
 
 object BillForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "bill form"
-  val page = page("page")
+  override val title = "Bills"
+  val page = page("Bill")
   val action = menu("act")
   val report = actor(
           ident = "report",
@@ -56,32 +56,32 @@ object BillForm : ReportSelectionForm() {
   }
 }
 
-object BlockBill : FormBlock(1, 1, "block bill") {
+object BlockBill : FormBlock(1, 1, "Bills") {
   val u = table(Bill)
   val v = table(Command)
 
   val numBill = hidden(domain = Domain<Int>(20)) {
-    label = "bill number"
+    label = "Number"
     help = "The bill number"
     columns(u.numBill)
   }
   val addressBill = mustFill(domain = Domain<String>(30), position = at(1, 1)) {
-    label = "bill address"
+    label = "Address"
     help = "The bill address"
     columns(u.addressBill)
   }
   val dateBill = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
-    label = "bill date"
+    label = "Date"
     help = "The bill date"
     columns(u.dateBill)
   }
   val amountTTC = visit(domain = Domain<Decimal>(20), position = at(3, 1)) {
-    label = "bill amount to pay"
-    help = "bill amount to pay"
+    label = "Amount to pay"
+    help = "The bill amount to pay"
     columns(u.amountTTC)
   }
   val refCmd = visit(domain = Domain<Int>(20), position = at(4, 1)) {
-    label = "command reference"
+    label = "Command reference"
     help = "The command reference"
     columns(u.refCmd, v.numCmd)
   }

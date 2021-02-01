@@ -35,7 +35,7 @@ import org.kopi.galite.type.Decimal
 object BillR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "BillReport"
+  override val title = "Bills_Report"
 
   val action = menu("Action")
 
@@ -104,30 +104,30 @@ object BillR : Report() {
   }
 
   val numBill = field(Domain<Int>(25)) {
-    label = "bill number"
+    label = "Number"
     help = "The bill number"
     align = FieldAlignment.LEFT
   }
 
   val addressBill = field(Domain<String>(25)) {
-    label = "bill address"
+    label = "Address"
     help = "The bill address"
     align = FieldAlignment.LEFT
   }
   val dateBill = field(Domain<String>(25)) {
-    label = "bill date"
+    label = "Date"
     help = "The bill date"
     align = FieldAlignment.LEFT
   }
 
   val amountTTC = field(Domain<Decimal>(2)) {
-    label = "AMOUNT TTC TO PAY"
-    help = "The amount TTC to pay"
+    label = "Amount to pay"
+    help = "The amount including all taxes to pay"
     align = FieldAlignment.LEFT
   }
 
   val refCmd = field(Domain<Int>(50)) {
-    label = "command reference city"
+    label = "Command reference"
     help = "The command reference"
     align = FieldAlignment.LEFT
   }
