@@ -19,9 +19,7 @@ package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Type
-import java.math.BigDecimal
+import org.kopi.galite.type.Type0
 
 /**
  * This class represents a must-fill form field.
@@ -54,18 +52,8 @@ class MustFillFormField<T>(block: FormBlock,
    * @param joinColumns columns to use to make join between block tables
    * @param init        initialises the form field column properties (index, priority...)
    */
-  fun FormField<Decimal>.columns(vararg joinColumns: Column<BigDecimal>, init: (FormFieldColumns<Decimal>.() -> Unit)? = null) {
-    initColumn(*joinColumns, init = init)
-  }
-
-  /**
-   * Assigns [columns] to this field.
-   *
-   * @param joinColumns columns to use to make join between block tables
-   * @param init        initialises the form field column properties (index, priority...)
-   */
-  @JvmName("otherTypesColumns")
-  fun <V: Type<T, K>, K> FormField<V>.columns(vararg joinColumns: Column<K>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+  @JvmName("types0Columns")
+  fun <V: Type0<K>, K> FormField<V>.columns(vararg joinColumns: Column<K>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
     initColumn(*joinColumns, init = init)
   }
 }

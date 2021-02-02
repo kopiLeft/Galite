@@ -173,8 +173,8 @@ open class FormBlock(var buffer: Int,
    * @return a VISIT field.
    */
   inline fun <reified T> visit(domain: Domain<T>,
-                                                position: FormPosition,
-                                                init: NullableFormField<T?>.() -> Unit): FormField<T?> {
+                               position: FormPosition,
+                               init: NullableFormField<T>.() -> Unit): FormField<T?> {
     return initField(domain, init, VConstants.ACS_VISIT, position)
   }
 
@@ -189,7 +189,7 @@ open class FormBlock(var buffer: Int,
    */
   inline fun <reified T> skipped(domain: Domain<T>,
                                  position: FormPosition,
-                                 init: NullableFormField<T?>.() -> Unit): FormField<T?> {
+                                 init: NullableFormField<T>.() -> Unit): FormField<T?> {
     return initField(domain, init, VConstants.ACS_SKIPPED, position)
   }
 
@@ -202,23 +202,23 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T> hidden(domain: Domain<T>, init: NullableFormField<T?>.() -> Unit): FormField<T?> {
+  inline fun <reified T> hidden(domain: Domain<T>, init: NullableFormField<T>.() -> Unit): FormField<T?> {
     return initField(domain, init, VConstants.ACS_HIDDEN)
   }
 
   /**
    * Initializes a field.
    */
-  inline fun <reified T, K> initField(domain: Domain<T>,
-                                   init: NullableFormField<K>.() -> Unit,
+  inline fun <reified T> initField(domain: Domain<T>,
+                                   init: NullableFormField<T>.() -> Unit,
                                    access: Int,
-                                   position: FormPosition? = null): FormField<K> {
+                                   position: FormPosition? = null): FormField<T?> {
     initDomain(domain)
-    val field = NullableFormField(this, domain, blockFields.size, access, position) as NullableFormField<K>
+    val field = NullableFormField(this, domain, blockFields.size, access, position)
     field.init()
     field.initialize(this)
     blockFields.add(field)
-    return field
+    return field as FormField<T?>
   }
 
   inline fun <reified T> initDomain(domain: Domain<T>) {

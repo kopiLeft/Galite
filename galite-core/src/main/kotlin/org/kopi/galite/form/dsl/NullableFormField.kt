@@ -19,14 +19,13 @@ package org.kopi.galite.form.dsl
 
 import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.type.Type
-import java.math.BigDecimal
+import org.kopi.galite.type.Type0
 
 /**
  * This class represents a nullable form field(visit, skipped and hidden).
  *
  */
-class NullableFormField<T: Any?>(block: FormBlock,
+class NullableFormField<T>(block: FormBlock,
                            domain: Domain<T>,
                            fieldIndex: Int,
                            initialAccess: Int,
@@ -43,7 +42,7 @@ class NullableFormField<T: Any?>(block: FormBlock,
    * @param joinColumns columns to use to make join between block tables
    * @param init        initialises the form field column properties (index, priority...)
    */
-  fun <V: T> columns(vararg joinColumns: Column<V>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+  fun <V: T?> columns(vararg joinColumns: Column<V>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
     initColumn(*joinColumns, init = init)
   }
 
@@ -53,18 +52,8 @@ class NullableFormField<T: Any?>(block: FormBlock,
    * @param joinColumns columns to use to make join between block tables
    * @param init        initialises the form field column properties (index, priority...)
    */
-  fun <K: BigDecimal?> FormField<T>.columns(vararg joinColumns: Column<K>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
-    initColumn(*joinColumns, init = init)
-  }
-
-  /**
-   * Assigns [columns] to this field.
-   *
-   * @param joinColumns columns to use to make join between block tables
-   * @param init        initialises the form field column properties (index, priority...)
-   */
-  @JvmName("otherTypesColumns")
-  fun <V: Type<T, K>, K> FormField<T>.columns(vararg joinColumns: Column<K>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+  @JvmName("types0Columns")
+  fun <U: Type0<V>, V: Any, K: V?> FormField<U>.columns(vararg joinColumns: Column<K>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
     initColumn(*joinColumns, init = init)
   }
 }

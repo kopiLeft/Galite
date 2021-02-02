@@ -23,25 +23,9 @@ import java.util.Locale
 /**
  * This class is the super-class for types
  */
-abstract class Type<U, V> : Comparable<U> {
-  /**
-   * Compares two objects
-   */
-  abstract override fun equals(other: Any?): Boolean
-
+abstract class Type<U, V> : Type0<V>, Comparable<U> {
   /**
    * Format the object depending on the current language
    */
   override fun toString(): String = toString(Locale.getDefault())
-
-  /**
-   * Format the object depending on the current language
-   * @param    locale    the current language
-   */
-  abstract fun toString(locale: Locale): String
-
-  /**
-   * Represents the value in sql
-   */
-  abstract fun toSql(): Any
 }
