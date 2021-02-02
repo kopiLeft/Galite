@@ -52,7 +52,6 @@ class NullableFormField<T>(block: FormBlock,
    * @param joinColumns columns to use to make join between block tables
    * @param init        initialises the form field column properties (index, priority...)
    */
-  @JvmName("types0Columns")
   fun <U: Type0<V>, V: Any, K: V?> FormField<U>.columns(vararg joinColumns: Column<K>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
     initColumn(*joinColumns, init = init)
   }

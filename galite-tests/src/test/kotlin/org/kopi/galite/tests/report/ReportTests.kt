@@ -244,8 +244,8 @@ object SimpleReport : Report() {
   }
 
   val salary = field(Domain<Decimal>(width = 10, scale = 5)) {
-    label = "age"
-    help = "The user age"
+    label = "salary"
+    help = "The user salary"
     align = FieldAlignment.LEFT
     compute {
       // Computes the average of ages
