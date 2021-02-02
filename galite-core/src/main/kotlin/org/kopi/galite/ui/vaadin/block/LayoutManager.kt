@@ -47,7 +47,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
   /**
    * Layout the container.
    */
-  protected fun layout() {
+  internal fun layout() {
     handler!!.handleColSpan()
     handler!!.layout(layout)
   }
@@ -55,7 +55,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
   /**
    * Releases the content of this layout manager
    */
-  fun release() {
+  private fun release() {
     handler!!.release()
     handler = null
     layout = null
