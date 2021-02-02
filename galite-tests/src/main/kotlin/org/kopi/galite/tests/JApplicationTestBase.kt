@@ -18,17 +18,27 @@ package org.kopi.galite.tests
 
 import java.util.Locale
 
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.chart.VChart
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.Registry
+import org.kopi.vkopi.lib.ui.swing.chart.DChart
+import org.kopi.vkopi.lib.ui.swing.report.DReport
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
 
 /**
  * TestBase class for all tests.
  */
 open class JApplicationTestBase : DBSchemaTest() {
+
+  override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run(false) }
+
+  override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run(false) }
+
   class GaliteRegistry : Registry("Galite", null)
 
   class GaliteApplication() : JApplication(GaliteRegistry()) {

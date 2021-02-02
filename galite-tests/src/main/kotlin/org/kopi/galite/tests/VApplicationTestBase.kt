@@ -19,7 +19,12 @@ package org.kopi.galite.tests
 
 import java.util.Locale
 
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.chart.VChart
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.report.VReport
+import org.kopi.galite.ui.vaadin.chart.DChart
+import org.kopi.galite.ui.vaadin.report.DReport
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.Registry
 
@@ -27,6 +32,10 @@ import org.kopi.galite.visual.Registry
  * TestBase class for all tests.
  */
 open class VApplicationTestBase : TestBase() {
+  override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run() }
+
+  override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run() }
+
   class GaliteRegistry : Registry("Galite", null)
 
   class GaliteApplication : VApplication(GaliteRegistry()) {
