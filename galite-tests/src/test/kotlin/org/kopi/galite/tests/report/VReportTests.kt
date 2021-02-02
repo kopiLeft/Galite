@@ -16,20 +16,19 @@
  */
 package org.kopi.galite.tests.report
 
+import java.awt.event.KeyEvent
+import java.util.Locale
+
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.PConfig
 import org.kopi.galite.report.Report
-import org.kopi.galite.report.VCCDepthFirstCircuitN
-
 import org.kopi.galite.report.VReport
-import org.kopi.galite.report.VReportRow
-import org.kopi.galite.tests.VApplicationTestBase
+import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.VActor
-import java.awt.event.KeyEvent
-import java.util.*
-import kotlin.test.assertEquals
 
 /**
  *
@@ -37,30 +36,31 @@ import kotlin.test.assertEquals
  *
  * @see VReport
  */
-class VReportTests: VApplicationTestBase() {
+class VReportTests: JApplicationTestBase() {
 
   /**
    * Checks that f12 actor is the first report actor.
    */
   @Test
   fun reportVActorTest() {
-    val report = SimpleReport.model
-    val f12 = VActor("File",
-                     "org/kopi/galite/Window",
-                     "GotoShortcuts",
-                     "org/kopi/galite/Window",
-                     null,
-                     KeyEvent.VK_F12,
-                     0)
-            .also {
-              it.menuName = "Fichier"
-              it.menuItem = "Favoris"
-            }
+    withReport(SimpleReport()) {
+      val f12 = VActor("File",
+                       "org/kopi/galite/Window",
+                       "GotoShortcuts",
+                       "org/kopi/galite/Window",
+                       null,
+                       KeyEvent.VK_F12,
+                       0)
+              .also {
+                it.menuName = "Fichier"
+                it.menuItem = "Favoris"
+              }
 
-    // Actor checks
-    assertEquals(f12, report.actors[0])
-    assertEquals(f12, report.actors[0])
-    assertEquals(-8, report.actors[0]!!.number)
+      // Actor checks
+      assertEquals(f12, model.actors[0])
+      assertEquals(f12, model.actors[0])
+      assertEquals(-8, model.actors[0]!!.number)
+    }
   }
 
   /**
@@ -68,11 +68,12 @@ class VReportTests: VApplicationTestBase() {
    */
   @Test
   fun reportSourceTitleTest() {
-    val report = SimpleReport.model
-    assertEquals("org/kopi/galite/tests/report/SimpleReport", report.source)
-    assertEquals("SimpleReport", report.getTitle())
-    assertEquals(null, report.smallIcon)
-    assertEquals(PConfig(), report.printOptions)
+    withReport(SimpleReport()) {
+      assertEquals("org/kopi/galite/tests/report/SimpleReport", model.source)
+      assertEquals("SimpleReport", model.getTitle())
+      assertEquals(null, model.smallIcon)
+      assertEquals(PConfig(), model.printOptions)
+    }
   }
 
   /**
@@ -80,31 +81,32 @@ class VReportTests: VApplicationTestBase() {
    */
   @Test
   fun vmodelTest() {
-    val model = SimpleReport.model.model
-    val id = model.columns[0]!!
-    val name = model.columns[1]!!
+    withReport(SimpleReport()) { mReport ->
+      val id = mReport.columns[0]!!
+      val name = mReport.columns[1]!!
 
-    // Columns checks
-    assertEquals("ANM_1", name.ident)
-    assertEquals("name", name.label)
-    assertEquals("The user name", name.help)
-    assertEquals(Constants.CLO_VISIBLE, name.options)
-    assertEquals(Constants.ALG_DEFAULT, name.align)
-    assertEquals(-1, name.groups)
-    assertEquals(null, name.function)
-    assertEquals(true, name.visible)
-    assertEquals(false, name.folded)
-   // assertEquals(0, name.width) TODO
-   // assertEquals(0, name.height) TODO
-    assertEquals(true, id.isHidden())
-   // assertEquals(0, name.width) TODO
-   // assertEquals(0, name.height) TODO
+      // Columns checks
+      assertEquals("ANM_1", name.ident)
+      assertEquals("name", name.label)
+      assertEquals("The user name", name.help)
+      assertEquals(Constants.CLO_VISIBLE, name.options)
+      assertEquals(Constants.ALG_DEFAULT, name.align)
+      assertEquals(-1, name.groups)
+      assertEquals(null, name.function)
+      assertEquals(true, name.visible)
+      assertEquals(false, name.folded)
+      // assertEquals(0, name.width) TODO
+      // assertEquals(0, name.height) TODO
+      assertEquals(true, id.isHidden())
+      // assertEquals(0, name.width) TODO
+      // assertEquals(0, name.height) TODO
+    }
   }
 
   /**
    * Simple Report with two fields.
    */
-  object SimpleReport : Report() {
+  class SimpleReport : Report() {
     override val locale = Locale.FRANCE
 
     override val title = "SimpleReport"
