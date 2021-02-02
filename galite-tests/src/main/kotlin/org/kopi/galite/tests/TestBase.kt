@@ -21,11 +21,11 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.chart.UChart
 import org.kopi.galite.chart.VChart
-import org.kopi.galite.report.MReport
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VReport
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 /**
  * TestBase class for all tests.
@@ -53,7 +53,9 @@ open class TestBase {
    * @param operations operations to apply on the report
    */
   fun <T: Report> withReport(report: T, operations: (T.(model: VReport) -> Unit)? = null) {
-    val display = getReportDisplay(report.model) ?: throw Exception("Display is null")
+    val display = getReportDisplay(report.model)
+
+    assertNotNull(display)
 
     report.model.setDisplay(
             (display as UReport)
@@ -62,7 +64,6 @@ open class TestBase {
     if (operations != null) {
       report.operations(report.model)
     }
-    report.model.model = MReport()
   }
 
   /**
@@ -72,7 +73,9 @@ open class TestBase {
    * @param operations operations to apply on the chart
    */
   fun <T: Chart> withChart(chart: T, operations: (T.(model: VChart) -> Unit)? = null) {
-    val display = getChartDisplay(chart.model) ?: throw Exception("Display is null")
+    val display = getChartDisplay(chart.model)
+
+    assertNotNull(display)
 
     chart.model.setDisplay(
             (display as UChart)
