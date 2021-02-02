@@ -20,6 +20,8 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.`java-time`.date
+import org.jetbrains.exposed.sql.`java-time`.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -31,14 +33,18 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Image
+import org.kopi.galite.type.Month
+import org.kopi.galite.type.Timestamp
 
 object Product : Table() {
-  val id = integer("ID").autoIncrement()
+  val id = integer("ID").autoIncrement().nullable()
   val uc = integer("UC")
   val ts = integer("TS")
   val name = varchar("NAME", 10)
-  val price = decimal("PRICE", 10, 5)
-  val image = blob("image")
+  val price = decimal("PRICE", 10, 5).nullable()
+  val image = blob("IMAGE")
+  val date = timestamp("MAN_DATE")
+  val month = date("EXP_MONTH").nullable()
 }
 
 object FormWithSpecialTypes : Form() {
@@ -126,12 +132,26 @@ class BlockWithSpecialTypes : FormBlock(1, 1, "Test block") {
     columns(p.image)
   }
 
+  val date = mustFill(domain = Domain<Timestamp>(), position = at(2, 1)) {
+    label = "Date"
+    help = "The date of manufacturing"
+    columns(p.date)
+  }
+
+  val expiration = visit(domain = Domain<Month>(), position = at(3, 1)) {
+    label = "Expiration"
+    help = "The expiration month"
+    columns(p.month)
+  }
+
   init {
     price.value = Decimal.valueOf("2")
     id.value = 1
     uc.value = 0
     ts.value = 0
-
+    expiration.value = null
+    date.value = Timestamp.now()
+    expiration.value = Month.now()
   }
 }
 

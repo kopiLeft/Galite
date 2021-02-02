@@ -49,9 +49,9 @@ import org.kopi.galite.type.Week
  * @param height            the height in char of this field
  * @param visibleHeight     the visible height in char of this field.
  */
-open class Domain<T : Comparable<T>?>(val width: Int? = null,
-                                      val height: Int? = null,
-                                      val visibleHeight: Int? = null) {
+open class Domain<T>(val width: Int? = null,
+                     val height: Int? = null,
+                     val visibleHeight: Int? = null) {
   companion object {
     operator fun <T: Decimal?> invoke(width: Int, scale: Int): Domain<Decimal> =
             Domain(width, scale, null)
@@ -99,16 +99,6 @@ open class Domain<T : Comparable<T>?>(val width: Int? = null,
       }
     }
   }
-
-  /**
-   * returns true if this domain is a code domain, false otherwise
-   */
-  private fun isCodeDomain(): Boolean = this is CodeDomain<T>
-
-  /**
-   * returns true if this domain is a list domain, false otherwise
-   */
-  private fun isListDomain(): Boolean = this is ListDomain<T>
 
   /**
    * Returns the default alignment

@@ -20,6 +20,7 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -30,10 +31,14 @@ import java.util.regex.Pattern
 /**
  * This class represents date types
  */
-open class Date : Type<Date> {
+open class Date : Type<Date, LocalDate> {
 
   constructor(year: Int, month: Int, day: Int) {
     scalar = gregorianToJulian(year, month, day)
+  }
+
+  constructor(date: LocalDate) {
+    scalar = gregorianToJulian(date.year, date.monthValue, date.dayOfMonth)
   }
 
   constructor(date: java.sql.Date) {

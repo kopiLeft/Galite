@@ -28,7 +28,7 @@ import java.time.Instant
 /**
  * This class represents kopi timestamp types
  */
-class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp>() {
+class Timestamp(val sqlTimestamp: java.sql.Timestamp) : Type<Timestamp, Instant>() {
 
   constructor(string: String) : this(java.sql.Timestamp.valueOf(string))
 

@@ -23,7 +23,7 @@ import java.util.Locale
 /**
  * This class is the super-class for types
  */
-abstract class Type<T> : Comparable<T> {
+abstract class Type<U, V> : Comparable<U> {
   /**
    * Compares two objects
    */

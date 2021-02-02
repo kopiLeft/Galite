@@ -23,7 +23,7 @@ import java.util.Locale
 /**
  * This class represents image types
  */
-class Image(val width: Int, val height: Int, var value: ExposedBlob) : Type<Image>() {
+class Image(val width: Int, val height: Int, var value: ExposedBlob) : Type<Image, ExposedBlob>() {
 
   /**
    * Compares two objects

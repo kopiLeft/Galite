@@ -37,7 +37,7 @@ class FormSampleTests: JApplicationTestBase() {
     assertEquals(1, FormSample.tb4ToTestChangeBlockAccess.vBlock.getAccess())
 
     assertArrayEquals(intArrayOf(0, 0, 0), FormSample.tb4ToTestChangeBlockAccess.id.access)
-    assertArrayEquals(intArrayOf(1, 1, 4), FormSample.tb4ToTestChangeBlockAccess.name.access)
+    assertArrayEquals(intArrayOf(1, 1, 2), FormSample.tb4ToTestChangeBlockAccess.name.access)
     assertArrayEquals(intArrayOf(1, 1, 4), FormSample.tb4ToTestChangeBlockAccess.password.access)
     assertArrayEquals(intArrayOf(1, 1, 2), FormSample.tb4ToTestChangeBlockAccess.age.access)
   }
