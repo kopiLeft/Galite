@@ -16,6 +16,11 @@
  */
 package org.kopi.galite.tests.report
 
+import java.awt.event.KeyEvent
+import java.util.Locale
+
+import kotlin.test.assertEquals
+
 import org.junit.Test
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Constants
@@ -24,9 +29,6 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.JApplicationTestBase
 import org.kopi.galite.visual.VActor
-import java.awt.event.KeyEvent
-import java.util.*
-import kotlin.test.assertEquals
 
 /**
  *
@@ -41,7 +43,7 @@ class VReportTests: JApplicationTestBase() {
    */
   @Test
   fun reportVActorTest() {
-    withReport(SimpleReport()) { model ->
+    withReport(SimpleReport()) {
       val f12 = VActor("File",
                        "org/kopi/galite/Window",
                        "GotoShortcuts",
@@ -66,7 +68,7 @@ class VReportTests: JApplicationTestBase() {
    */
   @Test
   fun reportSourceTitleTest() {
-    withReport(SimpleReport()) { model ->
+    withReport(SimpleReport()) {
       assertEquals("org/kopi/galite/tests/report/SimpleReport", model.source)
       assertEquals("SimpleReport", model.getTitle())
       assertEquals(null, model.smallIcon)
@@ -79,10 +81,9 @@ class VReportTests: JApplicationTestBase() {
    */
   @Test
   fun vmodelTest() {
-    withReport(SimpleReport()) { model ->
-      val model = model.model
-      val id = model.columns[0]!!
-      val name = model.columns[1]!!
+    withReport(SimpleReport()) { mReport ->
+      val id = mReport.columns[0]!!
+      val name = mReport.columns[1]!!
 
       // Columns checks
       assertEquals("ANM_1", name.ident)

@@ -17,15 +17,17 @@
 
 package org.kopi.galite.tests
 
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.chart.UChart
 import org.kopi.galite.chart.VChart
+import org.kopi.galite.report.MReport
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VReport
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 /**
  * TestBase class for all tests.
@@ -52,7 +54,7 @@ open class TestBase {
    * @param report The report to test
    * @param operations operations to apply on the report
    */
-  fun <T: Report> withReport(report: T, operations: (T.(model: VReport) -> Unit)? = null) {
+  fun <T: Report> withReport(report: T, operations: (T.(mReport: MReport) -> Unit)? = null) {
     val display = getReportDisplay(report.model)
 
     assertNotNull(display)
@@ -62,7 +64,7 @@ open class TestBase {
     )
 
     if (operations != null) {
-      report.operations(report.model)
+      report.operations(report.model.model)
     }
   }
 
