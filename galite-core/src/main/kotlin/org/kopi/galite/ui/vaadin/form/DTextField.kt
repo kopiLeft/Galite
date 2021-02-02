@@ -32,6 +32,7 @@ open class DTextField(model: VFieldUI,
                       detail: Boolean) : DField(model, label, align, options, detail), UTextField {
 
   init {
+    maxWidth = "" + model.model.width + "em"
     setTextField(TextField())
   }
 

@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.block
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.formlayout.FormLayout
+import org.kopi.galite.ui.vaadin.base.Styles
 
 /**
  * An abstract implementation for the block layout.
@@ -36,6 +37,10 @@ abstract class AbstractBlockLayout protected constructor(val col: Int, val line:
    * This is a special hidden for use in multiple block layout.
    */
   constructor() : this(1, 1)
+
+  init {
+    className = Styles.BLOCK_LAYOUT
+  }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

@@ -21,17 +21,12 @@ import com.vaadin.flow.component.Component
 
 /**
  * A simple block layout manager. This class aims to correct component positions in case of
- * column and row span. In fact, GWT flexible table does not handle correctly the indexes
- * of components in case of a columns and rows span. For example, a column span of 2 in the first
- * column will lead to index the normally third column to the second column.
- *
- * [(0,1) - (0,2) - (0, 3)] : if we span the first and the second column, GWT re-index the third
- * column to the second one and the configuration become : [(0,1) - (..) - (0, 2)]
- *
- * This behavior causes a lot of problems in the simple block layout. This class aims to correct these
- * kind of problems.
+ * column and row span.
  */
 class LayoutManager(private var layout: AbstractBlockLayout?) {
+
+  private var handler: ConstraintsHandler? = ConstraintsHandler()
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -52,7 +47,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
   /**
    * Layout the container.
    */
-  fun layout() {
+  protected fun layout() {
     handler!!.handleColSpan()
     handler!!.layout(layout)
   }
@@ -74,6 +69,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
   class ConstraintWrapper(val constraint: ComponentConstraint,
                           colSpan: Int,
                           rowSpan: Int) {
+
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
@@ -100,6 +96,8 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
    * A component constraints wrapper
    */
   class ConstraintsHandler {
+    private var constraints: MutableList<ConstraintWrapper>? = mutableListOf()
+
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
@@ -180,26 +178,5 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
       constraints!!.clear()
       constraints = null
     }
-
-    //---------------------------------------
-    // DATA MEMBERS
-    //---------------------------------------
-    private var constraints: MutableList<ConstraintWrapper>?
-
-    //---------------------------------------
-    // CONSTRUCTOR
-    //---------------------------------------
-    init {
-      constraints = ArrayList()
-    }
-  }
-
-  private var handler: ConstraintsHandler?
-
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  init {
-    handler = ConstraintsHandler()
   }
 }
