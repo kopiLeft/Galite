@@ -23,7 +23,6 @@ import org.kopi.galite.report.PConfig
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.JApplicationTestBase
-import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VActor
 import java.awt.event.KeyEvent
 import java.util.*
@@ -42,7 +41,6 @@ class VReportTests: JApplicationTestBase() {
    */
   @Test
   fun reportVActorTest() {
-    UIFactory.uiFactory
     withReport(SimpleReport()) { model ->
       val f12 = VActor("File",
                        "org/kopi/galite/Window",
