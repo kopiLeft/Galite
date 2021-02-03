@@ -205,7 +205,7 @@ abstract class Chart : Window() {
       (model as VChart).setType(value)
     }
 
-  override val model: VWindow by lazy {
+  override val model: VChart by lazy {
     genLocalization()
 
     object : VChart() {
