@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,15 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.exceptions
+package org.kopi.galite.type
+
+import java.util.Locale
 
 /**
- * Thrown to indicate that an invalid value has been passed to a field.
- *
- * @param value to pass
- * @param label the field's label
- *
+ * This class is the super-class for types
  */
-class InvalidValueException(value: Comparable<*>?, label: String?) : RuntimeException() {
-  override val message = "invalid value $value for the field $label"
+interface Type0<T> {
+  /**
+   * Compares two objects
+   */
+  override fun equals(other: Any?): Boolean
+
+  /**
+   * Format the object depending on the current language
+   * @param    locale    the current language
+   */
+  fun toString(locale: Locale): String
+
+  /**
+   * Represents the value in sql
+   */
+  fun toSql(): Any
 }

@@ -19,10 +19,8 @@ package org.kopi.galite.tests.domain
 
 import org.junit.Test
 import org.kopi.galite.domain.CodeDomain
-import org.kopi.galite.report.ReportField
 
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 /**
  * Contains tests of code-domain creation and manipulation
@@ -55,29 +53,4 @@ class CodeDomainTests {
     assertEquals("cde2", codes[1].label)
     assertEquals(2L, codes[1].value)
   }
-
-  /**
-   * Tests making check on Code Domain
-   *
-   * must fails with UnsupportedOperationException because convertUpper
-   * is used only with List Domain
-   */
-  @Test
-  fun applyConvertCheckOnCodeDomainTest() {
-    // Declaration of the domain with length
-    class StringTestType : CodeDomain<String>() {
-      init {
-        "cde1" keyOf "1"
-      }
-    }
-
-    // Creating a field with the domain StringTestType
-    val field = ReportField(StringTestType().also { it.kClass = String::class }, "", {})
-
-    // test check
-    assertFailsWith<UnsupportedOperationException> {
-      field.checkValue("Abcdef")
-    }
-  }
-
 }

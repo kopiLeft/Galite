@@ -26,7 +26,7 @@ import java.util.Locale
 /**
  * This class represents the decimal type
  */
-class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
+class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal>, Type0<BigDecimal> {
   constructor(b: BigInteger) : this(BigDecimal(b))
 
   constructor(value: Long, scale: Int) : this(BigDecimal.valueOf(value, scale))
@@ -175,7 +175,7 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
    * Format the object depending on the current language
    * @param    locale    the current language
    */
-  fun toString(locale: Locale?): String {
+  override fun toString(locale: Locale): String {
     val str = value.toString()
     var pos = 0
     var dot: Int
@@ -225,7 +225,7 @@ class Decimal(var value: BigDecimal) : Number(), Comparable<Decimal> {
   /**
    * Represents the value in sql
    */
-  fun toSql(): BigDecimal = value
+  override fun toSql(): BigDecimal = value
 
   // ----------------------------------------------------------------------
   // IMPLEMENTATION OF NUMBER

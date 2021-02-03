@@ -42,7 +42,7 @@ class BlockWithFields : FormBlock(1, 1, "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = visit(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
@@ -50,7 +50,7 @@ class BlockWithFields : FormBlock(1, 1, "Test block") {
       "example"
     }
   }
-  val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
+  val age = skipped(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     columns(u.age) {
