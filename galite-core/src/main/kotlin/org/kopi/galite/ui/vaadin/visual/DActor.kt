@@ -96,15 +96,13 @@ class DActor(private var model: VActor) : Actor(model.menuItem,
      * @param acceleratorModifier The original modifier accelerator key.
      * @return The corrected modifier accelerator key.
      */
-    private fun correctAcceleratorModifier(acceleratorModifier: Int): KeyModifier {
-      var correctAcceleratorModifier = KeyModifier.of("Unidentified")
+    private fun correctAcceleratorModifier(acceleratorModifier: Int): KeyModifier? =
       when (acceleratorModifier) {
-        Event.SHIFT_MASK -> correctAcceleratorModifier = KeyModifier.of("Shift")
-        Event.ALT_MASK -> correctAcceleratorModifier = KeyModifier.of("Alt")
-        Event.CTRL_MASK -> correctAcceleratorModifier = KeyModifier.of("Control")
-        Event.META_MASK -> correctAcceleratorModifier = KeyModifier.of("Meta")
+        Event.SHIFT_MASK -> KeyModifier.of("Shift")
+        Event.ALT_MASK -> KeyModifier.of("Alt")
+        Event.CTRL_MASK -> KeyModifier.of("Control")
+        Event.META_MASK -> KeyModifier.of("Meta")
+        else -> null
       }
-      return correctAcceleratorModifier
-    }
   }
 }

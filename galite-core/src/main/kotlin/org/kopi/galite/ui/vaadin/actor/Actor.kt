@@ -37,7 +37,7 @@ open class Actor(val caption: String?,
                  val menu: String,
                  val icon: String?,
                  val acceleratorKey: Key,
-                 vararg modifiersKey: KeyModifier) : Button(), HasEnabled {
+                 val modifiersKey: KeyModifier?) : Button(), HasEnabled {
 
   init {
     super.setText(caption)
@@ -48,10 +48,8 @@ open class Actor(val caption: String?,
       super.setIcon(img)
     }
 
-    super.addClickShortcut(acceleratorKey)
-
-    if (!modifiersKey.contains("UNIDENTIFIED")) {
-      super.addClickShortcut(acceleratorKey, *modifiersKey)
+    if (modifiersKey != null) {
+      super.addClickShortcut(acceleratorKey, modifiersKey)
     } else {
       super.addClickShortcut(acceleratorKey)
     }
