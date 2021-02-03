@@ -30,19 +30,20 @@ import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 
-
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
  */
 abstract class DWindow protected constructor(private val model: VWindow) : Div(), UWindow {
+  var actors : VActorPanel = VActorPanel()
 
-  private val actors = VActorPanel()
-
+  init {
+    add(actors)
+  }
   override fun onAttach(attachEvent: AttachEvent?) {
     model.actors.forEach { actor ->
       val dActor = DActor(actor!!)
 
-      if (dActor.icon != null ) {
+      if (dActor.icon != null) {
         dActor.isEnabled = isEnabled
         addActor(dActor)
       }

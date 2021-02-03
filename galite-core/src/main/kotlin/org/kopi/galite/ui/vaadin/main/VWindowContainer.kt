@@ -40,7 +40,6 @@ internal class VWindowContainer : Div() {
   private var currentWindow : Component? = null
   private val pane = Div()
   private val caption: VCaption
-  val actors = VActorPanel()
 
   //---------------------------------------------------
   // CONSTRUCTOR
@@ -49,7 +48,6 @@ internal class VWindowContainer : Div() {
     val captionWrapper = Div()
     className = "k-window-container"
     pane.className = "k-container-pane"
-    pane.add(actors)
     caption = VCaption(false)
     caption.className = "k-window-caption"
     captionWrapper.setId("session")
