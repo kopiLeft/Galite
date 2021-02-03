@@ -249,7 +249,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     dl.init(model.label, model.toolTip)
 
     if (dlDetail != null) {
-      dl!!.init(model.label, model.toolTip)
+      dl.init(model.label, model.toolTip)
     }
   }
 
@@ -392,14 +392,14 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
           dlDetail = createLabel(model.label, model.toolTip, true)
           if (columnEnd >= 0) {
             (getBlock().display as UMultiBlock).addToDetail(dlDetail,
-                                                            Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
+                                                            Alignment(column * fieldComponentsNumber - 2, line - 1, 1, 1, false, true))
           }
           // field for the value in the detail view
           detailDisplay = createDisplay(dlDetail, model, true)
           (getBlock().display as UMultiBlock).addToDetail(detailDisplay,
-                                                          Alignment(column * 2 - 1, line - 1,
-                                                                    (columnEnd - column) * 2 + 1,
-                                                                    (lineEnd - line) * 2 + 1, false))
+                                                          Alignment(column * fieldComponentsNumber - 1, line - 1,
+                                                                    (columnEnd - column) * fieldComponentsNumber + 1,
+                                                                    (lineEnd - line) * fieldComponentsNumber + 1, false))
           detailDisplay!!.setPosition(0)
           detailDisplay!!.setInDetail(true)
         }
@@ -416,9 +416,9 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       } else if (column < 0) {
         // multifields (special fields)
         // take care that in this row is only this multifield
-        blockView.add(dl, MultiFieldAlignment(columnEnd * 2 - 1, line - 1, 1, 1, true))
+        blockView.add(dl, MultiFieldAlignment(columnEnd * fieldComponentsNumber - 1, line - 1, 1, 1, true))
         displays = arrayOf(createDisplay(dl, model, false))
-        blockView.add(displays[0]!!, MultiFieldAlignment(columnEnd * 2 - 1,
+        blockView.add(displays[0]!!, MultiFieldAlignment(columnEnd * fieldComponentsNumber - 1,
                                                          line,
                                                          1,
                                                          lineEnd - line + 1,
@@ -429,15 +429,15 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         displays = arrayOf(createDisplay(dl, model, false))
         if (columnEnd >= 0 && displays[0] !is UActorField) {
           // not an info field and not an actor field  => show label
-          blockView.add(dl, Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
+          blockView.add(dl, Alignment(column * fieldComponentsNumber - 2, line - 1, 1, 1, false, true))
         }
         if (displays[0] is UActorField) {
           // an actor field takes the label and the field space
           blockView.add(displays[0]!!,
-                        Alignment(column * 2 - 2, line - 1, (columnEnd - column) * 2 + 2, lineEnd - line + 1, false))
+                        Alignment(column * fieldComponentsNumber - 2, line - 1, (columnEnd - column) * fieldComponentsNumber + 2, lineEnd - line + 1, false))
         } else {
           blockView.add(displays[0]!!,
-                        Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, lineEnd - line + 1, false))
+                        Alignment(column * fieldComponentsNumber - 1, line - 1, (columnEnd - column) * fieldComponentsNumber + 1, lineEnd - line + 1, false))
         }
         displays[0]!!.setPosition(0)
         displays[0]!!.updateText()
@@ -451,6 +451,11 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     fireDisplayCreated()
     // building = false;
   }
+
+  /**
+   * Number of components to represent a field. Default is 2 = (field + label)
+   */
+  protected open val fieldComponentsNumber get() = 2
 
   /**
    * Returns the displayed size of this column.

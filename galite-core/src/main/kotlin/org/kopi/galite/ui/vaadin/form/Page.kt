@@ -18,11 +18,14 @@
 package org.kopi.galite.ui.vaadin.form
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VScrollablePanel
+import org.kopi.galite.ui.vaadin.block.Block
 
 /**
  * A form page, can be either or vertical or horizontal page.
@@ -70,5 +73,48 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
       add(child, align)
     }
     last = null
+  }
+
+  /**
+   * Sets the block caption.
+   * @param block The block widget.
+   */
+  fun setCaption(block: Block) {
+    setCaption(content, block)
+  }
+
+  /**
+   * Sets the block caption.
+   * @param content The caption container.
+   * @param block The block widget.
+   */
+  protected fun <T> setCaption(content: T, block: Block) where T: Component, T: FlexComponent {
+    val caption = block.caption
+    if (caption != null) {
+      if (content is HorizontalLayout) {
+        // wrap it in a vertical content before
+        val temp = VerticalLayout()
+        val index: Int = content.indexOf(block)
+        temp.className = "k-centered-page-wrapper"
+        temp.add(caption)
+        temp.add(block)
+        (content as HorizontalLayout).addComponentAtIndex(index, temp)
+      } else if (content is VerticalLayout) {
+        val index: Int = content.indexOf(block)
+        if (index >= 0) {
+          (content as VerticalLayout).addComponentAtIndex(index, caption)
+        } else {
+          // it is a follow block
+          for (i in 0 until content.componentCount) {
+            if (content.getComponentAt(i) != null
+                    && "follow-blocks-container" == (content.getComponentAt(i) as HasStyle).className) {
+              setCaption(content.getComponentAt(i) as T, block)
+            }
+          }
+        }
+      } else {
+        content.add(caption) // not really suitable.
+      }
+    }
   }
 }

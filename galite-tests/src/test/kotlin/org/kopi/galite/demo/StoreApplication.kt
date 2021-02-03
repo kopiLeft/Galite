@@ -43,8 +43,9 @@ object Client : Table("CLIENTS") {
   val fstnameClt = varchar("CLIENT FIRSTNAME", 25)
   val addressClt = varchar("CLIENT ADDRESS", 50)
   val ageClt = integer("CLIENT AGE")
+  val countryClt = varchar("CLIENT_COUNTRY", 30)
   val cityClt = varchar("CLIENT CITY", 30)
-  val postalCodeClt = integer("CLIENT POSTAL CODE")
+  val zipCodeClt = integer("CLIENT_POSTAL_CODE")
 
   override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
 }
@@ -208,19 +209,20 @@ fun initUserRights(user: String = DBSchemaTest.connectedUser) {
 }
 
 fun addClients() {
-  addClient(0, "Salah", "Mohamed", "10,Rue du Lac", "Megrine", 2001, 40)
-  addClient(1, "Guesmi", "Khaled", "14,Rue Mongi Slim", "Tunis", 6000, 35)
-  addClient(2, "Bouaroua", "Ahmed", "10,Rue du Lac", "Mourouj", 5003, 22)
+  addClient(0, "Salah", "Mohamed", "10,Rue du Lac", "Tunisia", "Megrine", 2001, 40)
+  addClient(1, "Guesmi", "Khaled", "14,Rue Mongi Slim", "Tunisia", "Tunis", 6000, 35)
+  addClient(2, "Bouaroua", "Ahmed", "10,Rue du Lac", "Tunisia", "Mourouj", 5003, 22)
 }
 
-fun addClient(id: Int, name: String, fstName: String, address: String, city: String, postalCode: Int, age: Int) {
+fun addClient(id: Int, name: String, fstName: String, address: String, country: String, city: String, postalCode: Int, age: Int) {
   Client.insert {
     it[idClt] = id
     it[nameClt] = name
     it[fstnameClt] = fstName
     it[addressClt] = address
     it[cityClt] = city
-    it[postalCodeClt] = postalCode
+    it[countryClt] = country
+    it[zipCodeClt] = postalCode
     it[ageClt] = age
   }
 }

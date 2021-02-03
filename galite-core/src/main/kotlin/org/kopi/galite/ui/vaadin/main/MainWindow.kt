@@ -19,18 +19,11 @@ package org.kopi.galite.ui.vaadin.main
 
 import java.util.Locale
 
-import kotlin.collections.MutableList
-
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
 import org.kopi.galite.ui.vaadin.common.VMain
 import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.ui.vaadin.visual.DAdminMenu
-import org.kopi.galite.ui.vaadin.visual.DBookmarkMenu
-import org.kopi.galite.ui.vaadin.visual.DMainMenu
-import org.kopi.galite.ui.vaadin.visual.DMenu
-import org.kopi.galite.ui.vaadin.visual.DUserMenu
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
@@ -232,7 +225,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
       l.onUser()
     }
   }
-
 
   /**
    * Sets the href for the anchor element.

@@ -19,8 +19,7 @@ package org.kopi.galite.ui.vaadin.field
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.html.Div
 
 /**
  * The field component. Contains one text input field or other component
@@ -30,11 +29,20 @@ import com.vaadin.flow.component.HasEnabled
  * @param hasDecrement has decrement button ?
  * TODO: Implement this class with appropriate component
  */
-open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Component(), HasEnabled {
+open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+
+  /**
+   * Sets the text input widget.
+   * @param textField The input widget.
+   */
+  open fun setTextField(textField: TextField) {
+    addComponentAsFirst(textField) // add it at first position.
+  }
+
   /**
    * Sets the default access of the field.
    * @param defaultAccess The field default access.
@@ -237,14 +245,6 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Component(), Ha
     for (l in listeners) {
       l.fireAction()
     }
-  }
-
-  override fun setVisible(visible: Boolean) {
-    TODO()
-  }
-
-  override fun isVisible(): Boolean {
-    TODO()
   }
 
   /**

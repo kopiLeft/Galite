@@ -32,7 +32,7 @@ class DActorField(model: VFieldUI,
                   align: Int,
                   options: Int,
                   detail: Boolean)
-  : DField(model, label, align, options, detail), UActorField, ClickNotifier<DActorField> {
+  : DField(model, label, align, options, detail), UActorField {
 
   // --------------------------------------------------
   // IMPLEMENTATION
