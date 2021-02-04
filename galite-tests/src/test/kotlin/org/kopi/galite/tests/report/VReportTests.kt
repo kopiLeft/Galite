@@ -18,6 +18,7 @@ package org.kopi.galite.tests.report
 
 import java.awt.event.KeyEvent
 import java.io.FileInputStream
+import java.io.File
 import java.util.Scanner
 import java.util.Locale
 
@@ -80,44 +81,58 @@ class VReportTests: JApplicationTestBase() {
   }
 
   /**
+   * Reading Excel file.
+   */
+  fun readExcelFile(file: File, type: Int) : String {
+    var result = ""
+
+    try {
+      val file = FileInputStream(file)
+      val workbook = if(type == TYP_XLS) {
+        //Create Workbook instance holding reference to .xls file
+        HSSFWorkbook(file) //xls
+      } else {
+        //Create Workbook instance holding reference to .xlsx file
+        XSSFWorkbook(file) // xlsx
+      }
+
+      //Get first/desired sheet from the workbook
+      val sheet = workbook.getSheetAt(0)
+
+      //Iterate through each rows one by one
+      val rowIterator: Iterator<Row> = sheet.iterator()
+
+      while (rowIterator.hasNext()) {
+        val row: Row = rowIterator.next()
+        //For each row, iterate through all the columns
+        val cellIterator: Iterator<Cell> = row.cellIterator()
+        while (cellIterator.hasNext()) {
+          val cell: Cell = cellIterator.next()
+          when (cell.cellType) {
+            CellType.NUMERIC -> result += cell.numericCellValue.toString() + "  "
+            CellType.STRING -> result += cell.stringCellValue.toString() + "  "
+          }
+        }
+        result += ""
+      }
+      file.close()
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+
+    return result
+  }
+  /**
    * Checks that export report as XLS working correctly.
    */
   @Test
   fun exportFile_XLS() {
     withReport(SimpleReport()) {
       val file = Utils.getTempFile("galite", "xls")
-      var result = ""
 
       model.export(file, TYP_XLS)
 
-      try {
-        val file = FileInputStream(file)
-
-        //Create Workbook instance holding reference to .xls file
-        val workbook = HSSFWorkbook(file) //xls
-        //Get first/desired sheet from the workbook
-        val sheet = workbook.getSheetAt(0)
-
-        //Iterate through each rows one by one
-        val rowIterator: Iterator<Row> = sheet.iterator()
-
-        while (rowIterator.hasNext()) {
-          val row: Row = rowIterator.next()
-          //For each row, iterate through all the columns
-          val cellIterator: Iterator<Cell> = row.cellIterator()
-          while (cellIterator.hasNext()) {
-            val cell: Cell = cellIterator.next()
-            when (cell.cellType) {
-              CellType.NUMERIC -> result += cell.numericCellValue.toString() + "  "
-              CellType.STRING -> result += cell.stringCellValue.toString() + "  "
-            }
-          }
-          result += ""
-        }
-        file.close()
-      } catch (e: Exception) {
-        e.printStackTrace()
-      }
+      val result = readExcelFile(file, TYP_XLS)
 
       assertEquals("id  name  age  salary  " +
                            "1.0  Hichem  26.0  2000.88" +
@@ -134,38 +149,10 @@ class VReportTests: JApplicationTestBase() {
   fun exportFile_XLSX() {
     withReport(SimpleReport()) {
       val file = Utils.getTempFile("galite", "xlsx")
-      var result = ""
 
       model.export(file, TYP_XLSX)
 
-      try {
-        val file = FileInputStream(file)
-
-        //Create Workbook instance holding reference to .xlsx file
-        val workbook = XSSFWorkbook(file) // xlsx
-        //Get first/desired sheet from the workbook
-        val sheet = workbook.getSheetAt(0)
-
-        //Iterate through each rows one by one
-        val rowIterator: Iterator<Row> = sheet.iterator()
-
-        while (rowIterator.hasNext()) {
-          val row: Row = rowIterator.next()
-          //For each row, iterate through all the columns
-          val cellIterator: Iterator<Cell> = row.cellIterator()
-          while (cellIterator.hasNext()) {
-            val cell: Cell = cellIterator.next()
-            when (cell.cellType) {
-              CellType.NUMERIC -> result += cell.numericCellValue.toString() + "  "
-              CellType.STRING -> result += cell.stringCellValue.toString() + "  "
-            }
-          }
-          result += ""
-        }
-        file.close()
-      } catch (e: Exception) {
-        e.printStackTrace()
-      }
+      val result = readExcelFile(file, TYP_XLSX)
 
       assertEquals("id  name  age  salary  " +
                            "1.0  Hichem  26.0  2000.88" +
