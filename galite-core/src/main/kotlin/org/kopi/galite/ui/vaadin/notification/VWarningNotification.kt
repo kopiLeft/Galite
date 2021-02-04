@@ -24,7 +24,7 @@ import com.vaadin.flow.component.KeyPressEvent
 /**
  * Warning type notification component.
  */
-open class VWarningNotification(title: String, message: String) : VAbstractNotification(title, message) {
+open class VWarningNotification(title: String?, message: String) : VAbstractNotification(title, message) {
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------

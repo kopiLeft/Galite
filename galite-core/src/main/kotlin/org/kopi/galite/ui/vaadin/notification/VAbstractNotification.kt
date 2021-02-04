@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.notification
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Paragraph
 
@@ -26,7 +27,7 @@ import com.vaadin.flow.component.html.Paragraph
  * warnings, errors, confirms and informations.
  */
 // TODO : implement this class with appropriate visual component
-abstract class VAbstractNotification(title: String, message: String?) : Component() {
+abstract class VAbstractNotification(title: String?, message: String?) : Component() {
 
   /**
    * Localization string.
@@ -45,6 +46,13 @@ abstract class VAbstractNotification(title: String, message: String?) : Componen
    * Shows the notification popup.
    */
   fun show(locale: String?) {
+
+  }
+
+  /**
+   * Shows the notification popup.
+   */
+  fun show(parent: HasComponents, locale: String?) {
 
   }
 

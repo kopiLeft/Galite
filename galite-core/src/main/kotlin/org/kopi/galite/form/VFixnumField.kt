@@ -767,7 +767,7 @@ class VFixnumField(val bufferSize: Int,
     }
 
     /**
-     * Calculates the upper bound of a fixnum field : FIXNUM(digits, scale)
+     * Calculates the upper bound of a decimal field : DECIMAL(digits, scale)
      *
      * @param     digits          the number of total digits.
      * @param     scale           the number of digits representing the fractional part.
@@ -791,7 +791,7 @@ class VFixnumField(val bufferSize: Int,
     }
 
     /**
-     * Computes the the width of a fixnum field : FIXNUM(digits, scale)
+     * Computes the the width of a decimal field : DECIMAL(digits, scale)
      *
      * @param     digits          the number of total digits.
      * @param     scale           the number of digits representing the fractional part.
