@@ -39,7 +39,7 @@ object blockToCheckFieldVisibility : FormBlock(1, 1, "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     onQuerySkipped()
@@ -47,7 +47,7 @@ object blockToCheckFieldVisibility : FormBlock(1, 1, "Test block") {
     onUpdateSkipped()
     columns(u.name)
   }
-  val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
+  val age = skipped(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     onQueryMustFill()
@@ -57,18 +57,18 @@ object blockToCheckFieldVisibility : FormBlock(1, 1, "Test block") {
       priority = 1
     }
   }
-  val lastName = mustFill(domain = Domain<String?>(20), position = at(2, 1)) {
+  val lastName = mustFill(domain = Domain<String>(20), position = at(2, 1)) {
     label = "lastName"
     help = "The user last name"
   }
-  val gender = visit(domain = Domain<String?>(20), position = at(2, 2)) {
+  val gender = visit(domain = Domain<String>(20), position = at(2, 2)) {
     label = "gender"
     help = "The user gender"
     onQueryHidden()
     onInsertSkipped()
     onUpdateMustFill()
   }
-  val country = skipped(domain = Domain<String?>(20), position = at(3, 1)) {
+  val country = skipped(domain = Domain<String>(20), position = at(3, 1)) {
     label = "country"
     help = "The country"
     onQueryVisit()

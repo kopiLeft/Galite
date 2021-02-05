@@ -95,26 +95,28 @@ public class DChart extends DWindow implements UChart {
    * start a block and enter in the good field (rec)
    * @exception	org.kopi.galite.visual.VException	may be raised by triggers
    */
-  protected void run(final boolean visible) throws VException {
+  public void run(final boolean visible) throws VException {
     ((VChart)getModel()).initChart();
     ((VChart)getModel()).setMenu();
 
-    Frame       frame;
-    Rectangle   bounds;
+    if(visible) {
+      Frame       frame;
+      Rectangle   bounds;
 
-    frame = getFrame();
-    frame.pack(); // layout frame; get preferred size
-    // calulate bounds for frame to fit screen
-    bounds = Utils.calculateBounds(frame, null, null);
-    bounds.width = Math.max(bounds.width, 900);
-    bounds.height = Math.max(bounds.height, 500);
-    frame.setBounds(bounds);
-    frame.setVisible(true);
-    // Focus this panel to dispatch the key-events to the menu.
-    // If "table" is focused, it will handle "esc" and "F2"
-    // itself and will consume them.
-    setFocusable(true);
-    requestFocusInWindow();
+      frame = getFrame();
+      frame.pack(); // layout frame; get preferred size
+      // calulate bounds for frame to fit screen
+      bounds = Utils.calculateBounds(frame, null, null);
+      bounds.width = Math.max(bounds.width, 900);
+      bounds.height = Math.max(bounds.height, 500);
+      frame.setBounds(bounds);
+      frame.setVisible(true);
+      // Focus this panel to dispatch the key-events to the menu.
+      // If "table" is focused, it will handle "esc" and "F2"
+      // itself and will consume them.
+      setFocusable(true);
+      requestFocusInWindow();
+    }
   }
 
   /**

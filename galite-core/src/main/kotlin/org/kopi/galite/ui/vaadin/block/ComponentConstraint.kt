@@ -15,22 +15,27 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
-
-import com.vaadin.flow.component.HasEnabled
-import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant
+package org.kopi.galite.ui.vaadin.block
 
 /**
- * A text field component.
+ * The child component layout constraint.
  *
- * @param label the text field label, if it's null it will create a field without label.
+ * Creates a new `ComponentConstraint` instance.
+ * @param x The position in x axis.
+ * @param y The position in y axis.
+ * @param width The column span width.
+ * @param height Number of line
+ * @param alignRight Is it right aligned ?
+ * @param useAll Use the whole possible width of the column ?
  */
-open class TextField(label: String? = null) : TextField(), HasEnabled {
+class ComponentConstraint(var x: Int,
+                          var y: Int,
+                          var width: Int,
+                          var height: Int,
+                          var alignRight: Boolean = false,
+                          var useAll: Boolean = false) {
 
-  init {
-    setWidthFull()
-    setLabel(label)
-    addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.MATERIAL_ALWAYS_FLOAT_LABEL)
+  override fun toString(): String {
+    return "[ X = $x, Y = $y, width = $width, height = $height]"
   }
 }

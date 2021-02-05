@@ -20,6 +20,7 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Locale
 import java.util.GregorianCalendar
 import java.util.Calendar
@@ -27,11 +28,15 @@ import java.util.Calendar
 /**
  * This class represents month types
  */
-open class Month(year: Int, month: Int) : Type<Month>() {
+open class Month(year: Int, month: Int) : Type<Month, LocalDate>() {
   /**
    * Constructs a Month from a Date
    */
   constructor(date: Date) : this(date.year, date.month)
+  /**
+   * Constructs a Month from a Date
+   */
+  constructor(date: LocalDate) : this(date.year, date.monthValue)
 
   /**
    * Formats the month according to the given format using the default

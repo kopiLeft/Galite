@@ -19,12 +19,14 @@ package org.kopi.galite.ui.vaadin.visual
 
 import java.io.File
 
+import org.kopi.galite.ui.vaadin.window.VActorPanel
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
 
@@ -32,6 +34,30 @@ import com.vaadin.flow.component.html.Div
  * The `DWindow` is an abstract implementation of an [UWindow] component.
  */
 abstract class DWindow protected constructor(private val model: VWindow) : Div(), UWindow {
+  private val actors : VActorPanel = VActorPanel()
+
+  init {
+    add(actors)
+  }
+  override fun onAttach(attachEvent: AttachEvent?) {
+    model.actors.forEach { actor ->
+      val dActor = DActor(actor!!)
+
+      if (dActor.icon != null) {
+        dActor.isEnabled = isEnabled
+        addActor(dActor)
+      }
+    }
+  }
+
+  /**
+   * Adds an actor to this window view.
+   * @param actor The actor to be added.
+   */
+  open fun addActor(actor: Component) {
+    actors.addActor(actor)
+  }
+
   val returnCode: Int
     get() = TODO()
 

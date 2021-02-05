@@ -32,13 +32,13 @@ import org.kopi.galite.list.VList
  * @param autocompleteLength  The auto complete length
  * @param access              true if this field is only an access to a form
  */
-class FieldList<T : Comparable<T>?>(val type: String,
-                                    val table: ColumnSet,
-                                    val action: (() -> VDictionary)?,
-                                    val columns: MutableList<ListDescription>,
-                                    val autocompleteType: Int,
-                                    val autocompleteLength: Int,
-                                    val access: Boolean) {
+class FieldList<T>(val type: String,
+                   val table: ColumnSet,
+                   val action: (() -> VDictionary)?,
+                   val columns: MutableList<ListDescription>,
+                   val autocompleteType: Int,
+                   val autocompleteLength: Int,
+                   val access: Boolean) {
 
   /**
    * Returns `true` if the list has a list action.

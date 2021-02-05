@@ -17,11 +17,10 @@
  */
 package org.kopi.galite.form.dsl
 
-import java.math.BigDecimal
+import kotlin.reflect.KProperty
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormTrigger
@@ -34,8 +33,6 @@ import org.kopi.galite.field.Field
 import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
-import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Image
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -53,11 +50,11 @@ import org.kopi.galite.type.Image
  * @param triggers             the triggers executed by this field
  * @param alias                the alias of this field
  */
-class FormField<T : Comparable<T>?>(val block: FormBlock,
-                                    domain: Domain<T>,
-                                    private val fieldIndex: Int,
-                                    initialAccess: Int,
-                                    var position: FormPosition? = null) : Field<T>(domain) {
+open class FormField<T>(val block: FormBlock,
+                        domain: Domain<T>,
+                        private val fieldIndex: Int,
+                        initialAccess: Int,
+                        var position: FormPosition? = null) : Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -69,23 +66,26 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   var commands: MutableList<Command>? = null
   var triggers = mutableListOf<Trigger>()
   var alias: String? = null
-  var initialValues = mutableMapOf<Int, T?>()
-  var value: T? = null
-    get() {
-      return if (vField.block == null) {
-        initialValues[0]
-      } else {
-        vField.getObject() as? T
-      }
+  var initialValues = mutableMapOf<Int, T>()
+  var value: T by this
+
+  private operator fun setValue(any: Any, property: KProperty<*>, value : T) {
+    if (vField.block == null) {
+      initialValues[0] = value
+    } else {
+      vField.setObject(value)
     }
-    set(value) {
-      field = value
-      if (vField.block == null) {
-        initialValues[0] = value
-      } else {
-        vField.setObject(value)
-      }
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  private operator fun getValue(any: Any, property: KProperty<*>): T {
+    return if (vField.block == null) {
+      initialValues[0] as T
+    } else {
+      val g = vField.getObject()
+      vField.getObject() as T
     }
+  }
 
   /** the minimum value that cannot exceed  */
   internal var min : T? = null
@@ -153,39 +153,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.LEFT
 
-  /**
-   * Assigns [columns] to this field.
-   *
-   * @param joinColumns columns to use to make join between block tables
-   * @param init        initialises the form field column properties (index, priority...)
-   */
-  fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
-    initColumn(*joinColumns, init = init)
-  }
-
-  /**
-   * Assigns [columns] to this field.
-   *
-   * @param joinColumns columns to use to make join between block tables
-   * @param init        initialises the form field column properties (index, priority...)
-   */
-  @JvmName("decimalColumns")
-  fun FormField<Decimal>.columns(vararg joinColumns: Column<BigDecimal>, init: (FormFieldColumns<Decimal>.() -> Unit)? = null) {
-    initColumn(*joinColumns, init = init)
-  }
-
-  /**
-   * Assigns [columns] to this field.
-   *
-   * @param joinColumns columns to use to make join between block tables
-   * @param init        initialises the form field column properties (index, priority...)
-   */
-  @JvmName("imageColumns")
-  fun FormField<Image>.columns(vararg joinColumns: Column<ExposedBlob>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
-    initColumn(*joinColumns, init = init)
-  }
-
-  private fun <S> initColumn(vararg joinColumns: Column<S>, init: (FormFieldColumns<T>.() -> Unit)?) {
+  fun initColumn(vararg joinColumns: Column<*>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
       FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
     }
@@ -304,7 +272,7 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
 
   fun setInfo(source: String) {
     val list = if (domain is ListDomain) {
-      domain.list.buildListModel(source)
+      (domain as ListDomain).list.buildListModel(source)
     } else {
       null
     }

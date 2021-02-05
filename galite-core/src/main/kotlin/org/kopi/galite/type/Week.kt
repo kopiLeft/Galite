@@ -25,7 +25,7 @@ import java.util.Calendar
 /**
  * This class represents the week types
  */
-open class Week(var scalar: Int) : Type<Week>() {
+open class Week(var scalar: Int) : Type<Week, Int>() {
   /**
    * Constructs a Week with a year and a week in this year
    * @param    year        the year

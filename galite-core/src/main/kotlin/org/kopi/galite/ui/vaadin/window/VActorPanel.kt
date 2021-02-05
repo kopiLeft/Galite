@@ -15,52 +15,36 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.base
+package org.kopi.galite.ui.vaadin.window
 
-import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.html.Input
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.menubar.MenuBar
+
+import org.kopi.galite.ui.vaadin.base.Styles
 
 /**
- * An input text component.
+ * The actor components container.
  */
-open class VInputText() : Input(), KeyNotifier {
-
+@CssImport("./styles/galite/vActorPanelStyles.css")
+class VActorPanel : MenuBar() {
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
-
-  /**
-   * Creates the input text component.
-   */
   init {
-    element.setAttribute("type", "text")
-  }
-
-  /**
-   * For children classes.
-   * @param input The input text.
-   */
-  protected constructor(input: String?) : this() {
-    value = input
+    className = Styles.WINDOW_VIEW_ACTORS
+    this.setId("actors")
+    this.setWidthFull()
   }
 
   //---------------------------------------------------
-  // IMPLEMENTATIONS
+  // ACCESSORS
   //---------------------------------------------------
-
   /**
-   * Sets the input element size.
-   * @param size The element size.
+   * Adds an actor to this actor panel.
+   * @param actor The actor to be added.
    */
-  fun setSize(size: Int) {
-    element.setAttribute("size", size.toString() + "")
-  }
-
-  /**
-   * Sets the element name.
-   * @param name The element name.
-   */
-  fun setName(name: String?) {
-    element.setAttribute("name", name)
+  fun addActor(actor: Component) {
+    this.addItem(actor)
   }
 }

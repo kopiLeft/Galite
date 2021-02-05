@@ -22,15 +22,19 @@ import org.kopi.galite.form.BlockListener
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.H4
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.form.Page
 
 /**
- * The server side component of a simple block.
+ * The component of a simple block.
  * This UI component supports only laying components for simple
  * layout view.
- *
- * TODO: implement Block with appropriate component
  */
 abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
+  init {
+    className = Styles.BLOCK
+  }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -86,10 +90,13 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
 
   /**
    * Switches the block view.
+   * Switch is only performed when it is a multi block.
    * @param detail Should be switch to the detail view ?
    */
   fun switchView(detail: Boolean) {
-    // TODO
+    if (layout is MultiBlockLayout) {
+      (layout as MultiBlockLayout).switchView(detail)
+    }
   }
 
   /**
@@ -120,14 +127,33 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * @param alignRight Is it right aligned ?
    * @param useAll Use all available area ?
    */
-  fun addComponent(component: Component?,
-                   x: Int,
-                   y: Int,
-                   width: Int,
-                   height: Int,
-                   alignRight: Boolean,
-                   useAll: Boolean) {
+  fun addComponent(
+          component: Component?,
+          x: Int,
+          y: Int,
+          width: Int,
+          height: Int,
+          alignRight: Boolean,
+          useAll: Boolean,
+  ) {
+    buildLayout()
     layout!!.addComponent(component, x, y, width, height, alignRight, useAll)
+  }
+
+  /**
+   * Builds the block layout.
+   */
+  fun buildLayout() {
+    if (layout == null) {
+      layout = createLayout()
+      if (droppable) {
+        //dndWrapper = DragAndDropWrapper(layout) TODO
+        //dndWrapper.setImmediate(true)
+        //setContent(dndWrapper)
+      } else {
+        setContent(layout as Component)
+      }
+    }
   }
 
   /**
@@ -198,6 +224,64 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
     // TODO
   }
 
+  /**
+   * Sets the block content.
+   * @param content The block content.
+   */
+  protected open fun setContent(content: Component) {
+    removeAll()
+    add(content)
+  }
+
+  /**
+   * Sets the block widget layout.
+   * @param layout The widget layout.
+   */
+  protected open fun setLayout(layout: BlockLayout) {
+    this.layout = layout
+  }
+
+  /**
+   * Sets the block caption.
+   * @param caption The block caption.
+   * @param maxColumnPos The maximum column position.
+   */
+  protected open fun setCaption(caption: String?) {
+    if (caption == null || caption.isEmpty()) {
+      return
+    }
+    val page: Page<*>? = parentPage
+    this.caption = H4(caption)
+    this.caption!!.className = "block-title"
+    page?.setCaption(this)
+  }
+
+  /**
+   * The parent block page.
+   */
+  var parentPage: Page<*>? = null
+
+  /**
+   * Layout components Creates the content of the block.
+   */
+  protected open fun layout() {
+    // create detail block view.
+    layout?.layout()
+  }
+
+  open fun clear() {
+    super.removeAll()
+    if (layout != null) {
+      try {
+        layout!!.removeAll()
+      } catch (e: IndexOutOfBoundsException) {
+        // ignore cause it can be cleared before
+      }
+      layout = null
+    }
+    caption = null
+  }
+
   //---------------------------------------------------
   // ABSTRACT METHODS
   //---------------------------------------------------
@@ -212,5 +296,6 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * @return the block layout.
    */
   private var layout: BlockLayout? = null
+  var caption: H4? = null
   private val listeners = mutableListOf<BlockListener>()
 }

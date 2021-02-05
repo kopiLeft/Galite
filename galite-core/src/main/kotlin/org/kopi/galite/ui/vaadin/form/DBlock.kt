@@ -22,10 +22,12 @@ import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UBlock
 import org.kopi.galite.form.UForm
 import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.BlockLayout
+import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
@@ -39,6 +41,61 @@ import com.vaadin.flow.component.Component
  * @param model The block model.
  */
 open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.isDroppable), UBlock {
+
+  protected var formView: DForm = parent
+  protected lateinit var columnViews: Array<VFieldUI?>
+
+  // protected Layout  		layout;
+  protected var maxRowPos: Int = model.maxRowPos
+  protected var maxColumnPos: Int = model.maxColumnPos
+  protected var displayedFields: Int = model.displayedFields
+
+  // cached infos
+  protected var sortedToprec = 0 // first record displayed
+  private var sortedRecToDisplay: IntArray
+  private var displayToSortedRec: IntArray
+
+  init {
+    maxRowPos = model.maxRowPos
+    maxColumnPos = model.maxColumnPos
+    displayedFields = model.displayedFields
+    formView = parent
+    setBorder(model.border, model.title)
+    model.addBlockListener(this)
+    setBufferSize(model.bufferSize)
+    setDisplaySize(model.displaySize)
+    setSortedRecords(model.sortedRecords)
+    setNoMove(model.noMove())
+    setNoChart(model.noChart())
+
+    if (model.isMulti()) {
+      sortedRecToDisplay = IntArray(model.bufferSize)
+      displayToSortedRec = IntArray(model.displaySize)
+    } else {
+      sortedRecToDisplay = IntArray(1)
+      displayToSortedRec = IntArray(1)
+    }
+
+    rebuildCachedInfos()
+    createFields()
+
+    if (model.isDroppable) {
+      TODO()
+      //setDropHandler(DBlockDropHandler(model))
+      //setDragStartMode(DragStartMode.HTML5)
+    }
+
+    // fire record info change event
+    // this is needed to notify view side with the record
+    // info changes done when the block listener is not yet
+    // installed.
+    for (i in 0 until model.bufferSize) {
+      if (model.getRecordInfoAt(i) !== 0) {
+        fireRecordInfoChanged(i, model.getRecordInfoAt(i))
+      }
+    }
+  }
+
   //------------------------------------------------
   // UTILS
   //------------------------------------------------
@@ -225,10 +282,12 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
     TODO()
   }
 
-  open fun fireColorChanged(col: Int,
-                            rec: Int,
-                            foreground: String?,
-                            background: String?) {
+  open fun fireColorChanged(
+          col: Int,
+          rec: Int,
+          foreground: String?,
+          background: String?,
+  ) {
     TODO()
   }
 
@@ -299,9 +358,20 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   /**
    * Clears the block content.
    */
-  open fun clear() {
+  override fun clear() {
     sortedToprec = 0
     refresh(true)
+  }
+
+  /**
+   * Sets the block border.
+   * @param style The border style.
+   * @param title The block title.
+   */
+  private fun setBorder(style: Int, title: String?) {
+    if (style != VConstants.BRD_NONE) {
+      title?.let { setCaption(it) }
+    }
   }
 
   //---------------------------------------------------
@@ -329,7 +399,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   }
 
   override fun add(comp: UComponent, constraints: Alignment) {
-    addComponent(comp as Component?,
+    addComponent(comp as Component,
                  constraints.x,
                  constraints.y,
                  constraints.width,
@@ -347,7 +417,15 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   }
 
   override fun createLayout(): BlockLayout {
-    TODO()
+    // label + field => fldNumber + lines
+    val layout = SimpleBlockLayout(DFieldUI.fldNumber * maxColumnPos, maxRowPos)
+    if (model.alignment != null) {
+      layout.setBlockAlignment(formView.getBlockView(model.alignment!!.block) as Component,
+                               model.alignment!!.targets,
+                               model.alignment!!.isChart())
+    }
+
+    return layout
   }
 
   //---------------------------------------------------
@@ -374,37 +452,4 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   override fun filterHidden() {}
   override fun filterShown() {}
   override fun getCurrentDisplay(): UBlock? = this
-
-  //---------------------------------------------------
-  // DATA MEMBER
-  //---------------------------------------------------
-  protected val formView: DForm = parent
-  protected lateinit var columnViews: Array<VFieldUI?>
-
-  // protected KopiLayout  		layout;
-  protected val maxRowPos: Int = model.maxRowPos
-  protected val maxColumnPos: Int = model.maxColumnPos
-  protected val displayedFields: Int = model.displayedFields
-
-  // cached infos
-  protected var sortedToprec = 0 // first record displayed
-  private val sortedRecToDisplay: IntArray
-  private val displayToSortedRec: IntArray
-  //------------------------------------------------
-  // CONSTRUCTOR
-  //------------------------------------------------
-  /**
-   * Creates a new `DBlock` instance.
-   */
-  init {
-    // TODO("NOT YET IMPLEMENTED")
-    if (model.isMulti()) {
-      sortedRecToDisplay = IntArray(model.bufferSize)
-      displayToSortedRec = IntArray(model.displaySize)
-    } else {
-      sortedRecToDisplay = IntArray(1)
-      displayToSortedRec = IntArray(1)
-    }
-    // TODO("NOT YET IMPLEMENTED")
-  }
 }

@@ -147,7 +147,7 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     value = 0
     columns(u.uc)
   }
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
@@ -165,7 +165,7 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       }
     }
   }
-  val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
+  val age = visit(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     minValue = 0
@@ -179,7 +179,7 @@ class TestBlock : FormBlock(1, 1, "Test block") {
       name.value = "Sami"
     }
   }
-  val job = visit(domain = Domain<String?>(20), position = at(3, 1)) {
+  val job = visit(domain = Domain<String>(20), position = at(3, 1)) {
     label = "Job"
     help = "The user job"
     columns(u.job)

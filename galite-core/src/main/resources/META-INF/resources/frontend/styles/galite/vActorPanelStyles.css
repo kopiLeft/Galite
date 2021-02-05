@@ -15,15 +15,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.exceptions
-
-/**
- * Thrown to indicate that an invalid value has been passed to a field.
- *
- * @param value to pass
- * @param label the field's label
- *
- */
-class InvalidValueException(value: Comparable<*>?, label: String?) : RuntimeException() {
-  override val message = "invalid value $value for the field $label"
+::part(overflow-button) {
+    background: url("../../frontend/images/bread_crumb_separator.png") no-repeat center center / contain;
+    color : white;
 }
+
