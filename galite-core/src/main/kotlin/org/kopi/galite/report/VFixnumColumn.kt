@@ -84,7 +84,7 @@ class VFixnumColumn(ident: String?,
   }
 
   override fun formatColumn(exporter: PExport, index: Int) {
-    exporter.formatFixedColumn(this, index)
+    exporter.formatDecimalColumn(this, index)
   }
 
   /**
@@ -107,6 +107,6 @@ class VFixnumColumn(ident: String?,
   }
 
   var formula: String? = null
-  var maxScale = 0
+  var maxScale = maxScale
     private set
 }

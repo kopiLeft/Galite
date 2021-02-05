@@ -61,7 +61,7 @@ class VFixnumCodeColumn(ident: String?,
   override fun getPrintedWidth(): Double = width * 0.7
 
   override fun formatColumn(exporter: PExport, index: Int) {
-    exporter.formatFixedColumn(this, index)
+    exporter.formatDecimalColumn(this, index)
   }
 
   /**
