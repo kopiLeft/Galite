@@ -62,6 +62,7 @@ open class FormField<T>(val block: FormBlock,
   private var options: Int = 0
   var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
+  var dropList: MutableList<String>? = null
   var commands: MutableList<Command>? = null
   var triggers = mutableListOf<Trigger>()
   var alias: String? = null
@@ -145,6 +146,9 @@ open class FormField<T>(val block: FormBlock,
     }
   }
 
+  fun droppable(vararg droppables : String) {
+    this.block.dropList?.addAll(droppables)
+  }
 
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.LEFT

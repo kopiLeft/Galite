@@ -3806,7 +3806,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var maxColumnPos = 0
   var displayedFields = 0
   private var isFilterVisible = false
-  protected var dropListMap = HashMap<Any?, Any?>()
+  protected var dropListMap = HashMap<String, String>()
 
   companion object {
     // record info flags
