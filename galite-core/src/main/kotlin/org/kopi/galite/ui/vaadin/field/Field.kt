@@ -36,14 +36,6 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
   //---------------------------------------------------
 
   /**
-   * Sets the text input widget.
-   * @param textField The input widget.
-   */
-  open fun setTextField(textField: TextField) {
-    addComponentAsFirst(textField) // add it at first position.
-  }
-
-  /**
    * Sets the default access of the field.
    * @param defaultAccess The field default access.
    */
