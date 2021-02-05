@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import java.util.*
+import java.util.Optional
 
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.data.binder.ValidationResult
@@ -89,10 +89,10 @@ class StringValidator<T>(
     val chars = source.toLowerCase().toCharArray()
     var found = false
     for (i in chars.indices) {
-      if (!found && Character.isLetter(chars[i])) {
-        chars[i] = Character.toUpperCase(chars[i])
+      if (!found && chars[i].isLetter()) {
+        chars[i] = chars[i].toUpperCase()
         found = true
-      } else if (isWhitespace(chars[i])) {
+      } else if (chars[i].isWhitespace()) {
         found = false
       }
     }
@@ -104,11 +104,8 @@ class StringValidator<T>(
    * @param text The text to be checked.
    * @return `true` if the text is valid.
    */
-  private fun checkText(text: String?): Boolean {
-    var end = 0
-    end = textToModel(text, width, Int.MAX_VALUE, fixedNewLine).length
-    return end <= width * height
-  }
+  private fun checkText(text: String?): Boolean =
+          textToModel(text, width, Int.MAX_VALUE, fixedNewLine).length <= width * height
 
   /**
    * Replaces new-lines by blanks
@@ -122,8 +119,10 @@ class StringValidator<T>(
     val length = source!!.length
     var start = 0
     var lines = 0
+
     while (start < length && lines < lin) {
       val index = source.indexOf('\n', start)
+
       if (index == -1) {
         target.append(source.substring(start, length))
         start = length
@@ -135,6 +134,7 @@ class StringValidator<T>(
           }
         } else {
           var i = (index - start) % col
+
           while (i != 0 && i < col) {
             target.append(' ')
             i++
@@ -145,28 +145,6 @@ class StringValidator<T>(
       }
     }
     return target.toString()
-  }
-
-  /**
-   * Checks if the given character is a white space.
-   * The implementation is picked from java implementation
-   * since GWT does not contains the implementation of [Character.isWhitespace]
-   * @param c The concerned character.
-   * @return `true` if the character is whitespace.
-   */
-  fun isWhitespace(c: Char): Boolean {
-    return c == ' ' || c == '\u00A0' // SPACE_SEPARATOR
-            || c == '\u2007' // LINE_SEPARATOR
-            || c == '\u202F' // PARAGRAPH_SEPARATOR
-            || c == '\u0009' // HORIZONTAL TABULATION.
-            || c == '\n' // LINE FEED.
-            || c == '\u000B' // VERTICAL TABULATION.
-            || c == '\u000C' // FORM FEED.
-            || c == '\r' // CARRIAGE RETURN.
-            || c == '\u001C' // FILE SEPARATOR.
-            || c == '\u001D' // GROUP SEPARATOR.
-            || c == '\u001E' // RECORD SEPARATOR.
-            || c == '\u001F' // UNIT SEPARATOR.
   }
 }
 

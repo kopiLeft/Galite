@@ -26,11 +26,7 @@ class VPasswordField: PasswordField(), UTextField {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun hasAutoComplete(): Boolean {
-    return false
-  }
+  override fun hasAutoComplete(): Boolean = false
 
-  override fun getMaxLength(): Int {
-    return super.getMaxLength()
-  }
+  override fun getMaxLength(): Int = super.getMaxLength()
 }

@@ -17,9 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.notification
 
-import com.vaadin.flow.component.HasComponents
 import org.kopi.galite.ui.vaadin.base.LocalizedMessages
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
+
+import com.vaadin.flow.component.HasComponents
 
 /**
  * Utilities to show notifications in the client side.

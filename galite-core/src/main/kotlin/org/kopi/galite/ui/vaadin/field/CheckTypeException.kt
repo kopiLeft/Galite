@@ -17,8 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.HasValue
 import org.kopi.galite.ui.vaadin.notification.NotificationListener
+
+import com.vaadin.flow.component.HasValue
 
 /**
  * Thrown when the field content is checked against its validation

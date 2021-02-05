@@ -28,9 +28,9 @@ import com.vaadin.flow.data.binder.BeanValidationBinder
  * @param col             The column number.
  * @param rows            The row number.
  * @param visibleRows     The visible rows
- * @param dynamicNewLine  Use default line transformer in multiple line field ?
- * Dynamic new line means that we use '\n' for line break. Fixed new line means that we complete the messing
- * field columns with space character instead of using line separator.
+ * @param dynamicNewLine  Use default line transformer in multiple line field ? Dynamic new line means that
+ * we use '\n' for line break. Fixed new line means that we complete the messing field columns with space
+ * character instead of using line separator.
  * @param noEcho          Is it a password field ?
  * @param scanner         Is it a scanner field ?
  * @param noEdit          Is it a no edit field.
@@ -55,7 +55,7 @@ class TextField(
   private val enabled = true
 
   /**
-   * The field type: integer, fixnum, date, time, timestamp, ...
+   * The field type: integer, decimal, date, time, timestamp, ...
    */
   lateinit var type: Type
 
@@ -70,7 +70,7 @@ class TextField(
   var maxval: Double? = null
 
   /**
-   * The max scale to be used with this field if it is a fixnum one.
+   * The max scale to be used with this field if it is a decimal one.
    */
   var maxScale = 0
 
@@ -156,8 +156,8 @@ class TextField(
   }
 
   /**
-   * Creates the input widget according to field state.
-   * @return the input widget
+   * Creates the input component according to field state.
+   * @return the input component
    */
   protected fun createFieldComponent(): AbstractSinglePropertyField<*, *> {
     var col = col
@@ -220,8 +220,8 @@ class TextField(
   }
 
   /**
-   * Returns true if the field should contains only decimals.
-   * @return True if the field should contains only decimals.
+   * Returns true if the field should contains only integers.
+   * @return True if the field should contains only integers.
    */
   private fun isNumber(): Boolean {
     return type == Type.INTEGER
@@ -274,7 +274,7 @@ class TextField(
     INTEGER,
 
     /**
-     * Fixnum field.
+     * Decimal field.
      */
     DECIMAL,
 

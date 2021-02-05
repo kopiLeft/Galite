@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.field
 import com.vaadin.flow.component.textfield.IntegerField
 
 /**
- * A text area integer field.
+ * An integer field.
  */
 class VIntegerField : IntegerField(), UTextField {
   var cols: Int = 0
@@ -29,13 +29,9 @@ class VIntegerField : IntegerField(), UTextField {
     TODO("Not yet implemented")
   }
 
-  override fun getMaxLength(): Int {
-    return maxlengthDouble.toInt()
-  }
+  override fun getMaxLength(): Int = maxlengthDouble.toInt()
 
-  override fun getMinLength(): Int {
-    return minlengthDouble.toInt()
-  }
+  override fun getMinLength(): Int = minlengthDouble.toInt()
 
   override fun setMaxLength(maxLength: Int) {
     super.setMaxlength(maxLength.toDouble())
