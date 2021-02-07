@@ -34,6 +34,7 @@ import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.contextmenu.MenuItem
+import com.vaadin.flow.component.html.Div
 
 /**
  * Main application window composed of a header and content.
@@ -75,7 +76,14 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
 
     content.setContent(container)
     addToNavbar(header)
-    header.setWelcome(welcome)
+    val top = Div()
+    top.setId("top")
+    val second = Div()
+    second.setId("second")
+    second.add(welcome)
+    top.add(second)
+    header.setWelcome(top)
+
     welcome.add(windowsLink)
     main.setContent(content)
     main.setSizeFull()

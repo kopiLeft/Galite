@@ -26,7 +26,8 @@ import com.vaadin.flow.component.menubar.MenuBarVariant
 class WelcomeListMenu : MenuBar() {
 
   init {
-    addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_TERTIARY_INLINE)
+    setId("welcomeListMenu")
+   // addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_TERTIARY_INLINE)
   }
 
 }
