@@ -382,7 +382,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
           for (i in 0 until getDisplaySize()) {
             displays[i] = createDisplay(dl, model, false)
             blockView.add(displays[i]!!, Alignment(chartPos + leftOffset, i + 1, 1, 1, false))
-            displays[i]!!.setPosition(i)
+            displays[i]!!.position = i
           }
           scrollTo(0)
           // detail view of the chart
@@ -400,7 +400,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
                                                           Alignment(column * fieldComponentsNumber - 1, line - 1,
                                                                     (columnEnd - column) * fieldComponentsNumber + 1,
                                                                     (lineEnd - line) * fieldComponentsNumber + 1, false))
-          detailDisplay!!.setPosition(0)
+          detailDisplay!!.position = 0
           detailDisplay!!.setInDetail(true)
         }
 
@@ -423,7 +423,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
                                                          1,
                                                          lineEnd - line + 1,
                                                          false))
-        displays[0]!!.setPosition(0)
+        displays[0]!!.position = 0
         displays[0]!!.updateText()
       } else {
         displays = arrayOf(createDisplay(dl, model, false))
@@ -439,7 +439,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
           blockView.add(displays[0]!!,
                         Alignment(column * fieldComponentsNumber - 1, line - 1, (columnEnd - column) * fieldComponentsNumber + 1, lineEnd - line + 1, false))
         }
-        displays[0]!!.setPosition(0)
+        displays[0]!!.position = 0
         displays[0]!!.updateText()
       }
       if (displays != null) {
@@ -484,7 +484,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
    * @exception        VException        an exception may be raised in leave()
    */
   fun transferFocus(display: UField) {
-    val recno = blockView.getRecordFromDisplayLine(display.getPosition())
+    val recno = blockView.getRecordFromDisplayLine(display.position)
 
     // go to the correct block if necessary
     if (getBlock() != model.getForm().getActiveBlock()) {
@@ -529,7 +529,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         displays[rowInDisplay]!!.updateAccess()
       }
     }
-    if (detailDisplay != null && detailDisplay!!.getPosition() == rowInDisplay) {
+    if (detailDisplay != null && detailDisplay!!.position == rowInDisplay) {
       detailDisplay!!.updateAccess()
     }
   }
@@ -546,7 +546,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         displays[rowInDisplay]!!.updateColor()
       }
     }
-    if (detailDisplay != null && detailDisplay!!.getPosition() == rowInDisplay) {
+    if (detailDisplay != null && detailDisplay!!.position == rowInDisplay) {
       detailDisplay!!.updateColor()
     }
   }
@@ -576,7 +576,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       if (dispLine < 0) {
         dispLine = 0
       }
-      detailDisplay!!.setPosition(dispLine)
+      detailDisplay!!.position = dispLine
       detailDisplay!!.updateFocus()
       detailDisplay!!.updateAccess()
       detailDisplay!!.updateText()
