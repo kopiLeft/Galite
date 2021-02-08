@@ -17,13 +17,12 @@
 package org.kopi.galite.type
 
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
-import org.kopi.galite.util.base.InconsistencyException
 import java.util.Locale
 
 /**
  * This class represents image types
  */
-class Image(val width: Int, val height: Int, var value: ExposedBlob) : Type<Image>() {
+class Image(val width: Int, val height: Int, var value: ExposedBlob) : Type0<ExposedBlob> {
 
   /**
    * Compares two objects
@@ -59,14 +58,6 @@ class Image(val width: Int, val height: Int, var value: ExposedBlob) : Type<Imag
    * Represents the value in sql
    */
   override fun toSql(): ExposedBlob = value
-
-  /**
-   * Compares to another image.
-   * TODO Do we need to compare two images?
-   */
-  override operator fun compareTo(other: Image): Int {
-    throw InconsistencyException("Error while calling this method")
-  }
 
   companion object {
 

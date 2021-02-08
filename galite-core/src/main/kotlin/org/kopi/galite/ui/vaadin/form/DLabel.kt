@@ -32,6 +32,10 @@ import org.kopi.galite.visual.VActor
  */
 open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
+  init {
+    setText(text)
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -40,11 +44,13 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * @param activ The field state.
    */
   fun prepareSnapshot(activ: Boolean) {
+    text
     // TODO
   }
 
   override fun init(text: String?, help: String?) {
-    TODO()
+    tooltip = help
+    // TODO
   }
 
   /**
@@ -80,13 +86,6 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
       }
     }
   }
-
-  /**
-   * Returns the label text.
-   * @return The label text.
-   */
-  val text: String
-    get() = TODO()
 
   /**
    * Builds full field description.

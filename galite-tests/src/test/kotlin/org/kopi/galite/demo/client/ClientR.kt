@@ -103,7 +103,7 @@ object ClientR : Report() {
     }
   }
 
-  val fstnameClt = field(Domain<String>(25)) {
+  val firstName = field(Domain<String>(25)) {
     label = "First Name"
     help = "The client first name"
     align = FieldAlignment.LEFT
@@ -116,7 +116,7 @@ object ClientR : Report() {
     }
   }
 
-  val nameClt = field(Domain<String>(25)) {
+  val lastName = field(Domain<String>(25)) {
     label = "Last Name"
     help = "The client last name"
     align = FieldAlignment.LEFT
@@ -148,13 +148,19 @@ object ClientR : Report() {
     align = FieldAlignment.LEFT
   }
 
+  val countryClt = field(Domain<String>(50)) {
+    label = "City"
+    help = "The client country"
+    align = FieldAlignment.LEFT
+  }
+
   val cityClt = field(Domain<String>(50)) {
     label = "City"
     help = "The client city"
     align = FieldAlignment.LEFT
   }
 
-  val postalCodeClt = field(Domain<Int>(2)) {
+  val zipCodeClt = field(Domain<Int>(2)) {
     label = "Zip code"
     help = "The client zip code"
     align = FieldAlignment.LEFT
@@ -166,12 +172,13 @@ object ClientR : Report() {
     transaction {
       clients.forEach { result ->
         add {
-          this[nameClt] = result[Client.nameClt]
-          this[fstnameClt] = result[Client.fstnameClt]
+          this[firstName] = result[Client.firstNameClt]
+          this[lastName] = result[Client.lastNameClt]
           this[addressClt] = result[Client.addressClt]
+          this[ageClt] = result[Client.ageClt]
+          this[countryClt] = result[Client.countryClt]
           this[cityClt] = result[Client.cityClt]
-          this[postalCodeClt] = result[Client.postalCodeClt]
-          this[ageClt] = result[Client.birthdayDate]
+          this[zipCodeClt] = result[Client.zipCodeClt]
         }
       }
     }

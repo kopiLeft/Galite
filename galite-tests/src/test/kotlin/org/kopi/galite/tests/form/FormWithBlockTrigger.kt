@@ -44,7 +44,7 @@ object BlockWithTrigger1 : FormBlock(1, 1, "Test block") {
     }
   }
 
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
@@ -61,7 +61,7 @@ object BlockWithTrigger2 : FormBlock(1, 1, "Test", "Test block") {
     }
   }
 
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)

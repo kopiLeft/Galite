@@ -386,7 +386,7 @@ class PExport2PDF(
     widthSum += widths[index]
   }
 
-  override fun formatFixedColumn(column: VReportColumn, index: Int) {
+  override fun formatDecimalColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
                         Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
     widthSum += widths[index]

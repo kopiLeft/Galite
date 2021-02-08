@@ -207,7 +207,7 @@ abstract class PExport(val table: UTable,
 
   internal open fun formatWeekColumn(column: VReportColumn, index: Int) {}
 
-  internal open fun formatFixedColumn(column: VReportColumn, index: Int) {}
+  internal open fun formatDecimalColumn(column: VReportColumn, index: Int) {}
 
   internal open fun formatIntegerColumn(column: VReportColumn, index: Int) {}
 

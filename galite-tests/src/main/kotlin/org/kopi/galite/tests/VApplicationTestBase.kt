@@ -19,14 +19,47 @@ package org.kopi.galite.tests
 
 import java.util.Locale
 
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.chart.VChart
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.report.VReport
+import org.kopi.galite.ui.vaadin.chart.DChart
+import org.kopi.galite.ui.vaadin.report.DReport
 import org.kopi.galite.ui.vaadin.visual.VApplication
+import org.kopi.galite.ui.vaadin.visual.VApplicationContext
+import org.kopi.galite.ui.vaadin.visual.VFileHandler
+import org.kopi.galite.ui.vaadin.visual.VImageHandler
+import org.kopi.galite.ui.vaadin.visual.VUIFactory
+import org.kopi.galite.ui.vaadin.visual.VWindowController
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.FileHandler
+import org.kopi.galite.visual.ImageHandler
 import org.kopi.galite.visual.Registry
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.WindowController
 
 /**
  * TestBase class for all tests.
  */
 open class VApplicationTestBase : TestBase() {
+
+  init {
+    GaliteApplication()
+    setupApplication()
+  }
+
+  fun setupApplication() {
+    ApplicationContext.applicationContext = VApplicationContext()
+    FileHandler.fileHandler = VFileHandler()
+    ImageHandler.imageHandler = VImageHandler()
+    WindowController.windowController = VWindowController()
+    UIFactory.uiFactory = VUIFactory()
+  }
+
+  override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run() }
+
+  override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run() }
+
   class GaliteRegistry : Registry("Galite", null)
 
   class GaliteApplication : VApplication(GaliteRegistry()) {
@@ -55,13 +88,5 @@ open class VApplicationTestBase : TestBase() {
         null
       }
     }
-  }
-
-  init {
-    setupApplication()
-  }
-
-  fun setupApplication() {
-    val app = GaliteApplication()
   }
 }

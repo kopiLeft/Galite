@@ -23,7 +23,7 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
 /**
  * Information type notification component.
  */
-open class VInformationNotification(title: String, message: String) : VAbstractNotification(title, message) {
+open class VInformationNotification(title: String?, message: String) : VAbstractNotification(title, message) {
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------

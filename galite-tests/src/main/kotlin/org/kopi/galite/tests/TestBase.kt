@@ -17,8 +17,17 @@
 
 package org.kopi.galite.tests
 
-import org.kopi.galite.chart.Chart
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.chart.Chart
+import org.kopi.galite.chart.UChart
+import org.kopi.galite.chart.VChart
+import org.kopi.galite.report.MReport
+import org.kopi.galite.report.Report
+import org.kopi.galite.report.UReport
+import org.kopi.galite.report.VReport
 
 /**
  * TestBase class for all tests.
@@ -33,6 +42,50 @@ open class TestBase {
       override val title: String = "test"
     }
     chart.chartInit()
+  }
+
+  open fun getReportDisplay(model: VReport): UComponent? = null
+
+  open fun getChartDisplay(model: VChart): UComponent? = null
+
+  /**
+   * Tests operation on a report.
+   *
+   * @param report The report to test
+   * @param operations operations to apply on the report
+   */
+  fun <T: Report> withReport(report: T, operations: (T.(mReport: MReport) -> Unit)? = null) {
+    val display = getReportDisplay(report.model)
+
+    assertNotNull(display)
+
+    report.model.setDisplay(
+            (display as UReport)
+    )
+
+    if (operations != null) {
+      report.operations(report.model.model)
+    }
+  }
+
+  /**
+   * Tests operation on a chart.
+   *
+   * @param chart The chart to test
+   * @param operations operations to apply on the chart
+   */
+  fun <T: Chart> withChart(chart: T, operations: (T.(model: VChart) -> Unit)? = null) {
+    val display = getChartDisplay(chart.model)
+
+    assertNotNull(display)
+
+    chart.model.setDisplay(
+            (display as UChart)
+    )
+
+    if (operations != null) {
+      chart.operations(chart.model)
+    }
   }
 
   // ----------------------------------------------------------------------

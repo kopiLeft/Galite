@@ -47,13 +47,14 @@ import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 object Client : Table("CLIENTS") {
-  val idClt = integer("ID").autoIncrement()
-  val nameClt = varchar("NAME", 25)
-  val fstnameClt = varchar("FIRSTNAME", 25)
-  val addressClt = varchar("ADDRESS", 50)
-  val birthdayDate = integer("AGE")
-  val cityClt = varchar("CITY", 30)
-  val zipCode = integer("ZIP")
+  val idClt = integer("CLIENT ID").autoIncrement()
+  val firstNameClt = varchar("FIRST NAME", 25)
+  val lastNameClt = varchar("LAST NAME", 25)
+  val addressClt = varchar("CLIENT ADDRESS", 50)
+  val ageClt = integer("CLIENT AGE")
+  val countryClt = varchar("CLIENT_COUNTRY", 30)
+  val cityClt = varchar("CLIENT CITY", 30)
+  val zipCodeClt = integer("CLIENT_POSTAL_CODE")
 
   override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
 }
@@ -237,20 +238,21 @@ fun initUserRights(user: String = DBSchemaTest.connectedUser) {
 }
 
 fun addClients() {
-  addClient(0, "Salah", "Mohamed", "10,Rue du Lac", "Megrine", 2001, 40)
-  addClient(1, "Guesmi", "Khaled", "14,Rue Mongi Slim", "Tunis", 6000, 35)
-  addClient(2, "Bouaroua", "Ahmed", "10,Rue du Lac", "Mourouj", 5003, 22)
+  addClient(0, "Mohamed", "Salah", "10,Rue du Lac", 40, "Tunisia", "Megrine", 2001)
+  addClient(1, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "Tunisia", "Tunis", 6000)
+  addClient(2, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "Tunisia", "Mourouj", 5003)
 }
 
-fun addClient(id: Int, name: String, fstName: String, address: String, city: String, zipcode: Int, age: Int) {
+fun addClient(id: Int, firstName: String, lastName: String, address: String, age: Int, country: String, city: String, zipcode: Int) {
   Client.insert {
     it[idClt] = id
-    it[nameClt] = name
-    it[fstnameClt] = fstName
+    it[firstNameClt] = firstName
+    it[lastNameClt] = lastName
     it[addressClt] = address
+    it[ageClt] = age
+    it[countryClt] = country
     it[cityClt] = city
-    it[zipCode] = zipcode
-    it[birthdayDate] = age
+    it[zipCodeClt] = zipcode
   }
 }
 

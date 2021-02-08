@@ -34,6 +34,7 @@ dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
   api("org.jetbrains.exposed", "exposed-jodatime", exposedVersion)
+  api("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {

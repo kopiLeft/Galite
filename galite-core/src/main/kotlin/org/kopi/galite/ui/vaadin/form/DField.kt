@@ -38,14 +38,13 @@ import org.kopi.galite.visual.VColor
  * @param options The field options.
  * @param detail Is it a detail view ?
  */
-abstract class DField(protected val model: VFieldUI,
-                      protected var label: DLabel?,
-                      protected var align: Int,
-                      protected var options: Int,
+abstract class DField(internal val model: VFieldUI,
+                      internal var label: DLabel?,
+                      internal var align: Int,
+                      internal var options: Int,
                       private var inDetail: Boolean)
   : Field(model.getIncrementCommand() != null,
           model.getDecrementCommand() != null), UField, FieldListener {
-
 
   //----------------------------------------------------------------------
   // UI MANAGEMENT
@@ -72,7 +71,7 @@ abstract class DField(protected val model: VFieldUI,
    * Field cell renderer
    */
   override fun setPosition(pos: Int) {
-    TODO()
+    // TODO()
   }
 
   /**

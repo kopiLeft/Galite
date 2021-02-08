@@ -37,4 +37,28 @@ interface BlockLayout : HasComponents {
    * @param useAll     Use all available area ?
    */
   fun addComponent(component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean, useAll: Boolean)
+
+  /**
+   * Lays out the components added to the layout.
+   */
+  fun layout()
+
+  /**
+   * Clear the layout content.
+   */
+  fun clear()
+
+  /**
+   * Lays out some extra components. This used to render not standard components.
+   */
+  fun layoutAlignedComponents()
+
+  /**
+   * Updates the layout scroll bar of it exists.
+   * @param pageSize The scroll page size.
+   * @param maxValue The max scroll value.
+   * @param enable is the scroll bar enabled ?
+   * @param value The scroll position.
+   */
+  fun updateScroll(pageSize: Int, maxValue: Int, enable: Boolean, value: Int)
 }

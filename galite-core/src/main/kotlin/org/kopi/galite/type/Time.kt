@@ -20,6 +20,7 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.Instant
 
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -28,9 +29,13 @@ import java.util.Locale
 /**
  * This class represents the time types
  */
-open class Time : Type<Time> {
+open class Time : Type<Time, Instant> {
   constructor(hours: Int, minutes: Int, seconds: Int = 0) {
     scalar = (hours * 3600 + minutes * 60 + seconds) % (3600 * 24)
+  }
+
+  constructor(instant: Instant) {
+    TODO()
   }
 
   constructor(time: java.sql.Time) {

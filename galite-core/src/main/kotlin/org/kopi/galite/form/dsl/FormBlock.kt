@@ -73,7 +73,8 @@ open class FormBlock(var buffer: Int,
   internal var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
   private lateinit var commands: Array<Command?>
   private val triggers = mutableListOf<Trigger>()
-  lateinit var dropListMap: HashMap<*, *>
+  var dropListMap = HashMap<String, String>()
+  var dropList : MutableList<String>? = null
   private var maxRowPos = 0
   private var maxColumnPos = 0
   private var displayedFields = 0
@@ -152,10 +153,15 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a MUSTFILL field.
    */
-  inline fun <reified T : Comparable<T>?> mustFill(domain: Domain<T>,
-                                                   position: FormPosition,
-                                                   init: FormField<T>.() -> Unit): FormField<T> {
-    return initField(domain, init, VConstants.ACS_MUSTFILL, position)
+  inline fun <reified T> mustFill(domain: Domain<T>,
+                                  position: FormPosition,
+                                  init: MustFillFormField<T>.() -> Unit): FormField<T> {
+    initDomain(domain)
+    val field = MustFillFormField(this, domain, blockFields.size, VConstants.ACS_MUSTFILL, position)
+    field.init()
+    field.initialize(this)
+    blockFields.add(field)
+    return field
   }
 
   /**
@@ -167,9 +173,9 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a VISIT field.
    */
-  inline fun <reified T : Comparable<T>?> visit(domain: Domain<T>,
-                                                position: FormPosition,
-                                                init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T> visit(domain: Domain<T>,
+                               position: FormPosition,
+                               init: NullableFormField<T>.() -> Unit): FormField<T?> {
     return initField(domain, init, VConstants.ACS_VISIT, position)
   }
 
@@ -182,9 +188,9 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a SKIPPED field.
    */
-  inline fun <reified T : Comparable<T>?> skipped(domain: Domain<T>,
-                                                  position: FormPosition,
-                                                  init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T> skipped(domain: Domain<T>,
+                                 position: FormPosition,
+                                 init: NullableFormField<T>.() -> Unit): FormField<T?> {
     return initField(domain, init, VConstants.ACS_SKIPPED, position)
   }
 
@@ -197,28 +203,46 @@ open class FormBlock(var buffer: Int,
    * @param init    initialization method to initialize the field.
    * @return a HIDDEN field.
    */
-  inline fun <reified T : Comparable<T>?> hidden(domain: Domain<T>, init: FormField<T>.() -> Unit): FormField<T> {
+  inline fun <reified T> hidden(domain: Domain<T>, init: NullableFormField<T>.() -> Unit): FormField<T?> {
     return initField(domain, init, VConstants.ACS_HIDDEN)
   }
 
   /**
    * Initializes a field.
    */
-  inline fun <reified T : Comparable<T>?> initField(domain: Domain<T>,
-                                                    init: FormField<T>.() -> Unit,
-                                                    access: Int,
-                                                    position: FormPosition? = null): FormField<T> {
-    domain.kClass = T::class
-    if (domain is CodeDomain<T>) {
-      ownDomains.add(domain)
-    } else if (domain is ListDomain<T>) {
-      ownDomains.add(domain)
-    }
-    val field = FormField(this, domain, blockFields.size, access, position)
+  inline fun <reified T> initField(domain: Domain<T>,
+                                   init: NullableFormField<T>.() -> Unit,
+                                   access: Int,
+                                   position: FormPosition? = null): FormField<T?> {
+    initDomain(domain)
+    val field = NullableFormField(this, domain, blockFields.size, access, position)
     field.init()
     field.initialize(this)
-    blockFields.add(field)
-    return field
+    if (dropList == null) {
+      blockFields.add(field)
+    } else {
+      if (domain.kClass != String::class
+              && TODO("add Image type")) {
+        error("The field is droppable but its type is not supported as a drop target.")
+      } else {
+        val flavor: String? = this.addDropList(dropList!!, field)
+        if (flavor == null) {
+          blockFields.add(field)
+        } else {
+          error("The extension is already defined as a drop target for this field. ")
+        }
+      }
+    }
+    return field as FormField<T?>
+  }
+
+  inline fun <reified T> initDomain(domain: Domain<T>) {
+    domain.kClass = T::class
+    if (domain is CodeDomain) {
+      ownDomains.add(domain)
+    } else if (domain is ListDomain) {
+      ownDomains.add(domain)
+    }
   }
 
   /**
@@ -432,6 +456,17 @@ open class FormBlock(var buffer: Int,
    */
   fun DictionaryForm.recursiveQuery() {
     Commands.recursiveQuery(vBlock)
+  }
+
+  fun addDropList(dropList: MutableList<String>, field: FormField<*>): String? {
+    for (i in dropList.indices) {
+      val extension = dropList[i].toLowerCase()
+      if (dropListMap[extension] != null) {
+        return extension
+      }
+      dropListMap.put(extension, field.getIdent())
+    }
+    return null
   }
 
   // ----------------------------------------------------------------------
