@@ -28,6 +28,7 @@ import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.Route
+
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
@@ -309,7 +310,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Attaches a window to this application.
    * @param window The window to be added.
    */
-  fun <T> addWindow(window: T, title: String) where T : Component, T : HasSize {
+  fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
     if (mainWindow != null) {
       ui.ifPresent { myUi ->
         myUi.access {

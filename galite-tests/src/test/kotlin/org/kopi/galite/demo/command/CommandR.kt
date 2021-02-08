@@ -21,6 +21,8 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
+import org.joda.time.DateTime
+
 import org.kopi.galite.demo.Command
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
@@ -43,7 +45,7 @@ object CommandR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -53,7 +55,7 @@ object CommandR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -63,7 +65,7 @@ object CommandR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -73,7 +75,7 @@ object CommandR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -116,7 +118,7 @@ object CommandR : Report() {
     align = FieldAlignment.LEFT
 
   }
-  val dateCmd = field(Domain<String>(50)) {
+  val dateCmd = field(Domain<DateTime>(50)) {
     label = "Command date"
     help = "The command date"
     align = FieldAlignment.LEFT
@@ -151,11 +153,11 @@ object CommandR : Report() {
     }
   }
 
-  val q = Command.selectAll()
+  val commands = Command.selectAll()
 
   init {
     transaction {
-      q.forEach { result ->
+      commands.forEach { result ->
         add {
           this[numCmd] = result[Command.numCmd]
           this[idClt] = result[Command.idClt]

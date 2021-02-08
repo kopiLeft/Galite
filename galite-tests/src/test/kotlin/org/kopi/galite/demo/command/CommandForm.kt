@@ -18,6 +18,8 @@ package org.kopi.galite.demo.command
 
 import java.util.Locale
 
+import org.joda.time.DateTime
+
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Command
@@ -33,7 +35,7 @@ object CommandForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "Commands"
   val page = page("Command")
-  val action = menu("act")
+  val action = menu("Action")
   val report = actor(
           ident = "report",
           menu = action,
@@ -70,7 +72,7 @@ object BlockCommand : FormBlock(1, 1, "Commands") {
     help = "The client ID"
     columns(u.idClt, v.idClt)
   }
-  val dateCmd = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
+  val dateCmd = mustFill(domain = Domain<DateTime>(25), position = at(2, 1)) {
     label = "Command date"
     help = "The command date"
     columns(u.dateCmd)
@@ -97,7 +99,7 @@ object Payment : CodeDomain<String>() {
 
 object CommandStatus : CodeDomain<String>() {
   init {
-    "In preparation" keyOf "in preparation"
+    "in preparation" keyOf "in preparation"
     "available" keyOf "available"
     "delivered" keyOf "delivered"
     "canceled" keyOf "canceled"

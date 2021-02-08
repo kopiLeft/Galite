@@ -42,7 +42,7 @@ object TaxRuleR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -52,7 +52,7 @@ object TaxRuleR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -62,7 +62,7 @@ object TaxRuleR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -72,7 +72,7 @@ object TaxRuleR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -114,11 +114,11 @@ object TaxRuleR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val q = TaxRule.selectAll()
+  val taxRules = TaxRule.selectAll()
 
   init {
     transaction {
-      q.forEach { result ->
+      taxRules.forEach { result ->
         add {
           this[taxName] = result[TaxRule.taxName]
           this[rate] = result[TaxRule.rate]

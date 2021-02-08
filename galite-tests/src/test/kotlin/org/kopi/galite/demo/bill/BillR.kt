@@ -21,6 +21,8 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
+import org.joda.time.DateTime
+
 import org.kopi.galite.demo.Bill
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
@@ -43,7 +45,7 @@ object BillR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -53,7 +55,7 @@ object BillR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -63,7 +65,7 @@ object BillR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -73,7 +75,7 @@ object BillR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -114,13 +116,13 @@ object BillR : Report() {
     help = "The bill address"
     align = FieldAlignment.LEFT
   }
-  val dateBill = field(Domain<String>(25)) {
+  val dateBill = field(Domain<DateTime>(25)) {
     label = "Date"
     help = "The bill date"
     align = FieldAlignment.LEFT
   }
 
-  val amountTTC = field(Domain<Decimal>(2)) {
+  val amountWithTaxes = field(Domain<Decimal>(2)) {
     label = "Amount to pay"
     help = "The amount including all taxes to pay"
     align = FieldAlignment.LEFT
@@ -132,16 +134,16 @@ object BillR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val q = Bill.selectAll()
+  val bills = Bill.selectAll()
 
   init {
     transaction {
-      q.forEach { result ->
+      bills.forEach { result ->
         add {
           this[numBill] = result[Bill.numBill]
           this[addressBill] = result[Bill.addressBill]
           this[dateBill] = result[Bill.dateBill]
-          this[amountTTC] = Decimal(result[Bill.amountTTC])
+          this[amountWithTaxes] = Decimal(result[Bill.amountWithTaxes])
           this[refCmd] = result[Bill.refCmd]
         }
       }

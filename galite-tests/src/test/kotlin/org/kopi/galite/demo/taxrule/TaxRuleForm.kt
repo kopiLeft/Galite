@@ -30,7 +30,7 @@ object TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "TaxRules"
   val page = page("TaxRule")
-  val action = menu("act")
+  val action = menu("Action")
   val report = actor(
           ident = "report",
           menu = action,

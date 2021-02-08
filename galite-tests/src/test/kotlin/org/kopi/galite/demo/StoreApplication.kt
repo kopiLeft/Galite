@@ -22,7 +22,12 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.jodatime.CurrentDateTime
+import org.jetbrains.exposed.sql.jodatime.datetime
 import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.joda.time.DateTime
+
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
@@ -32,7 +37,6 @@ import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxrule.TaxRuleForm
 import org.kopi.galite.form.dsl.Form
-
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
@@ -43,44 +47,44 @@ import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 object Client : Table("CLIENTS") {
-  val idClt = integer("CLIENT_ID").autoIncrement()
-  val nameClt = varchar("CLIENT_NAME", 25)
-  val fstnameClt = varchar("CLIENT_FIRSTNAME", 25)
-  val addressClt = varchar("CLIENT_ADDRESS", 50)
-  val ageClt = integer("CLIENT_AGE")
-  val cityClt = varchar("CLIENT_CITY", 30)
-  val postalCodeClt = integer("CLIENT_ZIP")
+  val idClt = integer("ID").autoIncrement()
+  val nameClt = varchar("NAME", 25)
+  val fstnameClt = varchar("FIRSTNAME", 25)
+  val addressClt = varchar("ADDRESS", 50)
+  val birthdayDate = integer("AGE")
+  val cityClt = varchar("CITY", 30)
+  val postalCodeClt = integer("ZIP")
 
   override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
 }
 
-object Product : Table("Products") {
-  val idPdt = integer("ID_Product").autoIncrement()
+object Product : Table("PRODUCTS") {
+  val idPdt = integer("ID").autoIncrement()
   val designation = varchar("DESIGNATION", 50)
-  val category = varchar("CATEGORy", 30)
-  val taxName = varchar("PRODUCT_TAX", 20).references(TaxRule.taxName)
+  val category = varchar("CATEGORY", 30)
+  val taxName = varchar("TAX", 20).references(TaxRule.taxName)
   val price = integer("UNIT_PRICE_EXCLUDING_VAT")
-  val photo = blob("Product_PHOTO").nullable()
+  val photo = blob("PHOTO").nullable()
 
   override val primaryKey = PrimaryKey(idPdt)
 }
 
 object Stock : Table("STOCK") {
-  val idStckPdt = integer("Product_ID").references(Product.idPdt)
-  val idStckProv = integer("Provider_ID").references(Provider.idProvider)
+  val idStckPdt = integer("PRODUCT_ID").references(Product.idPdt)
+  val idStckProv = integer("PROVIDER_ID").references(Provider.idProvider)
   val minAlert = integer("MIN_VALUE_ALERT")
 
   override val primaryKey = PrimaryKey(idStckPdt, idStckProv)
 }
 
 object Provider : Table("PROVIDERS") {
-  val idProvider = integer("PROVIDER_ID").autoIncrement()
-  val nameProvider = varchar("PROVIDER_NAME", 50)
-  val tel = integer("PROVIDER_PHONE")
-  val description = varchar("PROVIDER_DESCRIPTION", 70)
-  val address = varchar("PROVIDER_ADDRESS ", 70)
-  val postalCode = integer("PROVIDER_SIP")
-  val logo = blob("PROVIDER_COMPANY_LOGO").nullable()
+  val idProvider = integer("ID").autoIncrement()
+  val nameProvider = varchar("NAME", 50)
+  val tel = integer("PHONE")
+  val description = varchar("DESCRIPTION", 70)
+  val address = varchar("ADDRESS ", 50)
+  val zipCode = integer("ZIP_CODE")
+  val logo = blob("COMPANY_LOGO").nullable()
 
   override val primaryKey = PrimaryKey(idProvider)
 }
@@ -88,37 +92,36 @@ object Provider : Table("PROVIDERS") {
 object BillProduct : Table("BILL_PRODUCT") {
   val idBPdt = integer("BILL_PRODUCT_ID").references(Product.idPdt)
   val quantity = integer("QUANTITY")
-  val amountHT = integer("AMOUNT HT")
-  val amountTTC = decimal("amount TTC", 9, 3)
+  val amount = integer("AMOUNT_BEFORE_TAXES")
+  val amountWithTaxes = decimal("AMOUNT_INCLUDING_TAXES", 9, 3)
 
   override val primaryKey = PrimaryKey(idBPdt)
 }
 
 object Command : Table("COMMANDS") {
   val numCmd = integer("COMMAND_NUMBER").autoIncrement()
-  val idClt = integer("ID_CLIENT").references(Client.idClt)
-  val dateCmd = varchar("COMMAND_DATE", 25)
+  val idClt = integer("CLIENT_ID").references(Client.idClt)
+  val dateCmd = datetime("COMMAND_DATE").defaultExpression(CurrentDateTime())
   val paymentMethod = varchar("PAYMENT_METHOD", 50)
   val statusCmd = varchar("COMMAND_STATUS", 30)
 
   override val primaryKey = PrimaryKey(numCmd)
-
 }
 
 object Bill : Table("BILLS") {
   val numBill = integer("BILL_NUMBER").autoIncrement()
-  val addressBill = varchar("BILL_ADDRESS", 30)
-  val dateBill = varchar("BILL_DATE", 25)
-  val amountTTC = decimal("AMOUNT_TO_PAY", 9, 3).references(BillProduct.amountTTC)
+  val addressBill = varchar("BILL_ADDRESS", 50)
+  val dateBill = datetime("BILL_DATE").defaultExpression(CurrentDateTime())
+  val amountWithTaxes = decimal("AMOUNT_TO_PAY", 9, 3).references(BillProduct.amountWithTaxes)
   val refCmd = integer("COMMAND_REFERENCE").references(Command.numCmd)
 
   override val primaryKey = PrimaryKey(numBill)
 }
 
 object TaxRule : Table("TAX_RULE") {
-  val idTaxe = integer("TAX_ID").autoIncrement()
-  val taxName = varchar("TAX_NAME", 20)
-  val rate = integer("TAX_RATE_IN_%")
+  val idTaxe = integer("ID").autoIncrement()
+  val taxName = varchar("NAME", 20)
+  val rate = integer("RATE_IN_PERCENTAGE")
 
   override val primaryKey = PrimaryKey(idTaxe)
 }
@@ -247,7 +250,7 @@ fun addClient(id: Int, name: String, fstName: String, address: String, city: Str
     it[addressClt] = address
     it[cityClt] = city
     it[postalCodeClt] = postalCode
-    it[ageClt] = age
+    it[birthdayDate] = age
   }
 }
 
@@ -282,7 +285,7 @@ fun addFourn(id: Int, name: String, tel: Int, address: String, description: Stri
     it[Provider.tel] = tel
     it[Provider.address] = address
     it[Provider.description] = description
-    it[Provider.postalCode] = postalCode
+    it[Provider.zipCode] = postalCode
   }
 }
 
@@ -303,18 +306,18 @@ fun addTaxRule(id: Int, taxName: String, rate: Int) {
 }
 
 fun addBills() {
-  addBill(0, "addresse facture 0", "13/09/20018", Decimal("3129.7").value, 0)
-  addBill(1, "addresse facture 1", "16/02/2020", Decimal("1149.24").value, 1)
-  addBill(2, "addresse facture 2", "13/05/2019", Decimal("219.6").value, 2)
-  addBill(3, "addresse facture 3", "12/01/2019", Decimal("146.9").value, 3)
+  addBill(0, "Bill address 0", DateTime.parse("2018-09-13"), Decimal("3129.7").value, 0)
+  addBill(1, "Bill address 1", DateTime.parse("2020-02-16"), Decimal("1149.24").value, 1)
+  addBill(2, "Bill address 2", DateTime.parse("2019-05-13"), Decimal("219.6").value, 2)
+  addBill(3, "Bill address 3", DateTime.parse("2019-01-12"), Decimal("146.9").value, 3)
 }
 
-fun addBill(num: Int, address: String, date: String, amount: BigDecimal, ref: Int) {
+fun addBill(num: Int, address: String, date: DateTime, amount: BigDecimal, ref: Int) {
   Bill.insert {
     it[numBill] = num
     it[addressBill] = address
     it[dateBill] = date
-    it[amountTTC] = amount
+    it[amountWithTaxes] = amount
     it[refCmd] = ref
   }
 }
@@ -335,13 +338,13 @@ fun addStock(id: Int, idStck: Int, minAlerte: Int) {
 }
 
 fun addCmds() {
-  addCmd(0, 0, "01/01/2020", "cheque", "en_cours")
-  addCmd(1, 0, "01/01/2020", "cheque", "en_cours")
-  addCmd(2, 1, "20/01/2021", "carte", "en_cours")
-  addCmd(3, 2, "13/05/2021", "espece", "en_cours")
+  addCmd(0, 0, DateTime.parse("2020-01-03"), "check", "in preparation")
+  addCmd(1, 0, DateTime.parse("2020-01-01"), "check", "available")
+  addCmd(2, 1, DateTime.parse("2021-05-03"), "bank card", "delivered")
+  addCmd(3, 2, DateTime.parse("2021-05-13"), "cash", "canceled")
 }
 
-fun addCmd(num: Int, id: Int, date: String, payment: String, status: String) {
+fun addCmd(num: Int, id: Int, date: DateTime, payment: String, status: String) {
   Command.insert {
     it[numCmd] = num
     it[idClt] = id
@@ -358,11 +361,11 @@ fun addBillPrdts() {
   addBillPrdt(3, 2, 130, Decimal("146.9").value)
 }
 
-fun addBillPrdt(id: Int, quantity: Int, amountHT: Int, amountTTC: BigDecimal) {
+fun addBillPrdt(id: Int, quantity: Int, amount: Int, amountWithTaxes: BigDecimal) {
   BillProduct.insert {
     it[idBPdt] = id
     it[BillProduct.quantity] = quantity
-    it[BillProduct.amountHT] = amountHT
-    it[BillProduct.amountTTC] = amountTTC
+    it[BillProduct.amount] = amount
+    it[BillProduct.amountWithTaxes] = amountWithTaxes
   }
 }

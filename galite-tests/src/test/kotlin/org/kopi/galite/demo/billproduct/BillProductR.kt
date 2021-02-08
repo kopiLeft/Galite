@@ -54,7 +54,7 @@ object BillProductR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -64,7 +64,7 @@ object BillProductR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -74,7 +74,7 @@ object BillProductR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -84,7 +84,7 @@ object BillProductR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -120,26 +120,26 @@ object BillProductR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val amountHT = field(Domain<Int>(25)) {
+  val amount = field(Domain<Int>(25)) {
     label = "Amount before tax"
     help = "The amount before tax to pay"
 
   }
-  val amountTTC = field(Domain<Decimal>(50)) {
+  val amountWithTaxes = field(Domain<Decimal>(50)) {
     label = "Amount all taxes included"
     help = "The amount all taxes included to pay"
     align = FieldAlignment.LEFT
   }
 
-  val q = BillProduct.selectAll()
+  val billProducts = BillProduct.selectAll()
 
   init {
     transaction {
-      q.forEach { result ->
+      billProducts.forEach { result ->
         add {
           this[quantity] = result[BillProduct.quantity]
-          this[amountHT] = result[BillProduct.amountHT]
-          this[amountTTC] = Decimal(result[BillProduct.amountTTC])
+          this[amount] = result[BillProduct.amount]
+          this[amountWithTaxes] = Decimal(result[BillProduct.amountWithTaxes])
         }
       }
     }

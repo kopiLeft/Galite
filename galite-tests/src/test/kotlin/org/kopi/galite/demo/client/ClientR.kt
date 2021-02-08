@@ -43,7 +43,7 @@ object ClientR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -53,7 +53,7 @@ object ClientR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -63,7 +63,7 @@ object ClientR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -73,7 +73,7 @@ object ClientR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -160,18 +160,18 @@ object ClientR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val q = Client.selectAll()
+  val clients = Client.selectAll()
 
   init {
     transaction {
-      q.forEach { result ->
+      clients.forEach { result ->
         add {
           this[nameClt] = result[Client.nameClt]
           this[fstnameClt] = result[Client.fstnameClt]
           this[addressClt] = result[Client.addressClt]
           this[cityClt] = result[Client.cityClt]
           this[postalCodeClt] = result[Client.postalCodeClt]
-          this[ageClt] = result[Client.ageClt]
+          this[ageClt] = result[Client.birthdayDate]
         }
       }
     }

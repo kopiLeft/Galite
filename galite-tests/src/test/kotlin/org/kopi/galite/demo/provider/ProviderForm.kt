@@ -25,13 +25,12 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.type.Image
 
 object ProviderForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "Providers"
   val page = page("Provider")
-  val action = menu("act")
+  val action = menu("Action")
   val report = actor(
           ident = "report",
           menu = action,
@@ -83,10 +82,10 @@ object BlockProvider : FormBlock(1, 1, "Providers") {
     help = "The provider address"
     columns(u.address)
   }
-  val postalCode = visit(domain = Domain<Int>(30), position = at(5, 1)) {
+  val zipCode = visit(domain = Domain<Int>(30), position = at(5, 1)) {
     label = "Zip code"
     help = "The provider zip code"
-    columns(u.postalCode)
+    columns(u.zipCode)
   }
   /*
   val logo = visit(domain = Domain<Image?>(20), position = at(6, 1)) {

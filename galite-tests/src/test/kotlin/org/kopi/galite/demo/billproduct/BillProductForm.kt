@@ -33,7 +33,7 @@ object BillProductForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "Bill products"
   val page = page("Bill product")
-  val action = menu("act")
+  val action = menu("Action")
   val report = actor(
           ident = "report",
           menu = action,
@@ -71,15 +71,15 @@ object BlockBillProduct : FormBlock(1, 1, "bill product") {
     help = "The quantity"
     columns(u.quantity)
   }
-  val amountHT = visit(domain = Domain<Int>(20), position = at(2, 1)) {
+  val amount = visit(domain = Domain<Int>(20), position = at(2, 1)) {
     label = "Amount before tax"
     help = "The amount before tax to pay"
-    columns(u.amountHT)
+    columns(u.amount)
   }
-  val amountTTC = visit(domain = Domain<Decimal>(20), position = at(3, 1)) {
+  val amountWithTaxes = visit(domain = Domain<Decimal>(20), position = at(3, 1)) {
     label = "Amount all taxes included"
     help = "The amount all taxes included to pay"
-    columns(u.amountTTC, w.amountTTC)
+    columns(u.amountWithTaxes, w.amountWithTaxes)
   }
 }
 

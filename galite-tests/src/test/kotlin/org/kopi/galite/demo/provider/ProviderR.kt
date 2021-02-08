@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.kopi.galite.demo.Provider
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
@@ -42,7 +43,7 @@ object ProviderR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -52,7 +53,7 @@ object ProviderR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -62,7 +63,7 @@ object ProviderR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -72,7 +73,7 @@ object ProviderR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -140,22 +141,22 @@ object ProviderR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val postalCode = field(Domain<Int>(50)) {
+  val zipCode = field(Domain<Int>(50)) {
     label = "Zip code"
     help = "The provider zip code"
     align = FieldAlignment.LEFT
   }
 
-  val q = Provider.selectAll()
+  val providers = Provider.selectAll()
 
   init {
     transaction {
-      q.forEach { result ->
+      providers.forEach { result ->
         add {
           this[nameProvider] = result[Provider.nameProvider]
           this[description] = result[Provider.description]
           this[tel] = result[Provider.tel]
-          this[postalCode] = result[Provider.postalCode]
+          this[zipCode] = result[Provider.zipCode]
           this[address] = result[Provider.address]
         }
       }

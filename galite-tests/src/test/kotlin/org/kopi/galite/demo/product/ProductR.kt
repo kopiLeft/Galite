@@ -53,7 +53,7 @@ object ProductR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -63,7 +63,7 @@ object ProductR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -73,7 +73,7 @@ object ProductR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -83,7 +83,7 @@ object ProductR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -143,11 +143,11 @@ object ProductR : Report() {
     help = "The product unit price excluding VAT"
     align = FieldAlignment.LEFT
   }
-  val q = Product.selectAll()
+  val products = Product.selectAll()
 
   init {
     transaction {
-      q.forEach { result ->
+      products.forEach { result ->
         add {
           this[designation] = result[Product.designation]
           this[category] = result[Product.category]

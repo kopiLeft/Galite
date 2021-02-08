@@ -18,7 +18,7 @@ package org.kopi.galite.demo.client
 
 import java.util.Locale
 
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.demo.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
@@ -29,7 +29,7 @@ object ClientForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "Clients"
   val page = page("Client")
-  val action = menu("act")
+  val action = menu("Action")
   val report = actor(
           ident = "report",
           menu = action,
@@ -71,10 +71,10 @@ object BlockClient : FormBlock(1, 1, "Clients") {
     help = "The client last name"
     columns(u.nameClt)
   }
-  val birtthDayClt = visit(domain = Domain<Int>(3), position = at(2, 1)) {
+  val birthdayClt = visit(domain = Domain<Int>(3), position = at(2, 1)) {
     label = "Age"
     help = "The client age"
-    columns(u.ageClt)
+    columns(u.birthdayDate)
   }
   val addressClt = visit(domain = Domain<String>(50), position = at(3, 1)) {
     label = "Address"
@@ -86,7 +86,7 @@ object BlockClient : FormBlock(1, 1, "Clients") {
     help = "The client city"
     columns(u.cityClt)
   }
-  val postalCodeClt = visit(domain = Domain<Int>(20), position = at(4, 2)) {
+  val zipCodeClt = visit(domain = Domain<Int>(20), position = at(4, 2)) {
     label = "Zip code"
     help = "The client zip code"
     columns(u.postalCodeClt)

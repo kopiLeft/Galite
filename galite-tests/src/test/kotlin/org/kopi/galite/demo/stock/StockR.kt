@@ -22,6 +22,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.Stock
+import org.kopi.galite.demo.bill.BillR
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -42,7 +43,7 @@ object StockR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -52,7 +53,7 @@ object StockR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -62,7 +63,7 @@ object StockR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -72,7 +73,7 @@ object StockR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -118,11 +119,11 @@ object StockR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val q = Stock.selectAll()
+  val stocks = Stock.selectAll()
 
   init {
     transaction {
-      q.forEach { result ->
+      stocks.forEach { result ->
         add {
           this[idStckPdt] = result[Stock.idStckPdt]
           this[idStckProv] = result[Stock.idStckProv]
