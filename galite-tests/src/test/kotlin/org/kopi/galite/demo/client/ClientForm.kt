@@ -65,12 +65,12 @@ object Clients : FormBlock(1, 1, "Clients") {
   val fstnameClt = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
     label = "First Name"
     help = "The client first name"
-    columns(u.fstnameClt)
+    columns(u.firstNameClt)
   }
   val nameClt = mustFill(domain = Domain<String>(25), position = at(2, 2)) {
     label = "Last name"
     help = "The client last name"
-    columns(u.nameClt)
+    columns(u.lastNameClt)
   }
   val ageClt = visit(domain = Domain<Int>(3), position = at(3, 1)) {
     label = "Age"
