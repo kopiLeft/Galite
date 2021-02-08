@@ -53,7 +53,7 @@ object Client : Table("CLIENTS") {
   val addressClt = varchar("ADDRESS", 50)
   val birthdayDate = integer("AGE")
   val cityClt = varchar("CITY", 30)
-  val postalCodeClt = integer("ZIP")
+  val zipCode = integer("ZIP")
 
   override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
 }
@@ -242,14 +242,14 @@ fun addClients() {
   addClient(2, "Bouaroua", "Ahmed", "10,Rue du Lac", "Mourouj", 5003, 22)
 }
 
-fun addClient(id: Int, name: String, fstName: String, address: String, city: String, postalCode: Int, age: Int) {
+fun addClient(id: Int, name: String, fstName: String, address: String, city: String, zipcode: Int, age: Int) {
   Client.insert {
     it[idClt] = id
     it[nameClt] = name
     it[fstnameClt] = fstName
     it[addressClt] = address
     it[cityClt] = city
-    it[postalCodeClt] = postalCode
+    it[zipCode] = zipcode
     it[birthdayDate] = age
   }
 }
@@ -272,10 +272,10 @@ fun addProduct(id: Int, designation: String, category: String, taxName: String, 
 }
 
 fun addFourns() {
-  addFourn(0, "Radhia Jouini", 21203506, "address provider 1", "description du Provider ayant l'id 0", 2000)
-  addFourn(1, "Sarra Boubaker", 99806234, "address provider 2", " description du Provider ayant l'id 1", 3005)
-  addFourn(2, "Hamida Zaoueche", 55896321, "address provider 3", " description du Provider ayant l'id 2", 6008)
-  addFourn(3, "Seif Markzi", 23254789, "address provider 4", " description du Provider ayant l'id 3", 2006)
+  addFourn(0, "Radhia Jouini", 21203506, "address provider 1", "Provider 0 description", 2000)
+  addFourn(1, "Sarra Boubaker", 99806234, "address provider 2", "Provider 1 description", 3005)
+  addFourn(2, "Hamida Zaoueche", 55896321, "address provider 3", "Provider 2 description", 6008)
+  addFourn(3, "Seif Markzi", 23254789, "address provider 4", "Provider 3 description", 2006)
 }
 
 fun addFourn(id: Int, name: String, tel: Int, address: String, description: String, postalCode: Int) {
