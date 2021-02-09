@@ -21,10 +21,12 @@ import kotlin.test.assertNotNull
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.targetTables
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.Test
+import org.kopi.galite.db.Modules
+import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
 import org.kopi.galite.form.VBlockDefaultOuterJoin
 import org.kopi.galite.tests.JApplicationTestBase
@@ -38,10 +40,10 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
 
     assertNotNull(searchTables)
 
-    val tables = searchTables.selectAll().targets
+    val tables = searchTables.targetTables()
 
-    assertCollectionsEquals(arrayListOf(Users), tables)
-    assertEquals(Users.columns,searchTables.columns)
+    assertCollectionsEquals(listOf(Users, UserRights, Modules), tables)
+    assertCollectionsEquals(Users.columns + UserRights.columns + Modules.columns,searchTables.columns)
   }
 
   @Test
