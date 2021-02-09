@@ -31,9 +31,9 @@ import org.kopi.galite.visual.VCommand
  * @param domain      The domain of this field.
  * @param ident       The identifier of this field, used to identify the field the localization file.
  */
-class ReportField<T : Comparable<T>?>(override val domain: Domain<T>,
-                                      internal val ident: String,
-                                      val init: ReportField<T>.() -> Unit) : Field<T>(domain) {
+class ReportField<T>(override val domain: Domain<T>,
+                     internal val ident: String,
+                     val init: ReportField<T>.() -> Unit) : Field<T>(domain) {
   /** the options of the field */
   internal var options: Int = 0
 
