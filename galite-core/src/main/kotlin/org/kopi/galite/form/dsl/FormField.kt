@@ -153,9 +153,22 @@ open class FormField<T>(val block: FormBlock,
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.LEFT
 
+  /** list of nullable columns */
+  var nullableColumns = mutableListOf<Column<*>>()
+
+  /** used for LEFT OUTER JOIN */
+  fun <T: Column<*>> nullable(column: T): T {
+    nullableColumns.add(column)
+    return column
+  }
+
   fun initColumn(vararg joinColumns: Column<*>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
-      FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
+      if(nullableColumns.contains(column)) {
+        FormFieldColumn(column, column.table.tableName, column.name, this, false, true)
+      } else {
+        FormFieldColumn(column, column.table.tableName, column.name, this, false, false)
+      }
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
