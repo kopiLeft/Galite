@@ -118,7 +118,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
                 // start of an outer join
                 addToJoinedTables(field.getColumn(j)!!.getTable_())
-                joinTables = joinTables.join(joinTable, joinType, field.getColumn(tableColumn)!!.column,
+                joinTables = joinTables.join(joinTable, joinType, field.getColumn(table)!!.column,
                                              field.getColumn(j)!!.column,
                                              additionalConstraint)
               }
