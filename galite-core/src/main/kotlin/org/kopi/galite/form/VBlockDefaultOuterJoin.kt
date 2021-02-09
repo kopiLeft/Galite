@@ -72,7 +72,28 @@ class VBlockDefaultOuterJoin(block: VBlock) {
             }
 
             if (j != tableColumn) {
-              if (isJoinedTable(field.getColumn(j)!!.column.table)) { // FIXME!
+              if(!isJoinedTable(field.getColumn(tableColumn)!!.column.table)) {
+
+                if (rootTable == table) {
+                  val joinTable = tables!![field.getColumn(tableColumn)!!.getTable()]
+
+                  // start of an outer join
+                  addToJoinedTables(field.getColumn(tableColumn)!!.getTable_())
+                  joinTables = joinTables.join(joinTable, joinType, field.getColumn(tableColumn)!!.column,
+                                               field.getColumn(j)!!.column,
+                                               additionalConstraint)
+                }
+                if (j == field.getColumnCount() || field.getColumnCount() == 2) {
+                  // a field is only processed if all columns processed
+                  // for nullable or has only 2 columns and one has been
+                  // already processed
+                  // must be marked before going to next level
+                  addToProcessedFields(i)
+                }
+                if (rootTable == table) {
+                  getJoinCondition(rootTable, field.getColumn(tableColumn)!!.getTable(), joinTables)
+                }
+              } else if (isJoinedTable(field.getColumn(j)!!.column.table)) { // FIXME!
                 // the table for this column is present in the outer join tree
                 // as caster outer joins do not work, we assume that the
                 // condition will apply to the root
@@ -111,23 +132,6 @@ class VBlockDefaultOuterJoin(block: VBlock) {
                 if (rootTable == table) {
                   getJoinCondition(rootTable, field.getColumn(j)!!.getTable(), joinTables)
                 }
-              }
-            } else if (!isJoinedTable(field.getColumn(j)!!.column.table)) {
-              if (rootTable == table) {
-                val joinTable = tables!![field.getColumn(j)!!.getTable()]
-
-                // start of an outer join
-                addToJoinedTables(field.getColumn(j)!!.getTable_())
-                joinTables = joinTables.join(joinTable, joinType, field.getColumn(table)!!.column,
-                                             field.getColumn(j)!!.column,
-                                             additionalConstraint)
-              }
-              if (j == field.getColumnCount() || field.getColumnCount() == 2) {
-                // a field is only processed if all columns processed
-                // for nullable or has only 2 columns and one has been
-                // already processed
-                // must be marked before going to next level
-                addToProcessedFields(i)
               }
             }
           }
