@@ -1,0 +1,35 @@
+
+:not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
+    margin: 0;
+    --lumo-font-family:  Arial, sans-serif !important;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.800rem;
+    border-right: 1px solid #dadada;
+    height:63px;
+    box-sizing: border-box;
+
+}
+:not(#user_menu):first-child::part(menu-bar-button):hover {
+    background-color: #d9f0f8;
+  }
+
+:not(#user_menu):first-child::part(menu-bar-button)  {
+    background-color: var(--lumo-base-color);
+    border-right: 1px solid #dadada;
+    height:63px;
+    box-sizing: border-box;
+   }
+
+::part(menu-bar-button) {
+    background-color: var(--lumo-base-color);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    box-sizing: border-box;
+    --lumo-font-size-m: 0.600rem;
+    margin:0;
+    vertical-align: middle;
+}
+
+:not(#user_menu):first-child::part(menu-bar-button):hover {
+    background-color: #d9f0f8;
+}

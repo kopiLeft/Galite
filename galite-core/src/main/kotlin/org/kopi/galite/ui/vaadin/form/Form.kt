@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.form
 import org.kopi.galite.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -30,6 +31,7 @@ import com.vaadin.flow.component.tabs.Tabs
 /**
  * The form component.
  */
+@CssImport("./styles/galite/Form.css")
 class Form(pageCount: Int, titles: Array<String>) : Div() {
   private var currentPage = -1
   private val pages: Array<Page<*>?> = arrayOfNulls(if (pageCount == 0) 1 else pageCount)

@@ -19,11 +19,13 @@ package org.kopi.galite.ui.vaadin.menu
 
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.contextmenu.MenuItem
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
 
 /**
  * The Module list Component.
  */
+@CssImport("./styles/galite/ModuleList.css")
 open class ModuleList : Div(), HasComponents {
 
   private var isMain = false

@@ -1,0 +1,48 @@
+#session {
+    font-family: Arial, sans-serif !important;
+    font-size: 25px !important;
+    box-sizing: border-box;
+    width:100%;
+    display: table;
+    height: 44px;
+    width: 100%;
+    background: #f2f2f2;
+   }
+
+#k-window-caption {
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  color:black;
+   }
+
+#outlet {
+    background-color:#f2f2f2;
+}
+
+   .k-block {
+        padding: 22px 50px 22px 50px;
+        width: 100%;
+        margin-bottom: 16px;
+        background: #ffffff;
+        display: inline-block;}
+
+  /**
+   * Aligned block styles
+   */
+  .k-block.k-block-aligned {
+      margin-top: $v-block-aligned-margin;
+  }
+
+k-block .label {
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    color: #a3a3a3;
+     }
+
+#simple vaadin-text-field {
+    width: 150px;
+    border: #dadada 1px solid;}
