@@ -17,11 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.actor
 
+import org.kopi.galite.ui.vaadin.base.Styles
+
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Image
+
 /**
  * The actor component
  *
@@ -39,7 +42,11 @@ open class Actor(val caption: String?,
                  val acceleratorKey: Key,
                  val modifiersKey: KeyModifier?) : Button(), HasEnabled {
 
+  //private val listeners: List<ActionListener>? = null
+
   init {
+    className = Styles.ACTOR
+
     super.setText(caption)
 
     if (icon != null) {
