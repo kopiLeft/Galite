@@ -164,11 +164,7 @@ open class FormField<T>(val block: FormBlock,
 
   fun initColumn(vararg joinColumns: Column<*>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
-      if(nullableColumns.contains(column)) {
-        FormFieldColumn(column, column.table.tableName, column.name, this, false, true)
-      } else {
-        FormFieldColumn(column, column.table.tableName, column.name, this, false, false)
-      }
+      FormFieldColumn(column, column.table.tableName, column.name, this, false, nullableColumns.contains(column))
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
