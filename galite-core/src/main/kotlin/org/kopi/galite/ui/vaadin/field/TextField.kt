@@ -45,9 +45,9 @@ class TextField(
         val scanner: Boolean,
         val noEdit: Boolean,
         val align: Int,
-) : Div() {
+) : AbstractField() {
 
-  lateinit var field: AbstractSinglePropertyField<*, *>
+  lateinit var field: AbstractSinglePropertyField<*, out Any?>
 
   /**
    * Is this text field enabled?
@@ -82,7 +82,11 @@ class TextField(
   /**
    * The value in the field
    */
-  val value: Any get() = this.field.value
+  override var value: Any?
+    get() = this.field.value
+    set(value) {
+      this.field.value = value
+    }
 
   /**
    * The field enumeration for code fields.
@@ -130,7 +134,7 @@ class TextField(
     val bindingBuilder = binder.forField(field)
 
     when (type) {
-      Type.STRING -> bindingBuilder.withValidator(StringValidator<Any>(col, rows, !dynamicNewLine, convertType)).bind(
+      Type.STRING -> bindingBuilder.withValidator(StringValidator(col, rows, !dynamicNewLine, convertType)).bind(
               { TODO() }, { _, _ -> TODO() })
       Type.INTEGER -> bindingBuilder.withValidator(IntegerValidator(minval, maxval)).bind({ TODO() },
                                                                                           { _, _ -> TODO() })
@@ -149,7 +153,7 @@ class TextField(
    * Creates the attached text field component.
    * @return the attached text field component.
    */
-  private fun createTextField(): AbstractSinglePropertyField<*, *> {
+  private fun createTextField(): AbstractSinglePropertyField<*, out Any?> {
     val text = createFieldComponent()
     // TODO
     return text
@@ -159,7 +163,7 @@ class TextField(
    * Creates the input component according to field state.
    * @return the input component
    */
-  protected fun createFieldComponent(): AbstractSinglePropertyField<*, *> {
+  protected fun createFieldComponent(): AbstractSinglePropertyField<*, out Any?> {
     var col = col
     val text = if (noEcho && rows == 1) {
       VTextField(col)

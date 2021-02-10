@@ -18,13 +18,14 @@
 package org.kopi.galite.ui.vaadin.block
 
 import org.kopi.galite.form.BlockListener
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.form.Page
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.form.Page
 
 /**
  * The component of a simple block.
@@ -32,35 +33,47 @@ import org.kopi.galite.ui.vaadin.form.Page
  * layout view.
  */
 abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
+
+  /** The block layout. */
+  private var layout: BlockLayout? = null
+  var caption: H4? = null
+  private val listeners = mutableListOf<BlockListener>()
+  private var fields = mutableListOf<ColumnView>()
+
+  /**
+   * The block buffer size.
+   */
+  var bufferSize = 0
+
+  /**
+   * The block display size.
+   */
+  var displaySize = 0
+
+  /**
+   * No chart option. Sets the block to not display the chart view even if it is a multi block.
+   */
+  var noChart = false
+
+  /**
+   * The block fields values per record.
+   */
+  private val cachedValues = mutableListOf<CachedValue>()
+
   init {
     className = Styles.BLOCK
   }
 
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
+  override fun onAttach(attachEvent: AttachEvent?) {
+    setCachedValues()
+  }
+
   /**
    * Sets the block title.
    * @param title The block title.
    */
   override fun setTitle(title: String?) {
     super.setTitle(title)
-    // TODO
-  }
-
-  /**
-   * Sets the buffer size of this block.
-   * @param bufferSize The block buffer size.
-   */
-  fun setBufferSize(bufferSize: Int) {
-    // TODO
-  }
-
-  /**
-   * Sets the block display size.
-   * @param displaySize The display size.
-   */
-  fun setDisplaySize(displaySize: Int) {
     // TODO
   }
 
@@ -77,14 +90,6 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * @param noMove The no move option.
    */
   fun setNoMove(noMove: Boolean) {
-    // TODO
-  }
-
-  /**
-   * Sets the block to not display the chart view even if it is a multi block.
-   * @param noChart The no chart ability.
-   */
-  fun setNoChart(noChart: Boolean) {
     // TODO
   }
 
@@ -156,6 +161,21 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
     }
   }
 
+
+  /**
+   * Appends the given field to the block field list.
+   * @param field The field to be added to block fields.
+   */
+  open fun addField(field: ColumnView) {
+    if (field.index != -1) {
+      if (field.index > fields.size) {
+        fields.add(field)
+      } else {
+        fields.add(field.index, field)
+      }
+    }
+  }
+
   /**
    * Registers a new block listener.
    * @param l The listener to be registered.
@@ -221,7 +241,80 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * @param value The new record value.
    */
   internal open fun fireValueChanged(col: Int, rec: Int, value: String?) {
+    val existingValue: CachedValue?
+
+    val cachedValue = CachedValue(col, rec, value)
+    existingValue = isAlreadyCached(cachedValue)
+    if (existingValue != null) {
+      cachedValues.remove(existingValue)
+    }
+    cachedValues.add(cachedValue)
+  }
+
+  /**
+   *
+   * @param cachedValue : cached value
+   * @return the existing cached value if it exists
+   */
+  protected open fun isAlreadyCached(cachedValue: CachedValue?): CachedValue? {
+    for (value in cachedValues) {
+      if (value.hasSameKey(cachedValue!!)) {
+        return value
+      }
+    }
+    return null
+  }
+
+  /**
+   * Sets the cached values of the block fields.
+   */
+  private fun setCachedValues() {
+    for (cachedValue in cachedValues) {
+      setCachedValue(cachedValue.col, cachedValue.rec, cachedValue.value)
+    }
+  }
+
+  /**
+   * Sets the cached values for the given column.
+   * @param column The column view number.
+   * @param rec The record number.
+   * @param value The column value.
+   */
+  private fun setCachedValue(column: Int, rec: Int, value: String) {
+    val field = fields[column]
+    if (field != null) {
+      field.setValueAt(rec, value)
+      field.updateValue(rec)
+    }
+  }
+
+  /**
+   * Sets the record to be changed.
+   * @param rec The record number.
+   * @param val The change value.
+   */
+  open fun setRecordChanged(rec: Int, `val`: Boolean) {
     // TODO
+  }
+
+
+  /**
+   * Returns the display line for the given record.
+   * @param recno The record number.
+   * @return The display line.
+   */
+  open fun getDisplayLine(recno: Int): Int {
+    // TODO
+    return 0
+  }
+
+  /**
+   * Sets the block active record from a given display line.
+   * @param displayLine The display line.
+   */
+  open fun getRecordFromDisplayLine(displayLine: Int): Int {
+    // return getDataPosition(displayToSortedRec.get(displayLine)) TODO
+    return 0
   }
 
   /**
@@ -290,12 +383,4 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * @return The created block layout.
    */
   abstract fun createLayout(): BlockLayout?
-
-  /**
-   * Returns the block layout.
-   * @return the block layout.
-   */
-  private var layout: BlockLayout? = null
-  var caption: H4? = null
-  private val listeners = mutableListOf<BlockListener>()
 }

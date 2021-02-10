@@ -53,13 +53,7 @@ interface UField : UComponent {
   /**
    * represents the field position in the chart.
    */
-  fun getPosition(): Int
-
-  /**
-   * Sets the field position in the chart.
-   * @param position The field position in the chart.
-   */
-  fun setPosition(position: Int)
+  var position: Int
 
   /**
    * Returns the auto fill button.

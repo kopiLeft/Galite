@@ -58,7 +58,7 @@ open class DTextField(
 
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-    setContent(field)
+    setFieldContent(field)
   }
 
   // --------------------------------------------------
@@ -152,10 +152,6 @@ open class DTextField(
             VConstants.FDO_CONVERT_NAME -> TextField.ConvertType.NAME
             else -> TextField.ConvertType.NONE
           }
-
-  fun setContent(component: TextField) {
-    addComponentAsFirst(component)
-  }
 
   // ----------------------------------------------------------------------
   // DRAWING

@@ -88,8 +88,17 @@ class DActor(private var model: VActor) : Actor(model.menuItem,
      * @param acceleratorKey The original accelerator key.
      * @return The corrected accelerator key.
      */
-    private fun correctAcceleratorKey(acceleratorKey: Int): Key = if (acceleratorKey == 10)
-      Key.UNIDENTIFIED else Key.of(org.kopi.galite.form.dsl.Key.fromInt(acceleratorKey).toString())
+    private fun correctAcceleratorKey(acceleratorKey: Int): Key = if (acceleratorKey == 10) {
+      Key.UNIDENTIFIED
+    } else
+    {
+      // Fixme!
+      try {
+        Key.of(org.kopi.galite.form.dsl.Key.fromInt(acceleratorKey).toString())
+      } catch (e: Exception) {
+        Key.UNIDENTIFIED
+      }
+    }
 
     /**
      * Returns the corrected modifier accelerator key.

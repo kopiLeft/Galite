@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.field
 
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.block.ColumnView
 
 import com.vaadin.flow.component.html.Div
 
@@ -30,57 +31,116 @@ import com.vaadin.flow.component.html.Div
  * TODO: Implement this class with appropriate component
  */
 open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
+  private val listeners = mutableListOf<FieldListener>()
+
+  /**
+   * Has an increment button ?
+   */
+  var hasIncrement = false
+
+  /**
+   * Has a decrement button ?
+   */
+  var hasDecrement = false
+
+  /**
+   * Has an action trigger ?
+   */
+  var hasAction = false
+
+  /**
+   * Is the action trigger enabled ?
+   */
+  var isActionEnabled = false
+
+  /**
+   * The field visibility
+   *
+   * TODO: Do wee need this or super.visible is fine.
+   */
+  var _visible = true
+
+  /**
+   * The visible field height needed to create layout.
+   */
+  var visibleHeight = 1
+
+  /**
+   * Tells if this field is never displayed in the detail view.
+   */
+  var noDetail = false
+
+  /**
+   * Tells if this field is never displayed in the chart view.
+   */
+  var noChart = false
+
+  /**
+   * The navigation delegation to server mode.
+   */
+  var navigationDelegationMode = NavigationDelegationMode.ALWAYS
+
+  /**
+   * Tells that this field has a PREFLD trigger. This will tell that
+   * the navigation should be delegated to server if the next target
+   * field has a PREFLD trigger.
+   */
+  var hasPreFieldTrigger = false
+
+  /**
+   * The actors associated with this field.
+   */
+  var actors = mutableListOf<Actor>()
+
+  /**
+   * The field dynamic access
+   */
+  var dynAccess = 0
+
+  /**
+   * The default field access.
+   */
+  var defaultAccess = 0
+
+  /**
+   * The position of the field for chart layout.
+   */
+  var position = 0
+
+  /**
+   * The column view index of this field.
+   */
+  var index = 0
+
+  var columnView: ColumnView? = null
+
+  var content: AbstractField? = null
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  /**
-   * Sets the default access of the field.
-   * @param defaultAccess The field default access.
-   */
-  fun setDefaultAccess(defaultAccess: Int) {
-    TODO()
+  fun setFieldContent(component: AbstractField) {
+    content = component
+    addComponentAsFirst(component)
   }
 
   /**
-   * Sets the dynamic access of the field.
-   * @param dynAccess the dynamic access of the field.
+   * Updates the value of this field according to its position.
    */
-  fun setDynAccess(dynAccess: Int) {
-    TODO()
+  fun updateValue() {
+    setValue(columnView!!.getValueAt(position))
   }
 
   /**
-   * Sets the field to be visible in chart view.
-   * @param noChart The visibility in chart view.
+   * Sets the value of the this field.
+   * @param o The field value.
    */
-  fun setNoChart(noChart: Boolean) {
-    TODO()
-  }
-
-  /**
-   * Sets the field to be visible in detail view.
-   * @param noDetail The visibility in detail view.
-   */
-  fun setNoDetail(noDetail: Boolean) {
-    TODO()
-  }
-
-  /**
-   * Sets the position of the field in the chart layout.
-   * @param position The position of the field.
-   */
-  open fun setPosition(position: Int) {
-    TODO()
-  }
-
-  /**
-   * Sets the column view index of this field.
-   * @param index The column view index.
-   */
-  fun setIndex(index: Int) {
-    TODO()
+  fun setValue(o: Any?) {
+    if (content != null) {
+      content!!.value = o.toString().toIntOrNull() ?: o
+    }
+    // TODO
   }
 
   /**
@@ -88,31 +148,7 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
    * @param actors The actors to be associated with field.
    */
   fun addActors(actors: Collection<Actor?>?) {
-    TODO()
-  }
-
-  /**
-   * Sets the field to has an action trigger.
-   * @param hasAction The field has an action trigger ?
-   */
-  fun setHasAction(hasAction: Boolean) {
-    TODO()
-  }
-
-  /**
-   * Sets the action trigger to be enabled/disabled on this field.
-   * @param isActionEnabled Is the action enabed ?
-   */
-  fun setActionEnabled(isActionEnabled: Boolean) {
-    TODO()
-  }
-
-  /**
-   * Sets this field to has a PREFLD trigger.
-   * @param hasPreFieldTrigger The PREFDL trigger flag.
-   */
-  fun setHasPreFieldTrigger(hasPreFieldTrigger: Boolean) {
-    TODO()
+    //TODO()
   }
 
   /**
@@ -120,7 +156,7 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
    * @param l The listener to be registered.
    */
   fun addFieldListener(l: FieldListener) {
-    TODO()
+    // TODO()
   }
 
   /**
@@ -239,19 +275,31 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
     }
   }
 
-  /**
-   * Sets the field visible height.
-   * @param visibleHeight The visible height.
-   */
-  fun setVisibleHeight(visibleHeight: Int) {
-    TODO()
-  }
-
   val isConnectorEnabled: Boolean
     get() = true
 
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val listeners = mutableListOf<FieldListener>()
+  /**
+   * The navigation delegation to server mode.
+   */
+  enum class NavigationDelegationMode {
+    /**
+     * do not delegate navigation to server
+     */
+    NONE,
+
+    /**
+     * delegate navigation to server if the content of this field has changed
+     */
+    ONCHANGE,
+
+    /**
+     * delegate navigation to server side when the field is not empty.
+     */
+    ONVALUE,
+
+    /**
+     * Always delegate navigation to server.
+     */
+    ALWAYS
+  }
 }

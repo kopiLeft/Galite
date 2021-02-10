@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.formlayout.FormLayout
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -45,6 +46,16 @@ abstract class AbstractBlockLayout protected constructor(val col: Int, val line:
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+
+  override fun onAttach(attachEvent: AttachEvent?) {
+    layout()
+  }
+
+  /**
+   * Initialize the size of the layout
+   */
+  protected abstract fun initSize()
+
   /**
    * Initialize layout size
    * @param columns The number of column.

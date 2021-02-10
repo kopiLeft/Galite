@@ -32,6 +32,19 @@ import org.kopi.galite.visual.VActor
  */
 open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  /**
+   * The info text used to display search operator.
+   */
+  var infoText: String? = ""
+
+  /**
+   * The label can execute field action trigger.
+   */
+  var hasAction = false
+
   init {
     setText(text)
   }
@@ -116,17 +129,6 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     }
     return description
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  /**
-   * The info text.
-   */
-  var infoText: String? = null
-    set(info) {
-      TODO()
-    }
 
   /**
    * `true` is the label is in detail mode.
