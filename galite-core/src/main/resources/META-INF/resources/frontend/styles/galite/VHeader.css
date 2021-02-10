@@ -14,6 +14,7 @@
 #moduleList {
     display: block;
     max-width: 85%;
+    margin-left: 0;
 }
 
 #welcomeContainer {
@@ -40,7 +41,7 @@
     color:white;
     box-sizing: border-box;
     background: url('https://api.iconify.design/vaadin:angle-double-right.svg?color=%23676767') no-repeat center center / contain;
- }
+}
 
 #welcomeContainer> * {
     display: inline;
@@ -66,16 +67,16 @@
       color: #ffffff !important;
       z-index: 5;
       @include shadow-no-top();
-  }
+}
 
 #overlay >  [role=menu] {
     box-sizing:border-box;
   	border-bottom: 1px solid #dadada;
- }
+}
 
 #overlay >  [role=menu] > [role=menuitem]:hover {
     background: #d9f0f8;
- }
+}
 
 .vaadin-menu-item {
     color: #8f8f8f;

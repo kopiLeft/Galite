@@ -7,42 +7,119 @@
     height: 44px;
     width: 100%;
     background: #f2f2f2;
-   }
+}
 
 #k-window-caption {
-  margin: 0;
-  box-sizing: border-box;
-  padding: 0;
-  border: 0;
-  vertical-align: baseline;
-  color:black;
-   }
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    color:black;
+}
 
 #outlet {
     background-color:#f2f2f2;
 }
 
-   .k-block {
-        padding: 22px 50px 22px 50px;
-        width: 100%;
-        margin-bottom: 16px;
-        background: #ffffff;
-        display: inline-block;}
+.k-block {
+    padding: 22px 50px 22px 50px;
+    margin-bottom: 16px;
+    background: #ffffff;
+    display: inline-block;
+}
 
-  /**
-   * Aligned block styles
-   */
-  .k-block.k-block-aligned {
-      margin-top: $v-block-aligned-margin;
-  }
+.k-block.k-block-aligned {
+    margin-top: $v-block-aligned-margin;
+}
 
 k-block .label {
     font-family: Arial, sans-serif !important;
     font-weight: 500 !important;
     font-style: normal !important;
     color: #a3a3a3;
-     }
+}
 
-#simple vaadin-text-field {
-    width: 150px;
-    border: #dadada 1px solid;}
+::part(input-field), ::part(input-field):not(:hover){
+    background-color:white;
+}
+
+::part(input-field):focus {
+    background-color:white;
+}
+
+.k-block ::part(value):focus  {
+    border-bottom: 2px solid #a3a3a3;
+    background: white;
+}
+
+.k-block ::part(value){
+    --lumo-text-field-overflow-mask-image: none;
+    border-bottom: 1px solid #dadada;
+    padding:0;
+    margin:0;
+    box-shadow: none;
+    background-color: var(--lumo-base-color);
+}
+
+#content{
+     background: #f2f2f2;
+     width: 100%;
+     height: auto;
+     display: inline-block;
+     vertical-align: top;
+     margin: 0;
+     padding: 0;
+     border: 0;
+}
+
+.k-form-tab {
+    width:100%;
+    margin:0;
+    box-sizing:border-box;
+}
+
+#session {
+    display: table;
+    height: 44px;
+    width: 100%;
+    background: #f2f2f2;
+}
+
+#session > * {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 20px;
+}
+
+#session span a span {
+    font-size: 14px !important;
+    font-weight: bold !important;
+}
+
+#session span a span {
+   color:black;
+   font-size: 16px !important;
+   font-weight: bold !important;
+   vertical-align: baseline;
+   font-family: Arial, sans-serif !important;
+}
+
+#session span a {
+    text-decoration:none;
+}
+
+.k-main-window {
+ position: fixed;
+ width: 100%;
+ height: 100%;
+ margin:0;
+ padding-top:50px;
+ box-sizing: border-box;
+ text-align: left;
+ display: inline-block;
+ white-space: normal;
+ vertical-align: bottom;
+ font-size: 16px;
+ line-height: normal;
+}
