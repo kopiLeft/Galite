@@ -20,9 +20,12 @@ package org.kopi.galite.ui.vaadin.visual
 import java.awt.Event
 import java.awt.event.KeyEvent
 
+import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEventListener
+import com.vaadin.flow.component.button.Button
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.base.Utils
@@ -40,12 +43,22 @@ import org.kopi.galite.visual.VActor
  * @param model The actor model.
  *
  */
-class DActor(private var model: VActor) : Actor(model.menuItem,
-                                                Utils.createTooltip(getDescription(model)),
-                                                model.menuName,
-                                                Utils.getFontAwesomeIcon(model.iconName),
-                                                correctAcceleratorKey(model.acceleratorKey),
-                                                correctAcceleratorModifier(model.acceleratorModifier)), UActor {
+class DActor(private var model: VActor)
+  : Actor(model.menuItem,
+          Utils.createTooltip(getDescription(model)),
+          model.menuName,
+          Utils.getFontAwesomeIcon(model.iconName),
+          correctAcceleratorKey(model.acceleratorKey),
+          correctAcceleratorModifier(model.acceleratorModifier)),
+        UActor,
+        ComponentEventListener<ClickEvent<Button>> {
+
+  init {
+    isEnabled = false
+    model.setDisplay(this)
+    addClickListener(this)
+  }
+
   // --------------------------------------------------
   // ACCESSORS
   // --------------------------------------------------
@@ -58,7 +71,15 @@ class DActor(private var model: VActor) : Actor(model.menuItem,
   }
 
   override fun setEnabled(enabled: Boolean) {
+    ui.ifPresent {
+      it.access {
         super.setEnabled(enabled)
+      }
+    }
+  }
+
+  override fun onComponentEvent(event: ClickEvent<Button>) {
+    model.performAction()
   }
 
   companion object {
@@ -106,12 +127,12 @@ class DActor(private var model: VActor) : Actor(model.menuItem,
      * @return The corrected modifier accelerator key.
      */
     private fun correctAcceleratorModifier(acceleratorModifier: Int): KeyModifier? =
-      when (acceleratorModifier) {
-        Event.SHIFT_MASK -> KeyModifier.of("Shift")
-        Event.ALT_MASK -> KeyModifier.of("Alt")
-        Event.CTRL_MASK -> KeyModifier.of("Control")
-        Event.META_MASK -> KeyModifier.of("Meta")
-        else -> null
-      }
+            when (acceleratorModifier) {
+              Event.SHIFT_MASK -> KeyModifier.of("Shift")
+              Event.ALT_MASK -> KeyModifier.of("Alt")
+              Event.CTRL_MASK -> KeyModifier.of("Control")
+              Event.META_MASK -> KeyModifier.of("Meta")
+              else -> null
+            }
   }
 }
