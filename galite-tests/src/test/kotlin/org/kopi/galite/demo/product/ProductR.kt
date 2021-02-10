@@ -2,12 +2,16 @@ package org.kopi.galite.demo.product
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.Product
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
+import org.kopi.galite.type.Decimal
 
 /**
  * Simple Report with two fields.
@@ -118,30 +122,22 @@ object ProductR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val price = field(Domain<Int>(20)) {
+  val price = field(Domain<Decimal>(10, 5)) {
     label = "product price"
     help = "The product unit price excluding VAT"
     align = FieldAlignment.LEFT
   }
 
   init {
-    add {
-      this[designation] = "Salah"
-      this[category] = "shoes"
-      this[taxName] = "Taux 9%"
-      this[price] = 200
-    }
-    add {
-      this[designation] = "Salah"
-      this[category] = "shirts"
-      this[taxName] = "Taux 19%"
-      this[price] = 250
-    }
-    add {
-      this[designation] = "Salah"
-      this[category] = "pullovers"
-      this[taxName] = "Taux 19%"
-      this[price] = 222
+    transaction {
+      Product.selectAll().forEach { result ->
+        add {
+          this[designation] = result[Product.designation]
+          this[category] = result[Product.category]
+          this[taxName] = result[Product.taxName]
+          this[price] = result[Product.price]
+        }
+      }
     }
   }
 }
