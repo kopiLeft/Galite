@@ -385,7 +385,7 @@ class MReport : Constants, Serializable {
   /**
    * Return all rows
    *
-   * @return    all visible desired row
+   * @return    all visible desired rows
    */
   fun getRows(): Array<VReportRow?> = visibleRows!!
 
