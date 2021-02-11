@@ -179,7 +179,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    * @param     manager         the manger to use for localization
    */
-  fun localize(manager: LocalizationManager, locale: Locale) {
+  fun localize(manager: LocalizationManager, locale: Locale?) {
     if(ApplicationContext.getDefaultLocale() != locale) {
       val loc = manager.getBlockLocalizer(source, name)
 

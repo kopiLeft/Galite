@@ -138,7 +138,6 @@ abstract class VReportColumn(
   // ----------------------------------------------------------------------
   var label: String = ""
   var help: String? = null
-    private set
   var visible: Boolean = true
   open var folded: Boolean = false
   var addedAtRuntime: Boolean = false
