@@ -113,7 +113,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
     private set
   private val items = mutableListOf<Module>()
   private val shortcutsID = mutableListOf<Int>()
-  override var locale: Locale = ApplicationContext.getDefaultLocale()
+  override val locale: Locale get() = ApplicationContext.getDefaultLocale()
 
   // ----------------------------------------------------------------------
   // CONSTRUCTORS

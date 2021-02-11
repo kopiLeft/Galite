@@ -205,6 +205,9 @@ abstract class Report : Window() {
         Timestamp::class ->
           VTimestampColumn(it.ident, it.options, it.align.value, it.groupID, function, it.domain.width ?: 0, format)
         else -> throw RuntimeException("Type ${it.domain.kClass!!.qualifiedName} is not supported")
+      }.also { column ->
+        column.label = it.label ?: ""
+        column.help = it.help
       }
     }.toTypedArray()
   }
@@ -230,6 +233,8 @@ abstract class Report : Window() {
     initFields()
 
     object : VReport() {
+      override val locale: Locale get() = this@Report.locale ?: ApplicationContext.getDefaultLocale()
+
       /**
        * Handling triggers
        */
@@ -268,8 +273,8 @@ abstract class Report : Window() {
       }
 
       override fun init() {
-        locale = this@Report.locale ?: ApplicationContext.getDefaultLocale()
         setTitle(title)
+        help = this@Report.help
         this.addActors(this@Report.actors.map { actor ->
           actor.buildModel(sourceFile)
         }.toTypedArray())
