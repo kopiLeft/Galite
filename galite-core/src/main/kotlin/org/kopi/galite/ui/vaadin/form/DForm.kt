@@ -278,10 +278,6 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // TODO
   }
 
-  override fun getRuntimeDebugInfo(): Throwable? {
-    TODO("Not yet implemented")
-  }
-
   override fun launchDocumentPreview(file: String) {
     val f = File(file)
     fileProduced(f, f.name)

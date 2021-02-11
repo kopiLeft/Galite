@@ -15,16 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.field
 
-import org.kopi.galite.report.MReport
+import com.vaadin.flow.component.html.Div
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
- *
- * @param model The table model.
+ * Super class for all field components.
  */
-class VTable(private val model: MReport) {
-
+abstract class AbstractField : Div() {
+  abstract var value: Any?
 }

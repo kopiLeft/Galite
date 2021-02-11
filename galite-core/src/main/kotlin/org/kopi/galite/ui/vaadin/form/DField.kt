@@ -24,6 +24,9 @@ import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VForm
+import org.kopi.galite.form.VImageField
+import org.kopi.galite.form.VStringField
+import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.field.Field
 import org.kopi.galite.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.Action
@@ -46,6 +49,44 @@ abstract class DField(internal val model: VFieldUI,
   : Field(model.getIncrementCommand() != null,
           model.getDecrementCommand() != null), UField, FieldListener {
 
+
+  // ----------------------------------------------------------------------
+  // DATA MEMBERS
+  // ----------------------------------------------------------------------
+  protected var state = 0 // Display state
+  protected var pos = 0
+  internal var access = 0 // current access of field
+  protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
+  protected var mouseInside = false // private events
+
+  init {
+    addFieldListener(this)
+    visibleHeight = when {
+      getModel() is VStringField -> {
+        (getModel() as VStringField).getVisibleHeight()
+      }
+      getModel() is VImageField -> {
+        /*
+         * Sets the visible height of the image field to allow row span in simple block layouts.
+         * We estimate that a row height is ~ 20 px
+         */
+        (getModel() as VImageField).iconHeight / 20
+      }
+      else -> {
+        getModel().height
+      }
+    }
+    hasAction = model.hasAction()
+    label!!.hasAction = model.hasAction()
+    noChart = getModel().noChart()
+    noDetail = getModel().noDetail()
+    navigationDelegationMode = _getNavigationDelegationMode()
+    defaultAccess = getModel().getDefaultAccess()
+    index = model.index
+    hasPreFieldTrigger = getModel().hasTrigger(VConstants.TRG_PREFLD)
+    addActors(getActors())
+  }
+
   //----------------------------------------------------------------------
   // UI MANAGEMENT
   // ----------------------------------------------------------------------
@@ -67,20 +108,6 @@ abstract class DField(internal val model: VFieldUI,
   //-------------------------------------------------
   // ACCESSORS
   //-------------------------------------------------
-  /**
-   * Field cell renderer
-   */
-  override fun setPosition(pos: Int) {
-    // TODO()
-  }
-
-  /**
-   * Field cell renderer
-   * @return the position in chart (0..nbDisplay)
-   */
-  override fun getPosition(): Int {
-    return pos
-  }
 
   /**
    * Returns the alignment.
@@ -150,6 +177,71 @@ abstract class DField(internal val model: VFieldUI,
     TODO()
   }
 
+
+  /**
+   * Returns the navigation delegation to server mode.
+   * For POSTFLD AND PREFLD triggers we always delegate the navigation to server.
+   * For POSTCHG, PREVAL, VALFLD and FORMAT triggers we delegate the navigation to server if
+   * the field value has changed.
+   * @return The navigation delegation to server mode.
+   */
+  private fun _getNavigationDelegationMode(): NavigationDelegationMode {
+    return when {
+      getModel().hasTrigger(VConstants.TRG_POSTFLD) -> {
+        NavigationDelegationMode.ALWAYS
+      }
+      getModel().hasTrigger(VConstants.TRG_PREFLD) -> {
+        NavigationDelegationMode.ALWAYS
+      }
+      getModel().block!!.hasTrigger(VConstants.TRG_PREREC) -> {
+        NavigationDelegationMode.ALWAYS
+      }
+      getModel().block!!.hasTrigger(VConstants.TRG_POSTREC) -> {
+        NavigationDelegationMode.ALWAYS
+      }
+      getModel().block!!.hasTrigger(VConstants.TRG_VALREC) -> {
+        NavigationDelegationMode.ALWAYS
+      }
+      getModel().list != null -> {
+        NavigationDelegationMode.ONVALUE
+      }
+      getModel().hasTrigger(VConstants.TRG_POSTCHG) -> {
+        NavigationDelegationMode.ONCHANGE
+      }
+      getModel().hasTrigger(VConstants.TRG_PREVAL) -> {
+        NavigationDelegationMode.ONCHANGE
+      }
+      getModel().hasTrigger(VConstants.TRG_VALFLD) -> {
+        NavigationDelegationMode.ONCHANGE
+      }
+      getModel().hasTrigger(VConstants.TRG_FORMAT) -> {
+        NavigationDelegationMode.ONCHANGE
+      }
+      else -> {
+        NavigationDelegationMode.NONE
+      }
+    }
+  }
+
+  /**
+   * Returns the actors associated with this field.
+   * @return The actors associated with this field.
+   */
+  private fun getActors(): Collection<Actor>? {
+    val actors: MutableSet<Actor>
+    actors = HashSet<Actor>()
+    for (cmd in model.getAllCommands()) {
+      if (cmd != null) {
+        // for field commands this is needed to have the actor model instance
+        cmd.setEnabled(false)
+        if (cmd.actor != null) {
+          actors.add(cmd.actor!!.getDisplay() as Actor)
+        }
+      }
+    }
+    return actors
+  }
+
   //-------------------------------------------------
   // ABSTRACT METHODS
   //-------------------------------------------------
@@ -189,11 +281,11 @@ abstract class DField(internal val model: VFieldUI,
   protected fun isSkipped(): Boolean {
     val block = getModel().block
     return (getAccess() == VConstants.ACS_SKIPPED
-            || !block!!.isRecordAccessible(getBlockView().getRecordFromDisplayLine(getPosition())))
+            || !block!!.isRecordAccessible(getBlockView().getRecordFromDisplayLine(position)))
   }
 
   override fun getAccess(): Int {
-    return getAccessAt(getPosition())
+    return getAccessAt(position)
   }
 
   /**
@@ -240,7 +332,7 @@ abstract class DField(internal val model: VFieldUI,
    * @return The foreground color of the current data position.
    */
   fun getForeground(): VColor? {
-    return getForegroundAt(getPosition())
+    return getForegroundAt(position)
   }
 
   /**
@@ -248,7 +340,7 @@ abstract class DField(internal val model: VFieldUI,
    * @return The background color of the current data position.
    */
   fun getBackground(): VColor? {
-    return getBackgroundAt(getPosition())
+    return getBackgroundAt(position)
   }
 
   // ----------------------------------------------------------------------
@@ -285,7 +377,7 @@ abstract class DField(internal val model: VFieldUI,
       // an empty row in a chart has not calculated
       // the access for each field (ACCESS Trigger)
       if (model.getBlock().isMulti()) {
-        val recno: Int = getBlockView().getRecordFromDisplayLine(getPosition())
+        val recno: Int = getBlockView().getRecordFromDisplayLine(position)
         if (!model.getBlock().isRecordFilled(recno)) {
           model.getBlock().updateAccess(recno)
         }
@@ -346,13 +438,4 @@ abstract class DField(internal val model: VFieldUI,
   override fun gotoLastRecord() {
     TODO()
   }
-
-  // ----------------------------------------------------------------------
-  // DATA MEMBERS
-  // ----------------------------------------------------------------------
-  protected var state = 0 // Display state
-  protected var pos = 0
-  internal var access = 0 // current access of field
-  protected var isEditable = false // is this field editable
-  protected var mouseInside = false // private events
 }

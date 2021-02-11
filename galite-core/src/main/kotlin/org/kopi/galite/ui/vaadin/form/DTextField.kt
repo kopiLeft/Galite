@@ -58,7 +58,7 @@ open class DTextField(
 
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-    setContent(field)
+    setFieldContent(field)
   }
 
   // --------------------------------------------------
@@ -153,10 +153,6 @@ open class DTextField(
             else -> TextField.ConvertType.NONE
           }
 
-  fun setContent(component: TextField) {
-    addComponentAsFirst(component)
-  }
-
   // ----------------------------------------------------------------------
   // DRAWING
   // ----------------------------------------------------------------------
@@ -211,6 +207,6 @@ open class DTextField(
   }
 
   override fun setBlink(blink: Boolean) {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 }

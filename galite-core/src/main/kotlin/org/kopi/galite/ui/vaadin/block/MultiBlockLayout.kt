@@ -37,6 +37,10 @@ class MultiBlockLayout : AbstractBlockLayout() {
     // TODO
   }
 
+  override fun initSize() {
+    TODO("Not yet implemented")
+  }
+
   override fun addComponent(
           component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean,
           useAll: Boolean,

@@ -34,11 +34,10 @@ class VBlockDefaultOuterJoin(block: VBlock) {
    */
   private fun getJoinCondition(rootTable: Int, table: Int): Join {
     var joinTables: Join? = null
-    var field: VField
 
     if (table == rootTable) {
       joinTables = Join(tables!![table])
-      addToJoinedTables(tables?.get(rootTable)!!)
+      addToJoinedTables(tables!![rootTable])
     }
 
     return getJoinCondition(rootTable, table, joinTables!!)
@@ -51,6 +50,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     var field: VField
     var additionalConstraint: (SqlExpressionBuilder.() -> Op<Boolean>)? = null
     var condition: Op<Boolean>? = null
+    var joinTables = joinTables
 
     for (i in fields.indices) {
       if (isProcessedField(i)) {
@@ -62,50 +62,75 @@ class VBlockDefaultOuterJoin(block: VBlock) {
         val tableColumn = field.fetchColumn(table)    // TODO should return Column<*>?
         val rootColumn = field.fetchColumn(rootTable) // TODO should return Column<*>?
 
-        if (tableColumn != -1) {    // TODO should check if tableColumn != null
-          if (field.getColumn(tableColumn)!!.nullable ||
-                  field.getColumn(rootColumn)!!.nullable) {
-            for (j in 0 until field.getColumnCount()) {
-              if (j != tableColumn) {
-                if (isJoinedTable(field.getColumn(j)!!.column.table)) {
-                  // the table for this column is present in the outer join tree
-                  // as caster outer joins do not work, we assume that the
-                  // condition will apply to the root
-                  if (j == rootColumn) {
-                    condition = if (condition != null) { // TODO Improve this!
-                      condition and (field.getColumn(tableColumn)!!.column eq field.getColumn(j)!!.column)
-                    } else {
-                      field.getColumn(tableColumn)!!.column eq field.getColumn(j)!!.column
-                    }
-                    additionalConstraint = { condition }
-                  }
+        if (tableColumn != -1 && rootColumn != -1) {    // TODO should we check if tableColumn != null?
+          for (j in 0 until field.getColumnCount()) {
+            val joinType = if (field.getColumn(tableColumn)!!.nullable ||
+                    field.getColumn(rootColumn)!!.nullable) {
+              JoinType.LEFT
+            } else {
+              JoinType.INNER
+            }
 
-                  if (j == field.getColumnCount() || field.getColumnCount() == 2) {
-                    // a field is only processed if all columns processed
-                    // for nullable or has only 2 columns and one has been
-                    // already processed
-                    addToProcessedFields(i)
-                  }
-                } else {
-                  if (rootTable == table) {
-                    val joinTable = tables!![field.getColumn(j)!!.getTable()]
+            if (j != tableColumn) {
+              if(!isJoinedTable(field.getColumn(tableColumn)!!.column.table)) {
 
-                    // start of an outer join
-                    addToJoinedTables(field.getColumn(j)!!.getTable_())
-                    joinTables.join(joinTable, JoinType.LEFT, field.getColumn(tableColumn)!!.column,
-                                    field.getColumn(j)!!.column,
-                                    additionalConstraint)
+                if (rootTable == table) {
+                  val joinTable = tables!![field.getColumn(tableColumn)!!.getTable()]
+
+                  // start of an outer join
+                  addToJoinedTables(field.getColumn(tableColumn)!!.getTable_())
+                  joinTables = joinTables.join(joinTable, joinType, field.getColumn(tableColumn)!!.column,
+                                               field.getColumn(j)!!.column,
+                                               additionalConstraint)
+                }
+                if (j == field.getColumnCount() || field.getColumnCount() == 2) {
+                  // a field is only processed if all columns processed
+                  // for nullable or has only 2 columns and one has been
+                  // already processed
+                  // must be marked before going to next level
+                  addToProcessedFields(i)
+                }
+                if (rootTable == table) {
+                  getJoinCondition(rootTable, field.getColumn(tableColumn)!!.getTable(), joinTables)
+                }
+              } else if (isJoinedTable(field.getColumn(j)!!.column.table)) { // FIXME!
+                // the table for this column is present in the outer join tree
+                // as caster outer joins do not work, we assume that the
+                // condition will apply to the root
+                if (j == rootColumn) {
+                  condition = if (condition != null) { // TODO Improve this!
+                    condition and (field.getColumn(tableColumn)!!.column eq field.getColumn(j)!!.column)
+                  } else {
+                    field.getColumn(tableColumn)!!.column eq field.getColumn(j)!!.column
                   }
-                  if (j == field.getColumnCount() || field.getColumnCount() == 2) {
-                    // a field is only processed if all columns processed
-                    // for nullable or has only 2 columns and one has been
-                    // already processed
-                    // must be marked before going to next level
-                    addToProcessedFields(i)
-                  }
-                  if (rootTable == table) {
-                    getJoinCondition(rootTable, field.getColumn(j)!!.getTable(), joinTables)
-                  }
+                  additionalConstraint = { condition }
+                }
+
+                if (j == field.getColumnCount() || field.getColumnCount() == 2) {
+                  // a field is only processed if all columns processed
+                  // for nullable or has only 2 columns and one has been
+                  // already processed
+                  addToProcessedFields(i)
+                }
+              } else {
+                if (rootTable == table) {
+                  val joinTable = tables!![field.getColumn(j)!!.getTable()]
+
+                  // start of an outer join
+                  addToJoinedTables(field.getColumn(j)!!.getTable_())
+                  joinTables = joinTables.join(joinTable, joinType, field.getColumn(tableColumn)!!.column,
+                                               field.getColumn(j)!!.column,
+                                               additionalConstraint)
+                }
+                if (j == field.getColumnCount() || field.getColumnCount() == 2) {
+                  // a field is only processed if all columns processed
+                  // for nullable or has only 2 columns and one has been
+                  // already processed
+                  // must be marked before going to next level
+                  addToProcessedFields(i)
+                }
+                if (rootTable == table) {
+                  getJoinCondition(rootTable, field.getColumn(j)!!.getTable(), joinTables)
                 }
               }
             }
@@ -159,23 +184,13 @@ class VBlockDefaultOuterJoin(block: VBlock) {
     }
 
     // first search join condition for the block main table.
-    val searchTablesCondition = getJoinCondition(0, 0)
+    var searchTablesCondition = getJoinCondition(0, 0)
 
     // search join condition for other lookup tables  not joined with main table.
     for (i in 1 until tables!!.size) {
       if (!isJoinedTable(tables!![i])) {
         // all not joined tables need to be ran through
-        searchTablesCondition.join(getJoinCondition(i, i), JoinType.INNER) {
-          fields.map { getSearchCondition(it) }.compoundAnd()
-        }
-      }
-    }
-    // add remaining tables (not joined tables) to the list of tables.
-    for (i in 1 until tables!!.size) {
-      if (!isJoinedTable(tables!![i])) {
-        searchTablesCondition.join(tables!![i], JoinType.INNER) {
-          fields.map { getSearchCondition(it) }.compoundAnd()
-        }
+        searchTablesCondition = getJoinCondition(i, i, searchTablesCondition)
       }
     }
     return searchTablesCondition

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <modules>
-    <module ident="1000" label="Client" help="Clients management" />
-        <module ident="1001" label="Client" help="Clients management" />
+    <module ident="1000" label="CLIENTS" help="Clients management" />
+        <module ident="1001" label="CLIENTS" help="Clients management" />
     <module ident="1010" label="Test" help="Suppliers management" />
         <module ident="1101" label="Test form1" help="Test form" />
         <module ident="1110" label="Test form2" help="Test form" />

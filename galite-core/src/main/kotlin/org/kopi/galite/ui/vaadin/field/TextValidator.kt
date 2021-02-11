@@ -156,6 +156,7 @@ class StringValidator<T>(
 class IntegerValidator<T>(minval: Double?, maxval: Double?): TextValidator<T> {
 
   override fun apply(value: T, context: ValueContext?): ValidationResult {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
+    return ValidationResult.ok()
   }
 }

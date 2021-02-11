@@ -179,7 +179,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    * @param     manager         the manger to use for localization
    */
-  fun localize(manager: LocalizationManager, locale: Locale) {
+  fun localize(manager: LocalizationManager, locale: Locale?) {
     if(ApplicationContext.getDefaultLocale() != locale) {
       val loc = manager.getBlockLocalizer(source, name)
 
@@ -1275,8 +1275,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // - can be removed if the method checkBlock is removed
           if (ApplicationContext.getDefaults() != null
                   && ApplicationContext.getDefaults().isDebugModeEnabled()) {
-            if ((form.getDisplay() as UForm).getRuntimeDebugInfo() != null) {
-              (form.getDisplay() as UForm).getRuntimeDebugInfo()!!.printStackTrace()
+            if ((form.getDisplay() as UForm).runtimeDebugInfo != null) {
+              (form.getDisplay() as UForm).runtimeDebugInfo!!.printStackTrace()
             }
             println("INFO: VBlock checkBlock " + Thread.currentThread())
           }

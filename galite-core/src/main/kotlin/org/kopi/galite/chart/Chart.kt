@@ -209,7 +209,7 @@ abstract class Chart : Window() {
     genLocalization()
 
     object : VChart() {
-      override var locale: Locale = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
+      override val locale: Locale get() = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
 
       /**
        * Handling triggers

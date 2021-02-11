@@ -42,7 +42,7 @@ import org.kopi.galite.visual.WindowController
  */
 open class VPreviewWindow : VWindow() {
 
-  override var locale: Locale = ApplicationContext.getDefaultLocale()
+  override val locale: Locale get() = ApplicationContext.getDefaultLocale()
 
   companion object {
     private const val DEF_ZOOM_RATIO = 1.30f
