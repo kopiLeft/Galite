@@ -229,11 +229,7 @@ abstract class Report : Window() {
   override val model: VReport by lazy {
     initFields()
 
-    genLocalization()
-
     object : VReport() {
-      override var locale: Locale = this@Report.locale ?: ApplicationContext.getDefaultLocale()
-
       /**
        * Handling triggers
        */
@@ -272,6 +268,8 @@ abstract class Report : Window() {
       }
 
       override fun init() {
+        locale = this@Report.locale ?: ApplicationContext.getDefaultLocale()
+        setTitle(title)
         this.addActors(this@Report.actors.map { actor ->
           actor.buildModel(sourceFile)
         }.toTypedArray())
