@@ -27,6 +27,7 @@ import org.kopi.galite.ui.vaadin.menu.ModuleList
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -45,7 +46,7 @@ import com.vaadin.flow.component.contextmenu.MenuItem
  * @param logo The application logo
  * @param href The logo link.
  */
-class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, Focusable<MainWindow> {
+class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -67,6 +68,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
 
   init {
     val main = VMain()
+    setWidthFull()
 
     className = Styles.MAIN_WINDOW
     setHref(href)

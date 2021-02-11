@@ -50,24 +50,24 @@ object ClientForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return ClientR
+    return ClientR()
   }
 }
 
 object Clients : FormBlock(1, 1, "Clients") {
   val u = table(Client)
 
-  val idClt = mustFill(domain = Domain<Int>(15), position = at(1, 1)) {
+  val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {
     label = "ID"
     help = "The client id"
     columns(u.idClt)
   }
-  val fstnameClt = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
+  val fstnameClt = visit(domain = Domain<String>(25), position = at(2, 1)) {
     label = "First Name"
     help = "The client first name"
     columns(u.fstnameClt)
   }
-  val nameClt = mustFill(domain = Domain<String>(25), position = at(2, 2)) {
+  val nameClt = visit(domain = Domain<String>(25), position = at(2, 2)) {
     label = "Last name"
     help = "The client last name"
     columns(u.nameClt)
