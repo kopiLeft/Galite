@@ -30,7 +30,7 @@ object ClientForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "Clients"
   val page = page("Client")
-  val action = menu("act")
+  val action = menu("Action")
   val report = actor(
           ident = "report",
           menu = action,

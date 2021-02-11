@@ -35,7 +35,7 @@ import org.kopi.galite.demo.command.CommandForm
 import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
-import org.kopi.galite.demo.taxrule.TaxRuleForm
+import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
@@ -47,14 +47,14 @@ import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 object Client : Table("CLIENTS") {
-  val idClt = integer("CLIENT ID").autoIncrement()
-  val firstNameClt = varchar("FIRST NAME", 25)
-  val lastNameClt = varchar("LAST NAME", 25)
-  val addressClt = varchar("CLIENT ADDRESS", 50)
-  val ageClt = integer("CLIENT AGE")
-  val countryClt = varchar("CLIENT_COUNTRY", 30)
-  val cityClt = varchar("CLIENT CITY", 30)
-  val zipCodeClt = integer("CLIENT_POSTAL_CODE")
+  val idClt = integer("ID").autoIncrement()
+  val firstNameClt = varchar("FIRSTNAME", 25)
+  val lastNameClt = varchar("LASTNAME", 25)
+  val addressClt = varchar("ADDRESS", 50)
+  val ageClt = integer("AGE")
+  val countryClt = varchar("COUNTRY", 30)
+  val cityClt = varchar("CITY", 30)
+  val zipCodeClt = integer("ZIP_CODE")
 
   override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
 }
@@ -64,7 +64,7 @@ object Product : Table("PRODUCTS") {
   val designation = varchar("DESIGNATION", 50)
   val category = varchar("CATEGORY", 30)
   val taxName = varchar("TAX", 20).references(TaxRule.taxName)
-  val price = integer("UNIT_PRICE_EXCLUDING_VAT")
+  val price = decimal("UNIT_PRICE_EXCLUDING_VAT", 9, 3)
   val photo = blob("PHOTO").nullable()
 
   override val primaryKey = PrimaryKey(idPdt)
@@ -93,7 +93,7 @@ object Provider : Table("PROVIDERS") {
 object BillProduct : Table("BILL_PRODUCT") {
   val idBPdt = integer("BILL_PRODUCT_ID").references(Product.idPdt)
   val quantity = integer("QUANTITY")
-  val amount = integer("AMOUNT_BEFORE_TAXES")
+  val amount = decimal("AMOUNT_BEFORE_TAXES", 9, 3)
   val amountWithTaxes = decimal("AMOUNT_INCLUDING_TAXES", 9, 3)
 
   override val primaryKey = PrimaryKey(idBPdt)
@@ -257,13 +257,13 @@ fun addClient(id: Int, firstName: String, lastName: String, address: String, age
 }
 
 fun addProducts() {
-  addProduct(0, "designation Product 0", "cat 1", "tax 1", 263)
-  addProduct(1, "designation Product 1", "cat 2", "tax 2", 314)
-  addProduct(2, "designation Product 2", "cat 3", "tax 2", 180)
-  addProduct(3, "designation Product 3", "cat 1", "tax 3", 65)
+  addProduct(0, "designation Product 0", "cat 1", "tax 1", Decimal("263").value)
+  addProduct(1, "designation Product 1", "cat 2", "tax 2", Decimal("314").value)
+  addProduct(2, "designation Product 2", "cat 3", "tax 2", Decimal("180").value)
+  addProduct(3, "designation Product 3", "cat 1", "tax 3", Decimal("65").value)
 }
 
-fun addProduct(id: Int, designation: String, category: String, taxName: String, price: Int) {
+fun addProduct(id: Int, designation: String, category: String, taxName: String, price: BigDecimal) {
   Product.insert {
     it[idPdt] = id
     it[Product.designation] = designation
@@ -357,13 +357,13 @@ fun addCmd(num: Int, id: Int, date: DateTime, payment: String, status: String) {
 }
 
 fun addBillPrdts() {
-  addBillPrdt(0, 10, 2630, Decimal("3129.7").value)
-  addBillPrdt(1, 3, 942, Decimal("1149.24").value)
-  addBillPrdt(2, 1, 180, Decimal("219.6").value)
-  addBillPrdt(3, 2, 130, Decimal("146.9").value)
+  addBillPrdt(0, 10, Decimal("2630").value, Decimal("3129.7").value)
+  addBillPrdt(1, 3, Decimal("942").value, Decimal("1149.24").value)
+  addBillPrdt(2, 1, Decimal("180").value, Decimal("219.6").value)
+  addBillPrdt(3, 2, Decimal("130").value, Decimal("146.9").value)
 }
 
-fun addBillPrdt(id: Int, quantity: Int, amount: Int, amountWithTaxes: BigDecimal) {
+fun addBillPrdt(id: Int, quantity: Int, amount: BigDecimal, amountWithTaxes: BigDecimal) {
   BillProduct.insert {
     it[idBPdt] = id
     it[BillProduct.quantity] = quantity

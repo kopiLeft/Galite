@@ -28,6 +28,8 @@ import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
+import org.kopi.galite.type.Decimal
+import java.math.BigDecimal
 
 /**
  * Product Report
@@ -35,7 +37,7 @@ import org.kopi.galite.report.VReport
 object ProductR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "Products_Report"
+  override val title = "Products"
 
   val action = menu("Action")
 
@@ -138,7 +140,7 @@ object ProductR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val price = field(Domain<Int>(20)) {
+  val price = field(Domain<BigDecimal>(20)) {
     label = "Price"
     help = "The product unit price excluding VAT"
     align = FieldAlignment.LEFT

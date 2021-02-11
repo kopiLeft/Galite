@@ -16,10 +16,13 @@
  */
 package org.kopi.galite.demo.stock
 
+import org.jetbrains.exposed.sql.JoinType
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.Product
+import org.kopi.galite.demo.Provider
 
 import org.kopi.galite.demo.Stock
 import org.kopi.galite.demo.bill.BillR
@@ -35,7 +38,7 @@ import org.kopi.galite.report.VReport
 object StockR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "Stocks_Report"
+  override val title = "Stocks"
 
   val action = menu("Action")
 
@@ -103,14 +106,14 @@ object StockR : Report() {
     }
   }
 
-  val idStckPdt = field(Domain<Int>(25)) {
-    label = "Product_ID"
-    help = "The product ID"
+  val designation = field(Domain<String>(25)) {
+    label = "Designation"
+    help = "The product designation"
     align = FieldAlignment.LEFT
   }
-  val idStckProv = field(Domain<Int>(25)) {
-    label = "Provider_ID"
-    help = "The provider id"
+  val nameProvider = field(Domain<String>(25)) {
+    label = "Provider name"
+    help = "The provider name"
     align = FieldAlignment.LEFT
   }
   val minAlert = field(Domain<Int>(25)) {
@@ -119,15 +122,18 @@ object StockR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val stocks = Stock.selectAll()
+  val stocks = Stock.join(Provider, JoinType.INNER, Stock.idStckProv, Provider.idProvider)
+          .join(Product, JoinType.INNER, Stock.idStckProv, Product.idPdt)
+          .slice(Stock.minAlert, Product.designation, Provider.nameProvider)
+          .selectAll()
 
   init {
     transaction {
       stocks.forEach { result ->
         add {
-          this[idStckPdt] = result[Stock.idStckPdt]
-          this[idStckProv] = result[Stock.idStckProv]
           this[minAlert] = result[Stock.minAlert]
+          this[designation] = result[Product.designation]
+          this[nameProvider] = result[Provider.nameProvider]
         }
       }
     }

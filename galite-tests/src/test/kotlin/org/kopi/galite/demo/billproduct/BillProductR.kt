@@ -28,6 +28,7 @@ import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 import org.kopi.galite.type.Decimal
+import java.math.BigDecimal
 
 /**
  * Products Bill Report
@@ -120,7 +121,7 @@ object BillProductR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val amount = field(Domain<Int>(25)) {
+  val amount = field(Domain<BigDecimal>(25)) {
     label = "Amount before tax"
     help = "The amount before tax to pay"
 

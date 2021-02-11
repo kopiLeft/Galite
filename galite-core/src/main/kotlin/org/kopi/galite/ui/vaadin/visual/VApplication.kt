@@ -15,19 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.ui.vaadin.visual
 
 import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
-
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasSize
-import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.page.Push
-import com.vaadin.flow.router.Route
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
@@ -57,6 +49,13 @@ import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
+
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.Route
 
 /**
  * The entry point for all Galite WEB applications.
