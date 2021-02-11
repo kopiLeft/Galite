@@ -20,12 +20,6 @@ plugins {
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
 
-repositories {
-  maven {
-    url = uri("https://maven.vaadin.com/vaadin-addons")
-  }
-}
-
 val exposedVersion = "0.27.1"
 val vaadinVersion = "18.0.3"
 val itextVersion = "2.1.5"

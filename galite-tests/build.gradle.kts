@@ -34,12 +34,6 @@ vaadin {
   pnpmEnable = true
 }
 
-repositories {
-  maven {
-    url = uri("https://maven.vaadin.com/vaadin-addons")
-  }
-}
-
 dependencies {
   implementation(project(":galite-core"))
 
@@ -70,8 +64,6 @@ dependencies {
   testImplementation("org.apache.poi", "poi", apachePoi)
   testImplementation("org.apache.poi", "poi-ooxml", apachePoi)
 
-  // Enhanced Dialog
-  implementation("com.vaadin.componentfactory","enhanced-dialog","1.0.4")
 }
 
 tasks {
