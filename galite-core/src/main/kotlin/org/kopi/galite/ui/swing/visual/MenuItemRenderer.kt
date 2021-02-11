@@ -64,35 +64,26 @@ internal class MenuItemRenderer(private val superUser: Boolean) : JLabel(), Tree
       rootIcon
     } else if (superUser && module.accessibility != Module.ACS_PARENT) {
       if (module.accessibility == Module.ACS_FALSE) {
-        if (expanded) {
-          expandedIcon_F
-        } else if (!leaf) {
-          collapsedIcon_F
-        } else if (hasFocus) {
-          selectedFormIcon_F
-        } else {
-          formIcon_F
+        when {
+          expanded -> expandedIcon_F
+          !leaf -> collapsedIcon_F
+          hasFocus -> selectedFormIcon_F
+          else -> formIcon_F
         }
       } else {
-        if (expanded) {
-          expandedIcon_T
-        } else if (!leaf) {
-          collapsedIcon_T
-        } else if (hasFocus) {
-          selectedFormIcon_T
-        } else {
-          formIcon_T
+        when {
+          expanded -> expandedIcon_T
+          !leaf -> collapsedIcon_T
+          hasFocus -> selectedFormIcon_T
+          else -> formIcon_T
         }
       }
     } else {
-      if (expanded) {
-        expandedIcon
-      } else if (!leaf) {
-        collapsedIcon
-      } else if (hasFocus) {
-        if (module.smallIcon == null) selectedFormIcon else module.smallIcon as ImageIcon?
-      } else {
-        if (module.smallIcon == null) formIcon else module.smallIcon as ImageIcon?
+      when {
+        expanded -> expandedIcon
+        !leaf -> collapsedIcon
+        hasFocus -> module.smallIcon as? ImageIcon ?: selectedFormIcon
+        else -> module.smallIcon as ImageIcon? ?: formIcon
       }
     }
     return this
@@ -123,7 +114,7 @@ internal class MenuItemRenderer(private val superUser: Boolean) : JLabel(), Tree
     /**
      * Comment for `serialVersionUID`
      */
-    private const val serialVersionUID = 5890176862796914299L
+    private const val serialVersionUID = 1L
 
     init {
       collapsedIcon = Utils.getImage("collapsed.gif")
