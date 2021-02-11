@@ -34,7 +34,7 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
 /**
  * Error type notification component.
  */
-open class VErrorNotification(title: String, message: String) : VAbstractNotification() {
+open class VErrorNotification(title: String?, message: String) : VAbstractNotification() {
 
   //-------------------------------------------------
   // IMPLEMENTATION

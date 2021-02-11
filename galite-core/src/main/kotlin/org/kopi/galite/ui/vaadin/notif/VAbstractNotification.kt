@@ -56,7 +56,7 @@ abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNoti
   /**
    * Initializes the notification panel.
    */
-  fun initialize(title: String, message: String, locale: String) {
+  fun initialize(title: String?, message: String, locale: String) {
     super.setDraggable(true)
     super.setResizable(true)
     super.setModal(false)
@@ -98,7 +98,7 @@ abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNoti
    * Sets the notification title.
    * @param title The notification title.
    */
-  fun setNotificationTitle(title: String) {
+  fun setNotificationTitle(title: String?) {
     this.title.text = title
   }
 
