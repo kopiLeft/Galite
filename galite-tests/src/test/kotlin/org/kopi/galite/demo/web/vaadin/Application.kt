@@ -31,14 +31,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.router.Route
-import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
-import org.kopi.galite.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.ui.vaadin.notif.InformationNotification
-import org.kopi.galite.ui.vaadin.notif.WarningNotification
-
 @SpringBootApplication
 open class Application : SpringBootServletInitializer()
 
@@ -134,48 +126,5 @@ object DBApplication : DBSchemaTest() {
       insertIntoUserRights(user, "2009", true)
       insertIntoUserRights(user, "2010", true)
     }
-  }
-}
-
-@Route("confirm")
-class ConfirmNotificationUI : VerticalLayout() {
-  val confirmationDialog = ConfirmNotification("Question", " Quitter : Êtes-vous sûr ?")
-  init {
-    confirmationDialog.locale = "en_GB"
-    val button = Button("Open Dialog") { _ -> confirmationDialog.open() }
-    add(button)
-  }
-}
-
-@Route("warning")
-class WarningNotificationUI : VerticalLayout() {
-  val warningDialog = WarningNotification("Warning", " Message warning")
-
-  init {
-    warningDialog.locale = "en_GB"
-    val button = Button("Open Dialog") { _ -> warningDialog.open() }
-    add(button)
-  }
-}
-
-@Route("erreur")
-class ErrorNotificationUI : VerticalLayout() {
-  val errorDialog = ErrorNotification("Erreur", " Message d'erreur")
-
-  init {
-    errorDialog.locale = "en_GB"
-    val button = Button("Open Dialog") { _ -> errorDialog.open() }
-    add(button)
-  }
-}
-
-@Route("information")
-class InformationNotificationUI : VerticalLayout() {
-  val infoDialog = InformationNotification("Info", " Message d'information")
-
-  init {
-    infoDialog.locale = "en_GB"
-    val button = Button("Open Dialog") { _ -> infoDialog.open() }
-    add(button)
   }
 }
