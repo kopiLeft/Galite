@@ -55,7 +55,7 @@ object Product : Table("Products") {
   val designation = varchar("DESIGNATION", 50)
   val category = varchar("CATEGORIE", 30)
   val taxName = varchar("PRODUCT TAX NAME", 20).references(TaxRule.taxName)
-  val price = integer("UNIT PRICE EXCLUDING VAT")
+  val price = decimal("UNIT PRICE EXCLUDING VAT", 10, 5)
   val photo = blob("Product PHOTO").nullable()
 
   override val primaryKey = PrimaryKey(idPdt)
@@ -228,19 +228,19 @@ fun addClient(id: Int, name: String, fstName: String, address: String, country: 
 }
 
 fun addProducts() {
-  addProduct(0, "designation Product 0", "cat 1", "tax 1", 263)
-  addProduct(1, "designation Product 1", "cat 2", "tax 2", 314)
-  addProduct(2, "designation Product 2", "cat 3", "tax 2", 180)
-  addProduct(3, "designation Product 3", "cat 1", "tax 3", 65)
+  addProduct(0, "designation Product 0", "cat 1", "tax 1", Decimal("263"))
+  addProduct(1, "designation Product 1", "cat 2", "tax 2", Decimal("314"))
+  addProduct(2, "designation Product 2", "cat 3", "tax 2", Decimal("180"))
+  addProduct(3, "designation Product 3", "cat 1", "tax 3", Decimal("65"))
 }
 
-fun addProduct(id: Int, designation: String, category: String, taxName: String, price: Int) {
+fun addProduct(id: Int, designation: String, category: String, taxName: String, price: Decimal) {
   Product.insert {
     it[idPdt] = id
     it[Product.designation] = designation
     it[Product.category] = category
     it[Product.taxName] = taxName
-    it[Product.price] = price
+    it[Product.price] = price.value
   }
 }
 

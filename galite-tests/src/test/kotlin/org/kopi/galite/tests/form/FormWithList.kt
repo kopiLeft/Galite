@@ -130,8 +130,8 @@ object UsersBlock : FormBlock(1, 1, "Test block") {
 
   init {
     trigger(POSTQRY) {
-      BlockWithManyTables.uid[0] = id.value!!
-      // BlockWithManyTables.load() TODO
+      BlockWithManyTables.uid[0] = id.value
+      BlockWithManyTables.load()
     }
   }
   val id = hidden(domain = Domain<Int>(20)) {
@@ -232,5 +232,8 @@ object BlockWithManyTables : FormBlock(20, 20, "Test block") {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithList)
+  Application.runForm(formName = FormWithList) {
+    initModules()
+    initUserRights()
+  }
 }

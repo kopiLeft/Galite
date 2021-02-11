@@ -18,6 +18,8 @@
 
 package org.kopi.galite.report
 
+import java.math.BigDecimal
+
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.form.VFixnumField
 import org.kopi.galite.type.Decimal
@@ -71,20 +73,18 @@ class VFixnumColumn(ident: String?,
    */
   private class VFixedFormat(private val maxScale: Int, private val exactScale: Boolean) : VCellFormat() {
 
-    override fun format(value: Any?): String {
-      return if (value == null) {
-        ""
-      } else (value as? Int)?.toString()
-              ?: if (value is Decimal) {
-                if ((value).scale > maxScale || exactScale) (value).setScale(maxScale).toString() else value.toString()
-              } else {
-                throw InconsistencyException("bad type for $value")
-              }
-    }
+    override fun format(value: Any?): String =
+            when(value) {
+              null -> ""
+              is Int -> value.toString()
+              is BigDecimal -> format(Decimal(value))
+              is Decimal -> if ((value).scale > maxScale || exactScale) (value).setScale(maxScale).toString() else value.toString()
+              else -> throw InconsistencyException("bad type for $value")
+            }
   }
 
   override fun formatColumn(exporter: PExport, index: Int) {
-    exporter.formatFixedColumn(this, index)
+    exporter.formatDecimalColumn(this, index)
   }
 
   /**
@@ -107,6 +107,6 @@ class VFixnumColumn(ident: String?,
   }
 
   var formula: String? = null
-  var maxScale = 0
+  var maxScale = maxScale
     private set
 }

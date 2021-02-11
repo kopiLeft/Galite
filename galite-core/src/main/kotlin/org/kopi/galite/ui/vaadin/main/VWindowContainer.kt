@@ -23,6 +23,8 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 
+import org.kopi.galite.ui.vaadin.window.VActorPanel
+
 /**
  * The main window container component.
  * This component will be responsible of displaying only one window.

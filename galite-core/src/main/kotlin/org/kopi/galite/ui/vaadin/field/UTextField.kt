@@ -15,35 +15,39 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.KeyPressEvent
-import org.kopi.galite.ui.vaadin.base.VInputButton
+import com.vaadin.flow.component.HasElement
+import com.vaadin.flow.component.HasSize
 
-/**
- * Information type notification component.
- */
-open class VInformationNotification(title: String?, message: String) : VAbstractNotification(title, message) {
-  //-------------------------------------------------
-  // IMPLEMENTATION
-  //-------------------------------------------------
-  override fun setButtons(locale: String?) {
+interface UTextField: HasElement, HasSize {
+  fun hasAutoComplete(): Boolean
 
-  }
+  var size: Int
+    get() = element.getProperty("size").toInt()
+    set(value) { element.setProperty("size", value.toString()) }
 
-  override val iconName: String
-    get() = "info-circle"
+  /**
+   * Returns the field max length.
+   * @return The field max length.
+   */
+  fun getMaxLength(): Int
 
-  fun focus() {
+  /**
+   * Returns the field min length.
+   * @return The field min length.
+   */
+  fun getMinLength(): Int
 
-  }
+  /**
+   * Sets the field max length.
+   * @param maxLength The field max length.
+   */
+  fun setMaxLength(maxLength: Int)
 
-  fun onKeyPress(event: KeyPressEvent) {
-
-  }
-
-  //--------------------------------------------------
-  // DATA MEMBERS
-  //--------------------------------------------------
-  private var close: VInputButton? = null
+  /**
+   * Sets the field min length.
+   * @param minLength The field min length.
+   */
+  fun setMinLength(minLength: Int)
 }

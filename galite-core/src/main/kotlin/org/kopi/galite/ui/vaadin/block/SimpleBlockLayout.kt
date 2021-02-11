@@ -17,10 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
-import com.vaadin.flow.component.AttachEvent
+import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.form.DField
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
-import org.kopi.galite.ui.vaadin.form.DField
 
 /**
  * The simple block layout component.
@@ -42,12 +43,9 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  override fun onAttach(attachEvent: AttachEvent?) {
-    layout()
-  }
-
-  fun initSize() {
+  override fun initSize() {
     initSize(col, line)
+    // setAlignment(align) TODO
   }
 
   override fun initSize(columns: Int, rows: Int) {
@@ -79,6 +77,38 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
           }
           aligns!![x][y] = constraints
           components!![x][y] = formItem
+
+          // TODO: Grid container?
+
+          // a follow field has no label
+          // an actor field has no label too.
+          // we treat this cases separately
+          val columnView: ColumnView = if (constraints.width < 0 || component.content is Actor) {
+            ColumnView(getBlock()).also { columnView ->
+              columnView.label = null
+              columnView.addField(component)
+              if (blockInDetailMode()) {
+                columnView.detailLabel = null
+                columnView.setDetailDisplay(component)
+              }
+            }
+          } else {
+            ColumnView(getBlock()).also { columnView ->
+              // Label
+              columnView.label = component.label
+              if (blockInDetailMode()) {
+                columnView.detailLabel = component.label
+              }
+
+              // Field
+              columnView.addField(component)
+              if (blockInDetailMode()) {
+                columnView.setDetailDisplay(component)
+              }
+            }
+          }
+
+          getBlock().addField(columnView)
         }
       }
     } else {
@@ -134,6 +164,26 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
         // addInfoComponentdAt(comp, align.x, align.y) TODO
       }
     }
+  }
+
+  fun getBlock(): Block {
+    var block: Block? = null
+    parent.ifPresent {
+      block = it as Block
+    }
+
+    requireNotNull(block)
+
+    return block!!
+  }
+
+  /**
+   * Returns if the block is in detail mode
+   *
+   * @return True if the block is in detail mode.
+   */
+  fun blockInDetailMode(): Boolean {
+    return getBlock().noChart
   }
 
   override fun clear() {

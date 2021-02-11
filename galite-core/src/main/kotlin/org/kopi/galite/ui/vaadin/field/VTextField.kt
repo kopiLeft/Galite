@@ -15,35 +15,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.KeyPressEvent
-import org.kopi.galite.ui.vaadin.base.VInputButton
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 /**
- * Information type notification component.
+ * A text field widget that can support many validation
+ * strategies to restrict field input.
  */
-open class VInformationNotification(title: String?, message: String) : VAbstractNotification(title, message) {
-  //-------------------------------------------------
-  // IMPLEMENTATION
-  //-------------------------------------------------
-  override fun setButtons(locale: String?) {
+open class VTextField(val col: Int) : TextField(), UTextField {
 
+  init {
+    style()
   }
 
-  override val iconName: String
-    get() = "info-circle"
-
-  fun focus() {
-
+  /**
+   * TODO: Temporary styling but it Should be enhanced.
+   */
+  fun style() {
+    setWidthFull()
+    addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.MATERIAL_ALWAYS_FLOAT_LABEL)
   }
 
-  fun onKeyPress(event: KeyPressEvent) {
-
+  override fun hasAutoComplete(): Boolean {
+    TODO("Not yet implemented")
   }
-
-  //--------------------------------------------------
-  // DATA MEMBERS
-  //--------------------------------------------------
-  private var close: VInputButton? = null
 }

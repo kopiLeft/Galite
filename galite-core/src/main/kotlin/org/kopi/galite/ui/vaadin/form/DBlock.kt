@@ -62,11 +62,11 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
     formView = parent
     setBorder(model.border, model.title)
     model.addBlockListener(this)
-    setBufferSize(model.bufferSize)
-    setDisplaySize(model.displaySize)
+    bufferSize = model.bufferSize
+    displaySize = model.displaySize
     setSortedRecords(model.sortedRecords)
     setNoMove(model.noMove())
-    setNoChart(model.noChart())
+    noChart = model.noChart()
 
     if (model.isMulti()) {
       sortedRecToDisplay = IntArray(model.bufferSize)
@@ -279,7 +279,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   }
 
   override fun fireValueChanged(col: Int, rec: Int, value: String?) {
-    TODO()
+    super.fireValueChanged(col, rec, value)
   }
 
   open fun fireColorChanged(

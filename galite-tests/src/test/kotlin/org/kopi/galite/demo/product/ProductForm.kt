@@ -18,7 +18,17 @@ package org.kopi.galite.demo.product
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Product
+import org.kopi.galite.demo.addBillPrdts
+import org.kopi.galite.demo.addBills
+import org.kopi.galite.demo.addClients
+import org.kopi.galite.demo.addCmds
+import org.kopi.galite.demo.addFourns
+import org.kopi.galite.demo.addProducts
+import org.kopi.galite.demo.addStocks
+import org.kopi.galite.demo.addTaxRules
+import org.kopi.galite.demo.createStoreTables
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
@@ -26,6 +36,7 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
+import org.kopi.galite.type.Decimal
 
 object ProductForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
@@ -85,7 +96,7 @@ object BlockProduct : FormBlock(1, 1, "product block") {
     help = "The product tax name"
     columns(u.taxName)
   }
-  val price = visit(domain = Domain<Int>(20), position = at(4, 1)) {
+  val price = visit(domain = Domain<Decimal>(10, 5), position = at(4, 1)) {
     label = "product price"
     help = "The product price"
     columns(u.price)
@@ -120,5 +131,17 @@ object Tax: CodeDomain<String>() {
 }
 
 fun main() {
-  Application.runForm(formName = ProductForm)
+  Application.runForm(formName = ProductForm) {
+    transaction {
+      createStoreTables()
+      addClients()
+      addTaxRules()
+      addProducts()
+      addFourns()
+      addStocks()
+      addCmds()
+      addBillPrdts()
+      addBills()
+    }
+  }
 }

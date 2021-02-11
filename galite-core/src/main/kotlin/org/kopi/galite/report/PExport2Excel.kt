@@ -225,12 +225,12 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
-  override fun formatFixedColumn(column: VReportColumn, index: Int) {
-    var fixnumFormat = "#,##0"
+  override fun formatDecimalColumn(column: VReportColumn, index: Int) {
+    var decimalFormat = "#,##0"
     for (i in 0 until (column as VFixnumColumn).maxScale) {
-      fixnumFormat += if (i == 0) ".0" else "0"
+      decimalFormat += if (i == 0) ".0" else "0"
     }
-    dataformats[index] = format!!.getFormat(fixnumFormat)
+    dataformats[index] = format!!.getFormat(decimalFormat)
     datatype[index] = CellType.NUMERIC.code
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }

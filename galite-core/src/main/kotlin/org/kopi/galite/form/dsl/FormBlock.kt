@@ -73,7 +73,8 @@ open class FormBlock(var buffer: Int,
   internal var access: IntArray = IntArray(3) { VConstants.ACS_MUSTFILL }
   private lateinit var commands: Array<Command?>
   private val triggers = mutableListOf<Trigger>()
-  lateinit var dropListMap: HashMap<*, *>
+  var dropListMap = HashMap<String, String>()
+  var dropList : MutableList<String>? = null
   private var maxRowPos = 0
   private var maxColumnPos = 0
   private var displayedFields = 0
@@ -217,7 +218,21 @@ open class FormBlock(var buffer: Int,
     val field = NullableFormField(this, domain, blockFields.size, access, position)
     field.init()
     field.initialize(this)
-    blockFields.add(field)
+    if (dropList == null) {
+      blockFields.add(field)
+    } else {
+      if (domain.kClass != String::class
+              && TODO("add Image type")) {
+        error("The field is droppable but its type is not supported as a drop target.")
+      } else {
+        val flavor: String? = this.addDropList(dropList!!, field)
+        if (flavor == null) {
+          blockFields.add(field)
+        } else {
+          error("The extension is already defined as a drop target for this field. ")
+        }
+      }
+    }
     return field as FormField<T?>
   }
 
@@ -441,6 +456,17 @@ open class FormBlock(var buffer: Int,
    */
   fun DictionaryForm.recursiveQuery() {
     Commands.recursiveQuery(vBlock)
+  }
+
+  fun addDropList(dropList: MutableList<String>, field: FormField<*>): String? {
+    for (i in dropList.indices) {
+      val extension = dropList[i].toLowerCase()
+      if (dropListMap[extension] != null) {
+        return extension
+      }
+      dropListMap.put(extension, field.getIdent())
+    }
+    return null
   }
 
   // ----------------------------------------------------------------------
