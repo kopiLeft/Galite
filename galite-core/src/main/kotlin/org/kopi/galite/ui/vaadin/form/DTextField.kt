@@ -207,6 +207,6 @@ open class DTextField(
   }
 
   override fun setBlink(blink: Boolean) {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 }

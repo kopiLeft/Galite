@@ -56,7 +56,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   protected var listenerList = EventListenerList() // List of listeners
   protected val f12: VActor
   open val source: String? = null // The localization source of this window.
-  open lateinit var locale: Locale
+  open val locale: Locale? = null
 
   init {
     f12 = VActor("File",

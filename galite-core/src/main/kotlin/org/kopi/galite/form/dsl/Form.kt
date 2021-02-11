@@ -204,6 +204,8 @@ abstract class Form : Window() {
   /** Form model */
   override val model: VForm by lazy {
     object : VForm() {
+      override val locale get() = this@Form.locale ?: ApplicationContext.getDefaultLocale()
+
       override fun init() {
         initialize()
       }
@@ -212,7 +214,6 @@ abstract class Form : Window() {
 
   fun VForm.initialize() {
     source = sourceFile
-    locale = this@Form.locale ?: ApplicationContext.getDefaultLocale()
     setTitle(title)
     pages = this@Form.pages.map {
       it.title

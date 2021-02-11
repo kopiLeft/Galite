@@ -28,7 +28,7 @@ import org.kopi.galite.report.VReport
 /**
  * Simple Report with two fields.
  */
-object ClientR : Report() {
+class ClientR : Report() {
   override val locale = Locale.FRANCE
 
   override val title = "ClientReport"
