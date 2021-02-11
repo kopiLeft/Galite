@@ -19,13 +19,14 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.type.Time
 
 /**
  * Represents a list column.
  */
 class VTimeColumn(title: String,
-                  column: String?,
+                  column: Column<*>?,
                   sortAscending: Boolean)
     : VListColumn(title,
                   column,

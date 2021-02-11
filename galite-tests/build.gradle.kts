@@ -28,6 +28,7 @@ val karibuTestingVersion = "1.2.5"
 val h2Version = "1.4.199"
 val exposedVersion = "0.27.1"
 val postgresNGVersion = "0.8.6"
+val apachePoi = "4.1.2"
 
 vaadin {
   pnpmEnable = true
@@ -45,16 +46,13 @@ dependencies {
   implementation(kotlin("test-junit"))
 
   implementation("com.vaadin", "vaadin-core") {
-    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
-            .forEach { group -> exclude(group = group) }
+    excludeWebJars()
   }
   implementation("com.vaadin", "vaadin-spring-boot-starter") {
-    listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
-            .forEach { group -> exclude(group = group) }
+    excludeWebJars()
+  }
+  implementation("org.springframework.boot", "spring-boot-devtools") {
+    excludeWebJars()
   }
 
   // UI tests dependencies
@@ -68,6 +66,11 @@ dependencies {
   testImplementation("com.h2database", "h2", h2Version)
   testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", postgresNGVersion)
 
+  //Apache POI
+  testImplementation("org.apache.poi", "poi", apachePoi)
+  testImplementation("org.apache.poi", "poi-ooxml", apachePoi)
+
+  // Enhanced Dialog
   implementation("com.vaadin.componentfactory","enhanced-dialog","1.0.4")
 }
 
@@ -81,4 +84,11 @@ dependencyManagement {
   imports {
     mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
   }
+}
+
+fun ExternalModuleDependency.excludeWebJars() {
+  listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
+         "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+         "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+          .forEach { group -> exclude(group = group) }
 }

@@ -19,17 +19,16 @@ package org.kopi.galite.chart
 
 import java.io.IOException
 
+import java.util.Locale
+
 import org.kopi.galite.common.Action
-import org.kopi.galite.common.ChartTriggerEvent
-import org.kopi.galite.common.ChartTypeTriggerEvent
-import org.kopi.galite.common.ChartVoidTriggerEvent
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
-import org.kopi.galite.report.Constants
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VWindow
 
 /**
@@ -72,7 +71,7 @@ abstract class Chart : Window() {
    * @param chartTriggerEvents   the trigger events to add
    * @param method               the method to execute when trigger is called
    */
-  private fun <T> trigger(chartTriggerEvents: Array<out ChartTriggerEvent>, method: () -> T): Trigger {
+  fun <T> trigger(vararg chartTriggerEvents: ChartTriggerEvent<T>, method: () -> T): Trigger {
     val event = formEventList(chartTriggerEvents)
     val chartAction = Action(null, method)
     val trigger = FormTrigger(event, chartAction)
@@ -80,7 +79,7 @@ abstract class Chart : Window() {
     return trigger
   }
 
-  private fun formEventList(chartTriggerEvents: Array<out ChartTriggerEvent>): Long {
+  private fun formEventList(chartTriggerEvents: Array<out ChartTriggerEvent<*>>): Long {
     var self = 0L
 
     chartTriggerEvents.forEach { trigger ->
@@ -88,26 +87,6 @@ abstract class Chart : Window() {
     }
 
     return self
-  }
-
-  /**
-   * Adds void triggers to this chart
-   *
-   * @param chartTriggerEvents the trigger events to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg chartTriggerEvents: ChartVoidTriggerEvent, method: () -> Unit): Trigger {
-    return trigger(chartTriggerEvents, method)
-  }
-
-  /**
-   * Adds void triggers to this chart
-   *
-   * @param chartTriggerEvents the trigger events to add
-   * @param method             the method to execute when trigger is called
-   */
-  fun trigger(vararg chartTriggerEvents: ChartTypeTriggerEvent, method: () -> VChartType): Trigger {
-    return trigger(chartTriggerEvents, method)
   }
 
   /**
@@ -149,6 +128,37 @@ abstract class Chart : Window() {
 
 
   open fun getFields(): List<ChartField<*>> = listOf(dimension) + measures
+
+  ///////////////////////////////////////////////////////////////////////////
+  // CHART TRIGGERS EVENTS
+  ///////////////////////////////////////////////////////////////////////////
+  /**
+   * Chart Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class ChartTriggerEvent<T>(val event: Int)
+
+  /**
+   * Executed before the chart is displayed.
+   */
+  val PRECHART = ChartTriggerEvent<Unit>(CConstants.TRG_PRECHART)
+
+  /**
+   * Executed at chart initialization.
+   */
+  val INITCHART = ChartTriggerEvent<Unit>(CConstants.TRG_INIT)
+
+  /**
+   * Executed after the chart initialization. This trigger should return a fixed type for the chart
+   * [org.kopi.galite.chart.VChartType].
+   */
+  val CHARTTYPE = ChartTriggerEvent<VChartType>(CConstants.TRG_CHARTTYPE)
+
+  /**
+   * Executed after the chart is closed.
+   */
+  val POSTCHART = ChartTriggerEvent<Unit>(CConstants.TRG_POSTCHART)
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION
@@ -195,17 +205,19 @@ abstract class Chart : Window() {
       (model as VChart).setType(value)
     }
 
-  override val model: VWindow by lazy {
+  override val model: VChart by lazy {
     genLocalization()
 
     object : VChart() {
+      override val locale: Locale get() = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
+
       /**
        * Handling triggers
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // CHART TRIGGERS
         triggers.forEach { trigger ->
-          val chartTriggerArray = IntArray(Constants.TRG_TYPES.size)
+          val chartTriggerArray = IntArray(CConstants.TRG_TYPES.size)
           for (i in VConstants.TRG_TYPES.indices) {
             if (trigger.events shr i and 1 > 0) {
               chartTriggerArray[i] = i
@@ -216,22 +228,30 @@ abstract class Chart : Window() {
         }
 
         // DIMENSION TRIGGERS
-        dimensions.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        this@Chart.dimension.also {
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+
+          if(it.formatTrigger != null) {
+            fieldTriggerArray[CConstants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
+          }
           // TODO : Add field triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
         // MEASURE TRIGGERS
-        measures.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+        this@Chart.measures.forEach {
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
+
+          if(it.colorTrigger != null) {
+            fieldTriggerArray[CConstants.TRG_COLOR] = it.colorTrigger!!.events.toInt()
+          }
           // TODO : Add field triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }
 
         // COMMANDS TRIGGERS
         commands?.forEach {
-          val fieldTriggerArray = IntArray(VConstants.TRG_TYPES.size)
+          val fieldTriggerArray = IntArray(CConstants.TRG_TYPES.size)
           // TODO : Add commands triggers here
           super.VKT_Triggers.add(fieldTriggerArray)
         }

@@ -17,18 +17,49 @@
  */
 package org.kopi.galite.common
 
+import org.jetbrains.exposed.sql.AutoIncColumnType
+import org.jetbrains.exposed.sql.BooleanColumnType
+import java.lang.RuntimeException
+
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.IDateColumnType
+import org.jetbrains.exposed.sql.IntegerColumnType
+import org.jetbrains.exposed.sql.LongColumnType
+import org.jetbrains.exposed.sql.StringColumnType
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.list.VBooleanColumn
+import org.kopi.galite.list.VDateColumn
+import org.kopi.galite.list.VIntegerColumn
+import org.kopi.galite.list.VListColumn
+import org.kopi.galite.list.VStringColumn
 
 /**
  * The description of a list element
  *
- * @param title                the title of the column
+ * @param title                 the title of the column
  * @param column                the column itself
- * @param type                the type of the column
+ * @param domain                the domain of the column
  */
-class ListDescription<T : Comparable<T>?>(private val title: String,
-                                          private val column: String,
-                                          val type: Domain<T>) {
+class ListDescription(val title: String,
+                      val column: Column<*>,
+                      val domain: Domain<*>) {
+
+  fun buildModel(): VListColumn {
+    val type = if(column.columnType is AutoIncColumnType) {
+      (column.columnType as AutoIncColumnType).delegate
+    } else {
+      column.columnType
+    }
+
+    return when(type) {
+      is IntegerColumnType, is LongColumnType -> VIntegerColumn(title, column, domain.defaultAlignment, domain.width!!, true)
+      is StringColumnType -> VStringColumn(title, column, domain.defaultAlignment, domain.width!!, true)
+      is BooleanColumnType -> VBooleanColumn(title, column, true)
+      is IDateColumnType, ->
+        VDateColumn(title, column, true)
+      else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+    }
+  }
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

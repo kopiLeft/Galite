@@ -26,8 +26,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
-import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -109,12 +107,12 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     }
     when {
       month == 0 -> {
-        val now: NotNullDate = Date.now()
+        val now: Date = Date.now()
         month = now.month
         year = now.year
       }
       year == -2 -> {
-        val now: NotNullDate = Date.now()
+        val now: Date = Date.now()
         year = now.year
       }
       year < 50 -> {
@@ -132,7 +130,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
       }
     }
-    setDate(rec, NotNullDate(year, month, day))
+    setDate(rec, Date(year, month, day))
   }
 
   // ----------------------------------------------------------------------
@@ -229,12 +227,12 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     }
     when {
       month == 0 -> {
-        val now: NotNullDate = Date.now()
+        val now: Date = Date.now()
         month = now.month
         year = now.year
       }
       year == -2 -> {
-        val now: NotNullDate = Date.now()
+        val now: Date = Date.now()
         year = now.year
       }
       year < 50 -> {
@@ -252,7 +250,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
       }
     }
-    return NotNullDate(year, month, day)
+    return Date(year, month, day)
   }
 
   /**
@@ -269,10 +267,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    return if (value[r] == null) "NULL"
-    else Utils.toSql(value[r]!!)
-  }
+  override fun getSqlImpl(r: Int): java.sql.Date? = if (value[r] == null) null else value[r]!!.toSql()
 
   /**
    * Copies the value of a record to another

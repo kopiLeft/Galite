@@ -19,7 +19,7 @@
 package org.kopi.galite.report
 
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Decimal
 
 class VFixnumCodeColumn(ident: String?,
                         type: String?,
@@ -32,7 +32,7 @@ class VFixnumCodeColumn(ident: String?,
                         format: VCellFormat?,
                         names: Array<String>,
                         // array of internal representations
-                        private val codes: Array<NotNullFixed>)
+                        private val codes: Array<Decimal>)
           : VCodeColumn(ident,
                         type,
                         source,
@@ -61,7 +61,7 @@ class VFixnumCodeColumn(ident: String?,
   override fun getPrintedWidth(): Double = width * 0.7
 
   override fun formatColumn(exporter: PExport, index: Int) {
-    exporter.formatFixedColumn(this, index)
+    exporter.formatDecimalColumn(this, index)
   }
 
   /**
@@ -73,6 +73,6 @@ class VFixnumCodeColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int = (object1 as NotNullFixed)
-          .compareTo(object2 as NotNullFixed)
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Decimal)
+          .compareTo(object2 as Decimal)
 }

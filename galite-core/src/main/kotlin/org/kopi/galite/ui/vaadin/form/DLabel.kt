@@ -33,6 +33,23 @@ import org.kopi.galite.visual.VActor
 open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
   //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  /**
+   * The info text used to display search operator.
+   */
+  var infoText: String? = ""
+
+  /**
+   * The label can execute field action trigger.
+   */
+  var hasAction = false
+
+  init {
+    setText(text)
+  }
+
+  //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   /**
@@ -40,11 +57,13 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * @param activ The field state.
    */
   fun prepareSnapshot(activ: Boolean) {
+    text
     // TODO
   }
 
   override fun init(text: String?, help: String?) {
-    TODO()
+    tooltip = help
+    // TODO
   }
 
   /**
@@ -82,13 +101,6 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
   }
 
   /**
-   * Returns the label text.
-   * @return The label text.
-   */
-  val text: String
-    get() = TODO()
-
-  /**
    * Builds full field description.
    * @param model The field model.
    * @param tooltip The initial field tooltip.
@@ -117,17 +129,6 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     }
     return description
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  /**
-   * The info text.
-   */
-  var infoText: String? = null
-    set(info) {
-      TODO()
-    }
 
   /**
    * `true` is the label is in detail mode.

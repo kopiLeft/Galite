@@ -18,10 +18,10 @@
 package org.kopi.galite.tests.chart
 
 import org.junit.Test
-import org.kopi.galite.domain.Domain
 
 import org.kopi.galite.tests.TestBase
 import org.kopi.galite.chart.Formatter
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.exceptions.MissingMeasureException
 
 import kotlin.test.assertEquals
@@ -164,14 +164,14 @@ class ChartTests : TestBase() {
   }
 }
 
-class StringTestType(val param: Int) : Domain<String>(25) {
-  override val type = code {
-    this["cde1"] = "1"
+class StringTestType(val param: Int) : CodeDomain<String>() {
+  init {
+    "cde1" keyOf "1"
   }
 }
 
-class IntTestType(val param: Int) : Domain<Int>(25) {
-  override val type = code {
-    this["cde1"] = 1
+class IntTestType(val param: Int) : CodeDomain<Int>() {
+  init {
+    "cde1" keyOf 1
   }
 }

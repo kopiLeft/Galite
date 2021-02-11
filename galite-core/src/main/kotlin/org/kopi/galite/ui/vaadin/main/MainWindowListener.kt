@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,16 +15,37 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.main
 
-package org.kopi.galite.exceptions
+import java.io.Serializable
 
 /**
- * Thrown to indicate that an invalid value has been passed to a field.
- *
- * @param value to pass
- * @param label the field's label
- *
+ * Registered objects are notified about actions happening
+ * in the main application window.
  */
-class InvalidValueException(value: Comparable<*>?, label: String?) : RuntimeException() {
-  override val message = "invalid value $value for the field $label"
+interface MainWindowListener : Serializable {
+  /**
+   * Fired when the administration link is clicked.
+   */
+  fun onAdmin()
+
+  /**
+   * Fired when the support link is clicked.
+   */
+  fun onSupport()
+
+  /**
+   * Fired when the help link is clicked.
+   */
+  fun onHelp()
+
+  /**
+   * Fired when the logout link is clicked.
+   */
+  fun onLogout()
+
+  /**
+   * Fired when the connected user link is clicked.
+   */
+  fun onUser()
 }

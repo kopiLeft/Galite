@@ -16,20 +16,34 @@
  */
 package org.kopi.galite.tests.report
 
+import java.awt.event.KeyEvent
+import java.io.FileInputStream
+import java.io.File
+import java.util.Scanner
+import java.util.Locale
+
+import kotlin.test.assertEquals
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.CellType
+import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.Test
+import org.kopi.galite.base.Utils
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.report.Constants
+import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.PConfig
 import org.kopi.galite.report.Report
-import org.kopi.galite.report.VCCDepthFirstCircuitN
-
+import org.kopi.galite.report.Triggers
 import org.kopi.galite.report.VReport
-import org.kopi.galite.report.VReportRow
-import org.kopi.galite.tests.VApplicationTestBase
+import org.kopi.galite.report.VReport.Companion.TYP_CSV
+import org.kopi.galite.report.VReport.Companion.TYP_XLS
+import org.kopi.galite.report.VReport.Companion.TYP_XLSX
+import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.VActor
-import java.awt.event.KeyEvent
-import java.util.*
-import kotlin.test.assertEquals
 
 /**
  *
@@ -37,30 +51,140 @@ import kotlin.test.assertEquals
  *
  * @see VReport
  */
-class VReportTests: VApplicationTestBase() {
+class VReportTests: JApplicationTestBase() {
+
+  /**
+   * Checks that export report as CSV working correctly.
+   */
+  @Test
+  fun exportFile_CSV() {
+    withReport(SimpleReport()) {
+      val file = Utils.getTempFile("galite", "csv")
+      val sc = Scanner(file)
+      var result = ""
+
+      model.export(file, TYP_CSV)
+      sc.useDelimiter(" ")
+
+      while (sc.hasNext()) {
+        result += sc.next()
+      }
+      sc.close()
+
+      assertEquals("id\tname\tage\tsalary\n" +
+                           "1\tHichem\t26\t2.000,88000\n" +
+                           "2\tSarra\t23\t2.000,55000\n" +
+                           "3\tHoussem\t25\t2.000,44000\n" +
+                           "4\tZied\t24\t2.000,33000\n" +
+                           "\t\t\t2.000,55000\n", result)
+    }
+  }
+
+  /**
+   * Reading Excel file.
+   */
+  fun readExcelFile(file: File, type: Int) : String {
+    var result = ""
+
+    try {
+      val file = FileInputStream(file)
+      val workbook = if(type == TYP_XLS) {
+        //Create Workbook instance holding reference to .xls file
+        HSSFWorkbook(file) //xls
+      } else {
+        //Create Workbook instance holding reference to .xlsx file
+        XSSFWorkbook(file) // xlsx
+      }
+
+      //Get first/desired sheet from the workbook
+      val sheet = workbook.getSheetAt(0)
+
+      //Iterate through each rows one by one
+      val rowIterator: Iterator<Row> = sheet.iterator()
+
+      while (rowIterator.hasNext()) {
+        val row: Row = rowIterator.next()
+        //For each row, iterate through all the columns
+        val cellIterator: Iterator<Cell> = row.cellIterator()
+        while (cellIterator.hasNext()) {
+          val cell: Cell = cellIterator.next()
+          when (cell.cellType) {
+            CellType.NUMERIC -> result += cell.numericCellValue.toString() + "  "
+            CellType.STRING -> result += cell.stringCellValue.toString() + "  "
+          }
+        }
+        result += ""
+      }
+      file.close()
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+
+    return result
+  }
+  /**
+   * Checks that export report as XLS working correctly.
+   */
+  @Test
+  fun exportFile_XLS() {
+    withReport(SimpleReport()) {
+      val file = Utils.getTempFile("galite", "xls")
+
+      model.export(file, TYP_XLS)
+
+      val result = readExcelFile(file, TYP_XLS)
+
+      assertEquals("id  name  age  salary  " +
+                           "1.0  Hichem  26.0  2000.88" +
+                           "  2.0  Sarra  23.0  2000.55  " +
+                           "3.0  Houssem  25.0  2000.44  " +
+                           "4.0  Zied  24.0  2000.33  2000.55  ", result)
+    }
+  }
+
+  /**
+   * Checks that export report as XLSX working correctly.
+   */
+  @Test
+  fun exportFile_XLSX() {
+    withReport(SimpleReport()) {
+      val file = Utils.getTempFile("galite", "xlsx")
+
+      model.export(file, TYP_XLSX)
+
+      val result = readExcelFile(file, TYP_XLSX)
+
+      assertEquals("id  name  age  salary  " +
+                           "1.0  Hichem  26.0  2000.88" +
+                           "  2.0  Sarra  23.0  2000.55  " +
+                           "3.0  Houssem  25.0  2000.44  " +
+                           "4.0  Zied  24.0  2000.33  2000.55  ", result)
+    }
+  }
 
   /**
    * Checks that f12 actor is the first report actor.
    */
   @Test
   fun reportVActorTest() {
-    val report = SimpleReport.model
-    val f12 = VActor("File",
-                     "org/kopi/galite/Window",
-                     "GotoShortcuts",
-                     "org/kopi/galite/Window",
-                     null,
-                     KeyEvent.VK_F12,
-                     0)
-            .also {
-              it.menuName = "Fichier"
-              it.menuItem = "Favoris"
-            }
+    withReport(SimpleReport()) {
+      val f12 = VActor("File",
+                       "org/kopi/galite/Window",
+                       "GotoShortcuts",
+                       "org/kopi/galite/Window",
+                       null,
+                       KeyEvent.VK_F12,
+                       0)
+              .also {
+                it.menuName = "Fichier"
+                it.menuItem = "Favoris"
+              }
 
-    // Actor checks
-    assertEquals(f12, report.actors[0])
-    assertEquals(f12, report.actors[0])
-    assertEquals(-8, report.actors[0]!!.number)
+      // Actor checks
+      assertEquals(f12, model.actors[0])
+      assertEquals(f12, model.actors[0])
+      assertEquals(-8, model.actors[0]!!.number)
+    }
   }
 
   /**
@@ -68,11 +192,12 @@ class VReportTests: VApplicationTestBase() {
    */
   @Test
   fun reportSourceTitleTest() {
-    val report = SimpleReport.model
-    assertEquals("org/kopi/galite/tests/report/SimpleReport", report.source)
-    assertEquals("SimpleReport", report.getTitle())
-    assertEquals(null, report.smallIcon)
-    assertEquals(PConfig(), report.printOptions)
+    withReport(SimpleReport()) {
+      assertEquals("org/kopi/galite/tests/report/SimpleReport", model.source)
+      assertEquals("SimpleReport", model.getTitle())
+      assertEquals(null, model.smallIcon)
+      assertEquals(PConfig(), model.printOptions)
+    }
   }
 
   /**
@@ -80,31 +205,32 @@ class VReportTests: VApplicationTestBase() {
    */
   @Test
   fun vmodelTest() {
-    val model = SimpleReport.model.model
-    val id = model.columns[0]!!
-    val name = model.columns[1]!!
+    withReport(SimpleReport()) { mReport ->
+      val id = mReport.columns[0]!!
+      val name = mReport.columns[1]!!
 
-    // Columns checks
-    assertEquals("ANM_1", name.ident)
-    assertEquals("name", name.label)
-    assertEquals("The user name", name.help)
-    assertEquals(Constants.CLO_VISIBLE, name.options)
-    assertEquals(Constants.ALG_DEFAULT, name.align)
-    assertEquals(-1, name.groups)
-    assertEquals(null, name.function)
-    assertEquals(true, name.visible)
-    assertEquals(false, name.folded)
-   // assertEquals(0, name.width) TODO
-   // assertEquals(0, name.height) TODO
-    assertEquals(true, id.isHidden())
-   // assertEquals(0, name.width) TODO
-   // assertEquals(0, name.height) TODO
+      // Columns checks
+      assertEquals("ANM_1", name.ident)
+      assertEquals("name", name.label)
+      assertEquals("The user name", name.help)
+      assertEquals(Constants.CLO_VISIBLE, name.options)
+      assertEquals(Constants.ALG_DEFAULT, name.align)
+      assertEquals(-1, name.groups)
+      assertEquals(null, name.function)
+      assertEquals(true, name.visible)
+      assertEquals(false, name.folded)
+      // assertEquals(0, name.width) TODO
+      // assertEquals(0, name.height) TODO
+      assertEquals(false, id.isHidden())
+      // assertEquals(0, name.width) TODO
+      // assertEquals(0, name.height) TODO
+    }
   }
 
   /**
    * Simple Report with two fields.
    */
-  object SimpleReport : Report() {
+  class SimpleReport : Report() {
     override val locale = Locale.FRANCE
 
     override val title = "SimpleReport"
@@ -112,7 +238,6 @@ class VReportTests: VApplicationTestBase() {
     val id = field(Domain<Int>(20)) {
       label = "id"
       help = "The user id"
-      hidden = true
     }
 
     val name = field(Domain<String>(20)) {
@@ -125,26 +250,40 @@ class VReportTests: VApplicationTestBase() {
       help = "The user age"
     }
 
+    val salary = field(Domain<Decimal>(width = 10, scale = 5)) {
+      label = "salary"
+      help = "The user salary"
+      align = FieldAlignment.LEFT
+      compute {
+        // Computes the average of ages
+        Triggers.avgDecimal(this)
+      }
+    }
+
     init {
       add {
         this[id] = 1
         this[name] = "Hichem"
         this[age] = 26
+        this[salary] = Decimal("2000.88")
       }
       add {
         this[id] = 2
         this[name] = "Sarra"
         this[age] = 23
+        this[salary] = Decimal("2000.55")
       }
       add {
         this[id] = 3
         this[name] = "Houssem"
         this[age] = 25
+        this[salary] = Decimal("2000.44")
       }
       add {
         this[id] = 4
         this[name] = "Zied"
         this[age] = 24
+        this[salary] = Decimal("2000.33")
       }
     }
   }

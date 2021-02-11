@@ -15,16 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.main
 
-import org.kopi.galite.report.MReport
+import com.vaadin.flow.component.tabs.Tabs
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
- *
- * @param model The table model.
+ * The already opened windows menu.
+ * The menu aims to show the opened windows by the user.
+ * From this menu, the user can switch to another window.
  */
-class VTable(private val model: MReport) {
+class VWindowsMenu(val vertical: Boolean) : Tabs() {
 
+  init {
+    orientation = if (vertical) Orientation.VERTICAL else Orientation.HORIZONTAL
+    // Make sure that CSS styles specified for the default Menu classes
+    // do not affect this menu
+    className = "k-windowsMenu"
+  }
 }

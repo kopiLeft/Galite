@@ -91,7 +91,7 @@ abstract class ApplicationContext {
      * Returns the default application [Locale].
      * @return The default application [Locale].
      */
-    fun getDefaultLocale(): Locale? = applicationContext.getApplication().defaultLocale
+    fun getDefaultLocale(): Locale = applicationContext.getApplication().defaultLocale
 
     /**
      * Returns the application [Registry].

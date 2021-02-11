@@ -41,7 +41,7 @@ class DImageField(model: VFieldUI,
   // UI MANAGEMENT
   // ----------------------------------------------------------------------
   override fun updateAccess() {
-    label!!.update(model, getPosition())
+    label!!.update(model, position)
   }
 
   override fun updateText() {
@@ -49,7 +49,7 @@ class DImageField(model: VFieldUI,
   }
 
   override fun updateFocus() {
-    label!!.update(model, getPosition())
+    label!!.update(model, position)
     super.updateFocus()
   }
 

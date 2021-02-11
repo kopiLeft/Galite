@@ -31,14 +31,14 @@ class VCompanyLogo : Div() {
    * @param href the href
    */
   fun setHref(href: String?) {
-    logo.href = href!!
+    logo.href = href
   }
 
   /**
    * Sets the target frame.
    * @param target The target frame.
    */
-  fun setTarget(target: String?) {
+  fun setTarget(target: String) {
     logo.setTarget(target)
   }
 

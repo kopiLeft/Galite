@@ -19,12 +19,11 @@ package org.kopi.galite.tests.report
 import java.io.File
 import java.util.Locale
 
+import kotlin.test.assertEquals
+
 import org.jdom2.input.SAXBuilder
 
 import org.junit.Test
-
-import org.kopi.galite.common.POSTREPORT
-import org.kopi.galite.common.PREREPORT
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -33,8 +32,7 @@ import org.kopi.galite.report.Triggers
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.VApplicationTestBase
-
-import kotlin.test.assertEquals
+import org.kopi.galite.type.Decimal
 
 class ReportTests: VApplicationTestBase() {
 
@@ -56,13 +54,25 @@ class ReportTests: VApplicationTestBase() {
     assertEquals(listOf("Sami", "Sofia", "Sofia"), rows)
 
     val firstRow = SimpleReport.getRow(0)
-    assertEquals(mapOf(SimpleReport.name to "Sami", SimpleReport.age to 22, SimpleReport.profession to "Journalist"), firstRow)
+    assertEquals(mapOf(SimpleReport.name to "Sami",
+                       SimpleReport.age to 22,
+                       SimpleReport.profession to "Journalist",
+                       SimpleReport.salary to Decimal("2000")),
+                 firstRow)
 
     val secondRow = SimpleReport.getRow(1)
-    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 23, SimpleReport.profession to "Dentist"), secondRow)
+    assertEquals(mapOf(SimpleReport.name to "Sofia",
+                       SimpleReport.age to 23,
+                       SimpleReport.profession to "Dentist",
+                       SimpleReport.salary to Decimal("2000.55")),
+                 secondRow)
 
     val thirdRow = SimpleReport.getRow(2)
-    assertEquals(mapOf(SimpleReport.name to "Sofia", SimpleReport.age to 25, SimpleReport.profession to "Baker"), thirdRow)
+    assertEquals(mapOf(SimpleReport.name to "Sofia",
+                       SimpleReport.age to 25,
+                       SimpleReport.profession to "Baker",
+                       SimpleReport.salary to Decimal("2000.55")),
+                 thirdRow)
   }
 
   /**
@@ -233,21 +243,34 @@ object SimpleReport : Report() {
     help = "The user profession"
   }
 
+  val salary = field(Domain<Decimal>(width = 10, scale = 5)) {
+    label = "salary"
+    help = "The user salary"
+    align = FieldAlignment.LEFT
+    compute {
+      // Computes the average of ages
+      Triggers.avgDecimal(this)
+    }
+  }
+
   init {
     add {
       this[name] = "Sami"
       this[age] = 22
       this[profession] = "Journalist"
+      this[salary] = Decimal("2000")
     }
     add {
       this[name] = "Sofia"
       this[age] = 23
       this[profession] = "Dentist"
+      this[salary] = Decimal("2000.55")
     }
     add {
       this[age] = 25
       this[profession] = "Baker"
       this[name] = "Sofia"
+      this[salary] = Decimal("2000.55")
     }
   }
 }

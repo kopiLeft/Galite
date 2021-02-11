@@ -23,7 +23,7 @@ import com.vaadin.flow.component.html.Input
 /**
  * An input text component.
  */
-class VInputText() : Input(), KeyNotifier {
+open class VInputText() : Input(), KeyNotifier {
 
   //---------------------------------------------------
   // CONSTRUCTOR

@@ -17,7 +17,9 @@
  */
 package org.kopi.galite.common
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.ColumnSet
+import org.kopi.galite.form.VDictionary
+import org.kopi.galite.list.VList
 
 /**
  * This class represent a list of data from the database
@@ -26,23 +28,44 @@ import org.jetbrains.exposed.sql.Table
  * @param table               the statement to select data
  * @param action              the field list action
  * @param columns             a description of the columns
- * @param autocompleteType    TODO: add doc
- * @param autocompleteLength  TODO: add doc
+ * @param autocompleteType    The auto completion
+ * @param autocompleteLength  The auto complete length
  * @param access              true if this field is only an access to a form
  */
-class FieldList<T : Comparable<T>?>(val type: String,
-                                    val table: Table,
-                                    val action: (() -> Unit)?,
-                                    val columns: Array<ListDescription<T>>,
-                                    val autocompleteType: Int,
-                                    val autocompleteLength: Int,
-                                    val access: Boolean) {
+class FieldList<T>(val type: String,
+                   val table: ColumnSet,
+                   val action: (() -> VDictionary)?,
+                   val columns: MutableList<ListDescription>,
+                   val autocompleteType: Int,
+                   val autocompleteLength: Int,
+                   val access: Boolean) {
 
   /**
    * Returns `true` if the list has a list action.
    */
   fun hasAction(): Boolean {
     return action != null
+  }
+
+  /**
+   * Return true if there is a shortcut to access the form to edit this field
+   */
+  fun hasShortcut(): Boolean {
+    return hasAction() && access
+  }
+
+  fun buildListModel(source: String): VList {
+    return VList(
+            type,
+            source,
+            columns.map { it.buildModel() }.toTypedArray(),
+            table,
+            action,
+            autocompleteType,
+            autocompleteLength,
+            null, // TODO : remove this
+            hasShortcut()
+    )
   }
 
   // ----------------------------------------------------------------------

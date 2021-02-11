@@ -28,10 +28,12 @@ object FormWithFields: Form() {
   override val locale = Locale.FRANCE
   override val title = "form with fields"
   val testPage = page("test page")
-  val testBlock = insertBlock(BlockWithFields, testPage)
+  val testPagse = page("test page")
+  val testBlock = insertBlock(BlockWithFields(), testPage)
+  val testBlocsk = insertBlock(BlockWithFields(), testPagse)
 }
 
-object BlockWithFields : FormBlock(1, 1, "Test block") {
+class BlockWithFields : FormBlock(1, 1, "Test block") {
   val u = table(User)
   val i = index(message = "ID should be unique")
 
@@ -40,12 +42,15 @@ object BlockWithFields : FormBlock(1, 1, "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = visit(domain = Domain<String?>(20), position = at(1, 1)) {
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
+    trigger(VALUE) {
+      "example"
+    }
   }
-  val age = skipped(domain = Domain<Int?>(3), position = follow(name)) {
+  val age = skipped(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
     columns(u.age) {

@@ -12,33 +12,31 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write timport java.math.BigIntegero the Free Software
+ * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 package org.kopi.galite.type
 
-import java.math.BigInteger
-import java.math.BigDecimal
+import java.util.Locale
 
 /**
- * This class represents the not null fixed type
+ * This class is the super-class for types
  */
-class NotNullFixed : Fixed {
-
-  constructor (b: BigDecimal) : super(b) {}
-  constructor(b: BigInteger) : super(b) {}
-  constructor(b: BigInteger, l: Int) : super(b) {}
-  constructor(value: Long, scale: Int) : super(value, scale) {}
-  constructor(d: Double) : super(d) {}
-  constructor(s: String) : super(s) {}
+interface Type0<T> {
+  /**
+   * Compares two objects
+   */
+  override fun equals(other: Any?): Boolean
 
   /**
-   * Checks whether this object is equal to the specified object.
+   * Format the object depending on the current language
+   * @param    locale    the current language
    */
-  override fun equals(other: Any?): Boolean = (other is NotNullFixed? && super.equals(other))
+  fun toString(locale: Locale): String
 
-  companion object {
-    fun castToNotNull(value: Fixed?): NotNullFixed? = value as? NotNullFixed
-  }
+  /**
+   * Represents the value in sql
+   */
+  fun toSql(): Any
 }

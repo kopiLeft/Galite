@@ -26,7 +26,7 @@ import org.jdom2.Document
 import org.jdom2.Element
 import org.jdom2.output.Format
 import org.jdom2.output.XMLOutputter
-
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.util.base.InconsistencyException
 
@@ -82,7 +82,7 @@ open class LocalizationWriter {
     val self = Element("type")
     self.setAttribute("ident", ident)
     pushNode(self)
-    type.genLocalization(this)
+    type.genTypeLocalization(this)
     popNode(self)
     peekNode(null).addContent(self)
   }
@@ -114,7 +114,7 @@ open class LocalizationWriter {
     peekNode(null).addContent(self)
   }
 
-  fun <T : Comparable<T>?> genFieldList(columns: Array<ListDescription<T>>) {
+  fun genFieldList(columns: MutableList<ListDescription>) {
     val self = Element("list")
     pushNode(self)
     for (i in columns.indices) {
@@ -132,10 +132,10 @@ open class LocalizationWriter {
     peekNode("code").addContent(self)
   }
 
-  fun genListDesc(column: String, title: String) {
+  fun genListDesc(column: Column<*>, title: String) {
     val self = Element("listdesc")
 
-    self.setAttribute("column", column)
+    self.setAttribute("column", column.name)
     self.setAttribute("title", title)
     peekNode("list").addContent(self)
   }

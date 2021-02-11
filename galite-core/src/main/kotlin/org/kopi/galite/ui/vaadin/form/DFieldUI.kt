@@ -48,25 +48,25 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
       VField.MDL_FLD_EDITOR -> if ((model as VTextField).isStyled) {
         DRichTextEditor(this, label as? DLabel, model.align,
                         model.options,
-                        (model as VTextField).height, detail)
+                        model.height, detail)
       } else {
         DTextEditor(this, label as? DLabel, model.align, model.options,
-                    (model as VTextField).height, detail)
+                    model.height, detail)
       }
       VField.MDL_FLD_TEXT -> if (model is VBooleanField) {
         DBooleanField(this, label as? DLabel, model.align, model.options,
                       detail)
-      } else if (model is VStringField && (model as VStringField).isStyled) {
+      } else if (model is VStringField && model.isStyled) {
         DRichTextEditor(this, label as? DLabel, model.align,
                         model.options,
-                        (model as VStringField).height, detail)
+                        model.height, detail)
       } else {
         DTextField(this, label as? DLabel, model.align, model.options,
                    detail)
       }
       VField.MDL_FLD_IMAGE -> DImageField(this, label as? DLabel, model.align,
                                           0, (model as VImageField).iconWidth,
-                                          (model as VImageField).iconHeight, detail)
+                                          model.iconHeight, detail)
       VField.MDL_FLD_ACTOR -> DActorField(this, label as? DLabel, model.align,
                                           model.options, detail)
       else -> throw InconsistencyException("Type of model " + model.getType().toString() + " not supported.")
@@ -93,6 +93,11 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
   }
 
   /**
+   * Number of components to represent a field. Default is 2 = (field + label)
+   */
+  override val fieldComponentsNumber get() = fldNumber
+
+  /**
    * If the fields values are set in the model before display creation,
    * The [org.kopi.galite.ui.vaadin.form.DFieldHandler.valueChanged] is not called since the
    * listener is not registered yet. We will call the value change event for
@@ -115,5 +120,9 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
                                                Utils.toString(model.getBackground(r)))
       }
     }
+  }
+
+  companion object {
+    const val fldNumber = 1
   }
 }

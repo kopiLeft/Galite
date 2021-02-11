@@ -124,35 +124,32 @@ object Commands : VConstants {
     val id = b.singleMenuQuery(false)
 
     if (id != -1) {
-      while (true) {
+      try {
+        b.fetchRecord(id)
+        gotoFieldIfNoActive(b)
+      } catch (e: VException) {
         try {
-          b.fetchRecord(id)
-          gotoFieldIfNoActive(b)
-          break
-        } catch (e: VException) {
-          try {
-          } catch (abortEx: VException) {
-            throw abortEx
-          }
-        } catch (e: SQLException) {
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          try {
-          } catch (abortEx: Error) {
-            throw InconsistencyException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw InconsistencyException(abortEx)
-          }
+        } catch (abortEx: VException) {
+          throw abortEx
+        }
+      } catch (e: SQLException) {
+        try {
+        } catch (abortEx: DBDeadLockException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: DBInterruptionException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: SQLException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: Error) {
+        try {
+        } catch (abortEx: Error) {
+          throw InconsistencyException(abortEx)
+        }
+      } catch (e: RuntimeException) {
+        try {
+        } catch (abortEx: RuntimeException) {
+          throw InconsistencyException(abortEx)
         }
       }
     }
@@ -173,38 +170,20 @@ object Commands : VConstants {
     val id = b.singleMenuQuery(false)
 
     if (id != -1) {
-      while (true) {
+      try {
+        transaction {
+          // fetches data to active record
+          b.fetchRecord(id)
+        }
+        gotoFieldIfNoActive(b)
+      } catch (e: SQLException) {
         try {
-          transaction {
-            // fetches data to active record
-            b.fetchRecord(id)
-          }
-          gotoFieldIfNoActive(b)
-          break
-        } catch (e: VException) {
-          try {
-          } catch (abortEx: VException) {
-            throw abortEx
-          }
-        } catch (e: SQLException) {
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          try {
-          } catch (abortEx: Error) {
-            throw InconsistencyException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw InconsistencyException(abortEx)
-          }
+        } catch (abortEx: DBDeadLockException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: DBInterruptionException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: SQLException) {
+          throw VExecFailedException(abortEx)
         }
       }
     }
@@ -226,30 +205,27 @@ object Commands : VConstants {
 
     if (id != -1) {
       try {
-        while (true) {
+        try {
+          b.fetchRecord(id)
+        } catch (e: VException) {
           try {
-            b.fetchRecord(id)
-            break
-          } catch (e: VException) {
-            try {
-            } catch (abortEx: VException) {
-              throw VExecFailedException(abortEx.message!!, abortEx)
-            }
-          } catch (e: SQLException) {
-            try {
-            } catch (abortEx: SQLException) {
-              throw VExecFailedException(abortEx)
-            }
-          } catch (e: Error) {
-            try {
-            } catch (abortEx: Error) {
-              throw InconsistencyException(abortEx)
-            }
-          } catch (e: RuntimeException) {
-            try {
-            } catch (abortEx: RuntimeException) {
-              throw InconsistencyException(abortEx)
-            }
+          } catch (abortEx: VException) {
+            throw VExecFailedException(abortEx.message!!, abortEx)
+          }
+        } catch (e: SQLException) {
+          try {
+          } catch (abortEx: SQLException) {
+            throw VExecFailedException(abortEx)
+          }
+        } catch (e: Error) {
+          try {
+          } catch (abortEx: Error) {
+            throw InconsistencyException(abortEx)
+          }
+        } catch (e: RuntimeException) {
+          try {
+          } catch (abortEx: RuntimeException) {
+            throw InconsistencyException(abortEx)
           }
         }
       } catch (e: VException) {
@@ -280,39 +256,36 @@ object Commands : VConstants {
     b.validate()
     Utils.freeMemory()
     try {
-      while (true) {
+      try {
         try {
-          try {
-            b.load()
-            gotoFieldIfNoActive(b)
-          } catch (e: VQueryOverflowException) {
-            // !!! HANDLE OVERFLOW WARNING
-          }
-          break
-        } catch (e: VException) {
-          try {
-          } catch (abortEx: VException) {
-            throw abortEx
-          }
-        } catch (e: SQLException) {
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          try {
-          } catch (abortEx: Error) {
-            throw InconsistencyException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw InconsistencyException(abortEx)
-          }
+          b.load()
+          gotoFieldIfNoActive(b)
+        } catch (e: VQueryOverflowException) {
+          // !!! HANDLE OVERFLOW WARNING
+        }
+      } catch (e: VException) {
+        try {
+        } catch (abortEx: VException) {
+          throw abortEx
+        }
+      } catch (e: SQLException) {
+        try {
+        } catch (abortEx: DBDeadLockException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: DBInterruptionException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: SQLException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: Error) {
+        try {
+        } catch (abortEx: Error) {
+          throw InconsistencyException(abortEx)
+        }
+      } catch (e: RuntimeException) {
+        try {
+        } catch (abortEx: RuntimeException) {
+          throw InconsistencyException(abortEx)
         }
       }
     } catch (e: VException) {
@@ -364,34 +337,31 @@ object Commands : VConstants {
       return
     }
     try {
-      while (true) {
+      try {
+        b.save()
+      } catch (e: VException) {
         try {
-          b.save()
-          break
-        } catch (e: VException) {
-          try {
-          } catch (abortEx: VException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: SQLException) {
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          try {
-          } catch (abortEx: Error) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw VExecFailedException(abortEx)
-          }
+        } catch (abortEx: VException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: SQLException) {
+        try {
+        } catch (abortEx: DBDeadLockException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: DBInterruptionException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: SQLException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: Error) {
+        try {
+        } catch (abortEx: Error) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: RuntimeException) {
+        try {
+        } catch (abortEx: RuntimeException) {
+          throw VExecFailedException(abortEx)
         }
       }
     } catch (e: VException) {
@@ -464,34 +434,31 @@ object Commands : VConstants {
       return
     }
     try {
-      while (true) {
+      try {
+        b.delete()
+      } catch (e: VException) {
         try {
-          b.delete()
-          break
-        } catch (e: VException) {
-          try {
-          } catch (abortEx: VException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: SQLException) {
-          try {
-          } catch (abortEx: DBDeadLockException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: DBInterruptionException) {
-            throw VExecFailedException(MessageCode.getMessage(VIS))
-          } catch (abortEx: SQLException) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: Error) {
-          try {
-          } catch (abortEx: Error) {
-            throw VExecFailedException(abortEx)
-          }
-        } catch (e: RuntimeException) {
-          try {
-          } catch (abortEx: RuntimeException) {
-            throw VExecFailedException(abortEx)
-          }
+        } catch (abortEx: VException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: SQLException) {
+        try {
+        } catch (abortEx: DBDeadLockException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: DBInterruptionException) {
+          throw VExecFailedException(MessageCode.getMessage(VIS))
+        } catch (abortEx: SQLException) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: Error) {
+        try {
+        } catch (abortEx: Error) {
+          throw VExecFailedException(abortEx)
+        }
+      } catch (e: RuntimeException) {
+        try {
+        } catch (abortEx: RuntimeException) {
+          throw VExecFailedException(abortEx)
         }
       }
     } catch (e: VException) {
@@ -547,7 +514,7 @@ object Commands : VConstants {
    * Sets the search operator for the current field
    */
   fun setSearchOperator(b: VBlock) {
-    val f: VField? = b.activeField
+    val f = b.activeField
 
     if (f != null) {
       val v: Int = VListDialog(VlibProperties.getString("search_operator"), arrayOf(

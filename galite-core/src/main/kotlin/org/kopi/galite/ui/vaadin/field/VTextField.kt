@@ -15,28 +15,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.field
 
-package org.kopi.galite.type
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 /**
- * This class represents the month types
+ * A text field widget that can support many validation
+ * strategies to restrict field input.
  */
-class NotNullMonth : Month {
-  /**
-   * Constructs a Month with a year and a month in this year
-   */
-  constructor(year: Int, month: Int) : super(year, month)
+open class VTextField(val col: Int) : TextField(), UTextField {
 
-  /**
-   * Constructs a Month from a Date
-   */
-  constructor(date: Date) : super(date)
-
-  companion object {
-    fun castToNotNull(value: Month): NotNullMonth = value as NotNullMonth
+  init {
+    style()
   }
 
-  fun getInt(column: Int): Int {
-    TODO()
+  /**
+   * TODO: Temporary styling but it Should be enhanced.
+   */
+  fun style() {
+    setWidthFull()
+    addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.MATERIAL_ALWAYS_FLOAT_LABEL)
+  }
+
+  override fun hasAutoComplete(): Boolean {
+    TODO("Not yet implemented")
   }
 }

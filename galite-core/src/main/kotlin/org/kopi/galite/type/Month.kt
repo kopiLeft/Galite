@@ -20,6 +20,7 @@ package org.kopi.galite.type
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Locale
 import java.util.GregorianCalendar
 import java.util.Calendar
@@ -27,11 +28,15 @@ import java.util.Calendar
 /**
  * This class represents month types
  */
-open class Month internal constructor(year: Int, month: Int) : Type() {
+open class Month(year: Int, month: Int) : Type<Month, LocalDate>() {
   /**
    * Constructs a Month from a Date
    */
-  internal constructor(date: Date) : this(date.year, date.month)
+  constructor(date: Date) : this(date.year, date.month)
+  /**
+   * Constructs a Month from a Date
+   */
+  constructor(date: LocalDate) : this(date.year, date.monthValue)
 
   /**
    * Formats the month according to the given format using the default
@@ -53,7 +58,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   /**
    * Clones this object.
    */
-  fun copy(): NotNullMonth = NotNullMonth(scalar / 12, scalar % 12 + 1)
+  fun copy(): Month = Month(scalar / 12, scalar % 12 + 1)
 
   // ----------------------------------------------------------------------
   // IN PLACE OPERATIONS
@@ -71,21 +76,15 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   /**
    * Returns a Month with the specified number of months added to this Month.
    */
-  fun add(months: Int): NotNullMonth {
-    return NotNullMonth((scalar + months) / 12, (scalar + months) % 12 + 1)
+  fun add(months: Int): Month {
+    return Month((scalar + months) / 12, (scalar + months) % 12 + 1)
   }
 
   /**
    * subtract
    * @returns the number of month between two Months
    */
-  fun subtract(other: Month?): Int? = other?.let { subtract(other as? NotNullMonth) }
-
-  /**
-   * subtract
-   * @returns the number of month between two Months
-   */
-  fun subtract(other: NotNullMonth): Int = scalar - (other as Month).scalar
+  fun subtract(other: Month): Int = scalar - other.scalar
 
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
@@ -98,14 +97,12 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  operator fun compareTo(other: Month): Int {
+  override operator fun compareTo(other: Month): Int {
     val v1 = scalar
     val v2 = other.scalar
 
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
-
-  override operator fun compareTo(other: Any?): Int = compareTo(other as? Month)
 
   /**
    * Returns the year of the month (by example 1999 or may be 2000 on year after)
@@ -120,20 +117,20 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   /**
    * Returns the first day of this month.
    */
-  open fun getFirstDay(): NotNullDate = NotNullDate(scalar / 12, scalar % 12 + 1, 1)
+  open fun getFirstDay(): Date = Date(scalar / 12, scalar % 12 + 1, 1)
 
   /**
    * Returns the last day of this month.
    */
-  open fun getLastDay(): NotNullDate =
+  open fun getLastDay(): Date =
           // this is the first day of the next month - 1 day.
-          NotNullDate((scalar + 1) / 12, (scalar + 1) % 12 + 1, 1).add(-1)
+          Date((scalar + 1) / 12, (scalar + 1) % 12 + 1, 1).add(-1)
 
   /**
    * Transforms this month in a date (the first day of the month)
    */
   @Deprecated("")
-  open fun getDate(): NotNullDate = getFirstDay()
+  open fun getDate(): Date = getFirstDay()
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
@@ -162,11 +159,16 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
   /**
    * Represents the value in sql
    */
-  override fun toSql(): String {
+  override fun toSql(): java.sql.Date {
     val year = scalar / 12
     val month = scalar % 12 + 1
 
-    return "{fn MONTH($year, $month)}"
+    //return "{fn MONTH($year, $month)}" TODO
+    return getDate().toSql()
+  }
+
+  override fun hashCode(): Int {
+    return scalar
   }
 
   // --------------------------------------------------------------------
@@ -178,9 +180,9 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
     /**
      * Current month
      */
-    fun now(): NotNullMonth {
+    fun now(): Month {
       val now = Calendar.getInstance()
-      return NotNullMonth(now[Calendar.YEAR], now[Calendar.MONTH] + 1)
+      return Month(now[Calendar.YEAR], now[Calendar.MONTH] + 1)
     }
 
     /**
@@ -190,7 +192,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
      * @param     input   the date to parse
      * @param     format  the format of the date
      */
-    fun parse(input: String, format: String): NotNullMonth = parse(input, format, Locale.getDefault())
+    fun parse(input: String, format: String): Month = parse(input, format, Locale.getDefault())
 
 
     /**
@@ -201,7 +203,7 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
      * @param     format  the format of the date
      * @param     locale  the Locale to use
      */
-    fun parse(input: String, format: String, locale: Locale): NotNullMonth {
+    fun parse(input: String, format: String, locale: Locale): Month {
       val cal = GregorianCalendar()
 
       try {
@@ -209,12 +211,12 @@ open class Month internal constructor(year: Int, month: Int) : Type() {
       } catch (e: ParseException) {
         throw IllegalArgumentException()
       }
-      return NotNullMonth(cal[Calendar.YEAR], cal[Calendar.MONTH] + 1)
+      return Month(cal[Calendar.YEAR], cal[Calendar.MONTH] + 1)
     }
 
     // --------------------------------------------------------------------
     // CONSTANTS
     // --------------------------------------------------------------------
-    val DEFAULT: NotNullMonth = NotNullMonth(1900, 1)
+    val DEFAULT: Month = Month(1900, 1)
   }
 }

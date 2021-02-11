@@ -30,7 +30,7 @@ open class VAnchorPanel : Anchor() {
    * Sets the anchor's href (the url to which it links).
    * @param href the anchor's href
    */
-  override fun setHref(href: String) {
+  override fun setHref(href: String?) {
     if (href != null) {
       super.setHref(href)
     } else {

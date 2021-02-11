@@ -58,6 +58,8 @@ class VHelpViewer : VWindow() {
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
+  override val locale: Locale  get() = Locale.getDefault()
+
   /**
    * Localize this menu tree
    *
@@ -110,7 +112,7 @@ class VHelpViewer : VWindow() {
     ))
 
     // localize the help viewer using the default locale
-    localize(Locale.getDefault())
+    localize(locale)
     getActor(CMD_QUIT).number = CMD_QUIT
   }
 }

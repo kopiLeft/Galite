@@ -15,28 +15,35 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.ui.vaadin.notification
 
-package org.kopi.galite.type
-
-import java.util.Calendar
+import com.vaadin.flow.component.KeyPressEvent
+import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
- * This class represents the time types
+ * Information type notification component.
  */
-class NotNullTime : Time {
-  constructor(hours: Int, minutes: Int, seconds: Int) : super(hours, minutes, seconds)
-  constructor(hours: Int, minutes: Int) : super(hours, minutes)
-  constructor(time: java.sql.Time) : super(time)
-  constructor(image: String) : super(image)
-  constructor(calendar: Calendar) : super(calendar)
+open class VInformationNotification(title: String?, message: String) : VAbstractNotification(title, message) {
+  //-------------------------------------------------
+  // IMPLEMENTATION
+  //-------------------------------------------------
+  override fun setButtons(locale: String?) {
 
-  /**
-   * Constructs a time from a scalar representation.
-   * DO NOT USE OUTSIDE OF THE LIBRARY
-   */
-  constructor(scalar: Int) : super(scalar)
-
-  companion object {
-    fun castToNotNull(value: Time): NotNullTime = value as NotNullTime
   }
+
+  override val iconName: String
+    get() = "info-circle"
+
+  fun focus() {
+
+  }
+
+  fun onKeyPress(event: KeyPressEvent) {
+
+  }
+
+  //--------------------------------------------------
+  // DATA MEMBERS
+  //--------------------------------------------------
+  private var close: VInputButton? = null
 }
