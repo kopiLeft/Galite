@@ -138,7 +138,52 @@ object FormWithNullableColumn : DictionaryForm() {
 
   val p1 = page("test page")
 
-  val tb1 = insertBlock(TestNullable(), p1) {
+  val blockWithTwoTablesInnerJoin = insertBlock(FormWithTwoTablesInnerJoin(), p1) {
+    command(item = FormWithList.list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockWithTwoTablesLeftJoin = insertBlock(FormWithTwoTablesLeftJoin(), p1) {
+    command(item = FormWithList.list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockWithThreeTablesLeftJoin = insertBlock(FormWithThreeTablesLeftJoin(), p1) {
+    command(item = FormWithList.list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockWithThreeTablesInnerJoin = insertBlock(FormWithThreeTablesInnerJoin(), p1) {
     command(item = FormWithList.list) {
       action = {
         println("-----------Generating list-----------------")
@@ -154,54 +199,120 @@ object FormWithNullableColumn : DictionaryForm() {
   }
 }
 
-class TestNullable : FormBlock(1, 1, "Test block") {
+class FormWithTwoTablesInnerJoin :  FormBlock(1, 1, "Inner Join Two Tables Test") {
   val c = table(Clients)
   val o = table(Order)
-  val p = table(Products)
 
-  val id_user = hidden(domain = Domain<Int>(20)) {
-    label = "id"
-    help = "The user id"
-    columns(c.id, nullable(o.client_id))
+  val id_user = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+    columns(c.id, o.client_id)
   }
-  val id_product = hidden(domain = Domain<Int>(20)) {
-    label = "id"
-    help = "The product id"
-    columns(p.id, nullable(o.product_id))
-  }
-  val ts = hidden(domain = Domain<Int>(20)) {
-    label = "ts"
-    help = "The user ts"
-    value = 0
-    columns(c.ts)
-  }
-  val uc = hidden(domain = Domain<Int>(20)) {
-    label = "uc"
-    help = "The user uc"
-    value = 0
-    columns(c.uc)
-  }
-  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
-    label = "name"
-    help = "The user name"
+
+  val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
     columns(c.name)
   }
 
-  val mail = visit(domain = Domain<String>(20), position = at(1, 2)) {
-    label = "mail"
-    help = "The user mail"
+  val mail = visit(domain = Domain<String>(20), position = at(2, 2)) {
     columns(c.mail)
   }
 
-  val quantity = visit(domain = Domain<Int>(10), position = at(2, 1)) {
-    label = "quantity"
-    help = "The quantity"
+  val quantity = visit(domain = Domain<Int>(10), position = at(3, 1)) {
+    columns(o.quantity)
+  }
+}
+
+class FormWithTwoTablesLeftJoin :  FormBlock(1, 1, "Left Join Two Tables Test") {
+  val c = table(Clients)
+  val o = table(Order)
+
+  val id_user = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+    columns(o.client_id, nullable(c.id))
+  }
+
+  val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
+    columns(c.name)
+  }
+
+  val mail = visit(domain = Domain<String>(20), position = at(2, 2)) {
+    columns(c.mail)
+  }
+
+  val quantity = visit(domain = Domain<Int>(10), position = at(3, 1)) {
+    columns(o.quantity)
+  }
+}
+
+class FormWithThreeTablesLeftJoin : FormBlock(1, 1, "Left Join three Tables Test") {
+  val o = table(Order)
+  val c = table(Clients)
+  val p = table(Products)
+
+  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+    columns(o.id)
+  }
+
+  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+    columns(c.id, nullable(o.client_id))
+  }
+  val id_product = skipped(domain = Domain<Int>(20), position = at(3, 1)) {
+    columns(p.id, nullable(o.product_id))
+  }
+  val ts = hidden(domain = Domain<Int>(20)) {
+    columns(c.ts)
+  }
+  val uc = hidden(domain = Domain<Int>(20)) {
+    columns(c.uc)
+  }
+  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+    columns(c.name)
+  }
+
+  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+    columns(c.mail)
+  }
+
+  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
     columns(o.quantity)
   }
 
-  val productName = visit(domain = Domain<String>(20), position = at(3, 1)) {
-    label = "product Name"
-    help = "The product Name"
+  val productName = visit(domain = Domain<String>(20), position = at(6, 1)) {
+    columns(p.designation)
+  }
+}
+
+class FormWithThreeTablesInnerJoin : FormBlock(1, 1, "Inner Join three Tables Test") {
+  val o = table(Order)
+  val c = table(Clients)
+  val p = table(Products)
+
+  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+    columns(o.id)
+  }
+
+  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+    columns(c.id, o.client_id)
+  }
+  val id_product = skipped(domain = Domain<Int>(20), position = at(3, 1)) {
+    columns(p.id, o.product_id)
+  }
+  val ts = hidden(domain = Domain<Int>(20)) {
+    columns(c.ts)
+  }
+  val uc = hidden(domain = Domain<Int>(20)) {
+    columns(c.uc)
+  }
+  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+    columns(c.name)
+  }
+
+  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+    columns(c.mail)
+  }
+
+  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+    columns(o.quantity)
+  }
+
+  val productName = visit(domain = Domain<String>(20), position = at(6, 1)) {
     columns(p.designation)
   }
 }

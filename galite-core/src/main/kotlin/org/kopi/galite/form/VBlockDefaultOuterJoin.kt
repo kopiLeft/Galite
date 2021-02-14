@@ -64,7 +64,7 @@ class VBlockDefaultOuterJoin(block: VBlock) {
 
         if (tableColumn != -1 && rootColumn != -1) {    // TODO should we check if tableColumn != null?
           for (j in 0 until field.getColumnCount()) {
-            val joinType = if (field.getColumn(j)!!.nullable ||
+            val joinType = if (field.getColumn(tableColumn)!!.nullable ||
                     field.getColumn(rootColumn)!!.nullable) {
               JoinType.LEFT
             } else {

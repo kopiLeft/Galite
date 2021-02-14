@@ -20,9 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.targetTables
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -46,23 +44,6 @@ class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
 
     assertCollectionsEquals(listOf(Users, UserRights, Modules), tables)
     assertCollectionsEquals(Users.columns + UserRights.columns + Modules.columns,searchTables.columns)
-  }
-
-  @Test
-  fun nullableColumnsTest() {
-    FormWithNullableColumn.model
-    FormWithNullableColumn.tb1.name.value = "client2"
-
-    val table = VBlockDefaultOuterJoin.getSearchTables(FormWithNullableColumn.tb1.vBlock)
-    val columns = FormWithNullableColumn.tb1.vBlock.getSearchColumns()
-
-    transaction {
-      val secondClientInformation = table!!.slice(columns).select(FormWithNullableColumn.tb1.vBlock.idColumn eq 2).map {
-        mutableListOf(it[Clients.name], it[Clients.mail])
-      }
-
-      assertCollectionsEquals(secondClientInformation, mutableListOf(mutableListOf("client2", "client2@kopi.com")))
-    }
   }
 
   @Test
