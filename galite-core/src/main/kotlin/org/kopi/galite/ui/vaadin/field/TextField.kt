@@ -180,6 +180,8 @@ class TextField(
       }
     } else if(isNumber()) {
       VIntegerField()
+    } else if(isDate()) {
+      VDateField()
     } else {
       VTextField(col) // TODO
     }
@@ -229,6 +231,14 @@ class TextField(
    */
   private fun isNumber(): Boolean {
     return type == Type.INTEGER
+  }
+
+  /**
+   * Returns true if the field should contains only date.
+   * @return True if the field should contains only date.
+   */
+  private fun isDate(): Boolean {
+    return type == Type.DATE
   }
 
   //---------------------------------------------------

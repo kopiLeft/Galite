@@ -109,7 +109,7 @@ open class DTextField(
       }
       is VDateField -> {
         // date field
-        TODO()
+        textfield.type = TextField.Type.DATE
       }
       is VWeekField -> {
         // week field
