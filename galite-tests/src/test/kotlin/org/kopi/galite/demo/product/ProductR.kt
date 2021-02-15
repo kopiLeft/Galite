@@ -29,7 +29,6 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 import org.kopi.galite.type.Decimal
-import java.math.BigDecimal
 
 /**
  * Product Report
@@ -140,7 +139,7 @@ object ProductR : Report() {
     align = FieldAlignment.LEFT
   }
 
-  val price = field(Domain<BigDecimal>(20)) {
+  val price = field(Domain<Decimal>(20)) {
     label = "Price"
     help = "The product unit price excluding VAT"
     align = FieldAlignment.LEFT

@@ -28,7 +28,6 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
-import java.math.BigDecimal
 
 object BillProductForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
@@ -72,7 +71,7 @@ object BlockBillProduct : FormBlock(1, 1, "bill product") {
     help = "The quantity"
     columns(u.quantity)
   }
-  val amount = visit(domain = Domain<BigDecimal>(20), position = at(2, 1)) {
+  val amount = visit(domain = Domain<Decimal>(20), position = at(2, 1)) {
     label = "Amount before tax"
     help = "The amount before tax to pay"
     columns(u.amount)
