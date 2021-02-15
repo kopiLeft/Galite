@@ -16,7 +16,13 @@
  */
 
 ::part(overflow-button) {
-    background: url("../../frontend/images/bread_crumb_separator.png") no-repeat center center / contain;
-    color : white;
+    margin: 0;
+    --lumo-font-family:  Arial, sans-serif !important;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.800rem;
+    border-right: 1px solid #dadada;
+    height:63px;
+    background-color: var(--lumo-tint);
+    box-sizing: border-box;
 }
-

@@ -9,6 +9,7 @@
     width: 100%;
     margin: 0 auto;
     height : 63px;
+    --lumo-space-m: 1rem;
 }
 
 #moduleList {
@@ -20,27 +21,24 @@
 #welcomeContainer {
     display: table-cell;
     text-align: center;
-        vertical-align: middle;
+    vertical-align: middle;
     width : 10%;
     padding:0;
     margin-top:15px;
+    justify-content: flex-start;
 }
 
 #horizontalAlignContainer {
     padding-top:15px;
 }
 
-::part(overflow-button) {
-    margin: 0;
-    --lumo-font-family:  Arial, sans-serif !important;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.800rem;
-    border-right: 1px solid #dadada;
-    height:63px;
-    color:white;
-    box-sizing: border-box;
-    background: url('https://api.iconify.design/vaadin:angle-double-right.svg?color=%23676767') no-repeat center center / contain;
+::part(reveal-button)::before {
+    content: var(--lumo-icons-eye);
+    font-size: var(--lumo-icon-size-xxs);
+}
+
+#vaadin-password-field-input-0: {
+    --lumo-text-field-size: var(--lumo-size-xs);
 }
 
 #welcomeContainer> * {
@@ -58,26 +56,21 @@
     border-right: 1px solid #dadada;
 }
 
-#windows, #welcome ::part(menu-bar-button) {
-   --lumo-primary-text-color: var(--lumo-shade-70pct);
+/*
+user , admin , wrk context and bookmark
+*/
+#welcome ::part(menu-bar-button) {
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    background:var(--lumo-tint);
+    padding: var(--lumo-space-xxs);
+    /*
+    width: var(--lumo-size-xs);
+    height: var(--lumo-size-xs);*/
 }
 
-#moduleList #button.active  {
-      background: #009bd4;
-      color: #ffffff !important;
-      z-index: 5;
-      @include shadow-no-top();
-}
-
-#overlay >  [role=menu] {
-    box-sizing:border-box;
-  	border-bottom: 1px solid #dadada;
-}
-
-#overlay >  [role=menu] > [role=menuitem]:hover {
-    background: #d9f0f8;
-}
-
+/*
+    modules submenu
+*/
 .vaadin-menu-item {
     color: #8f8f8f;
     width: 100%;

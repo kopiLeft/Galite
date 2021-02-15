@@ -1,4 +1,4 @@
-:not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
+#moduleList :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
     margin: 0;
     --lumo-font-family:  Arial, sans-serif !important;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
@@ -9,18 +9,31 @@
     box-sizing: border-box;
 }
 
-:not(#user_menu):first-child::part(menu-bar-button):hover {
+#user_menu , #wrkcontext_menu , #bookmarks_menu , #admin_menu {
+    background-color: var(--lumo-tint);
+    margin:0;
+    box-sizing: border-box;
+    padding: var(--lumo-space-xxs);
+}
+
+#moduleList :not(#user_menu):first-child::part(menu-bar-button):hover {
     background-color: #d9f0f8;
 }
 
-:not(#user_menu):first-child::part(menu-bar-button)  {
+#moduleList :not(#user_menu):first-child::part(menu-bar-button)  {
     background-color: var(--lumo-base-color);
     border-right: 1px solid #dadada;
     height:63px;
     box-sizing: border-box;
+    --lumo-space-m: 0;
 }
 
-::part(menu-bar-button) {
+#welcomeContainer {
+    box-sizing: border-box;
+    height:63px;
+}
+
+#horizontalAlignContainer::part(menu-bar-button) {
     background-color: var(--lumo-base-color);
     --lumo-primary-color: var(--lumo-shade-50pct);
     box-sizing: border-box;
@@ -29,6 +42,6 @@
     vertical-align: middle;
 }
 
-:not(#user_menu):first-child::part(menu-bar-button):hover {
+#moduleList:not(#user_menu):first-child::part(menu-bar-button):hover {
     background-color: #d9f0f8;
 }

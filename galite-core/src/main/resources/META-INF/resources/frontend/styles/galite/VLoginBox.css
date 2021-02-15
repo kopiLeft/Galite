@@ -61,7 +61,8 @@
     color: black;
 }
 
-.k-loginBox-pane tr td input[type="text"]{
+.k-loginBox-pane tr td {
+    color:black;
     font-weight: 500 !default !important;
     font-style: 500 !default !important;
     border: #dadada 1px solid !default;
@@ -70,6 +71,20 @@
     max-height: 40px !default;
     transition: .4s !default;
     position: relative;
+}
+
+#user_name:hover {
+      background: #f2f2f2;
+}
+
+.k-loginBox-pane select:hover {
+      background: #f2f2f2;
+
+}
+
+#user_name:focus{
+    background: none;
+    border-bottom: #009bd4 1px solid;
 }
 
 .k-loginBox-pane select {
@@ -86,7 +101,7 @@
     display: inline-block;
 }
 
-#login_button{
+#login_button {
     display: inline-block;
     background: #009bd4;
     color: white;
@@ -106,8 +121,4 @@ vaadin-password-field {
 
 * {
   box-sizing: border-box;
-}
-
-.k-loginBox input[type="button"]:hover {
-    cursor: pointer;
 }

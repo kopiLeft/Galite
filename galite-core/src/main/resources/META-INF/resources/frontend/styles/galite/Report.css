@@ -1,0 +1,12 @@
+::part(cell header-cell) {
+    --lumo-font-family:  Arial, sans-serif !important;
+    --lumo-primary-text-color: var(--lumo-error-color);
+     background: #f2f2f2;
+}
+
+#main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
+    --lumo-font-family:  Arial, sans-serif !important;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.750rem;
+}

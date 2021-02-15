@@ -109,17 +109,46 @@ k-block .label {
     text-decoration:none;
 }
 
-.k-main-window {
- position: fixed;
- width: 100%;
- height: 100%;
- margin:0;
- padding-top:50px;
- box-sizing: border-box;
- text-align: left;
- display: inline-block;
- white-space: normal;
- vertical-align: bottom;
- font-size: 16px;
- line-height: normal;
+div#windows {
+    padding-top:6px;
+    padding-right:15px;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    background:var(--lumo-tint);
+}
+
+.k-main-window:not(:#windows) {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    margin:0;
+    padding-top:50px;
+    box-sizing: border-box;
+    text-align: left;
+    display: inline-block;
+    white-space: normal;
+    vertical-align: bottom;
+    font-size: 16px;
+    line-height: normal;
+    --lumo-space-m: 0;
+}
+
+html{
+    --lumo-space-m: 0;
+}
+
+#actors {
+    height: 46px;
+    width: 100%;
+    background: #009bd4;
+    color: #ffffff;
+}
+
+.k-window-view-actors > [role=menuitem]{
+    display: inline-block;
+    vertical-align: top;
+    transition: 0.2s;
+    padding:0;
+    padding-right:0;
+    padding-left:0;
+    background-color: var(--lumo-error-color);
 }

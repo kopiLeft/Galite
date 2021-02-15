@@ -23,6 +23,7 @@ import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Image
 
 /**
@@ -35,6 +36,8 @@ import com.vaadin.flow.component.html.Image
  * @param acceleratorKey The accelerator key.
  * @param modifiersKey The modifiers key.
  */
+@CssImport(value = "./styles/galite/Actors.css",
+           themeFor = "vaadin-context-menu-item")
 open class Actor(val caption: String?,
                  description: String?,
                  val menu: String,
