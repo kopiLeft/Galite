@@ -40,12 +40,12 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   override fun setButtons(locale: String) {
     ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
     cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
-    cancel!!.addClickListener { hide() }
-    ok!!.addClickListener { open() }
-    ok!!.width = "20%"
-    ok!!.height = "50%"
-    cancel!!.width = "20%"
-    cancel!!.height = "50%"
+    cancel.addClickListener { hide() }
+    ok.addClickListener { open() }
+    ok.width = "20%"
+    ok.height = "50%"
+    cancel.width = "20%"
+    cancel.height = "50%"
   }
 
   /**
@@ -60,20 +60,20 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   }
 
   override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
-    cancel!!.click()
+    cancel.click()
     cancelFocused = true
     okFocused = false
   }
 
   override fun onRightEvent(keyDownEvent: ShortcutEvent?) {
-    cancel!!.focus()
+    cancel.focus()
     okFocused = false
     cancelFocused = true
 
   }
 
   override fun onLeftEvent(keyDownEvent: ShortcutEvent?) {
-    ok!!.focus()
+    ok.focus()
     okFocused = true
     cancelFocused = false
   }

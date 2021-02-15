@@ -62,13 +62,13 @@ open class VErrorNotification(title: String?, message: String) : VAbstractNotifi
       details = Details("Show details",
                         Text("details here"))
     }
-    close!!.addClickListener { hide() }
-    close!!.width = "20%"
-    close!!.height = "50%"
+    close.addClickListener { hide() }
+    close.width = "20%"
+    close.height = "50%"
   }
 
   override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
-    close!!.click()
+    close.click()
   }
 
   override fun onRightEvent(keyDownEvent: ShortcutEvent?) {
