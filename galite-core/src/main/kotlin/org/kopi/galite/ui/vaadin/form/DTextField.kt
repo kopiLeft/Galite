@@ -105,7 +105,7 @@ open class DTextField(
       }
       is VMonthField -> {
         // month field
-        TODO()
+        textfield.type = TextField.Type.MONTH
       }
       is VDateField -> {
         // date field
@@ -113,11 +113,11 @@ open class DTextField(
       }
       is VWeekField -> {
         // week field
-        TODO()
+        textfield.type = TextField.Type.WEEK
       }
       is VTimeField -> {
         // time field
-        TODO()
+        textfield.type = TextField.Type.TIME
       }
       is VCodeField -> {
         // code field
@@ -129,7 +129,7 @@ open class DTextField(
       }
       is VTimestampField -> {
         // timestamp field
-        TODO()
+        textfield.type = TextField.Type.TIMESTAMP
       }
       else -> {
         throw IllegalArgumentException("unknown field model : " + getModel().javaClass.name)

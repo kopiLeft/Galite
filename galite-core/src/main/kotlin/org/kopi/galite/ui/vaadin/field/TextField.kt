@@ -17,9 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.AbstractSinglePropertyField
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.data.binder.BeanValidationBinder
 
 /**
@@ -45,9 +44,9 @@ class TextField(
         val scanner: Boolean,
         val noEdit: Boolean,
         val align: Int,
-) : AbstractField() {
+) : org.kopi.galite.ui.vaadin.field.AbstractField() {
 
-  lateinit var field: AbstractSinglePropertyField<*, out Any?>
+  lateinit var field: AbstractField<*, out Any?>
 
   /**
    * Is this text field enabled?
@@ -121,7 +120,7 @@ class TextField(
     field.isEnabled = enabled
     add(field)
     if (hasAutofill) {
-      TODO("AUTOFILL")
+      //TODO("AUTOFILL")
     }
     setValidationStrategy()
   }
@@ -140,10 +139,10 @@ class TextField(
                                                                                           { _, _ -> TODO() })
       Type.DECIMAL -> TODO()
       Type.DATE -> TODO()
-      Type.TIME -> TODO()
-      Type.MONTH -> TODO()
-      Type.WEEK -> TODO()
-      Type.TIMESTAMP -> TODO()
+      Type.TIME -> bindingBuilder.withValidator(TimeValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.MONTH -> bindingBuilder.withValidator(MonthValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.WEEK -> bindingBuilder.withValidator(WeekValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.TIMESTAMP -> bindingBuilder.withValidator(TimestampValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.CODE -> TODO()
       else -> TODO()
     }
@@ -153,7 +152,7 @@ class TextField(
    * Creates the attached text field component.
    * @return the attached text field component.
    */
-  private fun createTextField(): AbstractSinglePropertyField<*, out Any?> {
+  private fun createTextField(): AbstractField<*, out Any?> {
     val text = createFieldComponent()
     // TODO
     return text
@@ -163,10 +162,10 @@ class TextField(
    * Creates the input component according to field state.
    * @return the input component
    */
-  protected fun createFieldComponent(): AbstractSinglePropertyField<*, out Any?> {
+  protected fun createFieldComponent(): AbstractField<*, out Any?> {
     var col = col
     val text = if (noEcho && rows == 1) {
-      VTextField(col)
+      VPasswordField(col)
     } else if (rows > 1) {
       if (scanner) {
         col = 40
@@ -180,8 +179,17 @@ class TextField(
       }
     } else if(isNumber()) {
       VIntegerField()
+    } else if(type == Type.TIME) {
+      VTimeField()
+    } else if(type == Type.TIME) {
+      VTimeStampField()
     } else {
-      VTextField(col) // TODO
+      VTextField(col).also {
+        if(type == Type.WEEK) {
+          it.setInputType("week")
+        }
+      }
+      // TODO
     }
 
     // TODO()
