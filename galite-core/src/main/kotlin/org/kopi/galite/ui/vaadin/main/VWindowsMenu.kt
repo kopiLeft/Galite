@@ -17,19 +17,43 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.tabs.Tabs
+import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.componentfactory.theme.EnhancedDialogVariant
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.FlexComponent
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * The already opened windows menu.
  * The menu aims to show the opened windows by the user.
  * From this menu, the user can switch to another window.
  */
-class VWindowsMenu(val vertical: Boolean) : Tabs() {
+class VWindowsMenu : EnhancedDialog() {
 
   init {
-    orientation = if (vertical) Orientation.VERTICAL else Orientation.HORIZONTAL
-    // Make sure that CSS styles specified for the default Menu classes
-    // do not affect this menu
-    className = "k-windowsMenu"
+    this.width = "5%"
+    this.height = "60%"
+    val headerIcon = Icon(VaadinIcon.COPY_O)
+    val headerText = Label("Changer de fenêtre")
+    val header = HorizontalLayout()
+
+    header.add(headerText, headerIcon)
+    header.alignItems = FlexComponent.Alignment.END
+    this.setHeader(header)
+    this.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
   }
+
+  fun addItem(container : VWindowContainer, window : Component, title : String) {
+    val item = VWindowsMenuItem(title, window, container)
+
+    item.addClickListener { this.close() }
+    items.add(item)
+    this.setContent(items)
+  }
+
+  private var items = VerticalLayout()
 }

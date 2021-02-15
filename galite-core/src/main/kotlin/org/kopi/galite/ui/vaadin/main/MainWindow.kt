@@ -87,6 +87,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     Shortcuts.addShortcutListener(this, this::goToPreviousPage, Key.PAGE_UP, KeyModifier.of("Alt"))
     Shortcuts.addShortcutListener(this, this::goToNextPage, Key.PAGE_DOWN, KeyModifier.of("Alt"))
     instance = this
+    windowsLink.addClickListener { windowsMenu.openPopUp() }
   }
 
   companion object {
@@ -138,6 +139,17 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    * @param window The window to be added.
    */
   fun addWindow(window: Component, title: String) {
+    windowsList.add(window)
+    container.addWindow(window, title)
+    container.showWindow(window)
+    windowsMenu.addItem(container, window, title)
+  }
+
+  /**
+   * Adds a window to this main window.
+   * @param window The window to be added.
+   */
+  fun addW(window: Component, title: String) {
     windowsList.add(window)
     container.addWindow(window, title)
     container.showWindow(window)
