@@ -46,17 +46,13 @@ class VFileHandler : FileHandler() {
     }
   }
 
-  override fun openFile(window: UWindow, defaultName: String): File? {
-    return openFile(window, null, defaultName)
-  }
+  override fun openFile(window: UWindow, defaultName: String): File? = openFile(window, null, defaultName)
 
-  override fun openFile(window: UWindow, filter: FileFilter): File? {
-    return openFile(window, null, null, getMimeType(filter))
-  }
+  override fun openFile(window: UWindow, filter: FileFilter): File? =
+          openFile(window, null, null, getMimeType(filter))
 
-  override fun openFile(window: UWindow, dir: File?, defaultName: String): File? {
-    return openFile(window, dir, defaultName, null)
-  }
+  override fun openFile(window: UWindow, dir: File?, defaultName: String): File? =
+          openFile(window, dir, defaultName, null)
 
   /**
    * Uploads a file from client side with the given mime type.
@@ -79,9 +75,7 @@ class VFileHandler : FileHandler() {
    * Returns the current application instance.
    * @return The current application instance.
    */
-  internal fun getApplication(): VApplication {
-    return ApplicationContext.applicationContext.getApplication() as VApplication
-  }
+  internal fun getApplication(): VApplication = ApplicationContext.applicationContext.getApplication() as VApplication
 
   /**
    * Converts the given bytes to a file. The file is created under OS temp directory.

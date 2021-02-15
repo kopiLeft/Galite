@@ -90,9 +90,8 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
 
   // TODO: Add uploadStarted event handler
 
-  override fun receiveUpload(filename: String?, mimeType: String?): OutputStream {
-    return ByteArrayOutputStream().also { output = it }
-  }
+  override fun receiveUpload(filename: String?, mimeType: String?): OutputStream =
+          ByteArrayOutputStream().also { output = it }
 
   /**
    * Returns the current application instance.
