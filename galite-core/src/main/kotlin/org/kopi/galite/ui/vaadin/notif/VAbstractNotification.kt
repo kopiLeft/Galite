@@ -21,7 +21,6 @@ import java.util.Locale
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
-
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.button.Button

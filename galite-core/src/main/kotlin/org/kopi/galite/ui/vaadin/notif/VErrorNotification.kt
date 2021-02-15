@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
+import org.kopi.galite.ui.vaadin.base.VInputButton
+
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.ShortcutEvent
@@ -27,9 +30,6 @@ import com.vaadin.flow.component.details.DetailsVariant
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.FlexComponent
-
-import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Error type notification component.
