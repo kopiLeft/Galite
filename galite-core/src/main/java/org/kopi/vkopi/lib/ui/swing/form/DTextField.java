@@ -60,7 +60,7 @@ import org.kopi.vkopi.lib.ui.swing.base.JHtmlTextArea;
 import org.kopi.vkopi.lib.ui.swing.base.TextSelecter;
 import org.kopi.vkopi.lib.ui.swing.spellchecker.SpellChecker;
 import org.kopi.vkopi.lib.ui.swing.spellchecker.SpellException;
-import org.kopi.vkopi.lib.ui.swing.visual.DMenuTree;
+import org.kopi.galite.ui.swing.visual.DMenuTree;
 import org.kopi.vkopi.lib.ui.swing.visual.DWindow;
 import org.kopi.vkopi.lib.ui.swing.visual.Utils;
 import org.kopi.galite.visual.ApplicationConfiguration;

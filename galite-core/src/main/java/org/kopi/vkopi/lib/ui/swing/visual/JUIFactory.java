@@ -25,6 +25,7 @@ import org.kopi.galite.form.VForm;
 import org.kopi.galite.form.VListDialog;
 import org.kopi.galite.preview.VPreviewWindow;
 import org.kopi.galite.report.VReport;
+import org.kopi.galite.ui.swing.visual.DMenuTree;
 import org.kopi.vkopi.lib.ui.swing.chart.DChart;
 import org.kopi.vkopi.lib.ui.swing.form.DForm;
 import org.kopi.vkopi.lib.ui.swing.form.DListDialog;

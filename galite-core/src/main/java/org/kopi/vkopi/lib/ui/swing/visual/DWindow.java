@@ -66,6 +66,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
+import org.kopi.galite.ui.swing.visual.DMenuTree;
 import org.kopi.vkopi.lib.ui.swing.base.JButtonPanel;
 import org.kopi.vkopi.lib.ui.swing.base.KnownBugs;
 import org.kopi.vkopi.lib.ui.swing.base.Utils;
@@ -1137,7 +1138,7 @@ public abstract class DWindow extends JPanel implements UWindow {
   /**
    * Reports iff a message is shown while in a transaction.
    */
-  /*package*/ void verifyNotInTransaction(String message) {
+  protected void verifyNotInTransaction(String message) {
     if (getModel().inTransaction() && debugMessageInTransaction()) {
       try {
 	ApplicationContext.Companion.reportTrouble("DWindow",
