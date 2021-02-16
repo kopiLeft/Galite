@@ -26,6 +26,9 @@ subprojects {
 
   repositories {
     jcenter()
+    maven {
+      url = uri("https://maven.vaadin.com/vaadin-addons")
+    }
   }
 
   dependencies {

@@ -16,11 +16,11 @@
  */
 package org.kopi.galite.chart
 
+import java.lang.RuntimeException
+
 import org.kopi.galite.common.Action
 import org.kopi.galite.common.ChartTrigger
 import org.kopi.galite.common.Trigger
-import java.lang.RuntimeException
-
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.Color

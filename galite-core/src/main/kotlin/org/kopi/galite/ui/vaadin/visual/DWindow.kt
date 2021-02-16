@@ -30,6 +30,7 @@ import org.kopi.galite.visual.VWindow
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
@@ -399,9 +400,13 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
   //---------------------------------------------------
 
   override fun fileProduced(file: File, name: String) {
-    ui.ifPresent {
-      it.access {
-        TODO()
+    ui.ifPresent { myUi ->
+      myUi.access {
+        // TODO: Use InformationNotification instead, and localize the message
+        Dialog().also {
+          it.add("File is generated to " + file.absoluteFile)
+          it.open()
+        }
       }
     }
   }
