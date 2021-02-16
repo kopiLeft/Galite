@@ -15,7 +15,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.ui.vaadin.visual
 
 import java.sql.SQLException
@@ -175,7 +174,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setAdminMenu(DAdminMenu(menu))
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu))
     mainWindow!!.addDetachListener { event ->
-        closeConnection()
+      closeConnection()
     }
   }
 

@@ -14,14 +14,16 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.billproduct
+package org.kopi.galite.demo.bill
 
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.kopi.galite.demo.BillProduct
+import org.joda.time.DateTime
+
+import org.kopi.galite.demo.Bill
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -30,25 +32,14 @@ import org.kopi.galite.report.VReport
 import org.kopi.galite.type.Decimal
 
 /**
- * Products Bill Report
+ * Bill Report
  */
-object BillProductR : Report() {
-
+object BillR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "Bill Product Report"
+  override val title = "Bills_Report"
 
   val action = menu("Action")
-
-  val greeting = actor(
-          ident = "greeting",
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
-  ) {
-    key = Key.F1          // key is optional here
-    icon = "ask"  // icon is optional here
-  }
 
   val csv = actor(
           ident = "CSV",
@@ -114,32 +105,46 @@ object BillProductR : Report() {
     }
   }
 
-  val quantity = field(Domain<Int>(25)) {
-    label = "Quantity"
-    help = "The quantity"
+  val numBill = field(Domain<Int>(25)) {
+    label = "Number"
+    help = "The bill number"
     align = FieldAlignment.LEFT
   }
 
-  val amount = field(Domain<Decimal>(25)) {
-    label = "Amount before tax"
-    help = "The amount before tax to pay"
-
+  val addressBill = field(Domain<String>(25)) {
+    label = "Address"
+    help = "The bill address"
+    align = FieldAlignment.LEFT
   }
-  val amountWithTaxes = field(Domain<Decimal>(50)) {
-    label = "Amount all taxes included"
-    help = "The amount all taxes included to pay"
+  val dateBill = field(Domain<DateTime>(25)) {
+    label = "Date"
+    help = "The bill date"
     align = FieldAlignment.LEFT
   }
 
-  val billProducts = BillProduct.selectAll()
+  val amountWithTaxes = field(Domain<Decimal>(2)) {
+    label = "Amount to pay"
+    help = "The amount including all taxes to pay"
+    align = FieldAlignment.LEFT
+  }
+
+  val refCmd = field(Domain<Int>(50)) {
+    label = "Command reference"
+    help = "The command reference"
+    align = FieldAlignment.LEFT
+  }
+
+  val bills = Bill.selectAll()
 
   init {
     transaction {
-      billProducts.forEach { result ->
+      bills.forEach { result ->
         add {
-          this[quantity] = result[BillProduct.quantity]
-          this[amount] = result[BillProduct.amount]
-          this[amountWithTaxes] = Decimal(result[BillProduct.amountWithTaxes])
+          this[numBill] = result[Bill.numBill]
+          this[addressBill] = result[Bill.addressBill]
+          this[dateBill] = result[Bill.dateBill]
+          this[amountWithTaxes] = Decimal(result[Bill.amountWithTaxes])
+          this[refCmd] = result[Bill.refCmd]
         }
       }
     }

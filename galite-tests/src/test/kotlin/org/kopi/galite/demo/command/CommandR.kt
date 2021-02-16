@@ -14,41 +14,32 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.billproduct
+package org.kopi.galite.demo.command
 
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.kopi.galite.demo.BillProduct
+import org.joda.time.DateTime
+
+import org.kopi.galite.demo.Command
+import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 
 /**
- * Products Bill Report
+ * Command Report
  */
-object BillProductR : Report() {
-
+object CommandR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "Bill Product Report"
+  override val title = "Commands_Report"
 
   val action = menu("Action")
-
-  val greeting = actor(
-          ident = "greeting",
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
-  ) {
-    key = Key.F1          // key is optional here
-    icon = "ask"  // icon is optional here
-  }
 
   val csv = actor(
           ident = "CSV",
@@ -114,32 +105,65 @@ object BillProductR : Report() {
     }
   }
 
-  val quantity = field(Domain<Int>(25)) {
-    label = "Quantity"
-    help = "The quantity"
+  val numCmd = field(Domain<Int>(25)) {
+    label = "Command number"
+    help = "The command number"
+    align = FieldAlignment.LEFT
+
+  }
+
+  val idClt = field(Domain<Int>(25)) {
+    label = "Client ID"
+    help = "The command client ID"
+    align = FieldAlignment.LEFT
+
+  }
+  val dateCmd = field(Domain<DateTime>(50)) {
+    label = "Command date"
+    help = "The command date"
     align = FieldAlignment.LEFT
   }
 
-  val amount = field(Domain<Decimal>(25)) {
-    label = "Amount before tax"
-    help = "The amount before tax to pay"
-
-  }
-  val amountWithTaxes = field(Domain<Decimal>(50)) {
-    label = "Amount all taxes included"
-    help = "The amount all taxes included to pay"
+  val paymentMethod = field(Payment) {
+    label = "Payment method"
+    help = "The payment method"
     align = FieldAlignment.LEFT
   }
 
-  val billProducts = BillProduct.selectAll()
+  val statusCmd = field(CommandStatus) {
+    label = "Command status"
+    help = "The command status"
+    align = FieldAlignment.LEFT
+  }
+
+  object Payment : CodeDomain<String>() {
+    init {
+      "cash" keyOf "cash"
+      "check" keyOf "check"
+      "bank card" keyOf "bank card"
+    }
+  }
+
+  object CommandStatus : CodeDomain<String>() {
+    init {
+      "In preparation" keyOf "in preparation"
+      "available" keyOf "available"
+      "delivered" keyOf "delivered"
+      "canceled" keyOf "canceled"
+    }
+  }
+
+  val commands = Command.selectAll()
 
   init {
     transaction {
-      billProducts.forEach { result ->
+      commands.forEach { result ->
         add {
-          this[quantity] = result[BillProduct.quantity]
-          this[amount] = result[BillProduct.amount]
-          this[amountWithTaxes] = Decimal(result[BillProduct.amountWithTaxes])
+          this[numCmd] = result[Command.numCmd]
+          this[idClt] = result[Command.idClt]
+          this[dateCmd] = result[Command.dateCmd]
+          this[paymentMethod] = result[Command.paymentMethod]
+          this[statusCmd] = result[Command.statusCmd]
         }
       }
     }

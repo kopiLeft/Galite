@@ -14,41 +14,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.billproduct
+package org.kopi.galite.demo.taxRule
 
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.kopi.galite.demo.BillProduct
+import org.kopi.galite.demo.TaxRule
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 
 /**
- * Products Bill Report
+ * Tax Rules Report
  */
-object BillProductR : Report() {
-
+object TaxRuleR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "Bill Product Report"
+  override val title = "TaxRules_Report"
 
   val action = menu("Action")
-
-  val greeting = actor(
-          ident = "greeting",
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
-  ) {
-    key = Key.F1          // key is optional here
-    icon = "ask"  // icon is optional here
-  }
 
   val csv = actor(
           ident = "CSV",
@@ -114,32 +102,26 @@ object BillProductR : Report() {
     }
   }
 
-  val quantity = field(Domain<Int>(25)) {
-    label = "Quantity"
-    help = "The quantity"
+  val taxName = field(Domain<String>(50)) {
+    label = "Name"
+    help = "The tax name"
     align = FieldAlignment.LEFT
   }
 
-  val amount = field(Domain<Decimal>(25)) {
-    label = "Amount before tax"
-    help = "The amount before tax to pay"
-
-  }
-  val amountWithTaxes = field(Domain<Decimal>(50)) {
-    label = "Amount all taxes included"
-    help = "The amount all taxes included to pay"
+  val rate = field(Domain<Int>(25)) {
+    label = "Rate in %"
+    help = "The tax rate in %"
     align = FieldAlignment.LEFT
   }
 
-  val billProducts = BillProduct.selectAll()
+  val taxRules = TaxRule.selectAll()
 
   init {
     transaction {
-      billProducts.forEach { result ->
+      taxRules.forEach { result ->
         add {
-          this[quantity] = result[BillProduct.quantity]
-          this[amount] = result[BillProduct.amount]
-          this[amountWithTaxes] = Decimal(result[BillProduct.amountWithTaxes])
+          this[taxName] = result[TaxRule.taxName]
+          this[rate] = result[TaxRule.rate]
         }
       }
     }

@@ -14,41 +14,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.billproduct
+package org.kopi.galite.demo.provider
 
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.kopi.galite.demo.BillProduct
+import org.kopi.galite.demo.Provider
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 
 /**
- * Products Bill Report
+ * Provider Report
  */
-object BillProductR : Report() {
-
+object ProviderR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "Bill Product Report"
+  override val title = "Providers_Report"
 
   val action = menu("Action")
-
-  val greeting = actor(
-          ident = "greeting",
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
-  ) {
-    key = Key.F1          // key is optional here
-    icon = "ask"  // icon is optional here
-  }
 
   val csv = actor(
           ident = "CSV",
@@ -114,32 +103,61 @@ object BillProductR : Report() {
     }
   }
 
-  val quantity = field(Domain<Int>(25)) {
-    label = "Quantity"
-    help = "The quantity"
+  val nameProvider = field(Domain<String>(50)) {
+    label = "Name"
+    help = "The provider name"
+    align = FieldAlignment.LEFT
+    format {
+      object : VCellFormat() {
+        override fun format(value: Any?): String {
+          return (value as String).toUpperCase()
+        }
+      }
+    }
+  }
+
+  val tel = field(Domain<Int>(25)) {
+    label = "Phone number"
+    help = "The provider phone number"
     align = FieldAlignment.LEFT
   }
 
-  val amount = field(Domain<Decimal>(25)) {
-    label = "Amount before tax"
-    help = "The amount before tax to pay"
-
+  val description = field(Domain<String>(255)) {
+    label = "Description"
+    help = "The provider description"
+    align = FieldAlignment.LEFT
+    format {
+      object : VCellFormat() {
+        override fun format(value: Any?): String {
+          return (value as String).toUpperCase()
+        }
+      }
+    }
   }
-  val amountWithTaxes = field(Domain<Decimal>(50)) {
-    label = "Amount all taxes included"
-    help = "The amount all taxes included to pay"
+
+  val address = field(Domain<String>(70)) {
+    label = "Address"
+    help = "The provider address"
     align = FieldAlignment.LEFT
   }
 
-  val billProducts = BillProduct.selectAll()
+  val zipCode = field(Domain<Int>(50)) {
+    label = "Zip code"
+    help = "The provider zip code"
+    align = FieldAlignment.LEFT
+  }
+
+  val providers = Provider.selectAll()
 
   init {
     transaction {
-      billProducts.forEach { result ->
+      providers.forEach { result ->
         add {
-          this[quantity] = result[BillProduct.quantity]
-          this[amount] = result[BillProduct.amount]
-          this[amountWithTaxes] = Decimal(result[BillProduct.amountWithTaxes])
+          this[nameProvider] = result[Provider.nameProvider]
+          this[description] = result[Provider.description]
+          this[tel] = result[Provider.tel]
+          this[zipCode] = result[Provider.zipCode]
+          this[address] = result[Provider.address]
         }
       }
     }

@@ -14,41 +14,33 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.billproduct
+package org.kopi.galite.demo.stock
 
+import org.jetbrains.exposed.sql.JoinType
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.Product
+import org.kopi.galite.demo.Provider
 
-import org.kopi.galite.demo.BillProduct
+import org.kopi.galite.demo.Stock
+import org.kopi.galite.demo.bill.BillR
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
-import org.kopi.galite.type.Decimal
 
 /**
- * Products Bill Report
+ * STock Report
  */
-object BillProductR : Report() {
-
+object StockR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "Bill Product Report"
+  override val title = "Stocks"
 
   val action = menu("Action")
-
-  val greeting = actor(
-          ident = "greeting",
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
-  ) {
-    key = Key.F1          // key is optional here
-    icon = "ask"  // icon is optional here
-  }
 
   val csv = actor(
           ident = "CSV",
@@ -114,32 +106,34 @@ object BillProductR : Report() {
     }
   }
 
-  val quantity = field(Domain<Int>(25)) {
-    label = "Quantity"
-    help = "The quantity"
+  val designation = field(Domain<String>(25)) {
+    label = "Designation"
+    help = "The product designation"
+    align = FieldAlignment.LEFT
+  }
+  val nameProvider = field(Domain<String>(25)) {
+    label = "Provider name"
+    help = "The provider name"
+    align = FieldAlignment.LEFT
+  }
+  val minAlert = field(Domain<Int>(25)) {
+    label = "Min Alert"
+    help = "The stock's min alert"
     align = FieldAlignment.LEFT
   }
 
-  val amount = field(Domain<Decimal>(25)) {
-    label = "Amount before tax"
-    help = "The amount before tax to pay"
-
-  }
-  val amountWithTaxes = field(Domain<Decimal>(50)) {
-    label = "Amount all taxes included"
-    help = "The amount all taxes included to pay"
-    align = FieldAlignment.LEFT
-  }
-
-  val billProducts = BillProduct.selectAll()
+  val stocks = Stock.join(Provider, JoinType.INNER, Stock.idStckProv, Provider.idProvider)
+          .join(Product, JoinType.INNER, Stock.idStckProv, Product.idPdt)
+          .slice(Stock.minAlert, Product.designation, Provider.nameProvider)
+          .selectAll()
 
   init {
     transaction {
-      billProducts.forEach { result ->
+      stocks.forEach { result ->
         add {
-          this[quantity] = result[BillProduct.quantity]
-          this[amount] = result[BillProduct.amount]
-          this[amountWithTaxes] = Decimal(result[BillProduct.amountWithTaxes])
+          this[minAlert] = result[Stock.minAlert]
+          this[designation] = result[Product.designation]
+          this[nameProvider] = result[Provider.nameProvider]
         }
       }
     }
