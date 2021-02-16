@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- #session {
+#session {
     font-family: Arial, sans-serif;
     font-size: 25px;
     box-sizing: border-box;
@@ -57,7 +57,7 @@ k-block .label {
     color: #a3a3a3;
 }
 
-::part(input-field), ::part(input-field):not(:hover){
+::part(input-field), ::part(input-field):not(:hover) {
     background-color: white;
 }
 

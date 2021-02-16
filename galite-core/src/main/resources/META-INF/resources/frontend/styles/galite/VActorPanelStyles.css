@@ -22,8 +22,7 @@
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.800rem;
     border-right: 1px solid #dadada;
-    height:63px;
+    height: 63px;
     background-color: var(--lumo-tint);
     box-sizing: border-box;
 }
-

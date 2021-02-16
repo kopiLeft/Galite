@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- .k-loginBox ::part(input-field) {
+.k-loginBox ::part(input-field) {
     background-color: var(--lumo-tint);
     box-sizing: border-box;
     border: 1px solid #dadada;
@@ -79,7 +79,7 @@
 }
 
 .k-loginBox-pane tr td {
-    color:black;
+    color: black;
     font-weight: 500;
     font-style: 500;
     line-height: 1.2em;
@@ -90,12 +90,11 @@
 }
 
 #user_name:hover {
-      background: #f2f2f2;
+    background: #f2f2f2;
 }
 
 .k-loginBox-pane select:hover {
-      background: #f2f2f2;
-
+    background: #f2f2f2;
 }
 
 #user_name:focus{
@@ -108,7 +107,6 @@
     background-color: white;
     margin-top: 10px;
 }
-
 
 .k-loginBox-pane label {
     font-weight: 500;
