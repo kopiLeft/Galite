@@ -33,7 +33,7 @@ abstract class FileHandler {
    * @param defaultName The file default name.
    * @return The chosen file.
    */
-  abstract fun chooseFile(window: UWindow, defaultName: String): File
+  abstract fun chooseFile(window: UWindow, defaultName: String): File?
 
   /**
    * Shows a dialog box to choose a file with a given default name from a given directory.
@@ -42,7 +42,7 @@ abstract class FileHandler {
    * @param defaultName The file default name.
    * @return The chosen file.
    */
-  abstract fun chooseFile(window: UWindow, dir: File, defaultName: String): File?
+  abstract fun chooseFile(window: UWindow, dir: File?, defaultName: String): File?
 
   /**
    * Shows a dialog box to open a file with a given default name.
@@ -50,7 +50,7 @@ abstract class FileHandler {
    * @param defaultName The file default name.
    * @return The opened file.
    */
-  abstract fun openFile(window: UWindow, defaultName: String): File
+  abstract fun openFile(window: UWindow, defaultName: String): File?
 
   /**
    * Shows a dialog box to open a file with a given default name.
@@ -58,7 +58,7 @@ abstract class FileHandler {
    * @param filter The file selection filter.
    * @return The opened file.
    */
-  abstract fun openFile(window: UWindow, filter: FileFilter): File
+  abstract fun openFile(window: UWindow, filter: FileFilter): File?
 
   /**
    * Shows a dialog box to open a file with a given default name from a given directory.
@@ -67,7 +67,7 @@ abstract class FileHandler {
    * @param defaultName The file default name.
    * @return The opened file.
    */
-  abstract fun openFile(window: UWindow, dir: File, defaultName: String): File
+  abstract fun openFile(window: UWindow, dir: File?, defaultName: String): File?
 
   //------------------------------------------------------------
   // FILE FILTER
