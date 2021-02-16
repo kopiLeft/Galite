@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import java.time.LocalDate
-
 import com.vaadin.flow.component.datepicker.DatePicker
 
 /**
@@ -26,7 +24,6 @@ import com.vaadin.flow.component.datepicker.DatePicker
  */
 class VDateField : DatePicker(), UTextField {
  init {
-   this.value = LocalDate.now()
    this.isClearButtonVisible = true
  }
 

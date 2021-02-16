@@ -41,9 +41,9 @@ class VFieldCommand(private val form: VForm,
       handler = this
       actor = form.getDefaultActor(trigger)
     }
-    actor?.isEnabled = enabled
-    actor?.number = trigger
-    actor?.handler = handler
+    actor!!.isEnabled = enabled
+    actor!!.number = trigger
+    actor!!.handler = handler
   }
 
   /**

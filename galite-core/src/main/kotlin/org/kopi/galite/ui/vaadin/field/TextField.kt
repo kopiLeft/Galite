@@ -139,7 +139,7 @@ class TextField(
       Type.INTEGER -> bindingBuilder.withValidator(IntegerValidator(minval, maxval)).bind({ TODO() },
                                                                                           { _, _ -> TODO() })
       Type.DECIMAL -> TODO()
-      Type.DATE -> TODO()
+      Type.DATE -> bindingBuilder.withValidator(DateValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.TIME -> TODO()
       Type.MONTH -> TODO()
       Type.WEEK -> TODO()
