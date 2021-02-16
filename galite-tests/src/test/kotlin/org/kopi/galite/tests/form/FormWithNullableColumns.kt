@@ -59,6 +59,17 @@ object Products : Table() {
   override val primaryKey = PrimaryKey(id)
 }
 
+object Adress : Table() {
+  val id = integer("ID")
+  val uc = integer("UC")
+  val ts = integer("TS")
+  val country = varchar("COUNTRY", 20)
+  val zip = varchar("ZIP", 20)
+  val client_id = integer("CLIENT_ID").references(Clients.id)
+
+  override val primaryKey = PrimaryKey(id)
+}
+
 object FormWithNullableColumn : DictionaryForm() {
   override val locale = Locale.FRANCE
   override val title = "form for test nullable "
@@ -197,6 +208,36 @@ object FormWithNullableColumn : DictionaryForm() {
       }
     }
   }
+
+  val blockWithThreeTablesInnerJoinInOneField = insertBlock(FormWithThreeTablesInnerJoinInField(), p1) {
+    command(item = FormWithList.list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
+
+  val blockWithThreeTablesLeftJoinInOneField = insertBlock(FormWithThreeTablesLeftJoinInField(), p1) {
+    command(item = FormWithList.list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+
+    command(item = FormWithList.resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
 }
 
 class FormWithTwoTablesInnerJoin :  FormBlock(1, 1, "Inner Join Two Tables Test") {
@@ -314,6 +355,86 @@ class FormWithThreeTablesInnerJoin : FormBlock(1, 1, "Inner Join three Tables Te
 
   val productName = visit(domain = Domain<String>(20), position = at(6, 1)) {
     columns(p.designation)
+  }
+}
+
+class FormWithThreeTablesInnerJoinInField : FormBlock(1, 1, "Inner Join three Tables in Field Test") {
+  val o = table(Order)
+  val c = table(Clients)
+  val a = table(Adress)
+
+  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+    columns(o.id)
+  }
+
+  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+    columns(c.id, o.client_id, a.client_id)
+  }
+
+  val ts = hidden(domain = Domain<Int>(20)) {
+    columns(c.ts)
+  }
+  val uc = hidden(domain = Domain<Int>(20)) {
+    columns(c.uc)
+  }
+  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+    columns(c.name)
+  }
+
+  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+    columns(c.mail)
+  }
+
+  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+    columns(o.quantity)
+  }
+
+  val country = visit(domain = Domain<String>(20), position = at(6, 1)) {
+    columns(a.country)
+  }
+
+  val zipCode = visit(domain = Domain<String>(20), position = at(6, 2)) {
+    columns(a.zip)
+  }
+}
+
+class FormWithThreeTablesLeftJoinInField : FormBlock(1, 1, "Left Join three Tables in Field Test") {
+  val o = table(Order)
+  val c = table(Clients)
+  val a = table(Adress)
+
+  val id_order = skipped(domain = Domain<Int>(20), position = at(1, 1)) {
+    columns(o.id)
+  }
+
+  val id_user = skipped(domain = Domain<Int>(20), position = at(2, 1)) {
+    columns(c.id, nullable(o.client_id), nullable(a.client_id))
+  }
+
+  val ts = hidden(domain = Domain<Int>(20)) {
+    columns(c.ts)
+  }
+  val uc = hidden(domain = Domain<Int>(20)) {
+    columns(c.uc)
+  }
+  val name = visit(domain = Domain<String>(20), position = at(4, 1)) {
+    columns(c.name)
+  }
+
+  val mail = visit(domain = Domain<String>(20), position = at(4, 2)) {
+    columns(c.mail)
+  }
+
+  val quantity = visit(domain = Domain<Int>(10), position = at(5, 1)) {
+    columns(o.quantity)
+  }
+
+  val country = visit(domain = Domain<String>(20), position = at(6, 1)) {
+    columns(a.country)
+  }
+
+  val zipCode = visit(domain = Domain<String>(20), position = at(6, 2)) {
+    columns(a.zip)
   }
 }
 

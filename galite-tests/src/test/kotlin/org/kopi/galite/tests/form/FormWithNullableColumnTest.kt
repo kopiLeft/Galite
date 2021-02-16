@@ -67,7 +67,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
   }
 
   @Test
-  fun innerJointhreeTablesTest() {
+  fun innerJoinThreeTablesTest() {
     FormWithNullableColumn.model
     val block =  FormWithNullableColumn.blockWithThreeTablesInnerJoin
 
@@ -106,6 +106,50 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
                            " CLIENTS.MAIL, \"ORDER\".QUANTITY, PRODUCTS.DESIGNATION FROM \"ORDER\" LEFT JOIN " +
                            "CLIENTS ON \"ORDER\".CLIENT_ID = CLIENTS.ID LEFT JOIN" +
                            " PRODUCTS ON \"ORDER\".PRODUCT_ID = PRODUCTS.ID",
+                   query.prepareSQL(this))
+    }
+  }
+
+  @Test
+  fun innerJoinThreeTablesInOneFieldTest() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockWithThreeTablesInnerJoinInOneField
+
+    block.form
+    block.form.model
+    block.name.value = "client1"
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    transaction {
+     assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
+                          " \"ORDER\".QUANTITY, ADRESS.COUNTRY, ADRESS.ZIP FROM \"ORDER\" INNER JOIN CLIENTS ON" +
+                          " \"ORDER\".CLIENT_ID = CLIENTS.ID INNER JOIN ADRESS ON " +
+                          "\"ORDER\".CLIENT_ID = ADRESS.CLIENT_ID",
+                   query.prepareSQL(this))
+    }
+  }
+
+  @Test
+  fun leftJoiThreeTablesInOneFieldTest() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockWithThreeTablesLeftJoinInOneField
+
+    block.form
+    block.form.model
+    block.name.value = "client1"
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    transaction {
+      println("------------−>" +query.prepareSQL(this))
+     assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
+                          " \"ORDER\".QUANTITY, ADRESS.COUNTRY, ADRESS.ZIP FROM \"ORDER\" LEFT JOIN CLIENTS ON " +
+                          "\"ORDER\".CLIENT_ID = CLIENTS.ID LEFT JOIN ADRESS ON \"ORDER\".CLIENT_ID = ADRESS.CLIENT_ID",
                    query.prepareSQL(this))
     }
   }
