@@ -17,7 +17,7 @@
 
 ::part(overflow-button) {
     margin: 0;
-    --lumo-font-family:  Arial, sans-serif !important;
+    --lumo-font-family:  Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.800rem;

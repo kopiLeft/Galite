@@ -1,4 +1,21 @@
-#session {
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+ #session {
     font-family: Arial, sans-serif;
     font-size: 25px;
     box-sizing: border-box;
@@ -34,9 +51,9 @@
 }
 
 k-block .label {
-    font-family: Arial, sans-serif !important;
-    font-weight: 500 !important;
-    font-style: normal !important;
+    font-family: Arial, sans-serif;
+    font-weight: 500;
+    font-style: normal;
     color: #a3a3a3;
 }
 
@@ -48,12 +65,12 @@ k-block .label {
     background-color: white;
 }
 
-.k-block ::part(value):focus  {
+.k-block ::part(value):focus {
     border-bottom: 2px solid #a3a3a3;
     background: white;
 }
 
-.k-block ::part(value){
+.k-block ::part(value) {
     --lumo-text-field-overflow-mask-image: none;
     border-bottom: 1px solid #dadada;
     padding: 0;
@@ -62,7 +79,7 @@ k-block .label {
     background-color: var(--lumo-base-color);
 }
 
-#content{
+#content {
      background: #f2f2f2;
      width: 100%;
      height: auto;
@@ -132,7 +149,7 @@ div#windows {
     --lumo-space-m: 0;
 }
 
-html{
+html {
     --lumo-space-m: 0;
 }
 
@@ -143,7 +160,7 @@ html{
     color: #ffffff;
 }
 
-.k-window-view-actors > [role=menuitem]{
+.k-window-view-actors > [role=menuitem] {
     display: inline-block;
     vertical-align: top;
     transition: 0.2s;
