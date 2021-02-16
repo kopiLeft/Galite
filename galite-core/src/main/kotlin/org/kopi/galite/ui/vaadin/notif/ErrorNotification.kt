@@ -15,35 +15,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
-
-import com.vaadin.flow.component.KeyPressEvent
-import org.kopi.galite.ui.vaadin.base.VInputButton
+package org.kopi.galite.ui.vaadin.notif
 
 /**
- * Information type notification component.
+ * Error notification component.
+ * @param title the warning notification title.
+ * @param message the warning notification message.
  */
-open class VInformationNotification(title: String?, message: String) : VAbstractNotification(title, message) {
-  //-------------------------------------------------
-  // IMPLEMENTATION
-  //-------------------------------------------------
-  override fun setButtons(locale: String?) {
-
-  }
-
-  override val iconName: String
-    get() = "info-circle"
-
-  fun focus() {
-
-  }
-
-  fun onKeyPress(event: KeyPressEvent) {
-
-  }
-
-  //--------------------------------------------------
-  // DATA MEMBERS
-  //--------------------------------------------------
-  private var close: VInputButton? = null
-}
+class ErrorNotification(title: String, message: String) : VErrorNotification(title, message)

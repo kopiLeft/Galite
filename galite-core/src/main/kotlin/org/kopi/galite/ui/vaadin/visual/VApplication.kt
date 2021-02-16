@@ -29,12 +29,12 @@ import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.MainWindowListener
-import org.kopi.galite.ui.vaadin.notification.ConfirmNotification
-import org.kopi.galite.ui.vaadin.notification.ErrorNotification
-import org.kopi.galite.ui.vaadin.notification.InformationNotification
-import org.kopi.galite.ui.vaadin.notification.NotificationListener
-import org.kopi.galite.ui.vaadin.notification.VAbstractNotification
-import org.kopi.galite.ui.vaadin.notification.WarningNotification
+import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.NotificationListener
+import org.kopi.galite.ui.vaadin.notif.VAbstractNotification
+import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
@@ -105,8 +105,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun error(message: String?) {
-    val dialog = ErrorNotification(VlibProperties.getString("Error"), message)
-    dialog.setOwner(this)
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message!!)
+    // dialog.setOwner(this)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
@@ -128,7 +128,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
     val dialog = ConfirmNotification(VlibProperties.getString("Question"), message)
-    dialog.setYesIsDefault(yesIsDefault)
+    // dialog.setYesIsDefault(yesIsDefault)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         askAnswer = if (yes) {
