@@ -36,8 +36,6 @@ import com.vaadin.flow.component.html.Image
  * @param acceleratorKey The accelerator key.
  * @param modifiersKey The modifiers key.
  */
-@CssImport(value = "./styles/galite/Actors.css",
-           themeFor = "vaadin-context-menu-item")
 open class Actor(val caption: String?,
                  description: String?,
                  val menu: String,

@@ -1,8 +1,8 @@
 #session {
-    font-family: Arial, sans-serif !important;
-    font-size: 25px !important;
+    font-family: Arial, sans-serif;
+    font-size: 25px;
     box-sizing: border-box;
-    width:100%;
+    width: 100%;
     display: table;
     height: 44px;
     width: 100%;
@@ -15,11 +15,11 @@
     padding: 0;
     border: 0;
     vertical-align: baseline;
-    color:black;
+    color: black;
 }
 
 #outlet {
-    background-color:#f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .k-block {
@@ -30,7 +30,7 @@
 }
 
 .k-block.k-block-aligned {
-    margin-top: $v-block-aligned-margin;
+    margin-top: -56px;
 }
 
 k-block .label {
@@ -41,11 +41,11 @@ k-block .label {
 }
 
 ::part(input-field), ::part(input-field):not(:hover){
-    background-color:white;
+    background-color: white;
 }
 
 ::part(input-field):focus {
-    background-color:white;
+    background-color: white;
 }
 
 .k-block ::part(value):focus  {
@@ -56,8 +56,8 @@ k-block .label {
 .k-block ::part(value){
     --lumo-text-field-overflow-mask-image: none;
     border-bottom: 1px solid #dadada;
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     box-shadow: none;
     background-color: var(--lumo-base-color);
 }
@@ -74,9 +74,9 @@ k-block .label {
 }
 
 .k-form-tab {
-    width:100%;
-    margin:0;
-    box-sizing:border-box;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 #session {
@@ -93,35 +93,35 @@ k-block .label {
 }
 
 #session span a span {
-    font-size: 14px !important;
-    font-weight: bold !important;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 #session span a span {
-   color:black;
-   font-size: 16px !important;
-   font-weight: bold !important;
+   color: black;
+   font-size: 16px;
+   font-weight: bold;
    vertical-align: baseline;
-   font-family: Arial, sans-serif !important;
+   font-family: Arial, sans-serif;
 }
 
 #session span a {
-    text-decoration:none;
+    text-decoration: none;
 }
 
 div#windows {
-    padding-top:6px;
-    padding-right:15px;
+    padding-top: 6px;
+    padding-right: 15px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
-    background:var(--lumo-tint);
+    background: var(--lumo-tint);
 }
 
 .k-main-window:not(:#windows) {
     position: fixed;
     width: 100%;
     height: 100%;
-    margin:0;
-    padding-top:50px;
+    margin: 0;
+    padding-top: 50px;
     box-sizing: border-box;
     text-align: left;
     display: inline-block;
@@ -147,8 +147,8 @@ html{
     display: inline-block;
     vertical-align: top;
     transition: 0.2s;
-    padding:0;
-    padding-right:0;
-    padding-left:0;
+    padding: 0;
+    padding-right: 0;
+    padding-left: 0;
     background-color: var(--lumo-error-color);
 }

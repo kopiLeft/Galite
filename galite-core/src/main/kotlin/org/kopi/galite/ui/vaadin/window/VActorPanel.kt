@@ -26,7 +26,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
 /**
  * The actor components container.
  */
-@CssImport("./styles/galite/vActorPanelStyles.css")
+@CssImport("./styles/galite/VActorPanelStyles.css")
 class VActorPanel : MenuBar() {
   //---------------------------------------------------
   // CONSTRUCTOR

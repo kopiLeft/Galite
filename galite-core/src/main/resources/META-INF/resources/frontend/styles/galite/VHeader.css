@@ -4,7 +4,7 @@
 }
 
 #header {
-    background-color:white;
+    background-color: white;
     display: table;
     width: 100%;
     margin: 0 auto;
@@ -23,8 +23,8 @@
     text-align: center;
     vertical-align: middle;
     width : 10%;
-    padding:0;
-    margin-top:15px;
+    padding: 0;
+    margin-top: 15px;
     justify-content: flex-start;
 }
 
@@ -43,7 +43,7 @@
 
 #welcomeContainer> * {
     display: inline;
-    padding-top:15px;
+    padding-top: 15px;
 }
 
 #windows, #welcomeContainer::part(menu-bar-button) {
@@ -63,9 +63,6 @@ user , admin , wrk context and bookmark
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     background:var(--lumo-tint);
     padding: var(--lumo-space-xxs);
-    /*
-    width: var(--lumo-size-xs);
-    height: var(--lumo-size-xs);*/
 }
 
 /*
@@ -74,8 +71,8 @@ user , admin , wrk context and bookmark
 .vaadin-menu-item {
     color: #8f8f8f;
     width: 100%;
-    font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
-    font-size: 12px !important;
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
 }

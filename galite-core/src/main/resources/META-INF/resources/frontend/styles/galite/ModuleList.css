@@ -1,17 +1,17 @@
 #moduleList :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
     margin: 0;
-    --lumo-font-family:  Arial, sans-serif !important;
+    --lumo-font-family: Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.800rem;
     border-right: 1px solid #dadada;
-    height:63px;
+    height: 63px;
     box-sizing: border-box;
 }
 
 #user_menu , #wrkcontext_menu , #bookmarks_menu , #admin_menu {
     background-color: var(--lumo-tint);
-    margin:0;
+    margin: 0;
     box-sizing: border-box;
     padding: var(--lumo-space-xxs);
 }
@@ -38,7 +38,7 @@
     --lumo-primary-color: var(--lumo-shade-50pct);
     box-sizing: border-box;
     --lumo-font-size-m: 0.600rem;
-    margin:0;
+    margin: 0;
     vertical-align: middle;
 }
 
