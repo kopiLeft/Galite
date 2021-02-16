@@ -22,14 +22,17 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
 
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.html.H3
-import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Information type notification component.
+ *
+ * @param title the information notification title.
+ * @param message the information notification message.
  */
-open class VInformationNotification(title: String?, message: String) : VAbstractNotification() {
+open class VInformationNotification(title: String?, message: String) : VAbstractNotification(title, message) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
@@ -69,15 +72,13 @@ open class VInformationNotification(title: String?, message: String) : VAbstract
   // DATA MEMBERS
   //--------------------------------------------------
   var close = VInputButton()
-  override val iconName: String
-    get() = "info-circle"
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.INFO_CIRCLE
 
   //--------------------------------------------------
   // CONSTRUCTOR
   //--------------------------------------------------
   init {
     super.title = H3(title)
-    super.message = Span(message)
-    super.initialize(title, message, locale)
   }
 }

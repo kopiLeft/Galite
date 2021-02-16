@@ -23,7 +23,6 @@ import org.joda.time.DateTime
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Command
-import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
@@ -46,7 +45,7 @@ object CommandForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
   val tb1 = insertBlock(BlockCommand, page) {
-    command(item = ClientForm.report) {
+    command(item = report) {
       action = {
         createReport(BlockCommand)
       }

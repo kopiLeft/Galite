@@ -25,6 +25,7 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.MainWindowListener
@@ -153,7 +154,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       return
     }
     notification.locale = defaultLocale.toString()
-    attachComponent(notification)
+    access {
+      notification.show()
+    }
   }
 
   //---------------------------------------------------------------------
@@ -276,7 +279,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param component The component to be detached.
    */
   fun detachComponent(component: Component?) {
-
+    remove(component)
   }
 
   /**
@@ -311,11 +314,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
     if (mainWindow != null) {
-      ui.ifPresent { myUi ->
-        myUi.access {
-          window.setSizeFull()
-          mainWindow!!.addWindow(window, title)
-        }
+      access {
+        window.setSizeFull()
+        mainWindow!!.addWindow(window, title)
       }
     }
   }
@@ -338,9 +339,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   protected fun setLocalizationContext(locale: Locale) {
     // default application locale is initialized
     // from application descriptor file (web.xml)
-
-    // default application locale is initialized
-    // from application descriptor file (web.xml)
     defaultLocale = locale
     if (defaultLocale == null) {
       // if no valid local is defined in the application descriptor
@@ -349,7 +347,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       // This is only to be share that we start with a language.
       defaultLocale = alternateLocale
     }
-    // Now create the localization manager using the application default locale.
     // Now create the localization manager using the application default locale.
     localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
   }

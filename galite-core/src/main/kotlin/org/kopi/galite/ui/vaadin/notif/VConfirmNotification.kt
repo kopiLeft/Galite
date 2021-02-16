@@ -22,7 +22,7 @@ import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.H3
-import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
@@ -30,8 +30,11 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Confirm type notification component.
+ *
+ * @param title the confirm notification title.
+ * @param message the confirm notification message.
  */
-open class VConfirmNotification(title: String, message: String) : VAbstractNotification() {
+open class VConfirmNotification(title: String, message: String) : VAbstractNotification(title, message) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
@@ -40,8 +43,8 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   override fun setButtons(locale: String) {
     ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
     cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
-    cancel.addClickListener { hide() }
-    ok.addClickListener { open() }
+    cancel.addClickListener { close() }
+    ok.addClickListener { close() }
     ok.width = "20%"
     ok.height = "50%"
     cancel.width = "20%"
@@ -82,8 +85,8 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   //------------------------------------------------
   // DATA MEMBERS
   //------------------------------------------------
-  override val iconName: String?
-    get() = "question-circle"
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.QUESTION_CIRCLE
   var ok = VInputButton()
   private var cancel = VInputButton()
   var listener: ComponentEventListener<ClickEvent<Button>>? = null
@@ -95,7 +98,5 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   //--------------------------------------------------
   init {
     super.title = H3(title)
-    super.message = Span(message)
-    super.initialize(title, message, locale)
   }
 }

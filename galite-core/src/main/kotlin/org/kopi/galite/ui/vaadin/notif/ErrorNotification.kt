@@ -19,7 +19,8 @@ package org.kopi.galite.ui.vaadin.notif
 
 /**
  * Error notification component.
- * @param title the warning notification title.
- * @param message the warning notification message.
+ *
+ * @param title the error notification title.
+ * @param message the error notification message.
  */
 class ErrorNotification(title: String, message: String) : VErrorNotification(title, message)

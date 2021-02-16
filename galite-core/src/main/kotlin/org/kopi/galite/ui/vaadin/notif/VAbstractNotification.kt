@@ -19,13 +19,15 @@ package org.kopi.galite.ui.vaadin.notif
 
 import java.util.Locale
 
+import org.kopi.galite.ui.vaadin.common.VSpan
+
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.H3
-import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
@@ -35,10 +37,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * An abstract implementation of notification components such as
  * warnings, errors, confirms and information.
  */
-abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNotification> {
+abstract class VAbstractNotification(title: String?, message: String) : EnhancedDialog(), Focusable<VAbstractNotification> {
 
   /**
-   * Creates a new notification widget with a window containing
+   * Creates a new notification component with a window containing
    * a title, a message, an image and buttons location.
    */
   fun init(locale: String) {
@@ -48,22 +50,18 @@ abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNoti
     createFooter()
   }
 
-  abstract fun onEnterEvent(keyDownEvent: ShortcutEvent?)
-  abstract fun onRightEvent(keyDownEvent: ShortcutEvent?)
-  abstract fun onLeftEvent(keyDownEvent: ShortcutEvent?)
-
   /**
-   * Initializes the notification panel.
+   * Shows the notification popup.
    */
-  fun initialize(title: String?, message: String, locale: String) {
-    super.setDraggable(true)
-    super.setResizable(true)
-    super.setModal(false)
-    super.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
-    init(locale)
-    setNotificationTitle(title)
-    setNotificationMessage(message)
+  fun show() {
+    open()
   }
+
+  abstract fun onEnterEvent(keyDownEvent: ShortcutEvent?)
+
+  abstract fun onRightEvent(keyDownEvent: ShortcutEvent?)
+
+  abstract fun onLeftEvent(keyDownEvent: ShortcutEvent?)
 
   /**
    * Closes the notification panel.
@@ -103,10 +101,11 @@ abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNoti
 
   /**
    * Sets the notification message.
+   *
    * @param message The notification message.
    */
-  fun setNotificationMessage(message: String) {
-    this.message.text = message
+  private fun setNotificationMessage(message: String) {
+    this.message.setHtml(message.replace("\n".toRegex(), "<br>").replace("<br><br>".toRegex(), "<br>"))
   }
 
   /**
@@ -172,24 +171,29 @@ abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNoti
   //-------------------------------------------------
   // DATA MEMBERS
   //-------------------------------------------------
-
   /**
-   * Represents the icon name to be used with this notification.
+   * Represents the icon to be used with this notification.
    */
-  protected abstract val iconName: String?
-  open var title = H3()
-  open var message = Span()
-  open var icon: Icon? = null
+  protected abstract val iconName: VaadinIcon?
+  var title = H3()
+  private var message = VSpan()
+  var icon: Icon? = null
   var locale: String = Locale.FRANCE.toString()
   private val listeners = mutableListOf<NotificationListener>()
-  protected val yesIsDefault = true
+  internal var yesIsDefault = true
+  internal var owner: Component? = null
   val header = HorizontalLayout()
   val content = HorizontalLayout()
   val footer = HorizontalLayout()
-  internal var setYesIsDefault: Boolean = false
 
   init {
     element.setAttribute("hideFocus", true)
     element.style["outline"] = "0px"
+
+    super.setDraggable(true)
+    super.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    init(locale)
+    setNotificationTitle(title)
+    setNotificationMessage(message)
   }
 }

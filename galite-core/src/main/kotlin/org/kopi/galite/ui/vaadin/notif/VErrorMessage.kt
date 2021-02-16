@@ -17,17 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import javax.swing.Popup
-
 import org.kopi.galite.ui.vaadin.common.VSpan
 
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.Scroller
 
 /**
  * An error message popup window containing stack trace detail
- * for an server exception.
+ * for a server exception.
  */
-class VErrorMessagePopup : Popup() {
+class VErrorMessage : Div() {
 
   //---------------------------------------------------
   // IMPLEMENTATION

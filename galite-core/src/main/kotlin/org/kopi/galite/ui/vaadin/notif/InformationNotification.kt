@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.notif
 /**
  * Information notification component.
  *
- * @param title the warning notification title.
- * @param message the warning notification message.
+ * @param title the information notification title.
+ * @param message the information notification message.
  */
 class InformationNotification(title: String, message: String) : VInformationNotification(title, message)

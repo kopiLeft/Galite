@@ -24,8 +24,8 @@ import com.vaadin.flow.component.Shortcuts
 /**
  * Confirm notification component.
  *
- * @param title the warning notification title.
- * @param message the warning notification message.
+ * @param title the confirm notification title.
+ * @param message the confirm notification message.
  */
 class ConfirmNotification(title: String, message: String) : VConfirmNotification(title, message) {
   /**

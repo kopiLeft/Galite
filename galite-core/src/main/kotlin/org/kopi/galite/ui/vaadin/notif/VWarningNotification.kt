@@ -22,14 +22,17 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
 
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.html.H3
-import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Warning type notification component.
+ *
+ * @param title the warning notification title.
+ * @param message the warning notification message.
  */
-open class VWarningNotification(title: String?, message: String) : VAbstractNotification() {
+open class VWarningNotification(title: String?, message: String) : VAbstractNotification(title, message) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
@@ -68,8 +71,8 @@ open class VWarningNotification(title: String?, message: String) : VAbstractNoti
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  override val iconName: String?
-    get() = "exclamation-circle"
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.EXCLAMATION_CIRCLE
 
   private var close = VInputButton()
 
@@ -78,7 +81,5 @@ open class VWarningNotification(title: String?, message: String) : VAbstractNoti
   //--------------------------------------------------
   init {
     super.title = H3(title)
-    super.message = Span(message)
-    super.initialize(title, message, locale)
   }
 }

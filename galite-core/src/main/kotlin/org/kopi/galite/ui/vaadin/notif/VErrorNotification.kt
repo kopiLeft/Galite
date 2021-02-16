@@ -28,13 +28,16 @@ import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.details.Details
 import com.vaadin.flow.component.details.DetailsVariant
 import com.vaadin.flow.component.html.H3
-import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 
 /**
  * Error type notification component.
+ *
+ * @param title the error notification title.
+ * @param message the error notification message.
  */
-open class VErrorNotification(title: String?, message: String) : VAbstractNotification() {
+open class VErrorNotification(title: String?, message: String) : VAbstractNotification(title, message) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
@@ -85,17 +88,15 @@ open class VErrorNotification(title: String?, message: String) : VAbstractNotifi
   var details = Details()
   var close = VInputButton()
   val listener: ComponentEventListener<ClickEvent<Button>>? = null
-  override val iconName: String
-    get() = "warning"
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.EXCLAMATION_CIRCLE
 
   //-------------------------------------------------
   // CONSTRUCTOR
   //-------------------------------------------------
   init {
     super.title = H3(title)
-    super.message = Span(message)
     details.element.setAttribute("aria-label", "Click me")
     details.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
-    super.initialize(title, message, locale)
   }
 }
