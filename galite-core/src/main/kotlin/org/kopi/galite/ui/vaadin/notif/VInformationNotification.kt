@@ -68,7 +68,6 @@ open class VInformationNotification(title: String?, message: String) : VAbstract
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-
   var close = VInputButton()
   override val iconName: String
     get() = "info-circle"
@@ -76,10 +75,6 @@ open class VInformationNotification(title: String?, message: String) : VAbstract
   //--------------------------------------------------
   // CONSTRUCTOR
   //--------------------------------------------------
-
-  /**
-   * Creates the information widget.
-   */
   init {
     super.title = H3(title)
     super.message = Span(message)

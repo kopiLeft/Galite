@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import java.util.Locale
-
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Focusable
@@ -30,6 +28,7 @@ import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import java.util.*
 
 /**
  * An abstract implementation of notification components such as
@@ -186,4 +185,10 @@ abstract class VAbstractNotification : EnhancedDialog(), Focusable<VAbstractNoti
   val header = HorizontalLayout()
   val content = HorizontalLayout()
   val footer = HorizontalLayout()
+  internal var setYesIsDefault: Boolean = false
+
+  init {
+    element.setAttribute("hideFocus", true)
+    element.style["outline"] = "0px"
+  }
 }

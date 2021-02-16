@@ -60,7 +60,7 @@ open class VErrorNotification(title: String?, message: String) : VAbstractNotifi
                         Text("Les détails ici"))
     } else if (locale == "en_GB") {
       details = Details("Show details",
-                        Text("details here"))
+                        Text("Details here"))
     }
     close.addClickListener { hide() }
     close.width = "20%"
@@ -82,7 +82,6 @@ open class VErrorNotification(title: String?, message: String) : VAbstractNotifi
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-
   var details = Details()
   var close = VInputButton()
   val listener: ComponentEventListener<ClickEvent<Button>>? = null
@@ -92,10 +91,6 @@ open class VErrorNotification(title: String?, message: String) : VAbstractNotifi
   //-------------------------------------------------
   // CONSTRUCTOR
   //-------------------------------------------------
-
-  /**
-   * Creates the error widget.
-   */
   init {
     super.title = H3(title)
     super.message = Span(message)

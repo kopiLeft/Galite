@@ -33,9 +33,9 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
  */
 open class VConfirmNotification(title: String, message: String) : VAbstractNotification() {
 
-//-------------------------------------------------
-// IMPLEMENTATION
-//-------------------------------------------------
+  //-------------------------------------------------
+  // IMPLEMENTATION
+  //-------------------------------------------------
 
   override fun setButtons(locale: String) {
     ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
@@ -82,7 +82,6 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   //------------------------------------------------
   // DATA MEMBERS
   //------------------------------------------------
-
   override val iconName: String?
     get() = "question-circle"
   var ok = VInputButton()
@@ -94,10 +93,6 @@ open class VConfirmNotification(title: String, message: String) : VAbstractNotif
   //--------------------------------------------------
   // CONSTRUCTOR
   //--------------------------------------------------
-
-  /**
-   * Creates the confirmation widget.
-   */
   init {
     super.title = H3(title)
     super.message = Span(message)

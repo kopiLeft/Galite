@@ -32,7 +32,6 @@ class ConfirmNotification(title: String, message: String) : VConfirmNotification
    * Creates the confirmation widget.
    */
   init {
-   element.setAttribute("hideFocus",true)
     Shortcuts.addShortcutListener(this,
                                   { keyDownEvent: ShortcutEvent? -> onEnterEvent(keyDownEvent) }, Key.ENTER)
             .listenOn(this)

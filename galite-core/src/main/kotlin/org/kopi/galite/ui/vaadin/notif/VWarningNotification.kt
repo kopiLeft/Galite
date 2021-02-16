@@ -68,7 +68,6 @@ open class VWarningNotification(title: String?, message: String) : VAbstractNoti
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-
   override val iconName: String?
     get() = "exclamation-circle"
 
@@ -77,10 +76,6 @@ open class VWarningNotification(title: String?, message: String) : VAbstractNoti
   //--------------------------------------------------
   // CONSTRUCTOR
   //--------------------------------------------------
-
-  /**
-   * Creates the warning widget.
-   */
   init {
     super.title = H3(title)
     super.message = Span(message)

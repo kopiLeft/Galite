@@ -69,7 +69,7 @@ dependencies {
   implementation("gnu.getopt", "java-getopt", getoptVersion)
 
   // EnhancedDialog dependency
-  implementation("com.vaadin.componentfactory","enhanced-dialog","1.0.4")
+  implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
 }
 
 dependencyManagement {
