@@ -15,12 +15,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-.k-loginBox ::part(input-field) {
-    background-color: var(--lumo-tint);
-    box-sizing: border-box;
-    border: 1px solid #dadada;
+/*
+ * Head's style
+ */
+#header {
+    background-color: white;
 }
 
+/*
+ * Main's style
+ */
+#outlet {
+    background-color: #f2f2f2;
+}
+
+/*
+ * Login Box container style
+ */
 .k-loginBox {
     border: 1px solid #cccccc;
     padding: 20px;
@@ -31,26 +42,16 @@
     font-weight: 400;
     font-style: normal;
     font-size: 12px;
-}
-
-#header {
-    background-color: white;
-}
-
-.k-loginBox-pane tr:not(:nth-child(6)) td {
-    vertical-align: bottom;
-}
-
-.k-loginBox {
-    border: 1px solid #cccccc;
-    padding: 20px;
-    margin-top: 20px;
-    background: white;
     box-sizing:border-box;
 }
 
-.k-loginBox-image {
-    margin: 12px 0 0 0;
+/*
+ * Login Box input fields style
+ */
+.k-loginBox ::part(input-field) {
+    background-color: var(--lumo-tint);
+    box-sizing: border-box;
+    border: 1px solid #dadada;
 }
 
 .k-loginBox-pane table tr td {
@@ -60,22 +61,6 @@
 
 .k-loginBox-pane {
     padding: 1px 6px 12px 10px;
-}
-
-.k-loginBox-error {
-    color: red;
-}
-
-#user_name {
-    width: 150px;
-    border: #dadada 1px solid;
-}
-
-.k-loginBox-info {
-    margin-bottom: 6px;
-    font-weight: 500;
-    font-style: normal;
-    color: black;
 }
 
 .k-loginBox-pane tr td {
@@ -89,11 +74,33 @@
     position: relative;
 }
 
-#user_name:hover {
-    background: #f2f2f2;
+.k-loginBox-pane label {
+    font-weight: 500;
+    font-style: normal;
+    color: #a3a3a3;
+    display: inline-block;
 }
 
-.k-loginBox-pane select:hover {
+/*
+ * Password's style
+ */
+label[for="user_password"] {
+    vertical-align:bottom;
+}
+
+vaadin-password-field {
+    width: 150px;
+}
+
+/*
+ * User name's style
+ */
+#user_name {
+    width: 150px;
+    border: #dadada 1px solid;
+}
+
+#user_name:hover {
     background: #f2f2f2;
 }
 
@@ -102,19 +109,22 @@
     border-bottom: #009bd4 1px solid;
 }
 
+/*
+ * Language Selector style
+ */
 .k-loginBox-pane select {
     border: #dadada 1px solid;
     background-color: white;
-    margin-top: 10px;
+    margin-top: 3px;
 }
 
-.k-loginBox-pane label {
-    font-weight: 500;
-    font-style: normal;
-    color: #a3a3a3;
-    display: inline-block;
+.k-loginBox-pane select:hover {
+    background: #f2f2f2;
 }
 
+/*
+ * Login Button
+ */
 #login_button {
     display: inline-block;
     background: #009bd4;
@@ -127,10 +137,6 @@
     min-width: 152px;
     margin: 0;
     border: #dadada 1px solid;
-}
-
-vaadin-password-field {
-    width: 150px;
 }
 
 * {
