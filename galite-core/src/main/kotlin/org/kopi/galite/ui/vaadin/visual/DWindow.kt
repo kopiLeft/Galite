@@ -260,7 +260,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     private var value = 0 // only for use in ask(...)
 
     override fun notice(message: String) {
-      val dialog = VInformationNotification(VlibProperties.getString("Notice"), message)
+      val dialog = VInformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
           application.detachComponent(dialog)
@@ -270,8 +270,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     }
 
     override fun error(message: String?) {
-      val dialog = VErrorNotification(VlibProperties.getString("Error"), message!!)
-      dialog.owner = this@DWindow
+      val dialog = VErrorNotification(VlibProperties.getString("Error"), message!!, notificationLocale)
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
           application.detachComponent(dialog)
@@ -281,7 +280,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     }
 
     override fun warn(message: String) {
-      val dialog = VWarningNotification(VlibProperties.getString("Warning"), message)
+      val dialog = VWarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
           application.detachComponent(dialog)
@@ -299,7 +298,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     }
 
     override fun ask(message: String, yesIsDefault: Boolean): Int {
-      val dialog = VConfirmNotification(VlibProperties.getString("Question"), message)
+      val dialog = VConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
       dialog.yesIsDefault = yesIsDefault
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
@@ -316,15 +315,13 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
       return value
     }
 
+    private val notificationLocale get() = application.defaultLocale.toString()
+
     /**
      * Shows a notification.
      * @param notification The notification to be shown
      */
-    internal fun showNotification(notification: VAbstractNotification?) {
-      if (notification == null) {
-        return
-      }
-      notification.locale = application.defaultLocale.toString()
+    internal fun showNotification(notification: VAbstractNotification) {
       access {
         notification.show()
       }

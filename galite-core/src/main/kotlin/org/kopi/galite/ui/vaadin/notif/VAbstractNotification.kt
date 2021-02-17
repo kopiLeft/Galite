@@ -17,38 +17,25 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import java.util.Locale
-
+import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VSpan
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.ShortcutEvent
-import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * An abstract implementation of notification components such as
  * warnings, errors, confirms and information.
  */
-abstract class VAbstractNotification(title: String?, message: String) : EnhancedDialog(), Focusable<VAbstractNotification> {
-
-  /**
-   * Creates a new notification component with a window containing
-   * a title, a message, an image and buttons location.
-   */
-  fun init(locale: String) {
-    setButtons(locale)
-    createHeader()
-    createContent()
-    createFooter()
-  }
+abstract class VAbstractNotification(title: String?,
+                                     message: String,
+                                     protected val locale: String)
+  : EnhancedDialog(), Focusable<VAbstractNotification> {
 
   /**
    * Shows the notification popup.
@@ -57,40 +44,37 @@ abstract class VAbstractNotification(title: String?, message: String) : Enhanced
     open()
   }
 
-  abstract fun onEnterEvent(keyDownEvent: ShortcutEvent?)
-
-  abstract fun onRightEvent(keyDownEvent: ShortcutEvent?)
-
-  abstract fun onLeftEvent(keyDownEvent: ShortcutEvent?)
-
   /**
-   * Closes the notification panel.
+   * Registers a new notification listener.
+   * @param l The listener to be added.
    */
-  override fun close() {
-    hide()
+  fun addNotificationListener(l: NotificationListener) {
+    listeners.add(l)
   }
 
   /**
-   * Hides the notification dialog.
+   * Removes a new notification listener.
+   * @param l The listener to be removed.
    */
-  protected open fun hide() {
-    super.close()
+  fun removeNotificationListener(l: NotificationListener) {
+    listeners.remove(l)
   }
 
   /**
    * Fires a close event.
    * @param action The user action.
    */
-  protected open fun fireOnClose(action: Boolean) {
+  protected fun fireOnClose(action: Boolean) {
     for (l in listeners) {
-      l.onClose(action)
+      if (l != null) {
+        l.onClose(action)
+      }
     }
   }
 
   //-------------------------------------------------
   // ACCESSORS
   //-------------------------------------------------
-
   /**
    * Sets the notification title.
    * @param title The notification title.
@@ -102,98 +86,73 @@ abstract class VAbstractNotification(title: String?, message: String) : Enhanced
   /**
    * Sets the notification message.
    *
-   * @param message The notification message.
+   * @param text The notification message.
    */
-  private fun setNotificationMessage(message: String) {
-    this.message.setHtml(message.replace("\n".toRegex(), "<br>").replace("<br><br>".toRegex(), "<br>"))
-  }
-
-  /**
-   * Creates the notification header.
-   */
-  fun createHeader() {
-    val close = Button()
-    close.icon = VaadinIcon.CLOSE.create()
-
-    close.addClickListener { close() }
-    header.setFlexGrow(1.0, title)
-    header.isPadding = true
-    header.alignItems = FlexComponent.Alignment.CENTER
-    header.add(title, close)
-    super.setHeader(header)
+  private fun setNotificationMessage(text: String) {
+    message.setHtml(text.replace("\n".toRegex(), "<br>").replace("<br><br>".toRegex(), "<br>"))
   }
 
   /**
    * Creates the notification content.
    */
   fun createContent() {
-    icon = Icon(iconName)
-    content.isSpacing = true
     content.addComponentAsFirst(icon)
     content.add(message)
     super.setContent(content)
   }
 
   /**
-   * Creates the notification footer.
+   * Should we go back to the last focused field when the notification is closed ?
+   * @return `true` if we should go back to the last focused field when the notification is closed.
    */
-  open fun createFooter() {
-    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    super.setFooter(footer)
-  }
-
-  /**
-   * Registers a new notification listener.
-   * @param l The listener to be added.
-   */
-  open fun addNotificationListener(l: NotificationListener) {
-    listeners.add(l)
-  }
-
-  /**
-   * Removes a new notification listener.
-   * @param l The listener to be removed.
-   */
-  open fun removeNotificationListener(l: NotificationListener) {
-    listeners.remove(l)
+  protected fun goBackToLastFocusedWindow(): Boolean {
+    return true
   }
 
   //-------------------------------------------------
   // ABSTRACT METHODS
   //-------------------------------------------------
-
   /**
    * Sets the notification buttons.
    * @param locale The notification locale.
    */
-  abstract fun setButtons(locale: String)
+  abstract fun setButtons()
+
+  /**
+   * The icon name to be used with this notification.
+   */
+  protected abstract val iconName: VaadinIcon
 
   //-------------------------------------------------
   // DATA MEMBERS
   //-------------------------------------------------
-  /**
-   * Represents the icon to be used with this notification.
-   */
-  protected abstract val iconName: VaadinIcon?
-  var title = H3()
+  private var listeners = mutableListOf<NotificationListener>()
+  private val icon = Icon(iconName)
+  private val title = H3(title)
+  private var content = Div()
   private var message = VSpan()
-  var icon: Icon? = null
-  var locale: String = Locale.FRANCE.toString()
-  private val listeners = mutableListOf<NotificationListener>()
-  internal var yesIsDefault = true
-  internal var owner: Component? = null
-  val header = HorizontalLayout()
-  val content = HorizontalLayout()
-  val footer = HorizontalLayout()
+  protected var buttons = Div()
+  internal var yesIsDefault = false
+  val footer = Div()
 
   init {
     element.setAttribute("hideFocus", true)
     element.style["outline"] = "0px"
+    super.addThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    isDraggable = true
+    this.message.className = Styles.NOTIFICATION_MESSAGE
+    buttons.className = Styles.NOTIFICATION_BUTTONS
 
-    super.setDraggable(true)
-    super.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
-    init(locale)
-    setNotificationTitle(title)
+    content.add(icon)
+    content.add(this.message)
+    super.setHeader(this.title)
+    content.add(icon)
     setNotificationMessage(message)
+    content.add(this.message)
+    content.add(buttons)
+    super.setContent(content)
+    footer.add(buttons)
+    this.setButtons()
+    super.setFooter(footer)
   }
 }

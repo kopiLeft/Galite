@@ -18,18 +18,12 @@
 package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.base.VInputButton
 
-import com.vaadin.flow.component.ClickEvent
-import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
-import com.vaadin.flow.component.Text
+import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.details.Details
-import com.vaadin.flow.component.details.DetailsVariant
-import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.FlexComponent
 
 /**
  * Error type notification component.
@@ -37,66 +31,46 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
  * @param title the error notification title.
  * @param message the error notification message.
  */
-open class VErrorNotification(title: String?, message: String) : VAbstractNotification(title, message) {
+class VErrorNotification(title: String?,
+                         message: String,
+                         locale: String)
+  : VAbstractNotification(title, message, locale) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
 
-  /**
-   * Creates the error notification footer.
-   */
-  override fun createFooter() {
-    footer.add(details)
-    footer.add(close)
-    footer.isSpacing = true
-    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    footer.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, details)
-    footer.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE, close)
-    super.setFooter(footer)
+  override fun setButtons() {
+    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
+    close.addClickListener { close() }
+    close.isAutofocus = true
+    buttons.add(close)
   }
 
-  override fun setButtons(locale: String) {
-    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
-    if (locale == "fr_FR") {
-      details = Details("Afficher les détails",
-                        Text("Les détails ici"))
-    } else if (locale == "en_GB") {
-      details = Details("Show details",
-                        Text("Details here"))
-    }
-    close.addClickListener { hide() }
-    close.width = "20%"
-    close.height = "50%"
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.EXCLAMATION_CIRCLE
+
+  fun onArrowUpEvent(keyDownEvent: ShortcutEvent?) {
+    close.focus()
   }
 
-  override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
-    close.click()
-  }
-
-  override fun onRightEvent(keyDownEvent: ShortcutEvent?) {
-    TODO("Not yet implemented")
-  }
-
-  override fun onLeftEvent(keyDownEvent: ShortcutEvent?) {
-    TODO("Not yet implemented")
+  fun onArrowDownEvent(keyDownEvent: ShortcutEvent?) {
+    details.focus()
   }
 
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  var details = Details()
-  var close = VInputButton()
-  val listener: ComponentEventListener<ClickEvent<Button>>? = null
-  override val iconName: VaadinIcon
-    get() = VaadinIcon.EXCLAMATION_CIRCLE
+  private var details = ErrorMessageDetails(message, locale, this)
+  private lateinit var close: Button
 
   //-------------------------------------------------
   // CONSTRUCTOR
   //-------------------------------------------------
   init {
-    super.title = H3(title)
     details.element.setAttribute("aria-label", "Click me")
-    details.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
+    footer.add(details)
+    Shortcuts.addShortcutListener(this, this::onArrowUpEvent, Key.ARROW_UP)
+    Shortcuts.addShortcutListener(this, this::onArrowDownEvent, Key.ARROW_DOWN)
   }
 }

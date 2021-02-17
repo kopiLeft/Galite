@@ -18,13 +18,9 @@
 package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.base.VInputButton
 
-import com.vaadin.flow.component.ShortcutEvent
-import com.vaadin.flow.component.html.H3
+import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.FlexComponent
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Warning type notification component.
@@ -32,54 +28,27 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param title the warning notification title.
  * @param message the warning notification message.
  */
-open class VWarningNotification(title: String?, message: String) : VAbstractNotification(title, message) {
+open class VWarningNotification(title: String?,
+                                message: String,
+                                locale: String)
+  : VAbstractNotification(title, message, locale) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
 
-  /**
-   * Creates the warning notification footer.
-   */
-  override fun createFooter() {
-    val footer = HorizontalLayout()
-    footer.add(close)
-    footer.isSpacing = true
-    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    super.setFooter(footer)
+  override fun setButtons() {
+    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
+    close.addClickListener { close() }
+    close.isAutofocus = true
+    buttons.add(close)
   }
 
-  override fun setButtons(locale: String) {
-    close = VInputButton(LocalizedProperties.getString(locale, "CLOSE"))
-    close.addClickListener { hide() }
-    close.width = "20%"
-    close.height = "50%"
-  }
-
-  override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
-    TODO("Not yet implemented")
-  }
-
-  override fun onRightEvent(keyDownEvent: ShortcutEvent?) {
-    TODO("Not yet implemented")
-  }
-
-  override fun onLeftEvent(keyDownEvent: ShortcutEvent?) {
-    TODO("Not yet implemented")
-  }
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.EXCLAMATION_CIRCLE
 
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  override val iconName: VaadinIcon
-    get() = VaadinIcon.EXCLAMATION_CIRCLE
-
-  private var close = VInputButton()
-
-  //--------------------------------------------------
-  // CONSTRUCTOR
-  //--------------------------------------------------
-  init {
-    super.title = H3(title)
-  }
+  private lateinit var close: Button
 }

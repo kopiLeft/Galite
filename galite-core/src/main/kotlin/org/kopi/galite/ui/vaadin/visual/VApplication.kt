@@ -66,6 +66,7 @@ import com.vaadin.flow.router.Route
 @Push
 @Route("")
 @CssImport("./styles/galite/styles.css")
+@Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
   //---------------------------------------------------
@@ -95,7 +96,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
-    val dialog = VInformationNotification(VlibProperties.getString("Notice"), message)
+    val dialog = VInformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
@@ -105,8 +106,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun error(message: String?) {
-    val dialog = VErrorNotification(VlibProperties.getString("Error"), message!!)
-    // dialog.setOwner(this)
+    val dialog = VErrorNotification(VlibProperties.getString("Error"), message!!, notificationLocale)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
@@ -117,7 +117,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun warn(message: String) {
-    val dialog = VWarningNotification(VlibProperties.getString("Warning"), message)
+    val dialog = VWarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
@@ -127,8 +127,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    val dialog = VConfirmNotification(VlibProperties.getString("Question"), message)
-    // dialog.setYesIsDefault(yesIsDefault)
+    val dialog = VConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+    dialog.yesIsDefault = yesIsDefault
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         askAnswer = if (yes) {
@@ -145,15 +145,13 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     return askAnswer
   }
 
+  private val notificationLocale get() = defaultLocale.toString()
+
   /**
    * Shows a notification.
    * @param notification The notification to be shown
    */
-  protected open fun showNotification(notification: VAbstractNotification?) {
-    if (notification == null) {
-      return
-    }
-    notification.locale = defaultLocale.toString()
+  protected open fun showNotification(notification: VAbstractNotification) {
     access {
       notification.show()
     }

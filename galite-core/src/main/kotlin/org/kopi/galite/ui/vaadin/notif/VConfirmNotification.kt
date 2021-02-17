@@ -17,16 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
+
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
+import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.FlexComponent
-
-import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Confirm type notification component.
@@ -34,69 +33,50 @@ import org.kopi.galite.ui.vaadin.base.VInputButton
  * @param title the confirm notification title.
  * @param message the confirm notification message.
  */
-open class VConfirmNotification(title: String, message: String) : VAbstractNotification(title, message) {
+class VConfirmNotification(title: String,
+                           message: String,
+                           locale: String)
+  : VAbstractNotification(title, message, locale) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
 
-  override fun setButtons(locale: String) {
-    ok = VInputButton(LocalizedProperties.getString(locale, "OK"))
-    cancel = VInputButton(LocalizedProperties.getString(locale, "NO"))
+  override fun setButtons() {
+    ok = Button(LocalizedProperties.getString(locale, "OK"))
+    cancel = Button(LocalizedProperties.getString(locale, "NO"))
     cancel.addClickListener { close() }
     ok.addClickListener { close() }
-    ok.width = "20%"
-    ok.height = "50%"
-    cancel.width = "20%"
-    cancel.height = "50%"
+    buttons.add(ok)
+    buttons.add(cancel)
+
+    if (yesIsDefault) {
+      ok.isAutofocus = true
+    } else {
+      cancel.isAutofocus = true
+    }
   }
 
-  /**
-   * Creates the confirmation notification footer.
-   */
-  override fun createFooter() {
-    footer.add(ok)
-    footer.add(cancel)
-    footer.isSpacing = true
-    footer.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    super.setFooter(footer)
-  }
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.QUESTION_CIRCLE
 
-  override fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
-    cancel.click()
-    cancelFocused = true
-    okFocused = false
-  }
-
-  override fun onRightEvent(keyDownEvent: ShortcutEvent?) {
+  fun onArrowRightEvent(keyDownEvent: ShortcutEvent?) {
     cancel.focus()
-    okFocused = false
-    cancelFocused = true
-
   }
 
-  override fun onLeftEvent(keyDownEvent: ShortcutEvent?) {
+  fun onArrowLeftEvent(keyDownEvent: ShortcutEvent?) {
     ok.focus()
-    okFocused = true
-    cancelFocused = false
   }
-
 
   //------------------------------------------------
   // DATA MEMBERS
   //------------------------------------------------
-  override val iconName: VaadinIcon
-    get() = VaadinIcon.QUESTION_CIRCLE
-  var ok = VInputButton()
-  private var cancel = VInputButton()
+  private lateinit var ok: Button
+  private lateinit var cancel: Button
   var listener: ComponentEventListener<ClickEvent<Button>>? = null
-  var okFocused = false
-  var cancelFocused = false
 
-  //--------------------------------------------------
-  // CONSTRUCTOR
-  //--------------------------------------------------
   init {
-    super.title = H3(title)
+    Shortcuts.addShortcutListener(this, this::onArrowRightEvent, Key.ARROW_RIGHT)
+    Shortcuts.addShortcutListener(this, this::onArrowLeftEvent, Key.ARROW_LEFT)
   }
 }

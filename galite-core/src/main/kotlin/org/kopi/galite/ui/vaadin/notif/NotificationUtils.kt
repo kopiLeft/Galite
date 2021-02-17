@@ -57,12 +57,12 @@ object NotificationUtils {
                 messageKey: String,
                 vararg params: Any?) {
     val error = VErrorNotification(LocalizedProperties.getString(locale, "Error"),
-                                   LocalizedMessages.getMessage(locale, messageKey, params))
-    error.init(locale)
+                                   LocalizedMessages.getMessage(locale, messageKey, params),
+                                   locale)
     if (callback != null) {
       error.addNotificationListener(callback)
     }
-   // error.show(parent, locale)
+    error.show()
   }
 
   /**
@@ -95,12 +95,12 @@ object NotificationUtils {
                   messageKey: String,
                   vararg params: Any?) {
     val warning = VWarningNotification(LocalizedProperties.getString(locale, "Warning"),
-                                       LocalizedMessages.getMessage(locale, messageKey, params))
-    warning.init(locale)
+                                       LocalizedMessages.getMessage(locale, messageKey, params),
+                                       locale)
     if (callback != null) {
       warning.addNotificationListener(callback)
     }
-   // warning.show(parent, locale)
+    warning.show()
   }
 
   /**
@@ -133,11 +133,11 @@ object NotificationUtils {
                       messageKey: String,
                       vararg params: Any?) {
     val information = VInformationNotification(LocalizedProperties.getString(locale, "Notice"),
-                                               LocalizedMessages.getMessage(locale, messageKey, params))
-    information.init(locale)
+                                               LocalizedMessages.getMessage(locale, messageKey, params),
+                                               locale)
     if (callback != null) {
       information.addNotificationListener(callback)
     }
-    //information.show(parent, locale)
+    information.show()
   }
 }

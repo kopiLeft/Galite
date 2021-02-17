@@ -19,6 +19,11 @@ package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.common.VSpan
 
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.details.Details
+import com.vaadin.flow.component.details.DetailsVariant
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.Scroller
 
@@ -26,7 +31,10 @@ import com.vaadin.flow.component.orderedlayout.Scroller
  * An error message popup window containing stack trace detail
  * for a server exception.
  */
-class VErrorMessage : Div() {
+class ErrorMessageDetails(message: String?,
+                          locale: String,
+                          val parent: Dialog)
+  : Div(), HasSize, Focusable<ErrorMessageDetails> {
 
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -58,6 +66,7 @@ class VErrorMessage : Div() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  private var details = Details()
   private var message: VSpan? = null
   private val scroller = Scroller()
 
@@ -66,5 +75,17 @@ class VErrorMessage : Div() {
   //---------------------------------------------------
   init {
     createContent()
+    setMessage(message)
+    details.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
+
+    // TODO: Change this a generic details
+    if (locale == "fr_FR") {
+      details = Details("Afficher les détails",
+                        scroller)
+    } else if (locale == "en_GB") {
+      details = Details("Show details",
+                        scroller)
+    }
+    add(details)
   }
 }
