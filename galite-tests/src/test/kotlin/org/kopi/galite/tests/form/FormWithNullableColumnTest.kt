@@ -146,11 +146,69 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
     val query = table!!.slice(columns).selectAll()
 
     transaction {
-      println("------------−>" +query.prepareSQL(this))
      assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
                           " \"ORDER\".QUANTITY, ADRESS.COUNTRY, ADRESS.ZIP FROM \"ORDER\" LEFT JOIN CLIENTS ON " +
                           "\"ORDER\".CLIENT_ID = CLIENTS.ID LEFT JOIN ADRESS ON \"ORDER\".CLIENT_ID = ADRESS.CLIENT_ID",
                    query.prepareSQL(this))
+    }
+  }
+
+  @Test
+  fun leftJoiInMiddleThreeTablesInOneFieldTest() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockThreeTablesMiddleLeftJoinInOneField
+
+    block.form
+    block.form.model
+    block.name.value = "client1"
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    //BLOCK31
+    /*SELECT T0.ID, T2.ID, T2.Name, T2.mail, T0.quantity, T1.Country, T1.ZIP
+ FROM TEST_ORDER T0 LEFT OUTER JOIN TEST_CLIENT T2 ON T0.CLIENT_ID = T2.ID A
+ ND T2.ID = T0.CLIENT_ID LEFT OUTER JOIN TEST_ADRESS T1 ON T0.CLIENT_ID = T1.CLIENT_ID
+ AND T1.CLIENT_ID = T0.CLIENT_ID WHERE T0.ID = 1 AND T1.CLIENT_ID = T2.ID*/
+    transaction {
+      println("--------------−−> " +query.prepareSQL(this))
+      assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
+                           " \"ORDER\".QUANTITY, ADRESS.COUNTRY, ADRESS.ZIP FROM \"ORDER\" LEFT JOIN CLIENTS " +
+                           "ON \"ORDER\".CLIENT_ID = CLIENTS.ID LEFT JOIN ADRESS " +
+                           "ON \"ORDER\".CLIENT_ID = ADRESS.CLIENT_ID",
+                   query.prepareSQL(this))
+
+    }
+  }
+
+  @Test
+  fun leftJoiInEndThreeTablesInOneFieldTest() {
+    FormWithNullableColumn.model
+    val block =  FormWithNullableColumn.blockThreeTablesEndLeftJoinInOneField
+
+    block.form
+    block.form.model
+    block.name.value = "client1"
+
+    val table = VBlockDefaultOuterJoin.getSearchTables(block.vBlock)
+    val columns = block.vBlock.getSearchColumns()
+    val query = table!!.slice(columns).selectAll()
+
+    //BLOCK41
+    /*  SELECT T0.ID, T1.ID, T1.Name, T1.mail, T0.quantity, T2.Country, T2.ZIP
+    FROM TEST_ORDER T0 LEFT OUTER JOIN TEST_CLIENT T1 ON T0.CLIENT_ID = T1.ID
+    AND T1.ID = T0.CLIENT_ID LEFT OUTER JOIN TEST_ADRESS T2 ON T0.CLIENT_ID = T2.CLIENT_ID
+    AND T2.CLIENT_ID = T0.CLIENT_ID WHERE T0.ID = 1 AND T2.CLIENT_ID = T1.ID*/
+
+    transaction {
+      println("--------------−−> " +query.prepareSQL(this))
+      assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\", CLIENTS.MAIL," +
+                           " \"ORDER\".QUANTITY, ADRESS.COUNTRY, ADRESS.ZIP FROM \"ORDER\" LEFT JOIN CLIENTS " +
+                           "ON \"ORDER\".CLIENT_ID = CLIENTS.ID LEFT JOIN ADRESS " +
+                           "ON \"ORDER\".CLIENT_ID = ADRESS.CLIENT_ID",
+                   query.prepareSQL(this))
+
     }
   }
 }
