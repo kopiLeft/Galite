@@ -29,12 +29,12 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.MainWindowListener
-import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
-import org.kopi.galite.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.ui.vaadin.notif.InformationNotification
 import org.kopi.galite.ui.vaadin.notif.NotificationListener
 import org.kopi.galite.ui.vaadin.notif.VAbstractNotification
-import org.kopi.galite.ui.vaadin.notif.WarningNotification
+import org.kopi.galite.ui.vaadin.notif.VConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.VErrorNotification
+import org.kopi.galite.ui.vaadin.notif.VInformationNotification
+import org.kopi.galite.ui.vaadin.notif.VWarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
@@ -95,7 +95,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
-    val dialog = InformationNotification(VlibProperties.getString("Notice"), message)
+    val dialog = VInformationNotification(VlibProperties.getString("Notice"), message)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
@@ -105,7 +105,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun error(message: String?) {
-    val dialog = ErrorNotification(VlibProperties.getString("Error"), message!!)
+    val dialog = VErrorNotification(VlibProperties.getString("Error"), message!!)
     // dialog.setOwner(this)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
@@ -117,7 +117,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun warn(message: String) {
-    val dialog = WarningNotification(VlibProperties.getString("Warning"), message)
+    val dialog = VWarningNotification(VlibProperties.getString("Warning"), message)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         detachComponent(dialog)
@@ -127,7 +127,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message)
+    val dialog = VConfirmNotification(VlibProperties.getString("Question"), message)
     // dialog.setYesIsDefault(yesIsDefault)
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {

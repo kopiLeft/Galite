@@ -22,12 +22,12 @@ import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
-import org.kopi.galite.ui.vaadin.notif.ErrorNotification
-import org.kopi.galite.ui.vaadin.notif.InformationNotification
 import org.kopi.galite.ui.vaadin.notif.NotificationListener
 import org.kopi.galite.ui.vaadin.notif.VAbstractNotification
-import org.kopi.galite.ui.vaadin.notif.WarningNotification
+import org.kopi.galite.ui.vaadin.notif.VConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.VErrorNotification
+import org.kopi.galite.ui.vaadin.notif.VInformationNotification
+import org.kopi.galite.ui.vaadin.notif.VWarningNotification
 import org.kopi.galite.ui.vaadin.window.VActorPanel
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
@@ -260,7 +260,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     private var value = 0 // only for use in ask(...)
 
     override fun notice(message: String) {
-      val dialog = InformationNotification(VlibProperties.getString("Notice"), message)
+      val dialog = VInformationNotification(VlibProperties.getString("Notice"), message)
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
           application.detachComponent(dialog)
@@ -270,7 +270,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     }
 
     override fun error(message: String?) {
-      val dialog = ErrorNotification(VlibProperties.getString("Error"), message!!)
+      val dialog = VErrorNotification(VlibProperties.getString("Error"), message!!)
       dialog.owner = this@DWindow
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
@@ -281,7 +281,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     }
 
     override fun warn(message: String) {
-      val dialog = WarningNotification(VlibProperties.getString("Warning"), message)
+      val dialog = VWarningNotification(VlibProperties.getString("Warning"), message)
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
           application.detachComponent(dialog)
@@ -299,7 +299,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     }
 
     override fun ask(message: String, yesIsDefault: Boolean): Int {
-      val dialog = ConfirmNotification(VlibProperties.getString("Question"), message)
+      val dialog = VConfirmNotification(VlibProperties.getString("Question"), message)
       dialog.yesIsDefault = yesIsDefault
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
