@@ -97,37 +97,25 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
     val dialog = VInformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
-    dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean) {
-        detachComponent(dialog)
-      }
-    })
+
     showNotification(dialog)
   }
 
   override fun error(message: String?) {
-    val dialog = VErrorNotification(VlibProperties.getString("Error"), message!!, notificationLocale)
-    dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean) {
-        detachComponent(dialog)
-      }
-    })
-    showNotification(dialog)
+    val dialog = VErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
 
+    showNotification(dialog)
   }
 
   override fun warn(message: String) {
     val dialog = VWarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
-    dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean) {
-        detachComponent(dialog)
-      }
-    })
+
     showNotification(dialog)
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
     val dialog = VConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+
     dialog.yesIsDefault = yesIsDefault
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {

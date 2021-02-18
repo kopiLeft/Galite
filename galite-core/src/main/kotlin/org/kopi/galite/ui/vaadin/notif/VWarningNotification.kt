@@ -27,6 +27,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
  *
  * @param title the warning notification title.
  * @param message the warning notification message.
+ * @param locale  the notification locale
  */
 open class VWarningNotification(title: String?,
                                 message: String,
@@ -38,7 +39,6 @@ open class VWarningNotification(title: String?,
   //-------------------------------------------------
 
   override fun setButtons() {
-    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener { close() }
     close.isAutofocus = true
     buttons.add(close)
@@ -50,5 +50,5 @@ open class VWarningNotification(title: String?,
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  private lateinit var close: Button
+  private val close = Button(LocalizedProperties.getString(locale, "CLOSE"))
 }

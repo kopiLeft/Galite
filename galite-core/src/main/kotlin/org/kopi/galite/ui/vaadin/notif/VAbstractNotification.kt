@@ -31,9 +31,13 @@ import com.vaadin.flow.component.icon.VaadinIcon
 /**
  * An abstract implementation of notification components such as
  * warnings, errors, confirms and information.
+ *
+ * @param title the notification title.
+ * @param message the notification message.
+ * @param locale  the notification locale
  */
 abstract class VAbstractNotification(title: String?,
-                                     message: String,
+                                     message: String?,
                                      protected val locale: String)
   : EnhancedDialog(), Focusable<VAbstractNotification> {
 
@@ -66,9 +70,7 @@ abstract class VAbstractNotification(title: String?,
    */
   protected fun fireOnClose(action: Boolean) {
     for (l in listeners) {
-      if (l != null) {
-        l.onClose(action)
-      }
+      l.onClose(action)
     }
   }
 
@@ -76,20 +78,14 @@ abstract class VAbstractNotification(title: String?,
   // ACCESSORS
   //-------------------------------------------------
   /**
-   * Sets the notification title.
-   * @param title The notification title.
-   */
-  fun setNotificationTitle(title: String?) {
-    this.title.text = title
-  }
-
-  /**
    * Sets the notification message.
    *
    * @param text The notification message.
    */
-  private fun setNotificationMessage(text: String) {
-    message.setHtml(text.replace("\n".toRegex(), "<br>").replace("<br><br>".toRegex(), "<br>"))
+  private fun setNotificationMessage(text: String?) {
+    if(text != null) {
+      message.setHtml(text.replace("\n".toRegex(), "<br>").replace("<br><br>".toRegex(), "<br>"))
+    }
   }
 
   /**
@@ -143,8 +139,6 @@ abstract class VAbstractNotification(title: String?,
     this.message.className = Styles.NOTIFICATION_MESSAGE
     buttons.className = Styles.NOTIFICATION_BUTTONS
 
-    content.add(icon)
-    content.add(this.message)
     super.setHeader(this.title)
     content.add(icon)
     setNotificationMessage(message)

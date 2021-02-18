@@ -32,8 +32,9 @@ import com.vaadin.flow.component.icon.VaadinIcon
  *
  * @param title the confirm notification title.
  * @param message the confirm notification message.
+ * @param locale  the notification locale
  */
-class VConfirmNotification(title: String,
+class VConfirmNotification(title: String?,
                            message: String,
                            locale: String)
   : VAbstractNotification(title, message, locale) {
@@ -43,8 +44,6 @@ class VConfirmNotification(title: String,
   //-------------------------------------------------
 
   override fun setButtons() {
-    ok = Button(LocalizedProperties.getString(locale, "OK"))
-    cancel = Button(LocalizedProperties.getString(locale, "NO"))
     cancel.addClickListener { close() }
     ok.addClickListener { close() }
     buttons.add(ok)
@@ -71,9 +70,9 @@ class VConfirmNotification(title: String,
   //------------------------------------------------
   // DATA MEMBERS
   //------------------------------------------------
-  private lateinit var ok: Button
-  private lateinit var cancel: Button
-  var listener: ComponentEventListener<ClickEvent<Button>>? = null
+  private val ok = Button(LocalizedProperties.getString(locale, "OK"))
+  private val cancel = Button(LocalizedProperties.getString(locale, "NO"))
+  private val listener: ComponentEventListener<ClickEvent<Button>>? = null
 
   init {
     Shortcuts.addShortcutListener(this, this::onArrowRightEvent, Key.ARROW_RIGHT)

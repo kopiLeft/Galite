@@ -261,31 +261,19 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
 
     override fun notice(message: String) {
       val dialog = VInformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
-      dialog.addNotificationListener(object : NotificationListener {
-        override fun onClose(yes: Boolean) {
-          application.detachComponent(dialog)
-        }
-      })
+
       showNotification(dialog)
     }
 
     override fun error(message: String?) {
-      val dialog = VErrorNotification(VlibProperties.getString("Error"), message!!, notificationLocale)
-      dialog.addNotificationListener(object : NotificationListener {
-        override fun onClose(yes: Boolean) {
-          application.detachComponent(dialog)
-        }
-      })
+      val dialog = VErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
+
       showNotification(dialog)
     }
 
     override fun warn(message: String) {
       val dialog = VWarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
-      dialog.addNotificationListener(object : NotificationListener {
-        override fun onClose(yes: Boolean) {
-          application.detachComponent(dialog)
-        }
-      })
+
       showNotification(dialog)
     }
 
@@ -299,6 +287,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
 
     override fun ask(message: String, yesIsDefault: Boolean): Int {
       val dialog = VConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+
       dialog.yesIsDefault = yesIsDefault
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(yes: Boolean) {
@@ -307,7 +296,6 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
           } else {
             MessageListener.AWR_NO
           }
-          application.detachComponent(dialog)
         }
       })
       // attach the notification to the application.

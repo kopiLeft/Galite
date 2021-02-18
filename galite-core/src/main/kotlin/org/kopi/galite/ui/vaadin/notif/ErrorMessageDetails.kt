@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.common.VSpan
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.details.Details
@@ -30,6 +31,11 @@ import com.vaadin.flow.component.orderedlayout.Scroller
 /**
  * An error message popup window containing stack trace detail
  * for a server exception.
+ *
+ * @param message The error message.
+ * @param locale  The notification locale
+ * @param parent  The parent dialog containing this message details
+ *
  */
 class ErrorMessageDetails(message: String?,
                           locale: String,
@@ -66,7 +72,7 @@ class ErrorMessageDetails(message: String?,
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private var details = Details()
+  private var details: FocusableDetails
   private var message: VSpan? = null
   private val scroller = Scroller()
 
@@ -76,16 +82,14 @@ class ErrorMessageDetails(message: String?,
   init {
     createContent()
     setMessage(message)
-    details.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
-
-    // TODO: Change this a generic details
-    if (locale == "fr_FR") {
-      details = Details("Afficher les détails",
-                        scroller)
-    } else if (locale == "en_GB") {
-      details = Details("Show details",
-                        scroller)
-    }
+    // TODO: Add localized message
+    details = FocusableDetails("Afficher les détails", scroller)
     add(details)
+  }
+
+  class FocusableDetails(message: String?, content: Component): Details(message, content), Focusable<FocusableDetails> {
+    init {
+      addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
+    }
   }
 }
