@@ -83,7 +83,7 @@ abstract class VAbstractNotification(title: String?,
    * @param text The notification message.
    */
   private fun setNotificationMessage(text: String?) {
-    if(text != null) {
+    if (text != null) {
       message.setHtml(text.replace("\n".toRegex(), "<br>").replace("<br><br>".toRegex(), "<br>"))
     }
   }

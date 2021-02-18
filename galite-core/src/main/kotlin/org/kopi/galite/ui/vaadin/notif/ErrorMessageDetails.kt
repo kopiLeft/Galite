@@ -87,7 +87,9 @@ class ErrorMessageDetails(message: String?,
     add(details)
   }
 
-  class FocusableDetails(message: String?, content: Component): Details(message, content), Focusable<FocusableDetails> {
+  class FocusableDetails(message: String?,
+                         content: Component)
+    : Details(message, content), Focusable<FocusableDetails> {
     init {
       addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
     }
