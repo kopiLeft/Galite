@@ -1524,7 +1524,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       } else {
         fields.forEachIndexed { index, field ->
           if (field.getColumnCount() > 0) {
-            field.setQuery_(fetchCount, result, columns[index])
+            field.setQuery(fetchCount, result, columns[index])
           }
         }
 
@@ -1590,7 +1590,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       var j = 0
       fields.forEach { field ->
         if (field.getColumnCount() > 0) {
-          field.setQuery_(result, columns[j])
+          field.setQuery(result, columns[j])
           j += 1
         }
       }
@@ -2091,7 +2091,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
           fields.forEach {
             if (it.lookupColumn(tableIndex) != null) {
-              it.setQuery_(query.first(), it.getColumn(1 + j)!!.column)
+              it.setQuery(query.first(), it.getColumn(1 + j)!!.column)
               j += 1
             }
           }
@@ -2966,7 +2966,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         fields.forEachIndexed { index, field ->
           if (field.lookupColumn(table) != null) {
-            field.setQuery_(recno, result, columns[index])
+            field.setQuery(recno, result, columns[index])
           }
         }
       } catch (noSuchElementException: NoSuchElementException) {
