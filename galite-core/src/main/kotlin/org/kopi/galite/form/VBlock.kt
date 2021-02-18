@@ -1475,9 +1475,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // create database query
     val columns = getSearchColumns()
-    val table = getSearchTables_()
-    val condition = getSearchConditions_()
-    val orderBy = getSearchOrder_()
+    val table = this.getSearchTables()
+    val condition = this.getSearchConditions()
+    val orderBy = this.getSearchOrder()
 
     if (isMulti()) {
       activeRecord = -1
@@ -1575,7 +1575,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun fetchRecord(id: Int) {
     val columns = getSearchColumns()
-    val table = getSearchTables_()
+    val table = this.getSearchTables()
     val condition = mutableListOf<Op<Boolean>>()
 
     condition.add(Op.build { idColumn eq id })
@@ -1915,30 +1915,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
-  @Deprecated("use getSearchTables_()")
-  fun getSearchTables(): String {
-    TODO()
-  }
-
-  /**
-   * Returns the tables for database query, with outer joins conditions.
-   */
-  fun getSearchTables_(): Join? {
+  fun getSearchTables(): Join? {
     return VBlockDefaultOuterJoin.getSearchTables(this)
   }
 
   /**
    * Returns the search conditions for database query.
    */
-  @Deprecated("use getSearchConditions_()")
-  fun getSearchConditions(): String? {
-    TODO()
-  }
-
-  /**
-   * Returns the search conditions for database query.
-   */
-  fun getSearchConditions_(): Op<Boolean>? {
+  fun getSearchConditions(): Op<Boolean>? {
     val conditionList: MutableList<Op<Boolean>> = mutableListOf()
 
     fields.forEach { field ->
@@ -1969,14 +1953,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search order for database query.
    */
-  fun getSearchOrder(): String? {
-    TODO()
-  }
-
-  /**
-   * Returns the search order for database query.
-   */
-  open fun getSearchOrder_(): MutableList<Pair<Column<*>, SortOrder>> {
+  open fun getSearchOrder(): MutableList<Pair<Column<*>, SortOrder>> {
     val columns = mutableListOf<Column<*>>()
     val priorities = IntArray(fields.size)
     val sizes = IntArray(fields.size)
@@ -2274,8 +2251,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* query from where ? */
-    val tables = getSearchTables_()
-    val conditions = getSearchConditions_()
+    val tables = this@VBlock.getSearchTables()
+    val conditions = this@VBlock.getSearchConditions()
 
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
