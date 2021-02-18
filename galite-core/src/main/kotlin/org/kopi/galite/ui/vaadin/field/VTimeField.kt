@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.field
 import com.vaadin.flow.component.timepicker.TimePicker
 
 /**
- * An integer field.
+ * A time field.
  */
 class VTimeField : TimePicker(), UTextField {
 

@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.field
 import com.vaadin.flow.component.datetimepicker.DateTimePicker
 
 /**
- * An integer field.
+ * A timestamp field.
  */
 class VTimeStampField : DateTimePicker(), UTextField {
 

@@ -181,7 +181,7 @@ class TextField(
       VIntegerField()
     } else if(type == Type.TIME) {
       VTimeField()
-    } else if(type == Type.TIME) {
+    } else if(type == Type.TIMESTAMP) {
       VTimeStampField()
     } else {
       VTextField(col).also {
