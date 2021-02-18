@@ -36,5 +36,6 @@ class VDefaultActor(val code: Int,
                     actorSource: String,
                     iconName: String?,
                     acceleratorKey: Int,
-                    acceleratorModifier: Int
-) : VActor(menuIdent, menuSource, actorIdent, actorSource, iconName, acceleratorKey, acceleratorModifier)
+                    acceleratorModifier: Int,
+                    userActor: Boolean = false
+) : VActor(menuIdent, menuSource, actorIdent, actorSource, iconName, acceleratorKey, acceleratorModifier, userActor)

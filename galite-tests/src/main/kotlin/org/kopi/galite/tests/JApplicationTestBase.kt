@@ -18,17 +18,50 @@ package org.kopi.galite.tests
 
 import java.util.Locale
 
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.chart.VChart
 import org.kopi.galite.db.DBContext
+import org.kopi.galite.report.VReport
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
+import org.kopi.galite.visual.ApplicationContext.Companion.applicationContext
+import org.kopi.galite.visual.FileHandler.Companion.fileHandler
+import org.kopi.galite.visual.ImageHandler.Companion.imageHandler
 import org.kopi.galite.visual.Registry
+import org.kopi.galite.visual.UIFactory
+import org.kopi.galite.visual.WindowController.Companion.windowController
+import org.kopi.vkopi.lib.ui.swing.chart.DChart
+import org.kopi.vkopi.lib.ui.swing.report.DReport
 import org.kopi.vkopi.lib.ui.swing.visual.JApplication
+import org.kopi.vkopi.lib.ui.swing.visual.JApplicationContext
+import org.kopi.vkopi.lib.ui.swing.visual.JFileHandler
+import org.kopi.vkopi.lib.ui.swing.visual.JImageHandler
+import org.kopi.vkopi.lib.ui.swing.visual.JUIFactory
+import org.kopi.vkopi.lib.ui.swing.visual.JWindowController
 
 /**
  * TestBase class for all tests.
  */
 open class JApplicationTestBase : DBSchemaTest() {
+
+  init {
+    GaliteApplication()
+    setupApplication()
+  }
+
+  fun setupApplication() {
+    applicationContext = JApplicationContext()
+    fileHandler = JFileHandler()
+    imageHandler = JImageHandler()
+    windowController = JWindowController()
+    UIFactory.uiFactory = JUIFactory()
+  }
+
+  override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run(false) }
+
+  override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run(false) }
+
   class GaliteRegistry : Registry("Galite", null)
 
   class GaliteApplication() : JApplication(GaliteRegistry()) {
@@ -53,7 +86,7 @@ open class JApplicationTestBase : DBSchemaTest() {
     override val isNoBugReport: Boolean
       get() = true
 
-    override val defaultLocale: Locale?
+    override val defaultLocale: Locale
       get() = Locale.FRANCE
 
     init {
@@ -86,13 +119,5 @@ open class JApplicationTestBase : DBSchemaTest() {
               }
       )
     }
-  }
-
-  init {
-    setupApplication()
-  }
-
-  fun setupApplication() {
-    val app = GaliteApplication()
   }
 }

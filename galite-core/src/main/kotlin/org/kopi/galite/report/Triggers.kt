@@ -27,7 +27,7 @@ object Triggers {
   /**
    * Compute the integer sum in a report column
    */
-  fun sumInteger(c: VReportColumn): VCalculateColumn {
+  fun sumInteger(c: ReportField<Int>): VCalculateColumn {
 
     return object : VCCDepthFirstCircuitN() {
 
@@ -51,7 +51,7 @@ object Triggers {
   /**
    * Compute the number of entries in a report column
    */
-  fun countInteger(c: VReportColumn): VCalculateColumn {
+  fun countInteger(c: ReportField<Int>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
@@ -82,7 +82,7 @@ object Triggers {
   /**
    * Compute the decimal sum in a report column
    */
-  fun sumDecimal(c: VReportColumn): VCalculateColumn {
+  fun sumDecimal(c: ReportField<Decimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
@@ -128,7 +128,7 @@ object Triggers {
   /**
    * Compute the decimal sum in a report column
    */
-  fun sumNullDecimal(c: VReportColumn): VCalculateColumn {
+  fun sumNullDecimal(c: ReportField<Decimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
@@ -152,7 +152,7 @@ object Triggers {
   /**
    * Report a value when all child are identical
    */
-  fun reportIdenticalValue(c: VReportColumn): VCalculateColumn {
+  fun reportIdenticalValue(c: ReportField<*>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount

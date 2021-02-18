@@ -17,11 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.report
 
+import java.awt.Color
+
 import org.kopi.galite.report.MReport
+import org.kopi.galite.report.Parameters
 import org.kopi.galite.report.Point
 import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VReport
 import org.kopi.galite.ui.vaadin.visual.DWindow
+
+import com.vaadin.flow.component.Unit
 
 /**
  * The `DReport` is the visual part of the [VReport] model.
@@ -31,61 +36,137 @@ import org.kopi.galite.ui.vaadin.visual.DWindow
  *
  * @param report The report model.
  */
-class DReport(val report: VReport) : DWindow(report), UReport {
+class DReport(report: VReport) : DWindow(report), UReport {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val model: MReport = report.model // report model
+  private val report: VReport = report
+  private lateinit var table: DTable
+  private var parameters: Parameters? = null
+  private var selectedColumn = 0
+
+  init {
+    model.addReportListener(this)
+    getModel().setDisplay(this)
+    setSizeFull()
+  }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun run() {
-    TODO()
+    report.initReport()
+    report.setMenu()
+    table.focus()
+    setInfoTable()
   }
 
   override fun build() {
-    TODO()
+    // load personal configuration
+    parameters = Parameters(Color(71, 184, 221))
+    table = DTable(model)
+    table.isColumnReorderingAllowed = true
+    // TODO
+    //table.setColumnCollapsingAllowed(true)
+    //table.setNullSelectionAllowed(false)
+    //table.setCellStyleGenerator(ReportCellStyleGenerator(model, parameters))
+    // 200 px is approximately the header window size + the actor pane size
+    ui.ifPresent {
+      it.page.retrieveExtendedClientDetails {
+        table.setHeight(it.windowInnerHeight.toFloat() - 200, Unit.PIXELS)
+      }
+    }
+    setContent(table)
+    resetWidth()
+    addTableListeners()
   }
 
   override fun redisplay() {
-    TODO()
+    // TODO
+  }
+
+  /**
+   * Reorders the report columns.
+   * @param newOrder The new columns order.
+   */
+  fun reorder(newOrder: IntArray) {
+    // TODO
   }
 
   override fun removeColumn(position: Int) {
-    TODO()
+    model.removeColumn(position)
+    model.initializeAfterRemovingColumn(table.convertColumnIndexToView(position))
+
+    // set new order.
+    val pos = IntArray(model.getAccessibleColumnCount())
+    for (i in 0 until model.getAccessibleColumnCount()) {
+      pos[i] = if (model.getDisplayOrder(i) > position) model.getDisplayOrder(i) - 1 else model.getDisplayOrder(i)
+    }
+    // table.fireStructureChanged() TODO
+    report.columnMoved(pos)
   }
 
   override fun addColumn(position: Int) {
-    TODO("Not yet implemented")
+    var position = position
+    position = table.convertColumnIndexToView(position)
+    position += 1
+    val headerLabel = "col" + model.getColumnCount()
+    model.addColumn(headerLabel, position)
+    // move last column to position.
+    val pos = IntArray(model.getAccessibleColumnCount())
+    for (i in 0 until position) {
+      pos[i] = model.getDisplayOrder(i)
+    }
+    for (i in position + 1 until model.getAccessibleColumnCount()) {
+      pos[i] = model.getDisplayOrder(i - 1)
+    }
+    pos[position] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
+    // table.fireStructureChanged() TODO
+    report.columnMoved(pos)
   }
 
   override fun addColumn() {
-    TODO("Not yet implemented")
+    //addColumn(table.convertColumnIndexToModel(table.getColumnCount() - 1))
   }
 
   override fun getTable(): UReport.UTable {
-    TODO("Not yet implemented")
+    return table
   }
 
   override fun contentChanged() {
-    TODO("Not yet implemented")
+    if (this::table.isInitialized) {
+      // TODO
+    }
   }
 
   override fun columnMoved(pos: IntArray) {
-    TODO("Not yet implemented")
+    reorder(pos)
+    model.columnMoved(pos)
+    redisplay()
   }
 
   override fun resetWidth() {
-    TODO("Not yet implemented")
+    // TODO
   }
 
   override fun getSelectedColumn(): Int {
-    TODO("Not yet implemented")
+    return table.selectedColumn
   }
 
-  override fun getSelectedCell(): Point {
-    TODO("Not yet implemented")
-  }
+  override fun getSelectedCell(): Point = Point(table.selectedColumn, table.selectedRow)
 
   override fun setColumnLabel(column: Int, label: String) {
-    TODO("Not yet implemented")
+    // Nothing to do
+  }
+
+  /**
+   * Notify the report table that the report content has been
+   * change in order to update the table content.
+   */
+  fun fireContentChanged() {
+    // TODO
   }
 
   /**
@@ -96,28 +177,29 @@ class DReport(val report: VReport) : DWindow(report), UReport {
     get() {
       val displayOrder = IntArray(model.getColumnCount())
       for (i in 0 until model.getColumnCount()) {
-        displayOrder[i] = table!!.convertColumnIndexToModel(i)
+        displayOrder[i] = table.convertColumnIndexToModel(i)
       }
       return displayOrder
     }
 
   /**
+   * Returns the number of columns displayed in the table
+   * @return tThe number or columns displayed
+   */
+  val columnCount: Int
+    get() = TODO()
+
+  /**
    * Add listeners to the report table.
    */
   private fun addTableListeners() {
-    TODO()
+    //TODO()
   }
 
   /**
    * Display table informations in the footer of the table
    */
   private fun setInfoTable() {
-    TODO()
+    //TODO()
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val model: MReport = report.model // report model
-  private var table: DTable? = null
 }

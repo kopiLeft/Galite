@@ -21,12 +21,9 @@ import java.util.Locale
 import org.kopi.galite.chart.Chart
 import org.kopi.galite.chart.VChartType
 import org.kopi.galite.chart.VColumnFormat
-import org.kopi.galite.common.CHARTTYPE
-import org.kopi.galite.common.INITCHART
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.decimal
 import org.kopi.galite.visual.VColor
 
 object ChartSample: Chart() {
@@ -88,18 +85,18 @@ object ChartSample: Chart() {
 
   init {
     city.add("Tunis") {
-      this[area] = decimal("34600")
+      this[area] = Decimal("34600")
       this[population] = 1056247
     }
 
     city.add("Kasserine") {
-      this[area] = decimal("806600")
+      this[area] = Decimal("806600")
       this[population] = 439243
     }
 
     city.add("Bizerte") {
       this[population] = 368500
-      this[area] = decimal("568219")
+      this[area] = Decimal("568219")
     }
   }
 }

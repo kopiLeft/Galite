@@ -17,13 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import java.awt.event.KeyEvent
+
 import org.kopi.galite.form.ULabel
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.label.SortableLabel
 import org.kopi.galite.visual.VActor
-import java.awt.event.KeyEvent
 
 /**
  * Creates a new `DLabel` instance.
@@ -35,21 +36,23 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-
   /**
    * Prepares the label's snapshot.
    * @param activ The field state.
    */
   fun prepareSnapshot(activ: Boolean) {
+    text
     // TODO
   }
 
-  override fun init(text: String?, toolTip: String?) {
-    this.tooltip = toolTip
+  override fun init(text: String?, help: String?) {
+    this.tooltip = help
+    //  BackgroundThreadHandler.access(new Runnable() {
     element.text = text
-    if (toolTip != null) {
-      element.text = Utils.createTooltip(toolTip)
+    if (help != null) {
+      element.setProperty("innerHTML", help)
     }
+    //}
   }
 
   /**
@@ -63,12 +66,12 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
       // Only show base help on a skipped field
       // Actors are not shown since they are not active.
       if (tooltip != null) {
-        element.text = Utils.createTooltip(tooltip)
+        element.setProperty("innerHTML", Utils.createTooltip(tooltip))
       }
     } else {
       val description = buildDescription(model, tooltip)
       if (description != null) {
-        element.text = Utils.createTooltip(description)
+        element.setProperty("innerHTML", Utils.createTooltip(description))
       }
     }
     if (model.model.getAccess(row) == VConstants.ACS_HIDDEN) {
@@ -145,29 +148,15 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     return description
   }
 
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var infoText: String? = null
-
   /**
-   * Returns the info text.
-   * @return The info text.
+   * Sets the info text.
    */
-  open fun getInfoText(): String? {
-    return infoText
-  }
-
   override fun setInfoText(info: String?) {
+    //BackgroundThreadHandler.access(new Runnable() {
     infoText = info
     super@DLabel.setInfoText(info)
+    //}
   }
-
-  /**
-   * `true` is the label is in detail mode.
-   */
-  var detailMode = false
-  private var tooltip: String? = null
 
   companion object {
     /**
@@ -188,6 +177,27 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
       }
     }
   }
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+
+  /**
+   * The info text used to display search operator.
+   */
+  var infoText: String? = ""
+    private set
+
+  /**
+   * The label can execute field action trigger.
+   */
+  var hasAction = false
+
+  /**
+   * `true` is the label is in detail mode.
+   */
+  var isInDetail = false
+  private var tooltip: String? = null
 
   //---------------------------------------------------
   // CONSTRUCTOR

@@ -163,11 +163,13 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
    * @param     manager         the manger to use for localization
    */
   private fun localize(manager: LocalizationManager) {
-    val loc = manager.getReportLocalizer(source)
+    if(ApplicationContext.getDefaultLocale() != locale) {
+      val loc = manager.getReportLocalizer(source)
 
-    setPageTitle(loc.getTitle())
-    help = loc.getHelp()
-    model.columns.forEach { it?.localize(loc) }
+      setPageTitle(loc.getTitle())
+      help = loc.getHelp()
+      model.columns.forEach { it?.localize(loc) }
+    }
   }
 
   // ----------------------------------------------------------------------

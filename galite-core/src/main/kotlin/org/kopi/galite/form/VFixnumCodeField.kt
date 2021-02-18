@@ -25,6 +25,7 @@ import org.kopi.galite.list.VFixnumCodeColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.util.base.InconsistencyException
+import java.math.BigDecimal
 
 /**
  * Constructor
@@ -148,7 +149,7 @@ open class VFixnumCodeField(bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = if (value[r] == -1) "NULL" else codes[value[r]]!!.toSql()
+  override fun getSqlImpl(r: Int): BigDecimal? = if (value[r] == -1) null else codes[value[r]]!!.toSql()
 
   /**
    * Returns the data type handled by this field.

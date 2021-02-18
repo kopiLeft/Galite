@@ -18,6 +18,8 @@
 
 package org.kopi.galite.form
 
+import java.math.BigDecimal
+
 import kotlin.math.max
 import kotlin.reflect.KClass
 
@@ -431,8 +433,8 @@ class VFixnumField(val bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    return if (value[r] == null) "NULL" else value[r]!!.toSql()
+  override fun getSqlImpl(r: Int): BigDecimal? {
+    return if (value[r] == null) null else value[r]!!.toSql()
   }
 
   /**
@@ -765,7 +767,7 @@ class VFixnumField(val bufferSize: Int,
     }
 
     /**
-     * Calculates the upper bound of a fixnum field : FIXNUM(digits, scale)
+     * Calculates the upper bound of a decimal field : DECIMAL(digits, scale)
      *
      * @param     digits          the number of total digits.
      * @param     scale           the number of digits representing the fractional part.
@@ -789,7 +791,7 @@ class VFixnumField(val bufferSize: Int,
     }
 
     /**
-     * Computes the the width of a fixnum field : FIXNUM(digits, scale)
+     * Computes the the width of a decimal field : DECIMAL(digits, scale)
      *
      * @param     digits          the number of total digits.
      * @param     scale           the number of digits representing the fractional part.

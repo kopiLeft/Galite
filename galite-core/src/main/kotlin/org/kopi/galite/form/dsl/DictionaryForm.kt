@@ -19,6 +19,7 @@ package org.kopi.galite.form.dsl
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.form.VDictionary
 import org.kopi.galite.form.VDictionaryForm
+import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VWindow
 
 /**
@@ -44,8 +45,8 @@ abstract class DictionaryForm : VDictionary, Form() {
 
   /** Form model */
   override val model: VDictionaryForm by lazy {
-    genLocalization()
     object : VDictionaryForm() {
+      override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale()
       override fun init() {
         initialize()
       }

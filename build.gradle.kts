@@ -18,7 +18,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.4.0" apply false
+  id("org.jetbrains.kotlin.jvm") version "1.4.30" apply false
 }
 
 subprojects {
@@ -26,6 +26,9 @@ subprojects {
 
   repositories {
     jcenter()
+    maven {
+      url = uri("https://maven.vaadin.com/vaadin-addons")
+    }
   }
 
   dependencies {

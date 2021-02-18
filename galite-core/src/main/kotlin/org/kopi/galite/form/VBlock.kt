@@ -20,6 +20,7 @@ package org.kopi.galite.form
 
 import java.sql.SQLException
 import java.util.EventListener
+import java.util.Locale
 
 import javax.swing.event.EventListenerList
 
@@ -178,22 +179,30 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    * @param     manager         the manger to use for localization
    */
-  fun localize(manager: LocalizationManager) {
-    val loc = manager.getBlockLocalizer(source, name)
+  fun localize(manager: LocalizationManager, locale: Locale?) {
+    if(ApplicationContext.getDefaultLocale() != locale) {
+      val loc = manager.getBlockLocalizer(source, name)
 
-    title = loc.getTitle()
-    help = loc.getHelp()
+      title = loc.getTitle()
+      help = loc.getHelp()
 
-    if (indices != null) {
-      for (i in indices!!.indices) {
-        //!!! for now, overwrite ident with localized message
-        //!!! inhibits relocalization of a running form
-        indices!![i] = loc.getIndexMessage(indices!![i])
+      if (indices != null) {
+        for (i in indices!!.indices) {
+          //!!! for now, overwrite ident with localized message
+          //!!! inhibits relocalization of a running form
+          indices!![i] = loc.getIndexMessage(indices!![i])
+        }
       }
     }
     fields.forEach {
       if (!it.isInternal()) {
-        it.localize(loc)
+        if(ApplicationContext.getDefaultLocale() != locale) {
+          val loc = manager.getBlockLocalizer(source, name)
+          it.localize(loc)
+        }
+        if(it is VCodeField && it.localizedByGalite) {
+          it.localize(manager)
+        }
       }
     }
   }
@@ -1266,8 +1275,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // - can be removed if the method checkBlock is removed
           if (ApplicationContext.getDefaults() != null
                   && ApplicationContext.getDefaults().isDebugModeEnabled()) {
-            if ((form.getDisplay() as UForm).getRuntimeDebugInfo() != null) {
-              (form.getDisplay() as UForm).getRuntimeDebugInfo()!!.printStackTrace()
+            if ((form.getDisplay() as UForm).runtimeDebugInfo != null) {
+              (form.getDisplay() as UForm).runtimeDebugInfo!!.printStackTrace()
             }
             println("INFO: VBlock checkBlock " + Thread.currentThread())
           }
@@ -2208,7 +2217,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       /* skip fields with fixed value */
       if (!field.isNull(activeRecord) &&
               field.getSearchOperator() == VConstants.SOP_EQ &&
-              !field.getSql(activeRecord)!!.contains('*')) {
+              !field.getSql(activeRecord)!!.toString().contains('*')) {
         continue
       }
       query_tab[query_cnt++] = field
@@ -2962,7 +2971,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             val sql = field.getSql(recno)
 
             if (sql != "?") { // dont lookup for blobs...
-              if (field.getSql(recno).equals(Utils.NULL_LITERAL)) {
+              if (field.getSql(recno)!!.equals(Utils.NULL_LITERAL)) {
                 conditions.add(Op.build { column.isNull() })
               } else {
                 conditions.add(Op.build { column eq field.getSql(recno)!! })
@@ -3129,7 +3138,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    */
   protected fun fillIdField(recno: Int, id: Int) {
-    TODO()
+    if (id == -1) {
+     // TODO()
+    }
+
+    idField.setInt(recno, id)
   }
 
   /**
@@ -3685,6 +3698,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected var options = 0 // block options
   protected lateinit var access: IntArray // access flags for each mode
   protected var indices: Array<String>? = null // error messages for violated indices
+  protected var indicesIdents: Array<String>? = null // error messages for violated indices
   internal var commands: Array<VCommand>? = null // commands
   open var actors: Array<VActor>? = null // actors to send to form (move to block import)
     get(): Array<VActor>? {
@@ -3792,7 +3806,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   var maxColumnPos = 0
   var displayedFields = 0
   private var isFilterVisible = false
-  protected var dropListMap = HashMap<Any?, Any?>()
+  protected var dropListMap = HashMap<String, String>()
 
   companion object {
     // record info flags

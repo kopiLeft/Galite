@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <modules>
-    <module ident="2000" label="Menu 1" help="Menu 1" />
-    <module ident="1000" label="Menu 2" help="Menu 2" />
-    <module ident="2009" label="Test form" help="Test form" />
-    <module ident="2010" label="test fields visibility" help="form for test fields visibility" />
+    <module ident="1000" label="CLIENTS" help="Clients management" />
+        <module ident="1001" label="CLIENTS" help="Clients management" />
+    <module ident="1010" label="Test" help="Suppliers management" />
+        <module ident="1101" label="Test form1" help="Test form" />
+        <module ident="1110" label="Test form2" help="Test form" />
+    <module ident="2000" label="COMMANDS" help="Commands management" />
+        <module ident="2001" label="COMMANDS" help="Commands management" />
+    <module ident="3000" label="PRODUCTS" help="Products management" />
+        <module ident="3001" label="PRODUCTS" help="Products management" />
+    <module ident="4000" label="BILLS" help="Bills management" />
+        <module ident="4001" label="BILLS" help="Bills management" />
+    <module ident="5000" label="BILL PRODUCTS" help="Bill of products" />
+        <module ident="5001" label="BILL PRODUCTS" help="Bill of products" />
+    <module ident="6000" label="STOCKS" help="Stock management" />
+        <module ident="6001" label="STOCKS" help="Stock management" />
+    <module ident="7000" label="TAX RULES" help="Tax Rules management" />
+        <module ident="7001" label="TAX RULES" help="Tax Rules management" />
+    <module ident="8000" label="PROVIDERS" help="Providers management" />
+        <module ident="8001" label="PROVIDERS" help="Providers management" />
 </modules>

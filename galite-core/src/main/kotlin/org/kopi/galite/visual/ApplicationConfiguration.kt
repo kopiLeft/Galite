@@ -62,7 +62,7 @@ abstract class ApplicationConfiguration {
   /**
    * Returns the debug mode (that you can change dynamically)
    */
-  fun isDebugModeEnabled(): Boolean = false
+  open fun isDebugModeEnabled(): Boolean = false
 
   /**
    * Property debug.mail.recipient

@@ -219,14 +219,16 @@ abstract class VForm : VWindow, VConstants {
    * @param     manager         the manger to use for localization
    */
   private fun localize(manager: LocalizationManager) {
-    val loc = manager.getFormLocalizer(source)
+    if(ApplicationContext.getDefaultLocale() != locale) {
+      val loc = manager.getFormLocalizer(source)
 
-    setTitle(loc.getTitle())
-    for (i in pages.indices) {
-      pages[i] = loc.getPage(i)
+      setTitle(loc.getTitle())
+      for (i in pages.indices) {
+        pages[i] = loc.getPage(i)
+      }
     }
     blocks.forEach { block ->
-      block.localize(manager)
+      block.localize(manager, locale)
     }
   }
 
@@ -755,7 +757,8 @@ abstract class VForm : VWindow, VConstants {
   // static (from DSL) data
   override var source: String? = null // qualified name of source file
   lateinit var blocks: Array<VBlock>
-  internal lateinit var pages: Array<String?>
+  internal lateinit var pages: Array<String>
+  internal lateinit var pagesIdents: Array<String>
   internal var help: String? = null //the name of this field
   internal val VKT_Triggers = mutableListOf(IntArray(VConstants.TRG_TYPES.size))
   internal val formTriggers = mutableMapOf<Int, Trigger>()

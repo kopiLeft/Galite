@@ -138,10 +138,10 @@ class VListDialog(list: Array<VListColumn?>,
       for (j in 0 until i) {
         val value1 = data[left][translatedIdents[j]]
         val value2 = data[left][translatedIdents[j + 1]]
-        var swap = if (value1 != null && value2 != null) {
+        val swap = if (value1 != null && value2 != null) {
           when (value1) {
             is String -> {
-              value1 > (value2 as? String)!!
+              value1 > value2 as String
             }
             is Number -> {
               value1.toDouble() > (value2 as Number).toDouble()
@@ -150,7 +150,7 @@ class VListDialog(list: Array<VListColumn?>,
               value1 && !(value2 as Boolean)
             }
             is Date -> {
-              value1 > value2 as? Date
+              value1 > value2 as Date
             }
             else -> {
               false

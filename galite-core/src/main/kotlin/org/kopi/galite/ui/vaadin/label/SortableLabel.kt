@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.label
 
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
@@ -27,7 +26,7 @@ import com.vaadin.flow.component.html.Image
 import java.util.*
 
 /**
- * The server side of the sortable label component.
+ * The sortable label component.
  */
 open class SortableLabel(text: String?) : Label(), HasComponents {
 

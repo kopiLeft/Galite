@@ -302,25 +302,27 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
     report.initReport();
     report.setMenu();
 
-    Frame       frame;
-    Rectangle   bounds;
+    if(visible) {
+      Frame frame;
+      Rectangle bounds;
 
-    frame = getFrame();
-    frame.pack(); // layout frame; get preferred size
-    // calulate bounds for frame to fit screen
-    bounds = Utils.calculateBounds(frame, null, null);
-    // set a minimum height for the window; there maybe only
-    // one or two lines at the beginning but after opening a column
-    // there are 50 lines
-    bounds.height = Math.max(bounds.height, 500); // 500 is aprox. 15 lines
-    frame.setBounds(bounds);
-    frame.setVisible(true);
-    setInfoTable();
-    // Focus this panel to dispatch the key-events to the menu.
-    // If "table" is focused, it will handle "esc" and "F2"
-    // itself and will consume them.
-    setFocusable(true);
-    requestFocusInWindow();
+      frame = getFrame();
+      frame.pack(); // layout frame; get preferred size
+      // calulate bounds for frame to fit screen
+      bounds = Utils.calculateBounds(frame, null, null);
+      // set a minimum height for the window; there maybe only
+      // one or two lines at the beginning but after opening a column
+      // there are 50 lines
+      bounds.height = Math.max(bounds.height, 500); // 500 is aprox. 15 lines
+      frame.setBounds(bounds);
+      frame.setVisible(true);
+      setInfoTable();
+      // Focus this panel to dispatch the key-events to the menu.
+      // If "table" is focused, it will handle "esc" and "F2"
+      // itself and will consume them.
+      setFocusable(true);
+      requestFocusInWindow();
+    }
   }
 
   /**

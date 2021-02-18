@@ -26,7 +26,6 @@ import org.jetbrains.exposed.sql.alias
 import org.kopi.galite.common.FieldList
 import org.kopi.galite.common.ListDescription
 import org.kopi.galite.common.LocalizationWriter
-import org.kopi.galite.exceptions.InvalidValueException
 import org.kopi.galite.form.VDictionary
 import org.kopi.galite.list.VList
 
@@ -38,9 +37,9 @@ import org.kopi.galite.list.VList
  * It allows optionally to define a constraint that makes restrictions
  * on the set of allowed values.
  */
-abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
-                                              height: Int? = null,
-                                              visibleHeight: Int? = null)
+abstract class ListDomain<T>(width: Int? = null,
+                             height: Int? = null,
+                             visibleHeight: Int? = null)
   : Domain<T>(width, height, visibleHeight) {
 
   /**
@@ -94,7 +93,14 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
   /**
    * Mapping of all values that a domain can take
    */
-  lateinit var list: FieldList<T>
+  val list: FieldList<T>
+    get() = FieldList(ident,
+                      table,
+                      access,
+                      columns,
+                      autocompleteType,
+                      autocompleteLength,
+                      access != null)
 
   /**
    * Transforms values in capital letters.
@@ -144,14 +150,6 @@ abstract class ListDomain<T : Comparable<T>?>(width: Int? = null,
    *
    */
   override fun genTypeLocalization(writer: LocalizationWriter) {
-    list = FieldList(ident,
-                     table,
-                     access,
-                     columns,
-                     autocompleteType,
-                     autocompleteLength,
-                     access != null
-    )
     writer.genType(list)
   }
 }

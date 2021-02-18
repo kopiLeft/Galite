@@ -19,8 +19,6 @@ package org.kopi.galite.ui.vaadin.main
 
 import java.util.Locale
 
-import kotlin.collections.MutableList
-
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
@@ -29,6 +27,7 @@ import org.kopi.galite.ui.vaadin.menu.ModuleList
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -47,15 +46,14 @@ import com.vaadin.flow.component.contextmenu.MenuItem
  * @param logo The application logo
  * @param href The logo link.
  */
-class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, Focusable<MainWindow> {
+class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
 
   private val listeners = mutableListOf<MainWindowListener>()
-  private val main = VMain()
-  private var menus: MutableList<ModuleList>? = null
+  private var menus = mutableListOf<ModuleList>()
   private val header = VHeader()
   private val windowsLink = VWindows()
   private val welcome = VWelcome()
@@ -69,6 +67,9 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   private val originalWindowTitle: String? = null
 
   init {
+    val main = VMain()
+    setWidthFull()
+
     className = Styles.MAIN_WINDOW
     setHref(href)
     setLogo(logo)
@@ -76,11 +77,10 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
 
     content.setContent(container)
     addToNavbar(header)
-    header.setWindows(windowsLink)
     header.setWelcome(welcome)
+    welcome.add(windowsLink)
     main.setContent(content)
-    main.width = "100%"
-    main.height = "100%"
+    main.setSizeFull()
     content.width = "100%"
     content.height = "100%"
     setContent(main)
@@ -96,25 +96,51 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
+
   /**
-   * Adds a menu to this main window.
-   * @param moduleList The module menu to be added
+   * Sets the main menu component.
+   * @param moduleList The module list widget.
    */
-  fun addMenu(moduleList: ModuleList) {
-    if (menus == null) {
-      menus = ArrayList()
-    }
-    menus!!.add(moduleList)
-    main.add(moduleList)
+  fun setMainMenu(moduleList: ModuleList) {
+    header.setMainMenu(moduleList)
+    menus.add(moduleList)
+  }
+
+  /**
+   * Sets the user menu attached to this main window.
+   * @param moduleList The user menu.
+   */
+  fun setUserMenu(moduleList: ModuleList) {
+    welcome.setUserMenu(moduleList)
+    menus.add(moduleList)
+  }
+
+  /**
+   * Sets the admin menu attached to this main window.
+   * @param moduleList The admin menu.
+   */
+  fun setAdminMenu(moduleList: ModuleList) {
+    welcome.setAdminMenu(moduleList)
+    menus.add(moduleList)
+  }
+
+  /**
+   * Sets the bookmarks menu attached to this main window.
+   * @param menu The favorites menu.
+   */
+  fun setBookmarksMenu(menu: ModuleList) {
+    welcome.setBookmarksMenu(menu)
+    menus.add(menu)
   }
 
   /**
    * Adds a window to this main window.
    * @param window The window to be added.
    */
-  fun addWindow(window: Component) {
+  fun addWindow(window: Component, title: String) {
     windowsList.add(window)
-    main.add(window)
+    container.addWindow(window, title)
+    container.showWindow(window)
   }
 
   /**
@@ -134,14 +160,12 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   /**
    * The connected user name.
    */
-  var connectedUser: String? = null
+  var connectedUser: String = ""
+    set(value) {
+      field = value
 
-  operator fun iterator(): Iterator<Component> {
-    val components = mutableListOf<Component>()
-    components.addAll(menus!!)
-    components.addAll(windowsList)
-    return components.iterator()
-  }
+      welcome.setConnectedUser(value)
+    }
 
   /**
    * Adds a main window listener.
@@ -204,7 +228,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     }
   }
 
-
   /**
    * Sets the href for the anchor element.
    * @param href the href
@@ -217,7 +240,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    * Sets the target frame.
    * @param target The target frame.
    */
-  fun setTarget(target: String?) {
+  fun setTarget(target: String) {
     header.setTarget(target)
   }
 

@@ -172,6 +172,7 @@ class Module(val id: Int,
         v.printStackTrace()
         throw v
       } catch (t: Throwable) {
+        throw t // TODO: To be removed
         ApplicationContext.reportTrouble("Form loading",
                                          "Module.startForm(DBContext ctxt, " +
                                                  "String object, String description, ImageIcon icon)",

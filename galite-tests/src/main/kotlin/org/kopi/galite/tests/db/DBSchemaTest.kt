@@ -159,7 +159,7 @@ open class DBSchemaTest : TestBase() {
   /**
    * Initialises the database with creating the necessary tables and creates users.
    */
-  fun initDatabase(user: String = connectedUser) {
+  open fun initDatabase(user: String = connectedUser) {
     transaction {
       createDBSchemaTables()
 

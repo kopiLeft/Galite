@@ -17,9 +17,10 @@
 
 plugins {
   kotlin("jvm") apply true
+  id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
 
-val exposedVersion = "0.27.1"
+val exposedVersion = "0.29.1"
 val vaadinVersion = "18.0.3"
 val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
@@ -33,9 +34,10 @@ dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
   api("org.jetbrains.exposed", "exposed-jodatime", exposedVersion)
+  api("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
 
   // Vaadin dependencies
-  implementation("com.vaadin", "vaadin-core", vaadinVersion) {
+  implementation("com.vaadin", "vaadin-core") {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
             "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
@@ -65,4 +67,13 @@ dependencies {
 
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", getoptVersion)
+
+  // EnhancedDialog dependency
+  implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
+}
+
+dependencyManagement {
+  imports {
+    mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
+  }
 }

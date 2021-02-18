@@ -17,8 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.actor
 
-import com.vaadin.flow.component.Component
+import org.kopi.galite.ui.vaadin.base.Styles
+
 import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.html.Image
 
 /**
  * The actor component
@@ -29,13 +34,31 @@ import com.vaadin.flow.component.HasEnabled
  * @param icon The actor icon.
  * @param acceleratorKey The accelerator key.
  * @param modifiersKey The modifiers key.
- * TODO: Implement this class with appropriate component
  */
-open class Actor(caption: String?,
+open class Actor(val caption: String?,
                  description: String?,
-                 menu: String,
-                 icon: String?,
-                 acceleratorKey: Int,
-                 vararg modifiersKey: Int) : Component(), HasEnabled {
+                 val menu: String,
+                 val icon: String?,
+                 val acceleratorKey: Key,
+                 val modifiersKey: KeyModifier?) : Button(), HasEnabled {
 
+  //private val listeners: List<ActionListener>? = null
+
+  init {
+    className = Styles.ACTOR
+
+    super.setText(caption)
+
+    if (icon != null) {
+      val img = Image()
+      img.src = icon
+      super.setIcon(img)
+    }
+
+    if (modifiersKey != null) {
+      super.addClickShortcut(acceleratorKey, modifiersKey)
+    } else {
+      super.addClickShortcut(acceleratorKey)
+    }
+  }
 }

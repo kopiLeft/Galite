@@ -19,6 +19,7 @@
 package org.kopi.galite.form
 
 import org.kopi.galite.l10n.FieldLocalizer
+import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.list.VList
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.MessageCode
@@ -34,7 +35,8 @@ import org.kopi.galite.visual.VlibProperties
 abstract class VCodeField(val bufferSize: Int,
                           val type: String,
                           var source: String,
-                          val idents: Array<String>)
+                          val idents: Array<String>,
+                          val localizedByGalite: Boolean = false)
   : VField(1, 1) {
 
   override fun hasAutofill(): Boolean = true
@@ -334,7 +336,7 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  abstract override fun getSqlImpl(r: Int): String?
+  abstract override fun getSqlImpl(r: Int): Any?
 
   /**
    * Copies the value of a record to another
@@ -391,10 +393,19 @@ abstract class VCodeField(val bufferSize: Int,
   /**
    * Localizes this field
    *
-   * @param     parent         the caller localizer
+   * @param     loc         the caller localizer
    */
-  override fun localize(loc: FieldLocalizer?) {
-    val loc = loc!!.manager.getTypeLocalizer(source, type)
+  override fun localize(loc: FieldLocalizer) {
+    localize(loc.manager)
+  }
+
+  /**
+   * Localizes this field
+   *
+   * @param     manager         the localizer manager
+   */
+  fun localize(manager: LocalizationManager) {
+    val loc = manager.getTypeLocalizer(source, type)
 
     val labels = arrayOfNulls<String>(idents.size)
 
@@ -402,10 +413,13 @@ abstract class VCodeField(val bufferSize: Int,
       labels[i] = loc.getCodeLabel(idents[i])
     }
 
-    this.labels = labels.requireNoNulls()
-    setDimension(getMaxWidth(this.labels), 1)
+    initLabels(labels.requireNoNulls())
   }
 
+  fun initLabels(labels: Array<String>) {
+    this.labels = labels
+    setDimension(getMaxWidth(this.labels), 1)
+  }
 
   /**
    * represents the name of this field
