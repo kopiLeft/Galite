@@ -3083,12 +3083,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       fillIdField(recno, id)
 
       if (!blockHasNoUcOrTsField()) {
-        val ucFld = ucField
-        val tsFld = tsField
-
-        assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
-        ucFld?.setInt(recno, 0)
-        tsFld?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
+        assert(ucField != null || tsField != null) { "UC or TS field must exist (Block = $name)." }
+        ucField?.setInt(recno, 0)
+        tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
       }
 
       val result = mutableListOf<Pair<Column<Any>, Any?>>()
@@ -3171,16 +3168,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)
-      val idFld = idField
-      val ucFld = ucField
-      val tsFld = tsField
+
       val result = mutableListOf<Pair<Column<Any>, Any?>>()
 
-      tsFld?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
-      ucFld?.setInt(recno, ucFld.getInt()!! + 1)
+      tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
+      ucField?.setInt(recno, ucField!!.getInt()!! + 1)
       for (field in fields) {
         /* do not update ID field */
-        if (field == idFld) {
+        if (field == idField) {
           continue
         }
         @Suppress("UNCHECKED_CAST")
@@ -3198,7 +3193,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       val table = tables!![0]
 
-      table.update({ idColumn eq idFld.getInt(recno)!! }) { table ->
+      table.update({ idColumn eq idField.getInt(recno)!! }) { table ->
         result.forEach {
           table[it.first] = it.second!!
         }
@@ -3270,21 +3265,18 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected fun checkRecordUnchanged(recno: Int) {
     // Assertion enabled only for tables with ID
     if (!blockHasNoUcOrTsField()) {
-      val idFld: VField = idField
-      val ucFld: VField? = ucField
-      val tsFld = tsField
       val table = tables!![0]
-      val value = idFld.getInt(recno)
+      val value = idField.getInt(recno)
 
-      assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
+      assert(ucField != null || tsField != null) { "UC or TS field must exist (Block = $name)." }
 
-      val ucColumn = if (ucFld == null) {
+      val ucColumn = if (ucField == null) {
         intLiteral(-1)
       } else {
         Column(table, "UC", IntegerColumnType())
       }
 
-      val tsColumn = if (tsFld == null) {
+      val tsColumn = if (tsField == null) {
         intLiteral(-1)
       } else {
         Column(table, "TS", IntegerColumnType())
@@ -3300,11 +3292,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         var changed = false
 
         transaction {
-          if (ucFld != null) {
-            changed = changed or (ucFld.getInt(recno) != query.first()[ucColumn])
+          if (ucField != null) {
+            changed = changed or (ucField!!.getInt(recno) != query.first()[ucColumn])
           }
-          if (tsFld != null) {
-            changed = changed or (tsFld.getInt(recno) != query.first()[tsColumn])
+          if (tsField != null) {
+            changed = changed or (tsField!!.getInt(recno) != query.first()[tsColumn])
           }
 
           if (changed) {
