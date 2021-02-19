@@ -103,7 +103,7 @@ class StylesInjector {
 
       append(".$name{")
       if (align != VConstants.ALG_LEFT) {
-        append("text-align: $cSSAlign !important;")
+        append("text-align: $cssAlign !important;")
       }
       if (background != null) {
         append("background-color: " + Utils.toString(background).toString() + " !important;")
@@ -118,8 +118,8 @@ class StylesInjector {
      * Return the CSS align of the alignment constants.
      * @return The CSS align of the alignment constants.
      */
-    protected val cSSAlign: String
-      protected get() = when (align) {
+    protected val cssAlign: String
+      get() = when (align) {
         VConstants.ALG_LEFT -> "left"
         VConstants.ALG_RIGHT -> "right"
         VConstants.ALG_CENTER -> "center"
