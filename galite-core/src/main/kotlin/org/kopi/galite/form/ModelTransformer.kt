@@ -25,7 +25,7 @@ package org.kopi.galite.form
  * field to a lot of spaces.
  */
 interface ModelTransformer {
-  fun toGui(modelTxt: String): String
+  fun toGui(modelTxt: String?): String?
   fun toModel(guiTxt: String): String
   fun checkFormat(guiTxt: String): Boolean
 }

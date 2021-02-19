@@ -15,24 +15,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
-
-import com.vaadin.flow.component.Component
+package org.kopi.galite.ui.vaadin.notif
 
 /**
- * Error notification component.
+ * Information notification component.
+ *
  * @param title the warning notification title.
  * @param message the warning notification message.
  */
-class ErrorNotification(title: String, message: String?) : VErrorNotification(title, message) {
-  //---------------------------------------------------
-  // ACCESSORS
-  //---------------------------------------------------
-  /**
-   * Sets the error owner.
-   * @param owner The error owner.
-   */
-  fun setOwner(owner: Component) {
-
-  }
-}
+class InformationNotification(title: String, message: String) : VInformationNotification(title, message)

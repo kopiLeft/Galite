@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import org.kopi.galite.ui.vaadin.notification.NotificationListener
+import org.kopi.galite.ui.vaadin.notif.NotificationListener
 
 import com.vaadin.flow.component.HasValue
 

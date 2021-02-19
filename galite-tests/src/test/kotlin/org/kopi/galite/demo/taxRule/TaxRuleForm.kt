@@ -14,25 +14,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.demo.billproduct
+package org.kopi.galite.demo.taxRule
 
 import java.util.Locale
 
 import org.kopi.galite.demo.Application
-import org.kopi.galite.demo.Bill
-import org.kopi.galite.demo.BillProduct
-import org.kopi.galite.demo.Product
+import org.kopi.galite.demo.TaxRule
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.type.Decimal
 
-object BillProductForm : ReportSelectionForm() {
+object TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "Bill products"
-  val page = page("Bill product")
+  override val title = "TaxRules"
+  val page = page("TaxRule")
   val action = menu("Action")
   val report = actor(
           ident = "report",
@@ -43,46 +40,40 @@ object BillProductForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
-  val tb1 = insertBlock(BlockBillProduct, page) {
+
+  val block = insertBlock(TaxRuleBlock, page) {
     command(item = report) {
       action = {
-        createReport(BlockBillProduct)
+        createReport(TaxRuleBlock)
       }
     }
   }
 
   override fun createReport(): Report {
-    return BillProductR
+    return TaxRuleR
   }
 }
 
-object BlockBillProduct : FormBlock(1, 1, "bill product") {
-  val u = table(BillProduct)
-  val v = table(Product)
-  val w = table(Bill)
+object TaxRuleBlock : FormBlock(1, 1, "TaxRule") {
+  val u = table(TaxRule)
 
-  val idBPdt = hidden(domain = Domain<Int>(20)) {
-    label = "Product ID"
-    help = "The bill product ID"
-    columns(u.idBPdt, v.idPdt)
+  val idTaxe = hidden(domain = Domain<Int>(20)) {
+    label = "ID"
+    help = "The tax ID"
+    columns(u.idTaxe)
   }
-  val quantity = mustFill(domain = Domain<Int>(30), position = at(1, 1)) {
-    label = "Quantity"
-    help = "The quantity"
-    columns(u.quantity)
+  val taxName = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "Name"
+    help = "The tax name"
+    columns(u.taxName)
   }
-  val amount = visit(domain = Domain<Decimal>(20), position = at(2, 1)) {
-    label = "Amount before tax"
-    help = "The amount before tax to pay"
-    columns(u.amount)
-  }
-  val amountWithTaxes = visit(domain = Domain<Decimal>(20), position = at(3, 1)) {
-    label = "Amount all taxes included"
-    help = "The amount all taxes included to pay"
-    columns(u.amountWithTaxes, w.amountWithTaxes)
+  val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
+    label = "Rate in %"
+    help = "The tax rate in %"
+    columns(u.rate)
   }
 }
 
 fun main() {
-  Application.runForm(formName = BillProductForm)
+  Application.runForm(formName = TaxRuleForm)
 }
