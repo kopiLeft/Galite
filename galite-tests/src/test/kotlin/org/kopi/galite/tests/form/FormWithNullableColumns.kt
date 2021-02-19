@@ -74,8 +74,40 @@ object FormWithNullableColumn : DictionaryForm() {
   override val locale = Locale.FRANCE
   override val title = "form for test nullable "
 
-  init {
-    connectToDatabase()
+  val action = menu("Action")
+
+  val edit = menu("Edit")
+
+  val list = actor(
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
+  val autoFill = actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  )
+
+  val resetBlock = actor(
+          ident = "reset",
+          menu = edit,
+          label = "break",
+          help = "Reset Block",
+  ) {
+    key = Key.F3   // key is optional here
+    icon = "break"  // icon is optional here
+  }
+
+  val p1 = page("test page")
+
+  val preform = trigger(INIT) {
     transaction {
       SchemaUtils.create(Clients)
       SchemaUtils.create(Order)
@@ -112,42 +144,8 @@ object FormWithNullableColumn : DictionaryForm() {
         it[client_id] = 1
         it[product_id] = 1
       }
-
     }
   }
-
-  val action = menu("Action")
-
-  val edit = menu("Edit")
-
-  val list = actor(
-          ident = "list",
-          menu = action,
-          label = "list",
-          help = "Display List",
-  ) {
-    key = Key.F1   // key is optional here
-    icon = "list"  // icon is optional here
-  }
-
-  val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
-  )
-
-  val resetBlock = actor(
-          ident = "reset",
-          menu = edit,
-          label = "break",
-          help = "Reset Block",
-  ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
-  }
-
-  val p1 = page("test page")
 
   val blockWithTwoTablesInnerJoin = insertBlock(FormWithTwoTablesInnerJoin(), p1) {
     command(item = FormWithList.list) {
