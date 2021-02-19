@@ -54,7 +54,6 @@ abstract class DField(internal val model: VFieldUI,
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   protected var state = 0 // Display state
-  protected var pos = 0
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
   protected var mouseInside = false // private events
@@ -174,7 +173,46 @@ abstract class DField(internal val model: VFieldUI,
   }
 
   override fun updateAccess() {
-    TODO()
+    // access { TODO: access from thread!!
+      access = getAccess()
+      dynAccess = access
+      updateStyles(access)
+      isVisible = access != VConstants.ACS_HIDDEN
+      isActionEnabled = access >= VConstants.ACS_VISIT
+      update(label)
+    //}
+  }
+
+  /**
+   * Updates a given field label.
+   * @param label The label to be updated.
+   */
+  private fun update(label: DLabel?) {
+    if (label != null) {
+      val was = label.isEnabled
+      val will = access >= VConstants.ACS_VISIT
+      if (was != will) {
+        label.isEnabled = will
+      }
+    }
+  }
+
+  /**
+   * Update field style according to its access.
+   * @param access The field access.
+   */
+  private fun updateStyles(access: Int) {
+    classNames.remove("visit")
+    classNames.remove("skipped")
+    classNames.remove("mustfill")
+    classNames.remove("hidden")
+    when (access) {
+      VConstants.ACS_VISIT ->       classNames.add("visit")
+      VConstants.ACS_SKIPPED ->     classNames.add("skipped")
+      VConstants.ACS_MUSTFILL ->    classNames.add("mustfill")
+      VConstants.ACS_HIDDEN ->      classNames.add("hidden")
+      else ->                       classNames.add("visit")
+    }
   }
 
 
@@ -271,7 +309,7 @@ abstract class DField(internal val model: VFieldUI,
       return false
     }
     val block = getModel().block
-    return getModel().hasFocus() && block!!.activeRecord == getBlockView().getRecordFromDisplayLine(pos)
+    return getModel().hasFocus() && block!!.activeRecord == getBlockView().getRecordFromDisplayLine(position)
   }
 
   /**

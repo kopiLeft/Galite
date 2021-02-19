@@ -20,7 +20,7 @@ plugins {
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
 
-val exposedVersion = "0.27.1"
+val exposedVersion = "0.29.1"
 val vaadinVersion = "18.0.3"
 val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"

@@ -30,18 +30,8 @@ import com.vaadin.flow.component.html.Div
  * @param hasDecrement has decrement button ?
  * TODO: Implement this class with appropriate component
  */
-open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
+open class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Div() {
   private val listeners = mutableListOf<FieldListener>()
-
-  /**
-   * Has an increment button ?
-   */
-  var hasIncrement = false
-
-  /**
-   * Has a decrement button ?
-   */
-  var hasDecrement = false
 
   /**
    * Has an action trigger ?

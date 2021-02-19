@@ -62,7 +62,7 @@ class Clients : FormBlock(1, 1, "Clients") {
     help = "The client id"
     columns(u.idClt)
   }
-  val fstnameClt = visit(domain = Domain<String>(25), position = at(1, 1)) {
+  val fstnameClt = mustFill(domain = Domain<String>(25), position = at(1, 1)) {
     label = "First Name"
     help = "The client first name"
     columns(u.firstNameClt)
