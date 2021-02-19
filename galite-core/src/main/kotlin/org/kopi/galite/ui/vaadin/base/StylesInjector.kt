@@ -77,13 +77,12 @@ class StylesInjector {
     // --------------------------------------------------
     /**
      * Apply this style to current browser page.
-     * @param selector The CSS selector to be used to inject the style in the browser page
      */
     fun inject() {
       // apply only when needed.
       if (align != VConstants.ALG_LEFT || foreground != null || background != null) {
         //BackgroundThreadHandler.access(Runnable { TODO: access
-          //Page.getCurrent().getStyles().add(toCSS()) TODO
+        //Page.getCurrent().getStyles().add(toCSS()) TODO
         //}
       }
     }
@@ -143,6 +142,5 @@ class StylesInjector {
 
     private val foreground = foreground
     private val background = background
-
   }
 }
