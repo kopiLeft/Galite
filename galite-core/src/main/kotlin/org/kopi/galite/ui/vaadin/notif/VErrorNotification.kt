@@ -42,7 +42,7 @@ class VErrorNotification(title: String?,
   //-------------------------------------------------
 
   override fun setButtons() {
-    details= ErrorMessageDetails(message, locale, this)
+    details = ErrorMessageDetails(message, locale, this)
     close = Button(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener { close() }
     close.isAutofocus = true
