@@ -46,7 +46,7 @@ object CommandForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
   val tb1 = insertBlock(BlockCommand, page) {
-    command(item = ClientForm.report) {
+    command(item = report) {
       action = {
         createReport(BlockCommand)
       }

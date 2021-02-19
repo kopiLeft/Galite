@@ -74,7 +74,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var welcomeView: WelcomeView? = null
   private var askAnswer = 0
   private lateinit var configuration: ApplicationConfiguration
-  private var stylesInjector: StylesInjector? = null
+  var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -456,14 +456,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String?): String? {
-    TODO()
-  }
-
-  /**
-   * Returns the styles injector attached with this application instance.
-   * @return The styles injector attached with this application instance.
-   */
-  fun getStylesInjector(): StylesInjector {
     TODO()
   }
 

@@ -15,18 +15,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.ui.vaadin.base
 
-import com.vaadin.flow.component.textfield.PasswordField
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.server.Command
 
 /**
- * A password field implementation
+ * Collects some utilities for background threads in a vaadin application.
+ *
+ *
+ * Note that all performed background tasks are followed by an client UI update
+ * using the push mechanism incorporated with vaadin.
+ *
  */
-class VPasswordField(val col: Int): PasswordField(), UTextField {
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  override fun hasAutoComplete(): Boolean = false
+object BackgroundThreadHandler {
 
-  override fun getMaxLength(): Int = super.getMaxLength()
+  /**
+   * Excluse access to the UI from a background thread to perform some updates.
+   * @param command the command which accesses the UI.
+   */
+  fun Component.access(command: Command) {
+    ui.ifPresent { myUi ->
+      myUi.access(command)
+    }
+  }
 }
