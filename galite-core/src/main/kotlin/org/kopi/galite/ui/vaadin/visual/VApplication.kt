@@ -30,11 +30,11 @@ import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.MainWindowListener
 import org.kopi.galite.ui.vaadin.notif.NotificationListener
-import org.kopi.galite.ui.vaadin.notif.VAbstractNotification
-import org.kopi.galite.ui.vaadin.notif.VConfirmNotification
-import org.kopi.galite.ui.vaadin.notif.VErrorNotification
-import org.kopi.galite.ui.vaadin.notif.VInformationNotification
-import org.kopi.galite.ui.vaadin.notif.VWarningNotification
+import org.kopi.galite.ui.vaadin.notif.AbstractNotification
+import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
@@ -96,25 +96,25 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
-    val dialog = VInformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
 
     showNotification(dialog)
   }
 
   override fun error(message: String?) {
-    val dialog = VErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
 
     showNotification(dialog)
   }
 
   override fun warn(message: String) {
-    val dialog = VWarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
 
     showNotification(dialog)
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    val dialog = VConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
 
     dialog.yesIsDefault = yesIsDefault
     dialog.addNotificationListener(object : NotificationListener {
@@ -139,7 +139,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Shows a notification.
    * @param notification The notification to be shown
    */
-  protected open fun showNotification(notification: VAbstractNotification) {
+  protected open fun showNotification(notification: AbstractNotification) {
     access {
       notification.show()
     }

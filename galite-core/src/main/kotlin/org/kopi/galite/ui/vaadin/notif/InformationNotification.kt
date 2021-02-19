@@ -23,16 +23,16 @@ import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
- * Warning type notification component.
+ * Information type notification component.
  *
- * @param title the warning notification title.
- * @param message the warning notification message.
+ * @param title the information notification title.
+ * @param message the information notification message.
  * @param locale  the notification locale
  */
-open class VWarningNotification(title: String?,
-                                message: String,
-                                locale: String)
-  : VAbstractNotification(title, message, locale) {
+open class InformationNotification(title: String?,
+                                   message: String,
+                                   locale: String)
+  : AbstractNotification(title, message, locale) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
@@ -41,12 +41,12 @@ open class VWarningNotification(title: String?,
   override fun setButtons() {
     close = Button(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener { close() }
-    close.isAutofocus = true
     buttons.add(close)
+    close.isAutofocus = true
   }
 
   override val iconName: VaadinIcon
-    get() = VaadinIcon.EXCLAMATION_CIRCLE
+    get() = VaadinIcon.INFO_CIRCLE
 
   //--------------------------------------------------
   // DATA MEMBERS

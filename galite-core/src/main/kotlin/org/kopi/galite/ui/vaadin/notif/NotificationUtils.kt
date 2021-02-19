@@ -56,9 +56,9 @@ object NotificationUtils {
                 locale: String,
                 messageKey: String,
                 vararg params: Any?) {
-    val error = VErrorNotification(LocalizedProperties.getString(locale, "Error"),
-                                   LocalizedMessages.getMessage(locale, messageKey, params),
-                                   locale)
+    val error = ErrorNotification(LocalizedProperties.getString(locale, "Error"),
+                                  LocalizedMessages.getMessage(locale, messageKey, params),
+                                  locale)
     if (callback != null) {
       error.addNotificationListener(callback)
     }
@@ -94,9 +94,9 @@ object NotificationUtils {
                   locale: String,
                   messageKey: String,
                   vararg params: Any?) {
-    val warning = VWarningNotification(LocalizedProperties.getString(locale, "Warning"),
-                                       LocalizedMessages.getMessage(locale, messageKey, params),
-                                       locale)
+    val warning = WarningNotification(LocalizedProperties.getString(locale, "Warning"),
+                                      LocalizedMessages.getMessage(locale, messageKey, params),
+                                      locale)
     if (callback != null) {
       warning.addNotificationListener(callback)
     }
@@ -132,9 +132,9 @@ object NotificationUtils {
                       locale: String,
                       messageKey: String,
                       vararg params: Any?) {
-    val information = VInformationNotification(LocalizedProperties.getString(locale, "Notice"),
-                                               LocalizedMessages.getMessage(locale, messageKey, params),
-                                               locale)
+    val information = InformationNotification(LocalizedProperties.getString(locale, "Notice"),
+                                              LocalizedMessages.getMessage(locale, messageKey, params),
+                                              locale)
     if (callback != null) {
       information.addNotificationListener(callback)
     }

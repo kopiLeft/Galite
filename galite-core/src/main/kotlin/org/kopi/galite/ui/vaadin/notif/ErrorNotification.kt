@@ -19,8 +19,6 @@ package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 
-import com.vaadin.flow.component.ClickEvent
-import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
@@ -28,56 +26,53 @@ import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
- * Confirm type notification component.
+ * Error type notification component.
  *
- * @param title the confirm notification title.
- * @param message the confirm notification message.
+ * @param title the error notification title.
+ * @param message the error notification message.
  * @param locale  the notification locale
  */
-class VConfirmNotification(title: String?,
-                           message: String,
-                           locale: String)
-  : VAbstractNotification(title, message, locale) {
+class ErrorNotification(title: String?,
+                        val message: String?,
+                        locale: String)
+  : AbstractNotification(title, message, locale) {
 
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
 
   override fun setButtons() {
-    ok = Button(LocalizedProperties.getString(locale, "OK"))
-    cancel = Button(LocalizedProperties.getString(locale, "NO"))
-    cancel.addClickListener { close() }
-    ok.addClickListener { close() }
-    buttons.add(ok)
-    buttons.add(cancel)
-
-    if (yesIsDefault) {
-      ok.isAutofocus = true
-    } else {
-      cancel.isAutofocus = true
-    }
+    details = ErrorMessageDetails(message, locale, this)
+    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
+    close.addClickListener { close() }
+    close.isAutofocus = true
+    buttons.add(close)
   }
 
   override val iconName: VaadinIcon
-    get() = VaadinIcon.QUESTION_CIRCLE
+    get() = VaadinIcon.EXCLAMATION_CIRCLE
 
-  fun onArrowRightEvent(keyDownEvent: ShortcutEvent?) {
-    cancel.focus()
+  fun onArrowUpEvent(keyDownEvent: ShortcutEvent?) {
+    close.focus()
   }
 
-  fun onArrowLeftEvent(keyDownEvent: ShortcutEvent?) {
-    ok.focus()
+  fun onArrowDownEvent(keyDownEvent: ShortcutEvent?) {
+    details.focus()
   }
 
-  //------------------------------------------------
+  //--------------------------------------------------
   // DATA MEMBERS
-  //------------------------------------------------
-  private lateinit var ok: Button
-  private lateinit var cancel: Button
-  private val listener: ComponentEventListener<ClickEvent<Button>>? = null
+  //--------------------------------------------------
+  private lateinit var details: ErrorMessageDetails
+  private lateinit var close: Button
 
+  //-------------------------------------------------
+  // CONSTRUCTOR
+  //-------------------------------------------------
   init {
-    Shortcuts.addShortcutListener(this, this::onArrowRightEvent, Key.ARROW_RIGHT)
-    Shortcuts.addShortcutListener(this, this::onArrowLeftEvent, Key.ARROW_LEFT)
+    details.element.setAttribute("aria-label", "Click me")
+    footer.add(details)
+    Shortcuts.addShortcutListener(this, this::onArrowUpEvent, Key.ARROW_UP)
+    Shortcuts.addShortcutListener(this, this::onArrowDownEvent, Key.ARROW_DOWN)
   }
 }

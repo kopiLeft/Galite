@@ -36,10 +36,10 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param message the notification message.
  * @param locale  the notification locale
  */
-abstract class VAbstractNotification(title: String?,
-                                     message: String?,
-                                     protected val locale: String)
-  : EnhancedDialog(), Focusable<VAbstractNotification> {
+abstract class AbstractNotification(title: String?,
+                                    message: String?,
+                                    protected val locale: String)
+  : EnhancedDialog(), Focusable<AbstractNotification> {
 
   /**
    * Shows the notification popup.
