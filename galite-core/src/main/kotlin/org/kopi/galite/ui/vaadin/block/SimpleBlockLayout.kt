@@ -22,6 +22,7 @@ import org.kopi.galite.ui.vaadin.form.DField
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * The simple block layout component.
@@ -54,6 +55,8 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
     followsAligns = ArrayList()
   }
 
+  val fieldsList = HashMap<Pair<Int, Int>, Pair<DField, Pair<Int, Int>>>()
+
   override fun addComponent(
           component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean,
           useAll: Boolean,
@@ -66,6 +69,21 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
                                           useAll)
     if (align == null) {
       if (width < 0) {
+        if (component is DField) {
+          val fieldToFollow = fieldsList[component.model.model.position!!.line to component.model.model.position!!.column]!!
+          val fields = HorizontalLayout(fieldToFollow.first, component)
+          val formItem = object : FormItem(fields) {
+            init {
+              addToLabel(fieldToFollow.first.label)
+            }
+          }
+
+          val x = fieldToFollow.second.first
+          val y = fieldToFollow.second.second
+          aligns!![x][y] = constraints
+          components!![x][y] = formItem
+        }
+
         follows!!.add(component!!)
         followsAligns!!.add(constraints)
       } else {
@@ -77,6 +95,9 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
           }
           aligns!![x][y] = constraints
           components!![x][y] = formItem
+
+          fieldsList[component.model.model.position!!.line to component.model.model.position!!.column] =
+                  (component to (x to y))
 
           // TODO: Grid container?
 

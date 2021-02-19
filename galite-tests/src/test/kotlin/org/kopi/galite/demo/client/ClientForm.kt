@@ -57,7 +57,7 @@ object ClientForm : ReportSelectionForm() {
 object Clients : FormBlock(1, 1, "Clients") {
   val u = table(Client)
 
-  val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {
+  val idClt = hidden(domain = Domain<Int>(15)) {
     label = "ID"
     help = "The client id"
     columns(u.idClt)
@@ -67,7 +67,7 @@ object Clients : FormBlock(1, 1, "Clients") {
     help = "The client first name"
     columns(u.firstNameClt)
   }
-  val nameClt = visit(domain = Domain<String>(25), position = at(1, 2)) {
+  val nameClt = visit(domain = Domain<String>(25), follow(fstnameClt)) {
     label = "Last name"
     help = "The client last name"
     columns(u.lastNameClt)
