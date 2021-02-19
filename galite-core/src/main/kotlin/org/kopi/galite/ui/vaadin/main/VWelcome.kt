@@ -19,7 +19,7 @@ package org.kopi.galite.ui.vaadin.main
 
 import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.ui.vaadin.menu.WelcomeListMenu
+import org.kopi.galite.ui.vaadin.menu.ModuleListMenu
 
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -34,10 +34,10 @@ class VWelcome : HorizontalLayout() {
   // DATA MEMBERS
   //---------------------------------------------------
   // menus
-  private val userMenu = WelcomeListMenu()
-  private val adminMenu = WelcomeListMenu()
-  private val bookmarksMenu = WelcomeListMenu()
-  private val workspaceContextMenu = WelcomeListMenu()
+  private val userMenu = ModuleListMenu()
+  private val adminMenu = ModuleListMenu()
+  private val bookmarksMenu = ModuleListMenu()
+  private val workspaceContextMenu = ModuleListMenu()
 
   // items
   private val userItem = ModuleItem(VaadinIcon.USER)
@@ -50,11 +50,13 @@ class VWelcome : HorizontalLayout() {
   /**
    * Creates the welcome text component.
    */
+
+  val userMenuItem = userMenu.addItem(userItem)
+  val adminMenuItem = adminMenu.addItem(adminItem)
+  val bookmarksMenuItem = bookmarksMenu.addItem(bookmarksItem)
+
   init {
     setId("welcome")
-    userMenu.addItem(userItem)
-    adminMenu.addItem(adminItem)
-    bookmarksMenu.addItem(bookmarksItem)
     workspaceContextMenu.addItem(workspaceContextItem)
     add(userMenu)
     add(adminMenu)
@@ -71,7 +73,13 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setUserMenu(menu: ModuleList) {
-    // TODO
+    if (menu.menu != null) {
+      val submenu = userMenuItem.subMenu
+
+      for (item in menu.menu.items) {
+        submenu.addItem(item)
+      }
+    }
   }
 
   /**
@@ -87,7 +95,11 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setAdminMenu(menu: ModuleList) {
-    // TODO
+    val submenu = adminMenuItem.subMenu
+
+    for (item in menu.menu.items) {
+      submenu.addItem(item)
+    }
   }
 
   /**
@@ -95,6 +107,10 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setBookmarksMenu(menu: ModuleList) {
-    // TODO
+    val submenu = bookmarksMenuItem.subMenu
+
+    for (item in menu.menu.items) {
+      submenu.addItem(item)
+    }
   }
 }
