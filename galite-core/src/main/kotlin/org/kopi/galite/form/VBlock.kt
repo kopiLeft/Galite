@@ -179,7 +179,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    * @param     manager         the manger to use for localization
    */
-  fun localize(manager: LocalizationManager, locale: Locale) {
+  fun localize(manager: LocalizationManager, locale: Locale?) {
     if(ApplicationContext.getDefaultLocale() != locale) {
       val loc = manager.getBlockLocalizer(source, name)
 
@@ -3100,7 +3100,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         if (column != null) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
             if (field.getLargeObject(recno) != null) {
-              result.add(column to ExposedBlob(field.getLargeObject(recno)!!.readAllBytes()))
+              result.add(column to ExposedBlob(field.getLargeObject(recno)!!.readBytes()))
             }
           } else {
             result.add(column to field.getSql(recno))
@@ -3189,7 +3189,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         if (column != null) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
             if (field.getLargeObject(recno) != null) {
-              result.add(column to ExposedBlob(field.getLargeObject(recno)!!.readAllBytes()))
+              result.add(column to ExposedBlob(field.getLargeObject(recno)!!.readBytes()))
             }
           } else {
             result.add(column to field.getSql(recno))

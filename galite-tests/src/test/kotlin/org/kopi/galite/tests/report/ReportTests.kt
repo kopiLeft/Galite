@@ -85,7 +85,7 @@ class ReportTests: VApplicationTestBase() {
     tempDir.deleteOnExit()
 
     val sourceFilePath = SimpleReport.javaClass.classLoader.getResource("").path +
-            this.javaClass.packageName.replace(".", "/") + File.separatorChar
+            this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
     SimpleReport.initFields()
     SimpleReport.genLocalization()
 

@@ -16,7 +16,6 @@
  */
 
 ::part(overflow-button) {
-    background: url("../../frontend/images/bread_crumb_separator.png") no-repeat center center / contain;
     color : white;
 }
 

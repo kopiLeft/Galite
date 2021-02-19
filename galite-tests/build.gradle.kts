@@ -62,7 +62,6 @@ dependencies {
 
   //Apache POI
   testImplementation("org.apache.poi", "poi", apachePoi)
-  // Apache OOxml
   testImplementation("org.apache.poi", "poi-ooxml", apachePoi)
 }
 

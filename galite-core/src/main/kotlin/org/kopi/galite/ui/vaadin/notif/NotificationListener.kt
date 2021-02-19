@@ -15,16 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.report
+package org.kopi.galite.ui.vaadin.notif
 
-import org.kopi.galite.report.MReport
+import java.io.Serializable
 
 /**
- * The `VTable` is a data container adapted
- * to dynamic reports needs.
- *
- * @param model The table model.
+ * Notifications listener.
  */
-class VTable(private val model: MReport) {
-
+interface NotificationListener : Serializable {
+  /**
+   * Fires the notification close action.
+   * @param action the user action.
+   */
+  fun onClose(action: Boolean)
 }

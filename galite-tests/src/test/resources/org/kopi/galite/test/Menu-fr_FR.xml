@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <modules>
-    <module ident="1000" label="Client" help="Clients management" />
-        <module ident="1001" label="Client" help="Clients management" />
-        <module ident="1010" label="Test" help="Suppliers management" />
-            <module ident="1101" label="Test form1" help="Test form" />
-            <module ident="1110" label="Test form2" help="Test form" />
-    <module ident="2000" label="Command" help="Commands management" />
-        <module ident="2001" label="Command" help="Commands management" />
-    <module ident="3000" label="Product" help="Products management" />
-        <module ident="3001" label="Product" help="Products management" />
-    <module ident="4000" label="Bill" help="Bills management" />
-        <module ident="4001" label="Bill" help="Bills management" />
-    <module ident="5000" label="Bill product" help="Bill of products" />
-        <module ident="5001" label="Bill product" help="Bill of products" />
+    <module ident="1000" label="CLIENTS" help="Clients management" />
+        <module ident="1001" label="CLIENTS" help="Clients management" />
+    <module ident="1010" label="Test" help="Suppliers management" />
+        <module ident="1101" label="Test form1" help="Test form" />
+        <module ident="1110" label="Test form2" help="Test form" />
+    <module ident="2000" label="COMMANDS" help="Commands management" />
+        <module ident="2001" label="COMMANDS" help="Commands management" />
+    <module ident="3000" label="PRODUCTS" help="Products management" />
+        <module ident="3001" label="PRODUCTS" help="Products management" />
+    <module ident="4000" label="BILLS" help="Bills management" />
+        <module ident="4001" label="BILLS" help="Bills management" />
+    <module ident="5000" label="BILL PRODUCTS" help="Bill of products" />
+        <module ident="5001" label="BILL PRODUCTS" help="Bill of products" />
+    <module ident="6000" label="STOCKS" help="Stock management" />
+        <module ident="6001" label="STOCKS" help="Stock management" />
+    <module ident="7000" label="TAX RULES" help="Tax Rules management" />
+        <module ident="7001" label="TAX RULES" help="Tax Rules management" />
+    <module ident="8000" label="PROVIDERS" help="Providers management" />
+        <module ident="8001" label="PROVIDERS" help="Providers management" />
 </modules>

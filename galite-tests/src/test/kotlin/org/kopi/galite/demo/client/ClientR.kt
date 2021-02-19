@@ -18,6 +18,10 @@ package org.kopi.galite.demo.client
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.demo.Client
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -26,30 +30,20 @@ import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
 
 /**
- * Simple Report with two fields.
+ * Client Report
  */
-object ClientR : Report() {
+class ClientR : Report() {
   override val locale = Locale.FRANCE
 
-  override val title = "ClientReport"
+  override val title = "Clients_Report"
 
   val action = menu("Action")
-
-  val greeting = actor(
-          ident = "greeting",
-          menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
-  ) {
-    key = Key.F1          // key is optional here
-    icon = "ask"  // icon is optional here
-  }
 
   val csv = actor(
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -59,7 +53,7 @@ object ClientR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -69,7 +63,7 @@ object ClientR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -79,7 +73,7 @@ object ClientR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -109,9 +103,9 @@ object ClientR : Report() {
     }
   }
 
-  val nameClt = field(Domain<String>(25)) {
-    label = "name client"
-    help = "The client name"
+  val firstName = field(Domain<String>(25)) {
+    label = "First Name"
+    help = "The client first name"
     align = FieldAlignment.LEFT
     format {
       object : VCellFormat() {
@@ -122,9 +116,9 @@ object ClientR : Report() {
     }
   }
 
-  val fstnameClt = field(Domain<String>(25)) {
-    label = "client firstname"
-    help = "The client firstname"
+  val lastName = field(Domain<String>(25)) {
+    label = "Last Name"
+    help = "The client last name"
     align = FieldAlignment.LEFT
     format {
       object : VCellFormat() {
@@ -134,8 +128,9 @@ object ClientR : Report() {
       }
     }
   }
+
   val addressClt = field(Domain<String>(50)) {
-    label = "client address"
+    label = "Address"
     help = "The client address"
     align = FieldAlignment.LEFT
     format {
@@ -148,47 +143,44 @@ object ClientR : Report() {
   }
 
   val ageClt = field(Domain<Int>(2)) {
-    label = "client age"
+    label = "Age"
     help = "The client age"
     align = FieldAlignment.LEFT
   }
 
+  val countryClt = field(Domain<String>(50)) {
+    label = "City"
+    help = "The client country"
+    align = FieldAlignment.LEFT
+  }
+
   val cityClt = field(Domain<String>(50)) {
-    label = "client city"
+    label = "City"
     help = "The client city"
     align = FieldAlignment.LEFT
   }
 
-  val postalCodeClt = field(Domain<Int>(2)) {
-    label = "client postal code"
-    help = "The client postal code"
+  val zipCodeClt = field(Domain<Int>(2)) {
+    label = "Zip code"
+    help = "The client zip code"
     align = FieldAlignment.LEFT
   }
 
+  val clients = Client.selectAll()
+
   init {
-    add {
-      this[nameClt] = "Salah"
-      this[fstnameClt] = "Mohamed"
-      this[addressClt] = "10,Rue du Lac"
-      this[cityClt] = "Megrine"
-      this[postalCodeClt] = 2001
-      this[ageClt] = 40
-    }
-    add {
-      this[nameClt] = "Guesmi"
-      this[fstnameClt] = "Khaled"
-      this[addressClt] = "14,Rue Mongi Slim"
-      this[cityClt] = "Tunis"
-      this[postalCodeClt] = 6000
-      this[ageClt] = 35
-    }
-    add {
-      this[nameClt] = "Bouaroua"
-      this[fstnameClt] = "Ahmed"
-      this[addressClt] = "10,Rue du Lac"
-      this[cityClt] = "Mourouj"
-      this[postalCodeClt] = 5003
-      this[ageClt] = 22
+    transaction {
+      clients.forEach { result ->
+        add {
+          this[firstName] = result[Client.firstNameClt]
+          this[lastName] = result[Client.lastNameClt]
+          this[addressClt] = result[Client.addressClt]
+          this[ageClt] = result[Client.ageClt]
+          this[countryClt] = result[Client.countryClt]
+          this[cityClt] = result[Client.cityClt]
+          this[zipCodeClt] = result[Client.zipCodeClt]
+        }
+      }
     }
   }
 }

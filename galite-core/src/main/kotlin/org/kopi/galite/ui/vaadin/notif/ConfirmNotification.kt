@@ -15,36 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.notif
 
-import org.kopi.galite.ui.vaadin.base.VInputButton
-
-import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.ShortcutEvent
+import com.vaadin.flow.component.Shortcuts
 
 /**
- * Warning type notification component.
+ * Confirm notification component.
+ *
+ * @param title the warning notification title.
+ * @param message the warning notification message.
  */
-open class VWarningNotification(title: String?, message: String) : VAbstractNotification(title, message) {
-  //-------------------------------------------------
-  // IMPLEMENTATION
-  //-------------------------------------------------
-  override fun setButtons(locale: String?) {
-
+class ConfirmNotification(title: String, message: String) : VConfirmNotification(title, message) {
+  /**
+   * Creates the confirmation widget.
+   */
+  init {
+    Shortcuts.addShortcutListener(this,
+                                  { keyDownEvent: ShortcutEvent? -> onEnterEvent(keyDownEvent) }, Key.ENTER)
+            .listenOn(this)
   }
-
-  protected override val iconName: String
-    get() = "warning"
-
-  fun focus() {
-
-  }
-
-  fun onKeyPress(event: KeyPressEvent) {
-
-  }
-
-  //--------------------------------------------------
-  // DATA MEMBERS
-  //--------------------------------------------------
-  private var close: VInputButton? = null
 }

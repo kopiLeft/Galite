@@ -19,18 +19,18 @@ package org.kopi.galite.demo.client
 import java.util.Locale
 
 import org.kopi.galite.demo.Client
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.demo.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object ClientForm : ReportSelectionForm() {
+class ClientForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "Clients"
   val page = page("Client")
-  val action = menu("act")
+  val action = menu("Action")
   val report = actor(
           ident = "report",
           menu = action,
@@ -41,59 +41,58 @@ object ClientForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
-  val block = insertBlock(Clients, page) {
+  val block = insertBlock(Clients(), page) {
     command(item = report) {
       action = {
-        createReport(Clients)
+        createReport(this@insertBlock)
       }
     }
   }
 
   override fun createReport(): Report {
-    return ClientR
+    return ClientR()
   }
 }
 
-object Clients : FormBlock(1, 1, "Clients") {
+class Clients : FormBlock(1, 1, "Clients") {
   val u = table(Client)
 
-  val idClt = mustFill(domain = Domain<Int>(15), position = at(1, 1)) {
+  val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {
     label = "ID"
     help = "The client id"
     columns(u.idClt)
   }
-  val fstnameClt = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
+  val fstnameClt = mustFill(domain = Domain<String>(25), position = at(1, 1)) {
     label = "First Name"
     help = "The client first name"
-    columns(u.fstnameClt)
+    columns(u.firstNameClt)
   }
-  val nameClt = mustFill(domain = Domain<String>(25), position = at(2, 2)) {
+  val nameClt = visit(domain = Domain<String>(25), position = at(1, 2)) {
     label = "Last name"
     help = "The client last name"
-    columns(u.nameClt)
+    columns(u.lastNameClt)
   }
-  val ageClt = visit(domain = Domain<Int>(3), position = at(3, 1)) {
+  val ageClt = visit(domain = Domain<Int>(3), position = at(2, 1)) {
     label = "Age"
     help = "The client age"
     columns(u.ageClt)
   }
-  val addressClt = visit(domain = Domain<String>(20), position = at(3, 2)) {
+  val addressClt = visit(domain = Domain<String>(20), position = at(2, 2)) {
     label = "Address"
     help = "The client address"
     columns(u.addressClt)
   }
-  val countryClt = visit(domain = Domain<String>(12), position = at(4, 1)) {
+  val countryClt = visit(domain = Domain<String>(12), position = at(3, 1)) {
     label = "Country"
     help = "The client country"
     columns(u.countryClt)
   }
-  val cityClt = visit(domain = Domain<String>(12), position = at(4, 2)) {
+  val cityClt = visit(domain = Domain<String>(12), position = at(3, 2)) {
     label = "City"
     help = "The client city"
     columns(u.cityClt)
   }
-
-  val zipCodeClt = visit(domain = Domain<Int>(12), position = at(4, 3)) {
+  val zipCodeClt = visit(domain = Domain<Int>(12), position = at(3, 3)) {
     label = "Zip code"
     help = "The client zip code"
     columns(u.zipCodeClt)
@@ -101,5 +100,5 @@ object Clients : FormBlock(1, 1, "Clients") {
 }
 
 fun main() {
-  Application.runForm(formName = ClientForm)
+  Application.runForm(formName = ClientForm())
 }

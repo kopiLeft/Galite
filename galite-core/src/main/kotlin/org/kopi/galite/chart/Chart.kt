@@ -172,7 +172,7 @@ abstract class Chart : Window() {
       requireNotNull(baseName)
       val localizationDestination = destination
               ?: this.javaClass.classLoader.getResource("")?.path +
-              this.javaClass.packageName.replace(".", "/")
+              this.javaClass.`package`.name.replace(".", "/")
       try {
         val writer = ChartLocalizationWriter()
         genLocalization(writer)
@@ -209,7 +209,7 @@ abstract class Chart : Window() {
     genLocalization()
 
     object : VChart() {
-      override var locale: Locale = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
+      override val locale: Locale get() = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
 
       /**
        * Handling triggers

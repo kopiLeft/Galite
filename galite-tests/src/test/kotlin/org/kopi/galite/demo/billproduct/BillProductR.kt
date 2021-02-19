@@ -18,6 +18,10 @@ package org.kopi.galite.demo.billproduct
 
 import java.util.Locale
 
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+
+import org.kopi.galite.demo.BillProduct
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -25,11 +29,14 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 import org.kopi.galite.type.Decimal
 
+/**
+ * Products Bill Report
+ */
 object BillProductR : Report() {
 
   override val locale = Locale.FRANCE
 
-  override val title = "Bill Product report"
+  override val title = "Bill Product Report"
 
   val action = menu("Action")
 
@@ -47,7 +54,7 @@ object BillProductR : Report() {
           ident = "CSV",
           menu = action,
           label = "CSV",
-          help = "Obtenir le format CSV",
+          help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -57,7 +64,7 @@ object BillProductR : Report() {
           ident = "XLS",
           menu = action,
           label = "XLS",
-          help = "Obtenir le format Excel (XLS)",
+          help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -67,7 +74,7 @@ object BillProductR : Report() {
           ident = "XLSX",
           menu = action,
           label = "XLSX",
-          help = "Obtenir le format Excel (XLSX)",
+          help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
     icon = "export"  // icon is optional here
@@ -77,7 +84,7 @@ object BillProductR : Report() {
           ident = "PDF",
           menu = action,
           label = "PDF",
-          help = "Obtenir le format PDF",
+          help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "export"  // icon is optional here
@@ -108,22 +115,33 @@ object BillProductR : Report() {
   }
 
   val quantity = field(Domain<Int>(25)) {
-    label = "quantity"
-    help = "quantity"
+    label = "Quantity"
+    help = "The quantity"
     align = FieldAlignment.LEFT
   }
 
-  val amountHT = field(Domain<Int>(25)) {
-    label = "amountHT"
-    help = "amountHT"
+  val amount = field(Domain<Decimal>(25)) {
+    label = "Amount before tax"
+    help = "The amount before tax to pay"
 
   }
-  val amountTTC = field(Domain<Decimal>(50)) {
-    label = "amountTTC"
-    help = "amountTTC"
+  val amountWithTaxes = field(Domain<Decimal>(50)) {
+    label = "Amount all taxes included"
+    help = "The amount all taxes included to pay"
     align = FieldAlignment.LEFT
   }
+
+  val billProducts = BillProduct.selectAll()
 
   init {
+    transaction {
+      billProducts.forEach { result ->
+        add {
+          this[quantity] = result[BillProduct.quantity]
+          this[amount] = result[BillProduct.amount]
+          this[amountWithTaxes] = Decimal(result[BillProduct.amountWithTaxes])
+        }
+      }
+    }
   }
 }
