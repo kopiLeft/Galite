@@ -33,7 +33,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param locale  the notification locale
  */
 class VErrorNotification(title: String?,
-                         message: String?,
+                         val message: String?,
                          locale: String)
   : VAbstractNotification(title, message, locale) {
 
@@ -42,6 +42,8 @@ class VErrorNotification(title: String?,
   //-------------------------------------------------
 
   override fun setButtons() {
+    details= ErrorMessageDetails(message, locale, this)
+    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener { close() }
     close.isAutofocus = true
     buttons.add(close)
@@ -61,8 +63,8 @@ class VErrorNotification(title: String?,
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  private val details = ErrorMessageDetails(message, locale, this)
-  private val close = Button(LocalizedProperties.getString(locale, "CLOSE"))
+  private lateinit var details: ErrorMessageDetails
+  private lateinit var close: Button
 
   //-------------------------------------------------
   // CONSTRUCTOR

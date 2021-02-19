@@ -39,6 +39,7 @@ open class VInformationNotification(title: String?,
   //-------------------------------------------------
 
   override fun setButtons() {
+    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener { close() }
     buttons.add(close)
     close.isAutofocus = true
@@ -50,5 +51,5 @@ open class VInformationNotification(title: String?,
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  private val close = Button(LocalizedProperties.getString(locale, "CLOSE"))
+  private lateinit var close: Button
 }

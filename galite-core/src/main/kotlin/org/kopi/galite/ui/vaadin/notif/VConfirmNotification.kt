@@ -44,6 +44,8 @@ class VConfirmNotification(title: String?,
   //-------------------------------------------------
 
   override fun setButtons() {
+    ok = Button(LocalizedProperties.getString(locale, "OK"))
+    cancel = Button(LocalizedProperties.getString(locale, "NO"))
     cancel.addClickListener { close() }
     ok.addClickListener { close() }
     buttons.add(ok)
@@ -70,8 +72,8 @@ class VConfirmNotification(title: String?,
   //------------------------------------------------
   // DATA MEMBERS
   //------------------------------------------------
-  private val ok = Button(LocalizedProperties.getString(locale, "OK"))
-  private val cancel = Button(LocalizedProperties.getString(locale, "NO"))
+  private lateinit var ok: Button
+  private lateinit var cancel: Button
   private val listener: ComponentEventListener<ClickEvent<Button>>? = null
 
   init {

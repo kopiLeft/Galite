@@ -37,10 +37,7 @@ import com.vaadin.flow.component.orderedlayout.Scroller
  * @param parent  The parent dialog containing this message details
  *
  */
-class ErrorMessageDetails(message: String?,
-                          locale: String,
-                          val parent: Dialog)
-  : Div(), HasSize, Focusable<ErrorMessageDetails> {
+class ErrorMessageDetails(message: String?, locale: String, val parent: Dialog) : Div(), HasSize {
 
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -69,6 +66,10 @@ class ErrorMessageDetails(message: String?,
     scroller.height = height.toString()
   }
 
+  fun focus() {
+    details.focus()
+  }
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
@@ -89,9 +90,5 @@ class ErrorMessageDetails(message: String?,
 
   class FocusableDetails(message: String?,
                          content: Component)
-    : Details(message, content), Focusable<FocusableDetails> {
-    init {
-      addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED)
-    }
-  }
+    : Details(message, content), Focusable<FocusableDetails>
 }
