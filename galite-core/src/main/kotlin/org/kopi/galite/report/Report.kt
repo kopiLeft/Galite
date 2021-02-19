@@ -148,7 +148,7 @@ abstract class Report : Window() {
       val baseName = this::class.simpleName
       requireNotNull(baseName)
       val localizationDestination = destination
-              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.packageName.replace(".", "/")
+              ?: this.javaClass.classLoader.getResource("")?.path + this.javaClass.`package`.name.replace(".", "/")
       try {
         val writer = ReportLocalizationWriter()
         genLocalization(writer)
