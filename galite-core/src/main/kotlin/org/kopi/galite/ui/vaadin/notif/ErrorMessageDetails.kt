@@ -17,17 +17,27 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
-import javax.swing.Popup
-
 import org.kopi.galite.ui.vaadin.common.VSpan
 
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.details.Details
+import com.vaadin.flow.component.details.DetailsVariant
+import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.Scroller
 
 /**
  * An error message popup window containing stack trace detail
- * for an server exception.
+ * for a server exception.
+ *
+ * @param message The error message.
+ * @param locale  The notification locale
+ * @param parent  The parent dialog containing this message details
+ *
  */
-class VErrorMessagePopup : Popup() {
+class ErrorMessageDetails(message: String?, locale: String, val parent: Dialog) : Div(), HasSize {
 
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -56,9 +66,14 @@ class VErrorMessagePopup : Popup() {
     scroller.height = height.toString()
   }
 
+  fun focus() {
+    details.focus()
+  }
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  private var details: FocusableDetails
   private var message: VSpan? = null
   private val scroller = Scroller()
 
@@ -67,5 +82,13 @@ class VErrorMessagePopup : Popup() {
   //---------------------------------------------------
   init {
     createContent()
+    setMessage(message)
+    // TODO: Add localized message
+    details = FocusableDetails("Afficher les détails", scroller)
+    add(details)
   }
+
+  class FocusableDetails(message: String?,
+                         content: Component)
+    : Details(message, content), Focusable<FocusableDetails>
 }

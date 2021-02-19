@@ -31,7 +31,7 @@ import com.vaadin.flow.server.Command
 object BackgroundThreadHandler {
 
   /**
-   * Excluse access to the UI from a background thread to perform some updates.
+   * Exclusive access to the UI from a background thread to perform some updates.
    * @param command the command which accesses the UI.
    */
   fun Component.access(command: Command) {
