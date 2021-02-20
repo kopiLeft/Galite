@@ -17,14 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import java.util.Locale
-
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.common.VContent
-import org.kopi.galite.ui.vaadin.common.VHeader
-import org.kopi.galite.ui.vaadin.common.VMain
-import org.kopi.galite.ui.vaadin.menu.ModuleList
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasSize
@@ -35,6 +27,12 @@ import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.contextmenu.MenuItem
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.common.VContent
+import org.kopi.galite.ui.vaadin.common.VHeader
+import org.kopi.galite.ui.vaadin.common.VMain
+import org.kopi.galite.ui.vaadin.menu.ModuleList
+import java.util.*
 
 /**
  * Main application window composed of a header and content.
@@ -104,6 +102,17 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   fun setMainMenu(moduleList: ModuleList) {
     header.setMainMenu(moduleList)
     menus.add(moduleList)
+  }
+
+  /**
+   * Updates the title (caption) of the given window.
+   * @param window The concerned window.
+   * @param title The new window title.
+   */
+  fun updateWindowTitle(window: Component, title: String) {
+    container.updateWindowTitle(window, title!!)
+    windowsMenu.updateCaption(window, title)
+    ui.get().page.setTitle(title)
   }
 
   /**

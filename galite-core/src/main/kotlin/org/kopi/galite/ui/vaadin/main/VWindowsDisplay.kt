@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
 
 /**
@@ -34,5 +35,14 @@ class VWindowsDisplay : Div() {
   init {
     add(menu)
     className = "k-windows-menu-container"
+  }
+
+  /**
+   * Updates the menu item caption for the given window.
+   * @param window The concerned window.
+   * @param caption The new item caption.
+   */
+  fun updateCaption(window: Component, caption: String) {
+    TODO()
   }
 }
