@@ -17,10 +17,39 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
+
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.icon.VaadinIcon
+
 /**
- * Information notification component.
+ * Information type notification component.
  *
- * @param title the warning notification title.
- * @param message the warning notification message.
+ * @param title the information notification title.
+ * @param message the information notification message.
+ * @param locale  the notification locale
  */
-class InformationNotification(title: String, message: String) : VInformationNotification(title, message)
+open class InformationNotification(title: String?,
+                                   message: String,
+                                   locale: String)
+  : AbstractNotification(title, message, locale) {
+
+  //-------------------------------------------------
+  // IMPLEMENTATION
+  //-------------------------------------------------
+
+  override fun setButtons() {
+    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
+    close.addClickListener { close() }
+    buttons.add(close)
+    close.isAutofocus = true
+  }
+
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.INFO_CIRCLE
+
+  //--------------------------------------------------
+  // DATA MEMBERS
+  //--------------------------------------------------
+  private lateinit var close: Button
+}

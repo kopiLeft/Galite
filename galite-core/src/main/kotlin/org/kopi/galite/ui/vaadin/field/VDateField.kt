@@ -15,28 +15,36 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.base
+package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.server.Command
+import com.vaadin.flow.component.datepicker.DatePicker
 
 /**
- * Collects some utilities for background threads in a vaadin application.
- *
- *
- * Note that all performed background tasks are followed by an client UI update
- * using the push mechanism incorporated with vaadin.
- *
+ * An Date field.
  */
-object BackgroundThreadHandler {
+class VDateField : DatePicker(), UTextField {
+ init {
+   this.isClearButtonVisible = true
+ }
 
-  /**
-   * Exclusive access to the UI from a background thread to perform some updates.
-   * @param command the command which accesses the UI.
-   */
-  fun Component.access(command: Command) {
-    ui.ifPresent { myUi ->
-      myUi.access(command)
-    }
+  override fun hasAutoComplete(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun getMaxLength(): Int {
+    TODO("Not yet implemented")
+  }
+
+  override fun getMinLength(): Int {
+    TODO("Not yet implemented")
+  }
+
+
+  override fun setMaxLength(maxLength: Int) {
+   //Nothing to Implement
+  }
+
+  override fun setMinLength(minLength: Int) {
+    TODO("Not yet implemented")
   }
 }

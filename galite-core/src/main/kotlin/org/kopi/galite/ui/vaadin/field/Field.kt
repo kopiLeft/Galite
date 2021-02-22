@@ -137,7 +137,7 @@ open class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Div() {
    * Adds the given actors to this field.
    * @param actors The actors to be associated with field.
    */
-  fun addActors(actors: Collection<Actor?>?) {
+  fun addActors(actors: Collection<Actor?>) {
     //TODO()
   }
 

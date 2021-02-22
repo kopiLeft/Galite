@@ -265,7 +265,7 @@ abstract class DField(internal val model: VFieldUI,
    * Returns the actors associated with this field.
    * @return The actors associated with this field.
    */
-  private fun getActors(): Collection<Actor>? {
+  private fun getActors(): Collection<Actor> {
     val actors: MutableSet<Actor>
     actors = HashSet<Actor>()
     for (cmd in model.getAllCommands()) {

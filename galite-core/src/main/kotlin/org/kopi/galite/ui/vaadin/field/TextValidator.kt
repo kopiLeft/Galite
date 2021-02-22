@@ -162,6 +162,17 @@ class IntegerValidator<T>(minval: Double?, maxval: Double?): TextValidator<T> {
 }
 
 /**
+ * An date validator.
+ */
+class DateValidator<T>: TextValidator<T> {
+
+  override fun apply(value: T, context: ValueContext?): ValidationResult {
+    //TODO("Not yet implemented")
+    return ValidationResult.ok()
+  }
+}
+
+/**
  * A week validator.
  */
 class WeekValidator<T>(): TextValidator<T> {

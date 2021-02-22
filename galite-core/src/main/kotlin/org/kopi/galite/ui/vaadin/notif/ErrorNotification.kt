@@ -17,9 +17,62 @@
  */
 package org.kopi.galite.ui.vaadin.notif
 
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
+
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.ShortcutEvent
+import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.icon.VaadinIcon
+
 /**
- * Error notification component.
- * @param title the warning notification title.
- * @param message the warning notification message.
+ * Error type notification component.
+ *
+ * @param title the error notification title.
+ * @param message the error notification message.
+ * @param locale  the notification locale
  */
-class ErrorNotification(title: String, message: String) : VErrorNotification(title, message)
+class ErrorNotification(title: String?,
+                        val message: String?,
+                        locale: String)
+  : AbstractNotification(title, message, locale) {
+
+  //-------------------------------------------------
+  // IMPLEMENTATION
+  //-------------------------------------------------
+
+  override fun setButtons() {
+    details = ErrorMessageDetails(message, locale, this)
+    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
+    close.addClickListener { close() }
+    close.isAutofocus = true
+    buttons.add(close)
+  }
+
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.EXCLAMATION_CIRCLE
+
+  fun onArrowUpEvent(keyDownEvent: ShortcutEvent?) {
+    close.focus()
+  }
+
+  fun onArrowDownEvent(keyDownEvent: ShortcutEvent?) {
+    details.focus()
+  }
+
+  //--------------------------------------------------
+  // DATA MEMBERS
+  //--------------------------------------------------
+  private lateinit var details: ErrorMessageDetails
+  private lateinit var close: Button
+
+  //-------------------------------------------------
+  // CONSTRUCTOR
+  //-------------------------------------------------
+  init {
+    details.element.setAttribute("aria-label", "Click me")
+    footer.add(details)
+    Shortcuts.addShortcutListener(this, this::onArrowUpEvent, Key.ARROW_UP)
+    Shortcuts.addShortcutListener(this, this::onArrowDownEvent, Key.ARROW_DOWN)
+  }
+}

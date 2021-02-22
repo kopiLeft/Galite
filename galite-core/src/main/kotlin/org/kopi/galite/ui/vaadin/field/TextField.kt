@@ -235,7 +235,7 @@ class TextField(val model: VField,
       Type.INTEGER -> bindingBuilder.withValidator(IntegerValidator(minval, maxval)).bind({ TODO() },
                                                                                           { _, _ -> TODO() })
       Type.DECIMAL -> TODO()
-      Type.DATE -> TODO()
+      Type.DATE -> bindingBuilder.withValidator(DateValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.TIME -> bindingBuilder.withValidator(TimeValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.MONTH -> bindingBuilder.withValidator(MonthValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.WEEK -> bindingBuilder.withValidator(WeekValidator()).bind({ TODO() }, { _, _ -> TODO() })
@@ -284,6 +284,8 @@ class TextField(val model: VField,
       VTimeField()
     } else if(type == Type.TIMESTAMP) {
       VTimeStampField()
+    } else if(isDate()) {
+      VDateField()
     } else {
       VTextField(col).also {
         if(type == Type.WEEK) {
@@ -330,6 +332,14 @@ class TextField(val model: VField,
    */
   private fun isDecimal(): Boolean {
     return type == Type.DECIMAL
+  }
+
+  /**
+   * Returns true if the field should contains only date.
+   * @return True if the field should contains only date.
+   */
+  private fun isDate(): Boolean {
+    return type == Type.DATE
   }
 
   /**

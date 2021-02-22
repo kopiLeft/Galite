@@ -57,7 +57,7 @@ class ClientForm : ReportSelectionForm() {
 class Clients : FormBlock(1, 1, "Clients") {
   val u = table(Client)
 
-  val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {
+  val idClt = mustFill(domain = Domain<Int>(15), position = at(1, 1)) {
     label = "ID"
     help = "The client id"
     columns(u.idClt)
