@@ -41,13 +41,7 @@ class WaitDialog(
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-
   private var timer: Timer?  = Timer()
-
-  /**
-   * The max time to wait
-   */
-  private var maxTime = 0
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
