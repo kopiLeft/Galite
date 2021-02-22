@@ -17,18 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.wait
 
+import org.kopi.galite.ui.vaadin.base.Styles
+
+import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.dialog.GeneratedVaadinDialog
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import org.kopi.galite.ui.vaadin.base.Styles
 
 /**
  * A Wait panel component.
  */
-class WaitWindow : VerticalLayout() {
+class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialog.OpenedChangeEvent<Dialog>> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -37,20 +40,15 @@ class WaitWindow : VerticalLayout() {
   private var text = Span()
   private var popup = Dialog()
 
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  /**
-   * Initializes the widget.
-   * @param connection The application connection.
-   */
   init {
+    image.className = Styles.WAIT_WINDOW_IMAGE
     text.className = Styles.WAIT_WINDOW_TEXT
     add(image)
     add(text)
     justifyContentMode = FlexComponent.JustifyContentMode.CENTER
     defaultHorizontalComponentAlignment = FlexComponent.Alignment.START
     isSpacing = false
+    popup.addOpenedChangeListener(this)
   }
 
   /**
@@ -60,6 +58,22 @@ class WaitWindow : VerticalLayout() {
   fun setText(text: String?) {
     if (text != null) {
       this.text.text = text
+    }
+  }
+
+  /**
+   * Shows the wait window.
+   * @param parent the parent widget.
+   */
+  fun show() {
+    popup.open()
+  }
+
+  override fun onComponentEvent(event: GeneratedVaadinDialog.OpenedChangeEvent<Dialog>) {
+    if(event.isOpened) {
+      popup.element.style["cursor"] = "wait"
+    } else {
+      popup.element.style["cursor"] = "default"
     }
   }
 }
