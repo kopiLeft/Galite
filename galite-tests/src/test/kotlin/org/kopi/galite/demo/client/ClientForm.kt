@@ -26,7 +26,7 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object ClientForm : ReportSelectionForm() {
+class ClientForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "Clients"
   val page = page("Client")
@@ -41,10 +41,10 @@ object ClientForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
-  val block = insertBlock(Clients, page) {
+  val block = insertBlock(Clients(), page) {
     command(item = report) {
       action = {
-        createReport(Clients)
+        createReport(this@insertBlock)
       }
     }
   }
@@ -54,7 +54,7 @@ object ClientForm : ReportSelectionForm() {
   }
 }
 
-object Clients : FormBlock(1, 1, "Clients") {
+class Clients : FormBlock(1, 1, "Clients") {
   val u = table(Client)
 
   val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {
@@ -100,5 +100,5 @@ object Clients : FormBlock(1, 1, "Clients") {
 }
 
 fun main() {
-  Application.runForm(formName = ClientForm)
+  Application.runForm(formName = ClientForm())
 }

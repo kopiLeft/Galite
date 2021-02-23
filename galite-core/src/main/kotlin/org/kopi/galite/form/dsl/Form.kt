@@ -184,7 +184,7 @@ abstract class Form : Window() {
       requireNotNull(baseName)
       val localizationDestination = destination
               ?: this.javaClass.classLoader.getResource("")?.path +
-              this.javaClass.packageName.replace(".", "/")
+              this.javaClass.`package`.name.replace(".", "/")
       try {
         val writer = FormLocalizationWriter()
         genLocalization(writer)

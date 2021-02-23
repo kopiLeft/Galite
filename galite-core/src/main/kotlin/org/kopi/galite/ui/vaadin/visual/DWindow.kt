@@ -21,12 +21,21 @@ import java.io.File
 import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.notif.AbstractNotification
+import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.NotificationListener
+import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.window.VActorPanel
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
@@ -43,17 +52,16 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
   //--------------------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------------------
-
-  //--------------------------------------------------------------
   private var inAction = false
   private var currentAction: Action? = null
   private val isProgressDialogAttached = false
   private val isWaitDialogAttached = false
   private val askUser = false
   private val actionRunner = ActionRunner()
-  private val actionsQueue: ConcurrentLinkedQueue<QueuedAction>? = null
+  private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
   private val actors : VActorPanel = VActorPanel()
   var runtimeDebugInfo: Throwable? = null
+  private val messageHandler: MessageHandler = MessageHandler()
 
   init {
     add(actors)
@@ -143,10 +151,8 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
   }
 
   override fun performAsyncAction(action: Action) {
-    ui.ifPresent {
-      it.access {
-        performActionImpl(action, true)
-      }
+    access {
+      performActionImpl(action, true)
     }
   }
 
@@ -218,8 +224,18 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     // TODO
   }
 
+  /**
+   * Displays an error message.
+   * @param message The error message to be displayed.
+   */
+  open fun displayError(message: String?) {
+    messageHandler.error(message)
+  }
+
   open fun reportError(e: VRuntimeException) {
-    // TODO
+    if (e.message != null) {
+      displayError(e.message)
+    }
   }
 
   open fun release() {
@@ -237,6 +253,69 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
   //--------------------------------------------------------------
   // INNER CLASSES
   //--------------------------------------------------------------
+  /**
+   * The MessageHandler is the window implementation of the [MessageListener].
+   */
+  inner class MessageHandler : MessageListener {
+    private var value = 0 // only for use in ask(...)
+
+    override fun notice(message: String) {
+      val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+
+      showNotification(dialog)
+    }
+
+    override fun error(message: String?) {
+      val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
+
+      showNotification(dialog)
+    }
+
+    override fun warn(message: String) {
+      val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+
+      showNotification(dialog)
+    }
+
+    /**
+     * Displays a request dialog for a user interaction.
+     * @param message The message to be displayed in the dialog box.
+     */
+    fun ask(message: String): Boolean {
+      return ask(message, false) == MessageListener.AWR_YES
+    }
+
+    override fun ask(message: String, yesIsDefault: Boolean): Int {
+      val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+
+      dialog.yesIsDefault = yesIsDefault
+      dialog.addNotificationListener(object : NotificationListener {
+        override fun onClose(yes: Boolean) {
+          value = if (yes) {
+            MessageListener.AWR_YES
+          } else {
+            MessageListener.AWR_NO
+          }
+        }
+      })
+      // attach the notification to the application.
+      showNotification(dialog)
+      return value
+    }
+
+    private val notificationLocale get() = application.defaultLocale.toString()
+
+    /**
+     * Shows a notification.
+     * @param notification The notification to be shown
+     */
+    internal fun showNotification(notification: AbstractNotification) {
+      access {
+        notification.show()
+      }
+    }
+  }
+
   /**
    * The `ActionRunner` is the used to run all users
    * [Action].
@@ -300,9 +379,9 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
      * action that can be cancelled.
      */
     protected fun clearActionQueue() {
-      val actions: MutableIterator<QueuedAction> = actionsQueue!!.iterator()
+      val actions: MutableIterator<QueuedAction> = actionsQueue.iterator()
       while (actions.hasNext()) {
-        val action: QueuedAction = actions.next() as QueuedAction
+        val action: QueuedAction = actions.next()
         if (action.isCancellable) {
           actions.remove()
         }
@@ -354,7 +433,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
      * Runs the next pending action in the queue.
      */
     fun runNextPendingAction() {
-      if (!actionsQueue!!.isEmpty()) {
+      if (!actionsQueue.isEmpty()) {
         val action: QueuedAction? = actionsQueue.poll()
         action?.execute()
       }
@@ -400,13 +479,11 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
   //---------------------------------------------------
 
   override fun fileProduced(file: File, name: String) {
-    ui.ifPresent { myUi ->
-      myUi.access {
-        // TODO: Use InformationNotification instead, and localize the message
-        Dialog().also {
-          it.add("File is generated to " + file.absoluteFile)
-          it.open()
-        }
+    access {
+      // TODO: Use InformationNotification instead, and localize the message
+      Dialog().also {
+        it.add("File is generated to " + file.absoluteFile)
+        it.open()
       }
     }
   }

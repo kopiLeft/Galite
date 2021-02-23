@@ -17,16 +17,34 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.PasswordField
+import com.vaadin.flow.component.datepicker.DatePicker
 
 /**
- * A password field implementation
+ * An Date field.
  */
-class VPasswordField(val col: Int): PasswordField(), UTextField {
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  override fun hasAutoComplete(): Boolean = false
+class VDateField : DatePicker(), UTextField {
+ init {
+   this.isClearButtonVisible = true
+ }
 
-  override fun getMaxLength(): Int = super.getMaxLength()
+  override fun hasAutoComplete(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun getMaxLength(): Int {
+    TODO("Not yet implemented")
+  }
+
+  override fun getMinLength(): Int {
+    TODO("Not yet implemented")
+  }
+
+
+  override fun setMaxLength(maxLength: Int) {
+   //Nothing to Implement
+  }
+
+  override fun setMinLength(minLength: Int) {
+    TODO("Not yet implemented")
+  }
 }

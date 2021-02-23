@@ -22,15 +22,26 @@ import com.vaadin.flow.component.html.Label
 
 /**
  * The label server component.
- * TODO: Implement this class with appropriate component
  */
 open class Label : Label(), HasEnabled {
 
   /**
-   * Sets the field label to be mandatory.
-   * @param mandatory Is it a mandatory field ?
+   * The info text used to display search operator.
    */
-  open fun setMandatory(mandatory: Boolean) {
-    TODO()
-  }
+  var infoText: String? = ""
+
+  /**
+   * The label can execute field action trigger.
+   */
+  var hasAction = false
+
+  /**
+   * Is it a sortable label ?
+   */
+  var sortable = false
+
+  /**
+   * Is this a mandatory field ?
+   */
+  var mandatory: Boolean = false
 }

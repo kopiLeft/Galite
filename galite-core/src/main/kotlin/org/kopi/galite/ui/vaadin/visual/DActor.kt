@@ -28,6 +28,7 @@ import com.vaadin.flow.component.ShortcutEventListener
 import com.vaadin.flow.component.button.Button
 
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
@@ -71,10 +72,8 @@ class DActor(private var model: VActor)
   }
 
   override fun setEnabled(enabled: Boolean) {
-    ui.ifPresent {
-      it.access {
-        super.setEnabled(enabled)
-      }
+    access {
+      super.setEnabled(enabled)
     }
   }
 

@@ -22,6 +22,8 @@ import java.awt.event.KeyEvent
 import org.kopi.galite.form.ULabel
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.label.SortableLabel
 import org.kopi.galite.visual.VActor
 
@@ -31,19 +33,6 @@ import org.kopi.galite.visual.VActor
  * @param help The label help.
  */
 open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  /**
-   * The info text used to display search operator.
-   */
-  var infoText: String? = ""
-
-  /**
-   * The label can execute field action trigger.
-   */
-  var hasAction = false
 
   init {
     setText(text)
@@ -57,13 +46,17 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * @param activ The field state.
    */
   fun prepareSnapshot(activ: Boolean) {
-    text
     // TODO
   }
 
-  override fun init(text: String?, help: String?) {
-    tooltip = help
-    // TODO
+  override fun init(text: String?, toolTip: String?) {
+    tooltip = toolTip
+    //BackgroundThreadHandler.access(Runnable {
+      this.text = text
+      if (toolTip != null) {
+        element.setProperty("title", Utils.createTooltip(toolTip))
+      }
+    //})
   }
 
   /**
@@ -71,8 +64,31 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * @param model The field model.
    * @param row The field row.
    */
-  fun update(model: VFieldUI, row: Int) {
-    TODO()
+  open fun update(model: VFieldUI, row: Int) {
+    access {
+      updateStyles(model.model.getAccess(row), model.model.hasFocus())
+      if (model.model.getAccess(row) == VConstants.ACS_SKIPPED) {
+        // Only show base help on a skipped field
+        // Actors are not shown since they are not active.
+        if (tooltip != null) {
+          element.setProperty("title", Utils.createTooltip(tooltip))
+        }
+      } else {
+        val description = buildDescription(model, tooltip)
+        if (description != null) {
+          element.setProperty("title", Utils.createTooltip(description))
+        }
+      }
+      if (model.model.getAccess(row) == VConstants.ACS_HIDDEN) {
+        if (isVisible) {
+          isVisible = false
+        }
+      } else {
+        if (!isVisible) {
+          isVisible = true
+        }
+      }
+    }
   }
 
   /**
@@ -85,7 +101,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     element.classList.remove("mustfill")
     element.classList.remove("hidden")
     element.classList.remove("focused")
-    setMandatory(access == VConstants.ACS_MUSTFILL)
+    mandatory = access == VConstants.ACS_MUSTFILL
     // The focus style is the major style
     if (focused) {
       element.classList.add("focused")
