@@ -28,7 +28,7 @@ open class Label : Label(), HasEnabled {
   /**
    * The info text used to display search operator.
    */
-  var infoText: String? = ""
+  open var infoText: String? = ""
 
   /**
    * The label can execute field action trigger.
