@@ -17,37 +17,26 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant
+import com.vaadin.flow.component.datetimepicker.DateTimePicker
 
 /**
- * A text field widget that can support many validation
- * strategies to restrict field input.
+ * A timestamp field.
  */
-open class VTextField(val col: Int) : TextField(), UTextField {
-
-  init {
-    style()
-  }
-
-  /**
-   * TODO: Temporary styling but it Should be enhanced.
-   */
-  fun style() {
-    setWidthFull()
-    addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.MATERIAL_ALWAYS_FLOAT_LABEL)
-  }
+class VTimeStampField : DateTimePicker(), UTextField {
 
   override fun hasAutoComplete(): Boolean {
     TODO("Not yet implemented")
   }
 
-  /**
-   * Sets the input field type attribute to [type]
-   */
-  fun setInputType(type: String) {
-    element.node.runWhenAttached { ui ->
-      ui.page.executeJs("$0.focusElement.type=$1", this, type)
-    }
+  override fun getMaxLength(): Int = TODO()
+
+  override fun getMinLength(): Int = TODO()
+
+  override fun setMaxLength(maxLength: Int) {
+    // TODO
+  }
+
+  override fun setMinLength(minLength: Int) {
+    // TODO
   }
 }

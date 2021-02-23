@@ -28,7 +28,7 @@ import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
 
-import com.vaadin.flow.component.AbstractSinglePropertyField
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
@@ -49,9 +49,9 @@ class TextField(val model: VField,
                 val scanner: Boolean,
                 val noEdit: Boolean,
                 val align: Int,
-                val hasAutofill: Boolean) : AbstractField() {
+                val hasAutofill: Boolean) : org.kopi.galite.ui.vaadin.field.AbstractField() {
 
-  var field: AbstractSinglePropertyField<*, out Any?>
+  val field: AbstractField<*, out Any?>
 
   /**
    * The column number.
@@ -149,7 +149,7 @@ class TextField(val model: VField,
     field.isEnabled = enabled
     add(field)
     if (hasAutofill) {
-      TODO("AUTOFILL")
+      //TODO("AUTOFILL")
     }
     setValidationStrategy()
   }
@@ -162,7 +162,6 @@ class TextField(val model: VField,
 
   fun setFieldType() {
     // set field type according to the model
-    // this will set the validation strategy on the client side.
     when (model) {
       is VStringField -> {
         // string field
@@ -177,7 +176,7 @@ class TextField(val model: VField,
       }
       is VMonthField -> {
         // month field
-        TODO()
+        type = Type.MONTH
       }
       is VDateField -> {
         // date field
@@ -185,11 +184,11 @@ class TextField(val model: VField,
       }
       is VWeekField -> {
         // week field
-        TODO()
+        type = Type.WEEK
       }
       is VTimeField -> {
         // time field
-        TODO()
+        type = Type.TIME
       }
       is VCodeField -> {
         // code field
@@ -201,7 +200,7 @@ class TextField(val model: VField,
       }
       is VTimestampField -> {
         // timestamp field
-        TODO()
+        type = Type.TIMESTAMP
       }
       else -> {
         throw IllegalArgumentException("unknown field model : " + model.javaClass.name)
@@ -237,10 +236,10 @@ class TextField(val model: VField,
                                                                                           { _, _ -> TODO() })
       Type.DECIMAL -> TODO()
       Type.DATE -> bindingBuilder.withValidator(DateValidator()).bind({ TODO() }, { _, _ -> TODO() })
-      Type.TIME -> TODO()
-      Type.MONTH -> TODO()
-      Type.WEEK -> TODO()
-      Type.TIMESTAMP -> TODO()
+      Type.TIME -> bindingBuilder.withValidator(TimeValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.MONTH -> bindingBuilder.withValidator(MonthValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.WEEK -> bindingBuilder.withValidator(WeekValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.TIMESTAMP -> bindingBuilder.withValidator(TimestampValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.CODE -> TODO()
       else -> TODO()
     }
@@ -250,7 +249,7 @@ class TextField(val model: VField,
    * Creates the attached text field component.
    * @return the attached text field component.
    */
-  private fun createTextField(): AbstractSinglePropertyField<*, out Any?> {
+  private fun createTextField(): AbstractField<*, out Any?> {
     val text = createFieldComponent()
     // TODO
     return text
@@ -260,7 +259,7 @@ class TextField(val model: VField,
    * Creates the input component according to field state.
    * @return the input component
    */
-  protected fun createFieldComponent(): AbstractSinglePropertyField<*, out Any?> {
+  protected fun createFieldComponent(): AbstractField<*, out Any?> {
     var col = col
     val text = if (noEcho && rows == 1) {
       VPasswordField(col)
@@ -281,10 +280,21 @@ class TextField(val model: VField,
         it.maxLength = col;
         it.isPreventInvalidInput = true
       }
+    } else if(type == Type.TIME) {
+      VTimeField()
+    } else if(type == Type.TIMESTAMP) {
+      VTimeStampField()
     } else if(isDate()) {
       VDateField()
     } else {
-      VTextField(col) // TODO
+      VTextField(col).also {
+        if(type == Type.WEEK) {
+          it.setInputType("week")
+        } else if (type == Type.MONTH) {
+          it.setInputType("month")
+        }
+      }
+      // TODO
     }
 
     // TODO()

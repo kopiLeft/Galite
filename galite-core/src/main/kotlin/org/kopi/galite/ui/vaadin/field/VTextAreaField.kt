@@ -31,14 +31,14 @@ class VTextAreaField : TextArea(), UTextField {
   }
 
   fun setRows(rows: Int, visibleRows: Int) {
-    addThemeVariants()
+    // TODO
   }
 
   fun setWordwrap(b: Boolean) {
-
+    // TODO
   }
 
   fun setFixedNewLine(b: Boolean) {
-
+    // TODO
   }
 }
