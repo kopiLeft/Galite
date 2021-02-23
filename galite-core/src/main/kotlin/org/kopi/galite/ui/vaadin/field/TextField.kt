@@ -290,6 +290,8 @@ class TextField(val model: VField,
       VTextField(col).also {
         if(type == Type.WEEK) {
           it.setInputType("week")
+        } else if (type == Type.MONTH) {
+          it.setInputType("month")
         }
       }
       // TODO
