@@ -17,20 +17,61 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import java.util.*
+
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.type.Date
 
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.datepicker.DatePicker
+import org.kopi.galite.type.Month
+import org.kopi.galite.visual.VlibProperties
+import java.time.LocalDate
 
 /**
  * The `DateChooser` is date selection component.
- * @param date The initial date.
  *
- * TODO: Implement this with appropriate componenet
+ * @param date The initial date.
  */
-class DateChooser(date: Date?, reference: Component) : Component(), UComponent, DateChooserListener {
+class DateChooser(date: Date?,
+                  reference: Component?)
+  : DatePicker(),
+        UComponent,
+        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate>> {
+
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private var selectedDate: Date?
+
+  /**
+   * Returns the first day of the selected month.
+   * @return The first day of the selected month.
+   */
+  val firstDay = 0
+
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+  /**
+   * Creates a new `DateChooser` instance.
+   */
+  init {
+    selectedDate = date
+    showRelativeTo(reference)
+    setToDay(VlibProperties.getString("today"))
+    if (date != null) {
+      super.setSelectedDate(date.toCalendar().time)
+    }
+    addValueChangeListener(this)
+    locale = application.defaultLocale
+    setOffset(Date().timezoneOffset)
+  }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -40,15 +81,18 @@ class DateChooser(date: Date?, reference: Component) : Component(), UComponent, 
    * @param date The initial date.
    * @return The selected date.
    */
-  private fun doModal(date: Date?): Date {
-    TODO()
+  private fun doModal(date: Date): Date? {
+    //BackgroundThreadHandler.startAndWait(Runnable { TODO
+      application.attachComponent(this@DateChooser)
+    //}, this)
+    return selectedDate
   }
 
   /**
    * Disposes the date chooser.
    */
   protected fun dispose() {
-    TODO()
+    application.detachComponent(this)
   }
 
   /**
@@ -84,20 +128,17 @@ class DateChooser(date: Date?, reference: Component) : Component(), UComponent, 
   //-------------------------------------------------
   // DATE CHOOSER LISTENER IMPLEMENTATION
   //-------------------------------------------------
-  override fun onClose(selected: java.util.Date?) {
-    TODO()
+
+  override fun valueChanged(event: ComponentValueChangeEvent<DatePicker, LocalDate>) {
+    val selected = event.value
+    if (selected != null) {
+      val cal: Calendar = Calendar.getInstance(ApplicationContext.getDefaultLocale())
+      //cal.time = selected TODO
+      setSelectedDate(Date(cal))
+    }
+    dispose()
+    //BackgroundThreadHandler.releaseLock(this) TODO
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var selectedDate: Date? = date
-
-  /**
-   * Returns the first day of the selected month.
-   * @return The first day of the selected month.
-   */
-  val firstDay = 0
 
   companion object {
     //---------------------------------------------------
@@ -119,15 +160,7 @@ class DateChooser(date: Date?, reference: Component) : Component(), UComponent, 
      */
     /*package*/
     fun getDaysInMonth(d: Date?): Int {
-      TODO()
+      return Month(d).getLastDay().day
     }
-  }
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
   }
 }

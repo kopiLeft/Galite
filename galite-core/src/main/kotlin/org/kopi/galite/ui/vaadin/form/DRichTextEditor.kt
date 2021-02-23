@@ -23,52 +23,206 @@ import org.kopi.galite.form.VFieldUI
 /**
  * Rich text editor implementation based on CK editor for vaadin.
  */
-class DRichTextEditor(model: VFieldUI,
-                      label: DLabel?,
-                      align: Int,
-                      options: Int,
-                      height: Int,
-                      detail: Boolean)
-  : DField(model, label!!, align, options, detail), UTextField {
-
+class DRichTextEditor(
+        model: VFieldUI,
+        label: DLabel?,
+        align: Int,
+        options: Int,
+        height: Int,
+        detail: Boolean
+) : DField(model, label, align, options, detail), UTextField, FocusListener, ValueChangeListener, NavigationListener {
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
   override fun updateColor() {}
 
   override fun getObject(): Any? {
-    TODO("Not yet implemented")
+    return editor.getValue()
   }
 
   override fun setBlink(blink: Boolean) {
-    TODO("Not yet implemented")
+    BackgroundThreadHandler.access(Runnable {
+      if (blink) {
+        editor.addStyleName("blink")
+      } else {
+        editor.removeStyleName("blink")
+      }
+    })
+  }
+
+  fun focus(event: FocusEvent?) {
+    // model transfer focus is performed
+    // when the field is focused and not when
+    // the field is clicked like text field
+    // because CK editor does not provide a way
+    // to capture click event on the editable area
+    onClick()
+  }
+
+  fun valueChange(event: ValueChangeEvent?) {
+    // value change event is fired when the field is blurred.
+    getModel().setChangedUI(true)
+    getModel().setChanged(true)
   }
 
   override fun updateText() {
-    TODO("Not yet implemented")
+    val newModelTxt = getModel().getText(getRowController().getBlockView().getRecordFromDisplayLine(getPosition()))
+    BackgroundThreadHandler.access(Runnable { editor.setValue(newModelTxt) })
   }
 
   override fun updateFocus() {
-    TODO("Not yet implemented")
+    label!!.update(model, getPosition())
+    if (!modelHasFocus()) {
+      if (inside) {
+        inside = false
+      }
+    } else {
+      if (!inside) {
+        inside = true
+        enterMe()
+      }
+    }
+    super.updateFocus()
   }
 
   override fun updateAccess() {
-    TODO("Not yet implemented")
+    super.updateAccess()
+    label!!.update(model, getBlockView().getRecordFromDisplayLine(getPosition()))
+    BackgroundThreadHandler.access(Runnable {
+      editor.setEnabled(access >= VConstants.ACS_VISIT)
+      isEnabled = access >= VConstants.ACS_VISIT
+    })
   }
 
   override fun forceFocus() {
-    TODO("Not yet implemented")
+    enterMe()
   }
 
-  override fun getText(): String? {
-    TODO("Not yet implemented")
+  override fun getText(): String {
+    return editor.getValue()
   }
 
-  override fun setHasCriticalValue(b: Boolean) {}
+  fun setHasCriticalValue(b: Boolean) {}
+  fun addSelectionFocusListener() {}
+  fun removeSelectionFocusListener() {}
+  fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 
-  override fun addSelectionFocusListener() {}
+  /**
+   * Gets the focus to this editor.
+   */
+  private fun enterMe() {
+    BackgroundThreadHandler.access(Runnable { editor.focus() })
+  }
 
-  override fun removeSelectionFocusListener() {}
+  // ----------------------------------------------------------------------
+  // NAVIGATION
+  // ----------------------------------------------------------------------
+  fun onGotoNextField() {
+    getModel().getForm().performAsyncAction(object : KopiAction("keyKEY_TAB") {
+      @Throws(VException::class)
+      fun execute() {
+        if (getModel() != null) {
+          getModel().getBlock().getForm().getActiveBlock().gotoNextField()
+        }
+      }
+    })
+  }
 
-  override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
+  fun onGotoPrevField() {
+    getModel().getForm().performAsyncAction(object : KopiAction("keyKEY_STAB") {
+      @Throws(VException::class)
+      fun execute() {
+        if (getModel() != null) {
+          getModel().getBlock().getForm().getActiveBlock().gotoPrevField()
+        }
+      }
+    })
+  }
+
+  fun onGotoNextBlock() {
+    getModel().getForm().performAsyncAction(object : KopiAction("keyKEY_BLOCK") {
+      @Throws(VException::class)
+      fun execute() {
+        if (getModel() != null) {
+          getModel().getBlock().getForm().gotoNextBlock()
+        }
+      }
+    })
+  }
+
+  fun onGotoPrevRecord() {
+    getModel().getForm().performAsyncAction(object : KopiAction("keyKEY_REC_UP") {
+      @Throws(VException::class)
+      fun execute() {
+        if (getModel() != null) {
+          getModel().getBlock().getForm().getActiveBlock().gotoPrevRecord()
+        }
+      }
+    })
+  }
+
+  fun onGotoNextRecord() {
+    getModel().getForm().performAsyncAction(object : KopiAction("keyKEY_REC_DOWN") {
+      @Throws(VException::class)
+      fun execute() {
+        if (getModel() != null) {
+          getModel().getBlock().getForm().getActiveBlock().gotoNextRecord()
+        }
+      }
+    })
+  }
+
+  fun onGotoFirstRecord() {
+    getModel().getForm().performAsyncAction(object : KopiAction("keyKEY_REC_FIRST") {
+      @Throws(VException::class)
+      fun execute() {
+        if (getModel() != null) {
+          getModel().getBlock().getForm().getActiveBlock().gotoFirstRecord()
+        }
+      }
+    })
+  }
+
+  fun onGotoLastRecord() {
+    getModel().getForm().performAsyncAction(object : KopiAction("keyKEY_REC_LAST") {
+      @Throws(VException::class)
+      fun execute() {
+        if (getModel() != null) {
+          getModel().getBlock().getForm().getActiveBlock().gotoLastRecord()
+        }
+      }
+    })
+  }
+
+  fun onGotoNextEmptyMustfill() {
+    getModel().getForm().performAsyncAction(object : KopiAction("keyKEY_ALTENTER") {
+      @Throws(VException::class)
+      fun execute() {
+        if (getModel() != null) {
+          getModel().getBlock().getForm().getActiveBlock().gotoNextEmptyMustfill()
+        }
+      }
+    })
+  }
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val editor: RichTextField
+  private var inside = false
+
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+  init {
+    editor = RichTextField(getModel().getWidth(),
+                           getModel().getHeight(),
+                           if (getModel().getHeight() === 1) 1 else (getModel() as VStringField).getVisibleHeight(),
+                           model.getModel().isNoEdit(),
+                           ApplicationContext.getDefaultLocale())
+    editor.addFocusListener(this)
+    editor.addValueChangeListener(this)
+    editor.addNavigationListener(this)
+    setContent(editor)
+  }
 }

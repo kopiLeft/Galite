@@ -23,6 +23,8 @@ import org.kopi.galite.form.VFieldUI
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ClickNotifier
+import org.kopi.galite.form.VConstants
+import org.kopi.galite.ui.vaadin.base.Utils
 
 /**
  * UI Implementation of an actor field.
@@ -33,6 +35,25 @@ class DActorField(model: VFieldUI,
                   options: Int,
                   detail: Boolean)
   : DField(model, label, align, options, detail), UActorField {
+
+  // --------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------
+  private val field: ActorField
+
+  // --------------------------------------------------
+  // CONSTRUCTOR
+  // --------------------------------------------------
+  init {
+    field = ActorField()
+    field.setCaption(getModel().label)
+    if (getModel().toolTip != null) {
+      field.setDescription(Utils.createTooltip(getModel().toolTip))
+    }
+    field.setEnabled(getModel().getDefaultAccess() >= VConstants.ACS_VISIT)
+    field.addClickListener(this)
+    setContent(field)
+  }
 
   // --------------------------------------------------
   // IMPLEMENTATION
@@ -50,19 +71,11 @@ class DActorField(model: VFieldUI,
   override fun updateText() {}
 
   override fun updateAccess() {
-    TODO("Not yet implemented")
-  }
-
-  override fun getObject(): Any? {
-    TODO("Not yet implemented")
-  }
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
+    super.updateAccess()
+    //BackgroundThreadHandler.access(Runnable { TODO
+      field.setVisible(access != VConstants.ACS_HIDDEN)
+      field.setEnabled(access >= VConstants.ACS_VISIT)
+    //})
   }
 
   override fun updateFocus() {}
@@ -70,11 +83,17 @@ class DActorField(model: VFieldUI,
   override fun forceFocus() {}
 
   override fun updateColor() {
-    TODO()
+    //BackgroundThreadHandler.access(Runnable {  TODO
+              field.setColor(Utils.toString(foreground), Utils.toString(background))
+    //})
+  }
+
+  override fun getObject(): Any? {
+    return null
   }
 
   override fun getText(): String? {
-    TODO("Not yet implemented")
+    return null
   }
 
   override fun setHasCriticalValue(b: Boolean) {}

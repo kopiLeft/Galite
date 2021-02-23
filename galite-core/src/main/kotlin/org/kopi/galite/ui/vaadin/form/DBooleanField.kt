@@ -18,7 +18,9 @@
 package org.kopi.galite.ui.vaadin.form
 
 import org.kopi.galite.form.UTextField
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.field.BooleanField
 
 /**
  * Boolean field.
@@ -29,12 +31,27 @@ import org.kopi.galite.form.VFieldUI
  * @param options The field options.
  * @param detail is it a detail field view ?
  */
-class DBooleanField(model: VFieldUI,
-                    label: DLabel?,
-                    align: Int,
-                    options: Int,
-                    detail: Boolean) : DObjectField(model, label, align, options,
-                                                    detail), UTextField {
+class DBooleanField(
+        model: VFieldUI?,
+        label: DLabel?,
+        align: Int,
+        options: Int,
+        detail: Boolean
+) : DObjectField(model, label, align, options, detail), UTextField, ValueChangeListener {
+
+  // --------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------
+  private val field: BooleanField
+  private var inside = false
+  // --------------------------------------------------
+  // CONSTRUCTOR
+  // --------------------------------------------------
+  init {
+    field = BooleanField(trueRepresentation, falseRepresentation)
+    field.addValueChangeListener(this)
+    setContent(field)
+  }
   // --------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------
@@ -47,30 +64,75 @@ class DBooleanField(model: VFieldUI,
   }
 
   override fun updateText() {
-    TODO()
+    //BackgroundThreadHandler.access(Runnable { TODO
+              field.setValue(getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position)))
+    //})
+    super.updateText()
   }
 
   override fun updateFocus() {
-    TODO()
+    label!!.update(model, position)
+    if (!modelHasFocus()) {
+      if (inside) {
+        inside = false
+      }
+    } else {
+      if (!inside) {
+        inside = true
+        enterMe()
+      }
+    }
+    super.updateFocus()
+  }
+
+  fun valueChange(event: ValueChangeEvent) {
+
+    // ensures to get model focus to validate the field
+    if (!getModel().hasFocus()) {
+      getModel().block.activeField = getModel()
+    }
+    val text = getModel().toText(event.getValue())
+    if (getModel().checkText(text!!)) {
+      getModel().changedUI = true
+      getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.getValue())
+    }
+    getModel().setChanged(true)
   }
 
   override fun updateAccess() {
-    TODO()
+    super.updateAccess()
+    label.update(model, getBlockView().getRecordFromDisplayLine(position))
+    //BackgroundThreadHandler.access(Runnable { TODO
+      field.setLabel(label.text)
+      field.setEnabled(getAccess() >= VConstants.ACS_VISIT)
+      if (getAccess() == VConstants.ACS_MUSTFILL) {
+        field.setMandatory(true)
+      } else {
+        field.setMandatory(false)
+      }
+    //})
   }
 
-  override fun getObject(): Any? = getText()
+  override fun getObject(): Any? {
+    return text
+  }
 
   override fun setBlink(b: Boolean) {
-    TODO()
+    //BackgroundThreadHandler.access(Runnable { TODO
+      field.setBlink(b)
+    //})
   }
 
   override fun getText(): String? {
-    TODO()
+    return getModel().toText(field.getValue())
   }
 
   override fun setHasCriticalValue(b: Boolean) {}
+
   override fun addSelectionFocusListener() {}
+
   override fun removeSelectionFocusListener() {}
+
   override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 
   /**
@@ -91,6 +153,8 @@ class DBooleanField(model: VFieldUI,
    * Gets the focus to this field.
    */
   protected fun enterMe() {
-    TODO()
+    //BackgroundThreadHandler.access(Runnable {  TODO
+      field.setFocus(true)
+    //})
   }
 }

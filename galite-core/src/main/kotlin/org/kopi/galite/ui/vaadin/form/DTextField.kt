@@ -31,6 +31,12 @@ import org.kopi.galite.visual.VlibProperties
 /**
  * The `DTextField` is the vaadin implementation
  * of the [UTextField] specifications.
+ *
+ * @param model The row controller.
+ * @param label The field label.
+ * @param align The field alignment.
+ * @param options The field options.
+ * @param detail Does the field belongs to the detail view ?
  */
 open class DTextField(
         model: VFieldUI,
@@ -43,10 +49,10 @@ open class DTextField(
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  private var field: TextField // the text component
+  private val field: TextField // the text component
   protected var inside = false
-  protected var noEdit = false
-  protected var scanner = false
+  protected var noEdit: Boolean
+  protected var scanner: Boolean
   private var selectionAfterUpdateDisabled = false
   protected var transformer: ModelTransformer? = null
 
@@ -64,7 +70,6 @@ open class DTextField(
     } else {
       ScannerTransformer(this)
     }
-
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.addTextValueChangeListener {
@@ -72,6 +77,7 @@ open class DTextField(
       checkText(it.value.toString()) // FIXME: use onTextChange(text) instead when we have full support for commands
     }
 
+    createContextMenu()
     setFieldContent(field)
   }
 
@@ -169,7 +175,7 @@ open class DTextField(
   override fun updateColor() {
     //access { TODO: Acccess from thread
     val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
-      field.classNames.add(injector.createAndInjectStyle(getModel().align, getForeground(), getBackground()))
+      field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
     //}
   }
 
@@ -276,119 +282,18 @@ open class DTextField(
   // --------------------------------------------------
 
   /**
-   * Converts a given string to a line string.
-   * @param source The source text.
-   * @param col The column index.
-   * @param row The row index.
-   * @return The converted string.
+   * Returns the field width.
+   * @return The field width.
    */
-  private fun convertToSingleLine(source: String, col: Int, row: Int): String =
-          buildString {
-            val length = source.length
-            var start = 0
-            while (start < length) {
-              var index = source.indexOf('\n', start)
-              if (index - start < col && index != -1) {
-                append(source.substring(start, index))
-                for (j in index - start until col) {
-                  append(' ')
-                }
-                start = index + 1
-                if (start == length) {
-                  // last line ends with a "new line" -> add an empty line
-                  for (j in 0 until col) {
-                    append(' ')
-                  }
-                }
-              } else {
-                if (start + col >= length) {
-                  append(source.substring(start, length))
-                  for (j in length until start + col) {
-                    append(' ')
-                  }
-                  start = length
-                } else {
-                  // find white space to break line
-                  var i = start + col - 1
-                  while (i > start) {
-                    if (Character.isWhitespace(source[i])) {
-                      break
-                    }
-                    i--
-                  }
-                  index = if (i == start) {
-                    start + col
-                  } else {
-                    i + 1
-                  }
-                  append(source.substring(start, index))
-                  var j = (index - start) % col
-                  while (j != 0 && j < col) {
-                    append(' ')
-                    j++
-                  }
-                  start = index
-                }
-              }
-            }
-          }
+  val fieldWidth: Float
+    get() = this.field.width.toFloat()
 
   /**
-   * Converts a given string to a fixed line string.
-   * @param source The source text.
-   * @param col The column index.
-   * @param row The row index.
-   * @return The converted string.
+   * Returns the field width unit.
+   * @return The field width unit.
    */
-  private fun convertFixedTextToSingleLine(source: String, col: Int, row: Int): String =
-          buildString {
-            val length = source.length
-            var start = 0
-            while (start < length) {
-              var index = source.indexOf('\n', start)
-              if (index - start < col && index != -1) {
-                append(source.substring(start, index))
-                for (j in index - start until col) {
-                  append(' ')
-                }
-                start = index + 1
-                if (start == length) {
-                  // last line ends with a "new line" -> add an empty line
-                  for (j in 0 until col) {
-                    append(' ')
-                  }
-                }
-              } else {
-                if (start + col >= length) {
-                  append(source.substring(start, length))
-                  for (j in length until start + col) {
-                    append(' ')
-                  }
-                  start = length
-                } else {
-                  // find white space to break line
-                  var i: Int
-                  i = start + col
-                  while (i > start) {
-                    if (Character.isWhitespace(source[i])) {
-                      break
-                    }
-                    i--
-                  }
-                  index = if (i == start) {
-                    start + col
-                  } else {
-                    i
-                  }
-                  append(source.substring(start, index))
-                  for (j in index - start until col) {
-                    append(' ')
-                  }
-                  start = index + 1
-                }
-              }
-            }
-          }
+  val fieldWidthUnits: Unit
+    get() = this.field.getWidthUnits()
 
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION
@@ -452,8 +357,8 @@ open class DTextField(
       return guiTxt
     }
 
-    override fun checkFormat(source: String): Boolean {
-      return if (row == 1) true else convertToSingleLine(source, col, row).length <= row * col
+    override fun checkFormat(guiTxt: String): Boolean {
+      return if (row == 1) true else convertToSingleLine(guiTxt, col, row).length <= row * col
     }
   }
 
@@ -534,7 +439,7 @@ open class DTextField(
   /**
    * Add the field context menu.
    */
-  /*protected open fun createContextMenu() {
+  protected fun createContextMenu() {
     if (model.hasAutofill() && getModel().getDefaultAccess() > VConstants.ACS_SKIPPED) {
       val contextMenu = ContextMenu()
       contextMenu.addItem(VlibProperties.getString("item-index")).setData(VlibProperties.getString("item-index"))
@@ -546,5 +451,121 @@ open class DTextField(
       })
       contextMenu.setAsContextMenuOf(field)
     }
-  }*/
+  }
+
+  companion object {
+    /**
+     * Converts a given string to a line string.
+     * @param source The source text.
+     * @param col The column index.
+     * @param row The row index.
+     * @return The converted string.
+     */
+    private fun convertToSingleLine(source: String, col: Int, row: Int): String =
+            buildString {
+              val length = source.length
+              var start = 0
+              while (start < length) {
+                var index = source.indexOf('\n', start)
+                if (index - start < col && index != -1) {
+                  append(source.substring(start, index))
+                  for (j in index - start until col) {
+                    append(' ')
+                  }
+                  start = index + 1
+                  if (start == length) {
+                    // last line ends with a "new line" -> add an empty line
+                    for (j in 0 until col) {
+                      append(' ')
+                    }
+                  }
+                } else {
+                  if (start + col >= length) {
+                    append(source.substring(start, length))
+                    for (j in length until start + col) {
+                      append(' ')
+                    }
+                    start = length
+                  } else {
+                    // find white space to break line
+                    var i = start + col - 1
+                    while (i > start) {
+                      if (Character.isWhitespace(source[i])) {
+                        break
+                      }
+                      i--
+                    }
+                    index = if (i == start) {
+                      start + col
+                    } else {
+                      i + 1
+                    }
+                    append(source.substring(start, index))
+                    var j = (index - start) % col
+                    while (j != 0 && j < col) {
+                      append(' ')
+                      j++
+                    }
+                    start = index
+                  }
+                }
+              }
+            }
+
+    /**
+     * Converts a given string to a fixed line string.
+     * @param source The source text.
+     * @param col The column index.
+     * @param row The row index.
+     * @return The converted string.
+     */
+    private fun convertFixedTextToSingleLine(source: String, col: Int, row: Int): String =
+            buildString {
+              val length = source.length
+              var start = 0
+              while (start < length) {
+                var index = source.indexOf('\n', start)
+                if (index - start < col && index != -1) {
+                  append(source.substring(start, index))
+                  for (j in index - start until col) {
+                    append(' ')
+                  }
+                  start = index + 1
+                  if (start == length) {
+                    // last line ends with a "new line" -> add an empty line
+                    for (j in 0 until col) {
+                      append(' ')
+                    }
+                  }
+                } else {
+                  if (start + col >= length) {
+                    append(source.substring(start, length))
+                    for (j in length until start + col) {
+                      append(' ')
+                    }
+                    start = length
+                  } else {
+                    // find white space to break line
+                    var i = start + col
+                    while (i > start) {
+                      if (Character.isWhitespace(source[i])) {
+                        break
+                      }
+                      i--
+                    }
+                    index = if (i == start) {
+                      start + col
+                    } else {
+                      i
+                    }
+                    append(source.substring(start, index))
+                    for (j in index - start until col) {
+                      append(' ')
+                    }
+                    start = index + 1
+                  }
+                }
+              }
+            }
+  }
 }

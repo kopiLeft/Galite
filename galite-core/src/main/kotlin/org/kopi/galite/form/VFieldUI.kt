@@ -36,7 +36,7 @@ import org.kopi.galite.visual.VExecFailedException
  * @param model     The field model.
  * @param index     The row controller index.
  */
-abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBlock,
+abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: UBlock,
                                                             val model: VField,
                                                             val index: Int = 0)
   : VConstants, ActionHandler, Serializable {
@@ -144,7 +144,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     }
   }
 
-  protected fun gotoActiveRecord() {
+  protected open fun gotoActiveRecord() {
     // to be redefined by subclasses
   }
 
@@ -557,7 +557,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
   /**
    * Clears all display fields.
    */
-  fun scrollTo(toprec: Int) {
+  open fun scrollTo(toprec: Int) {
     if (displays != null) {
       displays.forEach {
         it!!.updateFocus()

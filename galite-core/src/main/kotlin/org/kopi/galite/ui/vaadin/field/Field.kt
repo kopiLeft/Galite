@@ -95,7 +95,7 @@ open class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Div() {
   /**
    * The position of the field for chart layout.
    */
-  var position = 0
+  open var position = 0
 
   /**
    * The column view index of this field.
