@@ -35,7 +35,7 @@ open class UITestBase : TestBase() {
     }
 
     fun discoverRooterClass(clazz: Class<*>) {
-      routes = Routes().autoDiscoverViews(clazz.packageName)
+      routes = Routes().autoDiscoverViews(clazz.`package`.name)
     }
 
     var routes: Routes? = null

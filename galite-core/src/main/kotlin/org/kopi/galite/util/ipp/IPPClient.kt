@@ -28,14 +28,14 @@ class IPPClient(private val hostname: String,
                 private val user: String) {
 
   fun print(file: InputStream, nbCopies: Int, attributes: Array<String>?) {
-    val mediaAttributes: MutableList<String>? = mutableListOf()
-    val optionalAttributes: MutableList<String>? = mutableListOf()
+    val mediaAttributes = mutableListOf<String>()
+    val optionalAttributes = mutableListOf<String>()
 
     attributes?.forEach {
       if (it.indexOf('=') != -1) {
-        optionalAttributes!!.add(it)
+        optionalAttributes.add(it)
       } else {
-        mediaAttributes!!.add(it)
+        mediaAttributes.add(it)
       }
     }
 

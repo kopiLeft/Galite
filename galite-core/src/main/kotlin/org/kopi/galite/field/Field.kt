@@ -19,8 +19,6 @@ package org.kopi.galite.field
 
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.domain.Domain
-import org.kopi.galite.domain.ListDomain
-import org.kopi.galite.exceptions.InvalidValueException
 
 /**
  * A field represents a visual component that can hold values
@@ -29,7 +27,7 @@ import org.kopi.galite.exceptions.InvalidValueException
  *
  * @param domain the field's domain
  */
-abstract class Field<T : Comparable<T>?>(open val domain: Domain<T>) {
+abstract class Field<T>(open val domain: Domain<T>) {
   /** Field's label */
   var label: String? = null
 
@@ -49,21 +47,6 @@ abstract class Field<T : Comparable<T>?>(open val domain: Domain<T>) {
   fun checkLength(value: T): Boolean = when (domain.width) {
     null -> true
     else -> value.toString().length <= domain.width!!
-  }
-
-  /**
-   * Checks if the value passed to the field respects the check constraint
-   *
-   * @param value passed value
-   * @return  true if the domain is not defined or if the values if verified by
-   * the domain's constraint
-   * @throws InvalidValueException otherwise
-   */
-  fun checkValue(value: T): Boolean = when {
-    domain.type is ListDomain && (domain.type as ListDomain).checkValue(value) -> true
-    domain.type !is ListDomain -> throw UnsupportedOperationException("Check not supported " +
-                                                                              "by this domain type")
-    else -> throw InvalidValueException(value, label)
   }
 
   /**

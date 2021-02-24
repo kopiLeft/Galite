@@ -87,21 +87,17 @@ interface UReport : UWindow, ReportListener {
   fun setColumnLabel(column: Int, label: String)
 
   /**
-   * `UTable` is a report table ensuring conversion between
+   * [UTable] is a report table ensuring conversion between
    * visible indexes and model indexes
    */
   interface UTable {
     /**
-     * Maps the index of the column in the view at
-     * `viewColumnIndex` to the index of the column
-     * in the table model.
+     * Maps the index of the column in the view at [viewColumnIndex] to the index of the column in the table model.
      */
     fun convertColumnIndexToModel(viewColumnIndex: Int): Int
 
     /**
-     * Maps the index of the column in the table model at
-     * `modelColumnIndex` to the index of the column
-     * in the view.
+     * Maps the index of the column in the table model at [modelColumnIndex] to the index of the column in the view.
      */
     fun convertColumnIndexToView(modelColumnIndex: Int): Int
   }

@@ -17,36 +17,22 @@
  */
 package org.kopi.galite.form.dsl
 
+import kotlin.reflect.KProperty
+
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-
+import org.kopi.galite.common.Action
 import org.kopi.galite.common.Command
+import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.field.Field
-import org.kopi.galite.form.VBooleanCodeField
-import org.kopi.galite.form.VBooleanField
+import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFixnumCodeField
-import org.kopi.galite.form.VIntegerCodeField
-import org.kopi.galite.form.VIntegerField
-import org.kopi.galite.form.VMonthField
-import org.kopi.galite.form.VStringCodeField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.form.VTimeField
-import org.kopi.galite.form.VTimestampField
-import org.kopi.galite.form.VWeekField
-import org.kopi.galite.type.Date
-import org.kopi.galite.type.Fixed
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -64,11 +50,11 @@ import org.kopi.galite.type.Week
  * @param triggers             the triggers executed by this field
  * @param alias                the alias of this field
  */
-class FormField<T : Comparable<T>?>(val block: FormBlock,
-                                    domain: Domain<T>,
-                                    private val fieldIndex: Int,
-                                    initialAccess: Int,
-                                    var position: FormPosition? = null) : Field<T>(domain) {
+open class FormField<T>(val block: FormBlock,
+                        domain: Domain<T>,
+                        private val fieldIndex: Int,
+                        initialAccess: Int,
+                        var position: FormPosition? = null) : Field<T>(domain) {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -76,48 +62,52 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
   private var options: Int = 0
   var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
+  var dropList: MutableList<String>? = null
   var commands: MutableList<Command>? = null
-  var triggers: Array<Trigger>? = null
+  var triggers = mutableListOf<Trigger>()
   var alias: String? = null
-  var initialValues = mutableMapOf<Int, T?>()
-  var value: T? = null
-    get() {
-      return if (vField.block == null) {
-        initialValues[0]
-      } else {
-        vField.getObject() as? T
-      }
+  var initialValues = mutableMapOf<Int, T>()
+  var value: T by this
+
+  private operator fun setValue(any: Any, property: KProperty<*>, value : T) {
+    if (vField.block == null) {
+      initialValues[0] = value
+    } else {
+      vField.setObject(value)
     }
-    set(value) {
-      field = value
-      if (vField.block == null) {
-        initialValues[0] = value
-      } else {
-        vField.setObject(value)
-      }
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  private operator fun getValue(any: Any, property: KProperty<*>): T {
+    return if (vField.block == null) {
+      initialValues[0] as T
+    } else {
+      val g = vField.getObject()
+      vField.getObject() as T
     }
+  }
 
   /** the minimum value that cannot exceed  */
-  private var min : Int = Int.MIN_VALUE
+  internal var min : T? = null
 
   /** the maximum value that cannot exceed  */
-  private var max : Int = Int.MAX_VALUE
+  internal var max : T? = null
 
   /**
    * Sets the minimum value of an Int field.
    */
-  var <U> FormField<U>.minValue : Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.minValue : U? where U : Comparable<U>?, U : Number?
     get() {
       return min
     }
-  set(value) {
-    min = value
-  }
+    set(value) {
+      min = value
+    }
 
   /**
    * Sets the maximum value of an Int field.
    */
-  var <U> FormField<U>.maxValue : Int where U : Comparable<U>?, U : Number?
+  var <U> FormField<U>.maxValue : U? where U : Comparable<U>?, U : Number?
     get() {
       return max
     }
@@ -156,19 +146,25 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     }
   }
 
+  fun droppable(vararg droppables : String) {
+    this.block.dropList?.addAll(droppables)
+  }
 
   /** the alignment of the text */
   var align: FieldAlignment = FieldAlignment.LEFT
 
-  /**
-   * Assigns [columns] to this field.
-   *
-   * @param joinColumns columns to use to make join between block tables
-   * @param init        initialises the form field column properties (index, priority...)
-   */
-  fun columns(vararg joinColumns: Column<T>, init: (FormFieldColumns<T>.() -> Unit)? = null) {
+  /** list of nullable columns */
+  var nullableColumns = mutableListOf<Column<*>>()
+
+  /** used for LEFT OUTER JOIN */
+  fun <T: Column<*>> nullable(column: T): T {
+    nullableColumns.add(column)
+    return column
+  }
+
+  fun initColumn(vararg joinColumns: Column<*>, init: (FormFieldColumns<T>.() -> Unit)?) {
     val cols = joinColumns.map { column ->
-      FormFieldColumn(column, column.table.tableName, column.name, this, false, false) // TODO
+      FormFieldColumn(column, column.table.tableName, column.name, this, false, nullableColumns.contains(column))
     }
     columns = FormFieldColumns(cols.toTypedArray())
     if (init != null) {
@@ -227,73 +223,80 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
     this.access[VConstants.MOD_UPDATE] = VConstants.ACS_MUSTFILL
   }
 
-  // TODO add Fixed types
+  /**
+   * Adds triggers to this field
+   *
+   * @param fieldTriggerEvents    the trigger events to add
+   * @param method                the method to execute when trigger is called
+   */
+  fun <T> trigger(vararg fieldTriggerEvents: FieldTriggerEvent<T>, method: () -> T): Trigger =
+          initTrigger(fieldTriggerEvents, method)
+
+  /**
+   * Adds protected triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldProtectedTriggerEvent, method: () -> Unit): Trigger =
+          initTrigger(fieldTriggerEvents, method)
+
+  /**
+   * Adds protected triggers to this block.
+   *
+   * @param fieldTriggerEvents  the triggers to add
+   * @param method              the method to execute when trigger is called
+   */
+  fun trigger(vararg fieldTriggerEvents: FieldTypeTriggerEvent, method: () -> T): Trigger =
+          initTrigger(fieldTriggerEvents, method)
+
+  fun <T> initTrigger(fieldTriggerEvents: Array<out FieldTriggerEvent<*>>, method: () -> T) : Trigger {
+    val event = fieldEventList(fieldTriggerEvents)
+    val fieldAction = Action(null, method)
+    val trigger = FormTrigger(event, fieldAction)
+
+    triggers.add(trigger)
+    return trigger
+  }
+
+  private fun fieldEventList(fieldTriggerEvents: Array<out FieldTriggerEvent<*>>): Long {
+    var self = 0L
+
+    fieldTriggerEvents.forEach { trigger ->
+      self = self or (1L shl trigger.event)
+    }
+
+    return self
+  }
+
   /**
    * The field model based on the field type.
    */
   val vField: VField by lazy {
-    when {
-      domain.type == null -> {
-        when (domain.kClass) {
-          Int::class, Long::class -> VIntegerField(block.buffer, domain.width ?: 0, min, max)
-          String::class -> VStringField(block.buffer,
-                                        domain.width ?: 0,
-                                        domain.height ?: 1,
-                                        domain.visibleHeight ?: 1,
-                                        0,  // TODO
-                                        false) // TODO
-          Boolean::class -> VBooleanField(block.buffer)
-          Date::class, java.util.Date::class -> VDateField(block.buffer)
-          Month::class -> VMonthField(block.buffer)
-          Week::class -> VWeekField(block.buffer)
-          Time::class -> VTimeField(block.buffer)
-          Timestamp::class -> VTimestampField(block.buffer)
-          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-        }
-      }
-      domain.type is CodeDomain -> {
-        val type = domain.type as CodeDomain<*>
-        when (domain.kClass) {
-          Boolean::class -> VBooleanCodeField(block.buffer,
-                                              type.ident,
-                                              block.sourceFile,
-                                              type.codes.map { it.ident }.toTypedArray(),
-                                              type.codes.map { it.value as? Boolean }.toTypedArray())
-          Fixed::class -> VFixnumCodeField(block.buffer,
-                                           type.ident,
-                                           block.sourceFile,
-                                           type.codes.map { it.ident }.toTypedArray(),
-                                           type.codes.map { it.value as? Fixed }.toTypedArray())
-          Int::class, Long::class -> VIntegerCodeField(block.buffer,
-                                                       type.ident,
-                                                       block.sourceFile,
-                                                       type.codes.map { it.ident }.toTypedArray(),
-                                                       type.codes.map { it.value as? Int }.toTypedArray())
-          String::class -> VStringCodeField(block.buffer,
-                                            type.ident,
-                                            block.sourceFile,
-                                            type.codes.map { it.ident }.toTypedArray(),
-                                            type.codes.map { it.value as? String }.toTypedArray())
-          else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
-        }
-      }
-      domain is ListDomain -> {
-        TODO()
-      }
-      else -> {
-        TODO()
-      }
+    domain.buildFieldModel(this).also {
+      it.label = label
+      it.toolTip = help
     }
   }
 
-  fun setInfo() {
+  fun setInfo(source: String) {
+    val list = if (domain is ListDomain) {
+      (domain as ListDomain).list.buildListModel(source)
+    } else {
+      null
+    }
+
+    if (domain is CodeDomain) {
+      (vField as VCodeField).source = source
+    }
+
     vField.setInfo(
             getIdent(),
             fieldIndex,
             posInArray,
             options,
             access,
-            null, // TODO
+            list, // TODO
             columns?.getColumnsModels()?.toTypedArray(), // TODO
             columns?.index?.indexNumber ?: 0,
             columns?.priority ?: 0,
@@ -310,13 +313,6 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    * @param block        the actual form block
    */
   open fun initialize(block: FormBlock) {
-
-    // ACCESS
-    val blockAccess: IntArray = block.access
-    for (i in 0..2) {
-      access[i] = access[i].coerceAtMost(blockAccess[i])
-    }
-
     // TRANSIENT MODE
     if (columns == null && isNeverAccessible) {
       options = options or VConstants.FDO_TRANSIENT
@@ -403,6 +399,128 @@ class FormField<T : Comparable<T>?>(val block: FormBlock,
    */
   open val posInArray: Int
     get() = -1
+
+  ///////////////////////////////////////////////////////////////////////////
+  // FORM FIELD TRIGGERS EVENTS
+  ///////////////////////////////////////////////////////////////////////////
+  /**
+   * ACCESS is a special trigger that defines how a field can be accessed.
+   * This trigger must return one of these values:
+   * [Access.SKIPPED], [Access.HIDDEN], [Access.VISIT] or [Access.MUSTFILL].
+   */
+  val ACCESS = FieldTriggerEvent<Access>(VConstants.TRG_FLDACCESS)
+
+  /**
+   * Not defined actually
+   */
+  val FORMAT = FieldTriggerEvent<Unit>(VConstants.TRG_FORMAT)
+
+  /**
+   * Must return a boolean value, if "true" the cursor will move to the next field
+   */
+  val AUTOLEAVE = FieldTriggerEvent<Boolean>(VConstants.TRG_AUTOLEAVE)
+
+  /**
+   * Defines the default value of the field to be set if the setDefault() method is called
+   * (this method is automatically called when the user choose the insert command)
+   */
+  val DEFAULT = FieldTriggerEvent<Unit>(VConstants.TRG_DEFAULT)
+
+  /**
+   * Executed on field content change
+   */
+  val POSTCHG = FieldTriggerEvent<Unit>(VConstants.TRG_POSTCHG)
+
+  /**
+   * Executed before dropping file
+   */
+  val PREDROP = FieldTriggerEvent<Unit>(VConstants.TRG_PREDROP)
+
+  /**
+   * Executed after dropping file
+   */
+  val POSTDROP = FieldTriggerEvent<Unit>(VConstants.TRG_POSTDROP)
+
+  /**
+   * Executed upon exit of field
+   */
+  val POSTFLD = FieldTriggerEvent<Unit>(VConstants.TRG_POSTFLD)
+
+  /**
+   * Executed after inserting a row of the database
+   */
+  val POSTINS = FieldProtectedTriggerEvent(VConstants.TRG_POSTINS)
+
+  /**
+   * Executed after updating a row of the database
+   */
+  val POSTUPD = FieldProtectedTriggerEvent(VConstants.TRG_POSTUPD)
+
+  /**
+   * Executed before deleting a row of the database
+   */
+  val PREDEL = FieldProtectedTriggerEvent(VConstants.TRG_PREDEL)
+
+  /**
+   * Executed upon entry of field
+   */
+  val PREFLD = FieldTriggerEvent<Unit>(VConstants.TRG_PREFLD)
+
+  /**
+   * Executed before inserting a row of the database
+   */
+  val PREINS = FieldProtectedTriggerEvent(VConstants.TRG_PREINS)
+
+  /**
+   * Executed before updating a row of the database
+   */
+  val PREUPD = FieldProtectedTriggerEvent(VConstants.TRG_PREUPD)
+
+  /**
+   * Executed before validating any new entry
+   */
+  val PREVAL = FieldTriggerEvent<Unit>(VConstants.TRG_PREVAL)
+
+  /**
+   * Executed after field change and validation
+   */
+  val VALFLD = FieldTriggerEvent<Unit>(VConstants.TRG_VALFLD)
+
+  /**
+   * This is the same trigger as VALFLD
+   */
+  val VALIDATE = FieldTriggerEvent<Unit>(VConstants.TRG_VALFLD)
+
+  /**
+   * Equates the value of two fields
+   */
+  val VALUE = FieldTypeTriggerEvent(VConstants.TRG_VALUE)
+
+  /**
+   * Make field clickable and execute an action
+   */
+  val ACTION = FieldTriggerEvent<Unit>(VConstants.TRG_ACTION)
+
+  /**
+   * Field Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class FieldTriggerEvent<T>(val event: Int)
+
+  /**
+   * Field protected Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class FieldProtectedTriggerEvent(event: Int) : FieldTriggerEvent<Unit>(event)
+
+  /**
+   * Field object Triggers
+   *
+   * @param event the event of the trigger
+   */
+  open class FieldTypeTriggerEvent(event: Int) : FieldTriggerEvent<Any>(event)
 
   // ----------------------------------------------------------------------
   // XML LOCALIZATION GENERATION

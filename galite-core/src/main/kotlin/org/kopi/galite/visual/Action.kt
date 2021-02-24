@@ -18,8 +18,9 @@
 
 package org.kopi.galite.visual
 
-import kotlinx.coroutines.Runnable
 import kotlin.jvm.Throws
+
+import kotlinx.coroutines.Runnable
 
 abstract class Action @JvmOverloads constructor(val name: String? = null) : Runnable {
 
@@ -30,7 +31,7 @@ abstract class Action @JvmOverloads constructor(val name: String? = null) : Runn
     try {
       execute()
     } catch (e: VException) {
-      throw e.message.let { VRuntimeException(it, e) }
+      throw VRuntimeException(e.message, e)
     }
   }
 

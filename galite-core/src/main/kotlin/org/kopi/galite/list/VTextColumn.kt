@@ -20,9 +20,10 @@ package org.kopi.galite.list
 
 import kotlin.reflect.KClass
 
+import org.jetbrains.exposed.sql.Column
 import org.kopi.galite.visual.Message
 
-class VTextColumn(title: String, column: String?, align: Int, width: Int, sortAscending: Boolean)
+class VTextColumn(title: String, column: Column<*>?, align: Int, width: Int, sortAscending: Boolean)
   : VListColumn(title, column, align, Message.getMessage("text-type").length, sortAscending) {
   // --------------------------------------------------------------------
   // IMPLEMENTATION

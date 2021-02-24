@@ -107,7 +107,7 @@ class PExport2PDF(
         scale = printConfig.reportScale
         formatColumns()
       }
-      val tempFile: File = Utils.getTempFile("kopiexport", "pdf")
+      val tempFile = Utils.getTempFile("kopiexport", "pdf")
       val writer = PdfWriter.getInstance(document, FileOutputStream(tempFile))
 
       writer.pageEvent = object : PdfPageEventHelper() {
@@ -386,7 +386,7 @@ class PExport2PDF(
     widthSum += widths[index]
   }
 
-  override fun formatFixedColumn(column: VReportColumn, index: Int) {
+  override fun formatDecimalColumn(column: VReportColumn, index: Int) {
     widths[index] = max(Chunk(column.label, FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint,
                         Chunk("0", FontFactory.getFont(FontFactory.HELVETICA, scale.toFloat())).widthPoint * column.width)
     widthSum += widths[index]
@@ -427,7 +427,7 @@ class PExport2PDF(
   private val widths: FloatArray = FloatArray(columnCount)
 
   companion object {
-    private val BORDER_PADDING = 1
-    private val BORDER_WIDTH = 1
+    private const val BORDER_PADDING = 1
+    private const val BORDER_WIDTH = 1
   }
 }

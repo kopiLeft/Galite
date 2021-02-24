@@ -25,27 +25,23 @@ import java.util.Calendar
 /**
  * This class represents the week types
  */
-open class Week : Type {
+open class Week(var scalar: Int) : Type<Week, Int>() {
   /**
    * Constructs a Week with a year and a week in this year
    * @param    year        the year
    * @param    week        the week of year (1 .. 53)
    */
-  internal constructor(year: Int, week: Int) {
-    scalar = year * 53 + week - 1
-  }
+  constructor(year: Int, week: Int) : this(year * 53 + week - 1)
 
   /**
    * Constructs a Week from a Date
    */
-  internal constructor(date: Date) {
-    scalar = iso8601(date.year, date.month, date.day)
-  }
+  constructor(date: Date) : this(iso8601(date.year, date.month, date.day))
 
   /**
    * Clones this object.
    */
-  fun copy(): NotNullWeek = NotNullWeek(scalar / 53, scalar % 53 + 1)
+  fun copy(): Week = Week(scalar / 53, scalar % 53 + 1)
 
   // ----------------------------------------------------------------------
   // IN PLACE OPERATIONS
@@ -63,19 +59,13 @@ open class Week : Type {
   /**
    * Returns a Week with the specified number of weeks added to this Week.
    */
-  fun add(weeks: Int): NotNullWeek = NotNullWeek((scalar + weeks) / 53, (scalar + weeks) % 53 + 1)
+  fun add(weeks: Int): Week = Week((scalar + weeks) / 53, (scalar + weeks) % 53 + 1)
 
   /**
    * subtract
    * @returns the number of weeks between two Weeks
    */
-  fun subtract(other: Week?): Int? = other?.let { subtract(other as? NotNullWeek) }
-
-  /**
-   * subtract
-   * @returns the number of weeks between two Weeks
-   */
-  fun subtract(other: NotNullWeek): Int = scalar - (other as Week).scalar
+  fun subtract(other: Week): Int = scalar - other.scalar
 
   // ----------------------------------------------------------------------
   // OTHER OPERATIONS
@@ -88,14 +78,12 @@ open class Week : Type {
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  operator fun compareTo(other: Week): Int {
+  override operator fun compareTo(other: Week): Int {
     val v1 = scalar
     val v2 = other.scalar
+
     return if (v1 < v2) -1 else if (v1 > v2) 1 else 0
   }
-
-  override operator fun compareTo(other: Any?): Int =
-          compareTo(other as? Week) // week to start at 1
 
   /**
    * Returns the week number (starts at 1, ends at 53)
@@ -113,7 +101,7 @@ open class Week : Type {
    * Returns the date specified by this week and a day of week.
    * @param    weekday        the day of week (monday = 1, sunday = 7)
    */
-  fun getDate(weekday: Int): NotNullDate {
+  fun getDate(weekday: Int): Date {
     val year: Int
     val month: Int
     val day: Int
@@ -127,24 +115,24 @@ open class Week : Type {
       month = calendar[Calendar.MONTH] + 1
       day = calendar[Calendar.DAY_OF_MONTH]
     }
-    return NotNullDate(year, month, day)
+    return Date(year, month, day)
   }
 
   /**
    * Returns the first day of this week.
    */
-  open fun getFirstDay(): NotNullDate = getDate(1)
+  open fun getFirstDay(): Date = getDate(1)
 
   /**
    * Returns the last day of this week.
    */
-  open fun getLastDay(): NotNullDate = getDate(7)
+  open fun getLastDay(): Date = getDate(7)
 
   /**
    * Transforms this week into a date (the first day of the week)
    */
   @Deprecated("")
-  open fun getDate(): NotNullDate = getDate(1)
+  open fun getDate(): Date = getDate(1)
 
   // ----------------------------------------------------------------------
   // TYPE IMPLEMENTATION
@@ -170,16 +158,22 @@ open class Week : Type {
   override fun toSql(): String {
     val year = scalar / 53
     val week = scalar % 53 + 1
-    return "{fn WEEK($year, $week)}"
+    //return "{fn WEEK($year, $week)}"
+    TODO("NOT SUPPORTED YET")
+  }
+
+  override fun hashCode(): Int {
+    return scalar
   }
 
   companion object {
     /**
      * Current week
      */
-    fun now(): NotNullWeek {
+    fun now(): Week {
       val now = Calendar.getInstance()
-      return NotNullWeek(now[Calendar.YEAR], now[Calendar.WEEK_OF_YEAR])
+
+      return Week(now[Calendar.YEAR], now[Calendar.WEEK_OF_YEAR])
     }
 
     // --------------------------------------------------------------------
@@ -249,13 +243,11 @@ open class Week : Type {
     // --------------------------------------------------------------------
     // CONSTANTS
     // --------------------------------------------------------------------
-    val DEFAULT: NotNullWeek = NotNullWeek(0, 0)
+    val DEFAULT: Week = Week(0, 0)
 
     init {
       calendar.firstDayOfWeek = Calendar.MONDAY
       calendar.minimalDaysInFirstWeek = 4
     }
   }
-
-  private var scalar: Int
 }

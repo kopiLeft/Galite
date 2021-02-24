@@ -33,7 +33,7 @@ abstract class FormElement(ident: String?) {
 
   open lateinit var shortcut: String
 
-  val ident: String = javaClass.name.removePrefix("${javaClass.packageName}.")
+  val ident: String = ident ?: javaClass.name.removePrefix("${javaClass.`package`.name}.")
           .substringBeforeLast('$')
           .substringAfterLast('$')
 
@@ -42,7 +42,7 @@ abstract class FormElement(ident: String?) {
    */
   internal val sourceFile: String
     get() {
-      val basename = this.javaClass.packageName.replace(".", "/") + File.separatorChar
+      val basename = this.javaClass.`package`.name.replace(".", "/") + File.separatorChar
       return basename + this.javaClass.simpleName
     }
 

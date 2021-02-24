@@ -58,6 +58,8 @@ class VHelpViewer : VWindow() {
   // ----------------------------------------------------------------------
   // LOCALIZATION
   // ----------------------------------------------------------------------
+  override val locale: Locale  get() = Locale.getDefault()
+
   /**
    * Localize this menu tree
    *
@@ -75,11 +77,11 @@ class VHelpViewer : VWindow() {
   /**
    * Performs the appropriate action.
    *
-   * @param        key                the number of the actor.
+   * @param        VKT_Type                the number of the actor.
    * @return        true if an action was found for the specified number
    */
-  override fun executeVoidTrigger(key: Int) {
-    when (key) {
+  override fun executeVoidTrigger(VKT_Type: Int) {
+    when (VKT_Type) {
       CMD_QUIT -> close(0)
     }
   }
@@ -110,7 +112,7 @@ class VHelpViewer : VWindow() {
     ))
 
     // localize the help viewer using the default locale
-    localize(Locale.getDefault())
+    localize(locale)
     getActor(CMD_QUIT).number = CMD_QUIT
   }
 }

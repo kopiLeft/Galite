@@ -17,6 +17,8 @@
 
 package org.kopi.galite.report
 
+import org.kopi.galite.type.Type0
+
 /**
  * Represents a data row of a [Report].
  *
@@ -27,21 +29,34 @@ class ReportRow(private val reportFields: MutableList<ReportField<*>>) {
   val data = mutableMapOf<ReportField<*>, Any?>()
 
   /**
-   * Returns data value for a specific [field].
+   * Returns data value for a specific [ReportField].
    *
    * @param field the field.
-   * @return  data value for a specific [field].
+   * @return  data value for a specific [ReportField].
    */
   fun getValueOf(field: ReportField<*>) = data[field]
 
   /**
    * Sets a mapping between the values that the domain can take
-   * and a corresponding text to be displayed in a [Field].
+   * and a corresponding text to be displayed in a [ReportField].
    *
    * @param field the field.
    * @param value the field's value.
    */
   operator fun <T : Comparable<T>?> set(field: ReportField<T>, value: T) {
+    if (field in reportFields) {
+      data.putIfAbsent(field, value)
+    }
+  }
+
+  /**
+   * Sets a mapping between the values that the domain can take
+   * and a corresponding text to be displayed in a [ReportField].
+   *
+   * @param field the field.
+   * @param value the field's value.
+   */
+  operator fun <T : Type0<K>, K> set(field: ReportField<T>, value: K) {
     if (field in reportFields) {
       data.putIfAbsent(field, value)
     }

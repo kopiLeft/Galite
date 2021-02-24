@@ -16,17 +16,37 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.kopi.galite.db.DBContext
+import org.kopi.galite.form.VDictionary
 import org.kopi.galite.form.VDictionaryForm
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VWindow
 
 /**
  * Represents a dictionary form.
  */
-abstract class DictionaryForm : Form() {
+abstract class DictionaryForm : VDictionary, Form() {
+
+  override fun search(parent: VWindow): Int = model.search(parent)
+
+  override fun edit(parent: VWindow, id: Int): Int = model.edit(parent, id)
+
+  override fun add(parent: VWindow): Int = model.add(parent)
+
+  override var dBContext: DBContext?
+    get() = model.dBContext
+    set(value) {
+      model.dBContext = value
+    }
+
+  override fun doNotModal() {
+    model.doNotModal()
+  }
 
   /** Form model */
   override val model: VDictionaryForm by lazy {
-    genLocalization()
     object : VDictionaryForm() {
+      override val locale get() = this@DictionaryForm.locale ?: ApplicationContext.getDefaultLocale()
       override fun init() {
         initialize()
       }

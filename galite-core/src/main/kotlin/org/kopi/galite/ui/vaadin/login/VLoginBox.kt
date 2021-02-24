@@ -27,13 +27,14 @@ import org.kopi.galite.ui.vaadin.common.VSimpleTable
 
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.Key
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.Tag
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.textfield.PasswordField
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.dom.Element
@@ -164,6 +165,14 @@ class VLoginBox : Div() {
   fun addClickHandler(handler: (Any) -> Unit) {
     table.addClickHandler(handler)
   }
+
+  /**
+   * Focus on the first field in the login box.
+   */
+  fun focus() {
+    table.focus()
+  }
+
   //---------------------------------------------------
 // INNER CLASSES
 //---------------------------------------------------
@@ -298,13 +307,8 @@ class VLoginBox : Div() {
     /**
      * Focus on the first field in the login box.
      */
-    fun focus() { /*  Scheduler.get().scheduleEntry(new ScheduledCommand() { TODO
-
-        @Override
-        public void execute() {
-          content.focus();
-        }
-      });*/
+    fun focus() {
+      content.focus();
     }
 
     //---------------------------------------
@@ -348,10 +352,10 @@ class VLoginBox : Div() {
   /**
    * The login panel.
    */
-  private class LoginPane : Div() {
+  private class LoginPane : Div(), Focusable<LoginPane> {
     //---------------------------------------
-// IMPLEMENTATIONS
-//---------------------------------------
+    // IMPLEMENTATIONS
+    //---------------------------------------
     fun onEnterEvent(keyDownEvent: ShortcutEvent?) {
       login.click()
     }
@@ -467,9 +471,13 @@ class VLoginBox : Div() {
     /**
      * Focus on the first field in the login box.
      */
-//---------------------------------------
-// DATA MEMBERS
-//---------------------------------------
+    override fun focus() {
+      username.focus()
+    }
+
+    //---------------------------------------
+    // DATA MEMBERS
+    //---------------------------------------
     private val table: VSimpleTable
     private val errorIndicator: Span
     private val InformationText: Span
@@ -480,9 +488,7 @@ class VLoginBox : Div() {
     private val languageLabel: VInputLabel
     private val language: VSelect
     private val login: VInputButton
-    //---------------------------------------
-// CONSTRUCTOR
-//---------------------------------------
+
     /**
      * Creates the login panel
      */

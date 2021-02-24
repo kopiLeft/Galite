@@ -26,8 +26,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VDateColumn
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.type.Date
-import org.kopi.galite.type.NotNullDate
-import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -78,8 +76,8 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    val s = o as? String
+  override fun checkType(rec: Int, s: Any?) {
+    val s = s as? String
 
     if (s == "") {
       setNull(rec)
@@ -89,7 +87,6 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   }
 
   private fun parseDate(rec: Int, s: String?) {
-    var day = 0
     var month = 0
     var year = -2
     val tokens = StringTokenizer(s, "/.#")
@@ -97,7 +94,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     if (!tokens.hasMoreTokens()) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
     }
-    day = stringToInt(tokens.nextToken())
+    val day = stringToInt(tokens.nextToken())
 
     if (tokens.hasMoreTokens()) {
       month = stringToInt(tokens.nextToken())
@@ -110,12 +107,12 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     }
     when {
       month == 0 -> {
-        val now: NotNullDate = Date.now()
+        val now: Date = Date.now()
         month = now.month
         year = now.year
       }
       year == -2 -> {
-        val now: NotNullDate = Date.now()
+        val now: Date = Date.now()
         year = now.year
       }
       year < 50 -> {
@@ -133,7 +130,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
       }
     }
-    setDate(rec, NotNullDate(year, month, day))
+    setDate(rec, Date(year, month, day))
   }
 
   // ----------------------------------------------------------------------
@@ -211,7 +208,6 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     if (s == "") {
       return null
     }
-    var day = 0
     var month = 0
     var year = -2
     val tokens = StringTokenizer(s, "/.#")
@@ -219,7 +215,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     if (!tokens.hasMoreTokens()) {
       throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
     }
-    day = stringToInt(tokens.nextToken())
+    val day = stringToInt(tokens.nextToken())
     if (tokens.hasMoreTokens()) {
       month = stringToInt(tokens.nextToken())
     }
@@ -231,12 +227,12 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     }
     when {
       month == 0 -> {
-        val now: NotNullDate = Date.now()
+        val now: Date = Date.now()
         month = now.month
         year = now.year
       }
       year == -2 -> {
-        val now: NotNullDate = Date.now()
+        val now: Date = Date.now()
         year = now.year
       }
       year < 50 -> {
@@ -254,7 +250,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
       }
     }
-    return NotNullDate(year, month, day)
+    return Date(year, month, day)
   }
 
   /**
@@ -271,10 +267,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    return if (value[r] == null) "NULL"
-    else Utils.toSql(value[r]!!)
-  }
+  override fun getSqlImpl(r: Int): java.sql.Date? = if (value[r] == null) null else value[r]!!.toSql()
 
   /**
    * Copies the value of a record to another
@@ -339,9 +332,7 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
     return if (list != null) {
       super.fillField(handler)
     } else {
-      var force = false
-
-      force = try {
+      val force = try {
         val oldText = getDisplayedValue(true) as? String
         checkType(oldText)
         val newText = getText(block!!.activeRecord)

@@ -15,7 +15,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.ui.vaadin.visual
 
 import java.sql.SQLException
@@ -26,7 +25,16 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.StylesInjector
+import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.main.MainWindowListener
+import org.kopi.galite.ui.vaadin.notif.NotificationListener
+import org.kopi.galite.ui.vaadin.notif.AbstractNotification
+import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
@@ -35,14 +43,19 @@ import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
 import org.kopi.galite.visual.MessageCode
+import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.PrinterManager
 import org.kopi.galite.visual.Registry
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.VMenuTree
+import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.Route
 
 /**
@@ -50,32 +63,86 @@ import com.vaadin.flow.router.Route
  *
  * @param registry The [Registry] object.
  */
+@Push
 @Route("")
-abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application {
+@CssImport("./styles/galite/styles.css")
+@Suppress("LeakingThis")
+abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
+
+  //---------------------------------------------------
+  // DATA MEMBEERS
+  //---------------------------------------------------
+  private var mainWindow: MainWindow? = null
+  private var welcomeView: WelcomeView? = null
+  private var askAnswer = 0
+  private lateinit var configuration: ApplicationConfiguration
+  var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
+
+  // ---------------------------------------------------------------------
+  // Failure cause informations
+  // ---------------------------------------------------------------------
+
+  override val startupTime: Date = Date() // remembers the startup time
+
   init {
     instance = this
     // registry and locale initialization
     initialize()
     gotoWelcomeView()
+    askAnswer = MessageListener.AWR_UNDEF
   }
 
   // ---------------------------------------------------------------------
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
+    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
 
+    showNotification(dialog)
   }
 
   override fun error(message: String?) {
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
 
+    showNotification(dialog)
   }
 
   override fun warn(message: String) {
+    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
 
+    showNotification(dialog)
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    TODO()
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+
+    dialog.yesIsDefault = yesIsDefault
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        askAnswer = if (yes) {
+          MessageListener.AWR_YES
+        } else {
+          MessageListener.AWR_NO
+        }
+        detachComponent(dialog)
+      }
+    })
+    // attach the notification to the application.
+    showNotification(dialog)
+
+    return askAnswer
+  }
+
+  private val notificationLocale get() = defaultLocale.toString()
+
+  /**
+   * Shows a notification.
+   * @param notification The notification to be shown
+   */
+  protected open fun showNotification(notification: AbstractNotification) {
+    access {
+      notification.show()
+    }
   }
 
   //---------------------------------------------------------------------
@@ -86,7 +153,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun startApplication() {
-
+    menu = VMenuTree(dBContext!!)
+    menu.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
+    mainWindow = MainWindow(defaultLocale, logoImage, logoHref)
+    mainWindow!!.addMainWindowListener(this)
+    mainWindow!!.connectedUser = userName
+    mainWindow!!.setMainMenu(DMainMenu(menu))
+    mainWindow!!.setUserMenu(DUserMenu(menu))
+    mainWindow!!.setAdminMenu(DAdminMenu(menu))
+    mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu))
+    mainWindow!!.addDetachListener { event ->
+      closeConnection()
+    }
   }
 
   override fun allowQuit(): Boolean =
@@ -113,6 +191,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
         welcomeView = null
         removeAll()
       }
+      add(mainWindow)
     } catch (e: SQLException) { // sets the error if any problem occur.
       welcomeView!!.setError(e.message)
     } finally { //push();
@@ -128,14 +207,19 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param username The login user name.
    * @param password The login password.
    * @throws SQLException When cannot connect to database.
-   * @see .login
+   * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    dBContext = login(getInitParameter("database")!!,
+    /*dBContext = login(getInitParameter("database")!!, FIXME: uncomment this.
                       getInitParameter("driver")!!,
                       username,
                       password,
-                      getInitParameter("schema")!!)
+                      getInitParameter("schema")!!)*/
+    dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+                      "org.h2.Driver",
+                      "admin",
+                      "admin",
+                      null)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -148,8 +232,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val isNoBugReport: Boolean
     get() = java.lang.Boolean.parseBoolean(getInitParameter("nobugreport"))
 
-  override val menu: VMenuTree
-    get() = TODO()
+  override lateinit var menu: VMenuTree
 
   override var isGeneratingHelp: Boolean = false
 
@@ -162,7 +245,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override var localizationManager: LocalizationManager? = null
 
-  override fun displayError(parent: UComponent, message: String) {
+  override fun displayError(parent: UComponent?, message: String?) {
     error(message)
   }
 
@@ -182,7 +265,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param component The component to be detached.
    */
   fun detachComponent(component: Component?) {
-
+    remove(component)
   }
 
   /**
@@ -215,8 +298,13 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Attaches a window to this application.
    * @param window The window to be added.
    */
-  fun addWindow(window: Component) {
-
+  fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
+    if (mainWindow != null) {
+      access {
+        window.setSizeFull()
+        mainWindow!!.addWindow(window, title)
+      }
+    }
   }
 
   /**
@@ -230,15 +318,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   /**
    * Sets the localization context.
    *
-   *
-   * This aims to set the application [.defaultLocale]
-   * and [.localizationManager] internal attributes.
+   * This aims to set the application [defaultLocale]
+   * and [localizationManager] internal attributes.
    *
    */
   protected fun setLocalizationContext(locale: Locale) {
-    // default application locale is initialized
-    // from application descriptor file (web.xml)
-
     // default application locale is initialized
     // from application descriptor file (web.xml)
     defaultLocale = locale
@@ -249,7 +333,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       // This is only to be share that we start with a language.
       defaultLocale = alternateLocale
     }
-    // Now create the localization manager using the application default locale.
     // Now create the localization manager using the application default locale.
     localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
   }
@@ -321,24 +404,24 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   //---------------------------------------------------
   // MAIN WINDOW LISTENER IMPLEMENTATION
   // --------------------------------------------------
-  fun onAdmin() {
+  override fun onAdmin() {
     // TODO
   }
 
-  fun onSupport() {
+  override fun onSupport() {
     // TODO
   }
 
-  fun onHelp() {
+  override fun onHelp() {
     // TODO
   }
 
-  fun onLogout() {
+  override fun onLogout() {
     // close database connection and show welcome view
     logout()
   }
 
-  fun onUser() {
+  override fun onUser() {
     // TODO
   }
 
@@ -356,14 +439,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String?): String? {
-    TODO()
-  }
-
-  /**
-   * Returns the styles injector attached with this application instance.
-   * @return The styles injector attached with this application instance.
-   */
-  fun getStylesInjector(): StylesInjector {
     TODO()
   }
 
@@ -403,20 +478,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The alternate locale to be used when no default locale is specified.
    */
   protected abstract val alternateLocale: Locale
-
-  //---------------------------------------------------
-  // DATA MEMBEERS
-  //---------------------------------------------------
-  private var welcomeView: WelcomeView? = null
-  private var askAnswer = 0
-  private lateinit var configuration: ApplicationConfiguration
-  private var stylesInjector: StylesInjector? = null
-
-  // ---------------------------------------------------------------------
-  // Failure cause informations
-  // ---------------------------------------------------------------------
-
-  override val startupTime: Date = Date() // remembers the startup time
 
   companion object {
 

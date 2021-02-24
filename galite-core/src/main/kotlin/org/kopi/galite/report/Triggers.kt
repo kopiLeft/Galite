@@ -18,7 +18,7 @@
 
 package org.kopi.galite.report
 
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Decimal
 
 /**
  * This class implements predefined report triggers
@@ -27,7 +27,7 @@ object Triggers {
   /**
    * Compute the integer sum in a report column
    */
-  fun sumInteger(c: VReportColumn): VCalculateColumn {
+  fun sumInteger(c: ReportField<Int>): VCalculateColumn {
 
     return object : VCCDepthFirstCircuitN() {
 
@@ -51,7 +51,7 @@ object Triggers {
   /**
    * Compute the number of entries in a report column
    */
-  fun countInteger(c: VReportColumn): VCalculateColumn {
+  fun countInteger(c: ReportField<Int>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
@@ -80,20 +80,20 @@ object Triggers {
   }
 
   /**
-   * Compute the fixed sum in a report column
+   * Compute the decimal sum in a report column
    */
-  fun sumFixed(c: VReportColumn): VCalculateColumn {
+  fun sumDecimal(c: ReportField<Decimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
-        var result = NotNullFixed(0, 2)
+        var result = Decimal(0, 2)
 
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
-          val value = child.getValueAt(column) as NotNullFixed?
+          val value = child.getValueAt(column) as? Decimal
 
           if (value != null) {
-            result = result.add(value)
+            result = result + value
           }
         }
         return result
@@ -104,7 +104,7 @@ object Triggers {
   /**
    * Compute the integer sum in a report column
    */
-  fun sumNullInteger(c: VReportColumn): VCalculateColumn {
+  fun <T> sumNullInteger(c: ReportField<T>): VCalculateColumn where T: Comparable<T>, T: Number {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
@@ -126,22 +126,22 @@ object Triggers {
   }
 
   /**
-   * Compute the fixed sum in a report column
+   * Compute the decimal sum in a report column
    */
-  fun sumNullFixed(c: VReportColumn): VCalculateColumn {
+  fun sumNullDecimal(c: ReportField<Decimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
         var valueFound = false
-        var result = NotNullFixed(0, 2)
+        var result = Decimal(0, 2)
 
         for (i in 0 until childCount) {
           val child = row.getChildAt(i) as VReportRow
-          val value = child.getValueAt(column) as NotNullFixed?
+          val value = child.getValueAt(column) as? Decimal
 
           if (value != null) {
             valueFound = true
-            result = result.add(value)
+            result = result + value
           }
         }
         return if (valueFound) result else null
@@ -152,7 +152,7 @@ object Triggers {
   /**
    * Report a value when all child are identical
    */
-  fun reportIdenticalValue(c: VReportColumn): VCalculateColumn {
+  fun reportIdenticalValue(c: ReportField<*>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any? {
         val childCount = row.childCount
@@ -177,7 +177,7 @@ object Triggers {
   /**
    * Compute the integer average in a report column
    */
-  fun avgInteger(c: VReportColumn): VCalculateColumn {
+  fun <T> avgInteger(c: ReportField<T>): VCalculateColumn where T: Comparable<T>, T: Number {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
@@ -200,7 +200,7 @@ object Triggers {
    * Compute the integer sum in a report column and the the value
    * in the leaves with a serial number
    */
-  fun serialInteger(c: VReportColumn): VCalculateColumn {
+  fun <T> serialInteger(c: ReportField<T>): VCalculateColumn where T: Comparable<T>, T: Number {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val childCount = row.childCount
@@ -250,29 +250,29 @@ object Triggers {
   }
 
   /**
-   * Compute the fixed average in a report column
+   * Compute the decimal average in a report column
    */
-  fun avgFixed(c: VReportColumn): VCalculateColumn {
+  fun avgDecimal(c: ReportField<Decimal>): VCalculateColumn {
     return object : VCCDepthFirstCircuitN() {
       override fun evalNode(row: VReportRow, column: Int): Any {
         val leafCount = row.leafCount
         var notNullLeafCount = 0.0
-        var result = NotNullFixed(0, 2)
-        var leaf = row.firstLeaf as VReportRow
+        var result = Decimal(0, 2)
+        var leaf = row.firstLeaf as? VReportRow
 
         for (i in 0 until leafCount) {
-          val value = leaf.getValueAt(column) as NotNullFixed?
+          val value = leaf!!.getValueAt(column) as? Decimal
 
           if (value != null) {
-            result = result.add(value)
+            result = result + value
             notNullLeafCount++
           }
-          leaf = leaf.nextLeaf as VReportRow
+          leaf = leaf.nextLeaf as? VReportRow
         }
         return if (notNullLeafCount != 0.0) {
-          result.divide(NotNullFixed(notNullLeafCount)).setScale(2)
+          (result / Decimal(notNullLeafCount)).setScale(2)
         } else {
-          NotNullFixed(0, 2)
+          Decimal(0, 2)
         }
       }
     }

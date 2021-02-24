@@ -23,10 +23,8 @@ import kotlin.reflect.KClass
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.kopi.galite.db.Query
-import org.kopi.galite.db.Utils
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VWeekColumn
-import org.kopi.galite.type.NotNullWeek
 import org.kopi.galite.type.Week
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
@@ -77,8 +75,8 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    val s = o as? String
+  override fun checkType(rec: Int, s: Any?) {
+    val s = s as? String
 
     if (s == "") {
       setNull(rec)
@@ -169,7 +167,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
     }
     when {
       year == -1 -> {
-        val now: NotNullWeek = Week.now()
+        val now: Week = Week.now()
 
         year = now.year
       }
@@ -180,7 +178,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
         year += 1900
       }
     }
-    setWeek(rec, NotNullWeek(year, week))
+    setWeek(rec, Week(year, week))
   }
 
   // ----------------------------------------------------------------------
@@ -236,7 +234,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
    */
   override fun retrieveQuery_(result: ResultRow, column: Column<*>): Any? {
     val tmp = result[column] as? Int ?: return null
-    return NotNullWeek(tmp / 100, tmp % 100)
+    return Week(tmp / 100, tmp % 100)
   }
 
   /**
@@ -342,7 +340,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
     }
     when {
       year == -1 -> {
-        val now: NotNullWeek = Week.now()
+        val now: Week = Week.now()
 
         year = now.year
       }
@@ -353,7 +351,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
         year += 1900
       }
     }
-    return NotNullWeek(year, week)
+    return Week(year, week)
   }
 
   /**
@@ -364,9 +362,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String {
-    return if (value[r] == null) "NULL" else Utils.toSql(value[r])
-  }
+  override fun getSqlImpl(r: Int): String? = if(value[r] == null) null else value[r]!!.toSql()
 
   /**
    * Copies the value of a record to another
@@ -426,7 +422,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
       if (handler == null || force) {
         setWeek(block!!.activeRecord, Week.now())
       } else {
-        setWeek(block!!.activeRecord, NotNullWeek(handler.selectDate(getWeek(block!!.activeRecord).getFirstDay())))
+        setWeek(block!!.activeRecord, Week(handler.selectDate(getWeek(block!!.activeRecord).getFirstDay())))
       }
       true
     }

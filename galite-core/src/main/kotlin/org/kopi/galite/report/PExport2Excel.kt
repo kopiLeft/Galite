@@ -38,7 +38,7 @@ import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.report.UReport.UTable
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.type.Date
-import org.kopi.galite.type.Fixed
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
 import org.kopi.galite.type.Timestamp
@@ -91,11 +91,12 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
       sheet!!.setColumnWidth(i, widths[i].toInt())
     }
 
-    sheet?.repeatingColumns = CellRangeAddress.valueOf("0:" + (columnCount - 1))
-    sheet?.repeatingRows = CellRangeAddress.valueOf("0:0")
+    sheet?.repeatingColumns = CellRangeAddress(-1, -1, 0, columnCount - 1)
+    sheet?.repeatingRows = CellRangeAddress(0, 0, -1, -1)
 
     val footer = sheet!!.footer
     val header = sheet!!.header
+
     header.left = title + "  " + getColumnLabel(0) + " : " + subTitle
 
     footer.left = title + " - " + VlibProperties.getString("print-page") + " &P / &N "
@@ -111,20 +112,20 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
   }
 
   override fun exportHeader(data: Array<String?>) {
-    val titlerow = sheet!!.createRow(0)
+    val titleRow = sheet!!.createRow(0)
     var cellPos = 0
 
     data.forEach {
-      titlerow.createCell(cellPos++).setCellValue(it)
+      titleRow.createCell(cellPos++).setCellValue(it)
     }
   }
 
-  protected override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
+  override fun exportRow(level: Int, data: Array<String?>, orig: Array<Any?>, alignments: IntArray) {
     val row = sheet!!.createRow(rowNumber + 1)
     val color = getBackgroundForLevel(level)
     var cellPos = 0
 
-    data.forEachIndexed() { index, element ->
+    data.forEachIndexed { index, element ->
       val cell: Cell = row.createCell(cellPos)
       val cellStyle: CellStyle = cellStyleCacheManager.getStyle(this,
                                                                 workbook!!,
@@ -144,7 +145,7 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
       if (datatype[cellPos] == CellType.STRING.code) {
         cell.setCellValue(data.replace('\n', ' '))
       } else {
-        if (orig is Fixed) {
+        if (orig is Decimal) {
           cell.setCellValue(orig.toDouble())
         } else if (orig is Int) {
           if (datatype[cellPos] == CellType.BOOLEAN.code) {
@@ -224,12 +225,12 @@ abstract class PExport2Excel(table: UTable, model: MReport, printConfig: PConfig
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }
 
-  override fun formatFixedColumn(column: VReportColumn, index: Int) {
-    var fixnumFormat = "#,##0"
+  override fun formatDecimalColumn(column: VReportColumn, index: Int) {
+    var decimalFormat = "#,##0"
     for (i in 0 until (column as VFixnumColumn).maxScale) {
-      fixnumFormat += if (i == 0) ".0" else "0"
+      decimalFormat += if (i == 0) ".0" else "0"
     }
-    dataformats[index] = format!!.getFormat(fixnumFormat)
+    dataformats[index] = format!!.getFormat(decimalFormat)
     datatype[index] = CellType.NUMERIC.code
     widths[index] = (256 * computeColumnWidth(column)).toShort()
   }

@@ -50,7 +50,7 @@ class VListDialog(list: Array<VListColumn?>,
   constructor(list: Array<VListColumn?>,
               data: Array<Array<Any?>>,
               rows: Int,
-              newForm: VDictionary) : this(list, data, makeIdentArray(rows), rows, false) {
+              newForm: VDictionary?) : this(list, data, makeIdentArray(rows), rows, false) {
     this.newForm = newForm
   }
 
@@ -111,7 +111,7 @@ class VListDialog(list: Array<VListColumn?>,
    * Displays a dialog box returning position of selected element.
    */
   fun selectFromDialog(window: VWindow?, field: VField?, showSingleEntry: Boolean): Int =
-          display.selectFromDialog((window?.getDisplay())!!,
+          display.selectFromDialog(window?.getDisplay(),
                                    field?.getDisplay(),
                                    showSingleEntry)
 
@@ -138,10 +138,10 @@ class VListDialog(list: Array<VListColumn?>,
       for (j in 0 until i) {
         val value1 = data[left][translatedIdents[j]]
         val value2 = data[left][translatedIdents[j + 1]]
-        var swap = if (value1 != null && value2 != null) {
+        val swap = if (value1 != null && value2 != null) {
           when (value1) {
             is String -> {
-              value1 > (value2 as? String)!!
+              value1 > value2 as String
             }
             is Number -> {
               value1.toDouble() > (value2 as Number).toDouble()
@@ -150,7 +150,7 @@ class VListDialog(list: Array<VListColumn?>,
               value1 && !(value2 as Boolean)
             }
             is Date -> {
-              (value1 as Date) > value2 as? Date
+              value1 > value2 as Date
             }
             else -> {
               false

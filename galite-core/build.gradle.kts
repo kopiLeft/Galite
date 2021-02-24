@@ -17,14 +17,14 @@
 
 plugins {
   kotlin("jvm") apply true
+  id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
 
-val exposedVersion = "0.27.1"
+val exposedVersion = "0.29.1"
 val vaadinVersion = "18.0.3"
 val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
 val apachePoi = "4.1.2"
-val apacheOoxml = "3.9"
 val graphbuilder = "1.02"
 val hylafaxVersion = "1.0.0"
 val jFreeChartVersion = "1.0.19"
@@ -34,9 +34,10 @@ dependencies {
   // Exposed dependencies
   api("org.jetbrains.exposed", "exposed-core", exposedVersion)
   api("org.jetbrains.exposed", "exposed-jodatime", exposedVersion)
+  api("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
 
   // Vaadin dependencies
-  implementation("com.vaadin", "vaadin-core", vaadinVersion) {
+  implementation("com.vaadin", "vaadin-core") {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
             "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
             "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
@@ -53,7 +54,7 @@ dependencies {
   implementation("org.apache.poi", "poi", apachePoi)
 
   // Apache OOxml
-  implementation("org.apache.poi", "poi-ooxml", apacheOoxml)
+  implementation("org.apache.poi", "poi-ooxml", apachePoi)
 
   // Graphbuilder dependency
   implementation("com.github.virtuald", "curvesapi", graphbuilder)
@@ -66,4 +67,13 @@ dependencies {
 
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", getoptVersion)
+
+  // EnhancedDialog dependency
+  implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
+}
+
+dependencyManagement {
+  imports {
+    mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
+  }
 }

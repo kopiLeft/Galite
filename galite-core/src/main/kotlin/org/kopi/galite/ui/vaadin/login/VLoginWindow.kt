@@ -132,18 +132,18 @@ class VLoginWindow : Div() {
    */
   fun setLocale(locale: String?) {
     doInit(LocalizedProperties.getString(locale, "welcomeText"),
-            LocalizedProperties.getString(locale, "informationText"),
-            LocalizedProperties.getString(locale, "usernameLabel"),
-            LocalizedProperties.getString(locale, "passwordLabel"),
-            LocalizedProperties.getString(locale, "languageLabel"),
-            LocalizedProperties.getString(locale, "loginText"))
+           LocalizedProperties.getString(locale, "informationText"),
+           LocalizedProperties.getString(locale, "usernameLabel"),
+           LocalizedProperties.getString(locale, "passwordLabel"),
+           LocalizedProperties.getString(locale, "languageLabel"),
+           LocalizedProperties.getString(locale, "loginText"))
   }
 
   /**
    * Focus on the first field in the login box.
    */
   fun focus() {
-    //  loginBox.focus(); TODO
+    loginBox.focus()
   }
 
   //---------------------------------------------------

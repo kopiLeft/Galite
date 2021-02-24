@@ -21,6 +21,8 @@ import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
 
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.visual.VDefaultActor
 
 /**
  * This class represents an actor, ie a menu element with a name and may be an icon, a shortcut
@@ -33,17 +35,19 @@ import org.kopi.galite.form.dsl.Key
  * @param menu                the containing menu
  * @param label               the label
  * @param help                the help
- * @param icon                the icon
- * @param key                 the shortcut
  */
 class Actor(val ident: String, val menu: Menu, val label: String, val help: String, val number: Int) {
+  // The shortcut key
   var key: Key? = null
     set(key) {
       checkKey(key)
       field = key
     }
 
+  // The actor icon
   var icon: String? = null
+  var keyCode = 0
+  var keyModifier = 0
 
   private fun checkKey(key: Key?) {
     if (key == null) {
@@ -62,6 +66,17 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
     writer.genActorDefinition(ident, label, help)
   }
 
-  var keyCode = 0
-  var keyModifier = 0
+  /**
+   * Builds the actor model [VActor] from information provided by this actor.
+   */
+  internal fun buildModel(sourceFile: String) : VActor =
+          if (number == 0) {
+            VActor(menu.label, sourceFile, ident, sourceFile, icon, keyCode, keyModifier, true)
+          } else {
+            VDefaultActor(number, menu.label, sourceFile, ident, sourceFile, icon, keyCode, keyModifier, true)
+          }.also {
+            it.menuName = menu.label
+            it.menuItem = label
+            it.help = help
+          }
 }

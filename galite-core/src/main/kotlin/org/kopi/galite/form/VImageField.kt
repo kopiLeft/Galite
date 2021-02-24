@@ -66,7 +66,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {}
+  override fun checkType(rec: Int, s: Any?) {}
 
   override fun getType(): Int = MDL_FLD_IMAGE
 
@@ -131,7 +131,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
   /**
    * Returns the field value of given record as a date value.
    */
-  override fun getImage(r: Int): ByteArray = getObject(r) as ByteArray
+  override fun getImage(r: Int): ByteArray? = getObject(r) as? ByteArray
 
   /**
    * Returns the field value of the current record as an object
@@ -150,7 +150,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = if (value[r] == null) "NULL" else "?"
+  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else "?"
 
   /**
    * Copies the value of a record to another

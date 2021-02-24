@@ -96,8 +96,8 @@ class VIntegerField(val bufferSize: Int,
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception may be raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    val s = o as? String
+  override fun checkType(rec: Int, s: Any?) {
+    val s = s as? String
 
     if (s == "") {
       setNull(rec)
@@ -222,7 +222,7 @@ class VIntegerField(val bufferSize: Int,
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r])
+  override fun getSqlImpl(r: Int): Int? = value[r]
 
   /**
    * Copies the value of a record to another

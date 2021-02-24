@@ -16,25 +16,30 @@
  */
 package org.kopi.galite.tests.form
 
+import java.io.File
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.Table
-
-import org.kopi.galite.common.INITFORM
-import org.kopi.galite.common.POSTFORM
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.dsl.FieldOption
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.BlockOption
+import org.kopi.galite.form.dsl.FieldOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
+import org.kopi.galite.visual.FileHandler
 
 object User : Table() {
   val id = integer("ID")
+  val uc = integer("UC")
+  val ts = integer("TS")
   val name = varchar("NAME", 20).nullable()
   val age = integer("AGE").nullable()
+  val job = varchar("JOB", 20).nullable()
+  val cv = varchar("CURRICULUM VITAE", 70).nullable()
 }
 
 object FormSample : Form() {
@@ -58,8 +63,24 @@ object FormSample : Form() {
           label = "Graph for test",
           help = "show graph values",
   ) {
-    key  =  Key.F9          // key is optional here
-    icon =  "column_chart"  // icon is optional here
+    key = Key.F9          // key is optional here
+    icon = "column_chart"  // icon is optional here
+  }
+
+  val formActor = actor(
+          ident =  "save",
+          menu =   action,
+          label =  "form Command",
+          help =   "actor to test form command",
+  ) {
+    key  =  Key.F2          // key is optional here
+    icon =  "save"  // icon is optional here
+  }
+
+  val cmd = command(item = formActor) {
+    action = {
+      println("----------- FORM COMMAND ----------------")
+    }
   }
 
   val p1 = page("test page")
@@ -67,7 +88,6 @@ object FormSample : Form() {
 
   val tb1 = insertBlock(TestBlock(), p1) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------" + tb2.age.value)
@@ -87,7 +107,6 @@ object FormSample : Form() {
 
   val tb2 = insertBlock(TestBlock(), p2) {
     command(item = graph) {
-      this.name = "graphe"
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
@@ -100,7 +119,11 @@ object FormSample : Form() {
     options(BlockOption.NOINSERT)
   }
 
-  val preform = trigger(INITFORM) {
+  val tb4ToTestChangeBlockAccess = insertBlock(TestBlock(), p1) {
+    blockVisibility(Access.SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
+  }
+
+  val preform = trigger(INIT) {
     println("init form trigger works")
   }
 
@@ -123,7 +146,19 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     help = "The user id"
     columns(u.id)
   }
-  val name = mustFill(domain = Domain<String?>(20), position = at(1, 1)) {
+  val ts = hidden(domain = Domain<Int>(20)) {
+    label = "ts"
+    help = "The user ts"
+    value = 0
+    columns(u.ts)
+  }
+  val uc = hidden(domain = Domain<Int>(20)) {
+    label = "uc"
+    help = "The user uc"
+    value = 0
+    columns(u.uc)
+  }
+  val name = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "name"
     help = "The user name"
     columns(u.name)
@@ -133,15 +168,48 @@ class TestBlock : FormBlock(1, 1, "Test block") {
     help = "The user password"
 
     options(FieldOption.NOECHO)
+    trigger(ACCESS) {
+      if (name.value == "hidden") {
+        Access.HIDDEN
+      } else {
+        Access.SKIPPED
+      }
+    }
   }
-  val age = visit(domain = Domain<Int?>(3), position = follow(name)) {
+  val age = visit(domain = Domain<Int>(3), position = follow(name)) {
     label = "age"
     help = "The user age"
-    minValue = 10
-    maxValue =90
+    minValue = 0
+    maxValue = 90
     columns(u.age) {
       index = i
       priority = 1
+    }
+    trigger(POSTCHG) {
+      println("value changed !!")
+      name.value = "Sami"
+    }
+  }
+  val job = visit(domain = Domain<String>(20), position = at(3, 1)) {
+    label = "Job"
+    help = "The user job"
+    columns(u.job)
+  }
+  val cv = visit(domain = Domain<String?>(20), position = at(4, 1)) {
+    label = "Cv"
+    help = "The user curriculum vitae"
+    columns(u.cv)
+    droppable("pdf")
+    trigger(ACTION) {
+      FileHandler.fileHandler!!.openFile(form.model.getDisplay()!!, object : FileHandler.FileFilter {
+        override fun accept(pathname: File?): Boolean {
+          return (pathname!!.isDirectory
+                  || pathname.name.toLowerCase().endsWith(".pdf"))
+        }
+
+        override val description: String
+          get() = "PDF"
+      })
     }
   }
 }

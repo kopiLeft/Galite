@@ -23,9 +23,7 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimeColumn
-import org.kopi.galite.type.NotNullTime
 import org.kopi.galite.type.Time
-import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -79,13 +77,13 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    if (o as? String == "") {
+  override fun checkType(rec: Int, s: Any?) {
+    if (s as? String == "") {
       setNull(rec)
     } else {
       var hours = -1
       var minutes = 0
-      val buffer = (o as? String) + '\u0000'
+      val buffer = (s as? String) + '\u0000'
       var bp = 0
       var state = 1
 
@@ -164,7 +162,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         if (!isTime(hours, minutes)) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
         }
-        setTime(rec, NotNullTime(hours, minutes))
+        setTime(rec, Time(hours, minutes))
       }
     }
   }
@@ -320,7 +318,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         if (!isTime(hours, minutes)) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
         }
-        NotNullTime(hours, minutes)
+        Time(hours, minutes)
       }
     }
   }
@@ -333,7 +331,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r])
+  override fun getSqlImpl(r: Int): String? = if (value[r] == null) null else value[r]!!.toSql()  // TODO("NOT SUPPORTED YET")
 
   /**
    * Copies the value of a record to another

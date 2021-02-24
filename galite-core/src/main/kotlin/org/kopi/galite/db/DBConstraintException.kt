@@ -25,7 +25,7 @@ import java.sql.SQLException
  *
  * @param     query                   the sql query which generated the exception
  * @param     original                the original SQLException
- * @param     constraintName          the violated constraint
+ * @param     constraint              the violated constraint name
  **/
 open class DBConstraintException(query: String?, original: SQLException,
                                  val constraint: String = "unspecified") : DBException(query, original) {

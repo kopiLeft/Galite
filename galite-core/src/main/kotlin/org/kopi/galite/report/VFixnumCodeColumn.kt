@@ -19,7 +19,7 @@
 package org.kopi.galite.report
 
 import org.kopi.galite.util.base.InconsistencyException
-import org.kopi.galite.type.NotNullFixed
+import org.kopi.galite.type.Decimal
 
 class VFixnumCodeColumn(ident: String?,
                         type: String?,
@@ -31,7 +31,8 @@ class VFixnumCodeColumn(ident: String?,
                         width: Int,
                         format: VCellFormat?,
                         names: Array<String>,
-                        codes: Array<NotNullFixed>)
+                        // array of internal representations
+                        private val codes: Array<Decimal>)
           : VCodeColumn(ident,
                         type,
                         source,
@@ -45,13 +46,13 @@ class VFixnumCodeColumn(ident: String?,
   /**
    * Get the index of the value.
    */
-  override fun getIndex(o: Any): Int {
+  override fun getIndex(value: Any): Int {
     for (i in codes.indices) {
-      if (o == codes[i]) {
+      if (value == codes[i]) {
         return i
       }
     }
-    throw InconsistencyException(">>>>$o")
+    throw InconsistencyException(">>>>$value")
   }
 
   /**
@@ -60,7 +61,7 @@ class VFixnumCodeColumn(ident: String?,
   override fun getPrintedWidth(): Double = width * 0.7
 
   override fun formatColumn(exporter: PExport, index: Int) {
-    exporter.formatFixedColumn(this, index)
+    exporter.formatDecimalColumn(this, index)
   }
 
   /**
@@ -72,14 +73,6 @@ class VFixnumCodeColumn(ident: String?,
    * 1 if the second operand if smaller than the first
    * 0 if the two operands are equal
    */
-  override fun compareTo(object1: Any, object2: Any): Int = (object1 as NotNullFixed)
-          .compareTo(object2 as NotNullFixed)
-
-  // --------------------------------------------------------------------
-  // DATA MEMBERS
-  // --------------------------------------------------------------------
-
-  // array of internal representations
-  private val codes: Array<NotNullFixed> = codes
-
+  override fun compareTo(object1: Any, object2: Any): Int = (object1 as Decimal)
+          .compareTo(object2 as Decimal)
 }

@@ -64,7 +64,7 @@ interface Application : MessageListener {
    * @param parent The parent component.
    * @param message The message to be displayed.
    */
-  fun displayError(parent: UComponent, message: String)
+  fun displayError(parent: UComponent?, message: String?)
 
   /**
    * `true` if no bug report is sent.
@@ -109,7 +109,7 @@ interface Application : MessageListener {
   /**
    * The application default [Locale].
    */
-  val defaultLocale: Locale?
+  val defaultLocale: Locale
 
   /**
    * The application [LocalizationManager].

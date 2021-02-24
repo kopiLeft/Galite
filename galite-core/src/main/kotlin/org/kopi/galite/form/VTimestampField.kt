@@ -18,6 +18,8 @@
 
 package org.kopi.galite.form
 
+import java.time.Instant
+
 import kotlin.math.min
 import kotlin.reflect.KClass
 
@@ -25,7 +27,6 @@ import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimestampColumn
 import org.kopi.galite.type.Timestamp
-import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
@@ -69,8 +70,8 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
    * verify that value is valid (on exit)
    * @exception    org.kopi.galite.visual.VException    an exception is raised if text is bad
    */
-  override fun checkType(rec: Int, o: Any?) {
-    if (o as? String == "") {
+  override fun checkType(rec: Int, s: Any?) {
+    if (s as? String == "") {
       setNull(rec)
     } else {
       setTimestamp(rec, Timestamp.now())
@@ -178,7 +179,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
   /**
    * Returns the SQL representation of field value of given record.
    */
-  override fun getSqlImpl(r: Int): String = Utils.toSql(value[r])
+  override fun getSqlImpl(r: Int): Instant? = if(value[r] == null) null else value[r]!!.toSql()
 
   /**
    * Copies the value of a record to another

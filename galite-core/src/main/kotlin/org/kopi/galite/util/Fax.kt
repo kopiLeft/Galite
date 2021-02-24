@@ -432,18 +432,18 @@ class Fax(var port: Int, var host: String) {
     }
 
     val port: Int
-    protected val srv: ServerSocket? = ServerSocket(0, Companion.TIMEOUT)
+    protected val srv: ServerSocket = ServerSocket(0, TIMEOUT)
 
 
     init {
       // get next free port
-      port = srv!!.localPort
+      port = srv.localPort
       debug("BasicServ: port=$port")
       start()
     }
 
     companion object {
-      private val TIMEOUT = 20 // in seconds
+      private const val TIMEOUT = 20 // in seconds
     }
   }
 
@@ -459,7 +459,7 @@ class Fax(var port: Int, var host: String) {
 
       try {
         debug("RecvServ.run: Build connection")
-        val srv_clnt = srv!!.accept()
+        val srv_clnt = srv.accept()
 
         debug("RecvServ.run: Generate InputStream")
         val dataInputStream = DataInputStream(srv_clnt.getInputStream())
@@ -477,9 +477,7 @@ class Fax(var port: Int, var host: String) {
 
         data = out.toByteArray()
 
-        if (srv != null) {
-          srv.close()
-        }
+        srv.close()
       } catch (e: IOException) {
         fail("RecvServ", e, RECEIVE)
       }
@@ -505,7 +503,7 @@ class Fax(var port: Int, var host: String) {
 
       try {
         debug("SendServ.run: Build connection")
-        val srv_clnt = srv!!.accept()
+        val srv_clnt = srv.accept()
 
         debug("SendServ.run: Generate OutputStream")
         out = DataOutputStream(srv_clnt.getOutputStream())
@@ -516,9 +514,7 @@ class Fax(var port: Int, var host: String) {
         srv_clnt.close()
 
         debug("SendServ.run: Bytes sent= " + out.size())
-        if (srv != null) {
-          srv.close()
-        }
+        srv.close()
       } catch (e: IOException) {
         fail("Thread error", e, SEND)
       }

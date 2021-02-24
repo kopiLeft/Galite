@@ -20,13 +20,8 @@ package org.kopi.galite.tests.domain
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.selectAll
 import org.junit.Test
-import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
-import org.kopi.galite.exceptions.InvalidValueException
-import org.kopi.galite.report.ReportField
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertTrue
 
 /**
  * Contains tests of list-domain creation and manipulation
@@ -39,12 +34,12 @@ class ListDomainTests {
   @Test
   fun simpleDomainWithLengthTest() {
     // Declaration of the domain with length
-    class StringTestType : Domain<String>(20) {
-      override val type = list {
-        query = TestTable.selectAll()
+    class StringTestType : ListDomain<String>(20) {
+      override val table = query(TestTable.selectAll())
 
-        this["name"] =  TestTable.name
-        this["id"] =    TestTable.id
+      init {
+        "name" keyOf TestTable.name
+        "id" keyOf TestTable.id
       }
     }
 
@@ -52,75 +47,10 @@ class ListDomainTests {
     val domain = StringTestType()
 
     // test list values
-    val list = (domain.type as ListDomain<*>).list
+    val list = domain.columns
     assertEquals(2, list.size)
-    assertEquals(TestTable.id, list["id"])
-    assertEquals(TestTable.name, list["name"])
-  }
-
-  /**
-   * Tests the creation of a domain with convertUpper.
-   *
-   * succeed if the is converted to uppercase.
-   * fails otherwise.
-   */
-  @Test
-  fun domainWithConvertUpperTest() {
-    // Declaration of the domain with length
-    class StringTestType : Domain<String>(5) {
-      override val type = list {
-        convertUpper()
-
-        query = TestTable.selectAll()
-
-        this["id"] =    TestTable.id
-        this["name"] =  TestTable.name
-      }
-    }
-
-    // Creating an instance of the domain StringTestType
-    val domain = StringTestType()
-
-    // test converted value
-    val convertedToUpper = domain.applyConvertUpper("Abcdef")
-    assertEquals("ABCDEF", convertedToUpper)
-  }
-
-  /**
-   * Tests the creation of a domain with check
-   *
-   * succeed if the value does respect the check method.
-   * fails with InvalidValueException otherwise.
-   */
-  @Test
-  fun domainWithCheckTest() {
-    // Declaration of the domain with length
-    class StringTestType(val param: String) : Domain<String>(5) {
-      override val type = list {
-        convertUpper()
-
-        check = {
-          it.startsWith(param)
-        }
-
-        query = TestTable.selectAll()
-
-        this["id"] =    TestTable.id
-        this["name"] =  TestTable.name
-      }
-    }
-
-    // Creating a field with the domain StringTestType
-    val field = ReportField(StringTestType("A").also { it.kClass = String::class })
-
-    // test with a valid value
-    val checkValid = field.checkValue("Abcdef")
-    assertTrue(checkValid)
-
-    // test with an invalid value
-    assertFailsWith<InvalidValueException> {
-      field.checkValue("abcdef")
-    }
+    assertEquals(TestTable.name, list[0].column)
+    assertEquals(TestTable.id, list[1].column)
   }
 
   object TestTable : Table("TestTable") {
