@@ -67,12 +67,21 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
     classNames.add("report")
     width = "100%"
     addItemClickListener(this)
-    addColumnReorderListener(::onReoder)
+    addColumnReorderListener(::onReorder)
   }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+
+  /**
+   * Resets the table cached information.
+   */
+  fun resetCachedInfos() {
+    selectedRow = -1
+    selectedColumn = -1
+    select(null)
+  }
 
   /**
    * Builds the grid columns.
@@ -108,7 +117,7 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
    *
    * @param event the column reorder event. Provides the list of grid columns with the new order.
    */
-  fun onReoder(event: ColumnReorderEvent<VReportRow>) {
+  fun onReorder(event: ColumnReorderEvent<VReportRow>) {
     viewColumns = event.columns.map { it.key.toInt() }
   }
 

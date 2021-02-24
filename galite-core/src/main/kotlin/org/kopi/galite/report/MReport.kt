@@ -749,10 +749,15 @@ class MReport : Constants, Serializable {
   /**
    * Returns true if the specified row is fold at the specified column
    */
-  fun isRowFold(row: Int, column: Int): Boolean {
+  fun isRowFold(row: Int, column: Int): Boolean = isRowFold(visibleRows!![row], column)
+
+  /**
+   * Returns true if the specified row is fold at the specified column
+   */
+  fun isRowFold(row: VReportRow?, column: Int): Boolean {
     return if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
-      var currentRow = visibleRows!![row]
+      var currentRow = row
 
       while (currentRow!!.level < level) {
         currentRow = currentRow.parent as? VReportRow
@@ -808,10 +813,17 @@ class MReport : Constants, Serializable {
    *
    * @param    column        the model index of the column
    */
-  fun foldingRow(row: Int, column: Int) {
+  fun foldingRow(row: Int, column: Int) = foldingRow(visibleRows!![row],column)
+  /**
+   * Folds the specified row to specified column
+   *
+   * @param    column        the model index of the column
+   */
+
+  fun foldingRow(row: VReportRow?, column: Int) {
     if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
-      var currentRow = visibleRows!![row]
+      var currentRow = row
 
       while (currentRow!!.level < level) {
         currentRow = currentRow.parent as? VReportRow
@@ -828,13 +840,19 @@ class MReport : Constants, Serializable {
    *
    * @param    column        the model index of the column
    */
-  fun unfoldingRow(row: Int, column: Int) {
+  fun unfoldingRow(row: Int, column: Int) = unfoldingRow(visibleRows!![row],column)
+
+  /**
+   * Unfolds the specified row to specified column
+   *
+   * @param    column        the model index of the column
+   */
+  fun unfoldingRow(row: VReportRow?, column: Int) {
     if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
-      val currentRow = visibleRows!![row]
 
-      if (currentRow is VGroupRow) {
-        currentRow.setChildNodesVisible(level)
+      if (row is VGroupRow) {
+        row.setChildNodesVisible(level)
       }
       updateTableModel()
     }
@@ -846,6 +864,17 @@ class MReport : Constants, Serializable {
   fun isRowLine(row: Int): Boolean {
     return if (visibleRows != null) {
       row in 0 until maxRowCount && visibleRows!![row]!!.level == 0
+    } else {
+      false
+    }
+  }
+
+  /**
+   * Returns true if the specified row is fold at the specified column
+   */
+  fun isRowLine(row: VReportRow): Boolean {
+    return if (visibleRows != null) {
+      row in 0 until maxRowCount && row.level == 0
     } else {
       false
     }
@@ -986,7 +1015,7 @@ class MReport : Constants, Serializable {
   /**
    * Notifies all listeners that the report model has changed.
    */
-  protected fun fireContentChanged() {
+   open fun fireContentChanged() {
     val listeners = listenerList.listenerList
     var i = listeners.size - 2
 
@@ -1006,7 +1035,7 @@ class MReport : Constants, Serializable {
   // DATA MEMBERS
   // --------------------------------------------------------------------
   // Columns contains all columns defined by the user
-  // accessiblecolumns is a part of columns which contains only visible columns
+  // accessibleColumns is a part of columns which contains only visible columns
   var columns: Array<VReportColumn?> = arrayOf()    // array of column definitions
   var accessibleColumns: Array<VReportColumn?> = arrayOf() // array of visible or hide columns
     private set
@@ -1014,7 +1043,7 @@ class MReport : Constants, Serializable {
   // Root is the root of the tree (which is our model to manipulate data)
   private var root: VGroupRow? = null    // root of grouping tree
 
-  // Baserows contains data give by the request of the user
+  // baseRows contains data give by the request of the user
   // visibleRows contains all data which will be displayed. It's like a buffer. visibleRows
   // is changed when a column move or one or more row are folded
   private var userRows: ArrayList<VBaseRow>? = ArrayList(500)
@@ -1022,7 +1051,7 @@ class MReport : Constants, Serializable {
   private var visibleRows: Array<VReportRow?>? = null  // array of visible rows
   private var maxRowCount = 0
 
-  // Sortedcolumn contain the index of the sorted column
+  // sortedColumn contain the index of the sorted column
   // sortingOrder store the type of sort of the sortedColumn : ascending or descending
   private var sortedColumn = 0    // the table is sorted wrt. to this column
   private var sortingOrder = 0    // 1: ascending, -1: descending
