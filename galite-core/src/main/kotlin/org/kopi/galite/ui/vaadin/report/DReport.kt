@@ -24,13 +24,10 @@ import org.kopi.galite.report.Parameters
 import org.kopi.galite.report.Point
 import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VReport
-import org.kopi.galite.report.VReportRow
 import org.kopi.galite.ui.vaadin.visual.DWindow
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VException
 
 import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.grid.ItemClickEvent
+
 /**
  * The `DReport` is the visual part of the [VReport] model.
  *
@@ -195,75 +192,8 @@ class DReport(report: VReport) : DWindow(report), UReport {
   /**
    * Add listeners to the report table.
    */
-  open fun addTableListeners() {
-    val currentModel = model
-    table.addItemClickListener {
-      fun itemClick(event: ItemClickEvent<VReportRow>) {
-        val row = event.item
-        val col = event.column.key.toInt()
-
-        if (event.button == 0) {
-          if (event.clickCount == 2) {
-            if (model.isRowLine(row)) {
-              getModel().performAsyncAction(object : Action("edit_line") {
-                override fun execute() {
-                  try {
-                    report.editLine()
-                  } catch (ve: VException) {
-                    // exception thrown by trigger.
-                    throw ve
-                  }
-                }
-              })
-            } else {
-              if (row.visible) {
-                if (model.isRowFold(row, col)) {
-                  model.unfoldingRow(row, col)
-                } else {
-                  model.foldingRow(row, col)
-                }
-              }
-            }
-          } else if (event.isShiftKey && event.isCtrlKey) {
-            model.sortColumn(col)
-          } else if (event.isCtrlKey) {
-            if (row.visible) {
-              if (model.isRowFold(row, col)) {
-                model.unfoldingRow(row, col)
-              } else {
-                model.foldingRow(row, col)
-              }
-            }
-          } else if (event.isShiftKey) {
-            if (model.isColumnFold(col)) {
-              model.unfoldingColumn(col)
-            } else {
-              model.foldingColumn(col)
-            }
-          } else {
-            //access {
-             table.dataProvider.refreshAll()
-           // }
-            synchronized(table) { report.setMenu() }
-          }
-        } else if (event.button == 2) {
-          // labelPopupMenu.hide();
-          if (row.visible) {
-            if (model.isRowFold(row, col)) {
-              model.unfoldingRow(row, col)
-            } else {
-              model.foldingRow(row, col)
-            }
-          }
-        } else if (event.button == 1) {
-          if (model.isColumnFold(col)) {
-            model.unfoldingColumn(col)
-          } else {
-            model.foldingColumn(col)
-          }
-        }
-      }
-    }
+  fun addTableListeners() {
+    //TODO()
   }
 
   /**

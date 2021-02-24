@@ -68,6 +68,36 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
     width = "100%"
     addItemClickListener(this)
     addColumnReorderListener(::onReorder)
+    model.getRows().also {
+
+      addItemDoubleClickListener {event ->
+        val row = event.item
+        val col = event.column.key.toInt()
+        if (model.isRowLine(row)) {
+/*        performAsyncAction(object : Action("edit_line") {
+          override fun execute() {
+            try {
+              report.editLine()
+            } catch (ve: VException) {
+              // exception thrown by trigger.
+              throw ve
+            }
+          }
+        })*/
+        } else {
+          if (row.visible) {
+            if (model.isRowFold(row, col)) {
+              model.unfoldingRow(row, col)
+              buildRows()
+            } else {
+              dataProvider.refreshAll()
+              model.foldingRow(row, col)
+              buildRows()
+            }
+          }
+        }
+      }
+    }
   }
 
   //---------------------------------------------------
@@ -108,8 +138,8 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
   /**
    * Builds the grid rows.
    */
-  private fun buildRows() {
-    setItems(model.getRows().toList())
+  open fun buildRows() {
+    setItems(model.getRows().filterNotNull())
   }
 
   /**

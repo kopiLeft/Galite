@@ -814,12 +814,12 @@ class MReport : Constants, Serializable {
    * @param    column        the model index of the column
    */
   fun foldingRow(row: Int, column: Int) = foldingRow(visibleRows!![row],column)
+
   /**
    * Folds the specified row to specified column
    *
    * @param    column        the model index of the column
    */
-
   fun foldingRow(row: VReportRow?, column: Int) {
     if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
