@@ -18,33 +18,35 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import java.util.*
+import org.kopi.galite.ui.vaadin.common.VImage
 
 /**
  * The server side component of the image field.
+ * TODO: it have to be implemented later, ObjectField<Any?> ?
  */
-class ImageField : VObjectField() {
+class ImageField : ObjectField<Any?>() {
+
+  /**
+   * The image width.
+   */
+  var imageWidth = 0
+
+  /**
+   * The image height.
+   */
+  var imageHeight = 0
+
+  private var image: VImage? = VImage()
+
+  private val listeners = mutableListOf<ImageFieldListener>()
+
+  init {
+    image!!.setBorder(0)
+    // TODO
+  }
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  /**
-   * Sets the image width.
-   * @param width The image width.
-   */
-  fun setImageWidth(width: Int) {
-    state.imageWidth = width
-  }
-
-  /**
-   * Sets the image height.
-   * @param height The image height.
-   */
-  fun setImageHeight(height: Int) {
-    state.imageHeight = height
-  }
-
-  protected val state: ImageFieldState
-    protected get() = super.getState() as ImageFieldState
 
   /**
    * Registers a new image field listener.
@@ -67,7 +69,7 @@ class ImageField : VObjectField() {
    */
   protected fun fireRemoved() {
     for (l in listeners) {
-      l?.onRemove()
+      l.onRemove()
     }
   }
 
@@ -76,31 +78,40 @@ class ImageField : VObjectField() {
    */
   protected fun fireClicked() {
     for (l in listeners) {
-      l?.onImageClick()
+      l.onImageClick()
     }
   }
 
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val listeners: MutableList<ImageFieldListener>
-  private val rpc: ImageFieldServerRpc = object : ImageFieldServerRpc() {
-    fun onRemove() {
-      fireRemoved()
-    }
+  override val isNull: Boolean
+    get() = image == null || image!!.isEmpty
 
-    fun onClick() {
-      fireClicked()
-    }
+  override fun setValue(o: Any?) {
+    image!!.src = o as String?
   }
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates a new `ImageField` component.
-   */
-  init {
-    listeners = LinkedList()
-    registerRpc(rpc)
+
+
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    value = newPresentationValue
+  }
+
+  override fun setColor(foreground: String?, background: String?) {
+    // no color for image field
+  }
+
+  override fun getValue(): Any? {
+    return image!!.src
+  }
+
+  override fun generateModelValue(): Any? = value
+
+  override fun checkValue(rec: Int) {
+    // nothing to perform
+  }
+
+  override fun setParentVisibility(visible: Boolean) {}
+
+  override fun clear() {
+    super.clear()
+    image = null
   }
 }

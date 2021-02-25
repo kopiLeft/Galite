@@ -18,28 +18,69 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import java.lang.reflect.Method
+import com.vaadin.flow.component.BlurNotifier
+import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.FocusNotifier
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.shared.Registration
+import org.kopi.galite.ui.vaadin.base.Styles
 
 /**
  * The actor field server side implementation
  */
-class ActorField : VObjectField() {
+class ActorField : ObjectField<Any?>() {
+
+  /**
+   * The foreground color
+   */
+  var foreground: String? = null
+
+  /**
+   * The background color
+   */
+  var background: String? = null
+
+  private var button: Button = Button()
+
+  init {
+    button.className = Styles.ACTOR_FIELD_BUTTON
+    element.classList.add(Styles.ACTOR_FIELD)
+    //setWidget(button) TODO
+  }
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
-  protected val state: ActorFieldState
-    protected get() = super.getState() as ActorFieldState
-
-  protected fun getState(markAsDirty: Boolean): ActorFieldState {
-    return super.getState(markAsDirty) as ActorFieldState
+  fun addClickHandler(handler: ComponentEventListener<ClickEvent<Button>>?): Registration? {
+    return button.addClickListener(handler)
   }
 
   /**
-   * Sets the field icon name.
-   * @param icon The icon name.
+   * Sets the actor field caption.
+   * @param caption The field caption.
    */
-  fun setIcon(icon: String) {
-    state.icon = icon
+  fun setCaption(caption: String?) {
+    button.text = caption
+  }
+
+  /**
+   * Sets the actor field icon name.
+   * @param icon The actor field icon name.
+   */
+  fun setIcon(icon: Icon) {
+    button.icon = icon
+  }
+
+  override fun onFocus(event: FocusNotifier.FocusEvent<CustomField<Any>>?) {}
+
+  override fun onBlur(event: BlurNotifier.BlurEvent<CustomField<Any>>?) {}
+
+  override val isNull: Boolean = true
+
+  override fun setValue(o: Any?) {
+    // Do nothing as this is an actor field with no value
   }
 
   /**
@@ -47,81 +88,34 @@ class ActorField : VObjectField() {
    * @param foreground The foreground color
    * @param background The background color
    */
-  public override fun setColor(foreground: String, background: String) {
-    state.foreground = foreground
-    state.background = background
-  }
-
-  /**
-   * Registers a new click listener on this editor label.
-   * @param listener The click listener object.
-   */
-  fun addClickListener(listener: ClickListener?) {
-    addListener("handleClick", ClickEvent::class.java, listener, ClickEvent.CLICK_METHOD)
-  }
-
-  /**
-   * Removes a click listener from this editor label.
-   * @param listener The listener to remove.
-   */
-  fun removeClickListener(listener: ClickListener?) {
-    removeListener("handleClick", ClickEvent::class.java, listener)
-  }
-
-  /**
-   * Fires a click event on this editor label
-   */
-  protected fun fireClickEvent() {
-    fireEvent(ClickEvent(this))
-  }
-  //---------------------------------------------------
-  // LISTENERS & EVENTS
-  //---------------------------------------------------
-  /**
-   * Click listener on editor labels
-   */
-  interface ClickListener : ConnectorEventListener {
-    /**
-     * Notifies registered objects that a click event is fired on the editor label.
-     * @param event The click event object.
-     */
-    fun onClick(event: ClickEvent?)
-  }
-
-  /**
-   * The editor label click event
-   */
-  class ClickEvent  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  (source: Component?) : Event(source) {
-    companion object {
-      //---------------------------------------------------
-      // DATA MEMBERS
-      //---------------------------------------------------
-      val CLICK_METHOD: Method? = null
-
-      init {
-        try {
-          // Set the header click method
-          CLICK_METHOD = ClickListener::class.java.getDeclaredMethod("onClick", ClickEvent::class.java)
-        } catch (e: NoSuchMethodException) {
-          // This should never happen
-          throw RuntimeException(e)
-        }
-      }
+  override fun setColor(foreground: String?, background: String?) {
+    this.foreground = foreground
+    this.background = background
+    if (foreground != null && foreground.isNotEmpty()) {
+      // button.element.style.setColor(foreground) TODO
+    } else {
+      // button.element.style.setColor("inherit") TODO
+    }
+    if (background != null && background.isNotEmpty()) {
+      // button.element.style.setBackgroundColor(foreground) TODO
+    } else {
+      // button.element.style.setBackgroundColor("inherit") TODO
     }
   }
 
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  init {
-    setImmediate(true)
-    registerRpc(object : ActorFieldServerRpc() {
-      fun clicked() {
-        fireClickEvent()
-      }
-    })
+  override fun getValue(): Any? {
+    return null
+  }
+
+  override fun checkValue(rec: Int) {}
+
+  override fun setParentVisibility(visible: Boolean) {}
+
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    // Do nothing
+  }
+
+  override fun generateModelValue(): Any? {
+    return null
   }
 }

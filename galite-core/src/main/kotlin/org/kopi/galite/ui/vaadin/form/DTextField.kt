@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.contextmenu.ContextMenu
 import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
@@ -51,15 +52,12 @@ open class DTextField(
   // --------------------------------------------------
   private val field: TextField // the text component
   protected var inside = false
-  protected var noEdit: Boolean
-  protected var scanner: Boolean
+  protected var noEdit = options and VConstants.FDO_NOEDIT != 0
+  protected var scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
   private var selectionAfterUpdateDisabled = false
   protected var transformer: ModelTransformer? = null
 
   init {
-    noEdit = options and VConstants.FDO_NOEDIT != 0
-    scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
-
     transformer = if (getModel().height == 1
             || !scanner && getModel().getTypeOptions() and VConstants.FDO_DYNAMIC_NL > 0) {
       DefaultTransformer(getModel().width,
@@ -156,8 +154,8 @@ open class DTextField(
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
     //access { TODO: Acccess from thread
-      field.isEnabled = access >= VConstants.ACS_VISIT
-      isEnabled = access >= VConstants.ACS_VISIT
+    field.isEnabled = access >= VConstants.ACS_VISIT
+    isEnabled = access >= VConstants.ACS_VISIT
     //}
   }
 
@@ -175,7 +173,7 @@ open class DTextField(
   override fun updateColor() {
     //access { TODO: Acccess from thread
     val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
-      field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
+    field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
     //}
   }
 
@@ -204,10 +202,10 @@ open class DTextField(
    */
   private fun enterMe() {
     //BackgroundThreadHandler.access(Runnable { TODO: access
-      if (scanner) {
-        field.value = transformer!!.toGui("")
-      }
-      //field.focus() TODO
+    if (scanner) {
+      field.value = transformer!!.toGui("")
+    }
+    //field.focus() TODO
     //})
   }
 
@@ -221,7 +219,7 @@ open class DTextField(
     if (scanner) {
       // trick: it is now displayed on a different way
       //BackgroundThreadHandler.access(Runnable { TODO
-        field.value = transformer!!.toModel(field.value.toString())
+      field.value = transformer!!.toModel(field.value.toString())
       //})
     }
   }
@@ -292,8 +290,8 @@ open class DTextField(
    * Returns the field width unit.
    * @return The field width unit.
    */
-  val fieldWidthUnits: Unit
-    get() = this.field.getWidthUnits()
+  /*val fieldWidthUnits: Unit TODO
+    get() = this.field.getWidthUnits()*/
 
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION
@@ -442,14 +440,12 @@ open class DTextField(
   protected fun createContextMenu() {
     if (model.hasAutofill() && getModel().getDefaultAccess() > VConstants.ACS_SKIPPED) {
       val contextMenu = ContextMenu()
-      contextMenu.addItem(VlibProperties.getString("item-index")).setData(VlibProperties.getString("item-index"))
-      contextMenu.addItemClickListener(object : ContextMenuItemClickListener() {
-        fun contextMenuItemClicked(event: ContextMenuItemClickEvent?) {
-          contextMenu.hide()
-          performAutoFillAction()
-        }
-      })
-      contextMenu.setAsContextMenuOf(field)
+      contextMenu.addItem(VlibProperties.getString("item-index")) {
+        performAutoFillAction()
+      }
+      //.setData(VlibProperties.getString("item-index")) TODO
+
+      contextMenu.target = field
     }
   }
 

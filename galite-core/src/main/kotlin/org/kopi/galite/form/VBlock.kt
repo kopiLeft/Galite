@@ -169,7 +169,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
   fun isAccepted(flavor: String): Boolean = dropListMap.containsKey(flavor.toLowerCase())
 
-  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.toLowerCase()] as? String)
+  fun getDropTarget(flavor: String): VField? = getField(dropListMap[flavor.toLowerCase()])
 
   // ----------------------------------------------------------------------
   // LOCALIZATION
@@ -3139,7 +3139,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   protected fun fillIdField(recno: Int, id: Int) {
     if (id == -1) {
-     // TODO()
+      // TODO()
     }
 
     idField.setInt(recno, id)

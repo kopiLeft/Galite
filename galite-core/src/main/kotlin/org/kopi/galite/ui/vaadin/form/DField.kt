@@ -75,7 +75,7 @@ abstract class DField(internal val model: VFieldUI,
       }
     }
     hasAction = model.hasAction()
-    label.hasAction = model.hasAction()
+    label!!.hasAction = model.hasAction()
     noChart = getModel().noChart()
     noDetail = getModel().noDetail()
     navigationDelegationMode = _getNavigationDelegationMode()
@@ -166,12 +166,12 @@ abstract class DField(internal val model: VFieldUI,
 
   override fun updateAccess() {
     // access { TODO: access from thread!!
-      access = getAccess()
-      dynAccess = access
-      updateStyles(access)
-      isVisible = access != VConstants.ACS_HIDDEN
-      isActionEnabled = access >= VConstants.ACS_VISIT
-      update(label)
+    access = getAccess()
+    dynAccess = access
+    updateStyles(access)
+    isVisible = access != VConstants.ACS_HIDDEN
+    isActionEnabled = access >= VConstants.ACS_VISIT
+    update(label)
     //}
   }
 
@@ -378,7 +378,7 @@ abstract class DField(internal val model: VFieldUI,
    * @param fieldPos position of this field within block visible fields
    */
   override fun prepareSnapshot(fieldPos: Int, activ: Boolean) {
-    label.prepareSnapshot(activ)
+    label!!.prepareSnapshot(activ)
   }
 
   //-------------------------------------------------

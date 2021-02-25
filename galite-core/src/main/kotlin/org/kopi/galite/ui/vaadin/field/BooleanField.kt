@@ -17,9 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import java.lang.reflect.Method
+import com.vaadin.flow.component.BlurNotifier
+import com.vaadin.flow.component.FocusNotifier
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.checkbox.Checkbox
+import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.ui.vaadin.base.Styles
 
-import com.vaadin.flow.component.Component
 
 /**
  * Server side implementation of the boolean field
@@ -27,57 +32,53 @@ import com.vaadin.flow.component.Component
  * @param trueRepresentation The representation of the true value.
  * @param falseRepresentation The representation of the false false
  */
-class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : ObjectField() {
+class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : ObjectField<Boolean>() {
 
   /**
-   * Returns the field value.
-   * @return The field value.
+   * Sets the boolean field to be mandatory
+   * This will remove to choose the null option
+   * from the two check boxes
    */
-  var value: Boolean? = null
-    private set
+  var mandatory = false
+
+  private var content: HorizontalLayout = HorizontalLayout()
+
+  private var yes: Checkbox = Checkbox()
+
+  private var no: Checkbox = Checkbox()
+
+  private var forceHiddenVisibility = false
 
   init {
-    setImmediate(true)
-    state.trueRepresentation = trueRepresentation
-    state.falseRepresentation = falseRepresentation
-    registerRpc(object : BooleanFieldServerRpc() {
+    /*registerRpc(object : BooleanFieldServerRpc() { TODO
       fun valueChanged(value: Boolean) {
         setValue(value)
         fireValueChangeEvent(value)
       }
-    })
+    })*/
+
+    className = Styles.BOOLEAN_FIELD
+    yes.classNames.add("true")
+    no.classNames.add("false")
+    content.add(yes)
+    content.add(no)
+    // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
+    // content.setCellVerticalAlignment(no, HasVerticalAlignment.ALIGN_BOTTOM) TODO
+    // setWidget(content) TODO
+    yes.addValueChangeListener(::onYesChange)
+    no.addValueChangeListener(::onNoChange)
+    // addKeyPressHandler(this) TODO
+    // addKeyDownHandler(this) TODO
+    // sinkEvents(Event.ONMOUSEOVER or Event.ONMOUSEOUT) TODO
   }
 
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
-  protected val state: BooleanFieldState
-    protected get() = super.getState() as BooleanFieldState
-
-  /**
-   * Sets the field value
-   * @param value The field value
-   */
-  fun setValue(value: Boolean) {
-    state.value = value
-    this.value = value
-  }
 
   fun beforeClientResponse(initial: Boolean) {
-    super.beforeClientResponse(initial)
-    state.value = value
-  }
-
-  /**
-   * Sets the field label.
-   * @param label The field label.
-   */
-  fun setLabel(label: String) {
-    state.label = label
-  }
-
-  fun setMandatory(mandatory: Boolean) {
-    state.mandatory = mandatory
+    // super.beforeClientResponse(initial) TODO
+    // state.value = value TODO
   }
 
   /**
@@ -85,78 +86,156 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * @param focus The field focus
    */
   fun setFocus(focus: Boolean) {
-    getRpcProxy(BooleanFieldClientRpc::class.java).setFocus(focus)
+    // getRpcProxy(BooleanFieldClientRpc::class.java).setFocus(focus) TODO
   }
 
   /**
-   * Sets the field in blink state.
+   * Sets the blink state of the boolean field.
    * @param blink The blink state.
    */
   fun setBlink(blink: Boolean) {
-    getRpcProxy(BooleanFieldClientRpc::class.java).setBlink(blink)
+    // if (blink) { TODO
+    //   addStyleDependentName("blink")
+    // } else {
+    //   removeStyleDependentName("blink")
+    // }
   }
 
-  /**
-   * Registers a new value change listener on this editor label.
-   * @param listener The value change listener object.
-   */
-  fun addValueChangeListener(listener: ValueChangeListener?) {
-    addListener("handleValueChange", ValueChangeEvent::class.java, listener, ValueChangeEvent.VALUE_CHANGE)
+  override fun onBlur(event: BlurNotifier.BlurEvent<CustomField<Any>>?) {
+    super.onBlur(event)
+    if (value == null) {
+      isVisible = false
+    }
   }
 
-  /**
-   * Removes a value change listener from this editor label.
-   * @param listener The listener to remove.
-   */
-  fun removeValueChangeListener(listener: ValueChangeListener?) {
-    removeListener("handleValueChange", ValueChangeEvent::class.java, listener)
+  override fun onFocus(event: FocusNotifier.FocusEvent<CustomField<Any>>?) {
+    super.onFocus(event)
+    isVisible = true
   }
 
-  /**
-   * Fires a new value change event for this field.
-   * @param value The new field value
-   */
-  protected fun fireValueChangeEvent(value: Boolean?) {
-    fireEvent(ValueChangeEvent(this, value))
-  }
-  //---------------------------------------------------
-  // VALUE CHANGE
-  //---------------------------------------------------
-  /**
-   * A value change listener notifies registered objects of changes
-   * in the boolean fields value.
-   */
-  interface ValueChangeListener : ConnectorEventListener {
-    /**
-     * Fired when a value change is detected.
-     * @param event The value change event
-     */
-    fun valueChange(event: ValueChangeEvent?)
+  override fun setParentVisibility(visible: Boolean) {
+    if (value == null) {
+      // yes.element.style.setVisibility(Visibility.HIDDEN) TODO
+      // no.element.style.setVisibility(Visibility.HIDDEN) TODO
+      // removeStyleDependentName("visible") TODO
+    } else {
+      isVisible = visible
+    }
+    forceHiddenVisibility = !visible
   }
 
+  override fun setVisible(visible: Boolean) {
+    if (!forceHiddenVisibility && visible) {
+      //yes.element.style.setVisibility(Visibility.VISIBLE)
+      //no.element.style.setVisibility(Visibility.VISIBLE)
+      //addStyleDependentName("visible")
+    } else {
+      //yes.element.style.setVisibility(Visibility.HIDDEN)
+      //no.element.style.setVisibility(Visibility.HIDDEN)
+      //removeStyleDependentName("visible")
+    }
+  }
+
+  override fun isVisible(): Boolean {
+    TODO()
+  }
+
+  override val isNull: Boolean
+    get() = !yes.value && !no.value
+
   /**
-   * The value change event attached with the boolean field.
-   *
-   * @param source The source component.
-   * @param value The field new value.
+   * Sets the value of this boolean field.
+   * @param value The field value.
    */
-  class ValueChangeEvent(source: Component?, val value: Boolean?) : Event(source) {
-    //---------------------------------------------------
-    // ACCESSORS
-    //---------------------------------------------------
-
-    companion object {
-      val VALUE_CHANGE: Method? = null
-
-      init {
-        try {
-          // Set the header click method
-          VALUE_CHANGE = ValueChangeListener::class.java.getDeclaredMethod("valueChange", ValueChangeEvent::class.java)
-        } catch (e: NoSuchMethodException) {
-          // This should never happen
-          throw RuntimeException(e)
-        }
+  override fun setValue(value: Boolean?) {
+    when {
+      value == null -> {
+        yes.value = false
+        no.value = false
+      }
+      value -> {
+        yes.value = true
+        no.value = false
+      }
+      else -> {
+        yes.value = false
+        no.value = true
       }
     }
+    handleComponentVisiblity()
+  }
+
+
+
+  override fun setPresentationValue(newPresentationValue: Boolean?) {
+    value = newPresentationValue
+  }
+
+  override fun generateModelValue(): Boolean? = value
+
+  override fun setEnabled(enabled: Boolean) {
+    super.setEnabled(enabled)
+    yes.isEnabled = enabled
+    no.isEnabled = enabled
+  }
+
+  override fun setColor(foreground: String?, background: String?) {
+    // NOT SUPPORTED FOR BOOLEAN FIELDS
+  }
+
+  override fun getValue(): Boolean? =
+          if (!yes.value && !no.value) {
+            null
+          } else {
+            yes.value
+          }
+
+  override fun checkValue(rec: Int) {}
+
+  fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    if (event.value) {
+      no.value = false
+    } else if (mandatory && !no.value) {
+      yes.value = true
+    }
+    handleComponentVisiblity()
+    // ValueChangeEvent.fire(this, value) TODO
+  }
+
+  fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    if (event.value) {
+      yes.value = false
+    } else if (mandatory && !yes.value) {
+      no.value = true
+    }
+    handleComponentVisiblity()
+    // ValueChangeEvent.fire(this, value) TODO
+  }
+
+  /**
+   * Handles the component visibility according to its value.
+   */
+  protected fun handleComponentVisiblity() {
+    TODO()
+  }
+
+  /**
+   * Sets the name of the radio button inside the boolean field.
+   *
+   * The label attached with this field. TODO: doc?
+   * Needed to set the for attribute of the input radio
+   * in the field widget.
+   *
+   * @param label The name of the radio buttons.
+   * @param yes The localized label for true value.
+   * @param no The localized label for false value.
+   */
+  fun setLabel(label: String, yes: String?, no: String?) {
+    var label = label
+    label = label.replace("\\s".toRegex(), "_")
+    // this.yes.setName(label) TODO
+    // this.no.setName(label) TODO
+    // this.yes.setTitle(yes) TODO
+    // this.no.setTitle(no) TODO
   }
 }
