@@ -30,7 +30,7 @@ import java.util.*
 
 class DGridEditorBooleanField(
         columnView: VFieldUI,
-        label: DGridEditorLabel,
+        label: DGridEditorLabel?,
         align: Int,
         options: Int
 ) : DGridEditorField<Boolean?>(columnView, label, align, options), UTextField {

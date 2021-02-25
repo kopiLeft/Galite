@@ -71,7 +71,7 @@ class DBooleanField(
 
   override fun updateText() {
     //BackgroundThreadHandler.access(Runnable { TODO
-    field.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
+      field.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
     //})
     super.updateText()
   }
@@ -109,9 +109,9 @@ class DBooleanField(
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
     //BackgroundThreadHandler.access(Runnable { TODO
-    field.label = label!!.text
-    field.isEnabled = getAccess() >= VConstants.ACS_VISIT
-    field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
+      field.label = label!!.text
+      field.isEnabled = getAccess() >= VConstants.ACS_VISIT
+      field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
     //})
   }
 
@@ -121,7 +121,7 @@ class DBooleanField(
 
   override fun setBlink(b: Boolean) {
     //BackgroundThreadHandler.access(Runnable { TODO
-    field.setBlink(b)
+      field.setBlink(b)
     //})
   }
 

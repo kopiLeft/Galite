@@ -147,7 +147,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   fun gotoPage(i: Int) {
     currentPage = i
     //BackgroundThreadHandler.access(Runnable { TODO
-    content.gotoPage(i)
+      content.gotoPage(i)
     //})
   }
 

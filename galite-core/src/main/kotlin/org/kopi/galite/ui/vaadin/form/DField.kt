@@ -166,12 +166,12 @@ abstract class DField(internal val model: VFieldUI,
 
   override fun updateAccess() {
     // access { TODO: access from thread!!
-    access = getAccess()
-    dynAccess = access
-    updateStyles(access)
-    isVisible = access != VConstants.ACS_HIDDEN
-    isActionEnabled = access >= VConstants.ACS_VISIT
-    update(label)
+      access = getAccess()
+      dynAccess = access
+      updateStyles(access)
+      isVisible = access != VConstants.ACS_HIDDEN
+      isActionEnabled = access >= VConstants.ACS_VISIT
+      update(label)
     //}
   }
 
