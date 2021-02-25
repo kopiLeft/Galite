@@ -99,5 +99,5 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
    * @return The grid block view attached with this field handler.
    */
   protected val blockView: DGridBlock
-    protected get() = getRowController().blockView
+    get() = getRowController().blockView as DGridBlock
 }

@@ -17,10 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.customfield.CustomField
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.field.BooleanField
+import org.kopi.galite.ui.vaadin.field.ObjectField
 
 /**
  * Boolean field.
@@ -32,12 +36,14 @@ import org.kopi.galite.ui.vaadin.field.BooleanField
  * @param detail is it a detail field view ?
  */
 class DBooleanField(
-        model: VFieldUI?,
+        model: VFieldUI,
         label: DLabel?,
         align: Int,
         options: Int,
         detail: Boolean
-) : DObjectField(model, label, align, options, detail), UTextField, ValueChangeListener {
+) : DObjectField(model, label, align, options, detail),
+        UTextField,
+        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<CustomField<Boolean>, Boolean>> {
 
   // --------------------------------------------------
   // DATA MEMBERS
@@ -50,7 +56,7 @@ class DBooleanField(
   init {
     field = BooleanField(trueRepresentation, falseRepresentation)
     field.addValueChangeListener(this)
-    setContent(field)
+    //setContent(field) TODO
   }
   // --------------------------------------------------
   // IMPLEMENTATION
@@ -65,7 +71,7 @@ class DBooleanField(
 
   override fun updateText() {
     //BackgroundThreadHandler.access(Runnable { TODO
-              field.setValue(getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position)))
+    field.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
     //})
     super.updateText()
   }
@@ -85,31 +91,27 @@ class DBooleanField(
     super.updateFocus()
   }
 
-  fun valueChange(event: ValueChangeEvent) {
 
+  override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Boolean>, Boolean>?) {
     // ensures to get model focus to validate the field
     if (!getModel().hasFocus()) {
-      getModel().block.activeField = getModel()
+      getModel().block!!.activeField = getModel()
     }
-    val text = getModel().toText(event.getValue())
+    val text = getModel().toText(event!!.value)
     if (getModel().checkText(text!!)) {
       getModel().changedUI = true
-      getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.getValue())
+      getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.value)
     }
     getModel().setChanged(true)
   }
 
   override fun updateAccess() {
     super.updateAccess()
-    label.update(model, getBlockView().getRecordFromDisplayLine(position))
+    label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
     //BackgroundThreadHandler.access(Runnable { TODO
-      field.setLabel(label.text)
-      field.setEnabled(getAccess() >= VConstants.ACS_VISIT)
-      if (getAccess() == VConstants.ACS_MUSTFILL) {
-        field.setMandatory(true)
-      } else {
-        field.setMandatory(false)
-      }
+    field.label = label!!.text
+    field.isEnabled = getAccess() >= VConstants.ACS_VISIT
+    field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
     //})
   }
 
@@ -119,12 +121,12 @@ class DBooleanField(
 
   override fun setBlink(b: Boolean) {
     //BackgroundThreadHandler.access(Runnable { TODO
-      field.setBlink(b)
+    field.setBlink(b)
     //})
   }
 
   override fun getText(): String? {
-    return getModel().toText(field.getValue())
+    return getModel().toText(field.value)
   }
 
   override fun setHasCriticalValue(b: Boolean) {}
@@ -140,21 +142,21 @@ class DBooleanField(
    * @return The true representation of this boolean field.
    */
   protected val trueRepresentation: String?
-    protected get() = getModel().toText(java.lang.Boolean.TRUE)
+    get() = getModel().toText(java.lang.Boolean.TRUE)
 
   /**
    * Returns the false representation of this boolean field.
    * @return The false representation of this boolean field.
    */
   protected val falseRepresentation: String?
-    protected get() = getModel().toText(java.lang.Boolean.FALSE)
+    get() = getModel().toText(java.lang.Boolean.FALSE)
 
   /**
    * Gets the focus to this field.
    */
   protected fun enterMe() {
     //BackgroundThreadHandler.access(Runnable {  TODO
-      field.setFocus(true)
+    field.setFocus(true)
     //})
   }
 }

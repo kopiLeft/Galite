@@ -76,7 +76,7 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
 
   override fun createLayout(): BlockLayout {
     val layout = ChartBlockLayout(displayedFields, model.displaySize + 1)
-    layout.setScrollable(model.displaySize < model.bufferSize)
+    layout.hasScroll = model.displaySize < model.bufferSize
     return layout
   }
 
@@ -196,12 +196,12 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
    */
   private fun updateScrollbar() {
     //BackgroundThreadHandler.access(Runnable { TODO
-      val validRecords: Int = model.numberOfValidRecord
-      val dispSize: Int = model.displaySize
-      updateScroll(dispSize,
-                   validRecords,
-                   validRecords > dispSize,
-                   model.getNumberOfValidRecordBefore(getRecordFromDisplayLine(0)))
+    val validRecords: Int = model.numberOfValidRecord
+    val dispSize: Int = model.displaySize
+    updateScroll(dispSize,
+                 validRecords,
+                 validRecords > dispSize,
+                 model.getNumberOfValidRecordBefore(getRecordFromDisplayLine(0)))
     //})
   }
 }
