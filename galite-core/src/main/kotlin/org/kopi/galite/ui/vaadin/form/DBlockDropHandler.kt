@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dnd.DragSource
 import com.vaadin.flow.server.StreamVariable
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
@@ -39,11 +41,11 @@ import javax.activation.MimetypesFileTypeMap
  * The `DBlockDropHandler` is the block implementation
  * of the [DropHandler] specifications.
  */
-class DBlockDropHandler(block: VBlock) : DropHandler {
+class DBlockDropHandler(block: VBlock, component: Component) : DragSource<Component> by DragSource.configure(component) {
   //---------------------------------------------------
   // DROPTARGETLISTENER IMPLEMENTATION
   //---------------------------------------------------
-  fun drop(event: DragAndDropEvent) {
+  /*fun drop(event: DragAndDropEvent) { TODO
     if (isAccepted(event.getTransferable() as WrapperTransferable)) {
       if (isChartBlockContext) {
         fileList = ArrayList()
@@ -56,17 +58,17 @@ class DBlockDropHandler(block: VBlock) : DropHandler {
         (event.getTransferable() as WrapperTransferable).getFiles().get(0).setStreamVariable(StreamHandler())
       }
     }
-  }
+  }*/
 
-  val acceptCriterion: AcceptCriterion
-    get() = AcceptAll.get()
+  // val acceptCriterion: AcceptCriterion TODO
+  //   get() = AcceptAll.get() TODO
 
   /**
    * Returns the application instance.
    * @return The application instance.
    */
   protected val application: VApplication
-    protected get() = ApplicationContext.applicationContext.getApplication() as VApplication
+    get() = ApplicationContext.applicationContext.getApplication() as VApplication
 
   //---------------------------------------------------------
   // UTILS
@@ -99,7 +101,7 @@ class DBlockDropHandler(block: VBlock) : DropHandler {
    * @param transferable The [WrapperTransferable] instance.
    * @return `true` is the data flavor is accepted.
    */
-  private fun isAccepted(transferable: WrapperTransferable): Boolean {
+  /*private fun isAccepted(transferable: WrapperTransferable): Boolean { TODO
     val flavors: ArrayList<Html5File>
     flavors = ArrayList<Html5File>()
     for (i in 0 until transferable.getFiles().length) {
@@ -114,7 +116,7 @@ class DBlockDropHandler(block: VBlock) : DropHandler {
         isAccepted(getExtension(flavors[0]))
       }
     }
-  }
+  }*/
 
   /**
    * Returns `true` is the given data flavor is accepted for drop operation.
@@ -131,7 +133,7 @@ class DBlockDropHandler(block: VBlock) : DropHandler {
    * @param flavors The data flavors.
    * @return `true` when the drop operation succeeded.
    */
-  private fun isAccepted(flavors: ArrayList<Html5File>): Boolean {
+  /*private fun isAccepted(flavors: ArrayList<Html5File>): Boolean { TODO
     var oldFlavor: String? = null
     for (i in flavors.indices) {
       val newFlavor: String = getExtension(flavors[i])
@@ -142,7 +144,7 @@ class DBlockDropHandler(block: VBlock) : DropHandler {
       oldFlavor = newFlavor
     }
     return true
-  }
+  }*/
 
   /**
    * Handles drop action for multiple files in a chart block.
@@ -167,8 +169,8 @@ class DBlockDropHandler(block: VBlock) : DropHandler {
    * @return `true` when the drop operation succeeded.
    * @throws VException Visual errors.
    */
-  private fun handleDrop(file: File, flavor: String): Boolean {
-    val target: VField = block.getDropTarget(flavor) ?: return false
+  private fun handleDrop(file: File, flavor: String?): Boolean {
+    val target: VField = block.getDropTarget(flavor.orEmpty()) ?: return false // TODO: orEmpty() ?
     target.onBeforeDrop()
     return if (target is VStringField) {
       if (target.width < file.absolutePath.length) {
@@ -235,7 +237,8 @@ class DBlockDropHandler(block: VBlock) : DropHandler {
    * @return `true` is the context block is chart block.
    */
   private val isChartBlockContext: Boolean
-    private get() = block.noDetail() || block.isMulti() && !block.detailMode
+    get() = block.noDetail() || block.isMulti() && !block.detailMode
+
   //---------------------------------------------------
   // INNER CLASSES
   //---------------------------------------------------
@@ -355,21 +358,6 @@ class DBlockDropHandler(block: VBlock) : DropHandler {
     private fun getExtension(file: File): String? {
       var extension: String? = null
       val name = file.name
-      val index = name.lastIndexOf('.')
-      if (index > 0 && index < name.length - 1) {
-        extension = name.substring(index + 1).toLowerCase()
-      }
-      return extension
-    }
-
-    /**
-     * Returns the file extension.
-     * @param file The file instance.
-     * @return The file extension.
-     */
-    private fun getExtension(file: Html5File): String? {
-      var extension: String? = null
-      val name: String = file.getFileName()
       val index = name.lastIndexOf('.')
       if (index > 0 && index < name.length - 1) {
         extension = name.substring(index + 1).toLowerCase()

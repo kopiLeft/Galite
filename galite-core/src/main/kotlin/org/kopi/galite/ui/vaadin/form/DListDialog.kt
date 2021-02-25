@@ -23,6 +23,7 @@ import org.kopi.galite.form.VDictionary
 import org.kopi.galite.form.VForm
 import org.kopi.galite.form.VListDialog
 import org.kopi.galite.ui.vaadin.list.GridListDialog
+import org.kopi.galite.ui.vaadin.list.ListTable
 import org.kopi.galite.ui.vaadin.notif.InformationNotification
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
@@ -35,10 +36,23 @@ import org.kopi.galite.visual.VlibProperties
 /**
  * The `DListDialog` is the vaadin implementation of the
  * [UListDialog] specifications.
+ *
+ * @param model The list dialog model.
  */
 class DListDialog(
-        model: VListDialog
-) : GridListDialog(), UListDialog, CloseListener, SelectionListener, SearchListener {
+        private val model: VListDialog
+) : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
+
+  private var table: ListTable? = null
+  private var escaped = true
+  private var doNewForm = false
+  private var selectedPos = -1
+
+  init {
+    // addCloseListener(this) TODO
+    // addSelectionListener(this) TODO
+    // addSearchListener(this) TODO
+  }
   //---------------------------------------------------
   // LISTDIALOG IMPLEMENTATION
   //---------------------------------------------------
@@ -56,9 +70,9 @@ class DListDialog(
       // show the dialog beside the field.
       // otherwise show it centered.
       if (field is DField) {
-        showRelativeTo(field as DField?)
+        //showRelativeTo(field as DField?) TODO
       } else if (field is DGridEditorField<*>) {
-        showRelativeTo((field as DGridEditorField<*>).getEditor())
+        //showRelativeTo((field as DGridEditorField<*>).getEditor()) TODO
       }
     }
     showDialogAndWait()
@@ -69,74 +83,12 @@ class DListDialog(
     return selectFromDialog(window, null, showSingleEntry)
   }
 
-  fun onClose(event: CloseEvent) {
-    doSelectFromDialog(-1, event.isEscaped(), event.isNewForm())
-  }
-
-  fun onSelection(event: SelectionEvent) {
-    if (table.getContainerDataSource().size() === 0) {
-      return
-    }
-    ensureTableSelection()
-    when (event.getTarget()) {
-      SelectionTarget.CURRENT_ROW -> doSelectFromDialog(table.getSelectedRow() as Int, false, false)
-      SelectionTarget.NEXT_ROW -> table.select(nextItemId)
-      SelectionTarget.PREVIOUS_ROW -> table.select(prevItemId)
-      SelectionTarget.NEXT_PAGE -> table.select(nextPageItemId)
-      SelectionTarget.PREVIOUS_PAGE -> table.select(prevPageItemId)
-      SelectionTarget.FIRST_ROW -> table.select(table.getContainerDataSource().firstItemId())
-      SelectionTarget.LAST_ROW -> table.select(table.getContainerDataSource().lastItemId())
-      else -> {
-      }
-    }
-  }
-
-  fun onSearch(event: SearchEvent) {
-    if (!table.getContainerDataSource().hasFilters()) {
-      if (event.getPattern() == null || event.getPattern().length() === 0) {
-        ensureTableSelection()
-      } else {
-        val itemId: Any
-        itemId = table.search(event.getPattern())
-        if (itemId != null) {
-          table.select(itemId)
-        }
-      }
-    }
-  }
-
-  /**
-   * Ensures that a row is selected in the list dialog table.
-   * The selected row will be set to the first visible row when
-   * the selected row is null
-   */
-  protected fun ensureTableSelection() {
-    if (table.getSelectedRow() == null) {
-      table.select(table.getContainerDataSource().firstItemId())
-    }
-  }
-
-  /**
-   * Returns the next item ID according to the currently selected one.
-   * @return The next item ID according to the currently selected one.
-   */
-  protected val nextItemId: Int
-    get() = if (table.getSelectedRow() as Int == table.getContainerDataSource().lastItemId()) {
-      table.getContainerDataSource().lastItemId()
-    } else {
-      table.getContainerDataSource().nextItemId(table.getSelectedRow())
-    }
-
   /**
    * Returns the previous item ID according to the currently selected one.
    * @return The previous item ID according to the currently selected one.
    */
   protected val prevItemId: Int
-    get() = if (table.getSelectedRow() as Int == table.getContainerDataSource().firstItemId()) {
-      table.getContainerDataSource().firstItemId()
-    } else {
-      table.getContainerDataSource().prevItemId(table.getSelectedRow())
-    }
+    get() = TODO()
 
   /**
    * Looks for the next page item ID starting from the selected row.
@@ -144,14 +96,7 @@ class DListDialog(
    */
   protected val nextPageItemId: Int
     get() {
-      var nextPageItemId: Int
-      nextPageItemId = table.getSelectedRow()
-      var i = 0
-      while (i < 20 && nextPageItemId != table.getContainerDataSource().lastItemId()) {
-        nextPageItemId = table.getContainerDataSource().nextItemId(nextPageItemId)
-        i++
-      }
-      return nextPageItemId
+      TODO()
     }
 
   /**
@@ -160,15 +105,9 @@ class DListDialog(
    */
   protected val prevPageItemId: Int
     get() {
-      var prevPageItemId: Int
-      prevPageItemId = table.getSelectedRow()
-      var i = 0
-      while (i < 20 && prevPageItemId != table.getContainerDataSource().firstItemId()) {
-        prevPageItemId = table.getContainerDataSource().prevItemId(prevPageItemId)
-        i++
-      }
-      return prevPageItemId
+      TODO()
     }
+
   //------------------------------------------------------
   // UTILS
   //------------------------------------------------------
@@ -176,20 +115,19 @@ class DListDialog(
    * Handles the client response after thread release.
    * @return The selected position.
    */
-  protected fun handleClientResponse(): Int {
-    if (escaped) {
-      return -1
-    } else if (doNewForm) {
-      return try {
-        doNewForm(model.form, model.newForm)
-      } catch (e: VException) {
-        throw VRuntimeException(e)
-      }
-    } else if (selectedPos != -1) {
-      return model.convert(selectedPos)
-    }
-    return -1 // in all other cases return -1 indicating no choice.
-  }
+  protected fun handleClientResponse(): Int =
+          when {
+            escaped -> -1
+            doNewForm -> {
+              try {
+                doNewForm(model.form, model.newForm)
+              } catch (e: VException) {
+                throw VRuntimeException(e)
+              }
+            }
+            selectedPos != -1 -> model.convert(selectedPos)
+            else -> -1 // in all other cases return -1 indicating no choice.
+          }
 
   /**
    * Displays a window to insert a new record
@@ -210,30 +148,7 @@ class DListDialog(
    * Prepares the dialog content.
    */
   protected fun prepareDialog() {
-    table = ListTable(model)
-    setTable(table)
-    table.select(table.getContainerDataSource().firstItemId())
-    table.addItemClickListener(object : ItemClickListener() {
-      fun itemClick(event: ItemClickEvent) {
-        doSelectFromDialog(event.getItemId() as Int, false, false)
-      }
-    })
-    table.addSelectionListener(object : SelectionListener() {
-      fun select(event: SelectionEvent) {
-        if (!event.getSelected().isEmpty()) {
-          table.scrollTo(event.getSelected().toArray().get(0))
-        }
-      }
-    })
-    table.addColumnReorderListener(object : ColumnReorderListener() {
-      fun columnReorder(event: ColumnReorderEvent?) {
-        sort()
-      }
-    })
-    // set the new button if needed.
-    if (model.newForm != null || model.isForceNew) {
-      setNewText(VlibProperties.getString("new-record"))
-    }
+    // TODO
   }
 
   /**
@@ -241,7 +156,7 @@ class DListDialog(
    */
   protected fun showDialogAndWait() {
     //BackgroundThreadHandler.startAndWait(Runnable { TODO
-      application.attachComponent(this@DListDialog)
+    application.attachComponent(this@DListDialog)
     //}, this)
   }
 
@@ -283,43 +198,6 @@ class DListDialog(
    * Bubble sort the columns from right to left
    */
   private fun sort() {
-    var left = 0
-    var sel = -1
-    if (table != null) {
-      sel = if (table.getSelectedRow() != null) {
-        table.getSelectedRow()
-      } else {
-        0
-      }
-      left = table.getColumns().get(0).getPropertyId()
-    }
-    model.sort(left)
-    if (table != null) {
-      table.tableChanged()
-      table.select(sel)
-    }
-  }
-
-  //------------------------------------------------------
-  // DATA MEMBERS
-  //------------------------------------------------------
-  private val model: VListDialog
-  private var table: ListTable? = null
-  private var escaped = true
-  private var doNewForm = false
-  private var selectedPos = -1
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates a new `DListDialog` instance.
-   * @param model The list dialog model.
-   */
-  init {
-    setImmediate(true)
-    this.model = model
-    addCloseListener(this)
-    addSelectionListener(this)
-    addSearchListener(this)
+    // TODO
   }
 }

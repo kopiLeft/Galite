@@ -29,15 +29,14 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.datepicker.DatePicker
 import org.kopi.galite.type.Month
-import org.kopi.galite.visual.VlibProperties
 import java.time.LocalDate
 
 /**
  * The `DateChooser` is date selection component.
  *
- * @param date The initial date.
+ * @param selectedDate The initial date.
  */
-class DateChooser(date: Date?,
+class DateChooser(private var selectedDate: Date?,
                   reference: Component?)
   : DatePicker(),
         UComponent,
@@ -47,7 +46,6 @@ class DateChooser(date: Date?,
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private var selectedDate: Date?
 
   /**
    * Returns the first day of the selected month.
@@ -62,15 +60,14 @@ class DateChooser(date: Date?,
    * Creates a new `DateChooser` instance.
    */
   init {
-    selectedDate = date
-    showRelativeTo(reference)
-    setToDay(VlibProperties.getString("today"))
-    if (date != null) {
-      super.setSelectedDate(date.toCalendar().time)
+    // showRelativeTo(reference) TODO
+    // setToDay(VlibProperties.getString("today")) TODO
+    if (selectedDate != null) {
+      //super.setSelectedDate(date.toCalendar().time) TODO
     }
     addValueChangeListener(this)
     locale = application.defaultLocale
-    setOffset(Date().timezoneOffset)
+    //setOffset(Date().timezoneOffset) TODO
   }
 
   //---------------------------------------------------
@@ -83,7 +80,7 @@ class DateChooser(date: Date?,
    */
   private fun doModal(date: Date): Date? {
     //BackgroundThreadHandler.startAndWait(Runnable { TODO
-      application.attachComponent(this@DateChooser)
+    application.attachComponent(this@DateChooser)
     //}, this)
     return selectedDate
   }
@@ -121,7 +118,7 @@ class DateChooser(date: Date?,
    * Sets the selected date.
    * @param selectedDate The selected date.
    */
-  fun setSelectedDate(selectedDate: Date?) {
+  fun setSelectedDate(selectedDate: Date) {
     this.selectedDate = selectedDate
   }
 
@@ -149,7 +146,7 @@ class DateChooser(date: Date?,
      * @param date The initial date.
      * @return The selected date.
      */
-    fun selectDate(date: Date, reference: Component): Date {
+    fun selectDate(date: Date, reference: Component): Date? {
       val chooser = DateChooser(date, reference)
       return chooser.doModal(date)
     }
@@ -158,8 +155,7 @@ class DateChooser(date: Date?,
      * Returns the number of days in the specified month
      * @return The number of days in the specified month
      */
-    /*package*/
-    fun getDaysInMonth(d: Date?): Int {
+    fun getDaysInMonth(d: Date): Int {
       return Month(d).getLastDay().day
     }
   }

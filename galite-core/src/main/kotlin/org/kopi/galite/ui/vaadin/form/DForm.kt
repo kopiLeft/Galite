@@ -46,10 +46,10 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @return The current page index.
    */
   var currentPage = -1
-  private val content: Form
-  private val blockListener: BlockListener
+  private val content: Form = Form(pageCount, model.pages)
+  private val blockListener: BlockListener = BlockAccessHandler()
   private val blockViews: Array<DBlock?>
-  private val blockRecordHandler: DForm.BlockRecordHandler
+  private val blockRecordHandler: BlockRecordHandler = BlockRecordHandler()
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
@@ -58,12 +58,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @param model The form model.
    */
   init {
-    content = Form(pageCount, model.pages)
     // content.locale = application.defaultLocale.toString() TODO
     model.addFormListener(this)
-    content.addFormListener(this)
-    blockRecordHandler = DForm.BlockRecordHandler()
-    blockListener = DForm.BlockAccessHandler()
+    //content.addFormListener(this) TODO
     getModel().setDisplay(this)
     val blockCount = vForm.getBlockCount()
     blockViews = arrayOfNulls(blockCount)
@@ -150,7 +147,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   fun gotoPage(i: Int) {
     currentPage = i
     //BackgroundThreadHandler.access(Runnable { TODO
-      content.gotoPage(i)
+    content.gotoPage(i)
     //})
   }
 
@@ -294,7 +291,8 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // TODO
   }
 
-  override val runtimeDebugInfo: Throwable
+  override var runtimeDebugInfo: Throwable? = null
+    private set
 
   override fun launchDocumentPreview(file: String) {
     val f = File(file)
@@ -360,7 +358,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     //---------------------------------------
     override fun blockRecordChanged(current: Int, count: Int) {
       // TODO BackgroundThreadHandler.access(Runnable {
-        content.setPosition(current, count)
+      content.setPosition(current, count)
       //})
     }
   }

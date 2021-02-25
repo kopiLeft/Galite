@@ -17,104 +17,110 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.Component
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UMultiBlock
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
+import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VRuntimeException
 
 /**
  * A based Grid multi block implementation
  */
-class DGridMultiBlock  // --------------------------------------------------
-// CONSTRUCTOR
-// --------------------------------------------------
-(parent: DForm?, model: VBlock?) : DGridBlock(
-        parent!!, model), UMultiBlock, DetailsGenerator {
+class DGridMultiBlock(parent: DForm,
+                      model: VBlock)
+  : DGridBlock(parent, model), UMultiBlock /*, DetailsGenerator TODO */ {
+
+  private var detail: SimpleBlockLayout? = null
+  private var itemHasDetailVisible: Int? = null
+
   // --------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------
   override fun switchView(row: Int) {
-    if (!(getModel().getForm().getActiveBlock() === getModel())) {
-      if (!getModel().isAccessible()) {
+    if (model.form.getActiveBlock() != model) {
+      if (!model.isAccessible) {
         return
       }
       try {
-        getModel().getForm().gotoBlock(getModel())
+        model.form.gotoBlock(model)
       } catch (ex: Exception) {
         (getFormView() as DForm).reportError(VRuntimeException(ex.message, ex))
         return
       }
     }
     if (row >= 0) {
-      getModel().gotoRecord(getRecordFromDisplayLine(row))
+      model.gotoRecord(getRecordFromDisplayLine(row))
     } else if (getDisplayLine() >= 0) {
-      getModel().gotoRecord(getRecordFromDisplayLine(getDisplayLine()))
+      model.gotoRecord(getRecordFromDisplayLine(getDisplayLine()))
     }
-    getModel().setDetailMode(!inDetailMode())
-    BackgroundThreadHandler.access(Runnable {
+    model.detailMode = !inDetailMode()
+    /*BackgroundThreadHandler.access(Runnable { TODO
       if (grid.getEditedItemId() != null) {
-        itemHasDetailVisible = grid.getEditedItemId() as Int?
-        grid!!.setDetailsVisible(grid.getEditedItemId(), inDetailMode())
+        itemHasDetailVisible = grid.getEditedItemId()
+        grid.setDetailsVisible(grid.getEditedItemId(), inDetailMode())
         if (grid.isEditorActive()) {
           grid.cancelEditor()
         }
       }
-    })
+    })*/
   }
 
   override fun getRecordFromDisplayLine(line: Int): Int {
     return if (inDetailMode() && itemHasDetailVisible != null) {
-      itemHasDetailVisible
+      itemHasDetailVisible!!
     } else {
       super.getRecordFromDisplayLine(line)
     }
   }
 
-  fun addToDetail(comp: UComponent, constraint: KopiAlignment) {
+  override fun addToDetail(comp: UComponent?, constraint: Alignment) {
     if (detail == null) {
       detail = SimpleBlockLayout(2 * maxColumnPos, maxRowPos)
-      detail.addStyleName("grid-detail")
+      // detail.addStyleName("grid-detail") TODO
     }
     // block will not be marked in detail in client side
     // we force the field to be on the chart view as a hack
     // to allow free navigation
     if (comp is DField) {
-      (comp as DField).setNoChart(false)
+      comp.noChart = false
     }
-    detail.addComponent(comp as Component,
-                        constraint.x,
-                        constraint.y,
-                        constraint.width,
-                        constraint.height,
-                        constraint.alignRight,
-                        constraint.useAll)
+    detail!!.addComponent(comp as Component,
+                          constraint.x,
+                          constraint.y,
+                          constraint.width,
+                          constraint.height,
+                          constraint.alignRight,
+                          constraint.useAll)
   }
 
-  fun getDetails(rowReference: RowReference?): Component? {
+  /*fun getDetails(rowReference: RowReference?): Component? { TODO
     return detail
-  }
+  }*/
 
   override fun inDetailMode(): Boolean {
-    return getModel().isDetailMode()
+    return model.detailMode
   }
 
-  override fun blockViewModeLeaved(block: VBlock?, activeField: VField?) {
+  override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {
     // send active record to client side before view switch
     if (!inDetailMode()) {
-      BackgroundThreadHandler.access(Runnable { fireActiveRecordChanged(getModel().getActiveRecord()) })
+      //BackgroundThreadHandler.access(Runnable { TODO
+      fireActiveRecordChanged(model.activeRecord)
+      //})
     }
     try {
       // take care that value of current field
       // is visible in the other mode
       // Not field.updateText(); because the field is
       // maybe not visible in the Detail Mode
-      if (activeField != null) {
-        activeField.leave(true)
-      }
+      activeField?.leave(true)
     } catch (ex: VException) {
       ex.printStackTrace()
-      getModel().getForm().error(ex.getMessage())
+      model.form.error(ex.message)
     }
   }
 
@@ -130,7 +136,7 @@ class DGridMultiBlock  // --------------------------------------------------
         // Not field.updateText(); because the field is
         // maybe not visible in the Detail Mode
         if (activeField == null) {
-          //     getModel().gotoFirstField();
+          //     model.gotoFirstField();
         } else {
           if (!activeField.noDetail()) {
             // field is visible in chartView
@@ -138,13 +144,13 @@ class DGridMultiBlock  // --------------------------------------------------
           } else {
             // field is not visible in in chart view:
             // go to the next visible field
-            block.setActiveField(activeField)
-            getModel().gotoNextField()
+            block.activeField = activeField
+            model.gotoNextField()
           }
         }
       } catch (ex: VException) {
         ex.printStackTrace()
-        getModel().getForm().error(ex.getMessage())
+        model.form.error(ex.message)
       }
     } else {
       try {
@@ -155,7 +161,7 @@ class DGridMultiBlock  // --------------------------------------------------
         // Not field.updateText(); because the field is
         // maybe not visible in the Detail Mode
         if (activeField == null) {
-          // getModel().gotoFirstField();
+          // model.gotoFirstField();
         } else {
           if (!activeField.noChart()) {
             // field is visible in chartView
@@ -163,55 +169,49 @@ class DGridMultiBlock  // --------------------------------------------------
           } else {
             // field is not visible in in chart view:
             // go to the next visible field
-            block.setActiveField(activeField)
-            getModel().gotoNextField()
+            block.activeField = activeField
+            model.gotoNextField()
           }
         }
       } catch (ex: VException) {
         ex.printStackTrace()
-        getModel().getForm().error(ex.getMessage())
+        model.form.error(ex.message)
       }
     }
   }
 
   override fun blockChanged() {
     super.blockChanged()
-    if (getModel().getActiveRecord() !== -1 && itemHasDetailVisible != null && getModel().getActiveRecord() !== itemHasDetailVisible) {
-      enterRecord(getModel().getActiveRecord())
+    if (model.activeRecord != -1 && itemHasDetailVisible != null && model.activeRecord != itemHasDetailVisible) {
+      enterRecord(model.activeRecord)
     }
   }
 
   override fun enterRecord(recno: Int) {
-    BackgroundThreadHandler.access(Runnable {
+    /*BackgroundThreadHandler.access(Runnable { TODO
       if (inDetailMode() && itemHasDetailVisible != null) {
-        grid!!.setDetailsVisible(itemHasDetailVisible, false)
-        getModel().setDetailMode(false)
+        grid.setDetailsVisible(itemHasDetailVisible, false)
+        model.detailMode = false
         if (recno != itemHasDetailVisible) {
           itemHasDetailVisible = recno
-          getModel().setDetailMode(true)
-          grid!!.setDetailsVisible(itemHasDetailVisible, true)
+          model.detailMode = true
+          grid.setDetailsVisible(itemHasDetailVisible, true)
         }
       }
-    })
+    })*/
     super.enterRecord(recno)
   }
-
-  protected val detailsGenerator: DetailsGenerator?
-    protected get() = this
 
   /**
    * Updates the state of the detail display
    */
   protected fun updateDetailDisplay() {
     for (columnView in columnViews) {
-      if (columnView != null && columnView.getDetailDisplay() != null) {
-        columnView.getDetailDisplay().updateAccess()
-        columnView.getDetailDisplay().updateText()
-        columnView.getDetailDisplay().updateColor()
+      if (columnView?.detailDisplay != null) {
+        columnView.detailDisplay!!.updateAccess()
+        columnView.detailDisplay!!.updateText()
+        columnView.detailDisplay!!.updateColor()
       }
     }
   }
-
-  private var detail: SimpleBlockLayout? = null
-  private var itemHasDetailVisible: Int? = null
 }

@@ -17,12 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.Component
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UMultiBlock
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
 import org.kopi.galite.ui.vaadin.block.BlockLayout
+import org.kopi.galite.ui.vaadin.block.MultiBlockLayout
+import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VRuntimeException
 
 /**
  * The `DMultiBlock` is the UI implementation
@@ -35,45 +39,33 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  fun addToDetail(comp: UComponent?, constraints: KopiAlignment) {
-    (getLayout() as MultiBlockLayout).addToDetail(comp as Component?,
+  override fun addToDetail(comp: UComponent?, constraints: Alignment) {
+    /*(getLayout() as MultiBlockLayout).addToDetail(comp as Component?, TODO
                                                   constraints.x,
                                                   constraints.y,
                                                   constraints.width,
                                                   constraints.height,
                                                   constraints.alignRight,
-                                                  constraints.useAll)
+                                                  constraints.useAll)*/
   }
 
   override fun inDetailMode(): Boolean {
-    return getModel().isDetailMode()
+    return model.detailMode
   }
 
   override fun createLayout(): BlockLayout {
-    val layout: MultiBlockLayout
-    layout = MultiBlockLayout(2 * maxColumnPos,  // labels + fields
-                              maxRowPos,
-                              displayedFields,
-                              getModel().getDisplaySize() + 1)
-    if (model.getAlignment() != null) {
-      layout.setBlockAlignment(formView.getBlockView(model.getAlignment().getBlock()) as Component?,
-                               model.getAlignment().getTartgets(),
-                               model.getAlignment().isChart())
-    }
-    return layout
+    TODO()
   }
 
-  override fun blockViewModeLeaved(block: VBlock?, activeField: VField?) {
+  override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {
     try {
       // take care that value of current field
       // is visible in the other mode
       // Not field.updateText(); because the field is
       // maybe not visible in the Detail Mode
-      if (activeField != null) {
-        activeField.leave(true)
-      }
+      activeField?.leave(true)
     } catch (ex: VException) {
-      getModel().getForm().error(ex.getMessage())
+      model.form.error(ex.message)
     }
   }
 
@@ -95,12 +87,12 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
           } else {
             // field is not visible in in chart view:
             // go to the next visible field
-            block.setActiveField(activeField)
-            getModel().gotoNextField()
+            block.activeField = activeField
+            model.gotoNextField()
           }
         }
       } catch (ex: VException) {
-        getModel().getForm().error(ex.getMessage())
+        model.form.error(ex.message)
       }
     } else {
       try {
@@ -119,12 +111,12 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
           } else {
             // field is not visible in in chart view:
             // go to the next visible field
-            block.setActiveField(activeField)
-            getModel().gotoNextField()
+            block.activeField = activeField
+            model.gotoNextField()
           }
         }
       } catch (ex: VException) {
-        getModel().getForm().error(ex.getMessage())
+        model.form.error(ex.message)
       }
     }
   }
@@ -132,27 +124,28 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
   //---------------------------------------------------
   // MULTIBLOCK IMPLEMENTATION
   //---------------------------------------------------
-  @Throws(VException::class)
-  fun switchView(row: Int) {
+  override fun switchView(row: Int) {
     // if this block is not the current block
     //!!! graf 20080521: is this possible?
-    if (!(getModel().getForm().getActiveBlock() === getModel())) {
-      if (!getModel().isAccessible()) {
+    if (model.form.getActiveBlock() != model) {
+      if (!model.isAccessible) {
         return
       }
       try {
-        getModel().getForm().gotoBlock(getModel())
+        model.form.gotoBlock(model)
       } catch (ex: Exception) {
         (getFormView() as DForm).reportError(VRuntimeException(ex.message, ex))
         return
       }
     }
     if (row >= 0) {
-      getModel().gotoRecord(getRecordFromDisplayLine(row))
+      model.gotoRecord(getRecordFromDisplayLine(row))
     } else if (getDisplayLine() >= 0) {
-      getModel().gotoRecord(getRecordFromDisplayLine(getDisplayLine()))
+      model.gotoRecord(getRecordFromDisplayLine(getDisplayLine()))
     }
-    getModel().setDetailMode(!inDetailMode())
-    BackgroundThreadHandler.access(Runnable { switchView(inDetailMode().toInt()) })
+    model.detailMode = !inDetailMode()
+    //BackgroundThreadHandler.access(Runnable { TODO
+    switchView(inDetailMode())
+    //})
   }
 }
