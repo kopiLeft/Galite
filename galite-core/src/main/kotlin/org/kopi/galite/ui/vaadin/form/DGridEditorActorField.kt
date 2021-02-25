@@ -17,7 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.data.binder.Result
+import com.vaadin.flow.data.binder.ValueContext
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.grid.ActorRenderer
+import org.kopi.galite.ui.vaadin.grid.GridEditorActorField
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
 import java.util.*
 
 /**
@@ -29,6 +37,13 @@ class DGridEditorActorField(
         align: Int,
         options: Int
 ) : DGridEditorField<String?>(columnView, label, align, options) {
+
+  init {
+    if (getModel().toolTip != null) {
+      // editor.setDescription(model.getToolTip()) TODO
+    }
+  }
+
   // ----------------------------------------------------------------------
   // IMPLEMENTATION
   // ----------------------------------------------------------------------
@@ -37,46 +52,35 @@ class DGridEditorActorField(
   override fun getObject(): Any? = null
 
   override fun createEditor(): GridEditorActorField {
-    return GridEditorActorField(model.getLabel())
+    return GridEditorActorField(getModel().label)
   }
 
-  override fun createConverter(): Converter<String, Any> {
-    return object : Converter<String?, Any?>() {
-      fun convertToModel(value: String?, targetType: Class<out Any?>?, locale: Locale?): Any? {
-        return null
-      }
+  override fun createConverter(): Converter<String?, Any?> {
+    return object : Converter<String?, Any?> {
 
-      fun convertToPresentation(value: Any?, targetType: Class<out String?>?, locale: Locale?): String? {
-        return null
-      }
+      override fun convertToModel(value: String?, context: ValueContext?): Result<Any?>? = null
 
-      val modelType: Class<Any>
+      override fun convertToPresentation(value: Any?, context: ValueContext?): String? = null
+
+      val modelType: Class<Any> // TODO
         get() = Any::class.java
-      val presentationType: Class<String>
+
+      val presentationType: Class<String> // TODO
         get() = String::class.java
     }
   }
 
-  override fun createRenderer(): Renderer<String> {
-    return object : ActorRenderer(model.getLabel()) {
-      fun click(event: RendererClickEvent?) {
+  override fun createRenderer(): Renderer<String?> {
+    return object : ActorRenderer(getModel().label) {
+      /*fun click(event: RendererClickEvent?) { TODO
         columnView.executeAction()
-      }
+      }*/
     }
   }
 
-  override fun onClick(event: ClickEvent?) {
+  override fun onClick(event: ClickEvent<*>?) {
     // field action is performed in the window action queue
     // it is not like the other fields trigger
     columnView.executeAction()
-  }
-
-  // ----------------------------------------------------------------------
-  // CONSTRUCTOR
-  // ----------------------------------------------------------------------
-  init {
-    if (model.toolTip != null) {
-      getEditor().setDescription(model.getToolTip())
-    }
   }
 }

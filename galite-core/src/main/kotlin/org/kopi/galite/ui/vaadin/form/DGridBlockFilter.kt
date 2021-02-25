@@ -22,37 +22,13 @@ class DGridBlockFilter(
         filterString: String,
         private val ignoreCase: Boolean,
         private val onlyMatchPrefix: Boolean
-) : Filter {
+) /* : Filter TODO*/ {
 
   private val filterString = if (ignoreCase) filterString.toLowerCase() else filterString
 
   // --------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------
-  fun passesFilter(itemId: Any?, item: Item): Boolean {
-    val property: GridBlockProperty
-    val propertyValue: Any
-    property = item.getItemProperty(propertyId) as GridBlockProperty
-    if (property == null) {
-      return false
-    }
-    propertyValue = property.getValue()
-    if (propertyValue == null) {
-      return false
-    }
-    val value = if (ignoreCase) property.formatObject(propertyValue).toString().toLowerCase() else property.formatObject(
-            propertyValue).toString()
-    if (onlyMatchPrefix) {
-      if (!value.startsWith(filterString)) {
-        return false
-      }
-    } else {
-      if (!value.contains(filterString)) {
-        return false
-      }
-    }
-    return true
-  }
 
   fun appliesToProperty(propertyId: Any): Boolean {
     return this.propertyId == propertyId

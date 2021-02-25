@@ -18,8 +18,8 @@
 package org.kopi.galite.ui.vaadin.form
 
 import org.kopi.galite.form.VField
+import org.kopi.galite.ui.vaadin.event.TextFieldListener
 import org.kopi.galite.ui.vaadin.field.TextField
-import org.kopi.galite.ui.vaadin.field.TextFieldListener
 import org.kopi.galite.util.PrintException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.PrinterManager

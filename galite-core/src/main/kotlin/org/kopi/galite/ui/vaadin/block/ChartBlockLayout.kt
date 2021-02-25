@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
+import com.vaadin.flow.component.Component
+
 /**
  * The chart block layout.
  *
@@ -29,4 +31,27 @@ class ChartBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line), Bl
    * Can the block scroll ? If yes, draw a scroll bar
    */
   var hasScroll = false
+
+  override fun initSize() {
+    TODO("Not yet implemented")
+  }
+
+  override fun addComponent(
+          component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean,
+          useAll: Boolean,
+  ) {
+    TODO("Not yet implemented")
+  }
+
+  override fun layout() {
+    TODO("Not yet implemented")
+  }
+
+  override fun clear() {
+    TODO("Not yet implemented")
+  }
+
+  override fun updateScroll(pageSize: Int, maxValue: Int, enable: Boolean, value: Int) {
+    TODO("Not yet implemented")
+  }
 }

@@ -17,8 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.data.binder.Result
+import com.vaadin.flow.data.binder.ValueContext
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.UTextField
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
 import java.util.*
 
 class DGridEditorBooleanField(
@@ -26,19 +33,32 @@ class DGridEditorBooleanField(
         label: DGridEditorLabel,
         align: Int,
         options: Int
-) : DGridEditorField<Boolean>(columnView, label, align, options), UTextField, ValueChangeListener {
+) : DGridEditorField<Boolean?>(columnView, label, align, options), UTextField {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private var inside = false
+  private var rendrerValue: Boolean? = null
+
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+  init {
+    // editor.setLabel(label.text) TODO
+    // editor.addValueChangeListener(this) TODO
+  }
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
   override fun updateText() {
-    BackgroundThreadHandler.access(Runnable {
-      getEditor().setValue(
-              model.getBoolean(blockView.getRecordFromDisplayLine(position)))
-    })
+    //BackgroundThreadHandler.access(Runnable { TODO
+    editor.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
+    //})
   }
 
   override fun updateFocus() {
-    label!!.update(columnView, blockView.getRecordFromDisplayLine(position))
+    label!!.update(columnView, getBlockView().getRecordFromDisplayLine(position))
     if (!modelHasFocus()) {
       if (inside) {
         inside = false
@@ -48,8 +68,8 @@ class DGridEditorBooleanField(
         inside = true
         enterMe()
         if (rendrerValue != null) {
-          model.setChangedUI(true)
-          model.setBoolean(blockView.getModel().getActiveRecord(), rendrerValue)
+          getModel().changedUI = true
+          getModel().setBoolean(getBlockView().model.activeRecord, rendrerValue)
           rendrerValue = null
         }
       }
@@ -64,34 +84,28 @@ class DGridEditorBooleanField(
 
   override fun updateAccess() {
     super.updateAccess()
-    BackgroundThreadHandler.access(Runnable {
-      getEditor().setLabel(label.text)
+    /*BackgroundThreadHandler.access(Runnable { TODO
+      editor.setLabel(label.text)
       if (getAccess() == VConstants.ACS_MUSTFILL) {
-        getEditor().setMandatory(true)
+        editor.setMandatory(true)
       } else {
-        getEditor().setMandatory(false)
+        editor.setMandatory(false)
       }
-    })
+    })*/
   }
 
-  val `object`: Any
-    get() = text
+  override fun getObject(): String? = getText()
 
-  override fun createEditor(): GridEditorField<Boolean> {
-    return GridEditorBooleanField(trueRepresentation, falseRepresentation)
+  override fun createEditor(): GridEditorField<Boolean?> {
+    TODO()
   }
 
-  override fun createConverter(): Converter<Boolean, Any?> {
-    return object : Converter<Boolean?, Any?>() {
-      @Throws(ConversionException::class)
-      fun convertToModel(value: Boolean, targetType: Class<out Any?>?, locale: Locale?): Any {
-        return value
-      }
+  override fun createConverter(): Converter<Boolean?, Any?> {
+    return object : Converter<Boolean?, Any?> {
 
-      @Throws(ConversionException::class)
-      fun convertToPresentation(value: Any?, targetType: Class<out Boolean?>?, locale: Locale?): Boolean? {
-        return value as Boolean?
-      }
+      override fun convertToModel(value: Boolean?, context: ValueContext?): Result<Any?>? = Result.ok(value)
+
+      override fun convertToPresentation(value: Any?, context: ValueContext?): Boolean? = value as Boolean
 
       val modelType: Class<Any>
         get() = Any::class.java
@@ -100,75 +114,53 @@ class DGridEditorBooleanField(
     }
   }
 
-  override fun createRenderer(): Renderer<Boolean> {
-    val renderer: BooleanRenderer
-    renderer = BooleanRenderer(trueRepresentation, falseRepresentation)
-    renderer.addValueChangeListener(object : ValueChangeListener() {
-      fun valueChange(event: ValueChangeEvent) {
-        rendrerValue = event.getValue()
-      }
-    })
-    return renderer
+  override fun createRenderer(): Renderer<Boolean?> {
+    TODO()
   }
 
-  val text: String
-    get() = model.toText(getEditor().getValue())
+  override fun getText(): String? = getModel().toText(editor.value)
 
-  override fun getEditor(): GridEditorBooleanField {
-    return super.getEditor() as GridEditorBooleanField
-  }
+  override fun setHasCriticalValue(b: Boolean) {}
 
-  fun setHasCriticalValue(b: Boolean) {}
-  fun addSelectionFocusListener() {}
-  fun removeSelectionFocusListener() {}
-  fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
-  fun valueChange(event: ValueChangeEvent) {
-    val text: String
+  override fun addSelectionFocusListener() {}
 
+  override fun removeSelectionFocusListener() {}
+
+  override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
+
+  fun valueChange(event: HasValue.ValueChangeEvent<Boolean?>) { // TODO: link to listener
     // ensures to get model focus to validate the field
-    if (!model.hasFocus()) {
-      model.getBlock().setActiveField(model)
+    if (!getModel().hasFocus()) {
+      getModel().block!!.activeField = getModel()
     }
-    text = model.toText(event.getValue())
-    if (model.checkText(text)) {
-      model.setChangedUI(true)
-      model.setBoolean(blockView.getRecordFromDisplayLine(position), event.getValue())
+    val text = getModel().toText(event.value)
+    if (getModel().checkText(text!!)) { // TODO:nullable?
+      getModel().changedUI = true
+      getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.value)
     }
-    model.setChanged(true)
+    getModel().setChanged(true)
   }
 
   /**
    * Returns the true representation of this boolean field.
    * @return The true representation of this boolean field.
    */
-  protected val trueRepresentation: String
-    protected get() = model.toText(java.lang.Boolean.TRUE)
+  protected val trueRepresentation: String?
+    get() = getModel().toText(java.lang.Boolean.TRUE)
 
   /**
    * Returns the false representation of this boolean field.
    * @return The false representation of this boolean field.
    */
-  protected val falseRepresentation: String
-    protected get() = model.toText(java.lang.Boolean.FALSE)
+  protected val falseRepresentation: String?
+    get() = getModel().toText(java.lang.Boolean.FALSE)
 
   /**
    * Gets the focus to this field.
    */
   protected fun enterMe() {
-    BackgroundThreadHandler.access(Runnable { getEditor().focus() })
-  }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var inside = false
-  private var rendrerValue: Boolean? = null
-
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  init {
-    getEditor().setLabel(label.text)
-    getEditor().addValueChangeListener(this)
+    /*BackgroundThreadHandler.access(Runnable {  TODO
+      getEditor().focus()
+    })*/
   }
 }

@@ -76,7 +76,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
   private var currentAction: Action? = null
   private val askUser = false
   private val actors : VActorPanel = VActorPanel()
-  var runtimeDebugInfo: Throwable? = null
+  private var runtimeDebugInfo: Throwable? = null
 
   /**
    * Returns the exist code of this window.
@@ -266,7 +266,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
 
   override fun performBasicAction(action: Action) {
     //BackgroundThreadHandler.access(Runnable {  TODO
-      performActionImpl(action, false)
+    performActionImpl(action, false)
     //})
   }
 
@@ -382,17 +382,17 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
   //--------------------------------------------------------------
   override fun setTotalJobs(totalJobs: Int) {
     //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(progressDialog) {
-        if (isProgressDialogAttached) {
-          progressDialog.totalJobs = totalJobs
-        }
+    synchronized(progressDialog) {
+      if (isProgressDialogAttached) {
+        progressDialog.totalJobs = totalJobs
       }
+    }
     //})
   }
 
   override fun performAsyncAction(action: Action) {
     //BackgroundThreadHandler.access(Runnable { TODO
-      performActionImpl(action, true)
+    performActionImpl(action, true)
     //})
   }
 
@@ -402,53 +402,53 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
 
   override fun setWaitDialog(message: String, maxtime: Int) {
     //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(waitDialog) {
-        waitDialog.setTitle(MessageCode.getMessage("VIS-00067"))
-        waitDialog.setMessage(message)
-        waitDialog.setMaxTime(maxtime)
-        if (!isWaitDialogAttached) {
-          application.attachComponent(waitDialog)
-        }
+    synchronized(waitDialog) {
+      waitDialog.setTitle(MessageCode.getMessage("VIS-00067"))
+      waitDialog.setMessage(message)
+      waitDialog.setMaxTime(maxtime)
+      if (!isWaitDialogAttached) {
+        application.attachComponent(waitDialog)
       }
+    }
     //})
   }
 
   override fun unsetWaitDialog() {
     //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(waitDialog) {
-        if (isWaitDialogAttached) {
-          waitDialog.setTitle(null)
-          waitDialog.setMessage(null)
-          waitDialog.setMaxTime(0)
-          application.detachComponent(waitDialog)
-        }
+    synchronized(waitDialog) {
+      if (isWaitDialogAttached) {
+        waitDialog.setTitle(null)
+        waitDialog.setMessage(null)
+        waitDialog.setMaxTime(0)
+        application.detachComponent(waitDialog)
       }
+    }
     //})
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {
     //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(progressDialog) {
-        progressDialog.setTitle(MessageCode.getMessage("VIS-00067"))
-        progressDialog.setMessage(message)
-        progressDialog.totalJobs = totalJobs
-        if (!isProgressDialogAttached) {
-          application.attachComponent(progressDialog)
-        }
+    synchronized(progressDialog) {
+      progressDialog.setTitle(MessageCode.getMessage("VIS-00067"))
+      progressDialog.setMessage(message)
+      progressDialog.totalJobs = totalJobs
+      if (!isProgressDialogAttached) {
+        application.attachComponent(progressDialog)
       }
+    }
     //})
   }
 
   override fun unsetProgressDialog() {
     //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(progressDialog) {
-        if (isProgressDialogAttached) {
-          progressDialog.setTitle(null)
-          progressDialog.setMessage(null)
-          progressDialog.totalJobs = 0
-          application.detachComponent(progressDialog)
-        }
+    synchronized(progressDialog) {
+      if (isProgressDialogAttached) {
+        progressDialog.setTitle(null)
+        progressDialog.setMessage(null)
+        progressDialog.totalJobs = 0
+        application.detachComponent(progressDialog)
       }
+    }
     //})
   }
 
@@ -458,17 +458,17 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
 
   override fun setCurrentJob(currentJob: Int) {
     // access { TODO
-      synchronized(progressDialog) {
-        if (isProgressDialogAttached) {
-          progressDialog.setProgress(currentJob)
-        }
+    synchronized(progressDialog) {
+      if (isProgressDialogAttached) {
+        progressDialog.setProgress(currentJob)
       }
+    }
     //})
   }
 
   override fun setTitle(title: String) {
     // access { TODO
-      setCaption(title)
+    setCaption(title)
     //})
   }
 
@@ -478,11 +478,11 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
 
   override fun updateWaitDialogMessage(message: String) {
     // access { TODO
-      synchronized(waitDialog) {
-        if (isWaitDialogAttached) {
-          waitDialog.setMessage(message)
-        }
+    synchronized(waitDialog) {
+      if (isWaitDialogAttached) {
+        waitDialog.setMessage(message)
       }
+    }
     //})
   }
 
@@ -672,23 +672,23 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     //-----------------------------------------------------------
     override fun setWaitInfo(message: String) {
       //BackgroundThreadHandler.access(Runnable { TODO
-        synchronized(waitIndicator) {
-          waitIndicator.setText(message)
-          if (!iswaitIndicatorAttached) {
-            application.attachComponent(waitIndicator)
-          }
+      synchronized(waitIndicator) {
+        waitIndicator.setText(message)
+        if (!iswaitIndicatorAttached) {
+          application.attachComponent(waitIndicator)
         }
+      }
       //})
     }
 
     override fun unsetWaitInfo() {
       //BackgroundThreadHandler.access(Runnable { TODO
-        synchronized(waitIndicator) {
-          if (iswaitIndicatorAttached) {
-            waitIndicator.setText(null)
-            application.detachComponent(waitIndicator)
-          }
+      synchronized(waitIndicator) {
+        if (iswaitIndicatorAttached) {
+          waitIndicator.setText(null)
+          application.detachComponent(waitIndicator)
         }
+      }
       //})
     }
   }

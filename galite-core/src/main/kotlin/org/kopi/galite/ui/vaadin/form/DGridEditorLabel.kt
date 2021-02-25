@@ -24,20 +24,26 @@ import org.kopi.galite.form.ULabel
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.ui.vaadin.grid.GridEditorLabel
 import org.kopi.galite.visual.VActor
 
 /**
  * The editor label used as grid component header.
  */
 class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), ULabel, UChartLabel {
+
+  init {
+    init(text, help)
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
   override fun init(text: String?, tooltip: String?) {
     this.tooltip = tooltip
     //BackgroundThreadHandler.access(Runnable { TODO
-      setCaption(text)
-      setDescription(Utils.createTooltip(tooltip))
+    //setCaption(text) TODO
+    //setDescription(Utils.createTooltip(tooltip)) TODO
     //})
   }
 
@@ -52,13 +58,13 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
    */
   fun update(model: VFieldUI, row: Int) {
     //BackgroundThreadHandler.access(Runnable { TODO
-      if (model.model.getAccess(row) == VConstants.ACS_SKIPPED) {
-        // Only show base help on a skipped field
-        // Actors are not shown since they are not active.
-        setDescription(Utils.createTooltip(tooltip))
-      } else {
-        setDescription(Utils.createTooltip(buildDescription(model, tooltip)))
-      }
+    if (model.model.getAccess(row) == VConstants.ACS_SKIPPED) {
+      // Only show base help on a skipped field
+      // Actors are not shown since they are not active.
+      //setDescription(Utils.createTooltip(tooltip)) TODO
+    } else {
+      //setDescription(Utils.createTooltip(buildDescription(model, tooltip))) TODO
+    }
     //})
   }
 
@@ -67,7 +73,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
    * @return The label text.
    */
   val text: String
-    get() = getCaption()
+    get() = TODO()
 
   /**
    * Builds full field description.
@@ -75,7 +81,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
    * @param tooltip The initial field tooltip.
    * @return The full field description.
    */
-  protected fun buildDescription(model: VFieldUI, tooltip: String?): String {
+  fun buildDescription(model: VFieldUI, tooltip: String?): String {
     var tooltip = tooltip
     var description: String
     val commands = model.getAllCommands()
@@ -90,7 +96,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
           if (description.trim { it <= ' ' }.isNotEmpty()) {
             description += "<br>"
           }
-          description += getDescription(commands[i].actor)
+          description += getDescription(commands[i].actor!!)
         }
       }
     }
@@ -107,9 +113,9 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
   var infoText: String? = null
     set(info) {
       field = info
-      //BackgroundThreadHandler.access(Runnable { TODO
+      /*BackgroundThreadHandler.access(Runnable { TODO
         super@DGridEditorLabel.setInfoText(info)
-      //})
+      })*/
     }
   private var tooltip: String? = null
 
@@ -122,21 +128,14 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
     private fun getDescription(actor: VActor): String {
       return if (actor.acceleratorKey > 0) {
         if (actor.acceleratorModifier == 0) {
-          actor.menuItem.toString() + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
+          actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         } else {
-          actor.menuItem.toString() + " [" + KeyEvent.getKeyModifiersText(
+          actor.menuItem + " [" + KeyEvent.getKeyModifiersText(
                   actor.acceleratorModifier) + "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         }
       } else {
         actor.menuItem
       }
     }
-  }
-
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  init {
-    init(text, help)
   }
 }

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.ClickEvent
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.UField
 import org.kopi.galite.form.VConstants
@@ -29,20 +30,31 @@ import org.kopi.galite.ui.vaadin.field.TextField.ConvertType
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VColor
 
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
+import com.vaadin.flow.router.NavigationEvent
+import org.kopi.galite.form.UBlock
+
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
+
 /**
  * An UField associated with the grid block in inline edit.
  */
 abstract class DGridEditorField<T>(
         protected var columnView: VFieldUI,
-        // ----------------------------------------------------------------------
-        // DATA MEMBERS
-        // ----------------------------------------------------------------------
         val label: DGridEditorLabel?,
         protected var align: Int,
         protected var options: Int
-) : UField, NavigationListener, ClickListener, AutofillListener {
+) : UField,
+        GridEditorField.NavigationListener,
+        GridEditorField.ClickListener,
+        GridEditorField.AutofillListener {
 
-  protected val editor: GridEditorField<T> = createEditor()
+
+  /**
+   * Returns the field editor hold by this component.
+   */
+  var editor: GridEditorField<T> = createEditor()
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
 
@@ -53,10 +65,10 @@ abstract class DGridEditorField<T>(
    * Creates a new instance of the grid editor field.
    */
   init {
-    getEditor().setConverter(createConverter())
-    getEditor().addNavigationListener(this)
-    getEditor().addClickListener(this)
-    getEditor().addAutofillListener(this)
+    // editor.setConverter(createConverter()) TODO
+    // editor.addNavigationListener(this) TODO
+    // editor.addClickListener(this) TODO
+    // editor.addAutofillListener(this) TODO
     setLabelAlignment()
   }
   // ----------------------------------------------------------------------
@@ -65,21 +77,20 @@ abstract class DGridEditorField<T>(
 
   override fun getModel(): VField = columnView.model
 
-  val blockView: DGridBlock
-    get() = columnView.blockView as DGridBlock
+  override fun getBlockView(): DGridBlock = columnView.blockView as DGridBlock
 
   override fun getAccess(): Int {
     return if (getModel() != null) {
-      getModel().getAccess(blockView.getRecordFromDisplayLine(position))
+      getModel().getAccess(getBlockView().getRecordFromDisplayLine(position))
     } else {
       VConstants.ACS_SKIPPED
     }
   }
 
   override fun setBlink(blink: Boolean) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-      getEditor().setBlink(blink)
-    //})
+    /*BackgroundThreadHandler.access(Runnable { TODO
+      editor.setBlink(blink)
+    })*/
   }
 
   override var position: Int
@@ -92,13 +103,13 @@ abstract class DGridEditorField<T>(
 
   override fun forceFocus() {
     //BackgroundThreadHandler.access(Runnable {  TODO
-      getEditor().focus()
+    editor.focus()
     //})
   }
 
   override fun updateColor() {
     //BackgroundThreadHandler.access(Runnable { TODO
-      getEditor().setColor(Utils.toString(foreground), Utils.toString(background))
+    editor.setColor(Utils.toString(foreground), Utils.toString(background))
     //})
   }
 
@@ -109,28 +120,30 @@ abstract class DGridEditorField<T>(
    */
   protected fun setLabelAlignment() {
     if (label != null) {
-      when (getModel().align) {
+      /*when (getModel().align) { TODO
         VConstants.ALG_LEFT -> label.addStyleName("v-align-left")
         VConstants.ALG_RIGHT -> label.addStyleName("v-align-right")
         VConstants.ALG_CENTER -> label.addStyleName("v-align-center")
         else -> label.addStyleName("v-align-left")
-      }
+      }*/
     }
   }
 
   // ----------------------------------------------------------------------
   // UCOMPONENT
   // ----------------------------------------------------------------------
-  var isEnabled: Boolean
-    get() = getEditor().isEnabled()
-    set(enabled) {
-      getEditor().setEnabled(enabled)
-    }
-  var isVisible: Boolean
-    get() = getEditor().isVisible()
-    set(visible) {
-      getEditor().setVisible(visible)
-    }
+
+  override fun isEnabled(): Boolean = editor.isEnabled
+
+  override fun setEnabled(enabled: Boolean) {
+    editor.isEnabled = enabled
+  }
+
+  override fun isVisible(): Boolean = editor.isVisible
+
+  override fun setVisible(visible: Boolean) {
+    editor.isVisible = visible
+  }
 
   override fun updateFocus() {
     if (modelHasFocus()) {
@@ -141,12 +154,12 @@ abstract class DGridEditorField<T>(
   }
 
   override fun updateAccess() {
-    label?.update(columnView, blockView.getRecordFromDisplayLine(position))
+    label?.update(columnView, getBlockView().getRecordFromDisplayLine(position))
     //BackgroundThreadHandler.access(Runnable { TODO
-      access = getAccess()
-      isEnabled = access > VConstants.ACS_SKIPPED
-      isVisible = access != VConstants.ACS_HIDDEN
-      updateLabel()
+    access = getAccess()
+    setEnabled(access > VConstants.ACS_SKIPPED)
+    setVisible(access != VConstants.ACS_HIDDEN)
+    updateLabel()
     //})
   }
 
@@ -175,15 +188,15 @@ abstract class DGridEditorField<T>(
    * Performs a reset operation on this editor.
    */
   open fun reset() {
-    getEditor().setValue(nullRepresentation)
+    editor.value = nullRepresentation
   }
 
   // ----------------------------------------------------------------------
   // CLICK
   // ----------------------------------------------------------------------
-  open fun onClick(event: ClickEvent?) {
+  override fun onClick(event: ClickEvent<*>?) {
     if (!modelHasFocus()) {
-      val recno: Int = blockView.getRecordFromDisplayLine(position)
+      val recno: Int = getBlockView().getRecordFromDisplayLine(position)
       if (!columnView.getBlock().isRecordFilled(recno)) {
         getModel().block!!.updateAccess(recno)
       }
@@ -195,14 +208,14 @@ abstract class DGridEditorField<T>(
     }
   }
 
-  fun onAutofill(event: AutofillEvent?) {
+  override fun onAutofill(event: GridEditorField.AutofillEvent?) {
     performAutoFillAction()
   }
 
   // ----------------------------------------------------------------------
   // NAVIGATION
   // ----------------------------------------------------------------------
-  fun onGotoNextField(event: NavigationEvent?) {
+  override fun onGotoNextField(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
       override fun execute() {
         if (getModel() != null) {
@@ -212,7 +225,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  fun onGotoPrevField(event: NavigationEvent?) {
+  override fun onGotoPrevField(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_STAB") {
       override fun execute() {
         if (getModel() != null) {
@@ -222,7 +235,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  fun onGotoNextBlock(event: NavigationEvent?) {
+  override fun onGotoNextBlock(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_BLOCK") {
       override fun execute() {
         if (getModel() != null) {
@@ -232,7 +245,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  fun onGotoPrevRecord(event: NavigationEvent?) {
+  override fun onGotoPrevRecord(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_UP") {
       override fun execute() {
         if (getModel() != null) {
@@ -242,7 +255,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  fun onGotoNextRecord(event: NavigationEvent?) {
+  override fun onGotoNextRecord(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_DOWN") {
       override fun execute() {
         if (getModel() != null) {
@@ -252,7 +265,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  fun onGotoFirstRecord(event: NavigationEvent?) {
+  override fun onGotoFirstRecord(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_FIRST") {
       override fun execute() {
         if (getModel() != null) {
@@ -262,7 +275,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  fun onGotoLastRecord(event: NavigationEvent?) {
+  override fun onGotoLastRecord(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_LAST") {
       override fun execute() {
         if (getModel() != null) {
@@ -272,7 +285,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  fun onGotoNextEmptyMustfill(event: NavigationEvent?) {
+  override fun onGotoNextEmptyMustfill(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_ALTENTER") {
       override fun execute() {
         if (getModel() != null) {
@@ -281,16 +294,7 @@ abstract class DGridEditorField<T>(
       }
     })
   }
-  // ----------------------------------------------------------------------
-  // ACCESSORS
-  // ----------------------------------------------------------------------
-  /**
-   * Returns the field editor hold by this component.
-   * @return The field editor hold by this component.
-   */
-  open fun getEditor(): GridEditorField<T> {
-    return editor
-  }
+
   // ----------------------------------------------------------------------
   // UTIL
   // ----------------------------------------------------------------------
@@ -359,7 +363,7 @@ abstract class DGridEditorField<T>(
    */
   protected fun getForegroundAt(at: Int): VColor? {
     return if (getModel() != null) {
-      getModel().getForeground(blockView.getRecordFromDisplayLine(at))
+      getModel().getForeground(getBlockView().getRecordFromDisplayLine(at))
     } else {
       null
     }
@@ -372,7 +376,7 @@ abstract class DGridEditorField<T>(
    */
   protected fun getBackgroundAt(at: Int): VColor? {
     return if (getModel() != null) {
-      getModel().getBackground(blockView.getRecordFromDisplayLine(at))
+      getModel().getBackground(getBlockView().getRecordFromDisplayLine(at))
     } else {
       null
     }
@@ -401,7 +405,7 @@ abstract class DGridEditorField<T>(
       return false
     }
     val block = getModel().block
-    return getModel().hasFocus() && block!!.activeRecord == blockView.getRecordFromDisplayLine(position)
+    return getModel().hasFocus() && block!!.activeRecord == getBlockView().getRecordFromDisplayLine(position)
   }
 
   /**
@@ -442,8 +446,7 @@ abstract class DGridEditorField<T>(
    */
   protected val actors: Collection<Any>
     get() {
-      val actors: MutableSet<Actor>
-      actors = HashSet<Actor>()
+      val actors = mutableSetOf<Actor>()
       for (cmd in columnView.getAllCommands()) {
         if (cmd != null) {
           // for field commands this is needed to have the actor model instance

@@ -26,6 +26,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VImageField
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
 
 /**
  * A row controller for the grid block implementation
@@ -49,8 +50,7 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
                                                               (model as VImageField).iconWidth,
                                                               model.iconHeight,
                                                               model.options)
-        VField.MDL_FLD_ACTOR -> field = DGridEditorActorField(this, label as DGridEditorLabel, model.align,
-                                                              model.options)
+        VField.MDL_FLD_ACTOR -> field = TODO()
         else -> return super.createDisplay(label, model, detail)
       }
       field
@@ -86,7 +86,7 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
 
   override fun scrollTo(toprec: Int) {
     if (model.hasFocus()) {
-      getFieldHandler().enter()
+      fieldHandler.enter()
     }
   }
 
@@ -99,14 +99,14 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
    * @return The grid editor display of this row controller.
    */
   val editorField: DGridEditorField<*>
-    get() = displays[0]
+    get() = displays[0] as DGridEditorField<*>
 
   /**
    * Returns the grid editor field associated with this column view.
    * @return The grid editor field associated with this column view.
    */
   val editor: GridEditorField<*>
-    get() = editorField.getEditor()
+    get() = editorField.editor
 
   /**
    * Returns true if the column view has a chart display for this field model.
