@@ -25,8 +25,6 @@ import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.grid.ActorRenderer
 import org.kopi.galite.ui.vaadin.grid.GridEditorActorField
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
-import java.util.*
 
 /**
  * The grid editor actor field.

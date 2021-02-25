@@ -98,12 +98,8 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     )
     //BackgroundThreadHandler.access(Runnable { TODO
       for (col in 0 until model.getAccessibleColumnCount()) {
-        if (model.getAccessibleColumn(col)!!.folded &&
-                model.getAccessibleColumn(col) !is VSeparatorColumn) {
-          table.getColumnByKey(col.toString()).isVisible = false
-        } else {
-          table.getColumnByKey(col.toString()).isVisible = true
-        }
+        table.getColumnByKey(col.toString()).isVisible = !(model.getAccessibleColumn(col)!!.folded &&
+                model.getAccessibleColumn(col) !is VSeparatorColumn)
       }
     //})
   }
