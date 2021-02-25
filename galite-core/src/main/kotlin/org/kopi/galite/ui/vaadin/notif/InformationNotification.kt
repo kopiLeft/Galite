@@ -15,56 +15,41 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.notif
 
-import com.vaadin.flow.component.KeyPressEvent
-import org.kopi.galite.ui.vaadin.base.VInputButton
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
+
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
- * Error type notification component.
+ * Information type notification component.
+ *
+ * @param title the information notification title.
+ * @param message the information notification message.
+ * @param locale  the notification locale
  */
-open class VErrorNotification(title: String?, message: String?) : VAbstractNotification(title, message) {
+open class InformationNotification(title: String?,
+                                   message: String,
+                                   locale: String)
+  : AbstractNotification(title, message, locale) {
+
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
-  override fun setButtons(locale: String?) {
 
+  override fun setButtons() {
+    close = Button(LocalizedProperties.getString(locale, "CLOSE"))
+    close.addClickListener { close() }
+    buttons.add(close)
+    close.isAutofocus = true
   }
 
-  fun focus() {
-
-  }
-
-  override val iconName: String?
-    get() = "exclamation-circle"
-
-  /**
-   * Shows the error details. This is a related
-   * to the component component error set for this
-   * error notification.
-   */
-  protected fun showErrorDetails() {
-
-  }
-
-  /**
-   * Hides the error details.
-   */
-  protected fun hideErrorDetails() {
-
-  }
-
-  fun onKeyPress(event: KeyPressEvent) {
-
-  }
+  override val iconName: VaadinIcon
+    get() = VaadinIcon.INFO_CIRCLE
 
   //--------------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------------
-  private var detailsPopup: VErrorMessagePopup? = null
-  private var details: VInputButton? = null
-  private var close: VInputButton? = null
-
-  private var closeFocused = false
-  private var detailsFocused = false
+  private lateinit var close: Button
 }

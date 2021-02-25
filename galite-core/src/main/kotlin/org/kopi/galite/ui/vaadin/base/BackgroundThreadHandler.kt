@@ -15,35 +15,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.base
 
-import com.vaadin.flow.component.KeyPressEvent
-import org.kopi.galite.ui.vaadin.base.VInputButton
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.server.Command
 
 /**
- * Information type notification component.
+ * Collects some utilities for background threads in a vaadin application.
+ *
+ *
+ * Note that all performed background tasks are followed by an client UI update
+ * using the push mechanism incorporated with vaadin.
+ *
  */
-open class VInformationNotification(title: String?, message: String) : VAbstractNotification(title, message) {
-  //-------------------------------------------------
-  // IMPLEMENTATION
-  //-------------------------------------------------
-  override fun setButtons(locale: String?) {
+object BackgroundThreadHandler {
 
+  /**
+   * Exclusive access to the UI from a background thread to perform some updates.
+   * @param command the command which accesses the UI.
+   */
+  fun Component.access(command: Command) {
+    ui.ifPresent { myUi ->
+      myUi.access(command)
+    }
   }
-
-  override val iconName: String
-    get() = "info-circle"
-
-  fun focus() {
-
-  }
-
-  fun onKeyPress(event: KeyPressEvent) {
-
-  }
-
-  //--------------------------------------------------
-  // DATA MEMBERS
-  //--------------------------------------------------
-  private var close: VInputButton? = null
 }

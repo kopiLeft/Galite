@@ -17,37 +17,63 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.AbstractSinglePropertyField
+import org.kopi.galite.form.VCodeField
+import org.kopi.galite.form.VConstants
+import org.kopi.galite.form.VDateField
+import org.kopi.galite.form.VField
+import org.kopi.galite.form.VFixnumField
+import org.kopi.galite.form.VMonthField
+import org.kopi.galite.form.VStringField
+import org.kopi.galite.form.VTimeField
+import org.kopi.galite.form.VTimestampField
+import org.kopi.galite.form.VWeekField
+
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.data.binder.BeanValidationBinder
 
 /**
  * A text field component.
  *
- * @param col             The column number.
- * @param rows            The row number.
- * @param visibleRows     The visible rows
- * @param dynamicNewLine  Use default line transformer in multiple line field ? Dynamic new line means that
- * we use '\n' for line break. Fixed new line means that we complete the messing field columns with space
- * character instead of using line separator.
+ * @param model           The field model.
  * @param noEcho          Is it a password field ?
  * @param scanner         Is it a scanner field ?
  * @param noEdit          Is it a no edit field.
  * @param align           The field text alignment.
+ * @param hasAutofill     Tells if the field has an autofill command
  */
-class TextField(
-        val col: Int,
-        val rows: Int,
-        val visibleRows: Int,
-        val dynamicNewLine: Boolean,
-        val noEcho: Boolean,
-        val scanner: Boolean,
-        val noEdit: Boolean,
-        val align: Int,
-) : AbstractField() {
+class TextField(val model: VField,
+                val noEcho: Boolean,
+                val scanner: Boolean,
+                val noEdit: Boolean,
+                val align: Int,
+                val hasAutofill: Boolean) : org.kopi.galite.ui.vaadin.field.AbstractField() {
 
-  lateinit var field: AbstractSinglePropertyField<*, out Any?>
+  val field: AbstractField<*, out Any?>
+
+  /**
+   * The column number.
+   */
+  val col: Int
+
+  /**
+   * The row number.
+   */
+  val rows: Int
+
+  /**
+   * The visible rows
+   */
+  val visibleRows: Int
+
+  /**
+   * Use default line transformer in multiple line field ? Dynamic new line means that
+   * we use '\n' for line break. Fixed new line means that we complete the messing field columns with space
+   * character instead of using line separator.
+   */
+  val dynamicNewLine: Boolean
 
   /**
    * Is this text field enabled?
@@ -99,11 +125,6 @@ class TextField(
   var hasAutocomplete = false
 
   /**
-   * Tells if the field has an autofill command
-   */
-  var hasAutofill = false
-
-  /**
    * The auto complete minimum length to begin querying for suggestions
    */
   var autocompleteLength = 0
@@ -113,18 +134,93 @@ class TextField(
    */
   var convertType = ConvertType.NONE
 
-  /**
-   * Sets the text field component.
-   */
-  override fun onAttach(attachEvent: AttachEvent) {
+  val listeners = mutableListOf<HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>>()
+
+  init {
+    col = model.width
+    rows = model.height
+    visibleRows = if (model.height == 1) 1 else (model as VStringField).getVisibleHeight()
+    dynamicNewLine = !scanner && model.getTypeOptions() and VConstants.FDO_DYNAMIC_NL > 0
+    autocompleteLength = model.getAutocompleteLength()
+    hasAutocomplete = model.hasAutocomplete()
+    setFieldType()
+
     field = createTextField()
     field.isEnabled = enabled
     add(field)
     if (hasAutofill) {
-      TODO("AUTOFILL")
+      //TODO("AUTOFILL")
     }
     setValidationStrategy()
   }
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    listeners.forEach {
+      field.addValueChangeListener(it)
+    }
+  }
+
+  fun setFieldType() {
+    // set field type according to the model
+    when (model) {
+      is VStringField -> {
+        // string field
+        type = Type.STRING
+        convertType = _getConvertType()
+      }
+      is org.kopi.galite.form.VIntegerField -> {
+        // integer field
+        type = Type.INTEGER
+        minval = model.minval.toDouble()
+        maxval = model.maxval.toDouble()
+      }
+      is VMonthField -> {
+        // month field
+        type = Type.MONTH
+      }
+      is VDateField -> {
+        // date field
+        type = Type.DATE
+      }
+      is VWeekField -> {
+        // week field
+        type = Type.WEEK
+      }
+      is VTimeField -> {
+        // time field
+        type = Type.TIME
+      }
+      is VCodeField -> {
+        // code field
+        TODO()
+      }
+      is VFixnumField -> {
+        // fixnum field
+        TODO()
+      }
+      is VTimestampField -> {
+        // timestamp field
+        type = Type.TIMESTAMP
+      }
+      else -> {
+        throw IllegalArgumentException("unknown field model : " + model.javaClass.name)
+      }
+    }
+    // add navigation handler TODO
+  }
+
+  /**
+   * Returns the convert type for the string field.
+   * @return The convert type for the string field.
+   */
+  private fun _getConvertType(): ConvertType =
+          when ((model as VStringField).getTypeOptions() and VConstants.FDO_CONVERT_MASK) {
+            VConstants.FDO_CONVERT_NONE -> ConvertType.NONE
+            VConstants.FDO_CONVERT_UPPER -> ConvertType.UPPER
+            VConstants.FDO_CONVERT_LOWER -> ConvertType.LOWER
+            VConstants.FDO_CONVERT_NAME -> ConvertType.NAME
+            else -> ConvertType.NONE
+          }
 
   /**
    * Sets the validation strategy of a text field.
@@ -139,11 +235,11 @@ class TextField(
       Type.INTEGER -> bindingBuilder.withValidator(IntegerValidator(minval, maxval)).bind({ TODO() },
                                                                                           { _, _ -> TODO() })
       Type.DECIMAL -> TODO()
-      Type.DATE -> TODO()
-      Type.TIME -> TODO()
-      Type.MONTH -> TODO()
-      Type.WEEK -> TODO()
-      Type.TIMESTAMP -> TODO()
+      Type.DATE -> bindingBuilder.withValidator(DateValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.TIME -> bindingBuilder.withValidator(TimeValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.MONTH -> bindingBuilder.withValidator(MonthValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.WEEK -> bindingBuilder.withValidator(WeekValidator()).bind({ TODO() }, { _, _ -> TODO() })
+      Type.TIMESTAMP -> bindingBuilder.withValidator(TimestampValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.CODE -> TODO()
       else -> TODO()
     }
@@ -153,7 +249,7 @@ class TextField(
    * Creates the attached text field component.
    * @return the attached text field component.
    */
-  private fun createTextField(): AbstractSinglePropertyField<*, out Any?> {
+  private fun createTextField(): AbstractField<*, out Any?> {
     val text = createFieldComponent()
     // TODO
     return text
@@ -163,10 +259,10 @@ class TextField(
    * Creates the input component according to field state.
    * @return the input component
    */
-  protected fun createFieldComponent(): AbstractSinglePropertyField<*, out Any?> {
+  protected fun createFieldComponent(): AbstractField<*, out Any?> {
     var col = col
     val text = if (noEcho && rows == 1) {
-      VTextField(col)
+      VPasswordField(col)
     } else if (rows > 1) {
       if (scanner) {
         col = 40
@@ -178,10 +274,27 @@ class TextField(
         // if fixed new line mode is used, we remove scroll bar from text area
         it.setFixedNewLine(!dynamicNewLine)
       }
-    } else if(isNumber()) {
-      VIntegerField()
+    } else if(type == Type.INTEGER) {
+      VTextField(col).also {
+        it.pattern = "[0-9]*"
+        it.maxLength = col;
+        it.isPreventInvalidInput = true
+      }
+    } else if(type == Type.TIME) {
+      VTimeField()
+    } else if(type == Type.TIMESTAMP) {
+      VTimeStampField()
+    } else if(isDate()) {
+      VDateField()
     } else {
-      VTextField(col) // TODO
+      VTextField(col).also {
+        if(type == Type.WEEK) {
+          it.setInputType("week")
+        } else if (type == Type.MONTH) {
+          it.setInputType("month")
+        }
+      }
+      // TODO
     }
 
     // TODO()
@@ -224,11 +337,46 @@ class TextField(
   }
 
   /**
-   * Returns true if the field should contains only integers.
-   * @return True if the field should contains only integers.
+   * Returns true if the field should contains only date.
+   * @return True if the field should contains only date.
    */
-  private fun isNumber(): Boolean {
-    return type == Type.INTEGER
+  private fun isDate(): Boolean {
+    return type == Type.DATE
+  }
+
+  /**
+   * Sets the field focus.
+   */
+  fun focus() {
+    (field as Focusable<*>).focus()
+  }
+
+  /**
+   * Sets the the blink state of the field.
+   * @param blink The blink state.
+   */
+  fun setBlink(blink: Boolean) {
+    if (blink) {
+      classNames.add("text-field-blink")
+    } else {
+      classNames.remove("text-field-blink")
+    }
+  }
+
+
+  /**
+   * Returns if he field is read only.
+   */
+  fun isReadOnly(): Boolean {
+    return field.isReadOnly
+  }
+
+  /**
+   * Registers a text change listener
+   * @param l The text change listener.
+   */
+  fun addTextValueChangeListener(l: HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>) {
+    listeners.add(l)
   }
 
   //---------------------------------------------------

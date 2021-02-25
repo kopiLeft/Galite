@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedMessages
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
@@ -56,13 +56,13 @@ object NotificationUtils {
                 locale: String,
                 messageKey: String,
                 vararg params: Any?) {
-    val error = VErrorNotification(LocalizedProperties.getString(locale, "Error"),
-                                   LocalizedMessages.getMessage(locale, messageKey, params))
-    error.init()
+    val error = ErrorNotification(LocalizedProperties.getString(locale, "Error"),
+                                  LocalizedMessages.getMessage(locale, messageKey, params),
+                                  locale)
     if (callback != null) {
       error.addNotificationListener(callback)
     }
-    error.show(parent, locale)
+    error.show()
   }
 
   /**
@@ -94,13 +94,13 @@ object NotificationUtils {
                   locale: String,
                   messageKey: String,
                   vararg params: Any?) {
-    val warning = VWarningNotification(LocalizedProperties.getString(locale, "Warning"),
-                                       LocalizedMessages.getMessage(locale, messageKey, params))
-    warning.init()
+    val warning = WarningNotification(LocalizedProperties.getString(locale, "Warning"),
+                                      LocalizedMessages.getMessage(locale, messageKey, params),
+                                      locale)
     if (callback != null) {
       warning.addNotificationListener(callback)
     }
-    warning.show(parent, locale)
+    warning.show()
   }
 
   /**
@@ -132,12 +132,12 @@ object NotificationUtils {
                       locale: String,
                       messageKey: String,
                       vararg params: Any?) {
-    val information = VInformationNotification(LocalizedProperties.getString(locale, "Notice"),
-                                               LocalizedMessages.getMessage(locale, messageKey, params))
-    information.init()
+    val information = InformationNotification(LocalizedProperties.getString(locale, "Notice"),
+                                              LocalizedMessages.getMessage(locale, messageKey, params),
+                                              locale)
     if (callback != null) {
       information.addNotificationListener(callback)
     }
-    information.show(parent, locale)
+    information.show()
   }
 }

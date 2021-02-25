@@ -22,7 +22,7 @@ import com.vaadin.flow.component.textfield.PasswordField
 /**
  * A password field implementation
  */
-class VPasswordField: PasswordField(), UTextField {
+class VPasswordField(val col: Int): PasswordField(), UTextField {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

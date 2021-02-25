@@ -19,18 +19,18 @@ package org.kopi.galite.demo.client
 import java.util.Locale
 
 import org.kopi.galite.demo.Client
-import org.kopi.galite.demo.desktop.Application
+import org.kopi.galite.demo.Application
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object ClientForm : ReportSelectionForm() {
+class ClientForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
   override val title = "Clients"
   val page = page("Client")
-  val action = menu("act")
+  val action = menu("Action")
   val report = actor(
           ident = "report",
           menu = action,
@@ -41,10 +41,10 @@ object ClientForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
-  val block = insertBlock(Clients, page) {
+  val block = insertBlock(Clients(), page) {
     command(item = report) {
       action = {
-        createReport(Clients)
+        createReport(this@insertBlock)
       }
     }
   }
@@ -54,7 +54,7 @@ object ClientForm : ReportSelectionForm() {
   }
 }
 
-object Clients : FormBlock(1, 1, "Clients") {
+class Clients : FormBlock(1, 1, "Clients") {
   val u = table(Client)
 
   val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {
@@ -62,15 +62,15 @@ object Clients : FormBlock(1, 1, "Clients") {
     help = "The client id"
     columns(u.idClt)
   }
-  val fstnameClt = visit(domain = Domain<String>(25), position = at(2, 1)) {
+  val fstnameClt = mustFill(domain = Domain<String>(25), position = at(2, 1)) {
     label = "First Name"
     help = "The client first name"
-    columns(u.fstnameClt)
+    columns(u.firstNameClt)
   }
   val nameClt = visit(domain = Domain<String>(25), position = at(2, 2)) {
     label = "Last name"
     help = "The client last name"
-    columns(u.nameClt)
+    columns(u.lastNameClt)
   }
   val ageClt = visit(domain = Domain<Int>(3), position = at(3, 1)) {
     label = "Age"
@@ -92,7 +92,6 @@ object Clients : FormBlock(1, 1, "Clients") {
     help = "The client city"
     columns(u.cityClt)
   }
-
   val zipCodeClt = visit(domain = Domain<Int>(12), position = at(4, 3)) {
     label = "Zip code"
     help = "The client zip code"
@@ -101,5 +100,5 @@ object Clients : FormBlock(1, 1, "Clients") {
 }
 
 fun main() {
-  Application.runForm(formName = ClientForm)
+  Application.runForm(formName = ClientForm())
 }

@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1990-2016 kopiRight Managed Solutions GmbH
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,11 +13,29 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * $Id: DMenuTree.java 34997 2016-12-01 09:51:43Z hacheni $
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.vkopi.lib.ui.swing.visual
+package org.kopi.galite.ui.swing.visual
+
+import java.awt.BorderLayout
+import java.awt.event.ActionEvent
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import java.sql.SQLException
+import javax.swing.AbstractAction
+import javax.swing.ImageIcon
+import javax.swing.JOptionPane
+import javax.swing.JScrollPane
+import javax.swing.JTree
+import javax.swing.UIManager
+import javax.swing.event.TreeExpansionEvent
+import javax.swing.event.TreeExpansionListener
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.DefaultTreeModel
+import javax.swing.tree.TreeNode
+import javax.swing.tree.TreePath
 
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
@@ -32,26 +51,10 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties.getString
 import org.kopi.vkopi.lib.ui.swing.base.Utils
-import java.awt.BorderLayout
-import java.awt.event.ActionEvent
-import java.awt.event.KeyAdapter
-import java.awt.event.KeyEvent
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.sql.SQLException
-import java.util.*
-import javax.swing.AbstractAction
-import javax.swing.ImageIcon
-import javax.swing.JOptionPane
-import javax.swing.JScrollPane
-import javax.swing.JTree
-import javax.swing.UIManager
-import javax.swing.event.TreeExpansionEvent
-import javax.swing.event.TreeExpansionListener
-import javax.swing.tree.DefaultMutableTreeNode
-import javax.swing.tree.DefaultTreeModel
-import javax.swing.tree.TreeNode
-import javax.swing.tree.TreePath
+import org.kopi.vkopi.lib.ui.swing.visual.DWindow
+import org.kopi.vkopi.lib.ui.swing.visual.JApplication
+import org.kopi.vkopi.lib.ui.swing.visual.JBookmarkPanel
+import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler
 
 class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   // --------------------------------------------------------------------
@@ -299,20 +302,16 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   // --------------------------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------------------------
-  private val tree: Tree
+  private val tree: Tree = Tree(model.root)
   private val toolbar: JBookmarkPanel
-  private val shortcuts: MutableMap<Module, javax.swing.Action>
-  private val orderdShorts: MutableList<javax.swing.Action?>
-  private val modules: MutableList<Module>
+  private val shortcuts: MutableMap<Module, javax.swing.Action> = mutableMapOf()
+  private val orderdShorts: MutableList<javax.swing.Action?> = mutableListOf()
+  private val modules: MutableList<Module> = mutableListOf()
 
   // --------------------------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------------------------
   init {
-    tree = Tree(model.root)
-    shortcuts = Hashtable()
-    orderdShorts = ArrayList()
-    modules = ArrayList()
     tree.addMouseListener(object : MouseAdapter() {
       private var lastClick: Long = 0
       override fun mouseClicked(e: MouseEvent) {

@@ -20,7 +20,7 @@ plugins {
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
 
-val exposedVersion = "0.27.1"
+val exposedVersion = "0.29.1"
 val vaadinVersion = "18.0.3"
 val itextVersion = "2.1.5"
 val jdomVersion = "2.0.5"
@@ -29,12 +29,6 @@ val graphbuilder = "1.02"
 val hylafaxVersion = "1.0.0"
 val jFreeChartVersion = "1.0.19"
 val getoptVersion = "1.0.13"
-
-repositories {
-  maven {
-    url = uri("https://maven.vaadin.com/vaadin-addons")
-  }
-}
 
 dependencies {
   // Exposed dependencies
@@ -74,8 +68,8 @@ dependencies {
   //getOpt dependency
   implementation("gnu.getopt", "java-getopt", getoptVersion)
 
-  //Enhanced Dialog
-  implementation("com.vaadin.componentfactory","enhanced-dialog","1.0.4")
+  // EnhancedDialog dependency
+  implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
 }
 
 dependencyManagement {

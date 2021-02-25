@@ -15,14 +15,36 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.field
+
+import com.vaadin.flow.component.datepicker.DatePicker
 
 /**
- * Confirm notification component.
- *
- * @param title the warning notification title.
- * @param message the warning notification message.
+ * An Date field.
  */
-class ConfirmNotification(title: String, message: String) : VConfirmNotification(title, message) {
+class VDateField : DatePicker(), UTextField {
+ init {
+   this.isClearButtonVisible = true
+ }
 
+  override fun hasAutoComplete(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun getMaxLength(): Int {
+    TODO("Not yet implemented")
+  }
+
+  override fun getMinLength(): Int {
+    TODO("Not yet implemented")
+  }
+
+
+  override fun setMaxLength(maxLength: Int) {
+   //Nothing to Implement
+  }
+
+  override fun setMinLength(minLength: Int) {
+    TODO("Not yet implemented")
+  }
 }

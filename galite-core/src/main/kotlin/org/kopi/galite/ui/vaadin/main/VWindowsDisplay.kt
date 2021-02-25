@@ -36,6 +36,15 @@ class VWindowsDisplay : Div() {
     className = "k-windows-menu-container"
   }
 
+  /**
+   * Updates the menu item caption for the given window.
+   * @param window The concerned window.
+   * @param caption The new item caption.
+   */
+  fun updateCaption(window: Component, caption: String) {
+    TODO()
+  }
+
   fun addItem(container : VWindowContainer, window: Component, title : String) {
     menu.addItem(container, window, title)
   }

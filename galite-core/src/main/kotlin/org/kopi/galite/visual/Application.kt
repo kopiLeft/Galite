@@ -64,7 +64,7 @@ interface Application : MessageListener {
    * @param parent The parent component.
    * @param message The message to be displayed.
    */
-  fun displayError(parent: UComponent, message: String)
+  fun displayError(parent: UComponent?, message: String?)
 
   /**
    * `true` if no bug report is sent.

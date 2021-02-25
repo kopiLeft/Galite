@@ -15,7 +15,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package org.kopi.galite.ui.vaadin.visual
 
 import java.sql.SQLException
@@ -26,15 +25,16 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.MainWindowListener
-import org.kopi.galite.ui.vaadin.notification.ConfirmNotification
-import org.kopi.galite.ui.vaadin.notification.ErrorNotification
-import org.kopi.galite.ui.vaadin.notification.InformationNotification
-import org.kopi.galite.ui.vaadin.notification.NotificationListener
-import org.kopi.galite.ui.vaadin.notification.VAbstractNotification
-import org.kopi.galite.ui.vaadin.notification.WarningNotification
+import org.kopi.galite.ui.vaadin.notif.NotificationListener
+import org.kopi.galite.ui.vaadin.notif.AbstractNotification
+import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
+import org.kopi.galite.ui.vaadin.notif.ErrorNotification
+import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
 import org.kopi.galite.visual.Application
@@ -66,6 +66,7 @@ import com.vaadin.flow.router.Route
 @Push
 @Route("")
 @CssImport("./styles/galite/styles.css")
+@Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
   //---------------------------------------------------
@@ -75,7 +76,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var welcomeView: WelcomeView? = null
   private var askAnswer = 0
   private lateinit var configuration: ApplicationConfiguration
-  private var stylesInjector: StylesInjector? = null
+  var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -95,40 +96,27 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
-    val dialog = InformationNotification(VlibProperties.getString("Notice"), message)
-    dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean) {
-        detachComponent(dialog)
-      }
-    })
+    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+
     showNotification(dialog)
   }
 
   override fun error(message: String?) {
-    val dialog = ErrorNotification(VlibProperties.getString("Error"), message)
-    dialog.setOwner(this)
-    dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean) {
-        detachComponent(dialog)
-      }
-    })
-    showNotification(dialog)
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
 
+    showNotification(dialog)
   }
 
   override fun warn(message: String) {
-    val dialog = WarningNotification(VlibProperties.getString("Warning"), message)
-    dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean) {
-        detachComponent(dialog)
-      }
-    })
+    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+
     showNotification(dialog)
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message)
-    dialog.setYesIsDefault(yesIsDefault)
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+
+    dialog.yesIsDefault = yesIsDefault
     dialog.addNotificationListener(object : NotificationListener {
       override fun onClose(yes: Boolean) {
         askAnswer = if (yes) {
@@ -145,16 +133,16 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     return askAnswer
   }
 
+  private val notificationLocale get() = defaultLocale.toString()
+
   /**
    * Shows a notification.
    * @param notification The notification to be shown
    */
-  protected open fun showNotification(notification: VAbstractNotification?) {
-    if (notification == null) {
-      return
+  protected open fun showNotification(notification: AbstractNotification) {
+    access {
+      notification.show()
     }
-    notification.locale = defaultLocale.toString()
-    attachComponent(notification)
   }
 
   //---------------------------------------------------------------------
@@ -175,7 +163,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     mainWindow!!.setAdminMenu(DAdminMenu(menu))
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu))
     mainWindow!!.addDetachListener { event ->
-        closeConnection()
+      closeConnection()
     }
   }
 
@@ -257,7 +245,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override var localizationManager: LocalizationManager? = null
 
-  override fun displayError(parent: UComponent, message: String) {
+  override fun displayError(parent: UComponent?, message: String?) {
     error(message)
   }
 
@@ -277,7 +265,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param component The component to be detached.
    */
   fun detachComponent(component: Component?) {
-
+    remove(component)
   }
 
   /**
@@ -312,11 +300,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
     if (mainWindow != null) {
-      ui.ifPresent { myUi ->
-        myUi.access {
-          window.setSizeFull()
-          mainWindow!!.addWindow(window, title)
-        }
+      access {
+        window.setSizeFull()
+        mainWindow!!.addWindow(window, title)
       }
     }
   }
@@ -339,9 +325,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   protected fun setLocalizationContext(locale: Locale) {
     // default application locale is initialized
     // from application descriptor file (web.xml)
-
-    // default application locale is initialized
-    // from application descriptor file (web.xml)
     defaultLocale = locale
     if (defaultLocale == null) {
       // if no valid local is defined in the application descriptor
@@ -350,7 +333,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       // This is only to be share that we start with a language.
       defaultLocale = alternateLocale
     }
-    // Now create the localization manager using the application default locale.
     // Now create the localization manager using the application default locale.
     localizationManager = LocalizationManager(defaultLocale, Locale.getDefault())
   }
@@ -457,14 +439,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String?): String? {
-    TODO()
-  }
-
-  /**
-   * Returns the styles injector attached with this application instance.
-   * @return The styles injector attached with this application instance.
-   */
-  fun getStylesInjector(): StylesInjector {
     TODO()
   }
 

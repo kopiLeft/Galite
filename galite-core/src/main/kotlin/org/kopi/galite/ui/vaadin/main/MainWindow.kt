@@ -108,6 +108,17 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   }
 
   /**
+   * Updates the title (caption) of the given window.
+   * @param window The concerned window.
+   * @param title The new window title.
+   */
+  fun updateWindowTitle(window: Component, title: String) {
+    container.updateWindowTitle(window, title)
+    windowsMenu.updateCaption(window, title)
+    ui.get().page.setTitle(title)
+  }
+
+  /**
    * Sets the user menu attached to this main window.
    * @param moduleList The user menu.
    */
@@ -143,16 +154,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     container.addWindow(window, title)
     container.showWindow(window)
     windowsMenu.addItem(container, window, title)
-  }
-
-  /**
-   * Adds a window to this main window.
-   * @param window The window to be added.
-   */
-  fun addW(window: Component, title: String) {
-    windowsList.add(window)
-    container.addWindow(window, title)
-    container.showWindow(window)
   }
 
   /**

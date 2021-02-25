@@ -18,18 +18,8 @@ package org.kopi.galite.demo.product
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Product
-import org.kopi.galite.demo.addBillPrdts
-import org.kopi.galite.demo.addBills
-import org.kopi.galite.demo.addClients
-import org.kopi.galite.demo.addCmds
-import org.kopi.galite.demo.addFourns
-import org.kopi.galite.demo.addProducts
-import org.kopi.galite.demo.addStocks
-import org.kopi.galite.demo.addTaxRules
-import org.kopi.galite.demo.createStoreTables
-import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
@@ -37,11 +27,12 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
+import org.kopi.galite.type.Image
 
 object ProductForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
-  override val title = "product form"
-  val page = page("page")
+  override val title = "Products"
+  val page = page("Product")
   val action = menu("Action")
   val edit = menu("Edit")
   val autoFill = actor(
@@ -73,75 +64,61 @@ object ProductForm : ReportSelectionForm() {
   }
 }
 
-object BlockProduct : FormBlock(1, 1, "product block") {
+object BlockProduct : FormBlock(1, 1, "Products") {
   val u = table(Product)
 
   val idPdt = hidden(domain = Domain<Int>(20)) {
-    label = "product id"
-    help = "The product id"
+    label = "ID"
+    help = "The product ID"
     columns(u.idPdt)
   }
   val designation = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
-    label = "product designation"
+    label = "Designation"
     help = "The product designation"
     columns(u.designation)
   }
   val category = mustFill(domain = Category, position = at(2, 1)) {
-    label = "product category"
+    label = "Category"
     help = "The product category"
     columns(u.category)
   }
   val taxName = mustFill(domain = Tax, position = at(3, 1)) {
-    label = "Product tax name"
+    label = "Tax"
     help = "The product tax name"
     columns(u.taxName)
   }
-  val price = visit(domain = Domain<Decimal>(10, 5), position = at(4, 1)) {
-    label = "product price"
-    help = "The product price"
+  val price = visit(domain = Domain<Decimal>(20), position = at(4, 1)) {
+    label = "Price"
+    help = "The product unit price excluding VAT"
     columns(u.price)
   }
-/*
   val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
-    label = "product image"
+    label = "Image"
     help = "The product image"
-    columns(u.photo)
   }
-*/
 }
 
-object Category: CodeDomain<String>() {
+object Category : CodeDomain<String>() {
   init {
     "shoes" keyOf "cat 1"
     "shirts" keyOf "cat 2"
-    "glasses" keyOf  "cat 3"
+    "glasses" keyOf "cat 3"
     "pullovers" keyOf "cat 4"
     "jeans" keyOf "cat 5"
   }
 }
 
-object Tax: CodeDomain<String>() {
+object Tax : CodeDomain<String>() {
   init {
-    "Taux 19%"  keyOf "tax 1"
-    "Taux 9%" keyOf  "tax 2"
-    "Taux 13%" keyOf "tax 3"
-    "Taux 22%" keyOf "tax 4"
-    "Taux 11%"  keyOf "tax 5"
+    "0%"  keyOf "tax 0"
+    "19%" keyOf "tax 1"
+    "9%" keyOf "tax 2"
+    "13%" keyOf "tax 3"
+    "22%" keyOf "tax 4"
+    "11%" keyOf "tax 5"
   }
 }
 
 fun main() {
-  Application.runForm(formName = ProductForm) {
-    transaction {
-      createStoreTables()
-      addClients()
-      addTaxRules()
-      addProducts()
-      addFourns()
-      addStocks()
-      addCmds()
-      addBillPrdts()
-      addBills()
-    }
-  }
+  Application.runForm(formName = ProductForm)
 }

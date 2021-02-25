@@ -41,4 +41,13 @@ open class VTextField(val col: Int) : TextField(), UTextField {
   override fun hasAutoComplete(): Boolean {
     TODO("Not yet implemented")
   }
+
+  /**
+   * Sets the input field type attribute to [type]
+   */
+  fun setInputType(type: String) {
+    element.node.runWhenAttached { ui ->
+      ui.page.executeJs("$0.focusElement.type=$1", this, type)
+    }
+  }
 }

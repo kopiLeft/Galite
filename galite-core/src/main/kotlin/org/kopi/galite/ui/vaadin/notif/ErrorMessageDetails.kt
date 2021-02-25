@@ -15,22 +15,42 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.common.VSpan
 
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.details.Details
+import com.vaadin.flow.component.details.DetailsVariant
+import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.Scroller
+
 /**
  * An error message popup window containing stack trace detail
- * for an server exception.
+ * for a server exception.
+ *
+ * @param message The error message.
+ * @param locale  The notification locale
+ * @param parent  The parent dialog containing this message details
+ *
  */
-class VErrorMessagePopup {
+class ErrorMessageDetails(message: String?, locale: String, val parent: Dialog) : Div(), HasSize {
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
+
   /**
    * Creates the window content.
    */
   protected fun createContent() {
+    scroller.className = "error-details"
+    message = VSpan()
+    message!!.className = "details-message"
+    scroller.content = message
   }
 
   /**
@@ -41,15 +61,34 @@ class VErrorMessagePopup {
     this.message!!.setHtml(message)
   }
 
+  fun setPixelSize(width: Int, height: Int) {
+    scroller.width = width.toString()
+    scroller.height = height.toString()
+  }
+
+  fun focus() {
+    details.focus()
+  }
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  private var details: FocusableDetails
   private var message: VSpan? = null
+  private val scroller = Scroller()
 
   //---------------------------------------------------
   // CONSTRUCTORS
   //---------------------------------------------------
   init {
     createContent()
+    setMessage(message)
+    // TODO: Add localized message
+    details = FocusableDetails("Afficher les détails", scroller)
+    add(details)
   }
+
+  class FocusableDetails(message: String?,
+                         content: Component)
+    : Details(message, content), Focusable<FocusableDetails>
 }

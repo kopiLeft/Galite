@@ -15,17 +15,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.notification
+package org.kopi.galite.ui.vaadin.field
 
-import java.io.Serializable
+import com.vaadin.flow.component.datetimepicker.DateTimePicker
 
 /**
- * Notifications listener.
+ * A timestamp field.
  */
-interface NotificationListener : Serializable {
-  /**
-   * Fires the notification close action.
-   * @param action the user action.
-   */
-  fun onClose(action: Boolean)
+class VTimeStampField : DateTimePicker(), UTextField {
+
+  override fun hasAutoComplete(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun getMaxLength(): Int = TODO()
+
+  override fun getMinLength(): Int = TODO()
+
+  override fun setMaxLength(maxLength: Int) {
+    // TODO
+  }
+
+  override fun setMinLength(minLength: Int) {
+    // TODO
+  }
 }
