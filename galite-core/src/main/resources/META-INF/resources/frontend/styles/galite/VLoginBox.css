@@ -16,13 +16,6 @@
  */
 
 /*
- * Head's style
- */
-#header {
-    background-color: white;
-}
-
-/*
  * Main's style
  */
 #outlet {
@@ -37,12 +30,16 @@
     padding: 20px;
     margin-top: 20px;
     background: #ffffff;
-    vertical-align: middle;
-    font-family: Arial, sans-serif;
-    font-weight: 400;
-    font-style: normal;
     font-size: 12px;
-    box-sizing:border-box;
+}
+
+/*
+ * Login Box password input fields style
+ */
+vaadin-password-field {
+    --lumo-text-field-size: var(--lumo-size-xxs);
+    font-size: var(--lumo-font-size-xxs);
+    width: 150px;
 }
 
 /*
@@ -51,45 +48,41 @@
 .k-loginBox ::part(input-field) {
     background-color: var(--lumo-tint);
     box-sizing: border-box;
-    border: 1px solid #dadada;
+    border: 0;
+    border-bottom: 1px solid #dadada;
 }
 
+/*
+ *  Remove padding between login fields
+ */
 .k-loginBox-pane table tr td {
     padding: 0;
     text-align: left;
 }
 
-.k-loginBox-pane {
-    padding: 1px 6px 12px 10px;
-}
-
+/*
+ * Change login page title's style
+ */
 .k-loginBox-pane tr td {
     color: black;
-    font-weight: 500;
-    font-style: 500;
-    line-height: 1.2em;
-    padding: 6px 3px 3px 3px;
-    max-height: 40px;
-    transition: .4s;
-    position: relative;
-}
-
-.k-loginBox-pane label {
-    font-weight: 500;
-    font-style: normal;
-    color: #a3a3a3;
-    display: inline-block;
 }
 
 /*
- * Password's style
+ * Login page labels style
  */
-label[for="user_password"] {
-    vertical-align:bottom;
+.k-loginBox-pane label {
+    font-style: normal;
+    color: #a3a3a3;
 }
 
-vaadin-password-field {
-    width: 150px;
+/*
+ * Welcome's word style
+ */
+.k-loginBox b {
+    color:black;
+    font-weight: 500 ;
+    font-style: normal ;
+    font-size: 14px
 }
 
 /*
@@ -97,7 +90,9 @@ vaadin-password-field {
  */
 #user_name {
     width: 150px;
-    border: #dadada 1px solid;
+    border: 0;
+    border-bottom: 1px solid #dadada;
+ }
 }
 
 #user_name:hover {
@@ -126,13 +121,11 @@ vaadin-password-field {
  * Login Button
  */
 #login_button {
-    display: inline-block;
     background: #009bd4;
     color: white;
     padding: 4px 6px;
     font-family: Arial, sans-serif;
     font-weight: 500;
-    font-style: normal;
     font-size: 1.2em;
     min-width: 152px;
     margin: 0;

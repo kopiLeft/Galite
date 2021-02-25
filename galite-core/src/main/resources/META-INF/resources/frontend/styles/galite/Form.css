@@ -29,6 +29,9 @@
     padding: 0 20px;
 }
 
+/*
+ *  Style for forms and reports names
+ */
 #session span a span {
     color: black;
     font-size: 14px;
@@ -45,21 +48,10 @@
 }
 
 /*
- *  Style for forms and reports names
- */
-#k-window-caption {
-    margin: 0;
-    box-sizing: border-box;
-    padding: 0;
-    border: 0;
-    color: black;
-}
-
-/*
  * Form blocks style
  */
 .k-block {
-    padding: 22px 50px 22px 50px;
+    padding: 22px 20px 22px 50px;
     margin-bottom: 16px;
     background: #ffffff;
     display: inline-block;
@@ -104,6 +96,7 @@
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     background: var(--lumo-tint);
 }
+
 /*
  * Main Window's style
  */
@@ -135,4 +128,13 @@ html {
     width: 100%;
     background: #009bd4;
     color: #ffffff;
+}
+
+/*
+ * Form items style
+ */
+vaadin-form-item {
+    margin: 8px;
+    flex-direction: row;
+    align-items: flex-end;
 }

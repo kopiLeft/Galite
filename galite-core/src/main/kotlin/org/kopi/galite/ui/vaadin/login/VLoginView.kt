@@ -24,8 +24,6 @@ import org.kopi.galite.ui.vaadin.common.VSimpleTable
 /**
  * The login view containing the login panel box.
  */
-@CssImport(value = "./styles/galite/Vaadin-password.css",
-           themeFor = "vaadin-password-field")
 class VLoginView : VSimpleTable() {
   //---------------------------------------------------
 // IMPLEMENTATIONS

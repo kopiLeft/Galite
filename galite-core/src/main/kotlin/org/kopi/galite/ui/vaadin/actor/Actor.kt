@@ -23,7 +23,6 @@ import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Image
 
 /**

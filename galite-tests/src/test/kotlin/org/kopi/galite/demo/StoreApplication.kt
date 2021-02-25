@@ -241,7 +241,6 @@ fun addClients() {
   addClient(0, "Mohamed", "Salah", "10,Rue du Lac", 40, "Tunisia", "Megrine", 2001)
   addClient(1, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "Tunisia", "Tunis", 6000)
   addClient(2, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "Tunisia", "Mourouj", 5003)
-  addClient(3, "Mohamed", "Nouri", "23,Rue de La Liberte", 56, "Tunisia", "Megrine", 2001)
 }
 
 fun addClient(id: Int, firstName: String, lastName: String, address: String, age: Int, country: String, city: String, zipcode: Int) {

@@ -24,28 +24,19 @@
     --lumo-space-m: 1rem;
 }
 
-#header #welcome {
-    margin-left: auto;
-    margin-right: var(--lumo-space-m);
-}
-
 #moduleList {
     display: block;
     max-width: 85%;
     margin-left: 0;
-    height: 63px;
 }
 
 #welcomeContainer {
     box-sizing: border-box;
     height: 63px;
     display: table-cell;
-    text-align: center;
     vertical-align: middle;
     width : 10%;
-    padding: 0;
-    margin-top: 15px;
-    justify-content: flex-start;
+    --lumo-font-size-m: 0.700rem;
 }
 
 #welcomeContainer > * {
@@ -53,14 +44,35 @@
     padding-top: 15px;
 }
 
-#horizontalAlignContainer {
-    padding-top: 15px;
-}
-
+/*
+ * Change Logo's style
+ */
 #companyLogo {
     display: table-cell;
     width: 10%;
     border-right: 1px solid #dadada;
+}
+
+/*
+ * Change the dots' style
+ */
+::part(overflow-button) {
+    margin: 0;
+    --lumo-font-family:  Arial, sans-serif;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.800rem;
+    border-right: 1px solid #dadada;
+    height: 63px;
+    background-color: var(--lumo-tint);
+    box-sizing: border-box;
+}
+
+ /*
+ * Change the dots' style when hovered
+ */
+::part(overflow-button):hover {
+    background-color: #d9f0f8;
 }
 
 /*
@@ -118,13 +130,4 @@ user , admin , wrk context and bookmark
     height: 63px;
     box-sizing: border-box;
     --lumo-space-m: 0;
-}
-
-::part(reveal-button)::before {
-    content: var(--lumo-icons-eye);
-    font-size: var(--lumo-icon-size-xxs);
-}
-
-#vaadin-password-field-input-0: {
-    --lumo-text-field-size: var(--lumo-size-xs);
 }
