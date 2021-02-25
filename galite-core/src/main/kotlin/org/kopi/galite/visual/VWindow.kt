@@ -143,7 +143,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * -) THIS method should do as less as possible
    * -) THIS method should need be used to fix the model
    */
-  open fun executedAction(action: Action) {
+  open fun executedAction(action: Action?) {
     // overridden in VForm
     // nothing to do here
   }

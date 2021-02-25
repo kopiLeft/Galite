@@ -74,16 +74,7 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
         val row = event.item
         val col = event.column.key.toInt()
         if (model.isRowLine(row)) {
-/*        performAsyncAction(object : Action("edit_line") {
-          override fun execute() {
-            try {
-              report.editLine()
-            } catch (ve: VException) {
-              // exception thrown by trigger.
-              throw ve
-            }
-          }
-        })*/
+          //TODO
         } else {
           if (row.visible) {
             if (model.isRowFold(row, col)) {

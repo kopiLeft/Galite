@@ -245,7 +245,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override var localizationManager: LocalizationManager? = null
 
-  override fun displayError(parent: UComponent, message: String?) {
+  override fun displayError(parent: UComponent?, message: String?) {
     error(message)
   }
 

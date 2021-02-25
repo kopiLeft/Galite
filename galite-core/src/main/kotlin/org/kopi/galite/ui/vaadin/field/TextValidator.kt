@@ -171,3 +171,47 @@ class DateValidator<T>: TextValidator<T> {
     return ValidationResult.ok()
   }
 }
+
+/**
+ * A week validator.
+ */
+class WeekValidator<T>(): TextValidator<T> {
+
+  override fun apply(value: T, context: ValueContext?): ValidationResult {
+    //TODO("Not yet implemented")
+    return ValidationResult.ok()
+  }
+}
+
+/**
+ * A Month validator.
+ */
+class MonthValidator<T>(): TextValidator<T> {
+
+  override fun apply(value: T, context: ValueContext?): ValidationResult {
+    //TODO("Not yet implemented")
+    return ValidationResult.ok()
+  }
+}
+
+/**
+ * A time validator.
+ */
+class TimeValidator<T>(): TextValidator<T> {
+
+  override fun apply(value: T, context: ValueContext?): ValidationResult {
+    //TODO("Not yet implemented")
+    return ValidationResult.ok()
+  }
+}
+
+/**
+ * A Timestamp validator.
+ */
+class TimestampValidator<T>(): TextValidator<T> {
+
+  override fun apply(value: T, context: ValueContext?): ValidationResult {
+    //TODO("Not yet implemented")
+    return ValidationResult.ok()
+  }
+}

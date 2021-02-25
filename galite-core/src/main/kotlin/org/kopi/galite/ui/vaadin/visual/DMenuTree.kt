@@ -164,8 +164,4 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   override fun getBookmark(): UMenuTree.UBookmarkPanel? {
     TODO("Not yet implemented")
   }
-
-  override fun showApplicationInformation(message: String) {
-    TODO("Not yet implemented")
-  }
 }
