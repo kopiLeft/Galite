@@ -148,6 +148,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   /**
    * Adds a window to this main window.
    * @param window The window to be added.
+   * @param title The window title.
    */
   fun addWindow(window: Component, title: String) {
     windowsList.add(window)

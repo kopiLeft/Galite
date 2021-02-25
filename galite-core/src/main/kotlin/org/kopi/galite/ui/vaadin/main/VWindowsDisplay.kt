@@ -45,6 +45,12 @@ class VWindowsDisplay : Div() {
     TODO()
   }
 
+  /**
+   * Adds a window to the [VWindowsMenu].
+   * @param container The container of the window.
+   * @param window The window to be added.
+   * @param title The window title.
+   */
   fun addItem(container : VWindowContainer, window: Component, title : String) {
     menu.addItem(container, window, title)
   }

@@ -17,9 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import org.kopi.galite.ui.vaadin.base.Styles
+
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -32,9 +35,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * The menu aims to show the opened windows by the user.
  * From this menu, the user can switch to another window.
  */
-class VWindowsMenu : EnhancedDialog() {
+class VWindowsMenu : EnhancedDialog(), HasStyle {
 
   init {
+    className = Styles.MAIN_WINDOW
     this.width = "5%"
     this.height = "60%"
     val headerIcon = Icon(VaadinIcon.COPY_O)
@@ -47,6 +51,12 @@ class VWindowsMenu : EnhancedDialog() {
     this.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
   }
 
+  /**
+   * Adds a window like an [VWindowsMenuItem] into the [VWindowsMenu].
+   * @param container The container of the window.
+   * @param window The window to be added.
+   * @param title The window title.
+   */
   fun addItem(container : VWindowContainer, window : Component, title : String) {
     val item = VWindowsMenuItem(title, window, container)
 

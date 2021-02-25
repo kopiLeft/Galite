@@ -19,22 +19,23 @@ package org.kopi.galite.ui.vaadin.main
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.button.Button
-import org.kopi.galite.ui.vaadin.common.VContent
 
 /**
  * Class for menu items in the already opened windows menu.
+ *
+ * @param title The window title.
+ * @param window The window to be added.
+ * @param container The container of the window.
  */
 class VWindowsMenuItem(title : String, window : Component, container : VWindowContainer) : Button(title) {
 
   init {
-
+    className = STYLENAME_DEFAULT
+    element.style.set("whiteSpace", "nowrap")
+    // adding listener on the item to open the form in the container
     addClickListener {
-      ui.ifPresent { myUi ->
-      myUi.access {
-        container.addWindow(window, title)
-        container.showWindow(window)
-      }
-    }
+      window.isVisible = true
+      container.showWindow(window)
     }
   }
 
@@ -43,16 +44,5 @@ class VWindowsMenuItem(title : String, window : Component, container : VWindowCo
     // DATA MEMBERS
     //---------------------------------------------------
     private const val STYLENAME_DEFAULT = "item"
-  }
-
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates a new already opened window item.
-   */
-  init {
-    element.setAttribute("name",STYLENAME_DEFAULT)
-    element.setAttribute("whiteSpace","nowrap")
   }
 }
