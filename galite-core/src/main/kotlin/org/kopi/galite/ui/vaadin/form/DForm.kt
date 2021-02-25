@@ -260,7 +260,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   }
 
   override fun getBlockView(block: VBlock?): UBlock? {
-    val blocks: Array<VBlock> = vForm!!.blocks
+    val blocks: Array<VBlock> = vForm.blocks
     for (i in blocks.indices) {
       if (block == blocks[i]) {
         return blockViews[i]

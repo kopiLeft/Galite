@@ -260,11 +260,11 @@ abstract class VForm : VWindow, VConstants {
    * -) THIS method should do as less as possible
    * -) THIS method should need be used to fix the model
    */
-  override fun executedAction(action: Action) {
+  override fun executedAction(action: Action?) {
     checkForm(action)
   }
 
-  private fun checkForm(action: Action) {
+  private fun checkForm(action: Action?) {
     // !!! fixes model (if left in a bad state)
     if (activeBlock == null) {
       var i = 0

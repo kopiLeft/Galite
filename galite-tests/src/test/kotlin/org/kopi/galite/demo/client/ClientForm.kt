@@ -62,37 +62,37 @@ class Clients : FormBlock(1, 1, "Clients") {
     help = "The client id"
     columns(u.idClt)
   }
-  val fstnameClt = visit(domain = Domain<String>(25), position = at(1, 1)) {
+  val fstnameClt = visit(domain = Domain<String>(25), position = at(2, 1)) {
     label = "First Name"
     help = "The client first name"
     columns(u.firstNameClt)
   }
-  val nameClt = visit(domain = Domain<String>(25), position = at(1, 2)) {
+  val nameClt = visit(domain = Domain<String>(25), position = at(2, 2)) {
     label = "Last name"
     help = "The client last name"
     columns(u.lastNameClt)
   }
-  val ageClt = visit(domain = Domain<Int>(3), position = at(2, 1)) {
+  val ageClt = visit(domain = Domain<Int>(3), position = at(3, 1)) {
     label = "Age"
     help = "The client age"
     columns(u.ageClt)
   }
-  val addressClt = visit(domain = Domain<String>(20), position = at(2, 2)) {
+  val addressClt = visit(domain = Domain<String>(20), position = at(3, 2)) {
     label = "Address"
     help = "The client address"
     columns(u.addressClt)
   }
-  val countryClt = visit(domain = Domain<String>(12), position = at(3, 1)) {
+  val countryClt = visit(domain = Domain<String>(12), position = at(4, 1)) {
     label = "Country"
     help = "The client country"
     columns(u.countryClt)
   }
-  val cityClt = visit(domain = Domain<String>(12), position = at(3, 2)) {
+  val cityClt = visit(domain = Domain<String>(12), position = at(4, 2)) {
     label = "City"
     help = "The client city"
     columns(u.cityClt)
   }
-  val zipCodeClt = visit(domain = Domain<Int>(12), position = at(3, 3)) {
+  val zipCodeClt = visit(domain = Domain<Int>(12), position = at(4, 3)) {
     label = "Zip code"
     help = "The client zip code"
     columns(u.zipCodeClt)
