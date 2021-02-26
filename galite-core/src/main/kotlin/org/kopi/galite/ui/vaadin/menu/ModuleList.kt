@@ -40,7 +40,7 @@ open class ModuleList : Div(), HasComponents {
     }
 
   init {
-    setId("moduleList")
+    setId("module_list")
     setWidthFull()
     add(menu); // add it to container.
   }

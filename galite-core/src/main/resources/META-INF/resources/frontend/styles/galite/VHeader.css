@@ -23,7 +23,7 @@
     --lumo-space-m: 1rem;
 }
 
-#moduleList {
+#module_list {
     display: block;
     max-width: 85%;
     margin-left: 0;
@@ -76,7 +76,7 @@
 /*
  * Modules style
  */
-#moduleList :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
+#module_list :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
     margin: 0;
     --lumo-font-family: Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
@@ -87,7 +87,7 @@
     box-sizing: border-box;
 }
 
-#moduleList :not(#user_menu):first-child::part(menu-bar-button):hover {
+#module_list :not(#user_menu):first-child::part(menu-bar-button):hover {
     background-color: #d9f0f8;
 }
 
@@ -122,7 +122,7 @@ user , admin , wrk context and bookmark
     padding: var(--lumo-space-xxs);
 }
 
-#moduleList :not(#user_menu):first-child::part(menu-bar-button) {
+#module_list :not(#user_menu):first-child::part(menu-bar-button) {
     background-color: var(--lumo-base-color);
     border-right: 1px solid #dadada;
     height: 63px;
