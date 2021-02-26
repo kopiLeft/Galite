@@ -84,10 +84,10 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     content.width = "100%"
     content.height = "100%"
     setContent(main)
+    addLinksListeners()
     Shortcuts.addShortcutListener(this, this::goToPreviousPage, Key.PAGE_UP, KeyModifier.of("Alt"))
     Shortcuts.addShortcutListener(this, this::goToNextPage, Key.PAGE_DOWN, KeyModifier.of("Alt"))
     instance = this
-    windowsLink.addClickListener { windowsMenu.openPopUp() }
   }
 
   companion object {
@@ -154,7 +154,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     windowsList.add(window)
     container.addWindow(window, title)
     container.showWindow(window)
-    windowsMenu.addItem(container, window, title)
+    windowsMenu.addWindow(container, window, title)
   }
 
   /**
@@ -180,6 +180,26 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
 
       welcome.setConnectedUser(value)
     }
+
+  /**
+   * Shows the opened windows menu.
+   */
+  fun showWindowsMenu() {
+    windowsMenu.openPopUp()
+  }
+
+  /**
+   * Adds the global links listeners
+   */
+  fun addLinksListeners() {
+    windowsLink.addClickListener {
+      if (windowsLink.isEnabled) {
+        windowsLink.showLabel()
+        windowsLink.focus()
+        showWindowsMenu()
+      }
+    }
+  }
 
   /**
    * Adds a main window listener.

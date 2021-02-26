@@ -51,8 +51,8 @@ class VWindowsDisplay : Div() {
    * @param window The window to be added.
    * @param title The window title.
    */
-  fun addItem(container : VWindowContainer, window: Component, title : String) {
-    menu.addItem(container, window, title)
+  fun addWindow(container : VWindowContainer, window: Component, title : String) {
+    menu.addWindow(container, window, title)
   }
 
   fun openPopUp() {

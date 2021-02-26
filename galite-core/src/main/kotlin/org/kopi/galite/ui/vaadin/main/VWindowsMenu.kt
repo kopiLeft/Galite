@@ -39,8 +39,6 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
 
   init {
     className = Styles.MAIN_WINDOW
-    this.width = "5%"
-    this.height = "60%"
     val headerIcon = Icon(VaadinIcon.COPY_O)
     val headerText = Label("Changer de fenêtre")
     val header = HorizontalLayout()
@@ -57,7 +55,7 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
    * @param window The window to be added.
    * @param title The window title.
    */
-  fun addItem(container : VWindowContainer, window : Component, title : String) {
+  fun addWindow(container : VWindowContainer, window : Component, title : String) {
     val item = VWindowsMenuItem(title, window, container)
 
     item.addClickListener { this.close() }
