@@ -29,7 +29,7 @@ import com.vaadin.flow.component.html.Div
  * @param col The column number.
  * @param line The row number.
  */
-class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
+open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
   var align: BlockAlignment? = null
   private var follows: MutableList<Component>? = null
   private var followsAligns: MutableList<ComponentConstraint>? = null
@@ -204,7 +204,7 @@ class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line) {
    * @param targets The alignment targets.
    * @param isChart Is the original block chart ?
    */
-  fun setBlockAlignment(ori: Component, targets: IntArray, isChart: Boolean) {
+  open fun setBlockAlignment(ori: Component, targets: IntArray, isChart: Boolean) {
     align = BlockAlignment()
 
     align!!.isChart = isChart

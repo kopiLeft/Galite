@@ -101,7 +101,7 @@ class TextField(val model: VField,
   var maxScale = 0
 
   /**
-   * Is this field a fraction one ?
+   * Is this field a isFraction one ?
    */
   var fraction = false
 
@@ -362,7 +362,6 @@ class TextField(val model: VField,
       classNames.remove("text-field-blink")
     }
   }
-
 
   /**
    * Returns if he field is read only.

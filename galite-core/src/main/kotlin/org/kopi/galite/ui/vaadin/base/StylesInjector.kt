@@ -82,7 +82,7 @@ class StylesInjector {
       // apply only when needed.
       if (align != VConstants.ALG_LEFT || foreground != null || background != null) {
         //BackgroundThreadHandler.access(Runnable { TODO: access
-        //Page.getCurrent().getStyles().add(toCSS()) TODO
+          //Page.getCurrent().getStyles().add(toCSS()) TODO
         //}
       }
     }

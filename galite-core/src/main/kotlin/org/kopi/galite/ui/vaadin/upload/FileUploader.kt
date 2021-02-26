@@ -70,7 +70,7 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
    * @param mimeType The mime type to be uploaded.
    * @return The uploaded bytes.
    */
-  fun upload(mimeType: String?): ByteArray? {
+  fun upload(mimeType: String?): ByteArray {
     TODO()
   }
 

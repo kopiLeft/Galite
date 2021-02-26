@@ -38,21 +38,29 @@ import org.kopi.galite.visual.VRuntimeException
  * the [UForm] specifications.
  */
 class DForm(model: VForm) : DWindow(model), UForm, FormListener {
-
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
   /**
-   * The current page index.
+   * Returns the current page index.
+   * @return The current page index.
    */
   var currentPage = -1
-  private var content: Form = Form(pageCount, model.pages)
-  private var blockListener: BlockListener = BlockAccessHandler()
-  private var blockViews: Array<DBlock?>
-  private var blockRecordHandler = BlockRecordHandler()
-
+  private val content: Form = Form(pageCount, model.pages)
+  private val blockListener: BlockListener = BlockAccessHandler()
+  private val blockViews: Array<DBlock?>
+  private val blockRecordHandler: BlockRecordHandler = BlockRecordHandler()
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+  /**
+   * Creates a new `DForm` instance.
+   * @param model The form model.
+   */
   init {
-    content = Form(pageCount, model.pages)
-    // content.locale = application.defaultLocale TODO
+    // content.locale = application.defaultLocale.toString() TODO
     model.addFormListener(this)
-    // content.addFormListener(this) TODO
+    //content.addFormListener(this) TODO
     getModel().setDisplay(this)
     val blockCount = vForm.getBlockCount()
     blockViews = arrayOfNulls(blockCount)
@@ -137,16 +145,21 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @param i The page index.
    */
   fun gotoPage(i: Int) {
-    content.gotoPage(i)
+    currentPage = i
+    //BackgroundThreadHandler.access(Runnable { TODO
+      content.gotoPage(i)
+    //})
   }
 
   /**
    * Releases the form.
    */
   override fun release() {
-    vForm.removeFormListener(this)
-    for (i in blockViews.indices) {
-      vForm.getBlock(i).removeBlockListener(blockListener)
+    if (vForm != null) {
+      vForm.removeFormListener(this)
+      for (i in blockViews.indices) {
+        vForm.getBlock(i).removeBlockListener(blockListener)
+      }
     }
     super.release()
   }
@@ -278,6 +291,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // TODO
   }
 
+  override var runtimeDebugInfo: Throwable? = null
+    private set
+
   override fun launchDocumentPreview(file: String) {
     val f = File(file)
     fileProduced(f, f.name)
@@ -299,6 +315,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     override fun blockChanged() {}
     override fun blockCleared() {}
     override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
+      //BackgroundThreadHandler.access(Runnable { TODO
       if (pageCount == 1) {
         return
       }
@@ -340,7 +357,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // IMPLEMENTATION
     //---------------------------------------
     override fun blockRecordChanged(current: Int, count: Int) {
-      // TODO
+      // TODO BackgroundThreadHandler.access(Runnable {
+      content.setPosition(current, count)
+      //})
     }
   }
 }

@@ -29,8 +29,7 @@ import org.kopi.galite.ui.vaadin.base.Utils
  *
  * @param rowController The row controller.
  */
-open class DFieldHandler(rowController: VFieldUI) : AbstractFieldHandler(rowController) {
-
+open class DFieldHandler internal constructor(rowController: VFieldUI) : AbstractFieldHandler(rowController) {
   // --------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------

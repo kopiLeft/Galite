@@ -35,7 +35,8 @@ import org.kopi.galite.visual.VActor
 open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
   init {
-    setText(text)
+    //setSortable(false)
+    init(text, help)
   }
 
   //---------------------------------------------------
@@ -51,7 +52,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
   override fun init(text: String?, toolTip: String?) {
     tooltip = toolTip
-    //BackgroundThreadHandler.access(Runnable {
+    //BackgroundThreadHandler.access(Runnable { TODO
       this.text = text
       if (toolTip != null) {
         element.setProperty("title", Utils.createTooltip(toolTip))
@@ -145,6 +146,20 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     }
     return description
   }
+
+  /**
+   * Sets the info text.
+   */
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  override var infoText: String? = null
+    set(info) {
+      field = info
+      //BackgroundThreadHandler.access(Runnable { TODO
+        super@DLabel.infoText = info
+      //})
+    }
 
   /**
    * `true` is the label is in detail mode.

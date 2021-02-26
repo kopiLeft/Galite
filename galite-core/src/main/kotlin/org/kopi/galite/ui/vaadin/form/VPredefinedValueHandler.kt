@@ -17,15 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import java.awt.Color
+
 import org.kopi.galite.form.AbstractPredefinedValueHandler
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VForm
 import org.kopi.galite.type.Date
-import java.awt.Color
+import org.kopi.galite.ui.vaadin.upload.FileUploader
+import org.kopi.galite.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.ApplicationContext
+
+import com.vaadin.flow.component.Component
 
 /**
- * The `VPredefinedValueHandler` is the UI implementation of
+ * The `VPredefinedValueHandler` is the VAADIN implementation of
  * the predefined value handler specifications.
  *
  * @param model The row controller.
@@ -45,16 +51,27 @@ class VPredefinedValueHandler(model: VFieldUI,
   }
 
   override fun selectDate(date: Date): Date {
-    TODO()
+    return if (field.getDisplay() is DGridEditorField<*>) {
+      DateChooser.selectDate(date, (field.getDisplay() as DGridEditorField<*>).editor)
+    } else {
+      DateChooser.selectDate(date, field.getDisplay() as Component)
+    }!! // TODO: nullable?
   }
 
   /**
    * This method will open the file chooser to select an image.
    * @return the selected image from the user file system
    * @throws VException
-   * @see org.kopi.galite.form.PredefinedValueHandler.selectImage
+   * @see org.kopi.vkopi.lib.form.PredefinedValueHandler.selectImage
    */
   override fun selectImage(): ByteArray {
-    TODO()
+    return FileUploader().upload("image/*")
   }
+
+  /**
+   * Returns the current application instance.
+   * @return the current application instance.
+   */
+  protected val application: VApplication
+    protected get() = ApplicationContext.applicationContext.getApplication() as VApplication
 }
