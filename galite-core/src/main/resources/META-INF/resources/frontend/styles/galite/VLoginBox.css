@@ -93,13 +93,14 @@ vaadin-password-field {
     border: 0;
     border-bottom: 1px solid #dadada;
  }
-}
+
 
 #user_name:hover {
     background: #f2f2f2;
 }
 
-#user_name:focus{
+#user_name:focus {
+    outline : none;
     background: none;
     border-bottom: #009bd4 1px solid;
 }
@@ -130,8 +131,4 @@ vaadin-password-field {
     min-width: 152px;
     margin: 0;
     border: #dadada 1px solid;
-}
-
-* {
-  box-sizing: border-box;
 }

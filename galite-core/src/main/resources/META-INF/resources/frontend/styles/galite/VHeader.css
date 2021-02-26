@@ -20,7 +20,6 @@
     display: table;
     width: 100%;
     margin: 0 auto;
-    height: 63px;
     --lumo-space-m: 1rem;
 }
 
@@ -32,7 +31,6 @@
 
 #welcomeContainer {
     box-sizing: border-box;
-    height: 63px;
     display: table-cell;
     vertical-align: middle;
     width : 10%;
