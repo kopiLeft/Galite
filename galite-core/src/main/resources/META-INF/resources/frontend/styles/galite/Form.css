@@ -1,0 +1,140 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+/*
+ * Style of the reports and forms names' container
+ */
+#session {
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    box-sizing: border-box;
+    width: 100%;
+    display: table;
+    height: 44px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+/*
+ *  Style for forms and reports names
+ */
+#session span a span {
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    vertical-align: bottom;
+    font-family: Arial, sans-serif;
+}
+
+/*
+ *  Anchor's style
+ */
+#session span a {
+    text-decoration: none;
+}
+
+/*
+ * Form blocks style
+ */
+.k-block {
+    padding: 22px 20px 22px 50px;
+    margin-bottom: 16px;
+    background: #ffffff;
+    display: inline-block;
+}
+
+/*
+ * Field's values style
+ */
+::part(input-field), ::part(input-field):not(:hover) {
+    background-color: white;
+}
+
+.k-block ::part(value) {
+    --lumo-text-field-overflow-mask-image: none;
+    border-bottom: 1px solid #dadada;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    background-color: var(--lumo-base-color);
+}
+
+/*
+ * Field's values style when focused
+ */
+.k-block ::part(value):focus {
+    border-bottom: 2px solid #a3a3a3;
+    background: white;
+}
+
+.k-form-tab {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/*
+ * Copy Icon container
+ */
+#windows {
+    padding-top: 6px;
+    padding-right: 15px;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    background: var(--lumo-tint);
+}
+
+/*
+ * Main Window's style
+ */
+.k-main-window {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding-top: 63px;
+    box-sizing: border-box;
+    text-align: left;
+    display: inline-block;
+    white-space: normal;
+    vertical-align: bottom;
+    font-size: 16px;
+    line-height: normal;
+    --lumo-space-m: 0;
+}
+
+html {
+    --lumo-space-m: 0;
+}
+
+/*
+ * Actors' container style
+ */
+#actors {
+    height: 46px;
+    width: 100%;
+    background: #009bd4;
+    color: #ffffff;
+}
+
+/*
+ * Form items style
+ */
+vaadin-form-item {
+    margin: 8px;
+    flex-direction: row;
+    align-items: flex-end;
+}

@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.window
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.menubar.MenuBar
 
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -26,7 +25,6 @@ import org.kopi.galite.ui.vaadin.base.Styles
 /**
  * The actor components container.
  */
-@CssImport("./styles/galite/vActorPanelStyles.css")
 class VActorPanel : MenuBar() {
   //---------------------------------------------------
   // CONSTRUCTOR

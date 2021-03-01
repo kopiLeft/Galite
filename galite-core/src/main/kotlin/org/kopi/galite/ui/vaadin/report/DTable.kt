@@ -24,6 +24,7 @@ import org.kopi.galite.report.VReportRow
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnReorderEvent
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -37,6 +38,7 @@ import com.vaadin.flow.function.ValueProvider
  *
  * @param model The table model.
  */
+@CssImport("./styles/galite/Report.css")
 class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventListener<ItemClickEvent<VReportRow>> {
 
   //---------------------------------------------------

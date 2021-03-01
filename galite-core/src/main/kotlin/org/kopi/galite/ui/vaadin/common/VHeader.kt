@@ -19,10 +19,12 @@ package org.kopi.galite.ui.vaadin.common
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The window header component.
  */
+@CssImport("./styles/galite/VHeader.css")
 class VHeader : HorizontalLayout() {
   //---------------------------------------------------
   // DATA MEMBERS

@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.form
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -32,6 +33,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
  * @param pageCount The form page count.
  * @param titles The pages title.
  */
+@CssImport("./styles/galite/Form.css")
 class Form(val pageCount: Int, val titles: Array<String>) : Div() {
 
   /**

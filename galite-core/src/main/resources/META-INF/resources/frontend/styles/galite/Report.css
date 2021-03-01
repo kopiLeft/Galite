@@ -15,7 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-::part(overflow-button) {
-    color : white;
+/*
+ * Report style
+ */
+::part(cell header-cell) {
+     background: #f2f2f2;
 }
 
+#main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
+    --lumo-font-family:  Arial, sans-serif;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.750rem;
+}

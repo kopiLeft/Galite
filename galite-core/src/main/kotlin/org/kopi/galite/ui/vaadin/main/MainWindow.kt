@@ -35,6 +35,8 @@ import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.contextmenu.MenuItem
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.html.Div
 
 /**
  * Main application window composed of a header and content.
@@ -46,6 +48,7 @@ import com.vaadin.flow.component.contextmenu.MenuItem
  * @param logo The application logo
  * @param href The logo link.
  */
+@CssImport("./styles/galite/VLoginBox.css")
 class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
@@ -77,7 +80,14 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
 
     content.setContent(container)
     addToNavbar(header)
-    header.setWelcome(welcome)
+    val welcomeContainer = Div()
+    welcomeContainer.setId("welcome_container")
+    val horizontalAlignContainer = Div()
+    horizontalAlignContainer.setId("horizontal_align_container")
+    horizontalAlignContainer.add(welcome)
+    welcomeContainer.add(horizontalAlignContainer)
+    header.setWelcome(welcomeContainer)
+
     welcome.add(windowsLink)
     main.setContent(content)
     main.setSizeFull()
