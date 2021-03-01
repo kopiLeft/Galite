@@ -105,6 +105,69 @@ class ColumnView(val block: Block) {
   }
 
   /**
+   * Navigates to the next field in container block.
+   */
+  fun gotoNextField() {
+    if (block != null) {
+      // block.gotoNextField() TODO
+    }
+  }
+
+  /**
+   * Navigates to the previous field in container block.
+   */
+  fun gotoPrevField() {
+    if (block != null) {
+      // block.gotoPrevField() TODO
+    }
+  }
+
+  /**
+   * Navigates to next empty must fill field in container block.
+   */
+  fun gotoNextEmptyMustfill() {
+    if (block != null) {
+      // block.gotoNextEmptyMustfill() TODO
+    }
+  }
+
+  /**
+   * Navigates to the next record in container block.
+   */
+  fun gotoNextRecord() {
+    if (block != null) {
+      // block.gotoNextRecord() TODO
+    }
+  }
+
+  /**
+   * Navigates to the previous record in container block.
+   */
+  fun gotoPrevRecord() {
+    if (block != null) {
+      // block.gotoPrevRecord() TODO
+    }
+  }
+
+  /**
+   * Navigates to the first record in container block.
+   */
+  fun gotoFirstRecord() {
+    if (block != null) {
+      // block.gotoFirstRecord() TODO
+    }
+  }
+
+  /**
+   * Navigates to the last record in container block.
+   */
+  fun gotoLastRecord() {
+    if (block != null) {
+      // block.gotoLastRecord() TODO
+    }
+  }
+
+  /**
    * Sets the given record to be changed.
    * @param rec The record number.
    * @param val The change value.

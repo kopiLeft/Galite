@@ -23,6 +23,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.BlockListener
+import org.kopi.galite.ui.vaadin.block.ChartBlockLayout
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
@@ -39,6 +40,27 @@ import com.vaadin.flow.component.Component
  */
 open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), BlockListener {
 
+  //-------------------------------------------------
+  // DATA MEMBERS
+  //-------------------------------------------------
+  private var init = false
+
+  /*
+   * This flag was added to avoid mutual communication
+   * between client and server side when the scroll bar
+   * position is changed from the client side.
+   * Thus, scroll bar position is not changed by server
+   * side when it is changed from the client side
+   * @see {@link #refresh(boolean)
+   */
+  private var scrolling = false
+
+  init {
+    if (model.displaySize < model.bufferSize) {
+      addBlockListener(this)
+    }
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -53,7 +75,10 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
   }
 
   override fun createLayout(): BlockLayout {
-    TODO()
+    val layout = ChartBlockLayout(displayedFields, model.displaySize + 1)
+
+    layout.hasScroll = model.displaySize < model.bufferSize
+    return layout
   }
 
   override fun validRecordNumberChanged() {
@@ -78,7 +103,22 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
   }
 
   override fun onScroll(value: Int) {
-    TODO()
+    if ((getFormView() as DForm).inAction) {
+      // do not change the rows if there is currently a
+      // another command executed
+      return
+    }
+    if (!init) {
+      init = true // on initialization, we do not scroll.
+    } else {
+      try {
+        scrolling = true
+        setScrollPos(value)
+        scrolling = false
+      } catch (e: VException) {
+        e.printStackTrace()
+      }
+    }
   }
 
   override fun onActiveRecordChange(record: Int, sortedTopRec: Int) {
@@ -120,7 +160,7 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
          */
         private val isActiveBlock: Boolean
           get() = (model.form.getActiveBlock() != null
-                  && model.form.getActiveBlock() === model)
+                  && model.form.getActiveBlock() == model)
 
         /**
          * Returns `true` is there are trigger that should be fired on this block.
@@ -156,33 +196,14 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
    * Updates the scroll bar position.
    */
   private fun updateScrollbar() {
-    TODO()
-  }
+    //BackgroundThreadHandler.access(Runnable { TODO
+      val validRecords = model.numberOfValidRecord
+      val dispSize = model.displaySize
 
-  //-------------------------------------------------
-  // DATA MEMBERS
-  //-------------------------------------------------
-  private var init = false
-
-  /**
-   * This flag was added to avoid mutual communication
-   * between client and server side when the scroll bar
-   * position is changed from the client side.
-   * Thus, scroll bar position is not changed by server
-   * side when it is changed from the client side
-   * @see refresh(boolean)
-   */
-  private var scrolling = false
-
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates a new `DChartBlock` instance.
-   */
-  init {
-    if (model.displaySize < model.bufferSize) {
-      addBlockListener(this)
-    }
+      updateScroll(dispSize,
+                   validRecords,
+                   validRecords > dispSize,
+                   model.getNumberOfValidRecordBefore(getRecordFromDisplayLine(0)))
+    //})
   }
 }

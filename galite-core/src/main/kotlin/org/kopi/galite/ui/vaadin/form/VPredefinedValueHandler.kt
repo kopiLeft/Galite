@@ -17,15 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import java.awt.Color
+
 import org.kopi.galite.form.AbstractPredefinedValueHandler
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VForm
 import org.kopi.galite.type.Date
-import java.awt.Color
+import org.kopi.galite.ui.vaadin.upload.FileUploader
+import org.kopi.galite.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.ApplicationContext
+
+import com.vaadin.flow.component.Component
 
 /**
- * The `VPredefinedValueHandler` is the UI implementation of
+ * The `VPredefinedValueHandler` is the VAADIN implementation of
  * the predefined value handler specifications.
  *
  * @param model The row controller.
@@ -34,7 +40,8 @@ import java.awt.Color
  */
 class VPredefinedValueHandler(model: VFieldUI,
                               form: VForm,
-                              field: VField) : AbstractPredefinedValueHandler(model, form, field) {
+                              field: VField)
+  : AbstractPredefinedValueHandler(model, form, field) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -45,7 +52,11 @@ class VPredefinedValueHandler(model: VFieldUI,
   }
 
   override fun selectDate(date: Date): Date {
-    TODO()
+    return if (field.getDisplay() is DGridEditorField<*>) {
+      DateChooser.selectDate(date, (field.getDisplay() as DGridEditorField<*>).editor)
+    } else {
+      DateChooser.selectDate(date, field.getDisplay() as Component)
+    }!! // TODO: nullable?
   }
 
   /**
@@ -54,7 +65,12 @@ class VPredefinedValueHandler(model: VFieldUI,
    * @throws VException
    * @see org.kopi.galite.form.PredefinedValueHandler.selectImage
    */
-  override fun selectImage(): ByteArray {
-    TODO()
-  }
+  override fun selectImage(): ByteArray = FileUploader().upload("image/*")
+
+  /**
+   * Returns the current application instance.
+   * @return the current application instance.
+   */
+  protected val application: VApplication
+    get() = ApplicationContext.applicationContext.getApplication() as VApplication
 }

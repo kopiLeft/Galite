@@ -363,7 +363,6 @@ class TextField(val model: VField,
     }
   }
 
-
   /**
    * Returns if he field is read only.
    */

@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import org.kopi.galite.ui.vaadin.base.Styles
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
@@ -26,11 +24,36 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.Tabs
+import org.kopi.galite.ui.vaadin.base.Styles
 
 /**
  * The form component.
+ *
+ * @param pageCount The form page count.
+ * @param titles The pages title.
  */
-class Form(pageCount: Int, titles: Array<String>) : Div() {
+class Form(val pageCount: Int, val titles: Array<String>) : Div() {
+
+  /**
+   * The form locale.
+   */
+  var locale: String? = null
+
+  /**
+   * The current position
+   */
+  var currentPosition = 0
+
+  /**
+   * Total positions
+   */
+  var totalPositions = 0
+
+  /**
+   * The blocks components data.
+   */
+  //var blocksData: Map<Connector, BlockComponentData> = HashMap<Connector, BlockComponentData>() TODO
+
   private var currentPage = -1
   private val pages: Array<Page<*>?> = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
   private val tabsToPages: MutableMap<Tab, Component> = mutableMapOf()
@@ -132,5 +155,15 @@ class Form(pageCount: Int, titles: Array<String>) : Div() {
   fun gotoPage(i: Int) {
     currentPage = i
     selectPage(i)
+  }
+
+  /**
+   * Sets the block info position.
+   * @param current The current record.
+   * @param total The total records.
+   */
+  fun setPosition(current: Int, total: Int) {
+    currentPosition = current
+    totalPositions = total
   }
 }

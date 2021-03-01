@@ -17,20 +17,47 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import java.util.*
+
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.type.Date
 
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.datepicker.DatePicker
+import org.kopi.galite.type.Month
+import java.time.LocalDate
 
 /**
  * The `DateChooser` is date selection component.
- * @param date The initial date.
  *
- * TODO: Implement this with appropriate componenet
+ * @param selectedDate The initial date.
  */
-class DateChooser(date: Date?, reference: Component) : Component(), UComponent, DateChooserListener {
+class DateChooser(private var selectedDate: Date?,
+                  reference: Component?)
+  : DatePicker(),
+        UComponent,
+        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate>> {
+
+  /**
+   * Returns the first day of the selected month.
+   * @return The first day of the selected month.
+   */
+  val firstDay = 0
+
+  init {
+    // showRelativeTo(reference) TODO
+    // setToDay(VlibProperties.getString("today")) TODO
+    if (selectedDate != null) {
+      //super.setSelectedDate(date.toCalendar().time) TODO
+    }
+    addValueChangeListener(this)
+    locale = application.defaultLocale
+    //setOffset(Date().timezoneOffset) TODO
+  }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -40,15 +67,18 @@ class DateChooser(date: Date?, reference: Component) : Component(), UComponent, 
    * @param date The initial date.
    * @return The selected date.
    */
-  private fun doModal(date: Date?): Date {
-    TODO()
+  private fun doModal(date: Date): Date? {
+    //BackgroundThreadHandler.startAndWait(Runnable { TODO
+    application.attachComponent(this@DateChooser)
+    //}, this)
+    return selectedDate
   }
 
   /**
    * Disposes the date chooser.
    */
   protected fun dispose() {
-    TODO()
+    application.detachComponent(this)
   }
 
   /**
@@ -77,27 +107,24 @@ class DateChooser(date: Date?, reference: Component) : Component(), UComponent, 
    * Sets the selected date.
    * @param selectedDate The selected date.
    */
-  fun setSelectedDate(selectedDate: Date?) {
+  fun setSelectedDate(selectedDate: Date) {
     this.selectedDate = selectedDate
   }
 
   //-------------------------------------------------
   // DATE CHOOSER LISTENER IMPLEMENTATION
   //-------------------------------------------------
-  override fun onClose(selected: java.util.Date?) {
-    TODO()
+
+  override fun valueChanged(event: ComponentValueChangeEvent<DatePicker, LocalDate>) {
+    val selected = event.value
+    if (selected != null) {
+      val cal: Calendar = Calendar.getInstance(ApplicationContext.getDefaultLocale())
+      //cal.time = selected TODO
+      setSelectedDate(Date(cal))
+    }
+    dispose()
+    //BackgroundThreadHandler.releaseLock(this) TODO
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var selectedDate: Date? = date
-
-  /**
-   * Returns the first day of the selected month.
-   * @return The first day of the selected month.
-   */
-  val firstDay = 0
 
   companion object {
     //---------------------------------------------------
@@ -108,7 +135,7 @@ class DateChooser(date: Date?, reference: Component) : Component(), UComponent, 
      * @param date The initial date.
      * @return The selected date.
      */
-    fun selectDate(date: Date, reference: Component): Date {
+    fun selectDate(date: Date, reference: Component): Date? {
       val chooser = DateChooser(date, reference)
       return chooser.doModal(date)
     }
@@ -117,17 +144,8 @@ class DateChooser(date: Date?, reference: Component) : Component(), UComponent, 
      * Returns the number of days in the specified month
      * @return The number of days in the specified month
      */
-    /*package*/
-    fun getDaysInMonth(d: Date?): Int {
-      TODO()
+    fun getDaysInMonth(d: Date): Int {
+      return Month(d).getLastDay().day
     }
-  }
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
   }
 }
