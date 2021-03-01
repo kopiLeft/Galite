@@ -61,7 +61,7 @@ abstract class DField(internal val model: VFieldUI,
     addFieldListener(this)
     visibleHeight = when {
       getModel() is VStringField -> {
-        (getModel() as VStringField?)!!.getVisibleHeight()
+        (getModel() as VStringField).getVisibleHeight()
       }
       getModel() is VImageField -> {
         /*

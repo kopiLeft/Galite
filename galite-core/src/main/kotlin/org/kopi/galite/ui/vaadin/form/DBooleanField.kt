@@ -17,14 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.customfield.CustomField
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.field.BooleanField
 import org.kopi.galite.ui.vaadin.field.ObjectField
+
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.customfield.CustomField
 
 /**
  * Boolean field.
@@ -50,6 +51,7 @@ class DBooleanField(
   // --------------------------------------------------
   private val field: BooleanField
   private var inside = false
+
   // --------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------
@@ -98,6 +100,7 @@ class DBooleanField(
       getModel().block!!.activeField = getModel()
     }
     val text = getModel().toText(event!!.value)
+
     if (getModel().checkText(text!!)) {
       getModel().changedUI = true
       getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.value)
@@ -115,9 +118,7 @@ class DBooleanField(
     //})
   }
 
-  override fun getObject(): Any? {
-    return text
-  }
+  override fun getObject(): Any? = text
 
   override fun setBlink(b: Boolean) {
     //BackgroundThreadHandler.access(Runnable { TODO
@@ -125,9 +126,7 @@ class DBooleanField(
     //})
   }
 
-  override fun getText(): String? {
-    return getModel().toText(field.value)
-  }
+  override fun getText(): String? = getModel().toText(field.value)
 
   override fun setHasCriticalValue(b: Boolean) {}
 

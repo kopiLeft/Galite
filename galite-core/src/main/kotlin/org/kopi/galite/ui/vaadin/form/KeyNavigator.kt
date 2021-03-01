@@ -30,13 +30,7 @@ import java.io.IOException
 /**
  * Text field key navigation.
  */
-class KeyNavigator(model: VField?, box: TextField?) : TextFieldListener {
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val model = model
-  private val box = box
+class KeyNavigator(private val model: VField?, private val box: TextField?) : TextFieldListener {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

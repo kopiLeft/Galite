@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UMultiBlock
@@ -27,6 +26,8 @@ import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.MultiBlockLayout
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
+
+import com.vaadin.flow.component.Component
 
 /**
  * The `DMultiBlock` is the UI implementation
@@ -49,9 +50,7 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
                                                   constraints.useAll)*/
   }
 
-  override fun inDetailMode(): Boolean {
-    return model.detailMode
-  }
+  override fun inDetailMode(): Boolean = model.detailMode
 
   override fun createLayout(): BlockLayout {
     TODO()

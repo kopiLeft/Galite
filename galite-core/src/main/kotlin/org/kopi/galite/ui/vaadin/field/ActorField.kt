@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.base.Styles
+
 import com.vaadin.flow.component.BlurNotifier
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
@@ -25,7 +27,6 @@ import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.shared.Registration
-import org.kopi.galite.ui.vaadin.base.Styles
 
 /**
  * The actor field server side implementation

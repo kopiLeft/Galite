@@ -80,9 +80,7 @@ class DImageField(
   // --------------------------------------------------
   // IMPLEMENTATION OF ABSTRACTS METHODS
   // --------------------------------------------------
-  override fun getObject(): Any? {
-    return image
-  }
+  override fun getObject(): Any? = image
 
   override fun setBlink(b: Boolean) {
     // TODO
@@ -140,9 +138,8 @@ class DImageField(
    * @param baseName The base name.
    * @return The dynamic image name.
    */
-  protected fun createFileName(baseName: String): String {
-    return baseName + Date.now().format("yyyyMMddHHmmssSSS").toString() + ".png"
-  }
+  protected fun createFileName(baseName: String): String =
+          baseName + Date.now().format("yyyyMMddHHmmssSSS").toString() + ".png"
   //---------------------------------------------------
   // STREAM RESOURCE
   //---------------------------------------------------
@@ -156,9 +153,7 @@ class DImageField(
 
     override fun getOutputStream(): OutputStream = output
 
-    override fun listenProgress(): Boolean {
-      return true
-    }
+    override fun listenProgress(): Boolean = true
 
     override fun onProgress(event: StreamVariable.StreamingProgressEvent) {
       // show progress only when the file is bigger than 50MB

@@ -17,13 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.base.Styles
+
 import com.vaadin.flow.component.BlurNotifier
 import com.vaadin.flow.component.FocusNotifier
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import org.kopi.galite.ui.vaadin.base.Styles
 
 
 /**
@@ -115,8 +116,8 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
 
   override fun setParentVisibility(visible: Boolean) {
     if (value == null) {
-      // yes.element.style.setVisibility(Visibility.HIDDEN) TODO
-      // no.element.style.setVisibility(Visibility.HIDDEN) TODO
+      yes.element.style["visibility"] = "hidden"
+      no.element.style["visibility"] = "hidden"
       // removeStyleDependentName("visible") TODO
     } else {
       isVisible = visible
@@ -126,13 +127,13 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
 
   override fun setVisible(visible: Boolean) {
     if (!forceHiddenVisibility && visible) {
-      //yes.element.style.setVisibility(Visibility.VISIBLE)
-      //no.element.style.setVisibility(Visibility.VISIBLE)
-      //addStyleDependentName("visible")
+      yes.element.style["visibility"] = "visible"
+      no.element.style["visibility"] = "visible"
+      //addStyleDependentName("visible") TODO
     } else {
-      //yes.element.style.setVisibility(Visibility.HIDDEN)
-      //no.element.style.setVisibility(Visibility.HIDDEN)
-      //removeStyleDependentName("visible")
+      yes.element.style["visibility"] = "hidden"
+      no.element.style["visibility"] = "hidden"
+      //removeStyleDependentName("visible") TODO
     }
   }
 

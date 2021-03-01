@@ -79,9 +79,8 @@ class DListDialog(
     return handleClientResponse()
   }
 
-  override fun selectFromDialog(window: UWindow, showSingleEntry: Boolean): Int {
-    return selectFromDialog(window, null, showSingleEntry)
-  }
+  override fun selectFromDialog(window: UWindow, showSingleEntry: Boolean): Int =
+          selectFromDialog(window, null, showSingleEntry)
 
   /**
    * Returns the previous item ID according to the currently selected one.
@@ -136,13 +135,12 @@ class DListDialog(
    * @return The selected item.
    * @throws VException Visual errors.
    */
-  protected fun doNewForm(form: VForm?, cstr: VDictionary?): Int {
-    return if (form != null && cstr != null) {
-      cstr.add(form)
-    } else {
-      VListDialog.NEW_CLICKED
-    }
-  }
+  protected fun doNewForm(form: VForm?, cstr: VDictionary?): Int =
+          if (form != null && cstr != null) {
+            cstr.add(form)
+          } else {
+            VListDialog.NEW_CLICKED
+          }
 
   /**
    * Prepares the dialog content.

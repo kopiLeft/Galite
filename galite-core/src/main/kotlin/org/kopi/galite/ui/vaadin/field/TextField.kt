@@ -101,7 +101,7 @@ class TextField(val model: VField,
   var maxScale = 0
 
   /**
-   * Is this field a isFraction one ?
+   * Is this field a fraction one ?
    */
   var fraction = false
 

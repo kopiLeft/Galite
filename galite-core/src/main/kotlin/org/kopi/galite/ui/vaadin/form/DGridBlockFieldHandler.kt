@@ -23,6 +23,7 @@ import org.kopi.galite.form.VFieldUI
  * Specific field handling for grid block
  */
 class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowController) {
+
   // --------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------
@@ -65,6 +66,7 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
       super.valueChanged(r)
     } else {
       val editor = getCurrentDisplay() as DGridEditorField<*>?
+
       if (editor != null && blockView.isEditorActive && blockView.editedRecord == r) {
         editor.updateText()
       }
@@ -77,6 +79,7 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
       super.colorChanged(r)
     } else {
       val editor = getCurrentDisplay() as DGridEditorField<*>?
+
       if (editor != null && blockView.isEditorActive && blockView.editedRecord == r) {
         editor.updateColor()
       }

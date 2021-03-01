@@ -97,7 +97,7 @@ class DGridBlockItemSorter(
         // Assume the objects can be cast to Comparable, throw
         // ClassCastException otherwise.
         (o1 as Comparable<Any?>).compareTo(o2)
-      } else if (o1 === o2) {
+      } else if (o1 == o2) {
         // Objects are equal if both are null
         0
       } else {

@@ -40,8 +40,19 @@ import javax.activation.MimetypesFileTypeMap
 /**
  * The `DBlockDropHandler` is the block implementation
  * of the [DropHandler] specifications.
+ *
+ * @param block The block model.
  */
-class DBlockDropHandler(block: VBlock, component: Component) : DragSource<Component> by DragSource.configure(component) {
+class DBlockDropHandler(private val block: VBlock,
+                        component: Component)
+  : DragSource<Component> by DragSource.configure(component) {
+
+  //---------------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------------
+  private var fileList: ArrayList<File>? = null
+  private var filesCount = 0
+
   //---------------------------------------------------
   // DROPTARGETLISTENER IMPLEMENTATION
   //---------------------------------------------------
@@ -342,13 +353,6 @@ class DBlockDropHandler(block: VBlock, component: Component) : DragSource<Compon
     private val bas = ByteArrayOutputStream()
   }
 
-  //---------------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------------
-  private val block: VBlock
-  private var fileList: ArrayList<File>? = null
-  private var filesCount = 0
-
   companion object {
     /**
      * Returns the file extension.
@@ -429,15 +433,5 @@ class DBlockDropHandler(block: VBlock, component: Component) : DragSource<Compon
       // missing PNG files in initial map
       MIMETYPES_FILE_TYPEMAP.addMimeTypes("image/png png")
     }
-  }
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates a new `DBlockDropHandler` instance.
-   * @param block The block model.
-   */
-  init {
-    this.block = block
   }
 }

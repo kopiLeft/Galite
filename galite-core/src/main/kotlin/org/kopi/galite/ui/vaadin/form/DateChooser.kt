@@ -42,23 +42,12 @@ class DateChooser(private var selectedDate: Date?,
         UComponent,
         HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<DatePicker, LocalDate>> {
 
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-
   /**
    * Returns the first day of the selected month.
    * @return The first day of the selected month.
    */
   val firstDay = 0
 
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates a new `DateChooser` instance.
-   */
   init {
     // showRelativeTo(reference) TODO
     // setToDay(VlibProperties.getString("today")) TODO

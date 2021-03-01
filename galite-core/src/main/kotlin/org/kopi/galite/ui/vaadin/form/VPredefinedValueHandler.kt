@@ -40,7 +40,8 @@ import com.vaadin.flow.component.Component
  */
 class VPredefinedValueHandler(model: VFieldUI,
                               form: VForm,
-                              field: VField) : AbstractPredefinedValueHandler(model, form, field) {
+                              field: VField)
+  : AbstractPredefinedValueHandler(model, form, field) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -62,16 +63,14 @@ class VPredefinedValueHandler(model: VFieldUI,
    * This method will open the file chooser to select an image.
    * @return the selected image from the user file system
    * @throws VException
-   * @see org.kopi.vkopi.lib.form.PredefinedValueHandler.selectImage
+   * @see org.kopi.galite.form.PredefinedValueHandler.selectImage
    */
-  override fun selectImage(): ByteArray {
-    return FileUploader().upload("image/*")
-  }
+  override fun selectImage(): ByteArray = FileUploader().upload("image/*")
 
   /**
    * Returns the current application instance.
    * @return the current application instance.
    */
   protected val application: VApplication
-    protected get() = ApplicationContext.applicationContext.getApplication() as VApplication
+    get() = ApplicationContext.applicationContext.getApplication() as VApplication
 }

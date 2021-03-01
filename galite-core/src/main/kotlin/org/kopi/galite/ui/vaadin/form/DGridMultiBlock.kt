@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UMultiBlock
@@ -26,6 +25,8 @@ import org.kopi.galite.form.VField
 import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
+
+import com.vaadin.flow.component.Component
 
 /**
  * A based Grid multi block implementation
@@ -101,9 +102,7 @@ class DGridMultiBlock(parent: DForm,
     return detail
   }*/
 
-  override fun inDetailMode(): Boolean {
-    return model.detailMode
-  }
+  override fun inDetailMode(): Boolean = model.detailMode
 
   override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {
     // send active record to client side before view switch

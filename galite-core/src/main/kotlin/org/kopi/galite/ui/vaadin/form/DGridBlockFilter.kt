@@ -58,7 +58,5 @@ class DGridBlockFilter(
     return onlyMatchPrefix == o.onlyMatchPrefix
   }
 
-  override fun hashCode(): Int {
-    return (propertyId?.hashCode() ?: 0) xor (filterString?.hashCode() ?: 0)
-  }
+  override fun hashCode(): Int = (propertyId?.hashCode() ?: 0) xor (filterString?.hashCode() ?: 0)
 }

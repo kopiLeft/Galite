@@ -113,7 +113,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     for (i in 0 until model.getAccessibleColumnCount()) {
       pos[i] = if (model.getDisplayOrder(i) > position) model.getDisplayOrder(i) - 1 else model.getDisplayOrder(i)
     }
-    table.dataCommunicator.reset() // FIXME
+    table.dataCommunicator.reset() // TODO
     report.columnMoved(pos)
   }
 
@@ -132,7 +132,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
       pos[i] = model.getDisplayOrder(i - 1)
     }
     pos[position] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
-    table.dataCommunicator.reset() // FIXME
+    table.dataCommunicator.reset() // TODO
     report.columnMoved(pos)
   }
 

@@ -81,8 +81,6 @@ abstract class ShortcutAction(protected val caption: String,
      * @param modifierMask The modifier mask
      * @return The unique key.
      */
-    fun createKey(keyCode: Key, modifierMask: Int): String {
-      return "$keyCode-$modifierMask"
-    }
+    fun createKey(keyCode: Key, modifierMask: Int): String = "$keyCode-$modifierMask"
   }
 }

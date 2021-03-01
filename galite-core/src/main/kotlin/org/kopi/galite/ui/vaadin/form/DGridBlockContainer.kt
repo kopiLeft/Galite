@@ -17,14 +17,17 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.data.binder.HasItemComponents
-import com.vaadin.flow.data.provider.InMemoryDataProvider
-import com.vaadin.flow.dom.Element
+import java.util.ArrayList
+
+import kotlin.reflect.KClass
+
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
 import org.kopi.galite.ui.vaadin.base.Utils
-import java.util.ArrayList
-import kotlin.reflect.KClass
+
+import com.vaadin.flow.data.binder.HasItemComponents
+import com.vaadin.flow.data.provider.InMemoryDataProvider
+import com.vaadin.flow.dom.Element
 
 /**
  * Data source container for grid block
@@ -36,7 +39,6 @@ abstract class DGridBlockContainer(
 /*Sortable,
 Filterable,
 SimpleFilterable TODO */ {
-
 
   private val propertyIds: MutableList<Int>
   protected val allItemIds: List<Int>
@@ -160,9 +162,7 @@ SimpleFilterable TODO */ {
     // IMPLEMENTATION
     // --------------------------------------------------
 
-    fun appliesToProperty(propertyId: Any?): Boolean {
-      return true
-    }
+    fun appliesToProperty(propertyId: Any?): Boolean = true
 
   }
 }

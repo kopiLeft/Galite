@@ -17,15 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.base.ShortcutAction
+import org.kopi.galite.ui.vaadin.block.ColumnView
+
 import com.vaadin.flow.component.BlurNotifier
 import com.vaadin.flow.component.FocusNotifier
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.customfield.CustomField
-import org.kopi.galite.ui.vaadin.base.ShortcutAction
-import org.kopi.galite.ui.vaadin.block.ColumnView
-import java.util.*
 
 /**
  * The Object field server side component.
@@ -215,8 +215,8 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
           private val code: Int,
           key: Key,
           modifiers: Array<out KeyModifier>,
-  )
-    : ShortcutAction("key-navigator $code", key, *modifiers) {
+  ) : ShortcutAction("key-navigator $code", key, *modifiers) {
+
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------

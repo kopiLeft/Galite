@@ -69,9 +69,7 @@ class DGridEditorImageField(
     image = s as ByteArray?
   }
 
-  override fun createEditor(): GridEditorImageField {
-    return GridEditorImageField()
-  }
+  override fun createEditor(): GridEditorImageField = GridEditorImageField()
 
   override fun createConverter(): Converter<Any?, Any?> {
     TODO()

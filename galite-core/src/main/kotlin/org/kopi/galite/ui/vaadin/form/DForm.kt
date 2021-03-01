@@ -34,13 +34,12 @@ import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VRuntimeException
 
 /**
- * The `DForm` is the vaadin implementation of
- * the [UForm] specifications.
+ * The `DForm` is the vaadin implementation of the [UForm] specifications.
+ *
+ * @param model The form model.
  */
 class DForm(model: VForm) : DWindow(model), UForm, FormListener {
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
+
   /**
    * Returns the current page index.
    * @return The current page index.
@@ -50,13 +49,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   private val blockListener: BlockListener = BlockAccessHandler()
   private val blockViews: Array<DBlock?>
   private val blockRecordHandler: BlockRecordHandler = BlockRecordHandler()
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates a new `DForm` instance.
-   * @param model The form model.
-   */
+
   init {
     // content.locale = application.defaultLocale.toString() TODO
     model.addFormListener(this)

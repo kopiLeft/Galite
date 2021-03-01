@@ -51,7 +51,7 @@ class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
     super.addComponent(component, x, y, width, height, alignRight, useAll)
   }
 
-  override fun setBlockAlignment(ori: Component, targets: IntArray, isChart: Boolean) {
+  override fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
     // not supported feature
   }
 }

@@ -17,21 +17,18 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import java.lang.reflect.Method
+
+import kotlin.collections.Collection
+
+import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.field.AbstractField
+import org.kopi.galite.ui.vaadin.field.Field
+
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.router.NavigationEvent
-import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.field.AbstractField
-import org.kopi.galite.ui.vaadin.field.Field
-import org.kopi.galite.ui.vaadin.grid.GridEditorField.AutofillEvent
-import java.io.Serializable
-import java.lang.reflect.Method
-import java.util.*
-import kotlin.collections.Collection
-import kotlin.collections.LinkedHashSet
-import kotlin.collections.List
-import kotlin.collections.indices
 
 /**
  * A grid editor field server side implementation.

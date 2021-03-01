@@ -17,9 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.AbstractField
 import java.util.Locale
 
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
@@ -39,6 +39,7 @@ class RichTextField(
 ) : Component(),
         HasValue<AbstractField.ComponentValueChangeEvent<RichTextField, String>, String>,
         Focusable<RichTextField> {
+
   override fun setValue(value: String?) {
     TODO("Not yet implemented")
   }

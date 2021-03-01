@@ -200,16 +200,16 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
   //---------------------------------------------------
   /**
    * Sets the alignment information for this simple layout.
-   * @param ori The original block to align with.
+   * @param original The original block to align with.
    * @param targets The alignment targets.
    * @param isChart Is the original block chart ?
    */
-  open fun setBlockAlignment(ori: Component, targets: IntArray, isChart: Boolean) {
+  open fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
     align = BlockAlignment()
 
     align!!.isChart = isChart
     align!!.targets = targets
-    align!!.ori = ori
+    align!!.ori = original
 
     // alignPane = VAlignPanel(align) TODO
   }

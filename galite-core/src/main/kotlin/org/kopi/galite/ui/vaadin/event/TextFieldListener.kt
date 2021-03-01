@@ -20,8 +20,7 @@ package org.kopi.galite.ui.vaadin.event
 import java.io.Serializable
 
 /**
- * A text field listener to be registered on a text field
- * for communication handler between client and server side.
+ * A text field listener to be registered actions to perform on a text field.
  */
 interface TextFieldListener : Serializable {
   /**

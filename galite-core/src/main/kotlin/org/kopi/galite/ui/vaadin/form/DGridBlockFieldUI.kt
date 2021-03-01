@@ -32,6 +32,7 @@ import org.kopi.galite.ui.vaadin.grid.GridEditorField
  * A row controller for the grid block implementation
  */
 class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI(blockView, model, index) {
+
   // --------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------
@@ -68,18 +69,14 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
     }
   }
 
-  override fun createChartHeaderLabel(
-          text: String?,
-          help: String?,
-          index: Int,
-          model: VBlock.OrderModel,
-  ): UChartLabel {
+  override fun createChartHeaderLabel(text: String?,
+                                      help: String?,
+                                      index: Int,
+                                      model: VBlock.OrderModel): UChartLabel {
     return DGridEditorLabel(text, help)
   }
 
-  override fun createFieldHandler(): FieldHandler {
-    return DGridBlockFieldHandler(this)
-  }
+  override fun createFieldHandler(): FieldHandler = DGridBlockFieldHandler(this)
 
   override fun fireDisplayCreated() {
     // no client side cache

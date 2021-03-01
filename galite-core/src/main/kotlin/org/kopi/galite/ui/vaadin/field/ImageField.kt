@@ -43,6 +43,7 @@ class ImageField : ObjectField<Any?>() {
     image!!.setBorder(0)
     // TODO
   }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -97,9 +98,7 @@ class ImageField : ObjectField<Any?>() {
     // no color for image field
   }
 
-  override fun getValue(): Any? {
-    return image!!.src
-  }
+  override fun getValue(): Any? = image!!.src
 
   override fun generateModelValue(): Any? = value
 

@@ -17,18 +17,18 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import org.kopi.galite.form.UActorField
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.form.UActorField
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.ui.vaadin.field.ActorField
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.html.Div
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.ui.vaadin.field.ActorField
 
 /**
  * UI Implementation of an actor field.
@@ -97,9 +97,7 @@ class DActorField(model: VFieldUI,
     return null
   }
 
-  override fun getText(): String? {
-    return null
-  }
+  override fun getText(): String? = null
 
   override fun setHasCriticalValue(b: Boolean) {}
 

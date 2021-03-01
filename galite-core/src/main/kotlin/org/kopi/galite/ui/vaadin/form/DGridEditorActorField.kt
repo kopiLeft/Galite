@@ -49,9 +49,7 @@ class DGridEditorActorField(
 
   override fun getObject(): Any? = null
 
-  override fun createEditor(): GridEditorActorField {
-    return GridEditorActorField(getModel().label)
-  }
+  override fun createEditor(): GridEditorActorField = GridEditorActorField(getModel().label)
 
   override fun createConverter(): Converter<String?, Any?> {
     return object : Converter<String?, Any?> {

@@ -23,13 +23,13 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.BlockListener
+import org.kopi.galite.ui.vaadin.block.ChartBlockLayout
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
 import com.vaadin.flow.component.Component
-import org.kopi.galite.ui.vaadin.block.ChartBlockLayout
 
 /**
  * The `DChartBlock` is a [DBlock] representing
@@ -76,6 +76,7 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
 
   override fun createLayout(): BlockLayout {
     val layout = ChartBlockLayout(displayedFields, model.displaySize + 1)
+
     layout.hasScroll = model.displaySize < model.bufferSize
     return layout
   }
@@ -196,8 +197,9 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
    */
   private fun updateScrollbar() {
     //BackgroundThreadHandler.access(Runnable { TODO
-      val validRecords: Int = model.numberOfValidRecord
-      val dispSize: Int = model.displaySize
+      val validRecords = model.numberOfValidRecord
+      val dispSize = model.displaySize
+
       updateScroll(dispSize,
                    validRecords,
                    validRecords > dispSize,
