@@ -30,7 +30,7 @@ import org.kopi.galite.ui.vaadin.window.VActorPanel
  * This component will be responsible of displaying only one window.
  * The control of the displayed component will be from outside.
  */
-internal class VWindowContainer : Div() {
+class VWindowContainer : Div() {
 
   //---------------------------------------------------
   // DATA MEMBERS
