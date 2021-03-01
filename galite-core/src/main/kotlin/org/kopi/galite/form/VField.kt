@@ -1062,31 +1062,21 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   /**
    * Sets the field value of the current record from a query tuple.
-   * @param     query           the query holding the tuple
+   * @param     result          the result row of the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
-  @Deprecated("use setQuery_(query: ResultRow, column: Column<*>)")
-  fun setQuery(query: Query, column: Int) {
-    setQuery(block!!.currentRecord, query, column)
-  }
-
-  fun setQuery_(query: ResultRow, column: Column<*>) {
-    setQuery_(block!!.currentRecord, query, column)
+  fun setQuery(result: ResultRow, column: Column<*>) {
+    setQuery(block!!.currentRecord, result, column)
   }
 
   /**
    * Sets the field value of given record from a query tuple.
    * @param     record          the index of the record
-   * @param     query           the query holding the tuple
+   * @param     result          the result row of the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
-  @Deprecated("use setQuery_(record: Int, query: ResultRow, column: Column<*>)")
-  fun setQuery(record: Int, query: Query, column: Int) {
-    setObject(record, retrieveQuery(query, column))
-  }
-
-  fun setQuery_(record: Int, query: ResultRow, column: Column<*>) {
-    setObject(record, retrieveQuery_(query, column))
+  fun setQuery(record: Int, result: ResultRow, column: Column<*>) {
+    setObject(record, retrieveQuery_(result, column))
   }
 
   /**
@@ -1676,7 +1666,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             column.substring(1, condition.toString().length) eq condition.toString()
           }.orderBy(columns[0])
 
-          result = displayQueryList_(query, list!!.columns) as String?
+          result = displayQueryList(query, list!!.columns) as String?
           if (result == null) {
             throw VExecFailedException() // no message to display
           } else {
@@ -1722,11 +1712,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return id
   }
 
-  private fun displayQueryList(queryText: String, columns: Array<VListColumn?>): Any? {
-    TODO()
-  }
-
-  private fun displayQueryList_(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
+  private fun displayQueryList(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
     val columnsList = columns.map { vListColumn ->
       vListColumn!!.column
     }
@@ -1862,7 +1848,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       evalListTable().slice(columns).select(searchCondition).orderBy(list!!.getColumn(0).column!!)
     }
 
-    val result = displayQueryList_(query, list!!.columns)
+    val result = displayQueryList(query, list!!.columns)
 
     if (result == null) {
       throw VExecFailedException() // no message to display

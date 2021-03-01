@@ -1475,9 +1475,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // create database query
     val columns = getSearchColumns()
-    val table = getSearchTables_()
-    val condition = getSearchConditions_()
-    val orderBy = getSearchOrder_()
+    val table = getSearchTables()
+    val condition = getSearchConditions()
+    val orderBy = getSearchOrder()
 
     if (isMulti()) {
       activeRecord = -1
@@ -1524,7 +1524,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       } else {
         fields.forEachIndexed { index, field ->
           if (field.getColumnCount() > 0) {
-            field.setQuery_(fetchCount, result, columns[index])
+            field.setQuery(fetchCount, result, columns[index])
           }
         }
 
@@ -1575,7 +1575,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun fetchRecord(id: Int) {
     val columns = getSearchColumns()
-    val table = getSearchTables_()
+    val table = getSearchTables()
     val condition = mutableListOf<Op<Boolean>>()
 
     condition.add(Op.build { idColumn eq id })
@@ -1590,7 +1590,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       var j = 0
       fields.forEach { field ->
         if (field.getColumnCount() > 0) {
-          field.setQuery_(result, columns[j])
+          field.setQuery(result, columns[j])
           j += 1
         }
       }
@@ -1915,30 +1915,12 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
-  @Deprecated("use getSearchTables_()")
-  fun getSearchTables(): String {
-    TODO()
-  }
-
-  /**
-   * Returns the tables for database query, with outer joins conditions.
-   */
-  fun getSearchTables_(): Join? {
-    return VBlockDefaultOuterJoin.getSearchTables(this)
-  }
+  fun getSearchTables(): Join? = VBlockDefaultOuterJoin.getSearchTables(this)
 
   /**
    * Returns the search conditions for database query.
    */
-  @Deprecated("use getSearchConditions_()")
-  fun getSearchConditions(): String? {
-    TODO()
-  }
-
-  /**
-   * Returns the search conditions for database query.
-   */
-  fun getSearchConditions_(): Op<Boolean>? {
+  fun getSearchConditions(): Op<Boolean>? {
     val conditionList: MutableList<Op<Boolean>> = mutableListOf()
 
     fields.forEach { field ->
@@ -1969,14 +1951,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the search order for database query.
    */
-  fun getSearchOrder(): String? {
-    TODO()
-  }
-
-  /**
-   * Returns the search order for database query.
-   */
-  open fun getSearchOrder_(): MutableList<Pair<Column<*>, SortOrder>> {
+  open fun getSearchOrder(): MutableList<Pair<Column<*>, SortOrder>> {
     val columns = mutableListOf<Column<*>>()
     val priorities = IntArray(fields.size)
     val sizes = IntArray(fields.size)
@@ -2114,7 +2089,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
           fields.forEach {
             if (it.lookupColumn(tableIndex) != null) {
-              it.setQuery_(query.first(), it.getColumn(1 + j)!!.column)
+              it.setQuery(query.first(), it.getColumn(1 + j)!!.column)
               j += 1
             }
           }
@@ -2274,8 +2249,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* query from where ? */
-    val tables = getSearchTables_()
-    val conditions = getSearchConditions_()
+    val tables = getSearchTables()
+    val conditions = getSearchConditions()
 
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
@@ -2989,7 +2964,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         fields.forEachIndexed { index, field ->
           if (field.lookupColumn(table) != null) {
-            field.setQuery_(recno, result, columns[index])
+            field.setQuery(recno, result, columns[index])
           }
         }
       } catch (noSuchElementException: NoSuchElementException) {
@@ -3083,12 +3058,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       fillIdField(recno, id)
 
       if (!blockHasNoUcOrTsField()) {
-        val ucFld = ucField
-        val tsFld = tsField
-
-        assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
-        ucFld?.setInt(recno, 0)
-        tsFld?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
+        assert(ucField != null || tsField != null) { "UC or TS field must exist (Block = $name)." }
+        ucField?.setInt(recno, 0)
+        tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
       }
 
       val result = mutableListOf<Pair<Column<Any>, Any?>>()
@@ -3171,16 +3143,14 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)
-      val idFld = idField
-      val ucFld = ucField
-      val tsFld = tsField
+
       val result = mutableListOf<Pair<Column<Any>, Any?>>()
 
-      tsFld?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
-      ucFld?.setInt(recno, ucFld.getInt()!! + 1)
+      tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
+      ucField?.setInt(recno, ucField!!.getInt()!! + 1)
       for (field in fields) {
         /* do not update ID field */
-        if (field == idFld) {
+        if (field == idField) {
           continue
         }
         @Suppress("UNCHECKED_CAST")
@@ -3198,7 +3168,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       val table = tables!![0]
 
-      table.update({ idColumn eq idFld.getInt(recno)!! }) { table ->
+      table.update({ idColumn eq idField.getInt(recno)!! }) { table ->
         result.forEach {
           table[it.first] = it.second!!
         }
@@ -3270,21 +3240,18 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   protected fun checkRecordUnchanged(recno: Int) {
     // Assertion enabled only for tables with ID
     if (!blockHasNoUcOrTsField()) {
-      val idFld: VField = idField
-      val ucFld: VField? = ucField
-      val tsFld = tsField
       val table = tables!![0]
-      val value = idFld.getInt(recno)
+      val value = idField.getInt(recno)
 
-      assert(ucFld != null || tsFld != null) { "UC or TS field must exist (Block = $name)." }
+      assert(ucField != null || tsField != null) { "UC or TS field must exist (Block = $name)." }
 
-      val ucColumn = if (ucFld == null) {
+      val ucColumn = if (ucField == null) {
         intLiteral(-1)
       } else {
         Column(table, "UC", IntegerColumnType())
       }
 
-      val tsColumn = if (tsFld == null) {
+      val tsColumn = if (tsField == null) {
         intLiteral(-1)
       } else {
         Column(table, "TS", IntegerColumnType())
@@ -3300,11 +3267,11 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         var changed = false
 
         transaction {
-          if (ucFld != null) {
-            changed = changed or (ucFld.getInt(recno) != query.first()[ucColumn])
+          if (ucField != null) {
+            changed = changed or (ucField!!.getInt(recno) != query.first()[ucColumn])
           }
-          if (tsFld != null) {
-            changed = changed or (tsFld.getInt(recno) != query.first()[tsColumn])
+          if (tsField != null) {
+            changed = changed or (tsField!!.getInt(recno) != query.first()[tsColumn])
           }
 
           if (changed) {
