@@ -1475,9 +1475,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
     // create database query
     val columns = getSearchColumns()
-    val table = this.getSearchTables()
-    val condition = this.getSearchConditions()
-    val orderBy = this.getSearchOrder()
+    val table = getSearchTables()
+    val condition = getSearchConditions()
+    val orderBy = getSearchOrder()
 
     if (isMulti()) {
       activeRecord = -1
@@ -1575,7 +1575,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    */
   fun fetchRecord(id: Int) {
     val columns = getSearchColumns()
-    val table = this.getSearchTables()
+    val table = getSearchTables()
     val condition = mutableListOf<Op<Boolean>>()
 
     condition.add(Op.build { idColumn eq id })
@@ -1915,9 +1915,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the tables for database query, with outer joins conditions.
    */
-  fun getSearchTables(): Join? {
-    return VBlockDefaultOuterJoin.getSearchTables(this)
-  }
+  fun getSearchTables(): Join? = VBlockDefaultOuterJoin.getSearchTables(this)
 
   /**
    * Returns the search conditions for database query.
@@ -2251,8 +2249,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     /* query from where ? */
-    val tables = this@VBlock.getSearchTables()
-    val conditions = this@VBlock.getSearchConditions()
+    val tables = getSearchTables()
+    val conditions = getSearchConditions()
 
     val values = Array(query_cnt) { arrayOfNulls<Any>(fetchSize) }
     val ids = IntArray(fetchSize)
