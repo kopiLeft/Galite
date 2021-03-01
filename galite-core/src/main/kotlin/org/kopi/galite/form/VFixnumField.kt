@@ -35,7 +35,7 @@ import org.kopi.galite.visual.VlibProperties
  *
  * @param    digits      The digits after dot
  * @param    maxScale    The maximum scale to be used for this field
- * @param    fraction    is true if its is a fraction field
+ * @param    isFraction    is true if its is a isFraction field
  * @param    minval      The min permitted value
  * @param    maxval      The max permitted value
  *
@@ -43,7 +43,7 @@ import org.kopi.galite.visual.VlibProperties
 class VFixnumField(val bufferSize: Int,
                    private val digits: Int,
                    maxScale: Int,
-                   val fraction: Boolean,
+                   val isFraction: Boolean,
                    minval: Decimal?,
                    maxval: Decimal?)
   : VField(computeWidth(digits, maxScale, minval, maxval), 1) {
@@ -471,7 +471,7 @@ class VFixnumField(val bufferSize: Int,
    * Returns the string representation in human-readable format.
    */
   fun toText(v: Decimal): String {
-    return if (!fraction) {
+    return if (!isFraction) {
       v.toString()
     } else {
       toFraction(v.toString())

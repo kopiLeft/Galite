@@ -25,4 +25,50 @@ import com.vaadin.flow.component.HasEnabled
  * TODO: Implement this class with appropriate component
  */
 open class GridListDialog : Component(), HasEnabled {
+
+  /**
+   * This is used to display a new button under the dialog.
+   * No button will be drawn when it is `null`.
+   */
+  var newText: String? = null
+
+  /**
+   * The list dialog selection target.
+   */
+  enum class SelectionTarget {
+    /**
+     * Selects the current row and close the list.
+     */
+    CURRENT_ROW,
+
+    /**
+     * Navigates to the next row.
+     */
+    NEXT_ROW,
+
+    /**
+     * Navigates to the previous row.
+     */
+    PREVIOUS_ROW,
+
+    /**
+     * Navigates to the next page.
+     */
+    NEXT_PAGE,
+
+    /**
+     * Navigates to the previous page.
+     */
+    PREVIOUS_PAGE,
+
+    /**
+     * Navigates to the first row.
+     */
+    FIRST_ROW,
+
+    /**
+     * Navigates to the last row.
+     */
+    LAST_ROW
+  }
 }

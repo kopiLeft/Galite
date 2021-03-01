@@ -17,12 +17,18 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import org.kopi.galite.form.UActorField
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.form.UActorField
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.ui.vaadin.field.ActorField
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ClickNotifier
+import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.html.Div
 
 /**
  * UI Implementation of an actor field.
@@ -32,12 +38,32 @@ class DActorField(model: VFieldUI,
                   align: Int,
                   options: Int,
                   detail: Boolean)
-  : DField(model, label, align, options, detail), UActorField {
+  : DField(model, label, align, options, detail),
+        UActorField,
+        ComponentEventListener<ClickEvent<Button>> {
+
+  // --------------------------------------------------
+  // DATA MEMBERS
+  // --------------------------------------------------
+  private val field = ActorField()
+
+  // --------------------------------------------------
+  // CONSTRUCTOR
+  // --------------------------------------------------
+  init {
+    //field.setCaption(getModel().label) TODO
+    if (getModel().toolTip != null) {
+      //field.setDescription(Utils.createTooltip(getModel().toolTip)) TODO
+    }
+    field.isEnabled = getModel().getDefaultAccess() >= VConstants.ACS_VISIT
+    field.addClickHandler(this)
+    //setContent(field) TODO
+  }
 
   // --------------------------------------------------
   // IMPLEMENTATION
   // --------------------------------------------------
-  fun onClick(event: ClickEvent<DActorField>?) {
+  override fun onComponentEvent(event: ClickEvent<Button>?) {
     // field action is performed in the window action queue
     // it is not like the other fields trigger
     model.executeAction()
@@ -50,19 +76,11 @@ class DActorField(model: VFieldUI,
   override fun updateText() {}
 
   override fun updateAccess() {
-    TODO("Not yet implemented")
-  }
-
-  override fun getObject(): Any? {
-    TODO("Not yet implemented")
-  }
-
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
+    super.updateAccess()
+    //BackgroundThreadHandler.access(Runnable { TODO
+    field.isVisible = access != VConstants.ACS_HIDDEN
+    field.isEnabled = access >= VConstants.ACS_VISIT
+    //})
   }
 
   override fun updateFocus() {}
@@ -70,12 +88,16 @@ class DActorField(model: VFieldUI,
   override fun forceFocus() {}
 
   override fun updateColor() {
-    TODO()
+    //BackgroundThreadHandler.access(Runnable {  TODO
+    field.setColor(Utils.toString(foreground), Utils.toString(background))
+    //})
   }
 
-  override fun getText(): String? {
-    TODO("Not yet implemented")
+  override fun getObject(): Any? {
+    return null
   }
+
+  override fun getText(): String? = null
 
   override fun setHasCriticalValue(b: Boolean) {}
 

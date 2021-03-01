@@ -21,12 +21,14 @@
     width: 100%;
     margin: 0 auto;
     --lumo-space-m: 1rem;
+    height: 63px;
 }
 
 #module_list {
     display: block;
     max-width: 85%;
     margin-left: 0;
+    height: 63px;
 }
 
 #welcome_container {

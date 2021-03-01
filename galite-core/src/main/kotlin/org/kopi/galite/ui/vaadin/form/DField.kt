@@ -39,7 +39,7 @@ import org.kopi.galite.visual.VColor
  * @param label The field label.
  * @param align The field alignment.
  * @param options The field options.
- * @param detail Is it a detail view ?
+ * @param inDetail Is it a detail view ?
  */
 abstract class DField(internal val model: VFieldUI,
                       internal var label: DLabel?,
@@ -48,7 +48,6 @@ abstract class DField(internal val model: VFieldUI,
                       private var inDetail: Boolean)
   : Field(model.getIncrementCommand() != null,
           model.getDecrementCommand() != null), UField, FieldListener {
-
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -107,14 +106,11 @@ abstract class DField(internal val model: VFieldUI,
   //-------------------------------------------------
   // ACCESSORS
   //-------------------------------------------------
-
   /**
-   * Returns the alignment.
-   * @return the alignment.
+   * Field cell renderer
+   * @return the position in chart (0..nbDisplay)
    */
-  open fun getAlign(): Int? {
-    return align
-  }
+  override var position: Int = 0
 
   override fun getModel(): VField {
     return model.model
@@ -133,17 +129,13 @@ abstract class DField(internal val model: VFieldUI,
     return inDetail
   }
 
-  override fun getAutofillButton(): UComponent? {
-    return null
-  }
+  override fun getAutofillButton(): UComponent? = null
 
   /**
    * Returns the row controller.
    * @return The row controller.
    */
-  open fun getRowController(): VFieldUI {
-    return model
-  }
+  open fun getRowController(): VFieldUI = model
 
   //-------------------------------------------------
   // UTILS
@@ -369,18 +361,15 @@ abstract class DField(internal val model: VFieldUI,
    * Returns the foreground color of the current data position.
    * @return The foreground color of the current data position.
    */
-  fun getForeground(): VColor? {
-    return getForegroundAt(position)
-  }
+  val foreground: VColor?
+    get() = getForegroundAt(position)
 
   /**
    * Returns the background color of the current data position.
    * @return The background color of the current data position.
    */
-  fun getBackground(): VColor? {
-    return getBackgroundAt(position)
-  }
-
+  val background: VColor?
+    get() = getBackgroundAt(position)
   // ----------------------------------------------------------------------
   // SNAPSHOT PRINTING
   // ----------------------------------------------------------------------
@@ -436,7 +425,7 @@ abstract class DField(internal val model: VFieldUI,
   }
 
   override fun fireAction() {
-    TODO()
+    model.executeAction()
   }
 
   /**
@@ -446,34 +435,140 @@ abstract class DField(internal val model: VFieldUI,
    * actors actions.
    */
   override fun transferFocus() {
-    TODO()
+    if (!modelHasFocus()) {
+      // an empty row in a chart has not calculated
+      // the access for each field (ACCESS Trigger)
+      if (model.getBlock().isMulti()) {
+        val recno: Int = getBlockView().getRecordFromDisplayLine(position)
+        if (!model.getBlock().isRecordFilled(recno)) {
+          model.getBlock().updateAccess(recno)
+        }
+      }
+      if (!model.getBlock().isMulti()
+              || model.getBlock().detailMode == isInDetail() || model.getBlock().noChart()) {
+        val action: Action = object : Action("mouse1") {
+          override fun execute() {
+            // proceed only of we are in the same block context.
+            if (getModel().block == getModel().getForm().getActiveBlock()) {
+              val recno: Int = getBlockView().getRecordFromDisplayLine(position)
+
+              // go to the correct record if necessary
+              // but only if we are in the correct block now
+              if (getModel().block!!.isMulti()
+                      && recno != getModel().block!!.activeRecord && getModel().block!!.isRecordAccessible(
+                              recno)) {
+                getModel().block!!.gotoRecord(recno)
+              }
+
+              // go to the correct field if already necessary
+              // but only if we are in the correct record now
+              if (recno == getModel().block!!.activeRecord && getModel() != getModel().block!!.activeField && getAccess() >= VConstants.ACS_VISIT) {
+                getModel().block!!.gotoField(getModel())
+              }
+            }
+          }
+        }
+        // execute it as model transforming thread
+        // it is not allowed to execute it not with
+        // the method performAsync/BasicAction.
+        model.performAsyncAction(action)
+      }
+    }
   }
 
   override fun gotoNextField() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoNextField()
+        }
+      }
+    })
   }
 
   override fun gotoPrevField() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_STAB") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoPrevField()
+        }
+      }
+    })
   }
 
   override fun gotoNextEmptyMustfill() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_ALTENTER") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
+        }
+      }
+    })
   }
 
   override fun gotoPrevRecord() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_UP") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.gotoPrevRecord()
+        }
+      }
+    })
   }
 
   override fun gotoNextRecord() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_DOWN") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.gotoNextRecord()
+        }
+      }
+    })
   }
 
   override fun gotoFirstRecord() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_FIRST") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoFirstRecord()
+        }
+      }
+    })
   }
 
   override fun gotoLastRecord() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_LAST") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoLastRecord()
+        }
+      }
+    })
+  }
+
+  /**
+   * Performs the auto fill action.
+   */
+  fun performAutoFillAction() {
+    getModel().getForm().performAsyncAction(object : Action("autofill") {
+      override fun execute() {
+        model.transferFocus(this@DField)
+        model.autofillButton()
+      }
+    })
+  }
+
+  /**
+   * Performs the field action trigger
+   */
+  fun performFieldAction() {
+    if (model.hasAction()) {
+      getModel().getForm().performAsyncAction(object : Action("TRG_ACTION") {
+        override fun execute() {
+          model.transferFocus(this@DField)
+          getModel().callTrigger(VConstants.TRG_ACTION)
+        }
+      })
+    }
   }
 }

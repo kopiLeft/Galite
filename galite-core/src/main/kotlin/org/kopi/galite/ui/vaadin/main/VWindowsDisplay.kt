@@ -30,10 +30,9 @@ class VWindowsDisplay : Div() {
   // DATA MEMBERS
   //---------------------------------------------------
 
-  private val menu = VWindowsMenu(true)
+  private val menu = VWindowsMenu()
 
   init {
-    add(menu)
     className = "k-windows-menu-container"
   }
 
@@ -44,5 +43,19 @@ class VWindowsDisplay : Div() {
    */
   fun updateCaption(window: Component, caption: String) {
     TODO()
+  }
+
+  /**
+   * Adds a window to the [VWindowsMenu].
+   * @param container The container of the window.
+   * @param window The window to be added.
+   * @param title The window title.
+   */
+  fun addWindow(container : VWindowContainer, window: Component, title : String) {
+    menu.addWindow(container, window, title)
+  }
+
+  fun openPopUp() {
+    menu.open()
   }
 }

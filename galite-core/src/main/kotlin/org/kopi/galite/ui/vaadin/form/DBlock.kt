@@ -432,6 +432,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   // BLOCKLISTENER IMPLEMENTATION
   //---------------------------------------------------
   override fun blockClosed() {}
+
   override fun blockChanged() {
     refresh(true)
   }
@@ -441,15 +442,22 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   }
 
   override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {}
+
   override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {}
+
   override fun blockViewModeEntered(block: VBlock, activeField: VField?) {}
+
   override fun validRecordNumberChanged() {}
+
   override fun recordInfoChanged(rec: Int, info: Int) {}
+
   override fun orderChanged() {
     TODO()
   }
 
   override fun filterHidden() {}
+
   override fun filterShown() {}
+
   override fun getCurrentDisplay(): UBlock? = this
 }

@@ -24,6 +24,7 @@ import org.kopi.galite.report.Parameters
 import org.kopi.galite.report.Point
 import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VReport
+import org.kopi.galite.report.VSeparatorColumn
 import org.kopi.galite.ui.vaadin.visual.DWindow
 
 import com.vaadin.flow.component.Unit
@@ -36,13 +37,12 @@ import com.vaadin.flow.component.Unit
  *
  * @param report The report model.
  */
-class DReport(report: VReport) : DWindow(report), UReport {
+class DReport(private val report: VReport) : DWindow(report), UReport {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   private val model: MReport = report.model // report model
-  private val report: VReport = report
   private lateinit var table: DTable
   private var parameters: Parameters? = null
   private var selectedColumn = 0
@@ -92,7 +92,16 @@ class DReport(report: VReport) : DWindow(report), UReport {
    * @param newOrder The new columns order.
    */
   fun reorder(newOrder: IntArray) {
-    // TODO
+    model.columnMoved(newOrder)
+    table.setColumnOrder(
+            newOrder.map { table.getColumnByKey(it.toString()) }
+    )
+    //BackgroundThreadHandler.access(Runnable { TODO
+      for (col in 0 until model.getAccessibleColumnCount()) {
+        table.getColumnByKey(col.toString()).isVisible = !(model.getAccessibleColumn(col)!!.folded &&
+                model.getAccessibleColumn(col) !is VSeparatorColumn)
+      }
+    //})
   }
 
   override fun removeColumn(position: Int) {
@@ -104,7 +113,7 @@ class DReport(report: VReport) : DWindow(report), UReport {
     for (i in 0 until model.getAccessibleColumnCount()) {
       pos[i] = if (model.getDisplayOrder(i) > position) model.getDisplayOrder(i) - 1 else model.getDisplayOrder(i)
     }
-    // table.fireStructureChanged() TODO
+    table.dataCommunicator.reset() // TODO
     report.columnMoved(pos)
   }
 
@@ -123,7 +132,7 @@ class DReport(report: VReport) : DWindow(report), UReport {
       pos[i] = model.getDisplayOrder(i - 1)
     }
     pos[position] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
-    // table.fireStructureChanged() TODO
+    table.dataCommunicator.reset() // TODO
     report.columnMoved(pos)
   }
 
@@ -166,7 +175,10 @@ class DReport(report: VReport) : DWindow(report), UReport {
    * change in order to update the table content.
    */
   fun fireContentChanged() {
-    // TODO
+    if (::table.isInitialized) {
+      //table.model.fireContentChanged() TODO
+      synchronized(table) { report.setMenu() }
+    }
   }
 
   /**
