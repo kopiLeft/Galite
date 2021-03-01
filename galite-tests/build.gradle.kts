@@ -30,12 +30,6 @@ val exposedVersion = "0.27.1"
 val postgresNGVersion = "0.8.6"
 val apachePoi = "4.1.2"
 
-repositories {
-  maven {
-    url = uri("https://maven.vaadin.com/vaadin-addons")
-  }
-}
-
 vaadin {
   pnpmEnable = true
 }
