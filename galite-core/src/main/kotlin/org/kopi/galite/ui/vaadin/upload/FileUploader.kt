@@ -17,15 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.upload
 
-import java.io.ByteArrayOutputStream
-import java.io.OutputStream
-
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.upload.ProgressUpdateEvent
 import com.vaadin.flow.component.upload.Receiver
 import com.vaadin.flow.component.upload.Upload
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
+import java.io.ByteArrayOutputStream
+import java.io.OutputStream
+import java.util.*
 
 /**
  * The `FileUploader` handles file upload operations.
@@ -35,6 +35,7 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
   //--------------------------------------------
   // DATA MEMBERS
   //--------------------------------------------
+
   /**
    * The file uploader component.
    */
@@ -64,14 +65,24 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
+
   /**
    * Invokes the upload process for a given mime type.
    *
    * @param mimeType The mime type to be uploaded.
    * @return The uploaded bytes.
    */
-  fun upload(mimeType: String?): ByteArray {
-    TODO()
+  fun upload(mimeType: String?): ByteArray? {
+    this.mimeType = mimeType
+    uploader.setMimeType(mimeType)
+    application.attachComponent(uploader)
+    close()
+
+    return if (output != null) {
+      output!!.toByteArray()
+    } else {
+      null
+    }
   }
 
   /**
@@ -81,7 +92,13 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
    * For this we will use a timer to differ schedule the detach event of the uploader component.
    */
   fun close() {
-    TODO()
+    Timer().schedule(object : TimerTask() {
+      override fun run() {
+        //  access {
+        application.detachComponent(uploader)
+        // }
+      }
+    }, 200)
   }
 
   // TODO: Add uploadFailed event handler

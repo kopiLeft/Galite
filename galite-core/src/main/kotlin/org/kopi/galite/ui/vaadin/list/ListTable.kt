@@ -17,9 +17,212 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.HeaderRow
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.binder.Result
+import com.vaadin.flow.data.binder.ValueContext
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
+import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VListDialog
+import org.kopi.galite.list.VBooleanColumn
+import org.kopi.galite.list.VListColumn
 
 class ListTable(model: VListDialog) : Grid<Any>() {
-// TODO
+
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+
+  /**
+   * Install filters on all properties.
+   */
+  fun installFilters(model: VListDialog?) {
+    val filterRow = appendHeaderRow()
+    //filterRow.element.classList.add("list-filter")
+    //filterRow.setStyleName("list-filter")
+    for (propertyId in containerDataSource.containerPropertyIds) {
+      val cell: HeaderRow.HeaderCell = filterRow.getCell(propertyId)
+      val filter = TextField()
+      filter.classNames.add("filter-text")
+      //filter.setImmediate(true)
+      filter.addValueChangeListener {
+        fun textChange(event: HasValue.ValueChangeEvent<TextField>) {
+          containerDataSource.removeContainerFilters(propertyId)
+          if (event.value.label.isNotEmpty()) {
+            containerDataSource.addContainerFilter(propertyId,
+                                                   event.value.label,
+                                                   true,
+                                                   false)
+            // select the first item when the content is filtered
+            // to not loose grid focus and thus not loose navigation shortcuts
+            select(containerDataSource.id)
+          }
+        }
+      }
+      cell.setComponent(filter)
+    }
+    element.classList.add("filtred")
+  }
+
+  /**
+   * Looks the the item ID that its first column starts with the given pattern.
+   * @param pattern The search pattern.
+   * @return The found item ID or null if none of the search corresponds to the searched pattern
+   */
+  fun search(pattern: String?): Any? {
+    return containerDataSource.search(pattern)
+  }
+
+  /**
+   * Calculates the table width based on its content.
+   * @param model The data model.
+   */
+  protected fun setTableWidth(model: VListDialog) {
+    var width = 0
+    for (col in model.columns) {
+      val columnWidth = getColumnWidth(model, col!!.width) + 36
+      col.width = columnWidth
+      width += columnWidth
+    }
+    setWidth(Math.min(width, getWidth().toInt() - 20).toFloat(), Unit.PIXELS) //check getwidth().toint() TODO
+  }
+
+  /**
+   * Calculates the column width based on the column rows content.
+   * @param model The list data model.
+   * @param col The column index.
+   * @return The estimated wolumn width.
+   */
+  protected fun getColumnWidth(model: VListDialog, col: Int): Int {
+    var width = 0
+
+    for (row in 0 until model.count) {
+      val value = model.columns[col]!!.formatObject(model.getValueAt(row, col)).toString()
+      width = Math.max(width, Math.max(value.length, model.titles[col]!!.length))
+
+    }
+    return 8 * width
+  }
+
+  protected fun getListColumn(model: VListDialog, propertyId: Any?): VListColumn? {
+    return model.columns[propertyId as Int]
+  }
+
+  /**
+   * Install converters for values formatting.
+   */
+  protected fun installConverters(model: VListDialog) {
+    for (column in columns) {
+      if (getListColumn(model, column.id) is VBooleanColumn) {
+        // column.setRenderer(createBooleanRenderer(), createBooleanConverter()) TODO
+      } else {
+        //column.setRenderer(TextRenderer(), ListConverter(model.columns[column.id as Int])) TODO
+      }
+    }
+  }
+
+  /**
+   * Creates the conversion engine for grid data rendering.
+   * @return The boolean converter
+   */
+  protected fun createBooleanConverter(): Converter<Boolean, Any> {
+    return object : Converter<Boolean, Any> {
+
+      override fun convertToModel(value: Boolean?, context: ValueContext?): Result<Any>? = value as Result<Any>
+
+      override fun convertToPresentation(value: Any?, context: ValueContext?): Boolean = value as Boolean
+      val modelType: Class<Any>
+        get() = Any::class.java
+
+      val presentationType: Class<Boolean>
+        get() = Boolean::class.java
+    }
+  }
+
+  /**
+   * Creates the renderer for boolean column
+   * @return The boolean renderer
+   */
+  protected fun createBooleanRenderer(): Renderer<Boolean> {
+    //return BooleanRenderer(trueRepresentation, falseRepresentation)
+  }
+
+  /**
+   * Returns the true representation of this boolean field.
+   * @return The true representation of this boolean field.
+   */
+  protected val trueRepresentation: String
+    get() = VBooleanField.toText(java.lang.Boolean.TRUE)
+
+  /**
+   * Returns the false representation of this boolean field.
+   * @return The false representation of this boolean field.
+   */
+  protected val falseRepresentation: String
+    get() = VBooleanField.toText(java.lang.Boolean.FALSE)
+
+  /**
+   * Sets whether column collapsing is allowed or not.
+   * @param collapsingAllowed specifies whether column collapsing is allowed.
+   */
+  fun setColumnCollapsingAllowed(collapsingAllowed: Boolean) {
+    columns.forEach {
+      // it.setHidable(collapsingAllowed)
+    }
+  }
+
+  /**
+   * Sets the columns headers of this list table.
+   * @param headers The column headers.
+   */
+  fun setColumnHeaders(headers: Array<String?>) {
+    for (i in headers.indices) {
+      setColumnHeader(i, headers[i])
+    }
+  }
+
+  /**
+   * Sets the column header for the specified column;
+   * @param propertyId the propertyId identifying the column.
+   * @param header the header to set.
+   */
+  fun setColumnHeader(propertyId: Int, header: String?) {
+    //getColumn(propertyId).setHeaderCaption(header)
+  }
+
+  val containerDataSource: ListContainer
+    get() = super.getContainerDataSource() as ListContainer
+
+  /**
+   * Fires a container item set change.
+   */
+  fun tableChanged() {
+    //  access{
+    containerDataSource.fireItemSetChange()
+    //  }
+  }
+
+  //---------------------------------------------------
+  // CONSTRUCTOR
+  //---------------------------------------------------
+
+  init {
+    setSelectionMode(SelectionMode.SINGLE)
+    //(selectionModel as HasUserSelectionAllowed).setUserSelectionAllowed(false)
+    setColumnCollapsingAllowed(false)
+    //setColumnResizeMode(ColumnResizeMode.ANIMATED)
+    isColumnReorderingAllowed = true
+    //setEditorEnabled(false)
+    setColumnHeaders(model.titles)
+    installConverters(model)
+    // setHeightMode(HeightMode.ROW)
+    setTableWidth(model)
+    installFilters(model)
+    //setCellStyleGenerator(ListStyleGenerator(model))
+    recalculateColumnWidths()
+  }
 }
