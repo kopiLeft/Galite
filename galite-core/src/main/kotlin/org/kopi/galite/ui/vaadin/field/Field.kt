@@ -44,13 +44,6 @@ open class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Div() {
   var isActionEnabled = false
 
   /**
-   * The field visibility
-   *
-   * TODO: Do wee need this or super.visible is fine.
-   */
-  var _visible = true
-
-  /**
    * The visible field height needed to create layout.
    */
   var visibleHeight = 1
@@ -137,8 +130,8 @@ open class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Div() {
    * Adds the given actors to this field.
    * @param actors The actors to be associated with field.
    */
-  fun addActors(actors: Collection<Actor?>) {
-    //TODO()
+  fun addActors(actors: Collection<Actor>) {
+    this.actors.addAll(actors)
   }
 
   /**
@@ -146,7 +139,7 @@ open class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Div() {
    * @param l The listener to be registered.
    */
   fun addFieldListener(l: FieldListener) {
-    // TODO()
+    listeners.add(l)
   }
 
   /**
@@ -154,7 +147,7 @@ open class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Div() {
    * @param l The listener to be removed.
    */
   fun removeFieldListener(l: FieldListener) {
-    TODO()
+    listeners.remove(l)
   }
 
   /**

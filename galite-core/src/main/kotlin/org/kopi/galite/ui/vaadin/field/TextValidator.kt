@@ -215,3 +215,26 @@ class TimestampValidator<T>(): TextValidator<T> {
     return ValidationResult.ok()
   }
 }
+
+  /**
+   * A Decimal validator.
+   */
+  class DecimalValidator<T>(maxScale: Int, fraction: Boolean, col: Int,
+                            minval: Double?, maxval: Double?) : TextValidator<T> {
+
+    override fun apply(value: T, context: ValueContext?): ValidationResult {
+      //TODO("Not yet implemented")
+      return ValidationResult.ok()
+    }
+}
+
+/**
+   * A Code validator.
+   */
+  class CodeValidator<T>(enumerations: Array<String>?) : TextValidator<T> {
+
+    override fun apply(value: T, context: ValueContext?): ValidationResult {
+      //TODO("Not yet implemented")
+      return ValidationResult.ok()
+    }
+}

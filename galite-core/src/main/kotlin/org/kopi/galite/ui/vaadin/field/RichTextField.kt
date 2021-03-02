@@ -23,7 +23,6 @@ import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.HasValueAndElement
 import com.vaadin.flow.shared.Registration
 
 /**

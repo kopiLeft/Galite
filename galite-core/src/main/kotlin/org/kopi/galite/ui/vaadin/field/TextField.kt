@@ -192,11 +192,22 @@ class TextField(val model: VField,
       }
       is VCodeField -> {
         // code field
-        TODO()
+        type = Type.CODE
+        enumerations = model.labels
       }
       is VFixnumField -> {
         // fixnum field
-        TODO()
+        type = Type.DECIMAL
+        if(model.minval != null) {
+          minval = model.minval.toDouble()
+        }
+        if(model.maxval != null) {
+          maxval = model.maxval.toDouble()
+        }
+        model
+        maxScale = model.maxScale
+        fraction = model.isFraction
+
       }
       is VTimestampField -> {
         // timestamp field
@@ -234,13 +245,14 @@ class TextField(val model: VField,
               { TODO() }, { _, _ -> TODO() })
       Type.INTEGER -> bindingBuilder.withValidator(IntegerValidator(minval, maxval)).bind({ TODO() },
                                                                                           { _, _ -> TODO() })
-      Type.DECIMAL -> TODO()
+      Type.DECIMAL -> bindingBuilder.withValidator(DecimalValidator(maxScale, fraction, col, minval, maxval)).
+                                                        bind({ TODO() }, { _, _ -> TODO() })
       Type.DATE -> bindingBuilder.withValidator(DateValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.TIME -> bindingBuilder.withValidator(TimeValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.MONTH -> bindingBuilder.withValidator(MonthValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.WEEK -> bindingBuilder.withValidator(WeekValidator()).bind({ TODO() }, { _, _ -> TODO() })
       Type.TIMESTAMP -> bindingBuilder.withValidator(TimestampValidator()).bind({ TODO() }, { _, _ -> TODO() })
-      Type.CODE -> TODO()
+      Type.CODE -> bindingBuilder.withValidator(CodeValidator(enumerations)).bind({ TODO() }, { _, _ -> TODO() })
       else -> TODO()
     }
   }
@@ -280,6 +292,10 @@ class TextField(val model: VField,
         it.maxLength = col;
         it.isPreventInvalidInput = true
       }
+    } else if(isDecimal()) {
+      VFixnumField(col, maxScale, minval, maxval, fraction)
+    } else if(type == Type.CODE) {
+      VCodeField(enumerations)
     } else if(type == Type.TIME) {
       VTimeField()
     } else if(type == Type.TIMESTAMP) {

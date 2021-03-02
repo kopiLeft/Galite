@@ -61,6 +61,28 @@ class ColumnView(val block: Block) {
   }
 
   /**
+   * Sets this column view as the active field.
+   */
+  fun setAsActiveField() {
+    setAsActiveField(-1)
+  }
+
+  /**
+   * Sets this column view as the active field.
+   * @param rec The record of the active field
+   */
+  fun setAsActiveField(rec: Int) {
+    TODO()
+  }
+
+  /**
+   * Tells the block that this column is not the active field anymore.
+   */
+  fun unsetAsActiveField() {
+    TODO()
+  }
+
+  /**
    * Appends the given field to the column view collector.
    * @param field The field to be added.
    */
