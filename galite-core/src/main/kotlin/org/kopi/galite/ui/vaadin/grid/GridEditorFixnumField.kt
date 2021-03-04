@@ -18,15 +18,22 @@
 package org.kopi.galite.ui.vaadin.grid
 
 /**
- * Server side implementation of decimal grid editor field
+ * Implementation of decimal grid editor field
+ * @param minValue The minimum value to be accepted by the field.
+ * @param maxValue The maximum value to be accepted by the field.
+ * @param maxScale The max scale to be used with this field if it is a fixnum one.
+ * @param fraction Is this field a fraction one ?
  */
 class GridEditorFixnumField(
         width: Int,
-        minValue: Double,
-        maxValue: Double,
-        maxScale: Int,
-        fraction: Boolean
+        var minValue: Double,
+        var maxValue: Double,
+        var maxScale: Int,
+        var fraction: Boolean
 ) : GridEditorTextField(width) {
-  override var value: Any? = TODO()
-  // TODO
+
+  /**
+   * The current scale of the decimal field.
+   */
+  var scale = maxScale
 }

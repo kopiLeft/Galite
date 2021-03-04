@@ -17,18 +17,17 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import java.io.Serializable
 import java.lang.reflect.Method
-
-import kotlin.collections.Collection
+import java.util.EventListener
+import kotlin.collections.LinkedHashSet
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.field.AbstractField
-import org.kopi.galite.ui.vaadin.field.Field
 
-import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.router.NavigationEvent
 
 /**
  * A grid editor field server side implementation.
@@ -90,16 +89,6 @@ abstract class GridEditorField<T> protected constructor() : AbstractField(), Foc
   init {
     //registerRpc(NavigationRpcHandler())
     //registerRpc(ClickRpcHandler())
-  }
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
-  /**
-   * Sets the navigation delegation mode of this editor field.
-   * @param navigationDelegationMode The navigation delegation mode.
-   */
-  fun setNavigationDelegationMode(navigationDelegationMode: Field.NavigationDelegationMode) {
-    // state.navigationDelegationMode = navigationDelegationMode TODO
   }
 
   /**
@@ -184,7 +173,7 @@ abstract class GridEditorField<T> protected constructor() : AbstractField(), Foc
      * Fired when a click event is detected on editor field.
      * @param event The click event object.
      */
-    fun onClick(event: ClickEvent<*>?)
+    fun onClick(event: ClickEvent)
   }
 
   interface AutofillListener {
@@ -193,6 +182,26 @@ abstract class GridEditorField<T> protected constructor() : AbstractField(), Foc
      * @param event The autofill event.
      */
     fun onAutofill(event: AutofillEvent?)
+  }
+
+  /**
+   * The editor field navigation event
+   */
+  class NavigationEvent(source: Component?) : ComponentEvent<Component>(source, true)
+
+  /**
+   * The editor field click event
+   */
+  class ClickEvent(source: Component?) : ComponentEvent<Component>(source, true) {
+  companion object  {
+      //---------------------------------------------------
+      // DATA MEMBERS
+      //---------------------------------------------------
+      val  CLICK_METHOD: Method? = null
+      init {
+        TODO()
+      }
+    }
   }
 
   /**
@@ -210,5 +219,69 @@ abstract class GridEditorField<T> protected constructor() : AbstractField(), Foc
       }
     }
   }
-  // TODO
+
+  /**
+   * The event listener list for the editor field that has the ability to
+   * handle listeners with multiple invocation inside.
+   */
+  private class EventListenerList : Serializable {
+    //---------------------------------------------------
+    // IMPLEMENTATION
+    //---------------------------------------------------
+    /**
+     * Registers a new connector event listener.
+     * @param listener The listener to be registered.
+     */
+    fun addListener(listener: EventListener) {
+      listenerList.add(listener)
+    }
+
+    /**
+     * Removes a connector event listener.
+     * @param listener The listener to be removed.
+     */
+    fun removeListener(listener: EventListener) {
+      listenerList.remove(listener)
+    }
+
+    /**
+     * Returns the listeners contained in this event router and that has the given type.
+     * @param type The listener type.
+     * @return The listener array.
+     */
+    fun <T : EventListener?> getListeners(type: Class<T>): Array<T> {
+      val lList: Array<Any> = listenerList.toTypedArray()
+      val n = getListenerCount(lList, type)
+      val result = java.lang.reflect.Array.newInstance(type, n) as Array<T>
+      var j = 0
+      for (i in lList.indices) {
+        if (type.isAssignableFrom(lList[i].javaClass)) {
+          result[j++] = lList[i] as T
+        }
+      }
+      return result
+    }
+
+    private fun <T : EventListener?> getListenerCount(list: Array<Any>, type: Class<T>): Int {
+      var count = 0
+      for (i in list.indices) {
+        if (type.isAssignableFrom(list[i].javaClass)) {
+          count++
+        }
+      }
+      return count
+    }
+    //---------------------------------------------------
+    // DATA MEMBERS
+    //---------------------------------------------------
+    /**
+     * List of registered listeners.
+     */
+    private val listenerList: LinkedHashSet<EventListener> = LinkedHashSet<EventListener>()
+  }
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val eventListenerList: EventListenerList = EventListenerList()
 }

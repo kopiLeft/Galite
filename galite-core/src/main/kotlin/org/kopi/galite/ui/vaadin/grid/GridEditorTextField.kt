@@ -17,10 +17,177 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import java.util.EventListener
+
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.ComponentEvent
+import java.io.Serializable
+import java.lang.reflect.Method
+
 /**
  * A text field used as editor
  */
 open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
   override var value: Any? = TODO()
-  // TODO
+
+  /**
+   * The column number.
+   */
+  var col = width
+
+  /**
+   * The field text alignment.
+   */
+  var align = 0
+
+  /**
+   * The auto complete minimum length to begin querying for suggestions
+   */
+  var autocompleteLength = 0
+
+  /**
+   * If the field has the auto complete feature.
+   */
+  var hasAutocomplete = false
+
+  /**
+   * Sets the field to have the autofill option.
+   */
+  var hasAutofill = false
+
+  /**
+   * The convert type to be applied to the field.
+   */
+  var convertType: ConvertType = ConvertType.NONE
+
+  /**
+   * Returns the displayed value of the text editor.
+   * @return The displayed value of the text editor.
+   */
+  open fun getDisplayedValue(): String? {
+    return displayedValue ?: ""
+  }
+
+  /**
+   * Sets the field suggestions.
+   * @param suggestions The displayed strings.
+   * @param values The encapsulated values.
+   */
+  open fun setSuggestions(suggestions: Array<Array<String>>, query: String) {
+    val newSuggestions: MutableList<AutocompleteSuggestion>
+    newSuggestions = ArrayList<AutocompleteSuggestion>()
+    for (i in suggestions.indices) {
+      val suggestion = AutocompleteSuggestion()
+      suggestion.id = i
+      suggestion.query = query
+      suggestion.displayStrings = suggestions[i]
+      newSuggestions.add(suggestion)
+    }
+  }
+
+  /**
+   * The text change listener.
+   */
+  interface SuggestionsQueryListener : EventListener, Serializable {
+    /**
+     * Notifies registered objects that should query suggestions .
+     * @param event The suggestions query event providing the query string.
+     */
+    fun onSuggestionsQuery(event: SuggestionsQueryEvent?)
+  }
+
+  /**
+   * The suggestions query event object.
+   * @param source The source component.
+   * @param query The suggestions query
+   */
+  class SuggestionsQueryEvent(source: Component?, val query: String) {
+
+    companion object {
+      val QUERY_METHOD: Method? = null
+
+      init {
+        TODO()
+      }
+    }
+  }
+
+  //---------------------------------------------------
+  // TEXT CHANGE
+  //---------------------------------------------------
+
+  //---------------------------------------------------
+  // TEXT CHANGE
+  //---------------------------------------------------
+  /**
+   * Fires a text change event object.
+   * @param newText The new text value.
+   * @param oldText The old text value.
+   */
+  protected open fun fireTextChangeEvent(newText: String, oldText: String) {
+    fireEvent(TextChangeEvent(this, newText, oldText))
+  }
+
+  /**
+   * The text change listener.
+   */
+  interface TextChangeListener : EventListener {
+    /**
+     * Notifies registered objects that text has change.
+     * @param event The text change event providing new and old texts.
+     */
+    fun onTextChange(event: TextChangeEvent?)
+  }
+
+  /**
+   * The text change event object.
+   *
+   * @param source The source component.
+   * @param newText The new text value.
+   * @param oldText The old text value.
+   */
+  class TextChangeEvent(source: Component?, val newText: String, val oldText: String)
+    : ComponentEvent<Component>(source, true) {
+
+    companion object {
+      val TEXT_CHANGE: Method? = null
+
+      init {
+        TODO()
+      }
+    }
+  }
+
+  /**
+   * The convert type to be applied to this text field.
+   * The convert type can be to upper case, to lower case or to name.
+   */
+  enum class ConvertType {
+    /**
+     * no conversion.
+     */
+    NONE,
+
+    /**
+     * upper case conversion.
+     */
+    UPPER,
+
+    /**
+     * lower case conversion.
+     */
+    LOWER,
+
+    /**
+     * name conversion.
+     */
+    NAME
+  }
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  // used to store an internal state of this field
+  private val internalValue: String? = null
+  private val displayedValue: String? = null
 }

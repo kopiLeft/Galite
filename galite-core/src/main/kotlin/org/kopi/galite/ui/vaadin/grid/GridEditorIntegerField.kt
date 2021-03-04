@@ -18,9 +18,9 @@
 package org.kopi.galite.ui.vaadin.grid
 
 /**
- * Sever side of an integer editor field.
+ * An integer editor field.
+ * @param minValue The minimum value to be accepted by the field.
+ * @param minValue The maximum value to be accepted by the field.
  */
-class GridEditorIntegerField(width: Int, minValue: Int, maxValue: Int) : GridEditorTextField(width) {
-  override var value: Any? = TODO()
-  // TODO
-}
+class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) : GridEditorTextField(width)
+

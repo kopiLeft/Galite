@@ -17,12 +17,63 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import java.io.Serializable
+import java.lang.reflect.Method
+import java.util.EventListener
+
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.HasEnabled
 
 /**
  * A label used at grid headers
  */
 open class GridEditorLabel(caption: String?) : Component(), HasEnabled {
-  // TODO
+
+  /**
+   * The label can execute the field action trigger.
+   */
+  var hasAction = false
+
+  /**
+   * The info text used to display search operator.
+   */
+  var infoText = ""
+
+  /**
+   * Fires a click event on this editor label
+   */
+  protected open fun fireClickEvent() {
+    fireEvent(ClickEvent(this))
+  }
+
+  //---------------------------------------------------
+  // LISTENERS & EVENTS
+  //---------------------------------------------------
+  /**
+   * Click listener on editor labels
+   */
+  interface ClickListener : EventListener, Serializable {
+    /**
+     * Notifies registered objects that a click event is fired on the editor label.
+     * @param event The click event object.
+     */
+    fun onClick(event: ClickEvent?)
+  }
+
+  /**
+   * The editor label click event
+   */
+  class ClickEvent(source: Component?) : ComponentEvent<Component>(source, true) {
+    companion object {
+      //---------------------------------------------------
+      // DATA MEMBERS
+      //---------------------------------------------------
+      val CLICK_METHOD: Method? = null
+
+      init {
+        TODO()
+      }
+    }
+  }
 }

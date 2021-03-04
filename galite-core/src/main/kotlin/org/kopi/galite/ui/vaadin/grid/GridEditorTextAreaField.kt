@@ -24,8 +24,16 @@ class GridEditorTextAreaField(
         width: Int,
         height: Int,
         visibleHeight: Int,
-        fixedNewLine: Boolean
+        var fixedNewLine: Boolean
 ) : GridEditorTextField(width) {
-  override var value: Any? = TODO()
-  // TODO
+
+  /**
+   * The row number.
+   */
+  var rows = height
+
+  /**
+   * The visible rows
+   */
+  var visibleRows = visibleHeight
 }

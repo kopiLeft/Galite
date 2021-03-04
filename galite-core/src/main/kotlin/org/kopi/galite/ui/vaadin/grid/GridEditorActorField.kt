@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.vaadin.grid
 
 /**
- * The grid editor actor field server side implementation
+ * The grid editor actor field implementation.
  */
 class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
 
@@ -37,7 +37,7 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
   val type: Class<out String>
     get() = String::class.java
 
-  override var value: Any? = TODO()
+  override var value: Any? = null
 
   /*override fun addNavigationListener(listener: NavigationListener?) {
     // NOT SUPPORTED

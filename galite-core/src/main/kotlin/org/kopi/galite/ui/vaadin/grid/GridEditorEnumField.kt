@@ -18,9 +18,13 @@
 package org.kopi.galite.ui.vaadin.grid
 
 /**
- * Server side implementation of an enumeration editor
+ * Implementation of an enumeration editor
  */
 class GridEditorEnumField(width: Int, enumerations: Array<String>) : GridEditorTextField(width) {
-  override var value: Any? = TODO()
-  // TODO
+
+  /**
+   * The field enumeration for code fields.
+   */
+
+  var enumerations: Array<String> = enumerations
 }

@@ -32,4 +32,9 @@ open class ActorRenderer(caption: String?) : ClickableRenderer<String?>, Rendere
   override fun getItemClickListeners(): MutableList<ClickableRenderer.ItemClickListener<String?>> {
     TODO("Not yet implemented")
   }
+
+  /**
+   * The actor renderer caption.
+   */
+  var caption = caption ?: ""
 }
