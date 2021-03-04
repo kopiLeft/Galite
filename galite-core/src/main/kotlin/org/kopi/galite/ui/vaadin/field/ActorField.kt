@@ -97,9 +97,9 @@ class ActorField : ObjectField<Any?>() {
       button.element.style["color"] = "inherit"
     }
     if (background != null && background.isNotEmpty()) {
-      button.element.style["backgroundColor"] = foreground
+      button.element.style["background-color"] = foreground
     } else {
-      button.element.style["backgroundColor"] = "inherit"
+      button.element.style["background-color"] = "inherit"
     }
   }
 
