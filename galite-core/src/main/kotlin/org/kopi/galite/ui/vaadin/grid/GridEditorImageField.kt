@@ -21,6 +21,11 @@ package org.kopi.galite.ui.vaadin.grid
  * The server side implementation of an image grid editor.
  */
 class GridEditorImageField() : GridEditorField<Any?>() {
-  override var value: Any? = TODO()
-  // TODO
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun generateModelValue(): Any? {
+    TODO("Not yet implemented")
+  }
 }

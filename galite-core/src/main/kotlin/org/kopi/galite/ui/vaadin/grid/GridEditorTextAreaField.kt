@@ -25,7 +25,4 @@ class GridEditorTextAreaField(
         height: Int,
         visibleHeight: Int,
         fixedNewLine: Boolean
-) : GridEditorTextField(width) {
-  override var value: Any? = TODO()
-  // TODO
-}
+) : GridEditorTextField(width)
