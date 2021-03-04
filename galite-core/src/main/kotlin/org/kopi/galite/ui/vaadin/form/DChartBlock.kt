@@ -195,7 +195,7 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
   /**
    * Updates the scroll bar position.
    */
-  private fun updateScrollbar() {
+  override fun updateScrollbar() {
     //BackgroundThreadHandler.access(Runnable { TODO
       val validRecords = model.numberOfValidRecord
       val dispSize = model.displaySize

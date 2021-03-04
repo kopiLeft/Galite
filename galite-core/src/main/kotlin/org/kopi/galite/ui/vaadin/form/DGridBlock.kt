@@ -85,6 +85,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   private var filterRow: HeaderRow? = null
 
+  override var sortedRecords = IntArray(0)
+    set(value) {
+      if (!model.noDetail() && !inDetailMode()) {
+        field = value
+      }
+    }
+
   // --------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------
@@ -182,7 +189,8 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Notifies the block that the UI is focused on the given record.
    * @param recno The record number
    */
-  protected open fun enterRecord(recno: Int) {
+  override fun enterRecord(recno: Int) {
+    super.enterRecord(recno)
     model.form.performAsyncAction(object : Action() {
       override fun execute() {
         try {
@@ -351,12 +359,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   override fun fireRecordInfoChanged(rec: Int, info: Int) {
     // no client side cache
-  }
-
-  override fun setSortedRecords(sortedRecords: IntArray) {
-    if (!model.noDetail() && !inDetailMode()) {
-      super.setSortedRecords(sortedRecords)
-    }
   }
 
   override fun fireActiveRecordChanged(record: Int) {

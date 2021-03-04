@@ -38,8 +38,8 @@ class DRichTextEditor(
         height: Int,
         detail: Boolean
 ) : DField(model, label, align, options, detail),
-        UTextField,
-        Focusable<DRichTextEditor> /*, ValueChangeListener, NavigationListener TODO*/ {
+        UTextField
+        /*Focusable<DRichTextEditor> , ValueChangeListener, NavigationListener TODO*/ {
 
   //---------------------------------------------------
   // DATA MEMBERS

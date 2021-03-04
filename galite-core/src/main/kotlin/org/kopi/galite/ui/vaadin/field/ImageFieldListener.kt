@@ -15,22 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field;
+package org.kopi.galite.ui.vaadin.field
 
-import java.io.Serializable;
+import java.io.Serializable
 
 /**
  * Registered objects are notified with actions performed on an image field.
  */
-public interface ImageFieldListener extends Serializable {
-
+interface ImageFieldListener : Serializable {
   /**
    * Fired when the image is removed from the field.
    */
-  public void onRemove();
+  fun onRemove()
 
   /**
    * Fired when the image field is clicked.
    */
-  public void onImageClick();
+  fun onImageClick()
 }

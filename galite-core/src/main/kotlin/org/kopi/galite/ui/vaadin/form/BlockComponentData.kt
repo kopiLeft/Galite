@@ -15,12 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
-
-import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.customfield.CustomField
+package org.kopi.galite.ui.vaadin.form
 
 /**
- * Super class for all field components.
+ * Constraints for block position.
+ *
+ * @param isFollow is it a follow block ?
+ * @param isChart is it a chart block ?
+ * @param page the page index
  */
-abstract class AbstractField : CustomField<Any?>(), HasStyle
+data class BlockComponentData(var isFollow: Boolean, var isChart: Boolean, var page: Int)

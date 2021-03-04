@@ -30,7 +30,6 @@ import org.kopi.galite.form.VWeekField
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.data.binder.BeanValidationBinder
 
@@ -104,15 +103,6 @@ class TextField(val model: VField,
    * Is this field a fraction one ?
    */
   var fraction = false
-
-  /**
-   * The value in the field
-   */
-  override var value: Any?
-    get() = this.field.value
-    set(value) {
-      this.field.value = value
-    }
 
   /**
    * The field enumeration for code fields.
@@ -345,13 +335,6 @@ class TextField(val model: VField,
   }
 
   /**
-   * Sets the field focus.
-   */
-  fun focus() {
-    (field as Focusable<*>).focus()
-  }
-
-  /**
    * Sets the the blink state of the field.
    * @param blink The blink state.
    */
@@ -366,9 +349,15 @@ class TextField(val model: VField,
   /**
    * Returns if he field is read only.
    */
-  fun isReadOnly(): Boolean {
+  override fun isReadOnly(): Boolean {
     return field.isReadOnly
   }
+
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    field.value = value
+  }
+
+  override fun generateModelValue(): Any? = field.value
 
   /**
    * Registers a text change listener
@@ -376,6 +365,21 @@ class TextField(val model: VField,
    */
   fun addTextValueChangeListener(l: HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>) {
     listeners.add(l)
+  }
+
+  /**
+   * Communicates the widget text to server side.
+   */
+  internal fun sendTextToServer() {
+    // TODO
+  }
+
+  /**
+   * Sends the dirty values to the server side.
+   * @param values The field values per record.
+   */
+  internal fun sendDirtyValuesToServer(values: Map<Int?, String?>?) {
+    // TODO
   }
 
   //---------------------------------------------------
