@@ -22,17 +22,17 @@ import java.lang.reflect.Method
 import kotlin.collections.Collection
 
 import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.field.AbstractField
 import org.kopi.galite.ui.vaadin.field.Field
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.router.NavigationEvent
 
 /**
  * A grid editor field server side implementation.
  */
-abstract class GridEditorField<T> protected constructor() : AbstractField() {
+abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() {
 
   /**
    * The navigation delegation to server mode.

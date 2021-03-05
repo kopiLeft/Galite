@@ -21,6 +21,7 @@ import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.component.html.Div
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.ColumnView
@@ -34,7 +35,9 @@ import org.kopi.galite.ui.vaadin.window.Window
  * @param hasDecrement has decrement button ?
  * TODO: Implement this class with appropriate component
  */
-abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : CustomField<Any?>(), FieldListener, HasStyle {
+abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
+  : Div(), FieldListener, HasStyle {
+
   private var listeners = mutableListOf<FieldListener>()
 
   /**
@@ -108,7 +111,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
 
   var columnView: ColumnView? = null
 
-  lateinit var content: CustomField<Any?>
+  open lateinit var wrappedField: CustomField<Any?>
 
   /**
    * `true` if the content of this field has changed.
@@ -135,8 +138,8 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
     addFieldListener(this)
   }
 
-  fun setFieldContent(component: AbstractField) {
-    content = component
+  fun setFieldContent(component: CustomField<Any?>) {
+    wrappedField = component
     add(component)
   }
 
@@ -308,7 +311,15 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
    */
   open fun isNull(): Boolean = TODO()
 
-  open fun iniWidget() {
+
+  /**
+   * Gains the focus on this field.
+   */
+  open fun focus() {
+    wrappedField.focus()
+  }
+
+  open fun iniComponent() {
     init(hasIncrement, hasDecrement)
   }
 
@@ -465,7 +476,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
    * @param rec The concerned record number.
    */
   open fun markAsDirty(rec: Int) {
-    markAsDirty(rec, if (value == null) "" else value.toString())
+    markAsDirty(rec, if (wrappedField.value == null) "" else wrappedField.value.toString())
   }
 
   /**
@@ -528,8 +539,8 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
       return
     }
     if (dirtyValues != null && dirtyValues!!.isNotEmpty()) {
-      (content as TextField).sendTextToServer()
-      (content as TextField).sendDirtyValuesToServer(HashMap(dirtyValues))
+      (wrappedField as TextField).sendTextToServer()
+      (wrappedField as TextField).sendDirtyValuesToServer(HashMap(dirtyValues))
       dirtyValues!!.clear()
     }
     dirty = false
@@ -538,9 +549,9 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
   /**
    * Updates the value of this field according to its position.
    */
-  public override fun updateValue() {
-    value = columnView!!.getValueAt(position)
-    super.updateValue() // TODO: Do we need this?
+  fun updateValue() {
+    wrappedField.value = columnView!!.getValueAt(position)
+    // wrappedField.updateValue() // TODO: Do we need this?
   }
 
   /**
@@ -572,12 +583,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
    */
   protected open fun getBlock(): Block? = parent.orElse(null) as? Block
 
-  override fun setPresentationValue(newPresentationValue: Any?) {
-    content.value = newPresentationValue
-  }
-
-  override fun generateModelValue(): Any? = content.value
-
   /**
    * The navigation delegation to server mode.
    */
@@ -601,5 +606,15 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
      * Always delegate navigation to server.
      */
     ALWAYS
+  }
+
+  companion object {
+    /**
+     * Enables and disables the leave action of the active field.
+     * This is used to simulate the modal popups that blocks the execution
+     * Thread since Javascript can not handle multi thread and it is a single threaded.
+     * @param doNotLeaveActiveField Should we leave the active field.
+     */
+    var doNotLeaveActiveField = false
   }
 }
