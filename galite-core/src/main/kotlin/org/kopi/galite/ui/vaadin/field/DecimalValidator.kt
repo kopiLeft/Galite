@@ -47,7 +47,7 @@ class DecimalValidator(
       }
       if (v != null) {
         //!!! FIXME : we should get here the current scale of the field and
-        //            and not the max scale. The VFixnumField should be modified
+        //            and not the max scale. The DecimalField should be modified
         //            so that the current scale is sent to the client side when it changes.
         //            This scale value should be updated in validator instance of the field
         //            and then used in this test.
