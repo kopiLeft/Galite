@@ -127,6 +127,11 @@ class TextField(val model: VField,
    */
   var convertType = ConvertType.NONE
 
+  /**
+   * The text validator for this field.
+   */
+  var validator: TextValidator? = null
+
   val listeners = mutableListOf<HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>>()
 
   init {
@@ -144,7 +149,7 @@ class TextField(val model: VField,
     if (hasAutofill) {
       //TODO("AUTOFILL")
     }
-    setValidationStrategy()
+    setValidator()
   }
 
   val maxLength: Int get() = col * rows
@@ -218,26 +223,29 @@ class TextField(val model: VField,
           }
 
   /**
-   * Sets the validation strategy of a text field.
+   * Sets the validator of a text field.
    */
-  fun setValidationStrategy() {
+  fun setValidator() {
     val binder = BeanValidationBinder(String::class.java)
     val bindingBuilder = binder.forField(field)
 
-    when (type) {
-      Type.STRING -> bindingBuilder.withValidator(StringValidator(col, rows, !dynamicNewLine, convertType, maxLength)).bind(
-              { TODO() }, { _, _ -> TODO() })
-      Type.INTEGER -> bindingBuilder.withValidator(IntegerValidator(minval, maxval, maxLength)).bind({ TODO() },
-                                                                                                     { _, _ -> TODO() })
-      Type.DECIMAL -> bindingBuilder.withValidator(DecimalValidator(maxScale, fraction, col, minval, maxval, maxLength)).bind({ TODO() }, { _, _ -> TODO() })
-      Type.DATE -> bindingBuilder.withValidator(DateValidator(maxLength)).bind({ TODO() }, { _, _ -> TODO() })
-      Type.TIME -> bindingBuilder.withValidator(TimeValidator(maxLength)).bind({ TODO() }, { _, _ -> TODO() })
-      Type.MONTH -> bindingBuilder.withValidator(MonthValidator(maxLength)).bind({ TODO() }, { _, _ -> TODO() })
-      Type.WEEK -> bindingBuilder.withValidator(WeekValidator(maxLength)).bind({ TODO() }, { _, _ -> TODO() })
-      Type.TIMESTAMP -> bindingBuilder.withValidator(TimestampValidator(maxLength)).bind({ TODO() }, { _, _ -> TODO() })
-      Type.CODE -> TODO()
-      else -> TODO()
+    val validator = when (type) {
+      Type.STRING -> StringValidator(col, rows, !dynamicNewLine, convertType, maxLength)
+      Type.INTEGER -> IntegerValidator(minval, maxval, maxLength)
+      Type.DECIMAL -> DecimalValidator(maxScale, fraction, col, minval, maxval, maxLength)
+      Type.DATE -> DateValidator(maxLength)
+      Type.TIME -> TimeValidator(maxLength)
+      Type.MONTH -> MonthValidator(maxLength)
+      Type.WEEK -> WeekValidator(maxLength)
+      Type.TIMESTAMP -> TimestampValidator(maxLength)
+      Type.CODE -> EnumValidator(enumerations, maxLength)
+      else -> AllowAllValidator(maxLength)
     }
+
+    this.validator = validator
+
+    bindingBuilder.withValidator(validator)
+            .bind({ TODO() }, { _, _ -> TODO() })
   }
 
   /**

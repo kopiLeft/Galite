@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 /**
- * Time stamp validation strategy
+ * Time stamp validator
  */
 class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
 

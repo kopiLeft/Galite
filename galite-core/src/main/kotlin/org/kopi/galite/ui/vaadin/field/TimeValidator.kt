@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.vaadin.field
 
 /**
- * Time validation strategy.
+ * Time validator.
  */
 class TimeValidator(maxLength: Int) : AllowAllValidator(maxLength) {
 

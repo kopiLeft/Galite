@@ -21,7 +21,7 @@ import com.vaadin.flow.data.binder.ValidationResult
 import com.vaadin.flow.data.binder.ValueContext
 
 /**
- * No restriction applied in this validation strategy.
+ * No restriction applied in this validator.
  *
  * @param maxLength The maximum permitted length.
  */

@@ -21,7 +21,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 /**
- * Fixed numbers validation strategy.
+ * Fixed numbers validator.
  */
 class DecimalValidator(
         private val maxScale: Int,
@@ -49,7 +49,7 @@ class DecimalValidator(
         //!!! FIXME : we should get here the current scale of the field and
         //            and not the max scale. The VFixnumField should be modified
         //            so that the current scale is sent to the client side when it changes.
-        //            This scale value should be updated in validation strategy instance of the field
+        //            This scale value should be updated in validator instance of the field
         //            and then used in this test.
         if (v.scale() > maxScale) {
           throw CheckTypeException(field, "00011", maxScale)

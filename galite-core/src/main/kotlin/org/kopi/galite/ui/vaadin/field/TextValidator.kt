@@ -41,7 +41,7 @@ interface TextValidator: Validator<Any?> {
   fun validate(text: String?): Boolean
 
   /**
-   * Performs a check of the given text according to the strategy type.
+   * Performs a check of the given text according to the validation type.
    *
    * @param text The text to be checked.
    * @throws CheckTypeException when the given value is not valid.

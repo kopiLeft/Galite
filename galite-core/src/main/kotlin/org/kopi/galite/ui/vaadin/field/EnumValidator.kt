@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.vaadin.field
 
 /**
- * Validation strategy for enumeration fields
+ * Validator for enumeration fields
 
  * @param enumerations The enumeration values.
  */

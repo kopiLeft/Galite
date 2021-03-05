@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.vaadin.field
 
 /**
- * Validation strategy for string fields.
+ * Validator for string fields.
  */
 class StringValidator(
         private val width: Int,
@@ -52,8 +52,8 @@ class StringValidator(
   }
 
   /**
-   * Returns the convert type of this validation strategy.
-   * @return The convert type of this validation strategy.
+   * Returns the convert type of this validator.
+   * @return The convert type of this validator.
    */
   fun getConvertType(): TextField.ConvertType {
     return convertType

@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.vaadin.field
 
 /**
- * No edition validation strategy. Block all keycodes
+ * No edition validator. Block all keycodes
  */
 class NoeditValidator(maxLength: Int) : AllowAllValidator(maxLength) {
   override fun validate(c: Char): Boolean {

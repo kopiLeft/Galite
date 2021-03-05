@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.field
 import java.util.Date
 
 /**
- * Month validation strategy.
+ * Month validator.
  */
 class MonthValidator(maxLength: Int) : AllowAllValidator(maxLength) {
 

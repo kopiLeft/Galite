@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.vaadin.field
 
 /**
- * An integer validation strategy.
+ * An integer validator.
  *
  * @param minval The minimum accepted value.
  * @param maxval The maximum accepted value.
@@ -32,7 +32,7 @@ class IntegerValidator(private val minval: Int?,
   // CONSTRUCTOR
   //---------------------------------------------------
   /**
-   * Creates a new integer validation strategy instance.
+   * Creates a new integer validator instance.
    * @param minval The minimum accepted value.
    * @param maxval The maximum accepted value.
    */

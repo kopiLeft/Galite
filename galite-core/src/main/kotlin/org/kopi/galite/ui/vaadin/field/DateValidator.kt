@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 /**
- * A date validation strategy.
+ * A date validator.
  */
 class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
 

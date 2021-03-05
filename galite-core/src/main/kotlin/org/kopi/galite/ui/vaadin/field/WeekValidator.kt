@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.field
 import java.util.Date
 
 /**
- * Week validation strategy.
+ * Week validator.
  */
 class WeekValidator(maxLength: Int) : AllowAllValidator(maxLength) {
 
