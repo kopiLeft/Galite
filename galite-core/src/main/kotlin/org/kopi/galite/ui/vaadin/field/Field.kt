@@ -108,7 +108,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Cus
 
   var columnView: ColumnView? = null
 
-  lateinit var content: AbstractField
+  lateinit var content: CustomField<Any?>
 
   /**
    * `true` if the content of this field has changed.

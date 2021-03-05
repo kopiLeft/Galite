@@ -27,6 +27,13 @@ import com.vaadin.flow.component.HasComponents
 interface BlockLayout : HasComponents {
 
   /**
+   * Adds a component to the layout according to its constraints.
+   * @param component The component to add.
+   * @param constraints The constraints.
+   */
+  fun add(component: Component?, constraints: ComponentConstraint)
+
+  /**
    * Adds a component to this block layout.
    *
    * @param component  The component to be added.

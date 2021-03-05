@@ -62,7 +62,7 @@ interface UBlock : UComponent, BlockListener {
    * @param comp The [UComponent] to be added
    * @param constraints The [Alignment] constraints
    */
-  fun add(comp: UComponent, constraints: Alignment)
+  fun add(comp: UComponent?, constraints: Alignment)
 
   /**
    * Returns the position of a given column.

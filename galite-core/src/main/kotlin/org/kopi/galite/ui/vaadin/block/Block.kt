@@ -69,7 +69,11 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * with wron top scroll record.
    */
   private var activeRecordSetFromDisplay = false
-  private var layoutBelongsToGridDetail = false
+
+  /**
+   * true if the layout of this block belongs to the grid row detail.
+   */
+  var isLayoutBelongsToGridDetail = false
 
   /**
    * Is the animation enabled for block view switch?
@@ -683,7 +687,7 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * We need to clear block fields cause layout was unregistered
    */
   protected open fun clearFields() {
-    if (isLayoutBelongsToGridDetail() && fields != null) {
+    if (isLayoutBelongsToGridDetail && fields != null) {
       fields.clear()
     }
   }
@@ -856,7 +860,7 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
     }
 
     // first check if the navigation should be delegated to server side.
-    if (isLayoutBelongsToGridDetail() || activeField!!.delegateNavigationToServer() && activeField!!.getFieldListener() != null) {
+    if (isLayoutBelongsToGridDetail || activeField!!.delegateNavigationToServer() && activeField!!.getFieldListener() != null) {
       activeField!!.getFieldListener()!!.gotoNextRecord()
     } else {
       if (isMulti() && !detailMode) {
@@ -896,7 +900,7 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
       return
     }
     // first check if the navigation should be delegated to server side.
-    if (isLayoutBelongsToGridDetail() || activeField!!.delegateNavigationToServer() && activeField!!.getFieldListener() != null) {
+    if (isLayoutBelongsToGridDetail || activeField!!.delegateNavigationToServer() && activeField!!.getFieldListener() != null) {
       activeField!!.getFieldListener()!!.gotoPrevRecord()
     } else {
       if (isMulti() && !detailMode) {
@@ -932,7 +936,7 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * This act is delegated to the server side when the target field contains triggers to be executed.
    */
   open fun gotoFirstRecord() {
-    if (isLayoutBelongsToGridDetail() || activeField == null) {
+    if (isLayoutBelongsToGridDetail || activeField == null) {
       return
     }
     // first check if the navigation should be delegated to server side.
@@ -980,7 +984,7 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * This act is delegated to the server side when the target field contains triggers to be executed.
    */
   open fun gotoLastRecord() {
-    if (isLayoutBelongsToGridDetail() || activeField == null) {
+    if (isLayoutBelongsToGridDetail || activeField == null) {
       return
     }
     // first check if the navigation should be delegated to server side.
@@ -1085,7 +1089,7 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    */
   protected open fun refresh(force: Boolean) {
     var redisplay = false
-    if (isLayoutBelongsToGridDetail() || !isMulti()) {
+    if (isLayoutBelongsToGridDetail || !isMulti()) {
       return
     }
     // row in view
@@ -1506,7 +1510,7 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
     // if the block layout belongs to a grid row detail
     // display line is always 0 cause it acts like a simple
     // block even is buffer size is > 1
-    if (isLayoutBelongsToGridDetail() || noChart()) {
+    if (isLayoutBelongsToGridDetail || noChart()) {
       return 0
     }
     if (recno < 0) {
@@ -1666,22 +1670,6 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
       current = activeRecord + 1
     }
     return current
-  }
-
-  /**
-   * Sets the layout of this block belongs to the grid detail component.
-   * @param layoutBelongsToGridDetail Is the layout belongs to grid details ?
-   */
-  open fun setLayoutBelongsToGridDetail(layoutBelongsToGridDetail: Boolean) {
-    this.layoutBelongsToGridDetail = layoutBelongsToGridDetail
-  }
-
-  /**
-   * Returns true if the layout of this block belongs to the grid row detail.
-   * @return true if the layout of this block belongs to the grid row detail.
-   */
-  open fun isLayoutBelongsToGridDetail(): Boolean {
-    return layoutBelongsToGridDetail
   }
 
   fun onKeyPress(keyDownEvent: ShortcutEvent?) {

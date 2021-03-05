@@ -40,7 +40,7 @@ import com.vaadin.flow.component.Component
  * @param parent The parent form.
  * @param model The block model.
  */
-open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.isDroppable), UBlock {
+open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
 
   protected var formView: DForm = parent
   protected lateinit var columnViews: Array<VFieldUI?>
@@ -393,8 +393,8 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
     return model.getDataPosition(displayToSortedRec[line])
   }
 
-  override fun add(comp: UComponent, constraints: Alignment) {
-    addComponent(comp as Component,
+  override fun add(comp: UComponent?, constraints: Alignment) {
+    addComponent(comp as? Component,
                  constraints.x,
                  constraints.y,
                  constraints.width,
@@ -412,8 +412,8 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   }
 
   override fun createLayout(): BlockLayout {
-    // label + field => fldNumber + lines
-    val layout = SimpleBlockLayout(DFieldUI.fldNumber * maxColumnPos, maxRowPos)
+    // label + field => 2 + lines
+    val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos)
     if (model.alignment != null) {
       layout.setBlockAlignment(formView.getBlockView(model.alignment!!.block) as Component,
                                model.alignment!!.targets,

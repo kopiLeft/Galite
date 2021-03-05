@@ -17,26 +17,22 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.ComponentEventListener
+import org.kopi.galite.base.UComponent
+import org.kopi.galite.form.Alignment
+import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VField
+import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.block.BlockLayout
+import org.kopi.galite.ui.vaadin.block.SingleComponentBlockLayout
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VException
+
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.grid.ColumnResizeEvent
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.data.event.SortEvent
-import org.kopi.galite.base.UComponent
-import org.kopi.galite.form.Alignment
-import org.kopi.galite.form.VActorField
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VBooleanField
-import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.ui.vaadin.block.BlockLayout
-import org.kopi.galite.ui.vaadin.block.SingleComponentBlockLayout
-import org.kopi.galite.ui.vaadin.field.TextField
-import org.kopi.galite.visual.Action
-import org.kopi.galite.visual.VException
 
 /**
  * Grid based chart block implementation.
@@ -228,7 +224,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
     return DGridBlockFieldUI(this, model, index)
   }
 
-  override fun add(comp: UComponent, constraints: Alignment) {}
+  override fun add(comp: UComponent?, constraints: Alignment) {}
   override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
     // TODO
   }

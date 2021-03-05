@@ -64,8 +64,8 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun add(comp: UComponent, constraints: Alignment) {
-    addComponent(comp as Component?,
+  override fun add(comp: UComponent?, constraints: Alignment) {
+    addComponent(comp as? Component,
                  constraints.x,
                  constraints.y,
                  constraints.width,
