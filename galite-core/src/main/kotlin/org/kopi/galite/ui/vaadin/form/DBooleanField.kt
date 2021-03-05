@@ -118,7 +118,7 @@ class DBooleanField(
     //})
   }
 
-  override fun getObject(): Any? = text
+  override fun getObject(): Any? = value
 
   override fun setBlink(b: Boolean) {
     //BackgroundThreadHandler.access(Runnable { TODO

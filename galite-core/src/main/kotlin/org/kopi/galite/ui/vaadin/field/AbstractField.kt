@@ -17,11 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.customfield.CustomField
 
 /**
  * Super class for all field components.
  */
-abstract class AbstractField : Div() {
-  abstract var value: Any?
-}
+abstract class AbstractField : CustomField<Any?>(), HasStyle

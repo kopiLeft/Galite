@@ -15,22 +15,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field;
-
-import java.io.Serializable;
+package org.kopi.galite.ui.vaadin.form
 
 /**
- * Registered objects are notified with actions performed on an image field.
+ * Constraints for block position.
+ *
+ * @param isFollow is it a follow block ?
+ * @param isChart is it a chart block ?
+ * @param page the page index
  */
-public interface ImageFieldListener extends Serializable {
-
-  /**
-   * Fired when the image is removed from the field.
-   */
-  public void onRemove();
-
-  /**
-   * Fired when the image field is clicked.
-   */
-  public void onImageClick();
-}
+data class BlockComponentData(var isFollow: Boolean, var isChart: Boolean, var page: Int)

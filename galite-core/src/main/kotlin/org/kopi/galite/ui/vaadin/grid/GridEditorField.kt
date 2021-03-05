@@ -27,13 +27,12 @@ import org.kopi.galite.ui.vaadin.field.Field
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.router.NavigationEvent
 
 /**
  * A grid editor field server side implementation.
  */
-abstract class GridEditorField<T> protected constructor() : AbstractField(), Focusable<GridEditorField<T>> {
+abstract class GridEditorField<T> protected constructor() : AbstractField() {
 
   /**
    * The navigation delegation to server mode.

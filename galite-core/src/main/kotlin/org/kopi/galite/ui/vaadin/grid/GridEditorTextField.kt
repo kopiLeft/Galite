@@ -21,6 +21,11 @@ package org.kopi.galite.ui.vaadin.grid
  * A text field used as editor
  */
 open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
-  override var value: Any? = TODO()
-  // TODO
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun generateModelValue(): Any? {
+    TODO("Not yet implemented")
+  }
 }

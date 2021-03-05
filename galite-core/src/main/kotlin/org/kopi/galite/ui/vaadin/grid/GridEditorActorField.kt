@@ -37,7 +37,13 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
   val type: Class<out String>
     get() = String::class.java
 
-  override var value: Any? = TODO()
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun generateModelValue(): Any? {
+    TODO("Not yet implemented")
+  }
 
   /*override fun addNavigationListener(listener: NavigationListener?) {
     // NOT SUPPORTED

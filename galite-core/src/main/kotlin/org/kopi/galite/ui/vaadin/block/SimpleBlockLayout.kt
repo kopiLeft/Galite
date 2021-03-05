@@ -17,10 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
-import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.field.ActorField
 import org.kopi.galite.ui.vaadin.form.DField
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 
 /**
@@ -58,58 +59,61 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
           component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean,
           useAll: Boolean,
   ) {
-    val constraints = ComponentConstraint(x,
-                                          y,
-                                          width,
-                                          height,
-                                          alignRight,
-                                          useAll)
+    val constraints = ComponentConstraint(x, y, width, height, alignRight, useAll)
+
+    if (parent.get() is Grid<*>) { // TODO
+      getBlock().isLayoutBelongsToGridDetail = true
+    }
+    if (component != null) {
+      if (component is DField) {
+        val formItem = object : FormItem(component) {
+          init {
+            addToLabel(component.label)
+          }
+        }
+        add(formItem, constraints)
+
+        // a follow field has no label
+        // an actor field has no label too.
+        // we treat this cases separately
+        val columnView: ColumnView = if (constraints.width < 0 || component.content is ActorField) {
+          ColumnView(getBlock()).also { columnView ->
+            columnView.label = null
+            columnView.addField(component)
+            if (blockInDetailMode()) {
+              columnView.detailLabel = null
+              columnView.setDetailDisplay(component)
+            }
+          }
+        } else {
+          ColumnView(getBlock()).also { columnView ->
+            // Label
+            columnView.label = component.label
+            if (blockInDetailMode()) {
+              columnView.detailLabel = component.label
+            }
+
+            // Field
+            columnView.addField(component)
+            if (blockInDetailMode()) {
+              columnView.setDetailDisplay(component)
+            }
+          }
+        }
+
+        getBlock().addField(columnView)
+      }
+    }
+  }
+
+  override fun add(component: Component?, constraints: ComponentConstraint) {
     if (align == null) {
-      if (width < 0) {
+      if (constraints.width < 0) {
         follows!!.add(component!!)
         followsAligns!!.add(constraints)
       } else {
-        if (component is DField) {
-          val formItem = object : FormItem(component) {
-            init {
-              addToLabel(component.label)
-            }
-          }
-          aligns!![x][y] = constraints
-          components!![x][y] = formItem
-
-          // TODO: Grid container?
-
-          // a follow field has no label
-          // an actor field has no label too.
-          // we treat this cases separately
-          val columnView: ColumnView = if (constraints.width < 0 || component.content is Actor) {
-            ColumnView(getBlock()).also { columnView ->
-              columnView.label = null
-              columnView.addField(component)
-              if (blockInDetailMode()) {
-                columnView.detailLabel = null
-                columnView.setDetailDisplay(component)
-              }
-            }
-          } else {
-            ColumnView(getBlock()).also { columnView ->
-              // Label
-              columnView.label = component.label
-              if (blockInDetailMode()) {
-                columnView.detailLabel = component.label
-              }
-
-              // Field
-              columnView.addField(component)
-              if (blockInDetailMode()) {
-                columnView.setDetailDisplay(component)
-              }
-            }
-          }
-
-          getBlock().addField(columnView)
-        }
+        aligns!![constraints.x][constraints.y] = constraints
+        components!![constraints.x][constraints.y] = component
       }
     } else {
       if (component == null) {
@@ -117,12 +121,12 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       }
 
       // add to the original block as extra components.
-      val newConstraint = ComponentConstraint(align!!.getTargetPos(x),
-                                              y,
-                                              width,
-                                              height,
-                                              alignRight,
-                                              useAll)
+      val newConstraint = ComponentConstraint(align!!.getTargetPos(constraints.x),
+                                              constraints.y,
+                                              constraints.width,
+                                              constraints.height,
+                                              constraints.alignRight,
+                                              constraints.useAll)
       // adds an extra component to the block.
       addAlignedComponent(component, newConstraint)
     }
@@ -131,8 +135,8 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
   override fun layout() {
     // Responsive steps
     setResponsiveSteps(
-            *Array(col) {
-              ResponsiveStep("" + (15 + 5 * it) + "em", it + 1, ResponsiveStep.LabelsPosition.TOP)
+            *Array(col / 2) {
+              ResponsiveStep("" + (15 + 20 * it) + "em", it + 1)
             }
     )
 
@@ -151,7 +155,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
                                  aligns!![x][y]!!.height.coerceAtMost(getAllocatedHeight(x, y)))
             setAlignment(aligns!![x][y]!!.y, aligns!![x][y]!!.x, aligns!![x][y]!!.alignRight)*/
             add(components!![x][y])
-          } else {
+          } else if (x % 2 != 0) { // FIXME: We skip labels as they are attached to the field in a form item
             add(Div())
           }
         }

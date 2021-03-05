@@ -26,7 +26,4 @@ class GridEditorFixnumField(
         maxValue: Double,
         maxScale: Int,
         fraction: Boolean
-) : GridEditorTextField(width) {
-  override var value: Any? = TODO()
-  // TODO
-}
+) : GridEditorTextField(width)

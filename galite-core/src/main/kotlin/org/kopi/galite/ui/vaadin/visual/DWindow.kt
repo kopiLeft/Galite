@@ -48,6 +48,7 @@ import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WaitInfoListener
+import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dialog.Dialog
@@ -60,7 +61,7 @@ import com.vaadin.flow.server.ErrorHandler
  *
  * @param model The window model.
  */
-abstract class DWindow protected constructor(private val model: VWindow) : Div(), UWindow {
+abstract class DWindow protected constructor(private val model: VWindow) : Window(), UWindow {
 
   //--------------------------------------------------------------
   // DATA MEMBERS
@@ -75,7 +76,6 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
     private set
   private var currentAction: Action? = null
   private val askUser = false
-  private val actors : VActorPanel = VActorPanel()
   private var runtimeDebugInfo: Throwable? = null
 
   /**
@@ -117,21 +117,6 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
   //---------------------------------------------------
 
   /**
-   * Sets the window caption.
-   * @param caption The window caption.
-   */
-  fun setCaption(caption: String) {
-
-    // first look if we can set the title on the main window.
-    val success: Boolean = maybeSetMainWindowCaption(caption)
-    if (!success) {
-      // window does not belong to main window
-      // It may be then belong to a popup window
-      maybeSetPopupWindowCaption(caption)
-    }
-  }
-
-  /**
    * Sets the window caption if it belongs to the main window.
    * @param caption The window caption.
    * @return `true` if the caption is set.
@@ -146,31 +131,6 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
       return true
     }
     return false
-  }
-
-  /**
-   * Sets the window caption if it belongs to a popup window.
-   * @param caption The window caption.
-   * @return `true` if the caption is set.
-   */
-  private fun maybeSetPopupWindowCaption(caption: String): Boolean {
-    var parent: PopupWindow? = null
-    this.parent.ifPresent {
-      parent = it as PopupWindow
-    }
-    if (parent != null) {
-      parent!!.setCaption(caption)
-      return true
-    }
-    return false
-  }
-
-  /**
-   * Sets the window content.
-   * @param content The window content.
-   */
-  open fun setContent(content: Component) {
-    add(content)
   }
 
   /**
@@ -233,14 +193,6 @@ abstract class DWindow protected constructor(private val model: VWindow) : Div()
       val actor = DActor(actorDef!!)
       addActor(actor)
     }
-  }
-
-  /**
-   * Adds an actor to this window.
-   * @param actor The actor to be added.
-   */
-  fun addActor(actor: Actor) {
-    actors.addActor(actor)
   }
 
   /**

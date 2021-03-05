@@ -30,6 +30,21 @@ import org.kopi.galite.ui.vaadin.base.Styles
  */
 abstract class AbstractBlockLayout protected constructor(val col: Int, val line: Int) : FormLayout(), BlockLayout {
 
+  /**
+   * The number of columns
+   */
+  var columns = 1
+
+  /**
+   * The number of rows.
+   */
+  var rows = 1
+
+  /**
+   * The children constrains
+   */
+  var constrains: MutableMap<Component?, ComponentConstraint?> = mutableMapOf()
+
   protected var components: Array<Array<Component?>>? = null
   protected var aligns: Array<Array<ComponentConstraint?>>? = null
 
