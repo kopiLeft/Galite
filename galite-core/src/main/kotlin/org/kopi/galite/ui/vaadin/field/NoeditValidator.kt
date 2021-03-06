@@ -17,10 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.customfield.CustomField
-
 /**
- * Super class for all field components.
+ * No edition validator. Block all keycodes
  */
-abstract class AbstractField : CustomField<Any?>(), HasStyle
+class NoeditValidator(maxLength: Int) : AllowAllValidator(maxLength) {
+  override fun validate(c: Char): Boolean {
+    return false
+  }
+
+  override fun validate(text: String?): Boolean {
+    return false
+  }
+}

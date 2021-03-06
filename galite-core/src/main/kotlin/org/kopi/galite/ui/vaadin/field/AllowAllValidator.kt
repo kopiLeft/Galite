@@ -17,41 +17,38 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import org.kopi.galite.ui.vaadin.notif.NotificationListener
-
-import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.data.binder.ValidationResult
+import com.vaadin.flow.data.binder.ValueContext
 
 /**
- * Thrown when the field content is checked against its validator.
- * This exception is transformed later to an error notification.
+ * No restriction applied in this validator.
  *
- * @param field The concerned text input zone.
- * @param messageKey The message key.
- * @param params The message parameters
+ * @param maxLength The maximum permitted length.
  */
-class CheckTypeException(
-        val field: HasValue<*, *>,
-        val messageKey: String?,
-        vararg params: Any?
-) : Exception(), NotificationListener {
+open class AllowAllValidator(val maxLength: Int) : TextValidator {
 
-  /**
-   * Creates a new check type exception from a message key.
-   * @param field The concerned text input zone.
-   * @param messageKey The message key.
-   */
-  constructor(field: HasValue<*, *>, messageKey: String?) : this(field, messageKey, null)
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  /**
-   * Displays the check type error.
-   */
-  fun displayError() {
-    // TODO
+  override fun apply(value: Any?, context: ValueContext): ValidationResult =
+          if (validate(value?.toString())) ValidationResult.ok() else ValidationResult.error("TODO") // TODO
+
+  override fun validate(c: Char): Boolean = true
+
+  override fun validate(text: String?): Boolean {
+    return if (text == null) {
+      true // null text is considered as valid one
+    } else {
+      for (element in text) {
+        if (!validate(element)) {
+          return false
+        }
+      }
+      true
+    }
   }
 
-  override fun onClose(action: Boolean) {
-    // TODO
+  override fun checkType(field: TextField, text: String) {
+    // nothing to do, all is accepted
   }
 }

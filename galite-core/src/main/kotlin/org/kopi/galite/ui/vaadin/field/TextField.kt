@@ -30,7 +30,9 @@ import org.kopi.galite.form.VWeekField
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.data.binder.BeanValidationBinder
 
 /**
@@ -48,7 +50,8 @@ class TextField(val model: VField,
                 val scanner: Boolean,
                 val noEdit: Boolean,
                 val align: Int,
-                val hasAutofill: Boolean) : org.kopi.galite.ui.vaadin.field.AbstractField() {
+                val hasAutofill: Boolean)
+  : CustomField<Any?>(), HasStyle {
 
   val field: AbstractField<*, out Any?>
 
@@ -124,6 +127,11 @@ class TextField(val model: VField,
    */
   var convertType = ConvertType.NONE
 
+  /**
+   * The text validator for this field.
+   */
+  var validator: TextValidator? = null
+
   val listeners = mutableListOf<HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>>()
 
   init {
@@ -141,8 +149,10 @@ class TextField(val model: VField,
     if (hasAutofill) {
       //TODO("AUTOFILL")
     }
-    setValidationStrategy()
+    setValidator()
   }
+
+  val maxLength: Int get() = col * rows
 
   override fun onAttach(attachEvent: AttachEvent) {
     listeners.forEach {
@@ -213,26 +223,29 @@ class TextField(val model: VField,
           }
 
   /**
-   * Sets the validation strategy of a text field.
+   * Sets the validator of a text field.
    */
-  fun setValidationStrategy() {
-    val binder = BeanValidationBinder(Any::class.java)
+  fun setValidator() {
+    val binder = BeanValidationBinder(String::class.java)
     val bindingBuilder = binder.forField(field)
 
-    when (type) {
-      Type.STRING -> bindingBuilder.withValidator(StringValidator(col, rows, !dynamicNewLine, convertType)).bind(
-              { TODO() }, { _, _ -> TODO() })
-      Type.INTEGER -> bindingBuilder.withValidator(IntegerValidator(minval, maxval)).bind({ TODO() },
-                                                                                          { _, _ -> TODO() })
-      Type.DECIMAL -> TODO()
-      Type.DATE -> bindingBuilder.withValidator(DateValidator()).bind({ TODO() }, { _, _ -> TODO() })
-      Type.TIME -> bindingBuilder.withValidator(TimeValidator()).bind({ TODO() }, { _, _ -> TODO() })
-      Type.MONTH -> bindingBuilder.withValidator(MonthValidator()).bind({ TODO() }, { _, _ -> TODO() })
-      Type.WEEK -> bindingBuilder.withValidator(WeekValidator()).bind({ TODO() }, { _, _ -> TODO() })
-      Type.TIMESTAMP -> bindingBuilder.withValidator(TimestampValidator()).bind({ TODO() }, { _, _ -> TODO() })
-      Type.CODE -> TODO()
-      else -> TODO()
+    val validator = when (type) {
+      Type.STRING -> StringValidator(col, rows, !dynamicNewLine, convertType, maxLength)
+      Type.INTEGER -> IntegerValidator(minval, maxval, maxLength)
+      Type.DECIMAL -> DecimalValidator(maxScale, fraction, col, minval, maxval, maxLength)
+      Type.DATE -> DateValidator(maxLength)
+      Type.TIME -> TimeValidator(maxLength)
+      Type.MONTH -> MonthValidator(maxLength)
+      Type.WEEK -> WeekValidator(maxLength)
+      Type.TIMESTAMP -> TimestampValidator(maxLength)
+      Type.CODE -> EnumValidator(enumerations, maxLength)
+      else -> AllowAllValidator(maxLength)
     }
+
+    this.validator = validator
+
+    bindingBuilder.withValidator(validator)
+            .bind({ TODO() }, { _, _ -> TODO() })
   }
 
   /**
@@ -267,7 +280,6 @@ class TextField(val model: VField,
     } else if(type == Type.INTEGER) {
       VTextField(col).also {
         it.pattern = "[0-9]*"
-        it.maxLength = col;
         it.isPreventInvalidInput = true
       }
     } else if(type == Type.TIME) {
@@ -303,7 +315,7 @@ class TextField(val model: VField,
       size += 1
     }
     text.size = 1.coerceAtLeast(size)
-    text.setMaxLength(col * rows)
+    text.setMaxLength(maxLength)
     text.maxWidth = "" + col + "em" // TODO: temporary styling
     // add navigation handler.
     // text.addKeyDownHandler(TextFieldNavigationHandler.newInstance(this, text, rows > 1)) TODO
@@ -354,7 +366,7 @@ class TextField(val model: VField,
   }
 
   override fun setPresentationValue(newPresentationValue: Any?) {
-    field.value = value
+    field.value = newPresentationValue
   }
 
   override fun generateModelValue(): Any? = field.value

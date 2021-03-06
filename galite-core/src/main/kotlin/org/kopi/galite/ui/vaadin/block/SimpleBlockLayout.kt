@@ -76,7 +76,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         // a follow field has no label
         // an actor field has no label too.
         // we treat this cases separately
-        val columnView: ColumnView = if (constraints.width < 0 || component.content is ActorField) {
+        val columnView: ColumnView = if (constraints.width < 0 || component.wrappedField is ActorField) {
           ColumnView(getBlock()).also { columnView ->
             columnView.label = null
             columnView.addField(component)
