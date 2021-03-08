@@ -19,20 +19,21 @@ package org.kopi.galite.ui.vaadin.list
 
 import com.vaadin.flow.component.grid.contextmenu.GridMenuItem
 import com.vaadin.flow.data.provider.DataCommunicator
-import com.vaadin.flow.dom.Element
+import com.vaadin.flow.data.provider.FilterUtils
+import org.kopi.galite.report.VReportRow
 
 class ListFilter(private val propertyId: Any?,
                  filterString: String,
                  ignoreCase: Boolean,
-                 private val onlyMatchPrefix: Boolean) : DataCommunicator.Filter<ListProperty>() {
+                 private val onlyMatchPrefix: Boolean) : FilterUtils {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  fun passesFilter(itemId: Any?, item: GridMenuItem<>): Boolean {
+  fun passesFilter(itemId: Any?, item: GridMenuItem<VReportRow>): Boolean {
 
-    val property: ListProperty? = item.getItemProperty(propertyId)
+    val property: ListProperty? = get
     val propertyValue: Any?
     val value: String
 
@@ -53,6 +54,7 @@ class ListFilter(private val propertyId: Any?,
         return false
       }
     }
+
     return true
   }
 
@@ -60,16 +62,16 @@ class ListFilter(private val propertyId: Any?,
     return this.propertyId == propertyId
   }
 
-  override fun equals(obj: Any?): Boolean {
-    if (obj == null) {
+  override fun equals(other: Any?): Boolean {
+    if (other == null) {
       return false
     }
 
     // Only ones of the objects of the same class can be equal
-    if (obj !is ListFilter) {
+    if (other !is ListFilter) {
       return false
     }
-    val o = obj
+    val o = other
 
     // Checks the properties one by one
     if (propertyId != o.propertyId && o.propertyId != null && o.propertyId != propertyId) {
@@ -90,8 +92,4 @@ class ListFilter(private val propertyId: Any?,
 
   private val filterString: String? = if (ignoreCase) filterString.toLowerCase() else filterString
   private val ignoreCase: Boolean = ignoreCase
-
-  init {
-
-  }
 }

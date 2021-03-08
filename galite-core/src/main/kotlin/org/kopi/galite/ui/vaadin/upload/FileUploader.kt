@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.upload
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.upload.ProgressUpdateEvent
 import com.vaadin.flow.component.upload.Receiver
+import com.vaadin.flow.component.upload.StartedEvent
 import com.vaadin.flow.component.upload.Upload
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
@@ -56,7 +57,7 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
 
   init {
     uploader.addProgressListener(this)
-    //uploader.addStartedListener(this) TODO
+    uploader.addStartedListener(this as ComponentEventListener<StartedEvent>)
     //uploader.addFinishedListener(this)
     //uploader.addFailedListener(this)
     //uploader.setLocale(application.getDefaultLocale().toString())
@@ -74,7 +75,7 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
    */
   fun upload(mimeType: String?): ByteArray? {
     this.mimeType = mimeType
-    uploader.setMimeType(mimeType)
+    //uploader.setMimeType(mimeType) TODO
     application.attachComponent(uploader)
     close()
 

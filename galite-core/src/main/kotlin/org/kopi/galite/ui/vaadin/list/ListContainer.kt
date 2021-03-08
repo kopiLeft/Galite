@@ -17,9 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.ListItem
 import com.vaadin.flow.data.provider.DataCommunicator
+import com.vaadin.flow.data.provider.InMemoryDataProvider
 import org.kopi.galite.form.VListDialog
 import org.kopi.galite.ui.vaadin.base.Utils
 import java.util.*
@@ -27,24 +29,21 @@ import java.util.*
 /**
  * A sortable data source container for list dialog object.
  */
-class ListContainer(model: VListDialog) : Div() {
+class ListContainer(model: VListDialog) : Div(), InMemoryDataProvider {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  val containerPropertyIds: Collection<*>
+  val containerPropertyIds: Collection<Int>
     get() = Collections.unmodifiableCollection(propertyIds)
 
-  fun getContainerProperty(itemId: Any?, propertyId: Any?): ListProperty {
-    return ListProperty(model, (itemId as Int?)!!, (propertyId as Int?)!!)
-  }
+  fun getContainerProperty(itemId: Any?, propertyId: Any?): ListProperty
+          = ListProperty(model, itemId as Int, propertyId as Int)
 
-  fun getType(propertyId: Any?): Class<*> {
-    return String::class.java
-  }
+  fun getType(propertyId: Any?): Class<*> = String::class.java
 
-  protected fun getUnfilteredItem(itemId: Any?): ListItem {
+  protected fun getUnfilteredItem(itemId: Any?): ListItem? {
     return ListItem(this, itemId as Int?)
   }
 
@@ -61,11 +60,12 @@ class ListContainer(model: VListDialog) : Div() {
   }
 
   fun addContainerFilter(filter: ListFilter) {
-    addContainerFilter(filter)
+    containerFilters
+    add(filter as Component)
   }
 
   fun removeContainerFilter(filter: DataCommunicator.Filter<Any>) {
-    removeContainerFilter(filter)
+    remove(filter as Component)
   }
 
   fun removeAllContainerFilters() {
@@ -87,8 +87,8 @@ class ListContainer(model: VListDialog) : Div() {
     removeContainerFilters(propertyId)
   }
 
-  protected fun fireItemSetChange() {
-    //super.fireItemSetChange()
+  fun fireItemSetChange() {
+    //super.fireEvent(this)
   }
 
   /**
@@ -141,6 +141,8 @@ class ListContainer(model: VListDialog) : Div() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  private var filters: MutableSet<Filter?>? = HashSet<Filter>()
+
   val containerFilters: Collection<Any> = TODO()
   private val model: VListDialog = model
   private val propertyIds = Utils.buildIdList(model.getColumnCount())

@@ -17,23 +17,20 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
-import com.vaadin.flow.data.binder.Result
-import com.vaadin.flow.data.binder.ValueContext
-import com.vaadin.flow.data.converter.Converter
-import org.kopi.galite.list.VListColumn
+class ListItem(private val parent: ListContainer, private val row: Int) {
 
-/**
- * A list data model converter based on data model strings transformation.
- */
-class ListConverter(private val model: VListColumn?) : Converter<String?, Any?> {
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
 
-  override fun convertToModel(value: String?, context: ValueContext?): Result<Any?>? = null // not used
+  fun getItemProperty(id: Any?): ListProperty {
+    return parent.getContainerProperty(row, id)
+  }
 
-  override fun convertToPresentation(value: Any?, context: ValueContext?): String? = model!!.formatObject(value).toString()
+  val itemPropertyIds: Collection<*>
+    get() = parent.containerPropertyIds
 
-  val modelType: Class<Any>
-    get() = Any::class.java
+  fun addItemProperty(id: Any?, property: ListProperty?): Boolean = false
 
-  val presentationType: Class<String>
-    get() = String::class.java
+  fun removeItemProperty(id: Any?): Boolean = false
 }

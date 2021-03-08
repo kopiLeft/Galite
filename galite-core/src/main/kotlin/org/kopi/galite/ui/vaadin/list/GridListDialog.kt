@@ -18,13 +18,16 @@
 package org.kopi.galite.ui.vaadin.list
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.dom.Element
 
 /**
  * A list dialog
  * TODO: Implement this class with appropriate component
  */
-open class GridListDialog : Component(), HasEnabled {
+open class GridListDialog : Component(), HasEnabled , HasComponents{
 
   /**
    * This is used to display a new button under the dialog.
@@ -70,5 +73,17 @@ open class GridListDialog : Component(), HasEnabled {
      * Navigates to the last row.
      */
     LAST_ROW
+  }
+
+  //---------------------------------------------------
+  // ACCESSORS
+  //---------------------------------------------------
+
+  /**
+   * Sets the grid component for this list.
+   * @param table The grid component.
+   */
+  open fun setTable(table: Grid<Any>) {
+    this.add(table)
   }
 }

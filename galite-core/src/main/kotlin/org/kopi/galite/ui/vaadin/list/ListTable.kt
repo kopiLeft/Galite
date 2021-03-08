@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
+import com.vaadin.flow.component.ComponentEvent
+import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.grid.Grid
@@ -25,13 +27,12 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
-import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VListDialog
 import org.kopi.galite.list.VBooleanColumn
 import org.kopi.galite.list.VListColumn
 
-class ListTable(model: VListDialog) : Grid<Any>() {
+class ListTable(model: VListDialog) : Grid<VListDialog>() {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -41,11 +42,10 @@ class ListTable(model: VListDialog) : Grid<Any>() {
    * Install filters on all properties.
    */
   fun installFilters(model: VListDialog?) {
-    val filterRow = appendHeaderRow()
-    //filterRow.element.classList.add("list-filter")
-    //filterRow.setStyleName("list-filter")
+    val filterRow: HeaderRow = appendHeaderRow()
+    filterRow.also { element.classList.add("list-filter") }
     for (propertyId in containerDataSource.containerPropertyIds) {
-      val cell: HeaderRow.HeaderCell = filterRow.getCell(propertyId)
+      val cell: HeaderRow.HeaderCell = filterRow.getCell(columns[propertyId])
       val filter = TextField()
       filter.classNames.add("filter-text")
       //filter.setImmediate(true)
@@ -59,12 +59,35 @@ class ListTable(model: VListDialog) : Grid<Any>() {
                                                    false)
             // select the first item when the content is filtered
             // to not loose grid focus and thus not loose navigation shortcuts
-            select(containerDataSource.id)
+            select(containerDataSource[propertyId])
           }
         }
       }
       cell.setComponent(filter)
     }
+    containerDataSource.containerPropertyIds.forEach {
+      val cell: HeaderRow.HeaderCell = filterRow.getCell(it)
+      val filter = TextField()
+      filter.classNames.add("filter-text")
+      //filter.setImmediate(true)
+      filter.addValueChangeListener(object : ComponentEventListener<ComponentEvent<TextField>> {
+
+        override fun onComponentEvent(event: ComponentEvent<TextField>?) {
+          containerDataSource.removeContainerFilters(it)
+          if (event!!.source.label.isNotEmpty()) {
+            containerDataSource.addContainerFilter(it,
+                                                   event.source.title,
+                                                   ignoreCase = true,
+                                                   onlyMatchPrefix = false)
+            // select the first item when the content is filtered
+            // to not loose grid focus and thus not loose navigation shortcuts
+            select(containerDataSource.containerPropertyIds.stream())
+          }
+        }
+      })
+      cell.setComponent(filter)
+    }
+
     element.classList.add("filtred")
   }
 
@@ -147,9 +170,9 @@ class ListTable(model: VListDialog) : Grid<Any>() {
    * Creates the renderer for boolean column
    * @return The boolean renderer
    */
-  protected fun createBooleanRenderer(): Renderer<Boolean> {
-    //return BooleanRenderer(trueRepresentation, falseRepresentation)
-  }
+ /* protected fun createBooleanRenderer(): Renderer<Boolean> {
+    return Renderer(trueRepresentation, falseRepresentation)
+  }*/
 
   /**
    * Returns the true representation of this boolean field.
@@ -171,7 +194,7 @@ class ListTable(model: VListDialog) : Grid<Any>() {
    */
   fun setColumnCollapsingAllowed(collapsingAllowed: Boolean) {
     columns.forEach {
-      // it.setHidable(collapsingAllowed)
+      it.isVisible = collapsingAllowed
     }
   }
 
@@ -191,11 +214,11 @@ class ListTable(model: VListDialog) : Grid<Any>() {
    * @param header the header to set.
    */
   fun setColumnHeader(propertyId: Int, header: String?) {
-    //getColumn(propertyId).setHeaderCaption(header)
+    columns[propertyId].setHeader(header)
   }
 
   val containerDataSource: ListContainer
-    get() = super.getContainerDataSource() as ListContainer
+    get() = super.getDataProvider() as ListContainer //FIXME
 
   /**
    * Fires a container item set change.
@@ -212,17 +235,13 @@ class ListTable(model: VListDialog) : Grid<Any>() {
 
   init {
     setSelectionMode(SelectionMode.SINGLE)
-    //(selectionModel as HasUserSelectionAllowed).setUserSelectionAllowed(false)
     setColumnCollapsingAllowed(false)
-    //setColumnResizeMode(ColumnResizeMode.ANIMATED)
     isColumnReorderingAllowed = true
-    //setEditorEnabled(false)
+    isEnabled = false
     setColumnHeaders(model.titles)
     installConverters(model)
-    // setHeightMode(HeightMode.ROW)
     setTableWidth(model)
     installFilters(model)
-    //setCellStyleGenerator(ListStyleGenerator(model))
     recalculateColumnWidths()
   }
 }

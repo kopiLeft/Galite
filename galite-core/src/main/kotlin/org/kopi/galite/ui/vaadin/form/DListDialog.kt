@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.grid.ItemClickEvent
+import com.vaadin.flow.data.renderer.ClickableRenderer
 import org.kopi.galite.form.UField
 import org.kopi.galite.form.UListDialog
 import org.kopi.galite.form.VDictionary
@@ -53,6 +56,7 @@ class DListDialog(
     // addSelectionListener(this) TODO
     // addSearchListener(this) TODO
   }
+
   //---------------------------------------------------
   // LISTDIALOG IMPLEMENTATION
   //---------------------------------------------------
@@ -146,7 +150,13 @@ class DListDialog(
    * Prepares the dialog content.
    */
   protected fun prepareDialog() {
-    // TODO
+    table = ListTable(model)
+    setTable(table!!)
+    table!!.select(table!!.containerDataSource.containerPropertyIds.stream().findFirst())
+    table!!.addItemClickListener { event ->
+      doSelectFromDialog((event!!.item as Int), false, false)
+    }
+
   }
 
   /**

@@ -17,33 +17,24 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
-import kotlin.reflect.KClass
+import org.kopi.galite.list.VListColumn
 
-import org.kopi.galite.form.VListDialog
+import com.vaadin.flow.data.binder.Result
+import com.vaadin.flow.data.binder.ValueContext
+import com.vaadin.flow.data.converter.Converter
 
 /**
- * A list dialog property model based on object container property
+ * A list data model converter based on data model strings transformation.
  */
-open class ListProperty(val model: VListDialog, val row: Int, val col: Int) {
+class ListConverter(private val model: VListColumn?) : Converter<String?, Any?> {
 
-  fun getDefaultValue(): Any? = model.getValueAt(model.translatedIdents[row], col)
+  override fun convertToModel(value: String?, context: ValueContext?): Result<Any?>? = null // not used
 
-  fun isReadOnly(): Boolean = true
+  override fun convertToPresentation(value: Any?, context: ValueContext?): String? = model!!.formatObject(value).toString()
 
-  val type: KClass<*>
-    get() = model.columns[col]!!.getDataType()
+  val modelType: Class<Any>
+    get() = Any::class.java
 
-  override fun toString(): String {
-    return formatObject(model.getValueAt(model.translatedIdents[row], col))
-  }
-
-  /**
-   * Formats an object according to the property nature.
-   * @param o The object to be formatted.
-   * @return The formatted property object.
-   */
-  open fun formatObject(o: Any?): String {
-    return model.columns[col]!!.formatObject(o).toString()
-  }
+  val presentationType: Class<String>
+    get() = String::class.java
 }
-
