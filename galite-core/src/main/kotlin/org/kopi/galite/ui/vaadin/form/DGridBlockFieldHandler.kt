@@ -90,7 +90,7 @@ class DGridBlockFieldHandler(rowController: VFieldUI) : DFieldHandler(rowControl
     if (blockView.model.isChart() && blockView.inDetailMode()) {
       super.accessChanged(row)
     } else {
-      blockView.updateColumnAccess(getModel(), row)
+      blockView.updateColumnAccess(model, row)
       if (blockView.isEditorActive && blockView.editedRecord == row) {
         getRowController().fireAccessHasChanged(row)
       }

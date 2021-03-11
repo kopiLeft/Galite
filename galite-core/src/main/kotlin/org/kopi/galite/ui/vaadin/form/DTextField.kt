@@ -88,7 +88,7 @@ open class DTextField(
     getModel().getForm().performAsyncAction(object : Action("check_type") {
       override fun execute() {
         if (isChanged(getModel().getText(rec), transformer!!.toModel(text!!))) {
-          getModel().changedUI = true
+          getModel().isChangedUI = true
           checkText(rec, text)
         }
       }
@@ -235,7 +235,7 @@ open class DTextField(
       return
     }
     if (getModel().checkText(text) && changed) {
-      getModel().changedUI = true
+      getModel().isChangedUI = true
     }
     getModel().setChanged(changed)
   }

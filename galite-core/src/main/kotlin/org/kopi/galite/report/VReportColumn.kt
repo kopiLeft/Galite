@@ -59,7 +59,7 @@ abstract class VReportColumn(
   }
 
   open fun format(o: Any?): String {
-    return if (folded || o == null) {
+    return if (isFolded || o == null) {
       ""
     } else if (format != null) {
       format!!.format(o)!!
@@ -139,7 +139,7 @@ abstract class VReportColumn(
   var label: String = ""
   var help: String? = null
   var visible: Boolean = true
-  open var folded: Boolean = false
+  open var isFolded: Boolean = false
   var addedAtRuntime: Boolean = false
   var userDefinedLabel: Boolean = false
   private var styles: Array<ColumnStyle>? = null

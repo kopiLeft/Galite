@@ -50,7 +50,7 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
                                                   constraints.useAll)*/
   }
 
-  override fun inDetailMode(): Boolean = model.detailMode
+  override fun inDetailMode(): Boolean = model.isDetailMode
 
   override fun createLayout(): BlockLayout {
     TODO()
@@ -142,7 +142,7 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
     } else if (getDisplayLine() >= 0) {
       model.gotoRecord(getRecordFromDisplayLine(getDisplayLine()))
     }
-    model.detailMode = !inDetailMode()
+    model.isDetailMode = !inDetailMode()
     //BackgroundThreadHandler.access(Runnable { TODO
     switchView(inDetailMode())
     //})

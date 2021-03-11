@@ -44,7 +44,6 @@ import org.kopi.vkopi.lib.ui.swing.base.Utils;
 import org.kopi.vkopi.lib.ui.swing.visual.SwingThreadHandler;
 import org.kopi.galite.visual.Action;
 import org.kopi.galite.visual.VColor;
-import org.kopi.galite.visual.VException;
 
 /**
  * DField is a panel composed in a text field and an information panel
@@ -429,7 +428,7 @@ public abstract class DField extends JPanel implements UField {
                 }
 
                 if (!model.getBlock().isMulti()
-                        || model.getBlock().getDetailMode() == isInDetail()
+                        || model.getBlock().isDetailMode() == isInDetail()
                         || model.getBlock().noChart()) {
                     Action action = new Action("mouse1") {
                         public void execute() {

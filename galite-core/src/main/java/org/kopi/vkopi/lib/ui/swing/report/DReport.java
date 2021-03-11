@@ -379,7 +379,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
                                                  int column) {
     int		col   = table.convertColumnIndexToModel(column);
     int		level = model.getRow(row).getLevel();
-    boolean	folded = model.getAccessibleColumn(col).getFolded() &&
+    boolean	folded = model.getAccessibleColumn(col).isFolded() &&
             !(model.getAccessibleColumn(col) instanceof VSeparatorColumn);
     String	text = model.getAccessibleColumn(col).format(value);
     CellRenderer cell = null;
@@ -743,7 +743,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
     int			width;
     String              help;
 
-    if (column.getFolded() && !(column instanceof VSeparatorColumn)) {
+    if (column.isFolded() && !(column instanceof VSeparatorColumn)) {
       width = 1;
       help = column.getLabel();
     } else if (column instanceof VFixnumColumn || column instanceof VIntegerColumn) {
