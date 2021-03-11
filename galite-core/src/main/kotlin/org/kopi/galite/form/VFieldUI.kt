@@ -103,7 +103,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: 
         // this is typically needed in grid based blocks
         gotoActiveRecord()
         // switch to detail view when needed
-        if (getBlock().isMulti() && display == detailDisplay && !getBlock().detailMode) {
+        if (getBlock().isMulti() && display == detailDisplay && !getBlock().isDetailMode) {
           (blockView as UMultiBlock).switchView(-1)
         }
         display.setBlink(true)
@@ -135,7 +135,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: 
       !model.noChart() && !model.noDetail() -> {
         // field is visible on both views
         when {
-          getBlock().isMulti() && getBlock().detailMode -> detailDisplay
+          getBlock().isMulti() && getBlock().isDetailMode -> detailDisplay
           displayLine != -1 -> displays[displayLine]
           else -> null
         }

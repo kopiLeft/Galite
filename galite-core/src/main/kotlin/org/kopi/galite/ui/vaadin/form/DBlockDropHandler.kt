@@ -248,7 +248,7 @@ class DBlockDropHandler(private val block: VBlock,
    * @return `true` is the context block is chart block.
    */
   private val isChartBlockContext: Boolean
-    get() = block.noDetail() || block.isMulti() && !block.detailMode
+    get() = block.noDetail() || block.isMulti() && !block.isDetailMode
 
   //---------------------------------------------------
   // INNER CLASSES

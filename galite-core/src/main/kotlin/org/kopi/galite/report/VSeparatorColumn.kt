@@ -59,6 +59,6 @@ class VSeparatorColumn(
   /**
    * Returns the visibility of the column
    */
-  override var folded: Boolean = false
+  override var isFolded: Boolean = false
     get() = true
 }

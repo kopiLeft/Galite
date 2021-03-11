@@ -262,7 +262,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   // called if the in a chart the line changes, but it is still visible
   fun updateText() {
-    if (changedUI) {
+    if (isChangedUI) {
       modelNeedUpdate()
     }
   }
@@ -271,8 +271,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Validate the field, ie: get the last displayed value, check it and check mustfill
    */
   fun validate() {
-    if (changed) {
-      if (changedUI) {
+    if (isChanged) {
+      if (isChangedUI) {
         modelNeedUpdate()
       }
       callTrigger(VConstants.TRG_PREVAL)
@@ -289,8 +289,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         e.resetValue()
         throw e
       }
-      changed = false // !!! check
-      changedUI = false
+      isChanged = false // !!! check
+      isChangedUI = false
     }
   }
 
@@ -331,8 +331,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * text has changed (key typed on a display)
    */
   fun onTextChange(text: String) {
-    changed = true
-    changedUI = true
+    isChanged = true
+    isChangedUI = true
     autoLeave()
   }
 
@@ -465,7 +465,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     assert(block!!.activeRecord != -1) { threadInfo() + "current record = " + block!!.activeRecord }
     assert(block!!.activeField == null) { threadInfo() + "current field: " + block!!.activeField }
     block!!.activeField = this
-    changed = false
+    isChanged = false
     fireEntered()
     try {
       callTrigger(VConstants.TRG_PREFLD)
@@ -481,8 +481,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun leave(check: Boolean) {
     assert(this === block!!.activeField) { threadInfo() + "current field: " + block!!.activeField }
     try {
-      if (check && changed) {
-        if (changedUI && hasListener) {
+      if (check && isChanged) {
+        if (isChangedUI && hasListener) {
           checkType(getDisplayedValue(true))
         }
         callTrigger(VConstants.TRG_PREVAL)
@@ -500,15 +500,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           throw e
         }
       } else if (getForm().setTextOnFieldLeave()) {
-        if (changed && changedUI && hasListener) {
+        if (isChanged && isChangedUI && hasListener) {
           checkType(getDisplayedValue(true))
         }
       }
     } catch (e: VException) {
       throw e
     }
-    changed = false
-    changedUI = false
+    isChanged = false
+    isChangedUI = false
     callTrigger(VConstants.TRG_POSTFLD)
     block!!.activeField = null
     fireLeaved()
@@ -1529,8 +1529,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } else {
       block!!.updateAccess(r)
     }
-    changed = true
-    changedUI = false
+    isChanged = true
+    isChangedUI = false
     fireValueChanged(r)
   }
 
@@ -1541,7 +1541,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (changed && block!!.activeRecord != -1) {
       block!!.setRecordChanged(block!!.activeRecord, true)
     }
-    this.changed = changed
+    this.isChanged = changed
   }
 
   /**
@@ -2047,7 +2047,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       throw VRuntimeException(e)
     }
     setObject(block!!.activeRecord, result)
-    changed = true // if you edit the value it's like if you change it
+    isChanged = true // if you edit the value it's like if you change it
   }
 
   /**
@@ -2185,7 +2185,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
         append("\n")
         append("    changed: ")
-        append(changed)
+        append(isChanged)
         append("\n")
       } catch (e: Exception) {
         append("exception while retrieving field information\n")
@@ -2491,10 +2491,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   private var alias: VField? = null // The alias field
 
   // changed?
-  var changed = false // changed by user / changes are done in the model
+  var isChanged = false // changed by user / changes are done in the model
     private set
 
-  var changedUI = false // changed by user / changes are in the ui -> update model
+  var isChangedUI = false // changed by user / changes are in the ui -> update model
 
   // UPDATE model before doing anything
   var border = 0

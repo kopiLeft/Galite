@@ -27,7 +27,6 @@ import org.kopi.galite.util.LineBreaker
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.db.Query
-import org.kopi.galite.db.Utils
 
 open class VStringField(val bufferSize: Int,
                         width: Int,
@@ -149,7 +148,7 @@ open class VStringField(val bufferSize: Int,
   override fun setString(r: Int, v: String?) {
     val modelVal = if (v == null || v == "") null else v
 
-    if (changedUI || value[r] == null && modelVal != null || value[r] != null && value[r] != modelVal) {
+    if (isChangedUI || value[r] == null && modelVal != null || value[r] != null && value[r] != modelVal) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row

@@ -96,7 +96,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
    * Sets the field value of given record to a date value.
    */
   override fun setImage(r: Int, v: ByteArray?) {
-    if (changedUI || !value[r].contentEquals(v)) {
+    if (isChangedUI || !value[r].contentEquals(v)) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row

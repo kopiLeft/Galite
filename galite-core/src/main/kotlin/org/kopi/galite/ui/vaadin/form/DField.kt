@@ -410,7 +410,7 @@ abstract class DField(internal val model: VFieldUI,
         }
       }
       if (!model.getBlock().isMulti()
-              || model.getBlock().detailMode == isInDetail() || model.getBlock().noChart()) {
+              || model.getBlock().isDetailMode == isInDetail() || model.getBlock().noChart()) {
         val action: Action = object : Action("mouse1") {
           override fun execute() {
             model.transferFocus(this@DField) // use here a mouse transferfocus
@@ -445,7 +445,7 @@ abstract class DField(internal val model: VFieldUI,
         }
       }
       if (!model.getBlock().isMulti()
-              || model.getBlock().detailMode == isInDetail() || model.getBlock().noChart()) {
+              || model.getBlock().isDetailMode == isInDetail() || model.getBlock().noChart()) {
         val action: Action = object : Action("mouse1") {
           override fun execute() {
             // proceed only of we are in the same block context.

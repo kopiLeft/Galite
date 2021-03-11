@@ -50,7 +50,6 @@ abstract class DGridEditorField<T>(
         GridEditorField.ClickListener,
         GridEditorField.AutofillListener {
 
-
   /**
    * Returns the field editor hold by this component.
    */

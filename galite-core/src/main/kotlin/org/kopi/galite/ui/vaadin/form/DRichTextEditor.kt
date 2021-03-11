@@ -91,7 +91,7 @@ class DRichTextEditor(
 
   fun valueChanged(event: AbstractField.ComponentValueChangeEvent<RichTextField, String>?) {
     // value change event is fired when the field is blurred.
-    getModel().changedUI = true
+    getModel().isChangedUI = true
     getModel().setChanged(true)
   }
 

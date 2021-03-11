@@ -155,7 +155,7 @@ class VDynamicReport(block: VBlock) : VReport() {
                                                       null,
                                                       field.width,
                                                       null)
-            columns[fields.size - 1]!!.folded = true
+            columns[fields.size - 1]!!.isFolded = true
             // next column will have the position col.
             col -= 1
           } else {

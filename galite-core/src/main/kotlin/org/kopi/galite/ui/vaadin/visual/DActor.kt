@@ -108,17 +108,16 @@ class DActor(private var model: VActor)
      * @param acceleratorKey The original accelerator key.
      * @return The corrected accelerator key.
      */
-    private fun correctAcceleratorKey(acceleratorKey: Int): Key = if (acceleratorKey == 10) {
-      Key.UNIDENTIFIED
-    } else
-    {
-      // Fixme!
-      try {
-        Key.of(org.kopi.galite.form.dsl.Key.fromInt(acceleratorKey).toString())
-      } catch (e: Exception) {
-        Key.UNIDENTIFIED
+    private fun correctAcceleratorKey(acceleratorKey: Int): Key =
+      if (acceleratorKey == 10) {
+        Key.UNIDENTIFIED // TODO
+      } else {
+        try {
+          Key.of("F1") // TODO
+        } catch (e: Exception) {
+          Key.UNIDENTIFIED
+        }
       }
-    }
 
     /**
      * Returns the corrected modifier accelerator key.
