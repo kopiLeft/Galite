@@ -232,7 +232,7 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
         KEY_REC_DOWN -> columnView!!.gotoNextRecord()
         KEY_REC_FIRST -> columnView!!.gotoFirstRecord()
         KEY_REC_LAST -> columnView!!.gotoLastRecord()
-        // KEY_BLOCK -> connector.getServerRpc().gotoNextBlock() TODO
+        // KEY_BLOCK -> connector.getFieldListener().gotoNextBlock() TODO
         else -> {
         }
       }

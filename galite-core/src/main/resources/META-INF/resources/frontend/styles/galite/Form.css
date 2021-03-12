@@ -129,12 +129,3 @@ html {
     background: #009bd4;
     color: #ffffff;
 }
-
-/*
- * Form items style
- */
-vaadin-form-item {
-    margin: 8px;
-    flex-direction: row;
-    align-items: flex-end;
-}

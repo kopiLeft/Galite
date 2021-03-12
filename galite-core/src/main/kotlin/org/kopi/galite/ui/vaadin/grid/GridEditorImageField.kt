@@ -17,17 +17,22 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-
 import com.vaadin.flow.server.StreamResource
 import com.vaadin.flow.server.StreamResourceWriter
+import java.io.ByteArrayInputStream
+import java.io.InputStream
 
 /**
  * The implementation of an image grid editor.
  */
-class GridEditorImageField : GridEditorField<Any?>() {
-  override var value: Any? = TODO()
+class GridEditorImageField() : GridEditorField<Any?>() {
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun generateModelValue(): Any? {
+    TODO("Not yet implemented")
+  }
 
 
   /**

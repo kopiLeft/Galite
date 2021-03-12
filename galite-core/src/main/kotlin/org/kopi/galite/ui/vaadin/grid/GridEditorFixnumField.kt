@@ -26,14 +26,14 @@ package org.kopi.galite.ui.vaadin.grid
  */
 class GridEditorFixnumField(
         width: Int,
-        var minValue: Double,
-        var maxValue: Double,
-        var maxScale: Int,
-        var fraction: Boolean
+        minValue: Double,
+        maxValue: Double,
+        maxScale: Int,
+        fraction: Boolean
 ) : GridEditorTextField(width) {
 
-  /**
-   * The current scale of the decimal field.
-   */
-  var scale = maxScale
+    /**
+     * The current scale of the decimal field.
+     */
+    var scale = maxScale
 }

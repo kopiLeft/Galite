@@ -18,7 +18,11 @@
 package org.kopi.galite.ui.vaadin.grid
 
 /**
- * Server side implementation of a month editor field.
+ * Implementation of a month editor field.
  * Month field are fixed width field. Its width is 7
  */
-class GridEditorMonthField: GridEditorTextField(7)
+class GridEditorMonthField: GridEditorTextField(7) {
+  init {
+    setInputType("month")
+  }
+}

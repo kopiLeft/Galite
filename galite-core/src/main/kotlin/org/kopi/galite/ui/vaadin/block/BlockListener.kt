@@ -36,4 +36,35 @@ interface BlockListener : Serializable {
    * @param sortedTopRec The sorted top record.
    */
   fun onActiveRecordChange(record: Int, sortedTopRec: Int)
+
+  /**
+   * Updates the scroll position.
+   * @param value The scroll position.
+   */
+  fun updateScrollPos(value: Int)
+
+  /**
+   * Updates the value of the active record in server side.
+   * @param record The client active record.
+   * @param sortedTopRec the top sorted record.
+   */
+  fun updateActiveRecord(record: Int, sortedTopRec: Int)
+
+  /**
+   * Clears the cached values. This is called by the client side when the cached values are
+   * already registered in the client data model.
+   */
+  fun clearCachedValues(cachedValues: List<Block.CachedValue>)
+
+  /**
+   * Clears the cached colors. This is called by the client side when the cached colors are
+   * already registered in the client data model.
+   */
+  fun clearCachedColors(cachedColors: List<Block.CachedColor>)
+
+  /**
+   * Clears the given record info list.
+   * @param recordInfos The record info list.
+   */
+  fun clearRecordInfo(recordInfos: List<Block.RecordInfo>)
 }

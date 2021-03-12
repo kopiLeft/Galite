@@ -15,22 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field;
-
-import java.io.Serializable;
+package org.kopi.galite.ui.vaadin.field
 
 /**
- * Registered objects are notified with actions performed on an image field.
+ * No edition validator. Block all keycodes
  */
-public interface ImageFieldListener extends Serializable {
+class NoeditValidator(maxLength: Int) : AllowAllValidator(maxLength) {
+  override fun validate(c: Char): Boolean {
+    return false
+  }
 
-  /**
-   * Fired when the image is removed from the field.
-   */
-  public void onRemove();
-
-  /**
-   * Fired when the image field is clicked.
-   */
-  public void onImageClick();
+  override fun validate(text: String?): Boolean {
+    return false
+  }
 }

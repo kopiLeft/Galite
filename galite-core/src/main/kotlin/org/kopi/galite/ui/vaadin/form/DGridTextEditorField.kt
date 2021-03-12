@@ -46,10 +46,8 @@ import org.kopi.galite.ui.vaadin.grid.GridEditorTextField
 import org.kopi.galite.ui.vaadin.grid.GridEditorTimeField
 import org.kopi.galite.ui.vaadin.grid.GridEditorTimestampField
 import org.kopi.galite.ui.vaadin.grid.GridEditorWeekField
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
-import java.util.*
 
 /**
  * A grid text editor based on custom components.
@@ -227,8 +225,8 @@ class DGridTextEditorField(
   protected fun createIntegerEditorField(): GridEditorIntegerField {
     val model = getModel() as VIntegerField
     return GridEditorIntegerField(model.width,
-                                  model.maxval,
-                                  model.maxval)
+                                  model.maxValue,
+                                  model.maxValue)
   }
 
   /**
@@ -238,8 +236,8 @@ class DGridTextEditorField(
   protected fun createFixnumEditorField(): GridEditorFixnumField {
     val model = getModel() as VFixnumField
     return GridEditorFixnumField(model.width,
-                                 model.maxval.toDouble(),
-                                 model.maxval.toDouble(),
+                                 model.maxValue.toDouble(),
+                                 model.maxValue.toDouble(),
                                  model.maxScale,
                                  model.isFraction)
   }
@@ -339,7 +337,7 @@ class DGridTextEditorField(
       return
     }
     if (getModel().checkText(text) && changed) {
-      getModel().changedUI = true
+      getModel().isChangedUI = true
     }
     getModel().setChanged(changed)
   }

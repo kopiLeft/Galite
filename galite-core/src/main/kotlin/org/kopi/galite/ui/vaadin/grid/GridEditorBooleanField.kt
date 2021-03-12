@@ -17,24 +17,51 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
-import java.io.Serializable
-import java.lang.reflect.Method
-import java.util.EventListener
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEvent
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.checkbox.Checkbox
+import java.io.Serializable
+import java.lang.reflect.Method
+import java.util.*
 
 /**
- * Server side implementation of the editor boolean field.
+ * Implementation of the editor boolean field.
  */
 class GridEditorBooleanField(trueRepresentation: String, falseRepresentation: String) : GridEditorField<Boolean?>() {
-  override var value: Any?
-    get() {
-      return value
+  var yes: Checkbox = Checkbox()
+  var no: Checkbox = Checkbox()
+
+  init {
+    yes.addValueChangeListener(::onYesChange)
+    no.addValueChangeListener(::onNoChange)
+
+    add(yes, no)
+
+  }
+
+  fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    if (event.value) {
+      no.value = false
+    } else if (mandatory && !no.value) {
+      yes.value = true
     }
-    set(newFieldValue) {
-      internalValue = newFieldValue as? Boolean
+  }
+
+  fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    if (event.value) {
+      yes.value = false
+    } else if (mandatory && !yes.value) {
+      no.value = true
     }
+  }
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun generateModelValue(): Any? {
+    TODO("Not yet implemented")
+  }
 
   /**
    * Sets the boolean field to be mandatory
@@ -48,7 +75,7 @@ class GridEditorBooleanField(trueRepresentation: String, falseRepresentation: St
    * Needed to set the for attribute of the input radio
    * in the field widget.
    */
-  var label: String? = null
+  var label = null
 
   /**
    * The localized true value for this field
@@ -67,10 +94,6 @@ class GridEditorBooleanField(trueRepresentation: String, falseRepresentation: St
   protected fun fireValueChangeEvent(value: Boolean) {
     fireEvent(ValueChangeEvent(this, value))
   }
-
-  //---------------------------------------------------
-  // VALUE CHANGE
-  //---------------------------------------------------
 
   //---------------------------------------------------
   // VALUE CHANGE

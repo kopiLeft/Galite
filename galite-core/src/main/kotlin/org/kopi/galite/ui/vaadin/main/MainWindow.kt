@@ -62,7 +62,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   private val welcome = VWelcome()
   private val content = VContent()
   private val container = VWindowContainer()
-  private val locale: String? = null
+  private val locale: String = locale.toString()
   private var windowsList = mutableListOf<Component>()
   private val windows = mutableMapOf<Component, MenuItem>()
   private val windowsMenu = VWindowsDisplay()
@@ -101,7 +101,8 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   }
 
   companion object {
-    private var instance: MainWindow? = null
+    lateinit var instance: MainWindow
+    val locale: String get() = instance.locale
   }
 
   //---------------------------------------------------

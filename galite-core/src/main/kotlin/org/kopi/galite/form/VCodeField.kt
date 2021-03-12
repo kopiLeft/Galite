@@ -253,7 +253,7 @@ abstract class VCodeField(val bufferSize: Int,
    *
    */
   protected fun setCode(r: Int, v: Int) {
-    if (changedUI || value[r] != v) {
+    if (isChangedUI || value[r] != v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row

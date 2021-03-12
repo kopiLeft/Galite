@@ -17,25 +17,29 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
-import java.io.Serializable
 import java.lang.reflect.Method
-import java.util.EventListener
-import kotlin.collections.LinkedHashSet
+
+import kotlin.collections.Collection
 
 import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.field.AbstractField
+import org.kopi.galite.ui.vaadin.field.Field
 
+import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEvent
-import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.router.NavigationEvent
+import java.io.Serializable
+import java.util.*
+import kotlin.collections.LinkedHashSet
 
 /**
- * A grid editor field server side implementation.
+ * A grid editor field implementation.
  */
-abstract class GridEditorField<T> protected constructor() : AbstractField(), Focusable<GridEditorField<T>> {
+abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() {
 
   /**
-   * The navigation delegation to server mode.
+   * The navigation delegation to server mode. Default to [NavigationDelegationMode.ALWAYS].
    */
   var navigationDelegationMode = NavigationDelegationMode.ALWAYS
 
@@ -89,6 +93,16 @@ abstract class GridEditorField<T> protected constructor() : AbstractField(), Foc
   init {
     //registerRpc(NavigationRpcHandler())
     //registerRpc(ClickRpcHandler())
+  }
+  //---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
+  /**
+   * Sets the navigation delegation mode of this editor field.
+   * @param navigationDelegationMode The navigation delegation mode.
+   */
+  fun setNavigationDelegationMode(navigationDelegationMode: Field.NavigationDelegationMode) {
+    // state.navigationDelegationMode = navigationDelegationMode TODO
   }
 
   /**

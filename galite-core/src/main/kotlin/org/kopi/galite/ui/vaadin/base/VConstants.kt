@@ -15,13 +15,33 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
-
-import com.vaadin.flow.component.html.Div
+package org.kopi.galite.ui.vaadin.base
 
 /**
- * Super class for all field components.
+ * Collects needed constants.
  */
-abstract class AbstractField : Div() {
-  abstract var value: Any?
+interface VConstants {
+  companion object {
+    // --------------------------------------------------
+    // ACCESS
+    // --------------------------------------------------
+    // access flags
+    const val ACS_HIDDEN = 0
+    const val ACS_SKIPPED = 1
+    const val ACS_VISIT = 2
+    const val ACS_MUSTFILL = 4
+    const val ACS_ACCESS = 1 + 2 + 4
+
+    // record info flags
+    const val RCI_FETCHED = 0x00000001
+    const val RCI_CHANGED = 0x00000002
+    const val RCI_DELETED = 0x00000004
+    const val RCI_TRAILED = 0x00000008
+
+    // menus types
+    const val MAIN_MENU = -1
+    const val USER_MENU = -2
+    const val ADMIN_MENU = -3
+    const val BOOKMARK_MENU = -4
+  }
 }

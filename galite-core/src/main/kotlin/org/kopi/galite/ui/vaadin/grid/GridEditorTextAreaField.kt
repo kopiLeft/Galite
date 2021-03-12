@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.textfield.TextArea
+
 /**
  * A text area editor for grid block
  */
@@ -26,7 +28,14 @@ class GridEditorTextAreaField(
         visibleHeight: Int,
         var fixedNewLine: Boolean
 ) : GridEditorTextField(width) {
+  var textArear = TextArea()
+  init {
+    remove(field)
+    textArear.width = width.toString()
+    textArear.height = height.toString()
+    add(textArear)
 
+  }
   /**
    * The row number.
    */

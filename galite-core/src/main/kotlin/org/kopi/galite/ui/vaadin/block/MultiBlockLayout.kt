@@ -27,6 +27,7 @@ import com.vaadin.flow.component.html.Div
 class MultiBlockLayout : AbstractBlockLayout() {
 
   private var pane: Div? = null
+  private val chartLayout: ChartBlockLayout? = null
 
   /**
    * Switch from the chart view to the detail view and vis versa.
@@ -39,6 +40,10 @@ class MultiBlockLayout : AbstractBlockLayout() {
 
   override fun initSize() {
     TODO("Not yet implemented")
+  }
+
+  override fun add(component: Component?, constraints: ComponentConstraint) {
+    chartLayout!!.add(component, constraints)
   }
 
   override fun addComponent(

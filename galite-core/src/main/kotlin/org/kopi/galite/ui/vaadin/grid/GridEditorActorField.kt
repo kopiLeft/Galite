@@ -17,10 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.button.Button
+
 /**
- * The grid editor actor field implementation.
+ * The grid editor actor field server side implementation
  */
 class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
+
+  init {
+    add(Button(caption))
+  }
 
   /**
    * The actor field icon name.
@@ -37,7 +43,13 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
   val type: Class<out String>
     get() = String::class.java
 
-  override var value: Any? = null
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun generateModelValue(): Any? {
+    TODO("Not yet implemented")
+  }
 
   /*override fun addNavigationListener(listener: NavigationListener?) {
     // NOT SUPPORTED

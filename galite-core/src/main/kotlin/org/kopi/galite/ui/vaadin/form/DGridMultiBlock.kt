@@ -58,7 +58,7 @@ class DGridMultiBlock(parent: DForm,
     } else if (getDisplayLine() >= 0) {
       model.gotoRecord(getRecordFromDisplayLine(getDisplayLine()))
     }
-    model.detailMode = !inDetailMode()
+    model.isDetailMode = !inDetailMode()
     /*BackgroundThreadHandler.access(Runnable { TODO
       if (grid.getEditedItemId() != null) {
         itemHasDetailVisible = grid.getEditedItemId()
@@ -102,7 +102,7 @@ class DGridMultiBlock(parent: DForm,
     return detail
   }*/
 
-  override fun inDetailMode(): Boolean = model.detailMode
+  override fun inDetailMode(): Boolean = model.isDetailMode
 
   override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {
     // send active record to client side before view switch
@@ -190,10 +190,10 @@ class DGridMultiBlock(parent: DForm,
     /*BackgroundThreadHandler.access(Runnable { TODO
       if (inDetailMode() && itemHasDetailVisible != null) {
         grid.setDetailsVisible(itemHasDetailVisible, false)
-        model.detailMode = false
+        model.isDetailMode = false
         if (recno != itemHasDetailVisible) {
           itemHasDetailVisible = recno
-          model.detailMode = true
+          model.isDetailMode = true
           grid.setDetailsVisible(itemHasDetailVisible, true)
         }
       }

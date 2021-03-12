@@ -15,40 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.block
+package org.kopi.galite.ui.vaadin.field
+
+import java.io.Serializable
 
 /**
- * A cached value structure to be passed to the client side using the shared state mechanism.
- *
- * @param col The column index.
- * @param rec The record number.
- * @param value The cached value.
+ * Registered objects are notified with actions performed on an image field.
  */
-class CachedValue(var col: Int, var rec: Int, value: String?) {
+interface ImageFieldListener : Serializable {
+  /**
+   * Fired when the image is removed from the field.
+   */
+  fun onRemove()
 
   /**
-   * The cached value.
+   * Fired when the image field is clicked.
    */
-  var value: String = value ?: ""
-
-  /**
-   *
-   * @param other : cached value
-   * @return true if there is an existing cached value having the same key
-   */
-  fun hasSameKey(other: CachedValue): Boolean {
-    return col == other.col && rec == other.rec
-  }
-
-  override fun hashCode(): Int {
-    return col + rec + value.hashCode()
-  }
-
-  override fun equals(obj: Any?): Boolean {
-    return if (obj is CachedValue) {
-      col == obj.col && rec == obj.rec && value == obj.value
-    } else {
-      super.equals(obj)
-    }
-  }
+  fun onImageClick()
 }

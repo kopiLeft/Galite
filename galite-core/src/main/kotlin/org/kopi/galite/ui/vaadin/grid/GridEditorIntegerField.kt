@@ -17,10 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.textfield.NumberField
+
 /**
  * An integer editor field.
  * @param minValue The minimum value to be accepted by the field.
  * @param minValue The maximum value to be accepted by the field.
  */
-class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) : GridEditorTextField(width)
+class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) : GridEditorTextField(width) {
+   var numberField = NumberField()
+  init {
+    super.remove(field)
+    numberField.width = width.toString()
+    numberField.min = minValue.toDouble()
+    numberField.max = maxValue.toDouble()
+    add(numberField)
+  }
+}
 

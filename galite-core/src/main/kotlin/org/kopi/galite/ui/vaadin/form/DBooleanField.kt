@@ -21,7 +21,6 @@ import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.field.BooleanField
-import org.kopi.galite.ui.vaadin.field.ObjectField
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.HasValue
@@ -102,7 +101,7 @@ class DBooleanField(
     val text = getModel().toText(event!!.value)
 
     if (getModel().checkText(text!!)) {
-      getModel().changedUI = true
+      getModel().isChangedUI = true
       getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.value)
     }
     getModel().setChanged(true)
@@ -118,7 +117,7 @@ class DBooleanField(
     //})
   }
 
-  override fun getObject(): Any? = text
+  override fun getObject(): Any? = wrappedField.value
 
   override fun setBlink(b: Boolean) {
     //BackgroundThreadHandler.access(Runnable { TODO

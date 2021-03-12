@@ -26,11 +26,11 @@ import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.type.Date
 import org.kopi.galite.ui.vaadin.field.ImageField
+import org.kopi.galite.ui.vaadin.field.ImageFieldListener
 
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.server.StreamResource
 import com.vaadin.flow.server.StreamVariable
-import org.kopi.galite.ui.vaadin.field.ImageFieldListener
 
 /**
  * The image field implementation based on the customized VAADIN

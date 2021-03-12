@@ -17,8 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.timepicker.TimePicker
+
 /**
- * Server side implementation of the time editor field
+ * Implementation of the time editor field
  * Time fields are fixed width length
  */
-class GridEditorTimeField: GridEditorTextField(5)
+class GridEditorTimeField: GridEditorTextField(5) {
+  init {
+    remove(field)
+    add(TimePicker())
+  }
+}

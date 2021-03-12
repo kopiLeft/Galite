@@ -17,14 +17,17 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.select.Select
+
 /**
  * Implementation of an enumeration editor
  */
-class GridEditorEnumField(width: Int, enumerations: Array<String>) : GridEditorTextField(width) {
+class GridEditorEnumField(width: Int, var enumerations: Array<String>) : GridEditorTextField(width) {
+  init {
+    val labelSelect: Select<String> = Select()
 
-  /**
-   * The field enumeration for code fields.
-   */
+    labelSelect.setItems(*enumerations)
+    add(labelSelect)
+  }
 
-  var enumerations: Array<String> = enumerations
 }

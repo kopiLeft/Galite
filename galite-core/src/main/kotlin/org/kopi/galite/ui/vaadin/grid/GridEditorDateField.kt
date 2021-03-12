@@ -17,8 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.datepicker.DatePicker
+
 /**
- * Server side implementation of an editor date field.
+ * Implementation of an editor date field.
  * Date fields are fixed width fields with 10 characters inside.
  */
-class GridEditorDateField: GridEditorTextField(10)
+class GridEditorDateField: GridEditorTextField(10) {
+  init {
+    super.remove(field)
+    add(DatePicker())
+  }
+}

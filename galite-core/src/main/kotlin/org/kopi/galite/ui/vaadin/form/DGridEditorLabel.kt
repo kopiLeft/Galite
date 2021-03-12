@@ -69,13 +69,6 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
   }
 
   /**
-   * Returns the label text.
-   * @return The label text.
-   */
-  val text: String
-    get() = TODO()
-
-  /**
    * Builds full field description.
    * @param model The field model.
    * @param tooltip The initial field tooltip.
@@ -110,7 +103,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  var infoText: String? = null
+  override var infoText: String = ""
     set(info) {
       field = info
       /*BackgroundThreadHandler.access(Runnable { TODO

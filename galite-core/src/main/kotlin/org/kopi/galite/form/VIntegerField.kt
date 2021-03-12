@@ -25,26 +25,25 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VIntegerColumn
 import org.kopi.galite.list.VListColumn
-import org.kopi.galite.db.Utils
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VlibProperties
 
 /**
  * @param     width
- * @param     minval    the min permitted value
- * @param     maxval    the max permitted value
+ * @param     minValue    the min permitted value
+ * @param     maxValue    the max permitted value
  */
 class VIntegerField(val bufferSize: Int,
                     width: Int,
-                    val minval: Int,
-                    val maxval: Int) : VField(width, 1) {
+                    val minValue: Int,
+                    val maxValue: Int) : VField(width, 1) {
 
   /**
    * return the name of this field
    */
   override fun getTypeInformation(): String {
-    var min = minval
-    var max = maxval
+    var min = minValue
+    var max = maxValue
     var nines = 1
 
     for (i in width downTo 1) {
@@ -107,11 +106,11 @@ class VIntegerField(val bufferSize: Int,
       } catch (e: NumberFormatException) {
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
-      if (v < minval) {
-        throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minval) as? Array<Any>))
+      if (v < minValue) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minValue) as? Array<Any>))
       }
-      if (v > maxval) {
-        throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval) as? Array<Any>))
+      if (v > maxValue) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxValue) as? Array<Any>))
       }
       setInt(rec, v)
     }
@@ -133,7 +132,7 @@ class VIntegerField(val bufferSize: Int,
    */
   override fun setInt(r: Int, v: Int?) {
     var v = v
-    if (changedUI
+    if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary
@@ -141,10 +140,10 @@ class VIntegerField(val bufferSize: Int,
       if (v == null) {
         value[r] = null
       } else {
-        if (v < minval) {
-          v = minval
-        } else if (v > maxval) {
-          v = maxval
+        if (v < minValue) {
+          v = minValue
+        } else if (v > maxValue) {
+          v = maxValue
         }
         value[r] = v
       }
@@ -202,12 +201,12 @@ class VIntegerField(val bufferSize: Int,
         throw VFieldException(this, MessageCode.getMessage("VIS-00006"))
       }
 
-      if (v < minval) {
-        throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minval) as? Array<Any>))
+      if (v < minValue) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf<Any>(minValue) as? Array<Any>))
       }
 
-      if (v > maxval) {
-        throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxval) as? Array<Any>))
+      if (v > maxValue) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf<Any>(maxValue) as? Array<Any>))
       }
 
       v
@@ -360,6 +359,6 @@ class VIntegerField(val bufferSize: Int,
   // dynamic data
   // value
   private var value: Array<Int?> = arrayOfNulls(2 * bufferSize)
-  private var criticalMinValue: Int? = minval
-  private var criticalMaxValue: Int? = maxval
+  private var criticalMinValue: Int? = minValue
+  private var criticalMaxValue: Int? = maxValue
 }

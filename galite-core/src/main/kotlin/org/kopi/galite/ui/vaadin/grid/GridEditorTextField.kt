@@ -17,18 +17,37 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
-import java.util.EventListener
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEvent
+import com.vaadin.flow.component.textfield.TextField
 import java.io.Serializable
 import java.lang.reflect.Method
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A text field used as editor
  */
 open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
-  override var value: Any? = TODO()
+  open var field : TextField? = TextField()
+  init {
+    add(field)
+  }
+  override fun setPresentationValue(newPresentationValue: Any?) {
+  }
+
+  override fun generateModelValue(): Any? {
+    TODO("Not yet implemented")
+  }
+
+  /**
+   * Sets the input field type attribute to [type]
+   */
+  fun setInputType(type: String) {
+    element.node.runWhenAttached { ui ->
+      ui.page.executeJs("$0.focusElement.type=$1", this, type)
+    }
+  }
 
   /**
    * The column number.
@@ -115,10 +134,6 @@ open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
   //---------------------------------------------------
   // TEXT CHANGE
   //---------------------------------------------------
-
-  //---------------------------------------------------
-  // TEXT CHANGE
-  //---------------------------------------------------
   /**
    * Fires a text change event object.
    * @param newText The new text value.
@@ -191,3 +206,4 @@ open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
   private val internalValue: String? = null
   private val displayedValue: String? = null
 }
+

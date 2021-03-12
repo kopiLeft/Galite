@@ -17,8 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.datetimepicker.DateTimePicker
+
 /**
- * Server side implementation of a time stamp editor field
+ * Implementation of a time stamp editor field
  * Time stamp fields are fixed width fields.
  */
-class GridEditorTimestampField: GridEditorTextField(10 + 1 + 8)
+class GridEditorTimestampField: GridEditorTextField(10 + 1 + 8) {
+  init {
+    remove(field)
+    add(DateTimePicker())
+  }
+}

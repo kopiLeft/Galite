@@ -18,7 +18,7 @@
 package org.kopi.galite.ui.vaadin.grid
 
 /**
- * The server side implementation of a week editor field.
+ * Implementation of a week editor field.
  * Week fields are fixed width fields.
  */
 class GridEditorWeekField: GridEditorTextField(7)

@@ -16,6 +16,11 @@
  */
 package org.kopi.galite.demo
 
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.router.Route
 import java.math.BigDecimal
 
 import org.jetbrains.exposed.sql.Database
@@ -41,6 +46,17 @@ import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.type.Decimal
+import org.kopi.galite.ui.vaadin.grid.GridEditorActorField
+import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
+import org.kopi.galite.ui.vaadin.grid.GridEditorDateField
+import org.kopi.galite.ui.vaadin.grid.GridEditorEnumField
+import org.kopi.galite.ui.vaadin.grid.GridEditorIntegerField
+import org.kopi.galite.ui.vaadin.grid.GridEditorLabel
+import org.kopi.galite.ui.vaadin.grid.GridEditorMonthField
+import org.kopi.galite.ui.vaadin.grid.GridEditorTextAreaField
+import org.kopi.galite.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.ui.vaadin.grid.GridEditorTimeField
+import org.kopi.galite.ui.vaadin.grid.GridEditorTimestampField
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -370,4 +386,43 @@ fun addBillPrdt(id: Int, quantity: Int, amount: BigDecimal, amountWithTaxes: Big
     it[BillProduct.amount] = amount
     it[BillProduct.amountWithTaxes] = amountWithTaxes
   }
+}
+
+@Route("x")
+class Test_Grid : VerticalLayout() {
+  init {
+    val gridTextField = GridEditorTextField(20)
+    add(gridTextField)
+
+    val gridBooleanField = GridEditorBooleanField("true", "false")
+    add(gridBooleanField)
+
+    val gridActorField = GridEditorActorField("button")
+    add(gridActorField)
+
+    val gridDateField = GridEditorDateField()
+    add(gridDateField)
+
+    val gridEnumField = GridEditorEnumField(50, arrayOf("one", "two"))
+    add(gridEnumField)
+
+    val gridIntegerField = GridEditorIntegerField(50, 10, 20)
+    add(gridIntegerField)
+
+    val gridLabelField = GridEditorLabel("Label")
+    add(gridLabelField)
+
+    val gridMonthField = GridEditorMonthField()
+    add(gridMonthField)
+
+   val gridTextAreaField = GridEditorTextAreaField(10, 10, 10, false)
+    add(gridTextAreaField)
+
+   val gridTimeField = GridEditorTimeField()
+    add(gridTimeField)
+
+   val gridTimeStampField = GridEditorTimestampField()
+    add(gridTimeStampField)
+  }
+
 }

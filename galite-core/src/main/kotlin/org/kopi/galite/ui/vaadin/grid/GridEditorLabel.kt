@@ -24,11 +24,12 @@ import java.util.EventListener
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.html.Label
 
 /**
  * A label used at grid headers
  */
-open class GridEditorLabel(caption: String?) : Component(), HasEnabled {
+open class GridEditorLabel(caption: String?) : Label(caption), HasEnabled {
 
   /**
    * The label can execute the field action trigger.
@@ -38,7 +39,7 @@ open class GridEditorLabel(caption: String?) : Component(), HasEnabled {
   /**
    * The info text used to display search operator.
    */
-  var infoText = ""
+  open var infoText = ""
 
   /**
    * Fires a click event on this editor label

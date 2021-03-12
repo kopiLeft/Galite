@@ -25,6 +25,7 @@ import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.grid.ActorRenderer
 import org.kopi.galite.ui.vaadin.grid.GridEditorActorField
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
 
 /**
  * The grid editor actor field.
@@ -74,7 +75,7 @@ class DGridEditorActorField(
     }
   }
 
-  override fun onClick(event: ClickEvent<*>?) {
+  override fun onClick(event: GridEditorField.ClickEvent) {
     // field action is performed in the window action queue
     // it is not like the other fields trigger
     columnView.executeAction()

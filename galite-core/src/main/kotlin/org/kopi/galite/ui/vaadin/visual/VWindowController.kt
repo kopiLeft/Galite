@@ -69,25 +69,7 @@ class VWindowController : WindowController() {
   }
 
   override fun doNotModal(model: Window) {
-    val builder = getWindowBuilder(model.model)
-    if (builder != null) {
-      try {
-        val view = builder.createWindow(model.model) as DWindow
-        view.run()
-        val application = ApplicationContext.applicationContext.getApplication() as VApplication
-        if (application != null) {
-          if (model.model is VPreviewWindow
-                  || model.model is VHelpViewer
-                  || model.model is VMenuTree) {
-            showNotModalPopupWindow(application, view, model.title)
-          } else {
-            application.addWindow(view, model.model.getTitle())
-          }
-        }
-      } catch (e: VException) {
-        throw VRuntimeException(e.message, e)
-      }
-    }
+    doNotModal(model.model)
   }
 
   /**

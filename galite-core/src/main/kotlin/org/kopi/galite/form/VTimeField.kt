@@ -182,7 +182,7 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
    * Sets the field value of given record to a time value.
    */
   override fun setTime(r: Int, v: Time?) {
-    if (changedUI
+    if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && !value[r]?.equals(v)!!) {
       // trails (backup) the record if necessary
