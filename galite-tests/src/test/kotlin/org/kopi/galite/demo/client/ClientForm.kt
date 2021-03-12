@@ -31,6 +31,18 @@ class ClientForm : ReportSelectionForm() {
   override val title = "Clients"
   val page = page("Client")
   val action = menu("Action")
+  val li = menu("Action")
+
+  val list = actor(
+          ident = "list",
+          menu = li,
+          label = "list",
+          help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
   val report = actor(
           ident = "report",
           menu = action,
@@ -47,6 +59,12 @@ class ClientForm : ReportSelectionForm() {
         createReport(this@insertBlock)
       }
     }
+    command(item = list) {
+      action = {
+        //   menuQuery(this@insertBlock.vBlock)
+        recursiveQuery()
+      }
+    }
   }
 
   override fun createReport(): Report {
@@ -54,23 +72,29 @@ class ClientForm : ReportSelectionForm() {
   }
 }
 
-class Clients : FormBlock(1, 1, "Clients") {
+class Clients : FormBlock(1, 100, "Clients") {
   val u = table(Client)
 
   val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {
     label = "ID"
     help = "The client id"
-    columns(u.idClt)
+    columns(u.idClt){
+      priority =1
+    }
   }
   val fstnameClt = visit(domain = Domain<String>(25), position = at(2, 1)) {
     label = "First Name"
     help = "The client first name"
-    columns(u.firstNameClt)
+    columns(u.firstNameClt){
+      priority = 2
+    }
   }
   val nameClt = visit(domain = Domain<String>(25), position = at(2, 2)) {
     label = "Last name"
     help = "The client last name"
-    columns(u.lastNameClt)
+    columns(u.lastNameClt) {
+      priority = 3
+    }
   }
   val ageClt = visit(domain = Domain<Int>(3), position = at(3, 1)) {
     label = "Age"

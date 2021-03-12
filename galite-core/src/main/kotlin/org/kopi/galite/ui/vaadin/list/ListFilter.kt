@@ -25,15 +25,16 @@ import org.kopi.galite.report.VReportRow
 class ListFilter(private val propertyId: Any?,
                  filterString: String,
                  ignoreCase: Boolean,
-                 private val onlyMatchPrefix: Boolean) : FilterUtils {
+                 private val onlyMatchPrefix: Boolean)   {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  fun passesFilter(itemId: Any?, item: GridMenuItem<VReportRow>): Boolean {
+   fun passesFilter(itemId: Any?, item: GridMenuItem<VReportRow>): Boolean {
+/*
 
-    val property: ListProperty? = get
+    val property: ListProperty?
     val propertyValue: Any?
     val value: String
 
@@ -54,6 +55,7 @@ class ListFilter(private val propertyId: Any?,
         return false
       }
     }
+*/
 
     return true
   }

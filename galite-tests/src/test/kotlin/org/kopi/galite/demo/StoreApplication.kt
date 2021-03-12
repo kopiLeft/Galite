@@ -16,6 +16,14 @@
  */
 package org.kopi.galite.demo
 
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.provider.ListDataProvider
+import com.vaadin.flow.data.value.ValueChangeMode
+import com.vaadin.flow.router.Route
+import org.apache.commons.lang3.StringUtils
 import java.math.BigDecimal
 
 import org.jetbrains.exposed.sql.Database
@@ -45,6 +53,8 @@ import org.kopi.galite.type.Decimal
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
+import java.time.LocalDate
+import java.util.ArrayList
 
 object Client : Table("CLIENTS") {
   val idClt = integer("ID").autoIncrement()
@@ -369,5 +379,158 @@ fun addBillPrdt(id: Int, quantity: Int, amount: BigDecimal, amountWithTaxes: Big
     it[BillProduct.quantity] = quantity
     it[BillProduct.amount] = amount
     it[BillProduct.amountWithTaxes] = amountWithTaxes
+  }
+}
+/**
+ * Example object.
+ */
+class Person : Cloneable {
+  var id = 0
+  var firstName: String? = null
+  var lastName: String? = null
+  var age = 0
+  var address: Address? = null
+  var phoneNumber: String? = null
+  var maritalStatus: MaritalStatus? = null
+  private var birthDate: LocalDate? = null
+  var isSubscriber = false
+  var email: String? = null
+
+  constructor() {}
+  constructor(id: Int, firstName: String?, lastName: String?, age: Int,
+              address: Address?, phoneNumber: String?) : super() {
+    this.id = id
+    this.firstName = firstName
+    this.lastName = lastName
+    this.age = age
+    this.address = address
+    this.phoneNumber = phoneNumber
+  }
+
+  constructor(id: Int, firstName: String?, lastName: String?, age: Int,
+              address: Address?, phoneNumber: String?,
+              maritalStatus: MaritalStatus?, birthDate: LocalDate?) : super() {
+    this.id = id
+    this.firstName = firstName
+    this.lastName = lastName
+    this.age = age
+    this.address = address
+    this.phoneNumber = phoneNumber
+    this.maritalStatus = maritalStatus
+    this.birthDate = birthDate
+  }
+
+  fun getBirthDate(): LocalDate? {
+    return birthDate
+  }
+
+  fun setBirthDate(birthDate: LocalDate?) {
+    this.birthDate = birthDate
+  }
+
+  val image: String
+    get() = ("https://randomuser.me/api/portraits/men/" + id
+            + ".jpg")
+
+  override fun hashCode(): Int {
+    return id
+  }
+
+  override fun equals(obj: Any?): Boolean {
+    if (this === obj) return true
+    if (obj !is Person) {
+      return false
+    }
+    return id == obj.id
+  }
+
+  override fun toString(): String {
+    return firstName!!
+  }
+
+  public override fun clone(): Person { //NOSONAR
+    return try {
+      super.clone() as Person
+    } catch (e: CloneNotSupportedException) {
+      throw RuntimeException(
+              "The Person object could not be cloned.", e)
+    }
+  }
+}
+
+class Address {
+  var street: String? = null
+  var number = 0
+  var postalCode: String? = null
+  var city: String? = null
+
+  constructor() {}
+  constructor(postalCode: String?, city: String?) {
+    this.postalCode = postalCode
+    this.city = city
+  }
+
+  override fun toString(): String {
+    return String.format("%s %s", postalCode, city)
+  }
+}
+
+enum class MaritalStatus {
+  MARRIED, SINGLE
+}
+
+@Route("filte")
+class ListTable : VerticalLayout() {
+  val button = Button("open")
+  val personList: MutableList<Person> = ArrayList()
+  val grid = Grid(Person::class.java)
+  val firstNameField = TextField()
+  val dataProvider = ListDataProvider(
+          personList)
+  val filterRow = grid.appendHeaderRow()
+
+  init {
+    add(button)
+    personList.add(Person(100, "Lucas", "Kane", 68,
+                          Address("12080", "Washington"), "127-942-237"))
+    personList.add(Person(101, "Peter", "Buchanan", 38,
+                          Address("93849", "New York"), "201-793-488"))
+    personList.add(Person(102, "Samuel", "Lee", 53,
+                          Address("86829", "New York"), "043-713-538"))
+    personList.add(Person(103, "Anton", "Ross", 37,
+                          Address("63521", "New York"), "150-813-6462"))
+    personList.add(Person(104, "Aaron", "Atkinson", 18,
+                          Address("25415", "Washington"), "321-679-8544"))
+    personList.add(Person(105, "Jack", "Woodward", 28,
+                          Address("95632", "New York"), "187-338-588"))
+
+    grid.setItems(personList)
+
+    grid.removeColumnByKey("id")
+
+    // The Grid<>(Person.class) sorts the properties and in order to
+    // reorder the properties we use the 'setColumns' method.
+
+    grid.setColumns("firstName", "lastName", "age", "address",
+                    "phoneNumber")
+
+    grid.setDataProvider(dataProvider)
+
+    val firstNameColumn = grid
+            .addColumn(Person::firstName).setHeader("Name")
+    firstNameField.addValueChangeListener { event ->
+      dataProvider.addFilter { person ->
+        StringUtils.containsIgnoreCase(person.firstName,
+                                       firstNameField.value)
+      }
+    }
+
+    firstNameField.valueChangeMode = ValueChangeMode.EAGER
+
+    filterRow.getCell(firstNameColumn).setComponent(firstNameField)
+    firstNameField.setSizeFull()
+    firstNameField.placeholder = "Filter"
+    button.addClickListener{
+      add(grid) }
   }
 }

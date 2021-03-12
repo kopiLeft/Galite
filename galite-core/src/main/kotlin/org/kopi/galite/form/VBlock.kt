@@ -1584,7 +1584,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
     try {
-      val result = table!!.slice(columns).select(condition.compoundAnd()).single()
+      val result =  transaction {
+        table!!.slice(columns).select(condition.compoundAnd()).single()
+      }
 
       /* set values */
       var j = 0
@@ -1604,6 +1606,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     setRecordFetched(activeRecord, true)
     setRecordChanged(activeRecord, false)
     setRecordDeleted(activeRecord, false)
+
     callProtectedTrigger(VConstants.TRG_POSTQRY)
     setMode(VConstants.MOD_UPDATE)
   }
@@ -2127,11 +2130,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           buildQueryDialog()
         }
       } catch (e: VException) {
+        throw e
         try {
         } catch (abortEx: VException) {
           throw abortEx
         }
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
@@ -2141,11 +2146,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           throw VExecFailedException(abortEx)
         }
       } catch (e: Error) {
+        throw e
         try {
         } catch (abortEx: Error) {
           throw VExecFailedException(abortEx)
         }
       } catch (e: RuntimeException) {
+        throw e
         try {
         } catch (abortEx: RuntimeException) {
           throw VExecFailedException(abortEx)

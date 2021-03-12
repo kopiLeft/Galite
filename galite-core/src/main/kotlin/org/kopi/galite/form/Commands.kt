@@ -128,11 +128,13 @@ object Commands : VConstants {
         b.fetchRecord(id)
         gotoFieldIfNoActive(b)
       } catch (e: VException) {
+        throw e
         try {
         } catch (abortEx: VException) {
           throw abortEx
         }
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage(VIS))
@@ -142,11 +144,13 @@ object Commands : VConstants {
           throw VExecFailedException(abortEx)
         }
       } catch (e: Error) {
+        throw e
         try {
         } catch (abortEx: Error) {
           throw InconsistencyException(abortEx)
         }
       } catch (e: RuntimeException) {
+        throw e
         try {
         } catch (abortEx: RuntimeException) {
           throw InconsistencyException(abortEx)

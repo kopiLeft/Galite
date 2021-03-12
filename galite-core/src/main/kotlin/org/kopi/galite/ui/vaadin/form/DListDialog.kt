@@ -17,9 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.grid.ItemClickEvent
-import com.vaadin.flow.data.renderer.ClickableRenderer
 import org.kopi.galite.form.UField
 import org.kopi.galite.form.UListDialog
 import org.kopi.galite.form.VDictionary
@@ -28,6 +25,7 @@ import org.kopi.galite.form.VListDialog
 import org.kopi.galite.ui.vaadin.list.GridListDialog
 import org.kopi.galite.ui.vaadin.list.ListTable
 import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.NotificationListener
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
@@ -36,26 +34,23 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.data.selection.SelectionListener
+
+
 /**
  * The `DListDialog` is the vaadin implementation of the
  * [UListDialog] specifications.
  *
  * @param model The list dialog model.
  */
-class DListDialog(
-        private val model: VListDialog
-) : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
+class DListDialog(private val model: VListDialog)
+  : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
 
-  private var table: ListTable? = null
+  val table: ListTable? = ListTable(model)
   private var escaped = true
   private var doNewForm = false
   private var selectedPos = -1
-
-  init {
-    // addCloseListener(this) TODO
-    // addSelectionListener(this) TODO
-    // addSearchListener(this) TODO
-  }
 
   //---------------------------------------------------
   // LISTDIALOG IMPLEMENTATION
@@ -74,9 +69,9 @@ class DListDialog(
       // show the dialog beside the field.
       // otherwise show it centered.
       if (field is DField) {
-        //showRelativeTo(field as DField?) TODO
+        showRelativeTo(field)
       } else if (field is DGridEditorField<*>) {
-        //showRelativeTo((field as DGridEditorField<*>).getEditor()) TODO
+        showRelativeTo(field.editor)
       }
     }
     showDialogAndWait()
@@ -91,7 +86,11 @@ class DListDialog(
    * @return The previous item ID according to the currently selected one.
    */
   protected val prevItemId: Int
-    get() = TODO()
+    get() = if (table!!.headerRows as Int == table!!.dataProvider.items.indices.first) {
+      table!!.dataProvider.items.indices.first
+    } else {
+      table!!.dataProvider.items.indexOf(table!!.selectedItems as Int - 1)
+    }
 
   /**
    * Looks for the next page item ID starting from the selected row.
@@ -99,7 +98,14 @@ class DListDialog(
    */
   protected val nextPageItemId: Int
     get() {
-      TODO()
+      var nextPageItemId: Int
+      nextPageItemId = table!!.headerRows as Int
+      var i = 0
+      while (i < 20 && nextPageItemId != table!!.dataProvider.items.indices.last) {
+        nextPageItemId = table!!.dataProvider.items.indexOf(nextPageItemId + 1)
+        i++
+      }
+      return nextPageItemId
     }
 
   /**
@@ -108,7 +114,14 @@ class DListDialog(
    */
   protected val prevPageItemId: Int
     get() {
-      TODO()
+      var prevPageItemId: Int
+      prevPageItemId = table!!.selectedItems as Int
+      var i = 0
+      while (i < 20 && prevPageItemId != table!!.dataProvider.items.indices.first) {
+        prevPageItemId = table!!.dataProvider.items.indexOf(prevPageItemId - 1)
+        i++
+      }
+      return prevPageItemId
     }
 
   //------------------------------------------------------
@@ -129,6 +142,7 @@ class DListDialog(
               }
             }
             selectedPos != -1 -> model.convert(selectedPos)
+
             else -> -1 // in all other cases return -1 indicating no choice.
           }
 
@@ -146,17 +160,20 @@ class DListDialog(
             VListDialog.NEW_CLICKED
           }
 
-  /**
+  /**model
    * Prepares the dialog content.
    */
   protected fun prepareDialog() {
-    table = ListTable(model)
     setTable(table!!)
-    table!!.select(table!!.containerDataSource.containerPropertyIds.stream().findFirst())
+    table!!.selectionModel.selectFromClient(table!!.dataCommunicator.keyMapper.get(table!!.dataProvider.items.indices.first.toString()))
     table!!.addItemClickListener { event ->
       doSelectFromDialog((event!!.item as Int), false, false)
     }
-
+    table!!.addSelectionListener(SelectionListener<Grid<VListDialog>, VListDialog> { event ->
+      if (!event.firstSelectedItem.isEmpty) {
+        table!!.scrollToIndex(event.firstSelectedItem.hashCode())
+      }
+    })
   }
 
   /**
@@ -185,6 +202,12 @@ class DListDialog(
                                          MessageCode.getMessage("VIS-00028"),
                                          application.defaultLocale.toString())
 
+    notice.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean) {
+        application.detachComponent(notice)
+        //BackgroundThreadHandler.releaseLock(lock)
+      }
+    })
     notice.show()
   }
 
@@ -206,6 +229,81 @@ class DListDialog(
    * Bubble sort the columns from right to left
    */
   private fun sort() {
-    // TODO
+    var left = 0
+    var sel = -1
+    if (table != null) {
+      sel = if (table!!.selectedItems != null) {
+        table!!.selectedItems as Int
+      } else {
+        0
+      }
+      left = table!!.columns[0].key.toInt()
+    }
+    model.sort(left)
+    if (table != null) {
+      table!!.tableChanged()
+      table!!.selectionModel.selectFromClient(table!!.dataCommunicator.keyMapper.get(sel.toString()))
+    }
+  }
+
+  init {
+    //setItems(table!!.dataProvider.items)
+    add(table)
+    // addCloseListener(this) TODO
+    // addSelectionListener(this) TODO
+    // addSearchListener(this) TODO
+  }
+
+  fun onClose() {
+    doSelectFromDialog(-1, escaped, doNewForm)
+  }
+
+  /**
+   * Ensures that a row is selected in the list dialog table.
+   * The selected row will be set to the first visible row when
+   * the selected row is null
+   */
+  protected fun ensureTableSelection() {
+    /*  if (table.se() == null) {
+        table!!.select(table.getContainerDataSource().firstItemId())
+      }*/
+  }
+
+  fun selectionChange() {
+    /* if (table!!.dataProvider.items.isEmpty()) {
+      return
+    }
+
+    ensureTableSelection()
+    when (event) {
+      CURRENT_ROW -> doSelectFromDialog((table.getSelectedRow() as Int?)!!, false, false)
+      NEXT_ROW -> table.select(getNextItemId())
+      PREVIOUS_ROW -> table.select(prevItemId)
+      NEXT_PAGE -> table.select(nextPageItemId)
+      PREVIOUS_PAGE -> table.select(getPrevPageItemId())
+      FIRST_ROW -> table.select(table.getContainerDataSource().firstItemId())
+      LAST_ROW -> table.select(table.getContainerDataSource().lastItemId())
+      else -> {
+      }
+    }*/
+  }
+
+  fun selectionChange(event: com.vaadin.flow.data.selection.SelectionEvent<DListDialog, com.vaadin.flow.data.selection.SelectionEvent<DListDialog, ListTable>>?) {
+/*    if (table!!.dataProvider.items.isEmpty()) {
+      return
+    }
+
+    ensureTableSelection()
+    when (event) {
+      CURRENT_ROW -> doSelectFromDialog((table.getSelectedRow() as Int?)!!, false, false)
+      NEXT_ROW -> table.select(getNextItemId())
+      PREVIOUS_ROW -> table.select(prevItemId)
+      NEXT_PAGE -> table.select(nextPageItemId)
+      PREVIOUS_PAGE -> table.select(getPrevPageItemId())
+      FIRST_ROW -> table.select(table.getContainerDataSource().firstItemId())
+      LAST_ROW -> table.select(table.getContainerDataSource().lastItemId())
+      else -> {
+      }
+    }*/
   }
 }

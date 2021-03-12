@@ -24,6 +24,8 @@ import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
 import org.kopi.galite.ui.vaadin.common.VMain
 import org.kopi.galite.ui.vaadin.menu.ModuleList
+import org.kopi.galite.ui.vaadin.list.ListDialog
+import org.kopi.galite.ui.vaadin.list.GridListDialog
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
@@ -324,6 +326,22 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   }
 
   /**
+   * Shows a list dialog.
+   * @param dialog The list dialog.
+   */
+  fun showListDialog(dialog: ListDialog?) {
+    dialog?.show(this)
+  }
+
+  /**
+   * Shows a grid based list dialog.
+   * @param dialog The list dialog.
+   */
+  fun showGridListDialog(dialog: GridListDialog?) {
+    dialog?.show(this)
+  }
+
+  /**
    * Shows the next or previous window according to a flag
    * @param next Should we goto the next window ?
    * Otherwise, it is the previous window that must be shown.
@@ -331,4 +349,5 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   protected fun gotoWindow(next: Boolean) {
     // TODO
   }
+
 }
