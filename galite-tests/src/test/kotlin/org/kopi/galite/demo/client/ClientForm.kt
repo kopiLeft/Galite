@@ -54,7 +54,7 @@ class ClientForm : ReportSelectionForm() {
   }
 }
 
-class Clients : FormBlock(1, 1, "Clients") {
+class Clients : FormBlock(6, 6, "Clients") {
   val u = table(Client)
 
   val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {

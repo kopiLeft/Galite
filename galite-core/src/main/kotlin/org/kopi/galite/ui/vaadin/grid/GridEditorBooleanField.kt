@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.grid
 /**
  * Server side implementation of the editor boolean field.
  */
-class GridEditorBooleanField(trueRepresentation: String, falseRepresentation: String) : GridEditorField<Boolean?>() {
+class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: String?) : GridEditorField<Boolean?>() {
   override fun setPresentationValue(newPresentationValue: Any?) {
     TODO("Not yet implemented")
   }

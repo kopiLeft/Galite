@@ -102,6 +102,8 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         }
 
         getBlock().addField(columnView)
+      } else { // TODO
+        add(component, constraints)
       }
     }
   }
