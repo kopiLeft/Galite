@@ -28,7 +28,7 @@ import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.customfield.CustomField
 
 /**
- * The Object field server side component.
+ * The Object field component.
  */
 abstract class ObjectField<T> : CustomField<T>(), HasStyle {
 
@@ -164,20 +164,12 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
     }
   }
 
-  /*fun onFocus(event: FocusNotifier.FocusEvent<ObjectField<T>>?) { // TODO
-    fieldConnector.getColumnView().setAsActiveField()
-  }
-
-  fun onBlur(event: BlurNotifier.BlurEvent<ObjectField<T>>?) {
-    fieldConnector.getColumnView().unsetAsActiveField()
-  }*/
-
   open fun onFocus(event: FocusNotifier.FocusEvent<CustomField<Any>>?) {
-    // getFieldConnector().getColumnView().setAsActiveField() TODO
+    columnView!!.setAsActiveField()
   }
 
   open fun onBlur(event: BlurNotifier.BlurEvent<CustomField<Any>>?) {
-    // getFieldConnector().getColumnView().unsetAsActiveField() TODO
+    columnView!!.unsetAsActiveField()
   }
 
   /**
@@ -221,10 +213,9 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun performAction() {
-      /*if (fieldConnector == null) { TODO
+      if (element.parent == null) {
         return
       }
-      connector.sendValueToServer()*/
       when (code) {
         KEY_TAB -> columnView!!.gotoNextField()
         KEY_STAB -> columnView!!.gotoPrevField()
@@ -242,7 +233,7 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
   /**
    * The object field navigation handler.
    */
-  /*private inner class NavigationHandler : ShortcutActionHandler() {
+  private inner class NavigationHandler : ShortcutActionHandler() {
 
     init {
       createNavigatorKeys()
@@ -253,34 +244,32 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
     //---------------------------------------------------
     /**
      * Creates the navigation actions.
-     * @param fieldConnector The text field getConnector().
      */
-    protected fun createNavigatorKeys() { TODO
-      addKeyNavigator(KEY_TAB, Key.ENTER, 0)
-      addKeyNavigator(KEY_TAB, Key.TAB, 0)
-      addKeyNavigator(KEY_STAB, Key.TAB, KeyModifier.SHIFT)
-      addKeyNavigator(KEY_BLOCK, Key.ENTER, KeyModifier.SHIFT)
-      addKeyNavigator(KEY_REC_UP, Key.PAGE_UP, 0)
-      addKeyNavigator(KEY_REC_DOWN, Key.PAGE_DOWN, 0)
-      addKeyNavigator(KEY_REC_FIRST, Key.HOME, 0)
-      addKeyNavigator(KEY_REC_LAST, Key.END, 0)
-      addKeyNavigator(KEY_STAB, Key.ARROW_LEFT, KeyModifier.CONTROL)
-      addKeyNavigator(KEY_TAB, Key.ARROW_RIGHT, KeyModifier.CONTROL)
-      addKeyNavigator(KEY_REC_UP, Key.ARROW_UP, KeyModifier.CONTROL)
-      addKeyNavigator(KEY_REC_DOWN, Key.ARROW_DOWN, KeyModifier.CONTROL)
+    protected fun createNavigatorKeys() {
+      addKeyNavigator(KEY_TAB, Key.ENTER, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_TAB, Key.TAB, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_STAB, Key.TAB, KeyModifier.of("Shift"))
+      addKeyNavigator(KEY_BLOCK, Key.ENTER, KeyModifier.of("Shift"))
+      addKeyNavigator(KEY_REC_UP, Key.PAGE_UP, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_REC_DOWN, Key.PAGE_DOWN, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_REC_FIRST, Key.HOME, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_REC_LAST, Key.END, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_STAB, Key.ARROW_LEFT, KeyModifier.of("Control"))
+      addKeyNavigator(KEY_TAB, Key.ARROW_RIGHT, KeyModifier.of("Control"))
+      addKeyNavigator(KEY_REC_UP, Key.ARROW_UP, KeyModifier.of("Control"))
+      addKeyNavigator(KEY_REC_DOWN, Key.ARROW_DOWN, KeyModifier.of("Control"))
     }
 
-    *//**
+    /**
    * Adds a key navigator action to this handler.
-   * @param fieldConnector The object field connector
    * @param code The navigator code.
    * @param key The key code.
    * @param modifiers The modifiers.
-   *//*
+   */
     protected fun addKeyNavigator(code: Int, key: Key, vararg modifiers: KeyModifier) {
       addAction(KeyNavigator(code, key, modifiers))
     }
-  }*/
+  }
 
   companion object {
     private const val KEY_TAB = 0

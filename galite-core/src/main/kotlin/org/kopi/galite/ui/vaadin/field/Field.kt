@@ -23,6 +23,7 @@ import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.html.Div
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.ColumnView
 import org.kopi.galite.ui.vaadin.window.Window
@@ -37,6 +38,10 @@ import org.kopi.galite.ui.vaadin.window.Window
  */
 abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   : Div(), FieldListener, HasStyle {
+
+  init {
+    className = Styles.FIELD
+  }
 
   private var listeners = mutableListOf<FieldListener>()
 
@@ -117,7 +122,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * `true` if the content of this field has changed.
    */
   var changed = false
-  
+
   /**
    * `true` if this connector is dirty.
    */
@@ -147,8 +152,8 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Adds the given actors to this field.
    * @param actors The actors to be associated with field.
    */
-  fun addActors(actors: Collection<Actor?>) {
-    //TODO()
+  fun addActors(actors: Collection<Actor>) {
+    this.actors.addAll(actors)
   }
 
   /**
@@ -164,7 +169,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param l The listener to be removed.
    */
   fun removeFieldListener(l: FieldListener) {
-    TODO()
+    listeners.remove(l)
   }
 
   /**

@@ -171,8 +171,12 @@ class TextField(val model: VField,
       is org.kopi.galite.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
-        minval = model.minValue.toDouble()
-        maxval = model.maxValue.toDouble()
+        if(model.minValue != null) {
+          minval = model.minValue.toDouble()
+        }
+        if(model.maxValue != null) {
+          maxval = model.maxValue.toDouble()
+        }
       }
       is VMonthField -> {
         // month field
@@ -192,11 +196,21 @@ class TextField(val model: VField,
       }
       is VCodeField -> {
         // code field
-        TODO()
+        type = Type.CODE
+        enumerations = model.labels
       }
       is VFixnumField -> {
         // fixnum field
-        TODO()
+        type = Type.DECIMAL
+        if(model.minValue != null) {
+          minval = model.minValue.toDouble()
+        }
+        if(model.maxValue != null) {
+          maxval = model.maxValue.toDouble()
+        }
+        maxScale = model.maxScale
+        fraction = model.isFraction
+
       }
       is VTimestampField -> {
         // timestamp field
@@ -254,6 +268,9 @@ class TextField(val model: VField,
    */
   private fun createTextField(): AbstractField<*, out Any?> {
     val text = createFieldComponent()
+    if (noEdit) {
+      text.isReadOnly = true
+    }
     // TODO
     return text
   }
@@ -278,11 +295,12 @@ class TextField(val model: VField,
         it.setFixedNewLine(!dynamicNewLine)
       }
     } else if(type == Type.INTEGER) {
-      VTextField(col).also {
-        it.pattern = "[0-9]*"
-        it.isPreventInvalidInput = true
-      }
-    } else if(type == Type.TIME) {
+      VIntegerField(col, minval!!.toInt(), maxval!!.toInt())
+    } else if(isDecimal()) {
+      VFixnumField(col, maxScale, minval, maxval, fraction)
+    } else if(type == Type.CODE) {
+      VCodeField(enumerations)
+    }  else if(type == Type.TIME) {
       VTimeField()
     } else if(type == Type.TIMESTAMP) {
       VTimeStampField()

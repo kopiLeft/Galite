@@ -17,13 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import java.io.Serializable
 import java.util.Locale
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.HasValueAndElement
 import com.vaadin.flow.shared.Registration
 
 /**
@@ -31,14 +31,16 @@ import com.vaadin.flow.shared.Registration
  * TODO: implement with appropriate component, not abstract
  */
 class RichTextField(
-        col: Int,
-        rows: Int,
+        var col: Int,
+        var rows: Int,
         visibleRows: Int,
-        noEdit: Boolean,
+        var noEdit: Boolean,
         locale: Locale
 ) : Component(),
         HasValue<AbstractField.ComponentValueChangeEvent<RichTextField, String>, String>,
         Focusable<RichTextField> {
+
+  private val navigationListeners = ArrayList<NavigationListener>()
 
   override fun setValue(value: String?) {
     TODO("Not yet implemented")
@@ -68,5 +70,61 @@ class RichTextField(
 
   override fun isRequiredIndicatorVisible(): Boolean {
     TODO("Not yet implemented")
+  }
+
+  //---------------------------------------------------
+  // NAVGATION
+  //---------------------------------------------------
+  /**
+   * Registers a navigation listener on this rich text.
+   * @param l The listener to be registered.
+   */
+  fun addNavigationListener(l: NavigationListener) {
+    navigationListeners.add(l)
+  }
+
+  /**
+   * The grid editor field navigation listener
+   */
+  interface NavigationListener : Serializable {
+    /**
+     * Fired when a goto next field event is called by the user.
+     */
+    fun onGotoNextField()
+
+    /**
+     * Fired when a goto previous field event is called by the user.
+     */
+    fun onGotoPrevField()
+
+    /**
+     * Fired when a goto next block event is called by the user.
+     */
+    fun onGotoNextBlock()
+
+    /**
+     * Fired when a goto previous record event is called by the user.
+     */
+    fun onGotoPrevRecord()
+
+    /**
+     * Fired when a goto next field event is called by the user.
+     */
+    fun onGotoNextRecord()
+
+    /**
+     * Fired when a goto first record event is called by the user.
+     */
+    fun onGotoFirstRecord()
+
+    /**
+     * Fired when a goto last record event is called by the user.
+     */
+    fun onGotoLastRecord()
+
+    /**
+     * Fired when a goto next empty mandatory field event is called by the user.
+     */
+    fun onGotoNextEmptyMustfill()
   }
 }

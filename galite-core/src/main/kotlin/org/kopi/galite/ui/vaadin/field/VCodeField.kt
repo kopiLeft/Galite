@@ -17,45 +17,34 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.IntegerField
+import java.util.Arrays
+
+import com.vaadin.flow.component.combobox.ComboBox
 
 /**
- * An integer field.
+ * An Code field.
  */
-class VIntegerField(width : Int, minval : Int, maxval : Int) : IntegerField(), UTextField {
-  var cols: Int = 0
-
+class VCodeField(enumerations : Array<String>?) : ComboBox<String>(), UTextField {
   init {
-    this.min = minval
-    this.max = maxval
-    this.width = width.toString()
+    super.setItems(Arrays.stream(enumerations))
   }
 
-  override fun hasAutoComplete(): Boolean {
+  override fun hasAutoComplete(): Boolean = true
+
+  override fun getMaxLength(): Int {
     TODO("Not yet implemented")
   }
 
-  override fun getMaxLength(): Int = maxlengthDouble.toInt()
+  override fun getMinLength(): Int {
+    TODO("Not yet implemented")
+  }
 
-  override fun getMinLength(): Int = minlengthDouble.toInt()
 
   override fun setMaxLength(maxLength: Int) {
-    super.setMaxlength(maxLength.toDouble())
+    //Nothing to Implement
   }
 
   override fun setMinLength(minLength: Int) {
-    super.setMaxlength(minLength.toDouble())
-  }
-
-  fun setRows(rows: Int, visibleRows: Int) {
-    addThemeVariants()
-  }
-
-  fun setWordwrap(b: Boolean) {
-
-  }
-
-  fun setFixedNewLine(b: Boolean) {
-
+    TODO("Not yet implemented")
   }
 }

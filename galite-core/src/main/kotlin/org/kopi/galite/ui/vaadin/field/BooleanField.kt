@@ -26,9 +26,8 @@ import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-
 /**
- * Server side implementation of the boolean field
+ * The boolean field
  *
  * @param trueRepresentation The representation of the true value.
  * @param falseRepresentation The representation of the false false
@@ -57,7 +56,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
         fireValueChangeEvent(value)
       }
     })*/
-
     className = Styles.BOOLEAN_FIELD
     yes.classNames.add("true")
     no.classNames.add("false")
@@ -68,9 +66,18 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     // setWidget(content) TODO
     yes.addValueChangeListener(::onYesChange)
     no.addValueChangeListener(::onNoChange)
-    // addKeyPressHandler(this) TODO
-    // addKeyDownHandler(this) TODO
-    // sinkEvents(Event.ONMOUSEOVER or Event.ONMOUSEOUT) TODO
+    yes.element.style["visibility"] = "hidden"
+    no.element.style["visibility"] = "hidden"
+    content.element.addEventListener("mouseover") {
+      isVisible = true
+    }
+
+
+    content.element.addEventListener("mouseout") {
+      if(value == null) {
+        isVisible = false
+      }
+    }
   }
 
   //---------------------------------------------------
@@ -95,11 +102,11 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * @param blink The blink state.
    */
   fun setBlink(blink: Boolean) {
-    // if (blink) { TODO
-    //   addStyleDependentName("blink")
-    // } else {
-    //   removeStyleDependentName("blink")
-    // }
+    if (blink) {
+      element.classList.add(Styles.BOOLEAN_FIELD + "-blink")
+    } else {
+      element.classList.remove(Styles.BOOLEAN_FIELD + "-blink")
+    }
   }
 
   override fun onBlur(event: BlurNotifier.BlurEvent<CustomField<Any>>?) {
@@ -118,7 +125,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     if (value == null) {
       yes.element.style["visibility"] = "hidden"
       no.element.style["visibility"] = "hidden"
-      // removeStyleDependentName("visible") TODO
+      element.classList.remove(Styles.BOOLEAN_FIELD + "-visible")
     } else {
       isVisible = visible
     }
@@ -129,17 +136,17 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     if (!forceHiddenVisibility && visible) {
       yes.element.style["visibility"] = "visible"
       no.element.style["visibility"] = "visible"
-      //addStyleDependentName("visible") TODO
+      element.classList.add(Styles.BOOLEAN_FIELD + "-visible")
     } else {
       yes.element.style["visibility"] = "hidden"
       no.element.style["visibility"] = "hidden"
-      //removeStyleDependentName("visible") TODO
+      element.classList.remove(Styles.BOOLEAN_FIELD + "-visible")
     }
   }
 
-  override fun isVisible(): Boolean {
-    TODO()
-  }
+  override fun isVisible(): Boolean = (yes.element.style["visibility"].equals("visible")
+          && no.element.style["visibility"].equals("visible"))
+
 
   override val isNull: Boolean
     get() = !yes.value && !no.value
@@ -165,8 +172,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
     handleComponentVisiblity()
   }
-
-
 
   override fun setPresentationValue(newPresentationValue: Boolean?) {
     value = newPresentationValue
@@ -194,6 +199,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   override fun checkValue(rec: Int) {}
 
   fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    //FIX ME
     if (event.value) {
       no.value = false
     } else if (mandatory && !no.value) {
@@ -204,6 +210,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   }
 
   fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    //FIX ME
     if (event.value) {
       yes.value = false
     } else if (mandatory && !yes.value) {
@@ -217,7 +224,10 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * Handles the component visibility according to its value.
    */
   protected fun handleComponentVisiblity() {
-    TODO()
+    isVisible = if (element.parent != null || element.childCount > 0) { TODO()
+      // field is focused set it visible
+      true
+    } else value != null
   }
 
   /**
@@ -236,7 +246,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     label = label.replace("\\s".toRegex(), "_")
     // this.yes.setName(label) TODO
     // this.no.setName(label) TODO
-    // this.yes.setTitle(yes) TODO
-    // this.no.setTitle(no) TODO
+    this.yes.element.setProperty("title", yes)
+    this.no.element.setProperty("title", no)
   }
 }
