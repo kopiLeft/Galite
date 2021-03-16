@@ -102,7 +102,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         }
 
         getBlock().addField(columnView)
-      } else { // TODO
+      } else if(component is Grid<*>) { // TODO
         add(component, constraints)
       }
     }
