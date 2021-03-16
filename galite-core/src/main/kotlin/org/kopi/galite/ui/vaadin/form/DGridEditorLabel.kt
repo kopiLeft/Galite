@@ -41,6 +41,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
   //---------------------------------------------------
   override fun init(text: String?, tooltip: String?) {
     this.tooltip = tooltip
+    add(text)
     //BackgroundThreadHandler.access(Runnable { TODO
     //setCaption(text) TODO
     //setDescription(Utils.createTooltip(tooltip)) TODO
@@ -67,13 +68,6 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
     }
     //})
   }
-
-  /**
-   * Returns the label text.
-   * @return The label text.
-   */
-  val text: String
-    get() = TODO()
 
   /**
    * Builds full field description.

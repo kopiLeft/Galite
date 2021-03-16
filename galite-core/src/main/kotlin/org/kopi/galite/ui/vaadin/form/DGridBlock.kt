@@ -97,6 +97,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   override fun createFields() {
     super.createFields()
     //BackgroundThreadHandler.access(Runnable { TODO
+    grid = Grid<DGridBlockContainer.GridBlockItem>()
     /*grid = object : Grid(createContainerDataSource()) {
       protected fun doEditItem() {
         if (!inDetailMode()) {
@@ -220,7 +221,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
     })
   }
 
-  protected override fun createFieldDisplay(index: Int, model: VField): VFieldUI {
+  override fun createFieldDisplay(index: Int, model: VField): VFieldUI {
     return DGridBlockFieldUI(this, model, index)
   }
 
@@ -242,9 +243,9 @@ open class DGridBlock(parent: DForm, model: VBlock)
     return 0
   }
 
-  override fun getRecordFromDisplayLine(line: Int): Int {
+  /*override fun getRecordFromDisplayLine(line: Int): Int {
     TODO()
-  }
+  }*/
 
   override fun validRecordNumberChanged() {
     // optimized to not fire an item set change if the number
@@ -413,7 +414,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
     // correct grid width to add scroll bar width
     if (model.numberOfValidRecord > model.displaySize) {
       if (!widthAlreadyAdapted) {
-        grid.setWidth(grid.width.toFloat() + 16, Unit.PIXELS)
+        //grid.setWidth(grid.width.substring(0, grid.width.indexOfLast { it.isDigit() } + 1).toFloat() + 16, Unit.PIXELS)
         widthAlreadyAdapted = true
       }
     }
@@ -434,6 +435,25 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   protected fun configure() {
     val width = 0
+
+    for (i in 0 until model.getFieldCount()) {
+      if (!model.fields[i].isInternal() && !model.fields[i].noChart()) {
+        val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
+
+        if (columnView.hasDisplays()) {
+          grid.addComponentColumn { columnView.editor }
+            .setAutoWidth(true)
+            .setKey(i.toString())
+            .setHeader(columnView.editorField.label)
+        }
+      }
+    }
+    val items = mutableListOf<DGridBlockContainer.GridBlockItem>()
+
+    repeat(model.bufferSize) {
+      items.add(DGridBlockContainer.GridBlockItem(it))
+    }
+    grid.setItems(items)
     for (column in grid.columns) {
       /*val field = getField(column.getPropertyId()) TODO
       val columnView: DGridBlockFieldUI = columnViews.get(model.getFieldIndex(field))
@@ -460,7 +480,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
         width += column.width
       }*/
     }
-    grid.setWidth((width + 16).toFloat(), Unit.PIXELS)
+    //grid.setWidth((width + 16).toFloat(), Unit.PIXELS)
   }
 
   /**

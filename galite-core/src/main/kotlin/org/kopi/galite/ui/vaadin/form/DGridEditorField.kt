@@ -53,7 +53,8 @@ abstract class DGridEditorField<T>(
   /**
    * Returns the field editor hold by this component.
    */
-  var editor: GridEditorField<T> = createEditor()
+  val editor: GridEditorField<T>
+    get() = createEditor()
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
 
@@ -443,7 +444,7 @@ abstract class DGridEditorField<T>(
    * Returns the actors associated with this field.
    * @return The actors associated with this field.
    */
-  protected val actors: Collection<Any>
+  protected val actors: Collection<Actor>
     get() {
       val actors = mutableSetOf<Actor>()
       for (cmd in columnView.getAllCommands()) {

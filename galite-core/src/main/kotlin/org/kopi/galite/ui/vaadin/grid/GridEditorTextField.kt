@@ -17,15 +17,24 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.textfield.TextField
+
 /**
  * A text field used as editor
  */
 open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
-  override fun setPresentationValue(newPresentationValue: Any?) {
-    TODO("Not yet implemented")
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  val wrappedField = TextField()
+
+  init {
+    add(wrappedField)
   }
 
-  override fun generateModelValue(): Any? {
-    TODO("Not yet implemented")
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    wrappedField.value = newPresentationValue.toString()
   }
+
+  override fun generateModelValue(): Any? = wrappedField.value
 }
