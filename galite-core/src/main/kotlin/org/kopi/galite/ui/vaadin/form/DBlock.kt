@@ -40,7 +40,7 @@ import com.vaadin.flow.component.Component
  * @param parent The parent form.
  * @param model The block model.
  */
-open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.isDroppable), UBlock {
+open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
 
   protected var formView: DForm = parent
   protected lateinit var columnViews: Array<VFieldUI?>
@@ -49,11 +49,6 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   protected var maxRowPos: Int = model.maxRowPos
   protected var maxColumnPos: Int = model.maxColumnPos
   protected var displayedFields: Int = model.displayedFields
-
-  // cached infos
-  protected var sortedToprec = 0 // first record displayed
-  private var sortedRecToDisplay: IntArray
-  private var displayToSortedRec: IntArray
 
   init {
     maxRowPos = model.maxRowPos
@@ -64,8 +59,8 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
     model.addBlockListener(this)
     bufferSize = model.bufferSize
     displaySize = model.displaySize
-    setSortedRecords(model.sortedRecords)
-    setNoMove(model.noMove())
+    sortedRecords = model.sortedRecords
+    noMove = model.noMove()
     noChart = model.noChart()
 
     if (model.isMulti()) {
@@ -118,21 +113,21 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   /**
    * Goto the next record
    */
-  fun gotoNextRecord() {
+  override fun gotoNextRecord() {
     model.gotoNextRecord()
   }
 
   /**
    * Goto the previous record
    */
-  fun gotoPrevRecord() {
+  override fun gotoPrevRecord() {
     model.gotoPrevRecord()
   }
 
   /**
    * Rebuilds cached information
    */
-  private fun rebuildCachedInfos() {
+  override fun rebuildCachedInfos() {
     var cnt = 0
     var i = 0
 
@@ -192,7 +187,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
    * Redisplays only if forced or if the current record is off-screen.
    * If there is no current record, the first valid record is used
    */
-  protected open fun refresh(force: Boolean) {
+  override fun refresh(force: Boolean) {
     var redisplay = false
     val recno: Int // row in view
 
@@ -295,7 +290,7 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
    * Performs a scroll action.
    * @exception        VException an exception may be raised record.leave()
    */
-  fun setScrollPos(value: Int) {
+  override fun setScrollPos(value: Int) {
     // Can not be called in event dispatch thread
     // Scrollbar timer is not stop if you click on one of the two buttons
     var value = value
@@ -398,8 +393,8 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
     return model.getDataPosition(displayToSortedRec[line])
   }
 
-  override fun add(comp: UComponent, constraints: Alignment) {
-    addComponent(comp as Component,
+  override fun add(comp: UComponent?, constraints: Alignment) {
+    addComponent(comp as? Component,
                  constraints.x,
                  constraints.y,
                  constraints.width,
@@ -417,8 +412,8 @@ open class DBlock(val parent: DForm, override val model: VBlock) : Block(model.i
   }
 
   override fun createLayout(): BlockLayout {
-    // label + field => fldNumber + lines
-    val layout = SimpleBlockLayout(DFieldUI.fldNumber * maxColumnPos, maxRowPos)
+    // label + field => 2 + lines
+    val layout = SimpleBlockLayout(2 * maxColumnPos, maxRowPos)
     if (model.alignment != null) {
       layout.setBlockAlignment(formView.getBlockView(model.alignment!!.block) as Component,
                                model.alignment!!.targets,

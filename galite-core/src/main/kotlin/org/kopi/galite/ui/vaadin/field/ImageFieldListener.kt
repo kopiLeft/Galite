@@ -23,7 +23,6 @@ import java.io.Serializable
  * Registered objects are notified with actions performed on an image field.
  */
 interface ImageFieldListener : Serializable {
-
   /**
    * Fired when the image is removed from the field.
    */

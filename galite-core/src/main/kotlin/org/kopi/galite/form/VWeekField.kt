@@ -196,7 +196,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
    * Sets the field value of given record to a week value.
    */
   override fun setWeek(r: Int, v: Week?) {
-    if (changedUI
+    if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary

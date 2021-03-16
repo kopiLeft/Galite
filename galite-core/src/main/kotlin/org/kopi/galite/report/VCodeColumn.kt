@@ -63,7 +63,7 @@ abstract class VCodeColumn(ident: String?,
    * Return a string representation.
    */
   override fun format(o: Any?): String {
-    return if (folded || o == null) {
+    return if (isFolded || o == null) {
       ""
     } else {
       format?.format(o) ?: if (names != null) names!![getIndex(o)]!! else idents[getIndex(o)]

@@ -36,6 +36,13 @@ class ChartBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, line), Bl
     TODO("Not yet implemented")
   }
 
+  override fun add(component: Component?, constraints: ComponentConstraint) {
+    if (aligns != null && components != null) {
+      aligns!![constraints.x][constraints.y] = constraints
+      components!![constraints.x][constraints.y] = component
+    }
+  }
+
   override fun addComponent(
           component: Component?, x: Int, y: Int, width: Int, height: Int, alignRight: Boolean,
           useAll: Boolean,

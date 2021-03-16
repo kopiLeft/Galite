@@ -68,7 +68,7 @@ class DGridEditorBooleanField(
         inside = true
         enterMe()
         if (rendrerValue != null) {
-          getModel().changedUI = true
+          getModel().isChangedUI = true
           getModel().setBoolean(getBlockView().model.activeRecord, rendrerValue)
           rendrerValue = null
         }
@@ -135,7 +135,7 @@ class DGridEditorBooleanField(
     }
     val text = getModel().toText(event.value)
     if (getModel().checkText(text!!)) { // TODO:nullable?
-      getModel().changedUI = true
+      getModel().isChangedUI = true
       getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.value)
     }
     getModel().setChanged(true)

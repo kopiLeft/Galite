@@ -20,7 +20,4 @@ package org.kopi.galite.ui.vaadin.grid
 /**
  * Sever side of an integer editor field.
  */
-class GridEditorIntegerField(width: Int, minValue: Int, maxValue: Int) : GridEditorTextField(width) {
-  override var value: Any? = TODO()
-  // TODO
-}
+class GridEditorIntegerField(width: Int, minValue: Int, maxValue: Int) : GridEditorTextField(width)

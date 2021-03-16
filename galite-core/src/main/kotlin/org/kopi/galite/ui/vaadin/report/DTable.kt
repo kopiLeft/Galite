@@ -83,6 +83,7 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
     model.accessibleColumns.forEachIndexed { index, vReportColumn ->
       addColumn(ColumnValueProvider(index), index)
               .setHeader(getColumnNameComponent(vReportColumn!!))
+              .setAutoWidth(true)
     }
   }
 

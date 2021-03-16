@@ -38,8 +38,8 @@ class DRichTextEditor(
         height: Int,
         detail: Boolean
 ) : DField(model, label, align, options, detail),
-        UTextField,
-        Focusable<DRichTextEditor> /*, ValueChangeListener, NavigationListener TODO*/ {
+        UTextField
+        /*Focusable<DRichTextEditor> , ValueChangeListener, NavigationListener TODO*/ {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -91,7 +91,7 @@ class DRichTextEditor(
 
   fun valueChanged(event: AbstractField.ComponentValueChangeEvent<RichTextField, String>?) {
     // value change event is fired when the field is blurred.
-    getModel().changedUI = true
+    getModel().isChangedUI = true
     getModel().setChanged(true)
   }
 

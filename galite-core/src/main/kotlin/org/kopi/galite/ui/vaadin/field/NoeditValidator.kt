@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,14 +15,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
-package org.kopi.galite.ui.vaadin.common
-
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
+package org.kopi.galite.ui.vaadin.field
 
 /**
- * Abstract class for all window components.
+ * No edition validator. Block all keycodes
  */
-abstract class Window : VerticalLayout() {
+class NoeditValidator(maxLength: Int) : AllowAllValidator(maxLength) {
+  override fun validate(c: Char): Boolean {
+    return false
+  }
 
+  override fun validate(text: String?): Boolean {
+    return false
+  }
 }

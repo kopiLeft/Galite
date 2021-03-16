@@ -40,7 +40,7 @@ public DWaitPanel(DWindow parent) {
     setFocusable(false);
     addMouseListener(new MouseAdapter() {
         public void mouseClicked(MouseEvent e) {
-          //DWaitPanel.this.parent.getModel().getDBContext().getDefaultConnection().interrupt();
+          //DWaitPanel.this.parent.getModel().getDBContext().getDefaultConnection().interrupt(); TODO
         }
       });
     //    setWaiting(false);

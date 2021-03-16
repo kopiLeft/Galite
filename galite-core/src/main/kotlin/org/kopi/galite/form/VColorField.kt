@@ -90,7 +90,7 @@ class VColorField(val bufferSize: Int, width: Int, height: Int) : VField(1, 1) {
    * Sets the field value of given record to a date value.
    */
   override fun setColor(r: Int, v: Color?) {
-    if (changedUI || value[r] !== v) {
+    if (isChangedUI || value[r] !== v) {
       // trails (backup) the record if necessary
       trail(r)
       // set value in the defined row

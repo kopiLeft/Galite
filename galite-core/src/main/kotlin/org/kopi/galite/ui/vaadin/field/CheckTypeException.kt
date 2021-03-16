@@ -22,8 +22,8 @@ import org.kopi.galite.ui.vaadin.notif.NotificationListener
 import com.vaadin.flow.component.HasValue
 
 /**
- * Thrown when the field content is checked against its validation
- * strategy. This exception is transformed later to an error notification.
+ * Thrown when the field content is checked against its validator.
+ * This exception is transformed later to an error notification.
  *
  * @param field The concerned text input zone.
  * @param messageKey The message key.

@@ -28,10 +28,10 @@ package org.kopi.galite.ui.vaadin.block
  * @param alignRight Is it right aligned ?
  * @param useAll Use the whole possible width of the column ?
  */
-class ComponentConstraint(var x: Int,
-                          var y: Int,
-                          var width: Int,
-                          var height: Int,
+class ComponentConstraint(var x: Int = 0,
+                          var y: Int = 0,
+                          var width: Int = 0,
+                          var height: Int = 0,
                           var alignRight: Boolean = false,
                           var useAll: Boolean = false) {
 

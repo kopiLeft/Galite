@@ -100,7 +100,7 @@ public class DMultiBlock extends DChartBlock implements UMultiBlock {
     }
 
     public boolean inDetailMode() {
-        return getModel().getDetailMode();
+        return getModel().isDetailMode();
     }
 
     protected LayoutManager createLayoutManager() {
@@ -142,7 +142,7 @@ public class DMultiBlock extends DChartBlock implements UMultiBlock {
         if (row >= 0) {
             getModel().gotoRecord(getRecordFromDisplayLine(row));
         }
-        if (getModel().getDetailMode()) {
+        if (getModel().isDetailMode()) {
             getModel().setDetailMode(false);
             layout = chartLayout;
         } else {

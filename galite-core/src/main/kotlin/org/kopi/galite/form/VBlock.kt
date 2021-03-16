@@ -105,7 +105,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     activeField = null
     activeRecord = if (isMulti()) -1 else 0
     currentRecord = -1
-    detailMode = (!isMulti() || noChart()) && displaySize == 1
+    isDetailMode = (!isMulti() || noChart()) && displaySize == 1
     sortedRecords = if (isMulti()) {
       IntArray(bufferSize)
     } else {
@@ -824,7 +824,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       if (!fields[index].hasAction() &&
               fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
-              (detailMode && !fields[index].noDetail() || !detailMode && !fields[index].noChart())) {
+              (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
         target = fields[index]
       }
       i += 1
@@ -857,7 +857,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       index -= 1
       if (!fields[index].hasAction() &&
               fields[index].getAccess(activeRecord) >= VConstants.ACS_VISIT &&
-              (detailMode && !fields[index].noDetail() || !detailMode && !fields[index].noChart())) {
+              (isDetailMode && !fields[index].noDetail() || !isDetailMode && !fields[index].noChart())) {
         target = fields[index]
       }
       i += 1
@@ -1330,8 +1330,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     for (i in fields.indices) {
       fields[i].setSearchOperator(VConstants.SOP_EQ)
     }
-    if (!noChart() && detailMode) {
-      detailMode = false
+    if (!noChart() && isDetailMode) {
+      isDetailMode = false
     }
     setAccess(VConstants.ACS_MUSTFILL)
     for (i in 0 until bufferSize) {
@@ -2454,7 +2454,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     if (newValue != oldValue) {
       // backup record before we change it
       trailRecord(rec)
-      if (!value && activeField != null && activeField!!.changed) {
+      if (!value && activeField != null && activeField!!.isChanged) {
         activeField!!.setChanged(false)
       }
       recordInfo[rec] = newValue
@@ -3689,7 +3689,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     }
 
   var activeField: VField? = null
-  var detailMode = false
+  var isDetailMode = false
     set(mode: Boolean) {
       if (mode != field) {
         // remember field to enter it in the next view
