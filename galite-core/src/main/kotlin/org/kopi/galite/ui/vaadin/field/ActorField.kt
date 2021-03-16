@@ -48,7 +48,6 @@ class ActorField : ObjectField<Any?>() {
   init {
     button.className = Styles.ACTOR_FIELD_BUTTON
     element.classList.add(Styles.ACTOR_FIELD)
-    add(button)
   }
   //---------------------------------------------------
   // IMPLEMENTATION

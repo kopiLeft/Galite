@@ -169,8 +169,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     handleComponentVisiblity()
   }
 
-
-
   override fun setPresentationValue(newPresentationValue: Boolean?) {
     value = newPresentationValue
   }

@@ -17,15 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.Focusable
 import org.kopi.galite.form.UTextField
-import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VStringField
 import org.kopi.galite.ui.vaadin.field.RichTextField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
+
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.Focusable
 
 /**
  * Rich text editor implementation based on CK editor for vaadin.
@@ -130,8 +130,8 @@ class DRichTextEditor(
     enterMe()
   }
 
-  override fun getText(): String {
-    return editor.getValue()
+  override fun getText(): String? {
+    return editor.value
   }
 
   override fun setHasCriticalValue(b: Boolean) {}

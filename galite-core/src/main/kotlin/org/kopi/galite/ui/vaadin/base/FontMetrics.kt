@@ -15,22 +15,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field;
+package org.kopi.galite.ui.vaadin.base
 
-import java.io.Serializable;
+import java.io.Serializable
 
 /**
- * Registered objects are notified with actions performed on an image field.
+ * A font metrics used for some grid calculations
  */
-public interface ImageFieldListener extends Serializable {
+class FontMetrics(val fontFamily: String, val fontSize: Int, val text: String) : Serializable {
 
-  /**
-   * Fired when the image is removed from the field.
-   */
-  public void onRemove();
+  var width = 0
+  var height = 0
 
-  /**
-   * Fired when the image field is clicked.
-   */
-  public void onImageClick();
+  companion object {
+    val DIGIT = FontMetrics("sans-serif", 12, "0")
+    val LETTER = FontMetrics("sans-serif", 12, "X")
+  }
 }

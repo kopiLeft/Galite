@@ -22,8 +22,14 @@ import com.vaadin.flow.component.textfield.IntegerField
 /**
  * An integer field.
  */
-class VIntegerField : IntegerField(), UTextField {
+class VIntegerField(width : Int, minval : Int, maxval : Int) : IntegerField(), UTextField {
   var cols: Int = 0
+
+  init {
+    this.min = minval
+    this.max = maxval
+    this.width = width.toString()
+  }
 
   override fun hasAutoComplete(): Boolean {
     TODO("Not yet implemented")

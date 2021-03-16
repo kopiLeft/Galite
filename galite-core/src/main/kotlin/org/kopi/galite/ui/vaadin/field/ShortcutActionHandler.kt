@@ -1,9 +1,9 @@
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.base.ShortcutAction
+
 import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.KeyNotifier
-import org.kopi.galite.ui.vaadin.base.ShortcutAction
-import java.util.*
 
 /**
  * A shortcut action handler based on key down event.

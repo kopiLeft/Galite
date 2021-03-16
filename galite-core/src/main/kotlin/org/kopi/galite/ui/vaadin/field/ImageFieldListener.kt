@@ -17,34 +17,20 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import java.util.Arrays
-
-import com.vaadin.flow.component.combobox.ComboBox
+import java.io.Serializable
 
 /**
- * An Code field.
+ * Registered objects are notified with actions performed on an image field.
  */
-class VCodeField(enumerations : Array<String>?) : ComboBox<String>(), UTextField {
-  init {
-    super.setItems(Arrays.stream(enumerations))
-  }
+interface ImageFieldListener : Serializable {
 
-  override fun hasAutoComplete(): Boolean = true
+  /**
+   * Fired when the image is removed from the field.
+   */
+  fun onRemove()
 
-  override fun getMaxLength(): Int {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMinLength(): Int {
-    TODO("Not yet implemented")
-  }
-
-
-  override fun setMaxLength(maxLength: Int) {
-    //Nothing to Implement
-  }
-
-  override fun setMinLength(minLength: Int) {
-    TODO("Not yet implemented")
-  }
+  /**
+   * Fired when the image field is clicked.
+   */
+  fun onImageClick()
 }

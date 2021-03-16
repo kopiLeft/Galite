@@ -22,8 +22,11 @@ import com.vaadin.flow.component.textfield.BigDecimalField
 /**
  * An fixnum field.
  */
-class VFixnumField(col: Int, maxScale: Int, minval: Double?,
-                   maxval: Double?, fraction: Boolean) : BigDecimalField(), UTextField {
+class VFixnumField(col: Int,
+                   maxScale: Int,
+                   minval: Double?,
+                   maxval: Double?,
+                   fraction: Boolean) : BigDecimalField(), UTextField {
 
   override fun hasAutoComplete(): Boolean {
     TODO("Not yet implemented")

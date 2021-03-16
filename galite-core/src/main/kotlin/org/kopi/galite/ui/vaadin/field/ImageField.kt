@@ -41,7 +41,8 @@ class ImageField : ObjectField<Any?>() {
 
   init {
     image!!.setBorder(0)
-    // TODO
+    image!!.element.setProperty("borderStyle", "none")
+    className = "k-imagefield"
   }
 
   //---------------------------------------------------

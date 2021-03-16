@@ -246,18 +246,18 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
      * Creates the navigation actions.
      */
     protected fun createNavigatorKeys() {
-      addKeyNavigator(KEY_TAB, Key.ENTER, KeyModifier.valueOf(""))
-      addKeyNavigator(KEY_TAB, Key.TAB, KeyModifier.valueOf(""))
-      addKeyNavigator(KEY_STAB, Key.TAB, KeyModifier.valueOf("Shift"))
-      addKeyNavigator(KEY_BLOCK, Key.ENTER, KeyModifier.valueOf("Shift"))
-      addKeyNavigator(KEY_REC_UP, Key.PAGE_UP, KeyModifier.valueOf(""))
-      addKeyNavigator(KEY_REC_DOWN, Key.PAGE_DOWN, KeyModifier.valueOf(""))
-      addKeyNavigator(KEY_REC_FIRST, Key.HOME, KeyModifier.valueOf(""))
-      addKeyNavigator(KEY_REC_LAST, Key.END, KeyModifier.valueOf(""))
-      addKeyNavigator(KEY_STAB, Key.ARROW_LEFT, KeyModifier.valueOf("Control"))
-      addKeyNavigator(KEY_TAB, Key.ARROW_RIGHT, KeyModifier.valueOf("Control"))
-      addKeyNavigator(KEY_REC_UP, Key.ARROW_UP, KeyModifier.valueOf("Control"))
-      addKeyNavigator(KEY_REC_DOWN, Key.ARROW_DOWN, KeyModifier.valueOf("Control"))
+      addKeyNavigator(KEY_TAB, Key.ENTER, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_TAB, Key.TAB, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_STAB, Key.TAB, KeyModifier.of("Shift"))
+      addKeyNavigator(KEY_BLOCK, Key.ENTER, KeyModifier.of("Shift"))
+      addKeyNavigator(KEY_REC_UP, Key.PAGE_UP, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_REC_DOWN, Key.PAGE_DOWN, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_REC_FIRST, Key.HOME, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_REC_LAST, Key.END, KeyModifier.of("AltGraph"))
+      addKeyNavigator(KEY_STAB, Key.ARROW_LEFT, KeyModifier.of("Control"))
+      addKeyNavigator(KEY_TAB, Key.ARROW_RIGHT, KeyModifier.of("Control"))
+      addKeyNavigator(KEY_REC_UP, Key.ARROW_UP, KeyModifier.of("Control"))
+      addKeyNavigator(KEY_REC_DOWN, Key.ARROW_DOWN, KeyModifier.of("Control"))
     }
 
     /**

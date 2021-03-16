@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.field
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.block.ColumnView
+import org.kopi.galite.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.html.Div
 
@@ -33,6 +34,9 @@ import com.vaadin.flow.component.html.Div
 open class Field(val hasIncrement: Boolean, val hasDecrement: Boolean) : Div() {
   private val listeners = mutableListOf<FieldListener>()
 
+  init {
+    className = Styles.FIELD
+  }
   /**
    * Has an action trigger ?
    */

@@ -171,8 +171,12 @@ class TextField(val model: VField,
       is org.kopi.galite.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
-        minval = model.minval.toDouble()
-        maxval = model.maxval.toDouble()
+        if(model.minval != null) {
+          minval = model.minval.toDouble()
+        }
+        if(model.maxval != null) {
+          maxval = model.maxval.toDouble()
+        }
       }
       is VMonthField -> {
         // month field
@@ -204,7 +208,6 @@ class TextField(val model: VField,
         if(model.maxval != null) {
           maxval = model.maxval.toDouble()
         }
-        model
         maxScale = model.maxScale
         fraction = model.isFraction
 
@@ -263,6 +266,9 @@ class TextField(val model: VField,
    */
   private fun createTextField(): AbstractField<*, out Any?> {
     val text = createFieldComponent()
+    if (noEdit) {
+      text.isReadOnly = true
+    }
     // TODO
     return text
   }
@@ -287,11 +293,7 @@ class TextField(val model: VField,
         it.setFixedNewLine(!dynamicNewLine)
       }
     } else if(type == Type.INTEGER) {
-      VTextField(col).also {
-        it.pattern = "[0-9]*"
-        it.maxLength = col;
-        it.isPreventInvalidInput = true
-      }
+      VIntegerField(col, minval!!.toInt(), maxval!!.toInt())
     } else if(isDecimal()) {
       VFixnumField(col, maxScale, minval, maxval, fraction)
     } else if(type == Type.CODE) {
