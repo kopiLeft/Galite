@@ -89,13 +89,13 @@ class DGridMultiBlock(parent: DForm,
     if (comp is DField) {
       comp.noChart = false
     }
-    detail!!.addComponent(comp as Component,
-                          constraint.x,
-                          constraint.y,
-                          constraint.width,
-                          constraint.height,
-                          constraint.alignRight,
-                          constraint.useAll)
+    //detail!!.addComponent(comp as Component, TODO
+    //                      constraint.x,
+    //                      constraint.y,
+    //                      constraint.width,
+    //                      constraint.height,
+    //                      constraint.alignRight,
+    //                      constraint.useAll)
   }
 
   /*fun getDetails(rowReference: RowReference?): Component? { TODO
