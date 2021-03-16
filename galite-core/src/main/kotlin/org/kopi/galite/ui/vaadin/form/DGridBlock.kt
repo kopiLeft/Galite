@@ -435,9 +435,11 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   protected fun configure() {
     val width = 0
+
     for (i in 0 until model.getFieldCount()) {
       if (!model.fields[i].isInternal() && !model.fields[i].noChart()) {
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
+
         if (columnView.hasDisplays()) {
           grid.addComponentColumn { columnView.editor }
             .setAutoWidth(true)
@@ -446,11 +448,12 @@ open class DGridBlock(parent: DForm, model: VBlock)
         }
       }
     }
-    val l = mutableListOf<DGridBlockContainer.GridBlockItem>()
+    val items = mutableListOf<DGridBlockContainer.GridBlockItem>()
+
     repeat(model.bufferSize) {
-      l.add(DGridBlockContainer.GridBlockItem(it))
+      items.add(DGridBlockContainer.GridBlockItem(it))
     }
-    grid.setItems(l)
+    grid.setItems(items)
     for (column in grid.columns) {
       /*val field = getField(column.getPropertyId()) TODO
       val columnView: DGridBlockFieldUI = columnViews.get(model.getFieldIndex(field))

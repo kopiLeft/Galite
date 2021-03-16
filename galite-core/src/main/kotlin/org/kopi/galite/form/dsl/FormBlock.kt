@@ -225,7 +225,7 @@ open class FormBlock(var buffer: Int,
               && TODO("add Image type")) {
         error("The field is droppable but its type is not supported as a drop target.")
       } else {
-        val flavor: String? = addDropList(dropList!!, field)
+        val flavor = addDropList(dropList!!, field)
         if (flavor == null) {
           blockFields.add(field)
         } else {

@@ -289,7 +289,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @param title The block title.
    */
   fun setTitle(title: String?) {
-    //super.setTitle(title)
+    element.setAttribute("title", title)
     // TODO
   }
 
