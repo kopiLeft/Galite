@@ -92,10 +92,10 @@ object BlockProduct : FormBlock(1, 1, "Products") {
     help = "The product unit price excluding VAT"
     columns(u.price)
   }
- /* val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
+  val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
     label = "Image"
     help = "The product image"
-  }*/
+  }
 }
 
 object Category : CodeDomain<String>() {

@@ -50,28 +50,32 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   private var forceHiddenVisibility = false
 
   init {
+    /*registerRpc(object : BooleanFieldServerRpc() { TODO
+      fun valueChanged(value: Boolean) {
+        setValue(value)
+        fireValueChangeEvent(value)
+      }
+    })*/
     className = Styles.BOOLEAN_FIELD
     yes.classNames.add("true")
     no.classNames.add("false")
     content.add(yes)
     content.add(no)
-    yes.style.set("verticalAlign","VerticalAlignment.BOTTOM")
-    no.style.set("verticalAlign","VerticalAlignment.BOTTOM")
-    add(content)
+    // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
+    // content.setCellVerticalAlignment(no, HasVerticalAlignment.ALIGN_BOTTOM) TODO
+    // setWidget(content) TODO
     yes.addValueChangeListener(::onYesChange)
     no.addValueChangeListener(::onNoChange)
     yes.element.style["visibility"] = "hidden"
     no.element.style["visibility"] = "hidden"
-
     content.element.addEventListener("mouseover") {
-      yes.element.style["visibility"] = "visible"
-      no.element.style["visibility"] = "visible"
+      isVisible = true
     }
+
 
     content.element.addEventListener("mouseout") {
       if(value == null) {
-        yes.element.style["visibility"] = "hidden"
-        no.element.style["visibility"] = "hidden"
+        isVisible = false
       }
     }
   }
@@ -99,9 +103,9 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    */
   fun setBlink(blink: Boolean) {
     if (blink) {
-      element.classList.add("blink")
+      element.classList.add(Styles.BOOLEAN_FIELD + "-blink")
     } else {
-      element.classList.remove("blink")
+      element.classList.remove(Styles.BOOLEAN_FIELD + "-blink")
     }
   }
 
@@ -121,7 +125,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     if (value == null) {
       yes.element.style["visibility"] = "hidden"
       no.element.style["visibility"] = "hidden"
-      element.classList.remove("visible")
+      element.classList.remove(Styles.BOOLEAN_FIELD + "-visible")
     } else {
       isVisible = visible
     }
@@ -132,11 +136,11 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     if (!forceHiddenVisibility && visible) {
       yes.element.style["visibility"] = "visible"
       no.element.style["visibility"] = "visible"
-      element.classList.add("visible")
+      element.classList.add(Styles.BOOLEAN_FIELD + "-visible")
     } else {
       yes.element.style["visibility"] = "hidden"
       no.element.style["visibility"] = "hidden"
-      element.classList.remove("visible")
+      element.classList.remove(Styles.BOOLEAN_FIELD + "-visible")
     }
   }
 
@@ -195,8 +199,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   override fun checkValue(rec: Int) {}
 
   fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    yes.value = true
-    no.value = false
+    //FIX ME
     if (event.value) {
       no.value = false
     } else if (mandatory && !no.value) {
@@ -207,8 +210,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   }
 
   fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    no.value = true
-    yes.value = false
+    //FIX ME
     if (event.value) {
       yes.value = false
     } else if (mandatory && !yes.value) {
@@ -222,7 +224,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * Handles the component visibility according to its value.
    */
   protected fun handleComponentVisiblity() {
-     isVisible = if (element.parent != null || element.childCount > 0) {
+    isVisible = if (element.parent != null || element.childCount > 0) { TODO()
       // field is focused set it visible
       true
     } else value != null
@@ -244,7 +246,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     label = label.replace("\\s".toRegex(), "_")
     // this.yes.setName(label) TODO
     // this.no.setName(label) TODO
-    this.yes.label = yes
-    this.no.label = no
+    this.yes.element.setProperty("title", yes)
+    this.no.element.setProperty("title", no)
   }
 }

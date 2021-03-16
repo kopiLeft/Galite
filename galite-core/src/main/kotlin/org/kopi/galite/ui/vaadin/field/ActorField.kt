@@ -48,6 +48,7 @@ class ActorField : ObjectField<Any?>() {
   init {
     button.className = Styles.ACTOR_FIELD_BUTTON
     element.classList.add(Styles.ACTOR_FIELD)
+    //setWidget(button) TODO
   }
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -91,7 +92,7 @@ class ActorField : ObjectField<Any?>() {
     this.foreground = foreground
     this.background = background
     if (foreground != null && foreground.isNotEmpty()) {
-       button.element.style["color"] = foreground
+      button.element.style["color"] = foreground
     } else {
       button.element.style["color"] = "inherit"
     }

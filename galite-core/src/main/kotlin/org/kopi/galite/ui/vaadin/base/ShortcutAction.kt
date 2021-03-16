@@ -29,7 +29,7 @@ import com.vaadin.flow.component.KeyModifier
  */
 abstract class ShortcutAction(protected val caption: String,
                               protected val key: Key,
-                              vararg modifiers: KeyModifier
+                              vararg modifiers: KeyModifier?
 ) {
 
   protected val modifierMask: Int = createModifierMask(modifiers)
@@ -56,7 +56,7 @@ abstract class ShortcutAction(protected val caption: String,
    * @param modifiers The modifiers key.
    * @return The modifier mask to be used.
    */
-  protected fun createModifierMask(modifiers: Array<out KeyModifier>?): Int {
+  protected fun createModifierMask(modifiers: Array<out KeyModifier?>?): Int {
     var modifiersMask = 0
     if (modifiers != null) {
       for (i in modifiers.indices) {

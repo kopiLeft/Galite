@@ -79,7 +79,7 @@ object StockBlock : FormBlock(1, 1, "Stock") {
     help = "The provider id"
     columns(u.idStckProv, w.idProvider)
   }
-  val minAlert = mustFill(domain = Domain<Decimal>(20), position = at(1, 1)) {
+  val minAlert = mustFill(domain = Domain<Int>(20), position = at(1, 1)) {
     label = "Min Alert"
     help = "The stock's min alert"
    // columns(u.idStckProv, w.idProvider)
