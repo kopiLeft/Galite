@@ -46,5 +46,5 @@ interface TextValidator: Validator<Any?> {
    * @param text The text to be checked.
    * @throws CheckTypeException when the given value is not valid.
    */
-  fun checkType(field: TextField, text: String)
+  fun checkType(field: InputTextField, text: String)
 }

@@ -37,7 +37,7 @@ class DecimalValidator(
   //---------------------------------------------------
   override fun validate(c: Char): Boolean = c in '0'..'9' || c == '.' || c == '-' || c == ' ' || c == ',' || c == '/'
 
-  override fun checkType(field: TextField, text: String) {
+  override fun checkType(field: InputTextField, text: String) {
     if ("" == text) {
     } else {
       val v = try {

@@ -29,7 +29,7 @@ class WeekValidator(maxLength: Int) : AllowAllValidator(maxLength) {
   //---------------------------------------------------
   override fun validate(c: Char): Boolean = c in '0'..'9' || c == '.' || c == '/'
 
-  override fun checkType(field: TextField, text: String) {
+  override fun checkType(field: InputTextField, text: String) {
     if ("" == text) {
       field.value = null
     } else {
@@ -43,13 +43,12 @@ class WeekValidator(maxLength: Int) : AllowAllValidator(maxLength) {
    * @param s The text to be parsed
    * @throws CheckTypeException When the text is not a valid week.
    */
-  private fun parseWeek(field: TextField, s: String) {
+  private fun parseWeek(field: InputTextField, s: String) {
     var week = 0
     var year = -1
     var bp = 0
-    var state: Int
+    var state = 1
     val buffer = s + '\u0000'
-    state = 1
     while (state > 0) {
       when (state) {
         1 -> if (buffer[bp] in '0'..'9') {
