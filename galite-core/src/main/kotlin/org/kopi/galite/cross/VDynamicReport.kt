@@ -17,13 +17,9 @@
  */
 package org.kopi.galite.cross
 
-import java.awt.event.KeyEvent
-import java.util.ArrayList
-import java.util.Locale
-
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VBooleanCodeField
 import org.kopi.galite.form.VBooleanField
@@ -62,10 +58,13 @@ import org.kopi.galite.report.VTimeColumn
 import org.kopi.galite.report.VTimestampColumn
 import org.kopi.galite.report.VWeekColumn
 import org.kopi.galite.type.Decimal
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VExecFailedException
+import java.awt.event.KeyEvent
+import java.util.*
 
 class VDynamicReport(block: VBlock) : VReport() {
   /**
@@ -290,14 +289,36 @@ class VDynamicReport(block: VBlock) : VReport() {
           if (block.isMulti()) {
             block.activeRecord = 0
           }
-          val searchCondition = if (block.getSearchConditions() == null) "" else block.getSearchConditions()
+          val searchCondition = block.getSearchConditions()
           val searchColumns = block.getReportSearchColumns()
           val searchTables = block.getSearchTables()
           if (block.isMulti()) {
             block.activeRecord = -1
             block.activeField = null
           }
-          TODO()
+          val query  = if(searchCondition == null) {
+            searchTables!!.slice(searchColumns!!.toList()).selectAll()
+          } else {
+            searchTables!!.slice(searchColumns!!.toList()).select(searchCondition)
+          }
+         query.firstOrNull()?.also {
+            if (it[searchColumns[0]] != 0) {
+              val result: MutableList<Any> = ArrayList()
+
+              for (i in fields.indices) {
+                result.add(it[searchColumns[i]]!!)
+              }
+              model.addLine(result.toTypedArray())
+            }
+          }
+          query.forEach {
+            val result: MutableList<Any> = ArrayList()
+
+            for (i in fields.indices) {
+              result.add(it[searchColumns[i]]!!)
+            }
+            model.addLine(result.toTypedArray())
+          }
         }
       } catch (e: Throwable) {
         throw VExecFailedException(e)
@@ -475,4 +496,3 @@ class VDynamicReport(block: VBlock) : VReport() {
     initColumns()
   }
 }
-
