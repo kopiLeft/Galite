@@ -17,6 +17,9 @@
  */
 package org.kopi.galite.cross
 
+import java.awt.event.KeyEvent
+import java.util.Locale
+
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -63,8 +66,6 @@ import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.visual.VExecFailedException
-import java.awt.event.KeyEvent
-import java.util.*
 
 class VDynamicReport(block: VBlock) : VReport() {
   /**
