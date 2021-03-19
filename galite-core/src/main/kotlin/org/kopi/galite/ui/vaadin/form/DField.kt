@@ -58,7 +58,7 @@ abstract class DField(protected var model: VFieldUI,
   var align: Int = align
     protected set
   internal var access = 0 // current access of field
-  protected var isEditable: Boolean = options and VConstants.FDO_NOEDIT == 0 // is this field editable
+  protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
   protected var mouseInside = false // private events
 
   init {

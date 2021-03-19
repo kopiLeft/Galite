@@ -422,7 +422,7 @@ class TextField(val model: VField,
    * @param value The new field value.
    */
   internal fun markAsDirty(rec: Int, value: String?) {
-    (parent as Field).markAsDirty(rec, value)
+    (parent.get() as Field).markAsDirty(rec, value)
   }
 
   /**

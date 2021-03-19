@@ -185,6 +185,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
     // should validate text content
     if (validationStrategy != null) {
       val before: String = value
+
       if (!validationStrategy!!.validate(value)) {
         setText(before)
       } else {
@@ -199,6 +200,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
   fun setText(text: String?) {
     // set record to synchronize view and model even field is not focused
     var text = text
+
     setRecord()
     // set only valid inputs
     if (validationStrategy is NoeditValidator
@@ -260,9 +262,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
    * Returns `true` if the auto complete function should be used.
    * @return `true` if the auto complete function should be used.
    */
-  override fun hasAutoComplete(): Boolean {
-    return hasAutocomplete
-  }
+  override fun hasAutoComplete(): Boolean = hasAutocomplete
 
   /**
    * Sets the text validation strategy.
@@ -336,6 +336,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
    */
   protected fun setRecord() {
     val position = fieldConnector.position
+
     recordNumber = fieldConnector.columnView!!.getRecordFromDisplayLine(position)
   }
 
@@ -442,6 +443,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
   protected fun sendDirtyValuesToServerSide() {
     val window = parent!!
     val block = connector.parent.get() as Block
+
     if (block != null) {
       window.cleanDirtyValues(block)
     }
@@ -453,9 +455,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
    * Should the navigation be delegated to server side ?
    * @return `true` if the navigation is delegated to serevr side.
    */
-  protected fun delegateNavigationToServer(): Boolean {
-    return fieldConnector.delegateNavigationToServer()
-  }
+  protected fun delegateNavigationToServer(): Boolean = fieldConnector.delegateNavigationToServer()
 
   /**
    * Returns `true` if word wrap is used.
@@ -674,6 +674,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
 
   override fun setReadOnly(readOnly: Boolean) {
     val wasReadOnly: Boolean = isReadOnly
+
     if (readOnly) {
       tabIndex = -1
     } else if (wasReadOnly && !readOnly && tabIndex == -1) {
@@ -758,6 +759,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
   private fun refreshSuggestions() {
     // Get the raw text.
     val text: String = value
+
     if (text == null || text.isEmpty() || text.length == maxLength) {
       hideSuggestions()
     } else {
