@@ -132,6 +132,8 @@ class TextField(val model: VField,
    */
   var validator: TextValidator? = null
 
+  private val lastCommunicatedValue = ""
+
   val listeners = mutableListOf<HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>>()
 
   init {
@@ -307,7 +309,7 @@ class TextField(val model: VField,
     } else if(isDate()) {
       VDateField()
     } else {
-      VTextField(col).also {
+      InputTextField(col).also {
         if(type == Type.WEEK) {
           it.setInputType("week")
         } else if (type == Type.MONTH) {
@@ -410,6 +412,25 @@ class TextField(val model: VField,
    */
   internal fun sendDirtyValuesToServer(values: Map<Int?, String?>?) {
     // TODO
+  }
+
+  /**
+   * Marks the connector to be dirty for the given record.
+   * This means that before performing any action, the value of this field
+   * for the given record should be communicated to the server.
+   * @param rec The active record.
+   * @param value The new field value.
+   */
+  internal fun markAsDirty(rec: Int, value: String?) {
+    (parent.get() as Field).markAsDirty(rec, value)
+  }
+
+  /**
+   * Returns `true` if the last communicated value is different from the widget value.
+   * @return `true` if the last communicated value is different from the widget value.
+   */
+  internal fun needsSynchronization(): Boolean {
+    return lastCommunicatedValue != value
   }
 
   //---------------------------------------------------

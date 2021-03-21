@@ -30,7 +30,7 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
   //---------------------------------------------------
   override fun validate(c: Char): Boolean = c in '0'..'9' || c == '.' || c == '/'
 
-  override fun checkType(field: TextField, text: String) {
+  override fun checkType(field: InputTextField, text: String) {
     if ("" == text) {
       field.value = null
     } else {
@@ -43,7 +43,7 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
    * @param f The input field.
    * @param s The date text.
    */
-  private fun parseDate(f: TextField, s: String) {
+  private fun parseDate(f: InputTextField, s: String) {
     var day = 0
     var month = 0
     var year = -2

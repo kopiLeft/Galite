@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.block
 
 import org.kopi.galite.ui.vaadin.field.ActorField
+import org.kopi.galite.ui.vaadin.form.DBlock
 import org.kopi.galite.ui.vaadin.form.DField
 
 import com.vaadin.flow.component.Component
@@ -172,16 +173,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
     }
   }
 
-  fun getBlock(): Block {
-    var block: Block? = null
-    parent.ifPresent {
-      block = it as Block
-    }
-
-    requireNotNull(block)
-
-    return block!!
-  }
+  fun getBlock(): DBlock = parent.get() as DBlock
 
   /**
    * Returns if the block is in detail mode

@@ -96,7 +96,7 @@ class DRichTextEditor(
   }
 
   override fun updateText() {
-    val newModelTxt = getModel().getText(getRowController().blockView.getRecordFromDisplayLine(position))
+    val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     //BackgroundThreadHandler.access(Runnable { TODO
     editor.setValue(newModelTxt)
     //})

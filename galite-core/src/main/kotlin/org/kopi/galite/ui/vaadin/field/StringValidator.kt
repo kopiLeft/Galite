@@ -31,7 +31,7 @@ class StringValidator(
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun checkType(field: TextField, text: String) {
+  override fun checkType(field: InputTextField, text: String) {
     var text: String? = text
     if (text == null || "" == text) {
       field.value = null

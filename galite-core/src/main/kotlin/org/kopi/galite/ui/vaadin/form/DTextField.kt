@@ -160,7 +160,7 @@ open class DTextField(
   }
 
   override fun updateText() {
-    val newModelTxt = getModel().getText(getRowController().blockView.getRecordFromDisplayLine(position))
+    val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
       field.value = transformer!!.toGui(newModelTxt)!!.trim()
     }
