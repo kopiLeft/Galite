@@ -1830,9 +1830,8 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * Returns the database columns of block.
    */
-  fun getReportSearchColumns(): String? {
-    var result: String?
-    result = null
+  fun getReportSearchColumns(): MutableList<Column<*>>? {
+    val result = mutableListOf<Column<*>>()
 
     // take all visible fields with database access
     fields.forEach { field ->
@@ -1840,12 +1839,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       if (field !is VImageField
               && !field.isInternal()
               && field.getColumnCount() > 0) {
-        if (result == null) {
-          result = ""
-        } else {
-          result += ", "
-        }
-        result += field.getColumn(0)!!.getQualifiedName()
+        result.add(field.getColumn(0)!!.column)
       }
     }
 
@@ -1853,12 +1847,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     for (field in fields) {
       //!!! graf 20080329: should we replace fld!!.name.equals("ID") by fld == getIdField() ?
       if (field.isInternal() && field.name == idField.name && field.getColumnCount() > 0) {
-        if (result == null) {
-          result = ""
-        } else {
-          result += ", "
-        }
-        result += field.getColumn(0)!!.getQualifiedName()
+        result.add(field.getColumn(0)!!.column)
         break
       }
     }

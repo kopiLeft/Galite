@@ -40,11 +40,25 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val dynamicReport = actor(
+          ident = "dynamicReport",
+          menu = action,
+          label = "DynamicReport",
+          help = " Create Dynamic Report",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "preview"  // icon is optional here
+  }
 
   val block = insertBlock(Clients(), page) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)
+      }
+    }
+    command(item = dynamicReport) {
+      action = {
+        createDynamicReport()
       }
     }
   }

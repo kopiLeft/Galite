@@ -16,6 +16,7 @@
  */
 package org.kopi.galite.form.dsl
 
+import org.kopi.galite.cross.VDynamicReport
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.form.VDictionary
 import org.kopi.galite.form.VDictionaryForm
@@ -41,6 +42,13 @@ abstract class DictionaryForm : VDictionary, Form() {
 
   override fun doNotModal() {
     model.doNotModal()
+  }
+
+  /**
+   * create a report for this form
+   */
+  protected fun FormBlock.createDynamicReport() {
+    VDynamicReport.createDynamicReport(this.vBlock)
   }
 
   /** Form model */
