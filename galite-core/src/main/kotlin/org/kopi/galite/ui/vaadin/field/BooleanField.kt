@@ -63,7 +63,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     content.add(no)
     // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
     // content.setCellVerticalAlignment(no, HasVerticalAlignment.ALIGN_BOTTOM) TODO
-    // setWidget(content) TODO
+    add(content)
     yes.addValueChangeListener(::onYesChange)
     no.addValueChangeListener(::onNoChange)
     yes.element.style["visibility"] = "hidden"
@@ -224,28 +224,16 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * Handles the component visibility according to its value.
    */
   protected fun handleComponentVisiblity() {
-    isVisible = if (element.parent != null || element.childCount > 0) { TODO()
-      // field is focused set it visible
-      true
-    } else value != null
+    isVisible = value != null
   }
 
   /**
-   * Sets the name of the radio button inside the boolean field.
+   * Sets the tooltip of the checkbox buttons inside the boolean field.
    *
-   * The label attached with this field. TODO: doc?
-   * Needed to set the for attribute of the input radio
-   * in the field widget.
-   *
-   * @param label The name of the radio buttons.
    * @param yes The localized label for true value.
    * @param no The localized label for false value.
    */
-  fun setLabel(label: String, yes: String?, no: String?) {
-    var label = label
-    label = label.replace("\\s".toRegex(), "_")
-    // this.yes.setName(label) TODO
-    // this.no.setName(label) TODO
+  fun setLabel(yes: String?, no: String?) {
     this.yes.element.setProperty("title", yes)
     this.no.element.setProperty("title", no)
   }

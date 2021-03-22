@@ -117,7 +117,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   var columnView: ColumnView? = null
 
-  lateinit var wrappedField: CustomField<Any?>
+  lateinit var wrappedField: CustomField<*>
 
   /**
    * `true` if the content of this field has changed.
@@ -144,7 +144,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
     addFieldListener(this)
   }
 
-  fun setFieldContent(component: CustomField<Any?>) {
+  fun setFieldContent(component: CustomField<*>) {
     wrappedField = component
     add(component)
   }

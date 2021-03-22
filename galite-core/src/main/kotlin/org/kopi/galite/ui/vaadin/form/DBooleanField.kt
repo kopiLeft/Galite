@@ -48,16 +48,15 @@ class DBooleanField(
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  private val field: BooleanField
+  private val field: BooleanField = BooleanField(trueRepresentation, falseRepresentation)
   private var inside = false
 
   // --------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------
   init {
-    field = BooleanField(trueRepresentation, falseRepresentation)
     field.addValueChangeListener(this)
-    //setContent(field) TODO
+    setFieldContent(field)
   }
   // --------------------------------------------------
   // IMPLEMENTATION
@@ -111,7 +110,7 @@ class DBooleanField(
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
     //BackgroundThreadHandler.access(Runnable { TODO
-      field.label = label!!.text
+      field.setLabel(trueRepresentation, falseRepresentation)
       field.isEnabled = getAccess() >= VConstants.ACS_VISIT
       field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
     //})
