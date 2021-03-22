@@ -20,7 +20,6 @@ package org.kopi.galite.ui.vaadin.form
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
-
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.type.Date
@@ -138,7 +137,7 @@ class DImageField(
    * @return The dynamic image name.
    */
   protected fun createFileName(baseName: String): String =
-          baseName + Date.now().format("yyyyMMddHHmmssSSS").toString() + ".png"
+          baseName + Date.now().format("yyyyMMddHHmmssSSS") + ".png"
   //---------------------------------------------------
   // STREAM RESOURCE
   //---------------------------------------------------

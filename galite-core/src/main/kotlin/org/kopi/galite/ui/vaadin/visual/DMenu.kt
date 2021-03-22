@@ -182,6 +182,7 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
 
   override fun performAsyncAction(action: Action) {
     val currentUI = UI.getCurrent()
+
     requireNotNull(currentUI)
     Thread {
       UI.setCurrent(currentUI)

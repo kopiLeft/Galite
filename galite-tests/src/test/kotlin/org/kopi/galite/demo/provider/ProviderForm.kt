@@ -25,6 +25,7 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
+import org.kopi.galite.type.Image
 
 object ProviderForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
@@ -87,12 +88,11 @@ object BlockProvider : FormBlock(1, 1, "Providers") {
     help = "The provider zip code"
     columns(u.zipCode)
   }
-  /*
-  val logo = visit(domain = Domain<Image?>(20), position = at(6, 1)) {
+  val logo = visit(domain = Domain<Image>(20), position = at(6, 1)) {
     label = "Provider company logo"
     help = "The provider company logo"
     columns(u.logo)
-  }*/
+  }
 }
 
 fun main() {

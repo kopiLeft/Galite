@@ -29,7 +29,7 @@ import com.vaadin.flow.component.upload.receivers.MemoryBuffer
 import com.vaadin.flow.server.AbstractStreamResource
 
 /**
- * The server side component of the image field.
+ * The component of the image field.
  */
 class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectField<Any?>() {
 
