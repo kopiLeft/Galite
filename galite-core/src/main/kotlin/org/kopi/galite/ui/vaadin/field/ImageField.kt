@@ -19,11 +19,19 @@ package org.kopi.galite.ui.vaadin.field
 
 import org.kopi.galite.ui.vaadin.common.VImage
 
+import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.upload.Upload
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer
+import com.vaadin.flow.server.AbstractStreamResource
+
 /**
- * The server side component of the image field.
- * TODO: it have to be implemented later, ObjectField<Any?> ?
+ * The component of the image field.
  */
-class ImageField : ObjectField<Any?>() {
+class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectField<Any?>() {
 
   /**
    * The image width.
@@ -35,59 +43,33 @@ class ImageField : ObjectField<Any?>() {
    */
   var imageHeight = 0
 
-  private var image: VImage? = VImage()
+  private val image: VImage = VImage()
 
-  private val listeners = mutableListOf<ImageFieldListener>()
+  val upload: Upload = Upload(buffer)
 
   init {
-    image!!.setBorder(0)
-    image!!.element.setProperty("borderStyle", "none")
     className = "k-imagefield"
+    image.element.style["outline"] = "1px solid lightgreen"
+    image.setWidth(width, Unit.PIXELS)
+    image.setHeight(height, Unit.PIXELS)
+    image.setBorder(0)
+    image.element.setProperty("borderStyle", "none")
+    upload.uploadButton = Button(Icon(VaadinIcon.UPLOAD))
+    upload.dropLabelIcon = Div()
+    upload.setAcceptedFileTypes("image/*")
+    add(upload)
+    add(image)
   }
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  /**
-   * Registers a new image field listener.
-   * @param l The image field listener.
-   */
-  fun addImageFieldListener(l: ImageFieldListener) {
-    listeners.add(l)
-  }
-
-  /**
-   * Removes an image field listener.
-   * @param l The image field listener.
-   */
-  fun removeImageFieldListener(l: ImageFieldListener) {
-    listeners.remove(l)
-  }
-
-  /**
-   * Fired when the image is removed.
-   */
-  protected fun fireRemoved() {
-    for (l in listeners) {
-      l.onRemove()
-    }
-  }
-
-  /**
-   * Fired when the image is clicked.
-   */
-  protected fun fireClicked() {
-    for (l in listeners) {
-      l.onImageClick()
-    }
-  }
-
   override val isNull: Boolean
-    get() = image == null || image!!.isEmpty
+    get() = image.isEmpty
 
   override fun setValue(o: Any?) {
-    image!!.src = o as String?
+    image.src = o as String?
   }
 
 
@@ -99,7 +81,15 @@ class ImageField : ObjectField<Any?>() {
     // no color for image field
   }
 
-  override fun getValue(): Any? = image!!.src
+  override fun getValue(): Any? = image.src
+
+  fun setData(stream: AbstractStreamResource?) {
+    if(stream == null) {
+      image.element.removeAttribute("src")
+    } else {
+      image.element.setAttribute("src", stream)
+    }
+  }
 
   override fun generateModelValue(): Any? = value
 
@@ -108,9 +98,4 @@ class ImageField : ObjectField<Any?>() {
   }
 
   override fun setParentVisibility(visible: Boolean) {}
-
-  override fun clear() {
-    super.clear()
-    image = null
-  }
 }
