@@ -88,7 +88,7 @@ object BlockProvider : FormBlock(1, 1, "Providers") {
     help = "The provider zip code"
     columns(u.zipCode)
   }
-  val logo = visit(domain = Domain<Image>(20), position = at(6, 1)) {
+  val logo = visit(domain = Domain<Image>(100, 100), position = at(6, 1)) {
     label = "Provider company logo"
     help = "The provider company logo"
     columns(u.logo)
