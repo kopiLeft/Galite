@@ -37,15 +37,15 @@ import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.dnd.DragSource
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * The component of a simple block.
  * This UI component supports only laying components for simple
  * layout view.
  */
-abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
+abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnabled {
 
   /** The block layout. */
   var layout: BlockLayout? = null
@@ -288,8 +288,8 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
    * Sets the block title.
    * @param title The block title.
    */
-  override fun setTitle(title: String?) {
-    super.setTitle(title)
+  fun setTitle(title: String?) {
+    element.setAttribute("title", title)
     // TODO
   }
 
@@ -348,6 +348,7 @@ abstract class Block(private val droppable: Boolean) : Div(), HasEnabled {
         //dndWrapper = DragAndDropWrapper(layout) TODO
         //dndWrapper.setImmediate(true)
         //setContent(dndWrapper)
+        setContent(layout as Component)
       } else {
         setContent(layout as Component)
       }

@@ -132,6 +132,8 @@ class TextField(val model: VField,
    */
   var validator: TextValidator? = null
 
+  private val lastCommunicatedValue = ""
+
   val listeners = mutableListOf<HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>>()
 
   init {
@@ -171,8 +173,12 @@ class TextField(val model: VField,
       is org.kopi.galite.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
-        minval = model.minValue.toDouble()
-        maxval = model.maxValue.toDouble()
+        if(model.minValue != null) {
+          minval = model.minValue.toDouble()
+        }
+        if(model.maxValue != null) {
+          maxval = model.maxValue.toDouble()
+        }
       }
       is VMonthField -> {
         // month field
@@ -192,11 +198,21 @@ class TextField(val model: VField,
       }
       is VCodeField -> {
         // code field
-        TODO()
+        type = Type.CODE
+        enumerations = model.labels
       }
       is VFixnumField -> {
         // fixnum field
-        TODO()
+        type = Type.DECIMAL
+        if(model.minValue != null) {
+          minval = model.minValue.toDouble()
+        }
+        if(model.maxValue != null) {
+          maxval = model.maxValue.toDouble()
+        }
+        maxScale = model.maxScale
+        fraction = model.isFraction
+
       }
       is VTimestampField -> {
         // timestamp field
@@ -254,6 +270,9 @@ class TextField(val model: VField,
    */
   private fun createTextField(): AbstractField<*, out Any?> {
     val text = createFieldComponent()
+    if (noEdit) {
+      text.isReadOnly = true
+    }
     // TODO
     return text
   }
@@ -278,18 +297,19 @@ class TextField(val model: VField,
         it.setFixedNewLine(!dynamicNewLine)
       }
     } else if(type == Type.INTEGER) {
-      VTextField(col).also {
-        it.pattern = "[0-9]*"
-        it.isPreventInvalidInput = true
-      }
-    } else if(type == Type.TIME) {
+      VIntegerField(col, minval!!.toInt(), maxval!!.toInt())
+    } else if(isDecimal()) {
+      VFixnumField(col, maxScale, minval, maxval, fraction)
+    } else if(type == Type.CODE) {
+      VCodeField(enumerations)
+    }  else if(type == Type.TIME) {
       VTimeField()
     } else if(type == Type.TIMESTAMP) {
       VTimeStampField()
     } else if(isDate()) {
       VDateField()
     } else {
-      VTextField(col).also {
+      InputTextField(col).also {
         if(type == Type.WEEK) {
           it.setInputType("week")
         } else if (type == Type.MONTH) {
@@ -392,6 +412,25 @@ class TextField(val model: VField,
    */
   internal fun sendDirtyValuesToServer(values: Map<Int?, String?>?) {
     // TODO
+  }
+
+  /**
+   * Marks the connector to be dirty for the given record.
+   * This means that before performing any action, the value of this field
+   * for the given record should be communicated to the server.
+   * @param rec The active record.
+   * @param value The new field value.
+   */
+  internal fun markAsDirty(rec: Int, value: String?) {
+    (parent.get() as Field).markAsDirty(rec, value)
+  }
+
+  /**
+   * Returns `true` if the last communicated value is different from the widget value.
+   * @return `true` if the last communicated value is different from the widget value.
+   */
+  internal fun needsSynchronization(): Boolean {
+    return lastCommunicatedValue != value
   }
 
   //---------------------------------------------------

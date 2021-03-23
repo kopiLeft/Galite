@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.block
 import org.kopi.galite.ui.vaadin.base.VConstants
 import org.kopi.galite.ui.vaadin.field.Field
 import org.kopi.galite.ui.vaadin.field.FieldListener
-import org.kopi.galite.ui.vaadin.form.Form
+import org.kopi.galite.ui.vaadin.form.DBlock
 import org.kopi.galite.ui.vaadin.label.Label
 
 /**
@@ -28,7 +28,7 @@ import org.kopi.galite.ui.vaadin.label.Label
  * in a block model. This will collect all field connector that represents
  * the same field but in different records.
  */
-class ColumnView(val block: Block) {
+class ColumnView(val block: DBlock) {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -195,11 +195,11 @@ class ColumnView(val block: Block) {
   fun getFieldListener(): FieldListener? {
       if (block.inDetailMode()) {
         if (detailDisplay != null) {
-          return detailDisplay!!
+          return detailDisplay
         }
       } else {
         if (block.getDisplayLine() != -1) {
-          return displays[block.getDisplayLine()]!!
+          return displays[block.getDisplayLine()]
         }
       }
       return null
@@ -257,11 +257,11 @@ class ColumnView(val block: Block) {
       return
     }
     for (field in displays) {
-      if (field != null && field.dirty) {
+      if (field != null && field.isDirty) {
         field.cleanDirtyValues()
       }
     }
-    if (detailDisplay != null && detailDisplay!!.dirty) {
+    if (detailDisplay != null && detailDisplay!!.isDirty) {
       detailDisplay!!.cleanDirtyValues()
     }
   }
@@ -276,11 +276,11 @@ class ColumnView(val block: Block) {
         return false
       }
       for (field in displays) {
-        if (field != null && field.dirty) {
+        if (field != null && field.isDirty) {
           return true
         }
       }
-      return detailDisplay != null && detailDisplay!!.dirty
+      return detailDisplay != null && detailDisplay!!.isDirty
     }
 
   /**
@@ -343,7 +343,7 @@ class ColumnView(val block: Block) {
       }
     } else {
       if (block.getDisplayLine() != -1) {
-        if (displays[block.getDisplayLine()]!!.changed) {
+        if (displays[block.getDisplayLine()]!!.isChanged) {
           displays[block.getDisplayLine()]!!.checkValue(rec)
         }
       }
@@ -359,7 +359,7 @@ class ColumnView(val block: Block) {
       detailDisplay?.markAsDirty(rec)
     } else {
       if (block.getDisplayLine() != -1) {
-        if (displays[block.getDisplayLine()]!!.changed) {
+        if (displays[block.getDisplayLine()]!!.isChanged) {
           displays[block.getDisplayLine()]!!.markAsDirty(rec)
         }
       }
@@ -686,6 +686,6 @@ class ColumnView(val block: Block) {
    * Disables all blocks actors
    */
   fun disableAllBlocksActors() {
-    (block.parent.get() as Form).disableAllBlocksActors()
+    (block.parent.content).disableAllBlocksActors()
   }
 }

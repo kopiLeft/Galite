@@ -125,7 +125,9 @@ object Commands : VConstants {
 
     if (id != -1) {
       try {
-        b.fetchRecord(id)
+        transaction {
+          b.fetchRecord(id)
+        }
         gotoFieldIfNoActive(b)
       } catch (e: VException) {
         try {

@@ -41,10 +41,10 @@ import org.kopi.galite.visual.VColor
  * @param options The field options.
  * @param inDetail Is it a detail view ?
  */
-abstract class DField(internal val model: VFieldUI,
+abstract class DField(protected var model: VFieldUI,
                       internal var label: DLabel?,
-                      internal var align: Int,
-                      internal var options: Int,
+                      align: Int,
+                      protected var options: Int,
                       private var inDetail: Boolean)
   : Field(model.getIncrementCommand() != null,
           model.getDecrementCommand() != null), UField, FieldListener {
@@ -53,6 +53,10 @@ abstract class DField(internal val model: VFieldUI,
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   protected var state = 0 // Display state
+  protected var pos = 0
+  /** The alignment. */
+  var align: Int = align
+    protected set
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
   protected var mouseInside = false // private events
@@ -125,7 +129,7 @@ abstract class DField(internal val model: VFieldUI,
    * Returns `true` is the field belongs to the detail view.
    * @return `true` is the field belongs to the detail view.
    */
-  open fun isInDetail(): Boolean {
+  fun isInDetail(): Boolean {
     return inDetail
   }
 
@@ -135,8 +139,8 @@ abstract class DField(internal val model: VFieldUI,
    * Returns the row controller.
    * @return The row controller.
    */
-  open fun getRowController(): VFieldUI = model
-
+  val rowController: VFieldUI
+    get() = model
   //-------------------------------------------------
   // UTILS
   //-------------------------------------------------
@@ -199,14 +203,13 @@ abstract class DField(internal val model: VFieldUI,
     classNames.remove("mustfill")
     classNames.remove("hidden")
     when (access) {
-      VConstants.ACS_VISIT ->       classNames.add("visit")
-      VConstants.ACS_SKIPPED ->     classNames.add("skipped")
-      VConstants.ACS_MUSTFILL ->    classNames.add("mustfill")
-      VConstants.ACS_HIDDEN ->      classNames.add("hidden")
-      else ->                       classNames.add("visit")
+      VConstants.ACS_VISIT -> classNames.add("visit")
+      VConstants.ACS_SKIPPED -> classNames.add("skipped")
+      VConstants.ACS_MUSTFILL -> classNames.add("mustfill")
+      VConstants.ACS_HIDDEN -> classNames.add("hidden")
+      else -> classNames.add("visit")
     }
   }
-
 
   /**
    * Returns the navigation delegation to server mode.
@@ -455,14 +458,16 @@ abstract class DField(internal val model: VFieldUI,
               // go to the correct record if necessary
               // but only if we are in the correct block now
               if (getModel().block!!.isMulti()
-                      && recno != getModel().block!!.activeRecord && getModel().block!!.isRecordAccessible(
-                              recno)) {
+                      && recno != getModel().block!!.activeRecord
+                      && getModel().block!!.isRecordAccessible(recno)) {
                 getModel().block!!.gotoRecord(recno)
               }
 
               // go to the correct field if already necessary
               // but only if we are in the correct record now
-              if (recno == getModel().block!!.activeRecord && getModel() != getModel().block!!.activeField && getAccess() >= VConstants.ACS_VISIT) {
+              if (recno == getModel().block!!.activeRecord
+                      && getModel() != getModel().block!!.activeField
+                      && getAccess() >= VConstants.ACS_VISIT) {
                 getModel().block!!.gotoField(getModel())
               }
             }

@@ -17,19 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.BigDecimalField
 
 /**
- * An integer field.
+ * An fixnum field.
  */
-class VIntegerField(width : Int, minval : Int, maxval : Int) : IntegerField(), UTextField {
-  var cols: Int = 0
-
-  init {
-    this.min = minval
-    this.max = maxval
-    this.width = width.toString()
-  }
+class VFixnumField(col: Int,
+                   maxScale: Int,
+                   minval: Double?,
+                   maxval: Double?,
+                   fraction: Boolean) : BigDecimalField(), UTextField {
 
   override fun hasAutoComplete(): Boolean {
     TODO("Not yet implemented")
@@ -44,18 +41,7 @@ class VIntegerField(width : Int, minval : Int, maxval : Int) : IntegerField(), U
   }
 
   override fun setMinLength(minLength: Int) {
-    super.setMaxlength(minLength.toDouble())
+    super.setMinlength(minLength.toDouble())
   }
 
-  fun setRows(rows: Int, visibleRows: Int) {
-    addThemeVariants()
-  }
-
-  fun setWordwrap(b: Boolean) {
-
-  }
-
-  fun setFixedNewLine(b: Boolean) {
-
-  }
 }

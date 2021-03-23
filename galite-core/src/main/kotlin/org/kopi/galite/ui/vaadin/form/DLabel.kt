@@ -55,7 +55,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     //BackgroundThreadHandler.access(Runnable { TODO
       this.text = text
       if (toolTip != null) {
-        element.setProperty("title", Utils.createTooltip(toolTip))
+        element.setProperty("title", toolTip)
       }
     //})
   }

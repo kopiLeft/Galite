@@ -17,28 +17,34 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import java.io.Serializable
+import java.lang.reflect.Method
+import java.util.EventListener
+
+import kotlin.collections.ArrayList
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.textfield.TextField
-import java.io.Serializable
-import java.lang.reflect.Method
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * A text field used as editor
  */
 open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
-  open var field : TextField? = TextField()
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  val wrappedField = TextField()
+
   init {
-    add(field)
-  }
-  override fun setPresentationValue(newPresentationValue: Any?) {
+    add(wrappedField)
   }
 
-  override fun generateModelValue(): Any? {
-    TODO("Not yet implemented")
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    wrappedField.value = newPresentationValue.toString()
   }
+
+  override fun generateModelValue(): Any? = wrappedField.value
 
   /**
    * Sets the input field type attribute to [type]
@@ -206,4 +212,3 @@ open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
   private val internalValue: String? = null
   private val displayedValue: String? = null
 }
-

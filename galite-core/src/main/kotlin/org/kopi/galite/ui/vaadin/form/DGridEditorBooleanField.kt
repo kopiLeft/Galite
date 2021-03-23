@@ -25,8 +25,8 @@ import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
-import java.util.*
 
 class DGridEditorBooleanField(
         columnView: VFieldUI,
@@ -97,7 +97,7 @@ class DGridEditorBooleanField(
   override fun getObject(): String? = getText()
 
   override fun createEditor(): GridEditorField<Boolean?> {
-    TODO()
+    return GridEditorBooleanField(trueRepresentation, falseRepresentation)
   }
 
   override fun createConverter(): Converter<Boolean?, Any?> {

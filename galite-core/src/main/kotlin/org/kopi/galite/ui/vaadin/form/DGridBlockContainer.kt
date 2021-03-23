@@ -107,7 +107,7 @@ SimpleFilterable TODO */ {
   /**
    * Grid block data source item
    */
-  inner class GridBlockItem(private val record: Int) : HasItemComponents.ItemComponent<GridBlockItem> {
+  class GridBlockItem(private val record: Int) : HasItemComponents.ItemComponent<GridBlockItem> {
     override fun getElement(): Element {
       TODO("Not yet implemented")
     }

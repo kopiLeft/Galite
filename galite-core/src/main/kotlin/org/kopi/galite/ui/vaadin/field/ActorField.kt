@@ -29,7 +29,7 @@ import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.shared.Registration
 
 /**
- * The actor field server side implementation
+ * The actor field
  */
 class ActorField : ObjectField<Any?>() {
 
@@ -92,14 +92,14 @@ class ActorField : ObjectField<Any?>() {
     this.foreground = foreground
     this.background = background
     if (foreground != null && foreground.isNotEmpty()) {
-      // button.element.style.setColor(foreground) TODO
+      button.element.style["color"] = foreground
     } else {
-      // button.element.style.setColor("inherit") TODO
+      button.element.style["color"] = "inherit"
     }
     if (background != null && background.isNotEmpty()) {
-      // button.element.style.setBackgroundColor(foreground) TODO
+      button.element.style["background-color"] = foreground
     } else {
-      // button.element.style.setBackgroundColor("inherit") TODO
+      button.element.style["background-color"] = "inherit"
     }
   }
 

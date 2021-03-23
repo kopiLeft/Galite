@@ -23,8 +23,10 @@ import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.html.Div
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.ColumnView
+import org.kopi.galite.ui.vaadin.form.DBlock
 import org.kopi.galite.ui.vaadin.window.Window
 
 /**
@@ -37,6 +39,10 @@ import org.kopi.galite.ui.vaadin.window.Window
  */
 abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   : Div(), FieldListener, HasStyle {
+
+  init {
+    className = Styles.FIELD
+  }
 
   private var listeners = mutableListOf<FieldListener>()
 
@@ -111,19 +117,19 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   var columnView: ColumnView? = null
 
-  open lateinit var wrappedField: CustomField<Any?>
+  lateinit var wrappedField: CustomField<*>
 
   /**
    * `true` if the content of this field has changed.
    */
-  var changed = false
-  
+  var isChanged = false
+
   /**
    * `true` if this connector is dirty.
    */
-  var dirty = false
+  var isDirty = false
 
-  private var dirtyValues: MutableMap<Int, String>? = null
+  private var dirtyValues: MutableMap<Int, String?>? = null
 
   /**
    * Enables and disables the leave action of the active field.
@@ -138,7 +144,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
     addFieldListener(this)
   }
 
-  fun setFieldContent(component: CustomField<Any?>) {
+  fun setFieldContent(component: CustomField<*>) {
     wrappedField = component
     add(component)
   }
@@ -147,8 +153,8 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Adds the given actors to this field.
    * @param actors The actors to be associated with field.
    */
-  fun addActors(actors: Collection<Actor?>) {
-    //TODO()
+  fun addActors(actors: Collection<Actor>) {
+    this.actors.addAll(actors)
   }
 
   /**
@@ -164,7 +170,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param l The listener to be removed.
    */
   fun removeFieldListener(l: FieldListener) {
-    TODO()
+    listeners.remove(l)
   }
 
   /**
@@ -400,7 +406,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
     if (!columnView!!.isBlockActiveField) {
       throw AssertionError("wrong active field")
     }
-    if (changed) {
+    if (isChanged) {
       checkValue(rec)
     }
     if (!doNotLeaveActiveField) {
@@ -423,7 +429,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
     if (!columnView!!.isBlockActiveFieldNull) {
       throw AssertionError("wrong active field")
     }
-    changed = false
+    isChanged = false
     focus()
     columnView!!.setAsActiveField()
     setActorsEnabled(true)
@@ -452,10 +458,10 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
         true
       }
       NavigationDelegationMode.ONCHANGE -> {
-        changed
+        isChanged
       }
       NavigationDelegationMode.ONVALUE -> {
-        !isNull() || changed
+        !isNull() || isChanged
       }
       else -> {
         false
@@ -467,8 +473,8 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Sets this field to not be a dirty one.
    */
   open fun unsetDirty() {
-    dirty = false
-    changed = false
+    isDirty = false
+    isChanged = false
   }
 
   /**
@@ -486,7 +492,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param rec The value record.
    * @param value The text value to be sent for the given record
    */
-  protected open fun markAsDirty(rec: Int, value: String) {
+  internal open fun markAsDirty(rec: Int, value: String?) {
     if (dirtyValues == null) {
       dirtyValues = HashMap()
     }
@@ -494,7 +500,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
       dirtyValues!![rec] = value
       // set internal cached value
       columnView!!.setValueAt(rec, value)
-      dirty = true
+      isDirty = true
     }
   }
 
@@ -506,7 +512,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   protected open fun setCachedValueAt(rec: Int, value: String?) {
     if (!columnView!!.getRecordValueAt(rec).equals(value) && rec != -1) {
       columnView!!.setValueAt(rec, value)
-      changed = true
+      isChanged = true
     }
   }
 
@@ -515,7 +521,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param rec The record number.
    * @return The cached value.
    */
-  protected open fun getCachedValueAt(rec: Int): String? {
+  internal open fun getCachedValueAt(rec: Int): String? {
     return columnView!!.getRecordValueAt(rec)
   }
 
@@ -524,7 +530,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param enabled The enabled status
    */
   open fun setActorsEnabled(enabled: Boolean) {
-    val window = parent.get() as Window
+    val window = (parent.get().parent.get().parent.get() as DBlock).parent
     for (actor in actors) {
       window.setActorEnabled(actor, enabled)
     }
@@ -543,7 +549,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
       (wrappedField as TextField).sendDirtyValuesToServer(HashMap(dirtyValues))
       dirtyValues!!.clear()
     }
-    dirty = false
+    isDirty = false
   }
 
   /**

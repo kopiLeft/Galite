@@ -146,7 +146,7 @@ class KeyNavigator(private val model: VField?, private val box: TextField?) : Te
     performAction(object : Action("keyKEY_LIST_UP") {
       override fun execute() {
         if (model != null) {
-          (model.getDisplay() as DField).getRowController().previousEntry()
+          (model.getDisplay() as DField).rowController.previousEntry()
         }
       }
     })
@@ -156,7 +156,7 @@ class KeyNavigator(private val model: VField?, private val box: TextField?) : Te
     performAction(object : Action("keyKEY_LIST_UP") {
       override fun execute() {
         if (model != null) {
-          (model.getDisplay() as DField).getRowController().nextEntry()
+          (model.getDisplay() as DField).rowController.nextEntry()
         }
       }
     })

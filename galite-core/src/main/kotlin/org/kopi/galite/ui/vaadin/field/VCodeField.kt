@@ -17,37 +17,34 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant
+import java.util.Arrays
+
+import com.vaadin.flow.component.combobox.ComboBox
 
 /**
- * A text field widget that can support many validation
- * strategies to restrict field input.
+ * An Code field.
  */
-open class VTextField(val col: Int) : TextField(), UTextField {
-
+class VCodeField(enumerations : Array<String>?) : ComboBox<String>(), UTextField {
   init {
-    style()
+    super.setItems(Arrays.stream(enumerations))
   }
 
-  /**
-   * TODO: Temporary styling but it Should be enhanced.
-   */
-  fun style() {
-    setWidthFull()
-    addThemeVariants(TextFieldVariant.LUMO_SMALL, TextFieldVariant.MATERIAL_ALWAYS_FLOAT_LABEL)
-  }
+  override fun hasAutoComplete(): Boolean = true
 
-  override fun hasAutoComplete(): Boolean {
+  override fun getMaxLength(): Int {
     TODO("Not yet implemented")
   }
 
-  /**
-   * Sets the input field type attribute to [type]
-   */
-  fun setInputType(type: String) {
-    element.node.runWhenAttached { ui ->
-      ui.page.executeJs("$0.focusElement.type=$1", this, type)
-    }
+  override fun getMinLength(): Int {
+    TODO("Not yet implemented")
+  }
+
+
+  override fun setMaxLength(maxLength: Int) {
+    //Nothing to Implement
+  }
+
+  override fun setMinLength(minLength: Int) {
+    TODO("Not yet implemented")
   }
 }

@@ -45,7 +45,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    * @return The current page index.
    */
   var currentPage = -1
-  private val content: Form = Form(pageCount, model.pages)
+  val content: Form = Form(pageCount, model.pages)
   private val blockListener: BlockListener = BlockAccessHandler()
   private val blockViews: Array<DBlock?>
   private val blockRecordHandler: BlockRecordHandler = BlockRecordHandler()

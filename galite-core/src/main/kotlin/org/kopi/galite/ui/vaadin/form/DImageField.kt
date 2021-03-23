@@ -18,23 +18,21 @@
 package org.kopi.galite.ui.vaadin.form
 
 import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.io.OutputStream
 
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.type.Date
 import org.kopi.galite.ui.vaadin.field.ImageField
-import org.kopi.galite.ui.vaadin.field.ImageFieldListener
 
-import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.upload.FailedEvent
+import com.vaadin.flow.component.upload.SucceededEvent
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer
+import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.server.StreamResource
-import com.vaadin.flow.server.StreamVariable
 
 /**
- * The image field implementation based on the customized VAADIN
- * addons.
+ * The image field implementation.
  *
  * @param model The field model.
  * @param label The field label.
@@ -52,35 +50,53 @@ class DImageField(
         width: Int,
         height: Int,
         detail: Boolean
-) : DObjectField(model, label, align, options, detail),
-        ImageFieldListener
-/*DropHandler TODO */ {
+) : DObjectField(model, label, align, options, detail) {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   private var image: ByteArray? = null
-  private val field = ImageField()
-  //private val wrapper: DragAndDropWrapper TODO
-
+  private var buffer = MemoryBuffer()
+  private val field = ImageField(width.toFloat(), height.toFloat(), buffer)
+  // --------------------------------------------------
+  // CONSTRUCTION
+  // --------------------------------------------------
+  /**
+   * Creates a new `DImageField` instance.
+   */
   init {
     field.imageWidth = width
     field.imageHeight = height
-    //field.addObjectFieldListener(this) TODO
-    //field.addImageFieldListener(this) TODO
-    field.setWidth(width.toFloat(), Unit.PIXELS)
-    field.setHeight(height.toFloat(), Unit.PIXELS)
-    //wrapper = DragAndDropWrapper(field) TODO
-    //wrapper.setImmediate(true)  TODO
-    //wrapper.setDropHandler(this) TODO
-    //wrapper.setDragStartMode(DragStartMode.HTML5) TODO
-    //setContent(wrapper) TODO
+    field.addObjectFieldListener(this)
+    field.upload.addSucceededListener(::onUploadSucceeded)
+    field.upload.addFailedListener(::onUploadFailed)
+    field.upload.element.addEventListener("upload-abort", ::onRemove)
+    setFieldContent(field)
   }
 
   // --------------------------------------------------
   // IMPLEMENTATION OF ABSTRACTS METHODS
   // --------------------------------------------------
   override fun getObject(): Any? = image
+
+  /**
+   * Sets the object associated to current f
+   * @param s The object to set in
+   */
+  fun setObject(s: Any?) {
+    //BackgroundThreadHandler.access(Runnable { TODO
+      if (s == null) {
+        field.setData(s)
+      } else {
+        field.setData(DynamicImageResource(createFileName("image")) {
+          ByteArrayInputStream(s as ByteArray?)
+        })
+        setBlink(false)
+        setBlink(true)
+      }
+    //})
+    image = s as ByteArray?
+  }
 
   override fun setBlink(b: Boolean) {
     // TODO
@@ -107,31 +123,13 @@ class DImageField(
     // color properties are not set for an image field.
   }
 
-  override fun onRemove() {
+  fun onRemove(event: DomEvent) {
     setObject(null)
   }
 
-  override fun onImageClick() {
+  /*fun onImageClick() { TODO
     performAutoFillAction()
-  }
-
-  /**
-   * Sets the object associated to record r
-   * @param r The position of the record
-   * @param s The object to set in
-   */
-  fun setObject(s: Any?) {
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      if (s == null) {
-        field.setIcon(null)
-      } else {
-        field.setIcon(DynamicImageResource(ImageStreamSource(s as ByteArray?), createFileName("image")))
-        setBlink(false)
-        setBlink(true)
-      }
-    })*/
-    image = s as ByteArray?
-  }
+  }*/
 
   /**
    * Creates the dynamic image name.
@@ -139,54 +137,41 @@ class DImageField(
    * @return The dynamic image name.
    */
   protected fun createFileName(baseName: String): String =
-          baseName + Date.now().format("yyyyMMddHHmmssSSS").toString() + ".png"
+          baseName + Date.now().format("yyyyMMddHHmmssSSS") + ".png"
   //---------------------------------------------------
   // STREAM RESOURCE
   //---------------------------------------------------
 
   /**
-   * The image stream handler for reading uploaded stream from DnD
-   * operations.
+   * A dynamic [StreamResource] for an image field.
+   *
+   * @param streamSource Returns an [InputStream] object.
+   * @param fileName The file name.
    */
-  internal inner class ImageStreamHandler : StreamVariable {
-    private val output = ByteArrayOutputStream()
+  internal class DynamicImageResource(fileName: String,
+                                      streamSource: () -> InputStream)
+    : StreamResource(fileName, streamSource) {
 
-    override fun getOutputStream(): OutputStream = output
+    init {
+      cacheTime = 0L
+    }
+  }
 
-    override fun listenProgress(): Boolean = true
-
-    override fun onProgress(event: StreamVariable.StreamingProgressEvent) {
-      // show progress only when the file is bigger than 50MB
+  fun onUploadSucceeded(event: SucceededEvent) {
+    try {
+      setObject(buffer.inputStream.readBytes())
+    } finally {
       if (event.contentLength > 50 * 1024 * 1024) {
-        getModel().getForm().setCurrentJob(event.bytesReceived as Int)
+        getModel().getForm().unsetProgressDialog()
       }
     }
+  }
 
-    override fun streamingStarted(event: StreamVariable.StreamingStartEvent) {
-      // show progress only when the file is bigger than 50MB
-      if (event.contentLength > 50 * 1024 * 1024) {
-        getModel().getForm().setProgressDialog("", event.contentLength.toInt())
-      }
-    }
-
-    override fun streamingFinished(event: StreamVariable.StreamingEndEvent) {
-      try {
-        setObject(output.toByteArray())
-      } finally {
-        if (event.contentLength > 50 * 1024 * 1024) {
-          getModel().getForm().unsetProgressDialog()
-        }
-      }
-    }
-
-    override fun streamingFailed(event: StreamVariable.StreamingErrorEvent) {
-      event.exception.printStackTrace(System.err)
-      Thread {
-        getModel().getForm().error(event.exception.message)
-        //BackgroundThreadHandler.updateUI() TODO
-      }.start()
-    }
-
-    override fun isInterrupted(): Boolean = false // never interrupt
+  fun onUploadFailed(event: FailedEvent) {
+    event.reason.printStackTrace(System.err)
+    Thread {
+      getModel().getForm().error(event.reason.message)
+      //BackgroundThreadHandler.updateUI() TODO
+    }.start()
   }
 }
