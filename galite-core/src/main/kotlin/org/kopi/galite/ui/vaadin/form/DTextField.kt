@@ -17,6 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+
 import com.vaadin.flow.component.contextmenu.ContextMenu
 import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
@@ -162,7 +166,18 @@ open class DTextField(
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
-      field.value = transformer!!.toGui(newModelTxt)!!.trim()
+      when (field.type) {
+        TextField.Type.TIME -> {
+          field.value = LocalTime.parse(transformer!!.toGui(newModelTxt)!!.trim())
+        }
+        TextField.Type.TIMESTAMP -> {
+          val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+          field.value = LocalDateTime.parse(transformer!!.toGui(newModelTxt)!!.trim(), formatter)
+        }
+        else -> { field.value = transformer!!.toGui(newModelTxt)!!.trim()
+        }
+      }
     }
     super.updateText()
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {

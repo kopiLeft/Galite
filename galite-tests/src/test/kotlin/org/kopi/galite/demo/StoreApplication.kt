@@ -28,6 +28,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.joda.time.DateTime
 
+import org.kopi.galite.demo.allFieldTypes.AllFieldTypesForm
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
@@ -210,6 +211,8 @@ fun initModules() {
     DBSchemaTest.insertIntoModule("7001", "org/kopi/galite/test/Menu", 601, "7000", TaxRuleForm::class)
     DBSchemaTest.insertIntoModule("8000", "org/kopi/galite/test/Menu", 700)
     DBSchemaTest.insertIntoModule("8001", "org/kopi/galite/test/Menu", 701, "8000", ProviderForm::class)
+    DBSchemaTest.insertIntoModule("9000", "org/kopi/galite/test/Menu", 800)
+    DBSchemaTest.insertIntoModule("9001", "org/kopi/galite/test/Menu", 801, "9000", AllFieldTypesForm::class)
   }
 }
 
@@ -234,6 +237,8 @@ fun initUserRights(user: String = DBSchemaTest.connectedUser) {
     DBSchemaTest.insertIntoUserRights(user, "7001", true)
     DBSchemaTest.insertIntoUserRights(user, "8000", true)
     DBSchemaTest.insertIntoUserRights(user, "8001", true)
+    DBSchemaTest.insertIntoUserRights(user, "9000", true)
+    DBSchemaTest.insertIntoUserRights(user, "9001", true)
   }
 }
 
