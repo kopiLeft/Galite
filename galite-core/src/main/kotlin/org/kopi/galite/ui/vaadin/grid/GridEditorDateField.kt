@@ -25,7 +25,7 @@ import com.vaadin.flow.component.datepicker.DatePicker
  */
 class GridEditorDateField: GridEditorTextField(10) {
   init {
-    super.remove(field)
+    remove(wrappedField)
     add(DatePicker())
   }
 }

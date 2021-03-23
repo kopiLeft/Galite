@@ -25,7 +25,7 @@ import com.vaadin.flow.component.timepicker.TimePicker
  */
 class GridEditorTimeField: GridEditorTextField(5) {
   init {
-    remove(field)
+    remove(wrappedField)
     add(TimePicker())
   }
 }

@@ -30,7 +30,7 @@ class GridEditorTextAreaField(
 ) : GridEditorTextField(width) {
   var textArear = TextArea()
   init {
-    remove(field)
+    remove(wrappedField)
     textArear.width = width.toString()
     textArear.height = height.toString()
     add(textArear)

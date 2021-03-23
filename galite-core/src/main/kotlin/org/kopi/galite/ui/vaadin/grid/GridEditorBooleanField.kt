@@ -28,7 +28,7 @@ import java.util.*
 /**
  * Implementation of the editor boolean field.
  */
-class GridEditorBooleanField(trueRepresentation: String, falseRepresentation: String) : GridEditorField<Boolean?>() {
+class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: String?) : GridEditorField<Boolean?>() {
   var yes: Checkbox = Checkbox()
   var no: Checkbox = Checkbox()
 
@@ -80,12 +80,12 @@ class GridEditorBooleanField(trueRepresentation: String, falseRepresentation: St
   /**
    * The localized true value for this field
    */
-  var trueRepresentation: String = trueRepresentation
+  var trueRepresentation: String? = trueRepresentation
 
   /**
    * The localized false value for this field
    */
-  var falseRepresentation: String = falseRepresentation
+  var falseRepresentation: String? = falseRepresentation
 
   /**
    * Fires a new value change event for this field.

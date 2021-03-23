@@ -27,7 +27,7 @@ import com.vaadin.flow.component.textfield.NumberField
 class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) : GridEditorTextField(width) {
    var numberField = NumberField()
   init {
-    super.remove(field)
+    super.remove(wrappedField)
     numberField.width = width.toString()
     numberField.min = minValue.toDouble()
     numberField.max = maxValue.toDouble()

@@ -25,7 +25,7 @@ import com.vaadin.flow.component.datetimepicker.DateTimePicker
  */
 class GridEditorTimestampField: GridEditorTextField(10 + 1 + 8) {
   init {
-    remove(field)
+    remove(wrappedField)
     add(DateTimePicker())
   }
 }
