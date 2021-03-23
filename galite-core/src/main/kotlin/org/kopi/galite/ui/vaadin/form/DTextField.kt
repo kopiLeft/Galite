@@ -71,7 +71,7 @@ open class DTextField(
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.addTextValueChangeListener {
-      onTextChange(it.oldValue.toString(), it.value.toString())
+      onTextChange(it.oldValue?.toString(), it.value.toString())
       checkText(it.value.toString()) // FIXME: use onTextChange(text) instead when we have full support for commands
     }
 

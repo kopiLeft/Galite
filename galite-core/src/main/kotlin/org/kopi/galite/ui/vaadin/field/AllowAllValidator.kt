@@ -30,10 +30,11 @@ open class AllowAllValidator(val maxLength: Int) : TextValidator {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun apply(value: Any?, context: ValueContext): ValidationResult =
-          if (validate(value?.toString())) ValidationResult.ok() else ValidationResult.error("TODO") // TODO
+  override fun apply(value: Any?, context: ValueContext) =
+          if (validate(value?.toString())) ValidationResult.ok() else
+            ValidationResult.error("Invalid value: $value \n Check field format") // TODO
 
-  override fun validate(c: Char): Boolean = true
+  override fun validate(c: Char) = true
 
   override fun validate(text: String?): Boolean {
     return if (text == null) {

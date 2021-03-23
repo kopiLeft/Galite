@@ -28,7 +28,7 @@ class DateValidator(maxLength: Int) : AllowAllValidator(maxLength) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun validate(c: Char): Boolean = c in '0'..'9' || c == '.' || c == '/'
+  override fun validate(c: Char): Boolean = c in '0'..'9' || c == '.' || c == '/' || c == '-'
 
   override fun checkType(field: InputTextField, text: String) {
     if ("" == text) {

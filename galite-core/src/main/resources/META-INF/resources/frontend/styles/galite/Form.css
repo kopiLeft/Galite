@@ -116,8 +116,8 @@
     --lumo-space-m: 0;
 }
 
-html {
-    --lumo-space-m: 0;
+#outlet {
+--lumo-space-m: 0;
 }
 
 /*

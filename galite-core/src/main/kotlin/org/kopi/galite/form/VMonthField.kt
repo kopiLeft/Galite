@@ -32,7 +32,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 import java.sql.Date
 
-class VMonthField(val bufferSize: Int) : VField(7, 1) {
+class VMonthField(val bufferSize: Int) : VField(30, 1) {
 
   override fun hasAutofill(): Boolean = true
 
