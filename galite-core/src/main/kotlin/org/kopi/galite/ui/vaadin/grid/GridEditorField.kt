@@ -18,7 +18,10 @@
 package org.kopi.galite.ui.vaadin.grid
 
 import java.lang.reflect.Method
+import java.io.Serializable
+import java.util.EventListener
 
+import kotlin.collections.LinkedHashSet
 import kotlin.collections.Collection
 
 import org.kopi.galite.ui.vaadin.actor.Actor
@@ -26,12 +29,8 @@ import org.kopi.galite.ui.vaadin.field.Field
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.router.NavigationEvent
-import java.io.Serializable
-import java.util.*
-import kotlin.collections.LinkedHashSet
 
 /**
  * A grid editor field implementation.
@@ -187,7 +186,7 @@ abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() 
      * Fired when a click event is detected on editor field.
      * @param event The click event object.
      */
-    fun onClick(event: ClickEvent)
+    fun onClick(event: ClickEvent<*>?)
   }
 
   interface AutofillListener {
@@ -196,26 +195,6 @@ abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() 
      * @param event The autofill event.
      */
     fun onAutofill(event: AutofillEvent?)
-  }
-
-  /**
-   * The editor field navigation event
-   */
-  class NavigationEvent(source: Component?) : ComponentEvent<Component>(source, true)
-
-  /**
-   * The editor field click event
-   */
-  class ClickEvent(source: Component?) : ComponentEvent<Component>(source, true) {
-  companion object  {
-      //---------------------------------------------------
-      // DATA MEMBERS
-      //---------------------------------------------------
-      val  CLICK_METHOD: Method? = null
-      init {
-        TODO()
-      }
-    }
   }
 
   /**

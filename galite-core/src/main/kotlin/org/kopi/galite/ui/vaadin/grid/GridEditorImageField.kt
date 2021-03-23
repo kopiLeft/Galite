@@ -17,15 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import java.io.InputStream
+
 import com.vaadin.flow.server.StreamResource
 import com.vaadin.flow.server.StreamResourceWriter
 import java.io.ByteArrayInputStream
-import java.io.InputStream
 
 /**
  * The implementation of an image grid editor.
  */
-class GridEditorImageField() : GridEditorField<Any?>() {
+class GridEditorImageField : GridEditorField<Any?>() {
   override fun setPresentationValue(newPresentationValue: Any?) {
     TODO("Not yet implemented")
   }
@@ -33,7 +34,6 @@ class GridEditorImageField() : GridEditorField<Any?>() {
   override fun generateModelValue(): Any? {
     TODO("Not yet implemented")
   }
-
 
   /**
    * Creates a VAADIN resource from a binary stream.
@@ -70,6 +70,5 @@ class GridEditorImageField() : GridEditorField<Any?>() {
   class ImageStreamSource(val image: ByteArray)  {
     val stream: InputStream
       get() = ByteArrayInputStream(image)
-
   }
 }

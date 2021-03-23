@@ -29,5 +29,4 @@ class GridEditorEnumField(width: Int, var enumerations: Array<String>) : GridEdi
     labelSelect.setItems(*enumerations)
     add(labelSelect)
   }
-
 }

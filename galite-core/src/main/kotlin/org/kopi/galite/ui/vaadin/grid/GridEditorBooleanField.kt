@@ -17,13 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import java.io.Serializable
+import java.lang.reflect.Method
+import java.util.EventListener
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEvent
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
-import java.io.Serializable
-import java.lang.reflect.Method
-import java.util.*
 
 /**
  * Implementation of the editor boolean field.

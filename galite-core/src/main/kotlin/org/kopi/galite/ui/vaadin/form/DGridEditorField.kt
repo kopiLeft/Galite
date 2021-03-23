@@ -194,7 +194,7 @@ abstract class DGridEditorField<T>(
   // ----------------------------------------------------------------------
   // CLICK
   // ----------------------------------------------------------------------
-  override fun onClick(event: GridEditorField.ClickEvent) {
+  override fun onClick(event: ClickEvent<*>?) {
     if (!modelHasFocus()) {
       val recno: Int = getBlockView().getRecordFromDisplayLine(position)
       if (!columnView.getBlock().isRecordFilled(recno)) {
@@ -215,7 +215,7 @@ abstract class DGridEditorField<T>(
   // ----------------------------------------------------------------------
   // NAVIGATION
   // ----------------------------------------------------------------------
-  override fun onGotoNextField(event: GridEditorField.NavigationEvent?) {
+  override fun onGotoNextField(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
       override fun execute() {
         if (getModel() != null) {
@@ -225,7 +225,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoPrevField(event: GridEditorField.NavigationEvent?) {
+  override fun onGotoPrevField(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_STAB") {
       override fun execute() {
         if (getModel() != null) {
@@ -235,7 +235,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoNextBlock(event: GridEditorField.NavigationEvent?) {
+  override fun onGotoNextBlock(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_BLOCK") {
       override fun execute() {
         if (getModel() != null) {
@@ -245,7 +245,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoPrevRecord(event: GridEditorField.NavigationEvent?) {
+  override fun onGotoPrevRecord(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_UP") {
       override fun execute() {
         if (getModel() != null) {
@@ -255,7 +255,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoNextRecord(event: GridEditorField.NavigationEvent?) {
+  override fun onGotoNextRecord(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_DOWN") {
       override fun execute() {
         if (getModel() != null) {
@@ -265,7 +265,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoFirstRecord(event: GridEditorField.NavigationEvent?) {
+  override fun onGotoFirstRecord(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_FIRST") {
       override fun execute() {
         if (getModel() != null) {
@@ -275,7 +275,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoLastRecord(event: GridEditorField.NavigationEvent?) {
+  override fun onGotoLastRecord(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_LAST") {
       override fun execute() {
         if (getModel() != null) {
@@ -285,7 +285,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoNextEmptyMustfill(event: GridEditorField.NavigationEvent?) {
+  override fun onGotoNextEmptyMustfill(event: NavigationEvent?) {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_ALTENTER") {
       override fun execute() {
         if (getModel() != null) {

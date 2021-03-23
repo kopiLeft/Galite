@@ -75,7 +75,7 @@ class DGridEditorActorField(
     }
   }
 
-  override fun onClick(event: GridEditorField.ClickEvent) {
+  override fun onClick(event: ClickEvent<*>?) {
     // field action is performed in the window action queue
     // it is not like the other fields trigger
     columnView.executeAction()
