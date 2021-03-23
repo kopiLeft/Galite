@@ -70,6 +70,10 @@ dependencies {
 
   // EnhancedDialog dependency
   implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
+
+  //QuillEditor dependency
+  implementation("org.vaadin.klaudeta", "quill-editor", "1.0.0")
+
 }
 
 dependencyManagement {
