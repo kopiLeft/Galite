@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
-import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.server.Command
 
 /**
@@ -34,9 +34,36 @@ object BackgroundThreadHandler {
    * Exclusive access to the UI from a background thread to perform some updates.
    * @param command the command which accesses the UI.
    */
-  fun Component.access(command: Command) {
-    ui.ifPresent { myUi ->
-      myUi.access(command)
+  fun access(command: Command) {
+    UI.getCurrent().access(command)
+  }
+
+  /**
+   * Starts a task asynchronously and blocks the current thread. The lock will be released
+   * if a notify signal is send to the blocking object.
+   *
+   * @param lock      The lock object.
+   * @param command   The command which accesses the UI.
+   */
+  fun startAndWait(lock: Object, command: Command) {
+    UI.getCurrent().access(command)
+
+    synchronized(lock) {
+      try {
+        lock.wait()
+      } catch (e: InterruptedException) {
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * Releases the lock based on an object.
+   * @param lock The lock object.
+   */
+  fun releaseLock(lock: Object) {
+    synchronized(lock) {
+      lock.notifyAll()
     }
   }
 }

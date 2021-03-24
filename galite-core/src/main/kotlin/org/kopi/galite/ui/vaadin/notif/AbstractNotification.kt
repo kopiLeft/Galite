@@ -143,7 +143,7 @@ abstract class AbstractNotification(title: String?,
     content.add(icon)
     setNotificationMessage(message)
     content.add(this.message)
-    content.add(buttons)
+    content.add(buttons) // TODO
     super.setContent(content)
     footer.add(buttons)
     this.setButtons()

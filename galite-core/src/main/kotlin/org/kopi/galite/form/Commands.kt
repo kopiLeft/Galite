@@ -130,11 +130,13 @@ object Commands : VConstants {
         }
         gotoFieldIfNoActive(b)
       } catch (e: VException) {
+        throw e
         try {
         } catch (abortEx: VException) {
           throw abortEx
         }
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage(VIS))
@@ -144,11 +146,13 @@ object Commands : VConstants {
           throw VExecFailedException(abortEx)
         }
       } catch (e: Error) {
+        throw e
         try {
         } catch (abortEx: Error) {
           throw InconsistencyException(abortEx)
         }
       } catch (e: RuntimeException) {
+        throw e
         try {
         } catch (abortEx: RuntimeException) {
           throw InconsistencyException(abortEx)
@@ -179,6 +183,7 @@ object Commands : VConstants {
         }
         gotoFieldIfNoActive(b)
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage(VIS))
@@ -210,21 +215,25 @@ object Commands : VConstants {
         try {
           b.fetchRecord(id)
         } catch (e: VException) {
+          throw e
           try {
           } catch (abortEx: VException) {
             throw VExecFailedException(abortEx.message!!, abortEx)
           }
         } catch (e: SQLException) {
+          throw e
           try {
           } catch (abortEx: SQLException) {
             throw VExecFailedException(abortEx)
           }
         } catch (e: Error) {
+          throw e
           try {
           } catch (abortEx: Error) {
             throw InconsistencyException(abortEx)
           }
         } catch (e: RuntimeException) {
+          throw e
           try {
           } catch (abortEx: RuntimeException) {
             throw InconsistencyException(abortEx)
@@ -266,11 +275,13 @@ object Commands : VConstants {
           // !!! HANDLE OVERFLOW WARNING
         }
       } catch (e: VException) {
+        throw e
         try {
         } catch (abortEx: VException) {
           throw abortEx
         }
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage(VIS))
@@ -280,11 +291,13 @@ object Commands : VConstants {
           throw VExecFailedException(abortEx)
         }
       } catch (e: Error) {
+        throw e
         try {
         } catch (abortEx: Error) {
           throw InconsistencyException(abortEx)
         }
       } catch (e: RuntimeException) {
+        throw e
         try {
         } catch (abortEx: RuntimeException) {
           throw InconsistencyException(abortEx)
@@ -342,11 +355,13 @@ object Commands : VConstants {
       try {
         b.save()
       } catch (e: VException) {
+        throw e
         try {
         } catch (abortEx: VException) {
           throw VExecFailedException(abortEx)
         }
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage(VIS))
@@ -356,11 +371,13 @@ object Commands : VConstants {
           throw VExecFailedException(abortEx)
         }
       } catch (e: Error) {
+        throw e
         try {
         } catch (abortEx: Error) {
           throw VExecFailedException(abortEx)
         }
       } catch (e: RuntimeException) {
+        throw e
         try {
         } catch (abortEx: RuntimeException) {
           throw VExecFailedException(abortEx)
@@ -439,11 +456,13 @@ object Commands : VConstants {
       try {
         b.delete()
       } catch (e: VException) {
+        throw e
         try {
         } catch (abortEx: VException) {
           throw VExecFailedException(abortEx)
         }
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage(VIS))
@@ -453,11 +472,13 @@ object Commands : VConstants {
           throw VExecFailedException(abortEx)
         }
       } catch (e: Error) {
+        throw e
         try {
         } catch (abortEx: Error) {
           throw VExecFailedException(abortEx)
         }
       } catch (e: RuntimeException) {
+        throw e
         try {
         } catch (abortEx: RuntimeException) {
           throw VExecFailedException(abortEx)
@@ -557,9 +578,8 @@ object Commands : VConstants {
       titleTable[otherBlocks] = blockTable[otherBlocks]!!.title
       otherBlocks += 1
     }
-    val sel: Int
 
-    sel = when (otherBlocks) {
+    val sel: Int = when (otherBlocks) {
       0 -> -1
       1 -> 0
       else -> VListDialog(VlibProperties.getString("pick_in_list"),

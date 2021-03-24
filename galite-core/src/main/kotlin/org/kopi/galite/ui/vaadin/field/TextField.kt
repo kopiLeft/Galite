@@ -297,7 +297,12 @@ class TextField(val model: VField,
         it.setFixedNewLine(!dynamicNewLine)
       }
     } else if(type == Type.INTEGER) {
-      VIntegerField(col, minval!!.toInt(), maxval!!.toInt())
+      InputTextField(col).also {
+        it.pattern = "[0-9]*"
+        it.isPreventInvalidInput = true
+        it.element.setProperty("min", minval!!)
+        it.element.setProperty("max", maxval!!)
+      }
     } else if(isDecimal()) {
       VFixnumField(col, maxScale, minval, maxval, fraction)
     } else if(type == Type.CODE) {
