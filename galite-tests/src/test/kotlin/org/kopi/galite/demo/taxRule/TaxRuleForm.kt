@@ -72,6 +72,12 @@ object TaxRuleBlock : FormBlock(1, 1, "TaxRule") {
     help = "The tax rate in %"
     columns(u.rate)
   }
+
+  val bool = visit(domain = Domain<Boolean>(25), position = at(2, 2)) {
+    label = "%"
+    help = "The tax rate in %"
+
+  }
 }
 
 fun main() {

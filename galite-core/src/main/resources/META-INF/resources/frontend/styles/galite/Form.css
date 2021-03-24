@@ -77,8 +77,14 @@
  * Field's values style when focused
  */
 .k-block ::part(value):focus {
+    outline: none;
     border-bottom: 2px solid #a3a3a3;
     background: white;
+    box-shadow: none;
+}
+
+::part(input-field) {
+    box-shadow: none;
 }
 
 .k-form-tab {
@@ -128,4 +134,72 @@ html {
     width: 100%;
     background: #009bd4;
     color: #ffffff;
+}
+
+#actors::part(overflow-button) {
+    border-left: 1px solid #dadada;
+    height: 46px;
+    background: #009bd4;
+    color: #ffffff;
+}
+
+::part(k-actor) {
+    border : 0;
+    box-shadow: none;
+    background: #009bd4;
+    color: #ffffff;
+    height : 60px;
+}
+
+#actors::part(overflow-button):hover {
+     background: #505050;
+}
+
+::part(k-actor):hover {
+    background: #505050;
+}
+
+.k-window ::part(menu-bar-button) {
+    padding : 0;
+    height : 42px;
+}
+
+/*
+ * Boolean field style
+ */
+
+::part(checkbox) {
+    box-shadow: none;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    line-height: 0;
+}
+
+::part(checkbox)::after {
+    border-width: 0.3em 0 0 0.3em;
+    transform-origin: -1.5px -1.2px;
+}
+
+:not(.true)::part(checkbox)::after {
+    opacity : none;
+    transform: none;
+    font-size: 15;
+    font-weight: bold;
+    position: absolute;
+    top: 0.55em;
+    left: 0.09em;
+    box-sizing: border-box;
+    transform-origin: 0 0;
+    border-width: 0;
+     content: "\2715";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    color:white;
 }
