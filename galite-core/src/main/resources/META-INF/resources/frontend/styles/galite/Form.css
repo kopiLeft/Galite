@@ -145,7 +145,6 @@ html {
 
 ::part(k-actor) {
     border : 0;
-    box-shadow: none;
     background: #009bd4;
     color: #ffffff;
     height : 60px;
@@ -169,15 +168,11 @@ html {
  */
 
 ::part(checkbox) {
-    box-shadow: none;
     width: 1em;
     height: 1em;
     border-radius: 50%;
     vertical-align: middle;
     border: 1px solid #ddd;
-    -webkit-appearance: none;
-    outline: none;
-    cursor: pointer;
     line-height: 0;
 }
 
@@ -197,7 +192,7 @@ html {
     box-sizing: border-box;
     transform-origin: 0 0;
     border-width: 0;
-     content: "\2715";
+    content: "\2715";
     display: inline-block;
     width: 0;
     height: 0;
