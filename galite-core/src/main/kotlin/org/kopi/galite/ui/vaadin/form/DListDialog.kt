@@ -90,9 +90,11 @@ class DListDialog(
   override fun selectFromDialog(window: UWindow, showSingleEntry: Boolean): Int =
           selectFromDialog(window, null, showSingleEntry)
 
+  /**
+   * invoked when the user clicks outside the overlay or presses the escape key.
+   */
   fun onClose(event: DialogCloseActionEvent?) {
-    close()
-    doSelectFromDialog(-1)
+    doSelectFromDialog(-1, true, false)
   }
 
   fun onKeyDown(event: KeyDownEvent) {
@@ -152,15 +154,14 @@ class DListDialog(
         pattern = ""
         table!!.select(nextPageItemId)
       }
-      Key.SPACE -> if (newForm != null) { // TODO
-        close()
+      Key.SPACE -> if (newForm != null) {
+        if (newForm != null) {
+          doSelectFromDialog(-1, false, true)
+        }
       }
       Key.ENTER -> {
-        doSelectFromDialog(tableItems.indexOf(table!!.selectedItems.first()))
-        escaped = false
-        doNewForm = false
+        doSelectFromDialog(tableItems.indexOf(table!!.selectedItems.first()), false, false)
       }
-      Key.ESCAPE -> close()
       else -> {
       }
     }
@@ -294,9 +295,7 @@ class DListDialog(
     super.table = table
     table.select(tableItems.first())
     table.addSelectionListener {
-      doSelectFromDialog(tableItems.indexOf(it.firstSelectedItem.get()))
-      escaped = false
-      doNewForm = false
+      doSelectFromDialog(tableItems.indexOf(it.firstSelectedItem.get()), false, false)
     }
     // TODO
   }
@@ -337,7 +336,7 @@ class DListDialog(
    * @param escaped Was the list escaped ?
    * @param doNewForm Should we do a new dictionary form ?
    */
-  protected fun doSelectFromDialog(selectedPos: Int) {
+  protected fun doSelectFromDialog(selectedPos: Int, escaped: Boolean, doNewForm: Boolean) {
     this.selectedPos = selectedPos
     this.escaped = escaped
     this.doNewForm = doNewForm
