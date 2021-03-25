@@ -100,8 +100,8 @@ object BillProduct : Table("BILL_PRODUCT") {
 }
 
 object Command : Table("COMMANDS") {
-  val numCmd = integer("COMMAND_NUMBER").autoIncrement()
-  val idClt = integer("ID").references(Client.idClt)
+  val numCmd = integer("ID").autoIncrement()
+  val idClt = integer("CLIENT_ID").references(Client.idClt)
   val dateCmd = datetime("COMMAND_DATE").defaultExpression(CurrentDateTime())
   val paymentMethod = varchar("PAYMENT_METHOD", 50)
   val statusCmd = varchar("COMMAND_STATUS", 30)

@@ -41,10 +41,43 @@ object TaxRuleForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
+  val resetBlock = actor(
+    ident = "reset",
+    menu = action,
+    label = "break",
+    help = "Reset Block",
+  ) {
+    key = Key.F3   // key is optional here
+    icon = "break"  // icon is optional here
+  }
+
   val block = insertBlock(TaxRuleBlock, page) {
     command(item = report) {
       action = {
         createReport(TaxRuleBlock)
+      }
+    }
+
+    command(item = list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+
+    command(item = resetBlock) {
+      action = {
+        resetBlock()
       }
     }
   }
@@ -54,7 +87,7 @@ object TaxRuleForm : ReportSelectionForm() {
   }
 }
 
-object TaxRuleBlock : FormBlock(1, 1, "TaxRule") {
+object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
   val u = table(TaxRule)
 
   val idTaxe = hidden(domain = Domain<Int>(20)) {
@@ -62,15 +95,21 @@ object TaxRuleBlock : FormBlock(1, 1, "TaxRule") {
     help = "The tax ID"
     columns(u.idTaxe)
   }
+
   val taxName = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
     label = "Name"
     help = "The tax name"
-    columns(u.taxName)
+    columns(u.taxName) {
+      priority = 1
+    }
   }
+
   val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
     label = "Rate in %"
     help = "The tax rate in %"
-    columns(u.rate)
+    columns(u.rate) {
+      priority = 1
+    }
   }
 }
 

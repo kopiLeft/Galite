@@ -18,8 +18,6 @@ package org.kopi.galite.demo.command
 
 import java.util.Locale
 
-import org.joda.time.DateTime
-
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Command
@@ -29,7 +27,6 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.form.FormWithList
 
 object CommandForm : ReportSelectionForm() {
   override val locale = Locale.FRANCE
@@ -62,7 +59,6 @@ object CommandForm : ReportSelectionForm() {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
   }
-
 
   val resetBlock = actor(
     ident = "reset",
