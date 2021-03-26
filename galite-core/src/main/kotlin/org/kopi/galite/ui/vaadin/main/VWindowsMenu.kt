@@ -23,12 +23,12 @@ import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * The already opened windows menu.
@@ -37,7 +37,13 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  */
 class VWindowsMenu : EnhancedDialog(), HasStyle {
 
+  private var items = Div()
   init {
+    setThemeVariants(EnhancedDialogVariant.SIZE_LARGE);
+    items.element.style["display"] = "inline-block"
+    items.element.style["margin"] = "5px"
+    this.height = "800px"
+    items.className = "k-layout-window"
     className = Styles.MAIN_WINDOW
     val headerIcon = Icon(VaadinIcon.COPY_O)
     val headerText = Label("Changer de fenêtre")
@@ -46,7 +52,6 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
     header.add(headerText, headerIcon)
     header.alignItems = FlexComponent.Alignment.END
     this.setHeader(header)
-    this.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
   }
 
   /**
@@ -62,6 +67,4 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
     items.add(item)
     this.setContent(items)
   }
-
-  private var items = VerticalLayout()
 }

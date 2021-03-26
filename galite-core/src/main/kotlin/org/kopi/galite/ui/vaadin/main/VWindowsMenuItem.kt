@@ -18,7 +18,8 @@
 package org.kopi.galite.ui.vaadin.main
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.html.Image
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * Class for menu items in the already opened windows menu.
@@ -27,9 +28,26 @@ import com.vaadin.flow.component.button.Button
  * @param window The window to be added.
  * @param container The container of the window.
  */
-class VWindowsMenuItem(title : String, window : Component, container : VWindowContainer) : Button(title) {
+class VWindowsMenuItem(title : String, window : Component, container : VWindowContainer) : VerticalLayout() {
 
   init {
+    val elements = VerticalLayout()
+    elements.add(title)
+    width = "350px"
+    height = "350px"
+    element.style["display"] = "inline-block"
+    element.style["border"] = "1px solid #ddd"
+    element.style["margin-right"] = "5px"
+    // TODO(replace img by an interface from the opened window)
+    val img = Image()
+    img.src = "https://www.tmssoftware.com/site/img/webcore/vaadin.png"
+    img.text = "test"
+    img.setTitle("test")
+    img.width = "320px"
+    img.height = "320px"
+    elements.add(img)
+
+    this.add(elements)
     className = STYLENAME_DEFAULT
     element.style.set("whiteSpace", "nowrap")
     // adding listener on the item to open the form in the container
