@@ -358,13 +358,13 @@ open class FormBlock(var buffer: Int,
    * @param modes the list of modes where the access will be changed
    */
   fun blockVisibility(access: Access, vararg modes: Modes) {
-    if (modes.contains(Modes.MOD_QUERY)) {
+    if (modes.contains(Modes.QUERY)) {
       this.access[VConstants.MOD_QUERY] = access.value
     }
-    if (modes.contains(Modes.MOD_INSERT)) {
+    if (modes.contains(Modes.INSERT)) {
       this.access[VConstants.MOD_INSERT] = access.value
     }
-    if (modes.contains(Modes.MOD_UPDATE)) {
+    if (modes.contains(Modes.UPDATE)) {
       this.access[VConstants.MOD_UPDATE] = access.value
     }
   }

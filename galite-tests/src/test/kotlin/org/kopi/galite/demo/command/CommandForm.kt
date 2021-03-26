@@ -129,7 +129,7 @@ object BlockCommand : FormBlock(1, 10, "Commands") {
   }
 
   init {
-    blockVisibility(Access.VISIT, Modes.MOD_QUERY)
+    blockVisibility(Access.VISIT, Modes.QUERY)
   }
 }
 

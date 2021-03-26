@@ -115,7 +115,7 @@ object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
   }
 
   init {
-    blockVisibility(Access.VISIT, Modes.MOD_QUERY)
+    blockVisibility(Access.VISIT, Modes.QUERY)
   }
 }
 
