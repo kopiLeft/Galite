@@ -18,7 +18,7 @@
 
 package org.kopi.galite.form
 
-import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Op
 import java.io.ByteArrayInputStream
 import java.io.InputStream
@@ -83,7 +83,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
   /**
    * Returns the search conditions for this field.
    */
-  override fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? = null
+  override fun <T> getSearchCondition(column: ExpressionWithColumnType<T>?): Op<Boolean>? = null
 
   /**
    * Sets the field value of given record to a null value.

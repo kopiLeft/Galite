@@ -1913,6 +1913,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val conditionList: MutableList<Op<Boolean>> = mutableListOf()
 
     fields.forEach { field ->
+
       if (field.getColumnCount() > 0) {
         val condColumn = field.getColumn(0)!!.column as Column<String>
         val searchColumn = when (field.options and VConstants.FDO_SEARCH_MASK) {
@@ -1923,7 +1924,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
         }
 
-        val condition = field.getSearchCondition_(searchColumn)
+        val condition = field.getSearchCondition(searchColumn)
 
         condition?.let {
           conditionList.add(condition)
@@ -2028,30 +2029,28 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   protected fun fetchLookup(tableIndex: Int, currentField: VField) {
-    val table = object : Table(tables!![tableIndex].tableName) {}
+    val table = tables!![tableIndex]
     val columns = mutableListOf<Column<*>>()
     val conditions = mutableListOf<Op<Boolean>>()
 
-    for (i in fields.indices) {
-      val f = fields[i]
-
-      if (f !== currentField && f.lookupColumn(tableIndex) != null && !f.isLookupKey(tableIndex)) {
-        f.setNull(activeRecord)
+    fields.forEach { field ->
+      if (field !== currentField && field.lookupColumn(tableIndex) != null && !field.isLookupKey(tableIndex)) {
+        field.setNull(activeRecord)
       }
     }
 
-    for (i in fields.indices) {
-      val column = fields[i].lookupColumn(tableIndex)
+    fields.forEach {field ->
+      val column = field.lookupColumn(tableIndex)
 
       if (column != null) {
         columns.add(column)
       }
 
-      if (fields[i] == currentField || fields[i].isLookupKey(tableIndex)) {
-        val condition = fields[i].getSearchCondition()
+      if (field == currentField || field.isLookupKey(tableIndex)) {
+        val condition = field.getSearchCondition(column)
 
         // TODO: 10/12/2020 FIX this !
-        if (condition == null || fields[i].lookupColumn(tableIndex)!!.condition() !is EqOp) {
+        if (condition == null || condition !is EqOp) {
           // at least one key field is not completely specified
           // no guarantee that a unique value will be fetched
           // end processing - non-key fields have already been cleared
@@ -2060,7 +2059,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
         // TODO: 11/12/2020 FIX this !
         if (condition != null) {
-          conditions.add(fields[i].lookupColumn(tableIndex)!!.condition())
+          conditions.add(condition)
         }
       }
     }

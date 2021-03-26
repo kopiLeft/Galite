@@ -48,6 +48,8 @@ abstract class DictionaryForm : VDictionary, Form() {
    * create a report for this form
    */
   protected fun FormBlock.createDynamicReport() {
+    val f = this.vBlock.activeField
+    f?.validate()
     VDynamicReport.createDynamicReport(this.vBlock)
   }
 

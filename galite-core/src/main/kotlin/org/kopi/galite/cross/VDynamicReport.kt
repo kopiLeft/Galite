@@ -302,7 +302,11 @@ class VDynamicReport(block: VBlock) : VReport() {
           } else {
             searchTables!!.slice(searchColumns!!.toList()).select(searchCondition)
           }
-         query.firstOrNull()?.also {
+          val iterator = query.iterator()
+
+          if (iterator.hasNext()) {
+            val it = iterator.next()
+            // don't  add a line when ID equals 0.
             if (it[searchColumns[0]] != 0) {
               val result: MutableList<Any> = ArrayList()
 
@@ -312,7 +316,8 @@ class VDynamicReport(block: VBlock) : VReport() {
               model.addLine(result.toTypedArray())
             }
           }
-          query.forEach {
+
+          iterator.forEachRemaining {
             val result: MutableList<Any> = ArrayList()
 
             for (i in fields.indices) {

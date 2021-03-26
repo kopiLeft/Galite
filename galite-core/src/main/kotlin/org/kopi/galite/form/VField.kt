@@ -700,12 +700,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  open fun <T> getSearchCondition_(column: ExpressionWithColumnType<T>): Op<Boolean>? {
+  open fun <T> getSearchCondition(column: ExpressionWithColumnType<T>?): Op<Boolean>? {
     if (isNull(block!!.activeRecord)) {
       return when (getSearchOperator()) {
         VConstants.SOP_EQ -> null
-        VConstants.SOP_NE -> Op.build { column.isNotNull() }
-        else -> Op.build { column.isNull() }
+        VConstants.SOP_NE -> Op.build { column!!.isNotNull() }
+        else -> Op.build { column!!.isNull() }
       }
     } else {
       val operand = getSql(block!!.activeRecord)
@@ -733,57 +733,49 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            LikeOp(column, stringOperandLiteral)
+            LikeOp(column!!, stringOperandLiteral)
           }
           VConstants.SOP_NE -> Op.build {
-            NotLikeOp(column, stringOperandLiteral)
+            NotLikeOp(column!!, stringOperandLiteral)
           }
           VConstants.SOP_GE -> Op.build {
-            GreaterEqOp(column, stringOperandLiteral)
+            GreaterEqOp(column!!, stringOperandLiteral)
           }
           VConstants.SOP_GT -> Op.build {
-            GreaterOp(column, stringOperandLiteral)
+            GreaterOp(column!!, stringOperandLiteral)
           }
           VConstants.SOP_LE -> Op.build {
-            LessEqOp(column, stringOperandLiteral)
+            LessEqOp(column!!, stringOperandLiteral)
           }
           VConstants.SOP_LT -> Op.build {
-            LessOp(column, stringOperandLiteral)
+            LessOp(column!!, stringOperandLiteral)
           }
           else -> throw InconsistencyException()
         }
       } else {
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            EqOp(column, column.wrap(operand))
+            EqOp(column!!, column.wrap(operand))
           }
           VConstants.SOP_NE -> Op.build {
-            NeqOp(column, column.wrap(operand))
+            NeqOp(column!!, column.wrap(operand))
           }
           VConstants.SOP_GE -> Op.build {
-            GreaterEqOp(column, column.wrap(operand))
+            GreaterEqOp(column!!, column.wrap(operand))
           }
           VConstants.SOP_GT -> Op.build {
-            GreaterOp(column, column.wrap(operand))
+            GreaterOp(column!!, column.wrap(operand))
           }
           VConstants.SOP_LE -> Op.build {
-            LessEqOp(column, column.wrap(operand))
+            LessEqOp(column!!, column.wrap(operand))
           }
           VConstants.SOP_LT -> Op.build {
-            LessOp(column, column.wrap(operand))
+            LessOp(column!!, column.wrap(operand))
           }
           else -> throw InconsistencyException()
         }
       }
     }
-  }
-
-  /**
-   * Returns the search conditions for this field.
-   */
-  open fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? {
-    // TODO
-    return null
   }
 
   // ----------------------------------------------------------------------
@@ -1201,9 +1193,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun isNull(r: Int): Boolean = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
-    callSafeTrigger(VConstants.TRG_VALUE) == null
-  } else isNullImpl(r)
+  fun isNull(r: Int): Boolean =
+          alias?.isNull(0)
+                  ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+                    callSafeTrigger(VConstants.TRG_VALUE) == null
+                  } else {
+                    isNullImpl(r)
+                  }
 
   /**
    * Is the field value of given record null ?
@@ -1369,6 +1365,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (hasTrigger(VConstants.TRG_VALUE)) {
       setObject(r, callSafeTrigger(VConstants.TRG_VALUE))
     }
+    println()
     return getSqlImpl(r)
   }
 
@@ -1837,7 +1834,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
         else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
       }
-      getSearchCondition_(expression)
+      getSearchCondition(expression)
     } else {
       null
     }
