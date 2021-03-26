@@ -21,6 +21,7 @@ import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VInputButton
 import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.visual.ApplicationContext
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
@@ -38,7 +39,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
   private var windowResized = false
   protected var newForm: VInputButton? = null
   private var lastActiveWindow: Window? = null
-  private val close = Button(LocalizedProperties.getString(locale.toString(), "CLOSE")) // TODO
+  protected val close = Button(LocalizedProperties.getString(locale, "CLOSE"))
   private var content: VerticalLayout = VerticalLayout()
   protected var pattern: String? = null
   /**
@@ -187,6 +188,8 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
       newForm.setWidth("100%") // occupy all available space.
     }*/
   }
+
+  private val locale get() = ApplicationContext.applicationContext.getApplication().defaultLocale.toString()
 
   /**
    * The list dialog selection target.

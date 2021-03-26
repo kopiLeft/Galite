@@ -60,6 +60,9 @@ class DListDialog(
     addKeyPressListener(::onKeyPress)
     // addSelectionListener(this) TODO
     // addSearchListener(this) TODO
+    close.addClickListener {
+      doSelectFromDialog(-1, true, false)
+    }
   }
   //---------------------------------------------------
   // LISTDIALOG IMPLEMENTATION
