@@ -27,7 +27,7 @@ import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
 object TaxRuleForm : ReportSelectionForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "TaxRules"
   val page = page("TaxRule")
   val action = menu("Action")

@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.main
 
 import java.util.Locale
 
+import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
@@ -88,6 +89,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     welcomeContainer.add(horizontalAlignContainer)
     header.setWelcome(welcomeContainer)
 
+    windowsMenu.text = LocalizedProperties.getString(this.locale, "windowsText")
     welcome.add(windowsLink)
     main.setContent(content)
     main.setSizeFull()
@@ -196,7 +198,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    * Shows the opened windows menu.
    */
   fun showWindowsMenu() {
-    windowsMenu.openPopUp()
+    windowsMenu.showMenu()
   }
 
   /**

@@ -43,7 +43,7 @@ object User : Table() {
 }
 
 object FormSample : Form() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")

@@ -34,7 +34,7 @@ import org.kopi.galite.type.Decimal
  * Product Report
  */
 object ProductR : Report() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
 
   override val title = "Products"
 

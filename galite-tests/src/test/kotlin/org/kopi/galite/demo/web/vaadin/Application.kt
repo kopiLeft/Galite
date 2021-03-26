@@ -50,7 +50,8 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
   override val alternateLocale get() = Locale("de", "AT")
   override val supportedLocales
     get() =
-      arrayOf(Locale.FRANCE,
+      arrayOf(Locale.UK,
+              Locale.FRANCE,
               Locale("de", "AT"),
               Locale("ar", "TN"))
 
