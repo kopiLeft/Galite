@@ -33,6 +33,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VMenuTree
 
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.contextmenu.MenuItem
 
 /**
@@ -180,7 +181,11 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun performAsyncAction(action: Action) {
+    val currentUI = UI.getCurrent()
+
+    requireNotNull(currentUI)
     Thread {
+      UI.setCurrent(currentUI)
       try {
         action.execute()
       } catch (e: VException) {

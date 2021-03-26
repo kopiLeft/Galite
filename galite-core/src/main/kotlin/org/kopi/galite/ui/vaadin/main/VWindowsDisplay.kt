@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
 
 /**
@@ -29,10 +30,32 @@ class VWindowsDisplay : Div() {
   // DATA MEMBERS
   //---------------------------------------------------
 
-  private val menu = VWindowsMenu(true)
+  private val menu = VWindowsMenu()
 
   init {
-    add(menu)
     className = "k-windows-menu-container"
+  }
+
+  /**
+   * Updates the menu item caption for the given window.
+   * @param window The concerned window.
+   * @param caption The new item caption.
+   */
+  fun updateCaption(window: Component, caption: String) {
+    TODO()
+  }
+
+  /**
+   * Adds a window to the [VWindowsMenu].
+   * @param container The container of the window.
+   * @param window The window to be added.
+   * @param title The window title.
+   */
+  fun addWindow(container : VWindowContainer, window: Component, title : String) {
+    menu.addWindow(container, window, title)
+  }
+
+  fun openPopUp() {
+    menu.open()
   }
 }

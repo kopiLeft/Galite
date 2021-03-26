@@ -93,7 +93,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
    * Sets the field value of given record to a timestamp value.
    */
   override fun setTimestamp(r: Int, v: Timestamp?) {
-    if (changedUI
+    if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && value[r] != v) {
       // trails (backup) the record if necessary

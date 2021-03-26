@@ -1,0 +1,133 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+#header {
+    background-color: white;
+    display: table;
+    width: 100%;
+    margin: 0 auto;
+    --lumo-space-m: 1rem;
+    height: 63px;
+}
+
+#module_list {
+    display: block;
+    max-width: 85%;
+    margin-left: 0;
+    height: 63px;
+}
+
+#welcome_container {
+    box-sizing: border-box;
+    display: table-cell;
+    vertical-align: middle;
+    width : 10%;
+    --lumo-font-size-m: 0.700rem;
+}
+
+#welcome_container > * {
+    display: inline;
+    padding-top: 15px;
+}
+
+/*
+ * Change Logo's style
+ */
+#companyLogo {
+    display: table-cell;
+    width: 10%;
+    border-right: 1px solid #dadada;
+}
+
+/*
+ * Change the dots' style
+ */
+::part(overflow-button) {
+    margin: 0;
+    --lumo-font-family:  Arial, sans-serif;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.800rem;
+    border-right: 1px solid #dadada;
+    height: 63px;
+    background-color: var(--lumo-tint);
+    box-sizing: border-box;
+}
+
+ /*
+ * Change the dots' style when hovered
+ */
+::part(overflow-button):hover {
+    background-color: #d9f0f8;
+}
+
+/*
+ * Modules style
+ */
+#module_list :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
+    margin: 0;
+    --lumo-font-family: Arial, sans-serif;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.800rem;
+    border-right: 1px solid #dadada;
+    height: 63px;
+    box-sizing: border-box;
+}
+
+#module_list :not(#user_menu):first-child::part(menu-bar-button):hover {
+    background-color: #d9f0f8;
+}
+
+/*
+user , admin , wrk context and bookmark
+*/
+#welcome ::part(menu-bar-button) {
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    background:var(--lumo-tint);
+    padding: var(--lumo-space-xxs);
+}
+
+/*
+    modules submenu
+*/
+.vaadin-menu-item {
+    color: #8f8f8f;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+}
+
+/*
+ * Right Menus style
+ */
+#user_menu , #wrkcontext_menu , #bookmarks_menu , #admin_menu {
+    background-color: var(--lumo-tint);
+    margin: 0;
+    box-sizing: border-box;
+    padding: var(--lumo-space-xxs);
+}
+
+#module_list :not(#user_menu):first-child::part(menu-bar-button) {
+    background-color: var(--lumo-base-color);
+    border-right: 1px solid #dadada;
+    height: 63px;
+    box-sizing: border-box;
+    --lumo-space-m: 0;
+}

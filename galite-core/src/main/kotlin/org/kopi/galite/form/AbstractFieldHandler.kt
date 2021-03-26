@@ -23,8 +23,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.Module
 
-abstract class AbstractFieldHandler protected constructor(private val rowController: VFieldUI)
-  : FieldHandler {
+abstract class AbstractFieldHandler protected constructor(private val rowController: VFieldUI) : FieldHandler {
 
   // ----------------------------------------------------------------------
   // MODEL ACCESSOR
@@ -34,7 +33,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
    * Returns the row controller field model.
    * @return The row controller field model.
    */
-  fun getModel(): VField = rowController.model
+  val model: VField get() = rowController.model
 
   //-----------------------------------------------------------------------
   // FIELDHANDLER IMPLEMENTATION
@@ -47,8 +46,8 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
   // ----------------------------------------------------------------------
 
   override fun updateModel() {
-    if (getModel().changed && getModel().hasFocus()) {
-      getModel().checkType(getDisplayedValue(true))
+    if (model.isChanged && model.hasFocus()) {
+      model.checkType(getDisplayedValue(true))
     }
   }
 
@@ -62,7 +61,7 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
 
         if (!trim) {
           text
-        } else if (getModel().height == 1) {
+        } else if (model.height == 1) {
           Utils.trimString(text!!)
         } else {
           Utils.trailString(text!!)
@@ -89,13 +88,13 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     var mode = mode
     var id = -1
     val dictionary = (when {
-      getModel().list != null && getModel().list!!.newForm != null -> {
+      model.list != null && model.list!!.newForm != null -> {
         // OLD SYNTAX
-        Module.getExecutable(getModel().list!!.newForm!!) as VDictionary
+        Module.getExecutable(model.list!!.newForm!!) as VDictionary
       }
-      getModel().list != null && getModel().list!!.action != null -> {
+      model.list != null && model.list!!.action != null -> {
         // NEW SYNTAX
-        getModel().list!!.action!!()
+        model.list!!.action!!()
       }
       else -> {
         null
@@ -103,14 +102,14 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
     }) ?: return false
 
     if (mode == VForm.CMD_NEWITEM) {
-      id = dictionary.add(getModel().getForm())
+      id = dictionary.add(model.getForm())
     } else if (mode == VForm.CMD_EDITITEM) {
       try {
         updateModel()
-        if (!getModel().isNull(rowController.getBlock().activeRecord)) {
-          val value: Int = getModel().getListID()
+        if (!model.isNull(rowController.getBlock().activeRecord)) {
+          val value: Int = model.getListID()
           if (value != -1) {
-            id = dictionary.edit(getModel().getForm(), value)
+            id = dictionary.edit(model.getForm(), value)
           } else {
             mode = VForm.CMD_EDITITEM_S
           }
@@ -122,16 +121,16 @@ abstract class AbstractFieldHandler protected constructor(private val rowControl
       }
     }
     if (mode == VForm.CMD_EDITITEM_S) {
-      id = dictionary.search(getModel().getForm())
+      id = dictionary.search(model.getForm())
     }
     if (id == -1) {
       if (mode == VForm.CMD_EDITITEM || mode == VForm.CMD_EDITITEM_S) {
-        getModel().setNull(rowController.getBlock().activeRecord)
+        model.setNull(rowController.getBlock().activeRecord)
       }
       throw VExecFailedException() // no message needed
     }
-    getModel().setValueID(id)
-    getModel().block!!.gotoNextField()
+    model.setValueID(id)
+    model.block!!.gotoNextField()
     return true
   }
 }

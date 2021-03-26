@@ -39,22 +39,24 @@ import org.kopi.galite.visual.VColor
  * @param label The field label.
  * @param align The field alignment.
  * @param options The field options.
- * @param detail Is it a detail view ?
+ * @param inDetail Is it a detail view ?
  */
-abstract class DField(internal val model: VFieldUI,
+abstract class DField(protected var model: VFieldUI,
                       internal var label: DLabel?,
-                      internal var align: Int,
-                      internal var options: Int,
+                      align: Int,
+                      protected var options: Int,
                       private var inDetail: Boolean)
   : Field(model.getIncrementCommand() != null,
           model.getDecrementCommand() != null), UField, FieldListener {
-
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------
   protected var state = 0 // Display state
   protected var pos = 0
+  /** The alignment. */
+  var align: Int = align
+    protected set
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
   protected var mouseInside = false // private events
@@ -108,14 +110,11 @@ abstract class DField(internal val model: VFieldUI,
   //-------------------------------------------------
   // ACCESSORS
   //-------------------------------------------------
-
   /**
-   * Returns the alignment.
-   * @return the alignment.
+   * Field cell renderer
+   * @return the position in chart (0..nbDisplay)
    */
-  open fun getAlign(): Int? {
-    return align
-  }
+  override var position: Int = 0
 
   override fun getModel(): VField {
     return model.model
@@ -130,22 +129,18 @@ abstract class DField(internal val model: VFieldUI,
    * Returns `true` is the field belongs to the detail view.
    * @return `true` is the field belongs to the detail view.
    */
-  open fun isInDetail(): Boolean {
+  fun isInDetail(): Boolean {
     return inDetail
   }
 
-  override fun getAutofillButton(): UComponent? {
-    return null
-  }
+  override fun getAutofillButton(): UComponent? = null
 
   /**
    * Returns the row controller.
    * @return The row controller.
    */
-  open fun getRowController(): VFieldUI {
-    return model
-  }
-
+  val rowController: VFieldUI
+    get() = model
   //-------------------------------------------------
   // UTILS
   //-------------------------------------------------
@@ -174,9 +169,47 @@ abstract class DField(internal val model: VFieldUI,
   }
 
   override fun updateAccess() {
-    TODO()
+    // access { TODO: access from thread!!
+      access = getAccess()
+      dynAccess = access
+      updateStyles(access)
+      isVisible = access != VConstants.ACS_HIDDEN
+      isActionEnabled = access >= VConstants.ACS_VISIT
+      update(label)
+    //}
   }
 
+  /**
+   * Updates a given field label.
+   * @param label The label to be updated.
+   */
+  private fun update(label: DLabel?) {
+    if (label != null) {
+      val was = label.isEnabled
+      val will = access >= VConstants.ACS_VISIT
+      if (was != will) {
+        label.isEnabled = will
+      }
+    }
+  }
+
+  /**
+   * Update field style according to its access.
+   * @param access The field access.
+   */
+  private fun updateStyles(access: Int) {
+    classNames.remove("visit")
+    classNames.remove("skipped")
+    classNames.remove("mustfill")
+    classNames.remove("hidden")
+    when (access) {
+      VConstants.ACS_VISIT -> classNames.add("visit")
+      VConstants.ACS_SKIPPED -> classNames.add("skipped")
+      VConstants.ACS_MUSTFILL -> classNames.add("mustfill")
+      VConstants.ACS_HIDDEN -> classNames.add("hidden")
+      else -> classNames.add("visit")
+    }
+  }
 
   /**
    * Returns the navigation delegation to server mode.
@@ -227,7 +260,7 @@ abstract class DField(internal val model: VFieldUI,
    * Returns the actors associated with this field.
    * @return The actors associated with this field.
    */
-  private fun getActors(): Collection<Actor>? {
+  private fun getActors(): Collection<Actor> {
     val actors: MutableSet<Actor>
     actors = HashSet<Actor>()
     for (cmd in model.getAllCommands()) {
@@ -271,7 +304,7 @@ abstract class DField(internal val model: VFieldUI,
       return false
     }
     val block = getModel().block
-    return getModel().hasFocus() && block!!.activeRecord == getBlockView().getRecordFromDisplayLine(pos)
+    return getModel().hasFocus() && block!!.activeRecord == getBlockView().getRecordFromDisplayLine(position)
   }
 
   /**
@@ -331,18 +364,15 @@ abstract class DField(internal val model: VFieldUI,
    * Returns the foreground color of the current data position.
    * @return The foreground color of the current data position.
    */
-  fun getForeground(): VColor? {
-    return getForegroundAt(position)
-  }
+  val foreground: VColor?
+    get() = getForegroundAt(position)
 
   /**
    * Returns the background color of the current data position.
    * @return The background color of the current data position.
    */
-  fun getBackground(): VColor? {
-    return getBackgroundAt(position)
-  }
-
+  val background: VColor?
+    get() = getBackgroundAt(position)
   // ----------------------------------------------------------------------
   // SNAPSHOT PRINTING
   // ----------------------------------------------------------------------
@@ -383,7 +413,7 @@ abstract class DField(internal val model: VFieldUI,
         }
       }
       if (!model.getBlock().isMulti()
-              || model.getBlock().detailMode == isInDetail() || model.getBlock().noChart()) {
+              || model.getBlock().isDetailMode == isInDetail() || model.getBlock().noChart()) {
         val action: Action = object : Action("mouse1") {
           override fun execute() {
             model.transferFocus(this@DField) // use here a mouse transferfocus
@@ -398,7 +428,7 @@ abstract class DField(internal val model: VFieldUI,
   }
 
   override fun fireAction() {
-    TODO()
+    model.executeAction()
   }
 
   /**
@@ -408,34 +438,142 @@ abstract class DField(internal val model: VFieldUI,
    * actors actions.
    */
   override fun transferFocus() {
-    TODO()
+    if (!modelHasFocus()) {
+      // an empty row in a chart has not calculated
+      // the access for each field (ACCESS Trigger)
+      if (model.getBlock().isMulti()) {
+        val recno: Int = getBlockView().getRecordFromDisplayLine(position)
+        if (!model.getBlock().isRecordFilled(recno)) {
+          model.getBlock().updateAccess(recno)
+        }
+      }
+      if (!model.getBlock().isMulti()
+              || model.getBlock().isDetailMode == isInDetail() || model.getBlock().noChart()) {
+        val action: Action = object : Action("mouse1") {
+          override fun execute() {
+            // proceed only of we are in the same block context.
+            if (getModel().block == getModel().getForm().getActiveBlock()) {
+              val recno: Int = getBlockView().getRecordFromDisplayLine(position)
+
+              // go to the correct record if necessary
+              // but only if we are in the correct block now
+              if (getModel().block!!.isMulti()
+                      && recno != getModel().block!!.activeRecord
+                      && getModel().block!!.isRecordAccessible(recno)) {
+                getModel().block!!.gotoRecord(recno)
+              }
+
+              // go to the correct field if already necessary
+              // but only if we are in the correct record now
+              if (recno == getModel().block!!.activeRecord
+                      && getModel() != getModel().block!!.activeField
+                      && getAccess() >= VConstants.ACS_VISIT) {
+                getModel().block!!.gotoField(getModel())
+              }
+            }
+          }
+        }
+        // execute it as model transforming thread
+        // it is not allowed to execute it not with
+        // the method performAsync/BasicAction.
+        model.performAsyncAction(action)
+      }
+    }
   }
 
   override fun gotoNextField() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoNextField()
+        }
+      }
+    })
   }
 
   override fun gotoPrevField() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_STAB") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoPrevField()
+        }
+      }
+    })
   }
 
   override fun gotoNextEmptyMustfill() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_ALTENTER") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoNextEmptyMustfill()
+        }
+      }
+    })
   }
 
   override fun gotoPrevRecord() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_UP") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.gotoPrevRecord()
+        }
+      }
+    })
   }
 
   override fun gotoNextRecord() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_DOWN") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.gotoNextRecord()
+        }
+      }
+    })
   }
 
   override fun gotoFirstRecord() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_FIRST") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoFirstRecord()
+        }
+      }
+    })
   }
 
   override fun gotoLastRecord() {
-    TODO()
+    getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_LAST") {
+      override fun execute() {
+        if (getModel() != null) {
+          getModel().block!!.form.getActiveBlock()!!.gotoLastRecord()
+        }
+      }
+    })
+  }
+
+  /**
+   * Performs the auto fill action.
+   */
+  fun performAutoFillAction() {
+    getModel().getForm().performAsyncAction(object : Action("autofill") {
+      override fun execute() {
+        model.transferFocus(this@DField)
+        model.autofillButton()
+      }
+    })
+  }
+
+  /**
+   * Performs the field action trigger
+   */
+  fun performFieldAction() {
+    if (model.hasAction()) {
+      getModel().getForm().performAsyncAction(object : Action("TRG_ACTION") {
+        override fun execute() {
+          model.transferFocus(this@DField)
+          getModel().callTrigger(VConstants.TRG_ACTION)
+        }
+      })
+    }
   }
 }

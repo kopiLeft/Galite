@@ -93,11 +93,6 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
   }
 
   /**
-   * Number of components to represent a field. Default is 2 = (field + label)
-   */
-  override val fieldComponentsNumber get() = fldNumber
-
-  /**
    * If the fields values are set in the model before display creation,
    * The [org.kopi.galite.ui.vaadin.form.DFieldHandler.valueChanged] is not called since the
    * listener is not registered yet. We will call the value change event for
@@ -120,9 +115,5 @@ open class DFieldUI(blockView: UBlock, model: VField, index: Int) : VFieldUI(blo
                                                Utils.toString(model.getBackground(r)))
       }
     }
-  }
-
-  companion object {
-    const val fldNumber = 1
   }
 }

@@ -23,6 +23,14 @@ import com.vaadin.flow.component.Component
  * The block alignment info.
  */
 class BlockAlignment {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  var targets: IntArray = intArrayOf()
+  var isChart = false
+  var ori: Component? = null
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -79,9 +87,8 @@ class BlockAlignment {
    */
   protected fun getFieldTargetPos(x: Int): Int {
     var x = x
-    val target: Int
     x-- // we want to align middle
-    target = getTargetAt(x)
+    val target = getTargetAt(x)
 
     // if (x >= 0 && x < targets.length && targets[x] != -1) {
     if (target != -1) {
@@ -100,9 +107,8 @@ class BlockAlignment {
    */
   protected fun getLabelTargetPos(x: Int): Int {
     var x = x
-    val target: Int
     x-- // we want to align middle
-    target = getTargetAt(x)
+    val target = getTargetAt(x)
 
     // if (x >= 0 && x < targets.length && targets[x] != -1) {
     return if (target != -1) {
@@ -111,11 +117,4 @@ class BlockAlignment {
       } else 2 * target
     } else 0
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  var targets: IntArray = intArrayOf()
-  var isChart = false
-  var ori: Component? = null
 }

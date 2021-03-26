@@ -140,7 +140,7 @@ class VMonthField(val bufferSize: Int) : VField(7, 1) {
    * Sets the field value of given record to a month value.
    */
   override fun setMonth(r: Int, v: Month?) {
-    if (changedUI
+    if (isChangedUI
             || value[r] == null && v != null
             || value[r] != null && value[r]!! != v) {
       // trails (backup) the record if necessary

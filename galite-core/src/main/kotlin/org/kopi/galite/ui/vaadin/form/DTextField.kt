@@ -17,23 +17,27 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.contextmenu.ContextMenu
+import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
-import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
-import org.kopi.galite.form.VDateField
 import org.kopi.galite.form.VFieldUI
-import org.kopi.galite.form.VFixnumField
-import org.kopi.galite.form.VIntegerField
-import org.kopi.galite.form.VMonthField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.form.VTimeField
-import org.kopi.galite.form.VTimestampField
-import org.kopi.galite.form.VWeekField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.TextField
+import org.kopi.galite.ui.vaadin.visual.VApplication
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VlibProperties
 
 /**
  * The `DTextField` is the vaadin implementation
  * of the [UTextField] specifications.
+ *
+ * @param model The row controller.
+ * @param label The field label.
+ * @param align The field alignment.
+ * @param options The field options.
+ * @param detail Does the field belongs to the detail view ?
  */
 open class DTextField(
         model: VFieldUI,
@@ -46,19 +50,79 @@ open class DTextField(
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  private var field: TextField // the text component
+  private val field: TextField // the text component
   protected var inside = false
-  protected var noEdit = false
-  protected var scanner = false
+  protected var noEdit = options and VConstants.FDO_NOEDIT != 0
+  protected var scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
+  private var selectionAfterUpdateDisabled = false
+  protected var transformer: ModelTransformer? = null
 
   init {
-    //model.model.addFieldChangeListener(this) TODO
-    noEdit = options and VConstants.FDO_NOEDIT != 0
-    scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
-
+    transformer = if (getModel().height == 1
+            || !scanner && getModel().getTypeOptions() and VConstants.FDO_DYNAMIC_NL > 0) {
+      DefaultTransformer(getModel().width,
+                         getModel().height)
+    } else if (!scanner) {
+      NewlineTransformer(getModel().width,
+                         getModel().height)
+    } else {
+      ScannerTransformer(this)
+    }
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
+    field.addTextValueChangeListener {
+      onTextChange(it.oldValue.toString(), it.value.toString())
+      checkText(it.value.toString()) // FIXME: use onTextChange(text) instead when we have full support for commands
+    }
+
+    createContextMenu()
     setFieldContent(field)
+  }
+
+  fun onTextChange(oldText: String?, newText: String?) {
+    checkText(newText!!, isChanged(oldText, newText))
+  }
+
+  fun onTextChange(rec: Int, text: String?) {
+    // other dirty values has been sent ==> affect them directly to the model.
+    getModel().getForm().performAsyncAction(object : Action("check_type") {
+      override fun execute() {
+        if (isChanged(getModel().getText(rec), transformer!!.toModel(text!!))) {
+          getModel().isChangedUI = true
+          checkText(rec, text)
+        }
+      }
+    })
+  }
+
+  /**
+   * TODO: merge with onTextChange(rec, text)
+   */
+  fun onTextChange(text: String?) {
+    // other dirty values has been sent ==> affect them directly to the model.
+    getModel().getForm().performAsyncAction(object : Action("check_type") {
+      override fun execute() {
+        checkText(text)
+      }
+    })
+  }
+
+  /**
+   * Returns `true` if there is a difference between the old and the new text.
+   * @param oldText The old text value.
+   * @param newText The new text value.
+   * @return `true` if there is a difference between the old and the new text.
+   */
+  protected fun isChanged(oldText: String?, newText: String?): Boolean {
+    var oldText = oldText
+    var newText = newText
+    if (oldText == null) {
+      oldText = "" // replace null by empty string to avoid null pointer exceptions
+    }
+    if (newText == null) {
+      newText = ""
+    }
+    return oldText != newText
   }
 
   // --------------------------------------------------
@@ -71,116 +135,169 @@ open class DTextField(
    * @param align The field alignment.
    * @return The [TextField] object.
    */
-  private fun createFieldGUI(
-          noEcho: Boolean,
-          scanner: Boolean,
-          align: Int,
-  ): TextField {
+  private fun createFieldGUI(noEcho: Boolean,
+                             scanner: Boolean,
+                             align: Int): TextField {
 
-    val textfield = TextField(getModel().width,
-                              getModel().height,
-                              if (getModel().height == 1) 1 else (getModel() as VStringField).getVisibleHeight(),
-                              !scanner && getModel().getTypeOptions() and VConstants.FDO_DYNAMIC_NL > 0,
-                              noEcho,
-                              scanner,
-                              noEdit,
-                              align)
-    textfield.autocompleteLength = getModel().getAutocompleteLength()
-    textfield.hasAutocomplete = getModel().hasAutocomplete()
-    textfield.hasAutofill = model.hasAutofill()
-
-    // set field type according to the model
-    // this will set the validation strategy on the client side.
-    when (getModel()) {
-      is VStringField -> {
-        // string field
-        textfield.type = TextField.Type.STRING
-        textfield.convertType = getConvertType()
-      }
-      is VIntegerField -> {
-        // integer field
-        textfield.type = TextField.Type.INTEGER
-        textfield.minval = (getModel() as VIntegerField).minval.toDouble()
-        textfield.maxval = (getModel() as VIntegerField).maxval.toDouble()
-      }
-      is VMonthField -> {
-        // month field
-        TODO()
-      }
-      is VDateField -> {
-        // date field
-        TODO()
-      }
-      is VWeekField -> {
-        // week field
-        TODO()
-      }
-      is VTimeField -> {
-        // time field
-        TODO()
-      }
-      is VCodeField -> {
-        // code field
-        TODO()
-      }
-      is VFixnumField -> {
-        // fixnum field
-        TODO()
-      }
-      is VTimestampField -> {
-        // timestamp field
-        TODO()
-      }
-      else -> {
-        throw IllegalArgumentException("unknown field model : " + getModel().javaClass.name)
-      }
-    }
-    // add navigation handler TODO
-
-    return textfield
+    return TextField(getModel(),
+                     noEcho,
+                     scanner,
+                     noEdit,
+                     align,
+                     model.hasAutofill())
   }
-
-  /**
-   * Returns the convert type for the string field.
-   * @return The convert type for the string field.
-   */
-  private fun getConvertType(): TextField.ConvertType =
-          when ((getModel() as VStringField).getTypeOptions() and VConstants.FDO_CONVERT_MASK) {
-            VConstants.FDO_CONVERT_NONE -> TextField.ConvertType.NONE
-            VConstants.FDO_CONVERT_UPPER -> TextField.ConvertType.UPPER
-            VConstants.FDO_CONVERT_LOWER -> TextField.ConvertType.LOWER
-            VConstants.FDO_CONVERT_NAME -> TextField.ConvertType.NAME
-            else -> TextField.ConvertType.NONE
-          }
 
   // ----------------------------------------------------------------------
   // DRAWING
-  // ----------------------------------------------------------------------
+  // ----------------------------------------------------------------------7
   override fun updateAccess() {
-    //TODO("Not yet implemented")
+    super.updateAccess()
+    label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
+    //access { TODO: Acccess from thread
+    field.isEnabled = access >= VConstants.ACS_VISIT
+    isEnabled = access >= VConstants.ACS_VISIT
+    //}
   }
 
   override fun updateText() {
-    //TODO("Not yet implemented")
+    val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
+    access {
+      field.value = transformer!!.toGui(newModelTxt)!!.trim()
+    }
+    super.updateText()
+    if (modelHasFocus() && !selectionAfterUpdateDisabled) {
+      selectionAfterUpdateDisabled = false
+    }
   }
 
   override fun updateColor() {
-    //TODO("Not yet implemented")
+    //access { TODO: Acccess from thread
+    val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
+    field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
+    //}
   }
 
   override fun updateFocus() {
-    //TODO("Not yet implemented")
+    label!!.update(model, position)
+    if (!modelHasFocus()) {
+      if (inside) {
+        inside = false
+        leaveMe()
+      }
+    } else {
+      if (!inside) {
+        inside = true
+        enterMe()
+      }
+    }
+    super.updateFocus()
   }
 
   override fun forceFocus() {
-    //TODO("Not yet implemented")
+    enterMe()
   }
+
+  /**
+   * Gets the focus to this field.
+   */
+  private fun enterMe() {
+    //BackgroundThreadHandler.access(Runnable { TODO: access
+    if (scanner) {
+      field.value = transformer!!.toGui("")
+    }
+    //field.focus() TODO
+    //})
+  }
+
+  /**
+   * Leaves the field.
+   */
+  private fun leaveMe() {
+    reInstallSelectionFocusListener()
+    // update GUI: for
+    // scanner nescessary
+    if (scanner) {
+      // trick: it is now displayed on a different way
+      //BackgroundThreadHandler.access(Runnable { TODO
+      field.value = transformer!!.toModel(field.value.toString())
+      //})
+    }
+  }
+
+  /**
+   * Checks the given text.
+   * @param s The text to be checked.
+   * @param changed Is value changed ?
+   */
+  private fun checkText(s: String, changed: Boolean) {
+    val text: String = transformer!!.toModel(s)
+    if (!transformer!!.checkFormat(text)) {
+      return
+    }
+    if (getModel().checkText(text) && changed) {
+      getModel().isChangedUI = true
+    }
+    getModel().setChanged(changed)
+  }
+
+  /**
+   * Check the given text against model definition.
+   *
+   * @param r The record number.
+   * @param s The text to be verified.
+   * @throws VException Errors occurs during check.
+   */
+  private fun checkText(r: Int, s: String) {
+    val text: String = transformer!!.toModel(s)
+    if (!transformer!!.checkFormat(text)) {
+      return
+    }
+    if (getModel().checkText(text)) {
+      getModel().checkType(r, text)
+    }
+  }
+
+  /**
+   * Check the given text against model definition.
+   *
+   * TODO: merge with checkText(r, s)
+   *
+   * @param s The text to be verified.
+   * @throws VException Errors occurs during check.
+   */
+  private fun checkText(s: String?) {
+    val text: String = transformer!!.toModel(s ?: "")
+    if (!transformer!!.checkFormat(text)) {
+      return
+    }
+    if (getModel().checkText(text)) {
+      getModel().checkType(text)
+    }
+  }
+
+  // --------------------------------------------------
+  // UTILS
+  // --------------------------------------------------
+
+  /**
+   * Returns the field width.
+   * @return The field width.
+   */
+  val fieldWidth: Float
+    get() = this.field.width.toFloat()
+
+  /**
+   * Returns the field width unit.
+   * @return The field width unit.
+   */
+  /*val fieldWidthUnits: Unit TODO
+    get() = this.field.getWidthUnits()*/
 
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION
   //---------------------------------------------------
   override fun getText(): String? {
-    TODO("Not yet implemented")
+    return transformer!!.toModel(if (field.value == null) "" else field.value.toString())
   }
 
   override fun setHasCriticalValue(b: Boolean) {
@@ -195,18 +312,256 @@ open class DTextField(
     // ignore
   }
 
+  /**
+   * Reinstalls the focus listener.
+   */
+  open fun reInstallSelectionFocusListener() {
+    removeSelectionFocusListener()
+    addSelectionFocusListener()
+  }
+
   override fun setSelectionAfterUpdateDisabled(disable: Boolean) {
-    TODO("Not yet implemented")
+    selectionAfterUpdateDisabled = disable
   }
 
   //---------------------------------------------------
   // DFIELD IMPLEMENTATION
   //---------------------------------------------------
   override fun getObject(): Any? {
-    TODO("Not yet implemented")
+    return wrappedField.value
   }
 
   override fun setBlink(blink: Boolean) {
-    //TODO("Not yet implemented")
+    access {
+      field.setBlink(blink)
+    }
+  }
+
+  /**
+   * Default implementation of the [ModelTransformer]
+   *
+   * @param col The column index.
+   * @param row The row index.
+   */
+  inner class DefaultTransformer(var col: Int, var row: Int) : ModelTransformer {
+    //---------------------------------------
+    // IMPLEMENTATIONS
+    //---------------------------------------
+    override fun toGui(modelTxt: String?): String? {
+      return modelTxt
+    }
+
+    override fun toModel(guiTxt: String): String {
+      return guiTxt
+    }
+
+    override fun checkFormat(guiTxt: String): Boolean {
+      return if (row == 1) true else convertToSingleLine(guiTxt, col, row).length <= row * col
+    }
+  }
+
+  /**
+   * A scanner model transformer.
+   */
+  internal class ScannerTransformer(private val field: DTextField) : ModelTransformer {
+    //---------------------------------------
+    // IMPLEMENTATIONS
+    //---------------------------------------
+    override fun toGui(modelTxt: String?): String? {
+      return if (modelTxt == null || "" == modelTxt) {
+        VlibProperties.getString("scan-ready")
+      } else if (!field.field.isReadOnly()) {
+        VlibProperties.getString("scan-read") + " " + modelTxt
+      } else {
+        VlibProperties.getString("scan-finished")
+      }
+    }
+
+    override fun toModel(guiTxt: String): String {
+      return guiTxt
+    }
+
+    override fun checkFormat(software: String): Boolean {
+      return true
+    }
+  }
+
+  /**
+   * New line model transformer.
+   *
+   * @param col The column index.
+   * @param row The row index.
+   */
+  inner class NewlineTransformer(private val col: Int, private val row: Int) : ModelTransformer {
+    //---------------------------------------
+    // IMPLEMENTATIONS
+    //---------------------------------------
+    override fun toModel(source: String): String {
+      return convertFixedTextToSingleLine(source, col, row)
+    }
+
+    override fun toGui(source: String?): String? {
+      val target = StringBuffer()
+      val length = source!!.length
+      var usedRows = 1
+      var start = 0
+      while (start < length) {
+        val line = source.substring(start, (start + col).coerceAtMost(length))
+        var last = -1
+        var i = line.length - 1
+        while (last == -1 && i >= 0) {
+          if (!Character.isWhitespace(line[i])) {
+            last = i
+          }
+          --i
+        }
+        if (last != -1) {
+          target.append(line.substring(0, last + 1))
+        }
+        if (usedRows < row) {
+          if (start + col < length) {
+            target.append('\n')
+          }
+          usedRows++
+        }
+        start += col
+      }
+      return target.toString()
+    }
+
+    override fun checkFormat(source: String): Boolean {
+      return source.length <= row * col
+    }
+  }
+
+  /**
+   * Add the field context menu.
+   */
+  protected fun createContextMenu() {
+    if (model.hasAutofill() && getModel().getDefaultAccess() > VConstants.ACS_SKIPPED) {
+      val contextMenu = ContextMenu()
+      contextMenu.addItem(VlibProperties.getString("item-index")) {
+        performAutoFillAction()
+      }
+      //.setData(VlibProperties.getString("item-index")) TODO
+
+      contextMenu.target = field
+    }
+  }
+
+  companion object {
+    /**
+     * Converts a given string to a line string.
+     * @param source The source text.
+     * @param col The column index.
+     * @param row The row index.
+     * @return The converted string.
+     */
+    private fun convertToSingleLine(source: String, col: Int, row: Int): String =
+            buildString {
+              val length = source.length
+              var start = 0
+              while (start < length) {
+                var index = source.indexOf('\n', start)
+                if (index - start < col && index != -1) {
+                  append(source.substring(start, index))
+                  for (j in index - start until col) {
+                    append(' ')
+                  }
+                  start = index + 1
+                  if (start == length) {
+                    // last line ends with a "new line" -> add an empty line
+                    for (j in 0 until col) {
+                      append(' ')
+                    }
+                  }
+                } else {
+                  if (start + col >= length) {
+                    append(source.substring(start, length))
+                    for (j in length until start + col) {
+                      append(' ')
+                    }
+                    start = length
+                  } else {
+                    // find white space to break line
+                    var i = start + col - 1
+                    while (i > start) {
+                      if (Character.isWhitespace(source[i])) {
+                        break
+                      }
+                      i--
+                    }
+                    index = if (i == start) {
+                      start + col
+                    } else {
+                      i + 1
+                    }
+                    append(source.substring(start, index))
+                    var j = (index - start) % col
+                    while (j != 0 && j < col) {
+                      append(' ')
+                      j++
+                    }
+                    start = index
+                  }
+                }
+              }
+            }
+
+    /**
+     * Converts a given string to a fixed line string.
+     * @param source The source text.
+     * @param col The column index.
+     * @param row The row index.
+     * @return The converted string.
+     */
+    private fun convertFixedTextToSingleLine(source: String, col: Int, row: Int): String =
+            buildString {
+              val length = source.length
+              var start = 0
+              while (start < length) {
+                var index = source.indexOf('\n', start)
+                if (index - start < col && index != -1) {
+                  append(source.substring(start, index))
+                  for (j in index - start until col) {
+                    append(' ')
+                  }
+                  start = index + 1
+                  if (start == length) {
+                    // last line ends with a "new line" -> add an empty line
+                    for (j in 0 until col) {
+                      append(' ')
+                    }
+                  }
+                } else {
+                  if (start + col >= length) {
+                    append(source.substring(start, length))
+                    for (j in length until start + col) {
+                      append(' ')
+                    }
+                    start = length
+                  } else {
+                    // find white space to break line
+                    var i = start + col
+                    while (i > start) {
+                      if (Character.isWhitespace(source[i])) {
+                        break
+                      }
+                      i--
+                    }
+                    index = if (i == start) {
+                      start + col
+                    } else {
+                      i
+                    }
+                    append(source.substring(start, index))
+                    for (j in index - start until col) {
+                      append(' ')
+                    }
+                    start = index + 1
+                  }
+                }
+              }
+            }
   }
 }

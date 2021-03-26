@@ -31,7 +31,7 @@ abstract class Action @JvmOverloads constructor(val name: String? = null) : Runn
     try {
       execute()
     } catch (e: VException) {
-      throw e.message.let { VRuntimeException(it, e) }
+      throw VRuntimeException(e.message, e)
     }
   }
 

@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.menu
 
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.contextmenu.MenuItem
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
 
 /**
@@ -39,7 +40,7 @@ open class ModuleList : Div(), HasComponents {
     }
 
   init {
-    setId("moduleList")
+    setId("module_list")
     setWidthFull()
     add(menu); // add it to container.
   }

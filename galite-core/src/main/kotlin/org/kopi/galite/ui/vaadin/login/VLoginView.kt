@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.login
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dependency.CssImport
 import org.kopi.galite.ui.vaadin.common.VSimpleTable
 
 /**

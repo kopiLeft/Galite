@@ -29,20 +29,19 @@ import org.kopi.galite.ui.vaadin.base.Utils
  *
  * @param rowController The row controller.
  */
-open class DFieldHandler(rowController: VFieldUI) : AbstractFieldHandler(rowController) {
-
+open class DFieldHandler internal constructor(rowController: VFieldUI) : AbstractFieldHandler(rowController) {
   // --------------------------------------------------
   // IMPLEMENTATIONS
   // --------------------------------------------------
   override fun updateModel() {
     // model needs to be updated only when UI value has changed
-    if (getModel().changedUI && getModel().hasFocus()) {
-      getModel().checkType(getDisplayedValue(true))
+    if (model.isChangedUI && model.hasFocus()) {
+      model.checkType(getDisplayedValue(true))
     }
   }
 
   override fun predefinedFill(): Boolean {
-    val filled = getModel().fillField(VPredefinedValueHandler(getRowController(), getModel().getForm(), getModel()))
+    val filled = model.fillField(VPredefinedValueHandler(getRowController(), model.getForm(), model))
     if (filled) {
       getRowController().getBlock().gotoNextField()
     }
@@ -70,7 +69,7 @@ open class DFieldHandler(rowController: VFieldUI) : AbstractFieldHandler(rowCont
   }
 
   override fun searchOperatorChanged() {
-    val operator: Int = getModel().getSearchOperator()
+    val operator: Int = model.getSearchOperator()
     val info: String? = if (operator == VConstants.SOP_EQ) null else VConstants.OPERATOR_NAMES.get(operator)
     if (getRowController().getLabel() != null) {
       (getRowController().getLabel() as DLabel).infoText = info
@@ -91,7 +90,7 @@ open class DFieldHandler(rowController: VFieldUI) : AbstractFieldHandler(rowCont
       }
     }
     // fire value changed only for text fields.
-    if (getModel().getType() == VField.MDL_FLD_TEXT || getModel().getType() == VField.MDL_FLD_EDITOR) {
+    if (model.getType() == VField.MDL_FLD_TEXT || model.getType() == VField.MDL_FLD_EDITOR) {
       // store the record value in the client cache
       // so that it can be used for free navigation
       // when there is no communication needed to
@@ -118,7 +117,7 @@ open class DFieldHandler(rowController: VFieldUI) : AbstractFieldHandler(rowCont
     // we don't cache color for actor fields.
     (getRowController().blockView as DBlock).fireColorChanged(getRowController().index,
                                                               r,
-                                                              Utils.toString(getModel().getForeground(r)),
-                                                              Utils.toString(getModel().getBackground(r)))
+                                                              Utils.toString(model.getForeground(r)),
+                                                              Utils.toString(model.getBackground(r)))
   }
 }

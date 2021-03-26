@@ -262,7 +262,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   // called if the in a chart the line changes, but it is still visible
   fun updateText() {
-    if (changedUI) {
+    if (isChangedUI) {
       modelNeedUpdate()
     }
   }
@@ -271,8 +271,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Validate the field, ie: get the last displayed value, check it and check mustfill
    */
   fun validate() {
-    if (changed) {
-      if (changedUI) {
+    if (isChanged) {
+      if (isChangedUI) {
         modelNeedUpdate()
       }
       callTrigger(VConstants.TRG_PREVAL)
@@ -289,8 +289,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         e.resetValue()
         throw e
       }
-      changed = false // !!! check
-      changedUI = false
+      isChanged = false // !!! check
+      isChangedUI = false
     }
   }
 
@@ -331,8 +331,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * text has changed (key typed on a display)
    */
   fun onTextChange(text: String) {
-    changed = true
-    changedUI = true
+    isChanged = true
+    isChangedUI = true
     autoLeave()
   }
 
@@ -465,7 +465,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     assert(block!!.activeRecord != -1) { threadInfo() + "current record = " + block!!.activeRecord }
     assert(block!!.activeField == null) { threadInfo() + "current field: " + block!!.activeField }
     block!!.activeField = this
-    changed = false
+    isChanged = false
     fireEntered()
     try {
       callTrigger(VConstants.TRG_PREFLD)
@@ -481,8 +481,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   fun leave(check: Boolean) {
     assert(this === block!!.activeField) { threadInfo() + "current field: " + block!!.activeField }
     try {
-      if (check && changed) {
-        if (changedUI && hasListener) {
+      if (check && isChanged) {
+        if (isChangedUI && hasListener) {
           checkType(getDisplayedValue(true))
         }
         callTrigger(VConstants.TRG_PREVAL)
@@ -500,15 +500,15 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
           throw e
         }
       } else if (getForm().setTextOnFieldLeave()) {
-        if (changed && changedUI && hasListener) {
+        if (isChanged && isChangedUI && hasListener) {
           checkType(getDisplayedValue(true))
         }
       }
     } catch (e: VException) {
       throw e
     }
-    changed = false
-    changedUI = false
+    isChanged = false
+    isChangedUI = false
     callTrigger(VConstants.TRG_POSTFLD)
     block!!.activeField = null
     fireLeaved()
@@ -1062,31 +1062,21 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
   /**
    * Sets the field value of the current record from a query tuple.
-   * @param     query           the query holding the tuple
+   * @param     result          the result row of the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
-  @Deprecated("use setQuery_(query: ResultRow, column: Column<*>)")
-  fun setQuery(query: Query, column: Int) {
-    setQuery(block!!.currentRecord, query, column)
-  }
-
-  fun setQuery_(query: ResultRow, column: Column<*>) {
-    setQuery_(block!!.currentRecord, query, column)
+  fun setQuery(result: ResultRow, column: Column<*>) {
+    setQuery(block!!.currentRecord, result, column)
   }
 
   /**
    * Sets the field value of given record from a query tuple.
    * @param     record          the index of the record
-   * @param     query           the query holding the tuple
+   * @param     result          the result row of the query holding the tuple
    * @param     column          the index of the column in the tuple
    */
-  @Deprecated("use setQuery_(record: Int, query: ResultRow, column: Column<*>)")
-  fun setQuery(record: Int, query: Query, column: Int) {
-    setObject(record, retrieveQuery(query, column))
-  }
-
-  fun setQuery_(record: Int, query: ResultRow, column: Column<*>) {
-    setObject(record, retrieveQuery_(query, column))
+  fun setQuery(record: Int, result: ResultRow, column: Column<*>) {
+    setObject(record, retrieveQuery_(result, column))
   }
 
   /**
@@ -1539,8 +1529,8 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     } else {
       block!!.updateAccess(r)
     }
-    changed = true
-    changedUI = false
+    isChanged = true
+    isChangedUI = false
     fireValueChanged(r)
   }
 
@@ -1551,7 +1541,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (changed && block!!.activeRecord != -1) {
       block!!.setRecordChanged(block!!.activeRecord, true)
     }
-    this.changed = changed
+    this.isChanged = changed
   }
 
   /**
@@ -1676,7 +1666,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
             column.substring(1, condition.toString().length) eq condition.toString()
           }.orderBy(columns[0])
 
-          result = displayQueryList_(query, list!!.columns) as String?
+          result = displayQueryList(query, list!!.columns) as String?
           if (result == null) {
             throw VExecFailedException() // no message to display
           } else {
@@ -1722,11 +1712,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     return id
   }
 
-  private fun displayQueryList(queryText: String, columns: Array<VListColumn?>): Any? {
-    TODO()
-  }
-
-  private fun displayQueryList_(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
+  private fun displayQueryList(query: org.jetbrains.exposed.sql.Query, columns: Array<VListColumn?>): Any? {
     val columnsList = columns.map { vListColumn ->
       vListColumn!!.column
     }
@@ -1862,7 +1848,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       evalListTable().slice(columns).select(searchCondition).orderBy(list!!.getColumn(0).column!!)
     }
 
-    val result = displayQueryList_(query, list!!.columns)
+    val result = displayQueryList(query, list!!.columns)
 
     if (result == null) {
       throw VExecFailedException() // no message to display
@@ -2061,7 +2047,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       throw VRuntimeException(e)
     }
     setObject(block!!.activeRecord, result)
-    changed = true // if you edit the value it's like if you change it
+    isChanged = true // if you edit the value it's like if you change it
   }
 
   /**
@@ -2199,7 +2185,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
         append("\n")
         append("    changed: ")
-        append(changed)
+        append(isChanged)
         append("\n")
       } catch (e: Exception) {
         append("exception while retrieving field information\n")
@@ -2505,10 +2491,10 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
   private var alias: VField? = null // The alias field
 
   // changed?
-  var changed = false // changed by user / changes are done in the model
+  var isChanged = false // changed by user / changes are done in the model
     private set
 
-  var changedUI = false // changed by user / changes are in the ui -> update model
+  var isChangedUI = false // changed by user / changes are in the ui -> update model
 
   // UPDATE model before doing anything
   var border = 0

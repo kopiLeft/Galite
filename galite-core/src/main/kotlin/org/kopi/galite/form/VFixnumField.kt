@@ -35,7 +35,7 @@ import org.kopi.galite.visual.VlibProperties
  *
  * @param    digits      The digits after dot
  * @param    maxScale    The maximum scale to be used for this field
- * @param    fraction    is true if its is a fraction field
+ * @param    isFraction    is true if its is a isFraction field
  * @param    minval      The min permitted value
  * @param    maxval      The max permitted value
  *
@@ -43,10 +43,10 @@ import org.kopi.galite.visual.VlibProperties
 class VFixnumField(val bufferSize: Int,
                    private val digits: Int,
                    maxScale: Int,
-                   val fraction: Boolean,
-                   minval: Decimal?,
-                   maxval: Decimal?)
-  : VField(computeWidth(digits, maxScale, minval, maxval), 1) {
+                   val isFraction: Boolean,
+                   minValue: Decimal?,
+                   maxValue: Decimal?)
+  : VField(computeWidth(digits, maxScale, minValue, maxValue), 1) {
   /*
    * ----------------------------------------------------------------------
    * Constructor / build
@@ -82,8 +82,8 @@ class VFixnumField(val bufferSize: Int,
    * return the name of this field
    */
   override fun getTypeInformation(): String {
-    var min = minval
-    var max = maxval
+    var min = minValue
+    var max = maxValue
     var nines: Long = 1
 
     min = Decimal(Int.MIN_VALUE.toDouble())
@@ -167,11 +167,11 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale > scale) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
-        if (v.compareTo(minval) == -1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval)))
+        if (v.compareTo(minValue) == -1) {
+          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minValue)))
         }
-        if (v.compareTo(maxval) == 1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval)))
+        if (v.compareTo(maxValue) == 1) {
+          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxValue)))
         }
         if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
@@ -307,7 +307,7 @@ class VFixnumField(val bufferSize: Int,
     // trails (backup) the record if necessary
     var v = v
 
-    if ((changedUI
+    if ((isChangedUI
                     || (value[r] == null && v != null)
                     || (value[r] != null && value[r] != v))) {
       trail(r)
@@ -315,10 +315,10 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale != currentScale[r]) {
           v = v.setScale(currentScale[r])
         }
-        if (v.compareTo(minval) == -1) {
-          v = minval
-        } else if (v.compareTo(maxval) == 1) {
-          v = maxval
+        if (v.compareTo(minValue) == -1) {
+          v = minValue
+        } else if (v.compareTo(maxValue) == 1) {
+          v = maxValue
         }
       }
 
@@ -397,11 +397,11 @@ class VFixnumField(val bufferSize: Int,
         if (v.scale > scale) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00011", arrayOf(scale)))
         }
-        if (v.compareTo(minval) == -1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minval)))
+        if (v.compareTo(minValue) == -1) {
+          throw VFieldException(this, MessageCode.getMessage("VIS-00012", arrayOf(minValue)))
         }
-        if (v.compareTo(maxval) == 1) {
-          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxval)))
+        if (v.compareTo(maxValue) == 1) {
+          throw VFieldException(this, MessageCode.getMessage("VIS-00009", arrayOf(maxValue)))
         }
         if (toText(v.setScale(maxScale)).length > width) {
           throw VFieldException(this, MessageCode.getMessage("VIS-00010"))
@@ -471,7 +471,7 @@ class VFixnumField(val bufferSize: Int,
    * Returns the string representation in human-readable format.
    */
   fun toText(v: Decimal): String {
-    return if (!fraction) {
+    return if (!isFraction) {
       v.toString()
     } else {
       toFraction(v.toString())
@@ -538,9 +538,9 @@ class VFixnumField(val bufferSize: Int,
   private var fieldMaxScale = maxScale
 
   // dynamic data
-  var minval = minval?.setScale(maxScale) ?: - calculateUpperBound(digits, maxScale)
+  var minValue = minValue?.setScale(maxScale) ?: - calculateUpperBound(digits, maxScale)
     private set
-  var maxval = maxval?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
+  var maxValue = maxValue?.setScale(maxScale) ?: calculateUpperBound(digits, maxScale)
     private set
 
   // number of digits after dot
@@ -560,12 +560,12 @@ class VFixnumField(val bufferSize: Int,
       }
       field = scale
 
-      if (minval.scale > field) {
-        minval = minval.setScale(field)
+      if (minValue.scale > field) {
+        minValue = minValue.setScale(field)
       }
 
-      if (maxval.scale > field) {
-        maxval = maxval.setScale(field)
+      if (maxValue.scale > field) {
+        maxValue = maxValue.setScale(field)
       }
 
       //records scale must be <= maxScale
@@ -578,9 +578,9 @@ class VFixnumField(val bufferSize: Int,
 
   private var value: Array<Decimal?> = arrayOfNulls(2 * bufferSize)
 
-  protected var criticalMinValue = minval
+  protected var criticalMinValue = this.minValue
 
-  protected var criticalMaxValue = maxval
+  protected var criticalMaxValue = this.maxValue
 
   companion object {
 

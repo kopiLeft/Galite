@@ -1,0 +1,134 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+/*
+ * Main's style
+ */
+#outlet {
+    background-color: #f2f2f2;
+}
+
+/*
+ * Login Box container style
+ */
+.k-loginBox {
+    border: 1px solid #cccccc;
+    padding: 20px;
+    margin-top: 20px;
+    background: #ffffff;
+    font-size: 12px;
+}
+
+/*
+ * Login Box password input fields style
+ */
+vaadin-password-field {
+    --lumo-text-field-size: var(--lumo-size-xxs);
+    font-size: var(--lumo-font-size-xxs);
+    width: 150px;
+}
+
+/*
+ * Login Box input fields style
+ */
+.k-loginBox ::part(input-field) {
+    background-color: var(--lumo-tint);
+    box-sizing: border-box;
+    border: 0;
+    border-bottom: 1px solid #dadada;
+}
+
+/*
+ *  Remove padding between login fields
+ */
+.k-loginBox-pane table tr td {
+    padding: 0;
+    text-align: left;
+}
+
+/*
+ * Change login page title's style
+ */
+.k-loginBox-pane tr td {
+    color: black;
+}
+
+/*
+ * Login page labels style
+ */
+.k-loginBox-pane label {
+    font-style: normal;
+    color: #a3a3a3;
+}
+
+/*
+ * Welcome's word style
+ */
+.k-loginBox b {
+    color:black;
+    font-weight: 500 ;
+    font-style: normal ;
+    font-size: 14px
+}
+
+/*
+ * User name's style
+ */
+#user_name {
+    width: 150px;
+    border: 0;
+    border-bottom: 1px solid #dadada;
+ }
+
+
+#user_name:hover {
+    background: #f2f2f2;
+}
+
+#user_name:focus {
+    outline : none;
+    background: none;
+    border-bottom: #009bd4 1px solid;
+}
+
+/*
+ * Language Selector style
+ */
+.k-loginBox-pane select {
+    border: #dadada 1px solid;
+    background-color: white;
+    margin-top: 3px;
+}
+
+.k-loginBox-pane select:hover {
+    background: #f2f2f2;
+}
+
+/*
+ * Login Button
+ */
+#login_button {
+    background: #009bd4;
+    color: white;
+    padding: 4px 6px;
+    font-family: Arial, sans-serif;
+    font-weight: 500;
+    font-size: 1.2em;
+    min-width: 152px;
+    margin: 0;
+    border: #dadada 1px solid;
+}

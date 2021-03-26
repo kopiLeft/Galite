@@ -36,7 +36,7 @@ import org.kopi.galite.visual.VExecFailedException
  * @param model     The field model.
  * @param index     The row controller index.
  */
-abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBlock,
+abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: UBlock,
                                                             val model: VField,
                                                             val index: Int = 0)
   : VConstants, ActionHandler, Serializable {
@@ -103,7 +103,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         // this is typically needed in grid based blocks
         gotoActiveRecord()
         // switch to detail view when needed
-        if (getBlock().isMulti() && display == detailDisplay && !getBlock().detailMode) {
+        if (getBlock().isMulti() && display == detailDisplay && !getBlock().isDetailMode) {
           (blockView as UMultiBlock).switchView(-1)
         }
         display.setBlink(true)
@@ -135,7 +135,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       !model.noChart() && !model.noDetail() -> {
         // field is visible on both views
         when {
-          getBlock().isMulti() && getBlock().detailMode -> detailDisplay
+          getBlock().isMulti() && getBlock().isDetailMode -> detailDisplay
           displayLine != -1 -> displays[displayLine]
           else -> null
         }
@@ -144,7 +144,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     }
   }
 
-  protected fun gotoActiveRecord() {
+  protected open fun gotoActiveRecord() {
     // to be redefined by subclasses
   }
 
@@ -392,14 +392,14 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
           dlDetail = createLabel(model.label, model.toolTip, true)
           if (columnEnd >= 0) {
             (getBlock().display as UMultiBlock).addToDetail(dlDetail,
-                                                            Alignment(column * fieldComponentsNumber - 2, line - 1, 1, 1, false, true))
+                                                            Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
           }
           // field for the value in the detail view
           detailDisplay = createDisplay(dlDetail, model, true)
           (getBlock().display as UMultiBlock).addToDetail(detailDisplay,
-                                                          Alignment(column * fieldComponentsNumber - 1, line - 1,
-                                                                    (columnEnd - column) * fieldComponentsNumber + 1,
-                                                                    (lineEnd - line) * fieldComponentsNumber + 1, false))
+                                                          Alignment(column * 2 - 1, line - 1,
+                                                                    (columnEnd - column) * 2 + 1,
+                                                                    (lineEnd - line) * 2 + 1, false))
           detailDisplay!!.position = 0
           detailDisplay!!.setInDetail(true)
         }
@@ -416,9 +416,9 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
       } else if (column < 0) {
         // multifields (special fields)
         // take care that in this row is only this multifield
-        blockView.add(dl, MultiFieldAlignment(columnEnd * fieldComponentsNumber - 1, line - 1, 1, 1, true))
+        blockView.add(dl, MultiFieldAlignment(columnEnd * 2 - 1, line - 1, 1, 1, true))
         displays = arrayOf(createDisplay(dl, model, false))
-        blockView.add(displays[0]!!, MultiFieldAlignment(columnEnd * fieldComponentsNumber - 1,
+        blockView.add(displays[0]!!, MultiFieldAlignment(columnEnd * 2 - 1,
                                                          line,
                                                          1,
                                                          lineEnd - line + 1,
@@ -429,15 +429,15 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
         displays = arrayOf(createDisplay(dl, model, false))
         if (columnEnd >= 0 && displays[0] !is UActorField) {
           // not an info field and not an actor field  => show label
-          blockView.add(dl, Alignment(column * fieldComponentsNumber - 2, line - 1, 1, 1, false, true))
+          blockView.add(dl, Alignment(column * 2 - 2, line - 1, 1, 1, false, true))
         }
         if (displays[0] is UActorField) {
           // an actor field takes the label and the field space
           blockView.add(displays[0]!!,
-                        Alignment(column * fieldComponentsNumber - 2, line - 1, (columnEnd - column) * fieldComponentsNumber + 2, lineEnd - line + 1, false))
+                        Alignment(column * 2 - 2, line - 1, (columnEnd - column) * 2 + 2, lineEnd - line + 1, false))
         } else {
           blockView.add(displays[0]!!,
-                        Alignment(column * fieldComponentsNumber - 1, line - 1, (columnEnd - column) * fieldComponentsNumber + 1, lineEnd - line + 1, false))
+                        Alignment(column * 2 - 1, line - 1, (columnEnd - column) * 2 + 1, lineEnd - line + 1, false))
         }
         displays[0]!!.position = 0
         displays[0]!!.updateText()
@@ -451,11 +451,6 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
     fireDisplayCreated()
     // building = false;
   }
-
-  /**
-   * Number of components to represent a field. Default is 2 = (field + label)
-   */
-  protected open val fieldComponentsNumber get() = 2
 
   /**
    * Returns the displayed size of this column.
@@ -557,7 +552,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(val blockView: UBloc
   /**
    * Clears all display fields.
    */
-  fun scrollTo(toprec: Int) {
+  open fun scrollTo(toprec: Int) {
     if (displays != null) {
       displays.forEach {
         it!!.updateFocus()

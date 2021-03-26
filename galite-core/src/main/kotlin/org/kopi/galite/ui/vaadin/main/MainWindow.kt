@@ -35,6 +35,8 @@ import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.contextmenu.MenuItem
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.html.Div
 
 /**
  * Main application window composed of a header and content.
@@ -46,6 +48,7 @@ import com.vaadin.flow.component.contextmenu.MenuItem
  * @param logo The application logo
  * @param href The logo link.
  */
+@CssImport("./styles/galite/VLoginBox.css")
 class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
@@ -59,7 +62,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   private val welcome = VWelcome()
   private val content = VContent()
   private val container = VWindowContainer()
-  private val locale: String? = null
+  private val locale: String = locale.toString()
   private var windowsList = mutableListOf<Component>()
   private val windows = mutableMapOf<Component, MenuItem>()
   private val windowsMenu = VWindowsDisplay()
@@ -77,20 +80,29 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
 
     content.setContent(container)
     addToNavbar(header)
-    header.setWelcome(welcome)
+    val welcomeContainer = Div()
+    welcomeContainer.setId("welcome_container")
+    val horizontalAlignContainer = Div()
+    horizontalAlignContainer.setId("horizontal_align_container")
+    horizontalAlignContainer.add(welcome)
+    welcomeContainer.add(horizontalAlignContainer)
+    header.setWelcome(welcomeContainer)
+
     welcome.add(windowsLink)
     main.setContent(content)
     main.setSizeFull()
     content.width = "100%"
     content.height = "100%"
     setContent(main)
+    addLinksListeners()
     Shortcuts.addShortcutListener(this, this::goToPreviousPage, Key.PAGE_UP, KeyModifier.of("Alt"))
     Shortcuts.addShortcutListener(this, this::goToNextPage, Key.PAGE_DOWN, KeyModifier.of("Alt"))
     instance = this
   }
 
   companion object {
-    private var instance: MainWindow? = null
+    lateinit var instance: MainWindow
+    val locale: String get() = instance.locale
   }
 
   //---------------------------------------------------
@@ -104,6 +116,17 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   fun setMainMenu(moduleList: ModuleList) {
     header.setMainMenu(moduleList)
     menus.add(moduleList)
+  }
+
+  /**
+   * Updates the title (caption) of the given window.
+   * @param window The concerned window.
+   * @param title The new window title.
+   */
+  fun updateWindowTitle(window: Component, title: String) {
+    container.updateWindowTitle(window, title)
+    windowsMenu.updateCaption(window, title)
+    ui.get().page.setTitle(title)
   }
 
   /**
@@ -136,11 +159,13 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   /**
    * Adds a window to this main window.
    * @param window The window to be added.
+   * @param title The window title.
    */
   fun addWindow(window: Component, title: String) {
     windowsList.add(window)
     container.addWindow(window, title)
     container.showWindow(window)
+    windowsMenu.addWindow(container, window, title)
   }
 
   /**
@@ -166,6 +191,26 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
 
       welcome.setConnectedUser(value)
     }
+
+  /**
+   * Shows the opened windows menu.
+   */
+  fun showWindowsMenu() {
+    windowsMenu.openPopUp()
+  }
+
+  /**
+   * Adds the global links listeners
+   */
+  fun addLinksListeners() {
+    windowsLink.addClickListener {
+      if (windowsLink.isEnabled) {
+        windowsLink.showLabel()
+        windowsLink.focus()
+        showWindowsMenu()
+      }
+    }
+  }
 
   /**
    * Adds a main window listener.

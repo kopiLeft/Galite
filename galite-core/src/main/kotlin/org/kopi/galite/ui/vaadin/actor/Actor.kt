@@ -61,4 +61,12 @@ open class Actor(val caption: String?,
       super.addClickShortcut(acceleratorKey)
     }
   }
+
+  /**
+   * Sets the actor to be enabled.
+   * @param enabled The enabled status
+   */
+  open fun setActorEnabled(enabled: Boolean) {
+    // TODO
+  }
 }

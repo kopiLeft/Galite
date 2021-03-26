@@ -30,6 +30,6 @@ class VEmptyModuleList : Div() {
    * Creates the empty module list component.
    */
   init {
-    setId("moduleList_empty")
+    setId("module_list_empty")
   }
 }

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.html.Div
@@ -31,7 +32,7 @@ import com.vaadin.flow.shared.Registration
  * By clicking on the link, a popup will be shown that contains
  * the opened windows and then the user can switch between them.
  */
-class VWindows : Div(), HasEnabled {
+class VWindows : Div(), HasEnabled, Focusable<VWindows> {
 
   private val anchor = Anchor()
   private val label = Span()

@@ -17,10 +17,17 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.block.ColumnView
-
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.html.Div
+import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.block.Block
+import org.kopi.galite.ui.vaadin.block.ColumnView
+import org.kopi.galite.ui.vaadin.form.DBlock
+import org.kopi.galite.ui.vaadin.window.Window
 
 /**
  * The field component. Contains one text input field or other component
@@ -30,18 +37,14 @@ import com.vaadin.flow.component.html.Div
  * @param hasDecrement has decrement button ?
  * TODO: Implement this class with appropriate component
  */
-open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
-  private val listeners = mutableListOf<FieldListener>()
+abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
+  : Div(), FieldListener, HasStyle {
 
-  /**
-   * Has an increment button ?
-   */
-  var hasIncrement = false
+  init {
+    className = Styles.FIELD
+  }
 
-  /**
-   * Has a decrement button ?
-   */
-  var hasDecrement = false
+  private var listeners = mutableListOf<FieldListener>()
 
   /**
    * Has an action trigger ?
@@ -105,7 +108,7 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
   /**
    * The position of the field for chart layout.
    */
-  var position = 0
+  open var position = 0
 
   /**
    * The column view index of this field.
@@ -114,41 +117,44 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
 
   var columnView: ColumnView? = null
 
-  var content: AbstractField? = null
+  lateinit var wrappedField: CustomField<*>
+
+  /**
+   * `true` if the content of this field has changed.
+   */
+  var isChanged = false
+
+  /**
+   * `true` if this connector is dirty.
+   */
+  var isDirty = false
+
+  private var dirtyValues: MutableMap<Int, String?>? = null
+
+  /**
+   * Enables and disables the leave action of the active field.
+   */
+  val doNotLeaveActiveField = false
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  fun setFieldContent(component: AbstractField) {
-    content = component
-    addComponentAsFirst(component)
+  override fun onAttach(attachEvent: AttachEvent?) {
+    addFieldListener(this)
   }
 
-  /**
-   * Updates the value of this field according to its position.
-   */
-  fun updateValue() {
-    setValue(columnView!!.getValueAt(position))
-  }
-
-  /**
-   * Sets the value of the this field.
-   * @param o The field value.
-   */
-  fun setValue(o: Any?) {
-    if (content != null) {
-      content!!.value = o.toString().toIntOrNull() ?: o
-    }
-    // TODO
+  fun setFieldContent(component: CustomField<*>) {
+    wrappedField = component
+    add(component)
   }
 
   /**
    * Adds the given actors to this field.
    * @param actors The actors to be associated with field.
    */
-  fun addActors(actors: Collection<Actor?>?) {
-    //TODO()
+  fun addActors(actors: Collection<Actor>) {
+    this.actors.addAll(actors)
   }
 
   /**
@@ -156,7 +162,7 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
    * @param l The listener to be registered.
    */
   fun addFieldListener(l: FieldListener) {
-    // TODO()
+    listeners.add(l)
   }
 
   /**
@@ -164,7 +170,7 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
    * @param l The listener to be removed.
    */
   fun removeFieldListener(l: FieldListener) {
-    TODO()
+    listeners.remove(l)
   }
 
   /**
@@ -278,6 +284,311 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
   val isConnectorEnabled: Boolean
     get() = true
 
+
+  //---------------------------------------------------
+  // IMPLMENTATIONS
+  //---------------------------------------------------
+  /**
+   * Initializes the field widget.
+   * @param hasIncrement Has increment button ?
+   * @param hasDecrement Has decrement button ?
+   */
+  open fun init(hasIncrement: Boolean, hasDecrement: Boolean) {
+    /* TODO
+    addDomHandler(object : ClickHandler() {
+      fun onClick(event: ClickEvent?) {
+        fireClicked()
+      }
+    }, ClickEvent.getType())*/
+  }
+
+  /**
+   * Checks the content of this field.
+   * @param rec The active record.
+   * @throws CheckTypeException When the field content is not valid
+   */
+  open fun checkValue(rec: Int) {
+    TODO()
+  }
+
+  /**
+   * Checks if the content of this field is empty.
+   * @return `true` if this field is empty.
+   */
+  open fun isNull(): Boolean = TODO()
+
+
+  /**
+   * Gains the focus on this field.
+   */
+  open fun focus() {
+    wrappedField.focus()
+  }
+
+  open fun iniComponent() {
+    init(hasIncrement, hasDecrement)
+  }
+
+  open fun delegateCaptionHandling(): Boolean {
+    // do not delegate caption handling
+    return false
+  }
+
+  open fun updateCaption(connector: Component?) {
+    // not handled.
+  }
+
+  override fun onIncrement() {
+    fireIncremented()
+  }
+
+  override fun onDecrement() {
+    fireDecremented()
+  }
+
+  override fun onClick() {
+    // no click event is for rich text field and action fields
+    /*if (hasAction || content is RichTextField) { TODO
+      return
+    }*/
+    columnView!!.setBlockActiveRecordFromDisplayLine(position)
+    getWindow()!!.cleanDirtyValues(getBlock(), false) //!! do not make a focus transfer.
+    fireClicked()
+  }
+
+  override fun transferFocus() {
+    fireFocusTransferred()
+  }
+
+  override fun gotoNextField() {
+    fireGotoNextField()
+  }
+
+  override fun gotoPrevField() {
+    fireGotoPrevField()
+  }
+
+  override fun gotoNextEmptyMustfill() {
+    fireGotoNextEmptyMustfill()
+  }
+
+  override fun gotoNextRecord() {
+    fireGotoNextRecord()
+  }
+
+  override fun gotoPrevRecord() {
+    fireGotoPrevRecord()
+  }
+
+  override fun gotoFirstRecord() {
+    fireGotoFirstRecord()
+  }
+
+  override fun gotoLastRecord() {
+    fireGotoLastRecord()
+  }
+
+  /**
+   * Tells the server side the the action field should be performed
+   */
+  open fun actionPerformed() {
+    if (hasAction && isActionEnabled) {
+      fireActionPerformed()
+    }
+  }
+
+  /**
+   * Leaves this field by performing validations that does not depend on server side.
+   * @param rec The active record.
+   * @throws CheckTypeException
+   */
+  open fun leave(rec: Int) {
+    if (!columnView!!.isBlockActiveField) {
+      throw AssertionError("wrong active field")
+    }
+    if (isChanged) {
+      checkValue(rec)
+    }
+    if (!doNotLeaveActiveField) {
+      columnView!!.unsetAsActiveField()
+      setActorsEnabled(false)
+      columnView!!.disableBlockActors()
+    }
+  }
+
+  /**
+   * Enters to this field. This will obtain the focus to this field.
+   */
+  open fun enter() {
+    if (doNotLeaveActiveField) {
+      return
+    }
+    if (columnView!!.blockActiveRecord == -1) {
+      throw AssertionError("wrong active record")
+    }
+    if (!columnView!!.isBlockActiveFieldNull) {
+      throw AssertionError("wrong active field")
+    }
+    isChanged = false
+    focus()
+    columnView!!.setAsActiveField()
+    setActorsEnabled(true)
+  }
+
+  /**
+   * Returns the field access for the given record.
+   * @param record The concerned record.
+   * @return The field access.
+   */
+  open fun getAccess(record: Int): Int {
+    return if (record == -1) {
+      defaultAccess
+    } else {
+      dynAccess
+    }
+  }
+
+  /**
+   * Checks if the navigation from this field should be delegated to server.
+   * @return `true` if the navigation should be delegated to server.
+   */
+  open fun delegateNavigationToServer(): Boolean {
+    return when (navigationDelegationMode) {
+      NavigationDelegationMode.ALWAYS -> {
+        true
+      }
+      NavigationDelegationMode.ONCHANGE -> {
+        isChanged
+      }
+      NavigationDelegationMode.ONVALUE -> {
+        !isNull() || isChanged
+      }
+      else -> {
+        false
+      }
+    }
+  }
+
+  /**
+   * Sets this field to not be a dirty one.
+   */
+  open fun unsetDirty() {
+    isDirty = false
+    isChanged = false
+  }
+
+  /**
+   * Marks the value of this field to be dirty for its current value.
+   * @param rec The concerned record number.
+   */
+  open fun markAsDirty(rec: Int) {
+    markAsDirty(rec, if (wrappedField.value == null) "" else wrappedField.value.toString())
+  }
+
+  /**
+   * Marks the given text field connector to be dirty.
+   * This means that its value should be synchronized
+   * with the server as soon as possible.
+   * @param rec The value record.
+   * @param value The text value to be sent for the given record
+   */
+  internal open fun markAsDirty(rec: Int, value: String?) {
+    if (dirtyValues == null) {
+      dirtyValues = HashMap()
+    }
+    if (rec != -1) {
+      dirtyValues!![rec] = value
+      // set internal cached value
+      columnView!!.setValueAt(rec, value)
+      isDirty = true
+    }
+  }
+
+  /**
+   * Sets the cached value of this field for the given record.
+   * @param rec The record number.
+   * @param value The text value.
+   */
+  protected open fun setCachedValueAt(rec: Int, value: String?) {
+    if (!columnView!!.getRecordValueAt(rec).equals(value) && rec != -1) {
+      columnView!!.setValueAt(rec, value)
+      isChanged = true
+    }
+  }
+
+  /**
+   * Returns the field cached value at the given record.
+   * @param rec The record number.
+   * @return The cached value.
+   */
+  internal open fun getCachedValueAt(rec: Int): String? {
+    return columnView!!.getRecordValueAt(rec)
+  }
+
+  /**
+   * Sets the actors associated with this field to be enabled or disabled.
+   * @param enabled The enabled status
+   */
+  open fun setActorsEnabled(enabled: Boolean) {
+    val window = (parent.get().parent.get().parent.get() as DBlock).parent
+    for (actor in actors) {
+      window.setActorEnabled(actor, enabled)
+    }
+  }
+
+  /**
+   * Cleans the dirty values. This will send all buffered values
+   * for the server side.
+   */
+  open fun cleanDirtyValues() {
+    if (!isEnabled) {
+      return
+    }
+    if (dirtyValues != null && dirtyValues!!.isNotEmpty()) {
+      (wrappedField as TextField).sendTextToServer()
+      (wrappedField as TextField).sendDirtyValuesToServer(HashMap(dirtyValues))
+      dirtyValues!!.clear()
+    }
+    isDirty = false
+  }
+
+  /**
+   * Updates the value of this field according to its position.
+   */
+  fun updateValue() {
+    wrappedField.value = columnView!!.getValueAt(position)
+    // wrappedField.updateValue() // TODO: Do we need this?
+  }
+
+  /**
+   * Updates the color of this field according to its position.
+   */
+  open fun updateColor() {
+    setColor(columnView!!.getForegroundColorAt(position),
+             columnView!!.getBackgroundColorAt(position))
+  }
+
+  /**
+   * Sets the field background and foreground colors.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  open fun setColor(foreground: String?, background: String?) {
+    // TODO
+  }
+
+  /**
+   * Returns the parent window of this field.
+   * @return The parent window of this field.
+   */
+  protected open fun getWindow(): Window? = parent.orElse(null) as? Window
+
+  /**
+   * Returns the parent block of this field.
+   * @return The parent block of this field.
+   */
+  protected open fun getBlock(): Block? = parent.orElse(null) as? Block
+
   /**
    * The navigation delegation to server mode.
    */
@@ -301,5 +612,15 @@ open class Field(hasIncrement: Boolean, hasDecrement: Boolean) : Div() {
      * Always delegate navigation to server.
      */
     ALWAYS
+  }
+
+  companion object {
+    /**
+     * Enables and disables the leave action of the active field.
+     * This is used to simulate the modal popups that blocks the execution
+     * Thread since Javascript can not handle multi thread and it is a single threaded.
+     * @param doNotLeaveActiveField Should we leave the active field.
+     */
+    var doNotLeaveActiveField = false
   }
 }

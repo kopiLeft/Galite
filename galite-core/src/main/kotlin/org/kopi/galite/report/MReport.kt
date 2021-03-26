@@ -791,7 +791,7 @@ class MReport : Constants, Serializable {
    * Folds the specified column
    */
   fun setColumnFolded(column: Int, fold: Boolean) {
-    accessibleColumns[column]!!.folded = fold
+    accessibleColumns[column]!!.isFolded = fold
     fireContentChanged()
   }
 
@@ -799,7 +799,7 @@ class MReport : Constants, Serializable {
    * Folds the specified column
    */
   fun switchColumnFolding(column: Int) {
-    accessibleColumns[column]!!.folded = (!accessibleColumns[column]!!.folded)
+    accessibleColumns[column]!!.isFolded = (!accessibleColumns[column]!!.isFolded)
     fireContentChanged()
   }
 
@@ -920,7 +920,7 @@ class MReport : Constants, Serializable {
     if (label == null || label.isEmpty()) {
       return ""
     }
-    return if (accessibleColumns[column]!!.folded) label.substring(0, 1) else label
+    return if (accessibleColumns[column]!!.isFolded) label.substring(0, 1) else label
   }
 
   /**
