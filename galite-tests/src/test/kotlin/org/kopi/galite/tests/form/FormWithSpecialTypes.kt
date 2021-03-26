@@ -48,7 +48,7 @@ object Product : Table() {
 }
 
 object FormWithSpecialTypes : Form() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")

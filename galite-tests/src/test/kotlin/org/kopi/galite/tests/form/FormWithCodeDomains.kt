@@ -32,7 +32,7 @@ object FormWithCodeDomains: Form() {
           label = "Autofill",
           help = "Autofill",
   )
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form to test domains"
   val testBlock = insertBlock(DaysBlock)
 }

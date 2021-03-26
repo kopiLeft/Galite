@@ -176,8 +176,8 @@ class VReportTests: JApplicationTestBase() {
                        KeyEvent.VK_F12,
                        0)
               .also {
-                it.menuName = "Fichier"
-                it.menuItem = "Favoris"
+                it.menuName = "File"
+                it.menuItem = "Shortcuts"
               }
 
       // Actor checks
@@ -231,7 +231,7 @@ class VReportTests: JApplicationTestBase() {
    * Simple Report with two fields.
    */
   class SimpleReport : Report() {
-    override val locale = Locale.FRANCE
+    override val locale = Locale.UK
 
     override val title = "SimpleReport"
 
