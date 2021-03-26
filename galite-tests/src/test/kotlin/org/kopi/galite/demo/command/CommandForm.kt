@@ -23,8 +23,10 @@ import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Command
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
@@ -104,26 +106,30 @@ object BlockCommand : FormBlock(1, 10, "Commands") {
     columns(u.numCmd)
   }
 
-  val idClt = visit(domain = Domain<Int>(25), position = at(1, 1)) {
+  val idClt = mustFill(domain = Domain<Int>(25), position = at(1, 1)) {
     label = "Client ID"
     help = "The client ID"
     columns(u.idClt, v.idClt) {
       priority = 1
     }
   }
-  val paymentMethod = visit(domain = Payment, position = at(3, 1)) {
+  val paymentMethod = mustFill(domain = Payment, position = at(3, 1)) {
     label = "Payment method"
     help = "The payment method"
     columns(u.paymentMethod) {
       priority = 1
     }
   }
-  val statusCmd = visit(domain = CommandStatus, position = at(4, 1)) {
+  val statusCmd = mustFill(domain = CommandStatus, position = at(4, 1)) {
     label = "Command status"
     help = "The command status"
     columns(u.statusCmd) {
       priority = 1
     }
+  }
+
+  init {
+    blockVisibility(Access.VISIT, Modes.MOD_QUERY)
   }
 }
 

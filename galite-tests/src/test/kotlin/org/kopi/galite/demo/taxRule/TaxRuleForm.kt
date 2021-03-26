@@ -21,8 +21,10 @@ import java.util.Locale
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.TaxRule
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
@@ -110,6 +112,10 @@ object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
     columns(u.rate) {
       priority = 1
     }
+  }
+
+  init {
+    blockVisibility(Access.VISIT, Modes.MOD_QUERY)
   }
 }
 
