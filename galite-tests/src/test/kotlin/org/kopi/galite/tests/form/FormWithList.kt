@@ -29,7 +29,7 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
 object FormWithList : DictionaryForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")

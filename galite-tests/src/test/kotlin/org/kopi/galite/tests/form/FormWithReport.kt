@@ -25,7 +25,7 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.tests.report.SimpleReport
 
 object FormWithReport : ReportSelectionForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
 
   override val title = "form for test"
 
