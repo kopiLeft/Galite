@@ -109,7 +109,7 @@ object FormSample : Form() {
   }
 
   val tb4ToTestChangeBlockAccess = insertBlock(TestBlock(), p1) {
-    blockVisibility(Access.SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
+    blockVisibility(Access.SKIPPED, Modes.QUERY, Modes.INSERT)
   }
 
   val preform = trigger(INIT) {

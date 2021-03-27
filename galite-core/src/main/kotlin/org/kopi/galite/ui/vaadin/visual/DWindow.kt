@@ -51,6 +51,7 @@ import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.server.ErrorEvent
@@ -95,7 +96,8 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    */
   var isUserAsked = false
     private set
-  private val actionRunner: ActionRunner = ActionRunner()
+  val currentUI = UI.getCurrent().also { requireNotNull(it) }
+  private val actionRunner: ActionRunner = ActionRunner(currentUI)
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
   init {
@@ -655,11 +657,12 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * There is only one instance of ActionRunner.
    * It calls user actions.
    */
-  internal inner class ActionRunner : Runnable, ErrorHandler {
+  internal inner class ActionRunner(val currentUI: UI) : Runnable, ErrorHandler {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun run() {
+      UI.setCurrent(currentUI)
       try {
         if (currentAction != null) {
           runAction()

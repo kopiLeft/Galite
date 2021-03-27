@@ -22,6 +22,8 @@ import org.kopi.galite.form.UListDialog
 import org.kopi.galite.form.VDictionary
 import org.kopi.galite.form.VForm
 import org.kopi.galite.form.VListDialog
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.list.GridListDialog
 import org.kopi.galite.ui.vaadin.list.ListTable
 import org.kopi.galite.ui.vaadin.notif.InformationNotification
@@ -33,6 +35,11 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyDownEvent
+import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.data.provider.ListDataProvider
+
 /**
  * The `DListDialog` is the vaadin implementation of the
  * [UListDialog] specifications.
@@ -43,15 +50,19 @@ class DListDialog(
         private val model: VListDialog
 ) : GridListDialog(), UListDialog/*, CloseListener, SelectionListener, SearchListener TODO*/ {
 
-  private var table: ListTable? = null
   private var escaped = true
   private var doNewForm = false
   private var selectedPos = -1
 
   init {
-    // addCloseListener(this) TODO
+    addDialogCloseActionListener(::onClose)
+    addKeyDownListener(::onKeyDown)
+    addKeyPressListener(::onKeyPress)
     // addSelectionListener(this) TODO
     // addSearchListener(this) TODO
+    close.addClickListener {
+      doSelectFromDialog(-1, true, false)
+    }
   }
   //---------------------------------------------------
   // LISTDIALOG IMPLEMENTATION
@@ -83,28 +94,165 @@ class DListDialog(
           selectFromDialog(window, null, showSingleEntry)
 
   /**
+   * invoked when the user clicks outside the overlay or presses the escape key.
+   */
+  fun onClose(event: DialogCloseActionEvent?) {
+    doSelectFromDialog(-1, true, false)
+  }
+
+  fun onKeyDown(event: KeyDownEvent) {
+    if (event.key == Key.BACKSPACE) {
+      pattern = if (pattern != null && pattern!!.length > 1) {
+        pattern!!.substring(0, pattern!!.length - 1)
+      } else {
+        ""
+      }
+    }
+    doKeyAction(event.key)
+  }
+
+  open fun onKeyPress(event: KeyPressEvent) {
+    event.key.keys.forEach {
+      if (pattern == null) {
+        pattern = ""
+      }
+      if (it.toInt() != 0) {
+        pattern += it.toLowerCase()[0]
+      }
+      onSearch()
+    }
+  }
+
+  /**
+   * Allows access to the key events.
+   * @param keyCode The key code.
+   */
+  protected fun doKeyAction(keyCode: Key) {
+    if (tableItems.isEmpty()) {
+      return
+    }
+    ensureTableSelection()
+    when (keyCode) {
+      Key.HOME -> {
+        pattern = ""
+        table!!.select(tableItems.first())
+      }
+      Key.END -> {
+        pattern = ""
+        table!!.select(tableItems.last())
+      }
+      Key.ARROW_UP -> {
+        pattern = ""
+        table!!.select(prevItemId)
+      }
+      Key.ARROW_DOWN -> {
+        pattern = ""
+        table!!.select(nextItemId)
+      }
+      Key.PAGE_UP -> {
+        pattern = ""
+        table!!.select(prevPageItemId)
+      }
+      Key.PAGE_DOWN -> {
+        pattern = ""
+        table!!.select(nextPageItemId)
+      }
+      Key.SPACE -> if (newForm != null) {
+        if (newForm != null) {
+          doSelectFromDialog(-1, false, true)
+        }
+      }
+      Key.ENTER -> {
+        doSelectFromDialog(tableItems.indexOf(table!!.selectedItems.first()), false, false)
+      }
+      else -> {
+      }
+    }
+  }
+
+  fun onSearch() {
+    /*if (!table.getContainerDataSource().hasFilters()) { TODO
+      if (pattern == null || pattern.length() == 0) {
+        ensureTableSelection()
+      } else {
+        val itemId: Any?
+        itemId = table.search(pattern)
+        if (itemId != null) {
+          table.select(itemId)
+        }
+      }
+    }*/
+  }
+
+  /**
+   * Ensures that a row is selected in the list dialog table.
+   * The selected row will be set to the first visible row when
+   * the selected row is null
+   */
+  protected fun ensureTableSelection() {
+    if (table!!.selectedItems.isEmpty()) {
+      table!!.select(tableItems.first())
+    }
+  }
+
+  private val tableItems: Collection<List<Any?>>
+    get() = (table!!.dataProvider as ListDataProvider<List<Any?>>).items
+
+  /**
+   * Returns the next item ID according to the currently selected one.
+   * @return The next item ID according to the currently selected one.
+   */
+
+  protected val nextItemId: List<Any?>
+   get() {
+    return if (table!!.selectedItems.first() == tableItems.last()) {
+      tableItems.last()
+    } else {
+      tableItems.elementAt(tableItems.indexOf(table!!.selectedItems.first()) + 1)
+    }
+  }
+
+  /**
    * Returns the previous item ID according to the currently selected one.
    * @return The previous item ID according to the currently selected one.
    */
-  protected val prevItemId: Int
-    get() = TODO()
+  protected val prevItemId: List<Any?>
+    get() {
+      return if (table!!.selectedItems.first() == tableItems.first()) {
+        tableItems.first()
+      } else {
+        tableItems.elementAt(tableItems.indexOf(table!!.selectedItems.first()) - 1)
+      }
+    }
 
   /**
    * Looks for the next page item ID starting from the selected row.
    * @return The next page item ID.
    */
-  protected val nextPageItemId: Int
+  protected val nextPageItemId: List<Any?>?
     get() {
-      TODO()
+      var nextPageItemId = table!!.selectedItems.first()
+      var i = 0
+      while (i < 20 && nextPageItemId != tableItems.last()) {
+        nextPageItemId = tableItems.elementAt(tableItems.indexOf(nextPageItemId) + 1)
+        i++
+      }
+      return nextPageItemId
     }
 
   /**
    * Looks for the previous page item ID starting from the selected row.
    * @return The previous page item ID.
    */
-  protected val prevPageItemId: Int
+  protected val prevPageItemId: List<Any?>?
     get() {
-      TODO()
+      var prevPageItemId = table!!.selectedItems.first()
+      var i = 0
+      while (i < 20 && prevPageItemId != tableItems.first()) {
+        prevPageItemId = tableItems.elementAt(tableItems.indexOf(prevPageItemId) - 1)
+        i++
+      }
+      return prevPageItemId
     }
 
   //------------------------------------------------------
@@ -146,16 +294,23 @@ class DListDialog(
    * Prepares the dialog content.
    */
   protected fun prepareDialog() {
+    val table = ListTable(model)
+    super.table = table
+    table.select(tableItems.first())
+    table.addSelectionListener {
+      doSelectFromDialog(tableItems.indexOf(it.firstSelectedItem.get()), false, false)
+    }
     // TODO
   }
+  private val lock = java.lang.Object()
 
   /**
    * Shows the dialog and wait until it is closed from client side.
    */
   protected fun showDialogAndWait() {
-    //BackgroundThreadHandler.startAndWait(Runnable { TODO
-    application.attachComponent(this@DListDialog)
-    //}, this)
+    startAndWait(lock) {
+      showListDialog()
+    }
   }
 
   /**
@@ -188,8 +343,8 @@ class DListDialog(
     this.selectedPos = selectedPos
     this.escaped = escaped
     this.doNewForm = doNewForm
-    application.detachComponent(this)
-    // BackgroundThreadHandler.releaseLock(this) // release the background thread lock. TODO
+    close()
+    releaseLock(lock) // release the background thread lock.
   }
 
   /**

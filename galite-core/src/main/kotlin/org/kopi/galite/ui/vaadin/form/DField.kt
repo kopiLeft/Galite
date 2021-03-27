@@ -27,6 +27,7 @@ import org.kopi.galite.form.VForm
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.form.VStringField
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.Field
 import org.kopi.galite.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.Action
@@ -169,14 +170,14 @@ abstract class DField(protected var model: VFieldUI,
   }
 
   override fun updateAccess() {
-    // access { TODO: access from thread!!
+    access {
       access = getAccess()
       dynAccess = access
       updateStyles(access)
       isVisible = access != VConstants.ACS_HIDDEN
       isActionEnabled = access >= VConstants.ACS_VISIT
       update(label)
-    //}
+    }
   }
 
   /**

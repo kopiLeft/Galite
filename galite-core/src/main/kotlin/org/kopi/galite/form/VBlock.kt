@@ -50,8 +50,10 @@ import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -1627,11 +1629,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           fetchRecord(fetchBuffer[pos])
           return
         } catch (e: VException) {
+          throw e
           try {
           } catch (abortEx: VException) {
             throw abortEx
           }
         } catch (e: SQLException) {
+          throw e
           try {
           } catch (abortEx: DBDeadLockException) {
             throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
@@ -1641,11 +1645,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             throw VExecFailedException(abortEx)
           }
         } catch (e: Error) {
+          throw e
           try {
           } catch (abortEx: Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (e: RuntimeException) {
+          throw e
           try {
           } catch (abortEx: RuntimeException) {
             throw VExecFailedException(abortEx)
@@ -2112,15 +2118,18 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     try {
       try {
         dialog = transaction {
+          addLogger(StdOutSqlLogger) // TODO
           callProtectedTrigger(VConstants.TRG_PREQRY)
           buildQueryDialog()
         }
       } catch (e: VException) {
+        throw e
         try {
         } catch (abortEx: VException) {
           throw abortEx
         }
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
@@ -2130,11 +2139,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           throw VExecFailedException(abortEx)
         }
       } catch (e: Error) {
+        throw e
         try {
         } catch (abortEx: Error) {
           throw VExecFailedException(abortEx)
         }
       } catch (e: RuntimeException) {
+        throw e
         try {
         } catch (abortEx: RuntimeException) {
           throw VExecFailedException(abortEx)
