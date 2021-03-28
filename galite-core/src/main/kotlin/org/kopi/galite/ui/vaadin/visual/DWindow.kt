@@ -625,25 +625,25 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
     // IMPLEMENTATIONS
     //-----------------------------------------------------------
     override fun setWaitInfo(message: String) {
-      //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(waitIndicator) {
-        waitIndicator.setText(message)
-        if (!iswaitIndicatorAttached) {
-          application.attachComponent(waitIndicator)
+      access {
+        synchronized(waitIndicator) {
+          waitIndicator.setText(message)
+          if (!iswaitIndicatorAttached) {
+            waitIndicator.show()
+          }
         }
       }
-      //})
     }
 
     override fun unsetWaitInfo() {
-      //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(waitIndicator) {
-        if (iswaitIndicatorAttached) {
-          waitIndicator.setText(null)
-          application.detachComponent(waitIndicator)
+      access {
+        synchronized(waitIndicator) {
+          if (iswaitIndicatorAttached) {
+            waitIndicator.setText(null)
+            waitIndicator.close()
+          }
         }
       }
-      //})
     }
   }
   //--------------------------------------------------------------

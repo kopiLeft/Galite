@@ -22,8 +22,10 @@ import java.io.File
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
+import org.kopi.galite.ui.vaadin.wait.WaitWindow
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.Module
@@ -54,6 +56,8 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   abstract val type: Int
 
   protected val modules = hashMapOf<Int, Module>()
+
+  private val waitIndicator = WaitWindow()
 
   init {
     model.setDisplay(this)
@@ -198,11 +202,17 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   override fun setWaitDialog(message: String, maxtime: Int) {}
   override fun unsetWaitDialog() {}
   override fun setWaitInfo(message: String) {
-    // TODO
+    access {
+      waitIndicator.setText(message)
+      waitIndicator.show()
+    }
   }
 
   override fun unsetWaitInfo() {
-    // TODO
+    access {
+      waitIndicator.setText(null)
+      waitIndicator.close()
+    }
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {}
