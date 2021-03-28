@@ -26,6 +26,8 @@ import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VReport
 import org.kopi.galite.report.VSeparatorColumn
 import org.kopi.galite.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.Action
+import org.kopi.galite.visual.VException
 
 import com.vaadin.flow.component.Unit
 
@@ -66,7 +68,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   override fun build() {
     // load personal configuration
     parameters = Parameters(Color(71, 184, 221))
-    table = DTable(model)
+    table = DTable(VTable(model))
     table.isColumnReorderingAllowed = true
     // TODO
     //table.setColumnCollapsingAllowed(true)
@@ -146,7 +148,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun contentChanged() {
     if (this::table.isInitialized) {
-      // TODO
+      table.model.fireContentChanged()
     }
   }
 
@@ -205,7 +207,29 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
    * Add listeners to the report table.
    */
   private fun addTableListeners() {
-    //TODO()
+    // TODO
+    table.addItemDoubleClickListener { event ->
+      val row = event.item
+      val col = event.column.key.toInt()
+      if (model.isRowLine(row)) {
+        getModel().performAsyncAction(object : Action("edit_line") {
+          override fun execute() {
+            try {
+              report.editLine()
+            } catch (ve: VException) {
+              // exception thrown by trigger.
+              throw ve
+            }
+          }
+        })
+      } else {
+        if (model.isRowFold(row, col)) {
+          model.unfoldingRow(row, col)
+        } else {
+          model.foldingRow(row, col)
+        }
+      }
+    }
   }
 
   /**

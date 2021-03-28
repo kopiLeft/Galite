@@ -239,8 +239,9 @@ fun initUserRights(user: String = DBSchemaTest.connectedUser) {
 
 fun addClients() {
   addClient(0, "Mohamed", "Salah", "10,Rue du Lac", 40, "Tunisia", "Megrine", 2001)
-  addClient(1, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "Tunisia", "Tunis", 6000)
-  addClient(2, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "Tunisia", "Mourouj", 5003)
+  addClient(1, "Mohamed", "fdgh", "10,Rfggh Lac", 56, "Tunisia", "Megrine", 2001)
+  addClient(2, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "Tunisia", "Tunis", 6000)
+  addClient(3, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "Tunisia", "Mourouj", 5003)
 }
 
 fun addClient(id: Int, firstName: String, lastName: String, address: String, age: Int, country: String, city: String, zipcode: Int) {
