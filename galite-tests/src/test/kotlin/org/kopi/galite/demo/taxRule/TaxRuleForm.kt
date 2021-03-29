@@ -107,7 +107,7 @@ object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
   }
 
   val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
-    label = "Rate in %"
+    label = "Rate"
     help = "The tax rate in %"
     columns(u.rate) {
       priority = 1
@@ -116,6 +116,11 @@ object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
 
   init {
     blockVisibility(Access.VISIT, Modes.QUERY)
+  }
+
+  val percent = visit(domain = Domain<Boolean>(25), position = at(2, 2)) {
+    label = "%"
+    help = "The tax rate in %"
   }
 }
 
