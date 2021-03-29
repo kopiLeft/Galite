@@ -101,8 +101,6 @@ object FormSample : Form() {
       label = "Total"
       help = "total user age"
     }
-
-    align(tb1, 1 to 3)
   }
 
   val tb2 = insertBlock(TestBlock(), p2) {
