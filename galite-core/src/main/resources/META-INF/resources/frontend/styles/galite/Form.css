@@ -166,7 +166,6 @@ html {
 /*
  * Boolean field style
  */
-
 ::part(checkbox) {
     width: 1em;
     height: 1em;
