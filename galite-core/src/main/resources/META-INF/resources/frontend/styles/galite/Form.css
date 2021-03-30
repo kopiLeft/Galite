@@ -197,3 +197,24 @@ html {
     height: 0;
     color:white;
 }
+
+.k-wait-window-image {
+    display: flex;
+    justify-content: center;
+}
+
+.k-wait-window-image::after {
+    content: "";
+    width: 50px;
+    height: 50px;
+    border: 10px solid #dddddd;
+    border-top-color: #204c8a;
+    border-radius: 50%;
+    animation: k-wait-window-image 1s ease infinite;
+}
+
+@keyframes k-wait-window-image {
+    to {
+        transform: rotate(1turn);
+    }
+}
