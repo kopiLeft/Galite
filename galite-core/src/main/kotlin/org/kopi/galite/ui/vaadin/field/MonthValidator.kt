@@ -29,7 +29,7 @@ class MonthValidator(maxLength: Int) : AllowAllValidator(maxLength) {
   //---------------------------------------------------
   override fun validate(c: Char): Boolean = c in '0'..'9' || c == '.'
 
-  override fun checkType(field: InputTextField, text: String) {
+  override fun checkType(field: InputTextField<*>, text: String) {
     if ("" == text) {
       field.value = null
     } else {

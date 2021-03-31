@@ -48,7 +48,7 @@ open class AllowAllValidator(val maxLength: Int) : TextValidator {
     }
   }
 
-  override fun checkType(field: InputTextField, text: String) {
+  override fun checkType(field: InputTextField<*>, text: String) {
     // nothing to do, all is accepted
   }
 }

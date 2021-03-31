@@ -17,34 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.datepicker.DatePicker
 
 /**
  * An Date field.
  */
-class VDateField : DatePicker(), UTextField {
+class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
  init {
-   this.isClearButtonVisible = true
+   field.isClearButtonVisible = true
  }
-
-  override fun hasAutoComplete(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMaxLength(): Int {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMinLength(): Int {
-    TODO("Not yet implemented")
-  }
-
-
-  override fun setMaxLength(maxLength: Int) {
-   //Nothing to Implement
-  }
-
-  override fun setMinLength(minLength: Int) {
-    TODO("Not yet implemented")
-  }
 }
