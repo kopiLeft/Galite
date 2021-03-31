@@ -33,6 +33,7 @@ import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
 
 /**
@@ -53,7 +54,7 @@ class TextField(val model: VField,
                 val hasAutofill: Boolean)
   : CustomField<Any?>(), HasStyle {
 
-  val field: AbstractField<*, out Any?>
+  val field: InputTextField<*>
 
   /**
    * The column number.
@@ -132,9 +133,9 @@ class TextField(val model: VField,
    */
   var validator: TextValidator? = null
 
-  private val lastCommunicatedValue = ""
+  internal var lastCommunicatedValue = ""
 
-  val listeners = mutableListOf<HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>>()
+  val listeners = mutableListOf<HasValue.ValueChangeListener<ComponentValueChangeEvent<*, *>>>()
 
   init {
     col = model.width
@@ -158,7 +159,7 @@ class TextField(val model: VField,
 
   override fun onAttach(attachEvent: AttachEvent) {
     listeners.forEach {
-      field.addValueChangeListener(it)
+      field.addTextValueChangeListener(it)
     }
   }
 
@@ -258,17 +259,18 @@ class TextField(val model: VField,
       else -> AllowAllValidator(maxLength)
     }
 
-    this.validator = validator
-
     bindingBuilder.withValidator(validator)
             .bind({ TODO() }, { _, _ -> TODO() })
+
+    this.validator = validator
+    field.setTextValidator(validator)
   }
 
   /**
    * Creates the attached text field component.
    * @return the attached text field component.
    */
-  private fun createTextField(): AbstractField<*, out Any?> {
+  private fun createTextField(): InputTextField<*> {
     val text = createFieldComponent()
     if (noEdit) {
       text.isReadOnly = true
@@ -281,7 +283,7 @@ class TextField(val model: VField,
    * Creates the input component according to field state.
    * @return the input component
    */
-  protected fun createFieldComponent(): AbstractField<*, out Any?> {
+  protected fun createFieldComponent(): InputTextField<*> {
     var col = col
     val text = if (noEcho && rows == 1) {
       VPasswordField(col)
@@ -297,12 +299,7 @@ class TextField(val model: VField,
         it.setFixedNewLine(!dynamicNewLine)
       }
     } else if(type == Type.INTEGER) {
-      InputTextField(col).also {
-        it.pattern = "[0-9]*"
-        it.isPreventInvalidInput = true
-        it.element.setProperty("min", minval!!)
-        it.element.setProperty("max", maxval!!)
-      }
+      VIntegerField(col, minval!!, maxval!!)
     } else if(isDecimal()) {
       VFixnumField(col, maxScale, minval, maxval, fraction)
     } else if(type == Type.CODE) {
@@ -314,7 +311,7 @@ class TextField(val model: VField,
     } else if(isDate()) {
       VDateField()
     } else {
-      InputTextField(col).also {
+      InputTextField(TextField()).also {
         if(type == Type.WEEK) {
           it.setInputType("week")
         } else if (type == Type.MONTH) {
@@ -342,8 +339,9 @@ class TextField(val model: VField,
     text.size = 1.coerceAtLeast(size)
     text.setMaxLength(maxLength)
     text.maxWidth = "" + col + "em" // TODO: temporary styling
+    text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
-    // text.addKeyDownHandler(TextFieldNavigationHandler.newInstance(this, text, rows > 1)) TODO
+    text.addKeyDownListener(TextFieldNavigationHandler.newInstance(text, rows > 1))
     return text
   }
 
@@ -391,7 +389,7 @@ class TextField(val model: VField,
   }
 
   override fun setPresentationValue(newPresentationValue: Any?) {
-    field.value = newPresentationValue
+    field.value = newPresentationValue.toString()
   }
 
   override fun generateModelValue(): Any? = field.value
@@ -400,7 +398,7 @@ class TextField(val model: VField,
    * Registers a text change listener
    * @param l The text change listener.
    */
-  fun addTextValueChangeListener(l: HasValue.ValueChangeListener<HasValue.ValueChangeEvent<*>>) {
+  fun addTextValueChangeListener(l: HasValue.ValueChangeListener<ComponentValueChangeEvent<*, *>>) {
     listeners.add(l)
   }
 

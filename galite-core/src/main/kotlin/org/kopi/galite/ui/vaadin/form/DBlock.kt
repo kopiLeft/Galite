@@ -111,20 +111,6 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
   }
 
   /**
-   * Goto the next record
-   */
-  override fun gotoNextRecord() {
-    model.gotoNextRecord()
-  }
-
-  /**
-   * Goto the previous record
-   */
-  override fun gotoPrevRecord() {
-    model.gotoPrevRecord()
-  }
-
-  /**
    * Rebuilds cached information
    */
   override fun rebuildCachedInfos() {

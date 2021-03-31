@@ -458,7 +458,6 @@ abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: 
    */
   protected open fun getDisplaySize(): Int = getBlock().displaySize
 
-
   val display: UField?
     get() = if (blockView.getDisplayLine() == -1) {
       null

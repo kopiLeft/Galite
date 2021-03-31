@@ -27,6 +27,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.ColumnView
 import org.kopi.galite.ui.vaadin.form.DBlock
+import org.kopi.galite.ui.vaadin.form.DField
 import org.kopi.galite.ui.vaadin.window.Window
 
 /**
@@ -41,6 +42,9 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   : Div(), FieldListener, HasStyle {
 
   init {
+    /*this.addClickListener { TODO
+      fireClicked()
+    }*/
     className = Styles.FIELD
   }
 
@@ -129,7 +133,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    */
   var isDirty = false
 
-  private var dirtyValues: MutableMap<Int, String?>? = null
+  protected var dirtyValues: MutableMap<Int, String?>? = null
 
   /**
    * Enables and disables the leave action of the active field.
@@ -344,16 +348,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   override fun onDecrement() {
     fireDecremented()
-  }
-
-  override fun onClick() {
-    // no click event is for rich text field and action fields
-    /*if (hasAction || content is RichTextField) { TODO
-      return
-    }*/
-    columnView!!.setBlockActiveRecordFromDisplayLine(position)
-    getWindow()!!.cleanDirtyValues(getBlock(), false) //!! do not make a focus transfer.
-    fireClicked()
   }
 
   override fun transferFocus() {
@@ -581,13 +575,13 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Returns the parent window of this field.
    * @return The parent window of this field.
    */
-  protected open fun getWindow(): Window? = parent.orElse(null) as? Window
+  protected open fun getWindow(): Window? = ((this as DField).model.blockView as DBlock).parent
 
   /**
    * Returns the parent block of this field.
    * @return The parent block of this field.
    */
-  protected open fun getBlock(): Block? = parent.orElse(null) as? Block
+  protected open fun getBlock(): Block? = (this as DField).model.blockView as Block
 
   /**
    * The navigation delegation to server mode.

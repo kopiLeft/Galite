@@ -71,6 +71,27 @@ object CommandForm : ReportSelectionForm() {
     key = Key.F3   // key is optional here
     icon = "break"  // icon is optional here
   }
+
+  val serialQuery = actor(
+    ident = "serialQuery",
+    menu = action,
+    label = "serialQuery",
+    help = "serial query",
+  ) {
+    key = Key.F6   // key is optional here
+    icon = "serialquery"  // icon is optional here
+  }
+
+  val dynamicReport = actor(
+    ident = "dynamicReport",
+    menu = action,
+    label = "DynamicReport",
+    help = " Create Dynamic Report",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "preview"  // icon is optional here
+  }
+
   val tb1 = insertBlock(BlockCommand, page) {
     command(item = report) {
       action = {
@@ -87,6 +108,17 @@ object CommandForm : ReportSelectionForm() {
     command(item = resetBlock) {
       action = {
         resetBlock()
+      }
+    }
+    command(item = serialQuery) {
+      action = {
+        serialQuery()
+      }
+    }
+
+    command(item = dynamicReport) {
+      action = {
+        createDynamicReport()
       }
     }
   }

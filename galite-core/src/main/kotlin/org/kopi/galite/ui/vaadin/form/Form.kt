@@ -427,11 +427,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    * Cleans the dirty values of this form.
    */
   fun cleanDirtyValues(active: Block?, transferFocus: Boolean = true) {
-    for (child in children) {
-      if (child is Block) {
-        child.cleanDirtyValues(active, transferFocus)
-      }
-    }
+    active?.cleanDirtyValues(active, transferFocus)
   }
 
   /**

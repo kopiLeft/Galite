@@ -23,6 +23,7 @@ import org.kopi.galite.form.BlockListener
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VConstants
 import org.kopi.galite.ui.vaadin.field.CheckTypeException
+import org.kopi.galite.ui.vaadin.form.DBlock
 import org.kopi.galite.ui.vaadin.form.Form
 import org.kopi.galite.ui.vaadin.form.Page
 import org.kopi.galite.ui.vaadin.main.MainWindow
@@ -425,7 +426,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @param info The record info value.
    */
   protected open fun fireRecordInfoChanged(rec: Int, info: Int) {
-    // TODO
+    recordInfo.add(RecordInfo(rec, info))
   }
 
   /**
@@ -592,7 +593,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
     initialized = true
   }
 
-  open fun  updateCachedValues() {
+  open fun updateCachedValues() {
     if (!initialized) {
       return
     }
@@ -1642,7 +1643,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * Notifies the form that the active record of this block has changed.
    */
   protected open fun fireActiveRecordChanged() {
-    (parent.get() as Form).setCurrentPosition(getSortedPosition(getCurrentRecord() - 1) + 1, getRecordCount())
+    ((this as DBlock).parent.content).setCurrentPosition(getSortedPosition(getCurrentRecord() - 1) + 1, getRecordCount())
   }
 
   /**
