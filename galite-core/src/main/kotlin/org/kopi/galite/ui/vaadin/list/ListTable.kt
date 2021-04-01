@@ -17,9 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
-import com.vaadin.flow.component.grid.Grid
 import org.kopi.galite.form.VListDialog
 
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.grid.Grid
+
+@CssImport("./styles/galite/List.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   init {
     isColumnReorderingAllowed = true

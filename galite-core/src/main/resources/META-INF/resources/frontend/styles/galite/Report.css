@@ -20,6 +20,7 @@
  */
 ::part(cell header-cell) {
      background: #f2f2f2;
+     padding-left: 9px;
 }
 
 #main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
@@ -27,4 +28,5 @@
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.750rem;
+    padding-left: 5px;
 }

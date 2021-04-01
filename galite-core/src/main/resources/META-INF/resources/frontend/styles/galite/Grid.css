@@ -1,0 +1,7 @@
+/*
+ * Multiple Block style
+ * Columns titles colors
+ */
+ ::part(cell header-cell) {
+     color: #505050;
+}

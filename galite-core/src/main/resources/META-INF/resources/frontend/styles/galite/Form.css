@@ -66,11 +66,10 @@
 
 .k-block ::part(value) {
     --lumo-text-field-overflow-mask-image: none;
-    border-bottom: 1px solid #dadada;
     padding: 0;
     margin: 0;
     box-shadow: none;
-    background-color: var(--lumo-base-color);
+    border: none;
 }
 
 /*
@@ -144,23 +143,24 @@ html {
 }
 
 ::part(k-actor) {
-    border : 0;
+    border: 0;
     background: #009bd4;
     color: #ffffff;
-    height : 60px;
+    height: 60px;
+    font-size: 13px;
 }
 
-#actors::part(overflow-button):hover {
+#actors ::part(overflow-button):hover {
      background: #505050;
 }
 
 ::part(k-actor):hover {
-    background: #505050;
+    background: #547988;
 }
 
 .k-window ::part(menu-bar-button) {
-    padding : 0;
-    height : 42px;
+    padding: 0;
+    height: 42px;
 }
 
 /*
@@ -181,7 +181,7 @@ html {
 }
 
 :not(.true)::part(checkbox)::after {
-    opacity : none;
+    opacity: none;
     transform: none;
     font-size: 15;
     font-weight: bold;
@@ -198,6 +198,9 @@ html {
     color:white;
 }
 
+/*
+ * Spinner style
+ */
 .k-wait-window-image {
     display: flex;
     justify-content: center;

@@ -1,0 +1,48 @@
+/*
+ * List Dialog style
+ */
+.enhanced-dialog-content ::part(cell header-cell) {
+    color: #009bd4;
+    background-color: #f2f2f2;
+    font-weight: bold !important;
+}
+
+/*
+ * List Table header styles
+ */
+.enhanced-dialog-content vaadin-grid ,
+.enhanced-dialog-content  vaadin-grid > vaadin-grid-cell-content  {
+    --lumo-font-family:  Arial, sans-serif;
+    --lumo-font-size-m: 0.900rem;
+}
+
+.enhanced-dialog-content vaadin-grid ,
+.enhanced-dialog-content vaadin-grid > vaadin-grid-cell-content:hover {
+    cursor: pointer;
+}
+
+.listDialog~::part(header) {
+    padding: 0;
+    border-bottom: 0;
+}
+
+.listDialog~::part(dialog-content) {
+    padding: 0;
+}
+
+.listDialog~::part(footer) {
+    background-color: white;
+}
+
+.k-listdialog-table > * {
+    box-shadow: none;
+    padding-left: 9px;
+}
+
+.k-listdialog ::part(row) {
+    --_lumo-grid-selected-row-color: #d9f0f8;
+}
+
+.k-listdialog ::part(row):hover {
+    color: blue;
+}
