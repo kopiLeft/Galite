@@ -68,6 +68,7 @@ abstract class ShortcutAction(protected val caption: String,
      */
     fun createModifierMask(modifiers: Collection<KeyModifier>?): Int {
       var modifiersMask = 0
+
       modifiers?.forEach {
         modifiersMask = modifiersMask or it.ordinal
       }

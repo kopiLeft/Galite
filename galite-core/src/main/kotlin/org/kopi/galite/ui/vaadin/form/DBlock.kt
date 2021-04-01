@@ -57,9 +57,8 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     formView = parent
     setBorder(model.border, model.title)
     model.addBlockListener(this)
-    bufferSize = model.bufferSize
-    displaySize = model.displaySize
-    sortedRecords = model.sortedRecords
+    setBufferSize(model.bufferSize, model.displaySize)
+    setSortedRecords(model.sortedRecords)
     noMove = model.noMove()
     noChart = model.noChart()
 
@@ -173,7 +172,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
    * Redisplays only if forced or if the current record is off-screen.
    * If there is no current record, the first valid record is used
    */
-  override fun refresh(force: Boolean) {
+  open fun refresh(force: Boolean) {
     var redisplay = false
     val recno: Int // row in view
 
@@ -259,17 +258,13 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     fireActiveRecordChanged(model.activeRecord)
   }
 
-  override fun fireValueChanged(col: Int, rec: Int, value: String?) {
-    super.fireValueChanged(col, rec, value)
-  }
-
   open fun fireColorChanged(
           col: Int,
           rec: Int,
           foreground: String?,
           background: String?,
   ) {
-    TODO()
+    cachedColors.add(CachedColor(col, rec, foreground, background))
   }
 
   /**
@@ -433,7 +428,8 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
   override fun recordInfoChanged(rec: Int, info: Int) {}
 
   override fun orderChanged() {
-    TODO()
+    fireOrderChanged(model.sortedRecords)
+    refresh(true)
   }
 
   override fun filterHidden() {}

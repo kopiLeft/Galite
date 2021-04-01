@@ -38,6 +38,7 @@ open class ShortcutActionHandler : ComponentEventListener<KeyDownEvent> {
    */
   fun handleAction(event: KeyDownEvent) {
     val key = ShortcutAction.createKey(event.key, ShortcutAction.createModifierMask(event.modifiers))
+
     val action: ShortcutAction? = actions[key]
     if (action != null) {
       //event.preventDefault() // prevent default action. TODO
