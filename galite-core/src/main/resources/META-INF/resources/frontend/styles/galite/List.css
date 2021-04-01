@@ -4,7 +4,6 @@
 .enhanced-dialog-content ::part(cell header-cell) {
     color: #009bd4;
     background-color: #f2f2f2;
-    font-weight: bold !important;
 }
 
 /*
@@ -14,6 +13,7 @@
 .enhanced-dialog-content  vaadin-grid > vaadin-grid-cell-content  {
     --lumo-font-family:  Arial, sans-serif;
     --lumo-font-size-m: 0.900rem;
+    font-weight: bold;
 }
 
 .enhanced-dialog-content vaadin-grid ,
