@@ -29,6 +29,7 @@ import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.shared.Registration
 
@@ -41,9 +42,7 @@ class RichTextField(
         visibleRows: Int,
         var noEdit: Boolean,
         locale: Locale
-) : Div(),
-        HasValue<AbstractField.ComponentValueChangeEvent<RichTextField, String>, String>,
-        Focusable<RichTextField> {
+) : CustomField<Any?>() {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -55,17 +54,16 @@ class RichTextField(
   private val LINE_HEIGHT = 20
   private val TOOLBAR_HEIGHT = 66
 
-  var editor : QuillEditor? = null
+  var editor = QuillEditor()
   init {
-    editor = QuillEditor()
     add(editor)
-    editor!!.setHeight((TOOLBAR_HEIGHT + LINE_HEIGHT * visibleRows).toFloat(), Unit.PIXELS)
-    editor!!.isReadOnly = noEdit
+    editor.setHeight((TOOLBAR_HEIGHT + LINE_HEIGHT * visibleRows).toFloat(), Unit.PIXELS)
+    editor.isReadOnly = noEdit
 
     if (FontMetrics.LETTER.width * col < MIN_WIDTH) {
-      editor!!.setHeight(MIN_WIDTH.toFloat(), Unit.PIXELS)
+      editor.setHeight(MIN_WIDTH.toFloat(), Unit.PIXELS)
     } else {
-      editor!!.setHeight((FontMetrics.LETTER.width * col).toFloat(), Unit.PIXELS)
+      editor.setHeight((FontMetrics.LETTER.width * col).toFloat(), Unit.PIXELS)
 
     }
     //registerRpc(NavigationHandler())
@@ -73,9 +71,9 @@ class RichTextField(
 
   private val navigationListeners = ArrayList<NavigationListener>()
 
-  override fun setValue(value: String?) {
+  /*override fun setValue(value: String?) {
     editor!!.value = value
-  }
+  }*/
 
   override fun getValue() = editor!!.value
 
@@ -163,24 +161,19 @@ class RichTextField(
             + "ShowBlocks'")
   }
 
-  override fun addValueChangeListener(
-          listener: HasValue.ValueChangeListener<in AbstractField.ComponentValueChangeEvent<RichTextField, String>>?,
-  ): Registration {
-    TODO("Not yet implemented")
-  }
 
   override fun setReadOnly(readOnly: Boolean) {
-    editor!!.isReadOnly = readOnly
+    editor.isReadOnly = readOnly
   }
 
-  override fun isReadOnly() = editor!!.isReadOnly
+  override fun isReadOnly() = editor.isReadOnly
 
 
   override fun setRequiredIndicatorVisible(requiredIndicatorVisible: Boolean) {
-    editor!!.isRequiredIndicatorVisible = requiredIndicatorVisible
+    editor.isRequiredIndicatorVisible = requiredIndicatorVisible
   }
 
-  override fun isRequiredIndicatorVisible() = editor!!.isRequiredIndicatorVisible
+  override fun isRequiredIndicatorVisible() = editor.isRequiredIndicatorVisible
 
   //---------------------------------------------------
   // NAVGATION
@@ -237,4 +230,10 @@ class RichTextField(
      */
     fun onGotoNextEmptyMustfill()
   }
+
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    editor.value = newPresentationValue.toString()
+  }
+
+  override fun generateModelValue() : String = editor.value
 }

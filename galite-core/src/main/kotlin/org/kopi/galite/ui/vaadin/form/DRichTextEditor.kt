@@ -26,6 +26,7 @@ import org.kopi.galite.visual.ApplicationContext
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.customfield.CustomField
 
 /**
  * Rich text editor implementation based on CK editor for vaadin.
@@ -58,7 +59,7 @@ class DRichTextEditor(
                            ApplicationContext.getDefaultLocale())
     editor.addValueChangeListener(::valueChanged)
     //editor.addNavigationListener(this) TODO
-    //setContent(editor) TODO
+    setFieldContent(editor)
   }
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -89,7 +90,7 @@ class DRichTextEditor(
   }
 
 
-  fun valueChanged(event: AbstractField.ComponentValueChangeEvent<RichTextField, String>?) {
+  fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Any?>, Any?>?) {
     // value change event is fired when the field is blurred.
     getModel().isChangedUI = true
     getModel().setChanged(true)

@@ -62,16 +62,16 @@ object TaxRuleBlock : FormBlock(1, 1, "TaxRule") {
     help = "The tax ID"
     columns(u.idTaxe)
   }
-  val taxName = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
+  val taxName = mustFill(domain = Domain<String>(20, 20, 20), position = at(1, 1)) {
     label = "Name"
     help = "The tax name"
     columns(u.taxName)
   }
-  val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
+ /* val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
     label = "Rate in %"
     help = "The tax rate in %"
     columns(u.rate)
-  }
+  }*/
 }
 
 fun main() {

@@ -117,7 +117,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   var columnView: ColumnView? = null
 
-  lateinit var wrappedField: CustomField<Any?>
+  var wrappedField: CustomField<Any?>? = null
 
   /**
    * `true` if the content of this field has changed.
@@ -322,7 +322,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Gains the focus on this field.
    */
   open fun focus() {
-    wrappedField.focus()
+    wrappedField!!.focus()
   }
 
   open fun iniComponent() {
@@ -482,7 +482,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param rec The concerned record number.
    */
   open fun markAsDirty(rec: Int) {
-    markAsDirty(rec, if (wrappedField.value == null) "" else wrappedField.value.toString())
+    markAsDirty(rec, if (wrappedField!!.value == null) "" else wrappedField!!.value.toString())
   }
 
   /**
@@ -556,7 +556,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Updates the value of this field according to its position.
    */
   fun updateValue() {
-    wrappedField.value = columnView!!.getValueAt(position)
+    wrappedField!!.value = columnView!!.getValueAt(position)
     // wrappedField.updateValue() // TODO: Do we need this?
   }
 
