@@ -306,6 +306,7 @@ class VDynamicReport(block: VBlock) : VReport() {
 
           if (iterator.hasNext()) {
             val it = iterator.next()
+
             // don't  add a line when ID equals 0.
             if (it[searchColumns[0]] != 0) {
               val result: MutableList<Any> = ArrayList()

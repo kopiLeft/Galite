@@ -1913,7 +1913,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     val conditionList: MutableList<Op<Boolean>> = mutableListOf()
 
     fields.forEach { field ->
-
       if (field.getColumnCount() > 0) {
         val condColumn = field.getColumn(0)!!.column as Column<String>
         val searchColumn = when (field.options and VConstants.FDO_SEARCH_MASK) {
@@ -2029,27 +2028,29 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   protected fun fetchLookup(tableIndex: Int, currentField: VField) {
-    val table = tables!![tableIndex]
-    val columns = mutableListOf<Column<*>>()
-    val conditions = mutableListOf<Op<Boolean>>()
+    // clears all fields of lookup except the key(s)
+    // the specified field is considered to be a key
+    val table = tables!![tableIndex]  // table to select from
+    val columns = mutableListOf<Column<*>>()  // columns to select
+    val conditions = mutableListOf<Op<Boolean>>()  // search conditions
 
     fields.forEach { field ->
-      if (field !== currentField && field.lookupColumn(tableIndex) != null && !field.isLookupKey(tableIndex)) {
+      if (field != currentField && field.lookupColumn(tableIndex) != null && !field.isLookupKey(tableIndex)) {
         field.setNull(activeRecord)
       }
     }
 
-    fields.forEach {field ->
-      val column = field.lookupColumn(tableIndex)
+    fields.forEach { field ->
+      val column : Column<*>? = field.lookupColumn(tables!![tableIndex])
 
       if (column != null) {
+        // add column to select
         columns.add(column)
       }
 
       if (field == currentField || field.isLookupKey(tableIndex)) {
-        val condition = field.getSearchCondition(column)
+        val condition = field.getSearchCondition(column!!)
 
-        // TODO: 10/12/2020 FIX this !
         if (condition == null || condition !is EqOp) {
           // at least one key field is not completely specified
           // no guarantee that a unique value will be fetched
@@ -2057,7 +2058,6 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           return
         }
 
-        // TODO: 11/12/2020 FIX this !
         if (condition != null) {
           conditions.add(condition)
         }

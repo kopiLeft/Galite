@@ -702,12 +702,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  open fun <T> getSearchCondition(column: ExpressionWithColumnType<T>?): Op<Boolean>? {
+  open fun <T> getSearchCondition(column: ExpressionWithColumnType<T>): Op<Boolean>? {
     if (isNull(block!!.activeRecord)) {
       return when (getSearchOperator()) {
         VConstants.SOP_EQ -> null
-        VConstants.SOP_NE -> Op.build { column!!.isNotNull() }
-        else -> Op.build { column!!.isNull() }
+        VConstants.SOP_NE -> Op.build { column.isNotNull() }
+        else -> Op.build { column.isNull() }
       }
     } else {
       val operand = getSql(block!!.activeRecord)
@@ -735,44 +735,44 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            LikeOp(column!!, stringOperandLiteral)
+            LikeOp(column, stringOperandLiteral)
           }
           VConstants.SOP_NE -> Op.build {
-            NotLikeOp(column!!, stringOperandLiteral)
+            NotLikeOp(column, stringOperandLiteral)
           }
           VConstants.SOP_GE -> Op.build {
-            GreaterEqOp(column!!, stringOperandLiteral)
+            GreaterEqOp(column, stringOperandLiteral)
           }
           VConstants.SOP_GT -> Op.build {
-            GreaterOp(column!!, stringOperandLiteral)
+            GreaterOp(column, stringOperandLiteral)
           }
           VConstants.SOP_LE -> Op.build {
-            LessEqOp(column!!, stringOperandLiteral)
+            LessEqOp(column, stringOperandLiteral)
           }
           VConstants.SOP_LT -> Op.build {
-            LessOp(column!!, stringOperandLiteral)
+            LessOp(column, stringOperandLiteral)
           }
           else -> throw InconsistencyException()
         }
       } else {
         return when (getSearchOperator()) {
           VConstants.SOP_EQ -> Op.build {
-            EqOp(column!!, column.wrap(operand))
+            EqOp(column, column.wrap(operand))
           }
           VConstants.SOP_NE -> Op.build {
-            NeqOp(column!!, column.wrap(operand))
+            NeqOp(column, column.wrap(operand))
           }
           VConstants.SOP_GE -> Op.build {
-            GreaterEqOp(column!!, column.wrap(operand))
+            GreaterEqOp(column, column.wrap(operand))
           }
           VConstants.SOP_GT -> Op.build {
-            GreaterOp(column!!, column.wrap(operand))
+            GreaterOp(column, column.wrap(operand))
           }
           VConstants.SOP_LE -> Op.build {
-            LessEqOp(column!!, column.wrap(operand))
+            LessEqOp(column, column.wrap(operand))
           }
           VConstants.SOP_LT -> Op.build {
-            LessOp(column!!, column.wrap(operand))
+            LessOp(column, column.wrap(operand))
           }
           else -> throw InconsistencyException()
         }
@@ -1367,7 +1367,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (hasTrigger(VConstants.TRG_VALUE)) {
       setObject(r, callSafeTrigger(VConstants.TRG_VALUE))
     }
-    println()
+
     return getSqlImpl(r)
   }
 
@@ -1936,33 +1936,31 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         columns.add(it!!.column!!)
       }
 
-      val c = when (getAutocompleteType()) {
+      val cond = when (getAutocompleteType()) {
         VList.AUTOCOMPLETE_CONTAINS -> {
-          Op.build { condition like Utils.toSql("%" + query + "%") }
+          Op.build { condition like Utils.toSql("%" + query.toLowerCase() + "%") }
         }
         VList.AUTOCOMPLETE_STARTSWITH -> {
-          Op.build { condition like Utils.toSql(query + "%") }
+          Op.build { condition like Utils.toSql(query.toLowerCase() + "%") }
         }
         else -> {
           Op.build { condition eq Utils.toSql(query.toString()) }
         }
       }
 
-      val query = table.slice(columns).select(c).orderBy(list!!.getColumn(0).column!!)
+      val query = table.slice(columns).select(cond).orderBy(columns[0])
 
       while (true) {
         try {
           transaction {
-            exec(query) {
-              while (it.next()) {
-                var columnsList = mutableListOf<String>()
+              query.forEach {
+                val columnsList = mutableListOf<String>()
 
-                for (i in 0 until list!!.columnCount()) {
-                  columnsList.add(list!!.getColumn(i).formatObject(it.getObject(i + 1)) as String)
+                list!!.columns.forEach { column ->
+                  columnsList.add(column!!.formatObject(it[column.column!!]) as String)
                 }
                 suggestions.add(columnsList.toTypedArray())
               }
-            }
           }
           break
         } catch (e: SQLException) {
