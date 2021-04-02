@@ -83,7 +83,7 @@ class VImageField(val bufferSize: Int, val iconWidth: Int, val iconHeight: Int) 
   /**
    * Returns the search conditions for this field.
    */
-  override fun <T> getSearchCondition(column: ExpressionWithColumnType<T>?): Op<Boolean>? = null
+  override fun <T> getSearchCondition(column: ExpressionWithColumnType<T>): Op<Boolean>? = null
 
   /**
    * Sets the field value of given record to a null value.
