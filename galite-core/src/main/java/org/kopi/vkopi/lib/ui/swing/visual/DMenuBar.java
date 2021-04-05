@@ -45,19 +45,19 @@ public class DMenuBar extends JMenuBar {
     //!!! NOT YET IMPLEMENTED IN SWING
     if (actor.getModel().getMenuIdent().equals("Help")) {
       if ((menu = getHelpMenu()) == null) {
-	menu = new JMenu(actor.getModel().menuName);
+	menu = new JMenu(actor.getModel().getMenuName());
 	setHelpMenu(menu);
       }
     } else {
       /* lookup menu with name menuName, add it if necessary */
       for (int i = 0; menu == null && i < getMenuCount(); i++) {
-	if (getMenu(i).getText().equals(actor.getModel().menuName)) {
+	if (getMenu(i).getText().equals(actor.getModel().getMenuName())) {
 	  menu = getMenu(i);
 	}
       }
 
       if (menu == null) {
-	menu = this.add(new JMenu(actor.getModel().menuName));
+	menu = this.add(new JMenu(actor.getModel().getMenuName()));
       }
     }
 

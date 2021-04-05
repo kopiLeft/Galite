@@ -42,6 +42,7 @@ import org.jetbrains.exposed.sql.NotLikeOp
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.QueryAlias
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.intLiteral
 import org.jetbrains.exposed.sql.lowerCase
@@ -54,6 +55,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.Query
+import org.kopi.galite.db.Utils
 import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.l10n.BlockLocalizer
 import org.kopi.galite.l10n.FieldLocalizer
@@ -700,7 +702,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     }
   }
 
-  open fun <T> getSearchCondition_(column: ExpressionWithColumnType<T>): Op<Boolean>? {
+  open fun <T> getSearchCondition(column: ExpressionWithColumnType<T>): Op<Boolean>? {
     if (isNull(block!!.activeRecord)) {
       return when (getSearchOperator()) {
         VConstants.SOP_EQ -> null
@@ -776,14 +778,6 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
       }
     }
-  }
-
-  /**
-   * Returns the search conditions for this field.
-   */
-  open fun getSearchCondition(): (Expression<*>.() -> Op<Boolean>)? {
-    // TODO
-    return null
   }
 
   // ----------------------------------------------------------------------
@@ -1201,9 +1195,13 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Warning:   This method will become inaccessible to users in next release
    *
    */
-  fun isNull(r: Int): Boolean = alias?.isNull(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
-    callSafeTrigger(VConstants.TRG_VALUE) == null
-  } else isNullImpl(r)
+  fun isNull(r: Int): Boolean =
+          alias?.isNull(0)
+                  ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+                    callSafeTrigger(VConstants.TRG_VALUE) == null
+                  } else {
+                    isNullImpl(r)
+                  }
 
   /**
    * Is the field value of given record null ?
@@ -1369,6 +1367,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
     if (hasTrigger(VConstants.TRG_VALUE)) {
       setObject(r, callSafeTrigger(VConstants.TRG_VALUE))
     }
+
     return getSqlImpl(r)
   }
 
@@ -1837,7 +1836,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
 
         else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
       }
-      getSearchCondition_(expression)
+      getSearchCondition(expression)
     } else {
       null
     }
@@ -1864,21 +1863,31 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * Checks that field value exists in list
    */
   internal open fun enumerateValue(desc: Boolean) {
-    TODO()
-    /*var value: Any? = null
-    val qrybuf: String = " SELECT " + list!!.getColumn(0).column +
-            " FROM " + evalListTable() +
-            (if (isNull(block!!.activeRecord)) "" else " WHERE " + list!!.getColumn(0).column +
-                    (if (desc) " > " else " < ").toString() + getSql(block!!.activeRecord)).toString() +
-            " ORDER BY 1" + if (desc) "" else " DESC"
+    var value: Any? = null
+    val table = evalListTable()
+    val column = list!!.getColumn(0).column
+
+    val condition = if (desc) {
+      Op.build { list!!.getColumn(0).column!! greater getSql(block!!.activeRecord).toString() }
+    } else {
+      Op.build { list!!.getColumn(0).column!! less getSql(block!!.activeRecord).toString() }
+    }
+
+    val orderBy = if (desc) SortOrder.ASC else  SortOrder.DESC
+
+    val query = if (isNull(block!!.activeRecord)) {
+      table.slice(column!!).selectAll()
+    } else {
+      table.slice(column!!).select(condition).orderBy(column to orderBy)
+    }
 
     while (true) {
       try {
 
         transaction {
-          exec(qrybuf) {
-            while (value == null && it.next()) {
-              value = it.getObject(1)
+          query.forEach {
+            if (value == null) {
+              value = it[column]
             }
           }
         }
@@ -1904,7 +1913,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
       throw VExecFailedException() // no message to display
     } else {
       setObject(block!!.activeRecord, value)
-    }*/
+    }
   }
 
   /**
@@ -1915,59 +1924,43 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @throws VException Visual exceptions related to database errors.
    */
   open fun getSuggestions(query: String?): Array<Array<String?>>? {
-    TODO()
-    /*
     return if (query == null || getAutocompleteType() == VList.AUTOCOMPLETE_NONE) {
       null
     } else {
-      val suggestions: MutableList<Array<String?>>
+      val table = evalListTable()
+      val columns = mutableListOf<Column<*>>()
+      val suggestions= mutableListOf<Array<String?>>()
+      val condition = (list!!.getColumn(0).column as Column<String>).lowerCase()
 
-      suggestions = ArrayList()
-      val qrybuf = buildString {
-        append("SELECT ")
-        for (i in 0 until list!!.columnCount()) {
-          if (i != 0) {
-            append(", ")
-          }
-          append(list!!.getColumn(i).column)
-        }
-        append(" FROM ")
-        append(evalListTable())
-        append(" WHERE ")
-        append(" {fn LOWER(")
-        append(list!!.getColumn(0).column)
-        append(")}")
-        when (getAutocompleteType()) {
-          VList.AUTOCOMPLETE_CONTAINS -> {
-            append(" LIKE ")
-            append(Utils.toSql("%" + query.toLowerCase() + "%"))
-          }
-          VList.AUTOCOMPLETE_STARTSWITH -> {
-            append(" LIKE ")
-            append(Utils.toSql(query.toLowerCase() + "%"))
-          }
-          else -> {
-            // default should never reached
-            append(" = ")
-            append(Utils.toSql(query))
-          }
-        }
-        append(" ORDER BY 1")
+      list!!.columns.forEach {
+        columns.add(it!!.column!!)
       }
+
+      val cond = when (getAutocompleteType()) {
+        VList.AUTOCOMPLETE_CONTAINS -> {
+          Op.build { condition like Utils.toSql("%" + query.toLowerCase() + "%") }
+        }
+        VList.AUTOCOMPLETE_STARTSWITH -> {
+          Op.build { condition like Utils.toSql(query.toLowerCase() + "%") }
+        }
+        else -> {
+          Op.build { condition eq Utils.toSql(query.toString()) }
+        }
+      }
+
+      val query = table.slice(columns).select(cond).orderBy(columns[0])
+
       while (true) {
         try {
           transaction {
-            exec(qrybuf) {
-              while (it.next()) {
-                var columns: MutableList<String>
+              query.forEach {
+                val columnsList = mutableListOf<String>()
 
-                columns = ArrayList()
-                for (i in 0 until list!!.columnCount()) {
-                  columns.add(list!!.getColumn(i).formatObject(it.getObject(i + 1)) as String)
+                list!!.columns.forEach { column ->
+                  columnsList.add(column!!.formatObject(it[column.column!!]) as String)
                 }
-                suggestions.add(columns.toTypedArray())
+                suggestions.add(columnsList.toTypedArray())
               }
-            }
           }
           break
         } catch (e: SQLException) {
@@ -1988,7 +1981,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
         }
       }
       suggestions.toTypedArray()
-    }*/
+    }
   }
 
   // ---------------------------------------------------------------------

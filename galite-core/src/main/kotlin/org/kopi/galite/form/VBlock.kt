@@ -1929,7 +1929,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
         }
 
-        val condition = field.getSearchCondition_(searchColumn)
+        val condition = field.getSearchCondition(searchColumn)
 
         condition?.let {
           conditionList.add(condition)
@@ -2034,39 +2034,38 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   protected fun fetchLookup(tableIndex: Int, currentField: VField) {
-    val table = object : Table(tables!![tableIndex].tableName) {}
-    val columns = mutableListOf<Column<*>>()
-    val conditions = mutableListOf<Op<Boolean>>()
+    // clears all fields of lookup except the key(s)
+    // the specified field is considered to be a key
+    val table = tables!![tableIndex]  // table to select from
+    val columns = mutableListOf<Column<*>>()  // columns to select
+    val conditions = mutableListOf<Op<Boolean>>()  // search conditions
 
-    for (i in fields.indices) {
-      val f = fields[i]
-
-      if (f !== currentField && f.lookupColumn(tableIndex) != null && !f.isLookupKey(tableIndex)) {
-        f.setNull(activeRecord)
+    fields.forEach { field ->
+      if (field != currentField && field.lookupColumn(tableIndex) != null && !field.isLookupKey(tableIndex)) {
+        field.setNull(activeRecord)
       }
     }
 
-    for (i in fields.indices) {
-      val column = fields[i].lookupColumn(tableIndex)
+    fields.forEach { field ->
+      val column : Column<*>? = field.lookupColumn(tables!![tableIndex])
 
       if (column != null) {
+        // add column to select
         columns.add(column)
       }
 
-      if (fields[i] == currentField || fields[i].isLookupKey(tableIndex)) {
-        val condition = fields[i].getSearchCondition()
+      if (field == currentField || field.isLookupKey(tableIndex)) {
+        val condition = field.getSearchCondition(column!!)
 
-        // TODO: 10/12/2020 FIX this !
-        if (condition == null || fields[i].lookupColumn(tableIndex)!!.condition() !is EqOp) {
+        if (condition == null || condition !is EqOp) {
           // at least one key field is not completely specified
           // no guarantee that a unique value will be fetched
           // end processing - non-key fields have already been cleared
           return
         }
 
-        // TODO: 11/12/2020 FIX this !
         if (condition != null) {
-          conditions.add(fields[i].lookupColumn(tableIndex)!!.condition())
+          conditions.add(condition)
         }
       }
     }
