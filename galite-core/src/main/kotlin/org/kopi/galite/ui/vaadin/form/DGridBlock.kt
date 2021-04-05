@@ -81,12 +81,11 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   private var filterRow: HeaderRow? = null
 
-  override var sortedRecords = IntArray(0)
-    set(value) {
-      if (!model.noDetail() && !inDetailMode()) {
-        field = value
-      }
+  override fun setSortedRecords(sortedRecords: IntArray) {
+    if (!model.noDetail() && !inDetailMode()) {
+      super.setSortedRecords(sortedRecords)
     }
+  }
 
   // --------------------------------------------------
   // IMPLEMENTATIONS

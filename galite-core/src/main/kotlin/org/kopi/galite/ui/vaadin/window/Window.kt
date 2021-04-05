@@ -129,10 +129,8 @@ abstract class Window : VerticalLayout() {
    * Cleans the dirty values of this window
    */
   open fun cleanDirtyValues(active: Block?, transferFocus: Boolean) {
-    for (child in children) {
-      if (child is Form) {
-        child.cleanDirtyValues(active, transferFocus)
-      }
+    if (this.content is Form) {
+      (this.content as Form).cleanDirtyValues(active, transferFocus)
     }
   }
 

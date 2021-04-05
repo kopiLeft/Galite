@@ -1625,8 +1625,10 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       try {
         try {
-          fetchPosition = pos
-          fetchRecord(fetchBuffer[pos])
+          transaction {
+            fetchPosition = pos
+            fetchRecord(fetchBuffer[pos])
+          }
           return
         } catch (e: VException) {
           throw e

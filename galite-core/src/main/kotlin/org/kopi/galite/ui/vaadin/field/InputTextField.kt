@@ -29,23 +29,34 @@ import org.kopi.galite.ui.vaadin.window.Window
 import com.vaadin.flow.component.BlurNotifier
 import com.vaadin.flow.component.DetachEvent
 import com.vaadin.flow.component.FocusNotifier
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyDownEvent
+import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.KeyUpEvent
 import com.vaadin.flow.component.textfield.Autocomplete
-import com.vaadin.flow.component.textfield.TextField
+
+import com.vaadin.flow.component.AbstractCompositeField
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.textfield.HasAutocomplete
 import com.vaadin.flow.dom.DomEvent
+import com.vaadin.flow.shared.Registration
 
 /**
- * A text field widget that can support many validation
+ * A text field component that can support many validation
  * strategies to restrict field input.
  *
  * Protected constructor to use to create other types of fields.
  */
-class InputTextField internal constructor(val col: Int) : TextField(), UTextField
-  /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
+open class InputTextField<C: AbstractField<C, out Any>> internal constructor(protected val field: C)
+  : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
+      KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
+      HasAutocomplete
+      /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
 
   /**
    * Returns the parent window of this text field.
@@ -83,16 +94,11 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
     className = Styles.TEXT_INPUT
     addKeyPressListener(::onKeyPress)
     addKeyUpListener(::onKeyUp)
-    addValueChangeListener(::onValueChange)
-    element.addEventListener("paste") {
-      it.source
-    }
     element.addEventListener("paste", ::onPasteEvent)
     //sinkEvents(Event.ONCONTEXTMENU) TODO
-    addChangeListener(::onChange)
     addKeyDownListener(::onKeyDown)
     addFocusListener(::onFocus)
-    addBlurListener(::onBlur)
+    //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
     autocomplete = if (hasAutoComplete()) {
       Autocomplete.ON
@@ -102,13 +108,13 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
   }
 
   companion object {
-    var focusedTextField: InputTextField? = null
+    var focusedTextField: InputTextField<*>? = null
 
     /**
      * Returns the last focused text field.
      * @return the last focused text field.
      */
-    var lastFocusedTextField: InputTextField? = null
+    var lastFocusedTextField: InputTextField<*>? = null
       private set
 
     /**
@@ -128,6 +134,17 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+
+  override fun setPresentationValue(newPresentationValue: String?) {
+    content.value = newPresentationValue
+  }
+
+  fun addTextValueChangeListener(listener: HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<*, *>>): Registration {
+    return field.addValueChangeListener(listener)
+  }
+
+  override fun initContent(): C = field
+
   fun onKeyPress(event: KeyPressEvent) {
     // block any key when a suggestions query is launched.
     //if (connector.isQueryingForSuggestions()) { TODO
@@ -187,7 +204,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
       val before: String = value
 
       if (!validationStrategy!!.validate(value)) {
-        setText(before)
+        value = before
       } else {
         // even if it is not really correct, we mark the field as dirty after
         // a paste event.
@@ -197,7 +214,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
     }
   }
 
-  fun setText(text: String?) {
+  override fun setValue(text: String?) {
     // set record to synchronize view and model even field is not focused
     var text = text
 
@@ -212,7 +229,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
       if (text != value) {
         fieldConnector.isChanged = true
       }
-      value = text
+      super.setValue(text)
     }
     if (text != null) {
       valueBeforeEdit = text
@@ -262,7 +279,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
    * Returns `true` if the auto complete function should be used.
    * @return `true` if the auto complete function should be used.
    */
-  override fun hasAutoComplete(): Boolean = hasAutocomplete
+  open fun hasAutoComplete(): Boolean = hasAutocomplete
 
   /**
    * Sets the text validation strategy.
@@ -279,18 +296,25 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
   fun setWidth(width: Int) {
     setWidth(width.toString() + "ex")
   }
+
   /**
    * Returns the field max length.
    * @return The field max length.
    */
-  override fun setMaxLength(maxLength: Int) {
+  open fun getMaxLength(): Double = element.getProperty("maxlength", 0.0)
+
+  /**
+   * Sets the text zone max length.
+   * @param maxLength The max length.
+   */
+  open fun setMaxLength(maxLength: Int) {
     updateMaxLength(maxLength)
   }
 
   /**
    * Sets the text size.
    */
-  override var size: Int
+  var size: Int
     get() = element.getProperty("size").toInt()
     set(value) { element.setProperty("size", value.toString()) }
 
@@ -304,7 +328,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
   protected fun updateMaxLength(maxLength: Int) {
     // TODO: do we need this?
     if (maxLength >= 0) {
-      super.setMaxLength(maxLength)
+      element.setProperty("maxlength", maxLength.toDouble())
     } else {
       element.removeAttribute("maxLength")
     }
@@ -440,7 +464,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
    * This will send all pending dirty values to be sure
    * that all necessary values are sent to the server model.
    */
-  protected fun sendDirtyValuesToServerSide() {
+  internal fun sendDirtyValuesToServerSide() {
     val window = parent!!
     val block = connector.parent.get() as Block
 
@@ -455,7 +479,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
    * Should the navigation be delegated to server side ?
    * @return `true` if the navigation is delegated to serevr side.
    */
-  protected fun delegateNavigationToServer(): Boolean = fieldConnector.delegateNavigationToServer()
+  internal fun delegateNavigationToServer(): Boolean = fieldConnector.delegateNavigationToServer()
 
   /**
    * Returns `true` if word wrap is used.
@@ -615,7 +639,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
     //})
   }
 
-  fun onBlur(event: BlurNotifier.BlurEvent<TextField>) {
+  fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<C>>) {
     // this is called twice on Chrome when e.g. changing tab while prompting
     // field focused - do not change settings on the second time
     if (focusedTextField !== this || focusedTextField == null) {
@@ -628,7 +652,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
     recordNumber = -1 // set this field is not related to any record
   }
 
-  fun onFocus(event: FocusNotifier.FocusEvent<TextField>) {
+  fun onFocus(event: FocusNotifier.FocusEvent<InputTextField<C>>) {
     if (focusedTextField == this) {
       // already got the focus. give up
       return
@@ -659,10 +683,6 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
     //    }
     //  }
     //})
-  }
-
-  fun onChange(event: ChangeEvent<TextField>) {
-    valueChange(false)
   }
 
   override fun onDetach(detachEvent: DetachEvent?) {
@@ -760,7 +780,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
     // Get the raw text.
     val text: String = value
 
-    if (text == null || text.isEmpty() || text.length == maxLength) {
+    if (text == null || text.isEmpty() || text.length.toDouble() == getMaxLength()) {
       hideSuggestions()
     } else {
       currentText = text
@@ -826,14 +846,13 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
    * Returns the parent field connector.
    * @return The parent field connector.
    */
-  protected val fieldConnector: Field
-    protected get() = connector.parent.get() as Field
+  internal val fieldConnector: Field
+    get() = connector.parent.get() as Field
 
   /**
    * Checks if the content of this field is empty.
    * @return `true` if this field is empty.
    */
-  /*package*/
   val isNull: Boolean
     get() = value == null || ("" == value)
 
@@ -956,7 +975,7 @@ class InputTextField internal constructor(val col: Int) : TextField(), UTextFiel
    * @param enabled `true` to enable the widget, `false` to disable it
    */
   override fun setEnabled(enabled: Boolean) {
-    super.setEnabled(enabled)
+    super<AbstractCompositeField>.setEnabled(enabled)
     //if (!enabled && display != null) {
     //  display.hideSuggestions()
     //}

@@ -36,6 +36,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.WindowController
 
 /**
@@ -465,6 +466,14 @@ open class FormBlock(var buffer: Int,
    */
   fun resetBlock() {
     Commands.resetBlock(vBlock)
+  }
+
+  /**
+   * Queries block, fetches first record.
+   * @exception        VException        an exception may occur during DB access
+   */
+  fun serialQuery() {
+    Commands.serialQuery(vBlock)
   }
 
   /**

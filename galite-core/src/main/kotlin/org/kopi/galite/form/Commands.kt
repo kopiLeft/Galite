@@ -268,11 +268,13 @@ object Commands : VConstants {
     Utils.freeMemory()
     try {
       try {
-        try {
-          b.load()
-          gotoFieldIfNoActive(b)
-        } catch (e: VQueryOverflowException) {
-          // !!! HANDLE OVERFLOW WARNING
+        transaction {
+          try {
+            b.load()
+            gotoFieldIfNoActive(b)
+          } catch (e: VQueryOverflowException) {
+            // !!! HANDLE OVERFLOW WARNING
+          }
         }
       } catch (e: VException) {
         throw e
