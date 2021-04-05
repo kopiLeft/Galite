@@ -39,6 +39,10 @@
     padding-left: 9px;
 }
 
+::part(cell) {
+    position: unset;
+}
+
 .k-listdialog ::part(row) {
     --_lumo-grid-selected-row-color: #d9f0f8;
 }
