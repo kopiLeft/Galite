@@ -370,6 +370,29 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Alignment statements are useful to align a block(source block) referring to another one(target block)
+   *
+   * @param targetBlock the referred block name
+   * @param positions   sets of two form field
+   *    the one in the left is the source block form field
+   *    the other one is for the target block form field
+   */
+  fun align(targetBlock: FormBlock, vararg positions: Pair<FormField<*>, FormField<*>>) {
+    val targets = ArrayList<Int>()
+
+    blockFields.forEach { field ->
+      if(positions.toMap().contains(field)) {
+        val targetField = positions.toMap()[field]
+
+        targets.add(targetBlock.blockFields.indexOf(targetField) + 1)
+      }
+    }
+
+    align = FormBlockAlign(targetBlock,
+                           targets)
+  }
+
+  /**
    * Make a tuning pass in order to create informations about exported
    * elements such as block fields positions
    *
@@ -712,6 +735,7 @@ open class FormBlock(var buffer: Int,
         super.indicesIdents = this@FormBlock.indices.map {
           it.ident
         }.toTypedArray()
+        alignment = align?.getBlockAlignModel()
       }
     }.also {
       vBlock = it
