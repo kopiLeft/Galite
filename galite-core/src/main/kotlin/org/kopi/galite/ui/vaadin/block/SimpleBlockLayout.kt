@@ -225,12 +225,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
    * Returns the component height.
    * @return The component height.
    */
-  protected fun getComponentHeight(comp: Component): Int {
-    return if (comp is VField) {
-      comp.height
-    } else 1
-  }
-
+  protected fun getComponentHeight(comp: Component) = if (comp is VField) { comp.height } else 1
 
   /**
    * Returns the allocated height for the given column and row.
