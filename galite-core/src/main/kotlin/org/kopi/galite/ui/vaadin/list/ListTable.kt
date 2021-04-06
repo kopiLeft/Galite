@@ -31,7 +31,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     isColumnReorderingAllowed = true
     buildRows()
     buildColumns()
-    passesFilter(model)
+    installFilters(model)
   }
 
   private fun buildRows() {
@@ -48,14 +48,13 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
       addColumn {
         formatObject(it[col], col)
       }.setHeader(model.getColumnName(col))
-        .setAutoWidth(true)
-        .setKey(col.toString())
+              .setAutoWidth(true).key = col.toString()
     }
   }
   /**
    * Install filters on all properties.
    */
-  fun passesFilter(model: VListDialog?) {
+  fun installFilters(model: VListDialog?) {
     val filterRow = appendHeaderRow()
 
     filterRow.also { element.classList.add("list-filter") }
