@@ -193,7 +193,10 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
     // Add each actor to the panel
     actorDefs.forEach { actorDef ->
       val actor = DActor(actorDef!!)
-      addActor(actor)
+
+      if(actor.icon != null) {
+        addActor(actor)
+      }
     }
   }
 

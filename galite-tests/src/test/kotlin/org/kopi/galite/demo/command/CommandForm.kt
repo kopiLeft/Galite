@@ -72,6 +72,16 @@ object CommandForm : ReportSelectionForm() {
     icon = "break"  // icon is optional here
   }
 
+  val quitForm = actor(
+    ident = "quit",
+    menu = action,
+    label = "quit",
+    help = "Quit Form",
+  ) {
+    key = Key.F4   // key is optional here
+    icon = "quit"  // icon is optional here
+  }
+
   val serialQuery = actor(
     ident = "serialQuery",
     menu = action,
@@ -108,6 +118,11 @@ object CommandForm : ReportSelectionForm() {
     command(item = resetBlock) {
       action = {
         resetBlock()
+      }
+    }
+    command(item = quitForm) {
+      action = {
+        quitForm()
       }
     }
     command(item = serialQuery) {

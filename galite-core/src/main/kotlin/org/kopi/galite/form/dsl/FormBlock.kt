@@ -469,6 +469,13 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Quit current form
+   */
+  fun quitForm() {
+    Commands.quitForm(vBlock.form)
+  }
+
+  /**
    * Queries block, fetches first record.
    * @exception        VException        an exception may occur during DB access
    */

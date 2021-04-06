@@ -309,8 +309,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Removes an attached window to this main window.
    * @param window The window to be removed.
    */
-  fun removeWindow(window: Component) {
-
+  fun removeWindow(window: Component?) {
+    if (mainWindow != null && window != null) {
+      access {
+        mainWindow!!.removeWindow(window)
+      }
+    }
   }
 
   /**
