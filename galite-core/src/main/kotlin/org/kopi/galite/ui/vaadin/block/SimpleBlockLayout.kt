@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.block
 import org.kopi.galite.ui.vaadin.field.ActorField
 import org.kopi.galite.ui.vaadin.form.DBlock
 import org.kopi.galite.ui.vaadin.form.DField
+import org.kopi.galite.ui.vaadin.form.DGridMultiBlock
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.grid.Grid
@@ -62,10 +63,39 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
   ) {
     val constraints = ComponentConstraint(x, y, width, height, alignRight, useAll)
 
-    if (parent.get() is Grid<*>) { // TODO
+    if (parent.get() is DGridMultiBlock) { // TODO
       getBlock().isLayoutBelongsToGridDetail = true
-    }
-    if (component != null) {
+      if (component != null) {
+        if (component is DField) {
+          val columnView: ColumnView = if (constraints.width < 0 || component.wrappedField is ActorField) {
+            ColumnView(getBlock()).also { columnView ->
+              columnView.label = null
+              columnView.addField(component)
+              if (blockInDetailMode()) {
+                columnView.detailLabel = null
+                columnView.setDetailDisplay(component)
+              }
+            }
+          } else {
+            ColumnView(getBlock()).also { columnView ->
+              // Label
+              columnView.label = component.label
+              if (blockInDetailMode()) {
+                columnView.detailLabel = component.label
+              }
+
+              // Field
+              columnView.addField(component)
+              if (blockInDetailMode()) {
+                columnView.setDetailDisplay(component)
+              }
+            }
+          }
+
+          getBlock().addField(columnView)
+        }
+      }
+    } else if (component != null) {
       if (component is DField) {
         val formItem = object : FormItem(component) {
           init {
@@ -103,9 +133,11 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         }
 
         getBlock().addField(columnView)
-      } else if(component is Grid<*>) { // TODO
-        add(component, constraints)
       }
+    }
+
+    if(component is Grid<*>) { // TODO
+      add(component, constraints)
     }
   }
 
