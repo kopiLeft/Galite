@@ -107,7 +107,7 @@ SimpleFilterable TODO */ {
   /**
    * Grid block data source item
    */
-  class GridBlockItem(private val record: Int) {
+  class GridBlockItem(val record: Int) {
 
     // --------------------------------------------------
     // IMPLEMENTATION

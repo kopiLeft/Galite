@@ -18,6 +18,8 @@ package org.kopi.galite.demo
 
 import java.math.BigDecimal
 
+import kotlin.reflect.KClass
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
@@ -40,6 +42,7 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
+import org.kopi.galite.tests.form.FormWithList
 import org.kopi.galite.type.Decimal
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -135,7 +138,6 @@ fun main(args: Array<String>) {
   DBSchemaTest.reset()
   Application.initDatabase()
   initModules()
-  initUserRights()
   runApplication<StoreApplication>(*args)
 }
 
@@ -191,50 +193,37 @@ val list_Of_StoreTables = listOf(Client, Product, Stock, Provider,
 
 fun initModules() {
   transaction {
-    DBSchemaTest.insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
-    DBSchemaTest.insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", ClientForm::class)
-    DBSchemaTest.insertIntoModule("1010", "org/kopi/galite/test/Menu", 5, "1000")
-    DBSchemaTest.insertIntoModule("1101", "org/kopi/galite/test/Menu", 10, "1010", FormSample::class)
-    DBSchemaTest.insertIntoModule("1110", "org/kopi/galite/test/Menu", 15, "1010", FormWithFields::class)
-    DBSchemaTest.insertIntoModule("2000", "org/kopi/galite/test/Menu", 100)
-    DBSchemaTest.insertIntoModule("2001", "org/kopi/galite/test/Menu", 101, "2000", CommandForm::class)
-    DBSchemaTest.insertIntoModule("3000", "org/kopi/galite/test/Menu", 200)
-    DBSchemaTest.insertIntoModule("3001", "org/kopi/galite/test/Menu", 201, "3000", ProductForm::class)
-    DBSchemaTest.insertIntoModule("4000", "org/kopi/galite/test/Menu", 300)
-    DBSchemaTest.insertIntoModule("4001", "org/kopi/galite/test/Menu", 301, "4000", BillForm::class)
-    DBSchemaTest.insertIntoModule("5000", "org/kopi/galite/test/Menu", 400)
-    DBSchemaTest.insertIntoModule("5001", "org/kopi/galite/test/Menu", 401, "5000", BillProductForm::class)
-    DBSchemaTest.insertIntoModule("6000", "org/kopi/galite/test/Menu", 500)
-    DBSchemaTest.insertIntoModule("6001", "org/kopi/galite/test/Menu", 501, "6000", StockForm::class)
-    DBSchemaTest.insertIntoModule("7000", "org/kopi/galite/test/Menu", 600)
-    DBSchemaTest.insertIntoModule("7001", "org/kopi/galite/test/Menu", 601, "7000", TaxRuleForm::class)
-    DBSchemaTest.insertIntoModule("8000", "org/kopi/galite/test/Menu", 700)
-    DBSchemaTest.insertIntoModule("8001", "org/kopi/galite/test/Menu", 701, "8000", ProviderForm::class)
+    insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
+    insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", ClientForm::class)
+    insertIntoModule("1010", "org/kopi/galite/test/Menu", 5, "1000")
+    insertIntoModule("1101", "org/kopi/galite/test/Menu", 10, "1010", FormSample::class)
+    insertIntoModule("1110", "org/kopi/galite/test/Menu", 15, "1010", FormWithFields::class)
+    insertIntoModule("1120", "org/kopi/galite/test/Menu", 20, "1010", FormWithList::class)
+    insertIntoModule("2000", "org/kopi/galite/test/Menu", 100)
+    insertIntoModule("2001", "org/kopi/galite/test/Menu", 101, "2000", CommandForm::class)
+    insertIntoModule("3000", "org/kopi/galite/test/Menu", 200)
+    insertIntoModule("3001", "org/kopi/galite/test/Menu", 201, "3000", ProductForm::class)
+    insertIntoModule("4000", "org/kopi/galite/test/Menu", 300)
+    insertIntoModule("4001", "org/kopi/galite/test/Menu", 301, "4000", BillForm::class)
+    insertIntoModule("5000", "org/kopi/galite/test/Menu", 400)
+    insertIntoModule("5001", "org/kopi/galite/test/Menu", 401, "5000", BillProductForm::class)
+    insertIntoModule("6000", "org/kopi/galite/test/Menu", 500)
+    insertIntoModule("6001", "org/kopi/galite/test/Menu", 501, "6000", StockForm::class)
+    insertIntoModule("7000", "org/kopi/galite/test/Menu", 600)
+    insertIntoModule("7001", "org/kopi/galite/test/Menu", 601, "7000", TaxRuleForm::class)
+    insertIntoModule("8000", "org/kopi/galite/test/Menu", 700)
+    insertIntoModule("8001", "org/kopi/galite/test/Menu", 701, "8000", ProviderForm::class)
   }
 }
-
-fun initUserRights(user: String = DBSchemaTest.connectedUser) {
-  transaction {
-    DBSchemaTest.insertIntoUserRights(user, "1000", true)
-    DBSchemaTest.insertIntoUserRights(user, "1001", true)
-    DBSchemaTest.insertIntoUserRights(user, "1010", true)
-    DBSchemaTest.insertIntoUserRights(user, "1101", true)
-    DBSchemaTest.insertIntoUserRights(user, "1110", true)
-    DBSchemaTest.insertIntoUserRights(user, "2000", true)
-    DBSchemaTest.insertIntoUserRights(user, "2001", true)
-    DBSchemaTest.insertIntoUserRights(user, "3000", true)
-    DBSchemaTest.insertIntoUserRights(user, "3001", true)
-    DBSchemaTest.insertIntoUserRights(user, "4000", true)
-    DBSchemaTest.insertIntoUserRights(user, "4001", true)
-    DBSchemaTest.insertIntoUserRights(user, "5000", true)
-    DBSchemaTest.insertIntoUserRights(user, "5001", true)
-    DBSchemaTest.insertIntoUserRights(user, "6000", true)
-    DBSchemaTest.insertIntoUserRights(user, "6001", true)
-    DBSchemaTest.insertIntoUserRights(user, "7000", true)
-    DBSchemaTest.insertIntoUserRights(user, "7001", true)
-    DBSchemaTest.insertIntoUserRights(user, "8000", true)
-    DBSchemaTest.insertIntoUserRights(user, "8001", true)
-  }
+fun insertIntoModule(shortname: String,
+                     source: String,
+                     priorityNumber: Int,
+                     parentName: String = "-1",
+                     className: KClass<*>? = null,
+                     symbolNumber: Int? = null,
+                     user: String = DBSchemaTest.connectedUser) {
+  DBSchemaTest.insertIntoModule(shortname, source, priorityNumber, parentName, className, symbolNumber)
+  DBSchemaTest.insertIntoUserRights(user, shortname, true)
 }
 
 fun addClients() {
