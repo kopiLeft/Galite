@@ -175,13 +175,11 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    * @param window The window to be removed.
    */
   fun removeWindow(window: Component) {
-    if (equals(window.parent)) {
-      windowsList.remove(window)
-      remove(window)
-      /*if (window is PopupWindow) { TODO
-        (window as PopupWindow).fireOnClose() // fire close event
-      }*/
-    }
+    windowsList.remove(window)
+    container.removeWindow(window)
+    /*if (window is PopupWindow) { TODO
+      (window as PopupWindow).fireOnClose() // fire close event
+    }*/
   }
 
   /**

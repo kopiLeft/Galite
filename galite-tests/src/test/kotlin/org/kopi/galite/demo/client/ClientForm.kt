@@ -49,6 +49,15 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6          // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val quit = actor(
+          ident = "quit",
+          menu = action,
+          label = "quit",
+          help = "Quit",
+  ) {
+    key = Key.ESCAPE          // key is optional here
+    icon = "quit"  // icon is optional here
+  }
 
   val block = insertBlock(Clients(), page) {
     command(item = report) {
@@ -59,6 +68,11 @@ class ClientForm : ReportSelectionForm() {
     command(item = dynamicReport) {
       action = {
         createDynamicReport()
+      }
+    }
+    command(item = quit) {
+      action = {
+        quitForm()
       }
     }
   }
