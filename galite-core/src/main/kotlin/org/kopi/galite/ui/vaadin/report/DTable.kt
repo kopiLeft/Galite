@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.report
 
+import org.kopi.galite.report.Constants
 import org.kopi.galite.report.UReport.UTable
 import org.kopi.galite.report.VReportColumn
 import org.kopi.galite.report.VReportRow
@@ -83,6 +84,18 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
       addColumn(ColumnValueProvider(index), index)
               .setHeader(getColumnNameComponent(vReportColumn!!))
               .setAutoWidth(true)
+              .setClassNameGenerator { row ->
+                buildString {
+                  if (row.level == 0) append("level-0")
+
+                  val column = model.accessibleColumns[index]
+                  if (column!!.align == Constants.ALG_RIGHT) append(" right") else append(" left")
+
+                  val styles = model.accessibleColumns[index]!!.getStyles()
+                  if (styles[0].getFont().isItalic) append(" italic") else append(" notItalic")
+                  if (styles[0].getFont().isBold) append(" bold") else append(" notBold")
+                }
+              }
     }
   }
 
@@ -150,7 +163,7 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
    *
    * @param columnIndex the index of the column
    */
-  inner class ColumnValueProvider(private val columnIndex: Int): ValueProvider<VReportRow, Any> {
+  inner class ColumnValueProvider(private val columnIndex: Int) : ValueProvider<VReportRow, Any> {
     override fun apply(source: VReportRow): Any =
             model.accessibleColumns[columnIndex]!!.format(source.getValueAt(columnIndex))
   }

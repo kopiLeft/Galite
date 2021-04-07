@@ -30,3 +30,11 @@
     --lumo-font-size-m: 0.750rem;
     padding-left: 5px;
 }
+
+/*
+ * Multiple Block style
+ * Columns titles colors
+ */
+::part(cell header-cell) {
+    color: #505050;
+}
