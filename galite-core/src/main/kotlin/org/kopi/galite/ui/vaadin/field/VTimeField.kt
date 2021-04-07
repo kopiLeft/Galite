@@ -17,26 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.timepicker.TimePicker
 
 /**
  * A time field.
  */
-class VTimeField : TimePicker(), UTextField {
-
-  override fun hasAutoComplete(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMaxLength(): Int = TODO()
-
-  override fun getMinLength(): Int = TODO()
-
-  override fun setMaxLength(maxLength: Int) {
-    // TODO
-  }
-
-  override fun setMinLength(minLength: Int) {
-    // TODO
-  }
-}
+class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier

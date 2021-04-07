@@ -28,7 +28,7 @@ class TimestampValidator(maxLength: Int) : AllowAllValidator(maxLength) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  override fun checkType(field: InputTextField, text: String) {
+  override fun checkType(field: InputTextField<*>, text: String) {
     if ("" == text) {
       field.value = null
     } else {

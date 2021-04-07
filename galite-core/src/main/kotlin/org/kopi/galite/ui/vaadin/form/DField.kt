@@ -42,7 +42,7 @@ import org.kopi.galite.visual.VColor
  * @param options The field options.
  * @param inDetail Is it a detail view ?
  */
-abstract class DField(protected var model: VFieldUI,
+abstract class DField(internal var model: VFieldUI,
                       internal var label: DLabel?,
                       align: Int,
                       protected var options: Int,
@@ -404,6 +404,14 @@ abstract class DField(protected var model: VFieldUI,
   }
 
   override fun onClick() {
+
+    // no click event is for rich text field and action fields
+    /*if (hasAction || content is RichTextField) { TODO
+      return
+    }*/
+    columnView!!.setBlockActiveRecordFromDisplayLine(position)
+    getWindow()!!.cleanDirtyValues(getBlock(), false) //!! do not make a focus transfer.
+
     if (!modelHasFocus()) {
       // an empty row in a chart has not calculated
       // the access for each field (ACCESS Trigger)

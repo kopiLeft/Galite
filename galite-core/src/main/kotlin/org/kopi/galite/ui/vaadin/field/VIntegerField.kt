@@ -17,45 +17,24 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.TextField
 
 /**
  * An integer field.
  */
-class VIntegerField(width : Int, minval : Int, maxval : Int) : IntegerField(), UTextField {
-  var cols: Int = 0
+class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<TextField>(TextField()) {
 
   init {
-    this.min = minval
-    this.max = maxval
+    field.pattern = "[0-9]*"
+    field.isPreventInvalidInput = true
+    field.element.setProperty("min", minval)
+    field.element.setProperty("max", maxval)
     this.width = width.toString()
   }
 
-  override fun hasAutoComplete(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMaxLength(): Int = maxlengthDouble.toInt()
-
-  override fun getMinLength(): Int = minlengthDouble.toInt()
-
   override fun setMaxLength(maxLength: Int) {
-    super.setMaxlength(maxLength.toDouble())
+    field.maxLength = maxLength
   }
 
-  override fun setMinLength(minLength: Int) {
-    super.setMaxlength(minLength.toDouble())
-  }
-
-  fun setRows(rows: Int, visibleRows: Int) {
-    addThemeVariants()
-  }
-
-  fun setWordwrap(b: Boolean) {
-
-  }
-
-  fun setFixedNewLine(b: Boolean) {
-
-  }
+  override fun getMaxLength(): Double = field.maxLength.toDouble()
 }

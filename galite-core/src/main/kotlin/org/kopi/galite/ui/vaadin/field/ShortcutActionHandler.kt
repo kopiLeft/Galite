@@ -1,14 +1,34 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 package org.kopi.galite.ui.vaadin.field
 
 import org.kopi.galite.ui.vaadin.base.ShortcutAction
 
+import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.KeyDownEvent
-import com.vaadin.flow.component.KeyNotifier
 
 /**
  * A shortcut action handler based on key down event.
  */
-open class ShortcutActionHandler  : KeyNotifier {
+open class ShortcutActionHandler : ComponentEventListener<KeyDownEvent> {
+
+  private val actions: MutableMap<String, ShortcutAction> = mutableMapOf()
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -17,14 +37,16 @@ open class ShortcutActionHandler  : KeyNotifier {
    * @param event The key down event.
    */
   fun handleAction(event: KeyDownEvent) {
-    val action: ShortcutAction? = actions[ShortcutAction.createKey(event.key, getKeyboardModifiers(event))]
+    val key = ShortcutAction.createKey(event.key, ShortcutAction.createModifierMask(event.modifiers))
+
+    val action: ShortcutAction? = actions[key]
     if (action != null) {
       //event.preventDefault() // prevent default action. TODO
       action.performAction()
     }
   }
 
-  fun onKeyDown(event: KeyDownEvent) {
+  override fun onComponentEvent(event: KeyDownEvent) {
     handleAction(event)
   }
   //---------------------------------------------------
@@ -37,11 +59,6 @@ open class ShortcutActionHandler  : KeyNotifier {
   fun addAction(action: ShortcutAction) {
     actions[action.getKey()] = action
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val actions: MutableMap<String, ShortcutAction>
 
   companion object {
     /**
@@ -56,14 +73,5 @@ open class ShortcutActionHandler  : KeyNotifier {
               or (if (event.equals("event.ctrlKey")) 2 else 0)
               or if (event.equals("event.altKey")) 4 else 0)
     }
-  }
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates a new `ShortcutActionHandler` instance.
-   */
-  init {
-    actions = HashMap<String, ShortcutAction>()
   }
 }

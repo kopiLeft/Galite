@@ -19,24 +19,16 @@ package org.kopi.galite.ui.vaadin.field
 
 import java.util.Arrays
 
+import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.combobox.ComboBox
 
 /**
  * An Code field.
  */
-class VCodeField(enumerations : Array<String>?) : ComboBox<String>(), UTextField {
+class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String>>(ComboBox<String>()), KeyNotifier {
+
   init {
-    super.setItems(Arrays.stream(enumerations))
-  }
-
-  override fun hasAutoComplete(): Boolean = true
-
-  override fun getMaxLength(): Int {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMinLength(): Int {
-    TODO("Not yet implemented")
+    field.setItems(Arrays.stream(enumerations))
   }
 
 
@@ -44,7 +36,7 @@ class VCodeField(enumerations : Array<String>?) : ComboBox<String>(), UTextField
     //Nothing to Implement
   }
 
-  override fun setMinLength(minLength: Int) {
-    TODO("Not yet implemented")
+  override fun initContent(): ComboBox<String> {
+    return field
   }
 }

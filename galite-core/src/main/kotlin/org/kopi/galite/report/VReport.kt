@@ -24,6 +24,10 @@ import java.net.MalformedURLException
 import java.text.MessageFormat
 import java.util.Locale
 
+import org.apache.poi.ss.formula.functions.T
+
+import org.jetbrains.exposed.sql.ExpressionWithColumnType
+
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.cross.VDynamicReport
 import org.kopi.galite.db.DBContextHandler
@@ -462,8 +466,8 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
    * creates an SQL condition, so that the column have to fit the
    * requirements (value and search operator) of the field.
    */
-  protected fun buildSQLCondition(column: String, field: VField): String {
-    val condition = field.getSearchCondition()
+  protected fun buildSQLCondition(column: ExpressionWithColumnType<T>, field: VField): String {
+    val condition = field.getSearchCondition(column)
 
     return if (condition == null) {
       " TRUE = TRUE "

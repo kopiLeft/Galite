@@ -27,11 +27,12 @@ import org.kopi.galite.ui.vaadin.block.SingleComponentBlockLayout
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
 
-import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.grid.ColumnResizeEvent
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.HeaderRow
+import com.vaadin.flow.component.grid.editor.Editor
+import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
 
 /**
@@ -81,12 +82,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   private var filterRow: HeaderRow? = null
 
-  override var sortedRecords = IntArray(0)
-    set(value) {
-      if (!model.noDetail() && !inDetailMode()) {
-        field = value
-      }
+  lateinit var editor: Editor<DGridBlockContainer.GridBlockItem>
+
+  override fun setSortedRecords(sortedRecords: IntArray) {
+    if (!model.noDetail() && !inDetailMode()) {
+      super.setSortedRecords(sortedRecords)
     }
+  }
 
   // --------------------------------------------------
   // IMPLEMENTATIONS
@@ -107,6 +109,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
         }
       }
     }*/
+    editor = grid.editor
     grid.addSortListener(::sort)
     grid.setSelectionMode(Grid.SelectionMode.NONE)
     //grid.setEditorEnabled(model.isAccessible)
@@ -410,7 +413,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   protected fun contentChanged() {
     //BackgroundThreadHandler.access(Runnable { TODO
-    containerDatasource.fireContentChanged()
     // correct grid width to add scroll bar width
     if (model.numberOfValidRecord > model.displaySize) {
       if (!widthAlreadyAdapted) {
@@ -435,16 +437,23 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   protected fun configure() {
     val width = 0
+    val binder: Binder<DGridBlockContainer.GridBlockItem> = Binder()
+    editor.binder = binder
+
+    grid.addItemClickListener {
+      editor.editItem(it.item)
+    }
 
     for (i in 0 until model.getFieldCount()) {
       if (!model.fields[i].isInternal() && !model.fields[i].noChart()) {
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
 
         if (columnView.hasDisplays()) {
-          grid.addComponentColumn { columnView.editor }
+          grid.addColumn { it.getValue(model.fields[i]) }
             .setAutoWidth(true)
             .setKey(i.toString())
             .setHeader(columnView.editorField.label)
+            .setEditorComponent(columnView.editor)
         }
       }
     }
