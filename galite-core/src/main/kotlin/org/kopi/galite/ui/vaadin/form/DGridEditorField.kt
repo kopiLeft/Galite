@@ -53,8 +53,7 @@ abstract class DGridEditorField<T>(
   /**
    * Returns the field editor hold by this component.
    */
-  val editor: GridEditorField<T>
-    get() = createEditor()
+  val editor: GridEditorField<T> by lazy { createEditor() }
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
 
