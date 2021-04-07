@@ -53,16 +53,6 @@ object TaxRuleForm : ReportSelectionForm() {
     icon = "list"  // icon is optional here
   }
 
-  val resetBlock = actor(
-    ident = "reset",
-    menu = action,
-    label = "break",
-    help = "Reset Block",
-  ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
-  }
-
   val block = insertBlock(TaxRuleBlock, page) {
     command(item = report) {
       action = {
@@ -77,11 +67,8 @@ object TaxRuleForm : ReportSelectionForm() {
       }
     }
 
-    command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
-    }
+    val default = org.kopi.galite.demo.common.FormDefault(this)
+    val autofill = command(this@TaxRuleForm, default.resetCommand)
   }
 
   override fun createReport(): Report {

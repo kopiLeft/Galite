@@ -35,12 +35,7 @@ object ProductForm : ReportSelectionForm() {
   val page = page("Product")
   val action = menu("Action")
   val edit = menu("Edit")
-  val autoFill = actor(
-          ident = "Autofill",
-          menu = edit,
-          label = "Autofill",
-          help = "Autofill",
-  )
+
   val report = actor(
           ident = "report",
           menu = action,
@@ -52,6 +47,9 @@ object ProductForm : ReportSelectionForm() {
   }
 
   val block = insertBlock(BlockProduct, page) {
+    val default = org.kopi.galite.demo.common.FormDefault(this)
+    val autofill = command(this@ProductForm, default.autofillCommand)
+
     command(item = report) {
       action = {
         createReport(BlockProduct)

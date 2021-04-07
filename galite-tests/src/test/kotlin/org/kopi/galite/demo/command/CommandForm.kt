@@ -44,42 +44,14 @@ object CommandForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
-
-  val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
-  )
-
   val list = actor(
-    ident = "list",
-    menu = action,
-    label = "list",
-    help = "Display List",
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
   ) {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
-  }
-
-  val resetBlock = actor(
-    ident = "reset",
-    menu = action,
-    label = "break",
-    help = "Reset Block",
-  ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
-  }
-
-  val quitForm = actor(
-    ident = "quit",
-    menu = action,
-    label = "quit",
-    help = "Quit Form",
-  ) {
-    key = Key.F4   // key is optional here
-    icon = "quit"  // icon is optional here
   }
 
   val serialQuery = actor(
@@ -108,23 +80,18 @@ object CommandForm : ReportSelectionForm() {
         createReport(BlockCommand)
       }
     }
-
     command(item = list) {
       action = {
         println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
-    command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
-    }
-    command(item = quitForm) {
-      action = {
-        quitForm()
-      }
-    }
+
+  val default = org.kopi.galite.demo.common.FormDefault(this)
+  val autofill = command(this@CommandForm, default.autofillCommand)
+  val reset = command(this@CommandForm, default.resetCommand)
+  val quit = command(this@CommandForm, default.quitCommand)
+
     command(item = serialQuery) {
       action = {
         serialQuery()

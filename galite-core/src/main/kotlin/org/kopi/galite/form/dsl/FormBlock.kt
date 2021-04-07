@@ -337,6 +337,21 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Call and add a command to this block.
+   *
+   * PS: Block commands are commands accessible only from the block where they are called.
+   *
+   * @param window    the form linked to the command.
+   * @param command   the command.
+   */
+  fun command(window: Window, command: Command)  {
+    window.actors.add(command.item)
+    command(item = command.item) {
+      action = command.action
+    }
+  }
+
+  /**
    * Adds the block options. you can use one or more option from the options available for block.
    *
    * Use [BlockOption] to see the list of these block options.
