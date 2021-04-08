@@ -112,6 +112,13 @@ abstract class Form : Window() {
     return page
   }
 
+  /**
+   * Shows to the user want to show a help about this form.
+   */
+  fun showHelp() {
+    model.showHelp(model)
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   // FORM TRIGGERS EVENTS
   ///////////////////////////////////////////////////////////////////////////
