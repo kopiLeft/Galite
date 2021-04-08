@@ -17,25 +17,30 @@
  */
 package org.kopi.galite.ui.vaadin.window
 
-import org.kopi.galite.ui.vaadin.visual.DWindow
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.common.VSpan
 
-import com.vaadin.flow.component.html.Div
+import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.flow.component.HasStyle
 
 /**
  * The popup window component.
  */
-class PopupWindow : Div() {
+class PopupWindow : EnhancedDialog(), HasStyle {
 
+  private val listeners = mutableListOf<CloseListener>()
+  private var caption = VSpan()
+
+  init {
+    className = Styles.POPUP_WINDOW
+    caption.className = Styles.POPUP_WINDOW_CAPTION
+    isDraggable = true
+    isResizable = true
+    addToHeader(caption)
+  }
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-  /**
-   * Sets the modality of this window.
-   * @param modal Is it a modal window.
-   */
-  fun setModal(modal: Boolean) {
-    this.modal = modal
-  }
 
   /**
    * Registers a close listener.
@@ -62,17 +67,7 @@ class PopupWindow : Div() {
     }
   }
 
-  fun setContent(view: DWindow) {
-    // TODO
-  }
-
   fun setCaption(title: String) {
-    // TODO
+    caption.text = title
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private val listeners = mutableListOf<CloseListener>()
-  private var modal = false
 }
