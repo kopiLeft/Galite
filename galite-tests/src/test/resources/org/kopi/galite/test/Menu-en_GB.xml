@@ -6,6 +6,7 @@
     <module ident="1010" label="Test" help="Suppliers management" />
         <module ident="1101" label="Test form1" help="Test form" />
         <module ident="1110" label="Test form2" help="Test form" />
+        <module ident="1120" label="Form with list" help="Form with list" />
     <module ident="2000" label="COMMANDS" help="Commands management" />
         <module ident="2001" label="COMMANDS" help="Commands management" />
     <module ident="3000" label="PRODUCTS" help="Products management" />
