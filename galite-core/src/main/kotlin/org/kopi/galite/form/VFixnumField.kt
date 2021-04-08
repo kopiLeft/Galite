@@ -339,6 +339,8 @@ class VFixnumField(val bufferSize: Int,
     // !!! HACK for Oracle
     if (v != null && (v is Int)) {
       setDecimal(r, Decimal(v.toDouble()))
+    } else if(v != null && (v is BigDecimal)) {
+      setDecimal(r, Decimal(v))
     } else {
       setDecimal(r, v as Decimal?)
     }

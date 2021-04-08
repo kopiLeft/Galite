@@ -456,7 +456,9 @@ object Commands : VConstants {
     }
     try {
       try {
-        b.delete()
+        transaction {
+          b.delete()
+        }
       } catch (e: VException) {
         throw e
         try {

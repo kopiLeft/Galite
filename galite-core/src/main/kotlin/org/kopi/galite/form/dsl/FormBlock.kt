@@ -484,6 +484,13 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * * Loads block from database
+   */
+  fun deleteBlock() {
+    Commands.deleteBlock(vBlock)
+  }
+
+  /**
    * Menu query block, fetches selected record.
    */
   fun DictionaryForm.recursiveQuery() {

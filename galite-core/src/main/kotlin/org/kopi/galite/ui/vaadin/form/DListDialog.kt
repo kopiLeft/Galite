@@ -302,7 +302,7 @@ class DListDialog(
     }
     // TODO
   }
-  private val lock = java.lang.Object()
+  private val lock = Object()
 
   /**
    * Shows the dialog and wait until it is closed from client side.
