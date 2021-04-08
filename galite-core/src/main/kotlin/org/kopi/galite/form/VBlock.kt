@@ -3114,8 +3114,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    */
   protected fun fillIdField(recno: Int, id: Int) {
+    var id = id
     if (id == -1) {
-      // TODO()
+      id = Utils.getNextTableId(tables!![0])
     }
 
     idField.setInt(recno, id)
