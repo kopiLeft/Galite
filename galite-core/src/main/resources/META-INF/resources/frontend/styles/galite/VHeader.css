@@ -57,7 +57,6 @@
  * Change the dots' style
  */
 ::part(overflow-button) {
-    margin: 0;
     --lumo-font-family:  Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
@@ -78,8 +77,8 @@
 /*
  * Modules style
  */
+
 #module_list :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
-    margin: 0;
     --lumo-font-family: Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
@@ -91,6 +90,10 @@
 
 #module_list :not(#user_menu):first-child::part(menu-bar-button):hover {
     background-color: #d9f0f8;
+}
+
+#module_list :not(#user_menu):first-child::part(menu-bar-button):active {
+    background-color: red;
 }
 
 /*

@@ -64,12 +64,13 @@
     background-color: white;
 }
 
-.k-block ::part(value) {
+.k-block .simple ::part(value) {
     --lumo-text-field-overflow-mask-image: none;
     padding: 0;
     margin: 0;
     box-shadow: none;
-    border: none;
+    background-color: var(--lumo-base-color);
+    border-bottom: 1px solid #dadada;
 }
 
 /*
@@ -77,7 +78,7 @@
  */
 .k-block ::part(value):focus {
     outline: none;
-    border-bottom: 2px solid #a3a3a3;
+    border-bottom: 2px solid #dadada;
     background: white;
     box-shadow: none;
 }

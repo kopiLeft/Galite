@@ -26,6 +26,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnReorderEvent
+import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.ItemClickEvent
@@ -63,7 +64,7 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
   init {
     buildColumns()
     buildRows()
-    addThemeVariants(GridVariant.LUMO_COMPACT)
+    addThemeVariants(GridVariant.LUMO_COMPACT,GridVariant.LUMO_COLUMN_BORDERS)
     classNames.add("small")
     classNames.add("borderless")
     classNames.add("report")
@@ -81,17 +82,22 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
    */
   private fun buildColumns() {
     model.accessibleColumns.forEachIndexed { index, vReportColumn ->
+      val column = model.accessibleColumns[index]
+      val styles = column!!.getStyles()
+      val align = if (column.align == Constants.ALG_RIGHT) {
+        ColumnTextAlign.END
+      } else {
+        ColumnTextAlign.START
+      }
       addColumn(ColumnValueProvider(index), index)
               .setHeader(getColumnNameComponent(vReportColumn!!))
               .setAutoWidth(true)
+              .setTextAlign(align)
               .setClassNameGenerator { row ->
                 buildString {
                   if (row.level == 0) append("level-0")
+                  if (row.level == 1) append("level-1")
 
-                  val column = model.accessibleColumns[index]
-                  if (column!!.align == Constants.ALG_RIGHT) append(" right") else append(" left")
-
-                  val styles = model.accessibleColumns[index]!!.getStyles()
                   if (styles[0].getFont().isItalic) append(" italic") else append(" notItalic")
                   if (styles[0].getFont().isBold) append(" bold") else append(" notBold")
                 }

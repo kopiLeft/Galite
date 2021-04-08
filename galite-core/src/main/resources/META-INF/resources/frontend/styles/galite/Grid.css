@@ -19,7 +19,11 @@
  * Report Group style
  */
 [part~="cell"].level-0 {
-    background: rgb(245, 245, 255);
+    background: #F5FBFD !important;
+}
+
+[part~="cell"].level-1 {
+    background: #D9EAD3 !important;
 }
 
 [part~="cell"].italic {
@@ -36,12 +40,4 @@
 
 [part~="cell"].notBold {
     font-weight: normal;
-}
-
-[part~="cell"].right {
-    text-align: right;
-}
-
-[part~="cell"].left {
-    text-align: left;
 }

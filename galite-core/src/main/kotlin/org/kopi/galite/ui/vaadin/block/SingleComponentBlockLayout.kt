@@ -18,11 +18,14 @@
 package org.kopi.galite.ui.vaadin.block
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * A block layout that contains a single component inside.
  */
+@CssImport(value = "")
 class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
@@ -53,5 +56,9 @@ class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
 
   override fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
     // not supported feature
+  }
+
+  init {
+    className = "multiple"
   }
 }
