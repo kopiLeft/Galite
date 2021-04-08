@@ -48,9 +48,11 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
       addColumn {
         formatObject(it[col], col)
       }.setHeader(model.getColumnName(col))
-              .setAutoWidth(true).setKey(col.toString())
+        .setAutoWidth(true)
+        .setKey(col.toString())
     }
   }
+
   /**
    * Install filters on all properties.
    */
