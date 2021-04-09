@@ -46,8 +46,8 @@ class ConfirmNotification(title: String?,
   override fun setButtons() {
     ok = Button(LocalizedProperties.getString(locale, "OK"))
     cancel = Button(LocalizedProperties.getString(locale, "NO"))
-    cancel.addClickListener { close() }
-    ok.addClickListener { close() }
+    ok.addClickListener { fireOnClose(true) }
+    cancel.addClickListener { fireOnClose(false) }
     buttons.add(ok)
     buttons.add(cancel)
 
