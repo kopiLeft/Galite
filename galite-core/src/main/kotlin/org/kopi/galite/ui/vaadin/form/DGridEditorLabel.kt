@@ -119,7 +119,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
      * @param actor The actor model.
      * @return The actor description.
      */
-    private fun getDescription(actor: VActor): String {
+    private fun getDescription(actor: VActor): String? {
       return if (actor.acceleratorKey > 0) {
         if (actor.acceleratorModifier == 0) {
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
