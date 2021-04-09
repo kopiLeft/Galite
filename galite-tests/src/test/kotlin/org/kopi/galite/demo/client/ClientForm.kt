@@ -49,6 +49,20 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6          // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val helpForm = actor(
+          ident = "helpForm",
+          menu = action,
+          label = "Help",
+          help = " Help"
+  ) {
+    key = Key.F1
+    icon = "help"
+  }
+  val helpCmd = command(item = helpForm) {
+    action = {
+      showHelp()
+    }
+  }
 
   val block = insertBlock(Clients(), page) {
     command(item = report) {

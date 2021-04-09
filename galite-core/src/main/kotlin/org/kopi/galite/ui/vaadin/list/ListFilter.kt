@@ -15,23 +15,33 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.ui.vaadin.list
 
-import java.time.LocalTime
+import com.vaadin.flow.function.SerializablePredicate
 
-import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.timepicker.TimePicker
+class ListFilter(val propertyId: Int,
+                 filterString: String,
+                 val ignoreCase: Boolean,
+                 val onlyMatchPrefix: Boolean) : SerializablePredicate<List<Any?>> {
 
-/**
- * A time field.
- */
-class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
+val filterString = if(ignoreCase) filterString.toLowerCase() else filterString
 
-  override fun setPresentationValue(newPresentationValue: String?) {
-    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
-      LocalTime.parse(newPresentationValue)
-    } else {
-      null
+  override fun test(t: List<Any?>): Boolean {
+    if (t[propertyId] == null) {
+      return false
     }
+
+   val value = if (ignoreCase) t[propertyId].toString().toLowerCase() else t[propertyId].toString()
+
+    if (onlyMatchPrefix) {
+      if (!value.startsWith(filterString)) {
+        return false
+      }
+    } else {
+      if (!value.contains(filterString)) {
+        return false
+      }
+    }
+    return true
   }
 }

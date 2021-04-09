@@ -15,23 +15,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.ui.vaadin.menu
 
-import java.time.LocalTime
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.dialog.Dialog
 
-import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.timepicker.TimePicker
-
-/**
- * A time field.
- */
-class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
-
-  override fun setPresentationValue(newPresentationValue: String?) {
-    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
-      LocalTime.parse(newPresentationValue)
-    } else {
-      null
-    }
+class VNavigationMenu : Dialog(), HasStyle {
+  init {
+    //this.setThemeVariants(EnhancedDialogVariant.SIZE_MEDIUM)
+    this.isDraggable = false
+    this.isResizable = false
+  }
+  //---------------------------------------------------
+  // IMPLEMENTATION
+  //---------------------------------------------------
+  /**
+   * Sets the the navigation panel associated with this navigation menu.
+   * @param panel The navigation panel.
+   */
+  fun setNavigationPanel(panel: VNavigationPanel) {
+    add(panel)
   }
 }
