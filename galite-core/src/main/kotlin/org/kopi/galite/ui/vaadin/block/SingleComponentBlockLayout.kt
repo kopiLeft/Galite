@@ -23,6 +23,7 @@ import com.vaadin.flow.component.Component
  * A block layout that contains a single component inside.
  */
 class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
@@ -53,5 +54,9 @@ class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
 
   override fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
     // not supported feature
+  }
+
+  init {
+    className = "multiple"
   }
 }

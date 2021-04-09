@@ -31,6 +31,7 @@ import org.kopi.galite.visual.VException
 import com.vaadin.flow.component.grid.ColumnResizeEvent
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
+import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
 import com.vaadin.flow.data.binder.Binder
@@ -47,6 +48,10 @@ open class DGridBlock(parent: DForm, model: VBlock)
   // DATA MEMBERS
   // --------------------------------------------------
   protected lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
+
+  init {
+    grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
+  }
 
   /*
    * We use this to fire a set item change event only when

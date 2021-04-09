@@ -64,13 +64,13 @@
     background-color: white;
 }
 
-.k-block ::part(value) {
+.k-block .simple ::part(value) {
     --lumo-text-field-overflow-mask-image: none;
-    border-bottom: 1px solid #dadada;
     padding: 0;
     margin: 0;
     box-shadow: none;
     background-color: var(--lumo-base-color);
+    border-bottom: 1px solid #dadada;
 }
 
 /*
@@ -78,7 +78,7 @@
  */
 .k-block ::part(value):focus {
     outline: none;
-    border-bottom: 2px solid #a3a3a3;
+    border-bottom: 2px solid #dadada;
     background: white;
     box-shadow: none;
 }
@@ -144,23 +144,24 @@ html {
 }
 
 ::part(k-actor) {
-    border : 0;
+    border: 0;
     background: #009bd4;
     color: #ffffff;
-    height : 60px;
+    height: 60px;
+    font-size: 13px;
 }
 
 #actors::part(overflow-button):hover {
-     background: #505050;
+     background: #547988;
 }
 
 ::part(k-actor):hover {
-    background: #505050;
+    background: #547988;
 }
 
 .k-window ::part(menu-bar-button) {
-    padding : 0;
-    height : 42px;
+    padding: 0;
+    height: 42px;
 }
 
 /*
@@ -181,7 +182,7 @@ html {
 }
 
 :not(.true)::part(checkbox)::after {
-    opacity : none;
+    opacity: none;
     transform: none;
     font-size: 15;
     font-weight: bold;
@@ -195,5 +196,29 @@ html {
     display: inline-block;
     width: 0;
     height: 0;
-    color:white;
+    color: white;
+}
+
+/*
+ * Spinner style
+ */
+.k-wait-window-image {
+    display: flex;
+    justify-content: center;
+}
+
+.k-wait-window-image::after {
+    content: "";
+    width: 50px;
+    height: 50px;
+    border: 10px solid #dddddd;
+    border-top-color: #204c8a;
+    border-radius: 50%;
+    animation: k-wait-window-image 1s ease infinite;
+}
+
+@keyframes k-wait-window-image {
+    to {
+        transform: rotate(1turn);
+    }
 }

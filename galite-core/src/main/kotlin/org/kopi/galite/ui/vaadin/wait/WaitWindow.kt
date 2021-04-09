@@ -22,9 +22,8 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.dialog.GeneratedVaadinDialog
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
@@ -36,7 +35,7 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private var image = Icon(VaadinIcon.SPINNER)
+  private var image = Div()
   private var text = Span()
   private var popup = Dialog()
 
