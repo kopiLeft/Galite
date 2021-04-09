@@ -22,11 +22,15 @@ import com.vaadin.flow.component.textfield.PasswordField
 /**
  * A password field implementation
  */
-class VPasswordField(val col: Int): PasswordField(), UTextField {
+class VPasswordField(val col: Int): InputTextField<PasswordField>(PasswordField()) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun hasAutoComplete(): Boolean = false
 
-  override fun getMaxLength(): Int = super.getMaxLength()
+  override fun setMaxLength(maxLength: Int) {
+    field.maxLength = maxLength
+  }
+
+  override fun getMaxLength(): Double = field.maxLength.toDouble()
 }

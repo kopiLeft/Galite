@@ -71,7 +71,7 @@ object Adress : Table() {
 }
 
 object FormWithNullableColumn : DictionaryForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test nullable "
 
   val action = menu("Action")

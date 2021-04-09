@@ -37,10 +37,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  */
 class VWindowsMenu : EnhancedDialog(), HasStyle {
 
+  private val items = VerticalLayout()
+  private val headerText = Label()
+
   init {
     className = Styles.MAIN_WINDOW
     val headerIcon = Icon(VaadinIcon.COPY_O)
-    val headerText = Label("Changer de fenêtre")
     val header = HorizontalLayout()
 
     header.add(headerText, headerIcon)
@@ -63,5 +65,11 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
     this.setContent(items)
   }
 
-  private var items = VerticalLayout()
+  /**
+   * Sets the header text.
+   * @param text The header text.
+   */
+  fun setHeaderText(text: String?) {
+    headerText.text = text
+  }
 }

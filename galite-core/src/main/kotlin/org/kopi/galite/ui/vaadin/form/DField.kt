@@ -27,6 +27,7 @@ import org.kopi.galite.form.VForm
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.form.VStringField
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.Field
 import org.kopi.galite.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.Action
@@ -41,7 +42,7 @@ import org.kopi.galite.visual.VColor
  * @param options The field options.
  * @param inDetail Is it a detail view ?
  */
-abstract class DField(protected var model: VFieldUI,
+abstract class DField(internal var model: VFieldUI,
                       internal var label: DLabel?,
                       align: Int,
                       protected var options: Int,
@@ -169,14 +170,14 @@ abstract class DField(protected var model: VFieldUI,
   }
 
   override fun updateAccess() {
-    // access { TODO: access from thread!!
+    access {
       access = getAccess()
       dynAccess = access
       updateStyles(access)
       isVisible = access != VConstants.ACS_HIDDEN
       isActionEnabled = access >= VConstants.ACS_VISIT
       update(label)
-    //}
+    }
   }
 
   /**
@@ -403,6 +404,14 @@ abstract class DField(protected var model: VFieldUI,
   }
 
   override fun onClick() {
+
+    // no click event is for rich text field and action fields
+    /*if (hasAction || content is RichTextField) { TODO
+      return
+    }*/
+    columnView!!.setBlockActiveRecordFromDisplayLine(position)
+    getWindow()!!.cleanDirtyValues(getBlock(), false) //!! do not make a focus transfer.
+
     if (!modelHasFocus()) {
       // an empty row in a chart has not calculated
       // the access for each field (ACCESS Trigger)

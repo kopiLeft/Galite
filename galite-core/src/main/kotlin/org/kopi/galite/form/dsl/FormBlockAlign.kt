@@ -17,13 +17,18 @@
  */
 package org.kopi.galite.form.dsl
 
+import java.util.ArrayList
+
+import org.kopi.galite.form.BlockAlignment
+
 /**
  * This class describe the alignment of multi blocks
  *
- * This class describe the alignment of multi blocks
- *
- * @param block                 block alignment
- * @param target                the target column vector
- * @param source                the source column vector
+ * @param targetBlock            block alignment
+ * @param targets                the target column list
  */
-class FormBlockAlign(private val block: String, private val target: IntArray, private val source: IntArray)
+class FormBlockAlign(private val targetBlock: FormBlock,
+                     private val targets: ArrayList<Int>) {
+
+  fun getBlockAlignModel() = BlockAlignment(targetBlock.vBlock, targets.toIntArray())
+}

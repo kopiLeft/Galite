@@ -28,7 +28,7 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.type.Image
 
 object ProviderForm : ReportSelectionForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "Providers"
   val page = page("Provider")
   val action = menu("Action")

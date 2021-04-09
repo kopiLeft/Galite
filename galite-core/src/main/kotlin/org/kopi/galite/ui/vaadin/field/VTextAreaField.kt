@@ -23,12 +23,8 @@ import com.vaadin.flow.component.textfield.TextArea
  * A text area input zone.
  * TODO : All the class must be implemented
  */
-class VTextAreaField : TextArea(), UTextField {
+class VTextAreaField : InputTextField<TextArea>(TextArea()) {
   var cols: Int = 0
-
-  override fun hasAutoComplete(): Boolean {
-    TODO("Not yet implemented")
-  }
 
   fun setRows(rows: Int, visibleRows: Int) {
     // TODO
@@ -41,4 +37,10 @@ class VTextAreaField : TextArea(), UTextField {
   fun setFixedNewLine(b: Boolean) {
     // TODO
   }
+
+  override fun setMaxLength(maxLength: Int) {
+    field.maxLength = maxLength
+  }
+
+  override fun getMaxLength(): Double = field.maxLength.toDouble()
 }

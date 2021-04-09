@@ -50,7 +50,7 @@ object FormWithListDomains: Form() {
           label = "EditItem",
           help = "EditItem",
   )
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form to test list domains"
   val userListBlock = insertBlock(UsersListBlock)
 }
@@ -111,7 +111,7 @@ object Module: ListDomain<String>(20) {
 }
 
 object SomeDictionnaryForm : DictionaryForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")

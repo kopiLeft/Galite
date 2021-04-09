@@ -45,9 +45,10 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
     text.className = Styles.WAIT_WINDOW_TEXT
     add(image)
     add(text)
-    justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    defaultHorizontalComponentAlignment = FlexComponent.Alignment.START
+    defaultHorizontalComponentAlignment = FlexComponent.Alignment.CENTER
     isSpacing = false
+    popup.isCloseOnOutsideClick = false
+    popup.isCloseOnEsc = false
     popup.addOpenedChangeListener(this)
   }
 
@@ -63,10 +64,18 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
 
   /**
    * Shows the wait window.
-   * @param parent the parent widget.
    */
   fun show() {
+    popup.removeAll()
+    popup.add(this)
     popup.open()
+  }
+
+  /**
+   * Closes the wait panel.
+   */
+  fun close() {
+    popup.close()
   }
 
   override fun onComponentEvent(event: GeneratedVaadinDialog.OpenedChangeEvent<Dialog>) {

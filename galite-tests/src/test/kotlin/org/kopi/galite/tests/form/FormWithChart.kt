@@ -25,7 +25,7 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.tests.chart.ChartSample
 
 object FormWithChart: Form() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")

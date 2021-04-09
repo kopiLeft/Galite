@@ -282,7 +282,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     }
     // set locale from initialization.
     // set locale from initialization.
-    setLocalizationContext(Locale.FRANCE) // TODO
+    setLocalizationContext(Locale.UK) // TODO
   }
 
   /**

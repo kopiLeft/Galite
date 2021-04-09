@@ -45,6 +45,7 @@ open class Actor(val caption: String?,
   //private val listeners: List<ActionListener>? = null
 
   init {
+    this.element.setAttribute("part", Styles.ACTOR)
     className = Styles.ACTOR
 
     super.setText(caption)

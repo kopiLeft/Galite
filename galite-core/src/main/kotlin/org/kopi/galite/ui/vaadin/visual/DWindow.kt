@@ -22,9 +22,9 @@ import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
 import org.kopi.galite.base.Utils
-import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.notif.AbstractNotification
 import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
@@ -36,7 +36,6 @@ import org.kopi.galite.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.ui.vaadin.wait.WaitWindow
 import org.kopi.galite.ui.vaadin.window.PopupWindow
-import org.kopi.galite.ui.vaadin.window.VActorPanel
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
@@ -50,9 +49,8 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.ui.vaadin.window.Window
 
-import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
 
@@ -95,7 +93,8 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    */
   var isUserAsked = false
     private set
-  private val actionRunner: ActionRunner = ActionRunner()
+  val currentUI = UI.getCurrent().also { requireNotNull(it) }
+  private val actionRunner: ActionRunner = ActionRunner(currentUI)
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
   init {
@@ -528,20 +527,32 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
   internal inner class MessageHandler : MessageListener {
     override fun notice(message: String) {
       val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+      val lock = Object()
 
-      showNotification(dialog)
+      dialog.addDialogCloseActionListener {
+        releaseLock(lock)
+      }
+      showNotification(dialog, lock)
     }
 
     override fun error(message: String?) {
       val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
+      val lock = Object()
 
-      showNotification(dialog)
+      dialog.addDialogCloseActionListener {
+        releaseLock(lock)
+      }
+      showNotification(dialog, lock)
     }
 
     override fun warn(message: String) {
       val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+      val lock = Object()
 
-      showNotification(dialog)
+      dialog.addDialogCloseActionListener {
+        releaseLock(lock)
+      }
+      showNotification(dialog, lock)
     }
 
     /**
@@ -554,6 +565,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
 
     override fun ask(message: String, yesIsDefault: Boolean): Int {
       val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+      val lock = Object()
 
       dialog.yesIsDefault = yesIsDefault
       dialog.addNotificationListener(object : NotificationListener {
@@ -563,10 +575,10 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
           } else {
             MessageListener.AWR_NO
           }
+          releaseLock(lock)
         }
       })
-      // attach the notification to the application.
-      showNotification(dialog)
+      showNotification(dialog, lock)
       return value
     }
 
@@ -576,8 +588,8 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
      * Shows a notification.
      * @param notification The notification to be shown
      */
-    internal fun showNotification(notification: AbstractNotification) {
-      access {
+    internal fun showNotification(notification: AbstractNotification, lock: Object) {
+      startAndWait(lock) {
         notification.show()
       }
     }
@@ -623,25 +635,25 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
     // IMPLEMENTATIONS
     //-----------------------------------------------------------
     override fun setWaitInfo(message: String) {
-      //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(waitIndicator) {
-        waitIndicator.setText(message)
-        if (!iswaitIndicatorAttached) {
-          application.attachComponent(waitIndicator)
+      access {
+        synchronized(waitIndicator) {
+          waitIndicator.setText(message)
+          if (!iswaitIndicatorAttached) {
+            waitIndicator.show()
+          }
         }
       }
-      //})
     }
 
     override fun unsetWaitInfo() {
-      //BackgroundThreadHandler.access(Runnable { TODO
-      synchronized(waitIndicator) {
-        if (iswaitIndicatorAttached) {
-          waitIndicator.setText(null)
-          application.detachComponent(waitIndicator)
+      access {
+        synchronized(waitIndicator) {
+          if (iswaitIndicatorAttached) {
+            waitIndicator.setText(null)
+            waitIndicator.close()
+          }
         }
       }
-      //})
     }
   }
   //--------------------------------------------------------------
@@ -655,11 +667,12 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * There is only one instance of ActionRunner.
    * It calls user actions.
    */
-  internal inner class ActionRunner : Runnable, ErrorHandler {
+  internal inner class ActionRunner(val currentUI: UI) : Runnable, ErrorHandler {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun run() {
+      UI.setCurrent(currentUI)
       try {
         if (currentAction != null) {
           runAction()
