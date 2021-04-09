@@ -78,7 +78,7 @@
  */
 .k-block ::part(value):focus {
     outline: none;
-    border-bottom: 2px solid #dadada;
+    border-bottom: 2px solid #a3a3a3;
     background: white;
     box-shadow: none;
 }
@@ -122,7 +122,7 @@
     --lumo-space-m: 0;
 }
 
-html {
+#outlet {
     --lumo-space-m: 0;
 }
 
@@ -137,6 +137,7 @@ html {
 }
 
 #actors::part(overflow-button) {
+    margin: 0;
     border-left: 1px solid #dadada;
     height: 46px;
     background: #009bd4;
@@ -221,4 +222,31 @@ html {
     to {
         transform: rotate(1turn);
     }
+}
+
+/**
+ * Styles to be applied for actors menu
+ */
+.actors-navigationPanel {
+    display: inline-block;
+    width: 970px;
+    height:auto;
+    padding: 14px 14px 18px 14px;
+    background: #ffffff;
+    color: #8f8f8f;
+    border-bottom : 1px solid #dadada;
+}
+
+.actor-navigationItem {
+    height: auto;
+    background: var(--lumo-base-color);
+}
+
+.actor-navigationItem::part(label) {
+    color: #8f8f8f;
+}
+
+.actor-navigationColumn > label {
+    width:600px;
+    border-bottom : 1px solid #dadada;
 }
