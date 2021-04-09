@@ -115,6 +115,21 @@ abstract class Form : Window() {
   }
 
   /**
+   * Aborts current processing, resets form.
+   * @exception        VException        an exception may occur in form.reset()
+   */
+  fun resetForm() {
+    Commands.resetForm(model)
+  }
+
+  /**
+   * Shows to the user want to show a help about this form.
+   */
+  fun showHelp() {
+    model.showHelp(model)
+  }
+
+  /**
    * Aborts current processing, closes form.
    * @exception        VException        an exception may occur in form.close()
    */

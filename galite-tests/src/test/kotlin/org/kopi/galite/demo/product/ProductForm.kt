@@ -77,6 +77,11 @@ object BlockProduct : FormBlock(1, 1, "Products") {
     help = "The product designation"
     columns(u.designation)
   }
+  val price = visit(domain = Domain<Decimal>(20), follow(designation)) {
+    label = "Price"
+    help = "The product unit price excluding VAT"
+    columns(u.price)
+  }
   val category = mustFill(domain = Category, position = at(2, 1)) {
     label = "Category"
     help = "The product category"
@@ -86,11 +91,6 @@ object BlockProduct : FormBlock(1, 1, "Products") {
     label = "Tax"
     help = "The product tax name"
     columns(u.taxName)
-  }
-  val price = visit(domain = Domain<Decimal>(20), position = at(4, 1)) {
-    label = "Price"
-    help = "The product unit price excluding VAT"
-    columns(u.price)
   }
   val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
     label = "Image"

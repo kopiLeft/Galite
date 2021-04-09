@@ -27,12 +27,14 @@ import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * A list dialog
  * TODO: Implement this class with appropriate component
  */
+@CssImport("./styles/galite/Grid.css" , themeFor = "vaadin-grid")
 open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
 
   private var scrollBarAdded = false
@@ -49,6 +51,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
   private var newText: String? = null
 
   init {
+    element.classList.add("listDialog")
     content.element.setAttribute("hideFocus", "true")
     content.element.style["outline"] = "0px"
     content.element.style["min-width"] = "400px"

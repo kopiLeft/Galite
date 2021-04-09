@@ -233,7 +233,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   /**
-   * Display table informations in the footer of the table
+   * Display table information in the footer of the table
    */
   private fun setInfoTable() {
     //TODO()

@@ -15,48 +15,37 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.block
+package org.kopi.galite.ui.vaadin.menu
 
-import com.vaadin.flow.component.Component
+import org.kopi.galite.ui.vaadin.actor.VActorNavigationItem
 
-/**
- * A block layout that contains a single component inside.
- */
-class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
+import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
+class VNavigationColumn(val ident : String) : VerticalLayout(), HasStyle {
   //---------------------------------------------------
-  // IMPLEMENTATION
+  // DATA MEMBERS
   //---------------------------------------------------
-  override fun addComponent(
-          component: Component?,
-          x: Int,
-          y: Int,
-          width: Int,
-          height: Int,
-          alignRight: Boolean,
-          useAll: Boolean
-  ) {
-    // always put the component at the only available position
-    var x = x
-    var y = y
-    var width = width
-    if (x > 0) {
-      x = 0
-    }
-    if (y > 0) {
-      y = 0
-    }
-    if (width > 1 || width < 0) {
-      width = 1
-    }
-    super.addComponent(component, x, y, width, height, alignRight, useAll)
+  private val items = ArrayList<VActorNavigationItem>()
+  private val header = Div()
+
+  /**
+   * Sets the header item of this navigation column.
+   * @param header The header item.
+   */
+  fun setHeader(headerName: String) {
+    header.add(Label(headerName))
+    add(Label(headerName))
   }
 
-  override fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
-    // not supported feature
-  }
-
-  init {
-    className = "multiple"
+  /**
+   * Adds the given clickable item to this navigation column.
+   * @param item The clickable item to be added.
+   */
+  fun addClickableItem(item: VActorNavigationItem) {
+    items.add(item)
+    add(item)
   }
 }

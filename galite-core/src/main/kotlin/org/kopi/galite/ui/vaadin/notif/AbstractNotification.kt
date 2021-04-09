@@ -72,6 +72,7 @@ abstract class AbstractNotification(title: String?,
     for (l in listeners) {
       l.onClose(action)
     }
+    close()
   }
 
   //-------------------------------------------------
