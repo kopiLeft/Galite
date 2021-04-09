@@ -63,6 +63,16 @@ object TaxRuleForm : ReportSelectionForm() {
     icon = "break"  // icon is optional here
   }
 
+  val deleteBlock = actor(
+    ident = "deleteBlock",
+    menu = action,
+    label = "deleteBlock",
+    help = " deletes block",
+  ) {
+    key = Key.F5
+    icon = "delete"
+  }
+
   val block = insertBlock(TaxRuleBlock, page) {
     command(item = report) {
       action = {
@@ -80,6 +90,12 @@ object TaxRuleForm : ReportSelectionForm() {
     command(item = resetBlock) {
       action = {
         resetBlock()
+      }
+    }
+
+    command(item = deleteBlock) {
+      action = {
+        deleteBlock()
       }
     }
   }

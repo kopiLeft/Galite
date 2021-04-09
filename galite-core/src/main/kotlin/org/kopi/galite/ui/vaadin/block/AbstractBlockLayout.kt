@@ -82,15 +82,21 @@ abstract class AbstractBlockLayout protected constructor(val col: Int, val line:
   }
 
   /**
-   * Sets the widget in the given layout cell.
-   * @param widget The widget to be set.
+   * Sets the component in the given layout cell.
+   * @param formItem The component to be set.
    * @param row The cell row.
    * @param column The Cell column.
    * @param colSpan The column span width
    * @param rowSpan The row span width.
    */
-  open fun setComponent(widget: Component?, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
-    // TODO
+  open fun setComponent(formItem: Component?, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
+    addComponent(formItem, column, row, colSpan, rowSpan, false, false)
+    if (colSpan > 1) {
+      formItem!!.element.setAttribute("colspan", colSpan.toString())
+    }
+    if (rowSpan > 1) {
+      formItem!!.element.setAttribute("rowspan", rowSpan.toString())
+    }
   }
 
   open fun addAlignedComponent(widget: Component?, constraint: ComponentConstraint?) {

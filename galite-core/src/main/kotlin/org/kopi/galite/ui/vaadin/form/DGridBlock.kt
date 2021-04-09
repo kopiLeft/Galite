@@ -22,6 +22,7 @@ import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.SingleComponentBlockLayout
 import org.kopi.galite.visual.Action
@@ -30,6 +31,7 @@ import org.kopi.galite.visual.VException
 import com.vaadin.flow.component.grid.ColumnResizeEvent
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
+import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
 import com.vaadin.flow.data.binder.Binder
@@ -46,6 +48,10 @@ open class DGridBlock(parent: DForm, model: VBlock)
   // DATA MEMBERS
   // --------------------------------------------------
   protected lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
+
+  init {
+    grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
+  }
 
   /*
    * We use this to fire a set item change event only when
@@ -318,11 +324,11 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Scrolls the to beginning of the block
    */
   internal fun scrollToStart() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    if (grid != null) {
-      grid.scrollToStart()
+    access {
+      if (grid != null) {
+        grid.scrollToStart()
+      }
     }
-    //})
   }
 
   /**
@@ -412,24 +418,25 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Notifies the data source that the content of the block has changed.
    */
   protected fun contentChanged() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    // correct grid width to add scroll bar width
-    if (model.numberOfValidRecord > model.displaySize) {
-      if (!widthAlreadyAdapted) {
-        //grid.setWidth(grid.width.substring(0, grid.width.indexOfLast { it.isDigit() } + 1).toFloat() + 16, Unit.PIXELS)
-        widthAlreadyAdapted = true
+    access {
+      grid.dataProvider.refreshAll()
+      // correct grid width to add scroll bar width
+      if (model.numberOfValidRecord > model.displaySize) {
+        if (!widthAlreadyAdapted) {
+          //grid.setWidth(grid.width.substring(0, grid.width.indexOfLast { it.isDigit() } + 1).toFloat() + 16, Unit.PIXELS)
+          widthAlreadyAdapted = true
+        }
       }
     }
-    //})
   }
 
   /**
    * Refreshes, i.e. causes the client side to re-render all rows.
    */
   protected fun refreshAllRows() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    //grid.refreshAllRows()
-    //})
+    access {
+      grid.dataProvider.refreshAll()
+    }
   }
 
   /**
@@ -517,14 +524,14 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @return true if the grid editor is active and an item is being edited.
    */
   val isEditorActive: Boolean
-    get() = TODO()
+    get() = editor.isOpen
 
   /**
    * Returns the edited record in this block
    * @return the edited record in this block
    */
   val editedRecord: Int
-    get() = TODO()
+    get() = editor.item.record
 
   /**
    * Returns the field model for a given property ID.

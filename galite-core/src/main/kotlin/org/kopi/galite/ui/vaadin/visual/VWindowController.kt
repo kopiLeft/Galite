@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.visual
 
 import org.kopi.galite.common.Window
 import org.kopi.galite.preview.VPreviewWindow
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
@@ -86,10 +87,12 @@ class VWindowController : WindowController() {
           title: String,
   ) {
     val popup = PopupWindow()
-    popup.setModal(false)
+    popup.isModal = false
     popup.setContent(view)
     popup.setCaption(title) // put popup title
-    application.attachComponent(popup)
+    access {
+      popup.open()
+    }
   }
   //---------------------------------------------------
   // MODAL VIEW STARTER

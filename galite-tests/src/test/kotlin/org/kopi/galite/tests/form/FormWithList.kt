@@ -62,8 +62,24 @@ object FormWithList : DictionaryForm() {
     label = "break",
     help = "Reset Block",
   ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
+    key = Key.F3
+    icon = "break"
+  }
+
+  val resetForm = actor(
+    ident = "resetForm",
+    menu = reset,
+    label = "resetForm",
+    help = "Reset Form",
+  ) {
+    key = Key.F7
+    icon = "break"
+  }
+
+  val resetFormCmd = command(item = resetForm) {
+    action = {
+      resetForm()
+    }
   }
 
   val save = actor(

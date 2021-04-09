@@ -17,7 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
+import java.io.IOException
+
+import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.visual.VHelpViewer
+
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.Html
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * The `DHelpViewer` is used to display help information.
@@ -27,8 +36,27 @@ import org.kopi.galite.visual.VHelpViewer
  * of the the [VHelpViewer] model.
  *
  */
-class DHelpViewer(model: VHelpViewer) : DWindow(model) {
+class DHelpViewer(model: VHelpViewer) : DWindow(model), Focusable<Window> {
+
+  private val html = Html(model.url!!.openStream())
+
+  init {
+    model.setDisplay(this)
+
+    try {
+      val pane = Div()
+      val layout = VerticalLayout(html)
+      pane.width = "600px"
+      pane.height = "500px"
+      pane.add(layout)
+      layout.isMargin = true
+      setContent(pane)
+    } catch (e: IOException) {
+      throw InconsistencyException(e)
+    }
+  }
   override fun run() {
-    TODO()
+    focus()
+    getModel().setActorEnabled(VHelpViewer.CMD_QUIT, true)
   }
 }
