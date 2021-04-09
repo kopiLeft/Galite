@@ -17,11 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-
-import com.vaadin.flow.component.contextmenu.ContextMenu
 import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
@@ -32,6 +27,8 @@ import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VlibProperties
+
+import com.vaadin.flow.component.contextmenu.ContextMenu
 
 /**
  * The `DTextField` is the vaadin implementation
@@ -75,40 +72,11 @@ open class DTextField(
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.addTextValueChangeListener {
-      onTextChange(it.oldValue?.toString(), it.value.toString())
-      checkText(it.value.toString()) // FIXME: use onTextChange(text) instead when we have full support for commands
+      checkText(it.value.toString())
     }
 
     createContextMenu()
     setFieldContent(field)
-  }
-
-  fun onTextChange(oldText: String?, newText: String?) {
-    checkText(newText!!, isChanged(oldText, newText))
-  }
-
-  fun onTextChange(rec: Int, text: String?) {
-    // other dirty values has been sent ==> affect them directly to the model.
-    getModel().getForm().performAsyncAction(object : Action("check_type") {
-      override fun execute() {
-        if (isChanged(getModel().getText(rec), transformer!!.toModel(text!!))) {
-          getModel().isChangedUI = true
-          checkText(rec, text)
-        }
-      }
-    })
-  }
-
-  /**
-   * TODO: merge with onTextChange(rec, text)
-   */
-  fun onTextChange(text: String?) {
-    // other dirty values has been sent ==> affect them directly to the model.
-    getModel().getForm().performAsyncAction(object : Action("check_type") {
-      override fun execute() {
-        checkText(text)
-      }
-    })
   }
 
   /**
@@ -166,18 +134,7 @@ open class DTextField(
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
-      when (field.type) {
-        TextField.Type.TIME -> {
-          field.value = LocalTime.parse(transformer!!.toGui(newModelTxt)!!.trim())
-        }
-        TextField.Type.TIMESTAMP -> {
-          val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
-          field.value = LocalDateTime.parse(transformer!!.toGui(newModelTxt)!!.trim(), formatter)
-        }
-        else -> { field.value = transformer!!.toGui(newModelTxt)!!.trim()
-        }
-      }
+      field.value = transformer!!.toGui(newModelTxt)!!.trim()
     }
     super.updateText()
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
@@ -241,6 +198,7 @@ open class DTextField(
 
   /**
    * Checks the given text.
+   *
    * @param s The text to be checked.
    * @param changed Is value changed ?
    */

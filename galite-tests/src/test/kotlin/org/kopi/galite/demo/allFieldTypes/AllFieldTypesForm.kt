@@ -32,7 +32,7 @@ import org.kopi.galite.type.Timestamp
 import org.kopi.galite.type.Week
 
 object AllFieldTypesForm : DictionaryForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "All field types test"
   val page = page("AllFields")
   val action = menu("Action")

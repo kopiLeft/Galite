@@ -18,20 +18,20 @@ package org.kopi.galite.demo.command
 
 import java.util.Locale
 
-import org.joda.time.DateTime
-
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Command
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
 object CommandForm : ReportSelectionForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "Commands"
   val page = page("Command")
   val action = menu("Action")
@@ -44,10 +44,81 @@ object CommandForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
+  val resetBlock = actor(
+    ident = "reset",
+    menu = action,
+    label = "break",
+    help = "Reset Block",
+  ) {
+    key = Key.F3   // key is optional here
+    icon = "break"  // icon is optional here
+  }
+
+  val serialQuery = actor(
+    ident = "serialQuery",
+    menu = action,
+    label = "serialQuery",
+    help = "serial query",
+  ) {
+    key = Key.F6   // key is optional here
+    icon = "serialquery"  // icon is optional here
+  }
+
+  val dynamicReport = actor(
+    ident = "dynamicReport",
+    menu = action,
+    label = "DynamicReport",
+    help = " Create Dynamic Report",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "preview"  // icon is optional here
+  }
+
   val tb1 = insertBlock(BlockCommand, page) {
     command(item = report) {
       action = {
         createReport(BlockCommand)
+      }
+    }
+
+    command(item = list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+    command(item = resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+    command(item = serialQuery) {
+      action = {
+        serialQuery()
+      }
+    }
+
+    command(item = dynamicReport) {
+      action = {
+        createDynamicReport()
       }
     }
   }
@@ -57,7 +128,7 @@ object CommandForm : ReportSelectionForm() {
   }
 }
 
-object BlockCommand : FormBlock(1, 1, "Commands") {
+object BlockCommand : FormBlock(1, 10, "Commands") {
   val u = table(Command)
   val v = table(Client)
 
@@ -66,25 +137,31 @@ object BlockCommand : FormBlock(1, 1, "Commands") {
     help = "The command number"
     columns(u.numCmd)
   }
+
   val idClt = mustFill(domain = Domain<Int>(25), position = at(1, 1)) {
     label = "Client ID"
     help = "The client ID"
-    columns(u.idClt, v.idClt)
-  }
-  val dateCmd = mustFill(domain = Domain<DateTime>(25), position = at(2, 1)) {
-    label = "Command date"
-    help = "The command date"
-    columns(u.dateCmd)
+    columns(u.idClt, v.idClt) {
+      priority = 1
+    }
   }
   val paymentMethod = mustFill(domain = Payment, position = at(3, 1)) {
     label = "Payment method"
     help = "The payment method"
-    columns(u.paymentMethod)
+    columns(u.paymentMethod) {
+      priority = 1
+    }
   }
   val statusCmd = mustFill(domain = CommandStatus, position = at(4, 1)) {
     label = "Command status"
     help = "The command status"
-    columns(u.statusCmd)
+    columns(u.statusCmd) {
+      priority = 1
+    }
+  }
+
+  init {
+    blockVisibility(Access.VISIT, Modes.QUERY)
   }
 }
 

@@ -15,39 +15,33 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.ui.vaadin.list
 
-import com.vaadin.flow.component.HasElement
-import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.function.SerializablePredicate
 
-interface UTextField: HasElement, HasSize {
-  fun hasAutoComplete(): Boolean
+class ListFilter(val propertyId: Int,
+                 filterString: String,
+                 val ignoreCase: Boolean,
+                 val onlyMatchPrefix: Boolean) : SerializablePredicate<List<Any?>> {
 
-  var size: Int
-    get() = element.getProperty("size").toInt()
-    set(value) { element.setProperty("size", value.toString()) }
+val filterString = if(ignoreCase) filterString.toLowerCase() else filterString
 
-  /**
-   * Returns the field max length.
-   * @return The field max length.
-   */
-  fun getMaxLength(): Int
+  override fun test(t: List<Any?>): Boolean {
+    if (t[propertyId] == null) {
+      return false
+    }
 
-  /**
-   * Returns the field min length.
-   * @return The field min length.
-   */
-  fun getMinLength(): Int
+   val value = if (ignoreCase) t[propertyId].toString().toLowerCase() else t[propertyId].toString()
 
-  /**
-   * Sets the field max length.
-   * @param maxLength The field max length.
-   */
-  fun setMaxLength(maxLength: Int)
-
-  /**
-   * Sets the field min length.
-   * @param minLength The field min length.
-   */
-  fun setMinLength(minLength: Int)
+    if (onlyMatchPrefix) {
+      if (!value.startsWith(filterString)) {
+        return false
+      }
+    } else {
+      if (!value.contains(filterString)) {
+        return false
+      }
+    }
+    return true
+  }
 }

@@ -27,7 +27,7 @@ import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
 class ClientForm : ReportSelectionForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "Clients"
   val page = page("Client")
   val action = menu("Action")
@@ -46,8 +46,22 @@ class ClientForm : ReportSelectionForm() {
           label = "DynamicReport",
           help = " Create Dynamic Report",
   ) {
-    key = Key.F8          // key is optional here
+    key = Key.F6          // key is optional here
     icon = "preview"  // icon is optional here
+  }
+  val helpForm = actor(
+          ident = "helpForm",
+          menu = action,
+          label = "Help",
+          help = " Help"
+  ) {
+    key = Key.F1
+    icon = "help"
+  }
+  val helpCmd = command(item = helpForm) {
+    action = {
+      showHelp()
+    }
   }
 
   val block = insertBlock(Clients(), page) {

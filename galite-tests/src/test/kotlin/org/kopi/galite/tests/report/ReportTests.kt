@@ -118,7 +118,7 @@ class ReportTests: VApplicationTestBase() {
  * Simple Report with two fields.
  */
 object SimpleReport : Report() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
 
   override val title = "SimpleReport"
 

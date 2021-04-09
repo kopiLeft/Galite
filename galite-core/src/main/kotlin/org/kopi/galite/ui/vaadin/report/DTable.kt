@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.report
 
-import org.kopi.galite.report.MReport
 import org.kopi.galite.report.UReport.UTable
 import org.kopi.galite.report.VReportColumn
 import org.kopi.galite.report.VReportRow
@@ -39,7 +38,7 @@ import com.vaadin.flow.function.ValueProvider
  * @param model The table model.
  */
 @CssImport("./styles/galite/Report.css")
-class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventListener<ItemClickEvent<VReportRow>> {
+class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventListener<ItemClickEvent<VReportRow>> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -69,7 +68,7 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
     classNames.add("report")
     width = "100%"
     addItemClickListener(this)
-    addColumnReorderListener(::onReoder)
+    addColumnReorderListener(::onReorder)
   }
 
   //---------------------------------------------------
@@ -103,7 +102,7 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
    * Builds the grid rows.
    */
   private fun buildRows() {
-    setItems(model.getRows().toList())
+    setItems(model)
   }
 
   /**
@@ -111,7 +110,7 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
    *
    * @param event the column reorder event. Provides the list of grid columns with the new order.
    */
-  fun onReoder(event: ColumnReorderEvent<VReportRow>) {
+  fun onReorder(event: ColumnReorderEvent<VReportRow>) {
     viewColumns = event.columns.map { it.key.toInt() }
   }
 
@@ -153,6 +152,6 @@ class DTable(val model: MReport) : Grid<VReportRow>(), UTable, ComponentEventLis
    */
   inner class ColumnValueProvider(private val columnIndex: Int): ValueProvider<VReportRow, Any> {
     override fun apply(source: VReportRow): Any =
-            model.getAccessibleColumn(columnIndex)!!.format(source.getValueAt(columnIndex))
+            model.accessibleColumns[columnIndex]!!.format(source.getValueAt(columnIndex))
   }
 }

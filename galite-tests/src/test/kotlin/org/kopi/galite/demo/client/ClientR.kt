@@ -33,7 +33,7 @@ import org.kopi.galite.report.VReport
  * Client Report
  */
 class ClientR : Report() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
 
   override val title = "Clients_Report"
 
@@ -107,6 +107,7 @@ class ClientR : Report() {
     label = "First Name"
     help = "The client first name"
     align = FieldAlignment.LEFT
+    group = ageClt
     format {
       object : VCellFormat() {
         override fun format(value: Any?): String {

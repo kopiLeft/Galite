@@ -81,6 +81,7 @@ class DGridMultiBlock(parent: DForm,
   override fun addToDetail(comp: UComponent?, constraint: Alignment) {
     if (detail == null) {
       detail = SimpleBlockLayout(2 * maxColumnPos, maxRowPos)
+      setContent(detail!!)
       // detail.addStyleName("grid-detail") TODO
     }
     // block will not be marked in detail in client side
@@ -89,18 +90,15 @@ class DGridMultiBlock(parent: DForm,
     if (comp is DField) {
       comp.noChart = false
     }
-    //detail!!.addComponent(comp as Component, TODO
-    //                      constraint.x,
-    //                      constraint.y,
-    //                      constraint.width,
-    //                      constraint.height,
-    //                      constraint.alignRight,
-    //                      constraint.useAll)
-  }
 
-  /*fun getDetails(rowReference: RowReference?): Component? { TODO
-    return detail
-  }*/
+    detail!!.addComponent(comp as Component,
+                          constraint.x,
+                          constraint.y,
+                          constraint.width,
+                          constraint.height,
+                          constraint.alignRight,
+                          constraint.useAll)
+  }
 
   override fun inDetailMode(): Boolean = model.isDetailMode
 

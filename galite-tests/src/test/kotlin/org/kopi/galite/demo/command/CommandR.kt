@@ -35,7 +35,7 @@ import org.kopi.galite.report.VReport
  * Command Report
  */
 object CommandR : Report() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
 
   override val title = "Commands_Report"
 

@@ -17,11 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.data.binder.Result
-import com.vaadin.flow.data.binder.ValueContext
-import com.vaadin.flow.data.converter.Converter
-import com.vaadin.flow.data.renderer.Renderer
-import com.vaadin.flow.data.renderer.TextRenderer
 import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VCodeField
@@ -35,6 +30,7 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.grid.GridEditorDateField
 import org.kopi.galite.ui.vaadin.grid.GridEditorEnumField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
@@ -48,6 +44,12 @@ import org.kopi.galite.ui.vaadin.grid.GridEditorTimestampField
 import org.kopi.galite.ui.vaadin.grid.GridEditorWeekField
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
+
+import com.vaadin.flow.data.binder.Result
+import com.vaadin.flow.data.binder.ValueContext
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
+import com.vaadin.flow.data.renderer.TextRenderer
 
 /**
  * A grid text editor based on custom components.
@@ -85,9 +87,9 @@ class DGridTextEditorField(
 
   override fun updateText() {
     val newModelTxt = getModel().getText(getBlockView().getRecordFromDisplayLine(position))
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.value = transformer.toGui(newModelTxt)!!.trim()
-    //})
+    access {
+      editor.value = transformer.toGui(newModelTxt)!!.trim()
+    }
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
       selectionAfterUpdateDisabled = false
     }

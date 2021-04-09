@@ -67,7 +67,7 @@ class SimpleReportTest : VerticalLayout() {
    * Simple report with two fields
    */
   class SimpleReport : Report() {
-    override val locale = Locale.FRANCE
+    override val locale = Locale.UK
 
     override val title = "SimpleReport"
 

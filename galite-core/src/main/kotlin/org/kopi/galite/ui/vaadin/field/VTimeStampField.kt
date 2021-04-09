@@ -17,26 +17,23 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.datetimepicker.DateTimePicker
 
 /**
  * A timestamp field.
  */
-class VTimeStampField : DateTimePicker(), UTextField {
+class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNotifier {
 
-  override fun hasAutoComplete(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMaxLength(): Int = TODO()
-
-  override fun getMinLength(): Int = TODO()
-
-  override fun setMaxLength(maxLength: Int) {
-    // TODO
-  }
-
-  override fun setMinLength(minLength: Int) {
-    // TODO
+  override fun setPresentationValue(newPresentationValue: String?) {
+    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
+      val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+      LocalDateTime.parse(newPresentationValue, formatter)
+    } else {
+      null
+    }
   }
 }

@@ -25,7 +25,7 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
 object FormWithFields: Form() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form with fields"
   val testPage = page("test page")
   val testPagse = page("test page")

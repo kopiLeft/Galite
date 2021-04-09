@@ -20,9 +20,9 @@ import org.kopi.galite.form.VConstants
 
 enum class Modes(val value: Int) {
   /** mode query */
-  MOD_QUERY(VConstants.MOD_QUERY),
+  QUERY(VConstants.MOD_QUERY),
   /** mode insert */
-  MOD_INSERT(VConstants.MOD_INSERT),
+  INSERT(VConstants.MOD_INSERT),
   /** mode update */
-  MOD_UPDATE(VConstants.MOD_UPDATE)
+  UPDATE(VConstants.MOD_UPDATE)
 }

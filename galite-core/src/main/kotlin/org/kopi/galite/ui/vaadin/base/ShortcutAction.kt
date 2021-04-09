@@ -29,10 +29,10 @@ import com.vaadin.flow.component.KeyModifier
  */
 abstract class ShortcutAction(protected val caption: String,
                               protected val key: Key,
-                              vararg modifiers: KeyModifier?
+                              vararg modifiers: KeyModifier
 ) {
 
-  protected val modifierMask: Int = createModifierMask(modifiers)
+  protected val modifierMask: Int = createModifierMask(modifiers.toList())
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -51,28 +51,6 @@ abstract class ShortcutAction(protected val caption: String,
     return createKey(key, modifierMask)
   }
 
-  /**
-   * Creates the modifier mask of this shortcut action.
-   * @param modifiers The modifiers key.
-   * @return The modifier mask to be used.
-   */
-  protected fun createModifierMask(modifiers: Array<out KeyModifier?>?): Int {
-    var modifiersMask = 0
-    if (modifiers != null) {
-      for (i in modifiers.indices) {
-        when (modifiers[i]) {
-          //Key.ALT -> modifiersMask = modifiersMask or KeyboardListener.MODIFIER_ALT TODO
-          //Key.CONTROL -> modifiersMask = modifiersMask or KeyboardListener.MODIFIER_CTRL TODO
-          //Key.SHIFT -> modifiersMask = modifiersMask or KeyboardListener.MODIFIER_SHIFT TODO
-          //Key.WIN_KEY_LEFT_META -> modifiersMask = modifiersMask or KeyboardListener.MODIFIER_META TODO
-          else -> {
-          }
-        }
-      }
-    }
-    return modifiersMask
-  }
-
   companion object {
     /**
      * Creates a unique key for a key code and a modifier mask.
@@ -81,6 +59,20 @@ abstract class ShortcutAction(protected val caption: String,
      * @param modifierMask The modifier mask
      * @return The unique key.
      */
-    fun createKey(keyCode: Key, modifierMask: Int): String = "$keyCode-$modifierMask"
+    fun createKey(keyCode: Key, modifierMask: Int): String = "${keyCode.keys}-$modifierMask"
+
+    /**
+     * Creates the modifier mask of this shortcut action.
+     * @param modifiers The modifiers key.
+     * @return The modifier mask to be used.
+     */
+    fun createModifierMask(modifiers: Collection<KeyModifier>?): Int {
+      var modifiersMask = 0
+
+      modifiers?.forEach {
+        modifiersMask = modifiersMask or it.ordinal
+      }
+      return modifiersMask
+    }
   }
 }

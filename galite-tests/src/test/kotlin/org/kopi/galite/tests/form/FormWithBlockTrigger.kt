@@ -26,7 +26,7 @@ import org.kopi.galite.form.dsl.FormBlock
 
 object FormWithBlockTrigger: Form() {
 
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test"
   val testPage = page("test page")
   val menu = menu("Action")

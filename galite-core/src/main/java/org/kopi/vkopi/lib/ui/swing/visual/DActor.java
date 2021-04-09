@@ -113,7 +113,7 @@ public class DActor implements UActor {
   }
 
   private void init() {
-    action = new DActorAction(model.menuItem,
+    action = new DActorAction(model.getMenuItem(),
                               (model.getIconName() != null) ?
                               loadImage(model.getIconName()) :
                               null);

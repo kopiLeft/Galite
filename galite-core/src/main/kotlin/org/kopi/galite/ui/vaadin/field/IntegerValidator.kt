@@ -45,7 +45,7 @@ class IntegerValidator(private val minval: Int?,
     return Character.isDigit(c) || c == '.' || c == '-'
   }
 
-  override fun checkType(field: InputTextField, text: String) {
+  override fun checkType(field: InputTextField<*>, text: String) {
     if ("" == text) {
       field.value = null
     } else {

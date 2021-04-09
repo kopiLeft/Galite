@@ -21,13 +21,15 @@ import java.util.Locale
 import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.TaxRule
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
 object TaxRuleForm : ReportSelectionForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "TaxRules"
   val page = page("TaxRule")
   val action = menu("Action")
@@ -41,10 +43,59 @@ object TaxRuleForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
+  val resetBlock = actor(
+    ident = "reset",
+    menu = action,
+    label = "break",
+    help = "Reset Block",
+  ) {
+    key = Key.F3   // key is optional here
+    icon = "break"  // icon is optional here
+  }
+
+  val deleteBlock = actor(
+    ident = "deleteBlock",
+    menu = action,
+    label = "deleteBlock",
+    help = " deletes block",
+  ) {
+    key = Key.F5
+    icon = "delete"
+  }
+
   val block = insertBlock(TaxRuleBlock, page) {
     command(item = report) {
       action = {
         createReport(TaxRuleBlock)
+      }
+    }
+
+    command(item = list) {
+      action = {
+        println("-----------Generating list-----------------")
+        recursiveQuery()
+      }
+    }
+
+    command(item = resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+
+    command(item = deleteBlock) {
+      action = {
+        deleteBlock()
       }
     }
   }
@@ -54,7 +105,7 @@ object TaxRuleForm : ReportSelectionForm() {
   }
 }
 
-object TaxRuleBlock : FormBlock(1, 1, "TaxRule") {
+object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
   val u = table(TaxRule)
 
   val idTaxe = hidden(domain = Domain<Int>(20)) {
@@ -62,15 +113,30 @@ object TaxRuleBlock : FormBlock(1, 1, "TaxRule") {
     help = "The tax ID"
     columns(u.idTaxe)
   }
+
   val taxName = mustFill(domain = Domain<String>(20), position = at(1, 1)) {
     label = "Name"
     help = "The tax name"
-    columns(u.taxName)
+    columns(u.taxName) {
+      priority = 1
+    }
   }
+
   val rate = mustFill(domain = Domain<Int>(25), position = at(2, 1)) {
-    label = "Rate in %"
+    label = "Rate"
     help = "The tax rate in %"
-    columns(u.rate)
+    columns(u.rate) {
+      priority = 1
+    }
+  }
+
+  init {
+    blockVisibility(Access.VISIT, Modes.QUERY)
+  }
+
+  val percent = visit(domain = Domain<Boolean>(25), position = at(2, 2)) {
+    label = "%"
+    help = "The tax rate in %"
   }
 }
 
