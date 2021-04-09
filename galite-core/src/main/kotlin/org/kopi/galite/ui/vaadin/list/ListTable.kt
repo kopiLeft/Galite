@@ -17,14 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
-import com.vaadin.flow.component.grid.Grid
 import org.kopi.galite.form.VListDialog
+
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.provider.ListDataProvider
+import com.vaadin.flow.data.value.ValueChangeMode
 
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   init {
     isColumnReorderingAllowed = true
     buildRows()
     buildColumns()
+    installFilters(model)
   }
 
   private fun buildRows() {
@@ -33,7 +40,6 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     for (row in 0 until model.count) {
       items[row] = model.data.map { it[model.translatedIdents[row]] }
     }
-
     setItems(*items)
   }
 
@@ -45,6 +51,30 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
         .setAutoWidth(true)
         .setKey(col.toString())
     }
+  }
+
+  /**
+   * Install filters on all properties.
+   */
+  fun installFilters(model: VListDialog?) {
+    val filterRow = appendHeaderRow()
+
+    filterRow.also { element.classList.add("list-filter") }
+    this.columns.forEachIndexed { index, column ->
+      val cell = filterRow.getCell(column)
+      val filter = TextField()
+      val search = Icon(VaadinIcon.SEARCH)
+
+      filter.suffixComponent = search
+      filter.className = "filter-text"
+      filter.addValueChangeListener {
+        (dataProvider as ListDataProvider).filter = ListFilter(index, filter.value, true, false)
+      }
+
+      filter.valueChangeMode = ValueChangeMode.EAGER
+      cell.setComponent(filter)
+    }
+    element.classList.add("filtered")
   }
 
   /**
