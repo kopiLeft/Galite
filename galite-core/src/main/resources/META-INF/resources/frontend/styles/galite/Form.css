@@ -151,8 +151,8 @@ html {
     font-size: 13px;
 }
 
-#actors ::part(overflow-button):hover {
-     background: #505050;
+#actors::part(overflow-button):hover {
+     background: #547988;
 }
 
 ::part(k-actor):hover {
@@ -196,7 +196,7 @@ html {
     display: inline-block;
     width: 0;
     height: 0;
-    color:white;
+    color: white;
 }
 
 /*

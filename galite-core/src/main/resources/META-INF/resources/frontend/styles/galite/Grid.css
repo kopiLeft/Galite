@@ -30,14 +30,6 @@
     font-style: italic;
 }
 
-[part~="cell"].notItalic {
-    font-style: normal;
-}
-
 [part~="cell"].bold {
     font-weight: bold;
-}
-
-[part~="cell"].notBold {
-    font-weight: normal;
 }

@@ -9,14 +9,14 @@
 /*
  * List Table header styles
  */
-.enhanced-dialog-content vaadin-grid ,
-.enhanced-dialog-content  vaadin-grid > vaadin-grid-cell-content  {
+.enhanced-dialog-content vaadin-grid,
+.enhanced-dialog-content  vaadin-grid > vaadin-grid-cell-content {
     --lumo-font-family:  Arial, sans-serif;
     --lumo-font-size-m: 0.900rem;
     font-weight: bold;
 }
 
-.enhanced-dialog-content vaadin-grid ,
+.enhanced-dialog-content vaadin-grid,
 .enhanced-dialog-content vaadin-grid > vaadin-grid-cell-content:hover {
     cursor: pointer;
 }
@@ -37,10 +37,6 @@
 .k-listdialog-table > * {
     box-shadow: none;
     padding-left: 9px;
-}
-
-::part(cell) {
-    position: unset;
 }
 
 .k-listdialog ::part(row) {
