@@ -113,7 +113,22 @@ class DActor(private var model: VActor)
         Key.UNIDENTIFIED // TODO
       } else {
         try {
-          Key.of("F1") // TODO
+          when (acceleratorKey) {
+            KeyEvent.VK_F1 -> Key.F1
+            KeyEvent.VK_F2 -> Key.F2
+            KeyEvent.VK_F3 -> Key.F3
+            KeyEvent.VK_F4 -> Key.F4
+            KeyEvent.VK_F5 -> Key.F5
+            KeyEvent.VK_F6 -> Key.F6
+            KeyEvent.VK_F7 -> Key.F7
+            KeyEvent.VK_F8 -> Key.F8
+            KeyEvent.VK_F9 -> Key.F9
+            KeyEvent.VK_F10 -> Key.F10
+            KeyEvent.VK_F11 -> Key.F11
+            KeyEvent.VK_F12 -> Key.F12
+            KeyEvent.VK_ESCAPE -> Key.ESCAPE
+            else -> throw Exception("Key Undefined")
+          }
         } catch (e: Exception) {
           Key.UNIDENTIFIED
         }

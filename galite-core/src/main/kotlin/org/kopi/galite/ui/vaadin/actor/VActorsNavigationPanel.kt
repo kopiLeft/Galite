@@ -36,7 +36,7 @@ class VActorsNavigationPanel : VNavigationPanel() {
    */
   fun addActor(actor: Actor, action: VActor?) {
     var column: VNavigationColumn?
-    val item = VActorNavigationItem(actor.text, actor.menu, actor.acceleratorKey, actor.icon, action)
+    val item = VActorNavigationItem(actor.text, actor.menu, actor.acceleratorKey, actor.modifiersKey, actor.icon, action)
 
     column = getColumn(if (isHelpMenu(item.menu)) "help" else item.menu)
     if (column == null) {
