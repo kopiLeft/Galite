@@ -18,12 +18,10 @@
 package org.kopi.galite.ui.vaadin.block
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * A block layout that contains a single component inside.
  */
-@CssImport(value = "")
 class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
 
   //---------------------------------------------------

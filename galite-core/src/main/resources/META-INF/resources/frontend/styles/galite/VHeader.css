@@ -92,10 +92,6 @@
     background-color: #d9f0f8;
 }
 
-#module_list :not(#user_menu):first-child::part(menu-bar-button):active {
-    background-color: red;
-}
-
 /*
 user , admin , wrk context and bookmark
 */
