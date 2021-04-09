@@ -355,7 +355,9 @@ object Commands : VConstants {
     }
     try {
       try {
-        b.save()
+        transaction {
+          b.save()
+        }
       } catch (e: VException) {
         throw e
         try {

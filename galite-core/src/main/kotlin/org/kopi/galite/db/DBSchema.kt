@@ -18,7 +18,7 @@
 package org.kopi.galite.db
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.jodatime.datetime
+import org.jetbrains.exposed.sql.`java-time`.timestamp
 
 object Modules : Table("MODULE") {
   val id = integer("ID").autoIncrement()
@@ -104,9 +104,9 @@ object Users : Table("KOPI_USERS") {
   val phone = varchar("TELEFON", 20).nullable()
   val email = varchar("EMAIL", 40).nullable()
   val active = bool("AKTIV")
-  val createdOn = datetime("ERSTELLTAM")
+  val createdOn = timestamp("ERSTELLTAM").nullable() // TODO: should not be nullable
   val createdBy = integer("ERSTELLTVON")
-  val changedOn = datetime("GEAENDERTAM").nullable()
+  val changedOn = timestamp("GEAENDERTAM").nullable()
   val changedBy = integer("GEAENDERTVON")
 
   override val primaryKey = PrimaryKey(id, name = "PK_KOPI_USERS_ID")

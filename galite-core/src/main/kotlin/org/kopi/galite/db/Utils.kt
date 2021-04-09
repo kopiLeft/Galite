@@ -18,6 +18,12 @@
 
 package org.kopi.galite.db
 
+import java.lang.RuntimeException
+
+import org.jetbrains.exposed.sql.Sequence
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.nextIntVal
+import org.jetbrains.exposed.sql.selectAll
 import org.kopi.galite.type.Date
 import org.kopi.galite.type.Month
 import org.kopi.galite.type.Time
@@ -26,6 +32,20 @@ import org.kopi.galite.type.Week
 
 class Utils {
   companion object {
+
+    /**
+     * Returns first free ID of table.
+     */
+    fun getNextTableId(table: Table): Int {
+      val seqNextVal = Sequence(table.nameInDatabaseCase() + "Id").nextIntVal()
+      val seqNextValQuery = getDualTableName().slice(seqNextVal).selectAll()
+      val id = seqNextValQuery.firstOrNull()?.get(seqNextVal)
+        ?: throw RuntimeException("Unable to get the sequence next value for table ${table.nameInDatabaseCase()}")
+      return id
+    }
+
+    fun getDualTableName(): Table = Table("DUAL")
+
     fun trimString(input: String): String {
       val buffer = CharArray(input.length)
       var bufpos = 0
