@@ -337,6 +337,9 @@ class TextField(val model: VField,
     text.size = 1.coerceAtLeast(size)
     text.setMaxLength(maxLength)
     text.maxWidth = "" + col + "em" // TODO: temporary styling
+    if(type == Type.WEEK || type == Type.MONTH) {
+      text.maxWidth = "" + 30  + "em"
+    }
     // add navigation handler.
     // text.addKeyDownHandler(TextFieldNavigationHandler.newInstance(this, text, rows > 1)) TODO
     return text

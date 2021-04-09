@@ -20,6 +20,7 @@ package org.kopi.galite.form
 
 import java.util.Calendar
 import java.util.GregorianCalendar
+import java.sql.Date
 
 import kotlin.reflect.KClass
 
@@ -30,9 +31,8 @@ import org.kopi.galite.type.Month
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
-import java.sql.Date
 
-class VMonthField(val bufferSize: Int) : VField(30, 1) {
+class VMonthField(val bufferSize: Int) : VField(7, 1) {
 
   override fun hasAutofill(): Boolean = true
 
