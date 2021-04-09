@@ -48,6 +48,7 @@ import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dialog.Dialog
@@ -185,12 +186,16 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * @param actorDefs The [VActor] definitions.
    */
   private fun addActorsToGUI(actorDefs: Array<VActor?>) {
+    val panel = VActorsNavigationPanel()
     // Add actors panel
     add(actors)
     // Add each actor to the panel
     actorDefs.forEach { actorDef ->
       val actor = DActor(actorDef!!)
+
+      panel.addActor(actor, actorDef)
       addActor(actor)
+      addActorsNavigationPanel(panel)
     }
   }
 
