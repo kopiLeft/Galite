@@ -316,7 +316,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
       val pageNumber = block.pageNumber
       val blocks = vForm.blocks
       if (newAccess) {
-        // content.setEnabled(true, pageNumber) TODO
+        content.setEnabled(true, pageNumber)
       } else {
         // tab is visible (another visible block there?)
         for (i in blocks.indices) {
@@ -324,7 +324,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
             return
           }
         }
-        // content.setEnabled(false, pageNumber) TODO
+        content.setEnabled(false, pageNumber)
       }
     }
 
