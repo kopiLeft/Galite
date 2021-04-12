@@ -72,6 +72,11 @@ class ClientForm : ReportSelectionForm() {
       showHelp()
     }
   }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
 
   val block = insertBlock(Clients(), page) {
     command(item = report) {
@@ -82,11 +87,6 @@ class ClientForm : ReportSelectionForm() {
     command(item = dynamicReport) {
       action = {
         createDynamicReport()
-      }
-    }
-    command(item = quit) {
-      action = {
-        quitForm()
       }
     }
   }
