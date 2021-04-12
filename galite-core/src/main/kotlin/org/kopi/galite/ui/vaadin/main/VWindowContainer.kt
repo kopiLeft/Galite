@@ -116,6 +116,7 @@ class VWindowContainer : Div() {
         previousWindow = currentWindow
         previousWindow?.isVisible = false
         currentWindow = window
+        currentWindow?.isVisible = true
 
         caption.setCaption(windowToCaptionMap[window])
         UI.getCurrent().page.setTitle(caption.getCaption())
