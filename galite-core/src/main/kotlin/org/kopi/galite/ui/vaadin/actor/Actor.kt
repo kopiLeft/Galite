@@ -37,7 +37,7 @@ import com.vaadin.flow.component.html.Image
  */
 open class Actor(val caption: String?,
                  description: String?,
-                 val menu: String,
+                 val menu: String?,
                  val icon: String?,
                  val acceleratorKey: Key,
                  val modifiersKey: KeyModifier?) : Button(), HasEnabled {

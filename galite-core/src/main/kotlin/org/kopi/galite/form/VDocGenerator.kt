@@ -248,7 +248,7 @@ class VDocGenerator(val latexPrinter: LatexPrintWriter) : VHelpGenerator() {
   /**
    * printlns a compilation unit
    */
-  override fun helpOnCommand(menu: String, item: String, icon: String?, accKey: Int, accMod: Int, help: String?) {
+  override fun helpOnCommand(menu: String?, item: String?, icon: String?, accKey: Int, accMod: Int, help: String?) {
     latexPrinter.print("\\item{")
     if (accMod == Event.SHIFT_MASK) {
       latexPrinter.print("\\Taste{Shift} ")
