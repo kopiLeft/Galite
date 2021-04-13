@@ -46,7 +46,7 @@ class ClientForm : ReportSelectionForm() {
           label = "DynamicReport",
           help = " Create Dynamic Report",
   ) {
-    key = Key.F6          // key is optional here
+    key = Key.F6      // key is optional here
     icon = "preview"  // icon is optional here
   }
   val quit = actor(

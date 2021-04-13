@@ -210,7 +210,7 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  fun getSearchOrder_Test() {
+  fun getSearchOrderTest() {
     FormWithList.model
     val orderBys = FormWithList.block3.vBlock.getSearchOrder()
 

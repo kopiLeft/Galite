@@ -1216,9 +1216,12 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    *
    */
   fun getObject(r: Int): Any? =
-    alias?.getObject(0) ?: if (hasTrigger(VConstants.TRG_VALUE)) {
-      callSafeTrigger(VConstants.TRG_VALUE)
-    } else getObjectImpl(r)
+    alias?.getObject(0)
+      ?: if (hasTrigger(VConstants.TRG_VALUE)) {
+        callSafeTrigger(VConstants.TRG_VALUE)
+      } else {
+        getObjectImpl(r)
+      }
 
   /**
    * Returns the field value of the current record as an object
