@@ -152,7 +152,7 @@ abstract class Window : VerticalLayout() {
     for (child in children) {
       if (child is Actor) {
         if (child == actor) {
-          child.setActorEnabled(enabled)
+          child.isEnabled = enabled
         }
       }
     }

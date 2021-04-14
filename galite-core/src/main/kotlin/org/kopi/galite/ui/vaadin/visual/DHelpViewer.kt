@@ -57,6 +57,6 @@ class DHelpViewer(model: VHelpViewer) : DWindow(model), Focusable<Window> {
   }
   override fun run() {
     focus()
-    getModel().setActorEnabled(VHelpViewer.CMD_QUIT, true)
+    getModel()!!.setActorEnabled(VHelpViewer.CMD_QUIT, true)
   }
 }

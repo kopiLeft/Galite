@@ -54,7 +54,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // content.locale = application.defaultLocale.toString() TODO
     model.addFormListener(this)
     //content.addFormListener(this) TODO
-    getModel().setDisplay(this)
+    getModel()!!.setDisplay(this)
     val blockCount = vForm.getBlockCount()
     blockViews = arrayOfNulls(blockCount)
     for (i in 0 until blockCount) {
@@ -67,7 +67,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
       blockModel.addBlockListener(blockListener)
     }
     setContent(content)
-    getModel().enableCommands()
+    getModel()!!.enableCommands()
   }
 
   //---------------------------------------------------

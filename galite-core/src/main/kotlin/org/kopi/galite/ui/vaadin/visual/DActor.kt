@@ -78,7 +78,16 @@ class DActor(private var model: VActor)
   }
 
   override fun onComponentEvent(event: ClickEvent<Button>) {
-    model.performAction()
+    // fire the actor action
+    if (isEnabled) {
+      // clean all dirty values in the client side of the parent window.
+      /*getWindow().cleanDirtyValues(getBlock()) TODO
+      if (VEditorTextField.getLastFocusedEditor() != null) {
+        // fires text change event for grid editors
+        VEditorTextField.getLastFocusedEditor().valueChanged(false)
+      }*/
+      model.performAction()
+    }
   }
 
   companion object {

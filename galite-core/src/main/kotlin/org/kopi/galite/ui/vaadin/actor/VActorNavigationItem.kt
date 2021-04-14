@@ -34,7 +34,7 @@ import com.vaadin.flow.component.html.Label
  * @param icon The menu item icon.
  */
 class VActorNavigationItem(text: String,
-                           val menu: String,
+                           val menu: String?,
                            acceleratorKey: Key?,
                            keyModifier : KeyModifier?,
                            icon: String?,

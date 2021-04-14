@@ -49,6 +49,15 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6      // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val quit = actor(
+          ident = "quit",
+          menu = action,
+          label = "quit",
+          help = "Quit",
+  ) {
+    key = Key.ESCAPE          // key is optional here
+    icon = "quit"  // icon is optional here
+  }
   val helpForm = actor(
           ident = "helpForm",
           menu = action,
@@ -61,6 +70,11 @@ class ClientForm : ReportSelectionForm() {
   val helpCmd = command(item = helpForm) {
     action = {
       showHelp()
+    }
+  }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
     }
   }
 
