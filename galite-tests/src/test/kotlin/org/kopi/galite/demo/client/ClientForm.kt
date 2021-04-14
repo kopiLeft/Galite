@@ -21,14 +21,18 @@ import java.util.Locale
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Application
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
+import org.kopi.galite.tests.chart.ChartSample
+import org.kopi.galite.tests.form.FormWithChart
 
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Clients"
+  val page = page("Client")
   val action = menu("Action")
   val report = actor(
           ident = "report",
@@ -48,15 +52,6 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6      // key is optional here
     icon = "preview"  // icon is optional here
   }
-  val quit = actor(
-          ident = "quit",
-          menu = action,
-          label = "quit",
-          help = "Quit",
-  ) {
-    key = Key.ESCAPE          // key is optional here
-    icon = "quit"  // icon is optional here
-  }
   val helpForm = actor(
           ident = "helpForm",
           menu = action,
@@ -71,13 +66,17 @@ class ClientForm : ReportSelectionForm() {
       showHelp()
     }
   }
-  val quitCmd = command(item = quit) {
-    action = {
-      quitForm()
-    }
+  val graph = actor (
+          ident =  "graph",
+          menu =   FormWithChart.action,
+          label =  "Graph",
+          help =   "show graph values",
+  ) {
+    key  =  Key.F9          // key is optional here
+    icon =  "column_chart"  // icon is optional here
   }
 
-  val block = insertBlock(Clients()) {
+  val block = insertBlock(Clients(), page) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)
@@ -86,6 +85,12 @@ class ClientForm : ReportSelectionForm() {
     command(item = dynamicReport) {
       action = {
         createDynamicReport()
+      }
+    }
+    command(item = graph) {
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        showChart(ChartSample)
       }
     }
   }
