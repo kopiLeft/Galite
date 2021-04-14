@@ -65,7 +65,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   private var currentPage = -1
   private var pages: Array<Page<*>?> = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
   private val tabsToPages: MutableMap<Tab, Component> = mutableMapOf()
-  private var tabPanel: Tabs = Tabs()
+  private var tabPanel: Tabs? = null
   private var listeners: MutableList<FormListener> = mutableListOf()
   private var lastSelected = -1
   private var fireSelectionEvent = true
@@ -97,19 +97,20 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
     if (pageCount == 0) {
       setContent(pages[0]!!)
     } else {
-      tabPanel.className = Styles.FORM_TAB_PANEL
+      tabPanel = Tabs()
+      tabPanel!!.className = Styles.FORM_TAB_PANEL
       for (i in pages.indices) {
         val tab = createTabLabel(titles[i])
         tabsToPages[tab] = pages[i]!!
-        tabPanel.add(tab)
+        tabPanel!!.add(tab)
         tab.isEnabled = false
       }
 
-      tabPanel.addSelectedChangeListener {
+      tabPanel!!.addSelectedChangeListener {
         tabsToPages.values.forEach { page -> page.isVisible = false }
-        tabsToPages[tabPanel.selectedTab]!!.isVisible = true
+        tabsToPages[tabPanel!!.selectedTab]!!.isVisible = true
       }
-      setContent(tabPanel, Div(*pages))
+      setContent(tabPanel!!, Div(*pages))
     }
   }
 
@@ -128,8 +129,10 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    * @param page The page index.
    */
   private fun selectPage(page: Int) {
-    tabPanel.selectedIndex = page
-    tabPanel.selectedTab.isEnabled = true
+    if(tabPanel != null) {
+      tabPanel!!.selectedIndex = page
+      tabPanel!!.selectedTab.isEnabled = true
+    }
   }
 
   /**
@@ -149,6 +152,8 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    * @param isChart Is it a chart block ?
    */
   fun addBlock(block: Component, page: Int, isFollow: Boolean, isChart: Boolean) {
+    blocksData[block] = BlockComponentData(isFollow, isChart, page)
+
     val hAlign = if (isChart) {
       JustifyContentMode.CENTER
     } else {
@@ -249,7 +254,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    * @param page The page index.
    */
   fun setEnabled(enabled: Boolean, page: Int) {
-    // TODO
+    tabsToPages.keys.elementAtOrNull(page)?.isEnabled = enabled
   }
 
   /**

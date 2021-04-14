@@ -29,7 +29,6 @@ import org.kopi.galite.report.Report
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Clients"
-  val page = page("Client")
   val action = menu("Action")
   val report = actor(
           ident = "report",
@@ -78,7 +77,7 @@ class ClientForm : ReportSelectionForm() {
     }
   }
 
-  val block = insertBlock(Clients(), page) {
+  val block = insertBlock(Clients()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)
