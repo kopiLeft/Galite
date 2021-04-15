@@ -42,7 +42,7 @@ class VActorsNavigationPanel : VNavigationPanel() {
     if (column == null) {
       // The header item is not created
       // we will create the navigation column and the header item
-      column = VNavigationColumn(if (isHelpMenu(item.menu)) "help" else item.menu!!)
+      column = VNavigationColumn(if (isHelpMenu(item.menu)) "help" else item.menu)
       column.className = "actor-navigationColumn"
       column.setHeader(item.menu)
     }
