@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.common
 
-import java.util.Objects
-
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
@@ -28,9 +26,19 @@ import com.vaadin.flow.dom.Element
 
 @Tag("table")
 open class VSimpleTable : Component(), HasComponents, HasSize, HasStyle {
+
+  var tbody: Element = Element("tbody")
+  var lastTR: Element
+  var lastTd: Element? = null
+
+  init {
+    element.appendChild(tbody)
+    lastTR = Element("tr")
+  }
+
   //---------------------------------------------------
-// IMPLEMENTATIONS
-//---------------------------------------------------
+  // IMPLEMENTATIONS
+  //---------------------------------------------------
   /**
    * Sets the amount of spacing to be added around all cells.
    *
@@ -84,23 +92,8 @@ open class VSimpleTable : Component(), HasComponents, HasSize, HasStyle {
   }
 
   override fun add(vararg components: Component) {
-    Objects.requireNonNull(components, "Components should not be null")
     for (component in components) {
       addCell(true, component)
     }
-  }
-
-  var tbody: Element = Element("tbody")
-  var lastTR: Element
-  var lastTd: Element? = null
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates the login table instance.
-   */
-  init {
-    element.appendChild(tbody)
-    lastTR = Element("tr")
   }
 }
