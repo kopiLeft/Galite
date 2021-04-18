@@ -24,7 +24,8 @@ import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Image
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
  * The actor component
@@ -40,7 +41,7 @@ import com.vaadin.flow.component.html.Image
 open class Actor(val caption: String?,
                  description: String?,
                  val menu: String?,
-                 val icon: String?,
+                 val icon: VaadinIcon?,
                  val acceleratorKey: Key,
                  val modifiersKey: KeyModifier?) : Button(), HasEnabled {
 
@@ -51,8 +52,7 @@ open class Actor(val caption: String?,
     super.setText(caption)
 
     if (icon != null) {
-      val img = Image()
-      img.src = icon
+      val img = Icon(icon)
       super.setIcon(img)
     }
 
