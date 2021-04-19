@@ -48,16 +48,6 @@
 }
 
 /*
- * Form blocks style
- */
-.k-block {
-    padding: 22px 20px 22px 50px;
-    margin-bottom: 16px;
-    background: #ffffff;
-    display: inline-block;
-}
-
-/*
  * Field's values style
  */
 ::part(input-field), ::part(input-field):not(:hover) {
@@ -127,45 +117,6 @@
 }
 
 /*
- * Actors' container style
- */
-#actors {
-    height: 46px;
-    width: 100%;
-    background: #009bd4;
-    color: #ffffff;
-}
-
-#actors::part(overflow-button) {
-    margin: 0;
-    border-left: 1px solid #dadada;
-    height: 46px;
-    background: #009bd4;
-    color: #ffffff;
-}
-
-::part(k-actor) {
-    border: 0;
-    background: #009bd4;
-    color: #ffffff;
-    height: 60px;
-    font-size: 13px;
-}
-
-#actors::part(overflow-button):hover {
-     background: #547988;
-}
-
-::part(k-actor):hover {
-    background: #547988;
-}
-
-.k-window ::part(menu-bar-button) {
-    padding: 0;
-    height: 42px;
-}
-
-/*
  * Boolean field style
  */
 ::part(checkbox) {
@@ -222,31 +173,4 @@
     to {
         transform: rotate(1turn);
     }
-}
-
-/**
- * Styles to be applied for actors menu
- */
-.actors-navigationPanel {
-    display: inline-block;
-    width: 970px;
-    height:auto;
-    padding: 14px 14px 18px 14px;
-    background: #ffffff;
-    color: #8f8f8f;
-    border-bottom : 1px solid #dadada;
-}
-
-.actor-navigationItem {
-    height: auto;
-    background: var(--lumo-base-color);
-}
-
-.actor-navigationItem::part(label) {
-    color: #8f8f8f;
-}
-
-.actor-navigationColumn > label {
-    width:600px;
-    border-bottom : 1px solid #dadada;
 }

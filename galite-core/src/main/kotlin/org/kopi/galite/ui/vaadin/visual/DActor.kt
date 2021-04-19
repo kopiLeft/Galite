@@ -26,6 +26,7 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEventListener
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dependency.CssImport
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
@@ -44,6 +45,7 @@ import org.kopi.galite.visual.VActor
  * @param model The actor model.
  *
  */
+@CssImport("./styles/galite/Actor.css")
 class DActor(private var model: VActor)
   : Actor(model.menuItem,
           Utils.createTooltip(getDescription(model)),

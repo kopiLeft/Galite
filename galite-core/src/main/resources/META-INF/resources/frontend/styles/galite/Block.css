@@ -16,17 +16,29 @@
  */
 
 /*
- * Report style
+ * Form blocks style
  */
-::part(cell header-cell) {
-     background: #f2f2f2;
-     padding-left: 9px;
-     color: #505050;
+.k-block {
+    padding: 22px 20px 22px 50px;
+    margin-bottom: 16px;
+    background: #ffffff;
+    display: inline-block;
 }
 
-#main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-font-family:  Arial, sans-serif;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.750rem;
+.k-block .simple ::part(value) {
+    --lumo-text-field-overflow-mask-image: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    background-color: var(--lumo-base-color);
+    border-bottom: 1px solid #dadada;
+}
+
+.k-block .multiple ::part(value) {
+    border-left:1px solid #dadada;
+    border-bottom: 1px solid #dadada;
+}
+
+.k-block .multiple ::part(value):focus {
+    border-bottom: 1px solid #505050;
 }

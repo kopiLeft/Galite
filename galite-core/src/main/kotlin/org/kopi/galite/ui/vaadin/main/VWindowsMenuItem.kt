@@ -30,7 +30,6 @@ import com.vaadin.flow.component.button.Button
 class VWindowsMenuItem(title : String, window : Component, container : VWindowContainer) : Button(title) {
 
   init {
-    className = STYLENAME_DEFAULT
     element.style.set("whiteSpace", "nowrap")
     // adding listener on the item to open the form in the container
     addClickListener {

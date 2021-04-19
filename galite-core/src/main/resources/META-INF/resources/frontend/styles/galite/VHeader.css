@@ -129,3 +129,7 @@ user , admin , wrk context and bookmark
     box-sizing: border-box;
     --lumo-space-m: 0;
 }
+
+vcf-enhanced-dialog-overlay::part(footer) {
+  display:none;
+}

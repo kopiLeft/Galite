@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+ /*
+ * Actors' container style
+ */
+#actors {
+    height: 46px;
+    width: 100%;
+    background: #009bd4;
+    color: #ffffff;
+}
+
+#actors::part(overflow-button) {
+    margin: 0;
+    border-left: 1px solid #dadada;
+    height: 46px;
+    background: #009bd4;
+    color: #ffffff;
+}
+
+::part(k-actor) {
+    border: 0;
+    background: #009bd4;
+    color: #ffffff;
+    height: 60px;
+    font-size: 13px;
+}
+
+#actors::part(overflow-button):hover {
+     background: #547988;
+}
+
+::part(k-actor):hover {
+    background: #547988;
+}
+
+.k-window ::part(menu-bar-button) {
+    padding: 0;
+    height: 42px;
+}
+
+/**
+ * Styles to be applied for actors menu
+ */
+.actors-navigationPanel {
+    display: inline-block;
+    width: 970px;
+    height:auto;
+    padding: 14px 14px 18px 14px;
+    background: #ffffff;
+    color: #8f8f8f;
+    border-bottom : 1px solid #dadada;
+}
+
+.actor-navigationItem {
+    height: auto;
+    background: var(--lumo-base-color);
+}
+
+.actor-navigationItem::part(label) {
+    color: #8f8f8f;
+}
+
+.actor-navigationColumn > label {
+    width:600px;
+    border-bottom : 1px solid #dadada;
+}
