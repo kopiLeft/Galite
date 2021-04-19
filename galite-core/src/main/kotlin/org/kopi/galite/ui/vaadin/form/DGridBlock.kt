@@ -25,6 +25,7 @@ import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.SingleComponentBlockLayout
+import org.kopi.galite.ui.vaadin.list.ListFilter
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
 
@@ -34,8 +35,14 @@ import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
+import com.vaadin.flow.data.provider.ListDataProvider
+import com.vaadin.flow.data.value.ValueChangeMode
+import com.vaadin.flow.function.SerializablePredicate
 
 /**
  * Grid based chart block implementation.
@@ -269,6 +276,29 @@ open class DGridBlock(parent: DForm, model: VBlock)
     if (filterRow != null) {
       return
     }
+
+    access {
+      filterRow = grid.appendHeaderRow()
+
+      filterRow.also { element.classList.add("block-filter") }
+      grid.columns.forEachIndexed { index, column ->
+        val cell = filterRow!!.getCell(column)
+        val filter = TextField()
+        val search = Icon(VaadinIcon.SEARCH)
+
+        filter.suffixComponent = search
+        filter.className = "filter-text"
+        filter.addValueChangeListener {
+          (grid.dataProvider as ListDataProvider).filter =
+                  ListFilter(index, filter.value, true, false) as SerializablePredicate<DGridBlockContainer.GridBlockItem>
+        }
+
+        filter.valueChangeMode = ValueChangeMode.EAGER
+        cell.setComponent(filter)
+      }
+    }
+
+
     /*BackgroundThreadHandler.access(Runnable { TODO
       filterRow = grid.appendHeaderRow()
       // filterRow.setStyleName("block-filter")

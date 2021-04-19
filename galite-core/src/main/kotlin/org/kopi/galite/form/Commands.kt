@@ -213,7 +213,9 @@ object Commands : VConstants {
     if (id != -1) {
       try {
         try {
-          b.fetchRecord(id)
+          transaction {
+            b.fetchRecord(id)
+          }
         } catch (e: VException) {
           throw e
           try {

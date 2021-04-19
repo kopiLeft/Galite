@@ -21,4 +21,6 @@
         <module ident="7001" label="TAX RULES" help="Tax Rules management" />
     <module ident="8000" label="PROVIDERS" help="Providers management" />
         <module ident="8001" label="PROVIDERS" help="Providers management" />
+    <module ident="9000" label="NEWCOMMANDS" help="New Commands Form" />
+        <module ident="9001" label="NEWCOMMANDS" help="New Commands Form" />
 </modules>

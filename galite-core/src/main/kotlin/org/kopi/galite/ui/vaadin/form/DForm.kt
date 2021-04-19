@@ -27,6 +27,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldException
 import org.kopi.galite.form.VForm
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.util.base.InconsistencyException
@@ -139,9 +140,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    */
   fun gotoPage(i: Int) {
     currentPage = i
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access {
       content.gotoPage(i)
-    //})
+    }
   }
 
   /**

@@ -34,6 +34,7 @@ import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.demo.command.CommandForm
+import org.kopi.galite.demo.newCommands.NewCommandsForm
 import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
@@ -213,6 +214,8 @@ fun initModules() {
     insertIntoModule("7001", "org/kopi/galite/test/Menu", 601, "7000", TaxRuleForm::class)
     insertIntoModule("8000", "org/kopi/galite/test/Menu", 700)
     insertIntoModule("8001", "org/kopi/galite/test/Menu", 701, "8000", ProviderForm::class)
+    insertIntoModule("9000", "org/kopi/galite/test/Menu", 800)
+    insertIntoModule("9001", "org/kopi/galite/test/Menu", 801, "9000", NewCommandsForm::class)
   }
 }
 fun insertIntoModule(shortname: String,
