@@ -129,6 +129,14 @@ abstract class Form : Window() {
     model.showHelp(model)
   }
 
+  /**
+   * Aborts current processing, closes form.
+   * @exception        VException        an exception may occur in form.close()
+   */
+  fun quitForm() {
+    Commands.quitForm(model)
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   // FORM TRIGGERS EVENTS
   ///////////////////////////////////////////////////////////////////////////

@@ -29,7 +29,6 @@ import org.kopi.galite.report.Report
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Clients"
-  val page = page("Client")
   val action = menu("Action")
   val report = actor(
           ident = "report",
@@ -46,8 +45,17 @@ class ClientForm : ReportSelectionForm() {
           label = "DynamicReport",
           help = " Create Dynamic Report",
   ) {
-    key = Key.F6          // key is optional here
+    key = Key.F6      // key is optional here
     icon = "preview"  // icon is optional here
+  }
+  val quit = actor(
+          ident = "quit",
+          menu = action,
+          label = "quit",
+          help = "Quit",
+  ) {
+    key = Key.ESCAPE          // key is optional here
+    icon = "quit"  // icon is optional here
   }
   val helpForm = actor(
           ident = "helpForm",
@@ -63,8 +71,13 @@ class ClientForm : ReportSelectionForm() {
       showHelp()
     }
   }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
 
-  val block = insertBlock(Clients(), page) {
+  val block = insertBlock(Clients()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)

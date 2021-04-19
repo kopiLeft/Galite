@@ -51,7 +51,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   init {
     model.addReportListener(this)
-    getModel().setDisplay(this)
+    getModel()!!.setDisplay(this)
     setSizeFull()
   }
 
@@ -212,7 +212,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
       val row = event.item
       val col = event.column.key.toInt()
       if (model.isRowLine(row)) {
-        getModel().performAsyncAction(object : Action("edit_line") {
+        getModel()!!.performAsyncAction(object : Action("edit_line") {
           override fun execute() {
             try {
               report.editLine()

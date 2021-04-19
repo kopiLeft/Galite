@@ -240,6 +240,7 @@ abstract class Report : Window() {
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // REPORT TRIGGERS
+        super.VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
         triggers.forEach { trigger ->
           val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
           for (i in VConstants.TRG_TYPES.indices) {
@@ -248,7 +249,7 @@ abstract class Report : Window() {
               super.triggers[i] = trigger
             }
           }
-          super.VKT_Triggers[0] = blockTriggerArray
+          super.VKT_Triggers!![0] = blockTriggerArray
         }
 
         // FIELD TRIGGERS
@@ -261,14 +262,14 @@ abstract class Report : Window() {
             fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
           }
           // TODO : Add field triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
+          super.VKT_Triggers!!.add(fieldTriggerArray)
         }
 
         // COMMANDS TRIGGERS
         commands?.forEach {
           val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
           // TODO : Add commands triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
+          super.VKT_Triggers!!.add(fieldTriggerArray)
         }
       }
 

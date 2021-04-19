@@ -64,6 +64,11 @@ open class ChartMeasure<T>(domain: Domain<T>) : ChartField<T>(domain) where T : 
         Int::class -> VIntegerMeasure(ident, color)
         Decimal::class -> VFixnumMeasure(ident, color, domain.height!!)
         else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
+      }.also {
+        if (ident != "") {
+          it.label = label
+          it.help = help
+        }
       }
     }
 }

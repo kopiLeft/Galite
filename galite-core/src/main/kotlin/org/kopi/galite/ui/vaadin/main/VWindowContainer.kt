@@ -77,6 +77,8 @@ class VWindowContainer : Div() {
    * @return The new shown component or `null` if no window is shown.
    */
   fun removeWindow(window: Component): Component? {
+    caption.setCaption("") // reset window caption
+    // look for internal map.
     val caption = windowToCaptionMap.remove(window)
     if (caption != null) {
       pane.remove(window)
@@ -114,6 +116,7 @@ class VWindowContainer : Div() {
         previousWindow = currentWindow
         previousWindow?.isVisible = false
         currentWindow = window
+        currentWindow?.isVisible = true
 
         caption.setCaption(windowToCaptionMap[window])
         UI.getCurrent().page.setTitle(caption.getCaption())

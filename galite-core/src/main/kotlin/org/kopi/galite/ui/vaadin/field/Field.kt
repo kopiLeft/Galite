@@ -524,7 +524,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param enabled The enabled status
    */
   open fun setActorsEnabled(enabled: Boolean) {
-    val window = (parent.get().parent.get().parent.get() as DBlock).parent
+    val window = ((this as DField).model.blockView as DBlock).parent
     for (actor in actors) {
       window.setActorEnabled(actor, enabled)
     }

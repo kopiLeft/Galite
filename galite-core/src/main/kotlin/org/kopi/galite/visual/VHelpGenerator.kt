@@ -64,8 +64,8 @@ open class VHelpGenerator {
   /**
    * print a command
    */
-  open fun helpOnCommand(menu: String,
-                         item: String,
+  open fun helpOnCommand(menu: String?,
+                         item: String?,
                          icon: String?,
                          accKey: Int,
                          accMod: Int,

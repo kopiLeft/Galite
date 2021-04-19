@@ -60,7 +60,7 @@ import com.vaadin.flow.server.ErrorHandler
  *
  * @param model The window model.
  */
-abstract class DWindow protected constructor(private val model: VWindow) : Window(), UWindow {
+abstract class DWindow protected constructor(private var model: VWindow?) : Window(), UWindow {
 
   //--------------------------------------------------------------
   // DATA MEMBERS
@@ -99,16 +99,16 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
   init {
-    setCaption(model.getTitle())
+    setCaption(model!!.getTitle())
     createEditMenu()
-    model.addVActionListener(this)
-    model.addModelCloseListener(this)
-    model.addWaitDialogListener(this)
-    model.addProgressDialogListener(this)
-    model.addFileProductionListener(this)
-    model.addWaitInfoListener(waitInfoHandler)
-    model.addMessageListener(messageHandler)
-    addActorsToGUI(model.actors)
+    model!!.addVActionListener(this)
+    model!!.addModelCloseListener(this)
+    model!!.addWaitDialogListener(this)
+    model!!.addProgressDialogListener(this)
+    model!!.addFileProductionListener(this)
+    model!!.addWaitInfoListener(waitInfoHandler)
+    model!!.addMessageListener(messageHandler)
+    addActorsToGUI(model!!.actors)
     addAttachDetachListeners()
   }
 
@@ -249,15 +249,15 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
     }
     inAction = true
     currentAction = action
-    getModel().setCommandsEnabled(false)
+    getModel()!!.setCommandsEnabled(false)
     runtimeDebugInfo = RuntimeException(currentAction.toString())
-    if (!asynch || !getModel().allowAsynchronousOperation()) {
+    if (!asynch || !getModel()!!.allowAsynchronousOperation()) {
       // synchronus call
       actionRunner.run()
       if (getModel() != null) {
         // actions which close the window also
         // set the referenced model to null
-        getModel().executedAction(currentAction)
+        getModel()!!.executedAction(currentAction)
       }
     } else {
       val currentThread = Thread(actionRunner)
@@ -294,10 +294,11 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
   @Synchronized
   open fun release() {
     if (model != null) {
-      model.removeVActionListener(this)
-      model.removeWaitInfoListener(waitInfoHandler)
-      model.removeMessageListener(messageHandler)
+      model!!.removeVActionListener(this)
+      model!!.removeWaitInfoListener(waitInfoHandler)
+      model!!.removeMessageListener(messageHandler)
     }
+    model = null
     inAction = false
     currentAction = null
     runtimeDebugInfo = null
@@ -408,7 +409,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
     //})
   }
 
-  override fun getModel(): VWindow {
+  override fun getModel(): VWindow? {
     return model
   }
 
@@ -459,10 +460,10 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * definitly close the view(it may ask the user before)
    */
   override fun closeWindow() {
-    if (!getModel().allowQuit()) {
+    if (!getModel()!!.allowQuit()) {
       return
     }
-    getModel().willClose(VWindow.CDE_QUIT)
+    getModel()!!.willClose(VWindow.CDE_QUIT)
   }
 
   /**
@@ -492,7 +493,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * @param The message to be displayed.
    */
   protected fun verifyNotInTransaction(message: String) {
-    if (getModel().inTransaction() && debugMessageInTransaction()) {
+    if (getModel()!!.inTransaction() && debugMessageInTransaction()) {
       try {
         ApplicationContext.reportTrouble("DWindow",
                                          "$message IN TRANSACTION",
@@ -736,7 +737,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
         if (getModel() != null) {
           // commands like "Beenden" destroy the model
           // so it must be tested, that there is still a model
-          getModel().setCommandsEnabled(true)
+          getModel()!!.setCommandsEnabled(true)
           runNextPendingAction()
         }
       }
@@ -779,7 +780,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
       unsetWaitInfo()
       setWindowError(exc)
       if (getModel() != null) {
-        getModel().fatalError(getModel(), "VWindow.performActionImpl(final Action action)", exc)
+        getModel()!!.fatalError(getModel(), "VWindow.performActionImpl(final Action action)", exc)
       } else {
         application.displayError(null, MessageCode.getMessage("VIS-00041"))
       }
@@ -794,7 +795,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
       if (getModel() != null) {
         // actions which close the window also
         // set the referenced model to null
-        getModel().executedAction(currentAction)
+        getModel()!!.executedAction(currentAction)
       }
     }
 
