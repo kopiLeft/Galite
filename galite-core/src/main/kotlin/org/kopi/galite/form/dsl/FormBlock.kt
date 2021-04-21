@@ -458,6 +458,7 @@ open class FormBlock(var buffer: Int,
    * Saves current block (insert or update)
    */
   fun saveBlock() {
+    vBlock.validate()
     Commands.saveBlock(vBlock)
   }
 

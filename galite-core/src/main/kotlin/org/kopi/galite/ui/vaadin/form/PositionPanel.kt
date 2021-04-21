@@ -19,11 +19,11 @@ package org.kopi.galite.ui.vaadin.form
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.button.Button
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
-import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.event.PositionPanelListener
 import org.kopi.galite.ui.vaadin.label.Label
 
@@ -260,8 +260,13 @@ class PositionPanel : HorizontalLayout() {
     }
   }
 
-  fun show(block: Block) {
-    // TODO
+  fun show() {
+    setButtonsStyleName()
+    val popup = Dialog()
+    this.isVisible = true
+    popup.add(this)
+
+    popup.open()
   }
 
   /*fun hide(popup: VPopup) { TODO
