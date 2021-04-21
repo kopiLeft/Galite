@@ -158,8 +158,8 @@ object MultipleComponent : ReportSelectionForm() {
     icon = "delete"
   }
 
-  val blockSimple = insertBlock(BlockAllFields(), page)
-  val blockMutliple = insertBlock(Clients(), page2) {
+  val blockSimple = insertBlock(BlockAllFields(), page) {}
+  val blockMutliple = insertBlock(Clients(), page) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)
@@ -170,24 +170,8 @@ object MultipleComponent : ReportSelectionForm() {
         createDynamicReport()
       }
     }
-    command(item = list) {
-      action = {
-        println("-----------Generating list-----------------")
-        recursiveQuery()
-      }
-    }
-    command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
-    }
-    command(item = serialQuery) {
-      action = {
-        serialQuery()
-      }
-    }
   }
-  val blockList = insertBlock(TaxRuleBlock(), page3) {
+  val blockList = insertBlock(TaxRuleBlock(), page) {
     command(item = list) {
       action = {
         println("-----------Generating list-----------------")

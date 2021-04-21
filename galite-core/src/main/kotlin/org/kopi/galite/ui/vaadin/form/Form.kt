@@ -101,9 +101,11 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
       tabPanel!!.className = Styles.FORM_TAB_PANEL
       for (i in pages.indices) {
         val tab = createTabLabel(titles[i])
+        pages[i]!!.isVisible = false
         tabsToPages[tab] = pages[i]!!
         tabPanel!!.add(tab)
       }
+      tabsToPages[tabPanel!!.selectedTab]!!.isVisible = true
 
       tabPanel!!.addSelectedChangeListener {
         tabsToPages.values.forEach { page -> page.isVisible = false }

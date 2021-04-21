@@ -22,6 +22,7 @@ import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.type.Date
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.TextField
 import org.kopi.galite.ui.vaadin.visual.VApplication
@@ -133,7 +134,10 @@ open class DTextField(
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
-      field.value = transformer!!.toGui(newModelTxt)!!.trim()
+      if (field.type == TextField.Type.DATE) {
+        field.value = transformer!!.toGui(newModelTxt)!!.trim()
+      }
+
     }
     super.updateText()
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
