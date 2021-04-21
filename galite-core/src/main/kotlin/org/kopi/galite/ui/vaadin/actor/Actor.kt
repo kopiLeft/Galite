@@ -59,7 +59,7 @@ open class Actor(val caption: String?,
         val img = Icon(icon)
         super.setIcon(img)
       } else if (icon is IronIcons) {
-        super.setIcon(icon as Icon)
+        super.setIcon(icon.create())
       }
     }
 

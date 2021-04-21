@@ -51,7 +51,7 @@ class VActorNavigationItem(text: String,
       if (icon is VaadinIcon) {
         super.setIcon(Icon(icon))
       } else if (icon is IronIcons) {
-        super.setIcon(icon as Component)
+        super.setIcon(icon.create())
       }
     }
 
