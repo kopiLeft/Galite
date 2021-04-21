@@ -134,7 +134,7 @@ open class DTextField(
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
-      if (field.type == TextField.Type.DATE) {
+      if (field.type != TextField.Type.DATE) {
         field.value = transformer!!.toGui(newModelTxt)!!.trim()
       }
 
