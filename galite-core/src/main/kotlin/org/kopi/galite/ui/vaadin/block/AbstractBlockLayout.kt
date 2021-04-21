@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
+import kotlin.math.max
+
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -28,7 +30,9 @@ import org.kopi.galite.ui.vaadin.common.VTable
  * @param col The number of columns.
  * @param line The number of lines.
  */
-abstract class AbstractBlockLayout protected constructor(val col: Int, val line: Int) : VTable(line, col / 2), BlockLayout {
+abstract class AbstractBlockLayout protected constructor(val col: Int,
+                                                         val line: Int)
+  : VTable(line, max(1, col / 2)), BlockLayout {
 
   /**
    * The number of columns
