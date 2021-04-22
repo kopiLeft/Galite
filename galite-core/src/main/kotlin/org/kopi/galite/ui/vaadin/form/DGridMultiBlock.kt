@@ -27,6 +27,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.data.provider.ListDataProvider
 
 /**
  * A based Grid multi block implementation
@@ -36,7 +37,7 @@ class DGridMultiBlock(parent: DForm,
   : DGridBlock(parent, model), UMultiBlock /*, DetailsGenerator TODO */ {
 
   private var detail: SimpleBlockLayout? = null
-  private var itemHasDetailVisible: Int? = null
+  private var itemHasDetailVisible: DGridBlockContainer.GridBlockItem? = null
 
   // --------------------------------------------------
   // IMPLEMENTATION
@@ -59,20 +60,20 @@ class DGridMultiBlock(parent: DForm,
       model.gotoRecord(getRecordFromDisplayLine(getDisplayLine()))
     }
     model.isDetailMode = !inDetailMode()
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      if (grid.getEditedItemId() != null) {
-        itemHasDetailVisible = grid.getEditedItemId()
-        grid.setDetailsVisible(grid.getEditedItemId(), inDetailMode())
-        if (grid.isEditorActive()) {
-          grid.cancelEditor()
-        }
+    if (editor.item != null) {
+      itemHasDetailVisible = editor.item
+      grid.setDetailsVisible(editor.item, inDetailMode())
+      if (editor.isOpen) {
+        editor.closeEditor()
       }
-    })*/
+    }
   }
 
   override fun getRecordFromDisplayLine(line: Int): Int {
     return if (inDetailMode() && itemHasDetailVisible != null) {
-      itemHasDetailVisible!!
+      itemHasDetailVisible!!.record
+    } else if (isEditorInitialized && editor.item != null) {
+      editor.item.record
     } else {
       super.getRecordFromDisplayLine(line)
     }
@@ -179,23 +180,22 @@ class DGridMultiBlock(parent: DForm,
 
   override fun blockChanged() {
     super.blockChanged()
-    if (model.activeRecord != -1 && itemHasDetailVisible != null && model.activeRecord != itemHasDetailVisible) {
+    if (model.activeRecord != -1 && itemHasDetailVisible != null && model.activeRecord != itemHasDetailVisible!!.record) {
       enterRecord(model.activeRecord)
     }
   }
 
+  // TODO: require test where itemHasDetailVisible != null
   override fun enterRecord(recno: Int) {
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      if (inDetailMode() && itemHasDetailVisible != null) {
-        grid.setDetailsVisible(itemHasDetailVisible, false)
-        model.isDetailMode = false
-        if (recno != itemHasDetailVisible) {
-          itemHasDetailVisible = recno
-          model.isDetailMode = true
-          grid.setDetailsVisible(itemHasDetailVisible, true)
-        }
+    if (inDetailMode() && itemHasDetailVisible != null) {
+      grid.setDetailsVisible(itemHasDetailVisible, false)
+      model.isDetailMode = false
+      if (recno != itemHasDetailVisible!!.record) {
+        itemHasDetailVisible = (grid.dataProvider as ListDataProvider).items.single { it.record == recno }
+        model.isDetailMode = true
+        grid.setDetailsVisible(itemHasDetailVisible, true)
       }
-    })*/
+    }
     super.enterRecord(recno)
   }
 

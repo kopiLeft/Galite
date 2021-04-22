@@ -23,7 +23,6 @@ import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.UTextField
-import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField

@@ -39,6 +39,27 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
+  val saveBlock = actor(
+          ident = "saveBlock",
+          menu = action,
+          label = "Save Block",
+          help = " Save Block",
+  ) {
+    key = Key.F9
+    icon = "save"
+  }
+
   val dynamicReport = actor(
           ident = "dynamicReport",
           menu = action,
@@ -86,6 +107,16 @@ class ClientForm : ReportSelectionForm() {
     command(item = dynamicReport) {
       action = {
         createDynamicReport()
+      }
+    }
+    command(item = list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+    command(item = saveBlock) {
+      action = {
+        saveBlock()
       }
     }
   }
@@ -137,6 +168,10 @@ class Clients : FormBlock(6, 6, "Clients") {
     label = "Zip code"
     help = "The client zip code"
     columns(u.zipCodeClt)
+  }
+
+  init {
+    nameClt[0] = "test"
   }
 }
 
