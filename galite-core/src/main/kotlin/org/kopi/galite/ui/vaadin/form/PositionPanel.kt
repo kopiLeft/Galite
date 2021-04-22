@@ -36,6 +36,7 @@ class PositionPanel : HorizontalLayout() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  private val popup = Dialog()
   private var listeners: MutableList<PositionPanelListener>?
   private val first: Button
   private val last: Button
@@ -262,14 +263,13 @@ class PositionPanel : HorizontalLayout() {
 
   fun show() {
     setButtonsStyleName()
-    val popup = Dialog()
     this.isVisible = true
     popup.add(this)
 
     popup.open()
   }
 
-  /*fun hide(popup: VPopup) { TODO
-    popup.hide()
-  }*/
+  fun hide() {
+    popup.close()
+  }
 }

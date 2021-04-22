@@ -459,6 +459,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   protected fun configure() {
     val binder: Binder<DGridBlockContainer.GridBlockItem> = Binder()
+
     editor.binder = binder
 
     grid.addItemClickListener {
@@ -468,6 +469,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
     for (i in 0 until model.getFieldCount()) {
       val field = model.fields[i]
+
       if (!field.isInternal() && !field.noChart()) {
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
 
@@ -588,6 +590,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   fun refreshRow(row: Int) {
     access {
       val itemToRefresh = grid.dataCommunicator.getItem(row)
+
       grid.dataProvider.refreshItem(itemToRefresh)
     }
   }
