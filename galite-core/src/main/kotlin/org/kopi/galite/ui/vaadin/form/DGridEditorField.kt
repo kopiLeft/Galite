@@ -200,11 +200,7 @@ abstract class DGridEditorField<T>(
       if (!columnView.getBlock().isRecordFilled(recno)) {
         getModel().block!!.updateAccess(recno)
       }
-      columnView.performAsyncAction(object : Action("mouse1") {
-        override fun execute() {
-          columnView.transferFocus(this@DGridEditorField) // use here a mouse transferfocus
-        }
-      })
+      columnView.transferFocus(this@DGridEditorField) // use here a mouse transferfocus
     }
   }
 
