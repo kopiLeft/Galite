@@ -22,6 +22,9 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.Client
+import org.kopi.galite.demo.command.BlockCommand
+import org.kopi.galite.demo.command.CommandForm
+import org.kopi.galite.demo.command.CommandR
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
@@ -79,6 +82,16 @@ class ClientR : Report() {
     icon = "export"  // icon is optional here
   }
 
+  val helpForm = actor(
+          ident = "helpForm",
+          menu = action,
+          label = "Help",
+          help = " Help"
+  ) {
+    key = Key.F1
+    icon = "help"
+  }
+
   val cmdCSV = command(item = csv) {
     action = {
       model.export(VReport.TYP_CSV)
@@ -100,6 +113,12 @@ class ClientR : Report() {
   val cmdXLSX = command(item = xlsx) {
     action = {
       model.export(VReport.TYP_XLSX)
+    }
+  }
+
+  val helpCmd = command(item = helpForm) {
+    action = {
+      model.showHelp()
     }
   }
 

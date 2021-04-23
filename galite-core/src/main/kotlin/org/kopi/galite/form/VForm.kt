@@ -640,7 +640,7 @@ abstract class VForm : VWindow, VConstants {
     val fileName = VHelpGenerator().helpOnForm(getName(),
                                                commands,
                                                blocks,
-                                               description,
+                                               getTitle(),
                                                localHelp,
                                                "")
     return if (fileName == null) {

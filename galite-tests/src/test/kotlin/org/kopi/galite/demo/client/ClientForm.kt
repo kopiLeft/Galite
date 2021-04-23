@@ -48,6 +48,15 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6      // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val list = actor(
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
   val quit = actor(
           ident = "quit",
           menu = action,

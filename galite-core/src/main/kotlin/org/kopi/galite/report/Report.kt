@@ -275,6 +275,7 @@ abstract class Report : Window() {
 
       override fun init() {
         setTitle(title)
+        super.setPageTitle(title)
         help = this@Report.help
         this.addActors(this@Report.actors.map { actor ->
           actor.buildModel(sourceFile)

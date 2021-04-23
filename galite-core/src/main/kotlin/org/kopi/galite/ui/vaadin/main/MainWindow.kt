@@ -34,10 +34,10 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
-import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * Main application window composed of a header and content.
@@ -50,7 +50,7 @@ import com.vaadin.flow.component.html.Div
  * @param href The logo link.
  */
 @CssImport("./styles/galite/VLoginBox.css")
-class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, HasSize, Focusable<MainWindow> {
+class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -80,7 +80,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     setTarget("_blank")
 
     content.setContent(container)
-    addToNavbar(header)
+    add(header)
     val welcomeContainer = Div()
     welcomeContainer.setId("welcome_container")
     val horizontalAlignContainer = Div()
@@ -95,7 +95,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     main.setSizeFull()
     content.width = "100%"
     content.height = "100%"
-    setContent(main)
+    add(main)
     addLinksListeners()
     Shortcuts.addShortcutListener(this, this::goToPreviousPage, Key.PAGE_UP, KeyModifier.of("Alt"))
     Shortcuts.addShortcutListener(this, this::goToNextPage, Key.PAGE_DOWN, KeyModifier.of("Alt"))
