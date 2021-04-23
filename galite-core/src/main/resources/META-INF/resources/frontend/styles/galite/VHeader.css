@@ -51,6 +51,11 @@
     display: table-cell;
     width: 10%;
     border-right: 1px solid #dadada;
+    vertical-align: middle;
+}
+
+.logo-image {
+    vertical-align: middle;
 }
 
 /*
@@ -131,5 +136,5 @@ user , admin , wrk context and bookmark
 }
 
 vcf-enhanced-dialog-overlay::part(footer) {
-  display:none;
+  display: none;
 }
