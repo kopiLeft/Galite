@@ -33,3 +33,7 @@
 [part~="cell"].bold {
     font-weight: bold;
 }
+
+[part~="cell"].separator {
+    background: red;
+}

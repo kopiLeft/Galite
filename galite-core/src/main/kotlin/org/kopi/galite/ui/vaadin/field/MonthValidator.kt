@@ -90,5 +90,5 @@ class MonthValidator(maxLength: Int) : AllowAllValidator(maxLength) {
    * @param y The year.
    * @return The `true` if the month is valid.
    */
-  private fun isMonth(m: Int, y: Int): Boolean = if (y < 1 || m < 1 || m > 12) false else true
+  private fun isMonth(m: Int, y: Int): Boolean = !(y < 1 || m < 1 || m > 12)
 }
