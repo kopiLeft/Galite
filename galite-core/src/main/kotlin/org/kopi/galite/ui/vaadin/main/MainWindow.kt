@@ -38,6 +38,7 @@ import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
+import org.kopi.galite.ui.vaadin.window.PopupWindow
 
 /**
  * Main application window composed of a header and content.
@@ -177,9 +178,14 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
   fun removeWindow(window: Component) {
     windowsList.remove(window)
     container.removeWindow(window)
-    /*if (window is PopupWindow) { TODO
-      (window as PopupWindow).fireOnClose() // fire close event
-    }*/
+
+    window.parent.ifPresent {
+      it.parent.ifPresent { windowContainer ->
+        if (windowContainer is PopupWindow) {
+          windowContainer.close() // fire close event
+        }
+      }
+    }
   }
 
   /**

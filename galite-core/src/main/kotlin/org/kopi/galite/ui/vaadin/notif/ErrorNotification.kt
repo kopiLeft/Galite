@@ -44,7 +44,7 @@ class ErrorNotification(title: String?,
   override fun setButtons() {
     details = ErrorMessageDetails(message, locale, this)
     close = Button(LocalizedProperties.getString(locale, "CLOSE"))
-    close.addClickListener { close() }
+    close.addClickListener { fireOnClose(null) }
     close.isAutofocus = true
     buttons.add(close)
   }
