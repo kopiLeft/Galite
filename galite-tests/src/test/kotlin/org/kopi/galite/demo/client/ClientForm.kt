@@ -169,6 +169,10 @@ class Clients : FormBlock(6, 6, "Clients") {
     help = "The client zip code"
     columns(u.zipCodeClt)
   }
+  val active = visit(domain = Domain<Boolean>(), position = at(5, 1)) {
+    label = "City"
+    help = "The client city"
+  }
 
   init {
     nameClt[0] = "test"

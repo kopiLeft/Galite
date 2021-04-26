@@ -32,11 +32,11 @@ open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
     add(wrappedField)
   }
 
-  override fun setPresentationValue(newPresentationValue: Any?) {
+  override fun setPresentationValue(newPresentationValue: String?) {
     wrappedField.value = newPresentationValue.toString()
   }
 
-  override fun generateModelValue(): Any? = wrappedField.value
+  override fun generateModelValue(): String? = wrappedField.value
 
   override fun focus() {
     wrappedField.focus()

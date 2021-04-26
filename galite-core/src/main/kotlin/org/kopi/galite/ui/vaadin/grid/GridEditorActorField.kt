@@ -37,11 +37,11 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
   val type: Class<out String>
     get() = String::class.java
 
-  override fun setPresentationValue(newPresentationValue: Any?) {
+  override fun setPresentationValue(newPresentationValue: String?) {
     TODO("Not yet implemented")
   }
 
-  override fun generateModelValue(): Any? {
+  override fun generateModelValue(): String? {
     TODO("Not yet implemented")
   }
 
