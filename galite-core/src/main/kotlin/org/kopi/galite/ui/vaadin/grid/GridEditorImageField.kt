@@ -17,23 +17,34 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer
+import org.kopi.galite.ui.vaadin.field.ImageField
+
 /**
  * The server side implementation of an image grid editor.
  */
-class GridEditorImageField() : GridEditorField<Any?>() {
-  override fun setPresentationValue(newPresentationValue: Any?) {
-    TODO("Not yet implemented")
+class GridEditorImageField(width: Int, height: Int) : GridEditorField<Any?>() {
+
+  private var buffer = MemoryBuffer()
+  val wrappedField = ImageField(width.toFloat(), height.toFloat(), buffer)
+
+  init {
+    add(wrappedField)
   }
 
-  override fun generateModelValue(): Any? {
-    TODO("Not yet implemented")
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    wrappedField.value = newPresentationValue
   }
+
+  override fun generateModelValue(): Any? = wrappedField.value
 
   override fun focus() {
-    TODO("Not yet implemented")
+    wrappedField.focus()
   }
 
   override fun addFocusListener(focusFunction: () -> Unit) {
-    TODO("Not yet implemented")
+    wrappedField.addFocusListener {
+      focusFunction()
+    }
   }
 }

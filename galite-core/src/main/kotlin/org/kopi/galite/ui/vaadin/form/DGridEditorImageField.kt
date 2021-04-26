@@ -27,8 +27,8 @@ class DGridEditorImageField(
         columnView: VFieldUI,
         label: DGridEditorLabel?,
         align: Int,
-        width: Int,
-        height: Int,
+        val width: Int,
+        val height: Int,
         options: Int
 ) : DGridEditorField<Any?>(columnView, label, align, options) {
 
@@ -36,11 +36,6 @@ class DGridEditorImageField(
   // DATA MEMBERS
   //---------------------------------------------------
   private var image: ByteArray? = null
-
-  init {
-    // editor.setImageWidth(width) TODO
-    // editor.setImageHeight(height) TODO
-  }
 
   companion object {
     private var keyCounter = 0
@@ -66,7 +61,7 @@ class DGridEditorImageField(
     image = s as ByteArray?
   }
 
-  override fun createEditor(): GridEditorImageField = GridEditorImageField()
+  override fun createEditor(): GridEditorImageField = GridEditorImageField(width, height)
 
   override fun createConverter(): Converter<Any?, Any?> {
     TODO()
