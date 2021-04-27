@@ -113,9 +113,9 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * @param     manager         the manger to use for localization
    */
   protected fun localize(manager: LocalizationManager) {
-    val loc: ChartLocalizer = manager.getChartLocalizer(source)
-
     if(ApplicationContext.getDefaultLocale() != locale) {
+      val loc: ChartLocalizer = manager.getChartLocalizer(source)
+
       setPageTitle(loc.getTitle())
       help = loc.getHelp()
       // dimensions
