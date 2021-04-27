@@ -112,7 +112,7 @@ open class VHelpGenerator {
    * Add a button
    */
   fun addButton(name: String) {
-    addImage(name, 0)
+    addImage(name, 1)
   }
 
   // ----------------------------------------------------------------------

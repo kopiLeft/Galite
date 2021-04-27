@@ -517,7 +517,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * Try to handle an exception
    */
   fun fatalError(data: Any?, line: String, reason: Throwable) {
- //    TODO()
+     TODO()
   }
 
   // ----------------------------------------------------------------------

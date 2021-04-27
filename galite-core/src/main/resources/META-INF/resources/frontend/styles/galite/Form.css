@@ -175,16 +175,16 @@
  * scrollbar style
  */
 .k-form-page {
-    overflow : auto;
-    height : auto;
-    max-height : calc(100vh - 200px);
+    overflow: auto;
+    height: auto;
+    max-height: calc(100vh - 200px);
 }
 
 /*
  * border for grid row
  */
 ::part(row) {
-   border-bottom : 1px #DCDCDC solid;
+   border-bottom: 1px #DCDCDC solid;
 }
 
 /*
@@ -192,7 +192,6 @@
  */
 .help {
     margin-top: -30px;
-    overflow-x : none !important;
 }
 
 .help, .help > center > h1 {
@@ -215,27 +214,27 @@
 }
 
 pre {
-    background : none;
+    background: none;
 }
 
 /*
  * switch window style
  */
 .window-items-title, .item {
-    background : #E8E8E8;
-    color : #778899;
-    width : 500px;
+    background: #E8E8E8;
+    color: #778899;
+    width: 500px;
     font-family: Courier New, monospace; !important;
     font-style: italic !important;
     font-size: 1em;
 }
 
 .window-items-title {
-    background : none;
+    background: none;
 }
 
 .window-items-container vaadin-button {
     margin-top: -1px;
-    border-bottom : 1px solid gray;
-    width : 500px;
+    border-bottom: 1px solid gray;
+    width: 500px;
 }

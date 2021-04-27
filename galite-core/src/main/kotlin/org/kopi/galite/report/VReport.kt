@@ -518,7 +518,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   /**
    * Returns true iff there is trigger associated with given event.
    */
-  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = false
+  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
 
   fun setMenu() {
     if (!built) {

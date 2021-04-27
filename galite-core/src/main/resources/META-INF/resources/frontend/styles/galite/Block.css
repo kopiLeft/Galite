@@ -35,7 +35,7 @@
 }
 
 .k-block .multiple ::part(value) {
-    border-left:1px solid #dadada;
+    border-left: 1px solid #dadada;
     border-bottom: 1px solid #dadada;
 }
 
