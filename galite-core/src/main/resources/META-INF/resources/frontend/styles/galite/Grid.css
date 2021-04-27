@@ -19,11 +19,11 @@
  * Report Group style
  */
 [part~="cell"].level-0 {
-    background: #F5FBFD !important;
+    background: #F1F8FF !important;
 }
 
 [part~="cell"].level-1 {
-    background: #D9EAD3 !important;
+    background: #E6F2FF !important;
 }
 
 [part~="cell"].italic {
@@ -32,4 +32,8 @@
 
 [part~="cell"].bold {
     font-weight: bold;
+}
+
+[part~="cell"].separator {
+    background: red;
 }

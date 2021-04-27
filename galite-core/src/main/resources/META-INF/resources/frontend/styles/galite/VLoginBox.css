@@ -19,6 +19,7 @@
  * Main's style
  */
 #outlet {
+    --lumo-space-m: 0;
     background-color: #f2f2f2;
 }
 
