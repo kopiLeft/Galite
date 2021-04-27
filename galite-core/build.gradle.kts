@@ -73,6 +73,9 @@ dependencies {
 
   // ApexCharts dependency
   implementation("com.github.appreciated", "apexcharts", "2.0.0.beta10")
+
+  // Iron Icons dependency
+  implementation("com.flowingcode.addons", "iron-icons", "2.0.1")
 }
 
 dependencyManagement {
