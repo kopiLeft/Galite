@@ -19,7 +19,7 @@ package org.kopi.galite.ui.vaadin.report
 
 import org.kopi.galite.report.MReport
 import org.kopi.galite.report.VReportColumn
-import org.kopi.galite.report.VReportRow
+import org.kopi.galite.ui.vaadin.report.DReport.ReportModelItem
 
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.data.provider.ListDataProvider
@@ -32,7 +32,10 @@ import com.vaadin.flow.function.SerializablePredicate
  *
  * @param model The table model.
  */
-class VTable(internal val model: MReport): ListDataProvider<VReportRow>(model.getRows()) {
+class VTable(
+  internal val model: MReport,
+  reportItems: List<ReportModelItem>
+): ListDataProvider<ReportModelItem>(reportItems) {
 
   init {
     addFilter {
@@ -40,7 +43,7 @@ class VTable(internal val model: MReport): ListDataProvider<VReportRow>(model.ge
     }
   }
 
-  override fun size(query: Query<VReportRow, SerializablePredicate<VReportRow>>?): Int {
+  override fun size(query: Query<ReportModelItem, SerializablePredicate<ReportModelItem>>?): Int {
     return model.getRowCount()
   }
 
@@ -48,11 +51,6 @@ class VTable(internal val model: MReport): ListDataProvider<VReportRow>(model.ge
    * Notifies the table data provider that content has been changed.
    */
   fun fireContentChanged() {
-    for (i in 0 until model.getRowCount()) {
-      for (j in 0 until model.getColumnCount()) {
-        model.updateValueAt(i, j)
-      }
-    }
     refreshAll()
   }
 

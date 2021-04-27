@@ -694,7 +694,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
             columnOrderChanged = true;
 
             for (int i = 0; i < newColumnOrder.length; i++) {
-              if (!model.getAccessibleColumn(i).getVisible()) {
+              if (!model.getAccessibleColumn(i).isVisible()) {
                 hiddenColumnsCount += 1;
                 newColumnOrder[i] = model.getDisplayOrder(index);
                 index += 1;

@@ -219,7 +219,8 @@ abstract class Report : Window() {
         it.data[field]
       }
 
-      addLine(list.toTypedArray())
+      // Last null value is added for the separator column
+      addLine((list + listOf(null)).toTypedArray())
     }
   }
 
@@ -265,6 +266,9 @@ abstract class Report : Window() {
           // TODO : Add field triggers here
           super.VKT_Triggers!!.add(fieldTriggerArray)
         }
+
+        // TODO: for separator column
+        super.VKT_Triggers!!.add(IntArray(Constants.TRG_TYPES.size))
 
         // COMMANDS TRIGGERS
         commands?.forEach {
