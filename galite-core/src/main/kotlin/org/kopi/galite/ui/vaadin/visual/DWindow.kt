@@ -54,6 +54,7 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
+import com.vaadin.flow.server.VaadinService
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
@@ -95,7 +96,8 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   var isUserAsked = false
     private set
   val currentUI = UI.getCurrent().also { requireNotNull(it) }
-  private val actionRunner: ActionRunner = ActionRunner(currentUI)
+  val currentService = VaadinService.getCurrent().also { requireNotNull(it) }
+  private val actionRunner: ActionRunner = ActionRunner(currentUI, currentService)
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
   init {
@@ -673,12 +675,13 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * There is only one instance of ActionRunner.
    * It calls user actions.
    */
-  internal inner class ActionRunner(val currentUI: UI) : Runnable, ErrorHandler {
+  internal inner class ActionRunner(val currentUI: UI, val currentService: VaadinService) : Runnable, ErrorHandler {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun run() {
       UI.setCurrent(currentUI)
+      VaadinService.setCurrent(currentService)
       try {
         if (currentAction != null) {
           runAction()

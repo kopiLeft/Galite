@@ -44,5 +44,5 @@ interface UChart : UWindow {
   /**
    * The chart type.
    */
-  var type: UChartType
+  var type: UChartType?
 }

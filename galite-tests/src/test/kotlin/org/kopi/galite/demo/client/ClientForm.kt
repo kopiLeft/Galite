@@ -21,10 +21,13 @@ import java.util.Locale
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Application
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
+import org.kopi.galite.tests.chart.ChartSample
+import org.kopi.galite.tests.form.FormWithChart
 
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -41,10 +44,10 @@ class ClientForm : ReportSelectionForm() {
   }
 
   val list = actor(
-    ident = "list",
-    menu = action,
-    label = "list",
-    help = "Display List",
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
   ) {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
@@ -87,6 +90,16 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F1
     icon = "help"
   }
+  val graph = actor (
+          ident =  "graph",
+          menu =   FormWithChart.action,
+          label =  "Graph",
+          help =   "show graph values",
+  ) {
+    key  =  Key.F9          // key is optional here
+    icon =  "column_chart"  // icon is optional here
+  }
+
   val helpCmd = command(item = helpForm) {
     action = {
       showHelp()
@@ -107,6 +120,12 @@ class ClientForm : ReportSelectionForm() {
     command(item = dynamicReport) {
       action = {
         createDynamicReport()
+      }
+    }
+    command(item = graph) {
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        showChart(ChartSample)
       }
     }
     command(item = list) {
