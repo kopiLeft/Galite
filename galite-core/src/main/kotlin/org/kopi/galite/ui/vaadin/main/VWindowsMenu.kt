@@ -67,7 +67,7 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
 
     items.className = "window-items-container"
     item.addClickListener { this.close() }
-    items.add(container)
+    items.add(item)
     this.setContent(items)
   }
 
