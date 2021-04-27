@@ -292,9 +292,6 @@ abstract class Report : Window() {
         }
 
         super.model.addReportColumns()
-        fields.map {
-          add()
-        }
         super.model.addReportLines()
 
         handleTriggers(this@Report.triggers)

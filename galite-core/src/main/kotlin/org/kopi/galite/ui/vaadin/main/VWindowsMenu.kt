@@ -42,10 +42,10 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
   private val headerText = Label()
 
   init {
-    className = Styles.MAIN_WINDOW
     // Make sure that CSS styles specified for the default Menu classes
     // do not affect this menu
-    element.setAttribute("className","k-windowsMenu")
+    className = Styles.MAIN_WINDOW
+    element.setAttribute("className", "k-windowsMenu")
     val headerIcon = Icon(VaadinIcon.COPY_O)
     val header = HorizontalLayout()
 
@@ -64,10 +64,8 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
    */
   fun addWindow(container: VWindowContainer, window: Component, title: String) {
     val item = VWindowsMenuItem(title, window, container)
-    val container = Div()
 
-    container.className = "window-items-container"
-    container.add(item)
+    items.className = "window-items-container"
     item.addClickListener { this.close() }
     items.add(container)
     this.setContent(items)

@@ -221,7 +221,7 @@ pre {
 /*
  * switch window style
  */
-.window-items-title, .window-item {
+.window-items-title, .item {
     background : #E8E8E8;
     color : #778899;
     width : 500px;
@@ -234,7 +234,7 @@ pre {
     background : none;
 }
 
-.window-items-container {
+.window-items-container vaadin-button {
     margin-top: -1px;
     border-bottom : 1px solid gray;
     width : 500px;
