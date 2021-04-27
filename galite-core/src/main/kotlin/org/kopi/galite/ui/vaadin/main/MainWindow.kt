@@ -39,6 +39,7 @@ import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
 import org.kopi.galite.ui.vaadin.window.PopupWindow
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * Main application window composed of a header and content.
