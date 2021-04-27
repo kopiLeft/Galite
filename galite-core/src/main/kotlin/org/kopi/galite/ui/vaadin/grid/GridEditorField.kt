@@ -23,8 +23,10 @@ import kotlin.collections.Collection
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.field.Field
+import org.kopi.galite.ui.vaadin.form.DGridEditorField
 
 import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.router.NavigationEvent
@@ -32,7 +34,9 @@ import com.vaadin.flow.router.NavigationEvent
 /**
  * A grid editor field implementation.
  */
-abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() {
+abstract class GridEditorField<T> protected constructor() : CustomField<Any?>(), ClickNotifier<GridEditorField<T>> {
+
+  lateinit var dGridEditorField: DGridEditorField<*>
 
   /**
    * The navigation delegation to server mode. Default to [NavigationDelegationMode.ALWAYS].
@@ -118,6 +122,10 @@ abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() 
     this.foreground = foreground
     this.background = background
   }
+
+  abstract override fun focus()
+
+  abstract fun addFocusListener(focusFunction: () -> Unit)
 
   //---------------------------------------------------
   // INNER CLASSES

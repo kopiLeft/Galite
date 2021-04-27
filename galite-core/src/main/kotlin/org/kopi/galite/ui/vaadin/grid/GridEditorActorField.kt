@@ -45,6 +45,14 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
     TODO("Not yet implemented")
   }
 
+  override fun focus() {
+    TODO("Not yet implemented")
+  }
+
+  override fun addFocusListener(focusFunction: () -> Unit) {
+    TODO("Not yet implemented")
+  }
+
   /*override fun addNavigationListener(listener: NavigationListener?) {
     // NOT SUPPORTED
   }

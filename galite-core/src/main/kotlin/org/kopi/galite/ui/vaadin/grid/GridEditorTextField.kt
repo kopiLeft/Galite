@@ -37,4 +37,14 @@ open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
   }
 
   override fun generateModelValue(): Any? = wrappedField.value
+
+  override fun focus() {
+    wrappedField.focus()
+  }
+
+  override fun addFocusListener(focusFunction: () -> Unit) {
+    wrappedField.addFocusListener {
+      focusFunction()
+    }
+  }
 }

@@ -74,9 +74,6 @@ class DChart(model: VWindow) : DWindow(model), UChart, Focusable<DChart> {
   // DATA MEMBERS
   //---------------------------------------------------
   override var type: UChartType? = null
-    get() {
-      return field
-    }
     set(newType) {
       //access {
       if (field != null && newType != null) {

@@ -2585,7 +2585,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun isChart(): Boolean = !noChart()
 
   /**
-   * Returns true iff this block can display more than one record.
+   * Returns true if this block can display more than one record.
    */
   fun isMulti(): Boolean = bufferSize > 1
 

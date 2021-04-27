@@ -32,7 +32,6 @@ import org.kopi.galite.tests.form.FormWithChart
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Clients"
-  val page = page("Client")
   val action = menu("Action")
   val report = actor(
           ident = "report",
@@ -43,6 +42,27 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+
+  val list = actor(
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
+  ) {
+    key = Key.F1   // key is optional here
+    icon = "list"  // icon is optional here
+  }
+
+  val saveBlock = actor(
+          ident = "saveBlock",
+          menu = action,
+          label = "Save Block",
+          help = " Save Block",
+  ) {
+    key = Key.F9
+    icon = "save"
+  }
+
   val dynamicReport = actor(
           ident = "dynamicReport",
           menu = action,
@@ -52,6 +72,15 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6      // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val quit = actor(
+          ident = "quit",
+          menu = action,
+          label = "quit",
+          help = "Quit",
+  ) {
+    key = Key.ESCAPE          // key is optional here
+    icon = "quit"  // icon is optional here
+  }
   val helpForm = actor(
           ident = "helpForm",
           menu = action,
@@ -60,11 +89,6 @@ class ClientForm : ReportSelectionForm() {
   ) {
     key = Key.F1
     icon = "help"
-  }
-  val helpCmd = command(item = helpForm) {
-    action = {
-      showHelp()
-    }
   }
   val graph = actor (
           ident =  "graph",
@@ -76,7 +100,18 @@ class ClientForm : ReportSelectionForm() {
     icon =  "column_chart"  // icon is optional here
   }
 
-  val block = insertBlock(Clients(), page) {
+  val helpCmd = command(item = helpForm) {
+    action = {
+      showHelp()
+    }
+  }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
+
+  val block = insertBlock(Clients()) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)
@@ -91,6 +126,16 @@ class ClientForm : ReportSelectionForm() {
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         showChart(ChartSample)
+      }
+    }
+    command(item = list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+    command(item = saveBlock) {
+      action = {
+        saveBlock()
       }
     }
   }
@@ -142,6 +187,10 @@ class Clients : FormBlock(6, 6, "Clients") {
     label = "Zip code"
     help = "The client zip code"
     columns(u.zipCodeClt)
+  }
+
+  init {
+    nameClt[0] = "test"
   }
 }
 

@@ -28,4 +28,12 @@ class GridEditorImageField() : GridEditorField<Any?>() {
   override fun generateModelValue(): Any? {
     TODO("Not yet implemented")
   }
+
+  override fun focus() {
+    TODO("Not yet implemented")
+  }
+
+  override fun addFocusListener(focusFunction: () -> Unit) {
+    TODO("Not yet implemented")
+  }
 }

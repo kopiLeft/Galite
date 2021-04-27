@@ -17,14 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.data.converter.Converter
-import com.vaadin.flow.data.renderer.Renderer
-import org.kopi.galite.form.UBlock
-import java.util.Locale
-
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.grid.GridEditorImageField
-import org.kopi.galite.ui.vaadin.visual.VApplication
+
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
 
 class DGridEditorImageField(
         columnView: VFieldUI,

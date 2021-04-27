@@ -221,12 +221,10 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
 
   /**
    * Creates the block info widget.
-   * @param connection The application connection.
-   * @param locale The application locale.
    */
-  fun showBlockInfo(block: Block) {
+  fun showBlockInfo() {
     blockInfo.isVisible = false // hide it initially
-    blockInfo.show(block)
+    blockInfo.show()
   }
 
   /**

@@ -22,8 +22,9 @@ import org.kopi.galite.visual.VActor
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
  * Constructs a new actor navigation menu item that fires a command when it is selected.
@@ -37,16 +38,15 @@ class VActorNavigationItem(text: String,
                            val menu: String?,
                            acceleratorKey: Key?,
                            keyModifier : KeyModifier?,
-                           icon: String?,
+                           icon: VaadinIcon?,
                            val action: VActor?) : Button() {
 
   init {
     super.setText(text)
 
     if (icon != null) {
-      val img = Image()
+      val img = Icon(icon)
 
-      img.src = icon
       super.setIcon(img)
       this.addClickListener {
         action?.performAction()
