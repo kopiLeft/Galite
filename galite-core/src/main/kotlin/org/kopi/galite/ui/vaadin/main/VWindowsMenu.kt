@@ -23,6 +23,7 @@ import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -41,10 +42,14 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
   private val headerText = Label()
 
   init {
+    // Make sure that CSS styles specified for the default Menu classes
+    // do not affect this menu
     className = Styles.MAIN_WINDOW
+    element.setAttribute("className", "k-windowsMenu")
     val headerIcon = Icon(VaadinIcon.COPY_O)
     val header = HorizontalLayout()
 
+    header.className = "window-items-title"
     header.add(headerText, headerIcon)
     header.alignItems = FlexComponent.Alignment.END
     this.setHeader(header)
@@ -57,9 +62,10 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
    * @param window The window to be added.
    * @param title The window title.
    */
-  fun addWindow(container : VWindowContainer, window : Component, title : String) {
+  fun addWindow(container: VWindowContainer, window: Component, title: String) {
     val item = VWindowsMenuItem(title, window, container)
 
+    items.className = "window-items-container"
     item.addClickListener { this.close() }
     items.add(item)
     this.setContent(items)

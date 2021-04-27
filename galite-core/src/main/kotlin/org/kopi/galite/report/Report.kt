@@ -166,7 +166,7 @@ abstract class Report : Window() {
 
   // TODO add Decimal types
   fun MReport.addReportColumns() {
-    columns = fields.map {
+    val userFields = fields.map {
       if (it.group != null) {
         it.groupID = fields.indexOf(it.group)
       }
@@ -209,7 +209,8 @@ abstract class Report : Window() {
         column.label = it.label ?: ""
         column.help = it.help
       }
-    }.toTypedArray()
+    }
+    columns = (userFields + VSeparatorColumn()).toTypedArray()
   }
 
   private fun MReport.addReportLines() {
@@ -275,6 +276,7 @@ abstract class Report : Window() {
 
       override fun init() {
         setTitle(title)
+        super.setPageTitle(title)
         help = this@Report.help
         this.addActors(this@Report.actors.map { actor ->
           actor.buildModel(sourceFile)

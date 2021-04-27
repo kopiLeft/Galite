@@ -55,9 +55,10 @@ class VActorNavigationItem(text: String,
 
     if (acceleratorKey != null && acceleratorKey != Key.UNIDENTIFIED) {
       val modifier = keyModifier?.keys?.get(0)
-
-      this.addToSuffix(Label(if(modifier != null) modifier + "-" + acceleratorKey.keys[0] else acceleratorKey.keys[0]))
+      super.setText(text + if(modifier != null) modifier + "-" + acceleratorKey.keys[0] else " " + acceleratorKey.keys[0])
       super.addClickShortcut(acceleratorKey)
+    } else {
+      super.setText(text)
     }
 
     className = getClassname()
