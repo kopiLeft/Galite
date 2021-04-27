@@ -19,12 +19,13 @@ package org.kopi.galite.ui.vaadin.chart
 
 import org.kopi.galite.chart.VDataSeries
 
+import com.github.appreciated.apexcharts.config.chart.Type
 /**
  * Creates a new area chart from a given data series model.
  * @param title The chart title.
  * @param dataSeries The data series model.
  */
-class DAreaChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(title, dataSeries) {
+class DAreaChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.area, title, dataSeries) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

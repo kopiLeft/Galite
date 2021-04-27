@@ -21,6 +21,7 @@ import org.kopi.galite.report.Constants
 import org.kopi.galite.report.UReport.UTable
 import org.kopi.galite.report.VReportColumn
 import org.kopi.galite.report.VReportRow
+import org.kopi.galite.report.VSeparatorColumn
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEventListener
@@ -64,7 +65,7 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
   init {
     buildColumns()
     buildRows()
-    addThemeVariants(GridVariant.LUMO_COMPACT,GridVariant.LUMO_COLUMN_BORDERS)
+    addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_COLUMN_BORDERS)
     classNames.add("small")
     classNames.add("borderless")
     classNames.add("report")
@@ -89,19 +90,28 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
       } else {
         ColumnTextAlign.START
       }
-      addColumn(ColumnValueProvider(index), index)
-              .setHeader(getColumnNameComponent(vReportColumn!!))
-              .setAutoWidth(true)
-              .setTextAlign(align)
-              .setClassNameGenerator { row ->
-                buildString {
-                  if (row.level == 0) append("level-0")
-                  if (row.level == 1) append("level-1")
-
-                  if (styles[0].getFont().isItalic) append(" italic") else append(" notItalic")
-                  if (styles[0].getFont().isBold) append(" bold") else append(" notBold")
+      if (vReportColumn is VSeparatorColumn) {
+        addColumn(ColumnValueProvider(index), index)
+                .setClassNameGenerator { row ->
+                  buildString {
+                    append(" separator")
+                  }
                 }
-              }
+      } else {
+        addColumn(ColumnValueProvider(index), index)
+                .setHeader(getColumnNameComponent(vReportColumn!!))
+                .setAutoWidth(true)
+                .setTextAlign(align)
+                .setClassNameGenerator { row ->
+                  buildString {
+                    if (row.level == 0) append("level-0")
+                    if (row.level == 1) append("level-1")
+
+                    if (styles[0].getFont().isItalic) append(" italic") else append(" notItalic")
+                    if (styles[0].getFont().isBold) append(" bold") else append(" notBold")
+                  }
+                }
+      }
     }
   }
 

@@ -32,6 +32,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The `DBlock` is the vaadin implementation
@@ -40,6 +41,8 @@ import com.vaadin.flow.component.Component
  * @param parent The parent form.
  * @param model The block model.
  */
+
+@CssImport("./styles/galite/Block.css")
 open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
 
   protected var formView: DForm = parent

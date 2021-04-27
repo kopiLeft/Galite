@@ -29,20 +29,96 @@ import kotlin.collections.HashSet
 import org.kopi.galite.chart.UChartType
 import org.kopi.galite.chart.VDataSeries
 import org.kopi.galite.chart.VPrintOptions
+import org.kopi.galite.chart.VDimensionData
+
+import com.github.appreciated.apexcharts.config.chart.Type
+import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder
+import com.github.appreciated.apexcharts.helper.Series
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.github.appreciated.apexcharts.ApexCharts
+import com.github.appreciated.apexcharts.config.builder.ChartBuilder
+import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder
+import com.github.appreciated.apexcharts.config.builder.XAxisBuilder
 
 /**
  * Creates a new abstract chart type from a chart title and a data series array.
  * @param title The chart title.
  * @param dataSeries The data series.
  */
-abstract class DAbstractChartType protected constructor(private val title: String?,
-                                                        private val dataSeries: Array<VDataSeries>) : UChartType {
+abstract class DAbstractChartType protected constructor(private val type: Type,
+                                                        private val title: String?,
+                                                        private val dataSeries: Array<VDataSeries>
+                                                        ) : HorizontalLayout(), UChartType {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun build() {
-    TODO()
+    val apex = ApexCharts()
+    val dimensions = mutableListOf<String>()
+    val names = mutableListOf<String>()
+    val values = mutableListOf<Pair<String, Double>>()
+
+    dataSeries.forEachIndexed { i, serie ->
+      val dimension: VDimensionData = serie.dimension
+      val measures = serie.getMeasures()
+
+      dimensions.add(dimension.value.toString())
+
+      measures.forEach {
+        values.add(it.name to it.value!!.toDouble())
+      }
+
+      for (measure in measures) {
+        if (!names.contains(measure.name)) {
+          names.add(measure.name)
+        }
+      }
+    }
+
+    val finalValues = mutableListOf<List<Double>>()
+
+    for (name in names) {
+      finalValues.add(values.filter { it.first == name }.map { it.second })
+    }
+
+    val series = mutableListOf<Series<Double>>()
+
+    finalValues.forEachIndexed { index, value ->
+      series.add(Series(names[index], *value.toTypedArray()))
+    }
+
+    when (type) {
+      Type.pie -> {
+        finalValues.forEach {
+          val chart = ApexCharts()
+
+          chart.setChart(ChartBuilder.get().withType(type).build())
+          chart.setSeries(*it.toTypedArray())
+          chart.setLabels(*dimensions.toTypedArray())
+          add(chart)
+        }
+      }
+
+      Type.bar, Type.line, Type.area -> {
+        apex.setChart(ChartBuilder.get().withType(type).build())
+        apex.setSeries(*series.toTypedArray())
+        apex.setXaxis(XAxisBuilder.get().withCategories(*dimensions.toTypedArray()).build())
+        apex.setLabels(*dimensions.toTypedArray())
+      }
+
+      Type.rangeBar -> {
+        apex.setChart(ChartBuilder.get().withType(Type.bar).build())
+        apex.setSeries(*series.toTypedArray())
+        apex.setXaxis(XAxisBuilder.get().withCategories(*dimensions.toTypedArray()).build())
+        apex.setPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(true).build()).build())
+
+      }
+    }
+    if (type != Type.pie) {
+      super.add(apex)
+    }
+
   }
 
   override fun refresh() {
@@ -339,9 +415,5 @@ abstract class DAbstractChartType protected constructor(private val title: Strin
             Color(220, 220, 220),
             Color(245, 245, 245)
     )
-  }
-
-  init {
-    // TODO
   }
 }
