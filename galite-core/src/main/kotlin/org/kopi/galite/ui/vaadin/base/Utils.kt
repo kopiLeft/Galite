@@ -23,17 +23,19 @@ import com.flowingcode.vaadin.addons.ironicons.EditorIcons
 import com.flowingcode.vaadin.addons.ironicons.FileIcons
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.flowingcode.vaadin.addons.ironicons.MapsIcons
-import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.icon.IronIcon
+import com.vaadin.flow.component.icon.VaadinIcon
+
 import java.util.Hashtable
 
 import org.kopi.galite.base.Utils
 import org.kopi.galite.visual.VColor
 
-import com.vaadin.flow.component.icon.VaadinIcon
-
 /**
  * Some vaadin version utilities to obtain images and resources.
  */
+@CssImport("./styles/galite/Report.css")
 object Utils : Utils() {
 
   //---------------------------------------------------
@@ -166,13 +168,7 @@ object Utils : Utils() {
    * @return The equivalent icon.
    */
   fun getFontAwesomeIcon(iconName: String?): Any? {
-    if (pngToFontAwesomeMap[iconName] is VaadinIcon) {
-      return pngToFontAwesomeMap[iconName] as VaadinIcon
-    }
-    else if (pngToFontAwesomeMap[iconName] is IronIcons) {
-      return  pngToFontAwesomeMap[iconName] as IronIcons
-    }
-    return null
+    return pngToFontAwesomeMap[iconName]
   }
 
   /**
@@ -232,12 +228,12 @@ object Utils : Utils() {
     pngToFontAwesomeMap["expanded"] = VaadinIcon.FOLDER_OPEN_O
     pngToFontAwesomeMap["expanded_p"] = VaadinIcon.FOLDER_OPEN_O
     pngToFontAwesomeMap["exportCsv"] = VaadinIcon.FILE_TEXT_O
-    pngToFontAwesomeMap["exportPdf"] = FileIcons.PDF
+    pngToFontAwesomeMap["exportPdf"] = IronIcon("icons", "help")
     pngToFontAwesomeMap["exportXlsx"] = FileIcons.EXCEL
     pngToFontAwesomeMap["foldColumn"] = VaadinIcon.FOLDER_O
     pngToFontAwesomeMap["fold"] = VaadinIcon.FOLDER_O
     pngToFontAwesomeMap["formula"] = VaadinIcon.CALC
-    pngToFontAwesomeMap["help"] = IronIcons.HELP
+    pngToFontAwesomeMap["help"] = VaadinIcon.QUESTION_CIRCLE_O
     pngToFontAwesomeMap["home"] = VaadinIcon.HOME
     pngToFontAwesomeMap["insertline"] = VaadinIcon.LIST_OL
     pngToFontAwesomeMap["insert"] = VaadinIcon.INSERT

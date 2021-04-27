@@ -17,18 +17,18 @@
  */
 package org.kopi.galite.ui.vaadin.actor
 
-import com.flowingcode.vaadin.addons.ironicons.IronIcons
-import com.vaadin.flow.component.Component
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.window.Window
+
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.icon.VaadinIcon
-import org.kopi.galite.ui.vaadin.base.Utils
 
 /**
  * The actor component
@@ -59,7 +59,12 @@ open class Actor(val caption: String?,
         val img = Icon(icon)
         super.setIcon(img)
       } else if (icon is IronIcons) {
-        super.setIcon(icon.create())
+        super.setIcon(icon.create().also {
+          it.setSize("1000")
+        })
+      }
+      else if (icon is IronIcon) {
+        super.setIcon(IronIcon("icons", "help"))
       }
     }
 
