@@ -71,6 +71,9 @@ dependencies {
   // EnhancedDialog dependency
   implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
 
+  // ApexCharts dependency
+  implementation("com.github.appreciated", "apexcharts", "2.0.0.beta10")
+
   // Iron Icons dependency
   implementation("com.flowingcode.addons", "iron-icons", "2.0.1")
 }

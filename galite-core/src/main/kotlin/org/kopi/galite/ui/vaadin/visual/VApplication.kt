@@ -26,6 +26,7 @@ import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.FontMetrics
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.MainWindowListener
@@ -52,6 +53,7 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
@@ -152,15 +154,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override fun startApplication() {
     menu = VMenuTree(dBContext!!)
-    menu.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
+    menu!!.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref)
     mainWindow!!.addMainWindowListener(this)
     mainWindow!!.connectedUser = userName
-    mainWindow!!.setMainMenu(DMainMenu(menu))
-    mainWindow!!.setUserMenu(DUserMenu(menu))
-    mainWindow!!.setAdminMenu(DAdminMenu(menu))
-    mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu))
-    mainWindow!!.addDetachListener { event ->
+    mainWindow!!.setMainMenu(DMainMenu(menu!!))
+    mainWindow!!.setUserMenu(DUserMenu(menu!!))
+    mainWindow!!.setAdminMenu(DAdminMenu(menu!!))
+    mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
+    mainWindow!!.addDetachListener {
       closeConnection()
     }
   }
@@ -230,7 +232,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val isNoBugReport: Boolean
     get() = java.lang.Boolean.parseBoolean(getInitParameter("nobugreport"))
 
-  override lateinit var menu: VMenuTree
+  override var menu: VMenuTree? = null
 
   override var isGeneratingHelp: Boolean = false
 
@@ -377,7 +379,17 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Shows the welcome view.
    */
   protected fun gotoWelcomeView() {
-    initialize()
+    if (mainWindow != null) {
+      // it should be attached to the application.
+      parent.ifPresent {
+        (it as HasComponents).remove(mainWindow)
+      }
+      mainWindow = null
+      menu = null
+      localizationManager = null
+      isGeneratingHelp = false
+      removeAll()
+    }
     welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
     welcomeView!!.setSizeFull() // important to get the full screen size.
     welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent -> onLogin(event) }
@@ -485,6 +497,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
     /** Application instance */
     lateinit var instance: Application
+    private val FONT_METRICS = arrayOf(
+      FontMetrics.DIGIT,
+      FontMetrics.LETTER
+    )
 
     init {
       ApplicationContext.applicationContext = VApplicationContext()

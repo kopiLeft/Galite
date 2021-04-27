@@ -37,6 +37,7 @@ import org.kopi.galite.visual.VMenuTree
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.contextmenu.MenuItem
+import com.vaadin.flow.server.VaadinService
 
 /**
  * A module menu implementation that uses the menu tree
@@ -186,10 +187,13 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
 
   override fun performAsyncAction(action: Action) {
     val currentUI = UI.getCurrent()
+    val currentService = VaadinService.getCurrent()
 
     requireNotNull(currentUI)
+    requireNotNull(currentService)
     Thread {
       UI.setCurrent(currentUI)
+      VaadinService.setCurrent(currentService)
       try {
         action.execute()
       } catch (e: VException) {

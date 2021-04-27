@@ -80,6 +80,11 @@ class DGridTextEditorField(
     } else {
       ScannerTransformer(editor)
     }
+    editor.addValueChangeListener { event ->
+      if(event.isFromClient) {
+        checkText(event.value.toString(), true)
+      }
+    }
     // TODO
   }
 
@@ -119,7 +124,7 @@ class DGridTextEditorField(
     super.reset()
   }
 
-  override fun getText(): String? = TODO()
+  override fun getText(): String? = editor.value?.toString()
 
   override fun setHasCriticalValue(b: Boolean) {}
 
@@ -142,7 +147,6 @@ class DGridTextEditorField(
     //editor.setHasPreFieldTrigger(columnView.getModel().hasTrigger(VConstants.TRG_PREFLD))
     editor.addActors(actors)
     //editor.setConvertType(getConvertType(columnView.model))
-
     return editor
   }
 

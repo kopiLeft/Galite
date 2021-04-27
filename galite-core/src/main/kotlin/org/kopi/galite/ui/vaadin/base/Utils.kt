@@ -252,8 +252,8 @@ object Utils : Utils() {
     pngToFontAwesomeMap["searchop"] = VaadinIcon.SEARCH
     pngToFontAwesomeMap["search"] = VaadinIcon.FILE_SEARCH
     pngToFontAwesomeMap["serialquery"] = VaadinIcon.RECORDS
-    pngToFontAwesomeMap["serviceoff"] = VaadinIcon.CLOSE
-    pngToFontAwesomeMap["serviceon"] = VaadinIcon.CHECK
+    pngToFontAwesomeMap["serviceoff"] = DeviceIcons.SIGNAL_CELLULAR_OFF
+    pngToFontAwesomeMap["serviceon"] = DeviceIcons.SIGNAL_CELLULAR_4_BAR
     pngToFontAwesomeMap["store"] = VaadinIcon.BUILDING_O
     pngToFontAwesomeMap["suggest"] = VaadinIcon.PHONE
     pngToFontAwesomeMap["timeStamp"] = VaadinIcon.CLOCK
