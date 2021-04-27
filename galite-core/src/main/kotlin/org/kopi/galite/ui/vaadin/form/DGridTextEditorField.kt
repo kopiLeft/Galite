@@ -59,7 +59,7 @@ class DGridTextEditorField(
         label: DGridEditorLabel?,
         align: Int,
         options: Int
-) : DGridEditorField<String?>(columnView, label, align, options), UTextField {
+) : DGridEditorField<String>(columnView, label, align, options), UTextField {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -138,7 +138,7 @@ class DGridTextEditorField(
 
   override fun createEditor(): GridEditorTextField {
 
-    val editor = createEditorField()
+    val editor: GridEditorTextField = createEditorField()
     //editor.setAlignment(columnView.getModel().getAlign()) TODO
     //editor.setAutocompleteLength(columnView.getModel().getAutocompleteLength())
     //editor.setHasAutocomplete(columnView.getModel().hasAutocomplete())
@@ -150,8 +150,8 @@ class DGridTextEditorField(
     return editor
   }
 
-  override fun createConverter(): Converter<String?, Any?> {
-    return object : Converter<String?, Any?> {
+  override fun createConverter(): Converter<String, Any?> {
+    return object : Converter<String, Any?> {
       val presentationType: Class<String>
         get() = String::class.java
       val modelType: Class<Any>
@@ -172,7 +172,7 @@ class DGridTextEditorField(
     }
   }
 
-  override fun createRenderer(): Renderer<String?> {
+  override fun createRenderer(): Renderer<String> {
     return TextRenderer()
   }
 
@@ -449,7 +449,7 @@ class DGridTextEditorField(
    *
    * @param field The field view.
    */
-  internal class ScannerTransformer(private val field: GridEditorField<String?>) : ModelTransformer {
+  internal class ScannerTransformer(private val field: GridEditorField<String>) : ModelTransformer {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------

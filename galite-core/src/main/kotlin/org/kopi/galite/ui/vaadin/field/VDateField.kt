@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import java.time.LocalDate
+
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.datepicker.DatePicker
 
@@ -24,7 +26,16 @@ import com.vaadin.flow.component.datepicker.DatePicker
  * An Date field.
  */
 class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
- init {
-   field.isClearButtonVisible = true
- }
+
+  init {
+    field.isClearButtonVisible = true
+  }
+
+  override fun setPresentationValue(newPresentationValue: String?) {
+    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
+      LocalDate.parse(newPresentationValue)
+    } else {
+      null
+    }
+  }
 }

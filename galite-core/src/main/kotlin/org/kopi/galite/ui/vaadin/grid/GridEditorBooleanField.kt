@@ -37,6 +37,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
   val wrappedField = BooleanField(trueRepresentation, falseRepresentation)
 
   init {
+    className = "editor-booleanfield"
     add(wrappedField)
   }
 
@@ -53,6 +54,20 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
   override fun addFocusListener(focusFunction: () -> Unit) {
     wrappedField.addFocusListener {
       focusFunction()
+    }
+  }
+
+  /**
+   * Sets the blink state of the boolean field.
+   * @param blink The blink state.
+   */
+  override fun setBlink(blink: Boolean) {
+    if(className != null) {
+      if (blink) {
+        element.classList.add("$className-blink")
+      } else {
+        element.classList.remove("$className-blink")
+      }
     }
   }
 }

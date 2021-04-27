@@ -1052,11 +1052,15 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     }
   }*/
 
-  fun addStyleDependentName(className: String) {
-    // TODO
+  fun addStyleDependentName(dependentClassName: String) {
+    if(className != null) {
+      element.classList.add("$className-$dependentClassName")
+    }
   }
 
-  fun removeStyleDependentName(className: String) {
-    // TODO
+  fun removeStyleDependentName(dependentClassName: String) {
+    if(className != null) {
+      element.classList.remove("$className-$dependentClassName")
+    }
   }
 }

@@ -72,6 +72,8 @@ class DGridMultiBlock(parent: DForm,
   override fun getRecordFromDisplayLine(line: Int): Int {
     return if (inDetailMode() && itemHasDetailVisible != null) {
       itemHasDetailVisible!!.record
+    } else if (itemToBeEdited != null) {
+      itemToBeEdited!!
     } else if (isEditorInitialized && editor.item != null) {
       editor.item.record
     } else {

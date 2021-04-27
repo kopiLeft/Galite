@@ -193,11 +193,11 @@ class Clients : FormBlock(6, 6, "Clients") {
     label = "Date"
   }
 
-  val Decimal = visit(domain = Domain<Decimal>(10, 10), position = at(7, 1)) {
+  val Decimal = visit(domain = Domain<Decimal>(20, 10), position = at(7, 1)) {
     label = "Decimal"
   }
 
-  val Image = visit(domain = Domain<Image>(100, 100), position = at(8, 1)) {
+  val Image = visit(domain = Domain<Image>(10, 10), position = at(8, 1)) {
     label = "Image"
   }
 

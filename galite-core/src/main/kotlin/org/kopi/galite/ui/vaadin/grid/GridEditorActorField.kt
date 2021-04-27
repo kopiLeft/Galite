@@ -53,6 +53,8 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
     TODO("Not yet implemented")
   }
 
+  override fun setBlink(blink: Boolean) {}
+
   /*override fun addNavigationListener(listener: NavigationListener?) {
     // NOT SUPPORTED
   }

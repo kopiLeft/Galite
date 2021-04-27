@@ -128,6 +128,12 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
 
   abstract fun addFocusListener(focusFunction: () -> Unit)
 
+  /**
+   * Sets the blink state of this editor field.
+   * @param blink The blink state.
+   */
+  abstract fun setBlink(blink: Boolean)
+
   //---------------------------------------------------
   // INNER CLASSES
   //---------------------------------------------------
