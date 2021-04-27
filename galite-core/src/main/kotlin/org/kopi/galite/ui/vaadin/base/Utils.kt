@@ -228,7 +228,7 @@ object Utils : Utils() {
     pngToFontAwesomeMap["expanded"] = VaadinIcon.FOLDER_OPEN_O
     pngToFontAwesomeMap["expanded_p"] = VaadinIcon.FOLDER_OPEN_O
     pngToFontAwesomeMap["exportCsv"] = VaadinIcon.FILE_TEXT_O
-    pngToFontAwesomeMap["exportPdf"] = IronIcon("icons", "help")
+    pngToFontAwesomeMap["exportPdf"] = FileIcons.PDF
     pngToFontAwesomeMap["exportXlsx"] = FileIcons.EXCEL
     pngToFontAwesomeMap["foldColumn"] = VaadinIcon.FOLDER_O
     pngToFontAwesomeMap["fold"] = VaadinIcon.FOLDER_O
