@@ -24,7 +24,6 @@ import com.flowingcode.vaadin.addons.ironicons.FileIcons
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.flowingcode.vaadin.addons.ironicons.MapsIcons
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.icon.VaadinIcon
 
 import java.util.Hashtable
@@ -253,8 +252,8 @@ object Utils : Utils() {
     pngToFontAwesomeMap["searchop"] = VaadinIcon.SEARCH
     pngToFontAwesomeMap["search"] = VaadinIcon.FILE_SEARCH
     pngToFontAwesomeMap["serialquery"] = VaadinIcon.RECORDS
-    pngToFontAwesomeMap["serviceoff"] = VaadinIcon.CLOSE // TODO
-    pngToFontAwesomeMap["serviceon"] = VaadinIcon.CHECK // TODO
+    pngToFontAwesomeMap["serviceoff"] = VaadinIcon.CLOSE
+    pngToFontAwesomeMap["serviceon"] = VaadinIcon.CHECK
     pngToFontAwesomeMap["store"] = VaadinIcon.BUILDING_O
     pngToFontAwesomeMap["suggest"] = VaadinIcon.PHONE
     pngToFontAwesomeMap["timeStamp"] = VaadinIcon.CLOCK
@@ -283,7 +282,7 @@ object Utils : Utils() {
     pngToFontAwesomeMap["bold"] = VaadinIcon.BOLD
     pngToFontAwesomeMap["bomb"] = VaadinIcon.BOMB
     pngToFontAwesomeMap["bookmark"] = VaadinIcon.BOOKMARK
-    pngToFontAwesomeMap["boxarrow"] = VaadinIcon.TOOLBOX // TODO
+    pngToFontAwesomeMap["boxarrow"] = VaadinIcon.TOOLBOX
     pngToFontAwesomeMap["bw"] = VaadinIcon.STEP_FORWARD
     pngToFontAwesomeMap["calculate"] = VaadinIcon.CALC
     pngToFontAwesomeMap["cfolder"] = VaadinIcon.FOLDER

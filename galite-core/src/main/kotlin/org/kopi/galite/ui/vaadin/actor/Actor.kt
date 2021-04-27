@@ -27,7 +27,6 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
@@ -56,15 +55,9 @@ open class Actor(val caption: String?,
 
     if (icon != null) {
       if (icon is VaadinIcon) {
-        val img = Icon(icon)
-        super.setIcon(img)
+        super.setIcon(Icon(icon))
       } else if (icon is IronIcons) {
-        super.setIcon(icon.create().also {
-          it.setSize("1000")
-        })
-      }
-      else if (icon is IronIcon) {
-        super.setIcon(IronIcon("icons", "help"))
+        super.setIcon(icon.create())
       }
     }
 
