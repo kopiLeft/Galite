@@ -38,8 +38,8 @@ class DGridEditorImageField(
   private var image: ByteArray? = null
 
   init {
-    // editor.setImageWidth(width) TODO
-    // editor.setImageHeight(height) TODO
+    (editor as GridEditorImageField).setImageWidth(width)
+    (editor as GridEditorImageField).setImageHeight(height)
   }
 
   companion object {

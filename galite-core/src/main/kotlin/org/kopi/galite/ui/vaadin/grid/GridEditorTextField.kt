@@ -22,21 +22,27 @@ import com.vaadin.flow.component.textfield.TextField
 /**
  * A text field used as editor
  */
-open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
+open class GridEditorTextField(width: Int) : GridEditorField<String>() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   val wrappedField = TextField()
 
   init {
+    className = "editor-field"
     add(wrappedField)
+    addValueChangeListener {
+      if(!check(it.value)) {
+        value = it.oldValue
+      }
+    }
   }
 
-  override fun setPresentationValue(newPresentationValue: Any?) {
+  override fun setPresentationValue(newPresentationValue: String?) {
     wrappedField.value = newPresentationValue.toString()
   }
 
-  override fun generateModelValue(): Any? = wrappedField.value
+  override fun generateModelValue(): String? = wrappedField.value
 
   override fun focus() {
     wrappedField.focus()
@@ -45,6 +51,33 @@ open class GridEditorTextField(width: Int) : GridEditorField<String?>() {
   override fun addFocusListener(focusFunction: () -> Unit) {
     wrappedField.addFocusListener {
       focusFunction()
+    }
+  }
+
+  /**
+   * Validates the given text according to the field type.
+   * @param text The text to be validated
+   * @return true if the text is valid.
+   */
+  protected open fun check(text: String): Boolean {
+    return true
+  }
+
+  open fun validate() {
+    // to be overridden when needed
+  }
+
+  /**
+   * Sets the blink state of the boolean field.
+   * @param blink The blink state.
+   */
+  override fun setBlink(blink: Boolean) {
+    if(className != null) {
+      if (blink) {
+        element.classList.add("$className-blink")
+      } else {
+        element.classList.remove("$className-blink")
+      }
     }
   }
 }

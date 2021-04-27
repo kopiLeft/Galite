@@ -17,23 +17,44 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import org.kopi.galite.ui.vaadin.common.VImage
+
 /**
  * The server side implementation of an image grid editor.
  */
-class GridEditorImageField() : GridEditorField<Any?>() {
-  override fun setPresentationValue(newPresentationValue: Any?) {
-    TODO("Not yet implemented")
+class GridEditorImageField : GridEditorField<Any?>() {
+
+  private val image: VImage = VImage()
+
+  init {
+    className = "editor-imagefield"
+    image.setBorder(0)
+    add(image)
   }
 
-  override fun generateModelValue(): Any? {
-    TODO("Not yet implemented")
+  override fun setPresentationValue(newPresentationValue: Any?) {
+    image.src = newPresentationValue.toString()
   }
+
+  override fun generateModelValue(): Any? = image.src
 
   override fun focus() {
-    TODO("Not yet implemented")
+    image.focus()
   }
 
   override fun addFocusListener(focusFunction: () -> Unit) {
-    TODO("Not yet implemented")
+    image.addFocusListener {
+      focusFunction()
+    }
+  }
+
+  override fun setBlink(blink: Boolean) {}
+
+  fun setImageWidth(width: Int) {
+    image.width = "${width}px"
+  }
+
+  fun setImageHeight(height: Int) {
+    image.height = "${height}px"
   }
 }

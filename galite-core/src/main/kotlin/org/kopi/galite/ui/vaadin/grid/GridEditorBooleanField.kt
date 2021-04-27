@@ -17,23 +17,57 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import org.kopi.galite.ui.vaadin.field.BooleanField
+
 /**
- * Server side implementation of the editor boolean field.
+ * An editor for boolean field.
+ *
+ * The component is an association of two check buttons
+ * working exclusively to handle the three possible values handled
+ * by a boolean field.
+ *
+ * yes is checked & no is not checked --> true
+ * no is checked & yes is not checked --> false
+ * yes and no are both unchecked --> null
+ *
+ * yes and no cannot be checked at the same time
  */
 class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: String?) : GridEditorField<Boolean?>() {
-  override fun setPresentationValue(newPresentationValue: Any?) {
-    TODO("Not yet implemented")
+
+  val wrappedField = BooleanField(trueRepresentation, falseRepresentation)
+
+  init {
+    className = "editor-booleanfield"
+    add(wrappedField)
   }
 
-  override fun generateModelValue(): Any? {
-    TODO("Not yet implemented")
+  override fun setPresentationValue(newPresentationValue: Boolean?) {
+    wrappedField.value = newPresentationValue
   }
+
+  override fun generateModelValue(): Boolean? = wrappedField.value
 
   override fun focus() {
-    TODO("Not yet implemented")
+    wrappedField.focus()
   }
 
   override fun addFocusListener(focusFunction: () -> Unit) {
-    TODO("Not yet implemented")
+    wrappedField.addFocusListener {
+      focusFunction()
+    }
+  }
+
+  /**
+   * Sets the blink state of the boolean field.
+   * @param blink The blink state.
+   */
+  override fun setBlink(blink: Boolean) {
+    if(className != null) {
+      if (blink) {
+        element.classList.add("$className-blink")
+      } else {
+        element.classList.remove("$className-blink")
+      }
+    }
   }
 }

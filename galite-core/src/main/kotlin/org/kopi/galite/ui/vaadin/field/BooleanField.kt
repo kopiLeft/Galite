@@ -59,6 +59,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     className = Styles.BOOLEAN_FIELD
     yes.classNames.add("true")
     no.classNames.add("false")
+    setLabel(trueRepresentation, falseRepresentation)
     content.add(yes)
     content.add(no)
     // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
@@ -149,8 +150,9 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
   }
 
-  override fun isVisible(): Boolean = (yes.element.style["visibility"].equals("visible")
-          && no.element.style["visibility"].equals("visible"))
+  override fun isVisible(): Boolean =
+    yes.element.style["visibility"].equals("visible")
+            && no.element.style["visibility"].equals("visible")
 
 
   override val isNull: Boolean

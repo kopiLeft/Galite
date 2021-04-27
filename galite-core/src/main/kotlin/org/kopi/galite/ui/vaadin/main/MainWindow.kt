@@ -25,6 +25,7 @@ import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
 import org.kopi.galite.ui.vaadin.common.VMain
 import org.kopi.galite.ui.vaadin.menu.ModuleList
+import org.kopi.galite.ui.vaadin.window.PopupWindow
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
@@ -177,9 +178,14 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   fun removeWindow(window: Component) {
     windowsList.remove(window)
     container.removeWindow(window)
-    /*if (window is PopupWindow) { TODO
-      (window as PopupWindow).fireOnClose() // fire close event
-    }*/
+
+    window.parent.ifPresent {
+      it.parent.ifPresent { windowContainer ->
+        if (windowContainer is PopupWindow) {
+          windowContainer.close() // fire close event
+        }
+      }
+    }
   }
 
   /**

@@ -28,13 +28,14 @@ import org.kopi.galite.ui.vaadin.form.DGridEditorField
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.router.NavigationEvent
 
 /**
  * A grid editor field implementation.
  */
-abstract class GridEditorField<T> protected constructor() : CustomField<Any?>(), ClickNotifier<GridEditorField<T>> {
+abstract class GridEditorField<T> protected constructor() : CustomField<T>(), ClickNotifier<GridEditorField<T>>, HasStyle {
 
   lateinit var dGridEditorField: DGridEditorField<*>
 
@@ -126,6 +127,12 @@ abstract class GridEditorField<T> protected constructor() : CustomField<Any?>(),
   abstract override fun focus()
 
   abstract fun addFocusListener(focusFunction: () -> Unit)
+
+  /**
+   * Sets the blink state of this editor field.
+   * @param blink The blink state.
+   */
+  abstract fun setBlink(blink: Boolean)
 
   //---------------------------------------------------
   // INNER CLASSES

@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.notif
 import org.kopi.galite.ui.vaadin.base.LocalizedMessages
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 
 /**
@@ -36,7 +37,7 @@ object NotificationUtils {
    * @param messageKey The message key to be displayed.
    */
   fun showError(callback: NotificationListener?,
-                parent: HasComponents,
+                parent: Component,
                 locale: String,
                 messageKey: String) {
     showError(callback, parent, locale, messageKey, null)
@@ -52,7 +53,7 @@ object NotificationUtils {
    * @param params The message parameters.
    */
   fun showError(callback: NotificationListener?,
-                parent: HasComponents,
+                parent: Component,
                 locale: String,
                 messageKey: String,
                 vararg params: Any?) {

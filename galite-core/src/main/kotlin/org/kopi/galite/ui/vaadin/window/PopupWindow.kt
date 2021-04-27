@@ -42,31 +42,6 @@ class PopupWindow : EnhancedDialog(), HasStyle {
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  /**
-   * Registers a close listener.
-   * @param l The listener to be registered.
-   */
-  fun addCloseListener(l: CloseListener) {
-    listeners.add(l)
-  }
-
-  /**
-   * Removes a close listener.
-   * @param l The listener to be removed.
-   */
-  fun removeCloseListener(l: CloseListener) {
-    listeners.remove(l)
-  }
-
-  /**
-   * Fires a close event.
-   */
-  fun fireOnClose() {
-    for (l in listeners) {
-      l.onClose()
-    }
-  }
-
   fun setCaption(title: String) {
     caption.text = title
   }

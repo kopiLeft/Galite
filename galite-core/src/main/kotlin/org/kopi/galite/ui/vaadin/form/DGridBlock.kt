@@ -77,9 +77,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * the editor to bind the last record. Typically, this is used when multiple
    * gotoRecord are called via the window action queue.
    */
-  private var itemToBeEdited: Int? = null
-
-  private var gridEditorFieldToBeEdited: GridEditorField<*>? = null
+  protected var itemToBeEdited: Int? = null
 
   /*
    * A flag used to force disabling the editor cancel when scroll is fired
@@ -124,8 +122,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
     }
     editor = grid.editor
     editor.addOpenListener {
-      gridEditorFieldToBeEdited!!.focus()
-      gridEditorFieldToBeEdited!!.dGridEditorField.onClick()
       if (!inDetailMode()) {
         updateEditors()
         enterRecord(it.item.record)
@@ -463,8 +459,11 @@ open class DGridBlock(parent: DForm, model: VBlock)
     editor.binder = binder
 
     grid.addItemClickListener {
-      gridEditorFieldToBeEdited = it.column.editorComponent as GridEditorField<*>
-      editor.editItem(it.item)
+      val gridEditorFieldToBeEdited = it.column.editorComponent as GridEditorField<*>
+
+      itemToBeEdited = it.item.record
+      gridEditorFieldToBeEdited.focus()
+      gridEditorFieldToBeEdited.dGridEditorField.onClick()
     }
 
     for (i in 0 until model.getFieldCount()) {
@@ -602,20 +601,22 @@ open class DGridBlock(parent: DForm, model: VBlock)
   fun editRecord(record: Int) {
     if (grid != null) {
       itemToBeEdited = record
-      /*BackgroundThreadHandler.access(Runnable { TODO
+      access {
         if (grid.isEnabled
-                && (editor.item == null
-                        || (itemToBeEdited != null
-                        && editor.item.record != itemToBeEdited))) {
-          if (!containerDatasource.containsId(itemToBeEdited)) {
-            itemToBeEdited = containerDatasource.firstItemId()
+          && (editor.item == null
+                  || (itemToBeEdited != null
+                  && editor.item.record != itemToBeEdited))
+        ) {
+          if(itemToBeEdited!! < 0 || itemToBeEdited!! >= grid.dataCommunicator.itemCount) {
+            itemToBeEdited = 0
           }
-          doNotCancelEditor = true
+
+          // doNotCancelEditor = true TODO
           if (!inDetailMode()) {
-            editor.editItem(itemToBeEdited)
+            editor.editItem(grid.dataCommunicator.getItem(itemToBeEdited!!))
           }
         }
-      //})*/
+      }
     }
   }
 }

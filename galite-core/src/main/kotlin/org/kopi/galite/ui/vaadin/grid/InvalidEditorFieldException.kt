@@ -15,32 +15,26 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.ui.vaadin.grid
 
+import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.notif.NotificationListener
-
-import com.vaadin.flow.component.HasValue
+import org.kopi.galite.ui.vaadin.notif.NotificationUtils
+import java.lang.Exception
 
 /**
- * Thrown when the field content is checked against its validator.
- * This exception is transformed later to an error notification.
+ * Thrown when the field content is checked against its validation
+ * strategy. This exception is transformed later to an error notification.
  *
  * @param field The concerned text input zone.
  * @param messageKey The message key.
  * @param params The message parameters
  */
-class CheckTypeException(
-        val field: HasValue<*, *>,
-        val messageKey: String?,
-        vararg params: Any?
-) : Exception(), NotificationListener {
-
-  /**
-   * Creates a new check type exception from a message key.
-   * @param field The concerned text input zone.
-   * @param messageKey The message key.
-   */
-  constructor(field: HasValue<*, *>, messageKey: String?) : this(field, messageKey, null)
+class InvalidEditorFieldException(val field: GridEditorField<*>,
+                                  val messageKey: String,
+                                  vararg val params: Any)
+  : Exception(),
+      NotificationListener {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -48,10 +42,18 @@ class CheckTypeException(
    * Displays the check type error.
    */
   fun displayError() {
-    // TODO
+    field.setBlink(true)
+    NotificationUtils.showError(
+      this,
+      MainWindow.instance,
+      MainWindow.locale,
+      messageKey,
+      params
+    )
   }
 
   override fun onClose(action: Boolean?) {
-    // TODO
+    field.setBlink(false)
+    field.focus()
   }
 }

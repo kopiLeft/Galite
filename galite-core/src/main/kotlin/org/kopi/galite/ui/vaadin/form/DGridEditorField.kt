@@ -23,9 +23,11 @@ import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.field.Field.NavigationDelegationMode
 import org.kopi.galite.ui.vaadin.field.TextField.ConvertType
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VColor
 
@@ -33,7 +35,6 @@ import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.router.NavigationEvent
 
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
 
 /**
  * An UField associated with the grid block in inline edit.
@@ -102,9 +103,9 @@ abstract class DGridEditorField<T>(
   override fun setInDetail(detail: Boolean) {}
 
   override fun forceFocus() {
-    //BackgroundThreadHandler.access(Runnable {  TODO
-    editor.focus()
-    //})
+    access {
+      editor.focus()
+    }
   }
 
   override fun updateColor() {
@@ -200,7 +201,12 @@ abstract class DGridEditorField<T>(
       if (!columnView.getBlock().isRecordFilled(recno)) {
         getModel().block!!.updateAccess(recno)
       }
-      columnView.transferFocus(this@DGridEditorField) // use here a mouse transferfocus
+
+      columnView.performAsyncAction(object : Action("mouse1") {
+        override fun execute() {
+          columnView.transferFocus(this@DGridEditorField) // use here a mouse transferfocus
+        }
+      })
     }
   }
 
