@@ -383,15 +383,6 @@ class MReport : Constants, Serializable {
   fun getRow(row: Int): VReportRow? = visibleRows!![row]
 
   /**
-   * Return all rows
-   *
-   * @return    all visible desired rows
-   */
-  fun getRows(): MutableList<VReportRow?> {
-    return visibleRows!!
-  }
-
-  /**
    * Return the tree used by the model
    */
   fun getTree(): VGroupRow? = root
@@ -461,7 +452,7 @@ class MReport : Constants, Serializable {
       var i = 0
       while (i < displayGroups.size) {
         displayLevels[i] = level
-        if (accessibleColumns[displayOrder[i]]!!.visible) {
+        if (accessibleColumns[displayOrder[i]]!!.isVisible) {
           if (displayGroups[i] == -1 || i == separatorPos) {
             while (i < displayGroups.size) {
               displayLevels[i] = level
@@ -493,7 +484,7 @@ class MReport : Constants, Serializable {
    * last grouping column.
    */
   private fun sortBaseRows() {
-    visibleRows = MutableList(baseRows.size) { null }
+    visibleRows = arrayOfNulls(baseRows.size)
     sortBaseRows(0)
   }
 
@@ -508,7 +499,7 @@ class MReport : Constants, Serializable {
     }
     // sort in ascending order
     var i = column
-    while (!accessibleColumns[i]!!.visible) {
+    while (!accessibleColumns[i]!!.isVisible) {
       i += 1
     }
     if (i >= 0) {
@@ -528,7 +519,7 @@ class MReport : Constants, Serializable {
     root = VGroupRow(arrayOfNulls(getModelColumnCount()), displayLevels[0] + 1)
     // even if column 0 is hidden, it has the highest level
     buildGroupingTree(root!!, 0, baseRows.size - 1, 0)
-    visibleRows = MutableList(maxRowCount) { null }
+    visibleRows = arrayOfNulls(maxRowCount)
     root!!.visible = true
     for (i in 0 until root!!.childCount) {
       (root!!.getChildAt(i) as VReportRow).visible = true
@@ -550,7 +541,7 @@ class MReport : Constants, Serializable {
       while (displayLevels[next] == displayLevels[start]) {
         next++
       }
-      while (!accessibleColumns[start]!!.visible) {
+      while (!accessibleColumns[start]!!.isVisible) {
         // to get the first visible column of this level
         start++
       }
@@ -567,7 +558,7 @@ class MReport : Constants, Serializable {
 
         maxRowCount++
         for (i in 0 until next) {
-          newRow.setValueAt(displayOrder[i], baseRows[loRow]!!.getValueAt(displayOrder[i])!!)
+          newRow.setValueAt(displayOrder[i], baseRows[loRow]!!.getValueAt(displayOrder[i]))
         }
         buildGroupingTree(newRow, loRow, split - 1, next)
         tree.add(newRow)
@@ -592,7 +583,7 @@ class MReport : Constants, Serializable {
                         order: Int,
                         lo: Int,
                         hi: Int,
-                        scratch: MutableList<VReportRow?>?) {
+                        scratch: Array<VReportRow?>?) {
     // a one-element array is always sorted
     if (lo < hi) {
       val mid = (lo + hi) / 2
@@ -751,15 +742,10 @@ class MReport : Constants, Serializable {
   /**
    * Returns true if the specified row is fold at the specified column
    */
-  fun isRowFold(row: Int, column: Int): Boolean = isRowFold(visibleRows!![row], column)
-
-  /**
-   * Returns true if the specified row is fold at the specified column
-   */
-  fun isRowFold(row: VReportRow?, column: Int): Boolean {
+  fun isRowFold(row: Int, column: Int): Boolean {
     return if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
-      var currentRow = row
+      var currentRow = visibleRows!![row]
 
       while (currentRow!!.level < level) {
         currentRow = currentRow.parent as? VReportRow
@@ -815,17 +801,10 @@ class MReport : Constants, Serializable {
    *
    * @param    column        the model index of the column
    */
-  fun foldingRow(row: Int, column: Int) = foldingRow(visibleRows!![row],column)
-
-  /**
-   * Folds the specified row to specified column
-   *
-   * @param    column        the model index of the column
-   */
-  fun foldingRow(row: VReportRow?, column: Int) {
+  fun foldingRow(row: Int, column: Int) {
     if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
-      var currentRow = row
+      var currentRow = visibleRows!![row]
 
       while (currentRow!!.level < level) {
         currentRow = currentRow.parent as? VReportRow
@@ -842,19 +821,13 @@ class MReport : Constants, Serializable {
    *
    * @param    column        the model index of the column
    */
-  fun unfoldingRow(row: Int, column: Int) = unfoldingRow(visibleRows!![row],column)
-
-  /**
-   * Unfolds the specified row to specified column
-   *
-   * @param    column        the model index of the column
-   */
-  fun unfoldingRow(row: VReportRow?, column: Int) {
+  fun unfoldingRow(row: Int, column: Int) {
     if (root!!.level > 1) {
       val level = displayLevels[reverseOrder[column]]
+      val currentRow = visibleRows!![row]
 
-      if (row is VGroupRow) {
-        row.setChildNodesVisible(level)
+      if (currentRow is VGroupRow) {
+        currentRow.setChildNodesVisible(level)
       }
       updateTableModel()
     }
@@ -863,14 +836,9 @@ class MReport : Constants, Serializable {
   /**
    * Returns true if the specified row is fold at the specified column
    */
-  fun isRowLine(row: Int): Boolean = isRowLine(visibleRows!![row]!!)
-
-  /**
-   * Returns true if the specified row is fold at the specified column
-   */
-  fun isRowLine(row: VReportRow): Boolean {
+  fun isRowLine(row: Int): Boolean {
     return if (visibleRows != null) {
-      row in 0 until maxRowCount && row.level == 0
+      row in 0 until maxRowCount && visibleRows!![row]!!.level == 0
     } else {
       false
     }
@@ -930,19 +898,6 @@ class MReport : Constants, Serializable {
       e.printStackTrace()
     }
     return if (visibleRows!![row]!!.level < displayLevels[reverseOrder[column]]) null else x
-  }
-
-  /**
-   * Updates value for a cell.
-   *
-   * @param    row           the row whose value is to be updated
-   * @param    column        the index of the column whose value is to be updated (column of the model)
-   */
-  fun updateValueAt(row: Int, column: Int) {
-    val row = visibleRows!![row]!!
-    if (row.level < displayLevels[reverseOrder[column]]) {
-      row.setValueAt(column, null)
-    }
   }
 
   /**
@@ -1057,7 +1012,7 @@ class MReport : Constants, Serializable {
   // is changed when a column move or one or more row are folded
   private var userRows: ArrayList<VBaseRow>? = ArrayList(500)
   private lateinit var baseRows: Array<VReportRow?>    // array of base data rows
-  private var visibleRows: MutableList<VReportRow?>? = null  // array of visible rows
+  private var visibleRows: Array<VReportRow?>? = null  // array of visible rows
   private var maxRowCount = 0
 
   // Sortedcolumn contain the index of the sorted column

@@ -44,7 +44,7 @@ class VActorsNavigationPanel : VNavigationPanel() {
       // we will create the navigation column and the header item
       column = VNavigationColumn(if (isHelpMenu(item.menu)) "help" else item.menu)
       column.className = "actor-navigationColumn"
-      column.setHeader(item.menu!!)
+      column.setHeader(item.menu)
     }
     // now we can add the actor item.
     column.addClickableItem(item)

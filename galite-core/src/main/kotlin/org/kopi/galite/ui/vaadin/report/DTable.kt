@@ -20,13 +20,11 @@ package org.kopi.galite.ui.vaadin.report
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.UReport.UTable
 import org.kopi.galite.report.VReportColumn
-import org.kopi.galite.report.VReportRow
 import org.kopi.galite.report.VSeparatorColumn
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.grid.ColumnReorderEvent
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
@@ -41,7 +39,7 @@ import com.vaadin.flow.function.ValueProvider
  * @param model The table model.
  */
 @CssImport("./styles/galite/Report.css")
-class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventListener<ItemClickEvent<VReportRow>> {
+class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, ComponentEventListener<ItemClickEvent<DReport.ReportModelItem>> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -63,15 +61,14 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
   var viewColumns: List<Int>? = null
 
   init {
+    setItems(model)
     buildColumns()
-    buildRows()
     addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_COLUMN_BORDERS)
     classNames.add("small")
     classNames.add("borderless")
     classNames.add("report")
     width = "100%"
     addItemClickListener(this)
-    addColumnReorderListener(::onReorder)
   }
 
   //---------------------------------------------------
@@ -91,21 +88,21 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
         ColumnTextAlign.START
       }
       if (vReportColumn is VSeparatorColumn) {
-        addColumn(ColumnValueProvider(index), index)
+        addColumn(index)
                 .setClassNameGenerator { row ->
                   buildString {
                     append(" separator")
                   }
                 }
       } else {
-        addColumn(ColumnValueProvider(index), index)
+        addColumn(index)
                 .setHeader(getColumnNameComponent(vReportColumn!!))
                 .setAutoWidth(true)
                 .setTextAlign(align)
-                .setClassNameGenerator { row ->
+                .setClassNameGenerator { item ->
                   buildString {
-                    if (row.level == 0) append("level-0")
-                    if (row.level == 1) append("level-1")
+                    if (item.reportRow!!.level == 0) append("level-0")
+                    if (item.reportRow!!.level == 1) append("level-1")
 
                     if (styles[0].getFont().isItalic) append(" italic") else append(" notItalic")
                     if (styles[0].getFont().isBold) append(" bold") else append(" notBold")
@@ -128,22 +125,6 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
           }
 
   /**
-   * Builds the grid rows.
-   */
-  private fun buildRows() {
-    setItems(model)
-  }
-
-  /**
-   * Called when grid columns are reordered.
-   *
-   * @param event the column reorder event. Provides the list of grid columns with the new order.
-   */
-  fun onReorder(event: ColumnReorderEvent<VReportRow>) {
-    viewColumns = event.columns.map { it.key.toInt() }
-  }
-
-  /**
    * Maps the index of the column in the grid at [viewColumnIndex] to the index of the column in the table model.
    */
   override fun convertColumnIndexToModel(viewColumnIndex: Int): Int {
@@ -157,19 +138,18 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
     return viewColumns?.get(modelColumnIndex) ?: modelColumnIndex
   }
 
-  override fun onComponentEvent(event: ItemClickEvent<VReportRow>?) {
+  override fun onComponentEvent(event: ItemClickEvent<DReport.ReportModelItem>?) {
     //TODO("Not yet implemented")
   }
 
   /**
    * Adds a new text column to this table with a column value provider and a key for the column.
    *
-   * @param columnValueProvider   the value provider
    * @param key                   the key of the column provider
    * @return the created column
    */
-  fun addColumn(columnValueProvider: ColumnValueProvider, key: Int): Column<VReportRow> {
-    return super.addColumn(columnValueProvider).also {
+  fun addColumn(key: Int): Column<DReport.ReportModelItem> {
+    return super.addColumn(ColumnValueProvider(key)).also {
       it.setKey(key.toString())
     }
   }
@@ -179,8 +159,7 @@ class DTable(val model: VTable) : Grid<VReportRow>(), UTable, ComponentEventList
    *
    * @param columnIndex the index of the column
    */
-  inner class ColumnValueProvider(private val columnIndex: Int) : ValueProvider<VReportRow, Any> {
-    override fun apply(source: VReportRow): Any =
-            model.accessibleColumns[columnIndex]!!.format(source.getValueAt(columnIndex))
+  inner class ColumnValueProvider(private val columnIndex: Int) : ValueProvider<DReport.ReportModelItem, Any> {
+    override fun apply(source: DReport.ReportModelItem): Any = source.getValueAt(columnIndex)
   }
 }
