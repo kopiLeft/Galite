@@ -87,9 +87,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun redisplay() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-      //table.dataCommunicator.reset()
-    //})
+    table.dataProvider.refreshAll()
   }
 
   /**
@@ -350,11 +348,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     }
     labelPopupMenu.addItem(VlibProperties.getString("sort_ASC")) {
       currentModel.sortColumn(getSelectedColumnIndex(gridColumn), 1)
-      redisplay()
     }
     labelPopupMenu.addItem(VlibProperties.getString("sort_DSC")) {
       currentModel.sortColumn(getSelectedColumnIndex(gridColumn), -1)
-      redisplay()
     }
     labelPopupMenu.addItem(VlibProperties.getString("add_column")) {
       addColumn(getSelectedColumnIndex(gridColumn))
@@ -388,7 +384,6 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
           }
         } else if (event.isShiftKey) {
           currentModel.sortColumn(getSelectedColumnIndex(gridColumn))
-          redisplay()
         }
       }
     }
