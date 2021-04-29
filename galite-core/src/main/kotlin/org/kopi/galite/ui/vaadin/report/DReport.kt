@@ -162,6 +162,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     }
   }
 
+  // Workaround to issue: https://vaadin.com/forum/thread/18059426/grid-recalculatecolumnwidths-doesn-t-recalculate-on-first-attempt
   @ClientCallable
   fun recalculateColumnWidths() {
     table.recalculateColumnWidths()
