@@ -149,9 +149,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    * Returns the column count.
    * @return the column count.
    */
-  fun getColumnCount(): Int {
-    return model.getColumnCount()
-  }
+  fun getColumnCount(): Int = model.getColumnCount()
 
   /**
    * Reset all columns widths.

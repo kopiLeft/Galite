@@ -59,17 +59,13 @@ class VTable(
    * @param column The column index.
    * @return The column align.
    */
-  fun getColumnAlign(column: Int): Int {
-    return model.getAccessibleColumn(column)!!.align
-  }
+  fun getColumnAlign(column: Int): Int = model.getAccessibleColumn(column)!!.align
 
   /**
    * Returns the column count.
    * @return the column count.
    */
-  fun getColumnCount(): Int {
-    return model.getColumnCount()
-  }
+  fun getColumnCount(): Int = model.getColumnCount()
 
   /**
    * Returns the accessible columns to display in the grid.

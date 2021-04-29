@@ -17,12 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.report
 
-import com.vaadin.flow.component.grid.ColumnTextAlign
-import com.vaadin.flow.function.SerializableFunction
-import org.kopi.galite.report.Constants
 import org.kopi.galite.report.MReport
 import org.kopi.galite.report.VReportColumn
 import org.kopi.galite.report.VSeparatorColumn
+
+import com.vaadin.flow.function.SerializableFunction
 
 /**
  * The `ColumnStyleGenerator` is the dynamic report
@@ -41,11 +40,6 @@ class ColumnStyleGenerator(private val model: MReport, val column: VReportColumn
       if (column is VSeparatorColumn) {
         append(" separator")
       } else {
-        val align = if (column.align == Constants.ALG_RIGHT) {
-          ColumnTextAlign.END
-        } else {
-          ColumnTextAlign.START
-        }
         val styles = column.getStyles()
 
         if (item.reportRow!!.level == 0) append("level-0")
