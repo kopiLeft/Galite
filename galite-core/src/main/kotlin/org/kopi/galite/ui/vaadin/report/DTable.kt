@@ -117,14 +117,14 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    * Maps the index of the column in the grid at [viewColumnIndex] to the index of the column in the table model.
    */
   override fun convertColumnIndexToModel(viewColumnIndex: Int): Int {
-    return viewColumns?.indexOf(viewColumnIndex) ?: viewColumnIndex
+    return viewColumns?.get(viewColumnIndex) ?: viewColumnIndex
   }
 
   /**
    * Maps the index of the column in the table model at [modelColumnIndex] to the index of the column in the grid.
    */
   override fun convertColumnIndexToView(modelColumnIndex: Int): Int {
-    return viewColumns?.get(modelColumnIndex) ?: modelColumnIndex
+    return viewColumns?.indexOf(modelColumnIndex) ?: modelColumnIndex
   }
 
   override fun onComponentEvent(event: ItemClickEvent<DReport.ReportModelItem>?) {

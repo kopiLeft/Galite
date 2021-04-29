@@ -113,7 +113,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   override fun removeColumn(position: Int) {
     model.removeColumn(position)
     table.removeColumnByKey(position.toString())
-    model.initializeAfterRemovingColumn(table.convertColumnIndexToModel(position))
+    model.initializeAfterRemovingColumn(table.convertColumnIndexToView(position))
 
     // set new order.
     val pos = IntArray(model.getAccessibleColumnCount())
@@ -125,7 +125,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun addColumn(position: Int) {
     var position = position
-    position = table.convertColumnIndexToModel(position)
+    position = table.convertColumnIndexToView(position)
     position += 1
     val headerLabel = "col" + model.getColumnCount()
     val span = VerticalLayout(Span(headerLabel))
