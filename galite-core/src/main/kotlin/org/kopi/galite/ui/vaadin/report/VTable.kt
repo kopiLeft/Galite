@@ -55,7 +55,24 @@ class VTable(
   }
 
   /**
+   * Returns the column align.
+   * @param column The column index.
+   * @return The column align.
+   */
+  fun getColumnAlign(column: Int): Int {
+    return model.getAccessibleColumn(column)!!.align
+  }
+
+  /**
+   * Returns the column count.
+   * @return the column count.
+   */
+  fun getColumnCount(): Int {
+    return model.getColumnCount()
+  }
+
+  /**
    * Returns the accessible columns to display in the grid.
    */
-  val accessibleColumns: Array<VReportColumn?> = model.accessibleColumns
+  val accessibleColumns: Array<VReportColumn?> get() = model.accessibleColumns
 }

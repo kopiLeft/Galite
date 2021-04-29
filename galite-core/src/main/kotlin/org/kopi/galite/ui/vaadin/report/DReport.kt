@@ -29,8 +29,13 @@ import org.kopi.galite.report.VSeparatorColumn
 import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
+import org.kopi.galite.visual.VlibProperties
 
 import com.vaadin.flow.component.Unit
+import com.vaadin.flow.component.contextmenu.ContextMenu
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * The `DReport` is the visual part of the [VReport] model.
@@ -48,7 +53,6 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   private val model: MReport = report.model // report model
   private lateinit var table: DTable
   private var parameters: Parameters? = null
-  private var selectedColumn = 0
 
   init {
     model.addReportListener(this)
@@ -71,10 +75,6 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     parameters = Parameters(Color(71, 184, 221))
     table = DTable(VTable(model, buildRows(model.getColumnCount())))
     table.isColumnReorderingAllowed = true
-    // TODO
-    //table.setColumnCollapsingAllowed(true)
-    //table.setNullSelectionAllowed(false)
-    //table.setCellStyleGenerator(ReportCellStyleGenerator(model, parameters))
     // 200 px is approximately the header window size + the actor pane size
     ui.ifPresent {
       it.page.retrieveExtendedClientDetails {
@@ -87,7 +87,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun redisplay() {
-    // TODO
+    //BackgroundThreadHandler.access(Runnable { TODO
+      //table.dataCommunicator.reset()
+    //})
   }
 
   /**
@@ -101,31 +103,36 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     )
     //BackgroundThreadHandler.access(Runnable { TODO
       for (col in 0 until model.getAccessibleColumnCount()) {
-        table.getColumnByKey(col.toString()).isVisible = !(model.getAccessibleColumn(col)!!.isFolded &&
-                model.getAccessibleColumn(col) !is VSeparatorColumn)
+        table.getColumnByKey(col.toString()).isVisible =
+          !model.getAccessibleColumn(col)!!.isFolded
+                  || model.getAccessibleColumn(col) is VSeparatorColumn
       }
     //})
   }
 
   override fun removeColumn(position: Int) {
     model.removeColumn(position)
-    model.initializeAfterRemovingColumn(table.convertColumnIndexToView(position))
+    table.removeColumnByKey(position.toString())
+    model.initializeAfterRemovingColumn(table.convertColumnIndexToModel(position))
 
     // set new order.
     val pos = IntArray(model.getAccessibleColumnCount())
     for (i in 0 until model.getAccessibleColumnCount()) {
       pos[i] = if (model.getDisplayOrder(i) > position) model.getDisplayOrder(i) - 1 else model.getDisplayOrder(i)
     }
-    table.dataCommunicator.reset() // TODO
     report.columnMoved(pos)
   }
 
   override fun addColumn(position: Int) {
     var position = position
-    position = table.convertColumnIndexToView(position)
+    position = table.convertColumnIndexToModel(position)
     position += 1
     val headerLabel = "col" + model.getColumnCount()
+    val span = VerticalLayout(Span(headerLabel))
     model.addColumn(headerLabel, position)
+    val column = table.addColumn(model.getColumnCount() - 1)
+    column.setHeader(span)
+    addHeaderListeners(column, span)
     // move last column to position.
     val pos = IntArray(model.getAccessibleColumnCount())
     for (i in 0 until position) {
@@ -135,12 +142,11 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
       pos[i] = model.getDisplayOrder(i - 1)
     }
     pos[position] = model.getDisplayOrder(model.getAccessibleColumnCount() - 1)
-    table.dataCommunicator.reset() // TODO
     report.columnMoved(pos)
   }
 
   override fun addColumn() {
-    //addColumn(table.convertColumnIndexToModel(table.getColumnCount() - 1))
+    addColumn(table.getColumnCount() - 1)
   }
 
   override fun getTable(): UReport.UTable {
@@ -160,7 +166,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun resetWidth() {
-    // TODO
+    //BackgroundThreadHandler.access(Runnable { TODO
+      table.resetWidth()
+    //})
   }
 
   override fun getSelectedColumn(): Int {
@@ -170,7 +178,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   override fun getSelectedCell(): Point = Point(table.selectedColumn, table.selectedRow)
 
   override fun setColumnLabel(column: Int, label: String) {
-    // Nothing to do
+    //UI.getCurrent().access(Runnable { TODO
+      table.getColumnByKey(column.toString()).setHeader(label)
+    //})
   }
 
   /**
@@ -179,7 +189,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
    */
   fun fireContentChanged() {
     if (::table.isInitialized) {
-      //table.model.fireContentChanged() TODO
+      table.model.fireContentChanged()
       synchronized(table) { report.setMenu() }
     }
   }
@@ -202,33 +212,79 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
    * @return tThe number or columns displayed
    */
   val columnCount: Int
-    get() = TODO()
+    get() = table.getColumnCount()
 
   /**
    * Add listeners to the report table.
    */
   private fun addTableListeners() {
-    // TODO
-    // Listener for item double click to fold and unfold the row
-    table.addItemDoubleClickListener { event ->
-      val row = event.item
+    val currentModel: MReport = model
+
+    table.columnToHeaderMap.forEach { (gridColumn, header) ->
+      addHeaderListeners(gridColumn, header)
+    }
+
+    // Listeners for item click to fold and unfold the row
+    table.addItemClickListener { event ->
+      val row = event.item.rowIndex
       val col = event.column.key.toInt()
-      if (model.isRowLine(row.rowIndex)) {
-        getModel()!!.performAsyncAction(object : Action("edit_line") {
-          override fun execute() {
-            try {
-              report.editLine()
-            } catch (ve: VException) {
-              // exception thrown by trigger.
-              throw ve
+      if (event.button == 0) {
+        if (event.clickCount == 2) {
+          if (currentModel.isRowLine(row)) {
+            getModel()!!.performAsyncAction(object : Action("edit_line") {
+              override fun execute() {
+                try {
+                  report.editLine()
+                } catch (ve: VException) {
+                  // exception thrown by trigger.
+                  throw ve
+                }
+              }
+            })
+          } else {
+            if (row >= 0) {
+              if (currentModel.isRowFold(row, col)) {
+                currentModel.unfoldingRow(row, col)
+              } else {
+                currentModel.foldingRow(row, col)
+              }
             }
           }
-        })
-      } else {
-        if (model.isRowFold(row.rowIndex, col)) {
-          model.unfoldingRow(row.rowIndex, col)
+        } else if (event.isShiftKey && event.isCtrlKey) {
+          currentModel.sortColumn(col)
+        } else if (event.isCtrlKey) {
+          if (row >= 0) {
+            if (currentModel.isRowFold(row, col)) {
+              currentModel.unfoldingRow(row, col)
+            } else {
+              currentModel.foldingRow(row, col)
+            }
+          }
+        } else if (event.isShiftKey) {
+          if (currentModel.isColumnFold(col)) {
+            currentModel.unfoldingColumn(col)
+          } else {
+            currentModel.foldingColumn(col)
+          }
         } else {
-          model.foldingRow(row.rowIndex, col)
+          // BackgroundThreadHandler.access(Runnable { table.refreshRowCache() }) TODO
+          synchronized(table) {
+            report.setMenu()
+          }
+        }
+      } else if (event.button == 2) {
+        if (row >= 0) {
+          if (currentModel.isRowFold(row, col)) {
+            currentModel.unfoldingRow(row, col)
+          } else {
+            currentModel.foldingRow(row, col)
+          }
+        }
+      } else if (event.button == 1) {
+        if (currentModel.isColumnFold(col)) {
+          currentModel.unfoldingColumn(col)
+        } else {
+          currentModel.foldingColumn(col)
         }
       }
     }
@@ -249,13 +305,108 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
       }
       model.columnMoved(newColumnOrder)
     }
+
+    /*table.addListener(object : ColumnCollapseListener() { TODO
+      fun columnCollapsed(event: ColumnCollapseEvent) {
+        for (i in 0 until model.getAccessibleColumnCount()) {
+          model.getAccessibleColumn(i)!!.isFolded = false
+        }
+        for (propertyId: Any in event.getPropertyIds()) {
+          val col: Int = propertyId as String?. toInt () - 1
+          model.getAccessibleColumn(col)!!.isFolded = true
+        }
+        table.dataCommunicator.reset() // TODO
+      }
+    })*/
+
+    table.addSelectionListener {
+      report.setMenu()
+    }
+
+    table.dataProvider.addDataProviderListener {
+      setInfoTable()
+      table.resetCachedInfos()
+    }
   }
+
+  private fun addHeaderListeners(gridColumn: Grid.Column<*>, header: VerticalLayout) {
+    val currentModel: MReport = model
+    val labelPopupMenu = ContextMenu()
+
+    labelPopupMenu.target = header
+
+    labelPopupMenu.addItem(VlibProperties.getString("set_column_info")) {
+      table.selectedColumn = getSelectedColumnIndex(gridColumn)
+      getModel()!!.performAsyncAction(object : Action("set_column_info") {
+        override fun execute() {
+          try {
+            report.setColumnInfo()
+          } catch (ve: VException) {
+            // exception thrown by trigger.
+            throw ve
+          }
+        }
+      })
+    }
+    labelPopupMenu.addItem(VlibProperties.getString("sort_ASC")) {
+      currentModel.sortColumn(getSelectedColumnIndex(gridColumn), 1)
+      redisplay()
+    }
+    labelPopupMenu.addItem(VlibProperties.getString("sort_DSC")) {
+      currentModel.sortColumn(getSelectedColumnIndex(gridColumn), -1)
+      redisplay()
+    }
+    labelPopupMenu.addItem(VlibProperties.getString("add_column")) {
+      addColumn(getSelectedColumnIndex(gridColumn))
+    }
+    if (currentModel.getAccessibleColumn(getSelectedColumnIndex(gridColumn))!!.isAddedAtRuntime) {
+      labelPopupMenu.addItem(VlibProperties.getString("remove_column")) {
+        removeColumn(getSelectedColumnIndex(gridColumn))
+      }
+      labelPopupMenu.addItem(VlibProperties.getString("set_column_data")) {
+        table.selectedColumn = getSelectedColumnIndex(gridColumn)
+        getModel()!!.performAsyncAction(object : Action("set_column_data") {
+          override fun execute() {
+            try {
+              report.setColumnData()
+            } catch (ve: VException) {
+              // exception thrown by the trigger.
+              throw ve
+            }
+          }
+        })
+      }
+    }
+
+    header.addClickListener { event ->
+      if (event.button == 0) { // TODO do we need this check?
+        if (event.isCtrlKey) {
+          if (currentModel.isColumnFold(getSelectedColumnIndex(gridColumn))) {
+            currentModel.unfoldingColumn(getSelectedColumnIndex(gridColumn))
+          } else {
+            currentModel.foldingColumn(getSelectedColumnIndex(gridColumn))
+          }
+        } else if (event.isShiftKey) {
+          currentModel.sortColumn(getSelectedColumnIndex(gridColumn))
+          redisplay()
+        }
+      }
+    }
+  }
+
+  fun getSelectedColumnIndex(gridColumn: Grid.Column<*>): Int = gridColumn.key.toInt()
 
   /**
    * Display table information in the footer of the table
    */
   private fun setInfoTable() {
-    //TODO()
+    setStatisticsText(
+      table.model.model.getRowCount()
+        .toString() + "/"
+              + model.getBaseRowCount()
+              + "/"
+              + model.getVisibleRowCount()
+    )
   }
 
   /**

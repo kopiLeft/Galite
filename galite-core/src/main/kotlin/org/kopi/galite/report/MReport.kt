@@ -112,7 +112,7 @@ class MReport : Constants, Serializable {
     // add the new column;
     cols[columns.size] = VFixnumColumn(null, 0, 4, -1, null, 15, 7, null)
     cols[columns.size]!!.label = label
-    cols[columns.size]!!.addedAtRuntime = true
+    cols[columns.size]!!.isAddedAtRuntime = true
     // copy the other columns.
     columns.forEachIndexed { index, element ->
       cols[index] = element
