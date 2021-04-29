@@ -36,6 +36,9 @@ import com.vaadin.flow.component.contextmenu.ContextMenu
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.ClientCallable
+import com.vaadin.flow.component.UI
+
 
 /**
  * The `DReport` is the visual part of the [VReport] model.
@@ -87,7 +90,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun redisplay() {
-    table.dataProvider.refreshAll()
+    contentChanged()
   }
 
   /**
@@ -154,7 +157,14 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   override fun contentChanged() {
     if (this::table.isInitialized) {
       table.model.fireContentChanged()
+      val page = UI.getCurrent().page
+      page.executeJs("$0.\$server.recalculateColumnWidths()", element)
     }
+  }
+
+  @ClientCallable
+  fun recalculateColumnWidths() {
+    table.recalculateColumnWidths()
   }
 
   override fun columnMoved(pos: IntArray) {
