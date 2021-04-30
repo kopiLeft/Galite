@@ -25,6 +25,7 @@ import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
 import org.kopi.galite.ui.vaadin.common.VMain
 import org.kopi.galite.ui.vaadin.menu.ModuleList
+import org.kopi.galite.ui.vaadin.visual.DUserMenu
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 
 import com.vaadin.flow.component.Component
@@ -58,7 +59,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   //---------------------------------------------------
 
   private val listeners = mutableListOf<MainWindowListener>()
-  private var menus = mutableListOf<ModuleList>()
   private val header = VHeader()
   private val windowsLink = VWindows()
   private val welcome = VWelcome()
@@ -118,7 +118,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    */
   fun setMainMenu(moduleList: ModuleList) {
     header.setMainMenu(moduleList)
-    menus.add(moduleList)
   }
 
   /**
@@ -136,9 +135,8 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    * Sets the user menu attached to this main window.
    * @param moduleList The user menu.
    */
-  fun setUserMenu(moduleList: ModuleList) {
+  fun setUserMenu(moduleList: DUserMenu) {
     welcome.setUserMenu(moduleList)
-    menus.add(moduleList)
   }
 
   /**
@@ -147,7 +145,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    */
   fun setAdminMenu(moduleList: ModuleList) {
     welcome.setAdminMenu(moduleList)
-    menus.add(moduleList)
   }
 
   /**
@@ -156,7 +153,14 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    */
   fun setBookmarksMenu(menu: ModuleList) {
     welcome.setBookmarksMenu(menu)
-    menus.add(menu)
+  }
+
+  /**
+   * Sets the workspace context menu.
+   * @param menu The menu component.
+   */
+  fun setWorkspaceContextItemMenu(menu: ModuleList) {
+    welcome.setWorkspaceContextItemMenu(menu)
   }
 
   /**
