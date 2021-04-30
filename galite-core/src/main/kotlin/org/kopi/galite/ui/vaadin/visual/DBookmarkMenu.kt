@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
+import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.visual.RootMenu
 import org.kopi.galite.visual.VMenuTree
 
@@ -27,6 +28,7 @@ class DBookmarkMenu(model: VMenuTree) : DMenu(model) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
+  override fun getRootModuleItem(): ModuleItem = ModuleItem()
 
   override fun buildMenu(roots: List<RootMenu>) {
     if (getModel().getShortcutsID().isNotEmpty()) {

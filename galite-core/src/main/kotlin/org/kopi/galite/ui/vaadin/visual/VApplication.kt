@@ -43,6 +43,7 @@ import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.PrinterManager
@@ -149,7 +150,22 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // APPLICATION IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun logout() {
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"),
+                                     Message.getMessage("confirm_quit"),
+                                     notificationLocale)
 
+    dialog.yesIsDefault = false
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean?) {
+        if (yes == true) {
+          // close DB connection
+          closeConnection()
+          // show welcome screen
+          gotoWelcomeView()
+        }
+      }
+    })
+    showNotification(dialog)
   }
 
   override fun startApplication() {
@@ -157,11 +173,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     menu!!.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref)
     mainWindow!!.addMainWindowListener(this)
-    mainWindow!!.connectedUser = userName
     mainWindow!!.setMainMenu(DMainMenu(menu!!))
     mainWindow!!.setUserMenu(DUserMenu(menu!!))
     mainWindow!!.setAdminMenu(DAdminMenu(menu!!))
     mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
+    mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
+    mainWindow!!.connectedUser = userName
     mainWindow!!.addDetachListener {
       closeConnection()
     }
@@ -381,14 +398,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   protected fun gotoWelcomeView() {
     if (mainWindow != null) {
       // it should be attached to the application.
-      parent.ifPresent {
-        (it as HasComponents).remove(mainWindow)
-      }
+      removeAll()
       mainWindow = null
       menu = null
       localizationManager = null
       isGeneratingHelp = false
-      removeAll()
     }
     welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
     welcomeView!!.setSizeFull() // important to get the full screen size.

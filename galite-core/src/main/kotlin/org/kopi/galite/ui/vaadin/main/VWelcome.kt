@@ -17,53 +17,24 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.ui.vaadin.menu.WelcomeListMenu
 
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
- * The welcome text widget.
+ * The welcome text component.
  * Contains also the logout button to disconnect from application.
  */
 class VWelcome : HorizontalLayout() {
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
   // menus
-  private val userMenu = WelcomeListMenu()
-  private val adminMenu = WelcomeListMenu()
-  private val bookmarksMenu = WelcomeListMenu()
-  private val workspaceContextMenu = WelcomeListMenu()
+  private lateinit var userMenu: ModuleList
+  private lateinit var adminMenu: ModuleList
+  private lateinit var bookmarksMenu: ModuleList
+  private lateinit var workspaceContextMenu: ModuleList
 
-  // items
-  private val userItem = ModuleItem(VaadinIcon.USER)
-  private val adminItem = ModuleItem(VaadinIcon.COG)
-  private val bookmarksItem = ModuleItem(VaadinIcon.STAR)
-  private val workspaceContextItem = ModuleItem(VaadinIcon.MAP_MARKER)
-  //---------------------------------------------------
-  // CONSTRUCTOR
-  //---------------------------------------------------
-  /**
-   * Creates the welcome text component.
-   */
   init {
     setId("welcome")
-    userMenu.addItem(userItem)
-    adminMenu.addItem(adminItem)
-    bookmarksMenu.addItem(bookmarksItem)
-    workspaceContextMenu.addItem(workspaceContextItem)
-    add(userMenu)
-    add(adminMenu)
-    add(bookmarksMenu)
-    add(workspaceContextMenu)
-    userMenu.setId("user_menu")
-    adminMenu.setId("admin_menu")
-    bookmarksMenu.setId("bookmarks_menu")
-    workspaceContextMenu.setId("wrkcontext_menu")
   }
 
   /**
@@ -71,7 +42,10 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setUserMenu(menu: ModuleList) {
-    // TODO
+    userMenu = menu
+    menu.setId("user_menu")
+    menu.rootMenuItem!!.setIcon(VaadinIcon.USER)
+    addComponentAsFirst(menu)
   }
 
   /**
@@ -79,7 +53,7 @@ class VWelcome : HorizontalLayout() {
    * @param username The user name.
    */
   fun setConnectedUser(username: String) {
-    userItem.setCaption(username)
+    userMenu.rootMenuItem!!.setCaption(username)
   }
 
   /**
@@ -87,7 +61,10 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setAdminMenu(menu: ModuleList) {
-    // TODO
+    adminMenu = menu
+    menu.setId("admin_menu")
+    menu.rootMenuItem!!.setIcon(VaadinIcon.COG)
+    addComponentAtIndex(1, menu)
   }
 
   /**
@@ -95,6 +72,20 @@ class VWelcome : HorizontalLayout() {
    * @param menu The menu component.
    */
   fun setBookmarksMenu(menu: ModuleList) {
-    // TODO
+    bookmarksMenu = menu
+    menu.setId("bookmarks_menu")
+    menu.rootMenuItem!!.setIcon(VaadinIcon.STAR)
+    addComponentAtIndex(2, menu)
+  }
+
+  /**
+   * Sets the workspace context menu.
+   * @param menu The menu component.
+   */
+  fun setWorkspaceContextItemMenu(menu: ModuleList) {
+    workspaceContextMenu = menu
+    menu.setId("wrkcontext_menu")
+    menu.rootMenuItem!!.setIcon(VaadinIcon.MAP_MARKER)
+    addComponentAtIndex(3, menu)
   }
 }
