@@ -56,6 +56,14 @@ class VWindowsDisplay : Div() {
   }
 
   /**
+   * Removes the given window item.
+   * @param window The window item.
+   */
+  fun removeWindow(window: Component) {
+    menu.removeWindow(window)
+  }
+
+  /**
    * Shows the windows menu.
    */
   fun showMenu() {
