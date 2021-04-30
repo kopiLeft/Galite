@@ -21,6 +21,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasText
+import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -29,14 +30,13 @@ import com.vaadin.flow.dom.ElementFactory
 /**
  * The module item model.
  *
- * @param vaadinIcon The icon to add to this item.
  * @param help       The help text.
  */
-class ModuleItem(val vaadinIcon: VaadinIcon? = null,
-                      val help: String? = null)
+class ModuleItem(val help: String? = null)
   : Div(), HasComponents, HasStyle {
 
-  var parentMenu: ModuleListMenu? = null
+  var rootItem: MenuItem? = null
+  private var vaadinIcon: VaadinIcon? = null
 
   init {
     style["cursor"] = "pointer"
@@ -44,17 +44,14 @@ class ModuleItem(val vaadinIcon: VaadinIcon? = null,
     if(help != null) {
       element.setAttribute("help", help)
     }
-
-    if(vaadinIcon != null) {
-      add(Icon(vaadinIcon))
-    }
   }
 
   /**
    * Sets the item caption.
+   *
    * @param caption The item caption.
    */
-  open fun setCaption(caption: String) {
+  fun setCaption(caption: String) {
     if(vaadinIcon != null) {
       val stringPanel = VStrongPanel().also {
         it.text = caption
@@ -63,6 +60,15 @@ class ModuleItem(val vaadinIcon: VaadinIcon? = null,
     } else {
       text = caption
     }
+  }
+
+  /**
+   * Sets the icon to this module item.
+   * @param icon The icon to add to this item.
+   */
+  fun setIcon(icon: VaadinIcon) {
+    vaadinIcon = icon
+    add(Icon(icon))
   }
 
   /**
