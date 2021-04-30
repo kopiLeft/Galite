@@ -76,7 +76,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   override fun build() {
     // load personal configuration
     parameters = Parameters(Color(71, 184, 221))
-    table = DTable(VTable(model, buildRows(model.getColumnCount())))
+    table = DTable(VTable(model, buildRows()))
     table.isColumnReorderingAllowed = true
     // 200 px is approximately the header window size + the actor pane size
     ui.ifPresent {
@@ -133,6 +133,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     model.addColumn(headerLabel, position)
     val column = table.addColumn(model.getColumnCount() - 1)
     column.setHeader(span)
+    column.isAutoWidth = true
     addHeaderListeners(column, span)
     // move last column to position.
     val pos = IntArray(model.getAccessibleColumnCount())
@@ -333,6 +334,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     }
 
     table.dataProvider.addDataProviderListener {
+      table.setItems(buildRows())
       setInfoTable()
       table.resetCachedInfos()
     }
@@ -417,12 +419,10 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   /**
    * Builds the grid rows.
-   *
-   * @param length The ID list length.
    */
-  private fun buildRows(length: Int): List<ReportModelItem> {
+  private fun buildRows(): List<ReportModelItem> {
     val rows = mutableListOf<ReportModelItem>()
-    for (i in 0 until length) {
+    for (i in 0 until model.getRowCount()) {
       rows.add(ReportModelItem(i))
     }
     return rows

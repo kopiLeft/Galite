@@ -72,7 +72,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
     classNames.add("small")
     classNames.add("borderless")
     classNames.add("report")
-    width = "100%"
+    setWidthFull()
     addItemClickListener(this)
   }
 
