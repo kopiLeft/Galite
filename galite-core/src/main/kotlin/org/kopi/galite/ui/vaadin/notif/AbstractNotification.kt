@@ -68,7 +68,7 @@ abstract class AbstractNotification(title: String?,
    * Fires a close event.
    * @param action The user action.
    */
-  protected fun fireOnClose(action: Boolean) {
+  protected fun fireOnClose(action: Boolean?) {
     for (l in listeners) {
       l.onClose(action)
     }

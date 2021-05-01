@@ -117,7 +117,7 @@ class VWindowController : WindowController() {
           val application = ApplicationContext.applicationContext.getApplication() as VApplication
           if (application != null) {
             val popup = PopupWindow()
-            popup.setModal(true)
+            popup.isModal = true
             popup.setContent(view!!)
             popup.setCaption(model.getTitle()) // put popup title
             application.attachComponent(popup)

@@ -113,9 +113,9 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
    * @param     manager         the manger to use for localization
    */
   protected fun localize(manager: LocalizationManager) {
-    val loc: ChartLocalizer = manager.getChartLocalizer(source)
-
     if(ApplicationContext.getDefaultLocale() != locale) {
+      val loc: ChartLocalizer = manager.getChartLocalizer(source)
+
       setPageTitle(loc.getTitle())
       help = loc.getHelp()
       // dimensions
@@ -328,15 +328,15 @@ abstract class VChart constructor(context: DBContextHandler? = null) : VWindow()
     try {
       exported = when (type) {
         TYP_PDF -> {
-          (getDisplay() as UChart).type.exportToPDF(destination, printOptions)
+          (getDisplay() as UChart).type!!.exportToPDF(destination, printOptions)
           true
         }
         TYP_PNG -> {
-          (getDisplay() as UChart).type.exportToPNG(destination, printOptions.imageWidth, printOptions.imageHeight)
+          (getDisplay() as UChart).type!!.exportToPNG(destination, printOptions.imageWidth, printOptions.imageHeight)
           true
         }
         TYP_JPEG -> {
-          (getDisplay() as UChart).type.exportToJPEG(destination, printOptions.imageWidth, printOptions.imageHeight)
+          (getDisplay() as UChart).type!!.exportToJPEG(destination, printOptions.imageWidth, printOptions.imageHeight)
           true
         }
         else -> throw InconsistencyException("Export type unknown")

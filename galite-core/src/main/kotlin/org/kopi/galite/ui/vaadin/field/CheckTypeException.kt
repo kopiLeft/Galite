@@ -51,7 +51,7 @@ class CheckTypeException(
     // TODO
   }
 
-  override fun onClose(action: Boolean) {
+  override fun onClose(action: Boolean?) {
     // TODO
   }
 }

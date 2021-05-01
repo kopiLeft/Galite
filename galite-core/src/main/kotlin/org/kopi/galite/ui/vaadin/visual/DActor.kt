@@ -20,18 +20,19 @@ package org.kopi.galite.ui.vaadin.visual
 import java.awt.Event
 import java.awt.event.KeyEvent
 
+import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.visual.UActor
+import org.kopi.galite.visual.VActor
+
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEventListener
 import com.vaadin.flow.component.button.Button
-
-import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.visual.UActor
-import org.kopi.galite.visual.VActor
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The `DActor` is the vaadin implementation of
@@ -44,6 +45,7 @@ import org.kopi.galite.visual.VActor
  * @param model The actor model.
  *
  */
+@CssImport("./styles/galite/Actor.css")
 class DActor(private var model: VActor)
   : Actor(model.menuItem,
           Utils.createTooltip(getDescription(model)),

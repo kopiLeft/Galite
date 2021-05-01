@@ -27,5 +27,5 @@ interface NotificationListener : Serializable {
    * Fires the notification close action.
    * @param action the user action.
    */
-  fun onClose(action: Boolean)
+  fun onClose(action: Boolean?)
 }

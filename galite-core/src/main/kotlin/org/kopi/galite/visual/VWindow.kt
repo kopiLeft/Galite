@@ -492,7 +492,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    *
    * @param     ident  the message identifier
    * @param     param1 the first message parameter
-   * @param     param1 the second message parameter
+   * @param     param2 the second message parameter
    * @return    the requested message
    */
   protected fun formatMessage(ident: String, param1: Any?, param2: Any? = null): String? =
@@ -517,7 +517,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * Try to handle an exception
    */
   fun fatalError(data: Any?, line: String, reason: Throwable) {
-    TODO()
+     TODO()
   }
 
   // ----------------------------------------------------------------------

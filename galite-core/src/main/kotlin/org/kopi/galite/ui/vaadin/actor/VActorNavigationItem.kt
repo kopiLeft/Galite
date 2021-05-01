@@ -22,8 +22,10 @@ import org.kopi.galite.visual.VActor
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 
 /**
  * Constructs a new actor navigation menu item that fires a command when it is selected.
@@ -36,28 +38,31 @@ import com.vaadin.flow.component.html.Label
 class VActorNavigationItem(text: String,
                            val menu: String?,
                            acceleratorKey: Key?,
-                           keyModifier : KeyModifier?,
-                           icon: String?,
+                           keyModifier: KeyModifier?,
+                           icon: Any?,
                            val action: VActor?) : Button() {
 
   init {
     super.setText(text)
 
     if (icon != null) {
-      val img = Image()
-
-      img.src = icon
-      super.setIcon(img)
       this.addClickListener {
         action?.performAction()
+        if (icon is VaadinIcon) {
+          super.setIcon(Icon(icon))
+        } else if (icon is IronIcons) {
+          super.setIcon(icon.create())
+        }
       }
     }
 
     if (acceleratorKey != null && acceleratorKey != Key.UNIDENTIFIED) {
       val modifier = keyModifier?.keys?.get(0)
 
-      this.addToSuffix(Label(if(modifier != null) modifier + "-" + acceleratorKey.keys[0] else acceleratorKey.keys[0]))
+      super.setText(text + if(modifier != null) modifier + "-" + acceleratorKey.keys[0] else " " + acceleratorKey.keys[0])
       super.addClickShortcut(acceleratorKey)
+    } else {
+      super.setText(text)
     }
 
     className = getClassname()
