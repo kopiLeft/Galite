@@ -48,7 +48,8 @@ class VTable(
   }
 
   /**
-   * Notifies the table data provider that content has been changed.
+   * Notify the report table that the report content has been
+   * change in order to update the table content.
    */
   fun fireContentChanged() {
     refreshAll()

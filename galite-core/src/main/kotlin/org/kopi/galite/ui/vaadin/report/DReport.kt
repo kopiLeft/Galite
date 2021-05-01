@@ -157,6 +157,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun contentChanged() {
     if (this::table.isInitialized) {
+      table.setItems(buildRows())
       table.model.fireContentChanged()
       val page = UI.getCurrent().page
       page.executeJs("$0.\$server.recalculateColumnWidths()", element)
@@ -191,17 +192,6 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     //UI.getCurrent().access(Runnable { TODO
       table.getColumnByKey(column.toString()).setHeader(label)
     //})
-  }
-
-  /**
-   * Notify the report table that the report content has been
-   * change in order to update the table content.
-   */
-  fun fireContentChanged() {
-    if (::table.isInitialized) {
-      table.model.fireContentChanged()
-      synchronized(table) { report.setMenu() }
-    }
   }
 
   /**
@@ -334,7 +324,6 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     }
 
     table.dataProvider.addDataProviderListener {
-      table.setItems(buildRows())
       setInfoTable()
       table.resetCachedInfos()
     }
