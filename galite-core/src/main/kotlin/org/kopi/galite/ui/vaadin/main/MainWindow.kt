@@ -180,16 +180,32 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    * @param window The window to be removed.
    */
   fun removeWindow(window: Component) {
-    windowsList.remove(window)
-    container.removeWindow(window)
+    if(!closeIfIsPopup(window)) {
+      windowsList.remove(window)
+      container.removeWindow(window)
+      windowsMenu.removeWindow(window)
+    }
+  }
+
+  /**
+   * Close [window] if it is a popup window
+   *
+   * @param window window to close
+   * @return true is [window] is a popup and it was closed
+   */
+  private fun closeIfIsPopup(window: Component): Boolean {
+    var closed  = false
 
     window.parent.ifPresent {
       it.parent.ifPresent { windowContainer ->
         if (windowContainer is PopupWindow) {
           windowContainer.close() // fire close event
+          closed = true
         }
       }
     }
+
+    return closed
   }
 
   /**

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.menu
 
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasStyle
@@ -36,7 +37,7 @@ class ModuleItem(val help: String? = null)
   : Div(), HasComponents, HasStyle {
 
   var rootItem: MenuItem? = null
-  private var vaadinIcon: VaadinIcon? = null
+  private var icon: Component? = null
 
   init {
     style["cursor"] = "pointer"
@@ -52,7 +53,7 @@ class ModuleItem(val help: String? = null)
    * @param caption The item caption.
    */
   fun setCaption(caption: String) {
-    if(vaadinIcon != null) {
+    if(icon != null) {
       val stringPanel = VStrongPanel().also {
         it.text = caption
       }
@@ -64,11 +65,20 @@ class ModuleItem(val help: String? = null)
 
   /**
    * Sets the icon to this module item.
-   * @param icon The icon to add to this item.
+   * @param vaadinIcon The icon to add to this item.
    */
-  fun setIcon(icon: VaadinIcon) {
-    vaadinIcon = icon
-    add(Icon(icon))
+  fun setIcon(vaadinIcon: VaadinIcon) {
+    icon = Icon(vaadinIcon)
+    add(icon)
+  }
+
+  /**
+   * Sets the icon to this module item.
+   * @param ironIcon The icon to add to this item.
+   */
+  fun setIcon(ironIcon: IronIcons) {
+    icon = ironIcon.create()
+    add(icon)
   }
 
   /**

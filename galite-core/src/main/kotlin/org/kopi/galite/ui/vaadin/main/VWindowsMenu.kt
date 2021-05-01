@@ -39,6 +39,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 class VWindowsMenu : EnhancedDialog(), HasStyle {
 
   private val items = VerticalLayout()
+  private val windowsItemsMap = mutableMapOf<Component, VWindowsMenuItem>()
   private val headerText = Label()
 
   init {
@@ -54,6 +55,7 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
     header.alignItems = FlexComponent.Alignment.END
     this.setHeader(header)
     this.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    this.setContent(items)
   }
 
   /**
@@ -67,8 +69,17 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
 
     items.className = "window-items-container"
     item.addClickListener { this.close() }
+    windowsItemsMap[window] = item
     items.add(item)
-    this.setContent(items)
+  }
+
+  /**
+   * Removes the given window item.
+   * @param window The window item.
+   */
+  fun removeWindow(window: Component) {
+    items.remove(windowsItemsMap[window])
+    windowsItemsMap.remove(window)
   }
 
   /**
