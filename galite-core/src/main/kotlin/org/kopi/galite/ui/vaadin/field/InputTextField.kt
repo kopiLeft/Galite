@@ -43,6 +43,7 @@ import com.vaadin.flow.component.textfield.Autocomplete
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.textfield.HasAutocomplete
+import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.shared.Registration
 
@@ -55,7 +56,7 @@ import com.vaadin.flow.shared.Registration
 open class InputTextField<C: AbstractField<C, out Any>> internal constructor(protected val field: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
-      HasAutocomplete
+      HasAutocomplete, HasPrefixAndSuffix
       /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
 
   /**
@@ -1054,13 +1055,13 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
 
   fun addStyleDependentName(dependentClassName: String) {
     if(className != null) {
-      element.classList.add("$className-$dependentClassName")
+      element.classList.add("${Styles.TEXT_INPUT}-$dependentClassName")
     }
   }
 
   fun removeStyleDependentName(dependentClassName: String) {
     if(className != null) {
-      element.classList.remove("$className-$dependentClassName")
+      element.classList.remove("${Styles.TEXT_INPUT}-$dependentClassName")
     }
   }
 }

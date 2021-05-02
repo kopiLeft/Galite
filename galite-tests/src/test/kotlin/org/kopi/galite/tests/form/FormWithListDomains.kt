@@ -116,6 +116,28 @@ object SomeDictionnaryForm : DictionaryForm() {
 
   val action = menu("Action")
 
+  val edit = menu("Edit")
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
+  val quit = actor(
+    ident = "quit",
+    menu = action,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = "quit"
+  }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
   val list = actor(
           ident = "list",
           menu = action,

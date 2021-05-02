@@ -172,7 +172,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
           // set the return code
           returnCode = code
           // Inform all threads who wait for this panel
-          // model.notifyAll() TODO
+          (model as Object).notifyAll()
         }
       }
     }

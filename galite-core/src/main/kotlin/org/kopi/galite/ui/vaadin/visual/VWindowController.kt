@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.visual
 import org.kopi.galite.common.Window
 import org.kopi.galite.preview.VPreviewWindow
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
@@ -40,6 +41,9 @@ class VWindowController : WindowController() {
   override fun doModal(model: VWindow): Boolean {
     return try {
       val viewStarter = ModalViewRunner(model)
+      startAndWait(model as Object) {
+        viewStarter.run()
+      }
       if (viewStarter.getView() == null) false else viewStarter.getView()!!.returnCode == VWindow.CDE_VALIDATE
     } finally {
       // This is a turn around to kill delayed wait dialog displayed in modal windows
@@ -120,7 +124,7 @@ class VWindowController : WindowController() {
             popup.isModal = true
             popup.setContent(view!!)
             popup.setCaption(model.getTitle()) // put popup title
-            application.attachComponent(popup)
+            popup.open()
           }
         } catch (e: VException) {
           throw VRuntimeException(e.message, e)
