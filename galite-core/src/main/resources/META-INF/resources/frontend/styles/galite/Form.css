@@ -147,6 +147,14 @@
     color: white;
 }
 
+.k-boolean-field {
+    vertical-align: middle;
+}
+
+vaadin-checkbox {
+    height: 38px;
+}
+
 /*
  * Spinner style
  */

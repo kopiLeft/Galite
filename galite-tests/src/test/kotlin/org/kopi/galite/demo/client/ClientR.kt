@@ -29,8 +29,10 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
+import org.kopi.galite.visual.WindowController
 
 /**
  * Client Report
@@ -82,6 +84,16 @@ class ClientR : Report() {
     icon = "export"  // icon is optional here
   }
 
+  val editColumnData = actor(
+    ident = "EditColumnData",
+    menu = action,
+    label = "Edit Column Data",
+    help = "Edit Column Data",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "formula"  // icon is optional here
+  }
+
   val helpForm = actor(
           ident = "helpForm",
           menu = action,
@@ -119,6 +131,15 @@ class ClientR : Report() {
   val helpCmd = command(item = helpForm) {
     action = {
       model.showHelp()
+    }
+  }
+
+  val editColumn = command(item = editColumnData) {
+    action = {
+      if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
+        val formula  = org.kopi.galite.demo.product.ProductForm
+        WindowController.windowController.doModal(formula)
+      }
     }
   }
 

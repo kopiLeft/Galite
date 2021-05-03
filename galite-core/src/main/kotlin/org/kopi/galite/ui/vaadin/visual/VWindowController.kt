@@ -51,6 +51,10 @@ class VWindowController : WindowController() {
     }
   }
 
+  override fun doModal(model: Window): Boolean {
+    return doModal(model.model)
+  }
+
   override fun doNotModal(model: VWindow) {
     val builder = getWindowBuilder(model)
     if (builder != null) {

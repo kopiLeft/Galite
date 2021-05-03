@@ -327,7 +327,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * @param text The statistics text.
    */
   fun setStatisticsText(text: String?) {
-    // footPanel.setStatisticsText(text);
+    // footPanel.setStatisticsText(text); TODO
   }
 
   //--------------------------------------------------------------

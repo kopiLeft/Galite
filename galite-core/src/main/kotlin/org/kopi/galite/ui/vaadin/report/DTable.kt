@@ -19,6 +19,8 @@ package org.kopi.galite.ui.vaadin.report
 
 import org.kopi.galite.report.Constants
 import org.kopi.galite.report.UReport.UTable
+import org.kopi.galite.report.VFixnumColumn
+import org.kopi.galite.report.VIntegerColumn
 import org.kopi.galite.report.VReportColumn
 import org.kopi.galite.report.VSeparatorColumn
 
@@ -29,7 +31,8 @@ import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.ItemClickEvent
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.function.ValueProvider
 
 /**
@@ -48,7 +51,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
   /**
    * The table selected row.
    */
-  var selectedRow = -1
+  val selectedRow: Int get() = asSingleSelect().value?.rowIndex ?: -1
 
   /**
    * The selected column.
@@ -60,6 +63,8 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    */
   var viewColumns: List<Int>? = null
 
+  val columnToHeaderMap = mutableMapOf<Column<*>, VerticalLayout>()
+
   init {
     setItems(model)
     buildColumns()
@@ -67,7 +72,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
     classNames.add("small")
     classNames.add("borderless")
     classNames.add("report")
-    width = "100%"
+    setWidthFull()
     addItemClickListener(this)
   }
 
@@ -79,36 +84,19 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    * Builds the grid columns.
    */
   private fun buildColumns() {
-    model.accessibleColumns.forEachIndexed { index, vReportColumn ->
-      val column = model.accessibleColumns[index]
-      val styles = column!!.getStyles()
-      val align = if (column.align == Constants.ALG_RIGHT) {
+    model.accessibleColumns.forEachIndexed { index, column ->
+      val align = if (column!!.align == Constants.ALG_RIGHT) {
         ColumnTextAlign.END
       } else {
         ColumnTextAlign.START
       }
-      if (vReportColumn is VSeparatorColumn) {
-        addColumn(index)
-                .setClassNameGenerator { row ->
-                  buildString {
-                    append(" separator")
-                  }
-                }
-      } else {
-        addColumn(index)
-                .setHeader(getColumnNameComponent(vReportColumn!!))
-                .setAutoWidth(true)
-                .setTextAlign(align)
-                .setClassNameGenerator { item ->
-                  buildString {
-                    if (item.reportRow!!.level == 0) append("level-0")
-                    if (item.reportRow!!.level == 1) append("level-1")
 
-                    if (styles[0].getFont().isItalic) append(" italic") else append(" notItalic")
-                    if (styles[0].getFont().isBold) append(" bold") else append(" notBold")
-                  }
-                }
-      }
+      val gridColumn = addColumn(index, column)
+
+      gridColumn
+        .setHeader(getColumnNameComponent(column, gridColumn))
+        .setAutoWidth(true)
+        .setTextAlign(align)
     }
   }
 
@@ -118,24 +106,25 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    * @param column The report column.
    * @return The column name container.
    */
-  private fun getColumnNameComponent(column: VReportColumn): Component =
-          Div().also {
-            it.text = column.label
-            it.element.setProperty("title", column.help)
-          }
+  fun getColumnNameComponent(column: VReportColumn, gridColumn: Column<DReport.ReportModelItem>): Component =
+          VerticalLayout(Span(column.label))
+            .also {
+              it.element.setProperty("title", column.help)
+              columnToHeaderMap[gridColumn] = it
+            }
 
   /**
    * Maps the index of the column in the grid at [viewColumnIndex] to the index of the column in the table model.
    */
   override fun convertColumnIndexToModel(viewColumnIndex: Int): Int {
-    return viewColumns?.indexOf(viewColumnIndex) ?: viewColumnIndex
+    return viewColumns?.get(viewColumnIndex) ?: viewColumnIndex
   }
 
   /**
    * Maps the index of the column in the table model at [modelColumnIndex] to the index of the column in the grid.
    */
   override fun convertColumnIndexToView(modelColumnIndex: Int): Int {
-    return viewColumns?.get(modelColumnIndex) ?: modelColumnIndex
+    return viewColumns?.indexOf(modelColumnIndex) ?: modelColumnIndex
   }
 
   override fun onComponentEvent(event: ItemClickEvent<DReport.ReportModelItem>?) {
@@ -146,12 +135,63 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    * Adds a new text column to this table with a column value provider and a key for the column.
    *
    * @param key                   the key of the column provider
+   * @param column                the report column model
    * @return the created column
    */
-  fun addColumn(key: Int): Column<DReport.ReportModelItem> {
+  fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
     return super.addColumn(ColumnValueProvider(key)).also {
       it.setKey(key.toString())
+        .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
     }
+  }
+
+  /**
+   * Returns the column count.
+   * @return the column count.
+   */
+  fun getColumnCount(): Int = model.getColumnCount()
+
+  /**
+   * Reset all columns widths.
+   */
+  fun resetWidth() {
+    for (i in 0 until model.getColumnCount()) {
+      resetColumnSize(i)
+    }
+  }
+
+  /**
+   * Resets the column size at a given position.
+   * @param pos The column position.
+   */
+  private fun resetColumnSize(pos: Int) {
+    val column = model.model.getAccessibleColumn(convertColumnIndexToModel(pos))
+    var width: Int
+
+    if (column!!.isFolded && column !is VSeparatorColumn) {
+      width = 1
+    } else if (column is VFixnumColumn || column is VIntegerColumn) {
+      width = column.label.length.coerceAtLeast(column.width)
+      // Integer and Fixed column can contain , data generated by operations like sum, multiplication
+      // --> compute column width occording to data.
+      width = width.coerceAtLeast(model.model.computeColumnWidth(convertColumnIndexToModel(pos)))
+    } else {
+      width = column.label.length.coerceAtLeast(column.width)
+    }
+
+    if (width != 0) {
+      width = width * 9 + 2
+    }
+
+    columns[pos].width = "${width}px"
+  }
+
+  /**
+   * Resets the table cached information.
+   */
+  fun resetCachedInfos() {
+    selectedColumn = -1
+    select(null)
   }
 
   /**
