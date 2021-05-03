@@ -19,10 +19,12 @@ package org.kopi.galite.ui.vaadin.block
 
 import kotlin.math.max
 
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.Component
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VTable
+
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * An abstract implementation for the block layout.
@@ -32,7 +34,7 @@ import org.kopi.galite.ui.vaadin.common.VTable
  */
 abstract class AbstractBlockLayout protected constructor(val col: Int,
                                                          val line: Int)
-  : VTable(line, max(1, col / 2)), BlockLayout {
+  : VerticalLayout(), BlockLayout {
 
   /**
    * The number of columns
@@ -57,6 +59,8 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    * This is a special hidden for use in multiple block layout.
    */
   constructor() : this(1, 1)
+
+  val table  = VTable(line, max(1, col / 2))
 
   init {
     className = Styles.BLOCK_LAYOUT
@@ -93,13 +97,13 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    * @param colSpan The column span width
    * @param rowSpan The row span width.
    */
-  fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
-    add(row, column, formItem.element)
+  open fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
+    table.add(row, column, formItem.element)
     if (colSpan > 1) {
-      setColSpan(row, column, colSpan.toString())
+      table.setColSpan(row, column, colSpan.toString())
     }
     if (rowSpan > 1) {
-      setRowSpan(row, column, rowSpan.toString())
+      table.setRowSpan(row, column, rowSpan.toString())
     }
   }
 

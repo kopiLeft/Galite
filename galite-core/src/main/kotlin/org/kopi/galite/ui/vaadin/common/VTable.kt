@@ -18,14 +18,13 @@
 package org.kopi.galite.ui.vaadin.common
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.dom.Element
 
 @Tag("table")
-open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasComponents, HasSize, HasStyle {
+class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasStyle {
 
   val tbody: Element = Element("tbody")
 
@@ -87,7 +86,7 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasComponents
    * @param column the cell's column.
    * @param right Is it right aligned ?
    */
-  protected open fun setAlignment(row: Int, column: Int, right: Boolean) {
+  fun setAlignment(row: Int, column: Int, right: Boolean) {
     getCellAt(row, column)
       .setProperty("align", if (right) "right" else "left")
   }

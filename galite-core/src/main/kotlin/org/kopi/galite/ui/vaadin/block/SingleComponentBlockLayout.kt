@@ -24,6 +24,10 @@ import com.vaadin.flow.component.Component
  */
 class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
 
+  init {
+    className = "multiple"
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
@@ -56,7 +60,7 @@ class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
     // not supported feature
   }
 
-  init {
-    className = "multiple"
+  override fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
+    add(formItem)
   }
 }
