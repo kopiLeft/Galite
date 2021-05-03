@@ -98,4 +98,10 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
   }
 
   override fun setParentVisibility(visible: Boolean) {}
+
+  override fun addFocusListener(function: () -> kotlin.Unit) {
+    image.addFocusListener {
+      function()
+    }
+  }
 }
