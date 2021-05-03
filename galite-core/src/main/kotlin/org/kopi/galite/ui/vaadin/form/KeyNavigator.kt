@@ -17,20 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import java.io.IOException
+
 import org.kopi.galite.form.VField
 import org.kopi.galite.ui.vaadin.event.TextFieldListener
-import org.kopi.galite.ui.vaadin.field.TextField
+import org.kopi.galite.ui.vaadin.field.InputTextField
 import org.kopi.galite.util.PrintException
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.PrinterManager
 import org.kopi.galite.visual.VExecFailedException
 import org.kopi.galite.visual.VWindow
-import java.io.IOException
 
 /**
  * Text field key navigation.
  */
-class KeyNavigator(private val model: VField?, private val box: TextField?) : TextFieldListener {
+class KeyNavigator(private val model: VField?, private val box: InputTextField<*>?) : TextFieldListener {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

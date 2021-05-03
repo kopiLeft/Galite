@@ -110,10 +110,10 @@ class DBooleanField(
   override fun updateAccess() {
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access {
       field.isEnabled = getAccess() >= VConstants.ACS_VISIT
       field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
-    //})
+    }
   }
 
   override fun getObject(): Any? = wrappedField.value
