@@ -39,7 +39,7 @@ abstract class PExport(val table: UTable,
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
       val column: VReportColumn? = model.getAccessibleColumn(visibleColumn)
 
-      if (column!!.visible && !column.isFolded // if we have a new page for each group, we do not use the first visible column
+      if (column!!.isVisible && !column.isFolded // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || j != firstVisibleColumn)) {
         column.formatColumn(this, index)
         index += 1
@@ -55,7 +55,7 @@ abstract class PExport(val table: UTable,
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
       val column: VReportColumn? = model.getAccessibleColumn(visibleColumn)
 
-      if (column!!.visible && !column.isFolded // if we have a new page for each group, we do not use the first visible column
+      if (column!!.isVisible && !column.isFolded // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || j != firstVisibleColumn)) {
         data[index] = column.label
         index += 1
@@ -133,7 +133,7 @@ abstract class PExport(val table: UTable,
       val visibleColumn: Int = table.convertColumnIndexToModel(i)
       val column: VReportColumn? = model.getAccessibleColumn(visibleColumn)
 
-      if (!column!!.isFolded && column.visible // if we have a new page for each group, we do not use the first visible column
+      if (!column!!.isFolded && column.isVisible // if we have a new page for each group, we do not use the first visible column
               && (!printConfig.groupFormfeed || i != firstVisibleColumn)) {
         if (row.level < model.getDisplayLevels(model.getReverseOrder(visibleColumn))) {
           newRow[index] = null
@@ -162,7 +162,7 @@ abstract class PExport(val table: UTable,
           val visibleColumn: Int = table.convertColumnIndexToModel(i)
           val column: VReportColumn? = model.getAccessibleColumn(visibleColumn)
 
-          if (!column!!.isFolded && column.visible // if we have a new page for each group, we do not use the first visible column
+          if (!column!!.isFolded && column.isVisible // if we have a new page for each group, we do not use the first visible column
                   && (!printConfig.groupFormfeed || i != firstVisibleColumn)) {
             if (row.level < model.getDisplayLevels(model.getReverseOrder(visibleColumn)) &&
                     parent.level >= model.getDisplayLevels(model.getReverseOrder(visibleColumn))) {
@@ -242,7 +242,7 @@ abstract class PExport(val table: UTable,
       val visibleColumn: Int = table.convertColumnIndexToModel(j)
       val column: VReportColumn? = model.getAccessibleColumn(visibleColumn)
 
-      if (column!!.visible && !column.isFolded) {
+      if (column!!.isVisible && !column.isFolded) {
         if (firstVisibleColumn == -1) {
           firstVisibleColumn = j
         }

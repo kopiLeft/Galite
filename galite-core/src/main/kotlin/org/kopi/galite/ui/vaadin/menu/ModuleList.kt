@@ -19,7 +19,6 @@ package org.kopi.galite.ui.vaadin.menu
 
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.contextmenu.MenuItem
-import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
 
 /**
@@ -32,16 +31,18 @@ open class ModuleList : Div(), HasComponents {
   /**
    * The root menu of this module list.
    */
-  var menu: ModuleListMenu = ModuleListMenu()
-    set(value) {
-      removeAll()
-      field = value;
-      add(field); // add it to container.
-    }
+  val menu: ModuleListMenu = ModuleListMenu()
+  var rootMenuItem: ModuleItem? = null
 
   init {
     setId("module_list")
     setWidthFull()
+
+    if(getRootModuleItem() != null) {
+      rootMenuItem = getRootModuleItem()
+      rootMenuItem!!.rootItem = menu.addItem(rootMenuItem)
+    }
+
     add(menu); // add it to container.
   }
 
@@ -57,8 +58,14 @@ open class ModuleList : Div(), HasComponents {
   fun addItem(caption: String, help: String?): MenuItem {
     val moduleItem = ModuleItem(help = help)
     moduleItem.setCaption(caption)
-    return menu.addItem(moduleItem)
+    return if(rootMenuItem == null) {
+      menu.addItem(moduleItem)
+    } else {
+      rootMenuItem!!.rootItem!!.subMenu.addItem(moduleItem)
+    }
   }
+
+  open fun getRootModuleItem(): ModuleItem? = null
 
   /**
    * Sets this module list to handle main menu

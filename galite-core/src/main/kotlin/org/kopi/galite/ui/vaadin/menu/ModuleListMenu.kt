@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.menu
 
 import com.vaadin.flow.component.menubar.MenuBar
-import com.vaadin.flow.component.menubar.MenuBarVariant
 
 /**
  * The module list menu bar.

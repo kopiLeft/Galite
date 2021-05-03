@@ -111,7 +111,6 @@ class DBooleanField(
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
     //BackgroundThreadHandler.access(Runnable { TODO
-      field.setLabel(trueRepresentation, falseRepresentation)
       field.isEnabled = getAccess() >= VConstants.ACS_VISIT
       field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
     //})

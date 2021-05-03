@@ -47,7 +47,9 @@ class DGridBlockFieldUI(blockView: UBlock, model: VField, index: Int) : DFieldUI
         } else {
           field = DGridTextEditorField(this, label as? DGridEditorLabel, model.align, model.options)
         }
-        VField.MDL_FLD_IMAGE -> field = DGridEditorImageField(this, label as? DGridEditorLabel, model.align,
+        VField.MDL_FLD_IMAGE -> field = DGridEditorImageField(this,
+                                                              label as? DGridEditorLabel,
+                                                              model.align,
                                                               (model as VImageField).iconWidth,
                                                               model.iconHeight,
                                                               model.options)

@@ -22,8 +22,10 @@ import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Product
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
@@ -95,6 +97,10 @@ object BlockProduct : FormBlock(1, 1, "Products") {
   val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
     label = "Image"
     help = "The product image"
+  }
+
+  init {
+    blockVisibility(Access.VISIT, Modes.QUERY)
   }
 }
 

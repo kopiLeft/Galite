@@ -17,7 +17,58 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import java.lang.NumberFormatException
+
 /**
- * Sever side of an integer editor field.
+ * An integer field for grid inline edit
+ *
+ * @param width TODO
+ * @param minValue the minimum accepted value for this integer editor field.
+ * @param maxValue the maximum accepted value for this integer editor field.
  */
-class GridEditorIntegerField(width: Int, minValue: Int, maxValue: Int) : GridEditorTextField(width)
+class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) : GridEditorTextField(width) {
+
+  init {
+    wrappedField.pattern = "[0-9]*"
+    wrappedField.isPreventInvalidInput = true
+    wrappedField.element.setProperty("min", minValue.toDouble())
+    wrappedField.element.setProperty("max", maxValue.toDouble())
+    this.width = width.toString()
+  }
+
+  override fun check(text: String): Boolean {
+    for (element in text) {
+      val c = element
+      if (!(Character.isDigit(c) || c == '.' || c == '-')) {
+        return false
+      }
+    }
+    return true
+  }
+
+  override fun validate() {
+    val value = intValue()
+    if (value < minValue) {
+      throw InvalidEditorFieldException(this, "00012", minValue)
+    }
+    if (value > maxValue) {
+      throw InvalidEditorFieldException(this, "00009", maxValue)
+    }
+  }
+
+  protected fun isNumeric(): Boolean {
+    return true
+  }
+
+  /**
+   * Returns the integer value of this editor field.
+   * @return The integer value of this editor field.
+   */
+  protected fun intValue(): Int {
+    return try {
+      value!!.toInt()
+    } catch (e: NumberFormatException) {
+      throw InvalidEditorFieldException(this, "00006")
+    }
+  }
+}

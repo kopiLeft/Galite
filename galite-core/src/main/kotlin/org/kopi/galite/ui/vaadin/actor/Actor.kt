@@ -20,11 +20,14 @@ package org.kopi.galite.ui.vaadin.actor
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.window.Window
 
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
+
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Image
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
  * The actor component
@@ -40,7 +43,7 @@ import com.vaadin.flow.component.html.Image
 open class Actor(val caption: String?,
                  description: String?,
                  val menu: String?,
-                 val icon: String?,
+                 val icon: Any?,
                  val acceleratorKey: Key,
                  val modifiersKey: KeyModifier?) : Button(), HasEnabled {
 
@@ -51,9 +54,11 @@ open class Actor(val caption: String?,
     super.setText(caption)
 
     if (icon != null) {
-      val img = Image()
-      img.src = icon
-      super.setIcon(img)
+      if (icon is VaadinIcon) {
+        super.setIcon(Icon(icon))
+      } else if (icon is IronIcons) {
+        super.setIcon(icon.create())
+      }
     }
 
     if (modifiersKey != null) {

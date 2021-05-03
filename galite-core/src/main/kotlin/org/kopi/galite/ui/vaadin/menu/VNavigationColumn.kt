@@ -24,7 +24,7 @@ import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
-class VNavigationColumn(val ident : String) : VerticalLayout(), HasStyle {
+class VNavigationColumn(val ident : String?) : VerticalLayout(), HasStyle {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------

@@ -217,7 +217,7 @@ class VReportTests: JApplicationTestBase() {
       assertEquals(Constants.ALG_DEFAULT, name.align)
       assertEquals(-1, name.groups)
       assertEquals(null, name.function)
-      assertEquals(true, name.visible)
+      assertEquals(true, name.isVisible)
       assertEquals(false, name.isFolded)
       // assertEquals(0, name.width) TODO
       // assertEquals(0, name.height) TODO

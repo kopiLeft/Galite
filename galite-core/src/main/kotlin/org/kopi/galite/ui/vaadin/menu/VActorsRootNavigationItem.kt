@@ -34,6 +34,7 @@ class VActorsRootNavigationItem : Button() {
 
   init {
     className = "actors-rootNavigationItem"
+    element.setAttribute("part" ,"k-actor")
    // rootIcon.addStyleDependentName("actors")
     icon = rootIcon
     menu = VNavigationMenu()

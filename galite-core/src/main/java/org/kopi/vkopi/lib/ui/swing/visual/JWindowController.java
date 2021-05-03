@@ -99,6 +99,11 @@ public class JWindowController extends WindowController {
     return (viewStarter.getView() == null) ? false : viewStarter.getView().getReturnCode() == VWindow.CDE_VALIDATE;
   }
 
+
+  public boolean doModal(org.kopi.galite.common.Window model) {
+  	return doModal(model.getModel());
+  }
+
   
   public void doNotModal(final VWindow model) {
     SwingThreadHandler.start(new Runnable() {
@@ -127,29 +132,7 @@ public class JWindowController extends WindowController {
   }
 
   public void doNotModal(final org.kopi.galite.common.Window model) {
-    SwingThreadHandler.start(new Runnable() {
-      public void run() {
-	try {
-	  DWindow    		view;
-	  WindowBuilder   	builder;
-
-	  builder = getWindowBuilder(model.getModel());
-	  view = (DWindow)builder.createWindow(model.getModel());
-	  view.createFrame();
-	  view.run();
-	} catch (VException e) {
-	  // report error to user
-	  // this is called in the event-handling-thread
-	  // so this exceptions have not to be forwarded
-	  reportError(e);
-	} catch (VRuntimeException e) {
-	  // report error to user
-	  // this is called in the event-handling-thread
-	  // so this exceptions have not to be forwarded
-	  reportError(e);
-	}
-      }
-    });
+  	doNotModal(model.getModel());
   }
 
   //------------------------------------------------------------------------
