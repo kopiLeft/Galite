@@ -59,8 +59,4 @@ class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
   override fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
     // not supported feature
   }
-
-  override fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
-    add(formItem)
-  }
 }

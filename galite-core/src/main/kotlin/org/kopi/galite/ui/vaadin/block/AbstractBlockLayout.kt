@@ -24,7 +24,6 @@ import org.kopi.galite.ui.vaadin.common.VTable
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * An abstract implementation for the block layout.
@@ -34,7 +33,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  */
 abstract class AbstractBlockLayout protected constructor(val col: Int,
                                                          val line: Int)
-  : VerticalLayout(), BlockLayout {
+  : VTable(line, max(1, col / 2)), BlockLayout {
 
   /**
    * The number of columns
@@ -59,8 +58,6 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    * This is a special hidden for use in multiple block layout.
    */
   constructor() : this(1, 1)
-
-  val table  = VTable(line, max(1, col / 2))
 
   init {
     className = Styles.BLOCK_LAYOUT
@@ -98,12 +95,12 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    * @param rowSpan The row span width.
    */
   open fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
-    table.add(row, column, formItem.element)
+    add(row, column, formItem.element)
     if (colSpan > 1) {
-      table.setColSpan(row, column, colSpan.toString())
+      setColSpan(row, column, colSpan.toString())
     }
     if (rowSpan > 1) {
-      table.setRowSpan(row, column, rowSpan.toString())
+      setRowSpan(row, column, rowSpan.toString())
     }
   }
 

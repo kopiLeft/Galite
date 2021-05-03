@@ -24,11 +24,12 @@ import com.vaadin.flow.component.Tag
 import com.vaadin.flow.dom.Element
 
 @Tag("table")
-class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasStyle {
+open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasStyle {
 
   val tbody: Element = Element("tbody")
 
   init {
+    setWidthFull()
     element.appendChild(tbody)
     for (i in 0 until rowsNumber) {
       val tr = Element("tr")

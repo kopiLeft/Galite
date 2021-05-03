@@ -41,7 +41,6 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
 
   init {
     className = "simple"
-    add(table)
     initSize()
   }
 
@@ -193,7 +192,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
                                  aligns!![x][y]!!,
                                  aligns!![x][y]!!.width.coerceAtMost(getAllocatedWidth(x, y)),
                                  aligns!![x][y]!!.height.coerceAtMost(getAllocatedHeight(x, y)))
-            table.setAlignment(aligns!![x][y]!!.y, aligns!![x][y]!!.x, aligns!![x][y]!!.alignRight)
+            setAlignment(aligns!![x][y]!!.y, aligns!![x][y]!!.x, aligns!![x][y]!!.alignRight)
           }
         }
       }
