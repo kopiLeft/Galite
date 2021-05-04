@@ -22,8 +22,9 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VScrollablePanel
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.form.Form
-import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
+import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -61,6 +62,8 @@ abstract class Window : VerticalLayout() {
   open fun addActorsNavigationPanel(panel: VActorsNavigationPanel) {
     actors.addActorsNavigationPanel(panel)
   }
+
+  val navigationMenu get(): VNavigationMenu = actors.navigationMenu
 
   /**
    * Sets the window content.
