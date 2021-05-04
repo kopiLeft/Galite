@@ -19,8 +19,8 @@ package org.kopi.galite.ui.vaadin.main
 
 import org.kopi.galite.ui.vaadin.menu.ModuleList
 
+import com.flowingcode.vaadin.addons.ironicons.DeviceIcons
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
@@ -64,7 +64,7 @@ class VWelcome : HorizontalLayout() {
   fun setAdminMenu(menu: ModuleList) {
     adminMenu = menu
     menu.setId("admin_menu")
-    menu.rootMenuItem!!.setIcon(VaadinIcon.COG)
+    menu.rootMenuItem!!.setIcon(DeviceIcons.BRIGHTNESS_HIGH)
     addComponentAtIndex(1, menu)
   }
 

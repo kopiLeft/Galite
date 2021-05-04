@@ -87,10 +87,10 @@
  * Copy Icon container
  */
 #windows {
-    padding-top: 6px;
+    padding-top: 12px;
     padding-right: 15px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
-    background: var(--lumo-tint);
+    margin: 0;
 }
 
 /*
@@ -115,6 +115,35 @@
 /*
  * Boolean field style
  */
+
+.multiple ::part(checkbox) {
+    width: 1.2em;
+    height: 1.2em;
+    border: 1.2px solid #ddd;
+}
+
+.multiple vaadin-checkbox {
+    height: 60px;
+    padding-left: 0px;
+}
+
+.multiple ::part(checkbox)::after {
+    border-width: 0.3em 0 0 0.3em;
+    transform-origin: -0.2px -0.7px;
+}
+
+.multiple :not(.true)::part(checkbox)::after {
+    left: 0.15em;
+}
+
+#main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
+    --lumo-primary-color : #009bd4;
+}
+
+.multiple .k-boolean-field {
+    padding-left: 10px;
+}
+
 ::part(checkbox) {
     width: 1em;
     height: 1em;

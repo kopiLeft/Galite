@@ -102,7 +102,7 @@ user , admin , wrk context and bookmark
 #welcome ::part(menu-bar-button) {
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     background:var(--lumo-tint);
-    padding: var(--lumo-space-xxs);
+    display: contents;
 }
 
 /*
@@ -133,4 +133,13 @@ user , admin , wrk context and bookmark
     height: 63px;
     box-sizing: border-box;
     --lumo-space-m: 0;
+}
+
+#welcome #windows {
+    cursor: pointer;
+}
+
+#welcome #user_menu, #welcome #admin_menu, #welcome #bookmarks_menu, #welcome #wrkcontext_menu {
+    cursor: pointer;
+    padding-right: 10px;
 }
