@@ -186,6 +186,15 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
 
   override fun generateModelValue(): Boolean? = value
 
+  override fun addFocusListener(function: () -> Unit) {
+    yes.addFocusListener {
+      function()
+    }
+    no.addFocusListener {
+      function()
+    }
+  }
+
   override fun setEnabled(enabled: Boolean) {
     super.setEnabled(enabled)
     yes.isEnabled = enabled
