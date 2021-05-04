@@ -49,7 +49,7 @@ object StockR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -59,7 +59,7 @@ object StockR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -79,7 +79,7 @@ object StockR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportPdf"  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) {
