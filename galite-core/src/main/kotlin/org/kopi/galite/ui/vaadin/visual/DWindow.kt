@@ -195,11 +195,10 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     actorDefs.forEach { actorDef ->
       val actor = DActor(actorDef!!)
 
+      panel.addActor(actor, actorDef)
       if(actor.icon != null) {
-        panel.addActor(actor, actorDef)
         addActor(actor)
       }
-
       addActorsNavigationPanel(panel)
     }
   }

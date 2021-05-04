@@ -61,7 +61,7 @@ class FormDefault(block: FormBlock) : Form() {
   }
   val quitCommand = command(item = quitForm) {
     action = {
-      block.quitForm()
+      quitForm()
     }
   }
 }
