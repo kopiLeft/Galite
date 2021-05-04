@@ -44,30 +44,30 @@ object TaxRuleForm : ReportSelectionForm() {
   }
 
   val list = actor(
-    ident = "list",
-    menu = action,
-    label = "list",
-    help = "Display List",
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
   ) {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
   }
 
   val resetBlock = actor(
-    ident = "reset",
-    menu = action,
-    label = "break",
-    help = "Reset Block",
+          ident = "reset",
+          menu = action,
+          label = "break",
+          help = "Reset Block",
   ) {
     key = Key.F3   // key is optional here
     icon = "break"  // icon is optional here
   }
 
   val deleteBlock = actor(
-    ident = "deleteBlock",
-    menu = action,
-    label = "deleteBlock",
-    help = " deletes block",
+          ident = "deleteBlock",
+          menu = action,
+          label = "deleteBlock",
+          help = " deletes block",
   ) {
     key = Key.F5
     icon = "delete"
