@@ -50,6 +50,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    */
   var constrains: MutableMap<Component?, ComponentConstraint?> = mutableMapOf()
 
+  protected var alignPane: AlignPanel? = null
   protected var components: Array<Array<Component?>>? = null
   protected var aligns: Array<Array<ComponentConstraint?>>? = null
 
@@ -104,8 +105,8 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
     }
   }
 
-  open fun addAlignedComponent(widget: Component?, constraint: ComponentConstraint?) {
-    TODO()
+  override fun addAlignedComponent(component: Component, constraint: ComponentConstraint) {
+    alignPane?.addComponent(component, constraint)
   }
 
   override fun layoutAlignedComponents() {

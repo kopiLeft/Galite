@@ -134,4 +134,6 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
 
     return tableRow.getChild(column)
   }
+
+  val rowCount: Int get() = tbody.childCount
 }

@@ -308,6 +308,6 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
     align!!.targets = targets
     align!!.ori = original
 
-    // alignPane = VAlignPanel(align) TODO
+    alignPane = AlignPanel(align)
   }
 }

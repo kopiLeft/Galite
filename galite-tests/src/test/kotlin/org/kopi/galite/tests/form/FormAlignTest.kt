@@ -24,7 +24,7 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
 object FormAlignTest : Form() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val p1 = page("test page")

@@ -117,4 +117,11 @@ class BlockAlignment {
       } else 2 * target
     } else 0
   }
+
+
+  /**
+   * Returns the original block connector
+   * @return The original block connector
+   */
+  val block: Block get() = ori as Block
 }
