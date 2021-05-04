@@ -22,8 +22,10 @@ import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Product
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
@@ -35,7 +37,12 @@ object ProductForm : ReportSelectionForm() {
   val page = page("Product")
   val action = menu("Action")
   val edit = menu("Edit")
-
+  val autoFill = actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  )
   val report = actor(
           ident = "report",
           menu = action,
@@ -47,9 +54,6 @@ object ProductForm : ReportSelectionForm() {
   }
 
   val block = insertBlock(BlockProduct, page) {
-    val default = org.kopi.galite.demo.common.FormDefault(this)
-    val autofill = command(this@ProductForm, default.autofillCommand)
-
     command(item = report) {
       action = {
         createReport(BlockProduct)
@@ -75,6 +79,11 @@ object BlockProduct : FormBlock(1, 1, "Products") {
     help = "The product designation"
     columns(u.designation)
   }
+  val price = visit(domain = Domain<Decimal>(20), follow(designation)) {
+    label = "Price"
+    help = "The product unit price excluding VAT"
+    columns(u.price)
+  }
   val category = mustFill(domain = Category, position = at(2, 1)) {
     label = "Category"
     help = "The product category"
@@ -85,14 +94,13 @@ object BlockProduct : FormBlock(1, 1, "Products") {
     help = "The product tax name"
     columns(u.taxName)
   }
-  val price = visit(domain = Domain<Decimal>(20), position = at(4, 1)) {
-    label = "Price"
-    help = "The product unit price excluding VAT"
-    columns(u.price)
-  }
   val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
     label = "Image"
     help = "The product image"
+  }
+
+  init {
+    blockVisibility(Access.VISIT, Modes.QUERY)
   }
 }
 

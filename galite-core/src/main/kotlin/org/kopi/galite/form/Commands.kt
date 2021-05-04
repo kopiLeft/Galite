@@ -355,7 +355,9 @@ object Commands : VConstants {
     }
     try {
       try {
-        b.save()
+        transaction {
+          b.save()
+        }
       } catch (e: VException) {
         throw e
         try {
@@ -456,7 +458,9 @@ object Commands : VConstants {
     }
     try {
       try {
-        b.delete()
+        transaction {
+          b.delete()
+        }
       } catch (e: VException) {
         throw e
         try {

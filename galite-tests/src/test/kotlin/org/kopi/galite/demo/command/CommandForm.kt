@@ -44,6 +44,14 @@ object CommandForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+
+  val autoFill = actor(
+          ident = "Autofill",
+          menu = action,
+          label = "Autofill",
+          help = "Autofill",
+  )
+
   val list = actor(
           ident = "list",
           menu = action,
@@ -54,21 +62,31 @@ object CommandForm : ReportSelectionForm() {
     icon = "list"  // icon is optional here
   }
 
+  val resetBlock = actor(
+          ident = "reset",
+          menu = action,
+          label = "break",
+          help = "Reset Block",
+  ) {
+    key = Key.F3   // key is optional here
+    icon = "break"  // icon is optional here
+  }
+
   val serialQuery = actor(
-    ident = "serialQuery",
-    menu = action,
-    label = "serialQuery",
-    help = "serial query",
+          ident = "serialQuery",
+          menu = action,
+          label = "serialQuery",
+          help = "serial query",
   ) {
     key = Key.F6   // key is optional here
     icon = "serialquery"  // icon is optional here
   }
 
   val dynamicReport = actor(
-    ident = "dynamicReport",
-    menu = action,
-    label = "DynamicReport",
-    help = " Create Dynamic Report",
+          ident = "dynamicReport",
+          menu = action,
+          label = "DynamicReport",
+          help = " Create Dynamic Report",
   ) {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
@@ -80,18 +98,18 @@ object CommandForm : ReportSelectionForm() {
         createReport(BlockCommand)
       }
     }
+
     command(item = list) {
       action = {
         println("-----------Generating list-----------------")
         recursiveQuery()
       }
     }
-
-  val default = org.kopi.galite.demo.common.FormDefault(this)
-  val autofill = command(this@CommandForm, default.autofillCommand)
-  val reset = command(this@CommandForm, default.resetCommand)
-  val quit = command(this@CommandForm, default.quitCommand)
-
+    command(item = resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
     command(item = serialQuery) {
       action = {
         serialQuery()

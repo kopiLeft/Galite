@@ -391,21 +391,21 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   @Throws(VException::class)
   fun editLine() {
     if (cmdOpenLine != null) {
-      executeVoidTrigger(cmdOpenLine!!.trigger)
+      cmdOpenLine!!.action?.invoke()
     }
   }
 
   @Throws(VException::class)
   fun setColumnData() {
     if (cmdEditColumn != null) {
-      executeVoidTrigger(cmdEditColumn!!.trigger)
+      cmdEditColumn!!.action?.invoke()
     }
   }
 
   @Throws(VException::class)
   fun setColumnInfo() {
     if (cmdColumnInfo != null) {
-      executeVoidTrigger(cmdColumnInfo!!.trigger)
+      cmdColumnInfo!!.action?.invoke()
     }
   }
 
@@ -506,11 +506,11 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   internal fun callTrigger(event: Int, index: Int = 0): Any? {
     return when (Constants.TRG_TYPES[event]) {
       Constants.TRG_VOID -> {
-        executeVoidTrigger(VKT_Triggers[index][event])
+        executeVoidTrigger(VKT_Triggers!![index][event])
         null
       }
-      Constants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers[index][event])
-      Constants.TRG_BOOLEAN -> executeBooleanTrigger(VKT_Triggers[index][event])
+      Constants.TRG_OBJECT -> executeObjectTrigger(VKT_Triggers!![index][event])
+      Constants.TRG_BOOLEAN -> executeBooleanTrigger(VKT_Triggers!![index][event])
       else -> throw InconsistencyException("BAD TYPE" + Constants.TRG_TYPES[event])
     }
   }
@@ -518,7 +518,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   /**
    * Returns true iff there is trigger associated with given event.
    */
-  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers[index][event] != 0
+  protected fun hasTrigger(event: Int, index: Int = 0): Boolean = VKT_Triggers!![index][event] != 0
 
   fun setMenu() {
     if (!built) {
@@ -552,7 +552,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
       setCommandEnabled(cmdColumnInfo!!, column != -1)
     }
     if (cmdEditColumn != null) {
-      setCommandEnabled(cmdEditColumn!!, column != -1 && model.getAccessibleColumn(column)!!.addedAtRuntime)
+      setCommandEnabled(cmdEditColumn!!, column != -1 && model.getAccessibleColumn(column)!!.isAddedAtRuntime)
     }
   }
   // ----------------------------------------------------------------------
@@ -641,7 +641,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   private var built = false
   private var pageTitle = ""
   private var firstPageHeader = ""
-  protected var VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
+  protected var VKT_Triggers: MutableList<IntArray>? = null
   protected val triggers = mutableMapOf<Int, Trigger>()
   var commands: Array<VCommand?>? = null
   private val activeCommands = ArrayList<VCommand>()

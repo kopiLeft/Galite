@@ -27,6 +27,7 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
+import org.kopi.galite.type.Decimal
 
 object StockForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -34,6 +35,12 @@ object StockForm : ReportSelectionForm() {
   val page = page("Stock")
   val action = menu("Action")
   val edit = menu("Edit")
+  val autoFill = actor(
+          ident = "Autofill",
+          menu = edit,
+          label = "Autofill",
+          help = "Autofill",
+  )
   val report = actor(
           ident = "report",
           menu = action,
@@ -45,9 +52,6 @@ object StockForm : ReportSelectionForm() {
   }
 
   val block = insertBlock(StockBlock, page) {
-    val default = org.kopi.galite.demo.common.FormDefault(this)
-    val autofill = command(this@StockForm, default.autofillCommand)
-
     command(item = report) {
       action = {
         createReport(StockBlock)
@@ -78,7 +82,7 @@ object StockBlock : FormBlock(1, 1, "Stock") {
   val minAlert = mustFill(domain = Domain<Int>(20), position = at(1, 1)) {
     label = "Min Alert"
     help = "The stock's min alert"
-   // columns(u.idStckProv, w.idProvider)
+    // columns(u.idStckProv, w.idProvider)
   }
 }
 

@@ -631,7 +631,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
             }
           });
           labelPopupMenu.add(item);
-          if (model.getAccessibleColumn(table.convertColumnIndexToModel(column)).getAddedAtRuntime()) {
+          if (model.getAccessibleColumn(table.convertColumnIndexToModel(column)).isAddedAtRuntime()) {
             item = new JMenuItem(VlibProperties.getString("remove_column"));
             item.addActionListener(new  java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -645,7 +645,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
             });
             labelPopupMenu.add(item);
           }
-          if (model.getAccessibleColumn(table.convertColumnIndexToModel(column)).getAddedAtRuntime()) {
+          if (model.getAccessibleColumn(table.convertColumnIndexToModel(column)).isAddedAtRuntime()) {
             item = new JMenuItem(VlibProperties.getString("set_column_data"));
             item.addActionListener(new  java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -694,7 +694,7 @@ public class DReport extends DWindow implements UReport, TableCellRenderer {
             columnOrderChanged = true;
 
             for (int i = 0; i < newColumnOrder.length; i++) {
-              if (!model.getAccessibleColumn(i).getVisible()) {
+              if (!model.getAccessibleColumn(i).isVisible()) {
                 hiddenColumnsCount += 1;
                 newColumnOrder[i] = model.getDisplayOrder(index);
                 index += 1;

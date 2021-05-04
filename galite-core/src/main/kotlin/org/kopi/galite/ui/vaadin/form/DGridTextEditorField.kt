@@ -17,11 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.data.binder.Result
-import com.vaadin.flow.data.binder.ValueContext
-import com.vaadin.flow.data.converter.Converter
-import com.vaadin.flow.data.renderer.Renderer
-import com.vaadin.flow.data.renderer.TextRenderer
 import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VCodeField
@@ -35,6 +30,7 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.grid.GridEditorDateField
 import org.kopi.galite.ui.vaadin.grid.GridEditorEnumField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
@@ -49,6 +45,12 @@ import org.kopi.galite.ui.vaadin.grid.GridEditorWeekField
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
+import com.vaadin.flow.data.binder.Result
+import com.vaadin.flow.data.binder.ValueContext
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
+import com.vaadin.flow.data.renderer.TextRenderer
+
 /**
  * A grid text editor based on custom components.
  */
@@ -57,7 +59,7 @@ class DGridTextEditorField(
         label: DGridEditorLabel?,
         align: Int,
         options: Int
-) : DGridEditorField<String?>(columnView, label, align, options), UTextField {
+) : DGridEditorField<String>(columnView, label, align, options), UTextField {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -78,6 +80,11 @@ class DGridTextEditorField(
     } else {
       ScannerTransformer(editor)
     }
+    editor.addValueChangeListener { event ->
+      if(event.isFromClient) {
+        checkText(event.value.toString(), true)
+      }
+    }
     // TODO
   }
 
@@ -85,9 +92,9 @@ class DGridTextEditorField(
 
   override fun updateText() {
     val newModelTxt = getModel().getText(getBlockView().getRecordFromDisplayLine(position))
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.value = transformer.toGui(newModelTxt)!!.trim()
-    //})
+    access {
+      editor.value = transformer.toGui(newModelTxt)!!.trim()
+    }
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
       selectionAfterUpdateDisabled = false
     }
@@ -117,7 +124,7 @@ class DGridTextEditorField(
     super.reset()
   }
 
-  override fun getText(): String? = TODO()
+  override fun getText(): String? = editor.value?.toString()
 
   override fun setHasCriticalValue(b: Boolean) {}
 
@@ -131,7 +138,7 @@ class DGridTextEditorField(
 
   override fun createEditor(): GridEditorTextField {
 
-    val editor = createEditorField()
+    val editor: GridEditorTextField = createEditorField()
     //editor.setAlignment(columnView.getModel().getAlign()) TODO
     //editor.setAutocompleteLength(columnView.getModel().getAutocompleteLength())
     //editor.setHasAutocomplete(columnView.getModel().hasAutocomplete())
@@ -140,12 +147,11 @@ class DGridTextEditorField(
     //editor.setHasPreFieldTrigger(columnView.getModel().hasTrigger(VConstants.TRG_PREFLD))
     editor.addActors(actors)
     //editor.setConvertType(getConvertType(columnView.model))
-
     return editor
   }
 
-  override fun createConverter(): Converter<String?, Any?> {
-    return object : Converter<String?, Any?> {
+  override fun createConverter(): Converter<String, Any?> {
+    return object : Converter<String, Any?> {
       val presentationType: Class<String>
         get() = String::class.java
       val modelType: Class<Any>
@@ -166,7 +172,7 @@ class DGridTextEditorField(
     }
   }
 
-  override fun createRenderer(): Renderer<String?> {
+  override fun createRenderer(): Renderer<String> {
     return TextRenderer()
   }
 
@@ -443,7 +449,7 @@ class DGridTextEditorField(
    *
    * @param field The field view.
    */
-  internal class ScannerTransformer(private val field: GridEditorField<String?>) : ModelTransformer {
+  internal class ScannerTransformer(private val field: GridEditorField<String>) : ModelTransformer {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------

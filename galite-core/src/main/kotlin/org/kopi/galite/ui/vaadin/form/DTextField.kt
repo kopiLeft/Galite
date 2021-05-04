@@ -71,7 +71,7 @@ open class DTextField(
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.addTextValueChangeListener {
-      checkText(it.value.toString())
+      checkText(it.value?.toString())
     }
 
     createContextMenu()

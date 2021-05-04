@@ -17,25 +17,24 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.ClickEvent
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.UField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.field.Field.NavigationDelegationMode
 import org.kopi.galite.ui.vaadin.field.TextField.ConvertType
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.router.NavigationEvent
-import org.kopi.galite.form.UBlock
 
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
 
 /**
  * An UField associated with the grid block in inline edit.
@@ -47,14 +46,16 @@ abstract class DGridEditorField<T>(
         protected var options: Int
 ) : UField,
         GridEditorField.NavigationListener,
-        GridEditorField.ClickListener,
         GridEditorField.AutofillListener {
 
   /**
    * Returns the field editor hold by this component.
    */
-  val editor: GridEditorField<T>
-    get() = createEditor()
+  val editor: GridEditorField<T> by lazy {
+    createEditor().also {
+      it.dGridEditorField = this
+    }
+  }
   internal var access = 0 // current access of field
   protected var isEditable = options and VConstants.FDO_NOEDIT == 0 // is this field editable
 
@@ -67,7 +68,7 @@ abstract class DGridEditorField<T>(
   init {
     // editor.setConverter(createConverter()) TODO
     // editor.addNavigationListener(this) TODO
-    // editor.addClickListener(this) TODO
+    editor.addFocusListener(::onClick)
     // editor.addAutofillListener(this) TODO
     setLabelAlignment()
   }
@@ -102,9 +103,9 @@ abstract class DGridEditorField<T>(
   override fun setInDetail(detail: Boolean) {}
 
   override fun forceFocus() {
-    //BackgroundThreadHandler.access(Runnable {  TODO
-    editor.focus()
-    //})
+    access {
+      editor.focus()
+    }
   }
 
   override fun updateColor() {
@@ -182,7 +183,7 @@ abstract class DGridEditorField<T>(
    * @return The null representation of this editor.
    */
   protected open val nullRepresentation: T?
-    protected get() = null
+    get() = null
 
   /**
    * Performs a reset operation on this editor.
@@ -194,12 +195,13 @@ abstract class DGridEditorField<T>(
   // ----------------------------------------------------------------------
   // CLICK
   // ----------------------------------------------------------------------
-  override fun onClick(event: ClickEvent<*>?) {
+  open fun onClick() {
     if (!modelHasFocus()) {
       val recno: Int = getBlockView().getRecordFromDisplayLine(position)
       if (!columnView.getBlock().isRecordFilled(recno)) {
         getModel().block!!.updateAccess(recno)
       }
+
       columnView.performAsyncAction(object : Action("mouse1") {
         override fun execute() {
           columnView.transferFocus(this@DGridEditorField) // use here a mouse transferfocus

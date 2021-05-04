@@ -200,13 +200,12 @@ abstract class Chart : Window() {
   }
 
   var chartType: VChartType
-    get() = (model as VChart).chartType ?: VChartType.DEFAULT
+    get() = model.chartType ?: VChartType.DEFAULT
     set(value) {
-      (model as VChart).setType(value)
+      model.setType(value)
     }
 
   override val model: VChart by lazy {
-    genLocalization()
 
     object : VChart() {
       override val locale: Locale get() = this@Chart.locale ?: ApplicationContext.getDefaultLocale()
@@ -258,6 +257,8 @@ abstract class Chart : Window() {
       }
 
       override fun init() {
+        setTitle(title)
+        help = this@Chart.help
         this.addActors(this@Chart.actors.map { actor ->
           actor.buildModel(sourceFile)
         }.toTypedArray())

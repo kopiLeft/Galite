@@ -17,10 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import java.time.LocalTime
+
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.timepicker.TimePicker
 
 /**
  * A time field.
  */
-class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier
+class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
+
+  override fun setPresentationValue(newPresentationValue: String?) {
+    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
+      LocalTime.parse(newPresentationValue)
+    } else {
+      null
+    }
+  }
+}

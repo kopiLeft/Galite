@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.form
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.BooleanField
 
 import com.vaadin.flow.component.AbstractField
@@ -70,9 +71,9 @@ class DBooleanField(
   }
 
   override fun updateText() {
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access {
       field.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
-    //})
+    }
     super.updateText()
   }
 
@@ -110,7 +111,6 @@ class DBooleanField(
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
     //BackgroundThreadHandler.access(Runnable { TODO
-      field.setLabel(trueRepresentation, falseRepresentation)
       field.isEnabled = getAccess() >= VConstants.ACS_VISIT
       field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
     //})

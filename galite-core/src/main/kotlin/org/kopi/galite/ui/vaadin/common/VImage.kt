@@ -17,12 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.common
 
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.html.Image
 
 /**
  * A widget that wraps image element.
  */
-class VImage : Image() {
+class VImage : Image(), Focusable<VImage> {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

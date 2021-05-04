@@ -252,7 +252,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
    */
   override fun getObjectImpl(r: Int): Any? = value[r]
 
-  override fun toText(o: Any?): String = if (o == null) "" else toText(o as Week?)
+  override fun toText(o: Any?): String = if (o == null) "" else VWeekField.toText(o as Week)
 
   override fun toObject(s: String): Any? {
     if (s == "") {
@@ -357,7 +357,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns the display representation of field value of given record.
    */
-  override fun getTextImpl(r: Int): String = if (value[r] == null) "" else toText(value[r])
+  override fun getTextImpl(r: Int): String = if (value[r] == null) "" else VWeekField.toText(value[r])
 
   /**
    * Returns the SQL representation of field value of given record.
@@ -393,7 +393,7 @@ class VWeekField(val bufferSize: Int) : VField(7, 1) {
   /**
    * Returns a string representation of a week value wrt the field type.
    */
-  protected fun formatWeek(value: Week?): String = toText(value)
+  protected fun formatWeek(value: Week?): String = VWeekField.toText(value)
 
   // ----------------------------------------------------------------------
   // PRIVATE METHODS

@@ -17,13 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.UTextField
-import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
@@ -33,7 +34,9 @@ class DGridEditorBooleanField(
         label: DGridEditorLabel?,
         align: Int,
         options: Int
-) : DGridEditorField<Boolean?>(columnView, label, align, options), UTextField {
+) : DGridEditorField<Boolean?>(columnView, label, align, options),
+      UTextField,
+      HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<CustomField<Boolean?>, Boolean?>> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -46,7 +49,7 @@ class DGridEditorBooleanField(
   //---------------------------------------------------
   init {
     // editor.setLabel(label.text) TODO
-    // editor.addValueChangeListener(this) TODO
+    editor.addValueChangeListener(this)
   }
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -128,7 +131,7 @@ class DGridEditorBooleanField(
 
   override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 
-  fun valueChange(event: HasValue.ValueChangeEvent<Boolean?>) { // TODO: link to listener
+  override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Boolean?>, Boolean?>) {
     // ensures to get model focus to validate the field
     if (!getModel().hasFocus()) {
       getModel().block!!.activeField = getModel()

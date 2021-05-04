@@ -30,7 +30,5 @@ class VImageHandler : ImageHandler() {
     TODO("Not yet implemented")
   }
 
-  override fun getURL(image: String): String {
-    TODO("Not yet implemented")
-  }
+  override fun getURL(image: String): String = "ui/vaadin/$image" // TODO
 }

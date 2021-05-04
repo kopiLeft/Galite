@@ -209,7 +209,7 @@ open class Utils : org.kopi.galite.util.base.Utils() {
       try {
         val list = ArrayList<String>()
         val data = DataInputStream(
-                requireNotNull(Utils::class.java.classLoader.getResourceAsStream("$APPLICATION_DIR/version"))
+                requireNotNull(Utils::class.java.classLoader.getResourceAsStream("version"))
         )
         while (data.available() != 0) {
           list.add(data.readLine())

@@ -18,12 +18,16 @@
 package org.kopi.galite.ui.vaadin.actor
 
 import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.window.Window
+
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Image
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 
 /**
  * The actor component
@@ -31,29 +35,30 @@ import com.vaadin.flow.component.html.Image
  * @param caption The actor caption.
  * @param description The actor help.
  * @param menu The menu to which this actor belongs to.
- * @param icon The actor icon.
+ * @param icon The actor icon. The name will be translated after to a
+ * font awesome icon. TODO
  * @param acceleratorKey The accelerator key.
  * @param modifiersKey The modifiers key.
  */
 open class Actor(val caption: String?,
                  description: String?,
-                 val menu: String,
-                 val icon: String?,
+                 val menu: String?,
+                 val icon: Any?,
                  val acceleratorKey: Key,
                  val modifiersKey: KeyModifier?) : Button(), HasEnabled {
 
-  //private val listeners: List<ActionListener>? = null
-
   init {
-    this.element.setAttribute("part", Styles.ACTOR)
+    element.setAttribute("part", Styles.ACTOR)
     className = Styles.ACTOR
 
     super.setText(caption)
 
     if (icon != null) {
-      val img = Image()
-      img.src = icon
-      super.setIcon(img)
+      if (icon is VaadinIcon) {
+        super.setIcon(Icon(icon))
+      } else if (icon is IronIcons) {
+        super.setIcon(icon.create())
+      }
     }
 
     if (modifiersKey != null) {
@@ -64,10 +69,10 @@ open class Actor(val caption: String?,
   }
 
   /**
-   * Sets the actor to be enabled.
-   * @param enabled The enabled status
+   * Returns the parent window.
+   * @return The parent window.
    */
-  open fun setActorEnabled(enabled: Boolean) {
-    // TODO
+  protected open fun getWindow(): Window {
+    return parent.get().parent.get() as Window
   }
 }

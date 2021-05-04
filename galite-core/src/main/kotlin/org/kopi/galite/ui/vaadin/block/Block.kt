@@ -1646,7 +1646,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
 
   fun onKeyPress(keyDownEvent: ShortcutEvent?) {
     if (isMulti() && noChart()) {
-      (parent.get() as Form).showBlockInfo(this)
+      (parent.get() as Form).showBlockInfo()
     }
   }
 

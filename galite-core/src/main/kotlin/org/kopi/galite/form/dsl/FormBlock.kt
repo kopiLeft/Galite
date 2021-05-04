@@ -473,6 +473,7 @@ open class FormBlock(var buffer: Int,
    * Saves current block (insert or update)
    */
   fun saveBlock() {
+    vBlock.validate()
     Commands.saveBlock(vBlock)
   }
 
@@ -481,13 +482,6 @@ open class FormBlock(var buffer: Int,
    */
   fun resetBlock() {
     Commands.resetBlock(vBlock)
-  }
-
-  /**
-   * Quit current form
-   */
-  fun quitForm() {
-    Commands.quitForm(vBlock.form)
   }
 
   /**
@@ -503,6 +497,13 @@ open class FormBlock(var buffer: Int,
    */
   fun load() {
     vBlock.load()
+  }
+
+  /**
+   * * Loads block from database
+   */
+  fun deleteBlock() {
+    Commands.deleteBlock(vBlock)
   }
 
   /**

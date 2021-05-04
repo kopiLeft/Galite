@@ -23,6 +23,7 @@ import org.kopi.galite.ui.vaadin.base.VScrollablePanel
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.form.Form
 import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -51,6 +52,14 @@ abstract class Window : VerticalLayout() {
    */
   open fun addActor(actor: Actor) {
     actors.addActor(actor)
+  }
+
+  /**
+   * Adds the actors menu to be shown.
+   * @param panel The menu to be shown.
+   */
+  open fun addActorsNavigationPanel(panel: VActorsNavigationPanel) {
+    actors.addActorsNavigationPanel(panel)
   }
 
   /**
@@ -143,7 +152,7 @@ abstract class Window : VerticalLayout() {
     for (child in children) {
       if (child is Actor) {
         if (child == actor) {
-          child.setActorEnabled(enabled)
+          child.isEnabled = enabled
         }
       }
     }

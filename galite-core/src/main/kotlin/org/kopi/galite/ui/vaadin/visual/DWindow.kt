@@ -22,9 +22,9 @@ import java.io.Serializable
 import java.util.concurrent.ConcurrentLinkedQueue
 
 import org.kopi.galite.base.Utils
-import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.notif.AbstractNotification
 import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
@@ -36,7 +36,6 @@ import org.kopi.galite.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.ui.vaadin.wait.WaitWindow
 import org.kopi.galite.ui.vaadin.window.PopupWindow
-import org.kopi.galite.ui.vaadin.window.VActorPanel
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
@@ -49,20 +48,20 @@ import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
+import com.vaadin.flow.server.VaadinService
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
  *
  * @param model The window model.
  */
-abstract class DWindow protected constructor(private val model: VWindow) : Window(), UWindow {
+abstract class DWindow protected constructor(private var model: VWindow?) : Window(), UWindow {
 
   //--------------------------------------------------------------
   // DATA MEMBERS
@@ -97,20 +96,21 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
   var isUserAsked = false
     private set
   val currentUI = UI.getCurrent().also { requireNotNull(it) }
-  private val actionRunner: ActionRunner = ActionRunner(currentUI)
+  val currentService = VaadinService.getCurrent().also { requireNotNull(it) }
+  private val actionRunner: ActionRunner = ActionRunner(currentUI, currentService)
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
   init {
-    setCaption(model.getTitle())
+    setCaption(model!!.getTitle())
     createEditMenu()
-    model.addVActionListener(this)
-    model.addModelCloseListener(this)
-    model.addWaitDialogListener(this)
-    model.addProgressDialogListener(this)
-    model.addFileProductionListener(this)
-    model.addWaitInfoListener(waitInfoHandler)
-    model.addMessageListener(messageHandler)
-    addActorsToGUI(model.actors)
+    model!!.addVActionListener(this)
+    model!!.addModelCloseListener(this)
+    model!!.addWaitDialogListener(this)
+    model!!.addProgressDialogListener(this)
+    model!!.addFileProductionListener(this)
+    model!!.addWaitInfoListener(waitInfoHandler)
+    model!!.addMessageListener(messageHandler)
+    addActorsToGUI(model!!.actors)
     addAttachDetachListeners()
   }
 
@@ -188,6 +188,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * @param actorDefs The [VActor] definitions.
    */
   private fun addActorsToGUI(actorDefs: Array<VActor?>) {
+    val panel = VActorsNavigationPanel()
     // Add actors panel
     add(actors)
     // Add each actor to the panel
@@ -195,8 +196,11 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
       val actor = DActor(actorDef!!)
 
       if(actor.icon != null) {
+        panel.addActor(actor, actorDef)
         addActor(actor)
       }
+
+      addActorsNavigationPanel(panel)
     }
   }
 
@@ -250,15 +254,15 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
     }
     inAction = true
     currentAction = action
-    getModel().setCommandsEnabled(false)
+    getModel()!!.setCommandsEnabled(false)
     runtimeDebugInfo = RuntimeException(currentAction.toString())
-    if (!asynch || !getModel().allowAsynchronousOperation()) {
+    if (!asynch || !getModel()!!.allowAsynchronousOperation()) {
       // synchronus call
       actionRunner.run()
       if (getModel() != null) {
         // actions which close the window also
         // set the referenced model to null
-        getModel().executedAction(currentAction)
+        getModel()!!.executedAction(currentAction)
       }
     } else {
       val currentThread = Thread(actionRunner)
@@ -275,13 +279,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
     // Modal windows are attached to a popup window. So it is not closed
     // like not modal windows. We should remove the popup window from the application
     val application = application
-    if (parent.get() is PopupWindow) {
-      // it is a modal window ==> we remove its parent
-      application.removeWindow(parent.get())
-    } else {
-      // it is not a modal window, we need to remove it from the application.
-      application.removeWindow(this)
-    }
+    application.removeWindow(this)
   }
 
   /**
@@ -295,10 +293,11 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
   @Synchronized
   open fun release() {
     if (model != null) {
-      model.removeVActionListener(this)
-      model.removeWaitInfoListener(waitInfoHandler)
-      model.removeMessageListener(messageHandler)
+      model!!.removeVActionListener(this)
+      model!!.removeWaitInfoListener(waitInfoHandler)
+      model!!.removeMessageListener(messageHandler)
     }
+    model = null
     inAction = false
     currentAction = null
     runtimeDebugInfo = null
@@ -331,7 +330,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * @param text The statistics text.
    */
   fun setStatisticsText(text: String?) {
-    // footPanel.setStatisticsText(text);
+    // footPanel.setStatisticsText(text); TODO
   }
 
   //--------------------------------------------------------------
@@ -409,7 +408,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
     //})
   }
 
-  override fun getModel(): VWindow {
+  override fun getModel(): VWindow? {
     return model
   }
 
@@ -460,10 +459,10 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * definitly close the view(it may ask the user before)
    */
   override fun closeWindow() {
-    if (!getModel().allowQuit()) {
+    if (!getModel()!!.allowQuit()) {
       return
     }
-    getModel().willClose(VWindow.CDE_QUIT)
+    getModel()!!.willClose(VWindow.CDE_QUIT)
   }
 
   /**
@@ -493,7 +492,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * @param The message to be displayed.
    */
   protected fun verifyNotInTransaction(message: String) {
-    if (getModel().inTransaction() && debugMessageInTransaction()) {
+    if (getModel()!!.inTransaction() && debugMessageInTransaction()) {
       try {
         ApplicationContext.reportTrouble("DWindow",
                                          "$message IN TRANSACTION",
@@ -533,20 +532,38 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
   internal inner class MessageHandler : MessageListener {
     override fun notice(message: String) {
       val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+      val lock = Object()
 
-      showNotification(dialog)
+      dialog.addNotificationListener(object : NotificationListener {
+        override fun onClose(action: Boolean?) {
+          releaseLock(lock)
+        }
+      })
+      showNotification(dialog, lock)
     }
 
     override fun error(message: String?) {
       val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
+      val lock = Object()
 
-      showNotification(dialog)
+      dialog.addNotificationListener(object : NotificationListener {
+        override fun onClose(action: Boolean?) {
+          releaseLock(lock)
+        }
+      })
+      showNotification(dialog, lock)
     }
 
     override fun warn(message: String) {
       val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+      val lock = Object()
 
-      showNotification(dialog)
+      dialog.addNotificationListener(object : NotificationListener {
+        override fun onClose(action: Boolean?) {
+          releaseLock(lock)
+        }
+      })
+      showNotification(dialog, lock)
     }
 
     /**
@@ -559,19 +576,20 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
 
     override fun ask(message: String, yesIsDefault: Boolean): Int {
       val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+      val lock = Object()
 
       dialog.yesIsDefault = yesIsDefault
       dialog.addNotificationListener(object : NotificationListener {
-        override fun onClose(yes: Boolean) {
-          value = if (yes) {
+        override fun onClose(yes: Boolean?) {
+          value = if (yes == true) {
             MessageListener.AWR_YES
           } else {
             MessageListener.AWR_NO
           }
+          releaseLock(lock)
         }
       })
-      // attach the notification to the application.
-      showNotification(dialog)
+      showNotification(dialog, lock)
       return value
     }
 
@@ -581,8 +599,8 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
      * Shows a notification.
      * @param notification The notification to be shown
      */
-    internal fun showNotification(notification: AbstractNotification) {
-      access {
+    internal fun showNotification(notification: AbstractNotification, lock: Object) {
+      startAndWait(lock) {
         notification.show()
       }
     }
@@ -660,12 +678,13 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
    * There is only one instance of ActionRunner.
    * It calls user actions.
    */
-  internal inner class ActionRunner(val currentUI: UI) : Runnable, ErrorHandler {
+  internal inner class ActionRunner(val currentUI: UI, val currentService: VaadinService) : Runnable, ErrorHandler {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun run() {
       UI.setCurrent(currentUI)
+      VaadinService.setCurrent(currentService)
       try {
         if (currentAction != null) {
           runAction()
@@ -724,7 +743,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
         if (getModel() != null) {
           // commands like "Beenden" destroy the model
           // so it must be tested, that there is still a model
-          getModel().setCommandsEnabled(true)
+          getModel()!!.setCommandsEnabled(true)
           runNextPendingAction()
         }
       }
@@ -767,7 +786,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
       unsetWaitInfo()
       setWindowError(exc)
       if (getModel() != null) {
-        getModel().fatalError(getModel(), "VWindow.performActionImpl(final Action action)", exc)
+        getModel()!!.fatalError(getModel(), "VWindow.performActionImpl(final Action action)", exc)
       } else {
         application.displayError(null, MessageCode.getMessage("VIS-00041"))
       }
@@ -782,7 +801,7 @@ abstract class DWindow protected constructor(private val model: VWindow) : Windo
       if (getModel() != null) {
         // actions which close the window also
         // set the referenced model to null
-        getModel().executedAction(currentAction)
+        getModel()!!.executedAction(currentAction)
       }
     }
 

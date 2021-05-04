@@ -20,6 +20,8 @@
  */
 ::part(cell header-cell) {
      background: #f2f2f2;
+     padding-left: 9px;
+     color: #505050;
 }
 
 #main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {

@@ -2585,7 +2585,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun isChart(): Boolean = !noChart()
 
   /**
-   * Returns true iff this block can display more than one record.
+   * Returns true if this block can display more than one record.
    */
   fun isMulti(): Boolean = bufferSize > 1
 
@@ -2862,10 +2862,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Clears all hidden lookup fields.
    */
   protected fun clearLookups(recno: Int) {
-    tables?.forEach { table ->
-      fields.forEach { field ->
-        if (field.isInternal() && field.lookupColumn(table) != null && field.eraseOnLookup()) {
-          field.setNull(recno)
+    if (tables != null) {
+      for (i in 1 until tables!!.size) {
+        val table = tables!![i]
+        fields.forEach { field ->
+          if (field.isInternal() && field.lookupColumn(table) != null && field.eraseOnLookup()) {
+            field.setNull(recno)
+          }
         }
       }
     }
@@ -3111,8 +3114,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    */
   protected fun fillIdField(recno: Int, id: Int) {
+    var id = id
     if (id == -1) {
-      // TODO()
+      id = Utils.getNextTableId(tables!![0])
     }
 
     idField.setInt(recno, id)
@@ -3145,7 +3149,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)
 
-      val result = mutableListOf<Pair<Column<Any>, Any?>>()
+      val result = mutableListOf<Pair<Column<Any?>, Any?>>()
 
       tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
       ucField?.setInt(recno, ucField!!.getInt()!! + 1)
@@ -3155,7 +3159,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           continue
         }
         @Suppress("UNCHECKED_CAST")
-        val column = field.lookupColumn(0) as? Column<Any>
+        val column = field.lookupColumn(0) as? Column<Any?>
 
         if (column != null) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
@@ -3171,7 +3175,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       table.update({ idColumn eq idField.getInt(recno)!! }) { table ->
         result.forEach {
-          table[it.first] = it.second!!
+          table[it.first] = it.second
         }
       }
       setRecordChanged(recno, false)
