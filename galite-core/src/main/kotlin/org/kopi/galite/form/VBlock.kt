@@ -2758,9 +2758,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
       }
     } else {
-      for (i in activeCommands.indices) {
-        val cmd: VCommand = activeCommands.elementAt(i)
-
+      activeCommands.forEach { cmd ->
         cmd.setEnabled(false)
       }
       activeCommands.clear()

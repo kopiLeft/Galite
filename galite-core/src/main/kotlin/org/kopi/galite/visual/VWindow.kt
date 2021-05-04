@@ -303,7 +303,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   }
 
   /**
-   * Inform close linstener that this model was closed
+   * Inform close listener that this model was closed
    */
   open fun close(code: Int) {
     val listeners = modelListener.listenerList

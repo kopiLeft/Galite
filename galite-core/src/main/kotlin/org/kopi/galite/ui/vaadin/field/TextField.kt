@@ -30,14 +30,10 @@ import org.kopi.galite.form.VWeekField
 import org.kopi.galite.ui.vaadin.event.TextFieldListener
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
-import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.customfield.CustomField
-import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.IronIcon
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
 
@@ -57,7 +53,7 @@ class TextField(val model: VField,
                 val noEdit: Boolean,
                 val align: Int,
                 val hasAutofill: Boolean)
-  : CustomField<Any?>(), HasStyle {
+  : AbstractField<Any?>(), HasStyle {
 
   val field: InputTextField<*>
 
@@ -494,6 +490,12 @@ class TextField(val model: VField,
      * name conversion.
      */
     NAME
+  }
+
+  override fun addFocusListener(function: () -> Unit) {
+    field.addFocusListener {
+      function()
+    }
   }
 
   //---------------------------------------------------

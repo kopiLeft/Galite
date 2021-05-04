@@ -24,8 +24,8 @@ import org.kopi.galite.ui.vaadin.form.DGridMultiBlock
 import org.kopi.galite.form.VField
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.formlayout.FormLayout.FormItem
 import com.vaadin.flow.component.grid.Grid
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
@@ -178,39 +178,21 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
   }
 
   override fun layout() {
-    // Responsive steps
-    setResponsiveSteps(
-            *Array(col / 2) {
-              ResponsiveStep("" + (15 + 20 * it) + "em", it + 1)
-            }
-    )
-
     if (align != null) {
       // aligned blocks will be handled differently
       return
     } else {
-      // add follows
-      for (i in follows!!.indices) {
-        val align = followsAligns!![i]
-        val comp: Component = follows!![i]
-
-        addInfoComponentAt(comp, align.x, align.y)
-      }
-
       val manager = LayoutManager(this)
 
       for (y in components!![0].indices) {
         for (x in components!!.indices) {
           if (components!![x][y] != null && aligns!![x][y] != null) {
             // TODO
-            /*manager.setComponent(components!![x][y],
+            manager.setComponent(components!![x][y]!!,
                                  aligns!![x][y]!!,
                                  aligns!![x][y]!!.width.coerceAtMost(getAllocatedWidth(x, y)),
                                  aligns!![x][y]!!.height.coerceAtMost(getAllocatedHeight(x, y)))
-            setAlignment(aligns!![x][y]!!.y, aligns!![x][y]!!.x, aligns!![x][y]!!.alignRight)*/
-            add(components!![x][y])
-          } else if (x % 2 != 0) { // FIXME: We skip labels as they are attached to the field in a form item
-            add(Div())
+            setAlignment(aligns!![x][y]!!.y, aligns!![x][y]!!.x, aligns!![x][y]!!.alignRight)
           }
         }
       }
@@ -219,7 +201,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       for (i in follows!!.indices) {
         val align = followsAligns!![i]
         val comp: Component = follows!![i]
-        // addInfoComponentdAt(comp, align.x, align.y) TODO
+        addInfoComponentAt(comp, align.x, align.y)
       }
     }
   }
@@ -244,9 +226,11 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         setComponent(formItem,
                      aligns!![x][y]!!.x,
                      aligns!![x][y]!!.y,
-                     Math.min(aligns!![x][y]!!.width, getAllocatedWidth(x, y)),
-                     Math.min(Math.max(getComponentHeight(components!![x][y]!!), getComponentHeight(info!!)),
-                              getAllocatedHeight(x, y)))
+                     aligns!![x][y]!!.width.coerceAtMost(getAllocatedWidth(x, y)),
+                     getComponentHeight(components!![x][y]!!)
+                       .coerceAtLeast(getComponentHeight(info!!))
+                       .coerceAtMost(getAllocatedHeight(x, y))
+        )
         break
       }
     }

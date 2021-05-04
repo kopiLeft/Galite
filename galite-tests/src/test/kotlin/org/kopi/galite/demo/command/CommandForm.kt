@@ -46,47 +46,47 @@ object CommandForm : ReportSelectionForm() {
   }
 
   val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
+          ident = "Autofill",
+          menu = action,
+          label = "Autofill",
+          help = "Autofill",
   )
 
   val list = actor(
-    ident = "list",
-    menu = action,
-    label = "list",
-    help = "Display List",
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
   ) {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
   }
 
   val resetBlock = actor(
-    ident = "reset",
-    menu = action,
-    label = "break",
-    help = "Reset Block",
+          ident = "reset",
+          menu = action,
+          label = "break",
+          help = "Reset Block",
   ) {
     key = Key.F3   // key is optional here
     icon = "break"  // icon is optional here
   }
 
   val serialQuery = actor(
-    ident = "serialQuery",
-    menu = action,
-    label = "serialQuery",
-    help = "serial query",
+          ident = "serialQuery",
+          menu = action,
+          label = "serialQuery",
+          help = "serial query",
   ) {
     key = Key.F6   // key is optional here
     icon = "serialquery"  // icon is optional here
   }
 
   val dynamicReport = actor(
-    ident = "dynamicReport",
-    menu = action,
-    label = "DynamicReport",
-    help = " Create Dynamic Report",
+          ident = "dynamicReport",
+          menu = action,
+          label = "DynamicReport",
+          help = " Create Dynamic Report",
   ) {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here

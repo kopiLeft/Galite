@@ -24,6 +24,10 @@ import com.vaadin.flow.component.Component
  */
 class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
 
+  init {
+    className = "multiple"
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
@@ -54,9 +58,5 @@ class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
 
   override fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
     // not supported feature
-  }
-
-  init {
-    className = "multiple"
   }
 }

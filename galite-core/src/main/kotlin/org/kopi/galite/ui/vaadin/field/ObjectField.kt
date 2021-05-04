@@ -30,7 +30,7 @@ import com.vaadin.flow.component.customfield.CustomField
 /**
  * The Object field component.
  */
-abstract class ObjectField<T> : CustomField<T>(), HasStyle {
+abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
 
   //---------------------------------------------------
   // DATA MEMBERS

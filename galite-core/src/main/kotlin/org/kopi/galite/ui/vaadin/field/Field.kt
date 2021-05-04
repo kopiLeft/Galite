@@ -41,13 +41,6 @@ import org.kopi.galite.ui.vaadin.window.Window
 abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   : Div(), FieldListener, HasStyle {
 
-  init {
-    /*this.addClickListener { TODO
-      fireClicked()
-    }*/
-    className = Styles.FIELD
-  }
-
   private var listeners = mutableListOf<FieldListener>()
 
   /**
@@ -121,7 +114,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   var columnView: ColumnView? = null
 
-  lateinit var wrappedField: CustomField<*>
+  lateinit var wrappedField: AbstractField<*>
 
   /**
    * `true` if the content of this field has changed.
@@ -140,16 +133,19 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    */
   val doNotLeaveActiveField = false
 
+  init {
+    className = Styles.FIELD
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  override fun onAttach(attachEvent: AttachEvent?) {
-    addFieldListener(this)
-  }
-
-  fun setFieldContent(component: CustomField<*>) {
+  fun setFieldContent(component: AbstractField<*>) {
     wrappedField = component
+    wrappedField.addFocusListener {
+      fireClicked()
+    }
     add(component)
   }
 
