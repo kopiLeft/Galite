@@ -41,7 +41,7 @@ class VWindowController : WindowController() {
   override fun doModal(model: VWindow): Boolean {
     return try {
       val viewStarter = ModalViewRunner(model)
-      access {
+      startAndWait(model as Object) {
         viewStarter.run()
       }
       if (viewStarter.getView() == null) false else viewStarter.getView()!!.returnCode == VWindow.CDE_VALIDATE
@@ -127,7 +127,7 @@ class VWindowController : WindowController() {
             val popup = PopupWindow()
             popup.isModal = true
             popup.setContent(view!!)
-            popup.setCaption(model.getTitle()) //
+            popup.setCaption(model.getTitle()) // put popup title
             popup.open()
           }
         } catch (e: VException) {

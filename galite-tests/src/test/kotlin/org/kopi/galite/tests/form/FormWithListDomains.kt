@@ -30,7 +30,7 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
-object FormWithListDomains: Form() {
+class FormWithListDomains: Form() {
   val edit = menu("Edit")
   val autoFill = actor(
           ident = "Autofill",
@@ -56,17 +56,16 @@ object FormWithListDomains: Form() {
 }
 
 object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
-  val user = mustFill(domain = UsersList, position = at(1, 1)) {
+  val user = mustFill(domain = UsersList(), position = at(1, 1)) {
     label = "user"
     help = "The user"
   }
-  val module = mustFill(domain = Module, position = at(2, 1)) {
+  val module = mustFill(domain = Module(), position = at(2, 1)) {
     label = "module"
     help = "The module"
   }
 }
-
-object UsersList: ListDomain<Int>(20) {
+class UsersList: ListDomain<Int>(20) {
 
   override val table = query(
           Users.select {
@@ -75,7 +74,7 @@ object UsersList: ListDomain<Int>(20) {
   )
 
   override val access = {
-    SomeDictionnaryForm
+    SomeDictionnaryForm()
   }
 
   val autoComplete = complete(AutoComplete.LEFT, 1)
@@ -91,7 +90,7 @@ object UsersList: ListDomain<Int>(20) {
   }
 }
 
-object Module: ListDomain<String>(20) {
+class Module: ListDomain<String>(20) {
 
   override val table = Modules
 
@@ -109,13 +108,34 @@ object Module: ListDomain<String>(20) {
     "SYMBOL" keyOf Modules.symbol
   }
 }
-
-object SomeDictionnaryForm : DictionaryForm() {
+class SomeDictionnaryForm : DictionaryForm() {
   override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")
 
+  val edit = menu("Edit")
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
+  val quit = actor(
+    ident = "quit",
+    menu = action,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = "quit"
+  }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
   val list = actor(
           ident = "list",
           menu = action,
@@ -137,7 +157,7 @@ object SomeDictionnaryForm : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithListDomains) {
+  Application.runForm(formName = FormWithListDomains()) {
     initModules()
   }
 }

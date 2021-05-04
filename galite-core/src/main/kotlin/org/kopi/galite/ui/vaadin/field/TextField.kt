@@ -27,10 +27,13 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
+import org.kopi.galite.ui.vaadin.event.TextFieldListener
 
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
 
@@ -131,9 +134,13 @@ class TextField(val model: VField,
    */
   var validator: TextValidator? = null
 
+  private var autofill: IronIcon? = null
+
   internal var lastCommunicatedValue = ""
 
   val listeners = mutableListOf<HasValue.ValueChangeListener<ComponentValueChangeEvent<*, *>>>()
+
+  private val textFieldListeners = mutableListOf<TextFieldListener>()
 
   init {
     col = model.width
@@ -148,7 +155,23 @@ class TextField(val model: VField,
     field.isEnabled = enabled
     add(field)
     if (hasAutofill) {
-      //TODO("AUTOFILL")
+      autofill = IronIcons.FIND_IN_PAGE.create()
+      autofill!!.style["cursor"] = "pointer" // TODO: move to css
+      autofill!!.addClickListener {
+        fireAutofill()
+      }
+      field.suffixComponent = autofill
+      autofill!!.isVisible = false
+      field.addFocusListener {
+        if (autofill != null) {
+          autofill!!.isVisible = true
+        }
+      }
+      field.addBlurListener {
+        if (autofill != null) {
+          autofill!!.isVisible = false
+        }
+      }
     }
     setValidator()
   }
@@ -221,7 +244,6 @@ class TextField(val model: VField,
         throw IllegalArgumentException("unknown field model : " + model.javaClass.name)
       }
     }
-    // add navigation handler TODO
   }
 
   /**
@@ -340,6 +362,7 @@ class TextField(val model: VField,
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
     text.addKeyDownListener(TextFieldNavigationHandler.newInstance(text, rows > 1))
+    textFieldListeners.add(org.kopi.galite.ui.vaadin.form.KeyNavigator(model, text))
     return text
   }
 
@@ -432,6 +455,12 @@ class TextField(val model: VField,
    */
   internal fun needsSynchronization(): Boolean {
     return lastCommunicatedValue != value
+  }
+
+  private fun fireAutofill() {
+    for (l in textFieldListeners) {
+      l.autofill()
+    }
   }
 
   //---------------------------------------------------

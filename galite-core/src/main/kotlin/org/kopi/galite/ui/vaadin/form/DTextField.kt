@@ -124,10 +124,10 @@ open class DTextField(
   override fun updateAccess() {
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
-    //access { TODO: Acccess from thread
-    field.isEnabled = access >= VConstants.ACS_VISIT
-    isEnabled = access >= VConstants.ACS_VISIT
-    //}
+    access {
+      field.isEnabled = access >= VConstants.ACS_VISIT
+      isEnabled = access >= VConstants.ACS_VISIT
+    }
   }
 
   override fun updateText() {
