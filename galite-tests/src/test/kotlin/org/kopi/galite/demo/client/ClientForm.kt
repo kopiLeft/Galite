@@ -163,7 +163,7 @@ class ClientForm : ReportSelectionForm() {
 class Clients : FormBlock(6, 6, "Clients") {
   val u = table(Client)
 
-  val idClt = visit(domain = Domain<Int>(15), position = at(1, 1)) {
+  val idClt = visit(domain = Domain<Int>(30), position = at(1, 1..2)) {
     label = "ID"
     help = "The client id"
     columns(u.idClt)
@@ -198,7 +198,7 @@ class Clients : FormBlock(6, 6, "Clients") {
     help = "The client city"
     columns(u.cityClt)
   }
-  val zipCodeClt = visit(domain = Domain<Int>(12), position = at(4, 3)) {
+  val zipCodeClt = visit(domain = Domain<Int>(12), position = follow(cityClt)) {
     label = "Zip code"
     help = "The client zip code"
     columns(u.zipCodeClt)

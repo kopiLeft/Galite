@@ -333,7 +333,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
           useAll: Boolean,
   ) {
     buildLayout()
-    layout!!.addComponent(component, x, y, width, height, alignRight, useAll)
+    layout!!.addComponent(component, (x - 1) / 2, y, width, height, alignRight, useAll)
   }
 
   /**
@@ -342,14 +342,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   fun buildLayout() {
     if (layout == null) {
       layout = createLayout()
-      if (droppable) {
-        //dndWrapper = DragAndDropWrapper(layout) TODO
-        //dndWrapper.setImmediate(true)
-        //setContent(dndWrapper)
-        setContent(layout as Component)
-      } else {
-        setContent(layout as Component)
-      }
+      setContent(layout as Component)
     }
   }
 

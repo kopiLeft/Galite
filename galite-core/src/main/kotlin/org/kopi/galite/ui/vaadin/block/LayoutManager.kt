@@ -38,7 +38,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
    * @param colSpan The column span width
    * @param rowSpan The row span width.
    */
-  fun setComponent(component: Component?, c: ComponentConstraint, colSpan: Int, rowSpan: Int) {
+  fun setComponent(component: Component, c: ComponentConstraint, colSpan: Int, rowSpan: Int) {
     val constraint = ConstraintWrapper(c, colSpan, rowSpan)
     constraint.component = component
     handler!!.add(constraint)
@@ -89,7 +89,7 @@ class LayoutManager(private var layout: AbstractBlockLayout?) {
     var row = constraint.y
     var colSpan = colSpan
     var rowSpan = rowSpan
-    var component: Component? = null
+    lateinit var component: Component
   }
 
   /**
