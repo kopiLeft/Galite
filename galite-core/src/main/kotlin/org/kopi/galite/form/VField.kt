@@ -86,7 +86,7 @@ import org.kopi.galite.visual.VlibProperties
  * (DForm)
  */
 abstract class VField protected constructor(width: Int, height: Int) : VConstants, VModel {
-
+  var upload : Boolean = false
   /**
    * Sets the dimensions
    */

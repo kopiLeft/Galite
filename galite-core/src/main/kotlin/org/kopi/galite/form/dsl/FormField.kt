@@ -87,6 +87,10 @@ open class FormField<T>(val block: FormBlock,
     }
   }
 
+  fun upload() {
+    vField.upload = true
+  }
+
   /** the minimum value that cannot exceed  */
   internal var min : T? = null
 

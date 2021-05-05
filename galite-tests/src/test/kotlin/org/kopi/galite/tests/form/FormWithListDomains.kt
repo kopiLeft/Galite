@@ -24,6 +24,7 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.AutoComplete
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.Form
@@ -63,6 +64,12 @@ object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
   val module = mustFill(domain = Module(), position = at(2, 1)) {
     label = "module"
     help = "The module"
+  }
+
+  val test = visit(domain = Domain<Int>(25), position = at(3, 1)) {
+    label = "test"
+    help = "The test"
+    upload()
   }
 }
 class UsersList: ListDomain<Int>(20) {

@@ -661,6 +661,7 @@ abstract class VFieldUI protected @JvmOverloads constructor(open val blockView: 
 
   // static (compiled) data
   private val hasAutofill: Boolean // RE
+  val upload: Boolean = model.upload
   private var hasNewItem = false // MO
   private var hasEditItem = false // VE
 

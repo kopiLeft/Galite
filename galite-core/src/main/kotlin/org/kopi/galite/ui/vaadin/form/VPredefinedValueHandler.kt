@@ -65,7 +65,7 @@ class VPredefinedValueHandler(model: VFieldUI,
    * @throws VException
    * @see org.kopi.galite.form.PredefinedValueHandler.selectImage
    */
-  override fun selectImage(): ByteArray = FileUploader().upload("image/*")
+  override fun selectImage(): ByteArray? = FileUploader().upload("image/*")
 
   /**
    * Returns the current application instance.

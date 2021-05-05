@@ -21,9 +21,11 @@ import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 
 import com.vaadin.flow.component.ComponentEventListener
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.upload.ProgressUpdateEvent
 import com.vaadin.flow.component.upload.Receiver
 import com.vaadin.flow.component.upload.Upload
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
 
@@ -70,8 +72,27 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
    * @param mimeType The mime type to be uploaded.
    * @return The uploaded bytes.
    */
-  fun upload(mimeType: String?): ByteArray {
-    TODO()
+  fun upload(mimeType: String?): ByteArray? {
+    val dialog = Dialog()
+    dialog.add(uploader)
+    BackgroundThreadHandler.access {
+      dialog.open()
+    }
+
+
+//add(uploader)
+    this.mimeType = mimeType
+    /*  BackgroundThreadHandler.startAndWait(Runnable {
+        uploader.setMimeType(mimeType)
+        getApplication().attachComponent(uploader)
+        getApplication().push()
+      }, uploader)*/
+    close()
+    return if (output != null) {
+      output!!.toByteArray()
+    } else {
+      null
+    }
   }
 
   /**
@@ -113,6 +134,6 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
   }
 
   override fun onComponentEvent(event: ProgressUpdateEvent?) {
-    TODO("Not yet implemented")
+//    TODO("Not yet implemented")
   }
 }

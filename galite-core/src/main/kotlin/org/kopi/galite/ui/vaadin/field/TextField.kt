@@ -36,6 +36,8 @@ import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
+import org.kopi.galite.visual.FileHandler
+import java.io.File
 
 /**
  * A text field component.
@@ -52,7 +54,8 @@ class TextField(val model: VField,
                 val scanner: Boolean,
                 val noEdit: Boolean,
                 val align: Int,
-                val hasAutofill: Boolean)
+                val hasAutofill: Boolean,
+                val upload: Boolean)
   : AbstractField<Any?>(), HasStyle {
 
   val field: InputTextField<*>
@@ -154,10 +157,26 @@ class TextField(val model: VField,
     field = createTextField()
     field.isEnabled = enabled
     add(field)
-    if (hasAutofill) {
-      autofill = IronIcons.FIND_IN_PAGE.create()
-      autofill!!.style["cursor"] = "pointer" // TODO: move to css
-      autofill!!.addClickListener {
+    if (hasAutofill || upload) {
+      autofill = IronIcons.FIND_IN_PAGE.create() as IronIcon
+      (autofill!! as IronIcon).style["cursor"] = "pointer" // TODO: move to css
+      if (upload) {
+        (autofill!! as IronIcon).addClickListener {
+          FileHandler.fileHandler!!.openFile(model.block!!.form.getDisplay()!!, object : FileHandler.FileFilter {
+            override fun accept(pathname: File?): Boolean {
+              return (pathname!!.isDirectory
+                      || pathname.name.toLowerCase().endsWith(".pdf"))
+            }
+
+            override val description: String
+              get() = "PDF"
+          })
+        }
+      }
+      (autofill!!as IronIcon).addClickListener {
+
+        //  model.block!!.form.getDisplay().also { add(Upload(MemoryBuffer())) }  --> affiche le field
+
         fireAutofill()
       }
       field.suffixComponent = autofill
