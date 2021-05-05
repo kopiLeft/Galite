@@ -54,6 +54,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
+    grid.isHeightByRows = true
   }
 
   /*

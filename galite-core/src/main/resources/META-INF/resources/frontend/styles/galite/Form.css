@@ -180,6 +180,10 @@
     vertical-align: middle;
 }
 
+.multiple .k-boolean-field-content {
+    height: 40px;
+}
+
 vaadin-checkbox {
     height: 38px;
 }

@@ -57,6 +57,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
       }
     })*/
     className = Styles.BOOLEAN_FIELD
+    content.className = "k-boolean-field-content"
     yes.classNames.add("true")
     no.classNames.add("false")
     setLabel(trueRepresentation, falseRepresentation)

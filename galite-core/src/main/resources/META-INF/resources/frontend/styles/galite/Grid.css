@@ -36,6 +36,7 @@
 
 [part~="cell"].separator {
     background: red;
+    width: 15px;
 }
 
 :host([theme="column-borders compact"]) [part~="cell"]:focus {
