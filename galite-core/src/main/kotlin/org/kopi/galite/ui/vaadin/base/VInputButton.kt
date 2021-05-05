@@ -69,7 +69,7 @@ class VInputButton(caption: String? = null) : Input(), ClickNotifier<VInputButto
    *
    * @param caption The button caption.
    */
-  var caption: String
+  var caption: String?
     get() = value
     set(caption) {
       value = caption

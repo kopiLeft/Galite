@@ -257,7 +257,7 @@ abstract class Form : Window() {
 
     blocks = formBlocks.map { formBlock ->
       formBlock.getBlockModel(this, source).also { vBlock ->
-        vBlock.setInfo(formBlock.pageNumber)
+        vBlock.setInfo(formBlock.pageNumber, this)
         vBlock.initIntern()
         formBlock.blockFields.forEach { formField ->
           formField.initialValues.forEach {

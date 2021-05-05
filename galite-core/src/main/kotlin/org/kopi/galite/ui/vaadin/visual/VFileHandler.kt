@@ -67,7 +67,7 @@ class VFileHandler : FileHandler() {
     val uploader = FileUploader()
     val file: ByteArray? = uploader.upload(mimeType)
     return if (file != null) {
-      toFile(window, file, dir, if (uploader.filename == null) defaultName else uploader.filename)
+      toFile(window, file, dir, if (uploader.fileName == null) defaultName else uploader.fileName)
     } else null
   }
 
