@@ -58,6 +58,7 @@ import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
 
 /**
@@ -67,6 +68,7 @@ import com.vaadin.flow.router.Route
  */
 @Push
 @Route("")
+@PreserveOnRefresh
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
