@@ -354,9 +354,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // IMPLEMENTATION
     //---------------------------------------
     override fun blockRecordChanged(current: Int, count: Int) {
-      // TODO BackgroundThreadHandler.access(Runnable {
-      content.setPosition(current, count)
-      //})
+      access {
+        content.setPosition(current, count)
+      }
     }
   }
 }
