@@ -195,7 +195,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     actorDefs.forEach { actorDef ->
       val actor = DActor(actorDef!!)
 
-      panel.addActor(actor, actorDef)
+      panel.addActor(actor, actorDef, navigationMenu)
       if(actor.icon != null) {
         addActor(actor)
       }

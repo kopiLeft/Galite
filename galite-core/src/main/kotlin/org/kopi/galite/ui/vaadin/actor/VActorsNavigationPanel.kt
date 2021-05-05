@@ -34,9 +34,15 @@ class VActorsNavigationPanel : VNavigationPanel() {
    * Adds the given actor to this navigation panel.
    * @param actor The actor to be added.
    */
-  fun addActor(actor: Actor, action: VActor?) {
+  fun addActor(actor: Actor, action: VActor?, navigationMenu: VNavigationMenu) {
     var column: VNavigationColumn?
-    val item = VActorNavigationItem(actor.text, actor.menu, actor.acceleratorKey, actor.modifiersKey, actor.icon, action)
+    val item = VActorNavigationItem(actor.text,
+                                    actor.menu,
+                                    actor.acceleratorKey,
+                                    actor.modifiersKey,
+                                    actor.icon,
+                                    navigationMenu,
+                                    action)
 
     column = getColumn(if (isHelpMenu(item.menu)) "help" else item.menu)
     if (column == null) {
