@@ -70,6 +70,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
 
   override fun onAttach(attachEvent: AttachEvent?) {
     layout() // FIXME!!
+    layoutAlignedComponents()
   }
 
   /**
@@ -110,6 +111,8 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
   }
 
   override fun layoutAlignedComponents() {
-    TODO("Not yet implemented")
+    if (alignPane != null) {
+      add(0, 0, alignPane!!.element)
+    }
   }
 }
