@@ -20,17 +20,19 @@ package org.kopi.galite.ui.vaadin.upload
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 
-import com.vaadin.flow.component.ComponentEventListener
-import com.vaadin.flow.component.upload.ProgressUpdateEvent
-import com.vaadin.flow.component.upload.Receiver
-import com.vaadin.flow.component.upload.Upload
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
+
+import com.vaadin.flow.component.upload.FailedEvent
+import com.vaadin.flow.component.upload.Receiver
+import com.vaadin.flow.component.upload.StartedEvent
 
 /**
  * The `FileUploader` handles file upload operations.
  */
-class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
+class FileUploader : Receiver {
 
   //--------------------------------------------
   // DATA MEMBERS
@@ -38,7 +40,9 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
   /**
    * The file uploader component.
    */
-  val uploader = Upload(this)
+  private val uploadDialog = UploadDialog(this)
+
+  private val uploader = uploadDialog.upload
 
   /**
    * The output stream.
@@ -50,15 +54,15 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
   /**
    * The uploaded file name.
    */
-  var filename: String? = null
+  var fileName: String? = null
     private set
 
   init {
-    uploader.addProgressListener(this)
-    //uploader.addStartedListener(this) TODO
-    //uploader.addFinishedListener(this)
-    //uploader.addFailedListener(this)
-    //uploader.setLocale(application.getDefaultLocale().toString())
+    //uploader.addProgressListener(::updateProgress)
+    uploader.addStartedListener(::uploadStarted)
+    //uploader.addFinishedListener(::uploadFinished)
+    uploader.addFailedListener(::uploadFailed)
+    uploadDialog.setLocale(application.defaultLocale.toString())
   }
 
   //---------------------------------------------------
@@ -70,28 +74,70 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
    * @param mimeType The mime type to be uploaded.
    * @return The uploaded bytes.
    */
-  fun upload(mimeType: String?): ByteArray {
-    TODO()
+  fun upload(mimeType: String?): ByteArray? {
+    this.mimeType = mimeType
+    startAndWait(uploader as Object) {
+      //uploader.acceptedFileTypes.add(mimeType)
+      uploadDialog.open()
+    }
+
+    close()
+
+    return if (output != null) {
+      output!!.toByteArray()
+    } else {
+      null
+    }
   }
 
   /**
-   * Closes the uploader component.
-   * The uploader should not be detached Immediately from the main application window in order to communicate
-   * upload progress.
-   * For this we will use a timer to differ schedule the detach event of the uploader component.
+   * Closes the uploader dialog containing the uploader.
    */
   fun close() {
-    TODO()
+    access {
+      uploadDialog.close()
+    }
   }
 
-  // TODO: Add uploadFailed event handler
+  fun uploadFailed(event: FailedEvent) {
+    if (event.reason != null) {
+      event.reason.printStackTrace(System.err)
+    }
+  }
 
-  // TODO: Add uploadFinished event handler
+  fun uploadStarted(event: StartedEvent) {
+    val mimeTypes: Array<String>
+    var accepted: Boolean
+    if (mimeType == null) {
+      accepted = true
+    } else {
+      accepted = false
+      mimeTypes = mimeType!!.split(",".toRegex()).toTypedArray()
+      for (mimeType in mimeTypes) {
+        if (event.getMIMEType().startsWith(getParentMIMEType(mimeType))) {
+          accepted = true
+          break
+        }
+      }
+    }
+    if (!accepted) {
+      uploader.interruptUpload()
+    }
+  }
 
-  // TODO: Add uploadStarted event handler
+  override fun receiveUpload(fileName: String?, mimeType: String?): OutputStream? {
+    val stream = if(fileName == null) {
+      output = null
+      null
+    } else {
+      ByteArrayOutputStream()
+    }
 
-  override fun receiveUpload(filename: String?, mimeType: String?): OutputStream =
-          ByteArrayOutputStream().also { output = it }
+    output = stream
+    this.fileName = fileName
+
+    return stream
+  }
 
   /**
    * Returns the current application instance.
@@ -110,9 +156,5 @@ class FileUploader : ComponentEventListener<ProgressUpdateEvent>, Receiver {
     } else {
       mimeType.trim { it <= ' ' }
     }
-  }
-
-  override fun onComponentEvent(event: ProgressUpdateEvent?) {
-    TODO("Not yet implemented")
   }
 }

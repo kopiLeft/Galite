@@ -22,6 +22,7 @@ import kotlin.reflect.KProperty
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.kopi.galite.common.Action
+import org.kopi.galite.common.Actor
 import org.kopi.galite.common.Command
 import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
@@ -33,6 +34,7 @@ import org.kopi.galite.field.Field
 import org.kopi.galite.form.VCodeField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
+import org.kopi.galite.form.VForm
 
 /**
  * This class represents a form field. It represents an editable element of a block
@@ -63,7 +65,7 @@ open class FormField<T>(val block: FormBlock,
   var columns: FormFieldColumns<T>? = null
   var access: IntArray = IntArray(3) { initialAccess }
   var dropList: MutableList<String>? = null
-  var commands: MutableList<Command>? = null
+  var commands: MutableList<Command> = mutableListOf()
   var triggers = mutableListOf<Trigger>()
   var alias: String? = null
   var initialValues = mutableMapOf<Int, T>()
@@ -148,6 +150,19 @@ open class FormField<T>(val block: FormBlock,
 
   fun droppable(vararg droppables : String) {
     this.block.dropList?.addAll(droppables)
+  }
+
+  /**
+   * Adds a new command to this field.
+   **
+   * @param item    the actor linked to the command.
+   * @param init    initialization method.
+   */
+  fun command(item: Actor, init: Command.() -> Unit): Command {
+    val command = Command(item)
+    command.init()
+    commands.add(command)
+    return command
   }
 
   /** the alignment of the text */
@@ -279,7 +294,7 @@ open class FormField<T>(val block: FormBlock,
     }
   }
 
-  fun setInfo(source: String) {
+  fun setInfo(source: String, form: VForm) {
     val list = if (domain is ListDomain) {
       (domain as ListDomain).list.buildListModel(source)
     } else {
@@ -300,7 +315,7 @@ open class FormField<T>(val block: FormBlock,
             columns?.getColumnsModels()?.toTypedArray(), // TODO
             columns?.index?.indexNumber ?: 0,
             columns?.priority ?: 0,
-            null, // TODO
+            commands.map { it.buildModel(block.vBlock, form.actors) }.toTypedArray(),
             position?.getPositionModel(),
             align.value,
             null // TODO
