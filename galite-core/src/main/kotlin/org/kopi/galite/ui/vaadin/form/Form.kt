@@ -199,6 +199,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
       } else {
         pages[i] = Page(VerticalLayout())
       }
+      pages[i]!!.isVisible = false
     }
     // setPages content.
     setContent(pageCount, titles)
