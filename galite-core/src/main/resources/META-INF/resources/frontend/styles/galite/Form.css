@@ -217,8 +217,7 @@ vaadin-checkbox {
  */
 .k-form-page {
     overflow: auto;
-    height: auto;
-    max-height: calc(100vh - 200px);
+    height: calc(100vh - 200px);
 }
 
 /*
@@ -286,3 +285,9 @@ pre {
     width: 100%;
 }
 
+/*
+ * block display
+ */
+vaadin-vertical-layout {
+    display : grid;
+}
