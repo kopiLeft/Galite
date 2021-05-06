@@ -38,7 +38,7 @@ class GridEditorImageField : GridEditorField<Any?>() {
 
   override fun generateModelValue(): Any? = image.src
 
-  override fun focus() {
+  override fun doFocus() {
     image.focus()
   }
 
