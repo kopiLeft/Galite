@@ -17,6 +17,7 @@
 
 package org.kopi.galite.tests.form
 
+import java.io.File
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
@@ -24,11 +25,13 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.AutoComplete
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.visual.FileHandler
 
 class FormWithListDomains: Form() {
   val edit = menu("Edit")
@@ -52,7 +55,33 @@ class FormWithListDomains: Form() {
   )
   override val locale = Locale.UK
   override val title = "form to test list domains"
-  val userListBlock = insertBlock(UsersListBlock)
+  val userListBlock = insertBlock(UsersListBlock) {
+
+    val file = visit(domain = Domain<String>(25), position = at(3, 1)) {
+      label = "test"
+      help = "The test"
+      command(item = autoFill) {
+        action = {
+
+          val file = FileHandler.fileHandler!!.openFile(model.getDisplay()!!, FileFilter());
+          if (file != null) {
+            value = file.absolutePath
+          }
+        }
+      }
+    }
+  }
+}
+
+class FileFilter : FileHandler.FileFilter {
+  override fun accept(f: File?): Boolean {
+    return (f!!.isDirectory
+            || f.name.toLowerCase().endsWith(".xls")
+            || f.name.toLowerCase().endsWith(".xlsx"))
+  }
+
+  override val description: String
+    get() = "XLS/XLSX"
 }
 
 object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {

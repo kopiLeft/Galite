@@ -145,13 +145,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * @param page the page number of this block
    */
-  fun setInfo(page: Int) {
+  fun setInfo(page: Int, form: VForm) {
     pageNumber = page
-    setInfo()
+    setInfo(form)
     buildCstr()
   }
 
-  protected open fun setInfo() {
+  protected open fun setInfo(form: VForm) {
     // Do nothing, should be redefined if some info
     // has to be set
   }

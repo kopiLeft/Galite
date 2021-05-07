@@ -17,12 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.actor
 
+import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.VActor
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
@@ -40,20 +40,21 @@ class VActorNavigationItem(text: String,
                            acceleratorKey: Key?,
                            keyModifier: KeyModifier?,
                            icon: Any?,
+                           val navigationmenu : VNavigationMenu,
                            val action: VActor?) : Button() {
 
   init {
     super.setText(text)
 
-    if (icon != null) {
-      this.addClickListener {
-        action?.performAction()
-        if (icon is VaadinIcon) {
-          super.setIcon(Icon(icon))
-        } else if (icon is IronIcons) {
-          super.setIcon(icon.create())
-        }
-      }
+    if (icon is VaadinIcon) {
+      super.setIcon(Icon(icon))
+    } else if (icon is IronIcons) {
+      super.setIcon(icon.create())
+    }
+
+    this.addClickListener {
+      action?.performAction()
+      navigationmenu.close()
     }
 
     if (acceleratorKey != null && acceleratorKey != Key.UNIDENTIFIED) {

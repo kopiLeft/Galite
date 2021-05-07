@@ -51,7 +51,7 @@ class ClientR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -61,7 +61,7 @@ class ClientR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -71,7 +71,7 @@ class ClientR : Report() {
           help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val pdf = actor(
@@ -81,7 +81,7 @@ class ClientR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportPdf"  // icon is optional here
   }
 
   val editColumnData = actor(
