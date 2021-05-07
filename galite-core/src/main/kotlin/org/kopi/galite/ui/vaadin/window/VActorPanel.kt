@@ -40,6 +40,7 @@ class VActorPanel : MenuBar() {
     menu.element.setAttribute("id", "menu")
     this.setId("actors")
     this.setWidthFull()
+    this.setSizeFull()
     menu.add(actorsNavigationItem)
     this.addItem(menu)
   }

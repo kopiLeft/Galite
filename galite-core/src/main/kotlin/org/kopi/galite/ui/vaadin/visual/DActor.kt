@@ -25,6 +25,7 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
+import org.kopi.galite.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
@@ -75,6 +76,11 @@ class DActor(private var model: VActor)
 
   override fun setEnabled(enabled: Boolean) {
     access {
+      if(!enabled) {
+        super.getElement().setAttribute("part", Styles.ACTOR + "-disabled")
+      } else {
+        super.getElement().setAttribute("part", Styles.ACTOR)
+      }
       super.setEnabled(enabled)
     }
   }

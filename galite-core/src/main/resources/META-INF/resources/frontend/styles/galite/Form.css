@@ -222,7 +222,7 @@ vaadin-checkbox {
  */
 .k-form-page {
     overflow: auto;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 210px);
 }
 
 /*
@@ -281,7 +281,7 @@ pre {
 .window-items-container vaadin-button {
     margin-top: -1px;
     border-bottom: 1px solid gray;
-    width: 500px;
+    width: 550px;
 }
 
 .simple > tbody > tr > td > vaadin-form-item,
