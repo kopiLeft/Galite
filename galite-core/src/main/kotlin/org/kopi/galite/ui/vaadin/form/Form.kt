@@ -220,7 +220,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   }
 
   /**
-   * Creates the block info widget.
+   * Creates the block info component.
    */
   fun showBlockInfo() {
     blockInfo.isVisible = false // hide it initially

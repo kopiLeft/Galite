@@ -77,18 +77,23 @@
     box-shadow: none;
 }
 
+.k-form {
+    padding: 10px 20px;
+}
+
 .k-form-tab {
-    width: 100%;
     margin: 0;
     box-sizing: border-box;
+    border-bottom: 1px solid black;
 }
 
 /*
  * Copy Icon container
  */
 #windows {
-    padding-top: 12px;
+    padding-top: 10px;
     padding-right: 15px;
+    padding-left: 15px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     margin: 0;
 }
