@@ -50,7 +50,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  protected lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
+  lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
 
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
@@ -136,10 +136,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
     grid.isColumnReorderingAllowed = false
     //grid.setColumnResizeMode(ColumnResizeMode.ANIMATED)
     //grid.setHeightMode(HeightMode.ROW)
-    //grid.setHeightByRows(model.displaySize)
     //grid.setCellStyleGenerator(DGridBlockCellStyleGenerator(model))
     grid.addColumnResizeListener(::columnResize)
     configure()
+    grid.height = "calc(" +
+            "(1.04 * var(--lumo-size-xl) + var(--_lumo-grid-border-width)) + " +
+            "(${model.displaySize * 38}px + ${model.displaySize -1} * var(--_lumo-grid-border-width))" +
+            ")"
     //grid.setColumnOrder(columnsOrder)
     /*if (detailsGenerator != null) { TODO
       grid.setDetailsGenerator(detailsGenerator)
@@ -251,7 +254,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun createLayout(): BlockLayout {
-    return SingleComponentBlockLayout()
+    return SingleComponentBlockLayout(this)
   }
 
   override fun refresh(force: Boolean) {
@@ -473,6 +476,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
 
         if (columnView.hasDisplays()) {
+          headers.add(columnView.editorField.label)
           val column = grid.addColumn { it.getValue(field) }
             .setAutoWidth(true)
             .setKey(i.toString())

@@ -151,7 +151,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    * @param isFollow Is it a follow block ?
    * @param isChart Is it a chart block ?
    */
-  fun addBlock(block: Component, page: Int, isFollow: Boolean, isChart: Boolean) {
+  fun addBlock(block: Block, page: Int, isFollow: Boolean, isChart: Boolean) {
     blocksData[block] = BlockComponentData(isFollow, isChart, page)
 
     val hAlign = if (isChart) {
@@ -164,6 +164,9 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
     } else {
       pages[page]!!.add(block, hAlign)
     }
+
+    block.layout()
+    block.layoutAlignedComponents()
   }
 
   /**
@@ -355,26 +358,6 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   fun delegateCaptionHandling(): Boolean {
     // do not delegate caption handling
     return false
-  }
-
-  override fun onAttach(event: AttachEvent) {
-    if (event.isInitialAttach) {
-      init(pageCount, titles,"single.gif") // TODO: full path to image?
-      // look for blocks
-      for (child in children) {
-        if (child is Block) {
-          val data = blocksData[child]
-          if (data != null) {
-            addBlock(child, data.page, data.isFollow, data.isChart)
-          }
-        } else if (child is Grid<*>) {
-          val data = blocksData[child]
-          if (data != null) {
-            addBlock(child, data.page, data.isFollow, data.isChart)
-          }
-        }
-      }
-    }
   }
 
   override fun onPageSelection(page: Int) {

@@ -23,7 +23,8 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormAlignTest : Form() {
+val FormAlignTest = FormAlignTest_()
+class FormAlignTest_ : Form() {
   override val locale = Locale.UK
   override val title = "form for test"
 
@@ -43,7 +44,7 @@ object FormAlignTest : Form() {
   }
 }
 
-class TestAlign : FormBlock(10, 5, "Test block") {
+class TestAlign : FormBlock(10, 8, "Test block") {
 
   val designation = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "Designation"

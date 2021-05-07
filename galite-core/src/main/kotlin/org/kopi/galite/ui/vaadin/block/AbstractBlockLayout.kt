@@ -22,7 +22,6 @@ import kotlin.math.max
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VTable
 
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 
 /**
@@ -67,11 +66,6 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-
-  override fun onAttach(attachEvent: AttachEvent?) {
-    layout() // FIXME!!
-    layoutAlignedComponents()
-  }
 
   /**
    * Initialize the size of the layout

@@ -17,12 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
-import com.vaadin.flow.component.AttachEvent
-import java.lang.IndexOutOfBoundsException
+import org.kopi.galite.ui.vaadin.base.Utils
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasSize
-import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 
 /**
@@ -37,10 +37,12 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
   //---------------------------------------------------
   private var components: MutableList<Component>? = mutableListOf()
   private var aligns: MutableList<ComponentConstraint>? = mutableListOf()
+  private val ui = UI.getCurrent()
 
   init {
     className = "k-align-pane"
     element.style["overflow"] = "visible"
+    element.style["position"] = "relative"
   }
 
   //---------------------------------------------------
@@ -64,17 +66,19 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
     if (align == null) {
       return
     }
-    val ori = align!!.block.layout as? AbstractBlockLayout
+    val ori = align!!.block.layout
     if (ori == null) {
       return
-    } else if (ori.getCellAt(0, 0).getChild(0) is Grid<*>) { // FIXME
+    } else if (ori is SingleComponentBlockLayout) { // FIXME
       // block contains a VAADIN grid inside
       // -> we align according to grid column position
-      val grid = ori.getCellAt(0, 0).getChild(0) as Grid<*> // FIXME
+      val gridBlock = ori.block
+
+      Thread {
       for (i in aligns!!.indices) {
         val align = aligns!![i]
         if (align.x != -1) {
-          val column = grid.columns[align.x]
+          val column = gridBlock.headers[align.x]
 
           if (column != null) {
             var offsetWidth = 0
@@ -82,13 +86,14 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
             if (overlap != null) {
               offsetWidth = (overlap as HasSize).width.toInt() + 10 // horizontal gap
             }
-            setComponentPosition(
-              components!![i],
-              column.width.toInt(),
-              align.y * 21) // text fields height is 15px
+              setComponentPosition(
+                components!![i],
+                Utils.getOffsetLeft(column.element, ui),
+                align.y * 21) // text fields height is 15px
           }
         }
       }
+      }.start()
     } else {
       for (i in aligns!!.indices) {
         val align = aligns!![i]
@@ -118,10 +123,12 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
     }
   }
 
-  fun setComponentPosition(component: Component, left: Int, top: Int) {
-    component.element.style["position"] = "absolute"
-    component.element.style["left"] = left.toString() + "px"
-    component.element.style["top"] = top.toString() + "px"
+  fun setComponentPosition(component: Component, left: Double, top: Int) {
+    ui.access {
+      component.element.style["position"] = "absolute"
+      component.element.style["left"] = left.toString() + "px"
+      component.element.style["top"] = top.toString() + "px"
+    }
   }
 
   /**
