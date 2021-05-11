@@ -155,8 +155,10 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
     if (align == null) {
       if (constraints.width < 0) {
         follows!!.add(component!!)
+        constraints.x = (constraints.x - 1) / 2
         followsAligns!!.add(constraints)
       } else {
+        constraints.x = (constraints.x - 1) / 2
         aligns!![constraints.x][constraints.y] = constraints
         components!![constraints.x][constraints.y] = component
       }

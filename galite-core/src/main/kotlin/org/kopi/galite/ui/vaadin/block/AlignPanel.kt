@@ -17,20 +17,19 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
-import org.kopi.galite.ui.vaadin.base.Utils
-
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.html.Label
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * An absolute panel component.
  *
  * @param align The alignment info
  */
-class AlignPanel(var align: BlockAlignment?) : Div() {
+class AlignPanel(var align: BlockAlignment?) : HorizontalLayout() {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -41,8 +40,6 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
 
   init {
     className = "k-align-pane"
-    element.style["overflow"] = "visible"
-    element.style["position"] = "relative"
   }
 
   //---------------------------------------------------
@@ -54,7 +51,6 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
    * @param align The component constraint.
    */
   fun addComponent(w: Component, align: ComponentConstraint) {
-    add(w)
     components!!.add(w)
     aligns!!.add(align)
   }
@@ -73,26 +69,34 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
       // block contains a VAADIN grid inside
       // -> we align according to grid column position
       val gridBlock = ori.block
+      val ComponenetsTable : Array<Component?> = arrayOfNulls(gridBlock.headers.size)
+
+      for( i in 0 until  gridBlock.headers.size) {
+        ComponenetsTable[i] = Label("")
+      }
 
       Thread {
-      for (i in aligns!!.indices) {
-        val align = aligns!![i]
-        if (align.x != -1) {
-          val column = gridBlock.headers[align.x]
+        for (i in aligns!!.indices) {
+          val align = aligns!![i]
 
-          if (column != null) {
-            var offsetWidth = 0
-            val overlap: Component? = getOverlappingWidget(i, align.x, align.y)
-            if (overlap != null) {
-              offsetWidth = (overlap as HasSize).width.toInt() + 10 // horizontal gap
-            }
-              setComponentPosition(
-                components!![i],
-                Utils.getOffsetLeft(column.element, ui),
-                align.y * 21) // text fields height is 15px
+          if (align.x != -1) {
+            ComponenetsTable[align.x - 1] = components!![i]
           }
         }
-      }
+        val  grid = Grid<Component>()
+
+        grid.setWidthFull()
+
+        for (i in ComponenetsTable.indices) {
+          grid.addComponentColumn { ComponenetsTable[i] }
+        }
+
+        grid.isHeightByRows = true
+        grid.style["border"] = "none"
+        grid.setItems(ComponenetsTable[0])
+        ui.access {
+          add(grid)
+        }
       }.start()
     } else {
       for (i in aligns!!.indices) {
@@ -149,7 +153,6 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
 
   override fun onAttach(attachEvent: AttachEvent?) {
     layout()
-    setPanelSize()
   }
 
   /**
