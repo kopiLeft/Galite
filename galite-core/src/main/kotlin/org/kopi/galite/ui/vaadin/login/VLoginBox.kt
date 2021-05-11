@@ -36,6 +36,7 @@ import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.textfield.PasswordField
+import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.dom.Element
 import com.vaadin.flow.dom.ElementFactory
@@ -560,11 +561,18 @@ class VLoginBox : Div() {
       table.addCell(false, login)
       table.setTdHeight("15px")
       table.setTdWidth("250px")
+      setFieldsToEagerMode()
       add(table)
       Shortcuts.addShortcutListener(this,
                                     { keyDownEvent: ShortcutEvent? -> onEnterEvent(keyDownEvent) },
                                     Key.ENTER)
               .listenOn(this)
+    }
+
+    // Issue: https://github.com/vaadin/flow/issues/5959
+    private fun setFieldsToEagerMode() {
+      username.valueChangeMode = ValueChangeMode.EAGER
+      password.valueChangeMode = ValueChangeMode.EAGER
     }
   }
 
