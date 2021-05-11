@@ -19,6 +19,7 @@
 package org.kopi.galite.form
 
 import java.time.Instant
+import java.util.StringTokenizer
 
 import kotlin.math.min
 import kotlin.reflect.KClass
@@ -26,8 +27,10 @@ import kotlin.reflect.KClass
 import org.kopi.galite.db.Query
 import org.kopi.galite.list.VListColumn
 import org.kopi.galite.list.VTimestampColumn
+import org.kopi.galite.type.Date
 import org.kopi.galite.type.Timestamp
 import org.kopi.galite.visual.Message
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 
@@ -74,7 +77,178 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     if (s as? String == "") {
       setNull(rec)
     } else {
-      setTimestamp(rec, Timestamp.parse((s as String), "yyyy-MM-dd'T'HH:mm:ss"))
+      parseTimestamp(rec, s as String)
+    }
+  }
+
+  internal fun parseTimestamp(rec: Int, s: String) {
+    val timestamp = s.split("[ T]".toRegex(), 2).toTypedArray()
+    val date = parseDate(timestamp[0])
+    val time = parseTime(timestamp[1])
+    setTimestamp(rec, Timestamp("$date $time"))
+  }
+
+
+  private fun parseDate(s: String): String {
+    var day = 0
+    var month = 0
+    var year = -2
+    val tokens = StringTokenizer(s, "/.#-")
+
+    if (!tokens.hasMoreTokens()) {
+      throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
+    }
+    year = VDateField.stringToInt(tokens.nextToken())
+    if (tokens.hasMoreTokens()) {
+      month = VDateField.stringToInt(tokens.nextToken())
+    }
+    if (tokens.hasMoreTokens()) {
+      day = VDateField.stringToInt(tokens.nextToken())
+    }
+    if (tokens.hasMoreTokens() || day == -1 || month == -1 || year == -1) {
+      throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
+    }
+    when {
+      month == 0 -> {
+        val now = Date.now()
+        month = now.month
+        year = now.year
+      }
+      year == -2 -> {
+        val now = Date.now()
+        year = now.year
+      }
+      year < 50 -> {
+        year += 2000
+      }
+      year < 100 -> {
+        year += 1900
+      }
+      year < 1000 -> {
+        // less than 4 digits cause an error in database while paring the
+        // sql statement
+        throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
+      }
+    }
+    if (!VDateField.isDate(day, month, year)) {
+      throw VFieldException(this, MessageCode.getMessage("VIS-00003"))
+    }
+    return String.format("%04d-%02d-%02d", year, month, day)
+  }
+
+  private fun parseTime(s: String): String? {
+    var hours = -1
+    var minutes = 0
+    var seconds = 0
+    val buffer = s + '\u0000'
+    var bp = 0
+    var state = 1
+
+    while (state > 0) {
+      when (state) {
+        1 -> when {
+          buffer[bp] in '0'..'9' -> {
+            hours = buffer[bp] - '0'
+            state = 2
+          }
+          buffer[bp] == '\u0000' -> {
+            state = 0
+          }
+          else -> {
+            state = -1
+          }
+        }
+        2 -> when {
+          buffer[bp] in '0'..'9' -> {
+            hours = 10 * hours + (buffer[bp] - '0')
+            state = 3
+          }
+          buffer[bp] == ':' -> {
+            state = 4
+          }
+          buffer[bp] == '\u0000' -> {
+            state = 0
+          }
+          else -> {
+            state = -1
+          }
+        }
+        3 -> state = when {
+          buffer[bp] == ':' -> {
+            4
+          }
+          buffer[bp] == '\u0000' -> {
+            0
+          }
+          else -> {
+            -1
+          }
+        }
+        4 -> when {
+          buffer[bp] in '0'..'9' -> {
+            minutes = buffer[bp] - '0'
+            state = 5
+          }
+          buffer[bp] == '\u0000' -> {
+            state = 0
+          }
+          else -> {
+            state = -1
+          }
+        }
+        5 -> if (buffer[bp] in '0'..'9') {
+          minutes = 10 * minutes + (buffer[bp] - '0')
+          state = 6
+        } else {
+          state = -1
+        }
+        6 -> state = when {
+          buffer[bp] == ':' -> {
+            7
+          }
+          buffer[bp] == '\u0000' -> {
+            0
+          }
+          else -> {
+            -1
+          }
+        }
+        7 -> when {
+          buffer[bp] in '0'..'9' -> {
+            seconds = buffer[bp] - '0'
+            state = 8
+          }
+          buffer[bp] == '\u0000' -> {
+            state = 0
+          }
+          else -> {
+            state = -1
+          }
+        }
+        8 -> if (buffer[bp] in '0'..'9') {
+          seconds = 10 * seconds + (buffer[bp] - '0')
+          state = 9
+        } else {
+          state = -1
+        }
+        9 -> state = if (buffer[bp] == '\u0000') {
+          0
+        } else {
+          -1
+        }
+      }
+      bp += 1
+    }
+    if (state == -1) {
+      throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
+    }
+    return if (hours == -1) {
+      null
+    } else {
+      if (!VTimeField.isTime(hours, minutes)) {
+        throw VFieldException(this, MessageCode.getMessage("VIS-00007"))
+      }
+      String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
   }
 
