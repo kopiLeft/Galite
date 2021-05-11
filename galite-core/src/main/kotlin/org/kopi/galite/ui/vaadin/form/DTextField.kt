@@ -172,12 +172,12 @@ open class DTextField(
    * Gets the focus to this field.
    */
   private fun enterMe() {
-    //BackgroundThreadHandler.access(Runnable { TODO: access
-    if (scanner) {
-      field.value = transformer!!.toGui("")
+    access {
+      if (scanner) {
+        field.value = transformer!!.toGui("")
+      }
+      field.focus()
     }
-    //field.focus() TODO
-    //})
   }
 
   /**

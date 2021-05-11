@@ -40,7 +40,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
  * @param titles The pages title.
  */
 @CssImport("./styles/galite/Form.css")
-class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener, PositionPanelListener {
+class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanelListener {
 
   /**
    * The form locale.
@@ -73,19 +73,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
 
   init {
     className = Styles.FORM
-    for (i in pages.indices) {
-      if (pageCount != 0) {
-        if (titles[i].endsWith("<CENTER>")) {
-          pages[i] = Page(HorizontalLayout())
-        } else {
-          pages[i] = Page(VerticalLayout())
-        }
-      } else {
-        pages[i] = Page(VerticalLayout())
-      }
-    }
-    // setPages content.
-    setContent(pageCount, titles)
+    init(pageCount, titles)
   }
 
   /**
@@ -107,8 +95,8 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
       }
 
       tabPanel!!.addSelectedChangeListener {
-        tabsToPages.values.forEach { page -> page.isVisible = false }
-        tabsToPages[tabPanel!!.selectedTab]!!.isVisible = true
+        tabsToPages[it.previousTab]!!.isVisible = false
+        firePageSelected(pages.indexOf(tabsToPages[it.selectedTab]))
       }
       setContent(tabPanel!!, Div(*pages))
     }
@@ -172,6 +160,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    */
   fun gotoPage(i: Int) {
     currentPage = i
+    pages[i]!!.isVisible = true
     selectPage(i)
   }
 
@@ -193,15 +182,11 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   //---------------------------------------------------
   /**
    * Initializes the form component content.
-   * @param locale The application locale.
+   *
    * @param pageCount The page count.
    * @param titles The pages titles.
    */
-  fun init(
-          pageCount: Int,
-          titles: Array<String>,
-          separator: String?,
-  ) {
+  fun init(pageCount: Int, titles: Array<String>) {
     // not used any more but we keep it may be we will used again
     pages = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
     for (i in pages.indices) {
@@ -214,9 +199,10 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
       } else {
         pages[i] = Page(VerticalLayout())
       }
+      pages[i]!!.isVisible = false
     }
     // setPages content.
-    setContent(pageCount, titles, separator)
+    setContent(pageCount, titles)
   }
 
   /**
@@ -348,40 +334,12 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   }
 
   protected fun init() {
-    addFormListener(this)
     addPositionPanelListener(this)
   }
 
   fun delegateCaptionHandling(): Boolean {
     // do not delegate caption handling
     return false
-  }
-
-  override fun onAttach(event: AttachEvent) {
-    if (event.isInitialAttach) {
-      init(pageCount, titles,"single.gif") // TODO: full path to image?
-      // look for blocks
-      for (child in children) {
-        if (child is Block) {
-          val data = blocksData[child]
-          if (data != null) {
-            addBlock(child, data.page, data.isFollow, data.isChart)
-          }
-        } else if (child is Grid<*>) {
-          val data = blocksData[child]
-          if (data != null) {
-            addBlock(child, data.page, data.isFollow, data.isChart)
-          }
-        }
-      }
-    }
-  }
-
-  override fun onPageSelection(page: Int) {
-    // communicates the dirty values before leaving page
-    cleanDirtyValues(null)
-    disableAllBlocksActors()
-    firePageSelected(page)
   }
 
   /*fun onUnregister() { TODO
