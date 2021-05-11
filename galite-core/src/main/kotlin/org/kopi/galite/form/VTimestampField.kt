@@ -74,7 +74,7 @@ class VTimestampField(val bufferSize: Int) : VField(10 + 1 + 8, 1) {
     if (s as? String == "") {
       setNull(rec)
     } else {
-      setTimestamp(rec, Timestamp.now())
+      setTimestamp(rec, Timestamp.parse((s as String), "yyyy-MM-dd'T'HH:mm:ss"))
     }
   }
 

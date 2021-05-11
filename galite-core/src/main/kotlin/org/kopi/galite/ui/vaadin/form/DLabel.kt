@@ -52,12 +52,12 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
   override fun init(text: String?, toolTip: String?) {
     tooltip = toolTip
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access {
       this.text = text
       if (toolTip != null) {
         element.setProperty("title", toolTip)
       }
-    //})
+    }
   }
 
   /**
