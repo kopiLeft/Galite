@@ -312,23 +312,24 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     override fun blockChanged() {}
     override fun blockCleared() {}
     override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
-      //BackgroundThreadHandler.access(Runnable { TODO
-      if (pageCount == 1) {
-        return
-      }
-      //enable/disable tab of pages
-      val pageNumber = block.pageNumber
-      val blocks = vForm.blocks
-      if (newAccess) {
-        content.setEnabled(true, pageNumber)
-      } else {
-        // tab is visible (another visible block there?)
-        for (i in blocks.indices) {
-          if (pageNumber == blocks[i].pageNumber && blocks[i].isAccessible) {
-            return
-          }
+      access {
+        if (pageCount == 1) {
+          return@access
         }
-        content.setEnabled(false, pageNumber)
+        //enable/disable tab of pages
+        val pageNumber = block.pageNumber
+        val blocks = vForm.blocks
+        if (newAccess) {
+          content.setEnabled(true, pageNumber)
+        } else {
+          // tab is visible (another visible block there?)
+          for (i in blocks.indices) {
+            if (pageNumber == blocks[i].pageNumber && blocks[i].isAccessible) {
+              return@access
+            }
+          }
+          content.setEnabled(false, pageNumber)
+        }
       }
     }
 
