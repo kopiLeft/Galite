@@ -125,7 +125,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
         } else {
           MessageListener.AWR_NO
         }
-        detachComponent(dialog)
+        dialog.close()
       }
     })
     // attach the notification to the application.
