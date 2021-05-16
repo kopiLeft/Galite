@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.actor
 
 import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
-import org.kopi.galite.visual.VActor
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -41,29 +40,26 @@ class VActorNavigationItem(text: String,
                            keyModifier: KeyModifier?,
                            icon: Any?,
                            val navigationmenu : VNavigationMenu,
-                           val action: VActor?) : Button() {
+                           val action: () -> Unit) : Button() {
 
   init {
-    super.setText(text)
-
     if (icon is VaadinIcon) {
-      super.setIcon(Icon(icon))
+      setIcon(Icon(icon))
     } else if (icon is IronIcons) {
-      super.setIcon(icon.create())
+      setIcon(icon.create())
     }
 
-    this.addClickListener {
-      action?.performAction()
+    addClickListener {
+      action()
       navigationmenu.close()
     }
 
     if (acceleratorKey != null && acceleratorKey != Key.UNIDENTIFIED) {
       val modifier = keyModifier?.keys?.get(0)
 
-      super.setText(text + if(modifier != null) modifier + "-" + acceleratorKey.keys[0] else " " + acceleratorKey.keys[0])
-      super.addClickShortcut(acceleratorKey)
+      setText(text + if(modifier != null) modifier + "-" + acceleratorKey.keys[0] else " " + acceleratorKey.keys[0])
     } else {
-      super.setText(text)
+      setText(text)
     }
 
     className = getClassname()
