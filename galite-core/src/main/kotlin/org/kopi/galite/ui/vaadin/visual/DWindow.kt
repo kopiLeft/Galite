@@ -219,6 +219,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     registration.isBrowserDefaultAllowed = false
+    registration.listenOn(this)
   }
 
   /**
