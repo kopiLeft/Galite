@@ -19,7 +19,9 @@ package org.kopi.galite.ui.vaadin.form
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
+import org.kopi.galite.form.VActorField
 import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
@@ -50,7 +52,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  protected lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
+  lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
 
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
@@ -136,10 +138,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
     grid.isColumnReorderingAllowed = false
     //grid.setColumnResizeMode(ColumnResizeMode.ANIMATED)
     //grid.setHeightMode(HeightMode.ROW)
-    //grid.setHeightByRows(model.displaySize)
     //grid.setCellStyleGenerator(DGridBlockCellStyleGenerator(model))
     grid.addColumnResizeListener(::columnResize)
     configure()
+    grid.height = "calc(" +
+            "(1.04 * var(--lumo-size-xl) + var(--_lumo-grid-border-width)) + " +
+            "(${model.displaySize * 38}px + ${model.displaySize -1} * var(--_lumo-grid-border-width))" +
+            ")"
     //grid.setColumnOrder(columnsOrder)
     /*if (detailsGenerator != null) { TODO
       grid.setDetailsGenerator(detailsGenerator)
@@ -251,7 +256,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun createLayout(): BlockLayout {
-    return SingleComponentBlockLayout()
+    return SingleComponentBlockLayout(this)
   }
 
   override fun refresh(force: Boolean) {
@@ -474,7 +479,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
         if (columnView.hasDisplays()) {
           val column = grid.addColumn { it.getValue(field) }
-            .setAutoWidth(true)
             .setKey(i.toString())
             .setHeader(columnView.editorField.label)
             .setEditorComponent(columnView.editor)
@@ -483,13 +487,12 @@ open class DGridBlock(parent: DForm, model: VBlock)
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
           column.isSortable = field.isSortable()
-          /* TODO
           column.width =
             when {
               field is VBooleanField -> "" + 46 + "px" // boolean field length
               field is VActorField -> "" + 148 + "px" // actor field field length
-              else -> "" + field.width + 12 + "px" // add padding
-            }*/
+              else -> "" + (field.width + 12) + "px" // add padding TODO
+            }
           column.isVisible = field.getDefaultAccess() != VConstants.ACS_HIDDEN
         }
       }

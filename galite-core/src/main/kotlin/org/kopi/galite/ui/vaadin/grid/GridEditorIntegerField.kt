@@ -22,7 +22,7 @@ import java.lang.NumberFormatException
 /**
  * An integer field for grid inline edit
  *
- * @param width TODO
+ * @param width the width of this integer editor field.
  * @param minValue the minimum accepted value for this integer editor field.
  * @param maxValue the maximum accepted value for this integer editor field.
  */
@@ -33,7 +33,6 @@ class GridEditorIntegerField(width: Int, val minValue: Int, val maxValue: Int) :
     wrappedField.isPreventInvalidInput = true
     wrappedField.element.setProperty("min", minValue.toDouble())
     wrappedField.element.setProperty("max", maxValue.toDouble())
-    this.width = width.toString()
   }
 
   override fun check(text: String): Boolean {

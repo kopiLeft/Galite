@@ -166,7 +166,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       }
 
       // add to the original block as extra components.
-      val newConstraint = ComponentConstraint(align!!.getTargetPos(constraints.x),
+      val newConstraint = ComponentConstraint(align!!.getTargetPos((constraints.x * 2) + 1),
                                               constraints.y,
                                               constraints.width,
                                               constraints.height,
@@ -288,7 +288,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
   }
 
   override fun updateScroll(pageSize: Int, maxValue: Int, enable: Boolean, value: Int) {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 
 
@@ -308,6 +308,6 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
     align!!.targets = targets
     align!!.ori = original
 
-    // alignPane = VAlignPanel(align) TODO
+    alignPane = AlignPanel(align)
   }
 }

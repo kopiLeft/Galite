@@ -17,19 +17,22 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import java.util.Hashtable
+import java.util.concurrent.CompletableFuture
+
+import org.kopi.galite.base.Utils
+import org.kopi.galite.visual.VColor
+
 import com.flowingcode.vaadin.addons.ironicons.AvIcons
 import com.flowingcode.vaadin.addons.ironicons.DeviceIcons
 import com.flowingcode.vaadin.addons.ironicons.EditorIcons
 import com.flowingcode.vaadin.addons.ironicons.FileIcons
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.flowingcode.vaadin.addons.ironicons.MapsIcons
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.VaadinIcon
-
-import java.util.Hashtable
-
-import org.kopi.galite.base.Utils
-import org.kopi.galite.visual.VColor
+import com.vaadin.flow.dom.Element
 
 /**
  * Some vaadin version utilities to obtain images and resources.
@@ -185,6 +188,34 @@ object Utils : Utils() {
     } else {
       o1 == o2
     }
+  }
+
+  fun getOffsetLeft(element: Element?, ui: UI): Double {
+    val future = CompletableFuture<Double>()
+
+    ui.access {
+      ui.page
+        .executeJs("return $0.offsetLeft", element)
+        .then(Double::class.java) { value: Double ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
+  fun getOffsetWidth(element: Element?, ui: UI): Double {
+    val future = CompletableFuture<Double>()
+
+    ui.access {
+      ui.page
+        .executeJs("return $0.offsetWidth", element)
+        .then(Double::class.java) { value: Double ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
   }
 
   /**

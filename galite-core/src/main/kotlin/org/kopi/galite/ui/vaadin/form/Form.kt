@@ -139,7 +139,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    * @param isFollow Is it a follow block ?
    * @param isChart Is it a chart block ?
    */
-  fun addBlock(block: Component, page: Int, isFollow: Boolean, isChart: Boolean) {
+  fun addBlock(block: Block, page: Int, isFollow: Boolean, isChart: Boolean) {
     blocksData[block] = BlockComponentData(isFollow, isChart, page)
 
     val hAlign = if (isChart) {
@@ -152,6 +152,9 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
     } else {
       pages[page]!!.add(block, hAlign)
     }
+
+    block.layout()
+    block.layoutAlignedComponents()
   }
 
   /**

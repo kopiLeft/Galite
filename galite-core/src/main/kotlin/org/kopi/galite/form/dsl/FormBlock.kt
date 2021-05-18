@@ -400,7 +400,7 @@ open class FormBlock(var buffer: Int,
       if(positions.toMap().contains(field)) {
         val targetField = positions.toMap()[field]
 
-        targets.add(targetBlock.blockFields.indexOf(targetField) + 1)
+        targets.add(targetBlock.blockFields.indexOf(targetField))
       }
     }
 

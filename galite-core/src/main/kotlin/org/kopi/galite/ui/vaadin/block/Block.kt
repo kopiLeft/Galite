@@ -24,6 +24,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VConstants
 import org.kopi.galite.ui.vaadin.field.CheckTypeException
 import org.kopi.galite.ui.vaadin.form.DBlock
+import org.kopi.galite.ui.vaadin.form.DGridEditorLabel
 import org.kopi.galite.ui.vaadin.form.Form
 import org.kopi.galite.ui.vaadin.form.Page
 import org.kopi.galite.ui.vaadin.main.MainWindow
@@ -509,9 +510,13 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * Layout components Creates the content of the block.
    */
-  protected open fun layout() {
+  fun layout() {
     // create detail block view.
     layout?.layout()
+  }
+
+  fun layoutAlignedComponents() {
+    layout?.layoutAlignedComponents()
   }
 
   open fun clear() {
