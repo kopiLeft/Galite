@@ -26,7 +26,7 @@ class FormWithFieldsTests: JApplicationTestBase() {
 
   @Test
   fun sourceFormTest() {
-    val formModel = FormWithFields.model
+    val formModel = FormWithFields().model
     assertEquals(FormWithFields::class.qualifiedName!!.replace(".", "/"), formModel.source)
   }
 }

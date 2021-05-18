@@ -25,14 +25,13 @@ import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.VWindow
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Creates a new chart view from its model.
  * @param model The chart model.
  */
-class DChart(model: VWindow) : DWindow(model), UChart, Focusable<DChart> {
+class DChart(model: VWindow) : DWindow(model), UChart {
 
   //---------------------------------------------------
   // DATA MEMBERS

@@ -96,6 +96,10 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
     //registerRpc(NavigationRpcHandler())
     //registerRpc(ClickRpcHandler())
   }
+
+  companion object {
+    var lasFocusedEditor: GridEditorField<*>? = null
+  }
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -125,7 +129,13 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
     this.background = background
   }
 
-  abstract override fun focus()
+  override fun focus() {
+    super.focus()
+    lasFocusedEditor = this
+    doFocus()
+  }
+
+  abstract fun doFocus()
 
   abstract fun addFocusListener(focusFunction: () -> Unit)
 

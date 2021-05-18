@@ -727,9 +727,9 @@ open class FormBlock(var buffer: Int,
         }
       }
 
-      override fun setInfo() {
+      override fun setInfo(form: VForm) {
         blockFields.forEach {
-          it.setInfo(super.source)
+          it.setInfo(super.source, form)
         }
       }
 

@@ -46,7 +46,7 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
 
   override fun generateModelValue(): String? = wrappedField.value
 
-  override fun focus() {
+  override fun doFocus() {
     wrappedField.focus()
   }
 

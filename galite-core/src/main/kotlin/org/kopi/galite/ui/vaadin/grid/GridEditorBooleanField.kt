@@ -48,7 +48,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
 
   override fun generateModelValue(): Boolean? = wrappedField.value
 
-  override fun focus() {
+  override fun doFocus() {
     wrappedField.focus()
   }
 

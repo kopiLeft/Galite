@@ -50,7 +50,7 @@ class DActor(private var model: VActor)
   : Actor(model.menuItem,
           Utils.createTooltip(getDescription(model)),
           model.menuName,
-          Utils.getFontAwesomeIcon(model.iconName),
+          Utils.getVaadinIcon(model.iconName),
           correctAcceleratorKey(model.acceleratorKey),
           correctAcceleratorModifier(model.acceleratorModifier)),
         UActor,
