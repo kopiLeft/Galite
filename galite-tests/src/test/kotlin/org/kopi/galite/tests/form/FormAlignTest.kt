@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
@@ -40,11 +41,15 @@ class FormAlignTest_ : Form() {
     }
     val totalPrice = visit(Domain<Int>(7), position = at(1, 2)) {}
 
-    align(targetBlock, totalPrice to targetBlock.price , totalQuantity to targetBlock.quantity)
+    align(targetBlock, totalQuantity to targetBlock.quantity, totalPrice to targetBlock.price)
   }
 }
 
 class TestAlign : FormBlock(10, 8, "Test block") {
+
+  init {
+    options(BlockOption.NODETAIL)
+  }
 
   val designation = visit(domain = Domain<String>(20), position = at(1, 1)) {
     label = "Designation"

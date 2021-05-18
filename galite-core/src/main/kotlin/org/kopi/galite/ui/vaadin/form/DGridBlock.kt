@@ -19,7 +19,9 @@ package org.kopi.galite.ui.vaadin.form
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
+import org.kopi.galite.form.VActorField
 import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VBooleanField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
@@ -476,9 +478,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
 
         if (columnView.hasDisplays()) {
-          headers.add(columnView.editorField.label)
           val column = grid.addColumn { it.getValue(field) }
-            .setAutoWidth(true)
             .setKey(i.toString())
             .setHeader(columnView.editorField.label)
             .setEditorComponent(columnView.editor)
@@ -487,13 +487,12 @@ open class DGridBlock(parent: DForm, model: VBlock)
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
           column.isSortable = field.isSortable()
-          /* TODO
           column.width =
             when {
               field is VBooleanField -> "" + 46 + "px" // boolean field length
               field is VActorField -> "" + 148 + "px" // actor field field length
-              else -> "" + field.width + 12 + "px" // add padding
-            }*/
+              else -> "" + (field.width + 12) + "px" // add padding TODO
+            }
           column.isVisible = field.getDefaultAccess() != VConstants.ACS_HIDDEN
         }
       }

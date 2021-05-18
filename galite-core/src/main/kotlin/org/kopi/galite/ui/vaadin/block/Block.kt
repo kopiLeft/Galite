@@ -63,7 +63,6 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   protected lateinit var displayToSortedRec: IntArray
   private var initialized = false
   private var doNotUpdateScrollPosition = false
-  val headers = mutableListOf<DGridEditorLabel?>()
   /**
    * Some browsers fires extra scroll event with wrong scroll position
    * when a chart block field is clicked. This flag is used to prevent

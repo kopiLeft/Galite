@@ -37,6 +37,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
   val wrappedField = BooleanField(trueRepresentation, falseRepresentation)
 
   init {
+    wrappedField.setWidthFull()
     className = "editor-booleanfield"
     add(wrappedField)
   }

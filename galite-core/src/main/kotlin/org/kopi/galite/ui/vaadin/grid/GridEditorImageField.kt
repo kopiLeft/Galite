@@ -28,6 +28,7 @@ class GridEditorImageField : GridEditorField<Any?>() {
 
   init {
     className = "editor-imagefield"
+    image.setWidthFull()
     image.setBorder(0)
     add(image)
   }

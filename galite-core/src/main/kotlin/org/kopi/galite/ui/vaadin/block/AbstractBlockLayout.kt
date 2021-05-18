@@ -107,6 +107,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
   override fun layoutAlignedComponents() {
     if (alignPane != null) {
       add(0, 0, alignPane!!.element)
+      getCellAt(0, 0).style["width"] = "100%"
     }
   }
 }

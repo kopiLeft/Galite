@@ -102,6 +102,7 @@ class BlockAlignment {
 
   /**
    * Returns the label target position.
+   * TODO: do we still need this?
    * @param x The column position.
    * @return The label target position.
    */

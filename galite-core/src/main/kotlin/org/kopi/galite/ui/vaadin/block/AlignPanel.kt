@@ -21,9 +21,11 @@ import org.kopi.galite.ui.vaadin.base.Utils
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.data.provider.ListDataProvider
 
 /**
  * An absolute panel component.
@@ -37,7 +39,7 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
   //---------------------------------------------------
   private var components: MutableList<Component>? = mutableListOf()
   private var aligns: MutableList<ComponentConstraint>? = mutableListOf()
-  private val ui = UI.getCurrent()
+  private val ui = UI.getCurrent() // TODO
 
   init {
     className = "k-align-pane"
@@ -54,7 +56,6 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
    * @param align The component constraint.
    */
   fun addComponent(w: Component, align: ComponentConstraint) {
-    add(w)
     components!!.add(w)
     aligns!!.add(align)
   }
@@ -72,52 +73,51 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
     } else if (ori is SingleComponentBlockLayout) { // FIXME
       // block contains a VAADIN grid inside
       // -> we align according to grid column position
-      val gridBlock = ori.block
+      val gridBlock = ori.block.grid
+      val  grid = Grid<Array<Component?>>()
+      val rowsSize = aligns!!.maxOf { it.y } + 1
+      val columnsSize = gridBlock.columns.size
+      val alignedGridComponents = Array(rowsSize) {
+        arrayOfNulls<Component>(columnsSize)
+      }
 
-      Thread {
+      grid.width = gridBlock.width
+      grid.addThemeVariants(GridVariant.LUMO_NO_BORDER)
+      grid.setSelectionMode(Grid.SelectionMode.NONE)
+      gridBlock.columns.forEachIndexed { index, column ->
+        grid.addComponentColumn { it[index] ?: Div() }
+          .setWidth(column.width)
+      }
+      (grid.dataProvider as ListDataProvider).addFilter { it != null }
+
       for (i in aligns!!.indices) {
         val align = aligns!![i]
-        if (align.x != -1) {
-          val column = gridBlock.headers[align.x]
 
-          if (column != null) {
-            var offsetWidth = 0
-            val overlap: Component? = getOverlappingWidget(i, align.x, align.y)
-            if (overlap != null) {
-              offsetWidth = (overlap as HasSize).width.toInt() + 10 // horizontal gap
-            }
-              setComponentPosition(
-                components!![i],
-                Utils.getOffsetLeft(column.element, ui),
-                align.y * 21) // text fields height is 15px
-          }
+        if (align.x != -1) {
+          alignedGridComponents[align.y][align.x] = components!![i]
         }
       }
-      }.start()
+
+      grid.setItems(alignedGridComponents.toList())
+      add(grid)
+
     } else {
+      val ori = ori as AbstractBlockLayout
+
       for (i in aligns!!.indices) {
         val align = aligns!![i]
         if (align.x != -1) {
-          /*try {
-            val cell: Element = ori.getCellFormatter().getElement(ori.rowCount - 1, align.x)
-            if (cell != null) {
-              var offsetWidth = 0
-              val overlap: Component? = getOverlappingWidget(i, align.x, align.y)
-              if (overlap != null) {
-                offsetWidth = overlap.element.getClientWidth() + 10 // horizontal gap
-              }
-              setWidgetPosition(
-                getWidget(i),
-                cell.getOffsetLeft() + offsetWidth - if (align.x == 0) 0 else 0.coerceAtLeast(
-                  getWidget(i).getElement()
-                    .getClientWidth() - cell.getClientWidth()
-                ),
-                align.y * 21
-              ) // text fields height is 15px
-            }
-          } catch (e: IndexOutOfBoundsException) {
-            getWidget(i).setVisible(false)
-          }*/
+          val cell = ori.getCellAtOrNull(ori.rowCount - 1, align.x)
+
+          if (cell != null) {
+            add(components!![i])
+            Thread {
+              setComponentPosition(
+                components!![i],
+                Utils.getOffsetLeft(cell, ui),
+                align.y * 21) // text fields height is 15px
+            }.start()
+          }
         }
       }
     }
@@ -138,7 +138,7 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
    * @param y The row number.
    * @return The overlapping component. `null` otherwise.
    */
-  protected fun getOverlappingWidget(end: Int, x: Int, y: Int): Component? {
+  protected fun getOverlappingComponent(end: Int, x: Int, y: Int): Component? {
     for (i in 0 until end) {
       if (aligns!![i].x == x && aligns!![i].y == y) {
         return components!![i]
@@ -170,8 +170,8 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
       }
       i++
     }
-    setWidth("${width}px")
-    setHeight("${height}px")
+    //setWidth("${width}px") TODO
+    //setHeight("${height}px")
   }
 
   /**

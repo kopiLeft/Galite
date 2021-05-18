@@ -25,6 +25,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
@@ -256,9 +257,10 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
         }
       }
     }
-    // sends the model active record to client side.
-    // BackgroundThreadHandler.access(Runnable { fireActiveRecordChanged(model.getActiveRecord()) }) TODO: Do we need BackgroundThreadHandler?
-    fireActiveRecordChanged(model.activeRecord)
+    // Consider the model active record changes.
+    access {
+      fireActiveRecordChanged(model.activeRecord)
+    }
   }
 
   open fun fireColorChanged(

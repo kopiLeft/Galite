@@ -92,6 +92,7 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
   }
 
   init {
+    setWidthFull()
     //registerRpc(NavigationRpcHandler())
     //registerRpc(ClickRpcHandler())
   }
