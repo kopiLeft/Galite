@@ -17,15 +17,18 @@
  */
 package org.kopi.galite.ui.vaadin.progress
 
-import com.vaadin.flow.component.progressbar.ProgressBar
 import org.kopi.galite.ui.vaadin.base.Styles
+
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.progressbar.ProgressBar
 
 /**
  * A custom progress bar widget
  *
  * @param jobs total jobs
  */
-class ProgressBar(private val jobs: Int) : ProgressBar() {
+@CssImport("./styles/galite/progress.css")
+class ProgressBar(val parent: ProgressDialog, var jobs: Int) : ProgressBar() {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -46,8 +49,7 @@ class ProgressBar(private val jobs: Int) : ProgressBar() {
    * Progress with one step.
    */
   fun progress() {
-    progress++
-    setProgress(progress)
+    setProgress(progress + 1)
   }
 
   /**
@@ -65,6 +67,7 @@ class ProgressBar(private val jobs: Int) : ProgressBar() {
    */
   fun setProgressPercentage(percentage: Double) {
     value = percentage
+    parent.setPercentageText(percentage * 100)
   }
 
   /**

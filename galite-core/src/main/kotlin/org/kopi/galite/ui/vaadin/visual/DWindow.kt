@@ -85,7 +85,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   var returnCode = 0
     private set
   private var progressDialog: ProgressDialog = ProgressDialog()
-  private var isProgressDialogAttached = false
   private var waitDialog: WaitDialog = WaitDialog()
   private var isWaitDialogAttached = false
 
@@ -111,7 +110,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     model!!.addWaitInfoListener(waitInfoHandler)
     model!!.addMessageListener(messageHandler)
     addActorsToGUI(model!!.actors)
-    addAttachDetachListeners()
   }
 
   //---------------------------------------------------
@@ -203,27 +201,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
   }
 
-  /**
-   * Adds progress bar and wait dialog attach and
-   * detach listeners
-   */
-  private fun addAttachDetachListeners() {
-    // BackgroundThreadHandler.access(Runnable { TODO
-    progressDialog.addAttachListener {
-      isProgressDialogAttached = true
-    }
-    progressDialog.addDetachListener {
-      isProgressDialogAttached = false
-    }
-    waitDialog.addAttachListener {
-      isWaitDialogAttached = true
-    }
-    waitDialog.addDetachListener {
-      isWaitDialogAttached = false
-    }
-    //})
-  }
-
   override fun performBasicAction(action: Action) {
     //BackgroundThreadHandler.access(Runnable {  TODO
     performActionImpl(action, false)
@@ -301,7 +278,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     currentAction = null
     runtimeDebugInfo = null
     returnCode = -1
-    isProgressDialogAttached = false
     isWaitDialogAttached = false
     isUserAsked = false
     actionsQueue.clear()
@@ -336,13 +312,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   // UWINDOW IMPLEMENTATION
   //--------------------------------------------------------------
   override fun setTotalJobs(totalJobs: Int) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    synchronized(progressDialog) {
-      if (isProgressDialogAttached) {
-        progressDialog.totalJobs = totalJobs
-      }
-    }
-    //})
+    progressDialog.totalJobs = totalJobs
   }
 
   override fun performAsyncAction(action: Action) {
@@ -382,29 +352,29 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    synchronized(progressDialog) {
-      progressDialog.setTitle(MessageCode.getMessage("VIS-00067"))
-      progressDialog.setMessage(message)
-      progressDialog.totalJobs = totalJobs
-      if (!isProgressDialogAttached) {
-        application.attachComponent(progressDialog)
+    access {
+      synchronized(progressDialog) {
+        progressDialog.setTitle(MessageCode.getMessage("VIS-00067"))
+        progressDialog.setMessage(message)
+        progressDialog.totalJobs = totalJobs
+        if (!progressDialog.isOpened) {
+          progressDialog.open()
+        }
       }
     }
-    //})
   }
 
   override fun unsetProgressDialog() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    synchronized(progressDialog) {
-      if (isProgressDialogAttached) {
-        progressDialog.setTitle(null)
-        progressDialog.setMessage(null)
-        progressDialog.totalJobs = 0
-        application.detachComponent(progressDialog)
+    access {
+      synchronized(progressDialog) {
+        if (progressDialog.isOpened) {
+          progressDialog.setTitle(null)
+          progressDialog.setMessage(null)
+          progressDialog.totalJobs = 0
+          progressDialog.close()
+        }
       }
     }
-    //})
   }
 
   override fun getModel(): VWindow? {
@@ -412,19 +382,19 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun setCurrentJob(currentJob: Int) {
-    // access { TODO
-    synchronized(progressDialog) {
-      if (isProgressDialogAttached) {
-        progressDialog.setProgress(currentJob)
+    access {
+      synchronized(progressDialog) {
+        if (progressDialog.isOpened) {
+          progressDialog.setProgress(currentJob)
+        }
       }
     }
-    //})
   }
 
   override fun setTitle(title: String) {
-    // access { TODO
-    setCaption(title)
-    //})
+    access {
+      setCaption(title)
+    }
   }
 
   override fun setInformationText(text: String?) {
@@ -432,13 +402,11 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun updateWaitDialogMessage(message: String) {
-    // access { TODO
-    synchronized(waitDialog) {
-      if (isWaitDialogAttached) {
+    access {
+      synchronized(waitDialog) {
         waitDialog.setMessage(message)
       }
     }
-    //})
   }
 
   override fun setWindowFocusEnabled(enabled: Boolean) {

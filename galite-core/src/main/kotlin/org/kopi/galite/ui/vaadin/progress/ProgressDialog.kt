@@ -17,7 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.progress
 
+import org.kopi.galite.ui.vaadin.base.Styles
+
 import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H4
 import com.vaadin.flow.component.html.Paragraph
@@ -28,7 +31,7 @@ import com.vaadin.flow.component.html.Paragraph
  * @param title       The progress dialog title.
  * @param message     The progress dialog message.
  */
-open class ProgressDialog(title: String = "", message: String = "") : EnhancedDialog() {
+open class ProgressDialog(title: String = "", message: String = "") : EnhancedDialog(), HasStyle {
 
   /**
    * The polling interval to fetch current job value.
@@ -44,6 +47,10 @@ open class ProgressDialog(title: String = "", message: String = "") : EnhancedDi
    * The progress dialog total number of operations.
    */
   var totalJobs: Int = 0
+    set(value) {
+      bar.jobs = value
+      field = value
+    }
 
   /**
    * The dialog title displayed in the header.
@@ -58,14 +65,20 @@ open class ProgressDialog(title: String = "", message: String = "") : EnhancedDi
   /**
    * The dialog progress bar.
    */
-  private var bar = ProgressBar(totalJobs)
+  private var bar = ProgressBar(this, totalJobs)
+
+  private val percentageLabel = Paragraph()
 
   init {
-    // setStyleName(Styles.PROGRESS_DIALOG) TODO
-    content.add(message)
+    className = Styles.PROGRESS_DIALOG
+    isCloseOnEsc = false
+    isCloseOnOutsideClick = false
+    isDraggable = true
+    content.add(this.message)
     content.add(bar)
-    setHeader(title)
-    setHeader(title)
+    content.add(percentageLabel)
+    setHeader(this.title)
+    setContent(content)
   }
 
   //-------------------------------------------------
@@ -114,5 +127,13 @@ open class ProgressDialog(title: String = "", message: String = "") : EnhancedDi
    */
   fun progress() {
     bar.progress()
+  }
+
+  /**
+   * Sets the percentage text.
+   * @param percentage The percentage text.
+   */
+  open fun setPercentageText(percentage: Double) {
+    percentageLabel.text = percentage.toInt().toString() + "%"
   }
 }

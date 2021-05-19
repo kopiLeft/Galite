@@ -16,37 +16,46 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- /*
- * Report Group style
- */
-[part~="cell"].level-0:not(:focus) {
-    background: #F5FBFD !important;
+.k-progress~::part(overlay) {
+	width: 710px;
+	background: #ffffff;
 }
 
-[part~="cell"].level-1:not(:focus) {
-    background: #D9EAD3 !important;
+.k-progress~::part(overlay) h4 {
+	position: relative;
+	background: #f2f2f2;
+	color: #009bd4;
+	font-family: Arial, sans-serif !important;
+	font-weight: 700 !important;
+	font-style: normal;
+	padding: 22px;
+	font-size: 1.1em !important;
 }
 
-[part~="cell"].italic {
-    font-style: italic;
+.k-progress~::part(overlay) div:not(.k-progress-bar) {
+	padding: 42px 47px 25px 47px;
+	font-size: 16px !important;
+	color: #676767;
 }
 
-[part~="cell"].bold {
-    font-weight: bold;
+.k-progress~::part(overlay) > div p {
+	padding: 20px 0 !important;
+	text-align: center !important;
 }
 
-[part~="cell"].separator {
-    background: red;
+.k-progress~::part(overlay) .k-progress-bar {
+	display: block;
+	border-radius: 0;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 350px;
+	height: 15px;
+	background: #f2f2f2;
+	margin: 0 auto;
 }
 
-:host([theme="column-borders compact"]) [part~="cell"]:focus {
-    background: #bcdae6;
-}
-
-:host([theme="column-borders compact"]) {
-    --_lumo-grid-selected-row-color: none;
-}
-
-:host([theme="row-stripes"]) [part~="cell"] {
-    height: 38px;
+.k-progress~::part(overlay) table td {
+	width: 5px;
+	height: 15px;
+	margin: 1px;
 }
