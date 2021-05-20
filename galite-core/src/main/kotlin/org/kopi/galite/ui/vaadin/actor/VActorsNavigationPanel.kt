@@ -20,7 +20,7 @@ package org.kopi.galite.ui.vaadin.actor
 import org.kopi.galite.ui.vaadin.menu.VNavigationColumn
 import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.ui.vaadin.menu.VNavigationPanel
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.ui.vaadin.visual.DActor
 
 class VActorsNavigationPanel : VNavigationPanel() {
   init {
@@ -34,15 +34,9 @@ class VActorsNavigationPanel : VNavigationPanel() {
    * Adds the given actor to this navigation panel.
    * @param actor The actor to be added.
    */
-  fun addActor(actor: Actor, action: VActor?, navigationMenu: VNavigationMenu) {
+  fun addActor(actor: DActor, navigationMenu: VNavigationMenu) {
     var column: VNavigationColumn?
-    val item = VActorNavigationItem(actor.text,
-                                    actor.menu,
-                                    actor.acceleratorKey,
-                                    actor.modifiersKey,
-                                    actor.icon,
-                                    navigationMenu,
-                                    action)
+    val item = actor.createNavigationItem(navigationMenu)
 
     column = getColumn(if (isHelpMenu(item.menu)) "help" else item.menu)
     if (column == null) {
