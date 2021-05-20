@@ -52,7 +52,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  protected lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
+  lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
 
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
@@ -269,7 +269,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun createLayout(): BlockLayout {
-    return SingleComponentBlockLayout()
+    return SingleComponentBlockLayout(this)
   }
 
   override fun refresh(force: Boolean) {
@@ -517,7 +517,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
             when {
               field is VBooleanField -> "" + 46 + "px" // boolean field length
               field is VActorField -> "" + 148 + "px" // actor field field length
-              else -> "" + (8 * field.width + 12) + "px" // add padding TODO
+              else -> "" + (field.width + 12) + "px" // add padding TODO
             }
           column.isVisible = field.getDefaultAccess() != VConstants.ACS_HIDDEN
         }

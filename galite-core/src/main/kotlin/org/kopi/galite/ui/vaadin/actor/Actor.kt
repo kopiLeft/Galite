@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.actor
 
 import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.window.Window
 
 import com.flowingcode.vaadin.addons.ironicons.IronIconEnum
 import com.vaadin.flow.component.HasEnabled
@@ -59,19 +58,5 @@ open class Actor(val caption: String?,
         super.setIcon(icon.create())
       }
     }
-
-    if (modifiersKey != null) {
-      super.addClickShortcut(acceleratorKey, modifiersKey)
-    } else {
-      super.addClickShortcut(acceleratorKey)
-    }
-  }
-
-  /**
-   * Returns the parent window.
-   * @return The parent window.
-   */
-  protected open fun getWindow(): Window {
-    return parent.get().parent.get() as Window
   }
 }

@@ -50,7 +50,7 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
    * @param child The child component.
    * @param hAlign The horizontal alignment.
    */
-  fun add(child: Component, hAlign: FlexComponent.JustifyContentMode) {
+  fun add(child: Block, hAlign: FlexComponent.JustifyContentMode) {
     content.add(child)
     content.justifyContentMode = hAlign
     last = child
@@ -61,7 +61,7 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
    * @param child The widget to be added.
    * @param align The alignment.
    */
-  fun addFollow(child: Component, align: FlexComponent.JustifyContentMode) {
+  fun addFollow(child: Block, align: FlexComponent.JustifyContentMode) {
     if (last != null) {
       val temp = VerticalLayout()
       temp.className = "follow-blocks-container"

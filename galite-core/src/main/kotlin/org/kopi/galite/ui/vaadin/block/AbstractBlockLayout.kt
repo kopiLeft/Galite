@@ -22,7 +22,6 @@ import kotlin.math.max
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VTable
 
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.grid.Grid
 
@@ -51,6 +50,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    */
   var constrains: MutableMap<Component?, ComponentConstraint?> = mutableMapOf()
 
+  protected var alignPane: AlignPanel? = null
   protected var components: Array<Array<Component?>>? = null
   protected var aligns: Array<Array<ComponentConstraint?>>? = null
 
@@ -67,10 +67,6 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-
-  override fun onAttach(attachEvent: AttachEvent?) {
-    layout() // FIXME!!
-  }
 
   /**
    * Initialize the size of the layout
@@ -105,11 +101,14 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
     }
   }
 
-  open fun addAlignedComponent(widget: Component?, constraint: ComponentConstraint?) {
-    TODO()
+  override fun addAlignedComponent(component: Component, constraint: ComponentConstraint) {
+    alignPane?.addComponent(component, constraint)
   }
 
   override fun layoutAlignedComponents() {
-    TODO("Not yet implemented")
+    if (alignPane != null) {
+      add(0, 0, alignPane!!.element)
+      getCellAt(0, 0).style["width"] = "100%"
+    }
   }
 }

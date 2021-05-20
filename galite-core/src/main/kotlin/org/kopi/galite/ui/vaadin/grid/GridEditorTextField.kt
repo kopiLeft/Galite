@@ -31,6 +31,8 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
   init {
     className = "editor-field"
     add(wrappedField)
+    wrappedField.setWidthFull()
+    wrappedField.maxLength = width
     addValueChangeListener {
       if(!check(it.value)) {
         value = it.oldValue
