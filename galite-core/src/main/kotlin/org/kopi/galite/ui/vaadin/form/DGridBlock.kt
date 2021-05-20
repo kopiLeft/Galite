@@ -517,7 +517,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
             when {
               field is VBooleanField -> "" + 46 + "px" // boolean field length
               field is VActorField -> "" + 148 + "px" // actor field field length
-              else -> "" + (field.width + 12) + "px" // add padding TODO
+              else -> "" + (8 * field.width + 12) + "px" // add padding TODO
             }
           column.isVisible = field.getDefaultAccess() != VConstants.ACS_HIDDEN
         }
