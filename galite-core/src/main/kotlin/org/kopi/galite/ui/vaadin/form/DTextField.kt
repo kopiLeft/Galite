@@ -115,7 +115,8 @@ open class DTextField(
                      scanner,
                      noEdit,
                      align,
-                     model.hasAutofill())
+                     model.hasAutofill(),
+                     this)
   }
 
   // ----------------------------------------------------------------------

@@ -28,11 +28,14 @@ import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
 import org.kopi.galite.ui.vaadin.event.TextFieldListener
+import org.kopi.galite.ui.vaadin.form.DTextField
+import org.kopi.galite.ui.vaadin.form.KeyNavigator
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
@@ -46,13 +49,17 @@ import com.vaadin.flow.data.binder.BeanValidationBinder
  * @param noEdit          Is it a no edit field.
  * @param align           The field text alignment.
  * @param hasAutofill     Tells if the field has an autofill command
+ * @param fieldParent     parent of this text field
  */
+@CssImport("./styles/galite/textfield.css")
 class TextField(val model: VField,
                 val noEcho: Boolean,
                 val scanner: Boolean,
                 val noEdit: Boolean,
                 val align: Int,
-                val hasAutofill: Boolean)
+                val hasAutofill: Boolean,
+                val fieldParent: DTextField
+)
   : AbstractField<Any?>(), HasStyle {
 
   val field: InputTextField<*>
@@ -303,8 +310,9 @@ class TextField(val model: VField,
    * Creates the input component according to field state.
    * @return the input component
    */
-  protected fun createFieldComponent(): InputTextField<*> {
+  private fun createFieldComponent(): InputTextField<*> {
     var col = col
+    val size = getFieldSize()
     val text = if (noEcho && rows == 1) {
       VPasswordField(col)
     } else if (rows > 1) {
@@ -318,30 +326,37 @@ class TextField(val model: VField,
         // if fixed new line mode is used, we remove scroll bar from text area
         it.setFixedNewLine(!dynamicNewLine)
       }
-    } else if(type == Type.INTEGER) {
-      VIntegerField(col, minval!!, maxval!!)
-    } else if(isDecimal()) {
-      VFixnumField(col, maxScale, minval, maxval, fraction)
-    } else if(type == Type.CODE) {
-      VCodeField(enumerations)
-    }  else if(type == Type.TIME) {
-      VTimeField()
-    } else if(type == Type.TIMESTAMP) {
-      VTimeStampField()
-    } else if(isDate()) {
-      VDateField()
-    } else {
-      InputTextField(TextField()).also {
-        if(type == Type.WEEK) {
-          it.setInputType("week")
-        } else if (type == Type.MONTH) {
-          it.setInputType("month")
+    } else if(!fieldParent.hasAction) {
+      when (type) {
+        Type.INTEGER -> VIntegerField(col, minval!!, maxval!!)
+        Type.DECIMAL -> VFixnumField(col, maxScale, minval, maxval, fraction)
+        Type.CODE -> VCodeField(enumerations)
+        Type.TIME -> VTimeField()
+        Type.TIMESTAMP -> VTimeStampField()
+        Type.DATE -> VDateField()
+        else -> InputTextField(TextField()).also {
+          if (type == Type.WEEK) {
+            it.setInputType("week")
+          } else if (type == Type.MONTH) {
+            it.setInputType("month")
+          }
         }
       }
-      // TODO
+    } else {
+      VInputButtonField(size)
     }
 
-    // TODO()
+    text.size = size
+    text.setMaxLength(maxLength)
+    text.maxWidth = "" + col + "em" // TODO: temporary styling
+    text.setHasAutocomplete(model.hasAutocomplete())
+    // add navigation handler.
+    TextFieldNavigationHandler.createNavigator(text, rows > 1)
+    textFieldListeners.add(KeyNavigator(model, text))
+    return text
+  }
+
+  private fun getFieldSize(): Int {
     var size = col
     // numeric fields are considered as monospaced fields
     if (isNumeric()) {
@@ -356,14 +371,8 @@ class TextField(val model: VField,
     if (hasAutofill) {
       size += 1
     }
-    text.size = 1.coerceAtLeast(size)
-    text.setMaxLength(maxLength)
-    text.maxWidth = "" + col + "em" // TODO: temporary styling
-    text.setHasAutocomplete(model.hasAutocomplete())
-    // add navigation handler.
-    TextFieldNavigationHandler.createNavigator(text, rows > 1)
-    textFieldListeners.add(org.kopi.galite.ui.vaadin.form.KeyNavigator(model, text))
-    return text
+
+    return 1.coerceAtLeast(size)
   }
 
   /**
@@ -372,22 +381,6 @@ class TextField(val model: VField,
    */
   private fun isNumeric(): Boolean {
     return type != Type.STRING && type != Type.CODE
-  }
-
-  /**
-   * Returns true if the field should contains only decimals.
-   * @return True if the field should contains only decimals.
-   */
-  private fun isDecimal(): Boolean {
-    return type == Type.DECIMAL
-  }
-
-  /**
-   * Returns true if the field should contains only date.
-   * @return True if the field should contains only date.
-   */
-  private fun isDate(): Boolean {
-    return type == Type.DATE
   }
 
   /**
