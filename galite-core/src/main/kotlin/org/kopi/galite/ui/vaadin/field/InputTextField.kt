@@ -487,8 +487,8 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return `true` if word wrap is used.
    */
   protected val isWordwrap: Boolean
-    protected get() {
-      val wrap: String = getElement().getAttribute("wrap")
+    get() {
+      val wrap: String = element.getAttribute("wrap")
       return "off" != wrap
     }
 
@@ -743,11 +743,11 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   }
 
   /**
-   * Returns the widget connector.
-   * @return The widget connector.
+   * Returns the text field container.
+   * @return The the text field container.
    */
-  protected val connector: org.kopi.galite.ui.vaadin.field.TextField
-    get() = super.getParent().get() as org.kopi.galite.ui.vaadin.field.TextField
+  internal val connector: TextField
+    get() = super.getParent().get() as TextField
 
   /**
    * Checks the value of this text field.

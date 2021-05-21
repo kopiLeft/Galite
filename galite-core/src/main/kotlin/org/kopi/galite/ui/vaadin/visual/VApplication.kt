@@ -234,8 +234,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
                       getInitParameter("schema")!!)*/
     dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
                       "org.h2.Driver",
-                      "admin",
-                      "admin",
+                      username,
+                      password,
                       null)
     // check if context is created
     if (dBContext == null) {

@@ -78,7 +78,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     createFields()
 
     if (model.isDroppable) {
-      TODO()
+      //TODO()
       //setDropHandler(DBlockDropHandler(model))
       //setDragStartMode(DragStartMode.HTML5)
     }

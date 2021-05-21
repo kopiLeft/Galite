@@ -361,7 +361,7 @@ class TextField(val model: VField,
     text.maxWidth = "" + col + "em" // TODO: temporary styling
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
-    text.addKeyDownListener(TextFieldNavigationHandler.newInstance(text, rows > 1))
+    TextFieldNavigationHandler.createNavigator(text, rows > 1)
     textFieldListeners.add(org.kopi.galite.ui.vaadin.form.KeyNavigator(model, text))
     return text
   }
@@ -455,6 +455,42 @@ class TextField(val model: VField,
    */
   internal fun needsSynchronization(): Boolean {
     return lastCommunicatedValue != value
+  }
+
+  /**
+   * Fires a print form event on this text field.
+   */
+  internal fun firePrintForm() {
+    for (l in textFieldListeners) {
+      l.printForm()
+    }
+  }
+
+  /**
+   * Fires a previous entry event on this text field.
+   */
+  internal fun firePreviousEntry() {
+    for (l in textFieldListeners) {
+      l.previousEntry()
+    }
+  }
+
+  /**
+   * Fires a next entry event on this text field.
+   */
+  internal fun fireNextEntry() {
+    for (l in textFieldListeners) {
+      l.previousEntry()
+    }
+  }
+
+  /**
+   * Fires a goto next block event on this text field.
+   */
+  internal fun fireGotoNextBlock() {
+    for (l in textFieldListeners) {
+      l.gotoNextBlock()
+    }
   }
 
   private fun fireAutofill() {
