@@ -64,7 +64,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return The parent window of this text field.
    */
   val parentWindow: Window?
-    get() = parent
+    get() = fieldConnector.getWindow()
 
   // used while checking if FF has set input prompt as value
   private var validationStrategy: TextValidator? = null
@@ -83,7 +83,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   private var hasAutocomplete = false
   private var valueBeforeEdit: String? = ""
   private var align: String? = null
-  private var parent: Window? = null
   private var isCheckingValue = false
   /**
    * `true` if the state of this field is not synchronized with server side.
@@ -464,13 +463,14 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Sends all dirty values to the server side.
    * This will send all pending dirty values to be sure
    * that all necessary values are sent to the server model.
+   * TODO
    */
   internal fun sendDirtyValuesToServerSide() {
-    val window = parent!!
-    val block = connector.parent.get() as Block
+    val window = parentWindow
+    val block = connector.parent.get() as? Block
 
     if (block != null) {
-      window.cleanDirtyValues(block)
+      window!!.cleanDirtyValues(block)
     }
     // now the field is synchronized with server side.
     isAlreadySynchronized = true
@@ -992,7 +992,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     //display = null
     valueBeforeEdit = null
     align = null
-    parent = null
     //callback = null
     //suggestionCallback = null
   }

@@ -377,7 +377,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Closes the database connection
    */
   protected fun closeConnection() {
-
+    // TODO
   }
 
   /**

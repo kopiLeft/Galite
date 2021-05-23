@@ -21,14 +21,13 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.UActorField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.field.ActorField
 
 import com.vaadin.flow.component.ClickEvent
-import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Div
 
 /**
  * UI Implementation of an actor field.
@@ -88,9 +87,9 @@ class DActorField(model: VFieldUI,
   override fun forceFocus() {}
 
   override fun updateColor() {
-    //BackgroundThreadHandler.access(Runnable {  TODO
-    field.setColor(Utils.toString(foreground), Utils.toString(background))
-    //})
+    access {
+      field.setColor(Utils.toString(foreground), Utils.toString(background))
+    }
   }
 
   override fun getObject(): Any? {

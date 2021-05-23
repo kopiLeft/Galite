@@ -20,14 +20,6 @@ package org.kopi.galite.ui.vaadin.field
 import com.vaadin.flow.component.customfield.CustomField
 
 abstract class AbstractField<T>: CustomField<T>() {
-  companion object {
-    var focusedTextField: AbstractField<*>? = null
-  }
-
-  override fun focus() {
-    focusedTextField = this
-    super.focus()
-  }
 
   abstract fun addFocusListener(function: () -> Unit)
   // TODO add common code here

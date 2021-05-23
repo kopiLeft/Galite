@@ -96,7 +96,7 @@ class VWindowContainer : Div() {
    */
   fun updateWindowTitle(window: Component, title: String) {
     windowToCaptionMap[window] = title
-    TODO()
+    caption.setCaption(title)
   }
 
   /**

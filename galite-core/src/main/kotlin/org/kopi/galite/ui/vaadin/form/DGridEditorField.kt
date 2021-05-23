@@ -40,7 +40,7 @@ import com.vaadin.flow.router.NavigationEvent
  * An UField associated with the grid block in inline edit.
  */
 abstract class DGridEditorField<T>(
-        protected var columnView: VFieldUI,
+        internal var columnView: VFieldUI,
         val label: DGridEditorLabel?,
         protected var align: Int,
         protected var options: Int
@@ -109,9 +109,9 @@ abstract class DGridEditorField<T>(
   }
 
   override fun updateColor() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.setColor(Utils.toString(foreground), Utils.toString(background))
-    //})
+    access {
+      editor.setColor(Utils.toString(foreground), Utils.toString(background))
+    }
   }
 
   override fun prepareSnapshot(fieldPos: Int, activ: Boolean) {}

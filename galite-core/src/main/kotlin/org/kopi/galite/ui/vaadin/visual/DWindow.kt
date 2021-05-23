@@ -104,7 +104,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
   init {
-    setCaption(model!!.getTitle())
     createEditMenu()
     model!!.addVActionListener(this)
     model!!.addModelCloseListener(this)
@@ -120,23 +119,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-
-  /**
-   * Sets the window caption if it belongs to the main window.
-   * @param caption The window caption.
-   * @return `true` if the caption is set.
-   */
-  private fun maybeSetMainWindowCaption(caption: String): Boolean {
-    var parent: MainWindow? = null
-    this.parent.ifPresent {
-      parent = it as MainWindow
-    }
-    if (parent != null) {
-      parent!!.updateWindowTitle(this, caption)
-      return true
-    }
-    return false
-  }
 
   /**
    * Displays an error message.

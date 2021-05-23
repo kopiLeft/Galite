@@ -492,6 +492,11 @@ class TextField(val model: VField,
     }
   }
 
+  override fun focus() {
+    field.parentWindow?.lasFocusedField = this
+    super.focus()
+  }
+
   //---------------------------------------------------
   // CONVERT TYPE
   //---------------------------------------------------

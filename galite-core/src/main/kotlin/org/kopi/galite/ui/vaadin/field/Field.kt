@@ -480,13 +480,13 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Returns the parent window of this field.
    * @return The parent window of this field.
    */
-  protected open fun getWindow(): Window? = ((this as DField).model.blockView as DBlock).parent
+  internal open fun getWindow(): Window? = ((this as DField).model.blockView as? DBlock)?.parent
 
   /**
    * Returns the parent block of this field.
    * @return The parent block of this field.
    */
-  protected open fun getBlock(): Block? = (this as DField).model.blockView as Block
+  internal open fun getBlock(): Block? = (this as DField).model.blockView as Block
 
   /**
    * The navigation delegation to server mode.

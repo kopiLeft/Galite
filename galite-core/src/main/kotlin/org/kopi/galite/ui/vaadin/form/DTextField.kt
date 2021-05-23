@@ -143,10 +143,10 @@ open class DTextField(
   }
 
   override fun updateColor() {
-    //access { TODO: Acccess from thread
-    val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
-    field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
-    //}
+    access {
+      val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
+      field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
+    }
   }
 
   override fun updateFocus() {

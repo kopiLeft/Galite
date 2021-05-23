@@ -29,6 +29,7 @@ import org.kopi.galite.ui.vaadin.visual.DUserMenu
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 import org.kopi.galite.ui.vaadin.window.Window
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasSize
@@ -66,11 +67,11 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   private val content = VContent()
   private val container = VWindowContainer()
   private val locale: String = locale.toString()
-  private var windowsList = mutableListOf<Component>()
+  internal var windowsList = mutableListOf<Component>()
   private val windows = mutableMapOf<Component, MenuItem>()
   private val windowsMenu = VWindowsDisplay()
   var currentWindow: Component? = null
-  private val originalWindowTitle: String? = null
+  private var originalWindowTitle: String = ""
 
   init {
     val main = VMain()
@@ -185,6 +186,15 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
       windowsList.remove(window)
       currentWindow = container.removeWindow(window)
       windowsMenu.removeWindow(window)
+      if (currentWindow is Window) {
+        (currentWindow as Window).goBackToLastFocusedTextField()
+      }
+      if (windows.size <= 1) {
+        windowsLink.isEnabled = false
+      }
+      if (currentWindow == null) {
+        ui.get().page.setTitle(originalWindowTitle)
+      }
     }
   }
 
@@ -349,6 +359,10 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    */
   fun goToPreviousPage(event: ShortcutEvent) {
     gotoWindow(false)
+  }
+
+  override fun onAttach(attachEvent: AttachEvent?) {
+    originalWindowTitle = ui.get().internals.title
   }
 
   /**
