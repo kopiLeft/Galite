@@ -129,13 +129,35 @@ class VWindowContainer : Div() {
    * Shows the next window in the list.
    */
   fun showNextWindow(): Component? {
-    TODO()
+    var componentIndex: Int
+
+    componentIndex = getVisibleWindow()
+    componentIndex += 1
+    if (componentIndex >= windowToCaptionMap.count()) {
+      componentIndex = 0
+    }
+
+    return showWindow(getWindowAt(componentIndex))
   }
 
   /**
    * Shows the previous window in the list.
    */
   fun showPreviousWindow(): Component? {
-    TODO()
+    var componentIndex: Int
+
+    componentIndex = getVisibleWindow()
+    componentIndex -= 1
+    if (componentIndex < 0) {
+      componentIndex = windowToCaptionMap.count() - 1
+    }
+
+    return showWindow(getWindowAt(componentIndex))
   }
+
+  private fun getVisibleWindow(): Int = windowToCaptionMap.keys.indexOf(currentWindow)
+
+  private fun getWindowAt(index: Int): Component = windowToCaptionMap.keys.elementAt(index)
+
+  val isEmpty: Boolean get() = windowToCaptionMap.isEmpty()
 }

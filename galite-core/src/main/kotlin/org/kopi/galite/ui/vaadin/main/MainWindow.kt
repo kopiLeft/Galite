@@ -370,7 +370,11 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    * @param next Should we goto the next window ?
    * Otherwise, it is the previous window that must be shown.
    */
-  protected fun gotoWindow(next: Boolean) {
+  internal fun gotoWindow(next: Boolean) {
+    if(container.isEmpty) {
+      return
+    }
+
     currentWindow = if (next) {
       container.showNextWindow()
     } else {
