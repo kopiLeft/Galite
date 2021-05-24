@@ -134,4 +134,26 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
 
     return tableRow.getChild(column)
   }
+
+  /**
+   * Returns the table cell identified by the row and column number.
+   *
+   * @param row the cell's row.
+   * @param column the cell's column.
+   */
+  fun getCellAtOrNull(row: Int, column: Int): Element? {
+    if(row < 0 || row >= tbody.childCount) {
+      return null
+    }
+
+    val tableRow  = tbody.getChild(row)
+
+    if(column < 0 || column >= tableRow.childCount) {
+      return null
+    }
+
+    return tableRow.getChild(column)
+  }
+
+  val rowCount: Int get() = tbody.childCount
 }

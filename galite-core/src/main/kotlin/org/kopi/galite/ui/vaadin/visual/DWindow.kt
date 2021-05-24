@@ -50,6 +50,9 @@ import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.server.ErrorEvent
@@ -189,18 +192,34 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    */
   private fun addActorsToGUI(actorDefs: Array<VActor?>) {
     val panel = VActorsNavigationPanel()
+
     // Add actors panel
     add(actors)
     // Add each actor to the panel
     actorDefs.forEach { actorDef ->
       val actor = DActor(actorDef!!)
 
-      panel.addActor(actor, actorDef, navigationMenu)
+      panel.addActor(actor, navigationMenu)
       if(actor.icon != null) {
         addActor(actor)
       }
+      registerShortcutKey(actor, actor.acceleratorKey, actor.modifiersKey)
       addActorsNavigationPanel(panel)
     }
+  }
+
+  /**
+   * Registers a shortcut key on this window.
+   */
+  private fun registerShortcutKey(actor: DActor, acceleratorKey: Key, modifiersKey: KeyModifier?) {
+    val registration = if (modifiersKey != null) {
+      Shortcuts.addShortcutListener(this, actor::actionPerformed, acceleratorKey, modifiersKey)
+    } else {
+      Shortcuts.addShortcutListener(this, actor::actionPerformed, acceleratorKey)
+    }
+
+    registration.isBrowserDefaultAllowed = false
+    registration.listenOn(this)
   }
 
   /**

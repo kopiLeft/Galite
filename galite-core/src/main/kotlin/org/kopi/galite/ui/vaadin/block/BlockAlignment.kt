@@ -102,6 +102,7 @@ class BlockAlignment {
 
   /**
    * Returns the label target position.
+   * TODO: do we still need this?
    * @param x The column position.
    * @return The label target position.
    */
@@ -117,4 +118,11 @@ class BlockAlignment {
       } else 2 * target
     } else 0
   }
+
+
+  /**
+   * Returns the original block connector
+   * @return The original block connector
+   */
+  val block: Block get() = ori as Block
 }

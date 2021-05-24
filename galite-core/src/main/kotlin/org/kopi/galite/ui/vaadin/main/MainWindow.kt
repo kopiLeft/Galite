@@ -27,6 +27,7 @@ import org.kopi.galite.ui.vaadin.common.VMain
 import org.kopi.galite.ui.vaadin.menu.ModuleList
 import org.kopi.galite.ui.vaadin.visual.DUserMenu
 import org.kopi.galite.ui.vaadin.window.PopupWindow
+import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
@@ -68,7 +69,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   private var windowsList = mutableListOf<Component>()
   private val windows = mutableMapOf<Component, MenuItem>()
   private val windowsMenu = VWindowsDisplay()
-  private var currentWindow: Component? = null
+  var currentWindow: Component? = null
   private val originalWindowTitle: String? = null
 
   init {
@@ -171,7 +172,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   fun addWindow(window: Component, title: String) {
     windowsList.add(window)
     container.addWindow(window, title)
-    container.showWindow(window)
+    currentWindow = container.showWindow(window)
     windowsMenu.addWindow(container, window, title)
   }
 
@@ -182,7 +183,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   fun removeWindow(window: Component) {
     if(!closeIfIsPopup(window)) {
       windowsList.remove(window)
-      container.removeWindow(window)
+      currentWindow = container.removeWindow(window)
       windowsMenu.removeWindow(window)
     }
   }
@@ -356,6 +357,15 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    * Otherwise, it is the previous window that must be shown.
    */
   protected fun gotoWindow(next: Boolean) {
-    // TODO
+    currentWindow = if (next) {
+      container.showNextWindow()
+    } else {
+      container.showPreviousWindow()
+    }
+    if (currentWindow is Window) {
+      (currentWindow as Window).goBackToLastFocusedTextField()
+      // fireWindowVisible(currentWindow) TODO
+    }
+    // windowsMenu.setCurrent(currentWindow) TODO
   }
 }

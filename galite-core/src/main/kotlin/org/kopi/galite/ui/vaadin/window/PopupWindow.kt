@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.window
 
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VSpan
+import org.kopi.galite.ui.vaadin.main.MainWindow
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle
@@ -44,5 +45,21 @@ class PopupWindow : EnhancedDialog(), HasStyle {
 
   fun setCaption(title: String) {
     caption.text = title
+  }
+
+  override fun close() {
+    super.close()
+
+    // try to get it from the main window current shown window.
+    val lastActiveWindow = MainWindow.instance.currentWindow as? Window
+
+    if (lastActiveWindow != null) {
+      // focus the window itself to activate attached actors.
+      lastActiveWindow.focus()
+      if (lastActiveWindow.hasLastFocusedTextField()) {
+        // focus last text focused text box if available
+        lastActiveWindow.goBackToLastFocusedTextField()
+      }
+    }
   }
 }

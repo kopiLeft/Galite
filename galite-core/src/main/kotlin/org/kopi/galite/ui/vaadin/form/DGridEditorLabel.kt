@@ -32,6 +32,22 @@ import org.kopi.galite.visual.VActor
  */
 class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), ULabel, UChartLabel {
 
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  /**
+   * Returns the info text.
+   * @return The info text.
+   */
+  var infoText: String? = null
+    set(info) {
+      field = info
+      /*BackgroundThreadHandler.access(Runnable { TODO
+        super@DGridEditorLabel.setInfoText(info)
+      })*/
+    }
+  private var tooltip: String? = null
+
   init {
     init(text, help)
   }
@@ -96,22 +112,6 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
     }
     return description
   }
-
-  /**
-   * Returns the info text.
-   * @return The info text.
-   */
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  var infoText: String? = null
-    set(info) {
-      field = info
-      /*BackgroundThreadHandler.access(Runnable { TODO
-        super@DGridEditorLabel.setInfoText(info)
-      })*/
-    }
-  private var tooltip: String? = null
 
   companion object {
     /**

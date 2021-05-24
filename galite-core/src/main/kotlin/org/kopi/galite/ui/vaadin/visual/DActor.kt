@@ -21,8 +21,10 @@ import java.awt.Event
 import java.awt.event.KeyEvent
 
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.actor.VActorNavigationItem
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -85,7 +87,28 @@ class DActor(private var model: VActor)
     }
   }
 
+
   override fun onComponentEvent(event: ClickEvent<Button>) {
+    actionPerformed()
+  }
+
+  /**
+   * Creates an equivalent menu Item for this actor.
+   *
+   * @param navigationMenu the navigation menu which contains the navigation items.
+   * @return The actor menu item.
+   */
+  fun createNavigationItem(navigationMenu: VNavigationMenu): VActorNavigationItem {
+    return VActorNavigationItem(text,
+                                menu,
+                                acceleratorKey,
+                                modifiersKey,
+                                icon,
+                                navigationMenu,
+                                ::actionPerformed)
+  }
+
+  fun actionPerformed() {
     // fire the actor action
     if (isEnabled) {
       // clean all dirty values in the client side of the parent window.
@@ -144,7 +167,7 @@ class DActor(private var model: VActor)
             KeyEvent.VK_F11 -> Key.F11
             KeyEvent.VK_F12 -> Key.F12
             KeyEvent.VK_ESCAPE -> Key.ESCAPE
-            else -> throw Exception("Key Undefined")
+            else -> throw Exception("Key is undefined")
           }
         } catch (e: Exception) {
           Key.UNIDENTIFIED

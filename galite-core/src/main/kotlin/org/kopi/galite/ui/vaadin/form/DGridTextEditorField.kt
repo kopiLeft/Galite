@@ -335,12 +335,12 @@ class DGridTextEditorField(
    */
   @Synchronized
   private fun enterMe() {
-    /*BackgroundThreadHandler.access(Runnable { TODO
+   access {
       if (scanner) {
-        getEditor().setValue(transformer.toGui(""))
+        editor.value = transformer.toGui("")
       }
-      getEditor().focus()
-    })*/
+      editor.focus()
+    }
   }
 
   /**

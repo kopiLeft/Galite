@@ -37,6 +37,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
   val wrappedField = BooleanField(trueRepresentation, falseRepresentation)
 
   init {
+    wrappedField.setWidthFull()
     className = "editor-booleanfield"
     add(wrappedField)
   }
@@ -47,7 +48,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
 
   override fun generateModelValue(): Boolean? = wrappedField.value
 
-  override fun focus() {
+  override fun doFocus() {
     wrappedField.focus()
   }
 

@@ -31,6 +31,8 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
   init {
     className = "editor-field"
     add(wrappedField)
+    wrappedField.setWidthFull()
+    wrappedField.maxLength = width
     addValueChangeListener {
       if(!check(it.value)) {
         value = it.oldValue
@@ -44,7 +46,7 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
 
   override fun generateModelValue(): String? = wrappedField.value
 
-  override fun focus() {
+  override fun doFocus() {
     wrappedField.focus()
   }
 

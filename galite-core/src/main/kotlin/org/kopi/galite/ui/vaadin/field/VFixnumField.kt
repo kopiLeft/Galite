@@ -17,9 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import java.math.BigDecimal
-
-import com.vaadin.flow.component.textfield.BigDecimalField
+import com.vaadin.flow.component.textfield.TextField
 
 /**
  * An fixnum field.
@@ -29,13 +27,4 @@ class VFixnumField(col: Int,
                    minval: Double?,
                    maxval: Double?,
                    fraction: Boolean)
-  : InputTextField<BigDecimalField>(BigDecimalField()) {
-
-  override fun setPresentationValue(newPresentationValue: String?) {
-    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
-      BigDecimal(newPresentationValue)
-    } else {
-      null
-    }
-  }
-}
+  : InputTextField<TextField>(TextField())

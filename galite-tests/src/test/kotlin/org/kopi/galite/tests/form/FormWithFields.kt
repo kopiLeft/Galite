@@ -24,7 +24,7 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormWithFields: Form() {
+class FormWithFields: Form() {
   override val locale = Locale.UK
   override val title = "form with fields"
   val testPage = page("test page")
@@ -61,5 +61,5 @@ class BlockWithFields : FormBlock(1, 1, "Test block") {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithFields)
+  Application.runForm(formName = FormWithFields())
 }
