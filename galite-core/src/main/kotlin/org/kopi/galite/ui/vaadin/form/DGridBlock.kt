@@ -142,10 +142,10 @@ open class DGridBlock(parent: DForm, model: VBlock)
     //grid.setCellStyleGenerator(DGridBlockCellStyleGenerator(model))
     grid.addColumnResizeListener(::columnResize)
     configure()
-    grid.height = "calc(" +
+   /* grid.height = "calc(" +
             "(1.04 * var(--lumo-size-xl) + var(--_lumo-grid-border-width)) + " +
             "(${model.displaySize * 38}px + ${model.displaySize -1} * var(--_lumo-grid-border-width))" +
-            ")"
+            ")"*/
     //grid.setColumnOrder(columnsOrder)
     /*if (detailsGenerator != null) { TODO
       grid.setDetailsGenerator(detailsGenerator)

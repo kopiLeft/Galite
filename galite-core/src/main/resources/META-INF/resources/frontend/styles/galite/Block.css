@@ -19,7 +19,7 @@
  * Form blocks style
  */
 .k-block {
-    padding: 22px 20px 22px 50px;
+    padding: 22px 50px 22px 50px;
     margin-bottom: 16px;
     background: #ffffff;
     display: inline-block;
@@ -32,6 +32,11 @@
     box-shadow: none;
     background-color: var(--lumo-base-color);
     border-bottom: 1px solid #dadada;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+    min-height: 0;
 }
 
 .k-block .multiple ::part(value) {

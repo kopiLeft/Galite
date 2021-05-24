@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import org.kopi.galite.ui.vaadin.common.VTable
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Div
 
@@ -54,11 +56,7 @@ class VScrollablePanel : Div {
    *
    */
   private fun initialize() {
-    style["overflow"] = "auto"
-    content.style["display"] = "block"
-    super.add(content)
-    width = "100%"
-    height = "100%"
+    style["display"] = "block"
   }
 
   fun clear() {
@@ -66,27 +64,27 @@ class VScrollablePanel : Div {
   }
 
   override fun add(vararg components: Component) {
-    content.add(*components)
+    val table = VTable(0 ,0)
+
+    components.forEach {
+      table.addInNewRow(it)
+    }
+    super.add(table)
   }
 
   override fun remove(vararg components: Component) {
-    content.remove(*components)
+    super.remove(*components)
   }
 
   override fun removeAll() {
-    content.removeAll()
+    super.removeAll()
   }
 
   override fun addComponentAtIndex(index: Int, component: Component) {
-    content.addComponentAtIndex(index, component)
+    super.addComponentAtIndex(index, component)
   }
 
   override fun addComponentAsFirst(component: Component) {
     addComponentAtIndex(0, component)
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var content = Div()
 }

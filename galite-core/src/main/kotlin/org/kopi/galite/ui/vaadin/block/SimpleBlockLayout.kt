@@ -27,6 +27,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.formlayout.FormLayout.FormItem
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import org.kopi.galite.ui.vaadin.label.Label
 
 /**
  * The simple block layout component.
@@ -104,14 +105,14 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         if(constraints.width < 0 ) {
           val formItem = object : FormItem(component) {}
 
-          add(formItem, constraints)
+          add(component, constraints)
         } else {
           val formItem = object : FormItem(component) {
             init {
               addToLabel(component.label)
             }
           }
-          add(formItem, constraints)
+          add(component, constraints)
         }
 
         // a follow field has no label
@@ -143,6 +144,8 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         }
 
         getBlock().addField(columnView)
+      } else if (component is Label) {
+        add(component, constraints)
       }
     }
 
@@ -166,7 +169,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       }
 
       // add to the original block as extra components.
-      val newConstraint = ComponentConstraint(align!!.getTargetPos((constraints.x * 2) + 1),
+      val newConstraint = ComponentConstraint(align!!.getTargetPos(constraints.x),
                                               constraints.y,
                                               constraints.width,
                                               constraints.height,
@@ -214,25 +217,20 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
    */
   protected fun addInfoComponentAt(info: Component?, x: Int, y: Int) {
     for(field in components!![x][y]!!.children) {
-      if(field is DField) {
-        val content = HorizontalLayout(field, info)
+      val content = HorizontalLayout(field, info)
 
-        content.className = "info-content"
-        val formItem = object : FormItem(content) {
-          init {
-            addToLabel(field.label)
-          }
-        }
-        setComponent(formItem,
-                     aligns!![x][y]!!.x,
-                     aligns!![x][y]!!.y,
-                     aligns!![x][y]!!.width.coerceAtMost(getAllocatedWidth(x, y)),
-                     getComponentHeight(components!![x][y]!!)
-                       .coerceAtLeast(getComponentHeight(info!!))
-                       .coerceAtMost(getAllocatedHeight(x, y))
-        )
-        break
-      }
+      content.className = "info-content"
+      val formItem = object : FormItem(content) {}
+
+      setComponent(formItem,
+                   aligns!![x][y]!!.x,
+                   aligns!![x][y]!!.y,
+                   aligns!![x][y]!!.width.coerceAtMost(getAllocatedWidth(x, y)),
+                   getComponentHeight(components!![x][y]!!)
+                           .coerceAtLeast(getComponentHeight(info!!))
+                           .coerceAtMost(getAllocatedHeight(x, y))
+      )
+      break
     }
   }
 

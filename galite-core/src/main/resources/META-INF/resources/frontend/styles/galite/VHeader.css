@@ -108,8 +108,13 @@
 user , admin , wrk context and bookmark
 */
 #welcome ::part(menu-bar-button) {
+    height : 60px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     background:var(--lumo-tint);
+}
+
+#welcome ::part(menu-bar-button):hover {
+    background-color: #d9f0f8;
 }
 
 /*
@@ -146,12 +151,6 @@ user , admin , wrk context and bookmark
     cursor: pointer;
 }
 
-#welcome #admin_menu, #welcome #bookmarks_menu, #welcome #wrkcontext_menu {
+#welcome #user_menu, #welcome #admin_menu, #welcome #bookmarks_menu, #welcome #wrkcontext_menu {
     cursor: pointer;
-    width: 50px;
-}
-
-#welcome #user_menu {
-    cursor: pointer;
-    width: 70px;
 }
