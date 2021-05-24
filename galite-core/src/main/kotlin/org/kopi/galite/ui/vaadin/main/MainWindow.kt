@@ -362,7 +362,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   }
 
   override fun onAttach(attachEvent: AttachEvent?) {
-    originalWindowTitle = ui.get().internals.title
+    originalWindowTitle = ui.get().internals.title.orEmpty()
   }
 
   /**

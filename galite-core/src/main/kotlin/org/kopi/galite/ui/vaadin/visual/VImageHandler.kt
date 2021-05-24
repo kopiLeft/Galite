@@ -22,13 +22,9 @@ import org.kopi.galite.base.Image
 import org.kopi.galite.visual.ImageHandler
 
 class VImageHandler : ImageHandler() {
-  override fun getImage(image: String): Image {
-    TODO("Not yet implemented")
-  }
+  override fun getImage(image: String): Image? =  null
 
-  override fun getImage(image: ByteArray): Image {
-    TODO("Not yet implemented")
-  }
+  override fun getImage(image: ByteArray): Image? = null
 
-  override fun getURL(image: String): String = "ui/vaadin/$image" // TODO
+  override fun getURL(image: String): String = "ui/vaadin/$image" // FIXME
 }
