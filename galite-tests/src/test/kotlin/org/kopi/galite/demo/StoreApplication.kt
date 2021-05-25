@@ -16,6 +16,9 @@
  */
 package org.kopi.galite.demo
 
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextArea
+import com.vaadin.flow.router.Route
 import java.math.BigDecimal
 
 import kotlin.reflect.KClass
