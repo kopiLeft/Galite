@@ -139,8 +139,7 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
     val tr = Element("tr")
 
     tbody.appendChild(tr)
-    tr.appendChild(Element("td"))
-            .appendChild(component.element)
+    tr.appendChild(Element("td").appendChild((component.element)))
   }
 
   /**

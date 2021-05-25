@@ -27,7 +27,7 @@ class VTextAreaField : InputTextField<TextArea>(TextArea()) {
   var cols: Int = 0
 
   fun setRows(rows: Int, visibleRows: Int) {
-    // TODO
+    height = visibleRows.toString() + "em"
   }
 
   fun setWordwrap(b: Boolean) {

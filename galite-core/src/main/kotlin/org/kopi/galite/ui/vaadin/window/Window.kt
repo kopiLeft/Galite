@@ -31,7 +31,6 @@ import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import org.kopi.galite.ui.vaadin.report.DTable
 
 /**
  * Abstract class for all window components.
@@ -79,14 +78,6 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
    * @param content The content.
    */
   open fun setContent(content: Component) {
-    if (this.content != null) {
-      remove(this.content)
-    }
-    this.content = VScrollablePanel(content)
-    add(this.content)
-  }
-
-  open fun setContent(content: DTable) {
     if (this.content != null) {
       remove(this.content)
     }

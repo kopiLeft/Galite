@@ -18,11 +18,10 @@
 package org.kopi.galite.ui.vaadin.base
 
 import org.kopi.galite.ui.vaadin.common.VTable
+import org.kopi.galite.ui.vaadin.report.DTable
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
-import org.kopi.vkopi.lib.ui.swing.report.DTable
 
 /**
  * A scrollable vertical panel.
@@ -46,14 +45,11 @@ class VScrollablePanel : Div {
    */
   constructor(vararg children: Component) : super() {
     initialize()
+    if(children[0] is DTable) {
+      width ="100%"
+      height = "100%"
+    }
     this.add(*children)
-  }
-
-  constructor(children: Grid<*>) : super() {
-    initialize()
-    width = "100%"
-    height = "100%"
-    super.add(children)
   }
 
   //---------------------------------------------------

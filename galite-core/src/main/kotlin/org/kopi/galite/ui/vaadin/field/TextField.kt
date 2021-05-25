@@ -313,7 +313,7 @@ class TextField(val model: VField,
       }
       VTextAreaField().also {
         it.setRows(rows, visibleRows)
-        it.cols = col
+        it.width = (col * 10).toString() + "px"
         it.setWordwrap(true)
         // if fixed new line mode is used, we remove scroll bar from text area
         it.setFixedNewLine(!dynamicNewLine)

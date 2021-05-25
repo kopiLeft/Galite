@@ -37,6 +37,7 @@
     font-style: normal !important;
     font-size: 12px !important;
     min-height: 0;
+    max-height: 40px;
 }
 
 .k-block .multiple ::part(value) {
