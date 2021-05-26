@@ -180,7 +180,6 @@ class TextField(val model: VField,
         }
       }
     }
-    setValidator()
   }
 
   val maxLength: Int get() = col * rows
@@ -269,7 +268,7 @@ class TextField(val model: VField,
   /**
    * Sets the validator of a text field.
    */
-  fun setValidator() {
+  fun setValidator(field: InputTextField<*>) {
     val binder = BeanValidationBinder(String::class.java)
     val bindingBuilder = binder.forField(field)
 
@@ -294,15 +293,32 @@ class TextField(val model: VField,
   }
 
   /**
+   * Sets the text transformation applied to the text widget according to the convert text
+   * @param text The text widget.
+   */
+  private fun setTextTransform(text: InputTextField<*>) {
+    when (convertType) {
+      ConvertType.UPPER -> text.element.style["text-transform"] = "uppercase"
+      ConvertType.LOWER -> text.element.style["text-transform"] = "lowercase"
+      ConvertType.NAME -> text.element.style["text-transform"] = "capitalize"
+      ConvertType.NONE -> text.element.style["text-transform"] = "none"
+    }
+  }
+
+  /**
    * Creates the attached text field component.
    * @return the attached text field component.
    */
   private fun createTextField(): InputTextField<*> {
     val text = createFieldComponent()
+
+    setValidator(text)
+    setTextTransform(text)
     if (noEdit) {
+      text.setTextValidator(NoeditValidator(maxLength))
       text.isReadOnly = true
     }
-    // TODO
+
     return text
   }
 

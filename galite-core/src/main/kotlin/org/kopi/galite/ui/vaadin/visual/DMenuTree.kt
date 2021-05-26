@@ -133,6 +133,7 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
 
   override fun addSelectedElement() {
     val module = getSelectedModule()
+
     module?.let { addShortcut(it) }
   }
 

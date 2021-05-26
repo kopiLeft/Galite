@@ -848,7 +848,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return The parent field connector.
    */
   internal val fieldConnector: Field
-    get() = connector.parent.get() as Field
+    get() = connector.fieldParent
 
   /**
    * Checks if the content of this field is empty.

@@ -60,9 +60,9 @@
  * Autofill font awesome icon styles
  */
 .k-textfield .fa {
-  color: $v-textfield-autofill-icon-color;
-  font-size: $v-textfield-autofill-icon-font-size !important;
-  margin-left: $v-textfield-autofill-icon-margin;
+  color: #009bd4 !default;
+  font-size: 1.2em !default !important;
+  margin-left: -10px !default;
   position: relative;
   z-index: 8;
   height: 20px;
@@ -80,15 +80,15 @@
  * Disabled input styles
  */
 .k-textfield.v-disabled input, .k-textfield.v-disabled textarea {
-  border-bottom: $v-textfield-disabled-border;
-  color: $v-textfield-disabled-font-color;
+  border-bottom: #dadada 1px dotted !default;
+  color: #676767 !default;
 }
 
 /**
  * Disabled inputs autofill icon styles.
  */
 .k-textfield.v-disabled .fa {
-  color: $v-textfield-disabled-autofill-icon-color;
+  color: #a3a3a3 !default;
 }
 
 /**
@@ -106,7 +106,7 @@
 }
 
 .k-field {
-  margin-left: $v-field-maring-left;
+  margin-left: 0 !default;
 }
 
 /**
@@ -149,11 +149,11 @@
   line-height: 1.2em !default;
   transition: .4s !default;
   color: #000000 !default;
-  font-family: $v-app-font-family !important;
+  font-family: Arial, sans-serif !default !important;
   font-weight: 500 !default !important;
   font-style: normal !default !important;
-  font-size: $v-textfield-font-size !important;
-  padding: $v-editor-field-padding !important;
+  font-size: 12px !default !important;
+  padding: 4px !default !important;
 }
 
 /**
@@ -182,9 +182,9 @@
  * Autofill icon styles for grid editors.
  */
 .v-grid-editor-cells > div .fa {
-  color: $v-textfield-autofill-icon-color;
-  font-size: $v-textfield-autofill-icon-font-size !important;
-  margin-left: $v-textfield-autofill-icon-margin;
+  color: #009bd4 !default;
+  font-size: 1.2em !default !important;
+  margin-left: -10px !default;
   position: relative;
   z-index: 8;
   height: 20px;
@@ -247,4 +247,20 @@
 
 .cke_combo {
   margin-left: 8px;
+}
+
+.transform-uppercase::part(value) {
+    text-transform: uppercase;
+}
+
+.transform-lowercase::part(value) {
+    text-transform: lowercase;
+}
+
+.transform-capitalize::part(value) {
+    text-transform: capitalize;
+}
+
+.transform-none::part(value) {
+    text-transform: none;
 }

@@ -589,6 +589,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   fun updateColumnAccess(f: VField, rec: Int) {
     access {
       val column = grid.getColumnByKey(model.getFieldIndex(f).toString())
+
       if (::grid.isInitialized && column != null) {
         column.isVisible  = f.getAccess(rec) != VConstants.ACS_HIDDEN
       }

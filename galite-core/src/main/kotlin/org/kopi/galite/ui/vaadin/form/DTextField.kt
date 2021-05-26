@@ -145,6 +145,7 @@ open class DTextField(
   override fun updateColor() {
     access {
       val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
+
       field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
     }
   }
@@ -190,9 +191,9 @@ open class DTextField(
     // scanner nescessary
     if (scanner) {
       // trick: it is now displayed on a different way
-      //BackgroundThreadHandler.access(Runnable { TODO
-      field.value = transformer!!.toModel(field.value.toString())
-      //})
+      access {
+        field.value = transformer!!.toModel(field.value.toString())
+      }
     }
   }
 

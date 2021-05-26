@@ -69,6 +69,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
 
   private fun getRootItems(): List<TreeNode> {
     val rootItems = mutableListOf<TreeNode>()
+
     rootItems.addNode(root)
     return rootItems
   }
@@ -78,6 +79,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
 
     for (i in 0 until parent.childCount) {
       val node = parent.getChildAt(i)
+
       addItemComponent(node)
       childItems.add(node)
     }
