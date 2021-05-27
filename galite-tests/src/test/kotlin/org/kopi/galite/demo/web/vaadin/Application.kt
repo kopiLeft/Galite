@@ -45,7 +45,7 @@ fun main(args: Array<String>) {
 
 class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
-  override val logoImage get() = "ui/vaadin/logo_kopi.png"
+  override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"
   override val alternateLocale get() = Locale("de", "AT")
   override val supportedLocales
@@ -74,18 +74,18 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
   init {
     ApplicationConfiguration.setConfiguration(
             object : ApplicationConfiguration() {
-              override fun getVersion(): String = ""
-              override fun getApplicationName(): String = ""
-              override fun getInformationText(): String = ""
-              override fun getLogFile(): String = ""
-              override fun getDebugMailRecipient(): String = ""
+              override val version get(): String = "1.0"
+              override val applicationName get(): String = "MyApp"
+              override val informationText get(): String = "info"
+              override val logFile get(): String = ""
+              override val debugMailRecipient get(): String = ""
+              override fun getSMTPServer(): String = ""
+              override val faxServer get(): String = ""
+              override val dictionaryServer get(): String = ""
               override fun mailErrors(): Boolean = false
               override fun logErrors(): Boolean = true
               override fun debugMessageInTransaction(): Boolean = true
-              override fun getSMTPServer(): String = ""
-              override fun getFaxServer(): String = ""
-              override fun getDictionaryServer(): String = ""
-              override fun getRExec(): Rexec = TODO()
+              override val RExec get(): Rexec = TODO()
               override fun getStringFor(var1: String): String = TODO()
               override fun getIntFor(var1: String): Int {
                 val var2 = this.getStringFor(var1)
