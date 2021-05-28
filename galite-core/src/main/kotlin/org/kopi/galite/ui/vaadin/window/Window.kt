@@ -46,7 +46,7 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
   /**
    * The last focused text field in this form.
    */
-  val lasFocusedField: Focusable<*>? get() = AbstractField.focusedTextField ?: GridEditorField.lasFocusedEditor
+  var lasFocusedField: Focusable<*>? = null
 
   init {
     className = Styles.WINDOW
@@ -115,9 +115,9 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
    * @param caption The window caption.
    */
   open fun setCaption(caption: String) {
-
     // first look if we can set the title on the main window.
     val success = maybeSetMainWindowCaption(caption)
+
     if (!success) {
       // window does not belong to main window
       // It may be then belong to a popup window
@@ -131,8 +131,9 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
    * @return `true` if the caption is set.
    */
   private fun maybeSetMainWindowCaption(caption: String): Boolean {
-    val parent = parent.orElse(null) as? MainWindow
-    if (parent != null) {
+    val parent = MainWindow.instance
+
+    if (parent.windowsList.contains(this)) {
       parent.updateWindowTitle(this, caption)
       return true
     }
@@ -146,10 +147,18 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
    * @return `true` if the caption is set.
    */
   private fun maybeSetPopupWindowCaption(caption: String): Boolean {
-    val parent = parent.orElse(null) as? PopupWindow
+    var parent: PopupWindow? = null
+
+    getParent().ifPresent { popupContent ->
+      parent = if(popupContent is PopupWindow) {
+        popupContent
+      } else {
+        popupContent.parent.orElseGet(null) as? PopupWindow
+      }
+    }
 
     if (parent != null) {
-      parent.setCaption(caption)
+      parent!!.setCaption(caption)
       return true
     }
     return false

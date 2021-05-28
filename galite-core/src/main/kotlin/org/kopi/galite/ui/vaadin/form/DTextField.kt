@@ -115,7 +115,8 @@ open class DTextField(
                      scanner,
                      noEdit,
                      align,
-                     model.hasAutofill())
+                     model.hasAutofill(),
+                     this)
   }
 
   // ----------------------------------------------------------------------
@@ -142,10 +143,11 @@ open class DTextField(
   }
 
   override fun updateColor() {
-    //access { TODO: Acccess from thread
-    val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
-    field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
-    //}
+    access {
+      val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
+
+      field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
+    }
   }
 
   override fun updateFocus() {
@@ -189,9 +191,9 @@ open class DTextField(
     // scanner nescessary
     if (scanner) {
       // trick: it is now displayed on a different way
-      //BackgroundThreadHandler.access(Runnable { TODO
-      field.value = transformer!!.toModel(field.value.toString())
-      //})
+      access {
+        field.value = transformer!!.toModel(field.value.toString())
+      }
     }
   }
 

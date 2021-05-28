@@ -210,69 +210,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   }
 
   /**
-   * Fired when a navigation to the next field event is detected.
-   */
-  protected fun fireGotoNextField() {
-    for (l in listeners) {
-      l.gotoNextField()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the previous field event is detected.
-   */
-  protected fun fireGotoPrevField() {
-    for (l in listeners) {
-      l.gotoPrevField()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the next empty must fill field event is detected.
-   */
-  protected fun fireGotoNextEmptyMustfill() {
-    for (l in listeners) {
-      l.gotoNextEmptyMustfill()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the next record event is detected.
-   */
-  protected fun fireGotoNextRecord() {
-    for (l in listeners) {
-      l.gotoNextRecord()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the previous record event is detected.
-   */
-  protected fun fireGotoPrevRecord() {
-    for (l in listeners) {
-      l.gotoPrevRecord()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the first event is detected.
-   */
-  protected fun fireGotoFirstRecord() {
-    for (l in listeners) {
-      l.gotoFirstRecord()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the last record event is detected.
-   */
-  protected fun fireGotoLastRecord() {
-    for (l in listeners) {
-      l.gotoLastRecord()
-    }
-  }
-
-  /**
    * Fired when a navigation to the last record event is detected.
    */
   protected fun fireActionPerformed() {
@@ -348,34 +285,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   override fun transferFocus() {
     fireFocusTransferred()
-  }
-
-  override fun gotoNextField() {
-    fireGotoNextField()
-  }
-
-  override fun gotoPrevField() {
-    fireGotoPrevField()
-  }
-
-  override fun gotoNextEmptyMustfill() {
-    fireGotoNextEmptyMustfill()
-  }
-
-  override fun gotoNextRecord() {
-    fireGotoNextRecord()
-  }
-
-  override fun gotoPrevRecord() {
-    fireGotoPrevRecord()
-  }
-
-  override fun gotoFirstRecord() {
-    fireGotoFirstRecord()
-  }
-
-  override fun gotoLastRecord() {
-    fireGotoLastRecord()
   }
 
   /**
@@ -571,13 +480,13 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Returns the parent window of this field.
    * @return The parent window of this field.
    */
-  protected open fun getWindow(): Window? = ((this as DField).model.blockView as DBlock).parent
+  internal open fun getWindow(): Window? = ((this as DField).model.blockView as? DBlock)?.parent
 
   /**
    * Returns the parent block of this field.
    * @return The parent block of this field.
    */
-  protected open fun getBlock(): Block? = (this as DField).model.blockView as Block
+  internal open fun getBlock(): Block? = (this as DField).model.blockView as Block
 
   /**
    * The navigation delegation to server mode.

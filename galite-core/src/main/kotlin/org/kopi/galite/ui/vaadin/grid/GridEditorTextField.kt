@@ -26,7 +26,7 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  val wrappedField = TextField()
+  protected val wrappedField = TextField()
 
   init {
     className = "editor-field"

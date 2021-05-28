@@ -23,7 +23,9 @@ import kotlin.collections.Collection
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.field.Field
+import org.kopi.galite.ui.vaadin.form.DBlock
 import org.kopi.galite.ui.vaadin.form.DGridEditorField
+import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ClickNotifier
@@ -97,9 +99,6 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
     //registerRpc(ClickRpcHandler())
   }
 
-  companion object {
-    var lasFocusedEditor: GridEditorField<*>? = null
-  }
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -131,7 +130,7 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
 
   override fun focus() {
     super.focus()
-    lasFocusedEditor = this
+    parentWindow?.lasFocusedField = this
     doFocus()
   }
 
@@ -144,6 +143,13 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
    * @param blink The blink state.
    */
   abstract fun setBlink(blink: Boolean)
+
+  /**
+   * Returns the parent window of this text editor.
+   * @return The parent window of this text editor.
+   */
+  val parentWindow: Window?
+    get() = (dGridEditorField.columnView.blockView as? DBlock)?.parent
 
   //---------------------------------------------------
   // INNER CLASSES

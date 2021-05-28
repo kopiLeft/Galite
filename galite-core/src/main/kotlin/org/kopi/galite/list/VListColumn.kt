@@ -41,7 +41,7 @@ abstract class VListColumn(
   /**
    * Returns a representation of value
    */
-  override fun formatObject(value: Any?): Any {
+  override fun formatObject(value: Any?): Any? {
     return value?.toString() ?: VConstants.EMPTY_TEXT
   }
 

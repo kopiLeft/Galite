@@ -34,7 +34,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * A list dialog
  * TODO: Implement this class with appropriate component
  */
-@CssImport("./styles/galite/Grid.css" , themeFor = "vaadin-grid")
+@CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid")
 open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
 
   private var scrollBarAdded = false
