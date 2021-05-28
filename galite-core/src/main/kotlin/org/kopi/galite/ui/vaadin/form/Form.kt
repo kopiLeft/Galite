@@ -30,6 +30,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.Tabs
+import org.kopi.galite.ui.vaadin.common.VTable
 
 /**
  * The form component.
@@ -107,7 +108,12 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   private fun setContent(vararg components: Component) {
     removeAll()
-    add(*components)
+    val table = VTable(0, 0)
+
+    components.forEach {
+      table.addInNewRow(it)
+    }
+    add(table)
   }
 
   /**
