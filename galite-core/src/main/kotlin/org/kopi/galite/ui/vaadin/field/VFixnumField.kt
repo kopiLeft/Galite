@@ -17,7 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.textfield.BigDecimalField
+import com.vaadin.flow.component.textfield.TextField
 
 /**
  * An fixnum field.
@@ -26,22 +26,5 @@ class VFixnumField(col: Int,
                    maxScale: Int,
                    minval: Double?,
                    maxval: Double?,
-                   fraction: Boolean) : BigDecimalField(), UTextField {
-
-  override fun hasAutoComplete(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMaxLength(): Int = maxlengthDouble.toInt()
-
-  override fun getMinLength(): Int = minlengthDouble.toInt()
-
-  override fun setMaxLength(maxLength: Int) {
-    super.setMaxlength(maxLength.toDouble())
-  }
-
-  override fun setMinLength(minLength: Int) {
-    super.setMinlength(minLength.toDouble())
-  }
-
-}
+                   fraction: Boolean)
+  : InputTextField<TextField>(TextField())

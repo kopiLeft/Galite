@@ -358,8 +358,6 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
   // PRIVATE METHODS
   // ----------------------------------------------------------------------
 
-  private fun isTime(h: Int, m: Int): Boolean = h in 0..23 && m in 0..59
-
   private fun isTimeChar(c: Char): Boolean = c in '0'..'9' || c == ':'
 
   override fun fillField(handler: PredefinedValueHandler?): Boolean {
@@ -395,6 +393,10 @@ class VTimeField(val bufferSize: Int) : VField(5, 1) {
         setTime(record, getTime(record).add(if (desc) -1 else 1))
       }
     }
+  }
+
+  companion object {
+    internal fun isTime(h: Int, m: Int): Boolean = h in 0..23 && m in 0..59
   }
 
   private var value: Array<Time?> = arrayOfNulls(2 * bufferSize)

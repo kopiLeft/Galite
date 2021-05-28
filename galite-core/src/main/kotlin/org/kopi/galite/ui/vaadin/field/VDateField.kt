@@ -17,34 +17,26 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.datepicker.DatePicker
 
 /**
  * An Date field.
  */
-class VDateField : DatePicker(), UTextField {
- init {
-   this.isClearButtonVisible = true
- }
+class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
 
-  override fun hasAutoComplete(): Boolean {
-    TODO("Not yet implemented")
+  init {
+    field.isClearButtonVisible = true
   }
 
-  override fun getMaxLength(): Int {
-    TODO("Not yet implemented")
-  }
-
-  override fun getMinLength(): Int {
-    TODO("Not yet implemented")
-  }
-
-
-  override fun setMaxLength(maxLength: Int) {
-   //Nothing to Implement
-  }
-
-  override fun setMinLength(minLength: Int) {
-    TODO("Not yet implemented")
+  override fun setPresentationValue(newPresentationValue: String?) {
+    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
+      LocalDate.parse(newPresentationValue, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    } else {
+      null
+    }
   }
 }

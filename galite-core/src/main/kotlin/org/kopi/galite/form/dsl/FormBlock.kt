@@ -36,6 +36,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.util.base.InconsistencyException
+import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.WindowController
 
 /**
@@ -336,6 +337,21 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Call and add a command to this block.
+   *
+   * PS: Block commands are commands accessible only from the block where they are called.
+   *
+   * @param window    the form linked to the command.
+   * @param command   the command.
+   */
+  fun command(window: Window, command: Command)  {
+    window.actors.add(command.item)
+    command(item = command.item) {
+      action = command.action
+    }
+  }
+
+  /**
    * Adds the block options. you can use one or more option from the options available for block.
    *
    * Use [BlockOption] to see the list of these block options.
@@ -358,15 +374,38 @@ open class FormBlock(var buffer: Int,
    * @param modes the list of modes where the access will be changed
    */
   fun blockVisibility(access: Access, vararg modes: Modes) {
-    if (modes.contains(Modes.MOD_QUERY)) {
+    if (modes.contains(Modes.QUERY)) {
       this.access[VConstants.MOD_QUERY] = access.value
     }
-    if (modes.contains(Modes.MOD_INSERT)) {
+    if (modes.contains(Modes.INSERT)) {
       this.access[VConstants.MOD_INSERT] = access.value
     }
-    if (modes.contains(Modes.MOD_UPDATE)) {
+    if (modes.contains(Modes.UPDATE)) {
       this.access[VConstants.MOD_UPDATE] = access.value
     }
+  }
+
+  /**
+   * Alignment statements are useful to align a block(source block) referring to another one(target block)
+   *
+   * @param targetBlock the referred block name
+   * @param positions   sets of two form field
+   *    the one in the left is the source block form field
+   *    the other one is for the target block form field
+   */
+  fun align(targetBlock: FormBlock, vararg positions: Pair<FormField<*>, FormField<*>>) {
+    val targets = ArrayList<Int>()
+
+    blockFields.forEach { field ->
+      if(positions.toMap().contains(field)) {
+        val targetField = positions.toMap()[field]
+
+        targets.add(targetBlock.blockFields.indexOf(targetField))
+      }
+    }
+
+    align = FormBlockAlign(targetBlock,
+                           targets)
   }
 
   /**
@@ -434,6 +473,7 @@ open class FormBlock(var buffer: Int,
    * Saves current block (insert or update)
    */
   fun saveBlock() {
+    vBlock.validate()
     Commands.saveBlock(vBlock)
   }
 
@@ -445,10 +485,25 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Queries block, fetches first record.
+   * @exception        VException        an exception may occur during DB access
+   */
+  fun serialQuery() {
+    Commands.serialQuery(vBlock)
+  }
+
+  /**
    * * Loads block from database
    */
   fun load() {
     vBlock.load()
+  }
+
+  /**
+   * * Loads block from database
+   */
+  fun deleteBlock() {
+    Commands.deleteBlock(vBlock)
   }
 
   /**
@@ -672,9 +727,9 @@ open class FormBlock(var buffer: Int,
         }
       }
 
-      override fun setInfo() {
+      override fun setInfo(form: VForm) {
         blockFields.forEach {
-          it.setInfo(super.source)
+          it.setInfo(super.source, form)
         }
       }
 
@@ -712,6 +767,7 @@ open class FormBlock(var buffer: Int,
         super.indicesIdents = this@FormBlock.indices.map {
           it.ident
         }.toTypedArray()
+        alignment = align?.getBlockAlignModel()
       }
     }.also {
       vBlock = it

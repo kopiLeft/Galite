@@ -26,6 +26,7 @@ import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.FontMetrics
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.MainWindowListener
@@ -42,6 +43,7 @@ import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
+import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.MessageListener
 import org.kopi.galite.visual.PrinterManager
@@ -52,6 +54,7 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
@@ -116,8 +119,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
     dialog.yesIsDefault = yesIsDefault
     dialog.addNotificationListener(object : NotificationListener {
-      override fun onClose(yes: Boolean) {
-        askAnswer = if (yes) {
+      override fun onClose(yes: Boolean?) {
+        askAnswer = if (yes == true) {
           MessageListener.AWR_YES
         } else {
           MessageListener.AWR_NO
@@ -147,20 +150,36 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // APPLICATION IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun logout() {
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"),
+                                     Message.getMessage("confirm_quit"),
+                                     notificationLocale)
 
+    dialog.yesIsDefault = false
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(yes: Boolean?) {
+        if (yes == true) {
+          // close DB connection
+          closeConnection()
+          // show welcome screen
+          gotoWelcomeView()
+        }
+      }
+    })
+    showNotification(dialog)
   }
 
   override fun startApplication() {
     menu = VMenuTree(dBContext!!)
-    menu.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
+    menu!!.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
     mainWindow = MainWindow(defaultLocale, logoImage, logoHref)
     mainWindow!!.addMainWindowListener(this)
+    mainWindow!!.setMainMenu(DMainMenu(menu!!))
+    mainWindow!!.setUserMenu(DUserMenu(menu!!))
+    mainWindow!!.setAdminMenu(DAdminMenu(menu!!))
+    mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu!!))
+    mainWindow!!.setWorkspaceContextItemMenu(DBookmarkMenu(menu!!))
     mainWindow!!.connectedUser = userName
-    mainWindow!!.setMainMenu(DMainMenu(menu))
-    mainWindow!!.setUserMenu(DUserMenu(menu))
-    mainWindow!!.setAdminMenu(DAdminMenu(menu))
-    mainWindow!!.setBookmarksMenu(DBookmarkMenu(menu))
-    mainWindow!!.addDetachListener { event ->
+    mainWindow!!.addDetachListener {
       closeConnection()
     }
   }
@@ -230,7 +249,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val isNoBugReport: Boolean
     get() = java.lang.Boolean.parseBoolean(getInitParameter("nobugreport"))
 
-  override lateinit var menu: VMenuTree
+  override var menu: VMenuTree? = null
 
   override var isGeneratingHelp: Boolean = false
 
@@ -282,7 +301,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     }
     // set locale from initialization.
     // set locale from initialization.
-    setLocalizationContext(Locale.FRANCE) // TODO
+    setLocalizationContext(Locale.UK) // TODO
   }
 
   /**
@@ -310,7 +329,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param window The window to be removed.
    */
   fun removeWindow(window: Component) {
-
+    if (mainWindow != null) {
+      access {
+        mainWindow!!.removeWindow(window)
+      }
+    }
   }
 
   /**
@@ -373,7 +396,14 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Shows the welcome view.
    */
   protected fun gotoWelcomeView() {
-    initialize()
+    if (mainWindow != null) {
+      // it should be attached to the application.
+      removeAll()
+      mainWindow = null
+      menu = null
+      localizationManager = null
+      isGeneratingHelp = false
+    }
     welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
     welcomeView!!.setSizeFull() // important to get the full screen size.
     welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent -> onLogin(event) }
@@ -481,6 +511,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
     /** Application instance */
     lateinit var instance: Application
+    private val FONT_METRICS = arrayOf(
+      FontMetrics.DIGIT,
+      FontMetrics.LETTER
+    )
 
     init {
       ApplicationContext.applicationContext = VApplicationContext()

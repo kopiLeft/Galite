@@ -30,7 +30,7 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
 
 object StockForm : ReportSelectionForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "Stocks"
   val page = page("Stock")
   val action = menu("Action")
@@ -82,7 +82,7 @@ object StockBlock : FormBlock(1, 1, "Stock") {
   val minAlert = mustFill(domain = Domain<Int>(20), position = at(1, 1)) {
     label = "Min Alert"
     help = "The stock's min alert"
-   // columns(u.idStckProv, w.idProvider)
+    // columns(u.idStckProv, w.idProvider)
   }
 }
 

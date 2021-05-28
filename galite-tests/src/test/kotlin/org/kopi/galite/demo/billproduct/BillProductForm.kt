@@ -30,7 +30,7 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
 
 object BillProductForm : ReportSelectionForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "Bill products"
   val page = page("Bill product")
   val action = menu("Action")

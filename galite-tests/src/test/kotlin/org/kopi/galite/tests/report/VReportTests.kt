@@ -176,8 +176,8 @@ class VReportTests: JApplicationTestBase() {
                        KeyEvent.VK_F12,
                        0)
               .also {
-                it.menuName = "Fichier"
-                it.menuItem = "Favoris"
+                it.menuName = "File"
+                it.menuItem = "Shortcuts"
               }
 
       // Actor checks
@@ -217,7 +217,7 @@ class VReportTests: JApplicationTestBase() {
       assertEquals(Constants.ALG_DEFAULT, name.align)
       assertEquals(-1, name.groups)
       assertEquals(null, name.function)
-      assertEquals(true, name.visible)
+      assertEquals(true, name.isVisible)
       assertEquals(false, name.isFolded)
       // assertEquals(0, name.width) TODO
       // assertEquals(0, name.height) TODO
@@ -231,7 +231,7 @@ class VReportTests: JApplicationTestBase() {
    * Simple Report with two fields.
    */
   class SimpleReport : Report() {
-    override val locale = Locale.FRANCE
+    override val locale = Locale.UK
 
     override val title = "SimpleReport"
 

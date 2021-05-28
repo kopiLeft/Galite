@@ -138,9 +138,9 @@ abstract class VReportColumn(
   // ----------------------------------------------------------------------
   var label: String = ""
   var help: String? = null
-  var visible: Boolean = true
+  var isVisible: Boolean = true
   open var isFolded: Boolean = false
-  var addedAtRuntime: Boolean = false
+  var isAddedAtRuntime: Boolean = false
   var userDefinedLabel: Boolean = false
   private var styles: Array<ColumnStyle>? = null
 }

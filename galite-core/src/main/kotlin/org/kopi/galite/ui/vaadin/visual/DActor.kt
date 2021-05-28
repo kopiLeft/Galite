@@ -20,18 +20,21 @@ package org.kopi.galite.ui.vaadin.visual
 import java.awt.Event
 import java.awt.event.KeyEvent
 
+import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.actor.VActorNavigationItem
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
+import org.kopi.galite.visual.UActor
+import org.kopi.galite.visual.VActor
+
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEventListener
 import com.vaadin.flow.component.button.Button
-
-import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.visual.UActor
-import org.kopi.galite.visual.VActor
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The `DActor` is the vaadin implementation of
@@ -44,11 +47,12 @@ import org.kopi.galite.visual.VActor
  * @param model The actor model.
  *
  */
+@CssImport("./styles/galite/Actor.css")
 class DActor(private var model: VActor)
   : Actor(model.menuItem,
           Utils.createTooltip(getDescription(model)),
           model.menuName,
-          Utils.getFontAwesomeIcon(model.iconName),
+          Utils.getVaadinIcon(model.iconName),
           correctAcceleratorKey(model.acceleratorKey),
           correctAcceleratorModifier(model.acceleratorModifier)),
         UActor,
@@ -77,8 +81,38 @@ class DActor(private var model: VActor)
     }
   }
 
+
   override fun onComponentEvent(event: ClickEvent<Button>) {
-    model.performAction()
+    actionPerformed()
+  }
+
+  /**
+   * Creates an equivalent menu Item for this actor.
+   *
+   * @param navigationMenu the navigation menu which contains the navigation items.
+   * @return The actor menu item.
+   */
+  fun createNavigationItem(navigationMenu: VNavigationMenu): VActorNavigationItem {
+    return VActorNavigationItem(text,
+                                menu,
+                                acceleratorKey,
+                                modifiersKey,
+                                icon,
+                                navigationMenu,
+                                ::actionPerformed)
+  }
+
+  fun actionPerformed() {
+    // fire the actor action
+    if (isEnabled) {
+      // clean all dirty values in the client side of the parent window.
+      /*getWindow().cleanDirtyValues(getBlock()) TODO
+      if (VEditorTextField.getLastFocusedEditor() != null) {
+        // fires text change event for grid editors
+        VEditorTextField.getLastFocusedEditor().valueChanged(false)
+      }*/
+      model.performAction()
+    }
   }
 
   companion object {
@@ -113,7 +147,22 @@ class DActor(private var model: VActor)
         Key.UNIDENTIFIED // TODO
       } else {
         try {
-          Key.of("F1") // TODO
+          when (acceleratorKey) {
+            KeyEvent.VK_F1 -> Key.F1
+            KeyEvent.VK_F2 -> Key.F2
+            KeyEvent.VK_F3 -> Key.F3
+            KeyEvent.VK_F4 -> Key.F4
+            KeyEvent.VK_F5 -> Key.F5
+            KeyEvent.VK_F6 -> Key.F6
+            KeyEvent.VK_F7 -> Key.F7
+            KeyEvent.VK_F8 -> Key.F8
+            KeyEvent.VK_F9 -> Key.F9
+            KeyEvent.VK_F10 -> Key.F10
+            KeyEvent.VK_F11 -> Key.F11
+            KeyEvent.VK_F12 -> Key.F12
+            KeyEvent.VK_ESCAPE -> Key.ESCAPE
+            else -> throw Exception("Key is undefined")
+          }
         } catch (e: Exception) {
           Key.UNIDENTIFIED
         }

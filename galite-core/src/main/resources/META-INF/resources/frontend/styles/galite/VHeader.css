@@ -51,19 +51,23 @@
     display: table-cell;
     width: 10%;
     border-right: 1px solid #dadada;
+    vertical-align: middle;
+}
+
+.logo-image {
+    vertical-align: middle;
 }
 
 /*
  * Change the dots' style
  */
 ::part(overflow-button) {
-    margin: 0;
     --lumo-font-family:  Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.800rem;
     border-right: 1px solid #dadada;
-    height: 63px;
+    height: 61px;
     background-color: var(--lumo-tint);
     box-sizing: border-box;
 }
@@ -79,13 +83,12 @@
  * Modules style
  */
 #module_list :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
-    margin: 0;
     --lumo-font-family: Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.800rem;
     border-right: 1px solid #dadada;
-    height: 63px;
+    height: 61px;
     box-sizing: border-box;
 }
 

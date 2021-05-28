@@ -1,0 +1,51 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+ /*
+ * Report Group style
+ */
+[part~="cell"].level-0:not(:focus) {
+    background: #F5FBFD !important;
+}
+
+[part~="cell"].level-1:not(:focus) {
+    background: #D9EAD3 !important;
+}
+
+[part~="cell"].italic {
+    font-style: italic;
+}
+
+[part~="cell"].bold {
+    font-weight: bold;
+}
+
+[part~="cell"].separator {
+    background: red;
+}
+
+:host([theme="column-borders compact"]) [part~="cell"]:focus {
+    background: #bcdae6;
+}
+
+:host([theme="column-borders compact"]) {
+    --_lumo-grid-selected-row-color: none;
+}
+
+:host([theme="row-stripes"]) [part~="cell"] {
+    height: 38px;
+}

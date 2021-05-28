@@ -25,7 +25,7 @@ import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
 object FormToCheckFieldVisibility: Form() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test fields visibility"
   val testPage = page("test page")
   val testBlock = insertBlock(blockToCheckFieldVisibility, testPage)

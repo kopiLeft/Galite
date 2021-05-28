@@ -83,6 +83,12 @@ class ActorField : ObjectField<Any?>() {
     // Do nothing as this is an actor field with no value
   }
 
+  override fun addFocusListener(function: () -> Unit) {
+    super.addFocusListener {
+      function()
+    }
+  }
+
   /**
    * Sets the field foreground and background colors
    * @param foreground The foreground color

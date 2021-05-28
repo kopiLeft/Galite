@@ -118,7 +118,7 @@ class ReportTests: VApplicationTestBase() {
  * Simple Report with two fields.
  */
 object SimpleReport : Report() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
 
   override val title = "SimpleReport"
 
@@ -149,7 +149,7 @@ object SimpleReport : Report() {
           help = "Obtenir le format CSV",
   ) {
     key  =  Key.F8          // key is optional here
-    icon =  "export"  // icon is optional here
+    icon =  "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -159,7 +159,7 @@ object SimpleReport : Report() {
           help = "Obtenir le format Excel (XLS)",
   ) {
     key  =  Key.SHIFT_F8          // key is optional here
-    icon =  "export"  // icon is optional here
+    icon =  "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -179,7 +179,7 @@ object SimpleReport : Report() {
           help = "Obtenir le format PDF",
   ) {
     key  =  Key.F9          // key is optional here
-    icon =  "export"  // icon is optional here
+    icon =  "exportPdf"  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) {

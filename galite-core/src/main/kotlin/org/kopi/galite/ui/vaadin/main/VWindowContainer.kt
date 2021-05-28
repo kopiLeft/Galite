@@ -23,8 +23,6 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 
-import org.kopi.galite.ui.vaadin.window.VActorPanel
-
 /**
  * The main window container component.
  * This component will be responsible of displaying only one window.
@@ -77,8 +75,10 @@ class VWindowContainer : Div() {
    * @return The new shown component or `null` if no window is shown.
    */
   fun removeWindow(window: Component): Component? {
+    // look for internal map.
     val caption = windowToCaptionMap.remove(window)
     if (caption != null) {
+      this.caption.setCaption("") // reset window caption
       pane.remove(window)
       if (windowToCaptionMap.isNotEmpty() && previousWindow != null) {
         // show previous window in the list
@@ -114,6 +114,7 @@ class VWindowContainer : Div() {
         previousWindow = currentWindow
         previousWindow?.isVisible = false
         currentWindow = window
+        currentWindow?.isVisible = true
 
         caption.setCaption(windowToCaptionMap[window])
         UI.getCurrent().page.setTitle(caption.getCaption())

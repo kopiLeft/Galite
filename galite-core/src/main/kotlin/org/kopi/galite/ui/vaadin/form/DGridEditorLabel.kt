@@ -32,6 +32,22 @@ import org.kopi.galite.visual.VActor
  */
 class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), ULabel, UChartLabel {
 
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  /**
+   * Returns the info text.
+   * @return The info text.
+   */
+  var infoText: String? = null
+    set(info) {
+      field = info
+      /*BackgroundThreadHandler.access(Runnable { TODO
+        super@DGridEditorLabel.setInfoText(info)
+      })*/
+    }
+  private var tooltip: String? = null
+
   init {
     init(text, help)
   }
@@ -97,29 +113,13 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
     return description
   }
 
-  /**
-   * Returns the info text.
-   * @return The info text.
-   */
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  var infoText: String? = null
-    set(info) {
-      field = info
-      /*BackgroundThreadHandler.access(Runnable { TODO
-        super@DGridEditorLabel.setInfoText(info)
-      })*/
-    }
-  private var tooltip: String? = null
-
   companion object {
     /**
      * Creates the actor description.
      * @param actor The actor model.
      * @return The actor description.
      */
-    private fun getDescription(actor: VActor): String {
+    private fun getDescription(actor: VActor): String? {
       return if (actor.acceleratorKey > 0) {
         if (actor.acceleratorModifier == 0) {
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"

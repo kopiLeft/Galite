@@ -33,7 +33,7 @@ import org.kopi.galite.report.VReport
  * Provider Report
  */
 object ProviderR : Report() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
 
   override val title = "Providers_Report"
 
@@ -46,7 +46,7 @@ object ProviderR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -56,7 +56,7 @@ object ProviderR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -76,7 +76,7 @@ object ProviderR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportPdf"  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) {

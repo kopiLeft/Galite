@@ -18,7 +18,6 @@ package org.kopi.galite.tests.form
 
 import java.util.Locale
 
-import org.joda.time.DateTime
 import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
@@ -27,9 +26,10 @@ import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.type.Timestamp
 
 object FormWithList : DictionaryForm() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")
@@ -62,8 +62,24 @@ object FormWithList : DictionaryForm() {
     label = "break",
     help = "Reset Block",
   ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
+    key = Key.F3
+    icon = "break"
+  }
+
+  val resetForm = actor(
+    ident = "resetForm",
+    menu = reset,
+    label = "resetForm",
+    help = "Reset Form",
+  ) {
+    key = Key.F7
+    icon = "break"
+  }
+
+  val resetFormCmd = command(item = resetForm) {
+    action = {
+      resetForm()
+    }
   }
 
   val save = actor(
@@ -179,7 +195,7 @@ object UsersBlock : FormBlock(1, 1, "Test block") {
     columns(u.active)
   }
 
-  val createdOn = visit(domain = Domain<DateTime>(20), position = at(2, 4)) {
+  val createdOn = visit(domain = Domain<Timestamp>(20), position = at(2, 4)) {
     label = "createdOn"
     help = "createdOn"
     columns(u.createdOn)

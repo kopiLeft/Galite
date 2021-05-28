@@ -52,12 +52,12 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
   override fun init(text: String?, toolTip: String?) {
     tooltip = toolTip
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access {
       this.text = text
       if (toolTip != null) {
-        element.setProperty("title", Utils.createTooltip(toolTip))
+        element.setProperty("title", toolTip)
       }
-    //})
+    }
   }
 
   /**
@@ -173,7 +173,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
      * @param actor The actor model.
      * @return The actor description.
      */
-    private fun getDescription(actor: VActor?): String {
+    private fun getDescription(actor: VActor?): String? {
       return if (actor!!.acceleratorKey > 0) {
         if (actor.acceleratorModifier == 0) {
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"

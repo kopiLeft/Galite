@@ -71,40 +71,11 @@ open class DTextField(
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.addTextValueChangeListener {
-      onTextChange(it.oldValue.toString(), it.value.toString())
-      checkText(it.value.toString()) // FIXME: use onTextChange(text) instead when we have full support for commands
+      checkText(it.value?.toString())
     }
 
     createContextMenu()
     setFieldContent(field)
-  }
-
-  fun onTextChange(oldText: String?, newText: String?) {
-    checkText(newText!!, isChanged(oldText, newText))
-  }
-
-  fun onTextChange(rec: Int, text: String?) {
-    // other dirty values has been sent ==> affect them directly to the model.
-    getModel().getForm().performAsyncAction(object : Action("check_type") {
-      override fun execute() {
-        if (isChanged(getModel().getText(rec), transformer!!.toModel(text!!))) {
-          getModel().isChangedUI = true
-          checkText(rec, text)
-        }
-      }
-    })
-  }
-
-  /**
-   * TODO: merge with onTextChange(rec, text)
-   */
-  fun onTextChange(text: String?) {
-    // other dirty values has been sent ==> affect them directly to the model.
-    getModel().getForm().performAsyncAction(object : Action("check_type") {
-      override fun execute() {
-        checkText(text)
-      }
-    })
   }
 
   /**
@@ -153,10 +124,10 @@ open class DTextField(
   override fun updateAccess() {
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
-    //access { TODO: Acccess from thread
-    field.isEnabled = access >= VConstants.ACS_VISIT
-    isEnabled = access >= VConstants.ACS_VISIT
-    //}
+    access {
+      field.isEnabled = access >= VConstants.ACS_VISIT
+      isEnabled = access >= VConstants.ACS_VISIT
+    }
   }
 
   override fun updateText() {
@@ -201,12 +172,12 @@ open class DTextField(
    * Gets the focus to this field.
    */
   private fun enterMe() {
-    //BackgroundThreadHandler.access(Runnable { TODO: access
-    if (scanner) {
-      field.value = transformer!!.toGui("")
+    access {
+      if (scanner) {
+        field.value = transformer!!.toGui("")
+      }
+      field.focus()
     }
-    //field.focus() TODO
-    //})
   }
 
   /**
@@ -226,6 +197,7 @@ open class DTextField(
 
   /**
    * Checks the given text.
+   *
    * @param s The text to be checked.
    * @param changed Is value changed ?
    */

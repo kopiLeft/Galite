@@ -42,8 +42,9 @@ object User : Table() {
   val cv = varchar("CURRICULUM VITAE", 70).nullable()
 }
 
-object FormSample : Form() {
-  override val locale = Locale.FRANCE
+val FormSample = FormSample_()
+class FormSample_ : Form() {
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")
@@ -95,12 +96,21 @@ object FormSample : Form() {
     }
   }
 
+  val testBlock2 = block(1, 1, "Test2", "Test block2") {
+
+    val totalAge = visit(Domain<Int>(3), position = at(1, 1)) {
+      label = "Total"
+      help = "total user age"
+    }
+  }
+
   val tb2 = insertBlock(TestBlock(), p2) {
     command(item = graph) {
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- IN TEST COMMAND ----------------------------------")
       }
+
     }
   }
 
@@ -109,7 +119,7 @@ object FormSample : Form() {
   }
 
   val tb4ToTestChangeBlockAccess = insertBlock(TestBlock(), p1) {
-    blockVisibility(Access.SKIPPED, Modes.MOD_QUERY, Modes.MOD_INSERT)
+    blockVisibility(Access.SKIPPED, Modes.QUERY, Modes.INSERT)
   }
 
   val preform = trigger(INIT) {

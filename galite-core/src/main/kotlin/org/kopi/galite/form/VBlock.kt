@@ -50,8 +50,10 @@ import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -143,13 +145,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * @param page the page number of this block
    */
-  fun setInfo(page: Int) {
+  fun setInfo(page: Int, form: VForm) {
     pageNumber = page
-    setInfo()
+    setInfo(form)
     buildCstr()
   }
 
-  protected open fun setInfo() {
+  protected open fun setInfo(form: VForm) {
     // Do nothing, should be redefined if some info
     // has to be set
   }
@@ -1623,15 +1625,19 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       }
       try {
         try {
-          fetchPosition = pos
-          fetchRecord(fetchBuffer[pos])
+          transaction {
+            fetchPosition = pos
+            fetchRecord(fetchBuffer[pos])
+          }
           return
         } catch (e: VException) {
+          throw e
           try {
           } catch (abortEx: VException) {
             throw abortEx
           }
         } catch (e: SQLException) {
+          throw e
           try {
           } catch (abortEx: DBDeadLockException) {
             throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
@@ -1641,11 +1647,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             throw VExecFailedException(abortEx)
           }
         } catch (e: Error) {
+          throw e
           try {
           } catch (abortEx: Error) {
             throw VExecFailedException(abortEx)
           }
         } catch (e: RuntimeException) {
+          throw e
           try {
           } catch (abortEx: RuntimeException) {
             throw VExecFailedException(abortEx)
@@ -1923,7 +1931,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           else -> throw InconsistencyException("FATAL ERROR: bad search code: $options")
         }
 
-        val condition = field.getSearchCondition_(searchColumn)
+        val condition = field.getSearchCondition(searchColumn)
 
         condition?.let {
           conditionList.add(condition)
@@ -2028,39 +2036,38 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   }
 
   protected fun fetchLookup(tableIndex: Int, currentField: VField) {
-    val table = object : Table(tables!![tableIndex].tableName) {}
-    val columns = mutableListOf<Column<*>>()
-    val conditions = mutableListOf<Op<Boolean>>()
+    // clears all fields of lookup except the key(s)
+    // the specified field is considered to be a key
+    val table = tables!![tableIndex]  // table to select from
+    val columns = mutableListOf<Column<*>>()  // columns to select
+    val conditions = mutableListOf<Op<Boolean>>()  // search conditions
 
-    for (i in fields.indices) {
-      val f = fields[i]
-
-      if (f !== currentField && f.lookupColumn(tableIndex) != null && !f.isLookupKey(tableIndex)) {
-        f.setNull(activeRecord)
+    fields.forEach { field ->
+      if (field != currentField && field.lookupColumn(tableIndex) != null && !field.isLookupKey(tableIndex)) {
+        field.setNull(activeRecord)
       }
     }
 
-    for (i in fields.indices) {
-      val column = fields[i].lookupColumn(tableIndex)
+    fields.forEach { field ->
+      val column : Column<*>? = field.lookupColumn(tables!![tableIndex])
 
       if (column != null) {
+        // add column to select
         columns.add(column)
       }
 
-      if (fields[i] == currentField || fields[i].isLookupKey(tableIndex)) {
-        val condition = fields[i].getSearchCondition()
+      if (field == currentField || field.isLookupKey(tableIndex)) {
+        val condition = field.getSearchCondition(column!!)
 
-        // TODO: 10/12/2020 FIX this !
-        if (condition == null || fields[i].lookupColumn(tableIndex)!!.condition() !is EqOp) {
+        if (condition == null || condition !is EqOp) {
           // at least one key field is not completely specified
           // no guarantee that a unique value will be fetched
           // end processing - non-key fields have already been cleared
           return
         }
 
-        // TODO: 11/12/2020 FIX this !
         if (condition != null) {
-          conditions.add(fields[i].lookupColumn(tableIndex)!!.condition())
+          conditions.add(condition)
         }
       }
     }
@@ -2112,15 +2119,18 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
     try {
       try {
         dialog = transaction {
+          addLogger(StdOutSqlLogger) // TODO
           callProtectedTrigger(VConstants.TRG_PREQRY)
           buildQueryDialog()
         }
       } catch (e: VException) {
+        throw e
         try {
         } catch (abortEx: VException) {
           throw abortEx
         }
       } catch (e: SQLException) {
+        throw e
         try {
         } catch (abortEx: DBDeadLockException) {
           throw VExecFailedException(MessageCode.getMessage("VIS-00058"))
@@ -2130,11 +2140,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           throw VExecFailedException(abortEx)
         }
       } catch (e: Error) {
+        throw e
         try {
         } catch (abortEx: Error) {
           throw VExecFailedException(abortEx)
         }
       } catch (e: RuntimeException) {
+        throw e
         try {
         } catch (abortEx: RuntimeException) {
           throw VExecFailedException(abortEx)
@@ -2573,7 +2585,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun isChart(): Boolean = !noChart()
 
   /**
-   * Returns true iff this block can display more than one record.
+   * Returns true if this block can display more than one record.
    */
   fun isMulti(): Boolean = bufferSize > 1
 
@@ -2746,9 +2758,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
       }
     } else {
-      for (i in activeCommands.indices) {
-        val cmd: VCommand = activeCommands.elementAt(i)
-
+      activeCommands.forEach { cmd ->
         cmd.setEnabled(false)
       }
       activeCommands.clear()
@@ -2850,10 +2860,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    * Clears all hidden lookup fields.
    */
   protected fun clearLookups(recno: Int) {
-    tables?.forEach { table ->
-      fields.forEach { field ->
-        if (field.isInternal() && field.lookupColumn(table) != null && field.eraseOnLookup()) {
-          field.setNull(recno)
+    if (tables != null) {
+      for (i in 1 until tables!!.size) {
+        val table = tables!![i]
+        fields.forEach { field ->
+          if (field.isInternal() && field.lookupColumn(table) != null && field.eraseOnLookup()) {
+            field.setNull(recno)
+          }
         }
       }
     }
@@ -3099,8 +3112,9 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
    *
    */
   protected fun fillIdField(recno: Int, id: Int) {
+    var id = id
     if (id == -1) {
-      // TODO()
+      id = Utils.getNextTableId(tables!![0])
     }
 
     idField.setInt(recno, id)
@@ -3133,7 +3147,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       /* verify that the record has not been changed in the database */
       checkRecordUnchanged(recno)
 
-      val result = mutableListOf<Pair<Column<Any>, Any?>>()
+      val result = mutableListOf<Pair<Column<Any?>, Any?>>()
 
       tsField?.setInt(recno, (System.currentTimeMillis() / 1000).toInt())
       ucField?.setInt(recno, ucField!!.getInt()!! + 1)
@@ -3143,7 +3157,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           continue
         }
         @Suppress("UNCHECKED_CAST")
-        val column = field.lookupColumn(0) as? Column<Any>
+        val column = field.lookupColumn(0) as? Column<Any?>
 
         if (column != null) {
           if (field.hasLargeObject(recno) && field.hasBinaryLargeObject(recno)) {
@@ -3159,7 +3173,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
 
       table.update({ idColumn eq idField.getInt(recno)!! }) { table ->
         result.forEach {
-          table[it.first] = it.second!!
+          table[it.first] = it.second
         }
       }
       setRecordChanged(recno, false)

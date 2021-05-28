@@ -23,9 +23,11 @@ import org.kopi.galite.common.FormTrigger
 import org.kopi.galite.common.LocalizationWriter
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.common.Window
+import org.kopi.galite.form.Commands
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VForm
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.visual.VException
 
 /**
  * Represents a form.
@@ -110,6 +112,29 @@ abstract class Form : Window() {
     val page = FormPage(pages.size, "Id\$${pages.size}", title)
     pages.add(page)
     return page
+  }
+
+  /**
+   * Aborts current processing, resets form.
+   * @exception        VException        an exception may occur in form.reset()
+   */
+  fun resetForm() {
+    Commands.resetForm(model)
+  }
+
+  /**
+   * Shows to the user want to show a help about this form.
+   */
+  fun showHelp() {
+    model.showHelp(model)
+  }
+
+  /**
+   * Aborts current processing, closes form.
+   * @exception        VException        an exception may occur in form.close()
+   */
+  fun quitForm() {
+    Commands.quitForm(model)
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -232,7 +257,7 @@ abstract class Form : Window() {
 
     blocks = formBlocks.map { formBlock ->
       formBlock.getBlockModel(this, source).also { vBlock ->
-        vBlock.setInfo(formBlock.pageNumber)
+        vBlock.setInfo(formBlock.pageNumber, this)
         vBlock.initIntern()
         formBlock.blockFields.forEach { formField ->
           formField.initialValues.forEach {

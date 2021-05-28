@@ -17,13 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.html.Anchor
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.shared.Registration
 
 /**
@@ -36,7 +35,7 @@ class VWindows : Div(), HasEnabled, Focusable<VWindows> {
 
   private val anchor = Anchor()
   private val label = Span()
-  private val icon = Icon(VaadinIcon.COPY_O)
+  private val icon = IronIcons.CONTENT_COPY.create()
   private var enabled = false
 
   init {

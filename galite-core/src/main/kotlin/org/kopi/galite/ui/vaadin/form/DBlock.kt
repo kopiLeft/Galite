@@ -25,6 +25,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
@@ -32,6 +33,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The `DBlock` is the vaadin implementation
@@ -40,6 +42,8 @@ import com.vaadin.flow.component.Component
  * @param parent The parent form.
  * @param model The block model.
  */
+
+@CssImport("./styles/galite/Block.css")
 open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
 
   protected var formView: DForm = parent
@@ -57,9 +61,8 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     formView = parent
     setBorder(model.border, model.title)
     model.addBlockListener(this)
-    bufferSize = model.bufferSize
-    displaySize = model.displaySize
-    sortedRecords = model.sortedRecords
+    setBufferSize(model.bufferSize, model.displaySize)
+    setSortedRecords(model.sortedRecords)
     noMove = model.noMove()
     noChart = model.noChart()
 
@@ -108,20 +111,6 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
         index += 1
       }
     }
-  }
-
-  /**
-   * Goto the next record
-   */
-  override fun gotoNextRecord() {
-    model.gotoNextRecord()
-  }
-
-  /**
-   * Goto the previous record
-   */
-  override fun gotoPrevRecord() {
-    model.gotoPrevRecord()
   }
 
   /**
@@ -187,7 +176,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
    * Redisplays only if forced or if the current record is off-screen.
    * If there is no current record, the first valid record is used
    */
-  override fun refresh(force: Boolean) {
+  open fun refresh(force: Boolean) {
     var redisplay = false
     val recno: Int // row in view
 
@@ -268,13 +257,10 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
         }
       }
     }
-    // sends the model active record to client side.
-    // BackgroundThreadHandler.access(Runnable { fireActiveRecordChanged(model.getActiveRecord()) }) TODO: Do we need BackgroundThreadHandler?
-    fireActiveRecordChanged(model.activeRecord)
-  }
-
-  override fun fireValueChanged(col: Int, rec: Int, value: String?) {
-    super.fireValueChanged(col, rec, value)
+    // Consider the model active record changes.
+    access {
+      fireActiveRecordChanged(model.activeRecord)
+    }
   }
 
   open fun fireColorChanged(
@@ -283,7 +269,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
           foreground: String?,
           background: String?,
   ) {
-    TODO()
+    cachedColors.add(CachedColor(col, rec, foreground, background))
   }
 
   /**
@@ -447,7 +433,8 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
   override fun recordInfoChanged(rec: Int, info: Int) {}
 
   override fun orderChanged() {
-    TODO()
+    fireOrderChanged(model.sortedRecords)
+    refresh(true)
   }
 
   override fun filterHidden() {}

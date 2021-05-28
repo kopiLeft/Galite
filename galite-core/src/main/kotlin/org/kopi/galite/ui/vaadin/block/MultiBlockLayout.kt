@@ -61,6 +61,10 @@ class MultiBlockLayout : AbstractBlockLayout() {
     TODO("Not yet implemented")
   }
 
+  override fun addAlignedComponent(component: Component, constraint: ComponentConstraint) {
+    TODO("Not yet implemented")
+  }
+
   override fun layoutAlignedComponents() {
     TODO("Not yet implemented")
   }

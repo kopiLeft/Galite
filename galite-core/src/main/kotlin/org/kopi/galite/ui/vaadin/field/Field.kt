@@ -27,6 +27,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.ColumnView
 import org.kopi.galite.ui.vaadin.form.DBlock
+import org.kopi.galite.ui.vaadin.form.DField
 import org.kopi.galite.ui.vaadin.window.Window
 
 /**
@@ -39,10 +40,6 @@ import org.kopi.galite.ui.vaadin.window.Window
  */
 abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   : Div(), FieldListener, HasStyle {
-
-  init {
-    className = Styles.FIELD
-  }
 
   private var listeners = mutableListOf<FieldListener>()
 
@@ -117,7 +114,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   var columnView: ColumnView? = null
 
-  var wrappedField: CustomField<Any?>? = null
+  lateinit var wrappedField: AbstractField<*>
 
   /**
    * `true` if the content of this field has changed.
@@ -129,23 +126,26 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    */
   var isDirty = false
 
-  private var dirtyValues: MutableMap<Int, String?>? = null
+  protected var dirtyValues: MutableMap<Int, String?>? = null
 
   /**
    * Enables and disables the leave action of the active field.
    */
   val doNotLeaveActiveField = false
 
+  init {
+    className = Styles.FIELD
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
 
-  override fun onAttach(attachEvent: AttachEvent?) {
-    addFieldListener(this)
-  }
-
-  fun setFieldContent(component: CustomField<Any?>) {
+  fun setFieldContent(component: AbstractField<*>) {
     wrappedField = component
+    wrappedField.addFocusListener {
+      fireClicked()
+    }
     add(component)
   }
 
@@ -322,7 +322,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Gains the focus on this field.
    */
   open fun focus() {
-    wrappedField!!.focus()
+    wrappedField.focus()
   }
 
   open fun iniComponent() {
@@ -344,16 +344,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   override fun onDecrement() {
     fireDecremented()
-  }
-
-  override fun onClick() {
-    // no click event is for rich text field and action fields
-    /*if (hasAction || content is RichTextField) { TODO
-      return
-    }*/
-    columnView!!.setBlockActiveRecordFromDisplayLine(position)
-    getWindow()!!.cleanDirtyValues(getBlock(), false) //!! do not make a focus transfer.
-    fireClicked()
   }
 
   override fun transferFocus() {
@@ -482,7 +472,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param rec The concerned record number.
    */
   open fun markAsDirty(rec: Int) {
-    markAsDirty(rec, if (wrappedField!!.value == null) "" else wrappedField!!.value.toString())
+    markAsDirty(rec, if (wrappedField.value == null) "" else wrappedField.value.toString())
   }
 
   /**
@@ -530,7 +520,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param enabled The enabled status
    */
   open fun setActorsEnabled(enabled: Boolean) {
-    val window = (parent.get().parent.get().parent.get() as DBlock).parent
+    val window = ((this as DField).model.blockView as DBlock).parent
     for (actor in actors) {
       window.setActorEnabled(actor, enabled)
     }
@@ -556,7 +546,7 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Updates the value of this field according to its position.
    */
   fun updateValue() {
-    wrappedField!!.value = columnView!!.getValueAt(position)
+    wrappedField.value = columnView!!.getValueAt(position)
     // wrappedField.updateValue() // TODO: Do we need this?
   }
 
@@ -581,13 +571,13 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Returns the parent window of this field.
    * @return The parent window of this field.
    */
-  protected open fun getWindow(): Window? = parent.orElse(null) as? Window
+  protected open fun getWindow(): Window? = ((this as DField).model.blockView as DBlock).parent
 
   /**
    * Returns the parent block of this field.
    * @return The parent block of this field.
    */
-  protected open fun getBlock(): Block? = parent.orElse(null) as? Block
+  protected open fun getBlock(): Block? = (this as DField).model.blockView as Block
 
   /**
    * The navigation delegation to server mode.

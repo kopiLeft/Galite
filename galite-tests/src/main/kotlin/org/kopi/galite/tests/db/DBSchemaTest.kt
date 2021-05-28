@@ -17,6 +17,8 @@
 
 package org.kopi.galite.tests.db
 
+import java.time.Instant
+
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Database
@@ -24,7 +26,6 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.kopi.galite.tests.TestBase
@@ -122,9 +123,9 @@ open class DBSchemaTest : TestBase() {
         it[name] = userName
         it[character] = shortname
         it[active] = true
-        it[createdOn] = DateTime.now()
+        it[createdOn] = Instant.now()
         it[createdBy] = 1
-        it[changedOn] = DateTime.now()
+        it[changedOn] = Instant.now()
         it[changedBy] = 1
       }
     }

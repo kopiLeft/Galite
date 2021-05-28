@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.form
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.BooleanField
 
 import com.vaadin.flow.component.AbstractField
@@ -48,16 +49,15 @@ class DBooleanField(
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  private val field: BooleanField
+  private val field: BooleanField = BooleanField(trueRepresentation, falseRepresentation)
   private var inside = false
 
   // --------------------------------------------------
   // CONSTRUCTOR
   // --------------------------------------------------
   init {
-    field = BooleanField(trueRepresentation, falseRepresentation)
     field.addValueChangeListener(this)
-    //setContent(field) TODO
+    setFieldContent(field)
   }
   // --------------------------------------------------
   // IMPLEMENTATION
@@ -71,9 +71,9 @@ class DBooleanField(
   }
 
   override fun updateText() {
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access {
       field.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
-    //})
+    }
     super.updateText()
   }
 
@@ -110,11 +110,10 @@ class DBooleanField(
   override fun updateAccess() {
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
-    //BackgroundThreadHandler.access(Runnable { TODO
-      field.label = label!!.text
+    access {
       field.isEnabled = getAccess() >= VConstants.ACS_VISIT
       field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
-    //})
+    }
   }
 
   override fun getObject(): Any? = wrappedField!!.value

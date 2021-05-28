@@ -112,7 +112,7 @@ class MReport : Constants, Serializable {
     // add the new column;
     cols[columns.size] = VFixnumColumn(null, 0, 4, -1, null, 15, 7, null)
     cols[columns.size]!!.label = label
-    cols[columns.size]!!.addedAtRuntime = true
+    cols[columns.size]!!.isAddedAtRuntime = true
     // copy the other columns.
     columns.forEachIndexed { index, element ->
       cols[index] = element
@@ -383,13 +383,6 @@ class MReport : Constants, Serializable {
   fun getRow(row: Int): VReportRow? = visibleRows!![row]
 
   /**
-   * Return all rows
-   *
-   * @return    all visible desired rows
-   */
-  fun getRows(): Array<VReportRow?> = visibleRows!!
-
-  /**
    * Return the tree used by the model
    */
   fun getTree(): VGroupRow? = root
@@ -459,7 +452,7 @@ class MReport : Constants, Serializable {
       var i = 0
       while (i < displayGroups.size) {
         displayLevels[i] = level
-        if (accessibleColumns[displayOrder[i]]!!.visible) {
+        if (accessibleColumns[displayOrder[i]]!!.isVisible) {
           if (displayGroups[i] == -1 || i == separatorPos) {
             while (i < displayGroups.size) {
               displayLevels[i] = level
@@ -506,7 +499,7 @@ class MReport : Constants, Serializable {
     }
     // sort in ascending order
     var i = column
-    while (!accessibleColumns[i]!!.visible) {
+    while (!accessibleColumns[i]!!.isVisible) {
       i += 1
     }
     if (i >= 0) {
@@ -548,7 +541,7 @@ class MReport : Constants, Serializable {
       while (displayLevels[next] == displayLevels[start]) {
         next++
       }
-      while (!accessibleColumns[start]!!.visible) {
+      while (!accessibleColumns[start]!!.isVisible) {
         // to get the first visible column of this level
         start++
       }
@@ -565,7 +558,7 @@ class MReport : Constants, Serializable {
 
         maxRowCount++
         for (i in 0 until next) {
-          newRow.setValueAt(displayOrder[i], baseRows[loRow]!!.getValueAt(displayOrder[i])!!)
+          newRow.setValueAt(displayOrder[i], baseRows[loRow]!!.getValueAt(displayOrder[i]))
         }
         buildGroupingTree(newRow, loRow, split - 1, next)
         tree.add(newRow)

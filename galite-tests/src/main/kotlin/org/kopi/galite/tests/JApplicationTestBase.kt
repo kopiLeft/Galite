@@ -87,7 +87,7 @@ open class JApplicationTestBase : DBSchemaTest() {
       get() = true
 
     override val defaultLocale: Locale
-      get() = Locale.FRANCE
+      get() = Locale.UK
 
     init {
       ApplicationConfiguration.setConfiguration(

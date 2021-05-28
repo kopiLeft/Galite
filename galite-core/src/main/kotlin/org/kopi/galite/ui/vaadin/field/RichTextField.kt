@@ -42,7 +42,7 @@ class RichTextField(
         visibleRows: Int,
         var noEdit: Boolean,
         locale: Locale
-) : CustomField<Any?>() {
+) : ObjectField<Any?>() {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -71,11 +71,7 @@ class RichTextField(
 
   private val navigationListeners = ArrayList<NavigationListener>()
 
-  /*override fun setValue(value: String?) {
-    editor!!.value = value
-  }*/
-
-  override fun getValue() = editor!!.value
+  override fun getValue() = editor.value
 
   /**
    * Creates the configuration to be used for this rich text.
@@ -236,4 +232,22 @@ class RichTextField(
   }
 
   override fun generateModelValue() : String = editor.value
+  override val isNull: Boolean
+    get() = editor.value.isNullOrEmpty()
+
+  override fun setColor(foreground: String?, background: String?) {
+    TODO("Not yet implemented")
+  }
+
+  override fun checkValue(rec: Int) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setParentVisibility(visible: Boolean) {
+    TODO("Not yet implemented")
+  }
+
+  override fun addFocusListener(function: () -> kotlin.Unit) {
+    TODO("Not yet implemented")
+  }
 }

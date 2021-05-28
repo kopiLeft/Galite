@@ -55,7 +55,26 @@ class VWindowsDisplay : Div() {
     menu.addWindow(container, window, title)
   }
 
-  fun openPopUp() {
+  /**
+   * Removes the given window item.
+   * @param window The window item.
+   */
+  fun removeWindow(window: Component) {
+    menu.removeWindow(window)
+  }
+
+  /**
+   * Shows the windows menu.
+   */
+  fun showMenu() {
     menu.open()
+  }
+
+  /**
+   * Sets the dialog title.
+   * @param text The title text.
+   */
+  override fun setText(text: String?) {
+    menu.setHeaderText(text)
   }
 }

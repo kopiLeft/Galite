@@ -59,20 +59,26 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     className = Styles.BOOLEAN_FIELD
     yes.classNames.add("true")
     no.classNames.add("false")
+    setLabel(trueRepresentation, falseRepresentation)
     content.add(yes)
     content.add(no)
     // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
     // content.setCellVerticalAlignment(no, HasVerticalAlignment.ALIGN_BOTTOM) TODO
-    // setWidget(content) TODO
+    add(content)
     yes.addValueChangeListener(::onYesChange)
     no.addValueChangeListener(::onNoChange)
     yes.element.style["visibility"] = "hidden"
     no.element.style["visibility"] = "hidden"
+    content.element.style["border-bottom"] = "1px solid #dadada"
     content.element.addEventListener("mouseover") {
       isVisible = true
     }
-
-
+    content.element.addEventListener("focusin") {
+      content.element.style["border-bottom"] = "2px solid #a3a3a3"
+    }
+    content.element.addEventListener("focusout") {
+      content.element.style["border-bottom"] = "1px solid #dadada"
+    }
     content.element.addEventListener("mouseout") {
       if(value == null) {
         isVisible = false
@@ -144,8 +150,9 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
   }
 
-  override fun isVisible(): Boolean = (yes.element.style["visibility"].equals("visible")
-          && no.element.style["visibility"].equals("visible"))
+  override fun isVisible(): Boolean =
+    yes.element.style["visibility"].equals("visible")
+            && no.element.style["visibility"].equals("visible")
 
 
   override val isNull: Boolean
@@ -178,6 +185,15 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   }
 
   override fun generateModelValue(): Boolean? = value
+
+  override fun addFocusListener(function: () -> Unit) {
+    yes.addFocusListener {
+      function()
+    }
+    no.addFocusListener {
+      function()
+    }
+  }
 
   override fun setEnabled(enabled: Boolean) {
     super.setEnabled(enabled)
@@ -224,28 +240,16 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * Handles the component visibility according to its value.
    */
   protected fun handleComponentVisiblity() {
-    isVisible = if (element.parent != null || element.childCount > 0) { TODO()
-      // field is focused set it visible
-      true
-    } else value != null
+    isVisible = value != null
   }
 
   /**
-   * Sets the name of the radio button inside the boolean field.
+   * Sets the tooltip of the checkbox buttons inside the boolean field.
    *
-   * The label attached with this field. TODO: doc?
-   * Needed to set the for attribute of the input radio
-   * in the field widget.
-   *
-   * @param label The name of the radio buttons.
    * @param yes The localized label for true value.
    * @param no The localized label for false value.
    */
-  fun setLabel(label: String, yes: String?, no: String?) {
-    var label = label
-    label = label.replace("\\s".toRegex(), "_")
-    // this.yes.setName(label) TODO
-    // this.no.setName(label) TODO
+  fun setLabel(yes: String?, no: String?) {
     this.yes.element.setProperty("title", yes)
     this.no.element.setProperty("title", no)
   }

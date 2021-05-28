@@ -28,6 +28,7 @@ import org.kopi.galite.db.Users
 import org.kopi.galite.tests.JApplicationTestBase
 
 class FormWithListDomainsTests: JApplicationTestBase() {
+  val FormWithListDomains = FormWithListDomains()
 
   @Test
   fun formWithListDomainsTests() {

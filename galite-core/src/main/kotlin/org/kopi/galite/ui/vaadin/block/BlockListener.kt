@@ -61,10 +61,4 @@ interface BlockListener : Serializable {
    * already registered in the client data model.
    */
   fun clearCachedColors(cachedColors: List<Block.CachedColor>)
-
-  /**
-   * Clears the given record info list.
-   * @param recordInfos The record info list.
-   */
-  fun clearRecordInfo(recordInfos: List<Block.RecordInfo>)
 }

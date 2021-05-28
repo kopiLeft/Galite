@@ -76,6 +76,7 @@ open class VActor(var menuIdent: String,
 
   fun performBasicAction() {
     handler!!.executeVoidTrigger(number)
+    action?.invoke()
   }
 
   // ----------------------------------------------------------------------
@@ -154,8 +155,8 @@ open class VActor(var menuIdent: String,
     set(enabled) {
       display?.setEnabled(enabled)
     }    // Enables/disables the actor.
-  lateinit var menuName: String
-  lateinit var menuItem: String
+  var menuName: String? = null
+  var menuItem: String? = null
   private var display: UActor? = null
   var number = 0 // The number for the actor
   var action: (() -> Unit)? = null

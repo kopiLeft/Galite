@@ -22,9 +22,8 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.dialog.GeneratedVaadinDialog
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
@@ -36,7 +35,7 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private var image = Icon(VaadinIcon.SPINNER)
+  private var image = Div()
   private var text = Span()
   private var popup = Dialog()
 
@@ -45,9 +44,10 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
     text.className = Styles.WAIT_WINDOW_TEXT
     add(image)
     add(text)
-    justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    defaultHorizontalComponentAlignment = FlexComponent.Alignment.START
+    defaultHorizontalComponentAlignment = FlexComponent.Alignment.CENTER
     isSpacing = false
+    popup.isCloseOnOutsideClick = false
+    popup.isCloseOnEsc = false
     popup.addOpenedChangeListener(this)
   }
 
@@ -63,10 +63,18 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
 
   /**
    * Shows the wait window.
-   * @param parent the parent widget.
    */
   fun show() {
+    popup.removeAll()
+    popup.add(this)
     popup.open()
+  }
+
+  /**
+   * Closes the wait panel.
+   */
+  fun close() {
+    popup.close()
   }
 
   override fun onComponentEvent(event: GeneratedVaadinDialog.OpenedChangeEvent<Dialog>) {

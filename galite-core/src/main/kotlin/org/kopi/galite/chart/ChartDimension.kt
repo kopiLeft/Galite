@@ -108,6 +108,11 @@ open class ChartDimension<T : Comparable<T>?>(domain: Domain<T>) : ChartField<T>
             else -> throw RuntimeException("Type ${domain.kClass!!.qualifiedName} is not supported")
           }
         }
+      }.also {
+        if (ident != "") {
+          it.label = label
+          it.help = help
+        }
       }
     }
 }

@@ -48,37 +48,33 @@
 }
 
 /*
- * Form blocks style
- */
-.k-block {
-    padding: 22px 20px 22px 50px;
-    margin-bottom: 16px;
-    background: #ffffff;
-    display: inline-block;
-}
-
-/*
  * Field's values style
  */
 ::part(input-field), ::part(input-field):not(:hover) {
     background-color: white;
 }
 
-.k-block ::part(value) {
+.k-block .simple ::part(value) {
     --lumo-text-field-overflow-mask-image: none;
-    border-bottom: 1px solid #dadada;
     padding: 0;
     margin: 0;
     box-shadow: none;
     background-color: var(--lumo-base-color);
+    border-bottom: 1px solid #dadada;
 }
 
 /*
  * Field's values style when focused
  */
 .k-block ::part(value):focus {
+    outline: none;
     border-bottom: 2px solid #a3a3a3;
     background: white;
+    box-shadow: none;
+}
+
+::part(input-field) {
+    box-shadow: none;
 }
 
 .k-form-tab {
@@ -105,7 +101,6 @@
     width: 100%;
     height: 100%;
     margin: 0;
-    padding-top: 63px;
     box-sizing: border-box;
     text-align: left;
     display: inline-block;
@@ -116,16 +111,145 @@
     --lumo-space-m: 0;
 }
 
-html {
-    --lumo-space-m: 0;
+
+/*
+ * Boolean field style
+ */
+::part(checkbox) {
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    line-height: 0;
+}
+
+::part(checkbox)::after {
+    border-width: 0.3em 0 0 0.3em;
+    transform-origin: -1.5px -1.2px;
+}
+
+:not(.true)::part(checkbox)::after {
+    opacity: none;
+    transform: none;
+    font-size: 15;
+    font-weight: bold;
+    position: absolute;
+    top: 0.55em;
+    left: 0.09em;
+    box-sizing: border-box;
+    transform-origin: 0 0;
+    border-width: 0;
+    content: "\2715";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    color: white;
+}
+
+.k-boolean-field {
+    vertical-align: middle;
+}
+
+vaadin-checkbox {
+    height: 38px;
 }
 
 /*
- * Actors' container style
+ * Spinner style
  */
-#actors {
-    height: 46px;
-    width: 100%;
-    background: #009bd4;
-    color: #ffffff;
+.k-wait-window-image {
+    display: flex;
+    justify-content: center;
 }
+
+.k-wait-window-image::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 10px solid #dddddd;
+    border-top-color: #204c8a;
+    border-radius: 50%;
+    animation: k-wait-window-image 1s ease infinite;
+}
+
+@keyframes k-wait-window-image {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+/*
+ * scrollbar style
+ */
+.k-form-page {
+    overflow: auto;
+    height: auto;
+    max-height: calc(100vh - 200px);
+}
+
+/*
+ * border for grid row
+ */
+::part(row) {
+   border-bottom: 1px #DCDCDC solid;
+}
+
+/*
+ * help style
+ */
+.help {
+    margin-top: -30px;
+}
+
+.help, .help > center > h1 {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+}
+
+.help > center > h1 {
+    font-size: 2.5em !important;
+    font-weight: bold;
+}
+
+.help > table > tbody > tr > td > dl > dt > h2 {
+    font-family: Arial, sans-serif !important;
+    font-weight: bold;
+    font-style: normal !important;
+    font-size: 1.5em;
+}
+
+pre {
+    background: none;
+}
+
+/*
+ * switch window style
+ */
+.window-items-title, .item {
+    background: #E8E8E8;
+    color: #778899;
+    width: 500px;
+    font-family: Courier New, monospace; !important;
+    font-style: italic !important;
+    font-size: 1em;
+}
+
+.window-items-title {
+    background: none;
+}
+
+.window-items-container vaadin-button {
+    margin-top: -1px;
+    border-bottom: 1px solid gray;
+    width: 500px;
+}
+
+.simple > tbody > tr > td > vaadin-form-item,
+ .simple > tbody > tr > td > vaadin-form-item > .k-field > vaadin-custom-field,
+ .simple > tbody > tr > td > vaadin-form-item > .k-field > vaadin-custom-field > * {
+    width: 100%;
+}
+

@@ -17,14 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.data.converter.Converter
-import com.vaadin.flow.data.renderer.Renderer
-import org.kopi.galite.form.UBlock
-import java.util.Locale
-
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.grid.GridEditorImageField
-import org.kopi.galite.ui.vaadin.visual.VApplication
+
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
 
 class DGridEditorImageField(
         columnView: VFieldUI,
@@ -41,8 +38,8 @@ class DGridEditorImageField(
   private var image: ByteArray? = null
 
   init {
-    // editor.setImageWidth(width) TODO
-    // editor.setImageHeight(height) TODO
+    (editor as GridEditorImageField).setImageWidth(width)
+    (editor as GridEditorImageField).setImageHeight(height)
   }
 
   companion object {

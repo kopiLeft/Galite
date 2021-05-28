@@ -166,7 +166,7 @@ abstract class Report : Window() {
 
   // TODO add Decimal types
   fun MReport.addReportColumns() {
-    columns = fields.map {
+    val userFields = fields.map {
       if (it.group != null) {
         it.groupID = fields.indexOf(it.group)
       }
@@ -209,7 +209,8 @@ abstract class Report : Window() {
         column.label = it.label ?: ""
         column.help = it.help
       }
-    }.toTypedArray()
+    }
+    columns = (userFields + VSeparatorColumn()).toTypedArray()
   }
 
   private fun MReport.addReportLines() {
@@ -218,7 +219,8 @@ abstract class Report : Window() {
         it.data[field]
       }
 
-      addLine(list.toTypedArray())
+      // Last null value is added for the separator column
+      addLine((list + listOf(null)).toTypedArray())
     }
   }
 
@@ -240,6 +242,7 @@ abstract class Report : Window() {
        */
       fun handleTriggers(triggers: MutableList<Trigger>) {
         // REPORT TRIGGERS
+        super.VKT_Triggers = mutableListOf(IntArray(Constants.TRG_TYPES.size))
         triggers.forEach { trigger ->
           val blockTriggerArray = IntArray(Constants.TRG_TYPES.size)
           for (i in VConstants.TRG_TYPES.indices) {
@@ -248,7 +251,7 @@ abstract class Report : Window() {
               super.triggers[i] = trigger
             }
           }
-          super.VKT_Triggers[0] = blockTriggerArray
+          super.VKT_Triggers!![0] = blockTriggerArray
         }
 
         // FIELD TRIGGERS
@@ -261,19 +264,23 @@ abstract class Report : Window() {
             fieldTriggerArray[Constants.TRG_FORMAT] = it.formatTrigger!!.events.toInt()
           }
           // TODO : Add field triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
+          super.VKT_Triggers!!.add(fieldTriggerArray)
         }
+
+        // TODO: for separator column
+        super.VKT_Triggers!!.add(IntArray(Constants.TRG_TYPES.size))
 
         // COMMANDS TRIGGERS
         commands?.forEach {
           val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
           // TODO : Add commands triggers here
-          super.VKT_Triggers.add(fieldTriggerArray)
+          super.VKT_Triggers!!.add(fieldTriggerArray)
         }
       }
 
       override fun init() {
         setTitle(title)
+        super.setPageTitle(title)
         help = this@Report.help
         this.addActors(this@Report.actors.map { actor ->
           actor.buildModel(sourceFile)

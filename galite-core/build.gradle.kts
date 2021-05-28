@@ -39,8 +39,8 @@ dependencies {
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+           "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+           "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
 
@@ -71,9 +71,14 @@ dependencies {
   // EnhancedDialog dependency
   implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
 
+  // ApexCharts dependency
+  implementation("com.github.appreciated", "apexcharts", "2.0.0.beta10")
+
+  // Iron Icons dependency
+  implementation("com.flowingcode.addons", "iron-icons", "2.0.1")
+
   //QuillEditor dependency
   implementation("org.vaadin.klaudeta", "quill-editor", "1.0.0")
-
 }
 
 dependencyManagement {

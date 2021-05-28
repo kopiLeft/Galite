@@ -23,12 +23,13 @@ import org.kopi.galite.form.BlockListener
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VConstants
 import org.kopi.galite.ui.vaadin.field.CheckTypeException
+import org.kopi.galite.ui.vaadin.form.DBlock
+import org.kopi.galite.ui.vaadin.form.DGridEditorLabel
 import org.kopi.galite.ui.vaadin.form.Form
 import org.kopi.galite.ui.vaadin.form.Page
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.notif.NotificationUtils
 
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.HasValue
@@ -111,26 +112,38 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   var activeRecord = -1
     get() = if (field in 0 until bufferSize) field else -1
     set(value) {
-      if (isMulti() || value == 0) {
-        field = value
+      if (initialized) {
+        if (isMulti() || value == 0) {
+          field = value
+        }
+        fireActiveRecordChanged()
+        refresh(false)
       }
     }
 
   /**
    * The sorted records of this block.
    */
-  open var sortedRecords = IntArray(0)
+  private var sortedRecords = IntArray(0)
+
+  open fun setSortedRecords(sortedRecords: IntArray) {
+    this.sortedRecords = sortedRecords
+    if (initialized) {
+      refresh(true)
+    }
+  }
 
   /**
    * The block records info changes buffer.
    */
-  var recordInfo: MutableList<RecordInfo> = mutableListOf()
+  lateinit var recordInfo: IntArray
 
   /**
    * The cached field colors per record.
    */
   var cachedColors: MutableList<CachedColor> = mutableListOf()
     set(value) {
+      field = value
       for (cachedColor in value) {
         setCachedColors(cachedColor.col, cachedColor.rec, cachedColor.foreground, cachedColor.background)
       }
@@ -260,6 +273,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    */
   var cachedValues: MutableList<CachedValue> = mutableListOf()
     set(value) {
+      field = value
       for (cachedValue in value) {
         setCachedValue(cachedValue.col, cachedValue.rec, cachedValue.value)
       }
@@ -267,21 +281,6 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
 
   init {
     className = Styles.BLOCK
-  }
-
-  override fun onAttach(attachEvent: AttachEvent?) {
-    updateActiveRecord()
-    updateRecordInfo()
-    setBufferSize()
-    updateCachedValues()
-    updateCachedColors()
-    updateOrder()
-
-    handleContentComponent()
-    setContent()
-    if (layout is ChartBlockLayout) {
-      //(layout as ChartBlockLayout).addValueChangeHandler(this) TODO
-    }
   }
 
   /**
@@ -335,7 +334,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
           useAll: Boolean,
   ) {
     buildLayout()
-    layout!!.addComponent(component, x, y, width, height, alignRight, useAll)
+    layout!!.addComponent(component, (x - 1) / 2, y, width, height, alignRight, useAll)
   }
 
   /**
@@ -344,14 +343,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   fun buildLayout() {
     if (layout == null) {
       layout = createLayout()
-      if (droppable) {
-        //dndWrapper = DragAndDropWrapper(layout) TODO
-        //dndWrapper.setImmediate(true)
-        //setContent(dndWrapper)
-        setContent(layout as Component)
-      } else {
-        setContent(layout as Component)
-      }
+      setContent(layout as Component)
     }
   }
 
@@ -408,7 +400,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @param record The new active record.
    */
   protected open fun fireActiveRecordChanged(record: Int) {
-    // TODO
+    activeRecord = record
   }
 
   /**
@@ -425,7 +417,10 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @param info The record info value.
    */
   protected open fun fireRecordInfoChanged(rec: Int, info: Int) {
+    recordInfo[rec] = info
     // TODO
+    // forces the display after a record info update
+    refresh(true)
   }
 
   /**
@@ -515,9 +510,13 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * Layout components Creates the content of the block.
    */
-  protected open fun layout() {
+  fun layout() {
     // create detail block view.
     layout?.layout()
+  }
+
+  fun layoutAlignedComponents() {
+    layout?.layoutAlignedComponents()
   }
 
   open fun clear() {
@@ -562,15 +561,10 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
     }
   }
 
-  open fun updateRecordInfo() {
-    if (initialized && recordInfo.isNotEmpty()) {
-      clearRecordInfo(recordInfo)
-      // forces the display after a record info update
-      refresh(true)
-    }
-  }
-
-  open fun setBufferSize() {
+  fun setBufferSize(bufferSize: Int, displaySize: Int) {
+    this.bufferSize = bufferSize
+    this.displaySize = displaySize
+    recordInfo = IntArray(2 * bufferSize)
     if (isMulti()) {
       sortedRecords = IntArray(bufferSize)
       activeRecord = -1
@@ -590,31 +584,6 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
     // build the cache buffers
     rebuildCachedInfos()
     initialized = true
-  }
-
-  open fun  updateCachedValues() {
-    if (!initialized) {
-      return
-    }
-    if (cachedValues.isNotEmpty()) {
-      setCachedValues()
-      clearCachedValues(cachedValues)
-    }
-  }
-
-  open fun  updateCachedColors() {
-    if (!initialized) {
-      return
-    }
-    if (cachedColors.isNotEmpty()) {
-      clearCachedColors(cachedColors)
-    }
-  }
-
-  open fun  updateOrder() {
-    if (initialized) {
-      refresh(true)
-    }
   }
 
   /**
@@ -1088,7 +1057,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * Refreshes the display of this block.
    */
-  protected open fun refresh(force: Boolean) {
+  private fun refresh(force: Boolean) {
     var redisplay = false
     if (isLayoutBelongsToGridDetail || !isMulti()) {
       return
@@ -1419,7 +1388,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @return `true` if the specified record has been deleted.
    */
   open fun isSortedRecordDeleted(sortedRec: Int): Boolean {
-    return recordInfo[sortedRecords[sortedRec]].value and VConstants.RCI_DELETED != 0
+    return recordInfo[sortedRecords[sortedRec]] and VConstants.RCI_DELETED != 0
   }
 
   /**
@@ -1437,7 +1406,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @return `true` if the specified record has been fetched from the database
    */
   open fun isSortedRecordFetched(sortedRec: Int): Boolean {
-    return recordInfo[sortedRecords[sortedRec]].value and VConstants.RCI_FETCHED != 0
+    return recordInfo[sortedRecords[sortedRec]] and VConstants.RCI_FETCHED != 0
   }
 
   /**
@@ -1446,7 +1415,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @return `true` if the specified record has been changed
    */
   open fun isSortedRecordChanged(sortedRec: Int): Boolean {
-    return recordInfo[sortedRecords[sortedRec]].value and VConstants.RCI_CHANGED != 0
+    return recordInfo[sortedRecords[sortedRec]] and VConstants.RCI_CHANGED != 0
   }
 
   /**
@@ -1464,7 +1433,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @param value The fetch value.
    */
   open fun setRecordFetched(rec: Int, value: Boolean) {
-    val oldValue = recordInfo[rec].value
+    val oldValue = recordInfo[rec]
 
     // calculate new value
     val newValue = if (value) {
@@ -1474,7 +1443,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
     }
     if (newValue != oldValue) {
       // set record info
-      recordInfo[rec].value = newValue
+      recordInfo[rec] = newValue
       // inform listener that the number of rows changed
       updateScrollbar()
     }
@@ -1485,8 +1454,8 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * @param rec The record number.
    * @param value The change value.
    */
-  open fun setRecordChanged(rec: Int, value: Boolean) {
-    val oldValue = recordInfo[rec].value
+  fun setRecordChanged(rec: Int, value: Boolean) {
+    val oldValue = recordInfo[rec]
 
     // calculate new value
     val newValue = if (value) {
@@ -1496,7 +1465,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
     }
     if (newValue != oldValue) {
       // set record info
-      recordInfo[rec].value = newValue
+      recordInfo[rec] = newValue
       // inform listener that the number of rows changed
       updateScrollbar()
     }
@@ -1642,7 +1611,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    * Notifies the form that the active record of this block has changed.
    */
   protected open fun fireActiveRecordChanged() {
-    (parent.get() as Form).setCurrentPosition(getSortedPosition(getCurrentRecord() - 1) + 1, getRecordCount())
+    ((this as DBlock).parent.content).setCurrentPosition(getSortedPosition(getCurrentRecord() - 1) + 1, getRecordCount())
   }
 
   /**
@@ -1675,7 +1644,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
 
   fun onKeyPress(keyDownEvent: ShortcutEvent?) {
     if (isMulti() && noChart()) {
-      (parent.get() as Form).showBlockInfo(this)
+      (parent.get() as Form).showBlockInfo()
     }
   }
 
@@ -1705,12 +1674,6 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   fun clearCachedColors(cachedColors: List<CachedColor>) {
     for (cachedColor in cachedColors) {
       this.cachedColors.remove(cachedColor)
-    }
-  }
-
-  fun clearRecordInfo(recordInfos: List<RecordInfo>) {
-    for (info in recordInfos) {
-      this.recordInfo.remove(info)
     }
   }
 

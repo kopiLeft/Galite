@@ -34,7 +34,7 @@ import org.kopi.galite.type.Decimal
  * Product Report
  */
 object ProductR : Report() {
-  override val locale = Locale.FRANCE
+  override val locale = Locale.UK
 
   override val title = "Products"
 
@@ -57,7 +57,7 @@ object ProductR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -67,7 +67,7 @@ object ProductR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -87,7 +87,7 @@ object ProductR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportPdf"  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) {
