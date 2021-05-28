@@ -288,7 +288,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
   }
 
   override fun updateScroll(pageSize: Int, maxValue: Int, enable: Boolean, value: Int) {
-    //TODO("Not yet implemented")
+    // no scroll bar for simple layouts TODO
   }
 
 

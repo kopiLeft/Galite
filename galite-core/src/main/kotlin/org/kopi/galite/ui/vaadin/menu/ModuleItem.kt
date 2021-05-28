@@ -23,6 +23,7 @@ import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.HasText
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.dom.ElementFactory
 
 /**

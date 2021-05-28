@@ -26,6 +26,7 @@ import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
 
@@ -55,9 +56,9 @@ class DGridEditorBooleanField(
   // IMPLEMENTATION
   //---------------------------------------------------
   override fun updateText() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
-    //})
+    access {
+      editor.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
+    }
   }
 
   override fun updateFocus() {

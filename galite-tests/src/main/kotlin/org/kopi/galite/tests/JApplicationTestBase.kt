@@ -72,6 +72,8 @@ open class JApplicationTestBase : DBSchemaTest() {
             password: String,
             schema: String?
     ): DBContext? {
+      val username = "admin"
+      val password = "admin"
       return try {
         DBContext().apply {
           this.defaultConnection = this.createConnection(driver, database, username, password, true, schema)

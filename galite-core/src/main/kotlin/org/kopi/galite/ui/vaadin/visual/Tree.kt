@@ -17,67 +17,227 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
+import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
-import org.kopi.galite.visual.Item
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.visual.Module
 import org.kopi.galite.visual.UItemTree.UTreeComponent
+import org.kopi.galite.visual.UMenuTree
+
+import com.vaadin.flow.component.html.Image
+import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.treegrid.TreeGrid
 
 /**
  * The vaadin implementation of an [UTreeComponent].
+ *
+ * @param root The root tree item.
+ * @param isSuperUser Is it a super user ?
  */
-class Tree(root: TreeNode,
-           private val isNoEdit: Boolean,
-           private val localised: Boolean)
-  : UTreeComponent {
+class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<TreeNode>(), UMenuTree.UTree {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private var lastModifiedItemId: TreeNode? = null
+  private var itemsIds = mutableMapOf<Int, TreeNodeComponent>()
+
+  init {
+    setSizeFull()
+    setSelectionMode(SelectionMode.SINGLE)
+    buildTreeItems()
+  }
+  //----------------------------------------------------------
+  // IMPLEMENTATIONS
+  //----------------------------------------------------------
+  /**
+   * Builds the tree container from a root item.
+   * @return The tree container.
+   */
+  private fun buildTreeItems() {
+    setItems(getRootItems(), ::getChildItemProvider)
+    addComponentHierarchyColumn {
+      val nodeComponent = addItemComponent(it)
+
+      nodeComponent.setIcon(it.isLeaf, it.parent == null, nodeComponent.module!!.accessibility)
+      nodeComponent
+    }
+  }
+
+  private fun getRootItems(): List<TreeNode> {
+    val rootItems = mutableListOf<TreeNode>()
+
+    rootItems.addNode(root)
+    return rootItems
+  }
+
+  private fun getChildItemProvider(parent: TreeNode): List<TreeNode> {
+    val childItems = mutableListOf<TreeNode>()
+
+    for (i in 0 until parent.childCount) {
+      val node = parent.getChildAt(i)
+
+      addItemComponent(node)
+      childItems.add(node)
+    }
+
+    return childItems
+  }
+
+  private fun MutableList<TreeNode>.addNode(node: TreeNode) {
+    if(node.parent == null) {
+      addItemComponent(node)
+      add(node)
+    }
+
+    for (i in 0 until node.childCount) {
+      addNode(node.getChildAt(i))
+    }
+  }
+
+  private fun addItemComponent(node: TreeNode): TreeNodeComponent {
+    val module = getModule(node)
+    val nodeComponent = TreeNodeComponent(node, module)
+
+    itemsIds[module!!.id] = nodeComponent
+
+    return nodeComponent
+  }
+
+  /**
+   * Returns the [Module] corresponding of the given tree item.
+   * @param itemId The tree item ID.
+   * @return The corresponding tree item module.
+   */
+  fun getModule(itemId: TreeNode?): Module? =
+    if(itemId == null) null else (itemId as DefaultMutableTreeNode).userObject as Module
+
+  /**
+   * Emits the value change event. The value contained in the field is validated before the event is created.
+   */
+  fun valueChanged() {
+    dataProvider.refreshAll()
+  }
+
+  val selectedItem: TreeNode? get() = asSingleSelect().value
+
+  fun getNodeComponent(id: Int): TreeNodeComponent? = itemsIds[id]
+
+  //----------------------------------------------------------
+  // TREE IMPLEMENTATION
+  //----------------------------------------------------------
   override fun collapseRow(row: Int) {
-    TODO("Not yet implemented")
+    access {
+      collapse(itemsIds[row]?.item)
+    }
   }
 
   override fun expandRow(row: Int) {
-    TODO("Not yet implemented")
+    access {
+      expand(itemsIds[row]?.item)
+    }
   }
 
-  override fun expandTree() {
-    TODO("Not yet implemented")
-  }
+  override val selectionRow: Int get() = getModule(selectedItem)?.id ?: -1
 
-  override fun getSelectionRow(): Int {
-    TODO("Not yet implemented")
-  }
+  @Suppress("INAPPLICABLE_JVM_NAME")
+  @JvmName("isExpanded1")
+  override fun isExpanded(path: Any?): Boolean = super.isExpanded(path as? TreeNode)
 
-  override fun isExpanded(path: Any): Boolean {
-    TODO("Not yet implemented")
-  }
+  override fun isCollapsed(path: Any?): Boolean = !isExpanded(path)
 
-  override fun isCollapsed(path: Any?): Boolean {
-    TODO("Not yet implemented")
-  }
+  inner class TreeNodeComponent(val item: TreeNode, val module: Module?): HorizontalLayout() {
 
-  override fun getItems(): Array<Item> {
-    TODO("Not yet implemented")
-  }
+    private val text = Span(module?.description)
+    private val icon = Image()
 
-  override fun getRootItem(): Item {
-    TODO("Not yet implemented")
-  }
+    init {
+      element.setProperty("title", module?.help.orEmpty())
+      add(text, icon)
+    }
 
-  override fun isUnique(name: String): Boolean {
-    TODO("Not yet implemented")
-  }
+    /**
+     * Sets the item icon.
+     *
+     * @param item The item.
+     * @param isLeaf Is it a leaf tree item ?
+     * @param isRoot Is it a root tree item ?
+     * @param access The tree item access.
+     */
+    fun setIcon(isLeaf: Boolean, isRoot: Boolean, access: Int) {
+      if (isRoot) {
+        setItemIcon(Utils.getImage("home.png").resource)
+      } else {
+        if (isLeaf) {
+          if (!isSuperUser) {
+            if (item == selectedItem) {
+              setItemIcon( Utils.getImage("form_selected.png").resource)
+            } else {
+              setItemIcon(Utils.getImage("forms.png").resource)
+            }
+          } else {
+            setIcon(access, true)
+          }
+        } else {
+          if (!isSuperUser) {
+            if (isExpanded(item)) {
+              setItemIcon(Utils.getImage("expanded.png").resource)
+            } else {
+              setItemIcon(Utils.getImage("collapsed.png").resource)
+            }
+          } else {
+            setIcon(access, false)
+          }
+        }
+      }
+      lastModifiedItemId = item
+    }
 
-  override fun isEnabled(): Boolean {
-    TODO("Not yet implemented")
-  }
+    /**
+     * Set icon according to module accessibility.
+     * @param access The module accessibility.
+     * @param item The tree item.
+     * @param isLeaf Is it a leaf node ?
+     */
+    fun setIcon(access: Int, isLeaf: Boolean) {
+      access {
+        when (access) {
+          Module.ACS_FALSE -> if (isLeaf) {
+            setItemIcon(Utils.getImage("form_p.png").resource)
+          } else {
+            if (isExpanded(item)) {
+              setItemIcon(Utils.getImage("expanded_p.png").resource)
+            } else {
+              setItemIcon(Utils.getImage("collapsed_p.png").resource)
+            }
+          }
+          Module.ACS_TRUE -> if (isLeaf) {
+            setItemIcon(Utils.getImage("form_a.png").resource)
+          } else {
+            if (isExpanded(item)) {
+              setItemIcon(Utils.getImage("expanded_a.png").resource)
+            } else {
+              setItemIcon(Utils.getImage("collapsed_a.png").resource)
+            }
+          }
+          else -> if (isLeaf) {
+            setItemIcon(Utils.getImage("forms.png").resource)
+          } else {
+            if (isExpanded(item)) {
+              setItemIcon(Utils.getImage("expanded.png").resource)
+            } else {
+              setItemIcon(Utils.getImage("collapsed.png").resource)
+            }
+          }
+        }
+      }
+    }
 
-  override fun setEnabled(enabled: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun isVisible(): Boolean {
-    TODO("Not yet implemented")
-  }
-
-  override fun setVisible(visible: Boolean) {
-    TODO("Not yet implemented")
+    private fun setItemIcon(image: String) {
+      icon.src = image // TODO
+    }
   }
 }

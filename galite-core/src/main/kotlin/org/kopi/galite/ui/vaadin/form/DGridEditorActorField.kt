@@ -67,9 +67,9 @@ class DGridEditorActorField(
 
   override fun createRenderer(): Renderer<String?> {
     return object : ActorRenderer(getModel().label) {
-      /*fun click(event: RendererClickEvent?) { TODO
+      override fun onClick(item: String?) {
         columnView.executeAction()
-      }*/
+      }
     }
   }
 

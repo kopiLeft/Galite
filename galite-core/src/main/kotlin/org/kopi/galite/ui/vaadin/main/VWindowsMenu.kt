@@ -89,4 +89,11 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
   fun setHeaderText(text: String?) {
     headerText.text = text
   }
+
+  /**
+   * Returns the item for the given window widget.
+   * @param window The window widget.
+   * @return The menu item.
+   */
+  fun getItemFor(window: Component?): VWindowsMenuItem? = windowsItemsMap[window]
 }

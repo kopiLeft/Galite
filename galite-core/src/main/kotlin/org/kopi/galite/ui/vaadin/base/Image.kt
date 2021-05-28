@@ -38,7 +38,8 @@ class Image(val resource: String) : Image {
   }
 
   override fun getDescription(): String {
-    TODO()
+    //TODO()
+    return "TODO"
   }
 
   override fun getScaledInstance(width: Int,

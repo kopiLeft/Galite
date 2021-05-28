@@ -34,7 +34,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param description The actor help.
  * @param menu The menu to which this actor belongs to.
  * @param icon The actor icon. The name will be translated after to a
- * font awesome icon. TODO
+ * vaadin or iron icon.
  * @param acceleratorKey The accelerator key.
  * @param modifiersKey The modifiers key.
  */

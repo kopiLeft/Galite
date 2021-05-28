@@ -25,7 +25,7 @@ import com.vaadin.flow.component.KeyModifier
  *
  * @param isMulti is it a multiple line text field ?
  */
-class TextFieldNavigationHandler protected constructor(private val isMulti: Boolean) : ShortcutActionHandler() {
+class TextFieldNavigationHandler protected constructor(private val isMulti: Boolean) {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -33,50 +33,96 @@ class TextFieldNavigationHandler protected constructor(private val isMulti: Bool
    * Creates the navigation actions.
    * @param field The text field.
    */
-  protected fun createNavigatorKeys(field: InputTextField<*>) {
-    addKeyNavigator(field, KeyNavigator.KEY_EMPTY_FIELD, Key.ENTER, KeyModifier.of("Control"))
-    addKeyNavigator(field, KeyNavigator.KEY_NEXT_BLOCK, Key.ENTER, KeyModifier.of("Shift"))
-    addKeyNavigator(field, KeyNavigator.KEY_DIAMETER, Key.KEY_D, KeyModifier.of("Control"))
-    addKeyNavigator(field, KeyNavigator.KEY_REC_DOWN, Key.PAGE_DOWN)
-    addKeyNavigator(field, KeyNavigator.KEY_REC_DOWN, Key.PAGE_DOWN, KeyModifier.of("Shift"))
-    addKeyNavigator(field, KeyNavigator.KEY_REC_FIRST, Key.HOME, KeyModifier.of("Shift"))
-    addKeyNavigator(field, KeyNavigator.KEY_REC_LAST, Key.END, KeyModifier.of("Shift"))
-    addKeyNavigator(field, KeyNavigator.KEY_REC_UP, Key.PAGE_UP)
-    addKeyNavigator(field, KeyNavigator.KEY_REC_UP, Key.PAGE_UP, KeyModifier.of("Shift"))
-    addKeyNavigator(field, KeyNavigator.KEY_PREV_FIELD, Key.ARROW_LEFT, KeyModifier.of("Control"))
-    addKeyNavigator(field, KeyNavigator.KEY_PREV_FIELD, Key.TAB, KeyModifier.of("Shift"))
-    addKeyNavigator(field, KeyNavigator.KEY_PREV_FIELD, Key.ARROW_UP, KeyModifier.of("Shift"))
-    addKeyNavigator(field, KeyNavigator.KEY_NEXT_FIELD, Key.ARROW_RIGHT, KeyModifier.of("Control"))
-    addKeyNavigator(field, KeyNavigator.KEY_NEXT_FIELD, Key.TAB)
-    addKeyNavigator(field, KeyNavigator.KEY_NEXT_FIELD, Key.ARROW_DOWN, KeyModifier.of("Shift"))
-    addKeyNavigator(field, KeyNavigator.KEY_PRINTFORM, Key.PRINT_SCREEN, KeyModifier.of("Shift"))
+  internal fun createNavigatorKeys(field: InputTextField<*>) {
+    addKeyNavigator(field, Key.ENTER, KeyModifier.of("Control")) {
+      field.fieldConnector.columnView!!.gotoNextEmptyMustfill()
+    }
+    addKeyNavigator(field, Key.ENTER, KeyModifier.of("Shift")) {
+      field.connector.fireGotoNextBlock()
+    }
+    addKeyNavigator(field, Key.KEY_D, KeyModifier.of("Control")) {
+      val text = StringBuffer(field.value)
+      //text.insert(field.getCursorPos(), "\u00D8") TODO
+      field.value = text.toString()
+    }
+    addKeyNavigator(field, Key.PAGE_DOWN) {
+      field.fieldConnector.columnView!!.gotoNextRecord()
+    }
+    addKeyNavigator(field, Key.PAGE_DOWN, KeyModifier.of("Shift")) {
+      field.fieldConnector.columnView!!.gotoNextRecord()
+    }
+    addKeyNavigator(field, Key.HOME, KeyModifier.of("Shift")) {
+      field.fieldConnector.columnView!!.gotoFirstRecord()
+    }
+    addKeyNavigator(field, Key.END, KeyModifier.of("Shift")) {
+      field.fieldConnector.columnView!!.gotoLastRecord()
+    }
+    addKeyNavigator(field, Key.PAGE_UP) {
+      field.fieldConnector.columnView!!.gotoPrevRecord()
+    }
+    addKeyNavigator(field, Key.PAGE_UP, KeyModifier.of("Shift")) {
+      field.fieldConnector.columnView!!.gotoPrevRecord()
+    }
+    addKeyNavigator(field, Key.ARROW_LEFT, KeyModifier.of("Control")) {
+      field.fieldConnector.columnView!!.gotoPrevField()
+    }
+    addKeyNavigator(field, Key.TAB, KeyModifier.of("Shift")) {
+      field.fieldConnector.columnView!!.gotoPrevField()
+    }
+    addKeyNavigator(field, Key.ARROW_UP, KeyModifier.of("Shift")) {
+      field.fieldConnector.columnView!!.gotoPrevField()
+    }
+    addKeyNavigator(field, Key.ARROW_RIGHT, KeyModifier.of("Control")) {
+      field.fieldConnector.columnView!!.gotoNextField()
+    }
+    addKeyNavigator(field, Key.TAB) {
+      field.fieldConnector.columnView!!.gotoNextField()
+    }
+    addKeyNavigator(field, Key.ARROW_DOWN, KeyModifier.of("Shift")) {
+      field.fieldConnector.columnView!!.gotoNextField()
+    }
+    addKeyNavigator(field, Key.PRINT_SCREEN, KeyModifier.of("Shift")) {
+      field.connector.firePrintForm()
+    }
     // the magnet card reader sends a CNTR-J as last character
-    addKeyNavigator(field, KeyNavigator.KEY_NEXT_FIELD, Key.KEY_J, KeyModifier.of("Control"))
-    addKeyNavigator(field, KeyNavigator.KEY_ESCAPE, Key.ESCAPE)
-    addKeyNavigator(field, KeyNavigator.KEY_NEXT_VAL, Key.ARROW_DOWN, KeyModifier.of("Control"))
-    addKeyNavigator(field, KeyNavigator.KEY_PREV_VAL, Key.ARROW_UP, KeyModifier.of("Control"))
+    addKeyNavigator(field, Key.KEY_J, KeyModifier.of("Control")) {
+      field.fieldConnector.columnView!!.gotoNextField()
+    }
+    addKeyNavigator(field, Key.ARROW_DOWN, KeyModifier.of("Control")) {
+      field.connector.fireNextEntry()
+    }
+    addKeyNavigator(field, Key.ARROW_UP, KeyModifier.of("Control")) {
+      field.connector.firePreviousEntry()
+    }
     if (!isMulti) {
       // In multiline fields these keys are used for other stuff
-      addKeyNavigator(field, KeyNavigator.KEY_PREV_FIELD, Key.ARROW_UP)
-      addKeyNavigator(field, KeyNavigator.KEY_NEXT_FIELD, Key.ARROW_DOWN)
-      addKeyNavigator(field, KeyNavigator.KEY_NEXT_FIELD, Key.ENTER)
+      addKeyNavigator(field, Key.ARROW_UP) {
+        field.fieldConnector.columnView!!.gotoPrevField()
+      }
+      addKeyNavigator(field, Key.ARROW_DOWN) {
+        field.fieldConnector.columnView!!.gotoNextField()
+      }
+      addKeyNavigator(field, Key.ENTER) {
+        field.fieldConnector.columnView!!.gotoNextField()
+      }
     }
   }
 
   /**
    * Adds a key navigator action to this handler.
    * @param field The input text.
-   * @param code The navigator code.
    * @param key The key code.
    * @param modifiers The modifiers.
+   * @param navigationAction lambda representing the action to perform
    */
-  protected fun addKeyNavigator(
+  private fun addKeyNavigator(
     field: InputTextField<*>,
-    code: Int,
     key: Key,
-    vararg modifiers: KeyModifier
+    vararg modifiers: KeyModifier,
+    navigationAction: () -> Unit,
   ) {
-    addAction(KeyNavigator(field, code, key, modifiers))
+    KeyNavigator(field, key, modifiers, navigationAction)
+      .registerShortcut(field)
   }
 
   companion object {
@@ -87,10 +133,9 @@ class TextFieldNavigationHandler protected constructor(private val isMulti: Bool
      * Statically create a new navigation handler for text fields.
      * @param field The text field.
      * @param isMulti Is it a multiple line field ?
-     * @param hasAutocomplete if the field has the auto complete feature.
      * @return The navigation handler instance.
      */
-    fun newInstance(
+    fun createNavigator(
       field: InputTextField<*>,
       isMulti: Boolean
     ): TextFieldNavigationHandler {

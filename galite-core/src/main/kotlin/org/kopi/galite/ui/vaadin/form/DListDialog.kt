@@ -27,6 +27,7 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.list.GridListDialog
 import org.kopi.galite.ui.vaadin.list.ListTable
 import org.kopi.galite.ui.vaadin.notif.InformationNotification
+import org.kopi.galite.ui.vaadin.notif.NotificationListener
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
@@ -298,7 +299,9 @@ class DListDialog(
     super.table = table
     table.select(tableItems.first())
     table.addSelectionListener {
-      doSelectFromDialog(tableItems.indexOf(it.firstSelectedItem.get()), false, false)
+      it.firstSelectedItem.ifPresent { item ->
+        doSelectFromDialog(tableItems.indexOf(item), false, false)
+      }
     }
     // TODO
   }
@@ -325,12 +328,19 @@ class DListDialog(
    * This will show a user notification.
    */
   protected fun handleTooManyRows() {
-    val lock = Any()
+    val lock = Object()
     val notice = InformationNotification(VlibProperties.getString("Notice"),
                                          MessageCode.getMessage("VIS-00028"),
                                          application.defaultLocale.toString())
 
-    notice.show()
+    notice.addNotificationListener(object : NotificationListener {
+      override fun onClose(action: Boolean?) {
+        releaseLock(lock)
+      }
+    })
+    startAndWait(lock) {
+      notice.show()
+    }
   }
 
   /**

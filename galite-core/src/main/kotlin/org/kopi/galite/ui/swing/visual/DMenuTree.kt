@@ -287,11 +287,11 @@ class DMenuTree(model: VMenuTree) : DWindow(model), UMenuTree {
   // UTREE IMPLEMENTATION
   //------------------------------------------------------------
   inner class Tree(root: TreeNode?) : JTree(root), UTree {
-    override fun isExpanded(path: Any): Boolean {
+    override fun isExpanded(path: Any?): Boolean {
       return super.isExpanded(path as TreePath)
     }
 
-    override fun isCollapsed(path: Any): Boolean {
+    override fun isCollapsed(path: Any?): Boolean {
       return super.isCollapsed(path as TreePath)
     }
 
