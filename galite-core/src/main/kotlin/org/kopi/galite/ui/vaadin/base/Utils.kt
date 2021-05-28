@@ -37,7 +37,7 @@ import com.vaadin.flow.dom.Element
 /**
  * Some vaadin version utilities to obtain images and resources.
  */
-@CssImport("./styles/galite/Report.css")
+@CssImport("./styles/galite/report.css")
 object Utils : Utils() {
 
   //---------------------------------------------------

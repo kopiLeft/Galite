@@ -53,7 +53,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * @param logo The application logo
  * @param href The logo link.
  */
-@CssImport("./styles/galite/VLoginBox.css")
+@CssImport("./styles/galite/login.css")
 class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
