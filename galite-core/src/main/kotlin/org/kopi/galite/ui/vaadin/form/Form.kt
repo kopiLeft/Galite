@@ -21,7 +21,6 @@ import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.common.VCaption
 import org.kopi.galite.ui.vaadin.event.PositionPanelListener
 import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.common.VTable
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dependency.CssImport
@@ -108,12 +107,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   private fun setContent(vararg components: Component) {
     removeAll()
-    val table = VTable(0, 0)
-
-    components.forEach {
-      table.addInNewRow(it)
-    }
-    add(table)
+    add(*components)
   }
 
   /**

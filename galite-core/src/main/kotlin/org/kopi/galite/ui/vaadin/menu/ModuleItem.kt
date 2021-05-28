@@ -77,15 +77,6 @@ class ModuleItem(val help: String? = null)
    * Sets the icon to this module item.
    * @param ironIcon The icon to add to this item.
    */
-  fun setIcon(ironIcon: IronIcons) {
-    icon = ironIcon.create()
-    add(icon)
-  }
-
-  /**
-   * Sets the icon to this module item.
-   * @param ironIcon The icon to add to this item.
-   */
   fun setIcon(ironIcon: IronIconEnum) {
     icon = ironIcon.create()
     add(icon)

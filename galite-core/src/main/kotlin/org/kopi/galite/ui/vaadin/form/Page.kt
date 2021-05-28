@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import elemental.json.JsonValue
-
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VScrollablePanel
 import org.kopi.galite.ui.vaadin.block.Block
@@ -32,7 +30,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.AttachEvent
-
 
 /**
  * A form page, can be either or vertical or horizontal page.
@@ -63,7 +60,7 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
   }
 
   override fun onAttach(attachEvent: AttachEvent?) {
-    element.executeJs("return $0.clientWidth", this.element).then { width: JsonValue -> this.width = width.asNumber() }
+    element.executeJs("return $0.clientWidth", this.element).then { width -> this.width = width.asNumber() }
   }
 
   //---------------------------------------------------

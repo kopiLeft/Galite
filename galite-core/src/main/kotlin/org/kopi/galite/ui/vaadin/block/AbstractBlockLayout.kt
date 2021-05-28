@@ -23,8 +23,6 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VTable
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.grid.Grid
-
 
 /**
  * An abstract implementation for the block layout.

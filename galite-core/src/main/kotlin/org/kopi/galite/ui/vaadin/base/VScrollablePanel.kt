@@ -17,16 +17,20 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
-import org.kopi.galite.ui.vaadin.common.VTable
-import org.kopi.galite.ui.vaadin.report.DTable
-
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 
 /**
  * A scrollable vertical panel.
  */
 class VScrollablePanel : Div {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private var content = Div()
+
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
@@ -45,10 +49,6 @@ class VScrollablePanel : Div {
    */
   constructor(vararg children: Component) : super() {
     initialize()
-    if(children[0] is DTable) {
-      width ="100%"
-      height = "100%"
-    }
     this.add(*children)
   }
 
@@ -61,7 +61,10 @@ class VScrollablePanel : Div {
    *
    */
   private fun initialize() {
-    style["display"] = "block"
+    content.style["display"] = "block"
+    super.add(content)
+    content.style["display"] = "table"
+    content.setSizeFull()
   }
 
   fun clear() {
@@ -69,27 +72,25 @@ class VScrollablePanel : Div {
   }
 
   override fun add(vararg components: Component) {
-    val table = VTable(0 ,0)
-
-    components.forEach {
-      table.addInNewRow(it)
+    if(components[0] is Grid<*>) {
+      setSizeFull()
     }
-    super.add(table)
+    content.add(*components)
   }
 
   override fun remove(vararg components: Component) {
-    super.remove(*components)
+    content.remove(*components)
   }
 
   override fun removeAll() {
-    super.removeAll()
+    content.removeAll()
   }
 
   override fun addComponentAtIndex(index: Int, component: Component) {
-    super.addComponentAtIndex(index, component)
+    content.addComponentAtIndex(index, component)
   }
 
   override fun addComponentAsFirst(component: Component) {
-    addComponentAtIndex(0, component)
+    content.addComponentAtIndex(0, component)
   }
 }
