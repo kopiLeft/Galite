@@ -23,6 +23,7 @@ import org.kopi.galite.form.UChartLabel
 import org.kopi.galite.form.ULabel
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.grid.GridEditorLabel
 import org.kopi.galite.visual.VActor
@@ -57,11 +58,14 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
   //---------------------------------------------------
   override fun init(text: String?, tooltip: String?) {
     this.tooltip = tooltip
-    add(text)
-    //BackgroundThreadHandler.access(Runnable { TODO
-    //setCaption(text) TODO
-    //setDescription(Utils.createTooltip(tooltip)) TODO
-    //})
+    access {
+      add(text.orEmpty())
+      setDescription(Utils.createTooltip(tooltip))
+    }
+  }
+
+  private fun setDescription(tooltip: String) {
+    element.setProperty("title", tooltip)
   }
 
   override fun orderChanged() {}
@@ -74,15 +78,15 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
    * @param row The field row.
    */
   fun update(model: VFieldUI, row: Int) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    if (model.model.getAccess(row) == VConstants.ACS_SKIPPED) {
-      // Only show base help on a skipped field
-      // Actors are not shown since they are not active.
-      //setDescription(Utils.createTooltip(tooltip)) TODO
-    } else {
-      //setDescription(Utils.createTooltip(buildDescription(model, tooltip))) TODO
+    access {
+      if (model.model.getAccess(row) == VConstants.ACS_SKIPPED) {
+        // Only show base help on a skipped field
+        // Actors are not shown since they are not active.
+        setDescription(Utils.createTooltip(tooltip))
+      } else {
+        setDescription(Utils.createTooltip(buildDescription(model, tooltip)))
+      }
     }
-    //})
   }
 
   /**
@@ -125,7 +129,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), UL
           actor.menuItem + " [" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         } else {
           actor.menuItem + " [" + KeyEvent.getKeyModifiersText(
-                  actor.acceleratorModifier) + "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
+            actor.acceleratorModifier) + "-" + KeyEvent.getKeyText(actor.acceleratorKey) + "]"
         }
       } else {
         actor.menuItem

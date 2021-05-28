@@ -114,7 +114,7 @@ interface UMenuTree : UWindow {
      * @return false if any of the nodes in the node's path are collapsed,
      * true if all nodes in the path are expanded
      */
-    fun isExpanded(path: Any): Boolean
+    fun isExpanded(path: Any?): Boolean
 
     /**
      * Returns true if the value identified by path is currently collapsed,
@@ -125,7 +125,7 @@ interface UMenuTree : UWindow {
      * @return true if any of the nodes in the node's path are collapsed,
      * false if all nodes in the path are expanded
      */
-    fun isCollapsed(path: Any): Boolean
+    fun isCollapsed(path: Any?): Boolean
   }
 
   /**

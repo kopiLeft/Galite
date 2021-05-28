@@ -29,6 +29,7 @@ import org.kopi.galite.ui.vaadin.visual.DUserMenu
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 import org.kopi.galite.ui.vaadin.window.Window
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasSize
@@ -52,7 +53,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * @param logo The application logo
  * @param href The logo link.
  */
-@CssImport("./styles/galite/VLoginBox.css")
+@CssImport("./styles/galite/login.css")
 class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
@@ -66,11 +67,11 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   private val content = VContent()
   private val container = VWindowContainer()
   private val locale: String = locale.toString()
-  private var windowsList = mutableListOf<Component>()
+  internal var windowsList = mutableListOf<Component>()
   private val windows = mutableMapOf<Component, MenuItem>()
   private val windowsMenu = VWindowsDisplay()
   var currentWindow: Component? = null
-  private val originalWindowTitle: String? = null
+  private var originalWindowTitle: String = ""
 
   init {
     val main = VMain()
@@ -185,6 +186,15 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
       windowsList.remove(window)
       currentWindow = container.removeWindow(window)
       windowsMenu.removeWindow(window)
+      if (currentWindow is Window) {
+        (currentWindow as Window).goBackToLastFocusedTextField()
+      }
+      if (windows.size <= 1) {
+        windowsLink.isEnabled = false
+      }
+      if (currentWindow == null) {
+        ui.get().page.setTitle(originalWindowTitle)
+      }
     }
   }
 
@@ -351,12 +361,20 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
     gotoWindow(false)
   }
 
+  override fun onAttach(attachEvent: AttachEvent?) {
+    originalWindowTitle = ui.get().internals.title.orEmpty()
+  }
+
   /**
    * Shows the next or previous window according to a flag
    * @param next Should we goto the next window ?
    * Otherwise, it is the previous window that must be shown.
    */
-  protected fun gotoWindow(next: Boolean) {
+  internal fun gotoWindow(next: Boolean) {
+    if(container.isEmpty) {
+      return
+    }
+
     currentWindow = if (next) {
       container.showNextWindow()
     } else {

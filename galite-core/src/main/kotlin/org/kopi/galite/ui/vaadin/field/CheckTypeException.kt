@@ -17,9 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.notif.NotificationListener
-
-import com.vaadin.flow.component.HasValue
+import org.kopi.galite.ui.vaadin.notif.NotificationUtils
 
 /**
  * Thrown when the field content is checked against its validator.
@@ -30,9 +30,9 @@ import com.vaadin.flow.component.HasValue
  * @param params The message parameters
  */
 class CheckTypeException(
-        val field: HasValue<*, *>,
-        val messageKey: String?,
-        vararg params: Any?
+  val field: InputTextField<*>,
+  private val messageKey: String,
+  vararg val params: Any?
 ) : Exception(), NotificationListener {
 
   /**
@@ -40,7 +40,8 @@ class CheckTypeException(
    * @param field The concerned text input zone.
    * @param messageKey The message key.
    */
-  constructor(field: HasValue<*, *>, messageKey: String?) : this(field, messageKey, null)
+  constructor(field: InputTextField<*>, messageKey: String) : this(field, messageKey, null)
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -48,10 +49,20 @@ class CheckTypeException(
    * Displays the check type error.
    */
   fun displayError() {
-    // TODO
+    field.setBlink(true)
+    NotificationUtils.showError(
+      this,
+      MainWindow.instance,
+      MainWindow.locale,
+      messageKey,
+      params
+    )
   }
 
   override fun onClose(action: Boolean?) {
-    // TODO
+    field.setBlink(false)
+    field.setFocus(true)
+    field.setCheckingValue(false)
+    field.fieldConnector.isChanged = true
   }
 }

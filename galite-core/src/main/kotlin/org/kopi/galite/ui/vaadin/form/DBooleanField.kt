@@ -119,9 +119,9 @@ class DBooleanField(
   override fun getObject(): Any? = wrappedField.value
 
   override fun setBlink(b: Boolean) {
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access {
       field.setBlink(b)
-    //})
+    }
   }
 
   override fun getText(): String? = getModel().toText(field.value)
@@ -152,8 +152,8 @@ class DBooleanField(
    * Gets the focus to this field.
    */
   protected fun enterMe() {
-    //BackgroundThreadHandler.access(Runnable {  TODO
-    field.setFocus(true)
-    //})
+    access {
+      field.setFocus(true)
+    }
   }
 }

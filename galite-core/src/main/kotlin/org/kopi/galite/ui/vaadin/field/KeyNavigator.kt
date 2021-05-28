@@ -25,15 +25,15 @@ import org.kopi.galite.ui.vaadin.base.ShortcutAction
  * A text field input key navigator action.
  *
  * @param field The text input connector (for action fire)
- * @param code The action code
  * @param key The key code.
  * @param modifiers The modifiers to be used
+ * @param navigationAction lambda representing the action to perform
  */
 class KeyNavigator(private val field: InputTextField<*>,
-                   private val code: Int,
                    key: Key,
-                   modifiers: Array<out KeyModifier>
-) : ShortcutAction("key-navigator$code", key, *modifiers) {
+                   modifiers: Array<out KeyModifier>,
+                   navigationAction: () -> Unit
+) : ShortcutAction(key, modifiers, navigationAction) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -93,47 +93,9 @@ class KeyNavigator(private val field: InputTextField<*>,
   }
 
   /**
-   * Executes the navigation action according to its code.
+   * Executes the navigation action.
    */
   protected fun doNavigatorAction() {
-    when (code) {
-      KEY_NEXT_FIELD -> field.fieldConnector.columnView!!.gotoNextField()
-      KEY_PREV_FIELD -> field.fieldConnector.columnView!!.gotoPrevField()
-      //KEY_NEXT_BLOCK -> connector.getServerRpc().gotoNextBlock() TODO
-      KEY_REC_UP -> field.fieldConnector.columnView!!.gotoPrevRecord()
-      KEY_REC_DOWN -> field.fieldConnector.columnView!!.gotoNextRecord()
-      KEY_REC_FIRST -> field.fieldConnector.columnView!!.gotoFirstRecord()
-      KEY_REC_LAST -> field.fieldConnector.columnView!!.gotoLastRecord()
-      KEY_EMPTY_FIELD -> field.fieldConnector.columnView!!.gotoNextEmptyMustfill()
-      KEY_DIAMETER -> {
-        val text = StringBuffer(field.value)
-        //text.insert(field.getCursorPos(), "\u00D8") TODO
-        field.value = text.toString()
-      }
-      KEY_ESCAPE -> {
-      }
-      //KEY_PRINTFORM -> connector.getServerRpc().printForm() TODO
-      //KEY_PREV_VAL -> connector.getServerRpc().previousEntry() TODO
-      //KEY_NEXT_VAL -> connector.getServerRpc().nextEntry() TODO
-      else -> {
-      }
-    }
-  }
-
-  companion object {
-    // navigation constants.
-    const val KEY_NEXT_FIELD = 0
-    const val KEY_PREV_FIELD = 1
-    const val KEY_REC_UP = 2
-    const val KEY_REC_DOWN = 3
-    const val KEY_REC_FIRST = 4
-    const val KEY_REC_LAST = 5
-    const val KEY_EMPTY_FIELD = 6
-    const val KEY_NEXT_BLOCK = 7
-    const val KEY_PREV_VAL = 8
-    const val KEY_NEXT_VAL = 9
-    const val KEY_DIAMETER = 10
-    const val KEY_ESCAPE = 11
-    const val KEY_PRINTFORM = 12
+    navigationAction()
   }
 }

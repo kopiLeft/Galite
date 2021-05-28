@@ -90,7 +90,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   private var progressDialog: ProgressDialog = ProgressDialog()
   private var isProgressDialogAttached = false
   private var waitDialog: WaitDialog = WaitDialog()
-  private var isWaitDialogAttached = false
 
   /**
    * Returns `true` if the used has been asked for a request.
@@ -104,7 +103,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
   init {
-    setCaption(model!!.getTitle())
     createEditMenu()
     model!!.addVActionListener(this)
     model!!.addModelCloseListener(this)
@@ -120,23 +118,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-
-  /**
-   * Sets the window caption if it belongs to the main window.
-   * @param caption The window caption.
-   * @return `true` if the caption is set.
-   */
-  private fun maybeSetMainWindowCaption(caption: String): Boolean {
-    var parent: MainWindow? = null
-    this.parent.ifPresent {
-      parent = it as MainWindow
-    }
-    if (parent != null) {
-      parent!!.updateWindowTitle(this, caption)
-      return true
-    }
-    return false
-  }
 
   /**
    * Displays an error message.
@@ -234,12 +215,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     progressDialog.addDetachListener {
       isProgressDialogAttached = false
     }
-    waitDialog.addAttachListener {
-      isWaitDialogAttached = true
-    }
-    waitDialog.addDetachListener {
-      isWaitDialogAttached = false
-    }
     //})
   }
 
@@ -321,7 +296,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     runtimeDebugInfo = null
     returnCode = -1
     isProgressDialogAttached = false
-    isWaitDialogAttached = false
     isUserAsked = false
     actionsQueue.clear()
     Utils.freeMemory()
@@ -365,9 +339,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun performAsyncAction(action: Action) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    performActionImpl(action, true)
-    //})
+    access {
+      performActionImpl(action, true)
+    }
   }
 
   override fun modelClosed(type: Int) {
@@ -375,55 +349,55 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun setWaitDialog(message: String, maxtime: Int) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    synchronized(waitDialog) {
-      waitDialog.setTitle(MessageCode.getMessage("VIS-00067"))
-      waitDialog.setMessage(message)
-      waitDialog.setMaxTime(maxtime)
-      if (!isWaitDialogAttached) {
-        application.attachComponent(waitDialog)
+    access {
+      synchronized(waitDialog) {
+        waitDialog.setTitle(MessageCode.getMessage("VIS-00067"))
+        waitDialog.setMessage(message)
+        waitDialog.setMaxTime(maxtime)
+        if (!waitDialog.isOpened) {
+          waitDialog.open()
+        }
       }
     }
-    //})
   }
 
   override fun unsetWaitDialog() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    synchronized(waitDialog) {
-      if (isWaitDialogAttached) {
-        waitDialog.setTitle(null)
-        waitDialog.setMessage(null)
-        waitDialog.setMaxTime(0)
-        application.detachComponent(waitDialog)
+    access {
+      synchronized(waitDialog) {
+        if (waitDialog.isOpened) {
+          waitDialog.setTitle(null)
+          waitDialog.setMessage(null)
+          waitDialog.setMaxTime(0)
+          waitDialog.close()
+        }
       }
     }
-    //})
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    synchronized(progressDialog) {
-      progressDialog.setTitle(MessageCode.getMessage("VIS-00067"))
-      progressDialog.setMessage(message)
-      progressDialog.totalJobs = totalJobs
-      if (!isProgressDialogAttached) {
-        application.attachComponent(progressDialog)
+    access {
+      synchronized(progressDialog) {
+        progressDialog.setTitle(MessageCode.getMessage("VIS-00067"))
+        progressDialog.setMessage(message)
+        progressDialog.totalJobs = totalJobs
+        if (!isProgressDialogAttached) {
+          progressDialog.open()
+        }
       }
     }
-    //})
   }
 
   override fun unsetProgressDialog() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    synchronized(progressDialog) {
-      if (isProgressDialogAttached) {
-        progressDialog.setTitle(null)
-        progressDialog.setMessage(null)
-        progressDialog.totalJobs = 0
-        application.detachComponent(progressDialog)
+    access {
+      synchronized(progressDialog) {
+        if (isProgressDialogAttached) {
+          progressDialog.setTitle(null)
+          progressDialog.setMessage(null)
+          progressDialog.totalJobs = 0
+          progressDialog.close()
+        }
       }
     }
-    //})
   }
 
   override fun getModel(): VWindow? {
@@ -453,9 +427,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   override fun updateWaitDialogMessage(message: String) {
     // access { TODO
     synchronized(waitDialog) {
-      if (isWaitDialogAttached) {
-        waitDialog.setMessage(message)
-      }
+      waitDialog.setMessage(message)
     }
     //})
   }
@@ -464,7 +436,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // do nothing
   }
 
-  override fun setWaitInfo(message: String) {
+  override fun setWaitInfo(message: String?) {
     waitInfoHandler.setWaitInfo(message)
   }
 
@@ -538,7 +510,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * @return the current application instance.
    */
   protected val application: VApplication
-    protected get() = ApplicationContext.applicationContext.getApplication() as VApplication
+    get() = ApplicationContext.applicationContext.getApplication() as VApplication
 
   //--------------------------------------------------------------
   // MESSAGELISTENER IMPLEMENTATION
@@ -663,11 +635,11 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     //-----------------------------------------------------------
     // IMPLEMENTATIONS
     //-----------------------------------------------------------
-    override fun setWaitInfo(message: String) {
+    override fun setWaitInfo(message: String?) {
       access {
         synchronized(waitIndicator) {
           waitIndicator.setText(message)
-          if (!iswaitIndicatorAttached) {
+          if (!waitIndicator.isOpened) {
             waitIndicator.show()
           }
         }
@@ -677,7 +649,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     override fun unsetWaitInfo() {
       access {
         synchronized(waitIndicator) {
-          if (iswaitIndicatorAttached) {
+          if (waitIndicator.isOpened) {
             waitIndicator.setText(null)
             waitIndicator.close()
           }

@@ -50,12 +50,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   private var forceHiddenVisibility = false
 
   init {
-    /*registerRpc(object : BooleanFieldServerRpc() { TODO
-      fun valueChanged(value: Boolean) {
-        setValue(value)
-        fireValueChangeEvent(value)
-      }
-    })*/
     className = Styles.BOOLEAN_FIELD
     content.className = "k-boolean-field-content"
     yes.classNames.add("true")
@@ -101,7 +95,11 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * @param focus The field focus
    */
   fun setFocus(focus: Boolean) {
-    // getRpcProxy(BooleanFieldClientRpc::class.java).setFocus(focus) TODO
+    if(focus) {
+      focus()
+    } else {
+      blur()
+    }
   }
 
   /**
@@ -215,26 +213,24 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
 
   override fun checkValue(rec: Int) {}
 
-  fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    //FIX ME
+  private fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    //FIXME
     if (event.value) {
       no.value = false
     } else if (mandatory && !no.value) {
       yes.value = true
     }
     handleComponentVisiblity()
-    // ValueChangeEvent.fire(this, value) TODO
   }
 
-  fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    //FIX ME
+  private fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    //FIXME
     if (event.value) {
       yes.value = false
     } else if (mandatory && !yes.value) {
       no.value = true
     }
     handleComponentVisiblity()
-    // ValueChangeEvent.fire(this, value) TODO
   }
 
   /**

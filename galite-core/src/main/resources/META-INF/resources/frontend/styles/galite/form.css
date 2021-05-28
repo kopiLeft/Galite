@@ -284,12 +284,6 @@ pre {
     width: 550px;
 }
 
-.simple > tbody > tr > td > vaadin-form-item,
- .simple > tbody > tr > td > vaadin-form-item > .k-field > vaadin-custom-field,
- .simple > tbody > tr > td > vaadin-form-item > .k-field > vaadin-custom-field > * {
-    width: 100%;
-}
-
 tr {
     margin: 0;
     padding: 0;

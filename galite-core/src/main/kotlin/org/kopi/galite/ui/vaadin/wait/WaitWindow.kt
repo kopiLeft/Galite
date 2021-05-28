@@ -77,6 +77,11 @@ class WaitWindow : VerticalLayout(), ComponentEventListener<GeneratedVaadinDialo
     popup.close()
   }
 
+  /**
+   * Closes the wait panel.
+   */
+  val isOpened: Boolean get() = popup.isOpened
+
   override fun onComponentEvent(event: GeneratedVaadinDialog.OpenedChangeEvent<Dialog>) {
     if(event.isOpened) {
       popup.element.style["cursor"] = "wait"
