@@ -28,7 +28,7 @@ class VImageColumn(title: String, column: Column<*>?, sortAscending: Boolean)
   /**
    * Returns a string representation of value
    */
-  override fun formatObject(value: Any?): Any = when (value) {
+  override fun formatObject(value: Any?): Any? = when (value) {
     null -> VConstants.EMPTY_TEXT
     else -> ImageHandler.imageHandler.getImage(value as ByteArray)
   }

@@ -42,7 +42,9 @@ class VWindowsDisplay : Div() {
    * @param caption The new item caption.
    */
   fun updateCaption(window: Component, caption: String) {
-    TODO()
+    val item = menu.getItemFor(window)
+
+    item?.text = caption
   }
 
   /**

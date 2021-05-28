@@ -64,7 +64,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return The parent window of this text field.
    */
   val parentWindow: Window?
-    get() = parent
+    get() = fieldConnector.getWindow()
 
   // used while checking if FF has set input prompt as value
   private var validationStrategy: TextValidator? = null
@@ -83,7 +83,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   private var hasAutocomplete = false
   private var valueBeforeEdit: String? = ""
   private var align: String? = null
-  private var parent: Window? = null
   private var isCheckingValue = false
   /**
    * `true` if the state of this field is not synchronized with server side.
@@ -464,13 +463,14 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Sends all dirty values to the server side.
    * This will send all pending dirty values to be sure
    * that all necessary values are sent to the server model.
+   * TODO
    */
   internal fun sendDirtyValuesToServerSide() {
-    val window = parent!!
-    val block = connector.parent.get() as Block
+    val window = parentWindow
+    val block = connector.parent.get() as? Block
 
     if (block != null) {
-      window.cleanDirtyValues(block)
+      window!!.cleanDirtyValues(block)
     }
     // now the field is synchronized with server side.
     isAlreadySynchronized = true
@@ -487,8 +487,8 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return `true` if word wrap is used.
    */
   protected val isWordwrap: Boolean
-    protected get() {
-      val wrap: String = getElement().getAttribute("wrap")
+    get() {
+      val wrap: String = element.getAttribute("wrap")
       return "off" != wrap
     }
 
@@ -614,7 +614,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     return false
   }
 
-  fun setFocus(focused: Boolean) {
+  open fun setFocus(focused: Boolean) {
     if (focused) {
       focus()
     } else {
@@ -631,8 +631,8 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     fieldConnector.columnView!!.gotoNextField()
   }
 
-  protected fun onLoad() {
-    //super.onLoad()
+  protected open fun onLoad() {
+    //super.onLoad() TODO
     //Scheduler.get().scheduleFinally(object : ScheduledCommand() {
     //  fun execute() {
     //    parent = WidgetUtils.getParent(this@VInputTextField, VWindow::class.java)
@@ -640,7 +640,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     //})
   }
 
-  fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<C>>) {
+  open fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<C>>) {
     // this is called twice on Chrome when e.g. changing tab while prompting
     // field focused - do not change settings on the second time
     if (focusedTextField !== this || focusedTextField == null) {
@@ -653,7 +653,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     recordNumber = -1 // set this field is not related to any record
   }
 
-  fun onFocus(event: FocusNotifier.FocusEvent<InputTextField<C>>) {
+  open fun onFocus(event: FocusNotifier.FocusEvent<InputTextField<C>>) {
     if (focusedTextField == this) {
       // already got the focus. give up
       return
@@ -743,11 +743,11 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   }
 
   /**
-   * Returns the widget connector.
-   * @return The widget connector.
+   * Returns the text field container.
+   * @return The the text field container.
    */
-  protected val connector: org.kopi.galite.ui.vaadin.field.TextField
-    get() = super.getParent().get() as org.kopi.galite.ui.vaadin.field.TextField
+  internal val connector: TextField
+    get() = super.getParent().get() as TextField
 
   /**
    * Checks the value of this text field.
@@ -848,7 +848,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return The parent field connector.
    */
   internal val fieldConnector: Field
-    get() = connector.parent.get() as Field
+    get() = connector.fieldParent
 
   /**
    * Checks if the content of this field is empty.
@@ -985,14 +985,13 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   /**
    * Releases the content of this input field.
    */
-  fun release() {
+  open fun release() {
     validationStrategy = null
     currentText = null
     //oracle = null
     //display = null
     valueBeforeEdit = null
     align = null
-    parent = null
     //callback = null
     //suggestionCallback = null
   }

@@ -56,6 +56,7 @@ import org.kopi.galite.visual.WindowController
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.Route
@@ -67,6 +68,7 @@ import com.vaadin.flow.router.Route
  */
 @Push
 @Route("")
+@CssImport("./styles/galite/styles.css")
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
@@ -76,7 +78,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var mainWindow: MainWindow? = null
   private var welcomeView: WelcomeView? = null
   private var askAnswer = 0
-  private lateinit var configuration: ApplicationConfiguration
   var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
 
   // ---------------------------------------------------------------------
@@ -234,8 +235,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
                       getInitParameter("schema")!!)*/
     dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
                       "org.h2.Driver",
-                      "admin",
-                      "admin",
+                      username,
+                      password,
                       null)
     // check if context is created
     if (dBContext == null) {
@@ -377,7 +378,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Closes the database connection
    */
   protected fun closeConnection() {
-
+    // FIXME
   }
 
   /**

@@ -251,8 +251,17 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun add(comp: UComponent?, constraints: Alignment) {}
+
   override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
-    // TODO
+    access {
+      if (editor.item != null) {
+        editor.cancel()
+      }
+      grid.isEnabled = newAccess
+      if (newAccess) {
+        editor.isBuffered = false
+      }
+    }
   }
 
   override fun createLayout(): BlockLayout {
@@ -578,11 +587,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @param f The field model.
    */
   fun updateColumnAccess(f: VField, rec: Int) {
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      if (grid != null && grid.getColumn(model.getFieldIndex(f)) != null) {
-        grid.getColumn(model.getFieldIndex(f)).setHidden(f.getAccess(rec) == VConstants.ACS_HIDDEN)
+    access {
+      val column = grid.getColumnByKey(model.getFieldIndex(f).toString())
+
+      if (::grid.isInitialized && column != null) {
+        column.isVisible  = f.getAccess(rec) != VConstants.ACS_HIDDEN
       }
-    })*/
+    }
   }
 
   /**

@@ -37,7 +37,7 @@ import com.vaadin.flow.dom.Element
 /**
  * Some vaadin version utilities to obtain images and resources.
  */
-@CssImport("./styles/galite/Report.css")
+@CssImport("./styles/galite/report.css")
 object Utils : Utils() {
 
   //---------------------------------------------------
@@ -113,7 +113,11 @@ object Utils : Utils() {
    * @return An Image or null if not found
    */
   fun getImageFromResource(directory: String, name: String): Image? {
-    TODO()
+    if(Utils::class.java.classLoader.getResource("META-INF/resources/$directory/$name") != null) { // FIXME
+      return Image("$directory/$name")
+    }
+
+    return null
   }
 
   /**
@@ -230,7 +234,7 @@ object Utils : Utils() {
   // --------------------------------------------------
   // PRIVATE DATA
   // --------------------------------------------------
-  private const val VAADIN_RESOURCE_DIR = "org/kopi/galite/ui/vaadin"
+  private const val VAADIN_RESOURCE_DIR = "ui/vaadin"
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
   private const val RESOURCE_DIR = "org/kopi/galite"
