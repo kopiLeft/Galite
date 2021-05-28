@@ -163,7 +163,7 @@ class VLoginWindow : Div() {
     loginBox = VLoginBox()
     add(loginBox)
     loginBox.addClickHandler { onClick() }
-    loginBox.addChangeHandler { event: DomEvent? -> handleSelectionChange(event) }
+    loginBox.addChangeHandler(::handleSelectionChange)
     width = "400px"
   }
 }

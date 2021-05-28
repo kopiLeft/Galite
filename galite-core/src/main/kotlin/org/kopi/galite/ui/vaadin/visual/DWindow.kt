@@ -347,9 +347,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun performAsyncAction(action: Action) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    performActionImpl(action, true)
-    //})
+    access {
+      performActionImpl(action, true)
+    }
   }
 
   override fun modelClosed(type: Int) {
@@ -446,7 +446,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // do nothing
   }
 
-  override fun setWaitInfo(message: String) {
+  override fun setWaitInfo(message: String?) {
     waitInfoHandler.setWaitInfo(message)
   }
 
@@ -645,7 +645,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     //-----------------------------------------------------------
     // IMPLEMENTATIONS
     //-----------------------------------------------------------
-    override fun setWaitInfo(message: String) {
+    override fun setWaitInfo(message: String?) {
       access {
         synchronized(waitIndicator) {
           waitIndicator.setText(message)

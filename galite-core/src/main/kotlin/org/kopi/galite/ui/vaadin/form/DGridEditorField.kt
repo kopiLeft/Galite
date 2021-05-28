@@ -156,12 +156,12 @@ abstract class DGridEditorField<T>(
 
   override fun updateAccess() {
     label?.update(columnView, getBlockView().getRecordFromDisplayLine(position))
-    //BackgroundThreadHandler.access(Runnable { TODO
-    access = getAccess()
-    setEnabled(access > VConstants.ACS_SKIPPED)
-    setVisible(access != VConstants.ACS_HIDDEN)
-    updateLabel()
-    //})
+    access {
+      access = getAccess()
+      setEnabled(access > VConstants.ACS_SKIPPED)
+      setVisible(access != VConstants.ACS_HIDDEN)
+      updateLabel()
+    }
   }
 
   /**
