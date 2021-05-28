@@ -39,7 +39,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
  * @param pageCount The form page count.
  * @param titles The pages title.
  */
-@CssImport("./styles/galite/Form.css")
+@CssImport("./styles/galite/form.css")
 class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanelListener {
 
   /**
