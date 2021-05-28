@@ -141,10 +141,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
     //grid.setCellStyleGenerator(DGridBlockCellStyleGenerator(model))
     grid.addColumnResizeListener(::columnResize)
     configure()
-    grid.height = "calc(" +
-            "(1.04 * var(--lumo-size-xl) + var(--_lumo-grid-border-width)) + " +
-            "(${model.displaySize * 38}px + ${model.displaySize -1} * var(--_lumo-grid-border-width))" +
-            ")"
+    setHeightByRows(model.displaySize)
     //grid.setColumnOrder(columnsOrder)
     /*if (detailsGenerator != null) { TODO
       grid.setDetailsGenerator(detailsGenerator)
@@ -205,6 +202,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
       // setDragStartMode(DragStartMode.HTML5) TODO
     }
     //})
+  }
+
+  private fun setHeightByRows(rows: Int) {
+    grid.height = "calc(" +
+            "(1.04 * var(--lumo-size-xl) + var(--_lumo-grid-border-width)) + " +
+            "(${rows * 38}px + ${rows -1} * var(--_lumo-grid-border-width))" +
+            ")"
   }
 
   /**
@@ -275,6 +279,17 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   override fun getDisplayLine(recno: Int): Int {
     return 0
+  }
+
+
+  override fun getRecordFromDisplayLine(line: Int): Int {
+    return if (itemToBeEdited != null) {
+      itemToBeEdited!!
+    } else if (isEditorInitialized && editor.item != null) {
+      editor.item.record
+    } else {
+      super.getRecordFromDisplayLine(line)
+    }
   }
 
   /*override fun getRecordFromDisplayLine(line: Int): Int {
@@ -443,13 +458,15 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Notifies the data source that the content of the block has changed.
    */
   protected fun contentChanged() {
-    access {
-      grid.dataProvider.refreshAll()
-      // correct grid width to add scroll bar width
-      if (model.numberOfValidRecord > model.displaySize) {
-        if (!widthAlreadyAdapted) {
-          //grid.setWidth(grid.width.substring(0, grid.width.indexOfLast { it.isDigit() } + 1).toFloat() + 16, Unit.PIXELS)
-          widthAlreadyAdapted = true
+    if(::grid.isInitialized) {
+      access {
+        grid.dataProvider.refreshAll()
+        // correct grid width to add scroll bar width
+        if (model.numberOfValidRecord > model.displaySize) {
+          if (!widthAlreadyAdapted) {
+            //grid.setWidth(grid.width.substring(0, grid.width.indexOfLast { it.isDigit() } + 1).toFloat() + 16, Unit.PIXELS)
+            widthAlreadyAdapted = true
+          }
         }
       }
     }
@@ -500,7 +517,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
             when {
               field is VBooleanField -> "" + 46 + "px" // boolean field length
               field is VActorField -> "" + 148 + "px" // actor field field length
-              else -> "" + (field.width + 12) + "px" // add padding TODO
+              else -> "" + (8 * field.width + 12) + "px" // add padding TODO
             }
           column.isVisible = field.getDefaultAccess() != VConstants.ACS_HIDDEN
         }
@@ -539,7 +556,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @return true if the grid editor is active and an item is being edited.
    */
   val isEditorActive: Boolean
-    get() = editor.isOpen
+    get() = ::editor.isInitialized && editor.isOpen
 
   /**
    * Returns the edited record in this block
@@ -601,10 +618,12 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @param row The row index
    */
   fun refreshRow(row: Int) {
-    access {
-      val itemToRefresh = grid.dataCommunicator.getItem(row)
+    if(::grid.isInitialized) {
+      access {
+        val itemToRefresh = grid.dataCommunicator.getItem(row)
 
-      grid.dataProvider.refreshItem(itemToRefresh)
+        grid.dataProvider.refreshItem(itemToRefresh)
+      }
     }
   }
 

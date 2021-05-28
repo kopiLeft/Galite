@@ -27,8 +27,16 @@ class VTextAreaField : InputTextField<TextArea>(TextArea()) {
   var cols: Int = 0
 
   fun setRows(rows: Int, visibleRows: Int) {
+    element.setProperty("rows", visibleRows.toString())
     // TODO
   }
+
+  /**
+   * Sets the text size.
+   */
+  override var size: Int
+    get() = element.getProperty("cols").toInt()
+    set(value) { element.setProperty("cols", value.toString()) }
 
   fun setWordwrap(b: Boolean) {
     // TODO

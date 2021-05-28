@@ -314,7 +314,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   /**
    * Sets the text size.
    */
-  var size: Int
+  open var size: Int
     get() = element.getProperty("size").toInt()
     set(value) { element.setProperty("size", value.toString()) }
 

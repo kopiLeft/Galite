@@ -165,7 +165,8 @@ object Utils : Utils() {
    * @return The decoredted tooltip
    */
   fun createTooltip(content: String?): String {
-    return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>$content</div>"
+    //return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>${content.orEmpty()}</div>" TODO
+    return content.orEmpty()
   }
 
   /**
