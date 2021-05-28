@@ -43,7 +43,7 @@ import com.vaadin.flow.component.dependency.CssImport
  * @param model The block model.
  */
 
-@CssImport("./styles/galite/block.css")
+@CssImport("./styles/galite/Block.css")
 open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
 
   protected var formView: DForm = parent

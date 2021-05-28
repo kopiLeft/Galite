@@ -27,7 +27,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.component.dependency.CssImport
 
-@CssImport("./styles/galite/list.css")
+@CssImport("./styles/galite/List.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   init {
     isColumnReorderingAllowed = true

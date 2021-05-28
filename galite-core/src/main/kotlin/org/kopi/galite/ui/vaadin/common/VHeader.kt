@@ -24,7 +24,7 @@ import com.vaadin.flow.component.dependency.CssImport
 /**
  * The window header component.
  */
-@CssImport("./styles/galite/header.css")
+@CssImport("./styles/galite/VHeader.css")
 class VHeader : HorizontalLayout() {
   //---------------------------------------------------
   // DATA MEMBERS

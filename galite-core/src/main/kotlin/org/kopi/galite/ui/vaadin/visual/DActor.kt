@@ -47,7 +47,7 @@ import com.vaadin.flow.component.dependency.CssImport
  * @param model The actor model.
  *
  */
-@CssImport("./styles/galite/actor.css")
+@CssImport("./styles/galite/Actor.css")
 class DActor(private var model: VActor)
   : Actor(model.menuItem,
           Utils.createTooltip(getDescription(model)),

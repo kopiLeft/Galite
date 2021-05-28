@@ -41,7 +41,7 @@ import com.vaadin.flow.function.ValueProvider
  *
  * @param model The table model.
  */
-@CssImport("./styles/galite/report.css")
+@CssImport("./styles/galite/Report.css")
 class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, ComponentEventListener<ItemClickEvent<DReport.ReportModelItem>> {
 
   //---------------------------------------------------
