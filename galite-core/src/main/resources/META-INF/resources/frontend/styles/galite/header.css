@@ -152,6 +152,12 @@ user , admin , wrk context and bookmark
     cursor: pointer;
 }
 
-#welcome #user_menu, #welcome #admin_menu, #welcome #bookmarks_menu, #welcome #wrkcontext_menu {
+#header ::part(menu-bar-button) {
     cursor: pointer;
+}
+
+#header #welcome ::part(menu-bar-button) {
+    min-width: 0;
+    padding: 18px 10px;
+    text-transform: none;
 }

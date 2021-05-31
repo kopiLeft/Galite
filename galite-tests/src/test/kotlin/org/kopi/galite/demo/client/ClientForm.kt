@@ -27,20 +27,22 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.tests.chart.ChartSample
-import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithChart
-import org.kopi.galite.type.Date
 import org.kopi.galite.type.Decimal
-import org.kopi.galite.type.Image
-import org.kopi.galite.type.Month
-import org.kopi.galite.type.Time
-import org.kopi.galite.type.Timestamp
-import org.kopi.galite.type.Week
 
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Clients"
   val action = menu("Action")
+  val quit = actor(
+    ident = "quit",
+    menu = action,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE          // key is optional here
+    icon = "quit"  // icon is optional here
+  }
   val report = actor(
           ident = "report",
           menu = action,
@@ -87,15 +89,6 @@ class ClientForm : ReportSelectionForm() {
     key = Key.F6      // key is optional here
     icon = "preview"  // icon is optional here
   }
-  val quit = actor(
-          ident = "quit",
-          menu = action,
-          label = "quit",
-          help = "Quit",
-  ) {
-    key = Key.ESCAPE          // key is optional here
-    icon = "quit"  // icon is optional here
-  }
   val helpForm = actor(
           ident = "helpForm",
           menu = action,
@@ -126,7 +119,40 @@ class ClientForm : ReportSelectionForm() {
     }
   }
 
-  val block = insertBlock(Clients()) {
+  val clientsPage= page("Clients")
+  val contactsPage= page("Contacts")
+  val detailsPage= page("Details")
+
+  val block = insertBlock(Clients(), clientsPage) {
+    command(item = report) {
+      action = {
+        createReport(this@insertBlock)
+      }
+    }
+    command(item = dynamicReport) {
+      action = {
+        createDynamicReport()
+      }
+    }
+    command(item = graph) {
+      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+      action = {
+        showChart(ChartSample)
+      }
+    }
+    command(item = list) {
+      action = {
+        recursiveQuery()
+      }
+    }
+    command(item = saveBlock) {
+      action = {
+        saveBlock()
+      }
+    }
+  }
+
+  val salesBlock = insertBlock(sales(), clientsPage) {
     command(item = report) {
       action = {
         createReport(this@insertBlock)
@@ -160,7 +186,7 @@ class ClientForm : ReportSelectionForm() {
   }
 }
 
-class Clients : FormBlock(6, 6, "Clients") {
+class Clients : FormBlock(1, 1, "Clients") {
   val u = table(Client)
 
   val idClt = visit(domain = Domain<Int>(30), position = at(1, 1..2)) {
@@ -178,10 +204,15 @@ class Clients : FormBlock(6, 6, "Clients") {
     help = "The client last name"
     columns(u.lastNameClt)
   }
-  val ageClt = visit(domain = Domain<Int>(3), position = at(3, 1)) {
+  val ageClt = visit(domain = Domain<Int>(3), position = at(2, 3)) {
     label = "Age"
     help = "The client age"
     columns(u.ageClt)
+  }
+  val email = visit(domain = Domain<String>(25), position = at(3, 1)) {
+    label = "Email"
+    help = "The mail adress"
+    columns(u.mail)
   }
   val addressClt = visit(domain = Domain<String>(20), position = at(3, 2)) {
     label = "Address"
@@ -204,40 +235,36 @@ class Clients : FormBlock(6, 6, "Clients") {
     columns(u.zipCodeClt)
   }
   val active = visit(domain = Domain<Boolean>(), position = at(5, 1)) {
-    label = "City"
-    help = "The client city"
-  }
-
-  val Date = visit(domain = Domain<Date>(), position = at(6, 1)) {
-    label = "Date"
-  }
-
-  val Decimal = visit(domain = Domain<Decimal>(20, 10), position = at(7, 1)) {
-    label = "Decimal"
-  }
-
-  val Image = visit(domain = Domain<Image>(10, 10), position = at(8, 1)) {
-    label = "Image"
-  }
-
-  val Month = visit(domain = Domain<Month>(), position = at(9, 1)) {
-    label = "Month"
-  }
-
-  val Time = visit(domain = Domain<Time>(), position = at(10, 1)) {
-    label = "Time"
-  }
-
-  val Timestamp = visit(domain = Domain<Timestamp>(), position = at(11, 1)) {
-    label = "Timestamp"
-  }
-
-  val Week = visit(domain = Domain<Week>(), position = at(12, 1)) {
-    label = "Week"
+    label = "Active ?"
+    help = "Is the user active?"
   }
 
   init {
     nameClt[0] = "test"
+  }
+}
+
+class sales : FormBlock(10, 10, "Sales") {
+
+  val idClt = visit(domain = Domain<String>(5), position = at(1, 1..2)) {
+    label = "ID"
+    help = "The item id"
+  }
+  val description = visit(domain = Domain<String>(25), position = at(2, 1)) {
+    label = "Description"
+    help = "The item description"
+  }
+  val quantity = visit(domain = Domain<Int>(7), position = at(2, 2)) {
+    label = "Quantity"
+    help = "The number of items"
+  }
+  val price = visit(domain = Domain<Decimal>(10, 5), position = at(2, 2)) {
+    label = "Price"
+    help = "The item price"
+  }
+
+  init {
+    border = VConstants.BRD_LINE
   }
 }
 

@@ -111,19 +111,22 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
    */
   protected fun <T> setCaption(content: T, block: Block) where T: Component, T: FlexComponent {
     val caption = block.caption
+
     if (caption != null) {
+      val captionContainet = VerticalLayout()
+      captionContainet.className = "caption-container"
+      captionContainet.add(caption)
       if (content is HorizontalLayout) {
         // wrap it in a vertical content before
-        val temp = VerticalLayout()
         val index: Int = content.indexOf(block)
-        temp.className = "k-centered-page-wrapper"
-        temp.add(caption)
-        temp.add(block)
-        (content as HorizontalLayout).addComponentAtIndex(index, temp)
+
+        captionContainet.classNames.add("k-centered-page-wrapper")
+        captionContainet.add(block)
+        content.addComponentAtIndex(index, captionContainet)
       } else if (content is VerticalLayout) {
         val index: Int = content.indexOf(block)
         if (index >= 0) {
-          (content as VerticalLayout).addComponentAtIndex(index, caption)
+          content.addComponentAtIndex(index, captionContainet)
         } else {
           // it is a follow block
           for (i in 0 until content.componentCount) {
@@ -134,7 +137,7 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
           }
         }
       } else {
-        content.add(caption) // not really suitable.
+        content.add(captionContainet) // not really suitable.
       }
     }
   }

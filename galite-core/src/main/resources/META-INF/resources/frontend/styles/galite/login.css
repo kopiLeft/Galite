@@ -35,6 +35,13 @@
     font-size: 12px;
 }
 
+/**
+ * Error division style
+ */
+.k-loginBox-error {
+    color: red;
+}
+
 /*
  * Login Box password input fields style
  */

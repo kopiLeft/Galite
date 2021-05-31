@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.common
 
+import org.kopi.galite.ui.vaadin.label.Label
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.HasStyle
@@ -29,7 +31,6 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
   val tbody: Element = Element("tbody")
 
   init {
-    setWidthFull()
     element.appendChild(tbody)
     for (i in 0 until rowsNumber) {
       val tr = Element("tr")
@@ -74,10 +75,17 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
   /**
    * Adds the components to this table in a specific cell identified by the row and column number.
    */
-  fun add(row: Int, column: Int, vararg components: Element) {
+  fun add(row: Int, column: Int, vararg components: Component) {
     val cell = getCellAt(row, column)
 
-    cell.appendChild(*components)
+    components.forEach {
+      cell.appendChild(it.element)
+
+      // FIXME: styling temporary workaround
+      if(it is Label) {
+        cell.style["padding-top"] = "5px"
+      }
+    }
   }
 
   /**

@@ -51,9 +51,9 @@ class TestAlign : FormBlock(10, 8, "Test block") {
     options(BlockOption.NODETAIL)
   }
 
-  val designation = visit(domain = Domain<String>(20), position = at(1, 1)) {
-    label = "Designation"
-    help = "The designation of product"
+  val description = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "Description"
+    help = "The description of product"
   }
   val reference = visit(domain = Domain<String>(20), position = at(2, 1)) {
     label = "Reference"

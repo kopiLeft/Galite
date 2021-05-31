@@ -142,7 +142,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
     //grid.setCellStyleGenerator(DGridBlockCellStyleGenerator(model))
     grid.addColumnResizeListener(::columnResize)
     configure()
-    setHeightByRows(model.displaySize)
+    setHeightByRows(model.bufferSize, model.displaySize)
     //grid.setColumnOrder(columnsOrder)
     /*if (detailsGenerator != null) { TODO
       grid.setDetailsGenerator(detailsGenerator)
@@ -205,11 +205,15 @@ open class DGridBlock(parent: DForm, model: VBlock)
     //})
   }
 
-  private fun setHeightByRows(rows: Int) {
-    grid.height = "calc(" +
-            "(1.04 * var(--lumo-size-xl) + var(--_lumo-grid-border-width)) + " +
-            "(${rows * 38}px + ${rows -1} * var(--_lumo-grid-border-width))" +
-            ")"
+  private fun setHeightByRows(buffer: Int, rows: Int) {
+    if(buffer == rows) {
+      grid.isHeightByRows = true
+    } else {
+      grid.height = "calc(" +
+              "(1.04 * var(--lumo-size-m) + var(--_lumo-grid-border-width)) + " +
+              "(${rows * 38}px + ${rows -1} * var(--_lumo-grid-border-width))" +
+              ")"
+    }
   }
 
   /**

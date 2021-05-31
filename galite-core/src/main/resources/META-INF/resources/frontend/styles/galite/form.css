@@ -194,6 +194,10 @@ vaadin-checkbox {
     height: 38px;
 }
 
+.multiple .k-boolean-field-content {
+    height: 40px;
+}
+
 /*
  * Spinner style
  */
@@ -236,10 +240,6 @@ vaadin-checkbox {
 /*
  * help style
  */
-.help {
-    margin-top: -30px;
-}
-
 .help, .help > center > h1 {
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
@@ -295,7 +295,7 @@ tr {
 td {
     padding-bottom: 1px;
     height: 20px;
-    padding-right: 1px;
+    padding-right: 8px;
     display: table-cell;
     vertical-align: top;
 }
@@ -305,6 +305,16 @@ td {
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 12px !important;
+}
+
+ /**
+   * Label and grid label style
+   */
+td label {
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    color: #a3a3a3 ;
 }
 
  /**

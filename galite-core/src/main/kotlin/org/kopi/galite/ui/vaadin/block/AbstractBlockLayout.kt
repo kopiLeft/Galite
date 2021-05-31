@@ -91,7 +91,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    * @param rowSpan The row span width.
    */
   open fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
-    add(row, column, formItem.element)
+    add(row, column, formItem)
     if (colSpan > 1) {
       setColSpan(row, column, colSpan.toString())
     }
@@ -106,7 +106,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
 
   override fun layoutAlignedComponents() {
     if (alignPane != null) {
-      add(0, 0, alignPane!!.element)
+      add(0, 0, alignPane!!)
       getCellAt(0, 0).style["width"] = "100%"
     }
   }

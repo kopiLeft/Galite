@@ -59,7 +59,6 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     maxColumnPos = model.maxColumnPos
     displayedFields = model.displayedFields
     formView = parent
-    setBorder(model.border, model.title)
     model.addBlockListener(this)
     setBufferSize(model.bufferSize, model.displaySize)
     setSortedRecords(model.sortedRecords)
@@ -349,9 +348,9 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
    * @param style The border style.
    * @param title The block title.
    */
-  private fun setBorder(style: Int, title: String?) {
+  internal fun setBorder(style: Int, title: String?, page: Page<*>?) {
     if (style != VConstants.BRD_NONE) {
-      title?.let { setCaption(it) }
+      title?.let { setCaption(it, page) }
     }
   }
 
