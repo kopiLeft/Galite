@@ -15,7 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-rootProject.name = "Galite"
-include("galite-core")
-include("galite-tests")
-include("galite-demo")
+plugins {
+  kotlin("jvm") apply true
+}
+
+dependencies {
+  implementation(project(":galite-core"))
+}
+
+tasks {
+  compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+  }
+}
