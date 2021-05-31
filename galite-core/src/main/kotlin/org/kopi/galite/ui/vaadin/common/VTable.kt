@@ -135,6 +135,13 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
     return tableRow.getChild(column)
   }
 
+  fun addInNewRow(component: Component) {
+    val tr = Element("tr")
+
+    tbody.appendChild(tr)
+    tr.appendChild(Element("td").appendChild((component.element)))
+  }
+
   /**
    * Returns the table cell identified by the row and column number.
    *

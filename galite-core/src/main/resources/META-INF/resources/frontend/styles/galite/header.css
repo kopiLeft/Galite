@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,7 +21,6 @@
     display: table;
     width: 100%;
     margin: 0 auto;
-    --lumo-space-m: 1rem;
     height: 63px;
 }
 
@@ -29,6 +29,10 @@
     max-width: 85%;
     margin-left: 0;
     height: 63px;
+}
+
+#module_list_empty {
+    width: 1px;
 }
 
 #welcome_container {
@@ -52,6 +56,11 @@
     width: 10%;
     border-right: 1px solid #dadada;
     vertical-align: middle;
+    margin-left: 0;
+}
+
+#module_list_empty {
+    margin-left: none;
 }
 
 .logo-image {
@@ -100,9 +109,13 @@
 user , admin , wrk context and bookmark
 */
 #welcome ::part(menu-bar-button) {
+    height : 60px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     background:var(--lumo-tint);
-    padding: var(--lumo-space-xxs);
+}
+
+#welcome ::part(menu-bar-button):hover {
+    background-color: #d9f0f8;
 }
 
 /*
@@ -133,4 +146,12 @@ user , admin , wrk context and bookmark
     height: 63px;
     box-sizing: border-box;
     --lumo-space-m: 0;
+}
+
+#welcome #windows {
+    cursor: pointer;
+}
+
+#welcome #user_menu, #welcome #admin_menu, #welcome #bookmarks_menu, #welcome #wrkcontext_menu {
+    cursor: pointer;
 }

@@ -16,6 +16,9 @@
  */
 package org.kopi.galite.demo
 
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextArea
+import com.vaadin.flow.router.Route
 import java.math.BigDecimal
 
 import kotlin.reflect.KClass
@@ -195,7 +198,7 @@ val list_Of_StoreTables = listOf(Client, Product, Stock, Provider,
 fun initModules() {
   transaction {
     insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
-    insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", FormAlignTest::class)
+    insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", ClientForm::class)
     insertIntoModule("1010", "org/kopi/galite/test/Menu", 5, "1000")
     insertIntoModule("1101", "org/kopi/galite/test/Menu", 10, "1010", FormSample::class)
     insertIntoModule("1110", "org/kopi/galite/test/Menu", 15, "1010", FormWithFields::class)

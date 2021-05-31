@@ -23,7 +23,6 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VTable
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.grid.Grid
 
 /**
  * An abstract implementation for the block layout.
@@ -33,7 +32,7 @@ import com.vaadin.flow.component.grid.Grid
  */
 abstract class AbstractBlockLayout protected constructor(val col: Int,
                                                          val line: Int)
-  : VTable(line, max(1, col / 2)), BlockLayout {
+  : VTable(line, max(1, col)), BlockLayout {
 
   /**
    * The number of columns

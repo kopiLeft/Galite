@@ -17,15 +17,19 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.base.VScrollablePanel
+import org.kopi.galite.ui.vaadin.block.Block
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.VScrollablePanel
-import org.kopi.galite.ui.vaadin.block.Block
+import com.vaadin.flow.component.AttachEvent
 
 /**
  * A form page, can be either or vertical or horizontal page.
@@ -34,12 +38,29 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
 
   private var scrollPanel: VScrollablePanel?
   private var last: Component? = null
+  private var width = 0.0
 
   init {
     this.content.className = Styles.FORM_PAGE_CONTENT
     scrollPanel = VScrollablePanel(this.content)
     add(scrollPanel)
     className = Styles.FORM_PAGE
+
+    access {
+      UI.getCurrent().page.addBrowserWindowResizeListener { event ->
+        if (event.width < width) {
+          this.style["width"] = (event.width - 28).toString() + "px"
+          style["overflow"] = "auto"
+        } else {
+          this.style["width"] = "auto"
+        }
+
+      }
+    }
+  }
+
+  override fun onAttach(attachEvent: AttachEvent?) {
+    element.executeJs("return $0.clientWidth", this.element).then { width -> this.width = width.asNumber() }
   }
 
   //---------------------------------------------------

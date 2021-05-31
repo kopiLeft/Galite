@@ -100,12 +100,6 @@ object FormWithList : DictionaryForm() {
       }
     }
 
-    command(item = resetBlock) {
-      action = {
-        resetBlock()
-      }
-    }
-
     command(item = save) {
       action = {
         println("-----------Saving-----------------")
@@ -114,7 +108,13 @@ object FormWithList : DictionaryForm() {
     }
   }
 
-  val block = insertBlock(BlockWithManyTables, testPage1)
+  val block = insertBlock(BlockWithManyTables, testPage1) {
+    command(item = resetBlock) {
+      action = {
+        resetBlock()
+      }
+    }
+  }
 }
 
 object BlockSample : FormBlock(1, 1, "Test block") {

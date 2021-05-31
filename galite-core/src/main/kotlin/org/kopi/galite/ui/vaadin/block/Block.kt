@@ -334,7 +334,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
           useAll: Boolean,
   ) {
     buildLayout()
-    layout!!.addComponent(component, (x - 1) / 2, y, width, height, alignRight, useAll)
+    layout!!.addComponent(component, x, y, width, height, alignRight, useAll)
   }
 
   /**
