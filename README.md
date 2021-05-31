@@ -19,8 +19,8 @@ Galite offers many advantages:
 * Database-backed application: it provides you with the feature of connecting forms with databases and getting queries from different database dialects. You declare the database tables using [Exposed](https://github.com/JetBrains/Exposed) framework.
 * Strongly typed fields: you have to declare the data types of fields explicitly, which allows to check the type of data assigned to a field at compile-time.
 
-## Configuration
-To define your application configurations (logo, locales,..etc) you need to implement the `VApplication` class.
+## Customize and configure your App
+To define your application customizations (logo, locales, .etc) you need to implement the `VApplication` class.
 
 Exemple:
 ````KOTLIN
@@ -66,7 +66,6 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
         override val debugMailRecipient get(): String = "mail@adress"
         override fun getSMTPServer(): String = "smtp.server"
         override val faxServer get(): String = "fax.server"
-        override val dictionaryServer get(): String = "c:/aspell"
         override fun mailErrors(): Boolean = false
         override fun logErrors(): Boolean = true
         override fun debugMessageInTransaction(): Boolean = true
@@ -84,7 +83,7 @@ When starting the application, the login page is displayed. It is provided by Ga
 ## Form
 You should be able to build custom forms fast and efficiently.
 
-Here is an example:
+Here is a code snippet:
 ````KOTLIN
 class ClientForm : Form() {
   
@@ -110,7 +109,9 @@ class ClientForm : Form() {
     }
   }
 
-  val block = insertBlock(Clients()) 
+  val clientsPage= page("Clients")
+  
+  val block = insertBlock(Clients(), clientsPage) 
 }
 
 class Clients : FormBlock(1, 1, "Clients") {
@@ -136,64 +137,46 @@ class Clients : FormBlock(1, 1, "Clients") {
     help = "The client age"
     columns(u.ageClt)
   }
-  val addressClt = visit(domain = Domain<String>(20), position = at(3, 2)) {
-    label = "Address"
-    help = "The client address"
-    columns(u.addressClt)
-  }
-  val countryClt = visit(domain = Domain<String>(12), position = at(4, 1)) {
-    label = "Country"
-    help = "The client country"
-    columns(u.countryClt)
-  }
-  val cityClt = visit(domain = Domain<String>(12), position = at(4, 2)) {
-    label = "City"
-    help = "The client city"
-    columns(u.cityClt)
-  }
-  val zipCodeClt = visit(domain = Domain<Int>(12), position = follow(cityClt)) {
-    label = "Zip code"
-    help = "The client zip code"
-    columns(u.zipCodeClt)
-  }
   val active = visit(domain = Domain<Boolean>(), position = at(5, 1)) {
-    label = "City"
-    help = "The client city"
+    label = "Active ?"
+    help = "Is the use account active?"
   }
 }
 ````
+![client_form.png](docs/client_form.png)
+
 ## Reports
-The report consists of an instance that gets consistently injected with the data that is inserted by the user. The required data is iteratively fetched from the table to then be formatted within a customizable report.
+The report consists of an instance that gets dynamically injected with the data that is inserted by the user. The required data is iteratively fetched from the table to then be formatted within a customizable report.
 Reports can be grouped together according to certain attributes (collapse, computations)
 The user can generate a file from a report. The file can be in one of the following formats: csv, pdf or excel.
 ````KOTLIN
-class ClientR : Report() {
+class ProductReport : Report() {
   override val locale = Locale.UK
 
-  override val title = "report-title"
+  override val title = "Products"
 
   val action = menu("Action")
 
   val csv = actor(
-          ident = "CSV",
-          menu = action,
-          label = "CSV",
-          help = "CSV Format",
+    ident = "CSV",
+    menu = action,
+    label = "CSV",
+    help = "CSV Format",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "exportCsv"  // icon is optional here
+    key = Key.F8
+    icon = "exportCsv"
   }
 
   val pdf = actor(
-          ident = "PDF",
-          menu = action,
-          label = "PDF",
-          help = "PDF Format",
+    ident = "PDF",
+    menu = action,
+    label = "PDF",
+    help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
     icon = "exportPdf"  // icon is optional here
   }
-  
+
   val cmdCSV = command(item = csv) {
     action = {
       model.export(VReport.TYP_CSV)
@@ -206,11 +189,21 @@ class ClientR : Report() {
     }
   }
 
-  val firstName = field(Domain<String>(25)) {
-    label = "First Name"
-    help = "The client first name"
-    align = FieldAlignment.LEFT
-    group = ageClt
+  val category = field(Category) {
+    label = "Category"
+    help = "The product category"
+    group = department
+  }
+
+  val department = field(Domain<String>(20)) {
+    label = "Department"
+    help = "The product department"
+    group = description
+  }
+
+  val description = field(Domain<String>(50)) {
+    label = "Description"
+    help = "The product description"
     format {
       object : VCellFormat() {
         override fun format(value: Any?): String {
@@ -220,75 +213,38 @@ class ClientR : Report() {
     }
   }
 
-  val lastName = field(Domain<String>(25)) {
-    label = "Last Name"
-    help = "The client last name"
-    align = FieldAlignment.LEFT
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
-    }
+  val supplier = field(Domain<String>(20)) {
+    label = "Supplier"
+    help = "The supplier"
   }
 
-  val addressClt = field(Domain<String>(50)) {
-    label = "Address"
-    help = "The client address"
-    align = FieldAlignment.LEFT
-    format {
-      object : VCellFormat() {
-        override fun format(value: Any?): String {
-          return (value as String).toUpperCase()
-        }
-      }
-    }
+  val taxName = field(Domain<String>(10)) {
+    label = "Tax"
+    help = "The product tax name"
   }
 
-  val ageClt = field(Domain<Int>(2)) {
-    label = "Age"
-    help = "The client age"
-    align = FieldAlignment.LEFT
+  val price = field(Domain<Decimal>(10, 5)) {
+    label = "Price"
+    help = "The product unit price excluding VAT"
   }
-
-  val countryClt = field(Domain<String>(50)) {
-    label = "City"
-    help = "The client country"
-    align = FieldAlignment.LEFT
-  }
-
-  val cityClt = field(Domain<String>(50)) {
-    label = "City"
-    help = "The client city"
-    align = FieldAlignment.LEFT
-  }
-
-  val zipCodeClt = field(Domain<Int>(2)) {
-    label = "Zip code"
-    help = "The client zip code"
-    align = FieldAlignment.LEFT
-  }
-
-  val clients = Client.selectAll()
 
   init {
     transaction {
-      clients.forEach { result ->
+      Product.selectAll().forEach { result ->
         add {
-          this[firstName] = result[Client.firstNameClt]
-          this[lastName] = result[Client.lastNameClt]
-          this[addressClt] = result[Client.addressClt]
-          this[ageClt] = result[Client.ageClt]
-          this[countryClt] = result[Client.countryClt]
-          this[cityClt] = result[Client.cityClt]
-          this[zipCodeClt] = result[Client.zipCodeClt]
+          this[description] = result[Product.designation]
+          this[department] = result[Product.department]
+          this[supplier] = result[Product.supplier]
+          this[category] = result[Product.category]
+          this[taxName] = result[Product.taxName]
+          this[price] = result[Product.price]
         }
       }
     }
   }
 }
 ````
+![docs/products_report.png](docs/products_report.png)
 
 ## Charts
 If further analysis is needed, the user can generate charts to visualize data and draw conclusions from the observed patterns.
@@ -350,7 +306,7 @@ object ChartSample: Chart() {
   }
 }
 ````
-
+![docs/galite_chart.png](docs/galite_chart.png)
 ## Contributing
 All contributions are welcome.
 
