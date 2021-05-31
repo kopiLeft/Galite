@@ -170,6 +170,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
                        block.model.isFollow,
                        block.model.noDetail())
     }
+    content.setBorder(block, page)
   }
 
   /**

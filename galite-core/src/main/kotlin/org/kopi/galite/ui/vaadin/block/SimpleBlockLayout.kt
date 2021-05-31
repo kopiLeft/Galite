@@ -222,7 +222,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       content.className = "info-content"
       val formItem = object : FormItem(content) {}
 
-      setComponent(formItem,
+      setComponent(content,
                    aligns!![x][y]!!.x,
                    aligns!![x][y]!!.y,
                    aligns!![x][y]!!.width.coerceAtMost(getAllocatedWidth(x, y)),

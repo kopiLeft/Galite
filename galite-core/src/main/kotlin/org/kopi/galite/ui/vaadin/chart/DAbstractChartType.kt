@@ -50,6 +50,11 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
                                                         private val dataSeries: Array<VDataSeries>
                                                         ) : HorizontalLayout(), UChartType {
 
+  init {
+    // FIXME: temporary styling
+    minWidth = "500px"
+  }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

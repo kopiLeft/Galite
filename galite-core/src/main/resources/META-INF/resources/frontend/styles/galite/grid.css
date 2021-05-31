@@ -51,3 +51,7 @@
 :host([theme="row-stripes"]) [part~="cell"] {
     height: 38px;
 }
+
+[part="row"]:only-child [part~="header-cell"] {
+    min-height: var(--lumo-size-m);
+}

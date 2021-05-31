@@ -746,6 +746,7 @@ open class FormBlock(var buffer: Int,
         super.bufferSize = buffer
         super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
+        super.border = this@FormBlock.border
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.displayedFields = this@FormBlock.displayedFields

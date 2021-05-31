@@ -155,3 +155,17 @@ user , admin , wrk context and bookmark
 #welcome #user_menu, #welcome #admin_menu, #welcome #bookmarks_menu, #welcome #wrkcontext_menu {
     cursor: pointer;
 }
+
+#welcome #windows {
+    cursor: pointer;
+}
+
+#header ::part(menu-bar-button) {
+    cursor: pointer;
+}
+
+#header #welcome ::part(menu-bar-button) {
+    min-width: 0;
+    padding: 18px 10px;
+    text-transform: none;
+}

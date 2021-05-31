@@ -62,7 +62,7 @@ object ProductForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return ProductR
+    return ProductReport()
   }
 }
 

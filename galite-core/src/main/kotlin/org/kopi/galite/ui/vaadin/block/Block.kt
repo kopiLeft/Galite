@@ -489,13 +489,11 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * Sets the block caption.
    * @param caption The block caption.
-   * @param maxColumnPos The maximum column position.
    */
-  protected open fun setCaption(caption: String?) {
+  protected open fun setCaption(caption: String?, page: Page<*>?) {
     if (caption == null || caption.isEmpty()) {
       return
     }
-    val page: Page<*>? = parentPage
     this.caption = H4(caption)
     this.caption!!.className = "block-title"
     page?.setCaption(this)

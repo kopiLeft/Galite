@@ -162,6 +162,14 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
   }
 
   /**
+   * Sets the block border.
+   * @param block The block.
+   */
+  internal fun setBorder(block: DBlock, page: Int) {
+    block.setBorder(block.model.border, block.model.title, pages[page])
+  }
+
+  /**
    * Goes to the page with index = i
    * @param i The page index.
    */

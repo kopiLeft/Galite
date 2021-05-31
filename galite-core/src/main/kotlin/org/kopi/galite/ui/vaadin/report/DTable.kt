@@ -84,8 +84,6 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    * Builds the grid columns.
    */
   private fun buildColumns() {
-    val final = model.accessibleColumns.size
-
     model.accessibleColumns.forEachIndexed { index, column ->
       val align = if (column!!.align == Constants.ALG_RIGHT) {
         ColumnTextAlign.END
@@ -97,12 +95,9 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
 
       gridColumn
         .setHeader(getColumnNameComponent(column, gridColumn))
-        .setAutoWidth(true)
         .setTextAlign(align)
 
-      if (index == final - 1) {
-        gridColumn.flexGrow = 0
-      }
+      gridColumn.flexGrow = 0
     }
   }
 

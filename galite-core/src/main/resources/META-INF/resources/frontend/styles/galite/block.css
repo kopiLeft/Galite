@@ -37,7 +37,7 @@
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 12px !important;
-    min-height: 0;
+    min-height: 20px;
     max-height: 40px;
 }
 
