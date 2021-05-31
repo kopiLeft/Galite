@@ -77,7 +77,7 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
 }
 ````
 
-When starting the application, the login page is displayed. It is provided by Galite by default and you don't need to create it.
+When starting the application, the login page is displayed. It is provided by default by Galite, so you don't need to create it.
 ![login page](docs/login-page.png)
 
 ## Form
@@ -232,7 +232,7 @@ class ProductReport : Report() {
     transaction {
       Product.selectAll().forEach { result ->
         add {
-          this[description] = result[Product.designation]
+          this[description] = result[Product.description]
           this[department] = result[Product.department]
           this[supplier] = result[Product.supplier]
           this[category] = result[Product.category]
@@ -307,6 +307,7 @@ object ChartSample: Chart() {
 }
 ````
 ![docs/galite_chart.png](docs/galite_chart.png)
+
 ## Contributing
 All contributions are welcome.
 

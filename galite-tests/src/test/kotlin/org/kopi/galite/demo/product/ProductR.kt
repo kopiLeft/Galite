@@ -166,7 +166,7 @@ class ProductReport : Report() {
     transaction {
       products.forEach { result ->
         add {
-          this[description] = result[Product.designation]
+          this[description] = result[Product.description]
           this[department] = result[Product.department]
           this[supplier] = result[Product.supplier]
           this[category] = result[Product.category]
