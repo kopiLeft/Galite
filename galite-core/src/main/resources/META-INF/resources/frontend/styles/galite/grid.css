@@ -23,7 +23,7 @@
 }
 
 [part~="cell"].level-1:not(:focus) {
-    background: #D9EAD3 !important;
+    background: #F5F3ED !important;
 }
 
 [part~="cell"].italic {
@@ -36,6 +36,7 @@
 
 [part~="cell"].separator {
     background: red;
+    width: 15px;
 }
 
 :host([theme="column-borders compact"]) [part~="cell"]:focus {

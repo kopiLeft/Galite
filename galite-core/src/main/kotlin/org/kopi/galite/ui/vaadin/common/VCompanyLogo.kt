@@ -17,12 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.common
 
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * The company logo component that contains an image.
  */
-class VCompanyLogo : Div() {
+class VCompanyLogo : HorizontalLayout() {
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

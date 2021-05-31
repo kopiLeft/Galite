@@ -27,8 +27,7 @@ class VTextAreaField : InputTextField<TextArea>(TextArea()) {
   var cols: Int = 0
 
   fun setRows(rows: Int, visibleRows: Int) {
-    element.setProperty("rows", visibleRows.toString())
-    // TODO
+    height = visibleRows.toString() + "em"
   }
 
   /**
