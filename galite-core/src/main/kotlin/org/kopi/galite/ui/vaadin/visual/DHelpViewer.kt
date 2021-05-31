@@ -42,6 +42,7 @@ class DHelpViewer(model: VHelpViewer) : DWindow(model), Focusable<Window> {
 
   init {
     model.setDisplay(this)
+    isPadding = false
 
     try {
       val pane = Div()

@@ -17,12 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.common
 
+import org.kopi.galite.ui.vaadin.label.Label
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.dom.Element
-import org.kopi.galite.ui.vaadin.label.Label
 
 @Tag("table")
 open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasStyle {

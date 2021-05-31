@@ -240,10 +240,6 @@ vaadin-checkbox {
 /*
  * help style
  */
-.help {
-    margin-top: -30px;
-}
-
 .help, .help > center > h1 {
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
@@ -299,22 +295,7 @@ tr {
 td {
     padding-bottom: 1px;
     height: 20px;
-    padding-right: 1px;
-    display: table-cell;
-    vertical-align: top;
-}
-
-tr {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    vertical-align: baseline;
-}
-
-td {
-    padding-bottom: 1px;
-    height: 10px;
-    padding-right: 1px;
+    padding-right: 8px;
     display: table-cell;
     vertical-align: top;
 }
@@ -334,12 +315,6 @@ td label {
     font-weight: 500 !important;
     font-style: normal !important;
     color: #a3a3a3 ;
-}
-.k-form > * {
-    font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
-    font-size: 12px !important;
 }
 
  /**
