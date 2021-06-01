@@ -68,7 +68,9 @@ abstract class DGridEditorField<T>(
   init {
     // editor.setConverter(createConverter()) TODO
     // editor.addNavigationListener(this) TODO
-    editor.addFocusListener(::onClick)
+    editor.addClickListener {
+      onClick()
+    }
     // editor.addAutofillListener(this) TODO
     setLabelAlignment()
   }

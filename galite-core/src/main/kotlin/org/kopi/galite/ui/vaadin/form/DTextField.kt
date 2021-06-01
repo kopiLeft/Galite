@@ -28,6 +28,8 @@ import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VlibProperties
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * The `DTextField` is the vaadin implementation
@@ -71,7 +73,13 @@ open class DTextField(
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.addTextValueChangeListener {
-      checkText(it.value?.toString())
+      getModel().getForm().performAsyncAction(object : Action("check_type") {
+        override fun execute() {
+          getModel().isChangedUI = true
+          val value = format(it.value)
+          checkText(value)
+        }
+      })
     }
 
     createContextMenu()
@@ -248,6 +256,13 @@ open class DTextField(
       getModel().checkType(text)
     }
   }
+
+  private fun format(s: Any?): String? =
+    if(s is LocalDate) {
+      s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    } else {
+      s?.toString()
+    }
 
   // --------------------------------------------------
   // UTILS

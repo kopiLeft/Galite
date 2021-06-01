@@ -42,7 +42,7 @@ import com.vaadin.flow.function.ValueProvider
  * @param model The table model.
  */
 @CssImport("./styles/galite/report.css")
-class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, ComponentEventListener<ItemClickEvent<DReport.ReportModelItem>> {
+class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -73,7 +73,6 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
     classNames.add("borderless")
     classNames.add("report")
     setWidthFull()
-    addItemClickListener(this)
   }
 
   //---------------------------------------------------
@@ -126,10 +125,6 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    */
   override fun convertColumnIndexToView(modelColumnIndex: Int): Int {
     return viewColumns?.indexOf(modelColumnIndex) ?: modelColumnIndex
-  }
-
-  override fun onComponentEvent(event: ItemClickEvent<DReport.ReportModelItem>?) {
-    //TODO("Not yet implemented")
   }
 
   /**

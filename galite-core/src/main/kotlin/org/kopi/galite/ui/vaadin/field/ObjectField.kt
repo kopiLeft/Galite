@@ -146,20 +146,20 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
    * Returns `true` if this object field is `null`.
    * @return `true` if this object field is `null`.
    */
-  protected abstract val isNull: Boolean
+  override abstract val isNull: Boolean
 
   /**
    * Sets the object field color properties.
    * @param foreground The foreground color.
    * @param background The background color.
    */
-  internal abstract fun setColor(foreground: String?, background: String?)
+  abstract override fun setColor(foreground: String?, background: String?)
 
   /**
    * Checks the internal value of this field.
    * @param rec The active record.
    */
-  protected abstract fun checkValue(rec: Int)
+  abstract override fun checkValue(rec: Int)
 
   /**
    * Sets the component visibility from the parent field.

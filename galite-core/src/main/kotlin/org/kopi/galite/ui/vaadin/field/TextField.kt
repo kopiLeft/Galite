@@ -513,6 +513,36 @@ class TextField(val model: VField,
     super.focus()
   }
 
+  override fun addFocusListener(function: () -> Unit) {
+    field.addFocusListener {
+      function()
+    }
+  }
+
+  /**
+   * Sets the field color properties.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  override fun setColor(foreground: String?, background: String?) {
+    field.setColor(foreground, background)
+  }
+
+  /**
+   * Checks if the content of this field is empty.
+   * @return `true` if this field is empty.
+   */
+  override val isNull get(): Boolean = this.field.isNull
+
+  /**
+   * Checks the value of this text field.
+   * @param rec The active record.
+   * @throws CheckTypeException When field content is not valid
+   */
+  override fun checkValue(rec: Int) {
+    field.checkValue(rec)
+  }
+
   //---------------------------------------------------
   // CONVERT TYPE
   //---------------------------------------------------
@@ -540,12 +570,6 @@ class TextField(val model: VField,
      * name conversion.
      */
     NAME
-  }
-
-  override fun addFocusListener(function: () -> Unit) {
-    field.addFocusListener {
-      function()
-    }
   }
 
   //---------------------------------------------------

@@ -48,7 +48,7 @@ class ActorField : ObjectField<Any?>() {
   init {
     button.className = Styles.ACTOR_FIELD_BUTTON
     element.classList.add(Styles.ACTOR_FIELD)
-    //setWidget(button) TODO
+    add(button)
   }
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -63,6 +63,10 @@ class ActorField : ObjectField<Any?>() {
    */
   fun setCaption(caption: String?) {
     button.text = caption
+  }
+
+  fun setDescription(tooltip: String) {
+    element.setProperty("title", tooltip)
   }
 
   /**

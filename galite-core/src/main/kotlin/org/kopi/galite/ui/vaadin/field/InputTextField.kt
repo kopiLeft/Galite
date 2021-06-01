@@ -94,7 +94,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     className = Styles.TEXT_INPUT
     addKeyPressListener(::onKeyPress)
     addKeyUpListener(::onKeyUp)
-    element.addEventListener("paste", ::onPasteEvent)
+    //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
     addKeyDownListener(::onKeyDown)
     addFocusListener(::onFocus)
@@ -170,7 +170,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
       && validationStrategy != null && validationStrategy is EnumValidator
     ) {
       event.key.keys.forEach {
-        if (!validationStrategy!!.validate(java.lang.String.valueOf(it))) {
+        if (!validationStrategy!!.validate(it)) {
           cancelKey()
         }
       }
@@ -179,7 +179,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     // validate the whole text input.
     if (validationStrategy != null) {
       event.key.keys.forEach {
-        if (!validationStrategy!!.validate(value + java.lang.String.valueOf(it))) {
+        if (!validationStrategy!!.validate(value + it)) {
           cancelKey()
         }
       }

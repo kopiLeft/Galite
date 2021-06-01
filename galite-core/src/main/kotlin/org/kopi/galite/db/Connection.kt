@@ -76,6 +76,25 @@ class Connection {
   }
 
   /**
+   * Creates a connection with Exposed from a datasource.
+   *
+   * @param     dataSource      the dataSource
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the current database schema
+   */
+  constructor(
+    dataSource: javax.sql.DataSource,
+    lookupUserId: Boolean = true,
+    schema: String? = null // TODO
+  ) {
+    dbConnection = Database.connect(dataSource)
+    url = dbConnection.url
+    userName = dataSource.connection.metaData.userName
+    this.user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
+    password = null // already authenticated
+  }
+
+  /**
    * Returns the user ID
    */
   fun getUserID(): Int {
