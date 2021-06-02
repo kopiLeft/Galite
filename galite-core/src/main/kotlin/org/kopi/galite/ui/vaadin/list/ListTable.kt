@@ -87,4 +87,6 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   protected fun formatObject(o: Any?, col: Int): String {
     return model.columns[col]!!.formatObject(o).toString()
   }
+
+  val selectedItem: List<Any?> get() = asSingleSelect().value
 }

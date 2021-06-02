@@ -30,7 +30,7 @@ import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object CommandForm : ReportSelectionForm() {
+class CommandForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Commands"
   val page = page("Command")
@@ -92,10 +92,10 @@ object CommandForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
-  val tb1 = insertBlock(BlockCommand, page) {
+  val tb1 = insertBlock(BlockCommand(), page) {
     command(item = report) {
       action = {
-        createReport(BlockCommand)
+        createReport(BlockCommand())
       }
     }
 
@@ -128,7 +128,7 @@ object CommandForm : ReportSelectionForm() {
   }
 }
 
-object BlockCommand : FormBlock(1, 10, "Commands") {
+class BlockCommand : FormBlock(1, 10, "Commands") {
   val u = table(Command)
   val v = table(Client)
 
@@ -183,5 +183,5 @@ object CommandStatus : CodeDomain<String>() {
 }
 
 fun main() {
-  Application.runForm(formName = CommandForm)
+  Application.runForm(formName = CommandForm())
 }
