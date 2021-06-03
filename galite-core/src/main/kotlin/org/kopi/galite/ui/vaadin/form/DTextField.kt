@@ -17,7 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.contextmenu.ContextMenu
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
@@ -28,8 +30,8 @@ import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VlibProperties
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+
+import com.vaadin.flow.component.contextmenu.ContextMenu
 
 /**
  * The `DTextField` is the vaadin implementation
@@ -77,6 +79,7 @@ open class DTextField(
         override fun execute() {
           getModel().isChangedUI = true
           val value = format(it.value)
+
           checkText(value)
         }
       })

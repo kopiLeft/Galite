@@ -50,6 +50,8 @@ import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.data.renderer.TextRenderer
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.customfield.CustomField
 
 /**
  * A grid text editor based on custom components.
@@ -80,12 +82,18 @@ class DGridTextEditorField(
     } else {
       ScannerTransformer(editor)
     }
-    editor.addValueChangeListener { event ->
-      if(event.isFromClient) {
-        checkText(event.value.toString(), true)
-      }
-    }
+    editor.addValueChangeListener(::valueChanged)
     // TODO
+  }
+
+  fun valueChanged(event: AbstractField.ComponentValueChangeEvent<out CustomField<*>, *>) {
+    if(event.isFromClient) {
+      checkText(event.value.toString(), true)
+    }
+  }
+
+  override fun valueChanged() {
+    checkText(editor.value, isChanged(editor.oldValue, editor.value)) // TODO
   }
 
   override fun getObject(): Any? = editor.value
@@ -357,6 +365,24 @@ class DGridTextEditorField(
       getModel().isChangedUI = true
     }
     getModel().setChanged(changed)
+  }
+
+  /**
+   * Returns `true` if there is a difference between the old and the new text.
+   * @param oldText The old text value.
+   * @param newText The new text value.
+   * @return `true` if there is a difference between the old and the new text.
+   */
+  private fun isChanged(oldText: String?, newText: String?): Boolean {
+    var oldText: String? = oldText
+    var newText: String? = newText
+    if (oldText == null) {
+      oldText = "" // replace null by empty string to avoid null pointer exceptions
+    }
+    if (newText == null) {
+      newText = ""
+    }
+    return oldText != newText
   }
   // ----------------------------------------------------------------------
   // TRANSFORMERS IMPLEMENTATION

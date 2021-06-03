@@ -33,8 +33,6 @@ import org.kopi.galite.visual.VColor
 
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
-import com.vaadin.flow.router.NavigationEvent
-
 
 /**
  * An UField associated with the grid block in inline edit.
@@ -54,6 +52,9 @@ abstract class DGridEditorField<T>(
   val editor: GridEditorField<T> by lazy {
     createEditor().also {
       it.dGridEditorField = this
+      it.addClickListener {
+        onClick()
+      }
     }
   }
   internal var access = 0 // current access of field
@@ -79,6 +80,8 @@ abstract class DGridEditorField<T>(
   // ----------------------------------------------------------------------
 
   override fun getModel(): VField = columnView.model
+
+  abstract fun valueChanged()
 
   override fun getBlockView(): DGridBlock = columnView.blockView as DGridBlock
 
@@ -219,7 +222,7 @@ abstract class DGridEditorField<T>(
   // ----------------------------------------------------------------------
   // NAVIGATION
   // ----------------------------------------------------------------------
-  override fun onGotoNextField(event: NavigationEvent?) {
+  override fun onGotoNextField() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_TAB") {
       override fun execute() {
         if (getModel() != null) {
@@ -229,7 +232,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoPrevField(event: NavigationEvent?) {
+  override fun onGotoPrevField() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_STAB") {
       override fun execute() {
         if (getModel() != null) {
@@ -239,7 +242,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoNextBlock(event: NavigationEvent?) {
+  override fun onGotoNextBlock() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_BLOCK") {
       override fun execute() {
         if (getModel() != null) {
@@ -249,7 +252,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoPrevRecord(event: NavigationEvent?) {
+  override fun onGotoPrevRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_UP") {
       override fun execute() {
         if (getModel() != null) {
@@ -259,7 +262,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoNextRecord(event: NavigationEvent?) {
+  override fun onGotoNextRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_DOWN") {
       override fun execute() {
         if (getModel() != null) {
@@ -269,7 +272,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoFirstRecord(event: NavigationEvent?) {
+  override fun onGotoFirstRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_FIRST") {
       override fun execute() {
         if (getModel() != null) {
@@ -279,7 +282,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoLastRecord(event: NavigationEvent?) {
+  override fun onGotoLastRecord() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_REC_LAST") {
       override fun execute() {
         if (getModel() != null) {
@@ -289,7 +292,7 @@ abstract class DGridEditorField<T>(
     })
   }
 
-  override fun onGotoNextEmptyMustfill(event: NavigationEvent?) {
+  override fun onGotoNextEmptyMustfill() {
     getModel().getForm().performAsyncAction(object : Action("keyKEY_ALTENTER") {
       override fun execute() {
         if (getModel() != null) {

@@ -145,6 +145,10 @@ class DGridEditorBooleanField(
     getModel().setChanged(true)
   }
 
+  override fun valueChanged() {
+    // Nothing to do
+  }
+
   /**
    * Returns the true representation of this boolean field.
    * @return The true representation of this boolean field.
