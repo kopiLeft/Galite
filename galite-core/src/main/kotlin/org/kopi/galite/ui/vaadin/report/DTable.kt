@@ -136,6 +136,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    */
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
     val provider = ColumnValueProvider(key, column)
+
     return super.addComponentColumn(provider).also {
       provider.column = it
       it.setKey(key.toString())
