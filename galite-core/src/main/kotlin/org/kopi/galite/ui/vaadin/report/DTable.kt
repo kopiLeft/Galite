@@ -137,6 +137,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
     return super.addColumn(ColumnValueProvider(key)).also {
       it.setKey(key.toString())
+        .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
     }
   }
