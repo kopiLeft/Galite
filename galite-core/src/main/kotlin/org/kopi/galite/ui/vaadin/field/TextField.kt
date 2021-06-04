@@ -39,6 +39,7 @@ import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
+import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A text field component.
@@ -350,11 +351,17 @@ class TextField(val model: VField,
         Type.TIME -> VTimeField()
         Type.TIMESTAMP -> VTimeStampField()
         Type.DATE -> VDateField()
-        else -> InputTextField(TextField()).also {
-          if (type == Type.WEEK) {
-            it.setInputType("week")
-          } else if (type == Type.MONTH) {
-            it.setInputType("month")
+        else -> {
+          val textField = TextField()
+
+          InputTextField(textField).also {
+            if (type == Type.WEEK) {
+              it.setInputType("week")
+            } else if (type == Type.MONTH) {
+              it.setInputType("month")
+            } else {
+              textField.valueChangeMode = ValueChangeMode.TIMEOUT
+            }
           }
         }
       }

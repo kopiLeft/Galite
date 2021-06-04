@@ -17,10 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
-import java.util.concurrent.CompletableFuture
-
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.ShortcutAction
+import org.kopi.galite.ui.vaadin.base.Utils
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
@@ -117,7 +116,7 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
       Thread {
         UI.setCurrent(ui)
         val text = StringBuffer(value)
-        text.insert(getCursorPos(), "\u00D8")
+        text.insert(Utils.getCursorPos(wrappedField), "\u00D8")
         access {
           value = text.toString()
         }
@@ -151,20 +150,6 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
   protected open fun addNavigationAction(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
     NavigationAction(key, modifiers, navigationAction)
       .registerShortcut(this)
-  }
-
-  private fun getCursorPos(): Int {
-    val future = CompletableFuture<Int>()
-
-    access {
-      UI.getCurrent().page
-        .executeJs("return $0.shadowRoot.querySelector('[part=\"value\"]').selectionStart;", element)
-        .then(Int::class.java) { value: Int ->
-          future.complete(value)
-        }
-    }
-
-    return future.get()
   }
 
   //---------------------------------------------------
