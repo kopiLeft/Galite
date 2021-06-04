@@ -77,10 +77,12 @@ open class DTextField(
     field.addTextValueChangeListener {
       getModel().getForm().performAsyncAction(object : Action("check_type") {
         override fun execute() {
-          getModel().isChangedUI = true
-          val value = format(it.value)
+          if (isChanged(getModel().getText(), transformer!!.toModel(text))) {
+            val value = format(it.value)
 
-          checkText(value)
+            getModel().isChangedUI = true
+            checkText(value)
+          }
         }
       })
     }
@@ -288,7 +290,7 @@ open class DTextField(
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION
   //---------------------------------------------------
-  override fun getText(): String? {
+  override fun getText(): String {
     return transformer!!.toModel(if (field.value == null) "" else field.value.toString())
   }
 
