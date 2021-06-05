@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.field
 
 import com.vaadin.flow.component.textfield.TextArea
+import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A text area input zone.
@@ -25,6 +26,10 @@ import com.vaadin.flow.component.textfield.TextArea
  */
 class VTextAreaField : InputTextField<TextArea>(TextArea()) {
   var cols: Int = 0
+
+  init {
+    field.valueChangeMode = ValueChangeMode.TIMEOUT
+  }
 
   fun setRows(rows: Int, visibleRows: Int) {
     height = visibleRows.toString() + "em"

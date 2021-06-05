@@ -145,9 +145,10 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
 
   fun addInNewRow(component: Component) {
     val tr = Element("tr")
+    val componentInTD = Element("td").appendChild(component.element)
 
     tbody.appendChild(tr)
-    tr.appendChild(Element("td").appendChild((component.element)))
+    tr.appendChild(componentInTD)
   }
 
   /**

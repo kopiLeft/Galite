@@ -17,8 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.Utils
+
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.UI
 
 /**
  * A key navigation handler for a text input.
@@ -41,9 +45,15 @@ class TextFieldNavigationHandler protected constructor(private val isMulti: Bool
       field.connector.fireGotoNextBlock()
     }
     addKeyNavigator(field, Key.KEY_D, KeyModifier.of("Control")) {
-      val text = StringBuffer(field.value)
-      //text.insert(field.getCursorPos(), "\u00D8") TODO
-      field.value = text.toString()
+      val ui = UI.getCurrent()
+      Thread {
+        UI.setCurrent(ui)
+        val text = StringBuffer(field.value)
+        text.insert(Utils.getCursorPos(field), "\u00D8")
+        access {
+          field.value = text.toString()
+        }
+      }.start()
     }
     addKeyNavigator(field, Key.PAGE_DOWN) {
       field.fieldConnector.columnView!!.gotoNextRecord()

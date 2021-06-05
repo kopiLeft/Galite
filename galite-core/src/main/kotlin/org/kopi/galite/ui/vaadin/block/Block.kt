@@ -601,20 +601,6 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   }
 
   /**
-   * Handles the content widget.
-   */
-  protected open fun handleContentComponent() {
-    // TODO
-  }
-
-  /**
-   * Sets the block content.
-   */
-  protected open fun setContent() {
-    // TODO
-  }
-
-  /**
    * Returns the column view of the given index.
    * @param index The column view index.
    * @return The column view.

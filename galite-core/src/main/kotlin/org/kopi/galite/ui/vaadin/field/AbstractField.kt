@@ -22,5 +22,10 @@ import com.vaadin.flow.component.customfield.CustomField
 abstract class AbstractField<T>: CustomField<T>() {
 
   abstract fun addFocusListener(function: () -> Unit)
-  // TODO add common code here
+
+  internal abstract fun setColor(foreground: String?, background: String?)
+
+  internal abstract val isNull: Boolean
+
+  internal abstract fun checkValue(rec: Int)
 }

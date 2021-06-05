@@ -42,7 +42,7 @@ import com.vaadin.flow.function.ValueProvider
  * @param model The table model.
  */
 @CssImport("./styles/galite/report.css")
-class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, ComponentEventListener<ItemClickEvent<DReport.ReportModelItem>> {
+class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -73,7 +73,6 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
     classNames.add("borderless")
     classNames.add("report")
     setWidthFull()
-    addItemClickListener(this)
   }
 
   //---------------------------------------------------
@@ -128,10 +127,6 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
     return viewColumns?.indexOf(modelColumnIndex) ?: modelColumnIndex
   }
 
-  override fun onComponentEvent(event: ItemClickEvent<DReport.ReportModelItem>?) {
-    //TODO("Not yet implemented")
-  }
-
   /**
    * Adds a new text column to this table with a column value provider and a key for the column.
    *
@@ -142,6 +137,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
     return super.addColumn(ColumnValueProvider(key)).also {
       it.setKey(key.toString())
+        .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
     }
   }

@@ -26,6 +26,6 @@ package org.kopi.galite.form
  */
 interface ModelTransformer {
   fun toGui(modelTxt: String?): String?
-  fun toModel(guiTxt: String): String
-  fun checkFormat(guiTxt: String): Boolean
+  fun toModel(guiTxt: String?): String?
+  fun checkFormat(guiTxt: String?): Boolean
 }

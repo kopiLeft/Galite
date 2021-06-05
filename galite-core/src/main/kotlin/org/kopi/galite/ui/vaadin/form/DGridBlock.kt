@@ -391,13 +391,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Cancels the grid editor
    */
   protected fun cancelEditor() {
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      if (grid != null) {
-        if (grid.isEditorEnabled() && grid.isEditorActive()) {
-          grid.cancelEditor()
+    access {
+      if (::grid.isInitialized) {
+        if (grid.isEnabled && editor.item != null) {
+          editor.cancel()
         }
       }
-    })*/
+    }
   }
 
   override fun fireValueChanged(col: Int, rec: Int, value: String?) {
@@ -419,17 +419,17 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun orderChanged() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    if (grid != null) {
-      cancelEditor()
-      clearSortOrder()
-      containerDatasource.doSort()
-      contentChanged()
-      if (model.activeRecord != -1) {
-        editRecord(model.activeRecord)
+    access {
+      if (grid != null) {
+        cancelEditor()
+        clearSortOrder()
+        containerDatasource.doSort()
+        contentChanged()
+        if (model.activeRecord != -1) {
+          editRecord(model.activeRecord)
+        }
       }
     }
-    //})
   }
 
   fun sort(

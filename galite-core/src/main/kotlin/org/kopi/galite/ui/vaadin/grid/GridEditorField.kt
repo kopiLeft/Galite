@@ -32,7 +32,6 @@ import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.customfield.CustomField
-import com.vaadin.flow.router.NavigationEvent
 
 /**
  * A grid editor field implementation.
@@ -151,6 +150,8 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
   val parentWindow: Window?
     get() = (dGridEditorField.columnView.blockView as? DBlock)?.parent
 
+  var oldValue: String? = null
+
   //---------------------------------------------------
   // INNER CLASSES
   //---------------------------------------------------
@@ -162,49 +163,49 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
      * Fired when a goto next field event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoNextField(event: NavigationEvent?)
+    fun onGotoNextField()
 
     /**
      * Fired when a goto previous field event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoPrevField(event: NavigationEvent?)
+    fun onGotoPrevField()
 
     /**
      * Fired when a goto next block event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoNextBlock(event: NavigationEvent?)
+    fun onGotoNextBlock()
 
     /**
      * Fired when a goto previous record event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoPrevRecord(event: NavigationEvent?)
+    fun onGotoPrevRecord()
 
     /**
      * Fired when a goto next field event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoNextRecord(event: NavigationEvent?)
+    fun onGotoNextRecord()
 
     /**
      * Fired when a goto first record event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoFirstRecord(event: NavigationEvent?)
+    fun onGotoFirstRecord()
 
     /**
      * Fired when a goto last record event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoLastRecord(event: NavigationEvent?)
+    fun onGotoLastRecord()
 
     /**
      * Fired when a goto next empty mandatory field event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoNextEmptyMustfill(event: NavigationEvent?)
+    fun onGotoNextEmptyMustfill()
   }
 
   /**
