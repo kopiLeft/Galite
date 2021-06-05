@@ -74,11 +74,13 @@ open class DTextField(
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.addTextValueChangeListener {
-      val value = format(it.value)
-      if (isChanged(getModel().getText(), transformer!!.toModel(value))) {
+      if(it.isFromClient) {
+        val value = format(it.value)
+        if (isChanged(getModel().getText(), transformer!!.toModel(value))) {
 
-        getModel().isChangedUI = true
-        checkText(value)
+          getModel().isChangedUI = true
+          checkText(value)
+        }
       }
     }
 
