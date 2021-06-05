@@ -101,7 +101,8 @@ class DGridTextEditorField(
   override fun updateText() {
     val newModelTxt = getModel().getText(getBlockView().getRecordFromDisplayLine(position))
     access {
-      editor.value = transformer.toGui(newModelTxt)!!.trim()
+      //editor.value = transformer.toGui(newModelTxt)!!.trim() FIXME
+      editor.value = transformer.toGui(newModelTxt)
     }
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
       selectionAfterUpdateDisabled = false
@@ -171,7 +172,7 @@ class DGridTextEditorField(
 
       override fun convertToModel(value: String?, context: ValueContext?): Result<Any?> {
         return try {
-          Result.ok(getModel().toObject(transformer.toModel(value!!)))
+          Result.ok(getModel().toObject(transformer.toModel(value)!!))
         } catch (e: VException) {
           //throw ConversionException(e)
           TODO()
@@ -356,12 +357,12 @@ class DGridTextEditorField(
    * @param s The text to be checked.
    * @param changed Is value changed ?
    */
-  private fun checkText(s: String, changed: Boolean) {
-    val text: String = transformer.toModel(s)
+  private fun checkText(s: String?, changed: Boolean) {
+    val text = transformer.toModel(s)
     if (!transformer.checkFormat(text)) {
       return
     }
-    if (getModel().checkText(text) && changed) {
+    if (getModel().checkText(text!!) && changed) {
       getModel().isChangedUI = true
     }
     getModel().setChanged(changed)
@@ -401,11 +402,11 @@ class DGridTextEditorField(
       return modelTxt
     }
 
-    override fun toModel(guiTxt: String): String {
+    override fun toModel(guiTxt: String?): String? {
       return guiTxt
     }
 
-    override fun checkFormat(guiTxt: String): Boolean {
+    override fun checkFormat(guiTxt: String?): Boolean {
       return if (row == 1) true else convertToSingleLine(guiTxt, col, row).length <= row * col
     }
 
@@ -417,9 +418,9 @@ class DGridTextEditorField(
        * @param row The row index.
        * @return The converted string.
        */
-      private fun convertToSingleLine(source: String, col: Int, row: Int): String =
+      private fun convertToSingleLine(source: String?, col: Int, row: Int): String =
               buildString {
-                val length = source.length
+                val length = source!!.length
                 var start = 0
                 while (start < length) {
                   var index = source.indexOf('\n', start)
@@ -482,18 +483,18 @@ class DGridTextEditorField(
     override fun toGui(modelTxt: String?): String {
       return if (modelTxt == null || "" == modelTxt) {
         VlibProperties.getString("scan-ready")
-      } /*else if (!field.isReadOnly()) { TODO
+      } else if (!field.isReadOnly) {
         VlibProperties.getString("scan-read") + " " + modelTxt
-      }*/ else {
+      } else {
         VlibProperties.getString("scan-finished")
       }
     }
 
-    override fun toModel(guiTxt: String): String {
+    override fun toModel(guiTxt: String?): String? {
       return guiTxt
     }
 
-    override fun checkFormat(guiTxt: String): Boolean {
+    override fun checkFormat(guiTxt: String?): Boolean {
       return true
     }
   }
@@ -508,7 +509,7 @@ class DGridTextEditorField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(guiTxt: String): String = convertFixedTextToSingleLine(guiTxt, col, row)
+    override fun toModel(guiTxt: String?): String = convertFixedTextToSingleLine(guiTxt, col, row)
 
     override fun toGui(modelTxt: String?): String =
             buildString {
@@ -538,7 +539,7 @@ class DGridTextEditorField(
               }
             }
 
-    override fun checkFormat(guiTxt: String): Boolean = guiTxt.length <= row * col
+    override fun checkFormat(guiTxt: String?): Boolean = guiTxt!!.length <= row * col
 
     companion object {
       /**
@@ -548,9 +549,9 @@ class DGridTextEditorField(
        * @param row The row index.
        * @return The converted string.
        */
-      private fun convertFixedTextToSingleLine(source: String, col: Int, row: Int): String =
+      private fun convertFixedTextToSingleLine(source: String?, col: Int, row: Int): String =
               buildString {
-                val length = source.length
+                val length = source!!.length
                 var start = 0
                 while (start < length) {
                   var index = source.indexOf('\n', start)

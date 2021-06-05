@@ -27,7 +27,6 @@ import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.TextField
 import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VlibProperties
 
@@ -75,16 +74,12 @@ open class DTextField(
     field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
     field.addTextValueChangeListener {
-      getModel().getForm().performAsyncAction(object : Action("check_type") {
-        override fun execute() {
-          if (isChanged(getModel().getText(), transformer!!.toModel(text))) {
-            val value = format(it.value)
+      val value = format(it.value)
+      if (isChanged(getModel().getText(), transformer!!.toModel(value))) {
 
-            getModel().isChangedUI = true
-            checkText(value)
-          }
-        }
-      })
+        getModel().isChangedUI = true
+        checkText(value)
+      }
     }
 
     createContextMenu()
@@ -147,7 +142,8 @@ open class DTextField(
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
-      field.value = transformer!!.toGui(newModelTxt)!!.trim()
+      // field.value = transformer!!.toGui(newModelTxt)!!.trim() FIXME
+      field.value = transformer!!.toGui(newModelTxt)
     }
     super.updateText()
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
@@ -217,11 +213,11 @@ open class DTextField(
    * @param changed Is value changed ?
    */
   private fun checkText(s: String, changed: Boolean) {
-    val text: String = transformer!!.toModel(s)
+    val text = transformer!!.toModel(s)
     if (!transformer!!.checkFormat(text)) {
       return
     }
-    if (getModel().checkText(text) && changed) {
+    if (getModel().checkText(text!!) && changed) {
       getModel().isChangedUI = true
     }
     getModel().setChanged(changed)
@@ -235,11 +231,11 @@ open class DTextField(
    * @throws VException Errors occurs during check.
    */
   private fun checkText(r: Int, s: String) {
-    val text: String = transformer!!.toModel(s)
+    val text = transformer!!.toModel(s)
     if (!transformer!!.checkFormat(text)) {
       return
     }
-    if (getModel().checkText(text)) {
+    if (getModel().checkText(text!!)) {
       getModel().checkType(r, text)
     }
   }
@@ -253,11 +249,11 @@ open class DTextField(
    * @throws VException Errors occurs during check.
    */
   private fun checkText(s: String?) {
-    val text: String = transformer!!.toModel(s ?: "")
+    val text = transformer!!.toModel(s ?: "")
     if (!transformer!!.checkFormat(text)) {
       return
     }
-    if (getModel().checkText(text)) {
+    if (getModel().checkText(text!!)) {
       getModel().checkType(text)
     }
   }
@@ -291,7 +287,7 @@ open class DTextField(
   // TEXTFIELD IMPLEMENTATION
   //---------------------------------------------------
   override fun getText(): String {
-    return transformer!!.toModel(if (field.value == null) "" else field.value.toString())
+    return transformer!!.toModel(if (field.value == null) "" else field.value.toString())!!
   }
 
   override fun setHasCriticalValue(b: Boolean) {
@@ -345,11 +341,11 @@ open class DTextField(
       return modelTxt
     }
 
-    override fun toModel(guiTxt: String): String {
+    override fun toModel(guiTxt: String?): String? {
       return guiTxt
     }
 
-    override fun checkFormat(guiTxt: String): Boolean {
+    override fun checkFormat(guiTxt: String?): Boolean {
       return if (row == 1) true else convertToSingleLine(guiTxt, col, row).length <= row * col
     }
   }
@@ -364,18 +360,18 @@ open class DTextField(
     override fun toGui(modelTxt: String?): String? {
       return if (modelTxt == null || "" == modelTxt) {
         VlibProperties.getString("scan-ready")
-      } else if (!field.field.isReadOnly()) {
+      } else if (!field.field.isReadOnly) {
         VlibProperties.getString("scan-read") + " " + modelTxt
       } else {
         VlibProperties.getString("scan-finished")
       }
     }
 
-    override fun toModel(guiTxt: String): String {
+    override fun toModel(guiTxt: String?): String? {
       return guiTxt
     }
 
-    override fun checkFormat(software: String): Boolean {
+    override fun checkFormat(software: String?): Boolean {
       return true
     }
   }
@@ -390,7 +386,7 @@ open class DTextField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(source: String): String {
+    override fun toModel(source: String?): String? {
       return convertFixedTextToSingleLine(source, col, row)
     }
 
@@ -423,9 +419,7 @@ open class DTextField(
       return target.toString()
     }
 
-    override fun checkFormat(source: String): Boolean {
-      return source.length <= row * col
-    }
+    override fun checkFormat(source: String?): Boolean = source!!.length <= row * col
   }
 
   /**
@@ -451,9 +445,9 @@ open class DTextField(
      * @param row The row index.
      * @return The converted string.
      */
-    private fun convertToSingleLine(source: String, col: Int, row: Int): String =
+    private fun convertToSingleLine(source: String?, col: Int, row: Int): String =
             buildString {
-              val length = source.length
+              val length = source!!.length
               var start = 0
               while (start < length) {
                 var index = source.indexOf('\n', start)
@@ -509,9 +503,9 @@ open class DTextField(
      * @param row The row index.
      * @return The converted string.
      */
-    private fun convertFixedTextToSingleLine(source: String, col: Int, row: Int): String =
+    private fun convertFixedTextToSingleLine(source: String?, col: Int, row: Int): String =
             buildString {
-              val length = source.length
+              val length = source!!.length
               var start = 0
               while (start < length) {
                 var index = source.indexOf('\n', start)
