@@ -31,22 +31,11 @@ import org.kopi.galite.visual.VActor
 /**
  * The editor label used as grid component header.
  */
-class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(text), ULabel, UChartLabel {
+class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(), ULabel, UChartLabel {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  /**
-   * Returns the info text.
-   * @return The info text.
-   */
-  var infoText: String? = null
-    set(info) {
-      field = info
-      /*BackgroundThreadHandler.access(Runnable { TODO
-        super@DGridEditorLabel.setInfoText(info)
-      })*/
-    }
   private var tooltip: String? = null
 
   init {

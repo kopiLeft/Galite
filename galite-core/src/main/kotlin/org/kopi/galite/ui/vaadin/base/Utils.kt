@@ -29,6 +29,7 @@ import com.flowingcode.vaadin.addons.ironicons.EditorIcons
 import com.flowingcode.vaadin.addons.ironicons.FileIcons
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.flowingcode.vaadin.addons.ironicons.MapsIcons
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -216,6 +217,26 @@ object Utils : Utils() {
       ui.page
         .executeJs("return $0.offsetWidth", element)
         .then(Double::class.java) { value: Double ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
+  /**
+   * Gets the current position of the cursor.
+   *
+   * @param field the field to return its cursor position
+   * @return the cursor's position
+   */
+  fun getCursorPos(field: Component): Int {
+    val future = CompletableFuture<Int>()
+
+    BackgroundThreadHandler.access {
+      UI.getCurrent().page
+        .executeJs("return $0.shadowRoot.querySelector('[part=\"value\"]').selectionStart;", field.element)
+        .then(Int::class.java) { value: Int ->
           future.complete(value)
         }
     }

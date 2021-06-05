@@ -36,7 +36,6 @@ import org.kopi.galite.ui.vaadin.window.Window
  *
  * @param hasIncrement has increment button ?
  * @param hasDecrement has decrement button ?
- * TODO: Implement this class with appropriate component
  */
 abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   : Div(), FieldListener, HasStyle {
@@ -52,13 +51,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Is the action trigger enabled ?
    */
   var isActionEnabled = false
-
-  /**
-   * The field visibility
-   *
-   * TODO: Do wee need this or super.visible is fine.
-   */
-  var _visible = true
 
   /**
    * The visible field height needed to create layout.
@@ -245,14 +237,14 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @throws CheckTypeException When the field content is not valid
    */
   open fun checkValue(rec: Int) {
-    TODO()
+    wrappedField.checkValue(rec)
   }
 
   /**
    * Checks if the content of this field is empty.
    * @return `true` if this field is empty.
    */
-  open fun isNull(): Boolean = TODO()
+  open fun isNull(): Boolean = wrappedField.isNull
 
 
   /**
@@ -473,7 +465,11 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param background The background color.
    */
   open fun setColor(foreground: String?, background: String?) {
-    // TODO
+    if (wrappedField is TextField) {
+      (wrappedField as TextField).setColor(foreground, background)
+    } else if (wrappedField is ObjectField<*>) {
+      (wrappedField as ObjectField<*>).setColor(foreground, background)
+    }
   }
 
   /**

@@ -17,7 +17,15 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.ShortcutAction
+import org.kopi.galite.ui.vaadin.base.Utils
+
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A text field used as editor
@@ -33,11 +41,14 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     add(wrappedField)
     wrappedField.setWidthFull()
     wrappedField.maxLength = width
+    wrappedField.valueChangeMode = ValueChangeMode.TIMEOUT
     addValueChangeListener {
       if(!check(it.value)) {
         value = it.oldValue
       }
+      oldValue = value
     }
+    createNavigationActions()
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {
@@ -45,6 +56,8 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
   }
 
   override fun generateModelValue(): String? = wrappedField.value
+
+  override fun getValue(): String = wrappedField.value
 
   override fun doFocus() {
     wrappedField.focus()
@@ -55,6 +68,12 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
       focusFunction()
     }
   }
+
+  /**
+   * Returns true if it is a multi line editor field.
+   * @return True if it is a multi line editor field.
+   */
+  protected open val isMultiLine: Boolean = false
 
   /**
    * Validates the given text according to the field type.
@@ -80,6 +99,82 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
       } else {
         element.classList.remove("$className-blink")
       }
+    }
+  }
+
+  //---------------------------------------------------
+  // NAVIGATION
+  //---------------------------------------------------
+  /**
+   * Creates the navigation actions.
+   */
+  protected open fun createNavigationActions() {
+    addNavigationAction(Key.ENTER, KeyModifier.of("Control")) { dGridEditorField.onGotoNextRecord() }
+    addNavigationAction(Key.ENTER, KeyModifier.of("Shift")) { dGridEditorField.onGotoNextBlock() }
+    addNavigationAction(Key.KEY_D, KeyModifier.of("Control")) {
+      val ui = UI.getCurrent()
+      Thread {
+        UI.setCurrent(ui)
+        val text = StringBuffer(value)
+        text.insert(Utils.getCursorPos(wrappedField), "\u00D8")
+        access {
+          value = text.toString()
+        }
+      }.start()
+    }
+    addNavigationAction(Key.HOME, KeyModifier.of("Shift")) { dGridEditorField.onGotoFirstRecord() }
+    addNavigationAction(Key.END, KeyModifier.of("Shift")) { dGridEditorField.onGotoLastRecord() }
+    addNavigationAction(Key.ARROW_LEFT, KeyModifier.of("Control")) { dGridEditorField.onGotoPrevField() }
+    addNavigationAction(Key.TAB, KeyModifier.of("Shift")) { dGridEditorField.onGotoPrevField() }
+    addNavigationAction(Key.ARROW_UP, KeyModifier.of("Shift")) { dGridEditorField.onGotoPrevField() }
+    addNavigationAction(Key.ARROW_RIGHT, KeyModifier.of("Control")) { dGridEditorField.onGotoNextField() }
+    addNavigationAction(Key.TAB) { dGridEditorField.onGotoNextField() }
+    addNavigationAction(Key.ARROW_DOWN, KeyModifier.of("Shift")) { dGridEditorField.onGotoNextField() }
+    // the magnet card reader sends a CNTR-J as last character
+    addNavigationAction(Key.KEY_J, KeyModifier.of("Control")) { dGridEditorField.onGotoNextField() }
+    if (!isMultiLine) {
+      // In multiline fields these keys are used for other stuff
+      addNavigationAction(Key.ARROW_UP) { dGridEditorField.onGotoPrevField() }
+      addNavigationAction(Key.ARROW_DOWN) { dGridEditorField.onGotoNextField() }
+      addNavigationAction(Key.ENTER) { dGridEditorField.onGotoNextField() }
+    }
+  }
+
+  /**
+   * Adds a key navigator action to this handler.
+   *
+   * @param key The key code.
+   * @param modifiers The modifiers.
+   * @param navigationAction lambda representing the action to perform
+   */
+  protected open fun addNavigationAction(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
+    NavigationAction(key, modifiers, navigationAction)
+      .registerShortcut(this)
+  }
+
+  //---------------------------------------------------
+  // NAVIGATION ACTION
+  //---------------------------------------------------
+  /**
+   * A navigation action
+   */
+  inner class NavigationAction(
+    key: Key,
+    modifiers: Array<out KeyModifier>,
+    navigationAction: () -> Unit
+  ) : ShortcutAction(key, modifiers, navigationAction) {
+    //---------------------------------------------------
+    // IMPLEMENTATIONS
+    //---------------------------------------------------
+    override fun performAction() {
+      // block any navigation request if suggestions is showing
+      /*if (suggestionDisplay != null && suggestionDisplay.isSuggestionListShowingImpl()) { TODO
+        return
+      }*/
+
+      // first sends the text value to server side if changed
+      dGridEditorField.valueChanged()
+      navigationAction()
     }
   }
 }

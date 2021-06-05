@@ -146,20 +146,20 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
    * Returns `true` if this object field is `null`.
    * @return `true` if this object field is `null`.
    */
-  protected abstract val isNull: Boolean
+  override abstract val isNull: Boolean
 
   /**
    * Sets the object field color properties.
    * @param foreground The foreground color.
    * @param background The background color.
    */
-  internal abstract fun setColor(foreground: String?, background: String?)
+  abstract override fun setColor(foreground: String?, background: String?)
 
   /**
    * Checks the internal value of this field.
    * @param rec The active record.
    */
-  protected abstract fun checkValue(rec: Int)
+  abstract override fun checkValue(rec: Int)
 
   /**
    * Sets the component visibility from the parent field.
@@ -199,14 +199,14 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
      * Creates the navigation actions.
      */
     fun createNavigatorKeys() {
-      addKeyNavigator(Key.ENTER, KeyModifier.of("AltGraph")) { columnView!!.gotoNextField() }
-      addKeyNavigator(Key.TAB, KeyModifier.of("AltGraph")) { columnView!!.gotoNextField() }
+      addKeyNavigator(Key.ENTER) { columnView!!.gotoNextField() }
+      addKeyNavigator(Key.TAB) { columnView!!.gotoNextField() }
       addKeyNavigator(Key.TAB, KeyModifier.of("Shift")) { columnView!!.gotoPrevField() }
       addKeyNavigator(Key.ENTER, KeyModifier.of("Shift")) { fireGotoNextBlock() }
-      addKeyNavigator(Key.PAGE_UP, KeyModifier.of("AltGraph")) { columnView!!.gotoPrevRecord() }
-      addKeyNavigator(Key.PAGE_DOWN, KeyModifier.of("AltGraph")) { columnView!!.gotoNextRecord() }
-      addKeyNavigator(Key.HOME, KeyModifier.of("AltGraph")) { columnView!!.gotoFirstRecord() }
-      addKeyNavigator(Key.END, KeyModifier.of("AltGraph")) { columnView!!.gotoLastRecord() }
+      addKeyNavigator(Key.PAGE_UP) { columnView!!.gotoPrevRecord() }
+      addKeyNavigator(Key.PAGE_DOWN) { columnView!!.gotoNextRecord() }
+      addKeyNavigator(Key.HOME) { columnView!!.gotoFirstRecord() }
+      addKeyNavigator(Key.END) { columnView!!.gotoLastRecord() }
       addKeyNavigator(Key.ARROW_LEFT, KeyModifier.of("Control")) { columnView!!.gotoPrevField() }
       addKeyNavigator(Key.ARROW_RIGHT, KeyModifier.of("Control")) { columnView!!.gotoNextField() }
       addKeyNavigator(Key.ARROW_UP, KeyModifier.of("Control")) { columnView!!.gotoPrevRecord() }
