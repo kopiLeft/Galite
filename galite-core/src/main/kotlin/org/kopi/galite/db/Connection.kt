@@ -89,7 +89,7 @@ class Connection {
   ) {
     dbConnection = Database.connect(dataSource)
     url = dbConnection.url
-    userName = dataSource.connection.metaData.userName
+    userName = dataSource.connection.metaData.userName.orEmpty()
     this.user = if (!lookupUserId) USERID_NO_LOOKUP else USERID_TO_DETERMINE
     password = null // already authenticated
   }
