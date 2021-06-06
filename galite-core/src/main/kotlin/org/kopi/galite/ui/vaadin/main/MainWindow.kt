@@ -167,6 +167,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
 
   /**
    * Adds a window to this main window.
+   *
    * @param window The window to be added.
    * @param title The window title.
    */
@@ -174,7 +175,21 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
     windowsList.add(window)
     container.addWindow(window, title)
     currentWindow = container.showWindow(window)
-    windowsMenu.addWindow(container, window, title)
+
+    val item = windowsMenu.addWindow(window, title)
+    // adding listener on the item to show the window in the container
+    item.addClickListener {
+
+      if (currentWindow != item.window) {
+        currentWindow = container.showWindow(item.window)
+        if (currentWindow is Window) {
+          (currentWindow as Window).goBackToLastFocusedTextField()
+          window.isVisible = true
+        }
+        //windowsMenu.setCurrent(item) TODO
+        windowsMenu.hideMenu()
+      }
+    }
   }
 
   /**

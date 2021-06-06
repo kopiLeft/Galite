@@ -87,7 +87,6 @@ class DActor(private var model: VActor)
     }
   }
 
-
   override fun onComponentEvent(event: ClickEvent<Button>) {
     actionPerformed()
   }

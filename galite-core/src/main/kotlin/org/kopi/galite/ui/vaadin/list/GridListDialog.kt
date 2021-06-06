@@ -50,11 +50,10 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
   private var newText: String? = null
 
   init {
-    element.classList.add("listDialog")
+    content.className = Styles.LIST_DIALOG
     content.element.setAttribute("hideFocus", "true")
     content.element.style["outline"] = "0px"
     content.element.style["min-width"] = "400px"
-    content.className = Styles.LIST_DIALOG
     isResizable = true
   }
 
