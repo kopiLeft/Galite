@@ -78,6 +78,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     parameters = Parameters(Color(71, 184, 221))
     table = DTable(VTable(model, buildRows()))
     table.isColumnReorderingAllowed = true
+    table.cellStyler = ReportCellStyler(model, parameters!!)
     // 200 px is approximately the header window size + the actor pane size
     ui.ifPresent {
       it.page.retrieveExtendedClientDetails {
@@ -430,7 +431,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    fun getValueAt(columnIndex: Int): Any {
+    fun getValueAt(columnIndex: Int): String {
       return model.accessibleColumns[columnIndex]!!.format(model.getValueAt(rowIndex, columnIndex))
     }
 

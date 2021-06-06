@@ -25,6 +25,26 @@
      color: #505050;
 }
 
+::part(cell) {
+     min-height: 15px;
+}
+
+::part(row) {
+     width: fit-content;
+}
+
+vaadin-grid > vaadin-grid-cell-content {
+   height: 100%;
+}
+
+vaadin-grid > vaadin-grid-cell-content {
+    padding: var(--lumo-size-xxs);
+}
+
+vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
+    display: table
+}
+
 #main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
     --lumo-font-family:  Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);

@@ -65,6 +65,8 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
 
   val columnToHeaderMap = mutableMapOf<Column<*>, VerticalLayout>()
 
+  lateinit var cellStyler: ReportCellStyler
+
   init {
     setItems(model)
     buildColumns()
@@ -84,17 +86,10 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
    */
   private fun buildColumns() {
     model.accessibleColumns.forEachIndexed { index, column ->
-      val align = if (column!!.align == Constants.ALG_RIGHT) {
-        ColumnTextAlign.END
-      } else {
-        ColumnTextAlign.START
-      }
-
-      val gridColumn = addColumn(index, column)
+      val gridColumn = addColumn(index, column!!)
 
       gridColumn
         .setHeader(getColumnNameComponent(column, gridColumn))
-        .setTextAlign(align)
 
       gridColumn.flexGrow = 0
     }
@@ -135,7 +130,10 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
    * @return the created column
    */
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
-    return super.addColumn(ColumnValueProvider(key)).also {
+    val provider = ColumnValueProvider(key, column)
+
+    return super.addComponentColumn(provider).also {
+      provider.column = it
       it.setKey(key.toString())
         .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
@@ -196,7 +194,24 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
    *
    * @param columnIndex the index of the column
    */
-  inner class ColumnValueProvider(private val columnIndex: Int) : ValueProvider<DReport.ReportModelItem, Any> {
-    override fun apply(source: DReport.ReportModelItem): Any = source.getValueAt(columnIndex)
+  inner class ColumnValueProvider(
+    private val columnIndex: Int,
+    private val columnModel: VReportColumn
+  ) : ValueProvider<DReport.ReportModelItem, Component> {
+    var column: Column<DReport.ReportModelItem>? = null
+
+    override fun apply(source: DReport.ReportModelItem): Component = VerticalLayout().also {
+      it.className = "grid-cell-container"
+      it.add(source.getValueAt(columnIndex))
+      it.setSizeFull()
+
+      column?.textAlign = if (columnModel.align == Constants.ALG_RIGHT) {
+        ColumnTextAlign.END
+      } else {
+        ColumnTextAlign.START
+      }
+
+      cellStyler.updateStyles(source.rowIndex, columnIndex, it)
+    }
   }
 }
