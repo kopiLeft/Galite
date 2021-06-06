@@ -19,6 +19,8 @@ package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VSpan
+import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
@@ -99,10 +101,15 @@ abstract class AbstractNotification(title: String?,
    * @param action The user action.
    */
   protected fun fireOnClose(action: Boolean?) {
+    val lastActiveWindow = MainWindow.instance.currentWindow as? Window
+
     for (l in listeners) {
       l.onClose(action)
     }
+
     close()
+
+    lastActiveWindow?.goBackToLastFocusedTextField()
   }
 
   //-------------------------------------------------

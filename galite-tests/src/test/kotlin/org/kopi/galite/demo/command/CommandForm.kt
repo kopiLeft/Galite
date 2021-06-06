@@ -95,7 +95,7 @@ class CommandForm : ReportSelectionForm() {
   val tb1 = insertBlock(BlockCommand(), page) {
     command(item = report) {
       action = {
-        createReport(BlockCommand())
+        createReport(this@insertBlock)
       }
     }
 

@@ -37,7 +37,6 @@ class VActorsRootNavigationItem : Button() {
     element.setAttribute("part" ,"k-actor")
    // rootIcon.addStyleDependentName("actors")
     icon = rootIcon
-    menu = VNavigationMenu()
     menu.className = "actors-navigationMenu"
     this.addClickListener { onClick() }
   }

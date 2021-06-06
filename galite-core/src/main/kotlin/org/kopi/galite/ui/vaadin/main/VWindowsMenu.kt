@@ -23,7 +23,6 @@ import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -60,17 +59,18 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
 
   /**
    * Adds a window like an [VWindowsMenuItem] into the [VWindowsMenu].
-   * @param container The container of the window.
+   *
    * @param window The window to be added.
    * @param title The window title.
    */
-  fun addWindow(container: VWindowContainer, window: Component, title: String) {
-    val item = VWindowsMenuItem(title, window, container)
+  fun addWindow(window: Component, title: String): VWindowsMenuItem {
+    val item = VWindowsMenuItem(title, window)
 
     items.className = "window-items-container"
-    item.addClickListener { this.close() }
     windowsItemsMap[window] = item
     items.add(item)
+
+    return item
   }
 
   /**

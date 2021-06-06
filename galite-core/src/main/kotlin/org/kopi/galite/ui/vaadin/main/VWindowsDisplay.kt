@@ -49,12 +49,12 @@ class VWindowsDisplay : Div() {
 
   /**
    * Adds a window to the [VWindowsMenu].
-   * @param container The container of the window.
+   *
    * @param window The window to be added.
    * @param title The window title.
    */
-  fun addWindow(container : VWindowContainer, window: Component, title : String) {
-    menu.addWindow(container, window, title)
+  fun addWindow(window: Component, title : String): VWindowsMenuItem {
+    return menu.addWindow(window, title)
   }
 
   /**
@@ -70,6 +70,13 @@ class VWindowsDisplay : Div() {
    */
   fun showMenu() {
     menu.open()
+  }
+
+  /**
+   * Shows the windows menu.
+   */
+  fun hideMenu() {
+    menu.close()
   }
 
   /**
