@@ -371,7 +371,7 @@ class TextField(val model: VField,
 
     text.size = size
     text.setMaxLength(maxLength)
-    text.maxWidth = "" + col + "em" // TODO: temporary styling
+    text.maxWidth = "" + size + "em" // TODO: temporary styling
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
     TextFieldNavigationHandler.createNavigator(text, rows > 1)
