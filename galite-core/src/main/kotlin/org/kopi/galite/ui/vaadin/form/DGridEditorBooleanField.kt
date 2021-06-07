@@ -133,6 +133,10 @@ class DGridEditorBooleanField(
   override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 
   override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Boolean?>, Boolean?>) {
+    if(!event.isFromClient) {
+      return
+    }
+
     // ensures to get model focus to validate the field
     if (!getModel().hasFocus()) {
       getModel().block!!.activeField = getModel()

@@ -153,7 +153,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     yes.element.style["visibility"].equals("visible")
             && no.element.style["visibility"].equals("visible")
 
-
   override val isNull: Boolean
     get() = !yes.value && !no.value
 
