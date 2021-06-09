@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.visual
 
 import javax.swing.tree.TreeNode
 
+import org.kopi.galite.ui.vaadin.base.Tree
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.Message
 import org.kopi.galite.visual.Module
