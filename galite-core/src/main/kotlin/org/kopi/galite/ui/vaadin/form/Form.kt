@@ -91,11 +91,14 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
         tabsToPages[tab] = pages[i]!!
         tabPanel!!.add(tab)
         tab.isEnabled = false
+        tab.element.classList.add("tab")
       }
 
       tabPanel!!.addSelectedChangeListener {
         tabsToPages[it.previousTab]!!.isVisible = false
         firePageSelected(pages.indexOf(tabsToPages[it.selectedTab]))
+        it.previousTab.element.classList.remove("selected-tab")
+        it.selectedTab.element.classList.add("selected-tab")
       }
       setContent(tabPanel!!, Div(*pages))
     }
@@ -124,6 +127,8 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
     if(tabPanel != null) {
       tabPanel!!.selectedIndex = page
       tabPanel!!.selectedTab.isEnabled = true
+      tabPanel!!.selectedTab.element.classList.add("selected-tab")
+
     }
   }
 

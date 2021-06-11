@@ -68,7 +68,10 @@ import com.vaadin.flow.router.Route
  */
 @Push
 @Route("")
-@CssImport("./styles/galite/styles.css")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/styles.css"),
+  CssImport("./styles/galite/common.css")
+])
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 

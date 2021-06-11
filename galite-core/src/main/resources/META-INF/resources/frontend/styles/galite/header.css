@@ -149,6 +149,11 @@ user , admin , wrk context and bookmark
 }
 
 #welcome #windows {
+    padding-top: 20px;
+    padding-right: 15px;
+    padding-left: 15px;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    margin: 0;
     cursor: pointer;
 }
 
@@ -160,4 +165,26 @@ user , admin , wrk context and bookmark
     min-width: 0;
     padding: 18px 10px;
     text-transform: none;
+}
+
+/*
+ * switch window style
+ */
+.window-items-title, .item {
+    background: #E8E8E8;
+    color: #778899;
+    width: 500px;
+    font-family: Courier New, monospace; !important;
+    font-style: italic !important;
+    font-size: 1em;
+}
+
+.window-items-title {
+    background: none;
+}
+
+.window-items-container vaadin-button {
+    margin-top: -1px;
+    border-bottom: 1px solid gray;
+    width: 550px;
 }

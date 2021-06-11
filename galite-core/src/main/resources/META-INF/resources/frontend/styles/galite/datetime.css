@@ -15,25 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
 
-import java.time.LocalTime
+[part~='input-field'] {
+  background-color: white;
+  border-bottom: #dadada 1px solid;
+}
 
-import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.timepicker.TimePicker
+[part~='input-field']:hover {
+	background: #d9f0f8;
+}
 
-/**
- * A time field.
- */
-@CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-time-picker-text-field")
-class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
+[part~='input-field']::after {
+    background: none;
+}
 
-  override fun setPresentationValue(newPresentationValue: String?) {
-    content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
-      LocalTime.parse(newPresentationValue)
-    } else {
-      null
-    }
-  }
+[part~='value']:focus {
+	background: none;
+	border-bottom: #009bd4 1px solid;
 }

@@ -21,14 +21,20 @@ import java.util.Arrays
 
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.combobox.ComboBox
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * An Code field.
  */
+@CssImport.Container(value = [
+  CssImport(value = "./styles/galite/combobox.css", themeFor = "vaadin-text-field"),
+  CssImport(value = "./styles/galite/combobox.css", themeFor = "vaadin-combo-box")
+])
 class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String>>(ComboBox<String>()), KeyNotifier {
 
   init {
     field.setItems(Arrays.stream(enumerations))
+    className = "custom-combobox"
   }
 
 

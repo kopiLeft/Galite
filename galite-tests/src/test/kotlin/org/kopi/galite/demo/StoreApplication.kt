@@ -43,8 +43,6 @@ import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.tests.form.FormAlignTest
-import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.tests.form.FormWithList
 import org.kopi.galite.type.Decimal

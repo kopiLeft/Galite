@@ -403,6 +403,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
       layout.setBlockAlignment(formView.getBlockView(model.alignment!!.block) as Component,
                                model.alignment!!.targets,
                                model.alignment!!.isChart())
+      element.classList.add("k-block-aligned")
     }
 
     return layout
