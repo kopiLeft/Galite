@@ -62,7 +62,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
     val apex = ApexCharts()
     val dimensions = mutableListOf<String>()
     val names = mutableListOf<String>()
-    val values = mutableListOf<Pair<String, Double>>()
+    val values = mutableListOf<Pair<String, Double?>>()
 
     dataSeries.forEachIndexed { i, serie ->
       val dimension: VDimensionData = serie.dimension
@@ -71,7 +71,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
       dimensions.add(dimension.value.toString())
 
       measures.forEach {
-        values.add(it.name to it.value!!.toDouble())
+        values.add(it.name to it.value?.toDouble())
       }
 
       for (measure in measures) {
@@ -81,7 +81,7 @@ abstract class DAbstractChartType protected constructor(private val type: Type,
       }
     }
 
-    val finalValues = mutableListOf<List<Double>>()
+    val finalValues = mutableListOf<List<Double?>>()
 
     for (name in names) {
       finalValues.add(values.filter { it.first == name }.map { it.second })

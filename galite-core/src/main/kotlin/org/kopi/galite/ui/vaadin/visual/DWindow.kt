@@ -590,23 +590,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // DATA MEMBERS
     //-----------------------------------------------------------
     private val waitIndicator = WaitWindow()
-    private var iswaitIndicatorAttached = false
-
-    //-----------------------------------------------------------
-    // CONSTRUCTOR
-    //-----------------------------------------------------------
-    init {
-      // add attach and detach listeners to detect
-      // wait indicator state.
-      // access { TODO
-      waitIndicator.addAttachListener {
-        iswaitIndicatorAttached = true
-      }
-      waitIndicator.addDetachListener {
-        iswaitIndicatorAttached = false
-      }
-      //})
-    }
 
     //-----------------------------------------------------------
     // IMPLEMENTATIONS

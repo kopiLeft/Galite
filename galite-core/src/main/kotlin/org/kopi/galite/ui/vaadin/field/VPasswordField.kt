@@ -18,16 +18,12 @@
 package org.kopi.galite.ui.vaadin.field
 
 import com.vaadin.flow.component.textfield.PasswordField
-import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A password field implementation
  */
 class VPasswordField(val col: Int): InputTextField<PasswordField>(PasswordField()) {
 
-  init {
-    field.valueChangeMode = ValueChangeMode.TIMEOUT
-  }
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
