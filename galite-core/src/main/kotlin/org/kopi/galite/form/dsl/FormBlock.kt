@@ -307,7 +307,7 @@ open class FormBlock(var buffer: Int,
    *
    * @param field                the field
    */
-  fun <T : Comparable<T>?> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
+  fun follow(field: FormField<*>): FormPosition = FormDescriptionPosition(field)
 
   /**
    * creates and returns a form block index. It is used to define a value in the database

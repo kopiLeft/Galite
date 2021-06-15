@@ -146,10 +146,6 @@
     --lumo-primary-color : #009bd4;
 }
 
-.multiple .k-boolean-field {
-    padding-left: 10px;
-}
-
 ::part(checkbox) {
     width: 1em;
     height: 1em;

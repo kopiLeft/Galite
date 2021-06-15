@@ -359,8 +359,6 @@ class TextField(val model: VField,
               it.setInputType("week")
             } else if (type == Type.MONTH) {
               it.setInputType("month")
-            } else {
-              textField.valueChangeMode = ValueChangeMode.TIMEOUT
             }
           }
         }
@@ -371,7 +369,7 @@ class TextField(val model: VField,
 
     text.size = size
     text.setMaxLength(maxLength)
-    text.maxWidth = "" + col + "em" // TODO: temporary styling
+    text.maxWidth = "" + size + "em" // TODO: temporary styling
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
     TextFieldNavigationHandler.createNavigator(text, rows > 1)
@@ -548,6 +546,10 @@ class TextField(val model: VField,
    */
   override fun checkValue(rec: Int) {
     field.checkValue(rec)
+  }
+
+  override fun getValue(): Any? {
+    return field.value
   }
 
   //---------------------------------------------------

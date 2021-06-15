@@ -87,7 +87,7 @@ class KeyNavigator(private val field: InputTextField<*>,
     // maybeCancelSuggestionsQuery() TODO: Suggestion
     // check if dirty values should be communicated
     // to server side.
-    maybeSendDirtyValues()
+    // maybeSendDirtyValues() FIXME We don't need this. TODO: Remove useless code
     // perform the navigation action.
     doNavigatorAction()
   }

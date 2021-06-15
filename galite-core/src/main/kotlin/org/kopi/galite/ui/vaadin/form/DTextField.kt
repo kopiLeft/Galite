@@ -75,10 +75,9 @@ open class DTextField(
 
     field.addTextValueChangeListener {
       if(it.isFromClient) {
-        val value = format(it.value)
-        if (isChanged(getModel().getText(), transformer!!.toModel(value))) {
+        val value = format(text)
 
-          getModel().isChangedUI = true
+        if (isChanged(getModel().getText(), value)) {
           checkText(value)
         }
       }
@@ -256,7 +255,7 @@ open class DTextField(
       return
     }
     if (getModel().checkText(text!!)) {
-      getModel().checkType(text)
+      getModel().onTextChange(text)
     }
   }
 

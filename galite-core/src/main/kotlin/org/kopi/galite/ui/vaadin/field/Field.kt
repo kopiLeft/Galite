@@ -135,7 +135,13 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   fun setFieldContent(component: AbstractField<*>) {
     wrappedField = component
-    wrappedField.addFocusListener {
+    wrappedField.addClickListener {
+      // no click event is for rich text field and action fields
+      /*if (hasAction || content is RichTextField) { TODO
+        return
+      }*/
+      columnView!!.setBlockActiveRecordFromDisplayLine(position)
+      getWindow()!!.cleanDirtyValues(getBlock(), false) //!! do not make a focus transfer.
       fireClicked()
     }
     add(component)

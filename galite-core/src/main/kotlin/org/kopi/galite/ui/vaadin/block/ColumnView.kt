@@ -167,6 +167,7 @@ class ColumnView(val block: DBlock) {
    * @return `true` if the navigation should be delegated to server.
    */
   fun delegateNavigationToServer(): Boolean {
+    return true // FIXME: always delegate navigation to server. remove useless code.
     if (block.inDetailMode()) {
       if (detailDisplay != null) {
         return detailDisplay!!.delegateNavigationToServer()

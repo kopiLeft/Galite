@@ -37,6 +37,6 @@ class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String
   }
 
   override fun initContent(): ComboBox<String> {
-    return field
+    return field // FIXME
   }
 }
