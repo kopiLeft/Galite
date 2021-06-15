@@ -43,7 +43,7 @@ import com.vaadin.flow.component.dependency.CssImport
  * @param model The block model.
  */
 
-@CssImport("./styles/galite/Block.css")
+@CssImport("./styles/galite/block.css")
 open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
 
   protected var formView: DForm = parent
@@ -59,7 +59,6 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     maxColumnPos = model.maxColumnPos
     displayedFields = model.displayedFields
     formView = parent
-    setBorder(model.border, model.title)
     model.addBlockListener(this)
     setBufferSize(model.bufferSize, model.displaySize)
     setSortedRecords(model.sortedRecords)
@@ -78,7 +77,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     createFields()
 
     if (model.isDroppable) {
-      TODO()
+      //TODO()
       //setDropHandler(DBlockDropHandler(model))
       //setDragStartMode(DragStartMode.HTML5)
     }
@@ -349,9 +348,9 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
    * @param style The border style.
    * @param title The block title.
    */
-  private fun setBorder(style: Int, title: String?) {
+  internal fun setBorder(style: Int, title: String?, page: Page<*>?) {
     if (style != VConstants.BRD_NONE) {
-      title?.let { setCaption(it) }
+      title?.let { setCaption(it, page) }
     }
   }
 

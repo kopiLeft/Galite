@@ -20,18 +20,17 @@ package org.kopi.galite.ui.vaadin.form
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.common.VCaption
 import org.kopi.galite.ui.vaadin.event.PositionPanelListener
+import org.kopi.galite.ui.vaadin.base.Styles
 
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.Tabs
-import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.common.VTable
 
 /**
  * The form component.
@@ -39,7 +38,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
  * @param pageCount The form page count.
  * @param titles The pages title.
  */
-@CssImport("./styles/galite/Form.css")
+@CssImport("./styles/galite/form.css")
 class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanelListener {
 
   /**
@@ -109,7 +108,12 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   private fun setContent(vararg components: Component) {
     removeAll()
-    add(*components)
+    val table = VTable(0, 0)
+
+    components.forEach {
+      table.addInNewRow(it)
+    }
+    add(table)
   }
 
   /**
@@ -155,6 +159,14 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
 
     block.layout()
     block.layoutAlignedComponents()
+  }
+
+  /**
+   * Sets the block border.
+   * @param block The block.
+   */
+  internal fun setBorder(block: DBlock, page: Int) {
+    block.setBorder(block.model.border, block.model.title, pages[page])
   }
 
   /**
@@ -209,7 +221,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
   }
 
   /**
-   * Creates the block info widget.
+   * Creates the block info component.
    */
   fun showBlockInfo() {
     blockInfo.isVisible = false // hide it initially

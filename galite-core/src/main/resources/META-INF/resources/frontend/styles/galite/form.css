@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -77,20 +78,25 @@
     box-shadow: none;
 }
 
+.k-form {
+    padding: 10px 20px;
+}
+
 .k-form-tab {
-    width: 100%;
     margin: 0;
     box-sizing: border-box;
+    border-bottom: #676767 1px solid;
 }
 
 /*
  * Copy Icon container
  */
 #windows {
-    padding-top: 6px;
+    padding-top: 22px;
     padding-right: 15px;
+    padding-left: 15px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
-    background: var(--lumo-tint);
+    margin: 0;
 }
 
 /*
@@ -115,6 +121,35 @@
 /*
  * Boolean field style
  */
+
+.multiple ::part(checkbox) {
+    width: 1.2em;
+    height: 1.2em;
+    border: 1.2px solid #ddd;
+}
+
+.multiple vaadin-checkbox {
+    height: 60px;
+    padding-left: 0px;
+}
+
+.multiple ::part(checkbox)::after {
+    border-width: 0.3em 0 0 0.3em;
+    transform-origin: -0.2px -0.7px;
+}
+
+.multiple :not(.true)::part(checkbox)::after {
+    left: 0.15em;
+}
+
+#main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
+    --lumo-primary-color : #009bd4;
+}
+
+.multiple .k-boolean-field {
+    padding-left: 10px;
+}
+
 ::part(checkbox) {
     width: 1em;
     height: 1em;
@@ -151,8 +186,16 @@
     vertical-align: middle;
 }
 
+.multiple .k-boolean-field-content {
+    height: 40px;
+}
+
 vaadin-checkbox {
     height: 38px;
+}
+
+.multiple .k-boolean-field-content {
+    height: 40px;
 }
 
 /*
@@ -184,8 +227,7 @@ vaadin-checkbox {
  */
 .k-form-page {
     overflow: auto;
-    height: auto;
-    max-height: calc(100vh - 200px);
+    height: calc(100vh - 210px);
 }
 
 /*
@@ -198,10 +240,6 @@ vaadin-checkbox {
 /*
  * help style
  */
-.help {
-    margin-top: -30px;
-}
-
 .help, .help > center > h1 {
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
@@ -244,12 +282,47 @@ pre {
 .window-items-container vaadin-button {
     margin-top: -1px;
     border-bottom: 1px solid gray;
-    width: 500px;
+    width: 550px;
 }
 
-.simple > tbody > tr > td > vaadin-form-item,
- .simple > tbody > tr > td > vaadin-form-item > .k-field > vaadin-custom-field,
- .simple > tbody > tr > td > vaadin-form-item > .k-field > vaadin-custom-field > * {
-    width: 100%;
+tr {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
 }
 
+td {
+    padding-bottom: 1px;
+    height: 20px;
+    padding-right: 8px;
+    display: table-cell;
+    vertical-align: top;
+}
+
+.k-form > * {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+}
+
+ /**
+   * Label and grid label style
+   */
+td label {
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    color: #a3a3a3 ;
+}
+
+ /**
+   * Label and grid label style
+   */
+td label {
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    color: #a3a3a3 ;
+}

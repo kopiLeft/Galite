@@ -27,6 +27,7 @@ import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
+import org.kopi.galite.ui.vaadin.base.Styles
 
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
@@ -47,7 +48,7 @@ import com.vaadin.flow.component.dependency.CssImport
  * @param model The actor model.
  *
  */
-@CssImport("./styles/galite/Actor.css")
+@CssImport("./styles/galite/actor.css")
 class DActor(private var model: VActor)
   : Actor(model.menuItem,
           Utils.createTooltip(getDescription(model)),
@@ -77,10 +78,14 @@ class DActor(private var model: VActor)
 
   override fun setEnabled(enabled: Boolean) {
     access {
+      if(!enabled) {
+        super.getElement().setAttribute("part", Styles.ACTOR + "-disabled")
+      } else {
+        super.getElement().setAttribute("part", Styles.ACTOR)
+      }
       super.setEnabled(enabled)
     }
   }
-
 
   override fun onComponentEvent(event: ClickEvent<Button>) {
     actionPerformed()

@@ -38,15 +38,7 @@ class ColumnStyleGenerator(private val model: MReport, val column: VReportColumn
   override fun apply(item: DReport.ReportModelItem): String =
     buildString {
       if (column is VSeparatorColumn) {
-        append(" separator")
-      } else {
-        val styles = column.getStyles()
-
-        if (item.reportRow!!.level == 0) append("level-0")
-        if (item.reportRow!!.level == 1) append("level-1")
-
-        if (styles[0].getFont().isItalic) append(" italic") else append(" notItalic")
-        if (styles[0].getFont().isBold) append(" bold") else append(" notBold")
+        append("separator")
       }
     }
 }

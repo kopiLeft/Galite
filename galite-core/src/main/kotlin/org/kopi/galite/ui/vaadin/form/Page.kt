@@ -17,15 +17,19 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.base.VScrollablePanel
+import org.kopi.galite.ui.vaadin.block.Block
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.base.VScrollablePanel
-import org.kopi.galite.ui.vaadin.block.Block
+import com.vaadin.flow.component.AttachEvent
 
 /**
  * A form page, can be either or vertical or horizontal page.
@@ -34,12 +38,29 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
 
   private var scrollPanel: VScrollablePanel?
   private var last: Component? = null
+  private var width = 0.0
 
   init {
     this.content.className = Styles.FORM_PAGE_CONTENT
     scrollPanel = VScrollablePanel(this.content)
     add(scrollPanel)
     className = Styles.FORM_PAGE
+
+    access {
+      UI.getCurrent().page.addBrowserWindowResizeListener { event ->
+        if (event.width < width) {
+          this.style["width"] = (event.width - 28).toString() + "px"
+          style["overflow"] = "auto"
+        } else {
+          this.style["width"] = "auto"
+        }
+
+      }
+    }
+  }
+
+  override fun onAttach(attachEvent: AttachEvent?) {
+    element.executeJs("return $0.clientWidth", this.element).then { width -> this.width = width.asNumber() }
   }
 
   //---------------------------------------------------
@@ -90,19 +111,22 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
    */
   protected fun <T> setCaption(content: T, block: Block) where T: Component, T: FlexComponent {
     val caption = block.caption
+
     if (caption != null) {
+      val captionContainet = VerticalLayout()
+      captionContainet.className = "caption-container"
+      captionContainet.add(caption)
       if (content is HorizontalLayout) {
         // wrap it in a vertical content before
-        val temp = VerticalLayout()
         val index: Int = content.indexOf(block)
-        temp.className = "k-centered-page-wrapper"
-        temp.add(caption)
-        temp.add(block)
-        (content as HorizontalLayout).addComponentAtIndex(index, temp)
+
+        captionContainet.classNames.add("k-centered-page-wrapper")
+        captionContainet.add(block)
+        content.addComponentAtIndex(index, captionContainet)
       } else if (content is VerticalLayout) {
         val index: Int = content.indexOf(block)
         if (index >= 0) {
-          (content as VerticalLayout).addComponentAtIndex(index, caption)
+          content.addComponentAtIndex(index, captionContainet)
         } else {
           // it is a follow block
           for (i in 0 until content.componentCount) {
@@ -113,7 +137,7 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
           }
         }
       } else {
-        content.add(caption) // not really suitable.
+        content.add(captionContainet) // not really suitable.
       }
     }
   }

@@ -23,7 +23,6 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VTable
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.grid.Grid
 
 /**
  * An abstract implementation for the block layout.
@@ -33,7 +32,7 @@ import com.vaadin.flow.component.grid.Grid
  */
 abstract class AbstractBlockLayout protected constructor(val col: Int,
                                                          val line: Int)
-  : VTable(line, max(1, col / 2)), BlockLayout {
+  : VTable(line, max(1, col)), BlockLayout {
 
   /**
    * The number of columns
@@ -92,7 +91,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    * @param rowSpan The row span width.
    */
   open fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
-    add(row, column, formItem.element)
+    add(row, column, formItem)
     if (colSpan > 1) {
       setColSpan(row, column, colSpan.toString())
     }
@@ -107,7 +106,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
 
   override fun layoutAlignedComponents() {
     if (alignPane != null) {
-      add(0, 0, alignPane!!.element)
+      add(0, 0, alignPane!!)
       getCellAt(0, 0).style["width"] = "100%"
     }
   }

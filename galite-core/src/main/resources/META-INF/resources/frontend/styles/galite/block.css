@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,7 +20,7 @@
  * Form blocks style
  */
 .k-block {
-    padding: 22px 20px 22px 50px;
+    padding: 22px 50px 22px 50px;
     margin-bottom: 16px;
     background: #ffffff;
     display: inline-block;
@@ -32,6 +33,12 @@
     box-shadow: none;
     background-color: var(--lumo-base-color);
     border-bottom: 1px solid #dadada;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+    min-height: 20px;
+    max-height: 40px;
 }
 
 .k-block .multiple ::part(value) {

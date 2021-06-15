@@ -137,7 +137,7 @@ class GridEditorDateField: GridEditorTextField(10) {
    * @param day The date day.
    * @return The formatted date.
    */
-  private fun format(year: Int, month: Int, day: Int): String? {
+  private fun format(year: Int, month: Int, day: Int): String {
     return SimpleDateFormat("dd.MM.yyyy")
       .format(Date(year - 1900, month - 1, day))
   }

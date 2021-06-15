@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +24,7 @@
     width: 100%;
     background: #009bd4;
     color: #ffffff;
+    display: grid;
 }
 
 #actors::part(overflow-button) {
@@ -37,6 +39,14 @@
     border: 0;
     background: #009bd4;
     color: #ffffff;
+    height: 60px;
+    font-size: 13px;
+}
+
+::part(k-actor-disabled) {
+    border: 0;
+    background: #009bd4;
+    color: #82cfe9;
     height: 60px;
     font-size: 13px;
 }
@@ -77,6 +87,6 @@
 }
 
 .actor-navigationColumn > label {
-    width:600px;
+    width: 100%;
     border-bottom : 1px solid #dadada;
 }

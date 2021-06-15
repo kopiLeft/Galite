@@ -320,7 +320,7 @@ abstract class VField protected constructor(width: Int, height: Int) : VConstant
    * @exception VException      an exception is raised if text is bad
    */
   open fun checkType(s: Any?) {
-    checkType(block!!.activeRecord, s!!)
+    checkType(block!!.activeRecord, s)
   }
 
   /**

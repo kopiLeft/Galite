@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.field
 
 import com.vaadin.flow.component.textfield.TextArea
+import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A text area input zone.
@@ -26,9 +27,20 @@ import com.vaadin.flow.component.textfield.TextArea
 class VTextAreaField : InputTextField<TextArea>(TextArea()) {
   var cols: Int = 0
 
-  fun setRows(rows: Int, visibleRows: Int) {
-    // TODO
+  init {
+    field.valueChangeMode = ValueChangeMode.TIMEOUT
   }
+
+  fun setRows(rows: Int, visibleRows: Int) {
+    height = visibleRows.toString() + "em"
+  }
+
+  /**
+   * Sets the text size.
+   */
+  override var size: Int
+    get() = element.getProperty("cols").toInt()
+    set(value) { element.setProperty("cols", value.toString()) }
 
   fun setWordwrap(b: Boolean) {
     // TODO

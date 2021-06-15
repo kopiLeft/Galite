@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,16 +39,16 @@
     cursor: pointer;
 }
 
-.listDialog~::part(header) {
+.k-listdialog~::part(header) {
     padding: 0;
     border-bottom: 0;
 }
 
-.listDialog~::part(dialog-content) {
+.k-listdialog~::part(dialog-content) {
     padding: 0;
 }
 
-.listDialog~::part(footer) {
+.k-listdialog~::part(footer) {
     background-color: white;
 }
 

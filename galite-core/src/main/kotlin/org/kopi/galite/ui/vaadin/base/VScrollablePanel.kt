@@ -18,12 +18,19 @@
 package org.kopi.galite.ui.vaadin.base
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 
 /**
  * A scrollable vertical panel.
  */
 class VScrollablePanel : Div {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private var content = Div()
+
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
@@ -54,11 +61,10 @@ class VScrollablePanel : Div {
    *
    */
   private fun initialize() {
-    style["overflow"] = "auto"
     content.style["display"] = "block"
     super.add(content)
-    width = "100%"
-    height = "100%"
+    content.style["display"] = "table"
+    content.setSizeFull()
   }
 
   fun clear() {
@@ -66,6 +72,9 @@ class VScrollablePanel : Div {
   }
 
   override fun add(vararg components: Component) {
+    if(components[0] is Grid<*>) {
+      setSizeFull()
+    }
     content.add(*components)
   }
 
@@ -82,11 +91,6 @@ class VScrollablePanel : Div {
   }
 
   override fun addComponentAsFirst(component: Component) {
-    addComponentAtIndex(0, component)
+    content.addComponentAtIndex(0, component)
   }
-
-  //---------------------------------------------------
-  // DATA MEMBERS
-  //---------------------------------------------------
-  private var content = Div()
 }

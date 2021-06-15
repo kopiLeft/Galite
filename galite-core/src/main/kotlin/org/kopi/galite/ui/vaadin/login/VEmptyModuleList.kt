@@ -17,12 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.login
 
-import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * An empty module list.
  */
-class VEmptyModuleList : Div() {
+class VEmptyModuleList : HorizontalLayout() {
   //---------------------------------------------------
 // CONSTRUCTORS
 //---------------------------------------------------

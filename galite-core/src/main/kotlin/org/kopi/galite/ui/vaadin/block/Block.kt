@@ -334,7 +334,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
           useAll: Boolean,
   ) {
     buildLayout()
-    layout!!.addComponent(component, (x - 1) / 2, y, width, height, alignRight, useAll)
+    layout!!.addComponent(component, x, y, width, height, alignRight, useAll)
   }
 
   /**
@@ -489,13 +489,11 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * Sets the block caption.
    * @param caption The block caption.
-   * @param maxColumnPos The maximum column position.
    */
-  protected open fun setCaption(caption: String?) {
+  protected open fun setCaption(caption: String?, page: Page<*>?) {
     if (caption == null || caption.isEmpty()) {
       return
     }
-    val page: Page<*>? = parentPage
     this.caption = H4(caption)
     this.caption!!.className = "block-title"
     page?.setCaption(this)
@@ -600,20 +598,6 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
       field.setBackgroundColorAt(rec, background)
       field.updateColor(rec)
     }
-  }
-
-  /**
-   * Handles the content widget.
-   */
-  protected open fun handleContentComponent() {
-    // TODO
-  }
-
-  /**
-   * Sets the block content.
-   */
-  protected open fun setContent() {
-    // TODO
   }
 
   /**

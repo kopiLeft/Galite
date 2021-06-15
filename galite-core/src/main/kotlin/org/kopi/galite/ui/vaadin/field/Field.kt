@@ -36,7 +36,6 @@ import org.kopi.galite.ui.vaadin.window.Window
  *
  * @param hasIncrement has increment button ?
  * @param hasDecrement has decrement button ?
- * TODO: Implement this class with appropriate component
  */
 abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   : Div(), FieldListener, HasStyle {
@@ -52,13 +51,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * Is the action trigger enabled ?
    */
   var isActionEnabled = false
-
-  /**
-   * The field visibility
-   *
-   * TODO: Do wee need this or super.visible is fine.
-   */
-  var _visible = true
 
   /**
    * The visible field height needed to create layout.
@@ -210,69 +202,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
   }
 
   /**
-   * Fired when a navigation to the next field event is detected.
-   */
-  protected fun fireGotoNextField() {
-    for (l in listeners) {
-      l.gotoNextField()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the previous field event is detected.
-   */
-  protected fun fireGotoPrevField() {
-    for (l in listeners) {
-      l.gotoPrevField()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the next empty must fill field event is detected.
-   */
-  protected fun fireGotoNextEmptyMustfill() {
-    for (l in listeners) {
-      l.gotoNextEmptyMustfill()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the next record event is detected.
-   */
-  protected fun fireGotoNextRecord() {
-    for (l in listeners) {
-      l.gotoNextRecord()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the previous record event is detected.
-   */
-  protected fun fireGotoPrevRecord() {
-    for (l in listeners) {
-      l.gotoPrevRecord()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the first event is detected.
-   */
-  protected fun fireGotoFirstRecord() {
-    for (l in listeners) {
-      l.gotoFirstRecord()
-    }
-  }
-
-  /**
-   * Fired when a navigation to the last record event is detected.
-   */
-  protected fun fireGotoLastRecord() {
-    for (l in listeners) {
-      l.gotoLastRecord()
-    }
-  }
-
-  /**
    * Fired when a navigation to the last record event is detected.
    */
   protected fun fireActionPerformed() {
@@ -308,14 +237,14 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @throws CheckTypeException When the field content is not valid
    */
   open fun checkValue(rec: Int) {
-    TODO()
+    wrappedField.checkValue(rec)
   }
 
   /**
    * Checks if the content of this field is empty.
    * @return `true` if this field is empty.
    */
-  open fun isNull(): Boolean = TODO()
+  open fun isNull(): Boolean = wrappedField.isNull
 
 
   /**
@@ -348,34 +277,6 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   override fun transferFocus() {
     fireFocusTransferred()
-  }
-
-  override fun gotoNextField() {
-    fireGotoNextField()
-  }
-
-  override fun gotoPrevField() {
-    fireGotoPrevField()
-  }
-
-  override fun gotoNextEmptyMustfill() {
-    fireGotoNextEmptyMustfill()
-  }
-
-  override fun gotoNextRecord() {
-    fireGotoNextRecord()
-  }
-
-  override fun gotoPrevRecord() {
-    fireGotoPrevRecord()
-  }
-
-  override fun gotoFirstRecord() {
-    fireGotoFirstRecord()
-  }
-
-  override fun gotoLastRecord() {
-    fireGotoLastRecord()
   }
 
   /**
@@ -564,20 +465,24 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
    * @param background The background color.
    */
   open fun setColor(foreground: String?, background: String?) {
-    // TODO
+    if (wrappedField is TextField) {
+      (wrappedField as TextField).setColor(foreground, background)
+    } else if (wrappedField is ObjectField<*>) {
+      (wrappedField as ObjectField<*>).setColor(foreground, background)
+    }
   }
 
   /**
    * Returns the parent window of this field.
    * @return The parent window of this field.
    */
-  protected open fun getWindow(): Window? = ((this as DField).model.blockView as DBlock).parent
+  internal open fun getWindow(): Window? = ((this as DField).model.blockView as? DBlock)?.parent
 
   /**
    * Returns the parent block of this field.
    * @return The parent block of this field.
    */
-  protected open fun getBlock(): Block? = (this as DField).model.blockView as Block
+  internal open fun getBlock(): Block? = (this as DField).model.blockView as Block
 
   /**
    * The navigation delegation to server mode.

@@ -21,6 +21,7 @@ import org.kopi.galite.chart.ChartTypeFactory
 import org.kopi.galite.chart.UChart
 import org.kopi.galite.chart.UChartType
 import org.kopi.galite.chart.VChart
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.VWindow
 
@@ -74,16 +75,16 @@ class DChart(model: VWindow) : DWindow(model), UChart {
   //---------------------------------------------------
   override var type: UChartType? = null
     set(newType) {
-      //access {
-      if (field != null && newType != null) {
-        content.remove(field as Component)
+      access {
+        if (field != null && newType != null) {
+          content.remove(field as Component)
+        }
+        if (newType != null) {
+          field = newType
+          newType.build()
+          content.add(newType as Component)
+        }
       }
-      if (newType != null) {
-        field = newType
-        newType.build()
-        content.add(newType as Component)
-      }
-      // }
     }
 
   companion object {

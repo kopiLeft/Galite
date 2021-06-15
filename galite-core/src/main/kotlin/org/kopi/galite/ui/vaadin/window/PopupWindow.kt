@@ -23,10 +23,13 @@ import org.kopi.galite.ui.vaadin.main.MainWindow
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasStyle
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The popup window component.
  */
+
+@CssImport("./styles/galite/dialog.css")
 class PopupWindow : EnhancedDialog(), HasStyle {
 
   private val listeners = mutableListOf<CloseListener>()

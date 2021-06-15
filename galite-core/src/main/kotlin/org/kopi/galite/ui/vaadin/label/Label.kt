@@ -17,13 +17,21 @@
  */
 package org.kopi.galite.ui.vaadin.label
 
+import org.kopi.galite.ui.vaadin.base.Styles
+
 import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Label
 
 /**
  * The label server component.
  */
+@CssImport("./styles/galite/label.css")
 open class Label : Label(), HasEnabled {
+
+  init {
+    className = Styles.LABEL
+  }
 
   /**
    * The info text used to display search operator.

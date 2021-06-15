@@ -29,6 +29,7 @@ import com.flowingcode.vaadin.addons.ironicons.EditorIcons
 import com.flowingcode.vaadin.addons.ironicons.FileIcons
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.flowingcode.vaadin.addons.ironicons.MapsIcons
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -37,7 +38,7 @@ import com.vaadin.flow.dom.Element
 /**
  * Some vaadin version utilities to obtain images and resources.
  */
-@CssImport("./styles/galite/Report.css")
+@CssImport("./styles/galite/report.css")
 object Utils : Utils() {
 
   //---------------------------------------------------
@@ -113,7 +114,11 @@ object Utils : Utils() {
    * @return An Image or null if not found
    */
   fun getImageFromResource(directory: String, name: String): Image? {
-    TODO()
+    if(Utils::class.java.classLoader.getResource("META-INF/resources/$directory/$name") != null) { // FIXME
+      return Image("$directory/$name")
+    }
+
+    return null
   }
 
   /**
@@ -161,7 +166,8 @@ object Utils : Utils() {
    * @return The decoredted tooltip
    */
   fun createTooltip(content: String?): String {
-    return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>$content</div>"
+    //return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>${content.orEmpty()}</div>" TODO
+    return content.orEmpty()
   }
 
   /**
@@ -219,6 +225,26 @@ object Utils : Utils() {
   }
 
   /**
+   * Gets the current position of the cursor.
+   *
+   * @param field the field to return its cursor position
+   * @return the cursor's position
+   */
+  fun getCursorPos(field: Component): Int {
+    val future = CompletableFuture<Int>()
+
+    BackgroundThreadHandler.access {
+      UI.getCurrent().page
+        .executeJs("return $0.shadowRoot.querySelector('[part=\"value\"]').selectionStart;", field.element)
+        .then(Int::class.java) { value: Int ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
+  /**
    * Returns the complete theme resource URL of the given resource path.
    * @param resourcePath The theme complete resource path.
    * @return The URL of the given theme resource.
@@ -230,7 +256,7 @@ object Utils : Utils() {
   // --------------------------------------------------
   // PRIVATE DATA
   // --------------------------------------------------
-  private const val VAADIN_RESOURCE_DIR = "org/kopi/galite/ui/vaadin"
+  private const val VAADIN_RESOURCE_DIR = "ui/vaadin"
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
   private const val RESOURCE_DIR = "org/kopi/galite"
