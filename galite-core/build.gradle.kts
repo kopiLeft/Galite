@@ -77,8 +77,8 @@ dependencies {
   // Iron Icons dependency
   implementation("com.flowingcode.addons", "iron-icons", "2.0.1")
 
-  //QuillEditor dependency
-  implementation("org.vaadin.klaudeta", "quill-editor", "1.0.0")
+  //Wysiwyg-e Rich Text Editor component for Java dependency
+  implementation("org.vaadin.pekka", "wysiwyg_e-java", "2.0.1")
 }
 
 dependencyManagement {

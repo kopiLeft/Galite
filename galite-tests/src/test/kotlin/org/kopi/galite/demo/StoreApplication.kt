@@ -35,6 +35,7 @@ import org.joda.time.DateTime
 
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
+import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.demo.command.CommandForm
 import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
@@ -42,8 +43,6 @@ import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.tests.form.FormAlignTest
-import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.tests.form.FormWithList
 import org.kopi.galite.type.Decimal
@@ -132,6 +131,7 @@ object TaxRule : Table("TAX_RULE") {
   val idTaxe = integer("ID").autoIncrement()
   val taxName = varchar("NAME", 20)
   val rate = integer("RATE_IN_PERCENTAGE")
+  val informations = varchar("INFORMATION", 200).nullable()
 
   override val primaryKey = PrimaryKey(idTaxe)
 }
@@ -295,14 +295,15 @@ fun addTaxRules() {
   addTaxRule(1, "tax 2", 22)
   addTaxRule(2, "tax 3", 13)
   addTaxRule(3, "tax 4", 9)
-  addTaxRule(4, "tax 5", 20)
+  addTaxRule(4, "tax 5", 20, "<strong>ABC</strong>")
 }
 
-fun addTaxRule(id: Int, taxName: String, rate: Int) {
+fun addTaxRule(id: Int, taxName: String, rate: Int, information: String? = null) {
   TaxRule.insert {
     it[idTaxe] = id
     it[TaxRule.taxName] = taxName
     it[TaxRule.rate] = rate
+    it[informations] = information
   }
 }
 

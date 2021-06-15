@@ -23,19 +23,16 @@ import java.util.Locale
 import kotlin.collections.ArrayList
 
 import org.kopi.galite.ui.vaadin.base.FontMetrics
-import org.vaadin.klaudeta.quill.QuillEditor
+import org.vaadin.pekka.WysiwygE
 
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.Focusable
-import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.Unit
-import com.vaadin.flow.component.customfield.CustomField
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.shared.Registration
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * A rich text field implementation based on QuillEditor
  */
+
+@CssImport("./styles/galite/richText.css")
 class RichTextField(
         var col: Int,
         var rows: Int,
@@ -54,8 +51,25 @@ class RichTextField(
   private val LINE_HEIGHT = 20
   private val TOOLBAR_HEIGHT = 66
 
-  var editor = QuillEditor()
+  var editor = WysiwygE(true)
   init {
+    editor.element.children.forEach {
+      it.classList.add("richText-tool")
+      it.removeAttribute("disabled") // no result
+    }
+    
+    editor.element.addEventListener("focusin") {
+      editor.removeClassName("richText-focus-out")
+      editor.addClassName("richText-focus-in")
+    }
+
+    editor.element.addEventListener("focusout") {
+      editor.removeClassName("richText-focus-in")
+      editor.addClassName("richText-focus-out")
+    }
+
+    editor.className ="richText"
+    editor.placeholder = ""
     add(editor)
     editor.setHeight((TOOLBAR_HEIGHT + LINE_HEIGHT * visibleRows).toFloat(), Unit.PIXELS)
     editor.isReadOnly = noEdit
@@ -248,6 +262,6 @@ class RichTextField(
   }
 
   override fun addFocusListener(function: () -> kotlin.Unit) {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
   }
 }

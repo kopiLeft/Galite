@@ -23,9 +23,9 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.ui.vaadin.field.RichTextField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 
 import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.customfield.CustomField
 
 /**
@@ -45,18 +45,17 @@ class DRichTextEditor(
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private val editor: RichTextField
+  private val editor = RichTextField(getModel().width,
+                                     getModel().height,
+                                     if (getModel().height == 1) 1 else (getModel() as VStringField).getVisibleHeight(),
+                                     model.model.isNoEdit(),
+                                     ApplicationContext.getDefaultLocale())
   private var inside = false
 
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
   init {
-    editor = RichTextField(getModel().width,
-                           getModel().height,
-                           if (getModel().height == 1) 1 else (getModel() as VStringField).getVisibleHeight(),
-                           model.model.isNoEdit(),
-                           ApplicationContext.getDefaultLocale())
     editor.addValueChangeListener(::valueChanged)
     //editor.addNavigationListener(this) TODO
     setFieldContent(editor)
@@ -98,9 +97,9 @@ class DRichTextEditor(
 
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.setValue(newModelTxt)
-    //})
+    access {
+      editor.value = newModelTxt
+    }
   }
 
   override fun updateFocus() {
@@ -147,9 +146,9 @@ class DRichTextEditor(
    * Gets the focus to this editor.
    */
   private fun enterMe() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.focus()
-    //})
+    access {
+      editor.focus()
+    }
   }
 
   // ----------------------------------------------------------------------
