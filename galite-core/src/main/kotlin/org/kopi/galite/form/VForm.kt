@@ -410,12 +410,13 @@ abstract class VForm : VWindow, VConstants {
       }
     }
 
-    activeBlock?.leave(false)
-
     for (i in blocks.indices) {
       blocks[i].clear()
       blocks[i].setMode(VConstants.MOD_QUERY) // vincent 14.9.98
     }
+
+    activeBlock?.leave(false)
+
     initialise()
     if (activeBlock == null) {
       // it is possible, that the INIT-Trigger of the form

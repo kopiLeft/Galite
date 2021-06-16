@@ -75,7 +75,7 @@ open class DTextField(
 
     field.addTextValueChangeListener {
       if(it.isFromClient) {
-        val value = format(text)
+        val value = text
 
         if (isChanged(getModel().getText(), value)) {
           checkText(value)
@@ -259,13 +259,6 @@ open class DTextField(
     }
   }
 
-  private fun format(s: Any?): String? =
-    if(s is LocalDate) {
-      s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-    } else {
-      s?.toString()
-    }
-
   // --------------------------------------------------
   // UTILS
   // --------------------------------------------------
@@ -287,8 +280,8 @@ open class DTextField(
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION
   //---------------------------------------------------
-  override fun getText(): String {
-    return transformer!!.toModel(if (field.value == null) "" else field.value.toString())!!
+  override fun getText(): String? {
+    return transformer!!.toModel(field.value.orEmpty())
   }
 
   override fun setHasCriticalValue(b: Boolean) {

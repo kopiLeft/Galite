@@ -16,16 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/*
- * Main's style
- */
 #outlet {
     --lumo-space-m: 0;
     background-color: #f2f2f2;
 }
 
-/*
- * Login Box container style
+/**
+ * Main Style
  */
 .k-loginBox {
     border: 1px solid #cccccc;
@@ -59,14 +56,6 @@ vaadin-password-field {
     box-sizing: border-box;
     border: 0;
     border-bottom: 1px solid #dadada;
-}
-
-/*
- *  Remove padding between login fields
- */
-.k-loginBox-pane table tr td {
-    padding: 0;
-    text-align: left;
 }
 
 /*
@@ -140,4 +129,141 @@ vaadin-password-field {
     min-width: 152px;
     margin: 0;
     border: #dadada 1px solid;
+}
+
+/**
+ * Main Style
+ */
+.k-loginBox {
+    border: 1px solid #cccccc;
+    padding: 20px;
+    margin-top: 20px;
+    background: #ffffff;
+}
+
+/**
+ * Image style
+ */
+.k-loginBox-image {
+    margin: 12px 0 0 0;
+}
+
+/**
+ * Table cell style
+ */
+.k-loginBox-pane table tr td {
+    padding: 0 !important;
+    text-align: left;
+}
+
+/**
+ * Main panel style
+ */
+.k-loginBox-pane {
+    padding: 1px 6px 12px 10px !important;
+}
+
+/**
+ * Error division style
+ */
+.k-loginBox-error {
+    color: red;
+}
+
+/**
+ * Input zones style.
+ */
+#user_password, #user_name {
+    width: 150px;
+}
+
+/**
+ * Info division style.
+ */
+.k-loginBox-info {
+    margin-bottom: 6px;
+    font-weight: 500 ! important;
+    font-style: normal !important;
+    color: #000000;
+}
+
+/**
+ * Input texts styles
+ */
+.k-loginBox-pane input[type="text"], .k-loginBox-pane input[type="password"] {
+    color: #000000 !default;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    border-bottom: #dadada 1px solid !default;
+    line-height: 1.2em !default;
+    padding: 6px 3px 3px 3px !important;
+    max-height: 40px !default;
+    transition: .4s !default;
+    position: relative;
+}
+
+/**
+ * Styles for hovered text zones.
+ */
+.k-loginBox-pane input[type="text"]:hover, .k-loginBox-pane input[type="password"]:hover {
+    background: #d9f0f8 !default;
+}
+
+/**
+ * Styles for focused text zones.
+ */
+.k-loginBox-pane input[type="text"]:focus, .k-loginBox-pane input[type="password"]:focus {
+    background: none;
+    border-bottom: #009bd4 1px solid !default;
+}
+
+/**
+ * Styles for languages combo box zones.
+ */
+.k-loginBox-pane select {
+    margin-top: 10px;
+}
+
+.k-loginBox-pane tr:not(:nth-child(6)) td {
+    vertical-align: bottom;
+}
+
+/**
+ * Styles for labels.
+ */
+.k-loginBox-pane label {
+    font-weight: 500 !important;
+    font-style: normal !important;
+    color: #a3a3a3 !default;
+}
+
+/**
+ * Styles for hovered error message.
+ */
+.k-loginBox b {
+    font-weight: 500 ! important;
+    font-style: normal !important;
+    font-size: 14px !important;
+}
+
+/**
+ * Styles for connect button.
+ */
+.k-loginBox input[type="button"] {
+    display: inline-block;
+    background: #009bd4;
+    color: #ffffff;
+    padding: 4px 6px;
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: 1.2em !important;
+    min-width: 152px;
+}
+
+/**
+ * Styles for connect button in hover state.
+ */
+.k-loginBox input[type="button"]:hover {
+    cursor: pointer;
 }

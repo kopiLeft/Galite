@@ -34,3 +34,25 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	border: 0;
 	vertical-align: baseline;
 }
+
+a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.k-label span.mandatory {
+	color: #fd2020;
+	padding-left: 2px;
+}
+
+.k-label-has-action:hover, .editor-label-has-action:hover {
+	text-decoration: underline;
+	color: #009bd4;
+}
+
+.k-label, .editor-label {
+	font-family: Arial, sans-serif !important;
+	font-weight: 500 !important;
+	font-style: normal !important;
+	color: #a3a3a3;
+}

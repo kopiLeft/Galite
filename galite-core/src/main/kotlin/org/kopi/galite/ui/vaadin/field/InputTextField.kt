@@ -18,6 +18,8 @@
 package org.kopi.galite.ui.vaadin.field
 
 import java.text.DecimalFormatSymbols
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -99,7 +101,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
     addKeyDownListener(::onKeyDown)
-    addFocusListener(::onFocus)
+    addFocusListener(::onFocus) // TODO
     //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
     autocomplete = if (hasAutoComplete()) {
@@ -147,8 +149,15 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   }
 
   override fun getValue(): String? {
-    return field.value.toString()
+    return format(field.value)
   }
+
+  private fun format(s: Any?): String? =
+    if(s is LocalDate) {
+      s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    } else {
+      s?.toString()
+    }
 
   override fun initContent(): C = field
 
@@ -236,7 +245,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
       if (text != value) {
         fieldConnector.isChanged = true
       }
-      super.setValue(text)
+      setPresentationValue(text)
     }
     if (text != null) {
       valueBeforeEdit = text

@@ -266,7 +266,7 @@ pre {
     background: #E8E8E8;
     color: #778899;
     width: 500px;
-    font-family: Courier New, monospace; !important;
+    font-family: Courier New, monospace !important;
     font-style: italic !important;
     font-size: 1em;
 }
@@ -293,7 +293,6 @@ td {
     height: 20px;
     padding-right: 8px;
     display: table-cell;
-    vertical-align: top;
 }
 
 .k-form > * {
