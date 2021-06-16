@@ -16,20 +16,83 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Actors panel main styles
+/*
+ * Actors' container style
  */
 #actors {
-    display: inline-block;
     height: 46px;
     width: 100%;
     background: #009bd4;
     color: #ffffff;
+    display: grid;
+}
+
+#actors::part(overflow-button) {
+    margin: 0;
+    border-left: 1px solid #dadada;
+    height: 46px;
+    background: #009bd4;
+    color: #ffffff;
+}
+
+::part(k-actor) {
+    border: 0;
+    background: #009bd4;
+    color: #ffffff;
+    height: 60px;
+    font-size: 13px;
+}
+
+::part(k-actor-disabled) {
+    border: 0;
+    background: #009bd4;
+    color: #82cfe9;
+    height: 60px;
+    font-size: 13px;
+}
+
+#actors::part(overflow-button):hover {
+     background: #547988;
+}
+
+::part(k-actor):hover {
+    background: #547988;
+}
+
+.k-window ::part(menu-bar-button) {
+    padding: 0;
+    height: 42px;
+}
+
+/**
+ * Styles to be applied for actors menu
+ */
+.actors-navigationPanel {
+    display: inline-block;
+    width: 970px;
+    height:auto;
+    padding: 14px 14px 18px 14px;
+    background: #ffffff;
+    color: #8f8f8f;
+    border-bottom : 1px solid #dadada;
+}
+
+.actor-navigationItem {
+    height: auto;
+    background: var(--lumo-base-color);
+}
+
+.actor-navigationItem::part(label) {
+    color: #8f8f8f;
+}
+
+.actor-navigationColumn > label {
+    width: 100%;
+    border-bottom : 1px solid #dadada;
 }
 
 /**
  * Styles for the form main menu (first div in actors panel)
- * replace #actors > div:nth-child(1) by ::part(rootNavigation)
  */
 ::part(rootNavigation) {
     height: 100%;
@@ -38,121 +101,12 @@
 }
 
 /**
- * Styles for non font awesome elements in actors panel.
- * -> allows to align the actor name with the icon => our titles are aligned by default
- */
-/* #actors :not(.fa) {
-    line-height: 1.5em;
-}*/
-
-/**
- * Styles to be applied for all elements inside the actors panel div.
- * replace #actors * by #actors::part(container)
- */
-#actors::part(container) {
-    display: inline-block;
-    vertical-align: top;
-    transition: .2s;
-}
-
-/**
- * Styles for all span elements inside the actors panel div
- * -> the spans in kopi are the actors therefore replacement of  #actors span by #actors::part(k-actor), ::part(rootNavigation)
- */
-#actors::part(k-actor), ::part(rootNavigation) {
-    height: 100%;
-    width: auto;
-}
-
-/**
  * Styles for anchors inside the form main menu
- * -> style apply on tag a of root menu #actors > div:nth-child(1) a {
  */
  ::part(rootNavigation) {
     padding: 10px 16px;
     margin: 4px;
     height: auto;
-}
-
-/**
- * Styles to be applied for anchors inside a span in actors panel div
- * -> difficult to find an equivalence
- */
-/* #actors span > a {
-    padding: 14px 17px 14px 0;
-}*/
-
-/**
- * Font awesome icons styles in actors panel
- *  -> to access the actor icon and change its size -> I tried to access with part (prefix) but no effect
- */
-/*#actors .fa {
-    font-size: 1.5em !important;
-}*/
-
-/**
- * Transition applied for all font awesome icons in actors panel
- */
-/*#actors * i {
-    transition: initial;
-}*/
-
-/**
- * Styles for division containing actors panel
- * -> replace #actors > div:nth-child(2) by #actors::part(container)
- */
-#actors::part(container) {
-    width: calc(100% - 80px);
-}
-
-/**
- * Styles for actors slide menu inside the actors panel
- * -> replace #actors > div:nth-child(2) .actors-slide-menu by #actors::part(container)
- */
-#actors::part(container) {
-    height: 46px;
-}
-
-/**
- * Styles for all anchors inside the slide menu of the actors panel.
- * -> replace #actors > div:nth-child(2) a by #actors::part(k-actor)
- */
-#actors::part(k-actor) {
-    padding: 14px 10px;
-}
-
-/**
- * Styles to be applied for font awesome icons in actors slide menu.
- * -> #actors > div:nth-child(2) .fa difficulty accessing the actor icon
- */
- #actors > div:nth-child(2) .fa {
-    font-size: 1.5em !important;
-    padding: 0 8px 0 0;
-}
-
-/**
- * Styles to be applied for disabled actors.
- * -> #actors > div:nth-child(2) span.v-disabled,#actors > div:nth-child(2) span.v-disabled *#actors > div:nth-child(2) span.v-disabled * replaced by #actors::part(k-actor-disabled)
- */
-#actors::part(k-actor-disabled) {
-    color: #82cfe9;
-}
-
-/**
- * Styles to be applied for hovered actors.
- * -> #actors > div:nth-child(2) a:hover replaced by #actors::part(k-actor):hover
- */
-#actors::part(k-actor):hover {
-    background: #547988;
-}
-
-/**
- * Styles to be applied for hovered disabled actors.
- * -> #actors > div:nth-child(2) span-disabled a,#actors > div:nth-child(2) span.v-disabled a:hover replaced by #actors::part(k-actor-disabled),#actors::part(k-actor-disabled):hover
- */
-#actors::part(k-actor-disabled),
-#actors::part(k-actor-disabled):hover {
-    background: none;
 }
 
 /*
@@ -164,69 +118,11 @@
 }
 
 /**
- * More actors icon styles
- * -> #actors .more-actors i replaced by #actors::part(overflow-button)
- */
-
-#actors::part(overflow-button) {
-    padding: 0 !important;
-}
-
-/*/////////////////////////Our style////////////////////////////////*/
-
-/**
- * actors style
- */
-::part(k-actor) {
-    background: #009bd4;
-    color: #ffffff;
-    height: 100%;
-    font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
-    font-size: 12px !important;
-}
-
-/**
- * overflow button style
- */
-#actors::part(overflow-button) {
-    margin: 0;
-    border-left: 1px solid #dadada;
-    background: #009bd4;
-    color: #ffffff;
-    height: 46px;
-}
-
-/**
- * change color of overflow button on hover
- */
-#actors::part(overflow-button):hover {
-     background: #547988;
-}
-
-/**
- * Remove shadow of button
- */
-.k-window ::part(menu-bar-button) {
-    padding: 0;
-}
-
-/**
  * Change color of root menu button
  */
 ::part(rootNavigation) {
     color: #ffffff;;
 }
-
-/**
- * Display overflow button
- */
-#actors::part(container) {
-    display: flex;
-}
-
-/*/////////////////////////////////////////////////////////*/
 
 /* -- form menu popup styles --*/
 
@@ -235,7 +131,6 @@
  */
 .actors-navigationPanel {
     display: inline-block;
-   /* @include shadow-no-top();*/
     padding: 14px 14px 18px 14px;
     background: #ffffff;
     width: 970px;
@@ -296,13 +191,6 @@
 }
 
 /**
- * Styles to be applied for all styles for all span tags in form menu
- */
-/* .actors-navigationPanel > ul li span {
-    min-width: 30px;
-}*/
-
-/**
  * Styles to be applied for all anchors inside a an actor item inside the form menu
  */
 .actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem {
@@ -324,21 +212,6 @@
 }
 
 /**
- * Styles for hovered and disabled actors items.
- */
-/*.actors-navigationPanel > ul li.actor-navigationItem-disabled *,
-.actors-navigationPanel > ul li.actor-navigationItem-disabled:hover * {
-    color: #bcbcbc;
-}*/
-
-/**
- * Styles for hovered anchors when actor item is disabled
- */
-/* .actors-navigationPanel > ul li.actor-navigationItem-disabled:hover a {
-    cursor: default;
-}*/
-
-/**
  * Styles for non font awesome icons inside the form menu.
  */
 .actors-navigationPanel *:not(iron-icon) {
@@ -358,66 +231,3 @@
 .actors-navigationPanel * iron-icon {
     transition: initial;
 }
-
-/* -- more actors menu -- */
-/* --> on n'a pas un more actors menu */
-
-/* .more-actors.open > a, .more-actors.open > a:hover {
-    background: #ffffff !important;
-    color: #009bd4 !important;
-    z-index: 5 !important;
-    @include shadow-no-top();
-}
-
-.more-actors-menu {
-    margin: 4px 0 !important;
-    width: auto;
-    height: auto;
-    border-top: 1px solid #dadada;
-    border-right: 1px solid #dadada;
-    background: #ffffff;
-    display: inline-block;
-    border-left: 1px solid #dadada;
-    @include shadow-no-top();
-}
-
-.more-actors-menu li {
-    display: block !important;
-    border-bottom: 1px solid #dadada;
-}
-
-.more-actors-menu li .k-actor {
-    padding: 15px 22px;
-    color: $darker-grey;
-    width: 100%;
-}
-
-.more-actors-menu li .k-actor:hover {
-    background: $light-blue;
-    cursor: pointer;
-}
-
-.more-actors-menu li > span.v-disabled {
-    color: $grey;
-}
-
-.more-actors-menu li  > span.v-disabled:hover {
-    background: none;
-    cursor: default;
-}
-
-.more-actors-menu .fa {
-    font-size: 1.5em !important;
-    padding: 0 8px 0 0;
-}*/
-
-/***************************/
-::part(k-actor-disabled) {
-    border: 0;
-    background: #009bd4;
-    color: #82cfe9;
-    height: 60px;
-    font-size: 13px;
-}
-
-/***************************/

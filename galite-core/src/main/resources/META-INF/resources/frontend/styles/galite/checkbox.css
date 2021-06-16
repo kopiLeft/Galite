@@ -54,7 +54,6 @@
     border-radius: 50%;
     vertical-align: middle;
     border: 1px solid #ddd;
-    line-height: 0;
 }
 
 ::part(checkbox)::after {
@@ -68,7 +67,7 @@
     font-size: 15;
     font-weight: bold;
     position: absolute;
-    top: 0.55em;
+    top: 0em;
     left: 0.09em;
     box-sizing: border-box;
     transform-origin: 0 0;
@@ -94,4 +93,12 @@ vaadin-checkbox {
 
 .multiple .k-boolean-field-content {
     height: 40px;
+}
+
+.k-boolean-field-content{
+    display: inline;
+}
+
+vaadin-checkbox label {
+    display: inline;
 }

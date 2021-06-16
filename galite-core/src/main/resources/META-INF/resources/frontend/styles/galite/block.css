@@ -35,7 +35,7 @@
     height: 20px;
     padding-right: 8px;
     display: table-cell;
-    vertical-align: top;
+    /*vertical-align: top;*/ /* make label and field in same line*/
 }
 
 /**
@@ -184,3 +184,10 @@
       background: none;
       border-bottom: #dadada 1px solid;
   }*/
+
+/*
+ * make label & follow field in same line
+ */
+.info-content {
+    display: -webkit-box;
+}

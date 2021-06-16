@@ -26,9 +26,11 @@ import org.kopi.galite.visual.ApplicationContext
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 
 /**
  * A list dialog
@@ -54,9 +56,18 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
     element.classList.add("listDialog")
     content.element.setAttribute("hideFocus", "true")
     content.element.style["outline"] = "0px"
-    content.element.style["min-width"] = "400px"
     content.className = Styles.LIST_DIALOG
     isResizable = true
+
+    BackgroundThreadHandler.access {
+      UI.getCurrent().page.addBrowserWindowResizeListener { event ->
+        if (event.width < table!!.model.columns.size * 210) {
+          content.style["width"] = (event.width - 28).toString() + "px"
+        } else {
+          content.style["width"] = (table!!.model.columns.size * 210).toString() + "px"
+        }
+      }
+    }
   }
 
   //---------------------------------------------------
@@ -170,6 +181,9 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
       if (newForm != null) {
         content.add(newForm)
       }
+      val width = table!!.model.columns.size * 210
+
+      content.element.style["width"] =  width.toString() + "px"
       add(content)
       addToFooter(close)
       addToFooter(close)
