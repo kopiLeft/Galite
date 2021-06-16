@@ -24,8 +24,6 @@ abstract class AbstractField<T>: CustomField<T>(), ClickNotifier<AbstractField<T
 
   abstract fun addFocusListener(function: () -> Unit)
 
-  internal abstract fun setColor(foreground: String?, background: String?)
-
   internal abstract val isNull: Boolean
 
   internal abstract fun checkValue(rec: Int)

@@ -529,7 +529,7 @@ class TextField(val model: VField,
    * @param foreground The foreground color.
    * @param background The background color.
    */
-  override fun setColor(foreground: String?, background: String?) {
+  fun setColor(foreground: String?, background: String?) {
     field.setColor(foreground, background)
   }
 
