@@ -207,11 +207,11 @@ public class DItemTree extends DWindow implements UItemTree {
       treeModel = ((DefaultTreeModel)tree.getModel());
       if (getModel().isSingleSelection()) {
         rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
-        if (!selectedItem.getSelected()) {
+        if (!selectedItem.isSelected()) {
           unselectAll(treeModel, rootNode);
         }
       }
-      selectedItem.setSelected(!selectedItem.getSelected());
+      selectedItem.setSelected(!selectedItem.isSelected());
       treeModel.nodeChanged(selectedNode);
       getModel().refresh();
     }
@@ -233,10 +233,10 @@ public class DItemTree extends DWindow implements UItemTree {
       rootNode = (DefaultMutableTreeNode)treeModel.getRoot();
       selectedItem = (Item)selectedNode.getUserObject();
 
-      if (!selectedItem.getDefaultItem()) {
+      if (!selectedItem.isDefaultItem()) {
         setDefault(treeModel, rootNode);
       }
-      selectedItem.setDefaultItem(!selectedItem.getDefaultItem());
+      selectedItem.setDefaultItem(!selectedItem.isDefaultItem());
       selectedItem.setSelected(true);
       treeModel.nodeChanged(selectedNode);
       getModel().refresh();
@@ -253,7 +253,7 @@ public class DItemTree extends DWindow implements UItemTree {
       DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
       Item item = (Item)child.getUserObject();
 
-      if (item.getDefaultItem()) {
+      if (item.isDefaultItem()) {
         item.setDefaultItem(false);
         treeModel.nodeChanged(child);
       }
@@ -273,7 +273,7 @@ public class DItemTree extends DWindow implements UItemTree {
       DefaultMutableTreeNode child = (DefaultMutableTreeNode)node.getChildAt(i);
       Item item = (Item)child.getUserObject();
 
-      if (item.getSelected()) {
+      if (item.isSelected()) {
         item.setSelected(false);
         treeModel.nodeChanged(child);
       }

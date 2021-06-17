@@ -25,15 +25,15 @@ class Item(val id: Int,
            var name: String,
            var localisedName: String?,
            var description: String?,
-           var selected: Boolean,
-           var defaultItem: Boolean,
+           var isSelected: Boolean,
+           var isDefaultItem: Boolean,
            icon: String?,
            var originalName: String) : Comparable<Item> {
 
   var icon: Image? = null
   var smallIcon: Image? = null
   var childCount = 0
-  lateinit var children: Array<Item>
+  var children: Array<Item>? = null
   var level = 0
 
   init {
@@ -80,7 +80,7 @@ class Item(val id: Int,
             && name == other.name
             && localisedName == other.localisedName
             && description == other.description
-            && selected == other.selected
-            && defaultItem == other.defaultItem) 1 else -1
+            && isSelected == other.isSelected
+            && isDefaultItem == other.isDefaultItem) 1 else -1
   }
 }

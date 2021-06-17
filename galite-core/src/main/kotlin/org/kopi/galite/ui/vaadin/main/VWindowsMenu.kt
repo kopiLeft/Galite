@@ -78,7 +78,10 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
    * @param window The window item.
    */
   fun removeWindow(window: Component) {
-    items.remove(windowsItemsMap[window])
+    val toRemove = windowsItemsMap[window]
+    toRemove?.let {
+      items.remove(it)
+    }
     windowsItemsMap.remove(window)
   }
 

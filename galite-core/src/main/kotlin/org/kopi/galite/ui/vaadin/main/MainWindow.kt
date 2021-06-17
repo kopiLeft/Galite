@@ -221,14 +221,23 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    */
   private fun closeIfIsPopup(window: Component): Boolean {
     var closed  = false
+    var popupWindow: PopupWindow? = null
 
-    window.parent.ifPresent {
-      it.parent.ifPresent { windowContainer ->
-        if (windowContainer is PopupWindow) {
-          windowContainer.close() // fire close event
-          closed = true
+    if(window is PopupWindow) {
+      popupWindow = window
+    } else {
+      window.parent.ifPresent {
+        it.parent.ifPresent { windowContainer ->
+          if (windowContainer is PopupWindow) {
+            popupWindow = windowContainer
+          }
         }
       }
+    }
+
+    popupWindow?.let {
+      it.close() // fire close event
+      closed = true
     }
 
     return closed
