@@ -45,7 +45,7 @@ class VWelcome : HorizontalLayout() {
   fun setUserMenu(menu: ModuleList) {
     userMenu = menu
     menu.setId("user_menu")
-    menu.rootMenuItem!!.setIcon(IronIcons.ACCOUNT_BOX)
+    menu.rootMenuItem!!.setIcon(IronIcons.ACCOUNT_BOX.create())
     addComponentAsFirst(menu)
   }
 
@@ -64,7 +64,9 @@ class VWelcome : HorizontalLayout() {
   fun setAdminMenu(menu: ModuleList) {
     adminMenu = menu
     menu.setId("admin_menu")
-    menu.rootMenuItem!!.setIcon(VaadinIcon.COG)
+    val icon  = VaadinIcon.COG.create()
+    icon.setSize("21.5px")
+    menu.rootMenuItem!!.setIcon(icon)
     addComponentAtIndex(1, menu)
   }
 
@@ -75,7 +77,7 @@ class VWelcome : HorizontalLayout() {
   fun setBookmarksMenu(menu: ModuleList) {
     bookmarksMenu = menu
     menu.setId("bookmarks_menu")
-    menu.rootMenuItem!!.setIcon(IronIcons.STAR)
+    menu.rootMenuItem!!.setIcon(IronIcons.STAR.create())
     addComponentAtIndex(2, menu)
   }
 
@@ -86,7 +88,7 @@ class VWelcome : HorizontalLayout() {
   fun setWorkspaceContextItemMenu(menu: ModuleList) {
     workspaceContextMenu = menu
     menu.setId("wrkcontext_menu")
-    menu.rootMenuItem!!.setIcon(IronIcons.ROOM)
+    menu.rootMenuItem!!.setIcon(IronIcons.ROOM.create())
     addComponentAtIndex(3, menu)
   }
 }

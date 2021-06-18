@@ -16,6 +16,9 @@
  */
 package org.kopi.galite.demo
 
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.TextArea
+import com.vaadin.flow.router.Route
 import java.math.BigDecimal
 
 import kotlin.reflect.KClass
@@ -40,6 +43,7 @@ import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.db.DBSchemaTest
+import org.kopi.galite.tests.form.FormAlignTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.tests.form.FormWithList
@@ -55,6 +59,7 @@ object Client : Table("CLIENTS") {
   val lastNameClt = varchar("LASTNAME", 25)
   val addressClt = varchar("ADDRESS", 50)
   val ageClt = integer("AGE")
+  val mail = varchar("EMAIL", 25)
   val countryClt = varchar("COUNTRY", 30)
   val cityClt = varchar("CITY", 30)
   val zipCodeClt = integer("ZIP_CODE")
@@ -64,8 +69,10 @@ object Client : Table("CLIENTS") {
 
 object Product : Table("PRODUCTS") {
   val idPdt = integer("ID").autoIncrement()
-  val designation = varchar("DESIGNATION", 50)
+  val description = varchar("DESCRIPTION", 50)
   val category = varchar("CATEGORY", 30)
+  val department = varchar("DEPARTMENT", 10)
+  val supplier = varchar("SUPPLIER", 20)
   val taxName = varchar("TAX", 20).references(TaxRule.taxName)
   val price = decimal("UNIT_PRICE_EXCLUDING_VAT", 9, 3)
   val photo = blob("PHOTO").nullable()
@@ -196,7 +203,7 @@ fun initModules() {
     insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
     insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", ClientForm::class)
     insertIntoModule("1010", "org/kopi/galite/test/Menu", 5, "1000")
-    insertIntoModule("1101", "org/kopi/galite/test/Menu", 10, "1010", FormSample::class)
+    insertIntoModule("1101", "org/kopi/galite/test/Menu", 10, "1010", ClientForm::class)
     insertIntoModule("1110", "org/kopi/galite/test/Menu", 15, "1010", FormWithFields::class)
     insertIntoModule("1120", "org/kopi/galite/test/Menu", 20, "1010", FormWithList::class)
     insertIntoModule("2000", "org/kopi/galite/test/Menu", 100)
@@ -227,19 +234,20 @@ fun insertIntoModule(shortname: String,
 }
 
 fun addClients() {
-  addClient(0, "Mohamed", "Salah", "10,Rue du Lac", 40, "Tunisia", "Megrine", 2001)
-  addClient(1, "Mohamed", "fdgh", "10,Rfggh Lac", 56, "Tunisia", "Megrine", 2001)
-  addClient(2, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "Tunisia", "Tunis", 6000)
-  addClient(3, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "Tunisia", "Mourouj", 5003)
+  addClient(0, "Hichem", "Fazai", "10,Rue du Lac", 28, "example@mail", "Tunisia", "Megrine", 2001)
+  addClient(1, "Mohamed", "Salah", "10,Rue Lac", 56, "example@mail", "Tunisia", "Megrine", 2001)
+  addClient(2, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "example@mail", "Tunisia", "Tunis", 6000)
+  addClient(3, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "example@mail", "Tunisia", "Mourouj", 5003)
 }
 
-fun addClient(id: Int, firstName: String, lastName: String, address: String, age: Int, country: String, city: String, zipcode: Int) {
+fun addClient(id: Int, firstName: String, lastName: String, address: String, age: Int, email: String, country: String, city: String, zipcode: Int) {
   Client.insert {
     it[idClt] = id
     it[firstNameClt] = firstName
     it[lastNameClt] = lastName
     it[addressClt] = address
     it[ageClt] = age
+    it[mail] = email
     it[countryClt] = country
     it[cityClt] = city
     it[zipCodeClt] = zipcode
@@ -247,16 +255,18 @@ fun addClient(id: Int, firstName: String, lastName: String, address: String, age
 }
 
 fun addProducts() {
-  addProduct(0, "designation Product 0", "cat 1", "tax 1", Decimal("263").value)
-  addProduct(1, "designation Product 1", "cat 2", "tax 2", Decimal("314").value)
-  addProduct(2, "designation Product 2", "cat 3", "tax 2", Decimal("180").value)
-  addProduct(3, "designation Product 3", "cat 1", "tax 3", Decimal("65").value)
+  addProduct(0, "description Product 0", "cat 1", "tax 1", "Men", "Supplier 0", Decimal("263").value)
+  addProduct(1, "description Product 1", "cat 2", "tax 2", "Men","Supplier 0", Decimal("314").value)
+  addProduct(2, "description Product 2", "cat 3", "tax 2", "Women","Supplier 0", Decimal("180").value)
+  addProduct(3, "description Product 3", "cat 1", "tax 3", "Children","Supplier 0", Decimal("65").value)
 }
 
-fun addProduct(id: Int, designation: String, category: String, taxName: String, price: BigDecimal) {
+fun addProduct(id: Int, description: String, category: String, taxName: String, department: String, supplier: String, price: BigDecimal) {
   Product.insert {
     it[idPdt] = id
-    it[Product.designation] = designation
+    it[Product.description] = description
+    it[Product.department] = department
+    it[Product.supplier] = supplier
     it[Product.category] = category
     it[Product.taxName] = taxName
     it[Product.price] = price

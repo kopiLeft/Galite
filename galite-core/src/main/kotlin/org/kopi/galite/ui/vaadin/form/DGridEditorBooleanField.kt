@@ -26,6 +26,7 @@ import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
 
@@ -55,9 +56,9 @@ class DGridEditorBooleanField(
   // IMPLEMENTATION
   //---------------------------------------------------
   override fun updateText() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
-    //})
+    access {
+      editor.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
+    }
   }
 
   override fun updateFocus() {
@@ -132,6 +133,10 @@ class DGridEditorBooleanField(
   override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 
   override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Boolean?>, Boolean?>) {
+    if(!event.isFromClient) {
+      return
+    }
+
     // ensures to get model focus to validate the field
     if (!getModel().hasFocus()) {
       getModel().block!!.activeField = getModel()
@@ -142,6 +147,10 @@ class DGridEditorBooleanField(
       getModel().setBoolean(getBlockView().getRecordFromDisplayLine(position), event.value)
     }
     getModel().setChanged(true)
+  }
+
+  override fun valueChanged() {
+    // Nothing to do
   }
 
   /**

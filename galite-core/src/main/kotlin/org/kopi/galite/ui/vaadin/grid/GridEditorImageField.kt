@@ -28,6 +28,7 @@ class GridEditorImageField : GridEditorField<Any?>() {
 
   init {
     className = "editor-imagefield"
+    image.setWidthFull()
     image.setBorder(0)
     add(image)
   }
@@ -38,7 +39,7 @@ class GridEditorImageField : GridEditorField<Any?>() {
 
   override fun generateModelValue(): Any? = image.src
 
-  override fun focus() {
+  override fun doFocus() {
     image.focus()
   }
 

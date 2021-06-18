@@ -54,7 +54,7 @@ object Products : Table() {
   val id = integer("ID")
   val uc = integer("UC")
   val ts = integer("TS")
-  val designation = varchar("DESIGNATION", 20)
+  val description = varchar("DESCRIPTION", 20)
 
   override val primaryKey = PrimaryKey(id)
 }
@@ -133,7 +133,7 @@ object FormWithNullableColumn : DictionaryForm() {
         it[id] = 1
         it[uc] = 0
         it[ts] = 0
-        it[designation] = "produit de test"
+        it[description] = "produit de test"
       }
 
       Order.insert {
@@ -344,7 +344,7 @@ class FormWithThreeTablesLeftJoin : FormBlock(1, 1, "Left Join three Tables Test
   }
 
   val productName = visit(domain = Domain<String>(20), position = at(6, 1)) {
-    columns(p.designation)
+    columns(p.description)
   }
 }
 
@@ -382,7 +382,7 @@ class FormWithThreeTablesInnerJoin : FormBlock(1, 1, "Inner Join three Tables Te
   }
 
   val productName = visit(domain = Domain<String>(20), position = at(6, 1)) {
-    columns(p.designation)
+    columns(p.description)
   }
 }
 

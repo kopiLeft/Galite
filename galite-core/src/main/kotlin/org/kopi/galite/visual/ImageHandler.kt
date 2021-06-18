@@ -29,14 +29,14 @@ abstract class ImageHandler {
    * @param image The image name.
    * @return The [Image] having the `image` name.
    */
-  abstract fun getImage(image: String): Image
+  abstract fun getImage(image: String): Image?
 
   /**
    * Returns the [Image] having the `image` content.
    * @param image The image content.
    * @return The [Image] having the `image` content.
    */
-  abstract fun getImage(image: ByteArray): Image
+  abstract fun getImage(image: ByteArray): Image?
 
   /**
    * Returns the URL of a given image name.

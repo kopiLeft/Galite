@@ -18,27 +18,35 @@
 package org.kopi.galite.ui.vaadin.window
 
 import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VScrollablePanel
 import org.kopi.galite.ui.vaadin.block.Block
+import org.kopi.galite.ui.vaadin.field.AbstractField
 import org.kopi.galite.ui.vaadin.form.Form
-import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * Abstract class for all window components.
  */
-abstract class Window : VerticalLayout() {
+abstract class Window : VerticalLayout(), Focusable<Window> {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   protected val actors : VActorPanel = VActorPanel()
   private var content: Component? = null
+
+  /**
+   * The last focused text field in this form.
+   */
+  var lasFocusedField: Focusable<*>? = null
 
   init {
     className = Styles.WINDOW
@@ -86,13 +94,30 @@ abstract class Window : VerticalLayout() {
   }
 
   /**
+   * Returns `true` when this window has a focused text field before it looses focus.
+   * @return `true` when this window has a focused text field before it looses focus.
+   */
+  open fun hasLastFocusedTextField(): Boolean {
+    return lasFocusedField != null && (lasFocusedField as Component).isAttached
+  }
+
+  /**
+   * Sets the focus to the last focused text field of this form.
+   */
+  open fun goBackToLastFocusedTextField() {
+    if (lasFocusedField != null) {
+      lasFocusedField!!.focus()
+    }
+  }
+
+  /**
    * Sets the window caption.
    * @param caption The window caption.
    */
   open fun setCaption(caption: String) {
-
     // first look if we can set the title on the main window.
     val success = maybeSetMainWindowCaption(caption)
+
     if (!success) {
       // window does not belong to main window
       // It may be then belong to a popup window
@@ -106,8 +131,9 @@ abstract class Window : VerticalLayout() {
    * @return `true` if the caption is set.
    */
   private fun maybeSetMainWindowCaption(caption: String): Boolean {
-    val parent = parent.orElse(null) as? MainWindow
-    if (parent != null) {
+    val parent = MainWindow.instance
+
+    if (parent.windowsList.contains(this)) {
       parent.updateWindowTitle(this, caption)
       return true
     }
@@ -121,10 +147,18 @@ abstract class Window : VerticalLayout() {
    * @return `true` if the caption is set.
    */
   private fun maybeSetPopupWindowCaption(caption: String): Boolean {
-    val parent = parent.orElse(null) as? PopupWindow
+    var parent: PopupWindow? = null
+
+    getParent().ifPresent { popupContent ->
+      parent = if(popupContent is PopupWindow) {
+        popupContent
+      } else {
+        popupContent.parent.orElseGet(null) as? PopupWindow
+      }
+    }
 
     if (parent != null) {
-      parent.setCaption(caption)
+      parent!!.setCaption(caption)
       return true
     }
     return false

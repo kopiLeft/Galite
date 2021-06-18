@@ -23,6 +23,7 @@ import org.kopi.galite.common.ReportTrigger
 import org.kopi.galite.common.Trigger
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.field.Field
+import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.VCommand
 
 /**
@@ -84,6 +85,9 @@ class ReportField<T>(override val domain: Domain<T>,
 
   fun initialize() {
     init()
+    if(domain.kClass == Decimal::class) {
+      align = FieldAlignment.RIGHT
+    }
   }
 
   /**

@@ -306,20 +306,6 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   // PRIVATE METHODS
   // ----------------------------------------------------------------------
 
-  private fun isDate(d: Int, m: Int, y: Int): Boolean {
-    return if (y < 1 || m < 1 || m > 12 || d < 1) {
-      false
-    } else {
-      when (m) {
-        2 -> d <= (if (isLeapYear(y)) 29 else 28)
-        4, 6, 9, 11 -> d <= 30
-        else -> d <= 31
-      }
-    }
-  }
-
-  private fun isLeapYear(year: Int): Boolean = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
-
   private fun isDateChar(c: Char): Boolean = c in '0'..'9' || c == '.' || c == '/'
 
   /**
@@ -387,13 +373,27 @@ class VDateField(val bufferSize: Int) : VField(10, 1) {
   private var value: Array<Date?> = arrayOfNulls(2 * bufferSize)
 
   companion object {
-    private fun stringToInt(input: String): Int {
+    internal fun stringToInt(input: String): Int {
       return try {
         Integer.valueOf(input).toInt()
       } catch (e: Exception) {
         -1
       }
     }
+
+    internal fun isDate(d: Int, m: Int, y: Int): Boolean {
+      return if (y < 1 || m < 1 || m > 12 || d < 1) {
+        false
+      } else {
+        when (m) {
+          2 -> d <= (if (isLeapYear(y)) 29 else 28)
+          4, 6, 9, 11 -> d <= 30
+          else -> d <= 31
+        }
+      }
+    }
+
+    private fun isLeapYear(year: Int): Boolean = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
 
     /**
      *

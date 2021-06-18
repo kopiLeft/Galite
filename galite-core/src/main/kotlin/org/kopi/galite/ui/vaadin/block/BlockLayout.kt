@@ -56,6 +56,13 @@ interface BlockLayout : HasComponents {
   fun clear()
 
   /**
+   * Adds extra components to this layout.
+   * @param component The component to add.
+   * @param constraint The component constraints.
+   */
+  fun addAlignedComponent(component: Component, constraint: ComponentConstraint)
+
+  /**
    * Lays out some extra components. This used to render not standard components.
    */
   fun layoutAlignedComponents()

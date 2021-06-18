@@ -17,6 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.common
 
+import org.kopi.galite.ui.vaadin.label.Label
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.HasStyle
@@ -29,7 +31,6 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
   val tbody: Element = Element("tbody")
 
   init {
-    setWidthFull()
     element.appendChild(tbody)
     for (i in 0 until rowsNumber) {
       val tr = Element("tr")
@@ -74,10 +75,17 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
   /**
    * Adds the components to this table in a specific cell identified by the row and column number.
    */
-  fun add(row: Int, column: Int, vararg components: Element) {
+  fun add(row: Int, column: Int, vararg components: Component) {
     val cell = getCellAt(row, column)
 
-    cell.appendChild(*components)
+    components.forEach {
+      cell.appendChild(it.element)
+
+      // FIXME: styling temporary workaround
+      if(it is Label) {
+        cell.style["padding-top"] = "5px"
+      }
+    }
   }
 
   /**
@@ -134,4 +142,34 @@ open class VTable(rowsNumber: Int, colsNumber: Int) : Component(), HasSize, HasS
 
     return tableRow.getChild(column)
   }
+
+  fun addInNewRow(component: Component) {
+    val tr = Element("tr")
+    val componentInTD = Element("td").appendChild(component.element)
+
+    tbody.appendChild(tr)
+    tr.appendChild(componentInTD)
+  }
+
+  /**
+   * Returns the table cell identified by the row and column number.
+   *
+   * @param row the cell's row.
+   * @param column the cell's column.
+   */
+  fun getCellAtOrNull(row: Int, column: Int): Element? {
+    if(row < 0 || row >= tbody.childCount) {
+      return null
+    }
+
+    val tableRow  = tbody.getChild(row)
+
+    if(column < 0 || column >= tableRow.childCount) {
+      return null
+    }
+
+    return tableRow.getChild(column)
+  }
+
+  val rowCount: Int get() = tbody.childCount
 }

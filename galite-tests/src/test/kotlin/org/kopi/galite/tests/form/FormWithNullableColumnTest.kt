@@ -81,7 +81,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     transaction {
       assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, PRODUCTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\"," +
-                           " CLIENTS.MAIL, \"ORDER\".QUANTITY, PRODUCTS.DESIGNATION FROM \"ORDER\" INNER JOIN " +
+                           " CLIENTS.MAIL, \"ORDER\".QUANTITY, PRODUCTS.DESCRIPTION FROM \"ORDER\" INNER JOIN " +
                            "CLIENTS ON \"ORDER\".CLIENT_ID = CLIENTS.ID INNER JOIN" +
                            " PRODUCTS ON \"ORDER\".PRODUCT_ID = PRODUCTS.ID",
                    query.prepareSQL(this))
@@ -103,7 +103,7 @@ class FormWithNullableColumnsTest : JApplicationTestBase() {
 
     transaction {
       assertEquals("SELECT \"ORDER\".ID, CLIENTS.ID, PRODUCTS.ID, CLIENTS.TS, CLIENTS.UC, CLIENTS.\"NAME\"," +
-                           " CLIENTS.MAIL, \"ORDER\".QUANTITY, PRODUCTS.DESIGNATION FROM \"ORDER\" LEFT JOIN " +
+                           " CLIENTS.MAIL, \"ORDER\".QUANTITY, PRODUCTS.DESCRIPTION FROM \"ORDER\" LEFT JOIN " +
                            "CLIENTS ON \"ORDER\".CLIENT_ID = CLIENTS.ID LEFT JOIN" +
                            " PRODUCTS ON \"ORDER\".PRODUCT_ID = PRODUCTS.ID",
                    query.prepareSQL(this))

@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.actor
 
 import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.window.Window
 
 import com.flowingcode.vaadin.addons.ironicons.IronIconEnum
 import com.vaadin.flow.component.HasEnabled
@@ -35,7 +34,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param description The actor help.
  * @param menu The menu to which this actor belongs to.
  * @param icon The actor icon. The name will be translated after to a
- * font awesome icon. TODO
+ * vaadin or iron icon.
  * @param acceleratorKey The accelerator key.
  * @param modifiersKey The modifiers key.
  */
@@ -59,19 +58,5 @@ open class Actor(val caption: String?,
         super.setIcon(icon.create())
       }
     }
-
-    if (modifiersKey != null) {
-      super.addClickShortcut(acceleratorKey, modifiersKey)
-    } else {
-      super.addClickShortcut(acceleratorKey)
-    }
-  }
-
-  /**
-   * Returns the parent window.
-   * @return The parent window.
-   */
-  protected open fun getWindow(): Window {
-    return parent.get().parent.get() as Window
   }
 }

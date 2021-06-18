@@ -22,9 +22,7 @@ import kotlin.math.max
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VTable
 
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.grid.Grid
 
 /**
  * An abstract implementation for the block layout.
@@ -34,7 +32,7 @@ import com.vaadin.flow.component.grid.Grid
  */
 abstract class AbstractBlockLayout protected constructor(val col: Int,
                                                          val line: Int)
-  : VTable(line, max(1, col / 2)), BlockLayout {
+  : VTable(line, max(1, col)), BlockLayout {
 
   /**
    * The number of columns
@@ -51,6 +49,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    */
   var constrains: MutableMap<Component?, ComponentConstraint?> = mutableMapOf()
 
+  protected var alignPane: AlignPanel? = null
   protected var components: Array<Array<Component?>>? = null
   protected var aligns: Array<Array<ComponentConstraint?>>? = null
 
@@ -67,10 +66,6 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-
-  override fun onAttach(attachEvent: AttachEvent?) {
-    layout() // FIXME!!
-  }
 
   /**
    * Initialize the size of the layout
@@ -96,7 +91,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
    * @param rowSpan The row span width.
    */
   open fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
-    add(row, column, formItem.element)
+    add(row, column, formItem)
     if (colSpan > 1) {
       setColSpan(row, column, colSpan.toString())
     }
@@ -105,11 +100,14 @@ abstract class AbstractBlockLayout protected constructor(val col: Int,
     }
   }
 
-  open fun addAlignedComponent(widget: Component?, constraint: ComponentConstraint?) {
-    TODO()
+  override fun addAlignedComponent(component: Component, constraint: ComponentConstraint) {
+    alignPane?.addComponent(component, constraint)
   }
 
   override fun layoutAlignedComponents() {
-    TODO("Not yet implemented")
+    if (alignPane != null) {
+      add(0, 0, alignPane!!)
+      getCellAt(0, 0).style["width"] = "100%"
+    }
   }
 }

@@ -208,7 +208,7 @@ class VItemTree(rootName: String?,
   /**
    * Return items array
    */
-  fun getItems(): Array<Item> = getDisplay().getTree().getItems()
+  fun getItems(): Array<Item>? = getDisplay().getTree().getItems()
 
   /**
    * Return the root item

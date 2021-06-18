@@ -21,6 +21,6 @@ package org.kopi.galite.visual
 import java.util.EventListener
 
 interface WaitInfoListener : EventListener {
-  fun setWaitInfo(message: String)
+  fun setWaitInfo(message: String?)
   fun unsetWaitInfo()
 }

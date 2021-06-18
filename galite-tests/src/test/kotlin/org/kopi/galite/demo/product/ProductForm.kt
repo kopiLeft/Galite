@@ -62,7 +62,7 @@ object ProductForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return ProductR
+    return ProductReport()
   }
 }
 
@@ -74,12 +74,12 @@ object BlockProduct : FormBlock(1, 1, "Products") {
     help = "The product ID"
     columns(u.idPdt)
   }
-  val designation = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
-    label = "Designation"
-    help = "The product designation"
-    columns(u.designation)
+  val description = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
+    label = "Description"
+    help = "The product description"
+    columns(u.description)
   }
-  val price = visit(domain = Domain<Decimal>(20), follow(designation)) {
+  val price = visit(domain = Domain<Decimal>(20), follow(description)) {
     label = "Price"
     help = "The product unit price excluding VAT"
     columns(u.price)

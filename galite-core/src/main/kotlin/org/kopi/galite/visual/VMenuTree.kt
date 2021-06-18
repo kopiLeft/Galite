@@ -231,7 +231,7 @@ class VMenuTree @JvmOverloads constructor(ctxt: DBContext,
         val informationText: String
 
         informationText = try {
-          ApplicationContext.getDefaults().getInformationText()
+          ApplicationContext.getDefaults().informationText
         } catch (e: PropertyException) {
           e.printStackTrace()
           ""

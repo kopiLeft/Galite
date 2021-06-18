@@ -45,7 +45,7 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
     TODO("Not yet implemented")
   }
 
-  override fun focus() {
+  override fun doFocus() {
     TODO("Not yet implemented")
   }
 

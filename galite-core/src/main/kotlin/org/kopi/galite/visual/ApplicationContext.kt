@@ -155,12 +155,12 @@ abstract class ApplicationContext {
           return
         }
         val applicationName: String = try {
-          getDefaults().getApplicationName()
+          getDefaults().applicationName
         } catch (e: PropertyException) {
           "application name not defined"
         }
         val version: String = try {
-          getDefaults().getVersion()
+          getDefaults().version
         } catch (e: PropertyException) {
           "version not defined"
         }
@@ -170,7 +170,7 @@ abstract class ApplicationContext {
           null
         }
         val logFile: String? = try {
-          getDefaults().getLogFile()
+          getDefaults().logFile
         } catch (e: PropertyException) {
           null
         }
@@ -186,7 +186,7 @@ abstract class ApplicationContext {
         }
         if (smtpServer != null && sendMail) {
           val recipient: String = try {
-            getDefaults().getDebugMailRecipient()
+            getDefaults().debugMailRecipient
           } catch (e: PropertyException) {
             TODO()
           }

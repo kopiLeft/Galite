@@ -99,7 +99,7 @@ interface Application : MessageListener {
   /**
    * The connected user IP address.
    */
-  val userIP: String
+  val userIP: String?
 
   /**
    * The application [Registry].

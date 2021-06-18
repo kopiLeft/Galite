@@ -25,18 +25,12 @@ import com.vaadin.flow.component.button.Button
  *
  * @param title The window title.
  * @param window The window to be added.
- * @param container The container of the window.
  */
-class VWindowsMenuItem(title : String, window : Component, container : VWindowContainer) : Button(title) {
+class VWindowsMenuItem(title : String, val window : Component) : Button(title) {
 
   init {
     className = STYLENAME_DEFAULT
     element.style.set("whiteSpace", "nowrap")
-    // adding listener on the item to open the form in the container
-    addClickListener {
-      window.isVisible = true
-      container.showWindow(window)
-    }
   }
 
   companion object {

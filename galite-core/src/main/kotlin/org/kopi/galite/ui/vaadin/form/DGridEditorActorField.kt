@@ -67,9 +67,9 @@ class DGridEditorActorField(
 
   override fun createRenderer(): Renderer<String?> {
     return object : ActorRenderer(getModel().label) {
-      /*fun click(event: RendererClickEvent?) { TODO
+      override fun onClick(item: String?) {
         columnView.executeAction()
-      }*/
+      }
     }
   }
 
@@ -77,5 +77,9 @@ class DGridEditorActorField(
     // field action is performed in the window action queue
     // it is not like the other fields trigger
     columnView.executeAction()
+  }
+
+  override fun valueChanged() {
+    // Nothing to do
   }
 }

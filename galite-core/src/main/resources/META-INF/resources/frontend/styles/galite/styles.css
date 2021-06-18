@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+.k-form .k-form-page-content .caption-container {
+	background: #ffffff;
+	padding-top: 22px;
+	padding-left: 50px;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+
+a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.k-label span.mandatory {
+	color: #fd2020;
+	padding-left: 2px;
+}
+
+.k-label-has-action:hover, .editor-label-has-action:hover {
+	text-decoration: underline;
+	color: #009bd4;
+}
+
+.k-label, .editor-label {
+	font-family: Arial, sans-serif !important;
+	font-weight: 500 !important;
+	font-style: normal !important;
+	color: #a3a3a3;
+}

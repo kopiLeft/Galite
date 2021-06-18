@@ -307,7 +307,7 @@ open class FormBlock(var buffer: Int,
    *
    * @param field                the field
    */
-  fun <T : Comparable<T>?> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
+  fun follow(field: FormField<*>): FormPosition = FormDescriptionPosition(field)
 
   /**
    * creates and returns a form block index. It is used to define a value in the database
@@ -400,7 +400,7 @@ open class FormBlock(var buffer: Int,
       if(positions.toMap().contains(field)) {
         val targetField = positions.toMap()[field]
 
-        targets.add(targetBlock.blockFields.indexOf(targetField) + 1)
+        targets.add(targetBlock.blockFields.indexOf(targetField))
       }
     }
 
@@ -746,6 +746,7 @@ open class FormBlock(var buffer: Int,
         super.bufferSize = buffer
         super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
+        super.border = this@FormBlock.border
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.displayedFields = this@FormBlock.displayedFields

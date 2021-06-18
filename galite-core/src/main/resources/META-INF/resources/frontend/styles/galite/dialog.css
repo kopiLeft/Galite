@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,37 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- /*
- * Report Group style
- */
-[part~="cell"].level-0:not(:focus) {
-    background: #F5FBFD !important;
+.k-popup-window~::part(dialog-content) {
+    padding: 0;
 }
 
-[part~="cell"].level-1:not(:focus) {
-    background: #D9EAD3 !important;
+.k-popup-window .enhanced-dialog-content .k-window {
+    padding: 0;
 }
 
-[part~="cell"].italic {
-    font-style: italic;
-}
-
-[part~="cell"].bold {
-    font-weight: bold;
-}
-
-[part~="cell"].separator {
-    background: red;
-}
-
-:host([theme="column-borders compact"]) [part~="cell"]:focus {
-    background: #bcdae6;
-}
-
-:host([theme="column-borders compact"]) {
-    --_lumo-grid-selected-row-color: none;
-}
-
-:host([theme="row-stripes"]) [part~="cell"] {
-    height: 38px;
+.k-popup-window #overlay {
+--_enhanced-dialog-content-padding: 0;
 }

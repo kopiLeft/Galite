@@ -76,6 +76,23 @@ class DBContext {
     }
   }
 
+  /**
+   * Creates a connection from DataSource
+   *
+   * @param     dataSource      the dataSource
+   * @param     lookupUserId    lookup user id in table of users ?
+   * @param     schema          the current database schema
+   */
+  fun createConnection(dataSource: javax.sql.DataSource,
+                       lookupUserId: Boolean, // TODO
+                       schema: String? // TODO
+  ): Connection {
+    this.connection = Connection(dataSource = dataSource,
+                                 lookupUserId = lookupUserId,
+                                 schema = schema)
+    return this.connection
+  }
+
   // ----------------------------------------------------------------------
   // DATA MEMBERS
   // ----------------------------------------------------------------------

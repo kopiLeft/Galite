@@ -19,6 +19,8 @@ package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VSpan
+import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
@@ -40,6 +42,36 @@ abstract class AbstractNotification(title: String?,
                                     message: String?,
                                     protected val locale: String)
   : EnhancedDialog(), Focusable<AbstractNotification> {
+
+  //-------------------------------------------------
+  // DATA MEMBERS
+  //-------------------------------------------------
+  private var listeners = mutableListOf<NotificationListener>()
+  private val icon = Icon(iconName)
+  private val title = H3(title)
+  private var content = Div()
+  private var message = VSpan()
+  protected var buttons = Div()
+  internal var yesIsDefault = false
+  val footer = Div()
+
+  init {
+    element.setAttribute("hideFocus", true)
+    element.style["outline"] = "0px"
+    addThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    isDraggable = true
+    this.message.className = Styles.NOTIFICATION_MESSAGE
+    buttons.className = Styles.NOTIFICATION_BUTTONS
+
+    setHeader(this.title)
+    setNotificationMessage(message)
+    content.add(icon)
+    content.add(this.message)
+    setContent(content)
+    footer.add(buttons)
+    setButtons()
+    setFooter(footer)
+  }
 
   /**
    * Shows the notification popup.
@@ -69,10 +101,15 @@ abstract class AbstractNotification(title: String?,
    * @param action The user action.
    */
   protected fun fireOnClose(action: Boolean?) {
+    val lastActiveWindow = MainWindow.instance.currentWindow as? Window
+
     for (l in listeners) {
       l.onClose(action)
     }
+
     close()
+
+    lastActiveWindow?.goBackToLastFocusedTextField()
   }
 
   //-------------------------------------------------
@@ -119,35 +156,4 @@ abstract class AbstractNotification(title: String?,
    * The icon name to be used with this notification.
    */
   protected abstract val iconName: VaadinIcon
-
-  //-------------------------------------------------
-  // DATA MEMBERS
-  //-------------------------------------------------
-  private var listeners = mutableListOf<NotificationListener>()
-  private val icon = Icon(iconName)
-  private val title = H3(title)
-  private var content = Div()
-  private var message = VSpan()
-  protected var buttons = Div()
-  internal var yesIsDefault = false
-  val footer = Div()
-
-  init {
-    element.setAttribute("hideFocus", true)
-    element.style["outline"] = "0px"
-    super.addThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
-    isDraggable = true
-    this.message.className = Styles.NOTIFICATION_MESSAGE
-    buttons.className = Styles.NOTIFICATION_BUTTONS
-
-    super.setHeader(this.title)
-    content.add(icon)
-    setNotificationMessage(message)
-    content.add(this.message)
-    content.add(buttons) // TODO
-    super.setContent(content)
-    footer.add(buttons)
-    this.setButtons()
-    super.setFooter(footer)
-  }
 }

@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.menu
 
-import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasStyle
@@ -25,7 +24,6 @@ import com.vaadin.flow.component.HasText
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.dom.ElementFactory
 
 /**
@@ -67,17 +65,8 @@ class ModuleItem(val help: String? = null)
    * Sets the icon to this module item.
    * @param vaadinIcon The icon to add to this item.
    */
-  fun setIcon(vaadinIcon: VaadinIcon) {
-    icon = Icon(vaadinIcon)
-    add(icon)
-  }
-
-  /**
-   * Sets the icon to this module item.
-   * @param ironIcon The icon to add to this item.
-   */
-  fun setIcon(ironIcon: IronIcons) {
-    icon = ironIcon.create()
+  fun setIcon(vaadinIcon: Component) {
+    icon = vaadinIcon
     add(icon)
   }
 

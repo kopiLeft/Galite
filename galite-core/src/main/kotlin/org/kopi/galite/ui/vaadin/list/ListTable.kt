@@ -27,7 +27,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.component.dependency.CssImport
 
-@CssImport("./styles/galite/List.css")
+@CssImport("./styles/galite/list.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   init {
     isColumnReorderingAllowed = true
@@ -87,4 +87,6 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   protected fun formatObject(o: Any?, col: Int): String {
     return model.columns[col]!!.formatObject(o).toString()
   }
+
+  val selectedItem: List<Any?> get() = asSingleSelect().value
 }

@@ -20,18 +20,17 @@ package org.kopi.galite.ui.vaadin.form
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.common.VCaption
 import org.kopi.galite.ui.vaadin.event.PositionPanelListener
+import org.kopi.galite.ui.vaadin.base.Styles
 
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.tabs.Tab
 import com.vaadin.flow.component.tabs.Tabs
-import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.common.VTable
 
 /**
  * The form component.
@@ -39,8 +38,8 @@ import org.kopi.galite.ui.vaadin.base.Styles
  * @param pageCount The form page count.
  * @param titles The pages title.
  */
-@CssImport("./styles/galite/Form.css")
-class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener, PositionPanelListener {
+@CssImport("./styles/galite/form.css")
+class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanelListener {
 
   /**
    * The form locale.
@@ -67,25 +66,13 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   private val tabsToPages: MutableMap<Tab, Component> = mutableMapOf()
   private var tabPanel: Tabs? = null
   private var listeners: MutableList<FormListener> = mutableListOf()
-  private var lastSelected = -1
+  private var lastSelected: Tab? = null
   private var fireSelectionEvent = true
   private var blockInfo: PositionPanel = PositionPanel()
 
   init {
     className = Styles.FORM
-    for (i in pages.indices) {
-      if (pageCount != 0) {
-        if (titles[i].endsWith("<CENTER>")) {
-          pages[i] = Page(HorizontalLayout())
-        } else {
-          pages[i] = Page(VerticalLayout())
-        }
-      } else {
-        pages[i] = Page(VerticalLayout())
-      }
-    }
-    // setPages content.
-    setContent(pageCount, titles)
+    init(pageCount, titles)
   }
 
   /**
@@ -107,8 +94,15 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
       }
 
       tabPanel!!.addSelectedChangeListener {
-        tabsToPages.values.forEach { page -> page.isVisible = false }
-        tabsToPages[tabPanel!!.selectedTab]!!.isVisible = true
+        if(it.isFromClient) {
+          // This to prevent user from switch tabs. the method firePageSelected() is responsible for changing page.
+          // This will keep the previous tab if firePageSelected fails to switch tabs because an error occurred
+          // (For example: the used didn't fill a MUSTFILL field)
+          lastSelected = it.previousTab
+          tabPanel!!.selectedTab = lastSelected
+
+          firePageSelected(pages.indexOf(tabsToPages[it.selectedTab]))
+        }
       }
       setContent(tabPanel!!, Div(*pages))
     }
@@ -121,7 +115,12 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    */
   private fun setContent(vararg components: Component) {
     removeAll()
-    add(*components)
+    val table = VTable(0, 0)
+
+    components.forEach {
+      table.addInNewRow(it)
+    }
+    add(table)
   }
 
   /**
@@ -131,7 +130,8 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   private fun selectPage(page: Int) {
     if(tabPanel != null) {
       tabPanel!!.selectedIndex = page
-      tabPanel!!.selectedTab.isEnabled = true
+      lastSelected = tabPanel!!.selectedTab
+      lastSelected!!.isEnabled = true
     }
   }
 
@@ -151,7 +151,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    * @param isFollow Is it a follow block ?
    * @param isChart Is it a chart block ?
    */
-  fun addBlock(block: Component, page: Int, isFollow: Boolean, isChart: Boolean) {
+  fun addBlock(block: Block, page: Int, isFollow: Boolean, isChart: Boolean) {
     blocksData[block] = BlockComponentData(isFollow, isChart, page)
 
     val hAlign = if (isChart) {
@@ -164,6 +164,17 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
     } else {
       pages[page]!!.add(block, hAlign)
     }
+
+    block.layout()
+    block.layoutAlignedComponents()
+  }
+
+  /**
+   * Sets the block border.
+   * @param block The block.
+   */
+  internal fun setBorder(block: DBlock, page: Int) {
+    block.setBorder(block.model.border, block.model.title, pages[page])
   }
 
   /**
@@ -172,6 +183,8 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
    */
   fun gotoPage(i: Int) {
     currentPage = i
+    lastSelected?.let { tabsToPages[it]!!.isVisible = false }
+    pages[i]!!.isVisible = true
     selectPage(i)
   }
 
@@ -193,15 +206,11 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   //---------------------------------------------------
   /**
    * Initializes the form component content.
-   * @param locale The application locale.
+   *
    * @param pageCount The page count.
    * @param titles The pages titles.
    */
-  fun init(
-          pageCount: Int,
-          titles: Array<String>,
-          separator: String?,
-  ) {
+  fun init(pageCount: Int, titles: Array<String>) {
     // not used any more but we keep it may be we will used again
     pages = arrayOfNulls(if (pageCount == 0) 1 else pageCount)
     for (i in pages.indices) {
@@ -214,13 +223,14 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
       } else {
         pages[i] = Page(VerticalLayout())
       }
+      pages[i]!!.isVisible = false
     }
     // setPages content.
-    setContent(pageCount, titles, separator)
+    setContent(pageCount, titles)
   }
 
   /**
-   * Creates the block info widget.
+   * Creates the block info component.
    */
   fun showBlockInfo() {
     blockInfo.isVisible = false // hide it initially
@@ -348,40 +358,12 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), FormListener,
   }
 
   protected fun init() {
-    addFormListener(this)
     addPositionPanelListener(this)
   }
 
   fun delegateCaptionHandling(): Boolean {
     // do not delegate caption handling
     return false
-  }
-
-  override fun onAttach(event: AttachEvent) {
-    if (event.isInitialAttach) {
-      init(pageCount, titles,"single.gif") // TODO: full path to image?
-      // look for blocks
-      for (child in children) {
-        if (child is Block) {
-          val data = blocksData[child]
-          if (data != null) {
-            addBlock(child, data.page, data.isFollow, data.isChart)
-          }
-        } else if (child is Grid<*>) {
-          val data = blocksData[child]
-          if (data != null) {
-            addBlock(child, data.page, data.isFollow, data.isChart)
-          }
-        }
-      }
-    }
-  }
-
-  override fun onPageSelection(page: Int) {
-    // communicates the dirty values before leaving page
-    cleanDirtyValues(null)
-    disableAllBlocksActors()
-    firePageSelected(page)
   }
 
   /*fun onUnregister() { TODO
