@@ -59,6 +59,8 @@ class DActor(private var model: VActor)
         UActor,
         ComponentEventListener<ClickEvent<Button>> {
 
+  var item: VActorNavigationItem? = null
+
   init {
     isEnabled = false
     model.setDisplay(this)
@@ -84,6 +86,7 @@ class DActor(private var model: VActor)
         super.getElement().setAttribute("part", Styles.ACTOR)
       }
       super.setEnabled(enabled)
+      item?.isEnabled = enabled
     }
   }
 
@@ -105,6 +108,10 @@ class DActor(private var model: VActor)
                                 icon,
                                 navigationMenu,
                                 ::actionPerformed)
+      .also {
+        item = it
+        it.isEnabled = isEnabled
+      }
   }
 
   fun actionPerformed() {

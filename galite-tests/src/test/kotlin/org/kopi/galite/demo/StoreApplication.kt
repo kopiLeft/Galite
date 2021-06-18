@@ -47,6 +47,7 @@ import org.kopi.galite.tests.form.FormAlignTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.tests.form.FormWithList
+import org.kopi.galite.tests.form.FormWithListDomains
 import org.kopi.galite.type.Decimal
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -203,7 +204,7 @@ fun initModules() {
     insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
     insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", ClientForm::class)
     insertIntoModule("1010", "org/kopi/galite/test/Menu", 5, "1000")
-    insertIntoModule("1101", "org/kopi/galite/test/Menu", 10, "1010", ClientForm::class)
+    insertIntoModule("1101", "org/kopi/galite/test/Menu", 10, "1010", FormWithListDomains::class)
     insertIntoModule("1110", "org/kopi/galite/test/Menu", 15, "1010", FormWithFields::class)
     insertIntoModule("1120", "org/kopi/galite/test/Menu", 20, "1010", FormWithList::class)
     insertIntoModule("2000", "org/kopi/galite/test/Menu", 100)
