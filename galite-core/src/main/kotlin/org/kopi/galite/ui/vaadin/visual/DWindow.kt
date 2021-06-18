@@ -50,6 +50,7 @@ import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.Shortcuts
@@ -58,6 +59,7 @@ import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
 import com.vaadin.flow.server.VaadinService
+import com.vaadin.flow.server.VaadinSession
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
@@ -96,9 +98,10 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    */
   var isUserAsked = false
     private set
-  val currentUI = UI.getCurrent().also { requireNotNull(it) }
-  val currentService = VaadinService.getCurrent().also { requireNotNull(it) }
-  private val actionRunner: ActionRunner = ActionRunner(currentUI, currentService)
+  private lateinit var currentUI: UI
+  private lateinit var currentService: VaadinService
+  private lateinit var currentSession: VaadinSession
+  private val actionRunner: ActionRunner = ActionRunner()
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
   init {
@@ -616,6 +619,12 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       }
     }
   }
+
+  override fun onAttach(attachEvent: AttachEvent?) {
+    currentUI = UI.getCurrent().also { requireNotNull(it) }
+    currentService = VaadinService.getCurrent().also { requireNotNull(it) }
+    currentSession = VaadinSession.getCurrent().also { requireNotNull(it) }
+  }
   //--------------------------------------------------------------
   // ACTION RUNNER
   //--------------------------------------------------------------
@@ -627,13 +636,14 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    * There is only one instance of ActionRunner.
    * It calls user actions.
    */
-  internal inner class ActionRunner(val currentUI: UI, val currentService: VaadinService) : Runnable, ErrorHandler {
+  internal inner class ActionRunner : Runnable, ErrorHandler {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun run() {
       UI.setCurrent(currentUI)
       VaadinService.setCurrent(currentService)
+      VaadinSession.setCurrent(currentSession)
       try {
         if (currentAction != null) {
           runAction()

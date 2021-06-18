@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.base
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.server.Command
+import com.vaadin.flow.server.VaadinSession
 
 /**
  * Collects some utilities for background threads in a vaadin application.
@@ -35,7 +36,12 @@ object BackgroundThreadHandler {
    * @param command the command which accesses the UI.
    */
   fun access(command: Command) {
-    UI.getCurrent().access(command)
+    val currentUI = UI.getCurrent()
+
+    if(currentUI.internals.session == null) {
+      currentUI.internals.session = VaadinSession.getCurrent()
+    }
+    currentUI.access(command)
   }
 
   /**
@@ -46,7 +52,7 @@ object BackgroundThreadHandler {
    * @param command   The command which accesses the UI.
    */
   fun startAndWait(lock: Object, command: Command) {
-    UI.getCurrent().access(command)
+    access(command)
 
     synchronized(lock) {
       try {

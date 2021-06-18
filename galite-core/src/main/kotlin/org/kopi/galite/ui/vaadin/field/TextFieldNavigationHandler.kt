@@ -23,6 +23,8 @@ import org.kopi.galite.ui.vaadin.base.Utils
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.server.VaadinService
+import com.vaadin.flow.server.VaadinSession
 
 /**
  * A key navigation handler for a text input.
@@ -46,8 +48,12 @@ class TextFieldNavigationHandler protected constructor(private val isMulti: Bool
     }
     addKeyNavigator(field, Key.KEY_D, KeyModifier.of("Control")) {
       val ui = UI.getCurrent()
+      val currentService = VaadinService.getCurrent()
+      val currentSession = VaadinSession.getCurrent()
       Thread {
         UI.setCurrent(ui)
+        VaadinService.setCurrent(currentService)
+        VaadinSession.setCurrent(currentSession)
         val text = StringBuffer(field.value)
         text.insert(Utils.getCursorPos(field), "\u00D8")
         access {
