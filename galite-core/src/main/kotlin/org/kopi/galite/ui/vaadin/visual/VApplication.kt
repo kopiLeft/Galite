@@ -87,6 +87,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val startupTime: Date = Date() // remembers the startup time
 
   init {
+    className = "galite"
     instance = this
     // registry and locale initialization
     initialize()

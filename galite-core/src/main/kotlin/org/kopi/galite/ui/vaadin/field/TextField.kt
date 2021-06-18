@@ -202,10 +202,10 @@ class TextField(val model: VField,
       is org.kopi.galite.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
-        if(model.minValue != null) {
+        if (model.minValue != null) {
           minval = model.minValue.toDouble()
         }
-        if(model.maxValue != null) {
+        if (model.maxValue != null) {
           maxval = model.maxValue.toDouble()
         }
       }
@@ -233,10 +233,10 @@ class TextField(val model: VField,
       is VFixnumField -> {
         // fixnum field
         type = Type.DECIMAL
-        if(model.minValue != null) {
+        if (model.minValue != null) {
           minval = model.minValue.toDouble()
         }
-        if(model.maxValue != null) {
+        if (model.maxValue != null) {
           maxval = model.maxValue.toDouble()
         }
         maxScale = model.maxScale
@@ -548,7 +548,7 @@ class TextField(val model: VField,
     field.checkValue(rec)
   }
 
-  override fun getValue(): Any? {
+  override fun getValue(): String? {
     return field.value
   }
 

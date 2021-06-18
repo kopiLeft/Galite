@@ -123,7 +123,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * @param tooltip The initial field tooltip.
    * @return The full field description.
    */
-  protected fun buildDescription(model: VFieldUI, tooltip: String?): String? {
+  protected fun buildHtmlDescription(model: VFieldUI, tooltip: String?): String? {
     var description: String?
     val commands = model.getAllCommands()
     description = if (tooltip != null) {
@@ -139,6 +139,28 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
         if (commands[i].actor != null) {
           if (!description.endsWith("<html>")) {
             description += "<br>"
+          }
+          description += getDescription(commands[i].actor)
+        }
+      }
+    }
+    return description
+  }
+
+  /**
+   * Builds full field description.
+   * @param model The field model.
+   * @param tooltip The initial field tooltip.
+   * @return The full field description.
+   */
+  protected fun buildDescription(model: VFieldUI, tooltip: String?): String? {
+    var description = tooltip.orEmpty()
+    val commands = model.getAllCommands()
+    if (commands.isNotEmpty()) {
+      for (i in commands.indices) {
+        if (commands[i].actor != null) {
+          if (description.isNotEmpty()) {
+            description += "\n"
           }
           description += getDescription(commands[i].actor)
         }
