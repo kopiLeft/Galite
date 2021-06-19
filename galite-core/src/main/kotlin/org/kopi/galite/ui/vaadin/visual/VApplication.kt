@@ -370,7 +370,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       return alternateLocale
     }
     // check the locale format
-    // check the locale format
     return if (!checkLocale(locale)) {
       System.err.println("Error: Wrong locale format. Alternate locale will be used")
       alternateLocale

@@ -55,7 +55,6 @@ class LoginPageTests: GaliteVUITestBase() {
 
     // No error shown
     _expectNone<Span> { id = "post_error" }
-    //assertEquals("", errorIndicator._text)
     // Welcome view is removed
     _expectNone<WelcomeView>()
     // Main view is displayed
