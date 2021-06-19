@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.ui.report
+package org.kopi.galite.tests.ui.vaadin.report
 
 import java.util.Locale
 
@@ -28,10 +28,10 @@ import org.junit.Test
 
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.ui.vaadin.base.UITestBase
+import org.kopi.galite.tests.ui.vaadin.base.VUITestBase
 import org.kopi.galite.ui.vaadin.report.DReport
 
-class VReportTests: UITestBase() {
+class VReportTests: VUITestBase() {
 
   @Test
   fun testSimpleReport() {

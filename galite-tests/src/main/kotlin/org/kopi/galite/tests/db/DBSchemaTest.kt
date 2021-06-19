@@ -58,6 +58,7 @@ open class DBSchemaTest : TestBase() {
       transaction {
         createDBSchemaTables()
         insertIntoUsers(testUser, "administrator")
+        initModules()
       }
     }
 
@@ -67,6 +68,7 @@ open class DBSchemaTest : TestBase() {
     @AfterClass
     @JvmStatic
     fun reset() {
+      Database.connect(testURL, testDriver, testUser, testPassword)
       transaction {
         exec("DROP ALL OBJECTS")
       }
@@ -128,6 +130,13 @@ open class DBSchemaTest : TestBase() {
         it[changedOn] = Instant.now()
         it[changedBy] = 1
       }
+    }
+
+    /**
+     * this test insert data into Users table
+     */
+    fun initModules() {
+      insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
     }
 
     /**

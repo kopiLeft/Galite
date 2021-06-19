@@ -23,6 +23,7 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.chart.VChart
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.report.VReport
+import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.ui.vaadin.chart.DChart
 import org.kopi.galite.ui.vaadin.report.DReport
 import org.kopi.galite.ui.vaadin.visual.VApplication
@@ -31,6 +32,8 @@ import org.kopi.galite.ui.vaadin.visual.VFileHandler
 import org.kopi.galite.ui.vaadin.visual.VImageHandler
 import org.kopi.galite.ui.vaadin.visual.VUIFactory
 import org.kopi.galite.ui.vaadin.visual.VWindowController
+import org.kopi.galite.util.Rexec
+import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
@@ -41,7 +44,7 @@ import org.kopi.galite.visual.WindowController
 /**
  * TestBase class for all tests.
  */
-open class VApplicationTestBase : TestBase() {
+open class VApplicationTestBase : DBSchemaTest() {
 
   init {
     GaliteApplication()
@@ -66,12 +69,13 @@ open class VApplicationTestBase : TestBase() {
     override val sologanImage get() = "slogan.png"
     override val logoImage get() = "logo_kopi.png"
     override val logoHref get() = "http://"
-    override val alternateLocale get() = Locale("de", "AT")
+    override val alternateLocale get() = Locale.UK
     override val supportedLocales
       get() =
         arrayOf(Locale.FRANCE,
                 Locale("de", "AT"),
-                Locale("ar", "TN"))
+                Locale("ar", "TN"),
+                Locale.UK)
 
     override fun login(
             database: String,
@@ -80,8 +84,6 @@ open class VApplicationTestBase : TestBase() {
             password: String,
             schema: String?
     ): DBContext? {
-      val username = "admin"
-      val password = "admin"
       return try {
         DBContext().apply {
           this.defaultConnection = this.createConnection(driver, database, username, password, true, schema)
@@ -89,6 +91,36 @@ open class VApplicationTestBase : TestBase() {
       } catch (exception: Throwable) {
         null
       }
+    }
+    init {
+      ApplicationConfiguration.setConfiguration(
+        object : ApplicationConfiguration() {
+          override val version get(): String = "1.0"
+          override val applicationName get(): String = "MyApp"
+          override val informationText get(): String = "info"
+          override val logFile get(): String = ""
+          override val debugMailRecipient get(): String = ""
+          override fun getSMTPServer(): String = ""
+          override val faxServer get(): String = ""
+          override val dictionaryServer get(): String = ""
+          override fun mailErrors(): Boolean = false
+          override fun logErrors(): Boolean = true
+          override fun debugMessageInTransaction(): Boolean = true
+          override val RExec get(): Rexec = TODO()
+          override fun getStringFor(var1: String): String = TODO()
+          override fun getIntFor(var1: String): Int {
+            val var2 = this.getStringFor(var1)
+            return var2.toInt()
+          }
+
+          override fun getBooleanFor(var1: String): Boolean {
+            return java.lang.Boolean.valueOf(this.getStringFor(var1))
+          }
+
+          override fun isUnicodeDatabase(): Boolean = false
+          override fun useAcroread(): Boolean = TODO()
+        }
+      )
     }
   }
 }
