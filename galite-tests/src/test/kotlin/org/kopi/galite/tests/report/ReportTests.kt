@@ -31,7 +31,7 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.report.Triggers
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
-import org.kopi.galite.tests.VApplicationTestBase
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.type.Decimal
 
 class ReportTests: VApplicationTestBase() {

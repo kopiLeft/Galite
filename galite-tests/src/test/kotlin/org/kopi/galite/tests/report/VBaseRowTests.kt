@@ -18,7 +18,7 @@ package org.kopi.galite.tests.report
 
 import org.junit.Test
 import org.kopi.galite.report.VBaseRow
-import org.kopi.galite.tests.TestBase
+import org.kopi.galite.tests.common.TestBase
 import kotlin.test.assertEquals
 
 class VBaseRowTests : TestBase() {

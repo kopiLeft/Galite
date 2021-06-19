@@ -28,7 +28,7 @@ import org.junit.Test
 
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.ui.vaadin.base.VUITestBase
+import org.kopi.galite.tests.ui.vaadin.VUITestBase
 import org.kopi.galite.ui.vaadin.report.DReport
 
 class VReportTests: VUITestBase() {

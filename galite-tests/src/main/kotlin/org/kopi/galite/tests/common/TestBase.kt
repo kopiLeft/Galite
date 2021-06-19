@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests
+package org.kopi.galite.tests.common
 
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

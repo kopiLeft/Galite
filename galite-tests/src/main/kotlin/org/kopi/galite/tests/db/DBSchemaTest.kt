@@ -28,7 +28,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import org.kopi.galite.tests.TestBase
+import org.kopi.galite.tests.common.TestBase
 import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users

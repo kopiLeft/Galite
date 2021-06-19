@@ -19,7 +19,7 @@ package org.kopi.galite.tests.ui.vaadin.login
 import kotlin.test.assertEquals
 
 import org.junit.Test
-import org.kopi.galite.tests.ui.vaadin.base.GaliteVUITestBase
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.base.VInputButton
 import org.kopi.galite.ui.vaadin.base.VInputText
 import org.kopi.galite.ui.vaadin.common.VSelect
