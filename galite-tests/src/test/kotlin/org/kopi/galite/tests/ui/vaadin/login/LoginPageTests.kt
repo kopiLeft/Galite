@@ -49,8 +49,8 @@ class LoginPageTests: GaliteVUITestBase() {
     _expect<WelcomeView>(1)
 
     // Fill to username and password fields then click to the login button
-    userNameField._value = "admin"
-    passwordField._value = "admin"
+    userNameField._value = testUser
+    passwordField._value = testPassword
     loginButton._click()
 
     // No error shown
@@ -64,7 +64,7 @@ class LoginPageTests: GaliteVUITestBase() {
 
   @Test
   fun `test login fails`() {
-    userNameField._value = "admin"
+    userNameField._value = testUser
     passwordField._value = "incorrect password"
     loginButton._click()
 
