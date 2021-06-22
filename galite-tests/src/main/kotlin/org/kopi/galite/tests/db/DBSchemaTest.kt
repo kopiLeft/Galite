@@ -28,7 +28,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import org.kopi.galite.tests.TestBase
+import org.kopi.galite.tests.common.TestBase
 import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
@@ -58,6 +58,7 @@ open class DBSchemaTest : TestBase() {
       transaction {
         createDBSchemaTables()
         insertIntoUsers(testUser, "administrator")
+        initModules()
       }
     }
 
@@ -67,6 +68,7 @@ open class DBSchemaTest : TestBase() {
     @AfterClass
     @JvmStatic
     fun reset() {
+      Database.connect(testURL, testDriver, testUser, testPassword)
       transaction {
         exec("DROP ALL OBJECTS")
       }
@@ -128,6 +130,13 @@ open class DBSchemaTest : TestBase() {
         it[changedOn] = Instant.now()
         it[changedBy] = 1
       }
+    }
+
+    /**
+     * this test insert data into Users table
+     */
+    fun initModules() {
+      insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
     }
 
     /**

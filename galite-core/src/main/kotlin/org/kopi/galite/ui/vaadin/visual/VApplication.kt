@@ -302,8 +302,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       registry.buildDependencies()
     }
     // set locale from initialization.
-    // set locale from initialization.
-    setLocalizationContext(Locale.UK) // TODO
+    setLocalizationContext(getInitializationLocale()) // TODO
   }
 
   /**
@@ -364,8 +363,19 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Returns the initialization locale found in the application descriptor file.
    * @return the initialization locale found in the application descriptor file.
    */
-  protected open fun getInitializationLocale(): Locale? {
-    TODO()
+  protected open fun getInitializationLocale(): Locale {
+    val locale = getInitParameter("locale") // obtain application locale from descriptor file
+
+    if (locale == null) {
+      return alternateLocale
+    }
+    // check the locale format
+    return if (!checkLocale(locale)) {
+      System.err.println("Error: Wrong locale format. Alternate locale will be used")
+      alternateLocale
+    } else {
+      Locale(locale.substring(0, 2), locale.substring(3, 5))
+    }
   }
 
   /**
@@ -469,7 +479,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String?): String? {
-    TODO()
+    return ""
+    //return VaadinServlet.getCurrent().getInitParameter(key) TODO
   }
 
   //---------------------------------------------------

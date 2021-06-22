@@ -19,7 +19,7 @@ package org.kopi.galite.tests.form
 import org.junit.Test
 import org.junit.Assert.assertArrayEquals
 
-import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 
 class FormToCheckFieldVisibilityTests: JApplicationTestBase() {
   @Test

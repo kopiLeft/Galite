@@ -24,7 +24,7 @@ plugins {
 
 val vaadinVersion = "18.0.3"
 val jdomVersion = "2.0.5"
-val karibuTestingVersion = "1.2.5"
+val karibuTestingVersion = "1.2.12"
 val h2Version = "1.4.199"
 val exposedVersion = "0.27.1"
 val postgresNGVersion = "0.8.6"
