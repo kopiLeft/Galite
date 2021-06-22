@@ -153,7 +153,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
    * @param foreground The foreground color.
    * @param background The background color.
    */
-  abstract override fun setColor(foreground: String?, background: String?)
+  abstract fun setColor(foreground: String?, background: String?)
 
   /**
    * Checks the internal value of this field.
