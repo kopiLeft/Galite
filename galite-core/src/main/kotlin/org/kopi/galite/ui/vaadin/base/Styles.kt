@@ -63,6 +63,7 @@ object Styles {
   const val FORM_PAGE_CONTENT =               "k-form-page-content"
   const val FORM_TAB_PANEL =                  "k-form-tab"
   const val LIST_DIALOG =                     "k-listdialog"
+  const val LIST_DIALOG_CONTAINER =           "k-listdialog-container"
   const val LIST_DIALOG_CONTENT =             "k-listdialog-content"
   const val LIST_DIALOG_TABLE =               "k-listdialog-table"
   const val NOTIFICATION =                    "k-notification"

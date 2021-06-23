@@ -24,6 +24,7 @@ import org.kopi.galite.form.VForm
 import org.kopi.galite.form.VListDialog
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
+import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.list.GridListDialog
 import org.kopi.galite.ui.vaadin.list.ListTable
 import org.kopi.galite.ui.vaadin.notif.InformationNotification
@@ -40,6 +41,7 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.GridSingleSelectionModel
 import com.vaadin.flow.data.provider.ListDataProvider
 
@@ -347,7 +349,33 @@ class DListDialog(
                                   Key.ARROW_UP
     )
 
+    setGridWidth(table)
     // TODO
+  }
+
+  private fun setGridWidth(table: ListTable) {
+    val ui = UI.getCurrent()
+    var width = ""
+
+    table.headerComponents.map { header ->
+      header.element.addAttachListener {
+        Thread {
+          synchronized(width) {
+            val headerWidth = Utils.getWidth(header.parent.get().element, ui)
+
+            if (width == "") {
+              width = headerWidth.orEmpty()
+            } else if(headerWidth != null && headerWidth.isNotEmpty()){
+              width = "$width + $headerWidth"
+            }
+            ui.access {
+              widthStyler.width = "calc(calc($width) + 20px)"
+              widthStyler.minWidth = "calc(calc($width) + 20px)"
+            }
+          }
+        }.start()
+      }
+    }
   }
 
   /**

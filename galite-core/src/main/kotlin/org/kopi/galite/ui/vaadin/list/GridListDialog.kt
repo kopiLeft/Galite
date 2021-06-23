@@ -25,16 +25,18 @@ import org.kopi.galite.visual.ApplicationContext
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * A list dialog
  */
 @CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid")
-open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
+open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle {
 
   private var scrollBarAdded = false
   private var windowResized = false
@@ -42,6 +44,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
   private var lastActiveWindow: Window? = null
   protected val close = Button(LocalizedProperties.getString(locale, "CLOSE"))
   private var content: VerticalLayout = VerticalLayout()
+  protected var widthStyler = Div()
   protected var pattern: String? = null
   /**
    * This is used to display a new button under the dialog.
@@ -50,10 +53,10 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
   private var newText: String? = null
 
   init {
+    className = Styles.LIST_DIALOG_CONTAINER
     content.className = Styles.LIST_DIALOG
     content.element.setAttribute("hideFocus", "true")
     content.element.style["outline"] = "0px"
-    content.element.style["min-width"] = "400px"
     isResizable = true
   }
 
@@ -168,8 +171,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
       if (newForm != null) {
         content.add(newForm)
       }
-      add(content)
-      addToFooter(close)
+      add(widthStyler, content)
       addToFooter(close)
     }
 
