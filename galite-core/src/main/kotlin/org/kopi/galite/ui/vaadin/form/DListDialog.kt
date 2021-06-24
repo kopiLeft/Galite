@@ -356,8 +356,9 @@ class DListDialog(
   private fun setGridWidth(table: ListTable) {
     val ui = UI.getCurrent()
     var width = ""
+    var columns = 0
 
-    table.headerComponents.map { header ->
+    table.headerComponents.forEach { header ->
       header.element.addAttachListener {
         Thread {
           synchronized(width) {
@@ -365,12 +366,15 @@ class DListDialog(
 
             if (width == "") {
               width = headerWidth.orEmpty()
-            } else if(headerWidth != null && headerWidth.isNotEmpty()){
+            } else if(headerWidth != null && headerWidth.isNotEmpty()) {
               width = "$width + $headerWidth"
             }
-            ui.access {
-              widthStyler.width = "calc(calc($width) + 20px)"
-              widthStyler.minWidth = "calc(calc($width) + 20px)"
+
+            if(++columns == table.headerComponents.size) {
+              ui.access {
+                widthStyler.width = "calc(calc($width) + 20px)"
+                widthStyler.minWidth = "calc(calc($width) + 20px)"
+              }
             }
           }
         }.start()
