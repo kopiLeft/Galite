@@ -31,8 +31,7 @@ import com.vaadin.flow.dom.ElementFactory
  *
  * @param help       The help text.
  */
-class ModuleItem(val help: String? = null)
-  : Div(), HasComponents, HasStyle {
+class ModuleItem(val help: String? = null) : Div(), HasStyle {
 
   var rootItem: MenuItem? = null
   private var icon: Component? = null

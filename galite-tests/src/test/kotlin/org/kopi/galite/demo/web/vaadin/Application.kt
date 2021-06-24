@@ -47,7 +47,7 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"
-  override val alternateLocale get() = Locale("de", "AT")
+  override val alternateLocale get() = Locale.UK
   override val supportedLocales
     get() =
       arrayOf(Locale.UK,

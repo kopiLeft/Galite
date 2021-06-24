@@ -18,6 +18,8 @@ package org.kopi.galite.tests.ui.vaadin.login
 
 import kotlin.test.assertEquals
 
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.base.VInputButton
@@ -69,5 +71,19 @@ class LoginPageTests: GaliteVUITestBase() {
 
     // Error displayed
     assertEquals("VIS-00054: Error during database login.", errorIndicator._text)
+  }
+
+  companion object {
+    /**
+     * Defined your test specific modules
+     */
+    @BeforeClass
+    @JvmStatic
+    fun initTestModules() {
+      // Using modules defined in demo application
+      transaction {
+        insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
+      }
+    }
   }
 }

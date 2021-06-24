@@ -54,7 +54,6 @@ class MainWindowTests: GaliteVUITestBase() {
         .map { it._text }
 
    assertEquals(
-     // FIXME: Main module names are not visible, They are added into ModuleItem which is not visible.
      listOf(
        "CLIENTS", "CLIENTS", "Test", "Test form1", "Test form2", "Form with list",
        "COMMANDS", "COMMANDS",

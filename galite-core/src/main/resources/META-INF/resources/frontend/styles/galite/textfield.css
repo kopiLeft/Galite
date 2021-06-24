@@ -21,7 +21,8 @@
  */
 .k-textinput::part(input-field), .k-textareainput {
   color: #000000 !default;
-  font-weight: 500 !default !important;
+  font-weight: 400 !default !important;
+  font-family: Arial, sans-serif !important;
   font-style: normal !default !important;
   border-bottom: #dadada 1px solid !default;
   line-height: 1.2em !default;
@@ -150,7 +151,7 @@
   transition: .4s !default;
   color: #000000 !default;
   font-family: Arial, sans-serif !default !important;
-  font-weight: 500 !default !important;
+  font-weight: 400 !default !important;
   font-style: normal !default !important;
   font-size: 12px !default !important;
   padding: 4px !default !important;

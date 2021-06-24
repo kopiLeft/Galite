@@ -58,13 +58,15 @@ abstract class AbstractNotification(title: String?,
   init {
     element.setAttribute("hideFocus", true)
     element.style["outline"] = "0px"
-    addThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
     isDraggable = true
+    isModal = false
     this.message.className = Styles.NOTIFICATION_MESSAGE
+    this.message.style["white-space"] = "nowrap"
     buttons.className = Styles.NOTIFICATION_BUTTONS
 
     setHeader(this.title)
     setNotificationMessage(message)
+    icon.setSize("2.8em")
     content.add(icon)
     content.add(this.message)
     setContent(content)
