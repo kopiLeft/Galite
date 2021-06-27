@@ -21,6 +21,7 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.ui.vaadin.base.Utils
 
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
@@ -74,6 +75,17 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
    * @return True if it is a multi line editor field.
    */
   protected open val isMultiLine: Boolean = false
+
+  /**
+   * Sets this field to be an auto fill field
+   */
+  fun setAutofill() {
+    val autofillIcon  = IronIcons.FIND_IN_PAGE.create()
+    autofillIcon.addClickListener {
+        dGridEditorField.onAutofill()
+    }
+    wrappedField.suffixComponent = autofillIcon
+  }
 
   /**
    * Validates the given text according to the field type.
