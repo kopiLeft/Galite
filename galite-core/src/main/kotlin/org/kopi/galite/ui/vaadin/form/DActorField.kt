@@ -50,13 +50,13 @@ class DActorField(model: VFieldUI,
   // CONSTRUCTOR
   // --------------------------------------------------
   init {
-    //field.setCaption(getModel().label) TODO
+    field.setCaption(getModel().label)
     if (getModel().toolTip != null) {
-      //field.setDescription(Utils.createTooltip(getModel().toolTip)) TODO
+      field.setDescription(Utils.createTooltip(getModel().toolTip))
     }
     field.isEnabled = getModel().getDefaultAccess() >= VConstants.ACS_VISIT
     field.addClickHandler(this)
-    //setContent(field) TODO
+    add(field)
   }
 
   // --------------------------------------------------

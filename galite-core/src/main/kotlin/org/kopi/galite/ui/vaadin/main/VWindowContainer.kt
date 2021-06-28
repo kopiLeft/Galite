@@ -28,7 +28,7 @@ import com.vaadin.flow.component.html.Div
  * This component will be responsible of displaying only one window.
  * The control of the displayed component will be from outside.
  */
-class VWindowContainer : Div() {
+class VWindowContainer(val menu: VWindowsMenu) : Div() {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -112,6 +112,7 @@ class VWindowContainer : Div() {
       if(currentWindow != window) {
 
         previousWindow = currentWindow
+        menu.getItemFor(previousWindow)?.removeClassName("item-selected")
         previousWindow?.isVisible = false
         currentWindow = window
         currentWindow?.isVisible = true

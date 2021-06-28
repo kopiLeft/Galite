@@ -23,6 +23,7 @@ import java.io.InputStream
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.type.Date
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.ImageField
 
 import com.vaadin.flow.component.upload.FailedEvent
@@ -80,11 +81,12 @@ class DImageField(
   override fun getObject(): Any? = image
 
   /**
-   * Sets the object associated to current f
+   * Sets the object associated to current record
+   *
    * @param s The object to set in
    */
   fun setObject(s: Any?) {
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access {
       if (s == null) {
         field.setData(s)
       } else {
@@ -94,7 +96,7 @@ class DImageField(
         setBlink(false)
         setBlink(true)
       }
-    //})
+    }
     image = s as ByteArray?
   }
 

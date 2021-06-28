@@ -51,7 +51,6 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
 
   override fun initSize() {
     initSize(col, line)
-    // setAlignment(align) TODO
   }
 
   override fun initSize(columns: Int, rows: Int) {

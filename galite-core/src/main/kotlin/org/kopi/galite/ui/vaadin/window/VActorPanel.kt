@@ -36,6 +36,7 @@ class VActorPanel : MenuBar() {
   // CONSTRUCTOR
   //---------------------------------------------------
   init {
+    super.addThemeName("custom-context-menu-item")
     className = Styles.WINDOW_VIEW_ACTORS
     menu.element.setAttribute("id", "menu")
     this.setId("actors")

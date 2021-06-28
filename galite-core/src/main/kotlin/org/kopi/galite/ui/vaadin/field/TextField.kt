@@ -39,6 +39,7 @@ import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
+import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A text field component.
@@ -162,7 +163,7 @@ class TextField(val model: VField,
     field.isEnabled = enabled
     add(field)
     if (hasAutofill) {
-      autofill = IronIcons.FIND_IN_PAGE.create()
+      autofill = IronIcons.ARROW_DROP_DOWN.create()
       autofill!!.style["cursor"] = "pointer" // TODO: move to css
       autofill!!.addClickListener {
         fireAutofill()
@@ -201,10 +202,10 @@ class TextField(val model: VField,
       is org.kopi.galite.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
-        if(model.minValue != null) {
+        if (model.minValue != null) {
           minval = model.minValue.toDouble()
         }
-        if(model.maxValue != null) {
+        if (model.maxValue != null) {
           maxval = model.maxValue.toDouble()
         }
       }
@@ -232,10 +233,10 @@ class TextField(val model: VField,
       is VFixnumField -> {
         // fixnum field
         type = Type.DECIMAL
-        if(model.minValue != null) {
+        if (model.minValue != null) {
           minval = model.minValue.toDouble()
         }
-        if(model.maxValue != null) {
+        if (model.maxValue != null) {
           maxval = model.maxValue.toDouble()
         }
         maxScale = model.maxScale
@@ -350,11 +351,15 @@ class TextField(val model: VField,
         Type.TIME -> VTimeField()
         Type.TIMESTAMP -> VTimeStampField()
         Type.DATE -> VDateField()
-        else -> InputTextField(TextField()).also {
-          if (type == Type.WEEK) {
-            it.setInputType("week")
-          } else if (type == Type.MONTH) {
-            it.setInputType("month")
+        else -> {
+          val textField = TextField()
+
+          InputTextField(textField).also {
+            if (type == Type.WEEK) {
+              it.setInputType("week")
+            } else if (type == Type.MONTH) {
+              it.setInputType("month")
+            }
           }
         }
       }
@@ -364,7 +369,9 @@ class TextField(val model: VField,
 
     text.size = size
     text.setMaxLength(maxLength)
-    text.maxWidth = "" + col + "em" // TODO: temporary styling
+    text.maxWidth = "" + size + "em" // TODO: temporary styling
+    text.setWidthFull()
+    setWidthFull()
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
     TextFieldNavigationHandler.createNavigator(text, rows > 1)
@@ -383,6 +390,17 @@ class TextField(val model: VField,
         size += 2
       }
     }
+
+    if (type == Type.TIMESTAMP) {
+      size += 3
+    } else if (type == Type.DATE) {
+      size += 5
+    } else if (type == Type.TIME) {
+      size += 5
+    } else {
+      size += 4
+    }
+
     // let the place to the autofill icon
     if (hasAutofill) {
       size += 1
@@ -513,6 +531,40 @@ class TextField(val model: VField,
     super.focus()
   }
 
+  override fun addFocusListener(function: () -> Unit) {
+    field.addFocusListener {
+      function()
+    }
+  }
+
+  /**
+   * Sets the field color properties.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  fun setColor(foreground: String?, background: String?) {
+    field.setColor(foreground, background)
+  }
+
+  /**
+   * Checks if the content of this field is empty.
+   * @return `true` if this field is empty.
+   */
+  override val isNull get(): Boolean = this.field.isNull
+
+  /**
+   * Checks the value of this text field.
+   * @param rec The active record.
+   * @throws CheckTypeException When field content is not valid
+   */
+  override fun checkValue(rec: Int) {
+    field.checkValue(rec)
+  }
+
+  override fun getValue(): String? {
+    return field.value
+  }
+
   //---------------------------------------------------
   // CONVERT TYPE
   //---------------------------------------------------
@@ -540,12 +592,6 @@ class TextField(val model: VField,
      * name conversion.
      */
     NAME
-  }
-
-  override fun addFocusListener(function: () -> Unit) {
-    field.addFocusListener {
-      function()
-    }
   }
 
   //---------------------------------------------------

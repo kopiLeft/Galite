@@ -17,7 +17,7 @@
 
 package org.kopi.galite.tests.util.base
 
-import org.kopi.galite.tests.TestBase
+import org.kopi.galite.tests.common.TestBase
 import org.kopi.galite.util.base.InconsistencyException
 import org.kopi.galite.util.base.Utils
 

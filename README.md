@@ -1,6 +1,5 @@
 <img src="docs/logo_galite.png" alt="Galite" width="315" />
 
-# Galite
 Galite Framework
 
 ![license](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)
@@ -34,28 +33,8 @@ class MyApp : VApplication(Registry(domain = "GALITE", parent = null)) {
   
   override val alternateLocale get() = Locale("de", "AT")
   
-  override val supportedLocales
-    get() =
-      arrayOf(Locale.FRANCE,
-              Locale("de", "AT"),
-              Locale("ar", "TN"))
+  override val supportedLocales get() = arrayOf(Locale.FRANCE, Locale("de", "AT"), Locale("ar", "TN"))
 
-  override fun login(
-    database: String,
-    driver: String,
-    username: String,
-    password: String,
-    schema: String?
-  ): DBContext? {
-    return try {
-      DBContext().apply {
-        this.defaultConnection = this.createConnection(driver, database, username, password, true, schema)
-      }
-    } catch (exception: Throwable) {
-      null
-    }
-  }
-  
   init {
     ApplicationConfiguration.setConfiguration(
       object : ApplicationConfiguration() {

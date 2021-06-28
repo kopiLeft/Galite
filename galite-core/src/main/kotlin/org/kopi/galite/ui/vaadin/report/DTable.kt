@@ -42,7 +42,7 @@ import com.vaadin.flow.function.ValueProvider
  * @param model The table model.
  */
 @CssImport("./styles/galite/report.css")
-class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, ComponentEventListener<ItemClickEvent<DReport.ReportModelItem>> {
+class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -65,6 +65,8 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
 
   val columnToHeaderMap = mutableMapOf<Column<*>, VerticalLayout>()
 
+  lateinit var cellStyler: ReportCellStyler
+
   init {
     setItems(model)
     buildColumns()
@@ -73,7 +75,6 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
     classNames.add("borderless")
     classNames.add("report")
     setWidthFull()
-    addItemClickListener(this)
   }
 
   //---------------------------------------------------
@@ -85,17 +86,10 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    */
   private fun buildColumns() {
     model.accessibleColumns.forEachIndexed { index, column ->
-      val align = if (column!!.align == Constants.ALG_RIGHT) {
-        ColumnTextAlign.END
-      } else {
-        ColumnTextAlign.START
-      }
-
-      val gridColumn = addColumn(index, column)
+      val gridColumn = addColumn(index, column!!)
 
       gridColumn
         .setHeader(getColumnNameComponent(column, gridColumn))
-        .setTextAlign(align)
 
       gridColumn.flexGrow = 0
     }
@@ -128,10 +122,6 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
     return viewColumns?.indexOf(modelColumnIndex) ?: modelColumnIndex
   }
 
-  override fun onComponentEvent(event: ItemClickEvent<DReport.ReportModelItem>?) {
-    //TODO("Not yet implemented")
-  }
-
   /**
    * Adds a new text column to this table with a column value provider and a key for the column.
    *
@@ -140,8 +130,12 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    * @return the created column
    */
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
-    return super.addColumn(ColumnValueProvider(key)).also {
+    val provider = ColumnValueProvider(key, column)
+
+    return super.addComponentColumn(provider).also {
+      provider.column = it
       it.setKey(key.toString())
+        .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
     }
   }
@@ -200,7 +194,24 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable, Compo
    *
    * @param columnIndex the index of the column
    */
-  inner class ColumnValueProvider(private val columnIndex: Int) : ValueProvider<DReport.ReportModelItem, Any> {
-    override fun apply(source: DReport.ReportModelItem): Any = source.getValueAt(columnIndex)
+  inner class ColumnValueProvider(
+    private val columnIndex: Int,
+    private val columnModel: VReportColumn
+  ) : ValueProvider<DReport.ReportModelItem, Component> {
+    var column: Column<DReport.ReportModelItem>? = null
+
+    override fun apply(source: DReport.ReportModelItem): Component = VerticalLayout().also {
+      it.className = "grid-cell-container"
+      it.add(source.getValueAt(columnIndex))
+      it.setSizeFull()
+
+      column?.textAlign = if (columnModel.align == Constants.ALG_RIGHT) {
+        ColumnTextAlign.END
+      } else {
+        ColumnTextAlign.START
+      }
+
+      cellStyler.updateStyles(source.rowIndex, columnIndex, it)
+    }
   }
 }

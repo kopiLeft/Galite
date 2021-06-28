@@ -39,6 +39,8 @@ import org.kopi.galite.visual.VlibProperties
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.KeyPressEvent
+import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.component.grid.GridSingleSelectionModel
 import com.vaadin.flow.data.provider.ListDataProvider
 
 /**
@@ -54,6 +56,7 @@ class DListDialog(
   private var escaped = true
   private var doNewForm = false
   private var selectedPos = -1
+  private val lock = Object()
 
   init {
     addDialogCloseActionListener(::onClose)
@@ -199,6 +202,28 @@ class DListDialog(
   private val tableItems: Collection<List<Any?>>
     get() = (table!!.dataProvider as ListDataProvider<List<Any?>>).items
 
+  private val nextItem: List<Any?>
+    get() {
+      var index = tableItems.indexOf(table!!.selectedItem) + 1
+
+      if(index >= table!!.dataCommunicator.itemCount) {
+        index = 0
+      }
+
+      return table!!.dataCommunicator.getItem(index)
+    }
+
+  private val previousItem: List<Any?>
+    get() {
+      var index = tableItems.indexOf(table!!.selectedItem) - 1
+
+      if(index < 0) {
+        index = table!!.dataCommunicator.itemCount - 1
+      }
+
+      return table!!.dataCommunicator.getItem(index)
+    }
+
   /**
    * Returns the next item ID according to the currently selected one.
    * @return The next item ID according to the currently selected one.
@@ -298,14 +323,32 @@ class DListDialog(
     val table = ListTable(model)
     super.table = table
     table.select(tableItems.first())
-    table.addSelectionListener {
-      it.firstSelectedItem.ifPresent { item ->
-        doSelectFromDialog(tableItems.indexOf(item), false, false)
+    (table.selectionModel as GridSingleSelectionModel).addSingleSelectionListener {
+      if(it.isFromClient) {
+        doSelectFromDialog(tableItems.indexOf(it.value ?: it.oldValue), false, false)
       }
     }
+    Shortcuts.addShortcutListener(this,
+                                  { _ ->
+                                    doSelectFromDialog(tableItems.indexOf(table.selectedItem), false, false)
+                                  },
+                                  Key.ENTER
+    )
+    Shortcuts.addShortcutListener(this,
+                                  { _ ->
+                                    table.select(nextItem)
+                                  },
+                                  Key.ARROW_DOWN
+    )
+    Shortcuts.addShortcutListener(this,
+                                  { _ ->
+                                    table.select(previousItem)
+                                  },
+                                  Key.ARROW_UP
+    )
+
     // TODO
   }
-  private val lock = Object()
 
   /**
    * Shows the dialog and wait until it is closed from client side.

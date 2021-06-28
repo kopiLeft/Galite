@@ -66,7 +66,7 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     no.addValueChangeListener(::onNoChange)
     yes.element.style["visibility"] = "hidden"
     no.element.style["visibility"] = "hidden"
-    content.element.style["border-bottom"] = "1px solid #dadada"
+    content.element.style["border-bottom"] = "1px solid #009bd4"
     content.element.addEventListener("mouseover") {
       isVisible = true
     }
@@ -154,7 +154,6 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   override fun isVisible(): Boolean =
     yes.element.style["visibility"].equals("visible")
             && no.element.style["visibility"].equals("visible")
-
 
   override val isNull: Boolean
     get() = !yes.value && !no.value

@@ -64,8 +64,24 @@ class Utils {
       return if (bufpos == 0) "" else String(buffer, 0, bufpos)
     }
 
-    fun trailString(input: String): String = TODO()
-    fun toSql(date: Date): String = TODO()
+    fun trailString(input: String): String? {
+      var last = -1
+      var i = input.length - 1
+      while (last == -1 && i >= 0) {
+        if (!Character.isWhitespace(input[i])) {
+          last = i
+        }
+        --i
+      }
+      return if (last == -1) {
+        ""
+      } else if (last == input.length) {
+        input
+      } else {
+        input.substring(0, last + 1)
+      }
+    }
+    fun toSql(date: Date?): String = TODO()
 
     fun toSql(l: String?): String {
       return if (l == null) {

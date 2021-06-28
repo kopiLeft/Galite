@@ -20,11 +20,10 @@ package org.kopi.galite.ui.vaadin.visual
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.visual.Module
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.visual.Item
 import org.kopi.galite.visual.UItemTree.UTreeComponent
-import org.kopi.galite.visual.UMenuTree
 
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.html.Span
@@ -35,9 +34,13 @@ import com.vaadin.flow.component.treegrid.TreeGrid
  * The vaadin implementation of an [UTreeComponent].
  *
  * @param root The root tree item.
- * @param isSuperUser Is it a super user ?
+ * @param isNoEdit Is selection mode set to no edit ?
  */
-class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<TreeNode>(), UMenuTree.UTree {
+class Tree(
+  val root: TreeNode?,
+  private val isNoEdit: Boolean,
+  private val localised: Boolean
+) : TreeGrid<TreeNode>(), UTreeComponent {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -62,7 +65,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
     addComponentHierarchyColumn {
       val nodeComponent = addItemComponent(it)
 
-      nodeComponent.setIcon(it.isLeaf, it.parent == null, nodeComponent.module!!.accessibility)
+      nodeComponent.setIcon(it.isLeaf)
       nodeComponent
     }
   }
@@ -70,7 +73,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
   private fun getRootItems(): List<TreeNode> {
     val rootItems = mutableListOf<TreeNode>()
 
-    rootItems.addNode(root)
+    root?.let { rootItems.addNode(it) }
     return rootItems
   }
 
@@ -79,7 +82,6 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
 
     for (i in 0 until parent.childCount) {
       val node = parent.getChildAt(i)
-
       addItemComponent(node)
       childItems.add(node)
     }
@@ -98,22 +100,24 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
     }
   }
 
-  private fun addItemComponent(node: TreeNode): TreeNodeComponent {
-    val module = getModule(node)
-    val nodeComponent = TreeNodeComponent(node, module)
+  internal fun addItemComponent(node: TreeNode): TreeNodeComponent {
+    val item = getITEM(node)
+    val nodeComponent = TreeNodeComponent(node, item)
 
-    itemsIds[module!!.id] = nodeComponent
+    itemsIds[item!!.id] = nodeComponent
 
     return nodeComponent
   }
 
   /**
-   * Returns the [Module] corresponding of the given tree item.
-   * @param itemId The tree item ID.
-   * @return The corresponding tree item module.
+   * Returns the [Item] corresponding of the given tree item.
+   *
+   * @param itemId The tree item.
+   *
+   * @return The corresponding tree item
    */
-  fun getModule(itemId: TreeNode?): Module? =
-    if(itemId == null) null else (itemId as DefaultMutableTreeNode).userObject as Module
+  fun getITEM(itemId: TreeNode?): Item? =
+    if(itemId == null) null else (itemId as DefaultMutableTreeNode).userObject as? Item
 
   /**
    * Emits the value change event. The value contained in the field is validated before the event is created.
@@ -131,105 +135,169 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
   //----------------------------------------------------------
   override fun collapseRow(row: Int) {
     access {
-      collapse(itemsIds[row]?.item)
+      collapse(itemsIds[row]?.nodeItem)
     }
   }
 
   override fun expandRow(row: Int) {
     access {
-      expand(itemsIds[row]?.item)
+      expand(itemsIds[row]?.nodeItem)
     }
   }
 
-  override val selectionRow: Int get() = getModule(selectedItem)?.id ?: -1
+  override fun expandTree() {
+    expandNode(getItem(-1))
+  }
+
+  /**
+   * Return items list
+   */
+  fun expandNode(node: TreeNode?) {
+    val item = getITEM(node)
+    val childrenCollection = getChildrenOf(node)
+    if (childrenCollection != null && childrenCollection.isNotEmpty()) {
+      childrenCollection.forEach {
+        expandNode(it)
+      }
+    }
+    if (item!!.isSelected || isExpanded(node)) {
+      expandRow(item.parent)
+    }
+  }
+
+  override fun getSelectionRow(): Int = getITEM(selectedItem)?.id ?: -1
 
   @Suppress("INAPPLICABLE_JVM_NAME")
   @JvmName("isExpanded1")
   override fun isExpanded(path: Any?): Boolean = super.isExpanded(path as? TreeNode)
 
-  override fun isCollapsed(path: Any?): Boolean = !isExpanded(path)
+  override fun isCollapsed(path: Any?): Boolean {
+    return !isExpanded(path)
+  }
 
-  inner class TreeNodeComponent(val item: TreeNode, val module: Module?): HorizontalLayout() {
+  override fun getItems(): Array<Item>? {
+    val itemsList = getItems(getItem(-1))
 
-    private val text = Span(module?.description)
+    return if(itemsList.isEmpty()) null else itemsList.toTypedArray()
+  }
+
+  override fun isUnique(name: String): Boolean = isUnique(name, getItem(-1))
+
+  override fun getRootItem(): Item = getRootItem(getItem(-1))
+
+  /**
+   * Return true if the item name done is unique in this tree
+   */
+  fun isUnique(name: String?, node: TreeNode?): Boolean {
+    val item = getITEM(node)
+    return if (name == item!!.name && item.id != getITEM(selectedItem)?.id) {
+      false
+    } else {
+      val childrenCollection = getChildrenOf(node)
+      if (childrenCollection != null && childrenCollection.isNotEmpty()) {
+        var isUnique = true
+        var i = 0
+        while (isUnique && i < childrenCollection.size) {
+          isUnique = isUnique(name, childrenCollection[i])
+          i++
+        }
+        isUnique
+      } else {
+        true
+      }
+    }
+  }
+
+  /**
+   * Return items list
+   */
+  fun getItems(node: TreeNode?): List<Item> {
+    val items = mutableListOf<Item>()
+    val item = getITEM(node)
+    if (item!!.id >= 0) {
+      items.add(item)
+    }
+    val childrenCollection = getChildrenOf(node)
+    if (childrenCollection != null && childrenCollection.isNotEmpty()) {
+      item.childCount = childrenCollection.size
+      childrenCollection.forEach {
+        items.addAll(getItems(it))
+      }
+    } else {
+      item.childCount = 0
+    }
+    return items
+  }
+
+  /**
+   * Return items list
+   */
+  fun getRootItem(node: TreeNode?): Item {
+    val childrenCollection = getChildrenOf(node)
+    val item = getITEM(node)
+
+    if (childrenCollection != null && childrenCollection.isNotEmpty()) {
+      val children = arrayOfNulls<Item>(childrenCollection.size)
+      childrenCollection.forEachIndexed { index, treeNode ->
+        children[index] = getRootItem(treeNode)
+      }
+      item!!.childCount = childrenCollection.size
+      item.children = children.requireNoNulls()
+    } else {
+      item!!.childCount = 0
+      item.children = null
+    }
+    return item
+  }
+
+  fun getItem(itemId: Int): TreeNode? = itemsIds[itemId]?.nodeItem
+
+  fun getChildrenOf(itemId: Int): Array<TreeNode>? = treeData.getChildren(getItem(itemId))?.toTypedArray()
+
+  fun getChildrenOf(node: TreeNode?): Array<TreeNode>? = treeData.getChildren(node)?.toTypedArray()
+
+  inner class TreeNodeComponent(val nodeItem: TreeNode, val item: Item?): HorizontalLayout() {
+
+    private val text = Span(item?.getFormattedName(localised))
     private val icon = Image()
 
     init {
-      element.setProperty("title", module?.help.orEmpty())
-      add(text, icon)
+      add(icon, text)
     }
 
     /**
      * Sets the item icon.
      *
-     * @param item The item.
      * @param isLeaf Is it a leaf tree item ?
-     * @param isRoot Is it a root tree item ?
-     * @param access The tree item access.
      */
-    fun setIcon(isLeaf: Boolean, isRoot: Boolean, access: Int) {
-      if (isRoot) {
-        setItemIcon(Utils.getImage("home.png").resource)
-      } else {
+    fun setIcon(isLeaf: Boolean) {
+      if (isNoEdit) {
         if (isLeaf) {
-          if (!isSuperUser) {
-            if (item == selectedItem) {
-              setItemIcon( Utils.getImage("form_selected.png").resource)
-            } else {
-              setItemIcon(Utils.getImage("forms.png").resource)
-            }
-          } else {
-            setIcon(access, true)
-          }
+          setItemIcon(Utils.getImage("item.png").resource)
         } else {
-          if (!isSuperUser) {
-            if (isExpanded(item)) {
-              setItemIcon(Utils.getImage("expanded.png").resource)
-            } else {
-              setItemIcon(Utils.getImage("collapsed.png").resource)
-            }
-          } else {
-            setIcon(access, false)
-          }
+          setItemIcon(Utils.getImage("node.png").resource)
         }
+      } else {
+        setIcon(item)
       }
-      lastModifiedItemId = item
+
+      lastModifiedItemId = nodeItem
     }
 
     /**
-     * Set icon according to module accessibility.
-     * @param access The module accessibility.
-     * @param item The tree item.
-     * @param isLeaf Is it a leaf node ?
+     * Set icon according to item status.
+     * @param item The tree item .
      */
-    fun setIcon(access: Int, isLeaf: Boolean) {
+    fun setIcon(item: Item?) {
       access {
-        when (access) {
-          Module.ACS_FALSE -> if (isLeaf) {
-            setItemIcon(Utils.getImage("form_p.png").resource)
+        if (item!!.id != -1) {
+          if (item.isDefaultItem) {
+            setItemIcon(Utils.getImage("default.png").resource)
           } else {
-            if (isExpanded(item)) {
-              setItemIcon(Utils.getImage("expanded_p.png").resource)
+            if (item.isSelected) {
+              setItemIcon(Utils.getImage("checked.png").resource)
             } else {
-              setItemIcon(Utils.getImage("collapsed_p.png").resource)
-            }
-          }
-          Module.ACS_TRUE -> if (isLeaf) {
-            setItemIcon(Utils.getImage("form_a.png").resource)
-          } else {
-            if (isExpanded(item)) {
-              setItemIcon(Utils.getImage("expanded_a.png").resource)
-            } else {
-              setItemIcon(Utils.getImage("collapsed_a.png").resource)
-            }
-          }
-          else -> if (isLeaf) {
-            setItemIcon(Utils.getImage("forms.png").resource)
-          } else {
-            if (isExpanded(item)) {
-              setItemIcon(Utils.getImage("expanded.png").resource)
-            } else {
-              setItemIcon(Utils.getImage("collapsed.png").resource)
+              setItemIcon(Utils.getImage("unchecked.png").resource)
             }
           }
         }

@@ -117,7 +117,7 @@ interface UItemTree : UWindow {
      * @return false if any of the nodes in the node's path are collapsed,
      * true if all nodes in the path are expanded
      */
-    fun isExpanded(path: Any): Boolean
+    fun isExpanded(path: Any?): Boolean
 
     /**
      * Returns true if the value identified by path is currently collapsed,
@@ -134,7 +134,7 @@ interface UItemTree : UWindow {
      * Returns the items of the tree as an array, returns null if there is no items
      * @return an array that contain the items of the tree
      */
-    fun getItems(): Array<Item>
+    fun getItems(): Array<Item>?
 
     /**
      * Returns the root item

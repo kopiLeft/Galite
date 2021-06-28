@@ -25,6 +25,11 @@ import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class VNavigationColumn(val ident : String?) : VerticalLayout(), HasStyle {
+
+  init {
+    width = "calc(25% - 3px)"
+  }
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------

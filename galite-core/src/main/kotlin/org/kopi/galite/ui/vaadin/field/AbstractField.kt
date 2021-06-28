@@ -17,10 +17,14 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.customfield.CustomField
 
-abstract class AbstractField<T>: CustomField<T>() {
+abstract class AbstractField<T>: CustomField<T>(), ClickNotifier<AbstractField<T>> {
 
   abstract fun addFocusListener(function: () -> Unit)
-  // TODO add common code here
+
+  internal abstract val isNull: Boolean
+
+  internal abstract fun checkValue(rec: Int)
 }

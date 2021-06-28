@@ -77,36 +77,18 @@
     border-bottom : 1px solid #dadada;
 }
 
-.actor-navigationItem {
-    height: auto;
-    background: var(--lumo-base-color);
-}
-
-.actor-navigationItem::part(label) {
-    color: #8f8f8f;
-}
-
 .actor-navigationColumn > label {
     width: 100%;
     border-bottom : 1px solid #dadada;
+    font-size: 1.2em !important;
+    padding: 12px 48px;
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
 }
 
-/**
- * Styles for the form main menu (first div in actors panel)
- */
-::part(rootNavigation) {
-    height: 100%;
-    width: 65px;
-    position: relative;
-}
-
-/**
- * Styles for anchors inside the form main menu
- */
- ::part(rootNavigation) {
-    padding: 10px 16px;
-    margin: 4px;
-    height: auto;
+.actor-navigationColumn {
+    padding: 0;
 }
 
 /*
@@ -124,86 +106,6 @@
     color: #ffffff;;
 }
 
-/* -- form menu popup styles --*/
-
-/**
- * Main popup styles for form menu.
- */
-.actors-navigationPanel {
-    display: inline-block;
-    padding: 14px 14px 18px 14px;
-    background: #ffffff;
-    width: 970px;
-    height: auto;
-}
-
-/**
- * Styles to be used for ul tags inside the from menu popup
- */
-.actors-navigationPanel > .actor-navigationColumn {
-    width: calc(25% - 3px);
-    margin: 0;
-    vertical-align: top;
-}
-
-/**
- * Styles to be applied for all elements inside the form menu popup
- */
-.actors-navigationPanel * {
-    color: #8f8f8f;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-/**
- * Styles to be applied for all elements inside the form menu popup
- */
-.actors-navigationPanel > .actor-navigationColumn > label {
-    border-bottom: #dadada 1px solid;
-    margin-bottom: 5px;
-}
-
-/**
- * Styles to be applied for all li tags in form menu popup
- */
-.actors-navigationPanel > .actor-navigationColumn > * {
-    width: 100%;
-}
-
-/**
- * Styles to be applied for all h3 tags in form menu popup
- * h3 tags represents the menu headers
- */
-.actors-navigationPanel > .actor-navigationColumn > label {
-    font-size: 1.2em !important;
-    padding: 12px 48px;
-    font-family: Arial, sans-serif !important;
-    font-weight: 500 !important;
-    font-style: normal !important;
-}
-
-/**
- * Styles to be applied for font awesome icons in form menu
- */
-.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem  iron-icon {
-    width: 30px;
-    font-size: 1.5em !important;
-}
-
-/**
- * Styles to be applied for all anchors inside a an actor item inside the form menu
- */
-.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem {
-    padding: 10px 16px;
-    margin: 4px;
-    height: auto;
-    background: #ffffff;
-}
-    /* display full button name */
-.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem button {
-        width: calc(100% - 110px);
-}
-
 .actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem:hover * {
     color: #009bd4;
 }
@@ -211,23 +113,89 @@
     color: #009bd4;
 }
 
-/**
- * Styles for non font awesome icons inside the form menu.
- */
-.actors-navigationPanel *:not(iron-icon) {
+.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem-disabled:hover {
+    color: none;
+}
+
+.actor-navigationItem-disabled {
+    color: #DCDCDC;
+}
+
+.actors-navigationPanel * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.actor-navigationColumn > .actor-navigationItem, .actor-navigationColumn > .actor-navigationItem-disabled {
+    width: 100%;
+    padding-top: 20px;
+}
+
+.actor-navigationColumn > .actor-navigationItem > iron-icon,  .actor-navigationColumn > .actor-navigationItem-disabled > iron-icon {
+    width: 30px;
+    font-size: 1.5em !important;
+}
+
+.actor-navigationColumn > .actor-navigationItem > div, .actor-navigationColumn > .actor-navigationItem-disabled > div {
+    width: calc(100% - 110px);
+    padding: 10px 16px;
+    margin: 4px;
+    height: auto;
+    background: #ffffff;
+}
+
+.actor-navigationColumn > .actor-navigationItem > div {
+    cursor: pointer;
+}
+
+.actor-navigationColumn {
+    width: calc(25% - 3px);
     line-height: 1.5em;
 }
 
-/**
- * Default transition for all tags inside the form menu.
- */
-.actors-navigationPanel * {
-    transition: .2s;
+.actors-navigationPanel > * {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
 }
 
-/**
- * Transition to be applied for all font awesome icons inside the form menu.
- */
-.actors-navigationPanel * iron-icon {
-    transition: initial;
+.k-actor, .k-actor-disabled {
+    background: transparent;
+    padding: 15px 22px;
+
+    width: 100%;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+}
+
+.k-actor {
+    color: #676767;
+}
+
+.k-actor-disabled {
+    color: #a3a3a3;
+}
+
+.k-actor:hover {
+    background: #d9f0f8;
+    cursor: pointer;
+}
+vaadin-button.k-actor::after, vaadin-button.k-actor::before {
+    background: transparent;
+}
+
+.vaadin-menu-item:hover {
+      background: #d9f0f8;
+      cursor: pointer;
+}
+
+.vaadin-menu-item {
+    border-bottom: 1px solid #dadada;
+}
+
+:host([theme~="custom-context-menu-item"]) {
+     --_lumo-list-box-item-selected-icon-display: inherit;
 }

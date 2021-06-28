@@ -19,7 +19,7 @@ package org.kopi.galite.tests.base
 
 import org.junit.Test
 import org.kopi.galite.base.ExtendedMessageFormat
-import org.kopi.galite.tests.TestBase
+import org.kopi.galite.tests.common.TestBase
 import java.util.Locale
 import kotlin.test.assertEquals
 

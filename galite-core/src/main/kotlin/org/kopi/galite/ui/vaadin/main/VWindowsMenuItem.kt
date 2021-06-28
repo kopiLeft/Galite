@@ -19,23 +19,24 @@ package org.kopi.galite.ui.vaadin.main
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.button.Button
+import org.kopi.galite.ui.vaadin.base.VInputButton
 
 /**
  * Class for menu items in the already opened windows menu.
  *
  * @param title The window title.
  * @param window The window to be added.
- * @param container The container of the window.
  */
-class VWindowsMenuItem(title : String, window : Component, container : VWindowContainer) : Button(title) {
+class VWindowsMenuItem(title : String, val window : Component) : VInputButton(title) {
 
   init {
     className = STYLENAME_DEFAULT
     element.style.set("whiteSpace", "nowrap")
     // adding listener on the item to open the form in the container
     addClickListener {
-      window.isVisible = true
-      container.showWindow(window)
+      //window.isVisible = true
+      //container.showWindow(window)
+      addClassName("item-selected")
     }
   }
 

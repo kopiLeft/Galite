@@ -65,11 +65,11 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
   private val windowsLink = VWindows()
   private val welcome = VWelcome()
   private val content = VContent()
-  private val container = VWindowContainer()
   private val locale: String = locale.toString()
   internal var windowsList = mutableListOf<Component>()
   private val windows = mutableMapOf<Component, MenuItem>()
   private val windowsMenu = VWindowsDisplay()
+  private val container = VWindowContainer(windowsMenu.menu)
   var currentWindow: Component? = null
   private var originalWindowTitle: String = ""
 
@@ -167,6 +167,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
 
   /**
    * Adds a window to this main window.
+   *
    * @param window The window to be added.
    * @param title The window title.
    */
@@ -174,7 +175,21 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
     windowsList.add(window)
     container.addWindow(window, title)
     currentWindow = container.showWindow(window)
-    windowsMenu.addWindow(container, window, title)
+
+    val item = windowsMenu.addWindow(window, title)
+    // adding listener on the item to show the window in the container
+    item.addClickListener {
+
+      if (currentWindow != item.window) {
+        currentWindow = container.showWindow(item.window)
+        if (currentWindow is Window) {
+          (currentWindow as Window).goBackToLastFocusedTextField()
+          window.isVisible = true
+        }
+        //windowsMenu.setCurrent(item) TODO
+        windowsMenu.hideMenu()
+      }
+    }
   }
 
   /**
@@ -206,14 +221,23 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    */
   private fun closeIfIsPopup(window: Component): Boolean {
     var closed  = false
+    var popupWindow: PopupWindow? = null
 
-    window.parent.ifPresent {
-      it.parent.ifPresent { windowContainer ->
-        if (windowContainer is PopupWindow) {
-          windowContainer.close() // fire close event
-          closed = true
+    if(window is PopupWindow) {
+      popupWindow = window
+    } else {
+      window.parent.ifPresent {
+        it.parent.ifPresent { windowContainer ->
+          if (windowContainer is PopupWindow) {
+            popupWindow = windowContainer
+          }
         }
       }
+    }
+
+    popupWindow?.let {
+      it.close() // fire close event
+      closed = true
     }
 
     return closed

@@ -23,6 +23,7 @@ import com.vaadin.flow.component.textfield.PasswordField
  * A password field implementation
  */
 class VPasswordField(val col: Int): InputTextField<PasswordField>(PasswordField()) {
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

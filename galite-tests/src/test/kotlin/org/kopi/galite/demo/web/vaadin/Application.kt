@@ -20,7 +20,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.tests.VApplicationTestBase
+import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields
@@ -47,7 +47,7 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"
-  override val alternateLocale get() = Locale("de", "AT")
+  override val alternateLocale get() = Locale.UK
   override val supportedLocales
     get() =
       arrayOf(Locale.UK,

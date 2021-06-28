@@ -56,8 +56,10 @@ class DActor(private var model: VActor)
           Utils.getVaadinIcon(model.iconName),
           correctAcceleratorKey(model.acceleratorKey),
           correctAcceleratorModifier(model.acceleratorModifier)),
-        UActor,
-        ComponentEventListener<ClickEvent<Button>> {
+          UActor,
+          ComponentEventListener<ClickEvent<Button>> {
+
+  var item: VActorNavigationItem? = null
 
   init {
     isEnabled = false
@@ -80,13 +82,15 @@ class DActor(private var model: VActor)
     access {
       if(!enabled) {
         super.getElement().setAttribute("part", Styles.ACTOR + "-disabled")
+        super.getElement().setAttribute("class", Styles.ACTOR + "-disabled")
       } else {
         super.getElement().setAttribute("part", Styles.ACTOR)
+        super.getElement().setAttribute("class", Styles.ACTOR)
       }
       super.setEnabled(enabled)
+      item?.isEnabled = enabled
     }
   }
-
 
   override fun onComponentEvent(event: ClickEvent<Button>) {
     actionPerformed()
@@ -106,6 +110,10 @@ class DActor(private var model: VActor)
                                 icon,
                                 navigationMenu,
                                 ::actionPerformed)
+      .also {
+        item = it
+        it.isEnabled = isEnabled
+      }
   }
 
   fun actionPerformed() {

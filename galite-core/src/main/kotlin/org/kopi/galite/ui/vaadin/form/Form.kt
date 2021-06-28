@@ -66,7 +66,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
   private val tabsToPages: MutableMap<Tab, Component> = mutableMapOf()
   private var tabPanel: Tabs? = null
   private var listeners: MutableList<FormListener> = mutableListOf()
-  private var lastSelected = -1
+  private var lastSelected: Tab? = null
   private var fireSelectionEvent = true
   private var blockInfo: PositionPanel = PositionPanel()
 
@@ -95,10 +95,15 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
       }
 
       tabPanel!!.addSelectedChangeListener {
-        tabsToPages[it.previousTab]!!.isVisible = false
-        firePageSelected(pages.indexOf(tabsToPages[it.selectedTab]))
-        it.previousTab.element.classList.remove("selected-tab")
-        it.selectedTab.element.classList.add("selected-tab")
+        if(it.isFromClient) {
+          // This to prevent user from switch tabs. the method firePageSelected() is responsible for changing page.
+          // This will keep the previous tab if firePageSelected fails to switch tabs because an error occurred
+          // (For example: the used didn't fill a MUSTFILL field)
+          lastSelected = it.previousTab
+          tabPanel!!.selectedTab = lastSelected
+
+          firePageSelected(pages.indexOf(tabsToPages[it.selectedTab]))
+        }
       }
       setContent(tabPanel!!, Div(*pages))
     }
@@ -126,9 +131,8 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
   private fun selectPage(page: Int) {
     if(tabPanel != null) {
       tabPanel!!.selectedIndex = page
-      tabPanel!!.selectedTab.isEnabled = true
-      tabPanel!!.selectedTab.element.classList.add("selected-tab")
-
+      lastSelected = tabPanel!!.selectedTab
+      lastSelected!!.isEnabled = true
     }
   }
 
@@ -180,8 +184,11 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
    */
   fun gotoPage(i: Int) {
     currentPage = i
+    lastSelected?.let { tabsToPages[it]!!.isVisible = false }
+    lastSelected?.element?.classList?.remove("selected-tab")
     pages[i]!!.isVisible = true
     selectPage(i)
+    tabPanel!!.getComponentAt(currentPage).element.classList.add("selected-tab")
   }
 
   /**

@@ -78,4 +78,8 @@ class DGridEditorActorField(
     // it is not like the other fields trigger
     columnView.executeAction()
   }
+
+  override fun valueChanged() {
+    // Nothing to do
+  }
 }

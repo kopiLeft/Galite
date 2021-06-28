@@ -19,6 +19,7 @@
  * Label and grid label style
  */
 .k-label, .editor-label {
+    font-size: 12px !important;
     font-family: Arial, sans-serif !important;
     font-weight: 500 !important;
     font-style: normal !important;

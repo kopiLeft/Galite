@@ -21,8 +21,31 @@
  */
 ::part(cell header-cell) {
      background: #f2f2f2;
-     padding-left: 9px;
      color: #505050;
+}
+
+::part(cell) {
+     min-height: 16px;
+}
+
+::part(row) {
+     width: fit-content;
+}
+
+vaadin-grid > vaadin-grid-cell-content {
+   height: 100%;
+}
+
+vaadin-grid > vaadin-grid-cell-content {
+    padding: var(--lumo-size-xxs);
+}
+
+vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
+    display: table;
+}
+
+.grid-cell-container-focused {
+    background: #bcdae6;
 }
 
 #main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {

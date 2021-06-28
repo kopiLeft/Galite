@@ -25,4 +25,7 @@ class GridEditorTextAreaField(
         height: Int,
         visibleHeight: Int,
         fixedNewLine: Boolean
-) : GridEditorTextField(width)
+) : GridEditorTextField(width) {
+
+  override val isMultiLine: Boolean = true
+}

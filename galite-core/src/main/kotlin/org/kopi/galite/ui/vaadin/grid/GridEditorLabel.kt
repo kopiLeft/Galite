@@ -17,13 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.html.Div
 
 /**
  * A label used at grid headers
  */
-open class GridEditorLabel(caption: String?) : Div(), HasEnabled {
-  // TODO
-}
+open class GridEditorLabel : Div(), HasEnabled

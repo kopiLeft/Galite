@@ -76,6 +76,10 @@ class DGridEditorImageField(
     TODO()
   }
 
+  override fun valueChanged() {
+    // Nothing to do
+  }
+
   /*override fun getEditor(): GridEditorImageField { TODO
     return super.getEditor() as GridEditorImageField
   }*/

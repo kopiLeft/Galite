@@ -33,3 +33,19 @@
 	background: none;
 	border-bottom: #009bd4 1px solid;
 }
+
+vaadin-date-time-picker-date-picker {
+    --lumo-text-field-size: none;
+}
+
+vaadin-date-time-picker {
+    max-height: 40px;
+}
+
+.vaadin-text-field-container {
+    --lumo-text-field-size: none;
+}
+
+.vaadin-text-field-container  [part~='input-field'] [name~="suffix"] {
+    font-size: 13px;
+}

@@ -170,11 +170,11 @@ user , admin , wrk context and bookmark
 /*
  * switch window style
  */
-.window-items-title, .item {
-    background: #E8E8E8;
-    color: #778899;
-    width: 500px;
-    font-family: Courier New, monospace; !important;
+.window-items-title, .window-items-container .item {
+    background: white;
+    color: #8f8f8f;
+    width: 100%;
+    font-family: Courier New, monospace !important;
     font-style: italic !important;
     font-size: 1em;
 }
@@ -183,8 +183,18 @@ user , admin , wrk context and bookmark
     background: none;
 }
 
-.window-items-container vaadin-button {
-    margin-top: -1px;
-    border-bottom: 1px solid gray;
-    width: 550px;
+.window-items-container .item {
+    border-bottom: 1px solid #dadada;
+    text-align: left;
+    padding: 20px 24px;
+    color: #8f8f8f;
+}
+
+.window-items-container .item:hover {
+    background: #d9f0f8;
+    cursor: pointer;
+}
+
+.window-items-container .item-selected {
+    color: #DCDCDC;
 }

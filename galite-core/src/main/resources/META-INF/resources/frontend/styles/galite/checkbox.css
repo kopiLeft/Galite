@@ -44,10 +44,6 @@
     --lumo-primary-color : #009bd4;
 }
 
-.multiple .k-boolean-field {
-    padding-left: 10px;
-}
-
 ::part(checkbox) {
     width: 1em;
     height: 1em;
@@ -83,16 +79,16 @@
     vertical-align: middle;
 }
 
-.multiple .k-boolean-field-content {
-    height: 40px;
-}
-
 vaadin-checkbox {
     height: 38px;
 }
 
 .multiple .k-boolean-field-content {
     height: 40px;
+    padding-bottom: 5px;
+}
+.editor-booleanfield {
+    --lumo-primary-color: #009bd4;
 }
 
 .k-boolean-field-content{
@@ -101,4 +97,8 @@ vaadin-checkbox {
 
 vaadin-checkbox label {
     display: inline;
+}
+
+.editor-booleanfield {
+    --lumo-primary-color: #009bd4;
 }

@@ -30,7 +30,7 @@ class VWindowsDisplay : Div() {
   // DATA MEMBERS
   //---------------------------------------------------
 
-  private val menu = VWindowsMenu()
+  val menu = VWindowsMenu()
 
   init {
     className = "k-windows-menu-container"
@@ -44,17 +44,17 @@ class VWindowsDisplay : Div() {
   fun updateCaption(window: Component, caption: String) {
     val item = menu.getItemFor(window)
 
-    item?.text = caption
+    item?.value = caption
   }
 
   /**
    * Adds a window to the [VWindowsMenu].
-   * @param container The container of the window.
+   *
    * @param window The window to be added.
    * @param title The window title.
    */
-  fun addWindow(container : VWindowContainer, window: Component, title : String) {
-    menu.addWindow(container, window, title)
+  fun addWindow(window: Component, title : String): VWindowsMenuItem {
+    return menu.addWindow(window, title)
   }
 
   /**
@@ -70,6 +70,13 @@ class VWindowsDisplay : Div() {
    */
   fun showMenu() {
     menu.open()
+  }
+
+  /**
+   * Shows the windows menu.
+   */
+  fun hideMenu() {
+    menu.close()
   }
 
   /**

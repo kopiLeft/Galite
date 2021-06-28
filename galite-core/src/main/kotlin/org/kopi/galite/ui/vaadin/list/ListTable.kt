@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
+import com.vaadin.flow.component.Component
 import org.kopi.galite.form.VListDialog
 
 import com.vaadin.flow.component.grid.Grid
@@ -26,13 +27,18 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.html.Span
 
 @CssImport("./styles/galite/list.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
+
+  val headerComponents = mutableListOf<Component>()
+
   init {
     isColumnReorderingAllowed = true
-    buildRows()
     buildColumns()
+    buildRows()
+    recalculateColumnWidths()
     installFilters(model)
   }
 
@@ -49,7 +55,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     for(col in 0 until model.getColumnCount()) {
       addColumn {
         formatObject(it[col], col)
-      }.setHeader(model.getColumnName(col))
+      }.setHeader(Span(model.getColumnName(col)).also { headerComponents.add(it) })
               .setAutoWidth(true)
               .setKey(col.toString())
     }
@@ -65,6 +71,8 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     this.columns.forEachIndexed { index, column ->
       val cell = filterRow.getCell(column)
       val filter = TextField()
+
+      filter.setWidthFull()
       val search = Icon(VaadinIcon.SEARCH)
 
       filter.suffixComponent = search
@@ -87,4 +95,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
   protected fun formatObject(o: Any?, col: Int): String {
     return model.columns[col]!!.formatObject(o).toString()
   }
+
+  val selectedItem: List<Any?> get() = asSingleSelect().value
 }
+
