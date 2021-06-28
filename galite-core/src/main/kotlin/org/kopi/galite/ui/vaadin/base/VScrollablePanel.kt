@@ -61,7 +61,6 @@ class VScrollablePanel : Div {
    *
    */
   private fun initialize() {
-    content.style["display"] = "block"
     super.add(content)
     content.style["display"] = "table"
     content.setSizeFull()

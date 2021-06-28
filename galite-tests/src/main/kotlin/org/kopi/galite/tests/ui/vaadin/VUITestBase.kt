@@ -17,10 +17,17 @@
 
 package org.kopi.galite.tests.ui.vaadin
 
-import com.github.mvysny.kaributesting.v10.MockVaadin
-import com.github.mvysny.kaributesting.v10.Routes
 import org.junit.Before
 import org.junit.BeforeClass
+import org.kopi.galite.ui.vaadin.base.VInputButton
+import org.kopi.galite.ui.vaadin.base.VInputText
+
+import com.github.mvysny.kaributesting.v10.MockVaadin
+import com.github.mvysny.kaributesting.v10.Routes
+import com.github.mvysny.kaributesting.v10._click
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10._value
+import com.vaadin.flow.component.textfield.PasswordField
 
 /**
  * The high level class for all classes containing UI tests
@@ -44,6 +51,13 @@ open class VUITestBase : VApplicationTestBase() {
 }
 
 open class GaliteVUITestBase: VUITestBase() {
+  protected fun login() {
+    // Fill to username and password fields then click to the login button
+    _get<VInputText> { id = "user_name" }._value = testUser
+    _get<PasswordField> { id = "user_password" }._value = testPassword
+    _get<VInputButton> { id = "login_button" }._click()
+  }
+
   @Before
   fun createRoutes() {
     setupRoutes()

@@ -41,7 +41,6 @@ import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.KeyUpEvent
 import com.vaadin.flow.component.textfield.Autocomplete
-
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.textfield.HasAutocomplete
@@ -101,7 +100,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
     addKeyDownListener(::onKeyDown)
-    addFocusListener(::onFocus) // TODO
+    addFocusListener(::onFocus)
     //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
     autocomplete = if (hasAutoComplete()) {

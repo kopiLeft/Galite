@@ -28,7 +28,7 @@ import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object TaxRuleForm : ReportSelectionForm() {
+class TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "TaxRules"
   val page = page("TaxRule")
@@ -73,10 +73,10 @@ object TaxRuleForm : ReportSelectionForm() {
     icon = "delete"
   }
 
-  val block = insertBlock(TaxRuleBlock, page) {
+  val block = insertBlock(TaxRuleBlock(), page) {
     command(item = report) {
       action = {
-        createReport(TaxRuleBlock)
+        createReport(this@insertBlock)
       }
     }
 
@@ -101,11 +101,11 @@ object TaxRuleForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return TaxRuleR
+    return TaxRuleR()
   }
 }
 
-object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
+class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
   val u = table(TaxRule)
 
   val idTaxe = hidden(domain = Domain<Int>(20)) {
@@ -141,5 +141,5 @@ object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
 }
 
 fun main() {
-  Application.runForm(formName = TaxRuleForm)
+  Application.runForm(formName = TaxRuleForm())
 }
