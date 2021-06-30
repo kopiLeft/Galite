@@ -222,25 +222,7 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
   interface AutofillListener {
     /**
      * Fired when an autofill action is launched on the editor
-     * @param event The autofill event.
      */
-    fun onAutofill(event: AutofillEvent?)
+    fun onAutofill()
   }
-
-  /**
-   * The editor field click event
-   */
-  class AutofillEvent(source: Component?) {
-    companion object {
-      //---------------------------------------------------
-      // DATA MEMBERS
-      //---------------------------------------------------
-      val AUTOFILL_METHOD: Method? = null
-
-      init {
-        // TODO
-      }
-    }
-  }
-  // TODO
 }

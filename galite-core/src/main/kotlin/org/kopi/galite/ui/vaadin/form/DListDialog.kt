@@ -42,6 +42,7 @@ import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.grid.GridSingleSelectionModel
 import com.vaadin.flow.data.provider.ListDataProvider
 
 /**
@@ -324,8 +325,10 @@ class DListDialog(
     val table = ListTable(model)
     super.table = table
     table.select(tableItems.first())
-    table.addItemClickListener {
-      doSelectFromDialog(tableItems.indexOf(it.item), false, false)
+    (table.selectionModel as GridSingleSelectionModel).addSingleSelectionListener {
+      if(it.isFromClient) {
+        doSelectFromDialog(tableItems.indexOf(it.value ?: it.oldValue), false, false)
+      }
     }
     Shortcuts.addShortcutListener(this,
                                   { _ ->

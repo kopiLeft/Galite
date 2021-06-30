@@ -29,7 +29,7 @@ import org.kopi.galite.list.VColumn
 import org.kopi.galite.list.VIntegerColumn
 import org.kopi.galite.list.VList
 import org.kopi.galite.list.VStringColumn
-import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.visual.MessageCode
 
 class VFieldTests : JApplicationTestBase() {

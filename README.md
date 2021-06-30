@@ -1,6 +1,5 @@
 <img src="docs/logo_galite.png" alt="Galite" width="315" />
 
-# Galite
 Galite Framework
 
 ![license](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)

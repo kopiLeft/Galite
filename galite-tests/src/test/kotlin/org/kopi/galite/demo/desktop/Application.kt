@@ -22,7 +22,7 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.form.dsl.Form
-import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormSample
 import org.kopi.galite.tests.form.FormWithFields

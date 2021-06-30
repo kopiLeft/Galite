@@ -218,7 +218,7 @@ abstract class DGridEditorField<T>(
     }
   }
 
-  override fun onAutofill(event: GridEditorField.AutofillEvent?) {
+  override fun onAutofill() {
     performAutoFillAction()
   }
 

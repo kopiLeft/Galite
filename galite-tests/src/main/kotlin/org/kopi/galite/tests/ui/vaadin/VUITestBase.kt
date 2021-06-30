@@ -15,16 +15,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.ui.vaadin.base
+package org.kopi.galite.tests.ui.vaadin
+
+import org.junit.Before
+import org.junit.BeforeClass
+import org.kopi.galite.ui.vaadin.base.VInputButton
+import org.kopi.galite.ui.vaadin.base.VInputText
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
-import org.kopi.galite.tests.TestBase
+import com.github.mvysny.kaributesting.v10._click
+import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10._value
+import com.vaadin.flow.component.textfield.PasswordField
 
 /**
  * The high level class for all classes containing UI tests
  */
-open class UITestBase : TestBase() {
+open class VUITestBase : VApplicationTestBase() {
   fun setupRoutes() {
     MockVaadin.setup(routes!!)
   }
@@ -39,5 +47,27 @@ open class UITestBase : TestBase() {
     }
 
     var routes: Routes? = null
+  }
+}
+
+open class GaliteVUITestBase: VUITestBase() {
+  protected fun login() {
+    // Fill to username and password fields then click to the login button
+    _get<VInputText> { id = "user_name" }._value = testUser
+    _get<PasswordField> { id = "user_password" }._value = testPassword
+    _get<VInputButton> { id = "login_button" }._click()
+  }
+
+  @Before
+  fun createRoutes() {
+    setupRoutes()
+  }
+
+  companion object {
+    @BeforeClass
+    @JvmStatic
+    fun setupVaadin() {
+      discoverRooterClass(GaliteApplication::class.java)
+    }
   }
 }

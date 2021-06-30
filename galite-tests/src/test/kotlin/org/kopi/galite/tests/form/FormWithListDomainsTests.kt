@@ -25,7 +25,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.targetTables
 import org.junit.Test
 import org.kopi.galite.db.Users
-import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 
 class FormWithListDomainsTests: JApplicationTestBase() {
   val FormWithListDomains = FormWithListDomains()
