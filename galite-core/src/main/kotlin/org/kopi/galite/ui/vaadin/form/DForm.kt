@@ -140,7 +140,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    */
   fun gotoPage(i: Int) {
     currentPage = i
-    access {
+    access(currentUI) {
       content.gotoPage(i)
     }
   }
@@ -313,7 +313,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     override fun blockChanged() {}
     override fun blockCleared() {}
     override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
-      access {
+      access(currentUI) {
         if (pageCount == 1) {
           return@access
         }
@@ -356,7 +356,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // IMPLEMENTATION
     //---------------------------------------
     override fun blockRecordChanged(current: Int, count: Int) {
-      access {
+      access(currentUI) {
         content.setPosition(current, count)
       }
     }

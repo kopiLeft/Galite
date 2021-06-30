@@ -87,7 +87,7 @@ class DActorField(model: VFieldUI,
   override fun forceFocus() {}
 
   override fun updateColor() {
-    access {
+    access(currentUI) {
       field.setColor(Utils.toString(foreground), Utils.toString(background))
     }
   }

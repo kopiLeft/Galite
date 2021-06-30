@@ -36,10 +36,12 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyDownEvent
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.data.provider.ListDataProvider
 
 /**
@@ -351,7 +353,7 @@ class DListDialog(
    * Shows the dialog and wait until it is closed from client side.
    */
   protected fun showDialogAndWait() {
-    startAndWait(lock) {
+    startAndWait(lock, currentUI) {
       showListDialog()
     }
   }
@@ -378,7 +380,7 @@ class DListDialog(
         releaseLock(lock)
       }
     })
-    startAndWait(lock) {
+    startAndWait(lock, currentUI) {
       notice.show()
     }
   }
@@ -402,5 +404,11 @@ class DListDialog(
    */
   private fun sort() {
     // TODO
+  }
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
   }
 }

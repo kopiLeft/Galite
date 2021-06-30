@@ -25,7 +25,6 @@ import org.kopi.galite.base.Utils
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
-import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.notif.AbstractNotification
 import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
 import org.kopi.galite.ui.vaadin.notif.ErrorNotification
@@ -35,7 +34,6 @@ import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.progress.ProgressDialog
 import org.kopi.galite.ui.vaadin.wait.WaitDialog
 import org.kopi.galite.ui.vaadin.wait.WaitWindow
-import org.kopi.galite.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.MessageCode
@@ -49,8 +47,10 @@ import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WaitInfoListener
 import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
+import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 
 import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.Shortcuts
@@ -58,8 +58,8 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.server.ErrorEvent
 import com.vaadin.flow.server.ErrorHandler
-import com.vaadin.flow.server.VaadinService
-import com.vaadin.flow.server.VaadinSession
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
+import org.kopi.galite.ui.vaadin.window.PopupWindow
 
 /**
  * The `DWindow` is an abstract implementation of an [UWindow] component.
@@ -98,9 +98,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    */
   var isUserAsked = false
     private set
-  private lateinit var currentUI: UI
-  private lateinit var currentService: VaadinService
-  private lateinit var currentSession: VaadinSession
   private val actionRunner: ActionRunner = ActionRunner()
   private val actionsQueue: ConcurrentLinkedQueue<QueuedAction> = ConcurrentLinkedQueue<QueuedAction>()
 
@@ -255,10 +252,43 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   private fun dispose() {
     // close the window by removing it from the application.
     // this should not be called in a separate transaction.
-    // Modal windows are attached to a popup window. So it is not closed
-    // like not modal windows. We should remove the popup window from the application
-    val application = application
-    application.removeWindow(this)
+    val mainWindow = findMainWindow()
+
+    access(currentUI) {
+      if(!closeIfIsPopup(this)) {
+        mainWindow?.removeWindow(this)
+      }
+    }
+  }
+
+  /**
+   * Close [window] if it is a popup window
+   *
+   * @param window window to close
+   * @return true is [window] is a popup and it was closed
+   */
+  private fun closeIfIsPopup(window: Component): Boolean {
+    var closed  = false
+    var popupWindow: PopupWindow? = null
+
+    if(window is PopupWindow) {
+      popupWindow = window
+    } else {
+      window.parent.ifPresent {
+        it.parent.ifPresent { windowContainer ->
+          if (windowContainer is PopupWindow) {
+            popupWindow = windowContainer
+          }
+        }
+      }
+    }
+
+    popupWindow?.let {
+      it.close() // fire close event
+      closed = true
+    }
+
+    return closed
   }
 
   /**
@@ -318,7 +348,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun performAsyncAction(action: Action) {
-    access {
+    access(currentUI) {
       performActionImpl(action, true)
     }
   }
@@ -328,7 +358,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun setWaitDialog(message: String, maxtime: Int) {
-    access {
+    access(currentUI) {
       synchronized(waitDialog) {
         waitDialog.setTitle(MessageCode.getMessage("VIS-00067"))
         waitDialog.setMessage(message)
@@ -341,7 +371,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun unsetWaitDialog() {
-    access {
+    access(currentUI) {
       synchronized(waitDialog) {
         if (waitDialog.isOpened) {
           waitDialog.setTitle(null)
@@ -354,7 +384,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {
-    access {
+    access(currentUI) {
       synchronized(progressDialog) {
         progressDialog.setTitle(MessageCode.getMessage("VIS-00067"))
         progressDialog.setMessage(message)
@@ -367,7 +397,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun unsetProgressDialog() {
-    access {
+    access(currentUI) {
       synchronized(progressDialog) {
         if (progressDialog.isOpened) {
           progressDialog.setTitle(null)
@@ -384,7 +414,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun setCurrentJob(currentJob: Int) {
-    access {
+    access(currentUI) {
       synchronized(progressDialog) {
         if (progressDialog.isOpened) {
           progressDialog.setProgress(currentJob)
@@ -394,7 +424,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun setTitle(title: String) {
-    access {
+    access(currentUI) {
       setCaption(title)
     }
   }
@@ -404,7 +434,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun updateWaitDialogMessage(message: String) {
-    access {
+    access(currentUI) {
       synchronized(waitDialog) {
         waitDialog.setMessage(message)
       }
@@ -569,7 +599,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
      * @param notification The notification to be shown
      */
     internal fun showNotification(notification: AbstractNotification, lock: Object) {
-      startAndWait(lock) {
+      startAndWait(lock, currentUI) {
         notification.show()
       }
     }
@@ -598,7 +628,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // IMPLEMENTATIONS
     //-----------------------------------------------------------
     override fun setWaitInfo(message: String?) {
-      access {
+      access(currentUI) {
         synchronized(waitIndicator) {
           waitIndicator.setText(message)
           if (!waitIndicator.isOpened) {
@@ -609,7 +639,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun unsetWaitInfo() {
-      access {
+      access(currentUI) {
         synchronized(waitIndicator) {
           if (waitIndicator.isOpened) {
             waitIndicator.setText(null)
@@ -619,11 +649,10 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       }
     }
   }
+  var currentUI: UI? = null
 
-  override fun onAttach(attachEvent: AttachEvent?) {
-    currentUI = UI.getCurrent().also { requireNotNull(it) }
-    currentService = VaadinService.getCurrent().also { requireNotNull(it) }
-    currentSession = VaadinSession.getCurrent().also { requireNotNull(it) }
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
   }
   //--------------------------------------------------------------
   // ACTION RUNNER
@@ -641,9 +670,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun run() {
-      UI.setCurrent(currentUI)
-      VaadinService.setCurrent(currentService)
-      VaadinSession.setCurrent(currentSession)
+      BackgroundThreadHandler.setUI(currentUI)
       try {
         if (currentAction != null) {
           runAction()
@@ -806,9 +833,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
      * with window mechanism and will block other actions.
      */
     fun execute() {
-      //BackgroundThreadHandler.access(Runnable {  TODO
-      performActionImpl(action, asynch)
-      //})
+      access(currentUI) {
+        performActionImpl(action, asynch)
+      }
     }
 
     /**
@@ -824,7 +851,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   //---------------------------------------------------
 
   override fun fileProduced(file: File, name: String) {
-    access {
+    access(currentUI) {
       // TODO: Use InformationNotification instead, and localize the message
       Dialog().also {
         it.add("File is generated to " + file.absoluteFile)

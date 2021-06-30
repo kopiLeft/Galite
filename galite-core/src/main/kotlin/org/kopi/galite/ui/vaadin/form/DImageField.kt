@@ -86,7 +86,7 @@ class DImageField(
    * @param s The object to set in
    */
   fun setObject(s: Any?) {
-    access {
+    access(currentUI) {
       if (s == null) {
         field.setData(s)
       } else {

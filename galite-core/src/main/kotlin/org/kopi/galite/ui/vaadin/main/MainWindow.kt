@@ -26,6 +26,7 @@ import org.kopi.galite.ui.vaadin.common.VHeader
 import org.kopi.galite.ui.vaadin.common.VMain
 import org.kopi.galite.ui.vaadin.menu.ModuleList
 import org.kopi.galite.ui.vaadin.visual.DUserMenu
+import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 import org.kopi.galite.ui.vaadin.window.Window
 
@@ -54,7 +55,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * @param href The logo link.
  */
 @CssImport("./styles/galite/login.css")
-class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalLayout(), HasStyle, HasSize, Focusable<MainWindow> {
+class MainWindow(locale: Locale, val logo: String, val href: String, val application: VApplication) : VerticalLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -197,50 +198,18 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : VerticalL
    * @param window The window to be removed.
    */
   fun removeWindow(window: Component) {
-    if(!closeIfIsPopup(window)) {
-      windowsList.remove(window)
-      currentWindow = container.removeWindow(window)
-      windowsMenu.removeWindow(window)
-      if (currentWindow is Window) {
-        (currentWindow as Window).goBackToLastFocusedTextField()
-      }
-      if (windows.size <= 1) {
-        windowsLink.isEnabled = false
-      }
-      if (currentWindow == null) {
-        ui.get().page.setTitle(originalWindowTitle)
-      }
+    windowsList.remove(window)
+    currentWindow = container.removeWindow(window)
+    windowsMenu.removeWindow(window)
+    if (currentWindow is Window) {
+      (currentWindow as Window).goBackToLastFocusedTextField()
     }
-  }
-
-  /**
-   * Close [window] if it is a popup window
-   *
-   * @param window window to close
-   * @return true is [window] is a popup and it was closed
-   */
-  private fun closeIfIsPopup(window: Component): Boolean {
-    var closed  = false
-    var popupWindow: PopupWindow? = null
-
-    if(window is PopupWindow) {
-      popupWindow = window
-    } else {
-      window.parent.ifPresent {
-        it.parent.ifPresent { windowContainer ->
-          if (windowContainer is PopupWindow) {
-            popupWindow = windowContainer
-          }
-        }
-      }
+    if (windows.size <= 1) {
+      windowsLink.isEnabled = false
     }
-
-    popupWindow?.let {
-      it.close() // fire close event
-      closed = true
+    if (currentWindow == null) {
+      ui.get().page.setTitle(originalWindowTitle)
     }
-
-    return closed
   }
 
   /**
