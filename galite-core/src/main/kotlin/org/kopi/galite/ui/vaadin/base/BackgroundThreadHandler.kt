@@ -40,9 +40,7 @@ object BackgroundThreadHandler {
     if(currentUI == null) {
       command()
     } else {
-      executor.submit {
-        currentUI.access(command)
-      }
+      currentUI.access(command)
     }
   }
 
@@ -85,6 +83,6 @@ object BackgroundThreadHandler {
   // DATA MEMBERS
   //---------------------------------------------------
 
+  var executor = Executors.newCachedThreadPool()
   private val uiThreadLocal = ThreadLocal<UI?>()
-  private var executor = Executors.newCachedThreadPool()
 }

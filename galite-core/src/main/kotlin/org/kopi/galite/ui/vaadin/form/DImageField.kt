@@ -23,6 +23,7 @@ import java.io.InputStream
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.type.Date
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.ImageField
 
@@ -171,9 +172,9 @@ class DImageField(
 
   fun onUploadFailed(event: FailedEvent) {
     event.reason.printStackTrace(System.err)
-    Thread {
+    BackgroundThreadHandler.executor.submit {
       getModel().getForm().error(event.reason.message)
       //BackgroundThreadHandler.updateUI() TODO
-    }.start()
+    }
   }
 }

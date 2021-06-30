@@ -24,6 +24,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.form.VStringField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.VException
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -287,10 +288,10 @@ class DBlockDropHandler(private val block: VBlock,
 
     override fun streamingFailed(event: StreamVariable.StreamingErrorEvent) {
       event.exception.printStackTrace(System.err)
-      Thread {
+      BackgroundThreadHandler.executor.submit {
         block.form.error(event.exception.message)
         // BackgroundThreadHandler.updateUI() TODO
-      }.start()
+      }
     }
 
     override fun isInterrupted(): Boolean = false

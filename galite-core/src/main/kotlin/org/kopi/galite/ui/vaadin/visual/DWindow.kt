@@ -255,7 +255,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       }
     } else {
       val currentThread = Thread(actionRunner)
-      currentThread.start()
+      BackgroundThreadHandler.executor.submit(currentThread)
     }
   }
 
@@ -707,6 +707,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun error(event: ErrorEvent) {
+      // TODO: not covered by a test.
       try {
         // unlock session when it is locked
         // this will release the communication
@@ -864,22 +865,22 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   //---------------------------------------------------
 
   override fun fileProduced(file: File, name: String) {
-    val href = StreamResource(name, InputStreamFactory {
-      createFileInputStream(file.absolutePath)
-    })
-    val local = application.defaultLocale.toString()
-    val download = Anchor(href, "")
-    download.element.setAttribute("download", true)
-
-    val button = Button(LocalizedProperties.getString(local, "downloadLabel"), Icon(VaadinIcon.DOWNLOAD_ALT))
-    button.isDisableOnClick = true
-    download.add(button)
-
-    val title = Div()
-
-    title.text = (LocalizedProperties.getString(local, "downloadText") + " $name")
-
     access(currentUI) {
+      val href = StreamResource(name, InputStreamFactory {
+        createFileInputStream(file.absolutePath)
+      })
+      val locale = application.defaultLocale.toString()
+      val download = Anchor(href, "")
+      download.element.setAttribute("download", true)
+
+      val button = Button(LocalizedProperties.getString(locale, "downloadLabel"), Icon(VaadinIcon.DOWNLOAD_ALT))
+      button.isDisableOnClick = true
+      download.add(button)
+
+      val title = Div()
+
+      title.text = (LocalizedProperties.getString(locale, "downloadText") + " $name")
+
       Dialog().also {
         it.add(VerticalLayout(title, download))
         it.open()

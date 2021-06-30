@@ -187,14 +187,14 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun performAsyncAction(action: Action) {
-    Thread {
+    BackgroundThreadHandler.executor.submit {
       BackgroundThreadHandler.setUI(currentUI)
       try {
         action.execute()
       } catch (e: VException) {
         application.error(e.message)
       }
-    }.start()
+    }
   }
 
   override fun modelClosed(type: Int) {}

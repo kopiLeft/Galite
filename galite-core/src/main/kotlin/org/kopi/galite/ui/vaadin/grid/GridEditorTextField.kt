@@ -27,6 +27,7 @@ import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 
 /**
  * A text field used as editor
@@ -126,13 +127,13 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     addNavigationAction(Key.KEY_D, KeyModifier.of("Control")) {
       val ui = UI.getCurrent()
 
-      Thread {
+      BackgroundThreadHandler.executor.submit {
         val text = StringBuffer(value)
         text.insert(Utils.getCursorPos(wrappedField), "\u00D8")
         access(ui) {
           value = text.toString()
         }
-      }.start()
+      }
     }
     addNavigationAction(Key.HOME, KeyModifier.of("Shift")) { dGridEditorField.onGotoFirstRecord() }
     addNavigationAction(Key.END, KeyModifier.of("Shift")) { dGridEditorField.onGotoLastRecord() }

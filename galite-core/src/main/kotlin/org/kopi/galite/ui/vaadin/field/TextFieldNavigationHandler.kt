@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
 
@@ -47,13 +48,13 @@ class TextFieldNavigationHandler protected constructor(private val isMulti: Bool
     addKeyNavigator(field, Key.KEY_D, KeyModifier.of("Control")) {
       val ui = UI.getCurrent()
 
-      Thread {
+      BackgroundThreadHandler.executor.submit {
         val text = StringBuffer(field.value)
         text.insert(Utils.getCursorPos(field), "\u00D8")
         access(ui) {
           field.value = text.toString()
         }
-      }.start()
+      }
     }
     addKeyNavigator(field, Key.PAGE_DOWN) {
       field.fieldConnector.columnView!!.gotoNextRecord()

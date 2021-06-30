@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.Utils
 
 import com.vaadin.flow.component.AttachEvent
@@ -111,12 +112,12 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
 
           if (cell != null) {
             add(components!![i])
-            Thread {
+            BackgroundThreadHandler.executor.submit {
               setComponentPosition(
                 components!![i],
                 Utils.getOffsetLeft(cell, ui),
                 align.y * 21) // text fields height is 15px
-            }.start()
+            }
           }
         }
       }
