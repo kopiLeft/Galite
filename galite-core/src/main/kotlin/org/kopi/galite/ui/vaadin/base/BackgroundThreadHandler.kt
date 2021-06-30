@@ -18,8 +18,7 @@
 package org.kopi.galite.ui.vaadin.base
 
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.server.Command
-import com.vaadin.flow.server.VaadinSession
+import java.util.concurrent.Executors
 
 /**
  * Collects some utilities for background threads in a vaadin application.
@@ -35,13 +34,14 @@ object BackgroundThreadHandler {
    * Exclusive access to the UI from a background thread to perform some updates.
    * @param command the command which accesses the UI.
    */
-  fun access(command: Command) {
-    val currentUI = UI.getCurrent()
-
-    if(currentUI.internals.session == null) {
-      currentUI.internals.session = VaadinSession.getCurrent()
+  fun access(currentUI: UI? = UI.getCurrent(), command: () -> Unit) {
+    if(currentUI == null) {
+      command()
+    } else {
+      executor.submit {
+        currentUI.access(command)
+      }
     }
-    currentUI.access(command)
   }
 
   /**
@@ -51,8 +51,8 @@ object BackgroundThreadHandler {
    * @param lock      The lock object.
    * @param command   The command which accesses the UI.
    */
-  fun startAndWait(lock: Object, command: Command) {
-    access(command)
+  fun startAndWait(lock: Object, currentUI: UI? = UI.getCurrent(), command: () -> Unit) {
+    access(currentUI = currentUI, command = command)
 
     synchronized(lock) {
       try {
@@ -72,4 +72,17 @@ object BackgroundThreadHandler {
       lock.notifyAll()
     }
   }
+
+  fun setUI(ui: UI?) {
+    uiThreadLocal.set(ui)
+  }
+
+  fun getUI(): UI? = uiThreadLocal.get()
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+
+  private val uiThreadLocal = ThreadLocal<UI?>()
+  private var executor = Executors.newCachedThreadPool()
 }

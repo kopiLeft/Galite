@@ -45,8 +45,12 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
     scrollPanel = VScrollablePanel(this.content)
     add(scrollPanel)
     className = Styles.FORM_PAGE
+  }
 
-    access {
+  override fun onAttach(attachEvent: AttachEvent) {
+    element.executeJs("return $0.clientWidth", this.element).then { width -> this.width = width.asNumber() }
+
+    access(attachEvent.ui) {
       UI.getCurrent().page.addBrowserWindowResizeListener { event ->
         if (event.width < width) {
           this.style["width"] = (event.width - 28).toString() + "px"
@@ -57,10 +61,6 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
 
       }
     }
-  }
-
-  override fun onAttach(attachEvent: AttachEvent?) {
-    element.executeJs("return $0.clientWidth", this.element).then { width -> this.width = width.asNumber() }
   }
 
   //---------------------------------------------------

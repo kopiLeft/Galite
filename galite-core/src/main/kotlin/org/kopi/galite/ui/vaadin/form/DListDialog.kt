@@ -35,6 +35,7 @@ import org.kopi.galite.visual.UWindow
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VlibProperties
+import org.kopi.galite.visual.VWindow
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyDownEvent
@@ -77,7 +78,7 @@ class DListDialog(
 
     // too many rows case
     if (model.isTooManyRows) {
-      handleTooManyRows()
+      handleTooManyRows(window?.getModel())
     }
     prepareDialog() // prepares the dialog data.
     if (field != null) {
@@ -89,7 +90,7 @@ class DListDialog(
         //showRelativeTo((field as DGridEditorField<*>).getEditor()) TODO
       }
     }
-    showDialogAndWait()
+    showDialogAndWait(window?.getModel())
     return handleClientResponse()
   }
 
@@ -350,8 +351,8 @@ class DListDialog(
   /**
    * Shows the dialog and wait until it is closed from client side.
    */
-  protected fun showDialogAndWait() {
-    startAndWait(lock) {
+  protected fun showDialogAndWait(model: VWindow?) {
+    startAndWait(lock, model?.ui) {
       showListDialog()
     }
   }
@@ -367,7 +368,7 @@ class DListDialog(
    * Handles the too many rows case.
    * This will show a user notification.
    */
-  protected fun handleTooManyRows() {
+  protected fun handleTooManyRows(model: VWindow?) {
     val lock = Object()
     val notice = InformationNotification(VlibProperties.getString("Notice"),
                                          MessageCode.getMessage("VIS-00028"),
@@ -378,7 +379,7 @@ class DListDialog(
         releaseLock(lock)
       }
     })
-    startAndWait(lock) {
+    startAndWait(lock, model?.ui) {
       notice.show()
     }
   }

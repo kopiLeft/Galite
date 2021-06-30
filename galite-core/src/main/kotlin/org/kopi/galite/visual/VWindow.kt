@@ -18,6 +18,8 @@
 
 package org.kopi.galite.visual
 
+import kotlin.jvm.Throws
+
 import java.awt.Frame
 import java.awt.event.KeyEvent
 import java.io.File
@@ -32,7 +34,8 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.db.DBDeadLockException
 import org.kopi.galite.db.XInterruptProtectedException
 import org.kopi.galite.l10n.LocalizationManager
-import kotlin.jvm.Throws
+
+import com.vaadin.flow.component.UI
 
 /**
  * Creates a window
@@ -57,6 +60,7 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
   protected val f12: VActor
   open val source: String? = null // The localization source of this window.
   open val locale: Locale? = null
+  var ui: UI? = UI.getCurrent()
 
   init {
     f12 = VActor("File",

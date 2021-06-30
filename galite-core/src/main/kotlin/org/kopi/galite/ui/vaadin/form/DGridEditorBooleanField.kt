@@ -56,7 +56,7 @@ class DGridEditorBooleanField(
   // IMPLEMENTATION
   //---------------------------------------------------
   override fun updateText() {
-    access {
+    access(currentUI) {
       editor.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
     }
   }

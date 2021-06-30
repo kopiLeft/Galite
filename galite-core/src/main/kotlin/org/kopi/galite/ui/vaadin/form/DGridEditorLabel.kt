@@ -28,6 +28,9 @@ import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.grid.GridEditorLabel
 import org.kopi.galite.visual.VActor
 
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
+
 /**
  * The editor label used as grid component header.
  */
@@ -47,7 +50,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(), ULabel
   //---------------------------------------------------
   override fun init(text: String?, tooltip: String?) {
     this.tooltip = tooltip
-    access {
+    access(currentUI) {
       add(text.orEmpty())
       setDescription(Utils.createTooltip(tooltip))
     }
@@ -67,7 +70,7 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(), ULabel
    * @param row The field row.
    */
   fun update(model: VFieldUI, row: Int) {
-    access {
+    access(currentUI) {
       if (model.model.getAccess(row) == VConstants.ACS_SKIPPED) {
         // Only show base help on a skipped field
         // Actors are not shown since they are not active.
@@ -104,6 +107,12 @@ class DGridEditorLabel(text: String?, help: String?) : GridEditorLabel(), ULabel
       }
     }
     return description
+  }
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
   }
 
   companion object {

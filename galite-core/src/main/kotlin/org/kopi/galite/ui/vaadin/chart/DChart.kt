@@ -75,14 +75,16 @@ class DChart(model: VWindow) : DWindow(model), UChart {
   //---------------------------------------------------
   override var type: UChartType? = null
     set(newType) {
-      access {
-        if (field != null && newType != null) {
-          content.remove(field as Component)
-        }
-        if (newType != null) {
-          field = newType
-          newType.build()
-          content.add(newType as Component)
+      addAttachListener {
+        access(it.ui) {
+          if (field != null && newType != null) {
+            content.remove(field as Component)
+          }
+          if (newType != null) {
+            field = newType
+            newType.build()
+            content.add(newType as Component)
+          }
         }
       }
     }

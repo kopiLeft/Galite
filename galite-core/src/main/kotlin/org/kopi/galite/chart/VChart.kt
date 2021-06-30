@@ -35,6 +35,7 @@ import org.kopi.galite.db.DBContextHandler
 import org.kopi.galite.l10n.ChartLocalizer
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.Printable
+import org.kopi.galite.report.VReport
 import org.kopi.galite.util.PPaperType
 import org.kopi.galite.util.PrintJob
 import org.kopi.galite.util.base.InconsistencyException

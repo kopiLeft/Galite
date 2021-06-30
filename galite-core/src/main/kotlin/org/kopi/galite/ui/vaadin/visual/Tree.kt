@@ -25,6 +25,8 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.visual.Item
 import org.kopi.galite.visual.UItemTree.UTreeComponent
 
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -47,6 +49,7 @@ class Tree(
   //---------------------------------------------------
   private var lastModifiedItemId: TreeNode? = null
   private var itemsIds = mutableMapOf<Int, TreeNodeComponent>()
+  var currentUI: UI? = null
 
   init {
     setSizeFull()
@@ -134,13 +137,13 @@ class Tree(
   // TREE IMPLEMENTATION
   //----------------------------------------------------------
   override fun collapseRow(row: Int) {
-    access {
+    access(currentUI) {
       collapse(itemsIds[row]?.nodeItem)
     }
   }
 
   override fun expandRow(row: Int) {
-    access {
+    access(currentUI) {
       expand(itemsIds[row]?.nodeItem)
     }
   }
@@ -256,6 +259,9 @@ class Tree(
 
   fun getChildrenOf(node: TreeNode?): Array<TreeNode>? = treeData.getChildren(node)?.toTypedArray()
 
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
   inner class TreeNodeComponent(val nodeItem: TreeNode, val item: Item?): HorizontalLayout() {
 
     private val text = Span(item?.getFormattedName(localised))
@@ -289,7 +295,7 @@ class Tree(
      * @param item The tree item .
      */
     fun setIcon(item: Item?) {
-      access {
+      access(currentUI) {
         if (item!!.id != -1) {
           if (item.isDefaultItem) {
             setItemIcon(Utils.getImage("default.png").resource)

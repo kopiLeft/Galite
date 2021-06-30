@@ -94,8 +94,8 @@ class Module(val id: Int,
    *
    * @param    context        the context where to look for application
    */
-  fun run(context: DBContext) {
-    startForm(context, objectName, description, smallIcon)
+  fun run(context: DBContext, model: VWindow? = null) {
+    startForm(context, objectName, description, smallIcon, model)
   }
 
   override fun toString(): String = shortname
@@ -157,7 +157,8 @@ class Module(val id: Int,
     fun startForm(ctxt: DBContext,
                   objectName: String?,
                   description: String,
-                  icon: Image? = null): Executable? {
+                  icon: Image? = null,
+                  model: VWindow? = null): Executable? {
       return try {
         if (ApplicationContext.getDefaults().isDebugModeEnabled) {
           System.gc()
@@ -168,6 +169,9 @@ class Module(val id: Int,
 
         if (form is VWindow) {
           form.smallIcon = icon
+          model?.ui?.let {
+            form.ui = it
+          }
         }
         form.dBContext = ctxt
         form.doNotModal()

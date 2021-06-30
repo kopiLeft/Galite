@@ -18,6 +18,7 @@
 
 package org.kopi.galite.visual
 
+import com.vaadin.flow.server.VaadinService
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.l10n.LocalizationManager
 

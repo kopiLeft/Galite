@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
+import com.vaadin.flow.component.AttachEvent
 import java.io.File
 
 import javax.swing.tree.DefaultMutableTreeNode
@@ -35,10 +36,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VMenuTree
 
-import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.contextmenu.MenuItem
-import com.vaadin.flow.server.VaadinService
-import com.vaadin.flow.server.VaadinSession
 
 /**
  * A module menu implementation that uses the menu tree
@@ -151,7 +149,7 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
       override fun execute() {
         try {
           setWaitInfo(VlibProperties.getString("menu_form_started"))
-          module.run(model.dBContext!!)
+          module.run(model.dBContext!!, model)
         } finally {
           unsetWaitInfo()
         }
@@ -187,17 +185,7 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun performAsyncAction(action: Action) {
-    val currentUI = UI.getCurrent()
-    val currentService = VaadinService.getCurrent()
-    val currentSession = VaadinSession.getCurrent()
-
-    requireNotNull(currentUI)
-    requireNotNull(currentService)
-    requireNotNull(currentSession)
     Thread {
-      UI.setCurrent(currentUI)
-      VaadinService.setCurrent(currentService)
-      VaadinSession.setCurrent(currentSession)
       try {
         action.execute()
       } catch (e: VException) {
@@ -210,17 +198,21 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   override fun setWaitDialog(message: String, maxtime: Int) {}
   override fun unsetWaitDialog() {}
   override fun setWaitInfo(message: String?) {
-    access {
+    access(model.ui) {
       waitIndicator.setText(message)
       waitIndicator.show()
     }
   }
 
   override fun unsetWaitInfo() {
-    access {
+    access(model.ui) {
       waitIndicator.setText(null)
       waitIndicator.close()
     }
+  }
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    model.ui = attachEvent.ui
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {}

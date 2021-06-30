@@ -19,16 +19,18 @@ package org.kopi.galite.ui.vaadin.visual
 
 import org.kopi.galite.common.Window
 import org.kopi.galite.preview.VPreviewWindow
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.window.PopupWindow
-import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VHelpViewer
 import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VRuntimeException
 import org.kopi.galite.visual.VWindow
 import org.kopi.galite.visual.WindowController
+
+import com.vaadin.flow.component.UI
 
 /**
  * The `VWindowController` is the vaadin implementation
@@ -61,12 +63,12 @@ class VWindowController : WindowController() {
       try {
         val view = builder.createWindow(model) as DWindow
         view.run()
-        val application = ApplicationContext.applicationContext.getApplication() as VApplication
+        val application = getApplication(model.ui)
         if (application != null) {
           if (model is VPreviewWindow
                   || model is VHelpViewer
                   || model is VMenuTree) {
-            showNotModalPopupWindow(application, view, model.getTitle())
+            showNotModalPopupWindow(view, model.getTitle())
           } else {
             application.addWindow(view, model.getTitle())
           }
@@ -90,7 +92,6 @@ class VWindowController : WindowController() {
    * @param title The window title.
    */
   protected fun showNotModalPopupWindow(
-          application: VApplication,
           view: DWindow,
           title: String,
   ) {
@@ -98,10 +99,24 @@ class VWindowController : WindowController() {
     popup.isModal = false
     popup.setContent(view)
     popup.setCaption(title) // put popup title
-    access {
+    access(view.getModel()?.ui) {
       popup.open()
     }
   }
+
+  private fun getApplication(ui: UI?): VApplication? {
+    val ui = ui ?: UI.getCurrent() ?: BackgroundThreadHandler.getUI()
+    return if (ui == null) {
+      null
+    } else {
+      ui.children
+        .filter { component -> component is VApplication }
+        .findFirst()
+        .orElse(null) as? VApplication
+    }
+  }
+
+
   //---------------------------------------------------
   // MODAL VIEW STARTER
   //---------------------------------------------------
@@ -122,7 +137,7 @@ class VWindowController : WindowController() {
         try {
           view = builder.createWindow(model) as DWindow
           view!!.run()
-          val application = ApplicationContext.applicationContext.getApplication() as VApplication
+          val application = getApplication(model.ui)
           if (application != null) {
             val popup = PopupWindow()
             popup.isModal = true

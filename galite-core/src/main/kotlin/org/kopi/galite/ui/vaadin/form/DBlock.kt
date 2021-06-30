@@ -257,7 +257,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
       }
     }
     // Consider the model active record changes.
-    access {
+    access(model.form.ui) {
       fireActiveRecordChanged(model.activeRecord)
     }
   }
