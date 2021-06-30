@@ -15,41 +15,35 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.menu
+package org.kopi.galite.ui.vaadin.actor
 
-import org.kopi.galite.ui.vaadin.actor.VActorNavigationItem
-import org.kopi.galite.ui.vaadin.actor.VHeaderNavigationItem
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.html.Span
 
-import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
-
-class VNavigationColumn(val ident : String?) : VerticalLayout(), HasStyle {
-
-  init {
-    width = "calc(25% - 3px)"
-  }
-
+abstract class VNavigationItem : Span() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private val items = ArrayList<VActorNavigationItem>()
-  private val header = VHeaderNavigationItem()
+  protected val caption = Div()
+  protected val acceleratorKey = Span()
+  protected var icon : Component? = null
 
-  /**
-   * Sets the header item of this navigation column.
-   * @param header The header item.
-   */
-  fun setHeader(headerName: String?) {
-    header.setCaption(headerName)
-    add(header)
+  abstract fun setCaption(text: String?)
+
+  open fun getCaption(): String? {
+    return caption.element.text
   }
 
-  /**
-   * Adds the given clickable item to this navigation column.
-   * @param item The clickable item to be added.
-   */
-  fun addClickableItem(item: VActorNavigationItem) {
-    items.add(item)
-    add(item)
+  abstract fun setDescription(key: Key?, keyModifier: KeyModifier?)
+
+  abstract fun setIcon(iconName: Any?)
+
+  fun createComponent() {
+    className = getClassName()
+    acceleratorKey.className = "acceleratorKey"
+    add(icon, caption, acceleratorKey)
   }
 }

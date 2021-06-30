@@ -52,18 +52,6 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     createNavigationActions()
   }
 
-  /**
-   * Sets this field to be an auto fill field
-   */
-  fun setAutofill() {
-    val autofillIcon  = IronIcons.ARROW_DROP_DOWN.create()
-    autofillIcon.style["cursor"] = "pointer" // TODO: move to css
-    autofillIcon.addClickListener {
-      dGridEditorField.onAutofill()
-    }
-    wrappedField.suffixComponent = autofillIcon
-  }
-
   override fun setPresentationValue(newPresentationValue: String?) {
     wrappedField.value = newPresentationValue.toString()
   }
@@ -87,6 +75,17 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
    * @return True if it is a multi line editor field.
    */
   protected open val isMultiLine: Boolean = false
+
+  /**
+   * Sets this field to be an auto fill field
+   */
+  fun setAutofill() {
+    val autofillIcon  = IronIcons.ARROW_DROP_DOWN.create()
+    autofillIcon.addClickListener {
+      dGridEditorField.onAutofill()
+    }
+    wrappedField.suffixComponent = autofillIcon
+  }
 
   /**
    * Validates the given text according to the field type.

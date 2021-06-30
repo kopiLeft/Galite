@@ -142,6 +142,7 @@
  * Grid editor main styles
  */
 .v-grid-editor-cells > div .editor-field {
+  cursor: pointer;
   min-width: 100%;
   max-width: 100%;
   min-height: 100%;

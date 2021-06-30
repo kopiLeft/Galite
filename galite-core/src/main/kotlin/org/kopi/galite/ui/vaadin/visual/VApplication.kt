@@ -59,6 +59,7 @@ import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.component.page.Viewport
 import com.vaadin.flow.router.Route
 
 /**

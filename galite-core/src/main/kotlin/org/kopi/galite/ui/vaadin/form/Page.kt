@@ -17,11 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VScrollablePanel
 import org.kopi.galite.ui.vaadin.block.Block
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.UI
@@ -29,7 +30,6 @@ import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.AttachEvent
 
 /**
  * A form page, can be either or vertical or horizontal page.
@@ -37,7 +37,7 @@ import com.vaadin.flow.component.AttachEvent
 class Page<T>(private var content: T) : Div()  where T: Component, T: FlexComponent {
 
   private var scrollPanel: VScrollablePanel?
-  private var last: Component? = null
+  private var last: Block? = null
   private var width = 0.0
 
   init {
@@ -48,7 +48,8 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
     className = Styles.FORM_PAGE
     access {
       UI.getCurrent().page.retrieveExtendedClientDetails { receiver ->
-        width = receiver.screenWidth.toDouble() - 10
+        width = receiver.windowInnerWidth.toDouble() - 10
+
         this.style["max-width"] = width.toString() + "px"
       }
 
@@ -92,8 +93,10 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
       val temp = VerticalLayout()
       temp.className = "follow-blocks-container"
       content.remove(last)
+      last!!.addClassName("k-block-orig")
       temp.add(last)
       temp.add(child)
+      child.addClassName("k-block-aligned")
       content.add(temp)
     } else {
       add(child, align)
