@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.list
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VInputButton
+import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.visual.ApplicationContext
 
@@ -27,10 +28,13 @@ import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.progressbar.ProgressBar
 
 /**
  * A list dialog
@@ -68,8 +72,49 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
   fun showListDialog() {
     // setNewText(newText) TODO
     // now show the list dialog
-    // now show the list dialog
-    open()
+    openAndExpand()
+  }
+
+  private fun openAndExpand() {
+    val ui = UI.getCurrent()
+    var width = ""
+    var columns = 0
+    val progress = Dialog(ProgressBar().also { it.isIndeterminate = true })
+
+    super.open()
+
+    progress.isCloseOnOutsideClick = false
+    progress.isCloseOnEsc = false
+
+    if(table!!.headerComponents.isNotEmpty()) {
+      height = "0px"
+      progress.open()
+    }
+    table!!.headerComponents.first().element.addAttachListener {
+      Thread {
+        table!!.headerComponents.forEach { header ->
+          val headerWidth = Utils.getWidth(header.parent.get().element, ui)
+          if (width == "") {
+            width = headerWidth.orEmpty()
+          } else if(headerWidth != null && headerWidth.isNotEmpty()) {
+            width = "$width + $headerWidth"
+          }
+
+          if(++columns == table!!.headerComponents.size) {
+            ui.access {
+              widthStyler.width = "calc(calc($width) + 20px)"
+              widthStyler.minWidth = "calc(calc($width) + 20px)"
+              progress.close()
+              height = null
+            }
+          }
+        }
+      }.start()
+    }
+  }
+
+  override fun open() {
+    showListDialog()
   }
 
   /**
