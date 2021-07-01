@@ -32,14 +32,11 @@ import org.kopi.galite.ui.vaadin.form.DTextField
 import org.kopi.galite.ui.vaadin.form.KeyNavigator
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
-import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A text field component.
@@ -146,8 +143,6 @@ class TextField(val model: VField,
 
   internal var lastCommunicatedValue = ""
 
-  val listeners = mutableListOf<HasValue.ValueChangeListener<ComponentValueChangeEvent<*, *>>>()
-
   private val textFieldListeners = mutableListOf<TextFieldListener>()
 
   init {
@@ -184,12 +179,6 @@ class TextField(val model: VField,
   }
 
   val maxLength: Int get() = col * rows
-
-  override fun onAttach(attachEvent: AttachEvent) {
-    listeners.forEach {
-      field.addTextValueChangeListener(it)
-    }
-  }
 
   fun setFieldType() {
     // set field type according to the model
@@ -428,14 +417,6 @@ class TextField(val model: VField,
   }
 
   override fun generateModelValue(): Any? = field.value
-
-  /**
-   * Registers a text change listener
-   * @param l The text change listener.
-   */
-  fun addTextValueChangeListener(l: HasValue.ValueChangeListener<ComponentValueChangeEvent<*, *>>) {
-    listeners.add(l)
-  }
 
   /**
    * Communicates the widget text to server side.
