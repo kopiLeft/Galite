@@ -35,7 +35,6 @@
     height: 20px;
     padding-right: 8px;
     display: table-cell;
-    /*vertical-align: top;*/ /* make label and field in same line*/
 }
 
 /**
@@ -44,13 +43,6 @@
 .simple .k-textinput {
     padding-right: 24px;
 }
-
-/* -> .info-content td replaced by .info-content .k-textinput --> this generates a large space for (follow fields) and does not give the same behavior as kopi
-*/
-/*.info-content .k-textinput {
-    display: table-cell;
-    vertical-align: top !important;
-}*/
 
 /**
  * The block title styles
@@ -63,41 +55,12 @@
 }
 
 /**
- * Grid row detail layout styles
- * --> no example in kopi
- */
-/*.k-blocklayout-grid-detail {
-    padding: 8px;
-    width: 100% !important;
-}*/
-
-/**
- * Grid spacer styles (that contains detail view)
- * -> --> no example in kopi
- */
-/* .v-grid-spacer {
-    background: #ffffff !important;
-}*/
-
-/**
- * Styles for grid header and content cells.
- ** we don't need it
- */
-/* .k-blocklayout-simple .v-grid-tablewrapper,
-.k-blocklayout-simple .v-grid-header-deco,
-.k-blocklayout-simple .v-grid-tablewrapper td,
-.k-blocklayout-simple .v-grid-tablewrapper th {
-    border: none;
-}*/
-
-/************************************************/
-/**
  * Styles for grid, remove border
  */
 #main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
       border: none;
 }
- /************************************************/
+
 /**
  * Styles for the grid wrapper cell
  */
@@ -114,31 +77,8 @@
 }
 
 /**
- * Styles for grid Filters cells
- */
-/*.k-blocklayout .v-grid-row.block-filter th {
-    border-bottom: none;
-}*/
-
-/**
- * Styles for even rows in a block grid.
- * -> we don't need it
- */
-/* .k-blocklayout-simple .v-grid-body tr.v-grid-row:nth-child(even) {
-      background: #f2f2f2;
-}
-*/
-/**
- * Styles for odd rows in a block grid.
- * -> we don't need it
- */
-/* .k-blocklayout-simple .v-grid-body tr.v-grid-row:nth-child(odd) .v-grid-body {
-      background: #ffffff;
-}*/
-
-/**
  * Styles for grid body cell.
- * -> generates a problem in the display of fields in the grid
+ *
  */
 .multiple ::part(body-cell) {
     border-bottom: #a3a3a3 1px solid !important;
@@ -151,39 +91,6 @@
 .k-block.k-block-aligned {
     margin-top: -56px;
 }
-
-/* -> Style when adding the filter in the grid */
-  /**
-   * Filter text zones styles.
-   */
- /* .k-blocklayout-simple .v-grid-row.block-filter .v-grid-cell .filter-text {
-      min-width: 100%;
-      max-width: 100%;
-      min-height: 100%;
-      max-height: 100%;
-      padding: 0px 13px 5px 0px;
-      font-size: 0px 13px 5px 0px; /* to check en kopi !!
-      background-image: url('resource/searchop.png');
-      background-size: 12px;
-      background-position: right;
-      background-repeat: no-repeat;
-  }*/
-
-  /**
-   * Focus styles for filter text
-   */
-  /*.v-grid-cell .v-textfield:focus {
-      background: none;
-      border-bottom: #009bd4 1px solid;
-  }*/
-
-  /**
-   * Styles for filter text
-   */
- /* .v-grid-cell .v-textfield {
-      background: none;
-      border-bottom: #dadada 1px solid;
-  }*/
 
 /*
  * make label & follow field in same line

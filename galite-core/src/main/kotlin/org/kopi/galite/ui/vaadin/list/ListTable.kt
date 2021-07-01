@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
-import com.vaadin.flow.component.Component
 import org.kopi.galite.form.VListDialog
 
 import com.vaadin.flow.component.grid.Grid
@@ -28,6 +27,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Span
+import com.vaadin.flow.component.Component
 
 @CssImport("./styles/galite/list.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {

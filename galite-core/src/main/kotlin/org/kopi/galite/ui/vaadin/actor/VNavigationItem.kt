@@ -31,19 +31,30 @@ abstract class VNavigationItem : Span() {
   protected val acceleratorKey = Span()
   protected var icon : Component? = null
 
-  abstract fun setCaption(text: String?)
+  init {
+    className = getClassname()
+  }
 
-  open fun getCaption(): String? {
+  fun setCaption(text: String?) {
+    caption.text = text
+  }
+
+  fun getCaption(): String? {
     return caption.element.text
   }
 
-  abstract fun setDescription(key: Key?, keyModifier: KeyModifier?)
+  protected abstract fun setDescription(key: Key?, keyModifier: KeyModifier?)
 
-  abstract fun setIcon(iconName: Any?)
+  protected abstract fun setIcon(iconName: Any?)
+
+  protected abstract fun   getClassname(): String
 
   fun createComponent() {
-    className = getClassName()
     acceleratorKey.className = "acceleratorKey"
-    add(icon, caption, acceleratorKey)
+    icon?.let {
+      add(it)
+    }
+    add(caption)
+    add(acceleratorKey)
   }
 }

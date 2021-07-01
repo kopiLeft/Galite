@@ -49,3 +49,7 @@ vaadin-date-time-picker {
 .vaadin-text-field-container  [part~='input-field'] [name~="suffix"] {
     font-size: 13px;
 }
+
+:host([disabled]) [part="input-field"] {
+    background: transparent;
+}

@@ -81,14 +81,14 @@
     box-sizing: border-box;
 }
 
- /*
+/**
  * Change the dots' style when hovered
  */
 ::part(overflow-button):hover {
     background-color: #d9f0f8;
 }
 
-/*
+/**
  * Modules style
  */
 #module_list :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
@@ -105,9 +105,6 @@
     background-color: #d9f0f8;
 }
 
-/*
-user , admin , wrk context and bookmark
-*/
 #welcome ::part(menu-bar-button) {
     height : 60px;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
@@ -118,9 +115,9 @@ user , admin , wrk context and bookmark
     background-color: #d9f0f8;
 }
 
-/*
-    modules submenu
-*/
+/**
+ * modules submenu style
+ */
 .vaadin-menu-item {
     color: #8f8f8f;
     width: 100%;
@@ -130,7 +127,7 @@ user , admin , wrk context and bookmark
     font-size: 12px;
 }
 
-/*
+/**
  * Right Menus style
  */
 #user_menu , #wrkcontext_menu , #bookmarks_menu , #admin_menu {
@@ -167,7 +164,7 @@ user , admin , wrk context and bookmark
     text-transform: none;
 }
 
-/*
+/**
  * switch window style
  */
 .window-items-title, .window-items-container .item {

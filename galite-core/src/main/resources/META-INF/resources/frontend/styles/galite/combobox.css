@@ -22,6 +22,15 @@
 
 :host(.custom-combobox) [part='text-field'] {
     border-bottom: #dadada 1px solid;
+    max-height: 20px;
+}
+
+[part='input-field'] {
+    max-height: 20px;
+}
+
+:host(.custom-combobox) [part='input-field'] {
+    max-height: 20px;
 }
 
 [part~='input-field']::after {

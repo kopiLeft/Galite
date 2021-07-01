@@ -9,10 +9,6 @@ import com.vaadin.flow.component.icon.VaadinIcon
 open class VClickableNavigationItem : VNavigationItem() {
   private val DEPENDENT_STYLENAME_DISABLED_ITEM = "disabled"
 
-  override fun setCaption(text: String?) {
-    caption.text = text
-  }
-
   override fun setDescription(key: Key?, keyModifier: KeyModifier?) {
     if (key != null && key != Key.UNIDENTIFIED) {
       val modifier = keyModifier?.keys?.get(0)
@@ -23,12 +19,16 @@ open class VClickableNavigationItem : VNavigationItem() {
   }
 
   override fun setIcon(iconName: Any?) {
-    if (iconName is VaadinIcon) {
-      icon = Icon(iconName)
+    icon = if (iconName is VaadinIcon) {
+      Icon(iconName)
     } else if (iconName is IronIcons) {
-      icon = iconName.create()
+      iconName.create()
+    } else {
+      Icon("")
     }
   }
+
+  override fun getClassname(): String = ""
 
   override fun setEnabled(isEnabled: Boolean) {
     className = if(isEnabled) {

@@ -24,15 +24,14 @@ class VHeaderNavigationItem : VNavigationItem() {
   init {
     createComponent()
   }
-  override fun setCaption(text: String?) {
-    caption.text = text
-  }
 
   override fun setDescription(key: Key?, keyModifier: KeyModifier?) {
-    TODO("Not yet implemented")
+    // not used
   }
 
   override fun setIcon(iconName: Any?) {
-    TODO("Not yet implemented")
+    // not used
   }
+
+  override fun getClassname(): String = "header"
 }

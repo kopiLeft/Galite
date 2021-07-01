@@ -32,14 +32,6 @@
     font-family: Arial, sans-serif !important;
 }
 
-/**
- * Tab sheet cells styles
- * -> no need to add this style
- */
-/*.k-form-tab tr, .k-form-tab td {
-    display: table-cell;
-}*/
-
 .k-form-tab .selected-tab::after {
     width: 90%;
 }
@@ -67,32 +59,22 @@
     font-weight: 500 !important;
     font-style: normal !important;
     color: #000000;
-    border-bottom: 3px solid #009bd4; /* add this style to put a wide border under tab*/
+    border-bottom: 3px solid #009bd4;
 }
 
-/* this style for disabled tabs*/
+/**
+ * disabled tabs styles
+ */
 .k-form-tab .tab:not(.selected-tab):hover {
     border-bottom: 3px solid #dadada;
 }
 
-/* Style add to remove the small border under the tab*/
+/**
+ * remove the small border under the tab styles
+ */
  .k-form-tab .selected-tab::before {
       transform: translateX(0%) scale(0);
   }
-
-/**
- * Tab sheet anchor default styles
- */
-/* .k-form-tab .tab {
-    width: 100%;
-    height: auto;
-    display: inline-block;
-    padding: 15px 30px 10px 30px;
-    position: relative;
-    color: #676767;
-    text-align: center;
-    line-height: 1.5em;
-}*/
 
 /**
  * Tab sheet (not active tab) hover styles
@@ -132,14 +114,14 @@
 /**
  * Main styles for form component
  */
-/*.k-form {
+.k-form {
     background: #f2f2f2;
     width: 100%;
     height: auto;
     display: inline-block;
     vertical-align: top;
     padding: 10px 20px;
-}*/
+}
 
 /**
  * Form content styles
@@ -156,108 +138,30 @@
     padding-top: 22px;
     padding-left: 50px;
 }
+
 /**
- * Position Panel styles
- * -> I did not find an example in kopi
+ * Spinner style
  */
-/* .k-positionpanel {
- 	background-color: #F2F2F2 ;
- 	margin-top: 10px;
- }
 
- div.records-totalInfo {
- 	height: 27px;
-	width: 20px;
-	padding-top: 5px !important;
- 	font-size: 14px !important;
- 	text-decoration: none !important;
- 	color: #444444 !important;
- 	font-weight: bold !important;
- 	text-align: center;
- 	border-bottom: 1px solid;
-	border-right: 1px solid;
-	border-top: 1px solid;
-	border-bottom-right-radius: 5px;
-	border-top-right-radius: 5px;
- }
-
- div.slash {
- 	height: 27px;
-	padding-left: 4px;
-	padding-right: 4px;
-	padding-top: 5px !important;
-	font-size: 14px !important;
-	text-decoration: none !important;
-	color: #444444 !important;
-	font-weight: bold !important;
-	border-bottom: 1px solid;
-	border-top: 1px solid;
- }
-
- input.records-info {
- 	height: 27px;
-	width: 20px;
- 	font-size: 14px !important;
- 	text-decoration: none !important;
- 	color: #444444 !important;
- 	font-weight: bold !important;
- 	text-align: center;
- 	border-bottom: 1px solid;
-	border-left: 1px solid;
-	border-top: 1px solid;
-	border-bottom-left-radius: 5px;
-	border-top-left-radius: 5px;
- }
-
- button.v-disabled-button {
- 	border: 1px solid #5F9EA0;
-	border-radius: 5px;
-	height: 27px;
-	width: 30px;
-	background-color: #009BD4;
- }
-
- button.v-enabled-button {
- 	border: 1px solid #5F9EA0;
-	border-radius: 5px;
-	height: 27px;
-	width: 30px;
-	background-color: #61c2e3;
- }
-
- button.v-enabled-button:hover {
-     background-color: #547988;
- }
-
- .k-positionpanel button .fa {
-     color: white;
-     font-size: 18px !important;
- }*/
-
- /******our style *******/
- /*
-  * Spinner style
-  */
-
-  .k-wait-window-image {
+.k-wait-window-image {
     border: 10px solid #f3f3f3;
     border-radius: 50%;
     border-top: 10px solid #3498db;
     width: 50px;
     height: 50px;
     animation: spin 2s linear infinite;
-  }
+}
 
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
 
- /*
-  * scrollbar style
-  */
- .k-form-page {
-     overflow: auto;
-     height: calc(100vh - 210px);
- }
- /*************/
+/**
+ * scrollbar style
+ */
+.k-form-page {
+    overflow: auto;
+    height: calc(100vh - 210px);
+    max-width: calc(100vw - 30px);
+}

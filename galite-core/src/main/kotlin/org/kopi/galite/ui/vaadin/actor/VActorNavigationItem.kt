@@ -55,7 +55,5 @@ class VActorNavigationItem(text: String,
     createComponent()
   }
 
-  protected fun getClassname(): String {
-    return "actor-navigationItem"
-  }
+  override fun getClassname(): String = "actor-navigationItem"
 }

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
- /*
+/**
  * List Dialog style
  */
 .enhanced-dialog-content ::part(cell header-cell) {
@@ -25,7 +25,7 @@
     padding: 0 !important;
 }
 
-/*
+/**
  * List Table header styles
  */
 .enhanced-dialog-content vaadin-grid,
@@ -80,3 +80,13 @@ vaadin-grid-cell-content, .k-listdialog {
     font-size: 12px !important;
     --lumo-text-field-size: none;
 }
+
+:host([theme="k-listdialog-container"]) [part="header"] {
+    padding: 0;
+    border-bottom: 0;
+}
+
+:host([theme="k-listdialog-container"]) [part="dialog-content"] {
+    padding: 0;
+}
+

@@ -52,7 +52,10 @@ import com.vaadin.flow.data.value.ValueChangeMode
  * @param hasAutofill     Tells if the field has an autofill command
  * @param fieldParent     parent of this text field
  */
-@CssImport("./styles/galite/textfield.css")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/textfield.css"),
+  CssImport(value = "./styles/galite/textfield.css", themeFor = "vaadin-text-field")
+])
 class TextField(val model: VField,
                 val noEcho: Boolean,
                 val scanner: Boolean,

@@ -17,9 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.button.Button
 import org.kopi.galite.ui.vaadin.base.VInputButton
+
+import com.vaadin.flow.component.Component
 
 /**
  * Class for menu items in the already opened windows menu.

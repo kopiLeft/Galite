@@ -42,25 +42,14 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
 
   init {
     this.content.className = Styles.FORM_PAGE_CONTENT
-    this.style["width"] = "auto"
     scrollPanel = VScrollablePanel(this.content)
     add(scrollPanel)
     className = Styles.FORM_PAGE
+
     access {
-      UI.getCurrent().page.retrieveExtendedClientDetails { receiver ->
-        width = receiver.windowInnerWidth.toDouble() - 10
-
-        this.style["max-width"] = width.toString() + "px"
-      }
-
       UI.getCurrent().page.addBrowserWindowResizeListener { event ->
-        if (event.width < width) {
-          this.style["width"] = (event.width - 10).toString() + "px"
-          style["overflow"] = "auto"
-        } else {
-          this.style["width"] = "auto"
-        }
-
+        this.style["max-width"] = (event.width - 30).toString() + "px"
+        style["overflow"] = "auto"
       }
     }
   }

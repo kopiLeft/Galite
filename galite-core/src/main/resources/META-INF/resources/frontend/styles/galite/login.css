@@ -21,7 +21,7 @@
     background-color: #f2f2f2;
 }
 
-/*
+/**
  * Main's style
  */
 .k-loginBox {
@@ -32,7 +32,7 @@
     font-size: 12px;
 }
 
-/*
+/**
  * Login Box password input fields style
  */
 vaadin-password-field {
@@ -41,7 +41,7 @@ vaadin-password-field {
     width: 150px;
 }
 
-/*
+/**
  * Login Box input fields style
  */
 .k-loginBox ::part(input-field) {
@@ -51,14 +51,14 @@ vaadin-password-field {
     border-bottom: 1px solid #dadada;
 }
 
-/*
+/**
  * Change login page title's style
  */
 .k-loginBox-pane tr td {
     color: black;
 }
 
-/*
+/**
  * Login page labels style
  */
 .k-loginBox-pane label {
@@ -66,7 +66,7 @@ vaadin-password-field {
     color: #a3a3a3;
 }
 
-/*
+/**
  * Welcome's word style
  */
 .k-loginBox b {
@@ -76,7 +76,7 @@ vaadin-password-field {
     font-size: 14px
 }
 
-/*
+/**
  * User name's style
  */
 #user_name {
@@ -91,7 +91,7 @@ vaadin-password-field {
     border-bottom: #009bd4 1px solid;
 }
 
-/*
+/**
  * Language Selector style
  */
 .k-loginBox-pane select {
@@ -104,7 +104,7 @@ vaadin-password-field {
     background: #f2f2f2;
 }
 
-/*
+/**
  * Login Button
  */
 #login_button {

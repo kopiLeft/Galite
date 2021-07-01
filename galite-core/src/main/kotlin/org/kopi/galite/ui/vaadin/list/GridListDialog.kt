@@ -34,7 +34,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 /**
  * A list dialog
  */
-@CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid"),
+  CssImport("./styles/galite/list.css" , themeFor = "vcf-enhanced-dialog-overlay")
+])
 open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle {
 
   private var scrollBarAdded = false
@@ -52,6 +55,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
 
   init {
     className = Styles.LIST_DIALOG_CONTAINER
+    element.themeList.add(Styles.LIST_DIALOG_CONTAINER)
     content.className = Styles.LIST_DIALOG
     content.element.setAttribute("hideFocus", "true")
     content.element.style["outline"] = "0px"

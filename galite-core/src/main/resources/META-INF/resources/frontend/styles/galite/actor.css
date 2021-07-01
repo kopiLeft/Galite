@@ -91,9 +91,6 @@
     padding: 0;
 }
 
-/*
-* -> #actors > div:nth-child(1).open a we added a part when we click on this button to apply the style ::part(rootNavigation-open)
-*/
 ::part(rootNavigation-open) {
     background: #ffffff;
     color: #009bd4;
@@ -163,7 +160,6 @@
 .k-actor, .k-actor-disabled {
     background: transparent;
     padding: 15px 22px;
-
     width: 100%;
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
@@ -183,6 +179,7 @@
     background: #d9f0f8;
     cursor: pointer;
 }
+
 vaadin-button.k-actor::after, vaadin-button.k-actor::before {
     background: transparent;
 }
@@ -194,8 +191,4 @@ vaadin-button.k-actor::after, vaadin-button.k-actor::before {
 
 .vaadin-menu-item:not(:last-child) {
     border-bottom: 1px solid #dadada;
-}
-
-:host([theme~="custom-context-menu-item"]) {
-     --_lumo-list-box-item-selected-icon-display: inherit;
 }

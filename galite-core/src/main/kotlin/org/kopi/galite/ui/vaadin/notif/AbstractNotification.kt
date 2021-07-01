@@ -40,7 +40,10 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param locale  the notification locale
  */
 
-@CssImport("./styles/galite/notification.css")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/notification.css"),
+  CssImport("./styles/galite/notification.css" , themeFor = "vcf-enhanced-dialog-overlay")
+])
 abstract class AbstractNotification(title: String?,
                                     message: String?,
                                     protected val locale: String)
@@ -60,6 +63,7 @@ abstract class AbstractNotification(title: String?,
 
   init {
     element.classList.add("notification")
+    element.themeList.add("notification")
     element.setAttribute("hideFocus", true)
     element.style["outline"] = "0px"
     isDraggable = true

@@ -27,3 +27,19 @@
 .k-popup-window #overlay {
 --_enhanced-dialog-content-padding: 0;
 }
+
+.enhanced-dialog-content .k-window {
+	padding: 0;
+}
+
+.enhanced-dialog-content .k-window div, .enhanced-dialog-content .k-window div table {
+	width: 100%;
+}
+
+#resizerContainer {
+	overflow: hidden;
+}
+
+.k-popup-window~::part(dialog-content) {
+	overflow: hidden;
+}

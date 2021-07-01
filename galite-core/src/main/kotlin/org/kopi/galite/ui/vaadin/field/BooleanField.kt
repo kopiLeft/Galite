@@ -66,16 +66,10 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     no.addValueChangeListener(::onNoChange)
     yes.element.style["visibility"] = "hidden"
     no.element.style["visibility"] = "hidden"
-    content.element.style["border-bottom"] = "1px solid #009bd4"
     content.element.addEventListener("mouseover") {
       isVisible = true
     }
-    content.element.addEventListener("focusin") {
-      content.element.style["border-bottom"] = "1px solid #009bd4"
-    }
-    content.element.addEventListener("focusout") {
-      content.element.style["border-bottom"] = "1px solid #dadada"
-    }
+
     content.element.addEventListener("mouseout") {
       if(value == null) {
         isVisible = false
