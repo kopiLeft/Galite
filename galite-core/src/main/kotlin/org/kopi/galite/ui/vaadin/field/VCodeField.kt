@@ -34,7 +34,7 @@ class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String
 
   init {
     field.setItems(Arrays.stream(enumerations))
-    className = "custom-combobox"
+    element.themeList.add("galite-combobox")
   }
 
 

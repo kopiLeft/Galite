@@ -26,19 +26,14 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.Component
 
 @CssImport("./styles/galite/list.css")
 class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
 
-  val headerComponents = mutableListOf<Component>()
-
   init {
     isColumnReorderingAllowed = true
-    buildColumns()
     buildRows()
-    recalculateColumnWidths()
+    buildColumns()
     installFilters(model)
   }
 
@@ -55,7 +50,7 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     for(col in 0 until model.getColumnCount()) {
       addColumn {
         formatObject(it[col], col)
-      }.setHeader(Span(model.getColumnName(col)).also { headerComponents.add(it) })
+      }.setHeader(model.getColumnName(col))
               .setAutoWidth(true)
               .setKey(col.toString())
     }
@@ -71,8 +66,6 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
     this.columns.forEachIndexed { index, column ->
       val cell = filterRow.getCell(column)
       val filter = TextField()
-
-      filter.setWidthFull()
       val search = Icon(VaadinIcon.SEARCH)
 
       filter.suffixComponent = search
@@ -98,4 +91,3 @@ class ListTable(val model: VListDialog) : Grid<List<Any?>>() {
 
   val selectedItem: List<Any?> get() = asSingleSelect().value
 }
-

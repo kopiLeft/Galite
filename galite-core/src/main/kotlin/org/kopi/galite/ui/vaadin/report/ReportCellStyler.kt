@@ -32,7 +32,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * @param model The report model.
  * @param parameters The style parameters.
  */
-class ReportCellStyler(private val model: MReport, private val parameters: Parameters, val table: DTable) {
+class ReportCellStyler(private val model: MReport, private val parameters: Parameters) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -94,14 +94,13 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
       parameters.font.isItalic
     }
 
-    setStyle(level, background, foreground,fontSize, fontFamily, fontWeight(isBold), fontStyle(isItalic), component)
+    setStyle(background, foreground, fontSize, fontFamily, fontWeight(isBold), fontStyle(isItalic), component)
   }
 
   /**
    * Returns the encapsulated CSS style.
    */
   private fun setStyle(
-          level: Int,
           background: Color,
           foreground: Color,
           fontSize: Int,
@@ -110,9 +109,9 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
           fontStyle: String,
           component: VerticalLayout
   ) {
-    table.style["--level-$level"] = getCSSColor(background)
+    component.style["background-color"] = getCSSColor(background)
     component.style["color"] = getCSSColor(foreground)
-    component.style["font-size"] = ""+ fontSize
+    component.style["font-size"] = fontSize.toString()
     component.style["font-family"] = fontFamily
     component.style["font-weight"] = fontWeight
     component.style["font-style"] = fontStyle

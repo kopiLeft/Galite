@@ -110,7 +110,7 @@ class VWindowContainer(val menu: VWindowsMenu) : Div() {
     // show only if we find a mapping or the component in the pane dom
     if (windowToCaptionMap.contains(window) || pane.children.toArray().contains(window)) {
       if(currentWindow != window) {
-
+        menu.getItemFor(window)?.addClassName("item-selected")
         previousWindow = currentWindow
         menu.getItemFor(previousWindow)?.removeClassName("item-selected")
         previousWindow?.isVisible = false

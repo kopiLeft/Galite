@@ -39,8 +39,6 @@ class ColumnStyleGenerator(private val model: MReport, val column: VReportColumn
     buildString {
       if (column is VSeparatorColumn) {
         append("separator")
-      } else {
-        append(" level-"+model.getRow(item.rowIndex)!!.level)
       }
     }
 }

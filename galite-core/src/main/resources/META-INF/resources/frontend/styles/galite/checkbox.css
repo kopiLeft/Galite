@@ -50,6 +50,7 @@
     border-radius: 50%;
     vertical-align: middle;
     border: 1px solid #ddd;
+    font-size: 14px !important;
 }
 
 ::part(checkbox)::after {
@@ -64,7 +65,7 @@
     font-weight: bold;
     position: absolute;
     top: 0em;
-    left: 0.03em;
+    left: 0.09em;
     box-sizing: border-box;
     transform-origin: 0 0;
     border-width: 0;

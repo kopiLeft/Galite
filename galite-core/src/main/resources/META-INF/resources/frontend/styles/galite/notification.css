@@ -76,5 +76,6 @@
 }
 
 :host([theme~="notification"]) [part="footer"] {
-    background: white;
+    background: transparent;
+    padding-bottom: 25px;
 }

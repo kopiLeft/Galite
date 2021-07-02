@@ -32,12 +32,6 @@ class VWindowsMenuItem(title : String, val window : Component) : VInputButton(ti
   init {
     className = STYLENAME_DEFAULT
     element.style.set("whiteSpace", "nowrap")
-    // adding listener on the item to open the form in the container
-    addClickListener {
-      //window.isVisible = true
-      //container.showWindow(window)
-      addClassName("item-selected")
-    }
   }
 
   companion object {
