@@ -27,6 +27,7 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.event.TextFieldListener
 import org.kopi.galite.ui.vaadin.form.DTextField
 import org.kopi.galite.ui.vaadin.form.KeyNavigator
@@ -311,7 +312,11 @@ class TextField(val model: VField,
    * @return the attached text field component.
    */
   private fun createTextField(): InputTextField<*> {
-    val text = createFieldComponent()
+    lateinit var text: InputTextField<*>
+
+    access {
+      text = createFieldComponent()
+    }
 
     setValidator(text)
     setTextTransform(text)

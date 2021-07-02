@@ -288,10 +288,10 @@ class DBlockDropHandler(private val block: VBlock,
 
     override fun streamingFailed(event: StreamVariable.StreamingErrorEvent) {
       event.exception.printStackTrace(System.err)
-      BackgroundThreadHandler.executor.submit {
+      Thread {
         block.form.error(event.exception.message)
         // BackgroundThreadHandler.updateUI() TODO
-      }
+      }.start()
     }
 
     override fun isInterrupted(): Boolean = false

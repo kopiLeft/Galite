@@ -172,9 +172,9 @@ class DImageField(
 
   fun onUploadFailed(event: FailedEvent) {
     event.reason.printStackTrace(System.err)
-    BackgroundThreadHandler.executor.submit {
+    Thread {
       getModel().getForm().error(event.reason.message)
       //BackgroundThreadHandler.updateUI() TODO
-    }
+    }.start()
   }
 }

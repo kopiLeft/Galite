@@ -127,13 +127,13 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     addNavigationAction(Key.KEY_D, KeyModifier.of("Control")) {
       val ui = UI.getCurrent()
 
-      BackgroundThreadHandler.executor.submit {
+      Thread {
         val text = StringBuffer(value)
         text.insert(Utils.getCursorPos(wrappedField), "\u00D8")
         access(ui) {
           value = text.toString()
         }
-      }
+      }.start()
     }
     addNavigationAction(Key.HOME, KeyModifier.of("Shift")) { dGridEditorField.onGotoFirstRecord() }
     addNavigationAction(Key.END, KeyModifier.of("Shift")) { dGridEditorField.onGotoLastRecord() }

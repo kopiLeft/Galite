@@ -112,12 +112,12 @@ class AlignPanel(var align: BlockAlignment?) : Div() {
 
           if (cell != null) {
             add(components!![i])
-            BackgroundThreadHandler.executor.submit {
+            Thread {
               setComponentPosition(
                 components!![i],
                 Utils.getOffsetLeft(cell, ui),
                 align.y * 21) // text fields height is 15px
-            }
+            }.start()
           }
         }
       }
