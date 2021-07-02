@@ -76,6 +76,9 @@ dependencies {
 
   // Iron Icons dependency
   implementation("com.flowingcode.addons", "iron-icons", "2.0.1")
+
+  // Compile only dependency for Vaadin servlet
+  compileOnly("javax.servlet", "javax.servlet-api", "4.0.1")
 }
 
 dependencyManagement {

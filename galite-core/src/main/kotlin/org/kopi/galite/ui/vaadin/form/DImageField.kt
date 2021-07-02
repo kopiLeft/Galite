@@ -23,6 +23,7 @@ import java.io.InputStream
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.type.Date
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.field.ImageField
 
@@ -86,7 +87,7 @@ class DImageField(
    * @param s The object to set in
    */
   fun setObject(s: Any?) {
-    access {
+    access(currentUI) {
       if (s == null) {
         field.setData(s)
       } else {

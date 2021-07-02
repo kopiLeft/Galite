@@ -21,6 +21,7 @@ import java.util.Hashtable
 import java.util.concurrent.CompletableFuture
 
 import org.kopi.galite.base.Utils
+import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.VColor
 
 import com.flowingcode.vaadin.addons.ironicons.AvIcons
@@ -256,6 +257,20 @@ object Utils : Utils() {
     }
 
     return future.get()
+  }
+
+  fun Component.findMainWindow(): MainWindow? {
+    var mainWindow: MainWindow? = null
+    var parent: Component? = parent.orElse(null)
+
+    while (parent != null && mainWindow == null) {
+      if(parent is MainWindow) {
+        mainWindow = parent
+      }
+      parent = parent.parent.orElse(null)
+    }
+
+    return mainWindow
   }
 
   /**

@@ -29,11 +29,13 @@ import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.ui.vaadin.base.Styles
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEventListener
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
 
@@ -78,8 +80,15 @@ class DActor(private var model: VActor)
     return model
   }
 
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
+
   override fun setEnabled(enabled: Boolean) {
-    access {
+    access(currentUI) {
       if(!enabled) {
         super.getElement().setAttribute("part", Styles.ACTOR + "-disabled")
       } else {

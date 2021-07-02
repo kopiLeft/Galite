@@ -55,7 +55,7 @@ class FormWithListDomains: Form() {
   )
   override val locale = Locale.UK
   override val title = "form to test list domains"
-  val userListBlock = insertBlock(UsersListBlock) {
+  val userListBlock = insertBlock(UsersListBlock()) {
 
     val file = visit(domain = Domain<String>(25), position = at(3, 1)) {
       label = "test"
@@ -84,7 +84,7 @@ class FileFilter : FileHandler.FileFilter {
     get() = "XLS/XLSX"
 }
 
-object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
+class UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
   val user = mustFill(domain = UsersList(), position = at(1, 1)) {
     label = "user"
     help = "The user"
@@ -175,7 +175,7 @@ class SomeDictionnaryForm : DictionaryForm() {
     icon = "list"  // icon is optional here
   }
 
-  val block = insertBlock(UsersBlock) {
+  val block = insertBlock(UsersBlock()) {
     command(item = list) {
       action = {
         println("-----------Generating list-----------------")

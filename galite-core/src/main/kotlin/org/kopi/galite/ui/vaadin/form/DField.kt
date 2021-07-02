@@ -33,6 +33,9 @@ import org.kopi.galite.ui.vaadin.field.FieldListener
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VColor
 
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
+
 /**
  * The `DField` is the vaadin [UField] implementation.
  *
@@ -170,7 +173,7 @@ abstract class DField(internal var model: VFieldUI,
   }
 
   override fun updateAccess() {
-    access {
+    access(currentUI) {
       access = getAccess()
       dynAccess = access
       updateStyles(access)
@@ -180,6 +183,12 @@ abstract class DField(internal var model: VFieldUI,
     }
   }
 
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
   /**
    * Updates a given field label.
    * @param label The label to be updated.
