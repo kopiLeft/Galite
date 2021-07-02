@@ -15,26 +15,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+import org.kopi.galite.gradle.Versions
+
 plugins {
   kotlin("jvm") apply true
-  id("io.spring.dependency-management") version "1.0.10.RELEASE"
+  id("io.spring.dependency-management") version Versions.springDependencyManagement
 }
-
-val exposedVersion = "0.29.1"
-val vaadinVersion = "18.0.3"
-val itextVersion = "2.1.5"
-val jdomVersion = "2.0.5"
-val apachePoi = "4.1.2"
-val graphbuilder = "1.02"
-val hylafaxVersion = "1.0.0"
-val jFreeChartVersion = "1.0.19"
-val getoptVersion = "1.0.13"
 
 dependencies {
   // Exposed dependencies
-  api("org.jetbrains.exposed", "exposed-core", exposedVersion)
-  api("org.jetbrains.exposed", "exposed-jodatime", exposedVersion)
-  api("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
+  api("org.jetbrains.exposed", "exposed-core", Versions.exposedVersion)
+  api("org.jetbrains.exposed", "exposed-jodatime", Versions.exposedVersion)
+  api("org.jetbrains.exposed", "exposed-java-time", Versions.exposedVersion)
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {
@@ -45,44 +37,44 @@ dependencies {
   }
 
   // Itext dependency
-  implementation("com.lowagie", "itext", itextVersion)
+  implementation("com.lowagie", "itext", Versions.itext)
 
   // Jdom dependency
-  implementation("org.jdom", "jdom2", jdomVersion)
+  implementation("org.jdom", "jdom2", Versions.jdom)
 
   //Apache POI
-  implementation("org.apache.poi", "poi", apachePoi)
+  implementation("org.apache.poi", "poi", Versions.apachePoi)
 
   // Apache OOxml
-  implementation("org.apache.poi", "poi-ooxml", apachePoi)
+  implementation("org.apache.poi", "poi-ooxml", Versions.apachePoi)
 
   // Graphbuilder dependency
-  implementation("com.github.virtuald", "curvesapi", graphbuilder)
+  implementation("com.github.virtuald", "curvesapi", Versions.graphbuilder)
 
   // Hylafax dependencies
-  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", hylafaxVersion)
+  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", Versions.hylafax)
 
   //JFreeChart dependency
-  implementation("org.jfree", "jfreechart", jFreeChartVersion)
+  implementation("org.jfree", "jfreechart", Versions.jFreeChart)
 
   //getOpt dependency
-  implementation("gnu.getopt", "java-getopt", getoptVersion)
+  implementation("gnu.getopt", "java-getopt", Versions.getopt)
 
   // EnhancedDialog dependency
-  implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
+  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.enhancedDialog)
 
   // ApexCharts dependency
-  implementation("com.github.appreciated", "apexcharts", "2.0.0.beta10")
+  implementation("com.github.appreciated", "apexcharts", Versions.apexCharts)
 
   // Iron Icons dependency
-  implementation("com.flowingcode.addons", "iron-icons", "2.0.1")
+  implementation("com.flowingcode.addons", "iron-icons", Versions.ironIcons)
 
   // Compile only dependency for Vaadin servlet
-  compileOnly("javax.servlet", "javax.servlet-api", "4.0.1")
+  compileOnly("javax.servlet", "javax.servlet-api", Versions.javaxServletApi)
 }
 
 dependencyManagement {
   imports {
-    mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
+    mavenBom("com.vaadin:vaadin-bom:${Versions.vaadin}")
   }
 }

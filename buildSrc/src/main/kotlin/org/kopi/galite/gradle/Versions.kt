@@ -14,30 +14,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.gradle
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.kopi.galite.gradle.Versions
+object Versions {
+  const val kotlin = "1.5.10"
+  const val vaadin = "18.0.3"
+  const val spring = "2.4.0"
+  const val springDependencyManagement = "1.0.10.RELEASE"
 
-plugins {
-  id("org.jetbrains.kotlin.jvm") version Versions.kotlin apply false
-}
+  const val exposed = "0.29.1"
+  const val h2 = "1.4.199"
+  const val postgresNG = "0.8.6"
 
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
-
-  repositories {
-    jcenter()
-    maven {
-      url = uri("https://maven.vaadin.com/vaadin-addons")
-    }
-  }
-
-  dependencies {
-    "implementation"(kotlin("stdlib"))
-    "implementation"(kotlin("reflect"))
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-  }
+  const val itext = "2.1.5"
+  const val graphbuilder = "1.02"
+  const val hylafax = "1.0.0"
+  const val jFreeChart = "1.0.19"
+  const val getopt = "1.0.13"
+  const val karibuTesting = "1.2.12"
+  const val jdom = "2.0.5"
+  const val apachePoi = "4.1.2"
+  const val enhancedDialog = "1.0.4"
+  const val apexCharts = "2.0.0.beta10"
+  const val ironIcons = "2.0.0.beta10"
+  const val javaxServletApi = "4.0.1"
 }
