@@ -28,7 +28,7 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.type.Timestamp
 
-object FormWithList : DictionaryForm() {
+class FormWithList : DictionaryForm() {
   override val locale = Locale.UK
   override val title = "form for test"
 
@@ -92,7 +92,7 @@ object FormWithList : DictionaryForm() {
     icon = "save"  // icon is optional here
   }
 
-  val block3 = insertBlock(UsersBlock, testPage1) {
+  val block3 = insertBlock(UsersBlock(), testPage1) {
     command(item = list) {
       action = {
         println("-----------Generating list-----------------")
@@ -108,7 +108,7 @@ object FormWithList : DictionaryForm() {
     }
   }
 
-  val block = insertBlock(BlockWithManyTables, testPage1) {
+  val block = insertBlock(BlockWithManyTables(), testPage1) {
     command(item = resetBlock) {
       action = {
         resetBlock()
@@ -140,14 +140,14 @@ object BlockSample : FormBlock(1, 1, "Test block") {
   }
 }
 
-object UsersBlock : FormBlock(1, 1, "Test block") {
+class UsersBlock : FormBlock(1, 1, "Test block") {
   val u = table(Users)
   val unique = index(message = "ID should be unique")
 
   init {
     trigger(POSTQRY) {
-      BlockWithManyTables.uid[0] = id.value
-      BlockWithManyTables.load()
+      BlockWithManyTables().uid[0] = id.value
+      BlockWithManyTables().load()
     }
   }
   val id = hidden(domain = Domain<Int>(20)) {
@@ -214,7 +214,7 @@ object UsersBlock : FormBlock(1, 1, "Test block") {
   }
 }
 
-object BlockWithManyTables : FormBlock(20, 20, "Test block") {
+class BlockWithManyTables : FormBlock(20, 20, "Test block") {
   val u = table(Users)
   val m = table(Modules)
   val r = table(UserRights)
@@ -248,7 +248,7 @@ object BlockWithManyTables : FormBlock(20, 20, "Test block") {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithList) {
+  Application.runForm(formName = FormWithList()) {
     initModules()
     initUserRights()
   }

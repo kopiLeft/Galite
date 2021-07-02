@@ -196,7 +196,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
   override fun removeSelectedItem() {
     val item = getSelectedItem()
     if (item != null) {
-      access {
+      access(currentUI) {
         if (getModel()!!.isRemoveDescendantsAllowed) {
           removeChildren(item)
         } else {
@@ -283,7 +283,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
     if (inputDialog == null) {
       createInputDialog(localisation)
     }
-    access {
+    access(currentUI) {
       editTextField.value = if (newItem) "" else if (localisation) if (item.localisedName != null) item.localisedName else "" else item.name
       editTextField.maxLength = maxLength
       editTextField.width = "" + maxLength + "em"

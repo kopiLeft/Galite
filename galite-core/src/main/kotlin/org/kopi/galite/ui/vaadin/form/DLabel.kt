@@ -27,6 +27,9 @@ import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.label.SortableLabel
 import org.kopi.galite.visual.VActor
 
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
+
 /**
  * Creates a new `DLabel` instance.
  * @param text The label text.
@@ -52,7 +55,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
 
   override fun init(text: String?, toolTip: String?) {
     tooltip = toolTip
-    access {
+    access(currentUI) {
       this.text = text
       if (toolTip != null) {
         element.setProperty("title", toolTip)
@@ -66,7 +69,7 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
    * @param row The field row.
    */
   open fun update(model: VFieldUI, row: Int) {
-    access {
+    access(currentUI) {
       updateStyles(model.model.getAccess(row), model.model.hasFocus())
       if (model.model.getAccess(row) == VConstants.ACS_SKIPPED) {
         // Only show base help on a skipped field
@@ -169,12 +172,18 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
     return description
   }
 
-  /**
-   * Sets the info text.
-   */
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+  /**
+   * Sets the info text.
+   */
   override var infoText: String? = null
     set(info) {
       field = info

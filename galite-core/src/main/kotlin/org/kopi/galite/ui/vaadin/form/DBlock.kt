@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.AttachEvent
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UBlock
@@ -33,6 +34,7 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 
 /**
@@ -257,9 +259,15 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
       }
     }
     // Consider the model active record changes.
-    access {
+    access(currentUI) {
       fireActiveRecordChanged(model.activeRecord)
     }
+  }
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
   }
 
   open fun fireColorChanged(

@@ -53,13 +53,14 @@ import org.kopi.galite.visual.VMenuTree
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.WindowController
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
-import com.vaadin.flow.component.page.Viewport
+import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
 
 /**
@@ -73,6 +74,7 @@ import com.vaadin.flow.router.Route
   CssImport("./styles/galite/styles.css"),
   CssImport("./styles/galite/common.css")
 ])
+@PreserveOnRefresh
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
 
@@ -83,6 +85,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var welcomeView: WelcomeView? = null
   private var askAnswer = 0
   var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
+  var currentUI: UI? = null
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -147,7 +150,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param notification The notification to be shown
    */
   protected open fun showNotification(notification: AbstractNotification) {
-    access {
+    access(currentUI) {
       notification.show()
     }
   }
@@ -177,7 +180,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override fun startApplication() {
     menu = VMenuTree(dBContext!!)
     menu!!.setTitle(userName + "@" + url.substring(url.indexOf("//") + 2))
-    mainWindow = MainWindow(defaultLocale, logoImage, logoHref)
+    mainWindow = MainWindow(defaultLocale, logoImage, logoHref, this)
     mainWindow!!.addMainWindowListener(this)
     mainWindow!!.setMainMenu(DMainMenu(menu!!))
     mainWindow!!.setUserMenu(DUserMenu(menu!!))
@@ -322,21 +325,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
     if (mainWindow != null) {
-      access {
+      access(currentUI) {
         window.setSizeFull()
         mainWindow!!.addWindow(window, title)
-      }
-    }
-  }
-
-  /**
-   * Removes an attached window to this main window.
-   * @param window The window to be removed.
-   */
-  fun removeWindow(window: Component) {
-    if (mainWindow != null) {
-      access {
-        mainWindow!!.removeWindow(window)
       }
     }
   }
@@ -472,6 +463,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val userIP: String
     get() = TODO()
 
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
+
   //---------------------------------------------------
   // UTILS
   // --------------------------------------------------
@@ -529,8 +524,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     /** Application instance */
     lateinit var instance: Application
     private val FONT_METRICS = arrayOf(
-      FontMetrics.DIGIT,
-      FontMetrics.LETTER
+            FontMetrics.DIGIT,
+            FontMetrics.LETTER
     )
 
     init {
