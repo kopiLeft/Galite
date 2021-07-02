@@ -16,10 +16,9 @@
  */
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.kopi.galite.gradle.Versions
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version Versions.kotlin apply false
+  id("org.jetbrains.kotlin.jvm") version "1.5.10" apply false
 }
 
 subprojects {

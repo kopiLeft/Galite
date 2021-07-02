@@ -17,10 +17,7 @@
 package org.kopi.galite.gradle
 
 object Versions {
-  const val kotlin = "1.5.10"
   const val vaadin = "18.0.3"
-  const val spring = "2.4.0"
-  const val springDependencyManagement = "1.0.10.RELEASE"
 
   const val exposed = "0.29.1"
   const val h2 = "1.4.199"
@@ -29,13 +26,15 @@ object Versions {
   const val itext = "2.1.5"
   const val graphbuilder = "1.02"
   const val hylafax = "1.0.0"
-  const val jFreeChart = "1.0.19"
   const val getopt = "1.0.13"
-  const val karibuTesting = "1.2.12"
   const val jdom = "2.0.5"
   const val apachePoi = "4.1.2"
+
+  const val karibuTesting = "1.2.12"
   const val enhancedDialog = "1.0.4"
   const val apexCharts = "2.0.0.beta10"
   const val ironIcons = "2.0.0.beta10"
   const val javaxServletApi = "4.0.1"
+
+  const val jFreeChart = "1.0.19"
 }

@@ -19,14 +19,14 @@ import org.kopi.galite.gradle.Versions
 
 plugins {
   kotlin("jvm") apply true
-  id("io.spring.dependency-management") version Versions.springDependencyManagement
+  id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
 
 dependencies {
   // Exposed dependencies
-  api("org.jetbrains.exposed", "exposed-core", Versions.exposedVersion)
-  api("org.jetbrains.exposed", "exposed-jodatime", Versions.exposedVersion)
-  api("org.jetbrains.exposed", "exposed-java-time", Versions.exposedVersion)
+  api("org.jetbrains.exposed", "exposed-core", Versions.exposed)
+  api("org.jetbrains.exposed", "exposed-jodatime", Versions.exposed)
+  api("org.jetbrains.exposed", "exposed-java-time", Versions.exposed)
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {
