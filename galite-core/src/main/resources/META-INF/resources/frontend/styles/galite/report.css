@@ -28,10 +28,6 @@
      min-height: 16px;
 }
 
-::part(row) {
-     width: fit-content;
-}
-
 vaadin-grid > vaadin-grid-cell-content {
    height: 100%;
 }

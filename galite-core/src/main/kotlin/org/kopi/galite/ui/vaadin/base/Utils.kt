@@ -224,6 +224,20 @@ object Utils : Utils() {
     return future.get()
   }
 
+  fun getWidth(element: Element?, ui: UI): String? {
+    val future = CompletableFuture<String>()
+
+    ui.access {
+      ui.page
+        .executeJs("return $0.width", element)
+        .then(String::class.java) { value ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
   /**
    * Gets the current position of the cursor.
    *

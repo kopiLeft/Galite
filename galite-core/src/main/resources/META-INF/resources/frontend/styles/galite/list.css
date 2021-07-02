@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
+ /*
  * List Dialog style
  */
 .enhanced-dialog-content ::part(cell header-cell) {
@@ -25,7 +25,7 @@
     padding: 0 !important;
 }
 
-/**
+/*
  * List Table header styles
  */
 .enhanced-dialog-content vaadin-grid,
@@ -42,6 +42,11 @@
     cursor: pointer;
 }
 
+.k-listdialog~::part(header) {
+    padding: 0;
+    border-bottom: 0;
+}
+
 .k-listdialog-container~::part(header) {
     padding: 0;
     border-bottom: 0;
@@ -49,10 +54,6 @@
 
 .k-listdialog-container~::part(dialog-content) {
     padding: 0;
-}
-
-.k-listdialog~::part(footer) {
-    background-color: white;
 }
 
 .k-listdialog-table > * {
@@ -69,6 +70,10 @@
 
 vaadin-grid-cell-content, .k-listdialog {
     padding: 0;
+}
+
+.filter-text {
+    border-right: 1px solid #ddd;
 }
 
 .filter-text {
@@ -92,4 +97,3 @@ vaadin-grid-cell-content, .k-listdialog {
 :host([theme~="k-main-window"]) [part="header"] {
     padding: var(--lumo-space-l) var(--lumo-space-xl);
 }
-
