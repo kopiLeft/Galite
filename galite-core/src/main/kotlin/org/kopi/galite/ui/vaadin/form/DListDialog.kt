@@ -346,8 +346,7 @@ class DListDialog(
                                   },
                                   Key.ARROW_UP
     )
-
-    // TODO
+   // TODO
   }
 
   /**

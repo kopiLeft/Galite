@@ -18,30 +18,11 @@ package org.kopi.galite.demo.web.vaadin
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
-import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.tests.form.FormSample
-import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
-
-@SpringBootApplication
-open class Application : SpringBootServletInitializer()
-
-fun main(args: Array<String>) {
-  DBApplication.connectToDatabase()
-  DBSchemaTest.reset()
-  DBApplication.initDatabase()
-  DBApplication.initModules()
-  DBApplication.initUserRights()
-  runApplication<Application>(*args)
-}
 
 class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
@@ -102,32 +83,5 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
               override fun useAcroread(): Boolean = TODO()
             }
     )
-  }
-}
-
-object DBApplication : DBSchemaTest() {
-
-  /**
-   * Inserts the modules names to include in the application.
-   */
-  fun initModules() {
-    transaction {
-      insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
-      insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
-      insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", FormSample::class)
-      insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", FormWithFields::class)
-    }
-  }
-
-  /**
-   * Adds rights to the [user] to access the application modules.
-   */
-  fun initUserRights(user: String = connectedUser) {
-    transaction {
-      insertIntoUserRights(user, "2000", true)
-      insertIntoUserRights(user, "1000", true)
-      insertIntoUserRights(user, "2009", true)
-      insertIntoUserRights(user, "2010", true)
-    }
   }
 }
