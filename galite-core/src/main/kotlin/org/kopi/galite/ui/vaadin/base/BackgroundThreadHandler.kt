@@ -17,8 +17,9 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
-import com.vaadin.flow.component.UI
 import java.util.concurrent.Executors
+
+import com.vaadin.flow.component.UI
 
 /**
  * Collects some utilities for background threads in a vaadin application.

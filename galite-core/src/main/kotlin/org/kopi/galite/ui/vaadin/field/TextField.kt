@@ -64,7 +64,7 @@ class TextField(val model: VField,
 )
   : AbstractField<Any?>(), HasStyle {
 
-  val field: InputTextField<*>
+  lateinit var field: InputTextField<*>
 
   /**
    * The column number.
@@ -160,25 +160,27 @@ class TextField(val model: VField,
     hasAutocomplete = model.hasAutocomplete()
     setFieldType()
 
-    field = createTextField()
-    field.isEnabled = enabled
-    add(field)
-    if (hasAutofill) {
-      autofill = IronIcons.ARROW_DROP_DOWN.create()
-      autofill!!.style["cursor"] = "pointer" // TODO: move to css
-      autofill!!.addClickListener {
-        fireAutofill()
-      }
-      field.suffixComponent = autofill
-      autofill!!.isVisible = false
-      field.addFocusListener {
-        if (autofill != null) {
-          autofill!!.isVisible = true
+    access {
+      field = createTextField()
+      field.isEnabled = enabled
+      add(field)
+      if (hasAutofill) {
+        autofill = IronIcons.ARROW_DROP_DOWN.create()
+        autofill!!.style["cursor"] = "pointer" // TODO: move to css
+        autofill!!.addClickListener {
+          fireAutofill()
         }
-      }
-      field.addBlurListener {
-        if (autofill != null) {
-          autofill!!.isVisible = false
+        field.suffixComponent = autofill
+        autofill!!.isVisible = false
+        field.addFocusListener {
+          if (autofill != null) {
+            autofill!!.isVisible = true
+          }
+        }
+        field.addBlurListener {
+          if (autofill != null) {
+            autofill!!.isVisible = false
+          }
         }
       }
     }
@@ -312,11 +314,7 @@ class TextField(val model: VField,
    * @return the attached text field component.
    */
   private fun createTextField(): InputTextField<*> {
-    lateinit var text: InputTextField<*>
-
-    access {
-      text = createFieldComponent()
-    }
+    val text = createFieldComponent()
 
     setValidator(text)
     setTextTransform(text)

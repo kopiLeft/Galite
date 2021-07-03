@@ -27,9 +27,8 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.type.Decimal
 
-object StockForm : ReportSelectionForm() {
+class StockForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Stocks"
   val page = page("Stock")
@@ -51,20 +50,20 @@ object StockForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
-  val block = insertBlock(StockBlock, page) {
+  val block = insertBlock(StockBlock(), page) {
     command(item = report) {
       action = {
-        createReport(StockBlock)
+        createReport(this@insertBlock)
       }
     }
   }
 
   override fun createReport(): Report {
-    return StockR
+    return StockR()
   }
 }
 
-object StockBlock : FormBlock(1, 1, "Stock") {
+class StockBlock : FormBlock(1, 1, "Stock") {
   val u = table(Stock)
   val v = table(Product)
   val w = table(Provider)
@@ -87,5 +86,5 @@ object StockBlock : FormBlock(1, 1, "Stock") {
 }
 
 fun main() {
-  Application.runForm(formName = StockForm)
+  Application.runForm(formName = StockForm())
 }

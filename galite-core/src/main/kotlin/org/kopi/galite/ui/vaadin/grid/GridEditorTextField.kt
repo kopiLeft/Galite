@@ -27,7 +27,6 @@ import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 
 /**
  * A text field used as editor

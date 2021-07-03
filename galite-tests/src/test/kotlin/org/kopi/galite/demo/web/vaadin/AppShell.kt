@@ -18,11 +18,18 @@
 package org.kopi.galite.demo.web.vaadin
 
 import com.vaadin.flow.component.page.AppShellConfigurator
+import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.PWA
 
 /**
  * Use the @PWA annotation make the application installable on phones, tablets
  * and some desktop browsers.
  */
-@PWA(name = "Galite Demo", shortName = "Demo")
-class AppShell : AppShellConfigurator
+@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/window.gif")
+class AppShell : AppShellConfigurator {
+
+  override fun configurePage(settings: AppShellSettings) {
+    settings.addFavIcon("icon", "ui/vaadin/window.gif", "192x192")
+    settings.setPageTitle("Galite app")
+  }
+}

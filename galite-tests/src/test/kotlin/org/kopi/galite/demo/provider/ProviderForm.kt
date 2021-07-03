@@ -27,7 +27,7 @@ import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Image
 
-object ProviderForm : ReportSelectionForm() {
+class ProviderForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Providers"
   val page = page("Provider")
@@ -41,21 +41,27 @@ object ProviderForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
 
-  val block = insertBlock(BlockProvider, page) {
+  val block = insertBlock(BlockProvider(), page) {
     command(item = report) {
       action = {
-        createReport(BlockProvider)
+        createReport(this@insertBlock)
       }
     }
   }
 
   override fun createReport(): Report {
-    return ProviderR
+    return ProviderR()
   }
 }
 
-object BlockProvider : FormBlock(1, 1, "Providers") {
+class BlockProvider : FormBlock(1, 1, "Providers") {
   val u = table(Provider)
 
   val idProvider = hidden(domain = Domain<Int>(20)) {
@@ -96,5 +102,5 @@ object BlockProvider : FormBlock(1, 1, "Providers") {
 }
 
 fun main() {
-  Application.runForm(formName = ProviderForm)
+  Application.runForm(formName = ProviderForm())
 }

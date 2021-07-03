@@ -52,7 +52,7 @@ class BillProductForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return BillProductR
+    return BillProductR()
   }
 }
 

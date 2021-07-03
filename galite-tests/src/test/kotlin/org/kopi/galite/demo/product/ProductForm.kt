@@ -31,7 +31,7 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Image
 
-object ProductForm : ReportSelectionForm() {
+class ProductForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Products"
   val page = page("Product")
@@ -53,10 +53,10 @@ object ProductForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
-  val block = insertBlock(BlockProduct, page) {
+  val block = insertBlock(BlockProduct(), page) {
     command(item = report) {
       action = {
-        createReport(BlockProduct)
+        createReport(this@insertBlock)
       }
     }
   }
@@ -66,7 +66,7 @@ object ProductForm : ReportSelectionForm() {
   }
 }
 
-object BlockProduct : FormBlock(1, 1, "Products") {
+class BlockProduct : FormBlock(1, 1, "Products") {
   val u = table(Product)
 
   val idPdt = hidden(domain = Domain<Int>(20)) {
@@ -126,5 +126,5 @@ object Tax : CodeDomain<String>() {
 }
 
 fun main() {
-  Application.runForm(formName = ProductForm)
+  Application.runForm(formName = ProductForm())
 }

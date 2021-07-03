@@ -32,7 +32,7 @@ import org.kopi.galite.report.VReport
 /**
  * Provider Report
  */
-object ProviderR : Report() {
+class ProviderR : Report() {
   override val locale = Locale.UK
 
   override val title = "Providers_Report"
