@@ -52,16 +52,24 @@ open class VApplicationTestBase : DBSchemaTest() {
   }
 
   fun setupApplication() {
-    ApplicationContext.applicationContext = VApplicationContext()
-    FileHandler.fileHandler = VFileHandler()
-    ImageHandler.imageHandler = VImageHandler()
-    WindowController.windowController = VWindowController()
-    UIFactory.uiFactory = VUIFactory()
+    ApplicationContext.applicationContext = applicationContext
+    FileHandler.fileHandler = fileHandler
+    ImageHandler.imageHandler = imageHandler
+    WindowController.windowController = windowController
+    UIFactory.uiFactory = uiFactory
   }
 
   override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run() }
 
   override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run() }
+
+  companion object {
+    val applicationContext = VApplicationContext()
+    val fileHandler = VFileHandler()
+    val imageHandler = VImageHandler()
+    val windowController = VWindowController()
+    val uiFactory = VUIFactory()
+  }
 
   class GaliteRegistry : Registry("Galite", null)
 
