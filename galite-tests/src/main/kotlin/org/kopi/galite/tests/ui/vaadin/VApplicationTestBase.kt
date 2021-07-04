@@ -23,7 +23,8 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.chart.VChart
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.report.VReport
-import org.kopi.galite.tests.db.DBSchemaTest
+import org.kopi.galite.tests.common.ApplicationTestBase
+import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.ui.vaadin.chart.DChart
 import org.kopi.galite.ui.vaadin.report.DReport
 import org.kopi.galite.ui.vaadin.visual.VApplication
@@ -31,20 +32,18 @@ import org.kopi.galite.ui.vaadin.visual.VApplicationContext
 import org.kopi.galite.ui.vaadin.visual.VFileHandler
 import org.kopi.galite.ui.vaadin.visual.VImageHandler
 import org.kopi.galite.ui.vaadin.visual.VUIFactory
-import org.kopi.galite.ui.vaadin.visual.VWindowController
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
-import org.kopi.galite.visual.Registry
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.WindowController
 
 /**
  * TestBase class for all tests.
  */
-open class VApplicationTestBase : DBSchemaTest() {
+open class VApplicationTestBase : ApplicationTestBase() {
 
   init {
     GaliteApplication()
@@ -67,11 +66,8 @@ open class VApplicationTestBase : DBSchemaTest() {
     val applicationContext = VApplicationContext()
     val fileHandler = VFileHandler()
     val imageHandler = VImageHandler()
-    val windowController = VWindowController()
     val uiFactory = VUIFactory()
   }
-
-  class GaliteRegistry : Registry("Galite", null)
 
   class GaliteApplication : VApplication(GaliteRegistry()) {
     override val sologanImage get() = "slogan.png"

@@ -68,7 +68,7 @@ open class GaliteVUITestBase: VUITestBase() {
   protected fun HasMenuItems._clickItemWithCaptionAsynch(caption: String, action: () -> Unit) {
     _clickItemWithCaption(caption)
     MockVaadin.runUIQueue()
-    Thread.sleep(200)
+    Thread.sleep(500)
     MockVaadin.runUIQueue()
     action()
   }
