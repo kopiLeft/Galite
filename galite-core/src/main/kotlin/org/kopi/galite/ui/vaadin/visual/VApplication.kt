@@ -95,15 +95,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val startupTime: Date = Date() // remembers the startup time
 
   init {
-    instance = this
-  }
-
-  override fun onAttach(attachEvent: AttachEvent) {
     className = "galite"
     // registry and locale initialization
     initialize()
     gotoWelcomeView()
     askAnswer = MessageListener.AWR_UNDEF
+    instance = this
+  }
+
+  override fun onAttach(attachEvent: AttachEvent) {
     currentUI = attachEvent.ui
   }
 
@@ -479,7 +479,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String?): String? {
-    return VaadinServlet.getCurrent().getInitParameter(key)
+    return VaadinServlet.getCurrent()?.getInitParameter(key)
   }
 
   //---------------------------------------------------
