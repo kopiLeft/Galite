@@ -53,19 +53,18 @@ class MainWindowTests: GaliteVUITestBase() {
         ._find<MenuItem>()
         .map { it._text }
 
-   assertEquals(
-     listOf(
-       "CLIENTS", "CLIENTS", "Test", "Test form1", "Test form2", "Form with list",
-       "COMMANDS", "COMMANDS",
-       "PRODUCTS", "PRODUCTS",
-       "BILLS", "BILLS",
-       "BILL PRODUCTS", "BILL PRODUCTS",
-       "STOCKS", "STOCKS",
-       "TAX RULES", "TAX RULES",
-       "PROVIDERS", "PROVIDERS"
-     ),
-     clientsModules
-   )
+    assertEquals(
+      listOf(
+        "CLIENTS", "Client form",
+        "COMMANDS", "Commands form",
+        "PRODUCTS", "Products form",
+        "BILLS", "Bills form", "Bills products",
+        "STOCKS", "Stocks",
+        "TAX RULES", "Tax rules",
+        "PROVIDERS", "Providers form"
+      ),
+      clientsModules
+    )
   }
 
   companion object {

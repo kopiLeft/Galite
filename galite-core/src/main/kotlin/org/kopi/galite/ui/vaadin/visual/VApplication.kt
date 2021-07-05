@@ -62,6 +62,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.server.VaadinServlet
 
 /**
  * The entry point for all Galite WEB applications.
@@ -94,12 +95,16 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val startupTime: Date = Date() // remembers the startup time
 
   init {
-    className = "galite"
     instance = this
+  }
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    className = "galite"
     // registry and locale initialization
     initialize()
     gotoWelcomeView()
     askAnswer = MessageListener.AWR_UNDEF
+    currentUI = attachEvent.ui
   }
 
   // ---------------------------------------------------------------------
@@ -463,10 +468,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val userIP: String
     get() = TODO()
 
-  override fun onAttach(attachEvent: AttachEvent) {
-    currentUI = attachEvent.ui
-  }
-
   //---------------------------------------------------
   // UTILS
   // --------------------------------------------------
@@ -478,8 +479,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String?): String? {
-    return ""
-    //return VaadinServlet.getCurrent().getInitParameter(key) TODO
+    return VaadinServlet.getCurrent().getInitParameter(key)
   }
 
   //---------------------------------------------------

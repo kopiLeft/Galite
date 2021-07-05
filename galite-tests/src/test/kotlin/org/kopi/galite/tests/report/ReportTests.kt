@@ -36,6 +36,8 @@ import org.kopi.galite.type.Decimal
 
 class ReportTests: VApplicationTestBase() {
 
+  val SimpleReport = SimpleReport()
+
   /**
    * Tests that fields has been registered in the report.
    */
@@ -117,7 +119,7 @@ class ReportTests: VApplicationTestBase() {
 /**
  * Simple Report with two fields.
  */
-object SimpleReport : Report() {
+class SimpleReport : Report() {
   override val locale = Locale.UK
 
   override val title = "SimpleReport"

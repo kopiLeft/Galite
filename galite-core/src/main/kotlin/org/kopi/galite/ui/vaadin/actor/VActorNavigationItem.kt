@@ -21,10 +21,6 @@ import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.icon.VaadinIcon
-import com.flowingcode.vaadin.addons.ironicons.IronIcons
 
 /**
  * Constructs a new actor navigation menu item that fires a command when it is selected.

@@ -15,14 +15,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.demo.web.vaadin
+package org.kopi.galite.tests.common
 
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.server.PWA
+import org.kopi.galite.tests.db.DBSchemaTest
+import org.kopi.galite.ui.vaadin.visual.VWindowController
 
 /**
- * Use the @PWA annotation make the application installable on phones, tablets
- * and some desktop browsers.
+ * TestBase class for all application tests.
  */
-@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/window.gif")
-class AppShell : AppShellConfigurator
+open class ApplicationTestBase: DBSchemaTest() {
+
+  companion object {
+    // Use the same window controller for all tests to get all window builders available.
+    val windowController = VWindowController()
+  }
+}

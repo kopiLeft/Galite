@@ -25,8 +25,10 @@ import org.kopi.galite.ui.vaadin.base.VInputText
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
 import com.github.mvysny.kaributesting.v10._click
+import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
+import com.vaadin.flow.component.contextmenu.HasMenuItems
 import com.vaadin.flow.component.textfield.PasswordField
 
 /**
@@ -61,6 +63,14 @@ open class GaliteVUITestBase: VUITestBase() {
   @Before
   fun createRoutes() {
     setupRoutes()
+  }
+
+  protected fun HasMenuItems._clickItemWithCaptionAsynch(caption: String, action: () -> Unit) {
+    _clickItemWithCaption(caption)
+    MockVaadin.runUIQueue()
+    Thread.sleep(500)
+    MockVaadin.runUIQueue()
+    action()
   }
 
   companion object {

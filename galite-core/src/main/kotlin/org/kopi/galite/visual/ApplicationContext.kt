@@ -334,6 +334,7 @@ abstract class ApplicationContext {
      * The `ApplicationContext` instance.
      */
     lateinit var applicationContext: ApplicationContext
+    val isApplicationContextInitialized: Boolean get() = ::applicationContext.isInitialized
     var compt = 0
   }
 }

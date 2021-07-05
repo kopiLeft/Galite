@@ -14,15 +14,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.tests.common
 
-package org.kopi.galite.demo.web.vaadin
+import org.kopi.galite.visual.Registry
 
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.server.PWA
-
-/**
- * Use the @PWA annotation make the application installable on phones, tablets
- * and some desktop browsers.
- */
-@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/window.gif")
-class AppShell : AppShellConfigurator
+class GaliteRegistry : Registry("Galite", null)
