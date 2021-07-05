@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests
+package org.kopi.galite.tests.ui.vaadin
 
 import java.util.Locale
 
@@ -23,6 +23,8 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.chart.VChart
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.report.VReport
+import org.kopi.galite.tests.common.ApplicationTestBase
+import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.ui.vaadin.chart.DChart
 import org.kopi.galite.ui.vaadin.report.DReport
 import org.kopi.galite.ui.vaadin.visual.VApplication
@@ -30,18 +32,18 @@ import org.kopi.galite.ui.vaadin.visual.VApplicationContext
 import org.kopi.galite.ui.vaadin.visual.VFileHandler
 import org.kopi.galite.ui.vaadin.visual.VImageHandler
 import org.kopi.galite.ui.vaadin.visual.VUIFactory
-import org.kopi.galite.ui.vaadin.visual.VWindowController
+import org.kopi.galite.util.Rexec
+import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.FileHandler
 import org.kopi.galite.visual.ImageHandler
-import org.kopi.galite.visual.Registry
 import org.kopi.galite.visual.UIFactory
 import org.kopi.galite.visual.WindowController
 
 /**
  * TestBase class for all tests.
  */
-open class VApplicationTestBase : TestBase() {
+open class VApplicationTestBase : ApplicationTestBase() {
 
   init {
     GaliteApplication()
@@ -49,29 +51,35 @@ open class VApplicationTestBase : TestBase() {
   }
 
   fun setupApplication() {
-    ApplicationContext.applicationContext = VApplicationContext()
-    FileHandler.fileHandler = VFileHandler()
-    ImageHandler.imageHandler = VImageHandler()
-    WindowController.windowController = VWindowController()
-    UIFactory.uiFactory = VUIFactory()
+    ApplicationContext.applicationContext = applicationContext
+    FileHandler.fileHandler = fileHandler
+    ImageHandler.imageHandler = imageHandler
+    WindowController.windowController = windowController
+    UIFactory.uiFactory = uiFactory
   }
 
   override fun getReportDisplay(model: VReport): UComponent? = DReport(model).also { it.run() }
 
   override fun getChartDisplay(model: VChart): UComponent? = DChart(model).also { it.run() }
 
-  class GaliteRegistry : Registry("Galite", null)
+  companion object {
+    val applicationContext = VApplicationContext()
+    val fileHandler = VFileHandler()
+    val imageHandler = VImageHandler()
+    val uiFactory = VUIFactory()
+  }
 
   class GaliteApplication : VApplication(GaliteRegistry()) {
     override val sologanImage get() = "slogan.png"
     override val logoImage get() = "logo_kopi.png"
     override val logoHref get() = "http://"
-    override val alternateLocale get() = Locale("de", "AT")
+    override val alternateLocale get() = Locale.UK
     override val supportedLocales
       get() =
         arrayOf(Locale.FRANCE,
                 Locale("de", "AT"),
-                Locale("ar", "TN"))
+                Locale("ar", "TN"),
+                Locale.UK)
 
     override fun login(
             database: String,
@@ -80,8 +88,6 @@ open class VApplicationTestBase : TestBase() {
             password: String,
             schema: String?
     ): DBContext? {
-      val username = "admin"
-      val password = "admin"
       return try {
         DBContext().apply {
           this.defaultConnection = this.createConnection(driver, database, username, password, true, schema)
@@ -89,6 +95,36 @@ open class VApplicationTestBase : TestBase() {
       } catch (exception: Throwable) {
         null
       }
+    }
+    init {
+      ApplicationConfiguration.setConfiguration(
+        object : ApplicationConfiguration() {
+          override val version get(): String = "1.0"
+          override val applicationName get(): String = "MyApp"
+          override val informationText get(): String = "info"
+          override val logFile get(): String = ""
+          override val debugMailRecipient get(): String = ""
+          override fun getSMTPServer(): String = ""
+          override val faxServer get(): String = ""
+          override val dictionaryServer get(): String = ""
+          override fun mailErrors(): Boolean = false
+          override fun logErrors(): Boolean = true
+          override fun debugMessageInTransaction(): Boolean = true
+          override val RExec get(): Rexec = TODO()
+          override fun getStringFor(var1: String): String = TODO()
+          override fun getIntFor(var1: String): Int {
+            val var2 = this.getStringFor(var1)
+            return var2.toInt()
+          }
+
+          override fun getBooleanFor(var1: String): Boolean {
+            return java.lang.Boolean.valueOf(this.getStringFor(var1))
+          }
+
+          override fun isUnicodeDatabase(): Boolean = false
+          override fun useAcroread(): Boolean = TODO()
+        }
+      )
     }
   }
 }

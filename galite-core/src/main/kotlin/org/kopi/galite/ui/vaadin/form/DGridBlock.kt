@@ -262,7 +262,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   override fun add(comp: UComponent?, constraints: Alignment) {}
 
   override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
-    access {
+    access(currentUI) {
       if (editor.item != null) {
         editor.cancel()
       }
@@ -369,7 +369,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Scrolls the to beginning of the block
    */
   internal fun scrollToStart() {
-    access {
+    access(currentUI) {
       if (grid != null) {
         grid.scrollToStart()
       }
@@ -391,7 +391,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Cancels the grid editor
    */
   protected fun cancelEditor() {
-    access {
+    access(currentUI) {
       if (::grid.isInitialized) {
         if (grid.isEnabled && editor.item != null) {
           editor.cancel()
@@ -419,7 +419,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun orderChanged() {
-    access {
+    access(currentUI) {
       if (grid != null) {
         cancelEditor()
         clearSortOrder()
@@ -464,7 +464,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   protected fun contentChanged() {
     if(::grid.isInitialized) {
-      access {
+      access(currentUI) {
         grid.dataProvider.refreshAll()
         // correct grid width to add scroll bar width
         if (model.numberOfValidRecord > model.displaySize) {
@@ -481,7 +481,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Refreshes, i.e. causes the client side to re-render all rows.
    */
   protected fun refreshAllRows() {
-    access {
+    access(currentUI) {
       grid.dataProvider.refreshAll()
     }
   }
@@ -609,7 +609,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @param f The field model.
    */
   fun updateColumnAccess(f: VField, rec: Int) {
-    access {
+    access(currentUI) {
       val column = grid.getColumnByKey(model.getFieldIndex(f).toString())
 
       if (::grid.isInitialized && column != null) {
@@ -624,7 +624,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   fun refreshRow(row: Int) {
     if(::grid.isInitialized) {
-      access {
+      access(currentUI) {
         val itemToRefresh = grid.dataCommunicator.getItem(row)
 
         grid.dataProvider.refreshItem(itemToRefresh)
@@ -639,7 +639,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
   fun editRecord(record: Int) {
     if (grid != null) {
       itemToBeEdited = record
-      access {
+      access(currentUI) {
         if (grid.isEnabled
           && (editor.item == null
                   || (itemToBeEdited != null

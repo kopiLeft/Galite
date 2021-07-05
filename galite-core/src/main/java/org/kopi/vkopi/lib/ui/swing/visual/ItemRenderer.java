@@ -78,14 +78,14 @@ class ItemRenderer extends JLabel implements TreeCellRenderer {
     if (row == 0) {
       setIcon(rootIcon);
     } else if (!noEdit) {
-      if (item.getDefaultItem()) {
+      if (item.isDefaultItem()) {
         if (hasFocus) {
           setIcon(defaultIcon_S);
         } else {
           setIcon(defaultIcon);
         }
       } else {
-        if (!item.getSelected()) {
+        if (!item.isSelected()) {
           if (hasFocus) {
             setIcon(uncheckedIcon_S);
           } else {

@@ -32,7 +32,7 @@ import org.kopi.galite.type.Decimal
 /**
  * Products Bill Report
  */
-object BillProductR : Report() {
+class BillProductR : Report() {
 
   override val locale = Locale.UK
 

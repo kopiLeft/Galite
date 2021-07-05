@@ -17,9 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
@@ -53,7 +50,7 @@ open class DTextField(
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  private val field: TextField // the text component
+  private lateinit var field: TextField // the text component
   protected var inside = false
   protected var noEdit = options and VConstants.FDO_NOEDIT != 0
   protected var scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
@@ -71,21 +68,26 @@ open class DTextField(
     } else {
       ScannerTransformer(this)
     }
-    field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
+    access(currentUI) {
+      field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-    field.addTextValueChangeListener {
-      if(it.isFromClient) {
-        val value = format(it.value)
-        if (isChanged(getModel().getText(), transformer!!.toModel(value))) {
-
-          getModel().isChangedUI = true
-          checkText(value)
+      field.field.addTextValueChangeListener {
+        if(it.isFromClient) {
+          valueChanged()
         }
       }
-    }
 
-    createContextMenu()
-    setFieldContent(field)
+      createContextMenu()
+      setFieldContent(field)
+    }
+  }
+
+  override fun valueChanged() {
+    val value = text
+
+    if (isChanged(getModel().getText(), value)) {
+      checkText(value)
+    }
   }
 
   /**
@@ -135,7 +137,7 @@ open class DTextField(
   override fun updateAccess() {
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
-    access {
+    access(currentUI) {
       field.isEnabled = access >= VConstants.ACS_VISIT
       isEnabled = access >= VConstants.ACS_VISIT
     }
@@ -143,7 +145,7 @@ open class DTextField(
 
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
-    access {
+    access(currentUI) {
       // field.value = transformer!!.toGui(newModelTxt)!!.trim() FIXME
       field.value = transformer!!.toGui(newModelTxt)
     }
@@ -154,7 +156,7 @@ open class DTextField(
   }
 
   override fun updateColor() {
-    access {
+    access(currentUI) {
       val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
 
       field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
@@ -185,7 +187,7 @@ open class DTextField(
    * Gets the focus to this field.
    */
   private fun enterMe() {
-    access {
+    access(currentUI) {
       if (scanner) {
         field.value = transformer!!.toGui("")
       }
@@ -202,7 +204,7 @@ open class DTextField(
     // scanner nescessary
     if (scanner) {
       // trick: it is now displayed on a different way
-      access {
+      access(currentUI) {
         field.value = transformer!!.toModel(field.value.toString())
       }
     }
@@ -256,16 +258,9 @@ open class DTextField(
       return
     }
     if (getModel().checkText(text!!)) {
-      getModel().checkType(text)
+      getModel().onTextChange(text)
     }
   }
-
-  private fun format(s: Any?): String? =
-    if(s is LocalDate) {
-      s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-    } else {
-      s?.toString()
-    }
 
   // --------------------------------------------------
   // UTILS
@@ -288,8 +283,8 @@ open class DTextField(
   //---------------------------------------------------
   // TEXTFIELD IMPLEMENTATION
   //---------------------------------------------------
-  override fun getText(): String {
-    return transformer!!.toModel(if (field.value == null) "" else field.value.toString())!!
+  override fun getText(): String? {
+    return transformer!!.toModel(field.value.orEmpty())
   }
 
   override fun setHasCriticalValue(b: Boolean) {
@@ -324,7 +319,7 @@ open class DTextField(
   }
 
   override fun setBlink(blink: Boolean) {
-    access {
+    access(currentUI) {
       field.setBlink(blink)
     }
   }

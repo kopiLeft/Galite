@@ -49,6 +49,8 @@ class DHelpViewer(model: VHelpViewer) : DWindow(model), Focusable<Window> {
       val layout = VerticalLayout(html)
       pane.width = "600px"
       pane.height = "500px"
+      layout.element.classList.add("help-container")
+      pane.element.classList.add("help-content")
       pane.add(layout)
       layout.isMargin = true
       setContent(pane)

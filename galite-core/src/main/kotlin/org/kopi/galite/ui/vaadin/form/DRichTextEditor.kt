@@ -27,10 +27,11 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.customfield.CustomField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 
 /**
- * Rich text editor implementation based on CK editor for vaadin.
- */
+* Rich text editor implementation based on CK editor for vaadin.
+*/
 class DRichTextEditor(
         model: VFieldUI,
         label: DLabel?,
@@ -45,24 +46,24 @@ class DRichTextEditor(
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private val editor = RichTextField(getModel().width,
-                                     getModel().height,
-                                     if (getModel().height == 1) 1 else (getModel() as VStringField).getVisibleHeight(),
-                                     model.model.isNoEdit(),
-                                     ApplicationContext.getDefaultLocale())
+  private val editor: RichTextField
   private var inside = false
 
   //---------------------------------------------------
   // CONSTRUCTOR
   //---------------------------------------------------
   init {
-    editor.addTextValueChangeListener {
-      // value change event is fired when the field is blurred.
-      getModel().isChangedUI = true
-      getModel().setChanged(true)
+    editor = RichTextField(getModel().width,
+                           getModel().height,
+                           if (getModel().height == 1) 1 else (getModel() as VStringField).getVisibleHeight(),
+                           model.model.isNoEdit(),
+                           ApplicationContext.getDefaultLocale())
+    editor.addValueChangeListener {
+      valueChanged()
     }
-    //editor.addNavigationListener(this) TODO
     setFieldContent(editor)
+    //editor.addNavigationListener(this) TODO
+    //setContent(editor) TODO
   }
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -84,13 +85,25 @@ class DRichTextEditor(
   }
 
   override fun focus() {
-    editor.focus()
+    // model transfer focus is performed
+    // when the field is focused and not when
+    // the field is clicked like text field
+    // because CK editor does not provide a way
+    // to capture click event on the editable area
+    onClick()
+  }
+
+
+  override fun valueChanged() {
+    // value change event is fired when the field is blurred.
+    getModel().isChangedUI = true
+    getModel().setChanged(true)
   }
 
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
     access {
-      editor.value = newModelTxt
+      editor.setValue(newModelTxt)
     }
   }
 

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,16 +16,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package org.kopi.galite.tests.ui.visual
+[part~='input-field'] {
+    background-color: white;
+}
 
-import org.junit.Test
+:host([theme~="galite-combobox"]) [part="text-field"] {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+    padding: 0;
+}
 
-import org.kopi.galite.tests.VApplicationTestBase
+:host([theme~="galite-combobox"]) [part="input-field"] {
+    border-bottom: #dadada 1px solid;
+    max-height: 30px;
+}
 
-class VApplicationTests : VApplicationTestBase() {
+[part~='input-field']::after {
+    background: none;
+}
 
-  @Test
-  fun applicationInitParametersTest() {
-    // TODO
-  }
+[part~='value']:focus {
+	background: none;
+}
+
+[part~='input-field']:hover {
+	background: #d9f0f8;
 }

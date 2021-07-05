@@ -41,7 +41,7 @@ import org.kopi.galite.report.VReport
 import org.kopi.galite.report.VReport.Companion.TYP_CSV
 import org.kopi.galite.report.VReport.Companion.TYP_XLS
 import org.kopi.galite.report.VReport.Companion.TYP_XLSX
-import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.VActor
 

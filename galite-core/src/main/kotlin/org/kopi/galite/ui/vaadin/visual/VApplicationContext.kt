@@ -18,12 +18,24 @@
 
 package org.kopi.galite.ui.vaadin.visual
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.Application
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.visual.PreviewRunner
 
 class VApplicationContext : ApplicationContext() {
-  override fun getApplication(): Application = VApplication.instance
+  override fun getApplication(): Application {
+    val ui = BackgroundThreadHandler.locateUI()
+
+    return if (ui == null) {
+      VApplication.instance
+    } else {
+      ui.children
+        .filter { component -> component is VApplication }
+        .findFirst()
+        .orElse(null) as? VApplication ?: VApplication.instance
+    }
+  }
 
   /**
    * Returns the current PreviewRunner.

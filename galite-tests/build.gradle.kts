@@ -15,20 +15,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+import org.kopi.galite.gradle.Versions
+
 plugins {
   kotlin("jvm") apply true
   id("org.springframework.boot") version "2.4.0"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
   id("com.vaadin") version "0.17.0.1"
 }
-
-val vaadinVersion = "18.0.3"
-val jdomVersion = "2.0.5"
-val karibuTestingVersion = "1.2.5"
-val h2Version = "1.4.199"
-val exposedVersion = "0.27.1"
-val postgresNGVersion = "0.8.6"
-val apachePoi = "4.1.2"
 
 vaadin {
   pnpmEnable = true
@@ -50,19 +44,19 @@ dependencies {
   }
 
   // UI tests dependencies
-  implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", karibuTestingVersion)
+  implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", Versions.KARIBU_TESTING)
 
-  implementation("org.jdom", "jdom2", jdomVersion)
+  implementation("org.jdom", "jdom2", Versions.JDOM)
 
   // Exposed dependencies
-  testImplementation ("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
+  testImplementation ("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
 
-  testImplementation("com.h2database", "h2", h2Version)
-  testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", postgresNGVersion)
+  testImplementation("com.h2database", "h2", Versions.H2)
+  testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", Versions.POSTGRES_NG)
 
   //Apache POI
-  testImplementation("org.apache.poi", "poi", apachePoi)
-  testImplementation("org.apache.poi", "poi-ooxml", apachePoi)
+  testImplementation("org.apache.poi", "poi", Versions.APACHE_POI)
+  testImplementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
 }
 
 tasks {
@@ -73,7 +67,7 @@ tasks {
 
 dependencyManagement {
   imports {
-    mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
+    mavenBom("com.vaadin:vaadin-bom:${Versions.VAADIN}")
   }
 }
 

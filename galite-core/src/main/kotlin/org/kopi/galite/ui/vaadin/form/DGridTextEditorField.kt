@@ -100,7 +100,7 @@ class DGridTextEditorField(
 
   override fun updateText() {
     val newModelTxt = getModel().getText(getBlockView().getRecordFromDisplayLine(position))
-    access {
+    access(currentUI) {
       //editor.value = transformer.toGui(newModelTxt)!!.trim() FIXME
       editor.value = transformer.toGui(newModelTxt)
     }
@@ -152,7 +152,9 @@ class DGridTextEditorField(
     //editor.setAutocompleteLength(columnView.getModel().getAutocompleteLength())
     //editor.setHasAutocomplete(columnView.getModel().hasAutocomplete())
     //editor.setNavigationDelegationMode(getNavigationDelegationMode())
-    //editor.setHasAutofill(columnView.hasAutofill())
+    if (columnView.hasAutofill()) {
+      editor.setAutofill()
+    }
     //editor.setHasPreFieldTrigger(columnView.getModel().hasTrigger(VConstants.TRG_PREFLD))
     editor.addActors(actors)
     //editor.setConvertType(getConvertType(columnView.model))
@@ -344,7 +346,7 @@ class DGridTextEditorField(
    */
   @Synchronized
   private fun enterMe() {
-   access {
+   access(currentUI) {
       if (scanner) {
         editor.value = transformer.toGui("")
       }

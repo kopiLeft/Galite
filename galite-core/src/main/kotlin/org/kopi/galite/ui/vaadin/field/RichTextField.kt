@@ -166,7 +166,6 @@ class RichTextField(
 
   override fun isReadOnly() = editor.isReadOnly
 
-
   override fun setRequiredIndicatorVisible(requiredIndicatorVisible: Boolean) {
     editor.isRequiredIndicatorVisible = requiredIndicatorVisible
   }
@@ -269,8 +268,4 @@ class RichTextField(
   }
 
   inner class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
-
-  override fun setColor(foreground: String?, background: String?) {
-
-  }
 }

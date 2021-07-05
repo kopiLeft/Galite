@@ -14,30 +14,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.tests.common
 
-package org.kopi.galite.tests.ui.vaadin.base
+import org.kopi.galite.visual.Registry
 
-import com.github.mvysny.kaributesting.v10.MockVaadin
-import com.github.mvysny.kaributesting.v10.Routes
-import org.kopi.galite.tests.TestBase
-
-/**
- * The high level class for all classes containing UI tests
- */
-open class UITestBase : TestBase() {
-  fun setupRoutes() {
-    MockVaadin.setup(routes!!)
-  }
-
-  companion object {
-    fun discoverRooterByPackage(packageName: String) {
-      routes = Routes().autoDiscoverViews(packageName)
-    }
-
-    fun discoverRooterClass(clazz: Class<*>) {
-      routes = Routes().autoDiscoverViews(clazz.`package`.name)
-    }
-
-    var routes: Routes? = null
-  }
-}
+class GaliteRegistry : Registry("Galite", null)

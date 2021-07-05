@@ -28,7 +28,7 @@ import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object TaxRuleForm : ReportSelectionForm() {
+class TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "TaxRules"
   val page = page("TaxRule")
@@ -42,6 +42,12 @@ object TaxRuleForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
 
   val list = actor(
           ident = "list",
@@ -83,7 +89,7 @@ object TaxRuleForm : ReportSelectionForm() {
     icon = "save"
   }
 
-  val block = insertBlock(TaxRuleBlock, page) {
+  val block = insertBlock(TaxRuleBlock(), page) {
     command(item = saveBlock) {
       action = {
         println("-----------save-----------------" + informations.value)
@@ -93,7 +99,7 @@ object TaxRuleForm : ReportSelectionForm() {
 
     command(item = report) {
       action = {
-        createReport(TaxRuleBlock)
+        createReport(this@insertBlock)
       }
     }
 
@@ -118,11 +124,11 @@ object TaxRuleForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return TaxRuleR
+    return TaxRuleR()
   }
 }
 
-object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
+class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
   val u = table(TaxRule)
 
   val idTaxe = hidden(domain = Domain<Int>(20)) {
@@ -166,5 +172,5 @@ object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
 }
 
 fun main() {
-  Application.runForm(formName = TaxRuleForm)
+  Application.runForm(formName = TaxRuleForm())
 }

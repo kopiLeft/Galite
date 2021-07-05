@@ -18,6 +18,8 @@
 
 package org.kopi.galite.db
 
+import java.lang.RuntimeException
+
 import org.jetbrains.exposed.sql.Sequence
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.nextIntVal
@@ -62,23 +64,24 @@ class Utils {
       return if (bufpos == 0) "" else String(buffer, 0, bufpos)
     }
 
-    fun trailString(var0: String): String {
-      var var1 = -1
-      var var2 = var0.length - 1
-      while (var1 == -1 && var2 >= 0) {
-        if (!Character.isWhitespace(var0[var2])) {
-          var1 = var2
+    fun trailString(input: String): String? {
+      var last = -1
+      var i = input.length - 1
+      while (last == -1 && i >= 0) {
+        if (!Character.isWhitespace(input[i])) {
+          last = i
         }
-        --var2
+        --i
       }
-      return if (var1 == -1) {
+      return if (last == -1) {
         ""
+      } else if (last == input.length) {
+        input
       } else {
-        if (var1 == var0.length) var0 else var0.substring(0, var1 + 1)
+        input.substring(0, last + 1)
       }
     }
-
-    fun toSql(date: Date): String = TODO()
+    fun toSql(date: Date?): String = TODO()
 
     fun toSql(l: String?): String {
       return if (l == null) {

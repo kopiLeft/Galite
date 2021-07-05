@@ -21,4 +21,15 @@ package org.kopi.galite.ui.vaadin.grid
  * Server side implementation of the time editor field
  * Time fields are fixed width length
  */
-class GridEditorTimeField: GridEditorTextField(5)
+class GridEditorTimeField: GridEditorTextField(5) {
+
+  override fun check(text: String): Boolean {
+    for (i in 0 until text.length) {
+      val c = text[i]
+      if (!(c >= '0' && c <= '9' || c == ':')) {
+        return false
+      }
+    }
+    return true
+  }
+}

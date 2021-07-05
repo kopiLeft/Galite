@@ -18,6 +18,8 @@
 package org.kopi.galite.ui.vaadin.field
 
 import java.text.DecimalFormatSymbols
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -39,7 +41,6 @@ import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.KeyUpEvent
 import com.vaadin.flow.component.textfield.Autocomplete
-
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.textfield.HasAutocomplete
@@ -143,6 +144,17 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     return field.addValueChangeListener(listener)
   }
 
+  override fun getValue(): String? {
+    return format(field.value)
+  }
+
+  private fun format(s: Any?): String? =
+    if(s is LocalDate) {
+      s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    } else {
+      s?.toString()
+    }
+
   override fun initContent(): C = field
 
   fun onKeyPress(event: KeyPressEvent) {
@@ -201,7 +213,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   private fun onPasteEvent(event: DomEvent) {
     // should validate text content
     if (validationStrategy != null) {
-      val before: String = value
+      val before = value
 
       if (!validationStrategy!!.validate(value)) {
         value = before
@@ -229,7 +241,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
       if (text != value) {
         fieldConnector.isChanged = true
       }
-      super.setValue(text)
+      setPresentationValue(text)
     }
     if (text != null) {
       valueBeforeEdit = text
@@ -544,8 +556,8 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
 
       // look to the lower and upper convert type to detect if the field value has really changed
       when (strategy.getConvertType()) {
-        ConvertType.UPPER -> value.toUpperCase() != valueBeforeEdit!!.toUpperCase()
-        ConvertType.LOWER -> value.toLowerCase() != valueBeforeEdit!!.toLowerCase()
+        ConvertType.UPPER -> value?.toUpperCase() != valueBeforeEdit!!.toUpperCase()
+        ConvertType.LOWER -> value?.toLowerCase() != valueBeforeEdit!!.toLowerCase()
         else -> !value.equals(valueBeforeEdit)
       }
     } else {
@@ -556,10 +568,10 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Checks if the decimal separator must be changed.
    */
   protected fun maybeReplaceDecimalSeparator() {
-    if (validationStrategy is DecimalValidator && value.contains(".")) {
+    if (validationStrategy is DecimalValidator && value!!.contains(".")) {
       val dfs: DecimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale(MainWindow.locale)) // TODO
       if (dfs.decimalSeparator != '.') {
-        value = value.replace('.', dfs.decimalSeparator)
+        value = value?.replace('.', dfs.decimalSeparator)
       }
     }
   }
@@ -714,7 +726,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Selects the content of this text input
    */
   private fun maybeSelectAll() {
-    if (value != null && value.isNotEmpty()) {
+    if (value != null && value!!.isNotEmpty()) {
       selectAll()
     }
   }
@@ -733,7 +745,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Cancel suggestions query if needed.
    */
   private fun maybeCancelSuggestions() {
-    if (value == null || value.isEmpty()) {
+    if (value == null || value!!.isEmpty()) {
       //cancelSuggestions()
       // restore the suggestions to be fetched
       // before GWT returns control to event browser
@@ -757,7 +769,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   fun checkValue(rec: Int) {
     isCheckingValue = true //!!! don't check twice on field blur
     if (validationStrategy != null) {
-      validationStrategy!!.checkType(this, if (value == null) "" else value.trim())
+      validationStrategy!!.checkType(this, if (value == null) "" else value!!.trim())
       if (!value.equals(fieldConnector.getCachedValueAt(rec))) {
         connector.markAsDirty(rec, value)
       }
@@ -779,7 +791,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    */
   private fun refreshSuggestions() {
     // Get the raw text.
-    val text: String = value
+    val text = value
 
     if (text == null || text.isEmpty() || text.length.toDouble() == getMaxLength()) {
       hideSuggestions()

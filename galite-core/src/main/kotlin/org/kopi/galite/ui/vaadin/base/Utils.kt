@@ -21,6 +21,7 @@ import java.util.Hashtable
 import java.util.concurrent.CompletableFuture
 
 import org.kopi.galite.base.Utils
+import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.VColor
 
 import com.flowingcode.vaadin.addons.ironicons.AvIcons
@@ -224,6 +225,20 @@ object Utils : Utils() {
     return future.get()
   }
 
+  fun getWidth(element: Element?, ui: UI): String? {
+    val future = CompletableFuture<String>()
+
+    ui.access {
+      ui.page
+        .executeJs("return $0.width", element)
+        .then(String::class.java) { value ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
   /**
    * Gets the current position of the cursor.
    *
@@ -242,6 +257,20 @@ object Utils : Utils() {
     }
 
     return future.get()
+  }
+
+  fun Component.findMainWindow(): MainWindow? {
+    var mainWindow: MainWindow? = null
+    var parent: Component? = parent.orElse(null)
+
+    while (parent != null && mainWindow == null) {
+      if(parent is MainWindow) {
+        mainWindow = parent
+      }
+      parent = parent.parent.orElse(null)
+    }
+
+    return mainWindow
   }
 
   /**

@@ -109,7 +109,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * The model active record of this block.
    */
-  var activeRecord = -1
+  var activeRecord = 0
     get() = if (field in 0 until bufferSize) field else -1
     set(value) {
       if (initialized) {

@@ -26,6 +26,7 @@ import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VReport
 import org.kopi.galite.report.VReportRow
 import org.kopi.galite.report.VSeparatorColumn
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
@@ -78,7 +79,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
     parameters = Parameters(Color(71, 184, 221))
     table = DTable(VTable(model, buildRows()))
     table.isColumnReorderingAllowed = true
-    table.cellStyler = ReportCellStyler(model, parameters!!)
+    table.cellStyler = ReportCellStyler(model, parameters!!, table)
     // 200 px is approximately the header window size + the actor pane size
     ui.ifPresent {
       it.page.retrieveExtendedClientDetails {
@@ -100,16 +101,16 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
    */
   fun reorder(newOrder: IntArray) {
     model.columnMoved(newOrder)
-    table.setColumnOrder(
-            newOrder.map { table.getColumnByKey(it.toString()) }
-    )
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access(currentUI) {
+      table.setColumnOrder(
+        newOrder.map { table.getColumnByKey(it.toString()) }
+      )
       for (col in 0 until model.getAccessibleColumnCount()) {
         table.getColumnByKey(col.toString()).isVisible =
           !model.getAccessibleColumn(col)!!.isFolded
                   || model.getAccessibleColumn(col) is VSeparatorColumn
       }
-    //})
+    }
   }
 
   override fun removeColumn(position: Int) {
@@ -158,10 +159,12 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun contentChanged() {
     if (this::table.isInitialized) {
-      table.setItems(buildRows())
-      table.model.fireContentChanged()
-      val page = UI.getCurrent().page
-      page.executeJs("$0.\$server.recalculateColumnWidths()", element)
+      access(currentUI) {
+        table.setItems(buildRows())
+        table.model.fireContentChanged()
+        val page = UI.getCurrent().page
+        page.executeJs("$0.\$server.recalculateColumnWidths()", element)
+      }
     }
   }
 
@@ -178,9 +181,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun resetWidth() {
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access(currentUI) {
       table.resetWidth()
-    //})
+    }
   }
 
   override fun getSelectedColumn(): Int {

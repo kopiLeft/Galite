@@ -16,36 +16,85 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/*
- * Form blocks style
+/**
+ * Form blocks style.
  */
 .k-block {
     padding: 22px 50px 22px 50px;
+    width: 100%;
     margin-bottom: 16px;
     background: #ffffff;
     display: inline-block;
 }
 
-.k-block .simple ::part(value) {
-    --lumo-text-field-overflow-mask-image: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-    background-color: var(--lumo-base-color);
-    border-bottom: 1px solid #dadada;
+/**
+ * Styles to be applied to a simple block layout table cell.
+ */
+.simple td {
+    padding-bottom: 1px;
+    height: 20px;
+    padding-right: 8px;
+    display: table-cell;
+}
+
+/**
+ * Specific styles for a field cell
+ */
+.simple .k-textinput {
+    padding-right: 24px;
+}
+
+/**
+ * The block title styles
+ */
+.block-title {
+    font-size: 16px !important;
     font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
+    font-weight: 500 !important;
     font-style: normal !important;
-    font-size: 12px !important;
-    min-height: 20px;
-    max-height: 40px;
 }
 
-.k-block .multiple ::part(value) {
-    border-left: 1px solid #dadada;
-    border-bottom: 1px solid #dadada;
+/**
+ * Styles for grid, remove border
+ */
+#main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
+      border: none;
 }
 
-.k-block .multiple ::part(value):focus {
-    border-bottom: 1px solid #505050;
+/**
+ * Styles for the grid wrapper cell
+ */
+.multiple ::part(cell) {
+    height: 24px;
+}
+
+/**
+ * Styles for grid header cells
+ */
+.multiple ::part(header-cell) {
+    padding: 0px 4px 8px 4px !important;
+    border-bottom: #a3a3a3 2px solid;
+}
+
+/**
+ * Styles for grid body cell.
+ *
+ */
+.multiple ::part(body-cell) {
+    border-bottom: #a3a3a3 1px solid !important;
+    padding: 0 4px !important;
+}
+
+/**
+ * Aligned block styles
+ */
+.k-block.k-block-aligned {
+    margin-top: -56px;
+}
+
+/*
+ * make label & follow field in same line
+ */
+.info-content {
+    display: -webkit-box;
 }

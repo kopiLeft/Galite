@@ -24,5 +24,5 @@ import com.vaadin.flow.server.PWA
  * Use the @PWA annotation make the application installable on phones, tablets
  * and some desktop browsers.
  */
-@PWA(name = "Galite Demo", shortName = "Demo")
+@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/window.gif")
 class AppShell : AppShellConfigurator

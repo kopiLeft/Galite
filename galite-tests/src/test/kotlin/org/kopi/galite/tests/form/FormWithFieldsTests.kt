@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 
 import org.junit.Test
 
-import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 
 class FormWithFieldsTests: JApplicationTestBase() {
 

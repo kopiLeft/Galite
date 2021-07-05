@@ -17,10 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
-import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.customfield.CustomField
 import com.vaadin.flow.component.html.Div
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -135,7 +133,13 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
 
   fun setFieldContent(component: AbstractField<*>) {
     wrappedField = component
-    wrappedField.addFocusListener {
+    wrappedField.addClickListener {
+      // no click event is for rich text field and action fields
+      /*if (hasAction || content is RichTextField) { TODO
+        return
+      }*/
+      columnView!!.setBlockActiveRecordFromDisplayLine(position)
+      getWindow()!!.cleanDirtyValues(getBlock(), false) //!! do not make a focus transfer.
       fireClicked()
     }
     add(component)
@@ -471,6 +475,8 @@ abstract class Field(val hasIncrement: Boolean, val hasDecrement: Boolean)
       (wrappedField as ObjectField<*>).setColor(foreground, background)
     }
   }
+
+  abstract fun valueChanged()
 
   /**
    * Returns the parent window of this field.

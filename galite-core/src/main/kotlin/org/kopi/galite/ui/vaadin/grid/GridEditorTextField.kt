@@ -21,6 +21,7 @@ import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.ui.vaadin.base.Utils
 
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
@@ -41,9 +42,8 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     add(wrappedField)
     wrappedField.setWidthFull()
     wrappedField.maxLength = width
-    wrappedField.valueChangeMode = ValueChangeMode.TIMEOUT
     addValueChangeListener {
-      if(!check(it.value)) {
+      if(!check(it.value.orEmpty())) {
         value = it.oldValue
       }
       oldValue = value
@@ -74,6 +74,17 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
    * @return True if it is a multi line editor field.
    */
   protected open val isMultiLine: Boolean = false
+
+  /**
+   * Sets this field to be an auto fill field
+   */
+  fun setAutofill() {
+    val autofillIcon  = IronIcons.ARROW_DROP_DOWN.create()
+    autofillIcon.addClickListener {
+      dGridEditorField.onAutofill()
+    }
+    wrappedField.suffixComponent = autofillIcon
+  }
 
   /**
    * Validates the given text according to the field type.
@@ -113,11 +124,11 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     addNavigationAction(Key.ENTER, KeyModifier.of("Shift")) { dGridEditorField.onGotoNextBlock() }
     addNavigationAction(Key.KEY_D, KeyModifier.of("Control")) {
       val ui = UI.getCurrent()
+
       Thread {
-        UI.setCurrent(ui)
         val text = StringBuffer(value)
         text.insert(Utils.getCursorPos(wrappedField), "\u00D8")
-        access {
+        access(ui) {
           value = text.toString()
         }
       }.start()
@@ -148,8 +159,8 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
    * @param navigationAction lambda representing the action to perform
    */
   protected open fun addNavigationAction(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
-    NavigationAction(key, modifiers, navigationAction)
-      .registerShortcut(this)
+    NavigationAction(this, key, modifiers, navigationAction)
+      .registerShortcut()
   }
 
   //---------------------------------------------------
@@ -159,22 +170,25 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
    * A navigation action
    */
   inner class NavigationAction(
+    field: GridEditorField<*>,
     key: Key,
     modifiers: Array<out KeyModifier>,
     navigationAction: () -> Unit
-  ) : ShortcutAction(key, modifiers, navigationAction) {
+  ) : ShortcutAction<GridEditorField<*>>(field, key, modifiers, navigationAction) {
     //---------------------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------------------
     override fun performAction() {
-      // block any navigation request if suggestions is showing
-      /*if (suggestionDisplay != null && suggestionDisplay.isSuggestionListShowingImpl()) { TODO
-        return
-      }*/
+      wrappedField.runAfterGetValue {
+        // block any navigation request if suggestions is showing
+        /*if (suggestionDisplay != null && suggestionDisplay.isSuggestionListShowingImpl()) { TODO
+          return
+        }*/
 
-      // first sends the text value to server side if changed
-      dGridEditorField.valueChanged()
-      navigationAction()
+        // first sends the text value to server side if changed
+        dGridEditorField.valueChanged()
+        navigationAction()
+      }
     }
   }
 }

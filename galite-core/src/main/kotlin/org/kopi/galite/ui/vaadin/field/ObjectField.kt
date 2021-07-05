@@ -153,7 +153,7 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
    * @param foreground The foreground color.
    * @param background The background color.
    */
-  abstract override fun setColor(foreground: String?, background: String?)
+  abstract fun setColor(foreground: String?, background: String?)
 
   /**
    * Checks the internal value of this field.
@@ -174,10 +174,11 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
    * The object field key navigator.
    */
   private inner class KeyNavigator(
+    field: ObjectField<*>,
     key: Key,
     modifiers: Array<out KeyModifier>,
     navigationAction: () -> Unit
-  ) : ShortcutAction(key, modifiers, navigationAction) {
+  ) : ShortcutAction<ObjectField<*>>(field, key, modifiers, navigationAction) {
 
     //---------------------------------------
     // IMPLEMENTATIONS
@@ -220,8 +221,8 @@ abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
      * @param navigationAction lambda representing the action to perform
      */
     protected fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
-      KeyNavigator(key, modifiers, navigationAction)
-        .registerShortcut(this@ObjectField)
+      KeyNavigator(this@ObjectField, key, modifiers, navigationAction)
+        .registerShortcut()
     }
   }
 }

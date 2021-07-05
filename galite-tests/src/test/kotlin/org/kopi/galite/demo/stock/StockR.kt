@@ -33,9 +33,9 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 
 /**
- * STock Report
+ * Stock Report
  */
-object StockR : Report() {
+class StockR : Report() {
   override val locale = Locale.UK
 
   override val title = "Stocks"

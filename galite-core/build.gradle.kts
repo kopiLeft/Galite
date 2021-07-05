@@ -15,26 +15,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+import org.kopi.galite.gradle.Versions
+
 plugins {
   kotlin("jvm") apply true
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
 
-val exposedVersion = "0.29.1"
-val vaadinVersion = "18.0.3"
-val itextVersion = "2.1.5"
-val jdomVersion = "2.0.5"
-val apachePoi = "4.1.2"
-val graphbuilder = "1.02"
-val hylafaxVersion = "1.0.0"
-val jFreeChartVersion = "1.0.19"
-val getoptVersion = "1.0.13"
-
 dependencies {
   // Exposed dependencies
-  api("org.jetbrains.exposed", "exposed-core", exposedVersion)
-  api("org.jetbrains.exposed", "exposed-jodatime", exposedVersion)
-  api("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
+  api("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {
@@ -45,44 +37,47 @@ dependencies {
   }
 
   // Itext dependency
-  implementation("com.lowagie", "itext", itextVersion)
+  implementation("com.lowagie", "itext", Versions.ITEXT)
 
   // Jdom dependency
-  implementation("org.jdom", "jdom2", jdomVersion)
+  implementation("org.jdom", "jdom2", Versions.JDOM)
 
   //Apache POI
-  implementation("org.apache.poi", "poi", apachePoi)
+  implementation("org.apache.poi", "poi", Versions.APACHE_POI)
 
   // Apache OOxml
-  implementation("org.apache.poi", "poi-ooxml", apachePoi)
+  implementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
 
   // Graphbuilder dependency
-  implementation("com.github.virtuald", "curvesapi", graphbuilder)
+  implementation("com.github.virtuald", "curvesapi", Versions.GRAPH_BUILDER)
 
   // Hylafax dependencies
-  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", hylafaxVersion)
+  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", Versions.HYLAFAX)
 
   //JFreeChart dependency
-  implementation("org.jfree", "jfreechart", jFreeChartVersion)
+  implementation("org.jfree", "jfreechart", Versions.JFREE_CHART)
 
   //getOpt dependency
-  implementation("gnu.getopt", "java-getopt", getoptVersion)
+  implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
   // EnhancedDialog dependency
-  implementation("com.vaadin.componentfactory", "enhanced-dialog", "1.0.4")
+  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
 
   // ApexCharts dependency
-  implementation("com.github.appreciated", "apexcharts", "2.0.0.beta10")
+  implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
 
   // Iron Icons dependency
-  implementation("com.flowingcode.addons", "iron-icons", "2.0.1")
+  implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
 
   //Wysiwyg-e Rich Text Editor component for Java dependency
-  implementation("org.vaadin.pekka", "wysiwyg_e-java", "2.0.1")
+  implementation("org.vaadin.pekka", "wysiwyg_e-java", Versions.WYSIWYG_EJAVA)
+
+  // Compile only dependency for Vaadin servlet
+  compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
 }
 
 dependencyManagement {
   imports {
-    mavenBom("com.vaadin:vaadin-bom:${vaadinVersion}")
+    mavenBom("com.vaadin:vaadin-bom:${Versions.VAADIN}")
   }
 }
