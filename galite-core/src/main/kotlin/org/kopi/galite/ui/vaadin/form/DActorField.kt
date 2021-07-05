@@ -92,6 +92,10 @@ class DActorField(model: VFieldUI,
     }
   }
 
+  override fun valueChanged() {
+    // Nothing to do
+  }
+
   override fun getObject(): Any? {
     return null
   }

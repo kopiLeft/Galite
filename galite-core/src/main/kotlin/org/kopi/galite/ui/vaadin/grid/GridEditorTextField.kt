@@ -26,8 +26,6 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.data.value.ValueChangeMode
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 
 /**
  * A text field used as editor
@@ -43,9 +41,8 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     add(wrappedField)
     wrappedField.setWidthFull()
     wrappedField.maxLength = width
-    wrappedField.valueChangeMode = ValueChangeMode.TIMEOUT
     addValueChangeListener {
-      if(!check(it.value)) {
+      if(!check(it.value.orEmpty())) {
         value = it.oldValue
       }
       oldValue = value
@@ -161,8 +158,8 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
    * @param navigationAction lambda representing the action to perform
    */
   protected open fun addNavigationAction(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
-    NavigationAction(key, modifiers, navigationAction)
-      .registerShortcut(this)
+    NavigationAction(this, key, modifiers, navigationAction)
+      .registerShortcut()
   }
 
   //---------------------------------------------------
@@ -172,22 +169,25 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
    * A navigation action
    */
   inner class NavigationAction(
+    field: GridEditorField<*>,
     key: Key,
     modifiers: Array<out KeyModifier>,
     navigationAction: () -> Unit
-  ) : ShortcutAction(key, modifiers, navigationAction) {
+  ) : ShortcutAction<GridEditorField<*>>(field, key, modifiers, navigationAction) {
     //---------------------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------------------
     override fun performAction() {
-      // block any navigation request if suggestions is showing
-      /*if (suggestionDisplay != null && suggestionDisplay.isSuggestionListShowingImpl()) { TODO
-        return
-      }*/
+      wrappedField.runAfterGetValue {
+        // block any navigation request if suggestions is showing
+        /*if (suggestionDisplay != null && suggestionDisplay.isSuggestionListShowingImpl()) { TODO
+          return
+        }*/
 
-      // first sends the text value to server side if changed
-      dGridEditorField.valueChanged()
-      navigationAction()
+        // first sends the text value to server side if changed
+        dGridEditorField.valueChanged()
+        navigationAction()
+      }
     }
   }
 }

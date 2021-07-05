@@ -133,7 +133,7 @@ class TextFieldNavigationHandler protected constructor(private val isMulti: Bool
     navigationAction: () -> Unit,
   ) {
     KeyNavigator(field, key, modifiers, navigationAction)
-      .registerShortcut(field)
+      .registerShortcut()
   }
 
   companion object {
