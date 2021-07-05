@@ -66,11 +66,11 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
   private val windowsLink = VWindows()
   private val welcome = VWelcome()
   private val content = VContent()
-  private val container = VWindowContainer()
   private val locale: String = locale.toString()
   internal var windowsList = mutableListOf<Component>()
   private val windows = mutableMapOf<Component, MenuItem>()
   private val windowsMenu = VWindowsDisplay()
+  private val container = VWindowContainer(windowsMenu.menu)
   var currentWindow: Component? = null
   private var originalWindowTitle: String = ""
 

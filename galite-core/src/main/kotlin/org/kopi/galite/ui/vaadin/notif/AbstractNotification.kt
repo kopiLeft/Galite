@@ -25,6 +25,7 @@ import org.kopi.galite.ui.vaadin.window.Window
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.H3
 import com.vaadin.flow.component.icon.Icon
@@ -38,6 +39,11 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param message the notification message.
  * @param locale  the notification locale
  */
+
+@CssImport.Container(value = [
+  CssImport("./styles/galite/notification.css"),
+  CssImport("./styles/galite/notification.css" , themeFor = "vcf-enhanced-dialog-overlay")
+])
 abstract class AbstractNotification(title: String?,
                                     message: String?,
                                     protected val locale: String)
@@ -56,6 +62,8 @@ abstract class AbstractNotification(title: String?,
   val footer = Div()
 
   init {
+    element.classList.add("notification")
+    element.themeList.add("notification")
     element.setAttribute("hideFocus", true)
     element.style["outline"] = "0px"
     isDraggable = true

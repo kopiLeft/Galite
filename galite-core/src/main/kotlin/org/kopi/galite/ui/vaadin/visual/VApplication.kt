@@ -70,7 +70,10 @@ import com.vaadin.flow.router.Route
  */
 @Push
 @Route("")
-@CssImport("./styles/galite/styles.css")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/styles.css"),
+  CssImport("./styles/galite/common.css")
+])
 @PreserveOnRefresh
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
@@ -521,8 +524,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     /** Application instance */
     lateinit var instance: Application
     private val FONT_METRICS = arrayOf(
-      FontMetrics.DIGIT,
-      FontMetrics.LETTER
+            FontMetrics.DIGIT,
+            FontMetrics.LETTER
     )
 
     init {

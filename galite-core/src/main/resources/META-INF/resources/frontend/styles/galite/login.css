@@ -22,7 +22,7 @@
 }
 
 /**
- * Main Style
+ * Main's style
  */
 .k-loginBox {
     border: 1px solid #cccccc;
@@ -33,13 +33,6 @@
 }
 
 /**
- * Error division style
- */
-.k-loginBox-error {
-    color: red;
-}
-
-/*
  * Login Box password input fields style
  */
 vaadin-password-field {
@@ -48,7 +41,7 @@ vaadin-password-field {
     width: 150px;
 }
 
-/*
+/**
  * Login Box input fields style
  */
 .k-loginBox ::part(input-field) {
@@ -58,14 +51,14 @@ vaadin-password-field {
     border-bottom: 1px solid #dadada;
 }
 
-/*
+/**
  * Change login page title's style
  */
 .k-loginBox-pane tr td {
     color: black;
 }
 
-/*
+/**
  * Login page labels style
  */
 .k-loginBox-pane label {
@@ -73,7 +66,7 @@ vaadin-password-field {
     color: #a3a3a3;
 }
 
-/*
+/**
  * Welcome's word style
  */
 .k-loginBox b {
@@ -83,7 +76,7 @@ vaadin-password-field {
     font-size: 14px
 }
 
-/*
+/**
  * User name's style
  */
 #user_name {
@@ -92,18 +85,13 @@ vaadin-password-field {
     border-bottom: 1px solid #dadada;
  }
 
-
-#user_name:hover {
-    background: #f2f2f2;
-}
-
 #user_name:focus {
     outline : none;
     background: none;
     border-bottom: #009bd4 1px solid;
 }
 
-/*
+/**
  * Language Selector style
  */
 .k-loginBox-pane select {
@@ -116,7 +104,7 @@ vaadin-password-field {
     background: #f2f2f2;
 }
 
-/*
+/**
  * Login Button
  */
 #login_button {
@@ -130,6 +118,8 @@ vaadin-password-field {
     margin: 0;
     border: #dadada 1px solid;
 }
+
+
 
 /**
  * Main Style
@@ -182,7 +172,7 @@ vaadin-password-field {
  */
 .k-loginBox-info {
     margin-bottom: 6px;
-    font-weight: 500 ! important;
+    font-weight: 400 ! important;
     font-style: normal !important;
     color: #000000;
 }
@@ -190,31 +180,25 @@ vaadin-password-field {
 /**
  * Input texts styles
  */
-.k-loginBox-pane input[type="text"], .k-loginBox-pane input[type="password"] {
-    color: #000000 !default;
-    font-weight: 500 !important;
-    font-style: normal !important;
-    border-bottom: #dadada 1px solid !default;
-    line-height: 1.2em !default;
+#user_password, #user_name {
     padding: 6px 3px 3px 3px !important;
-    max-height: 40px !default;
-    transition: .4s !default;
-    position: relative;
+    max-height: 40px;
+
 }
 
 /**
  * Styles for hovered text zones.
  */
-.k-loginBox-pane input[type="text"]:hover, .k-loginBox-pane input[type="password"]:hover {
-    background: #d9f0f8 !default;
+#user_password::part(input-field):hover, #user_name:hover {
+    background: #d9f0f8;
 }
 
 /**
  * Styles for focused text zones.
  */
-.k-loginBox-pane input[type="text"]:focus, .k-loginBox-pane input[type="password"]:focus {
+#user_password:focus, #user_name:focus {
     background: none;
-    border-bottom: #009bd4 1px solid !default;
+    border-bottom: #009bd4 1px solid;
 }
 
 /**
@@ -234,7 +218,7 @@ vaadin-password-field {
 .k-loginBox-pane label {
     font-weight: 500 !important;
     font-style: normal !important;
-    color: #a3a3a3 !default;
+    color: #a3a3a3;
 }
 
 /**

@@ -91,6 +91,7 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
         tabsToPages[tab] = pages[i]!!
         tabPanel!!.add(tab)
         tab.isEnabled = false
+        tab.addClassName("tab")
       }
 
       tabPanel!!.addSelectedChangeListener {
@@ -184,8 +185,10 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
   fun gotoPage(i: Int) {
     currentPage = i
     lastSelected?.let { tabsToPages[it]!!.isVisible = false }
+    lastSelected?.removeClassName("selected-tab")
     pages[i]!!.isVisible = true
     selectPage(i)
+    tabPanel!!.getComponentAt(currentPage).element.classList.add("selected-tab")
   }
 
   /**

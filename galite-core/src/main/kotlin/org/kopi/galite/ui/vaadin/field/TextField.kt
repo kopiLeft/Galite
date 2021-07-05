@@ -53,7 +53,10 @@ import com.vaadin.flow.data.value.ValueChangeMode
  * @param hasAutofill     Tells if the field has an autofill command
  * @param fieldParent     parent of this text field
  */
-@CssImport("./styles/galite/textfield.css")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/textfield.css"),
+  CssImport(value = "./styles/galite/textfield.css", themeFor = "vaadin-text-field")
+])
 class TextField(val model: VField,
                 val noEcho: Boolean,
                 val scanner: Boolean,
@@ -375,6 +378,8 @@ class TextField(val model: VField,
     text.size = size
     text.setMaxLength(maxLength)
     text.maxWidth = "" + size + "em" // TODO: temporary styling
+    text.setWidthFull()
+    setWidthFull()
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
     TextFieldNavigationHandler.createNavigator(text, rows > 1)
@@ -393,6 +398,17 @@ class TextField(val model: VField,
         size += 2
       }
     }
+
+    if (type == Type.TIMESTAMP) {
+      size += 3
+    } else if (type == Type.DATE) {
+      size += 5
+    } else if (type == Type.TIME) {
+      size += 5
+    } else {
+      size += 4
+    }
+
     // let the place to the autofill icon
     if (hasAutofill) {
       size += 1

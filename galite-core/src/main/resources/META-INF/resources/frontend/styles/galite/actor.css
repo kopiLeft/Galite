@@ -77,16 +77,118 @@
     border-bottom : 1px solid #dadada;
 }
 
-.actor-navigationItem {
-    height: auto;
-    background: var(--lumo-base-color);
-}
-
-.actor-navigationItem::part(label) {
-    color: #8f8f8f;
-}
-
-.actor-navigationColumn > label {
+.actor-navigationColumn > span:first-child {
     width: 100%;
     border-bottom : 1px solid #dadada;
+    font-size: 1.2em !important;
+    padding: 12px 48px;
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+}
+
+.actor-navigationColumn {
+    padding: 0;
+}
+
+::part(rootNavigation-open) {
+    background: #ffffff;
+    color: #009bd4;
+}
+
+/**
+ * Change color of root menu button
+ */
+::part(rootNavigation) {
+    color: #ffffff;;
+}
+
+.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem:hover * {
+    color: #009bd4;
+}
+.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem:hover {
+    color: #009bd4;
+}
+
+.actors-navigationPanel > .actor-navigationColumn > .actor-navigationItem-disabled:hover {
+    color: none;
+}
+
+.actor-navigationItem-disabled {
+    color: #DCDCDC;
+}
+
+.actors-navigationPanel * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.actor-navigationColumn > .actor-navigationItem, .actor-navigationColumn > .actor-navigationItem-disabled {
+    width: 100%;
+    padding-top: 20px;
+}
+
+.actor-navigationColumn > .actor-navigationItem > iron-icon,  .actor-navigationColumn > .actor-navigationItem-disabled > iron-icon {
+    width: 30px;
+    font-size: 1.5em !important;
+}
+
+.actor-navigationColumn > .actor-navigationItem > div, .actor-navigationColumn > .actor-navigationItem-disabled > div {
+    width: calc(100% - 110px);
+    padding: 10px 16px;
+    margin: 4px;
+    height: auto;
+    background: #ffffff;
+}
+
+.actor-navigationColumn > .actor-navigationItem > div {
+    cursor: pointer;
+}
+
+.actor-navigationColumn {
+    width: calc(25% - 3px);
+    line-height: 1.5em;
+}
+
+.actors-navigationPanel > * {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+}
+
+.k-actor, .k-actor-disabled {
+    background: transparent;
+    padding: 15px 22px;
+    width: 100%;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+}
+
+.k-actor {
+    color: #676767;
+}
+
+.k-actor-disabled {
+    color: #a3a3a3;
+}
+
+.k-actor:hover {
+    background: #d9f0f8;
+    cursor: pointer;
+}
+
+vaadin-button.k-actor::after, vaadin-button.k-actor::before {
+    background: transparent;
+}
+
+.vaadin-menu-item:hover {
+      background: #d9f0f8;
+      cursor: pointer;
+}
+
+.vaadin-menu-item:not(:last-child) {
+    border-bottom: 1px solid #dadada;
 }

@@ -20,11 +20,13 @@ package org.kopi.galite.ui.vaadin.field
 import java.time.LocalTime
 
 import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.timepicker.TimePicker
 
 /**
  * A time field.
  */
+@CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-time-picker-text-field")
 class VTimeField : InputTextField<TimePicker>(TimePicker()), KeyNotifier {
 
   override fun setPresentationValue(newPresentationValue: String?) {

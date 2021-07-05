@@ -81,9 +81,9 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
    * Sets this field to be an auto fill field
    */
   fun setAutofill() {
-    val autofillIcon  = IronIcons.FIND_IN_PAGE.create()
+    val autofillIcon  = IronIcons.ARROW_DROP_DOWN.create()
     autofillIcon.addClickListener {
-        dGridEditorField.onAutofill()
+      dGridEditorField.onAutofill()
     }
     wrappedField.suffixComponent = autofillIcon
   }
