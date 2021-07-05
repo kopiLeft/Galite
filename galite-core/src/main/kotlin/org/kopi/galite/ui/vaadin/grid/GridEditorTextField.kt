@@ -125,7 +125,6 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
       val ui = UI.getCurrent()
 
       Thread {
-        UI.setCurrent(ui)
         val text = StringBuffer(value)
         text.insert(Utils.getCursorPos(wrappedField), "\u00D8")
         access(ui) {
