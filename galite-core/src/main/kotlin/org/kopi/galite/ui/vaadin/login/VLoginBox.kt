@@ -21,6 +21,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VHiddenSeparator
 import org.kopi.galite.ui.vaadin.base.VInputButton
 import org.kopi.galite.ui.vaadin.base.VInputLabel
+import org.kopi.galite.ui.vaadin.base.VInputPassword
 import org.kopi.galite.ui.vaadin.base.VInputText
 import org.kopi.galite.ui.vaadin.common.VSelect
 import org.kopi.galite.ui.vaadin.common.VSimpleTable
@@ -35,7 +36,6 @@ import com.vaadin.flow.component.Shortcuts
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
-import com.vaadin.flow.component.textfield.PasswordField
 import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.dom.Element
@@ -485,7 +485,7 @@ class VLoginBox : Div() {
     private val usernameLabel: VInputLabel
     private val username: VInputText
     private val passwordLabel: VInputLabel
-    private val password: PasswordField
+    private val password: VInputPassword
     private val languageLabel: VInputLabel
     private val language: VSelect
     private val login: VInputButton
@@ -513,7 +513,7 @@ class VLoginBox : Div() {
       username.addKeyPressListener { event: KeyPressEvent? -> removeError() }
       passwordLabel = VInputLabel()
       passwordLabel.setHtmlFor("user_password")
-      password = PasswordField()
+      password = VInputPassword()
       password.setId("user_password")
       password.element.setAttribute("name", "user_password")
       password.tabIndex = 2
