@@ -25,12 +25,10 @@ import org.kopi.galite.report.VReportColumn
 import org.kopi.galite.report.VSeparatorColumn
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
-import com.vaadin.flow.component.grid.ItemClickEvent
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.function.ValueProvider
@@ -200,10 +198,10 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   ) : ValueProvider<DReport.ReportModelItem, Component> {
     var column: Column<DReport.ReportModelItem>? = null
 
-    override fun apply(source: DReport.ReportModelItem): Component = VerticalLayout().also {
-      it.className = "grid-cell-container"
-      it.add(source.getValueAt(columnIndex))
-      it.setSizeFull()
+    override fun apply(source: DReport.ReportModelItem): Component = VerticalLayout().also { layout ->
+      layout.className = "grid-cell-container"
+      layout.add(source.getValueAt(columnIndex))
+      layout.setSizeFull()
 
       column?.textAlign = if (columnModel.align == Constants.ALG_RIGHT) {
         ColumnTextAlign.END
@@ -211,7 +209,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
         ColumnTextAlign.START
       }
 
-      cellStyler.updateStyles(source.rowIndex, columnIndex, it)
+      cellStyler.updateStyles(source.rowIndex, columnIndex, layout)
     }
   }
 }

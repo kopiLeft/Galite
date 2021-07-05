@@ -32,7 +32,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * @param model The report model.
  * @param parameters The style parameters.
  */
-class ReportCellStyler(private val model: MReport, private val parameters: Parameters) {
+class ReportCellStyler(private val model: MReport, private val parameters: Parameters, val table: DTable) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -46,6 +46,7 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
    */
   fun updateStyles(i: Int, j: Int, component: VerticalLayout) {
     val column = model.getAccessibleColumn(j)
+
     if (column is VSeparatorColumn) {
       return
     }
@@ -94,22 +95,23 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
       parameters.font.isItalic
     }
 
-    setStyle(background, foreground, fontSize, fontFamily, fontWeight(isBold), fontStyle(isItalic), component)
+    setStyle(level, background, foreground,fontSize, fontFamily, fontWeight(isBold), fontStyle(isItalic), component)
   }
 
   /**
    * Returns the encapsulated CSS style.
    */
   private fun setStyle(
-          background: Color,
-          foreground: Color,
-          fontSize: Int,
-          fontFamily: String,
-          fontWeight: String,
-          fontStyle: String,
-          component: VerticalLayout
+    level: Int,
+    background: Color,
+    foreground: Color,
+    fontSize: Int,
+    fontFamily: String,
+    fontWeight: String,
+    fontStyle: String,
+    component: VerticalLayout
   ) {
-    component.style["background-color"] = getCSSColor(background)
+    table.style["--level-$level"] = getCSSColor(background)
     component.style["color"] = getCSSColor(foreground)
     component.style["font-size"] = fontSize.toString()
     component.style["font-family"] = fontFamily
