@@ -20,13 +20,6 @@ import kotlin.test.assertEquals
 
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-
-import org.kopi.galite.ui.vaadin.menu.ModuleList
-
-import com.github.mvysny.kaributesting.v10._expectOne
-import com.github.mvysny.kaributesting.v10._get
-import com.vaadin.flow.component.menubar.MenuBar
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
@@ -35,9 +28,15 @@ import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.common.VCaption
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.VWindowContainer
+import org.kopi.galite.ui.vaadin.menu.ModuleList
+
+import com.github.mvysny.kaributesting.v10._expectOne
+import com.github.mvysny.kaributesting.v10._get
+import com.vaadin.flow.component.menubar.MenuBar
 
 class FormTests: GaliteVUITestBase() {
 
