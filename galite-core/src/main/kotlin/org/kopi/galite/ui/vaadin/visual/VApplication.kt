@@ -479,7 +479,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String?): String? {
-    return VaadinServlet.getCurrent().getInitParameter(key)
+    return VaadinServlet.getCurrent()?.getInitParameter(key)
   }
 
   //---------------------------------------------------
