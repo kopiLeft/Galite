@@ -27,7 +27,6 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.event.TextFieldListener
 import org.kopi.galite.ui.vaadin.form.DTextField
 import org.kopi.galite.ui.vaadin.form.KeyNavigator
@@ -64,7 +63,7 @@ class TextField(val model: VField,
 )
   : AbstractField<Any?>(), HasStyle {
 
-  lateinit var field: InputTextField<*>
+  val field: InputTextField<*>
 
   /**
    * The column number.
@@ -158,27 +157,25 @@ class TextField(val model: VField,
     hasAutocomplete = model.hasAutocomplete()
     setFieldType()
 
-    access {
-      field = createTextField()
-      field.isEnabled = enabled
-      add(field)
-      if (hasAutofill) {
-        autofill = IronIcons.ARROW_DROP_DOWN.create()
-        autofill!!.style["cursor"] = "pointer" // TODO: move to css
-        autofill!!.addClickListener {
-          fireAutofill()
+    field = createTextField()
+    field.isEnabled = enabled
+    add(field)
+    if (hasAutofill) {
+      autofill = IronIcons.ARROW_DROP_DOWN.create()
+      autofill!!.style["cursor"] = "pointer" // TODO: move to css
+      autofill!!.addClickListener {
+        fireAutofill()
+      }
+      field.suffixComponent = autofill
+      autofill!!.isVisible = false
+      field.addFocusListener {
+        if (autofill != null) {
+          autofill!!.isVisible = true
         }
-        field.suffixComponent = autofill
-        autofill!!.isVisible = false
-        field.addFocusListener {
-          if (autofill != null) {
-            autofill!!.isVisible = true
-          }
-        }
-        field.addBlurListener {
-          if (autofill != null) {
-            autofill!!.isVisible = false
-          }
+      }
+      field.addBlurListener {
+        if (autofill != null) {
+          autofill!!.isVisible = false
         }
       }
     }
