@@ -46,6 +46,7 @@ import org.kopi.galite.visual.WindowController
 open class VApplicationTestBase : ApplicationTestBase() {
 
   init {
+    GaliteApplication()
     setupApplication()
   }
 
