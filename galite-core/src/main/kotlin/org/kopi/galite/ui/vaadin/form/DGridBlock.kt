@@ -211,7 +211,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
     } else {
       grid.height = "calc(" +
               "(1.04 * var(--lumo-size-m) + var(--_lumo-grid-border-width)) + " +
-              "(${rows * 38}px + ${rows -1} * var(--_lumo-grid-border-width))" +
+              "(${rows * 24}px + ${rows -1} * var(--_lumo-grid-border-width))" +
               ")"
     }
   }
@@ -342,13 +342,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun filterHidden() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    if (filterRow != null) {
-      containerDatasource.removeAllContainerFilters()
-      //grid.removeHeaderRow(filterRow) TODO
-      filterRow = null
+    access(currentUI) {
+      if (filterRow != null) {
+        containerDatasource.removeAllContainerFilters()
+        //grid.removeHeaderRow(filterRow) TODO
+        filterRow = null
+      }
     }
-    //})
   }
 
   override fun blockChanged() {
@@ -518,12 +518,18 @@ open class DGridBlock(parent: DForm, model: VBlock)
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
           column.isSortable = field.isSortable()
-          column.width =
-            when {
-              field is VBooleanField -> "" + 46 + "px" // boolean field length
-              field is VActorField -> "" + 148 + "px" // actor field field length
-              else -> "" + (8 * field.width + 12) + "px" // add padding TODO
+          val width =
+            when (field) {
+              is VBooleanField -> 46 // boolean field length
+              is VActorField -> 148 // actor field field length
+              else -> 8 * field.width + 12  // add padding TODO
             }
+
+          column.width = if(field.hasAutofill()) {
+            "" + (width + 18) + "px" // Add more width for the autofill button
+          }  else {
+            "" + width + "px"
+          }
           column.isVisible = field.getDefaultAccess() != VConstants.ACS_HIDDEN
         }
       }

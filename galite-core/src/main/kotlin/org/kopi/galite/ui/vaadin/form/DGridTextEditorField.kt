@@ -335,9 +335,9 @@ class DGridTextEditorField(
     // update GUI: for scanner necessary
     if (scanner) {
       // trick: it is now displayed on a different way
-      //BackgroundThreadHandler.access(Runnable {  TODO
-      editor.value = transformer.toModel(getText()!!)
-      //})
+      access(currentUI) {
+        editor.value = transformer.toModel(getText()!!)
+      }
     }
   }
 

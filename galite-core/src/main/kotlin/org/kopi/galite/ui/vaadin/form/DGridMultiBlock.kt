@@ -22,6 +22,7 @@ import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UMultiBlock
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
@@ -108,9 +109,9 @@ class DGridMultiBlock(parent: DForm,
   override fun blockViewModeLeaved(block: VBlock, activeField: VField?) {
     // send active record to client side before view switch
     if (!inDetailMode()) {
-      //BackgroundThreadHandler.access(Runnable { TODO
-      fireActiveRecordChanged(model.activeRecord)
-      //})
+      access(currentUI) {
+        fireActiveRecordChanged(model.activeRecord)
+      }
     }
     try {
       // take care that value of current field
