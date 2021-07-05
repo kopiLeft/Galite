@@ -58,8 +58,10 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.html.Input
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.server.VaadinServlet
@@ -95,12 +97,26 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override val startupTime: Date = Date() // remembers the startup time
 
   init {
+    instance = this
     className = "galite"
     // registry and locale initialization
     initialize()
-    gotoWelcomeView()
+    //gotoWelcomeView()
+
+    add(
+      object : TextField() {
+        init {
+          addToInput(Input().also {
+            it.element.setProperty("size", "40")
+          }
+
+          )
+        }
+      }
+
+    )
+
     askAnswer = MessageListener.AWR_UNDEF
-    instance = this
   }
 
   override fun onAttach(attachEvent: AttachEvent) {
@@ -479,7 +495,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The initialization parameter contained in the application descriptor file.
    */
   protected fun getInitParameter(key: String?): String? {
-    return VaadinServlet.getCurrent()?.getInitParameter(key)
+    return VaadinServlet.getCurrent().getInitParameter(key)
   }
 
   //---------------------------------------------------
