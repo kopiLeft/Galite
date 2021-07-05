@@ -24,9 +24,9 @@ plugins {
 
 dependencies {
   // Exposed dependencies
-  api("org.jetbrains.exposed", "exposed-core", Versions.exposed)
-  api("org.jetbrains.exposed", "exposed-jodatime", Versions.exposed)
-  api("org.jetbrains.exposed", "exposed-java-time", Versions.exposed)
+  api("org.jetbrains.exposed", "exposed-core", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-jodatime", Versions.EXPOSED)
+  api("org.jetbrains.exposed", "exposed-java-time", Versions.EXPOSED)
 
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {
@@ -37,44 +37,44 @@ dependencies {
   }
 
   // Itext dependency
-  implementation("com.lowagie", "itext", Versions.itext)
+  implementation("com.lowagie", "itext", Versions.ITEXT)
 
   // Jdom dependency
-  implementation("org.jdom", "jdom2", Versions.jdom)
+  implementation("org.jdom", "jdom2", Versions.JDOM)
 
   //Apache POI
-  implementation("org.apache.poi", "poi", Versions.apachePoi)
+  implementation("org.apache.poi", "poi", Versions.APACHE_POI)
 
   // Apache OOxml
-  implementation("org.apache.poi", "poi-ooxml", Versions.apachePoi)
+  implementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
 
   // Graphbuilder dependency
-  implementation("com.github.virtuald", "curvesapi", Versions.graphbuilder)
+  implementation("com.github.virtuald", "curvesapi", Versions.GRAPH_BUILDER)
 
   // Hylafax dependencies
-  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", Versions.hylafax)
+  implementation("net.sf.gnu-hylafax", "gnu-hylafax-core", Versions.HYLAFAX)
 
   //JFreeChart dependency
-  implementation("org.jfree", "jfreechart", Versions.jFreeChart)
+  implementation("org.jfree", "jfreechart", Versions.JFREE_CHART)
 
   //getOpt dependency
-  implementation("gnu.getopt", "java-getopt", Versions.getopt)
+  implementation("gnu.getopt", "java-getopt", Versions.GETOPT)
 
   // EnhancedDialog dependency
-  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.enhancedDialog)
+  implementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
 
   // ApexCharts dependency
-  implementation("com.github.appreciated", "apexcharts", Versions.apexCharts)
+  implementation("com.github.appreciated", "apexcharts", Versions.APEX_CHARTS)
 
   // Iron Icons dependency
-  implementation("com.flowingcode.addons", "iron-icons", Versions.ironIcons)
+  implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
 
   // Compile only dependency for Vaadin servlet
-  compileOnly("javax.servlet", "javax.servlet-api", Versions.javaxServletApi)
+  compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
 }
 
 dependencyManagement {
   imports {
-    mavenBom("com.vaadin:vaadin-bom:${Versions.vaadin}")
+    mavenBom("com.vaadin:vaadin-bom:${Versions.VAADIN}")
   }
 }

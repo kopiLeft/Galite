@@ -44,19 +44,19 @@ dependencies {
   }
 
   // UI tests dependencies
-  implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", Versions.karibuTesting)
+  implementation("com.github.mvysny.kaributesting", "karibu-testing-v10", Versions.KARIBU_TESTING)
 
-  implementation("org.jdom", "jdom2", Versions.jdom)
+  implementation("org.jdom", "jdom2", Versions.JDOM)
 
   // Exposed dependencies
-  testImplementation ("org.jetbrains.exposed", "exposed-jdbc", Versions.exposed)
+  testImplementation ("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
 
-  testImplementation("com.h2database", "h2", Versions.h2)
-  testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", Versions.postgresNG)
+  testImplementation("com.h2database", "h2", Versions.H2)
+  testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", Versions.POSTGRES_NG)
 
   //Apache POI
-  testImplementation("org.apache.poi", "poi", Versions.apachePoi)
-  testImplementation("org.apache.poi", "poi-ooxml", Versions.apachePoi)
+  testImplementation("org.apache.poi", "poi", Versions.APACHE_POI)
+  testImplementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
 }
 
 tasks {
@@ -67,7 +67,7 @@ tasks {
 
 dependencyManagement {
   imports {
-    mavenBom("com.vaadin:vaadin-bom:${Versions.vaadin}")
+    mavenBom("com.vaadin:vaadin-bom:${Versions.VAADIN}")
   }
 }
 
