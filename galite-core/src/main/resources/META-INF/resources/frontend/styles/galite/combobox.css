@@ -16,37 +16,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Report style
- */
-::part(cell header-cell) {
-     background: #f2f2f2;
-     color: #505050;
+[part~='input-field'] {
+    background-color: white;
 }
 
-::part(cell) {
-     min-height: 16px;
+:host([theme~="galite-combobox"]) [part="text-field"] {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+    padding: 0;
 }
 
-vaadin-grid > vaadin-grid-cell-content {
-   height: 100%;
+:host([theme~="galite-combobox"]) [part="input-field"] {
+    border-bottom: #dadada 1px solid;
+    max-height: 30px;
 }
 
-vaadin-grid > vaadin-grid-cell-content {
-    padding: var(--lumo-size-xxs);
+[part~='input-field']::after {
+    background: none;
 }
 
-vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
-    display: table;
+[part~='value']:focus {
+	background: none;
 }
 
-.grid-cell-container-focused {
-    background: #bcdae6;
-}
-
-#main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-font-family:  Arial, sans-serif;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.750rem;
+[part~='input-field']:hover {
+	background: #d9f0f8;
 }

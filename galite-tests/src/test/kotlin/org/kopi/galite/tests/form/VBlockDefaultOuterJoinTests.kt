@@ -33,6 +33,8 @@ import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 
 class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
 
+  val FormWithList = FormWithList()
+
   @Test
   fun getSearchTablesTest() {
     FormWithList.model

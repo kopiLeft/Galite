@@ -25,8 +25,6 @@ import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.form.VForm
 import org.kopi.galite.type.Date
 import org.kopi.galite.ui.vaadin.upload.FileUploader
-import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.ApplicationContext
 
 import com.vaadin.flow.component.Component
 
@@ -66,11 +64,4 @@ class VPredefinedValueHandler(model: VFieldUI,
    * @see org.kopi.galite.form.PredefinedValueHandler.selectImage
    */
   override fun selectImage(): ByteArray? = FileUploader().upload("image/*")
-
-  /**
-   * Returns the current application instance.
-   * @return the current application instance.
-   */
-  protected val application: VApplication
-    get() = ApplicationContext.applicationContext.getApplication() as VApplication
 }

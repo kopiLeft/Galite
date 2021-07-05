@@ -40,32 +40,20 @@ class VActorNavigationItem(text: String,
                            keyModifier: KeyModifier?,
                            icon: Any?,
                            val navigationmenu : VNavigationMenu,
-                           val action: () -> Unit) : Button() {
+                           val action: () -> Unit) : VClickableNavigationItem() {
 
   init {
-    if (icon is VaadinIcon) {
-      setIcon(Icon(icon))
-    } else if (icon is IronIcons) {
-      setIcon(icon.create())
-    }
+    setCaption(text)
+    setDescription(acceleratorKey, keyModifier)
+    setIcon(icon)
 
     addClickListener {
       action()
       navigationmenu.close()
     }
 
-    if (acceleratorKey != null && acceleratorKey != Key.UNIDENTIFIED) {
-      val modifier = keyModifier?.keys?.get(0)
-
-      setText(text + if(modifier != null) modifier + "-" + acceleratorKey.keys[0] else " " + acceleratorKey.keys[0])
-    } else {
-      setText(text)
-    }
-
-    className = getClassname()
+    createComponent()
   }
 
-  protected fun getClassname(): String {
-    return "actor-navigationItem"
-  }
+  override fun getClassname(): String = "actor-navigationItem"
 }

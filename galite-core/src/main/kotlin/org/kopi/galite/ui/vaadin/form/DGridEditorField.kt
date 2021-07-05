@@ -31,6 +31,7 @@ import org.kopi.galite.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VColor
 
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 
@@ -54,6 +55,9 @@ abstract class DGridEditorField<T>(
       it.dGridEditorField = this
       it.addClickListener {
         onClick()
+      }
+      it.addAttachListener {
+        currentUI = it.ui
       }
     }
   }
@@ -105,16 +109,18 @@ abstract class DGridEditorField<T>(
   override fun setInDetail(detail: Boolean) {}
 
   override fun forceFocus() {
-    access {
+    access(currentUI) {
       editor.focus()
     }
   }
 
   override fun updateColor() {
-    access {
+    access(currentUI) {
       editor.setColor(Utils.toString(foreground), Utils.toString(background))
     }
   }
+
+  var currentUI: UI? = null
 
   override fun prepareSnapshot(fieldPos: Int, activ: Boolean) {}
 
@@ -158,7 +164,7 @@ abstract class DGridEditorField<T>(
 
   override fun updateAccess() {
     label?.update(columnView, getBlockView().getRecordFromDisplayLine(position))
-    access {
+    access(currentUI) {
       access = getAccess()
       setEnabled(access > VConstants.ACS_SKIPPED)
       setVisible(access != VConstants.ACS_HIDDEN)

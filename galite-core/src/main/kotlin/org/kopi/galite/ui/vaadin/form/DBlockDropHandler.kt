@@ -24,8 +24,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VImageField
 import org.kopi.galite.form.VStringField
-import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.visual.VException
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -73,13 +72,6 @@ class DBlockDropHandler(private val block: VBlock,
 
   // val acceptCriterion: AcceptCriterion TODO
   //   get() = AcceptAll.get() TODO
-
-  /**
-   * Returns the application instance.
-   * @return The application instance.
-   */
-  protected val application: VApplication
-    get() = ApplicationContext.applicationContext.getApplication() as VApplication
 
   //---------------------------------------------------------
   // UTILS

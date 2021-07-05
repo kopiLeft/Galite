@@ -46,7 +46,6 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
    */
   fun updateStyles(i: Int, j: Int, component: VerticalLayout) {
     val column = model.getAccessibleColumn(j)
-
     if (column is VSeparatorColumn) {
       return
     }
@@ -102,13 +101,13 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
    * Returns the encapsulated CSS style.
    */
   private fun setStyle(
-    background: Color,
-    foreground: Color,
-    fontSize: Int,
-    fontFamily: String,
-    fontWeight: String,
-    fontStyle: String,
-    component: VerticalLayout
+          background: Color,
+          foreground: Color,
+          fontSize: Int,
+          fontFamily: String,
+          fontWeight: String,
+          fontStyle: String,
+          component: VerticalLayout
   ) {
     component.style["background-color"] = getCSSColor(background)
     component.style["color"] = getCSSColor(foreground)

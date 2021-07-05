@@ -135,7 +135,7 @@ open class DTextField(
   override fun updateAccess() {
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
-    access {
+    access(currentUI) {
       field.isEnabled = access >= VConstants.ACS_VISIT
       isEnabled = access >= VConstants.ACS_VISIT
     }
@@ -143,7 +143,7 @@ open class DTextField(
 
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
-    access {
+    access(currentUI) {
       // field.value = transformer!!.toGui(newModelTxt)!!.trim() FIXME
       field.value = transformer!!.toGui(newModelTxt)
     }
@@ -154,7 +154,7 @@ open class DTextField(
   }
 
   override fun updateColor() {
-    access {
+    access(currentUI) {
       val injector = (ApplicationContext.applicationContext.getApplication() as VApplication).stylesInjector
 
       field.classNames.add(injector.createAndInjectStyle(getModel().align, foreground, background))
@@ -185,7 +185,7 @@ open class DTextField(
    * Gets the focus to this field.
    */
   private fun enterMe() {
-    access {
+    access(currentUI) {
       if (scanner) {
         field.value = transformer!!.toGui("")
       }
@@ -202,7 +202,7 @@ open class DTextField(
     // scanner nescessary
     if (scanner) {
       // trick: it is now displayed on a different way
-      access {
+      access(currentUI) {
         field.value = transformer!!.toModel(field.value.toString())
       }
     }
@@ -317,7 +317,7 @@ open class DTextField(
   }
 
   override fun setBlink(blink: Boolean) {
-    access {
+    access(currentUI) {
       field.setBlink(blink)
     }
   }

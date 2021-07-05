@@ -16,308 +16,152 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/*
- * Style of the reports and forms names' container
+/**
+ *---------------------------------------------------
+ * Styles for tab panel (tab sheet)
+ *---------------------------------------------------
  */
-#session {
-    font-family: Arial, sans-serif;
-    font-size: 25px;
-    box-sizing: border-box;
-    width: 100%;
-    display: table;
-    height: 44px;
-    width: 100%;
-    padding: 0 20px;
-}
 
-/*
- *  Style for forms and reports names
+/**
+ * Tab sheet main styles
  */
-#session span a span {
-    color: black;
-    font-size: 14px;
-    font-weight: bold;
-    vertical-align: bottom;
-    font-family: Arial, sans-serif;
+.k-form-tab {
+    border-bottom: #676767 1px solid;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-family: Arial, sans-serif !important;
 }
 
-/*
- *  Anchor's style
+.k-form-tab .selected-tab::after {
+    width: 90%;
+}
+
+/**
+ * Tab sheet anchor styles
  */
-#session span a {
-    text-decoration: none;
+.k-form-tab .tab::after {
+    content: "";
+    transition: .4s;
+    position: absolute;
+    height: 4px;
+    width: 0;
+    left: 5%;
+    bottom: 0;
+    background-color: #009bd4;
+    margin-bottom: -4px;
 }
 
-/*
- * Field's values style
+/**
+ * Tab sheet active tab styles
  */
-::part(input-field), ::part(input-field):not(:hover) {
-    background-color: white;
+
+.k-form-tab .selected-tab {
+    font-weight: 500 !important;
+    font-style: normal !important;
+    color: #000000;
+    border-bottom: 3px solid #009bd4;
 }
 
-.k-block .simple ::part(value) {
-    --lumo-text-field-overflow-mask-image: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-    background-color: var(--lumo-base-color);
-    border-bottom: 1px solid #dadada;
-}
-
-/*
- * Field's values style when focused
+/**
+ * disabled tabs styles
  */
-.k-block ::part(value):focus {
-    outline: none;
-    border-bottom: 2px solid #a3a3a3;
-    background: white;
-    box-shadow: none;
+.k-form-tab .tab:not(.selected-tab):hover {
+    border-bottom: 3px solid #dadada;
 }
 
-::part(input-field) {
-    box-shadow: none;
+/**
+ * remove the small border under the tab styles
+ */
+ .k-form-tab .selected-tab::before {
+      transform: translateX(0%) scale(0);
+  }
+
+/**
+ * Tab sheet (not active tab) hover styles
+ */
+.k-form-tab .tab:hover:not(.selected-tab)::before {
+    width: 90%;
 }
 
+/**
+ * Tab sheet (not active tab) hover styles
+ */
+.k-form-tab .tab:not(.selected-tab)::before {
+    content: "";
+    transition: .4s;
+    position: absolute;
+    height: 4px;
+    width: 0;
+    left: 5%;
+    bottom: 0;
+    background-color: #dadada;
+    margin-bottom: -4px;
+}
+
+/**
+ * Tab sheet hover styles
+ */
+.k-form-tab .tab:hover {
+    color: #000000;
+}
+
+/**
+ *---------------------------------------------------
+ * Form styles
+ *---------------------------------------------------
+ */
+
+/**
+ * Main styles for form component
+ */
 .k-form {
+    background: #f2f2f2;
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    vertical-align: top;
     padding: 10px 20px;
 }
 
-.k-form-tab {
-    margin: 0;
-    box-sizing: border-box;
-    border-bottom: #676767 1px solid;
-}
-
-/*
- * Copy Icon container
+/**
+ * Form content styles
  */
-#windows {
-    padding-top: 22px;
-    padding-right: 15px;
-    padding-left: 15px;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    margin: 0;
-}
-
-/*
- * Main Window's style
- */
-.k-main-window {
-    position: fixed;
+.k-form .k-form-tab .k-form-page-content {
     width: 100%;
-    height: 100%;
-    margin: 0;
-    box-sizing: border-box;
-    text-align: left;
-    display: inline-block;
-    white-space: normal;
-    vertical-align: bottom;
-    font-size: 16px;
-    line-height: normal;
-    --lumo-space-m: 0;
 }
 
-
-/*
- * Boolean field style
+/**
+ * Form caption container styles
  */
-
-.multiple ::part(checkbox) {
-    width: 1.2em;
-    height: 1.2em;
-    border: 1.2px solid #ddd;
+.k-form .k-form-page-content .caption-container {
+    background: #ffffff;
+    padding-top: 22px;
+    padding-left: 50px;
 }
 
-.multiple vaadin-checkbox {
-    height: 60px;
-    padding-left: 0px;
-}
-
-.multiple ::part(checkbox)::after {
-    border-width: 0.3em 0 0 0.3em;
-    transform-origin: -0.2px -0.7px;
-}
-
-.multiple :not(.true)::part(checkbox)::after {
-    left: 0.15em;
-}
-
-#main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-primary-color : #009bd4;
-}
-
-::part(checkbox) {
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
-    vertical-align: middle;
-    border: 1px solid #ddd;
-    line-height: 0;
-}
-
-::part(checkbox)::after {
-    border-width: 0.3em 0 0 0.3em;
-    transform-origin: -1.5px -1.2px;
-}
-
-:not(.true)::part(checkbox)::after {
-    opacity: none;
-    transform: none;
-    font-size: 15;
-    font-weight: bold;
-    position: absolute;
-    top: 0.55em;
-    left: 0.09em;
-    box-sizing: border-box;
-    transform-origin: 0 0;
-    border-width: 0;
-    content: "\2715";
-    display: inline-block;
-    width: 0;
-    height: 0;
-    color: white;
-}
-
-.k-boolean-field {
-    vertical-align: middle;
-}
-
-.multiple .k-boolean-field-content {
-    height: 40px;
-}
-
-vaadin-checkbox {
-    height: 38px;
-}
-
-.multiple .k-boolean-field-content {
-    height: 40px;
-}
-
-/*
+/**
  * Spinner style
  */
+
 .k-wait-window-image {
-    display: flex;
-    justify-content: center;
-}
-
-.k-wait-window-image::after {
-    content: "";
-    width: 20px;
-    height: 20px;
-    border: 10px solid #dddddd;
-    border-top-color: #204c8a;
+    border: 10px solid #f3f3f3;
     border-radius: 50%;
-    animation: k-wait-window-image 1s ease infinite;
+    border-top: 10px solid #3498db;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
 }
 
-@keyframes k-wait-window-image {
-    to {
-        transform: rotate(1turn);
-    }
-}
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
-/*
+/**
  * scrollbar style
  */
 .k-form-page {
     overflow: auto;
     height: calc(100vh - 210px);
-}
-
-/*
- * border for grid row
- */
-::part(row) {
-   border-bottom: 1px #DCDCDC solid;
-}
-
-/*
- * help style
- */
-.help, .help > center > h1 {
-    font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
-    font-size: 12px !important;
-}
-
-.help > center > h1 {
-    font-size: 2.5em !important;
-    font-weight: bold;
-}
-
-.help > table > tbody > tr > td > dl > dt > h2 {
-    font-family: Arial, sans-serif !important;
-    font-weight: bold;
-    font-style: normal !important;
-    font-size: 1.5em;
-}
-
-pre {
-    background: none;
-}
-
-/*
- * switch window style
- */
-.window-items-title, .item {
-    background: #E8E8E8;
-    color: #778899;
-    width: 500px;
-    font-family: Courier New, monospace !important;
-    font-style: italic !important;
-    font-size: 1em;
-}
-
-.window-items-title {
-    background: none;
-}
-
-.window-items-container vaadin-button {
-    margin-top: -1px;
-    border-bottom: 1px solid gray;
-    width: 550px;
-}
-
-tr {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    vertical-align: baseline;
-}
-
-td {
-    padding-bottom: 1px;
-    height: 20px;
-    padding-right: 8px;
-    display: table-cell;
-}
-
-.k-form > * {
-    font-family: Arial, sans-serif !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
-    font-size: 12px !important;
-}
-
- /**
-   * Label and grid label style
-   */
-td label {
-    font-family: Arial, sans-serif !important;
-    font-weight: 500 !important;
-    font-style: normal !important;
-    color: #a3a3a3 ;
-}
-
- /**
-   * Label and grid label style
-   */
-td label {
-    font-family: Arial, sans-serif !important;
-    font-weight: 500 !important;
-    font-style: normal !important;
-    color: #a3a3a3 ;
+    max-width: calc(100vw - 30px);
 }

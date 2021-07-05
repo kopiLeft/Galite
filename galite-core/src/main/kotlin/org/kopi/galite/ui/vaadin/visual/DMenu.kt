@@ -22,6 +22,7 @@ import java.io.File
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
@@ -35,9 +36,9 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VlibProperties
 import org.kopi.galite.visual.VMenuTree
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.contextmenu.MenuItem
-import com.vaadin.flow.server.VaadinService
 
 /**
  * A module menu implementation that uses the menu tree
@@ -186,14 +187,8 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   }
 
   override fun performAsyncAction(action: Action) {
-    val currentUI = UI.getCurrent()
-    val currentService = VaadinService.getCurrent()
-
-    requireNotNull(currentUI)
-    requireNotNull(currentService)
     Thread {
-      UI.setCurrent(currentUI)
-      VaadinService.setCurrent(currentService)
+      BackgroundThreadHandler.setUI(currentUI)
       try {
         action.execute()
       } catch (e: VException) {
@@ -206,17 +201,24 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   override fun setWaitDialog(message: String, maxtime: Int) {}
   override fun unsetWaitDialog() {}
   override fun setWaitInfo(message: String?) {
-    access {
+    access(currentUI) {
       waitIndicator.setText(message)
       waitIndicator.show()
     }
   }
 
   override fun unsetWaitInfo() {
-    access {
+    access(currentUI) {
       waitIndicator.setText(null)
       waitIndicator.close()
     }
+  }
+
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
   }
 
   override fun setProgressDialog(message: String, totalJobs: Int) {}

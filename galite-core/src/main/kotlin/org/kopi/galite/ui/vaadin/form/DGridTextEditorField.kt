@@ -100,7 +100,7 @@ class DGridTextEditorField(
 
   override fun updateText() {
     val newModelTxt = getModel().getText(getBlockView().getRecordFromDisplayLine(position))
-    access {
+    access(currentUI) {
       //editor.value = transformer.toGui(newModelTxt)!!.trim() FIXME
       editor.value = transformer.toGui(newModelTxt)
     }
@@ -346,7 +346,7 @@ class DGridTextEditorField(
    */
   @Synchronized
   private fun enterMe() {
-   access {
+   access(currentUI) {
       if (scanner) {
         editor.value = transformer.toGui("")
       }

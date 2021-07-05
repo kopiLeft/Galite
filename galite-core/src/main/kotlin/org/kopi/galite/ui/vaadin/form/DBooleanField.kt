@@ -71,7 +71,7 @@ class DBooleanField(
   }
 
   override fun updateText() {
-    access {
+    access(currentUI) {
       field.value = getModel().getBoolean(getBlockView().getRecordFromDisplayLine(position))
     }
     super.updateText()
@@ -110,7 +110,7 @@ class DBooleanField(
   override fun updateAccess() {
     super.updateAccess()
     label!!.update(model, getBlockView().getRecordFromDisplayLine(position))
-    access {
+    access(currentUI) {
       field.isEnabled = getAccess() >= VConstants.ACS_VISIT
       field.mandatory = getAccess() == VConstants.ACS_MUSTFILL
     }
@@ -119,7 +119,7 @@ class DBooleanField(
   override fun getObject(): Any? = wrappedField.value
 
   override fun setBlink(b: Boolean) {
-    access {
+    access(currentUI) {
       field.setBlink(b)
     }
   }
@@ -152,7 +152,7 @@ class DBooleanField(
    * Gets the focus to this field.
    */
   protected fun enterMe() {
-    access {
+    access(currentUI) {
       field.setFocus(true)
     }
   }

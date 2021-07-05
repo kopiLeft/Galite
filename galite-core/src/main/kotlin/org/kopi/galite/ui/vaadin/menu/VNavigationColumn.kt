@@ -18,26 +18,30 @@
 package org.kopi.galite.ui.vaadin.menu
 
 import org.kopi.galite.ui.vaadin.actor.VActorNavigationItem
+import org.kopi.galite.ui.vaadin.actor.VHeaderNavigationItem
 
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.html.Div
-import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class VNavigationColumn(val ident : String?) : VerticalLayout(), HasStyle {
+
+  init {
+    width = "calc(25% - 3px)"
+  }
+
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
   private val items = ArrayList<VActorNavigationItem>()
-  private val header = Div()
+  private val header = VHeaderNavigationItem()
 
   /**
    * Sets the header item of this navigation column.
    * @param header The header item.
    */
   fun setHeader(headerName: String?) {
-    header.add(Label(headerName))
-    add(Label(headerName))
+    header.setCaption(headerName)
+    add(header)
   }
 
   /**

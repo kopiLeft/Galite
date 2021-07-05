@@ -16,52 +16,46 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Label and grid label style
- */
-.k-label, .editor-label {
-    font-size: 12px !important;
+[part~='input-field'] {
+  background-color: white;
+  border-bottom: #dadada 1px solid;
+}
+
+:host {
+    vertical-align: top;
+    max-height: 20px;
+    --lumo-text-field-size: var(--lumo-space-l);
     font-family: Arial, sans-serif !important;
-    font-weight: 500 !important;
+    font-weight: 400 !important;
     font-style: normal !important;
-    color: #a3a3a3;
+    font-size: 12px !important;
 }
 
-.k-label {
-    margin-top: 5px;
-    white-space: nowrap;
+:host:hover {
+	background: #d9f0f8;
 }
 
-/**
- * Disabled label styles
- */
-.k-label.v-disabled span, .editor-label.v-disabled span {
-    color: #a3a3a3 !important;
+[part~='input-field']::after {
+    background: none;
 }
 
-/**
- * Grid label styles
- */
-.editor-label {
-    overflow: hidden;
-    white-space: nowrap;
-    -o-text-overflow: ellipsis !important;
-    -ms-text-overflow: ellipsis !important;
-    text-overflow: ellipsis !important;
+[part~='value']:focus {
+	background: none;
+	border-bottom: #009bd4 1px solid;
 }
 
-/**
- * Mandatory label indicator styles
- */
-.k-label span.mandatory {
-    color: #fd2020;
-    padding-left: 2px;
+vaadin-date-time-picker-date-picker {
+    --lumo-text-field-size: var(--lumo-size-xs);
 }
 
-/**
- * Label having action styles
- */
-.k-label-has-action span.action {
-    color: #009bd4;
-    padding-left: 2px;
+vaadin-date-time-picker {
+    max-height: 40px;
+}
+
+.vaadin-text-field-container  [part~='input-field'] [name~="suffix"] {
+    font-size: 13px;
+}
+
+:host([disabled]) [part="input-field"] {
+    background: white;
 }

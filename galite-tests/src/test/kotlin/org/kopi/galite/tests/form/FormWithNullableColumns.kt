@@ -147,6 +147,8 @@ object FormWithNullableColumn : DictionaryForm() {
     }
   }
 
+  val FormWithList = FormWithList()
+
   val blockWithTwoTablesInnerJoin = insertBlock(FormWithTwoTablesInnerJoin(), p1) {
     command(item = FormWithList.list) {
       action = {
