@@ -40,7 +40,7 @@ class DRichTextEditor(
         detail: Boolean
 ) : DField(model, label, align, options, detail),
         UTextField
-        /*Focusable<DRichTextEditor> , ValueChangeListener, NavigationListener TODO*/ {
+/*Focusable<DRichTextEditor> , ValueChangeListener, NavigationListener TODO*/ {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -56,7 +56,11 @@ class DRichTextEditor(
   // CONSTRUCTOR
   //---------------------------------------------------
   init {
-    editor.addValueChangeListener(::valueChanged)
+    editor.addTextValueChangeListener {
+      // value change event is fired when the field is blurred.
+      getModel().isChangedUI = true
+      getModel().setChanged(true)
+    }
     //editor.addNavigationListener(this) TODO
     setFieldContent(editor)
   }
@@ -80,19 +84,7 @@ class DRichTextEditor(
   }
 
   override fun focus() {
-    // model transfer focus is performed
-    // when the field is focused and not when
-    // the field is clicked like text field
-    // because CK editor does not provide a way
-    // to capture click event on the editable area
-    onClick()
-  }
-
-
-  fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Any?>, Any?>?) {
-    // value change event is fired when the field is blurred.
-    getModel().isChangedUI = true
-    getModel().setChanged(true)
+    editor.focus()
   }
 
   override fun updateText() {

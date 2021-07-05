@@ -22,28 +22,37 @@ import java.util.Locale
 
 import kotlin.collections.ArrayList
 
-import org.kopi.galite.ui.vaadin.base.FontMetrics
 import org.vaadin.pekka.WysiwygE
 
 import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasValue
 
 /**
  * A rich text field implementation based on QuillEditor
  */
 
-@CssImport("./styles/galite/richText.css")
+/**
+ * A rich text field implementation based on wysiwyg-e
+ */
+
+@CssImport("./styles/galite/richtext.css")
 class RichTextField(
         var col: Int,
         var rows: Int,
         visibleRows: Int,
         var noEdit: Boolean,
         locale: Locale
-) : ObjectField<Any?>() {
+) : AbstractField<String?>() {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
+
+  private val editor = FocusableWysiwygE(true)
+  private val navigationListeners = ArrayList<NavigationListener>()
+
   /**
    * Minimal field width to see the toolbar in 56 px height (2 lines)
    */
@@ -51,41 +60,20 @@ class RichTextField(
   private val LINE_HEIGHT = 20
   private val TOOLBAR_HEIGHT = 66
 
-  var editor = WysiwygE(true)
   init {
-    editor.element.children.forEach {
-      it.classList.add("richText-tool")
-      it.removeAttribute("disabled") // no result
-    }
-    
-    editor.element.addEventListener("focusin") {
-      editor.removeClassName("richText-focus-out")
-      editor.addClassName("richText-focus-in")
-    }
-
-    editor.element.addEventListener("focusout") {
-      editor.removeClassName("richText-focus-in")
-      editor.addClassName("richText-focus-out")
-    }
-
-    editor.className ="richText"
+    editor.className ="richtext"
     editor.placeholder = ""
     add(editor)
     editor.setHeight((TOOLBAR_HEIGHT + LINE_HEIGHT * visibleRows).toFloat(), Unit.PIXELS)
     editor.isReadOnly = noEdit
 
-    if (FontMetrics.LETTER.width * col < MIN_WIDTH) {
-      editor.setHeight(MIN_WIDTH.toFloat(), Unit.PIXELS)
+    if (8 * col < MIN_WIDTH) { // FIXME: FontMetrics.LETTER.width always return 0
+      editor.setWidth(MIN_WIDTH.toFloat(), Unit.PIXELS)
     } else {
-      editor.setHeight((FontMetrics.LETTER.width * col).toFloat(), Unit.PIXELS)
-
+      editor.setWidth((8 * col).toFloat(), Unit.PIXELS)
     }
     //registerRpc(NavigationHandler())
   }
-
-  private val navigationListeners = ArrayList<NavigationListener>()
-
-  override fun getValue() = editor.value
 
   /**
    * Creates the configuration to be used for this rich text.
@@ -93,18 +81,18 @@ class RichTextField(
    */
   protected fun createConfiguration(locale: Locale, visibleRows: Int) {
     // The component CKEditorVaadin contain a Config
-   // access {
-   /* val configuration: Config = Config()
-     // configuration.useCompactTags()
-     // configuration.disableElementsPath()
-    configuration.setUILanguage(Constants.Language.valueOf(locale.language))
-     // configuration.disableSpellChecker()
-     // configuration.setHeight(RichTextField.LINE_HEIGHT * visibleRows.toString() + "px")
-     /* configuration.addExtraConfig("toolbarGroups", createEditorToolbarGroups())
-      configuration.addExtraConfig("removeButtons", getRemovedToolbarButtons())
-      configuration.addExtraConfig("contentsCss", "'" + Utils.getThemeResourceURL("ckeditor.css").toString() + "'")*/
-      editor!!.config = configuration*/
-   // }
+    // access {
+    /* val configuration: Config = Config()
+      // configuration.useCompactTags()
+      // configuration.disableElementsPath()
+     configuration.setUILanguage(Constants.Language.valueOf(locale.language))
+      // configuration.disableSpellChecker()
+      // configuration.setHeight(RichTextField.LINE_HEIGHT * visibleRows.toString() + "px")
+      /* configuration.addExtraConfig("toolbarGroups", createEditorToolbarGroups())
+       configuration.addExtraConfig("removeButtons", getRemovedToolbarButtons())
+       configuration.addExtraConfig("contentsCss", "'" + Utils.getThemeResourceURL("ckeditor.css").toString() + "'")*/
+       editor!!.config = configuration*/
+    // }
   }
 
   /**
@@ -185,6 +173,14 @@ class RichTextField(
 
   override fun isRequiredIndicatorVisible() = editor.isRequiredIndicatorVisible
 
+  /**
+   * Registers a text change listener
+   * @param l The text change listener.
+   */
+  fun addTextValueChangeListener(l: HasValue.ValueChangeListener<ComponentValueChangeEvent<*, *>>) {
+    editor.addValueChangeListener(l)
+  }
+
   //---------------------------------------------------
   // NAVGATION
   //---------------------------------------------------
@@ -194,6 +190,37 @@ class RichTextField(
    */
   fun addNavigationListener(l: NavigationListener) {
     navigationListeners.add(l)
+  }
+
+  override fun setPresentationValue(newPresentationValue: String?) {
+    editor.value = newPresentationValue
+  }
+
+  override fun getValue() = editor.value
+
+  override fun setValue(value: String?) {
+    editor.value = value
+  }
+
+  override fun generateModelValue() : String = editor.value
+
+  /**
+   * Checks if the content of this field is empty.
+   * @return `true` if this field is empty.
+   */
+  override val isNull: Boolean
+    get() =  value == null
+
+  /**
+   * Checks the internal value of this field.
+   * @param rec The active record.
+   */
+  override fun checkValue(rec: Int) {}
+
+  override fun addFocusListener(function: () -> kotlin.Unit) {
+    editor.addFocusListener {
+      function()
+    }
   }
 
   /**
@@ -241,27 +268,9 @@ class RichTextField(
     fun onGotoNextEmptyMustfill()
   }
 
-  override fun setPresentationValue(newPresentationValue: Any?) {
-    editor.value = newPresentationValue.toString()
-  }
-
-  override fun generateModelValue() : String = editor.value
-  override val isNull: Boolean
-    get() = editor.value.isNullOrEmpty()
+  inner class FocusableWysiwygE(allToolsVisible: Boolean): WysiwygE(allToolsVisible), Focusable<FocusableWysiwygE>
 
   override fun setColor(foreground: String?, background: String?) {
-    TODO("Not yet implemented")
-  }
 
-  override fun checkValue(rec: Int) {
-    TODO("Not yet implemented")
-  }
-
-  override fun setParentVisibility(visible: Boolean) {
-    TODO("Not yet implemented")
-  }
-
-  override fun addFocusListener(function: () -> kotlin.Unit) {
-    //TODO("Not yet implemented")
   }
 }
