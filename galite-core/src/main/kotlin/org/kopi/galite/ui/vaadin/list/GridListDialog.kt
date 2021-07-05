@@ -39,7 +39,10 @@ import com.vaadin.flow.component.progressbar.ProgressBar
 /**
  * A list dialog
  */
-@CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid"),
+  CssImport("./styles/galite/list.css" , themeFor = "vcf-enhanced-dialog-overlay")
+])
 open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle {
 
   private var scrollBarAdded = false
@@ -58,6 +61,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
 
   init {
     className = Styles.LIST_DIALOG_CONTAINER
+    element.themeList.add(Styles.LIST_DIALOG_CONTAINER)
     content.className = Styles.LIST_DIALOG
     content.element.setAttribute("hideFocus", "true")
     content.element.style["outline"] = "0px"
@@ -170,21 +174,21 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
    * Forces the table to have scroll bars.
    */
   protected open fun forceScrollBar() {
-   /* val height: Double = table.getHeightByRows() * 41
-    if (!windowResized) {
-      if (hasVerticalScrollBar(height)) {
-        table.setWidth(table.getOffsetWidth() + 8 + "px") //add horizontal scroll bar width
-        scrollBarAdded = true
-      }
-    } else {
-      if (scrollBarAdded && !hasVerticalScrollBar(height)) {
-        table.setWidth(table.getOffsetWidth() - 16.toString() + "px") //remove horizontal scroll bar width
-        scrollBarAdded = false
-      } else if (!scrollBarAdded && hasVerticalScrollBar(height)) {
-        table.setWidth(table.getOffsetWidth() + 16 + "px") //add horizontal scroll bar width
-        scrollBarAdded = true
-      }
-    }*/
+    /* val height: Double = table.getHeightByRows() * 41
+     if (!windowResized) {
+       if (hasVerticalScrollBar(height)) {
+         table.setWidth(table.getOffsetWidth() + 8 + "px") //add horizontal scroll bar width
+         scrollBarAdded = true
+       }
+     } else {
+       if (scrollBarAdded && !hasVerticalScrollBar(height)) {
+         table.setWidth(table.getOffsetWidth() - 16.toString() + "px") //remove horizontal scroll bar width
+         scrollBarAdded = false
+       } else if (!scrollBarAdded && hasVerticalScrollBar(height)) {
+         table.setWidth(table.getOffsetWidth() + 16 + "px") //add horizontal scroll bar width
+         scrollBarAdded = true
+       }
+     }*/
   }
 
   /**

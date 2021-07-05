@@ -24,9 +24,6 @@ import org.kopi.galite.ui.vaadin.field.RichTextField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.Focusable
-
 /**
  * Rich text editor implementation based on CK editor for vaadin.
  */
@@ -56,7 +53,9 @@ class DRichTextEditor(
                            if (getModel().height == 1) 1 else (getModel() as VStringField).getVisibleHeight(),
                            model.model.isNoEdit(),
                            ApplicationContext.getDefaultLocale())
-    editor.addValueChangeListener(::valueChanged)
+    editor.addValueChangeListener {
+      valueChanged()
+    }
     //editor.addNavigationListener(this) TODO
     //setContent(editor) TODO
   }
@@ -89,7 +88,7 @@ class DRichTextEditor(
   }
 
 
-  fun valueChanged(event: AbstractField.ComponentValueChangeEvent<RichTextField, String>?) {
+  override fun valueChanged() {
     // value change event is fired when the field is blurred.
     getModel().isChangedUI = true
     getModel().setChanged(true)

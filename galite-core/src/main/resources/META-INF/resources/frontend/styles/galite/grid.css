@@ -20,11 +20,87 @@
  * Report Group style
  */
 [part~="cell"].level-0:not(:focus) {
-    background: #F5FBFD !important;
+    background: var(--level-0) !important;
 }
 
 [part~="cell"].level-1:not(:focus) {
-    background: #F5F3ED !important;
+    background: var(--level-1) !important;
+}
+
+[part~="cell"].level-2:not(:focus) {
+    background: var(--level-2) !important;
+}
+
+[part~="cell"].level-3:not(:focus) {
+    background: var(--level-3) !important;
+}
+
+[part~="cell"].level-4:not(:focus) {
+    background: var(--level-4) !important;
+}
+
+[part~="cell"].level-5:not(:focus) {
+    background: var(--level-5) !important;
+}
+
+[part~="cell"].level-6:not(:focus) {
+    background: var(--level-6) !important;
+}
+
+[part~="cell"].level-7:not(:focus) {
+    background: var(--level-7) !important;
+}
+
+[part~="cell"].level-8:not(:focus) {
+    background: var(--level-8) !important;
+}
+
+[part~="cell"].level-9:not(:focus) {
+    background: var(--level-9) !important;
+}
+
+[part~="cell"].level-10:not(:focus) {
+    background: var(--level-10) !important;
+}
+
+[part~="cell"].level-11:not(:focus) {
+    background: var(--level-11) !important;
+}
+
+[part~="cell"].level-12:not(:focus) {
+    background: var(--level-12) !important;
+}
+
+[part~="cell"].level-13:not(:focus) {
+    background: var(--level-13) !important;
+}
+
+[part~="cell"].level-14:not(:focus) {
+    background: var(--level-14) !important;
+}
+
+[part~="cell"].level-15:not(:focus) {
+    background: var(--level-15) !important;
+}
+
+[part~="cell"].level-16:not(:focus) {
+    background: var(--level-16) !important;
+}
+
+[part~="cell"].level-17:not(:focus) {
+    background: var(--level-17) !important;
+}
+
+[part~="cell"].level-18:not(:focus) {
+    background: var(--level-18) !important;
+}
+
+[part~="cell"].level-19:not(:focus) {
+    background: var(--level-19) !important;
+}
+
+[part~="cell"].level-20:not(:focus) {
+    background: var(--level-20) !important;
 }
 
 [part~="cell"].italic {

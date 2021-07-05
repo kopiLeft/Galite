@@ -18,7 +18,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.4.30" apply false
+  id("org.jetbrains.kotlin.jvm") version "1.4.32" apply false
 }
 
 subprojects {

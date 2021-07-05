@@ -21,4 +21,14 @@ package org.kopi.galite.ui.vaadin.grid
  * The server side implementation of a week editor field.
  * Week fields are fixed width fields.
  */
-class GridEditorWeekField: GridEditorTextField(7)
+class GridEditorWeekField: GridEditorTextField(7) {
+
+  override fun check(text: String): Boolean {
+    for (c in text) {
+      if (!(c >= '0' && c <= '9' || c == '.' || c == '/')) {
+        return false
+      }
+    }
+    return true
+  }
+}

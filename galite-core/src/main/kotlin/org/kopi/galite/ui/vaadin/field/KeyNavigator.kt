@@ -29,17 +29,20 @@ import org.kopi.galite.ui.vaadin.base.ShortcutAction
  * @param modifiers The modifiers to be used
  * @param navigationAction lambda representing the action to perform
  */
-class KeyNavigator(private val field: InputTextField<*>,
+class KeyNavigator(field: InputTextField<*>,
                    key: Key,
                    modifiers: Array<out KeyModifier>,
                    navigationAction: () -> Unit
-) : ShortcutAction(key, modifiers, navigationAction) {
+) : ShortcutAction<InputTextField<*>>(field, key, modifiers, navigationAction) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
   override fun performAction() {
-    internalPerformAction()
+    field.runAfterGetValue {
+      field.fieldConnector.valueChanged()
+      internalPerformAction()
+    }
   }
 
   /**

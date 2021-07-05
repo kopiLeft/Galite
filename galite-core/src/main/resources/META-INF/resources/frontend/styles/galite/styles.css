@@ -21,38 +21,148 @@ table {
 	border-spacing: 0;
 }
 
-
 .k-form .k-form-page-content .caption-container {
 	background: #ffffff;
 	padding-top: 22px;
 	padding-left: 50px;
 }
 
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address,
+big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article,
+aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section,
+summary, time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
 	vertical-align: baseline;
 }
 
-a {
-    text-decoration: none !important;
-    color: inherit;
-}
-
-.k-label span.mandatory {
-	color: #fd2020;
-	padding-left: 2px;
-}
-
-.k-label-has-action:hover, .editor-label-has-action:hover {
-	text-decoration: underline;
-	color: #009bd4;
-}
-
-.k-label, .editor-label {
-	font-family: Arial, sans-serif !important;
+.k-block .simple ::part(value) {
+    color: #000000;
 	font-weight: 500 !important;
 	font-style: normal !important;
+	border-bottom: #dadada 1px solid;
+	line-height: 1.2em;
+	padding: 0px 3px 3px 3px !important;
+	transition: 0.4s;
+	position: relative;
+}
+
+.k-textinput::part(input-field):hover, .kopi .k-textareainput:hover {
+	background: #d9f0f8;
+}
+
+/**
+ * remove a gray background when hover on TextField
+ */
+.k-textinput::part(input-field)::after {
+    background: none;
+}
+
+.k-block .simple ::part(value):focus, .kopi .k-textareainput:focus {
+	background: none;
+	border-bottom: #009bd4 1px solid;
+}
+
+/**
+ * remove background of TextField
+ */
+::part(input-field) {
+    box-shadow: none;
+    background-color: white;
+}
+
+.galite *, .k-popup-window > *, .k-window-container > * {
+	font-family: Arial, sans-serif !important;
+	font-weight: 400 !important;
+	font-style: normal !important;
+	font-size: 12px;
+}
+
+#session {
+	display: table;
+	height: 44px;
+	width: 100%;
+	background: #f2f2f2;
+}
+
+#session > * {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0 20px;
+}
+
+#session span a span {
+	font-size: 14px !important;
+	font-weight: bold !important;
+}
+
+a, a:hover {
+	text-decoration: none;
+	color: inherit;
+}
+
+.k-block .simple ::part(value) {
+    min-height: 5px;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+}
+
+/**
+ * help style
+ */
+.help, .help > center > h1 {
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+}
+
+.help > center > h1 {
+    font-size: 2.5em !important;
+    font-weight: bold;
+}
+
+.help > table > tbody > tr > td > dl > dt > h2 {
+    font-family: Arial, sans-serif !important;
+    font-weight: bold;
+    font-style: normal !important;
+    font-size: 1.5em;
+}
+
+pre {
+    background: none;
+}
+
+.help-container {
+    overflow: hidden;
+}
+
+.help-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.multiple ::part(header-cell) {
+	position: relative;
+	background-color: #fff;
+	text-align: left;
 	color: #a3a3a3;
+}
+
+.multiple ::part(value) {
+    min-height: 20px;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 12px !important;
+}
+
+.multiple ::part(value):focus {
+    outline : none;
+    background: none;
+    border-bottom: #009bd4 1px solid;
 }

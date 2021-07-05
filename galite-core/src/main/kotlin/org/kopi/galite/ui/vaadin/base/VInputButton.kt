@@ -25,7 +25,7 @@ import com.vaadin.flow.component.html.Input
 /**
  * An input element type button that cannot handle icons.
  */
-class VInputButton(caption: String? = null) : Input(), ClickNotifier<VInputButton> {
+open class VInputButton(caption: String? = null) : Input(), ClickNotifier<VInputButton> {
 
   //---------------------------------------------------
   // CONSTRUCTORS

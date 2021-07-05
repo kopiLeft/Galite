@@ -24,6 +24,7 @@ import com.vaadin.flow.component.FocusNotifier
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
@@ -32,6 +33,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param trueRepresentation The representation of the true value.
  * @param falseRepresentation The representation of the false false
  */
+@CssImport("./styles/galite/checkbox.css")
 class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : ObjectField<Boolean>() {
 
   /**
@@ -64,16 +66,10 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     no.addValueChangeListener(::onNoChange)
     yes.element.style["visibility"] = "hidden"
     no.element.style["visibility"] = "hidden"
-    content.element.style["border-bottom"] = "1px solid #dadada"
     content.element.addEventListener("mouseover") {
       isVisible = true
     }
-    content.element.addEventListener("focusin") {
-      content.element.style["border-bottom"] = "2px solid #a3a3a3"
-    }
-    content.element.addEventListener("focusout") {
-      content.element.style["border-bottom"] = "1px solid #dadada"
-    }
+
     content.element.addEventListener("mouseout") {
       if(value == null) {
         isVisible = false
