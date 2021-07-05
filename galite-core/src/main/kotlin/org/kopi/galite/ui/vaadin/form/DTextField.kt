@@ -17,9 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import org.kopi.galite.form.ModelTransformer
 import org.kopi.galite.form.UTextField
 import org.kopi.galite.form.VConstants
@@ -53,7 +50,7 @@ open class DTextField(
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  private val field: TextField // the text component
+  private lateinit var field: TextField // the text component
   protected var inside = false
   protected var noEdit = options and VConstants.FDO_NOEDIT != 0
   protected var scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
@@ -71,20 +68,26 @@ open class DTextField(
     } else {
       ScannerTransformer(this)
     }
-    field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
+    access(currentUI) {
+      field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-    field.addTextValueChangeListener {
-      if(it.isFromClient) {
-        val value = text
-
-        if (isChanged(getModel().getText(), value)) {
-          checkText(value)
+      field.field.addTextValueChangeListener {
+        if(it.isFromClient) {
+          valueChanged()
         }
       }
-    }
 
-    createContextMenu()
-    setFieldContent(field)
+      createContextMenu()
+      setFieldContent(field)
+    }
+  }
+
+  override fun valueChanged() {
+    val value = text
+
+    if (isChanged(getModel().getText(), value)) {
+      checkText(value)
+    }
   }
 
   /**

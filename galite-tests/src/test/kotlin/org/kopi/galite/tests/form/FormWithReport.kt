@@ -51,7 +51,7 @@ object FormWithReport : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return SimpleReport
+    return SimpleReport()
   }
 }
 

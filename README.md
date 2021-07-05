@@ -232,7 +232,7 @@ Charts are essential to the decision-making process and for speculation.
 The user will be able to select the required data along with the chart’s dimensions and measures.
 
 ````KOTLIN
-object ChartSample: Chart() {
+class ChartSample: Chart() {
   override val locale = Locale.UK
   override val title = "area/population per city"
   override val help = "This chart presents the area/population per city"

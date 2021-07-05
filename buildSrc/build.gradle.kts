@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,23 +14,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.grid
 
-/**
- * Server side implementation of an enumeration editor
- */
-class GridEditorEnumField(width: Int, private val enumerations: Array<String>?) : GridEditorTextField(width) {
+repositories {
+  mavenCentral()
+}
 
-  override fun check(text: String): Boolean {
-    if (enumerations != null && text != null) {
-      val s = text.toLowerCase()
-      for (i in enumerations.indices) {
-        if (enumerations.get(i).toLowerCase().startsWith(s)) {
-          return true
-        }
-      }
-      return false
-    }
-    return true
-  }
+plugins {
+  `kotlin-dsl` apply true
 }

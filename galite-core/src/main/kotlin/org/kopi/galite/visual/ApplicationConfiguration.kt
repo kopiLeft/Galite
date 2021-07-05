@@ -198,7 +198,7 @@ abstract class ApplicationConfiguration {
     private var configuration: ApplicationConfiguration? = null
 
     fun getConfiguration(): ApplicationConfiguration? {
-      return if (ApplicationContext.applicationContext != null) {
+      return if (ApplicationContext.isApplicationContextInitialized) {
         ApplicationContext.applicationContext.getApplication().applicationConfiguration
       } else {
         configuration
@@ -206,7 +206,7 @@ abstract class ApplicationConfiguration {
     }
 
     fun setConfiguration(conf: ApplicationConfiguration) {
-      if (ApplicationContext.applicationContext != null) {
+      if (ApplicationContext.isApplicationContextInitialized) {
         ApplicationContext.applicationContext.getApplication().applicationConfiguration = conf
       } else {
         configuration = conf

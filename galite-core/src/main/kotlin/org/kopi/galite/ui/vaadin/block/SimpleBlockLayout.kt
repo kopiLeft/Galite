@@ -17,17 +17,17 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
-import org.kopi.galite.ui.vaadin.field.ActorField
+import org.kopi.galite.form.VField
+import org.kopi.galite.ui.vaadin.form.DActorField
 import org.kopi.galite.ui.vaadin.form.DBlock
 import org.kopi.galite.ui.vaadin.form.DField
 import org.kopi.galite.ui.vaadin.form.DGridMultiBlock
-import org.kopi.galite.form.VField
+import org.kopi.galite.ui.vaadin.label.Label
 
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.formlayout.FormLayout.FormItem
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import org.kopi.galite.ui.vaadin.label.Label
 
 /**
  * The simple block layout component.
@@ -69,7 +69,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
       getBlock().isLayoutBelongsToGridDetail = true
       if (component != null) {
         if (component is DField) {
-          val columnView: ColumnView = if (constraints.width < 0 || component.wrappedField is ActorField) {
+          val columnView: ColumnView = if (constraints.width < 0 || component is DActorField) {
             ColumnView(getBlock()).also { columnView ->
               columnView.label = null
               columnView.addField(component)
@@ -117,7 +117,7 @@ open class SimpleBlockLayout(col: Int, line: Int) : AbstractBlockLayout(col, lin
         // a follow field has no label
         // an actor field has no label too.
         // we treat this cases separately
-        val columnView: ColumnView = if (constraints.width < 0 || component.wrappedField is ActorField) {
+        val columnView: ColumnView = if (constraints.width < 0 || component is DActorField) {
           ColumnView(getBlock()).also { columnView ->
             columnView.label = null
             columnView.addField(component)

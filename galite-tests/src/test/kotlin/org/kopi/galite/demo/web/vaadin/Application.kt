@@ -19,12 +19,12 @@ package org.kopi.galite.demo.web.vaadin
 import java.util.Locale
 
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.tests.ui.vaadin.VApplicationTestBase
+import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 
-class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
+class GaliteApplication : VApplication(GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"

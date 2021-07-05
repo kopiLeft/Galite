@@ -45,8 +45,6 @@ import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.textfield.HasAutocomplete
 import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
-import com.vaadin.flow.data.value.HasValueChangeMode
-import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.shared.Registration
 
@@ -108,7 +106,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     } else {
       Autocomplete.OFF
     }
-    (field as? HasValueChangeMode)?.valueChangeMode = ValueChangeMode.TIMEOUT
   }
 
   companion object {

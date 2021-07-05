@@ -124,7 +124,7 @@ class CommandForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return CommandR
+    return CommandR()
   }
 }
 

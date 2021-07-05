@@ -30,7 +30,7 @@ import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
 
-object BillForm : ReportSelectionForm() {
+class BillForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Bills"
   val page = page("Bill")
@@ -44,21 +44,27 @@ object BillForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
 
-  val tb1 = insertBlock(BlockBill, page) {
+  val tb1 = insertBlock(BlockBill(), page) {
     command(item = report) {
       action = {
-        createReport(BlockBill)
+        createReport(this@insertBlock)
       }
     }
   }
 
   override fun createReport(): Report {
-    return BillR
+    return BillR()
   }
 }
 
-object BlockBill : FormBlock(1, 1, "Bills") {
+class BlockBill : FormBlock(1, 1, "Bills") {
   val u = table(Bill)
   val v = table(Command)
 
@@ -90,5 +96,5 @@ object BlockBill : FormBlock(1, 1, "Bills") {
 }
 
 fun main() {
-  Application.runForm(formName = BillForm)
+  Application.runForm(formName = BillForm())
 }

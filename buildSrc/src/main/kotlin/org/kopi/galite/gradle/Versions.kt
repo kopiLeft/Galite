@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,23 +14,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.grid
+package org.kopi.galite.gradle
 
-/**
- * Server side implementation of an enumeration editor
- */
-class GridEditorEnumField(width: Int, private val enumerations: Array<String>?) : GridEditorTextField(width) {
+object Versions {
 
-  override fun check(text: String): Boolean {
-    if (enumerations != null && text != null) {
-      val s = text.toLowerCase()
-      for (i in enumerations.indices) {
-        if (enumerations.get(i).toLowerCase().startsWith(s)) {
-          return true
-        }
-      }
-      return false
-    }
-    return true
-  }
+  const val EXPOSED = "0.29.1"
+  const val H2 = "1.4.199"
+  const val  POSTGRES_NG = "0.8.6"
+
+  const val ITEXT = "2.1.5"
+  const val  GRAPH_BUILDER = "1.02"
+  const val HYLAFAX = "1.0.0"
+  const val GETOPT = "1.0.13"
+  const val JDOM = "2.0.5"
+  const val APACHE_POI = "4.1.2"
+
+  const val VAADIN = "18.0.3"
+
+  const val KARIBU_TESTING = "1.2.12"
+  const val ENHANCED_DIALOG = "1.0.4"
+  const val APEX_CHARTS = "2.0.0.beta10"
+  const val IRON_ICONS = "2.0.1"
+  const val JAVAX_SERVLET_API = "4.0.1"
+
+  const val JFREE_CHART = "1.0.19"
 }

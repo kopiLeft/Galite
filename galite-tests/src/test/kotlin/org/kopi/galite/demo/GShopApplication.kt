@@ -134,14 +134,14 @@ object TaxRule : Table("TAX_RULE") {
 }
 
 @SpringBootApplication
-open class StoreApplication : SpringBootServletInitializer()
+open class GShopApplication : SpringBootServletInitializer()
 
 fun main(args: Array<String>) {
   connectToDatabase()
   DBSchemaTest.reset()
   Application.initDatabase()
   initModules()
-  runApplication<StoreApplication>(*args)
+  runApplication<GShopApplication>(*args)
 }
 
 object Application : DBSchemaTest() {
@@ -161,7 +161,7 @@ object Application : DBSchemaTest() {
   override fun initDatabase(user: String) {
     super.initDatabase(user)
     transaction {
-      createStoreTables()
+      createGShopApplicationTables()
       addClients()
       addTaxRules()
       addProducts()
@@ -185,37 +185,32 @@ fun connectToDatabase(url: String = DBSchemaTest.testURL,
 /**
  * Creates DBSchema tables
  */
-fun createStoreTables() {
-  list_Of_StoreTables.forEach { table ->
+fun createGShopApplicationTables() {
+  list_Of_GShopApplicationTables.forEach { table ->
     SchemaUtils.create(table)
   }
 }
 
-val list_Of_StoreTables = listOf(Client, Product, Stock, Provider,
+val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
                                  Bill, TaxRule, Command, BillProduct)
 
 fun initModules() {
   transaction {
     insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
     insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", ClientForm::class)
-    insertIntoModule("1010", "org/kopi/galite/test/Menu", 5, "1000")
-    insertIntoModule("1101", "org/kopi/galite/test/Menu", 10, "1010", FormWithListDomains::class)
-    insertIntoModule("1110", "org/kopi/galite/test/Menu", 15, "1010", FormWithFields::class)
-    insertIntoModule("1120", "org/kopi/galite/test/Menu", 20, "1010", FormWithList::class)
     insertIntoModule("2000", "org/kopi/galite/test/Menu", 100)
     insertIntoModule("2001", "org/kopi/galite/test/Menu", 101, "2000", CommandForm::class)
     insertIntoModule("3000", "org/kopi/galite/test/Menu", 200)
     insertIntoModule("3001", "org/kopi/galite/test/Menu", 201, "3000", ProductForm::class)
     insertIntoModule("4000", "org/kopi/galite/test/Menu", 300)
     insertIntoModule("4001", "org/kopi/galite/test/Menu", 301, "4000", BillForm::class)
-    insertIntoModule("5000", "org/kopi/galite/test/Menu", 400)
-    insertIntoModule("5001", "org/kopi/galite/test/Menu", 401, "5000", BillProductForm::class)
-    insertIntoModule("6000", "org/kopi/galite/test/Menu", 500)
-    insertIntoModule("6001", "org/kopi/galite/test/Menu", 501, "6000", StockForm::class)
-    insertIntoModule("7000", "org/kopi/galite/test/Menu", 600)
-    insertIntoModule("7001", "org/kopi/galite/test/Menu", 601, "7000", TaxRuleForm::class)
-    insertIntoModule("8000", "org/kopi/galite/test/Menu", 700)
-    insertIntoModule("8001", "org/kopi/galite/test/Menu", 701, "8000", ProviderForm::class)
+    insertIntoModule("4010", "org/kopi/galite/test/Menu", 401, "4000", BillProductForm::class)
+    insertIntoModule("5000", "org/kopi/galite/test/Menu", 500)
+    insertIntoModule("5001", "org/kopi/galite/test/Menu", 501, "5000", StockForm::class)
+    insertIntoModule("6000", "org/kopi/galite/test/Menu", 600)
+    insertIntoModule("6001", "org/kopi/galite/test/Menu", 601, "6000", TaxRuleForm::class)
+    insertIntoModule("7000", "org/kopi/galite/test/Menu", 700)
+    insertIntoModule("7001", "org/kopi/galite/test/Menu", 701, "7000", ProviderForm::class)
   }
 }
 fun insertIntoModule(shortname: String,
