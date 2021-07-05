@@ -15,28 +15,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.4.32" apply false
+repositories {
+  mavenCentral()
 }
 
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
-
-  repositories {
-    jcenter()
-    maven {
-      url = uri("https://maven.vaadin.com/vaadin-addons")
-    }
-  }
-
-  dependencies {
-    "implementation"(kotlin("stdlib"))
-    "implementation"(kotlin("reflect"))
-  }
-
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-  }
+plugins {
+  `kotlin-dsl` apply true
 }

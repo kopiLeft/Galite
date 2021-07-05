@@ -14,29 +14,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.gradle
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+object Versions {
 
-plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.4.32" apply false
-}
+  const val EXPOSED = "0.29.1"
+  const val H2 = "1.4.199"
+  const val  POSTGRES_NG = "0.8.6"
 
-subprojects {
-  apply(plugin = "org.jetbrains.kotlin.jvm")
+  const val ITEXT = "2.1.5"
+  const val  GRAPH_BUILDER = "1.02"
+  const val HYLAFAX = "1.0.0"
+  const val GETOPT = "1.0.13"
+  const val JDOM = "2.0.5"
+  const val APACHE_POI = "4.1.2"
 
-  repositories {
-    jcenter()
-    maven {
-      url = uri("https://maven.vaadin.com/vaadin-addons")
-    }
-  }
+  const val VAADIN = "18.0.3"
 
-  dependencies {
-    "implementation"(kotlin("stdlib"))
-    "implementation"(kotlin("reflect"))
-  }
+  const val KARIBU_TESTING = "1.2.12"
+  const val ENHANCED_DIALOG = "1.0.4"
+  const val APEX_CHARTS = "2.0.0.beta10"
+  const val IRON_ICONS = "2.0.1"
+  const val JAVAX_SERVLET_API = "4.0.1"
 
-  tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-  }
+  const val JFREE_CHART = "1.0.19"
 }
