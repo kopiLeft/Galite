@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.common.VImage
 
 import com.vaadin.flow.component.Unit
@@ -45,9 +46,12 @@ class ImageField(width: Float, height: Float, buffer: MemoryBuffer) : ObjectFiel
 
   private val image: VImage = VImage()
 
-  val upload: Upload = Upload(buffer)
+  lateinit var upload: Upload
 
   init {
+    access {
+      upload = Upload(buffer)
+    }
     className = "k-imagefield"
     image.element.style["outline"] = "1px solid lightgreen"
     image.setWidth(width, Unit.PIXELS)

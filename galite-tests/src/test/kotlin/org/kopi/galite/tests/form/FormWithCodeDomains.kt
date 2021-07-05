@@ -24,7 +24,7 @@ import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormWithCodeDomains: Form() {
+class FormWithCodeDomains: Form() {
   val edit = menu("Edit")
   val autoFill = actor(
           ident = "Autofill",
@@ -57,5 +57,5 @@ object Days: CodeDomain<Int>() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithCodeDomains)
+  Application.runForm(formName = FormWithCodeDomains())
 }

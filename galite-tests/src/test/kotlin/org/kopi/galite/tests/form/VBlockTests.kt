@@ -32,6 +32,8 @@ import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : JApplicationTestBase() {
 
+  val FormWithList = FormWithList()
+
   @Test
   fun deleteRecordTest() {
     FormSample.model

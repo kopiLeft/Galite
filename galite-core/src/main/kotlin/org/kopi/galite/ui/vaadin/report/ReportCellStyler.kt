@@ -113,7 +113,7 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
   ) {
     table.style["--level-$level"] = getCSSColor(background)
     component.style["color"] = getCSSColor(foreground)
-    component.style["font-size"] = ""+ fontSize
+    component.style["font-size"] = fontSize.toString()
     component.style["font-family"] = fontFamily
     component.style["font-weight"] = fontWeight
     component.style["font-style"] = fontStyle

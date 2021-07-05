@@ -30,7 +30,7 @@ class VWindowsDisplay : Div() {
   // DATA MEMBERS
   //---------------------------------------------------
 
-  private val menu = VWindowsMenu()
+  val menu = VWindowsMenu()
 
   init {
     className = "k-windows-menu-container"
@@ -44,7 +44,7 @@ class VWindowsDisplay : Div() {
   fun updateCaption(window: Component, caption: String) {
     val item = menu.getItemFor(window)
 
-    item?.text = caption
+    item?.value = caption
   }
 
   /**

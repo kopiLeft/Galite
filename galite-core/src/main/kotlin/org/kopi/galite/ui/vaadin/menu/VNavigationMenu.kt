@@ -26,8 +26,9 @@ class VNavigationMenu : Dialog(), HasStyle {
 
   init {
     //this.setThemeVariants(EnhancedDialogVariant.SIZE_MEDIUM)
-    this.isDraggable = false
-    this.isResizable = false
+    isResizable = false
+    isDraggable = true
+    isCloseOnEsc = true
   }
   //---------------------------------------------------
   // IMPLEMENTATION

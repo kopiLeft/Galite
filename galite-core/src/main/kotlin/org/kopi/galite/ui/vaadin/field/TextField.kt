@@ -27,6 +27,7 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.event.TextFieldListener
 import org.kopi.galite.ui.vaadin.form.DTextField
 import org.kopi.galite.ui.vaadin.form.KeyNavigator
@@ -52,7 +53,10 @@ import com.vaadin.flow.data.value.ValueChangeMode
  * @param hasAutofill     Tells if the field has an autofill command
  * @param fieldParent     parent of this text field
  */
-@CssImport("./styles/galite/textfield.css")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/textfield.css"),
+  CssImport(value = "./styles/galite/textfield.css", themeFor = "vaadin-text-field")
+])
 class TextField(val model: VField,
                 val noEcho: Boolean,
                 val scanner: Boolean,
@@ -163,7 +167,7 @@ class TextField(val model: VField,
     field.isEnabled = enabled
     add(field)
     if (hasAutofill) {
-      autofill = IronIcons.FIND_IN_PAGE.create()
+      autofill = IronIcons.ARROW_DROP_DOWN.create()
       autofill!!.style["cursor"] = "pointer" // TODO: move to css
       autofill!!.addClickListener {
         fireAutofill()
@@ -311,7 +315,11 @@ class TextField(val model: VField,
    * @return the attached text field component.
    */
   private fun createTextField(): InputTextField<*> {
-    val text = createFieldComponent()
+    lateinit var text: InputTextField<*>
+
+    access {
+      text = createFieldComponent()
+    }
 
     setValidator(text)
     setTextTransform(text)
@@ -370,6 +378,8 @@ class TextField(val model: VField,
     text.size = size
     text.setMaxLength(maxLength)
     text.maxWidth = "" + size + "em" // TODO: temporary styling
+    text.setWidthFull()
+    setWidthFull()
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
     TextFieldNavigationHandler.createNavigator(text, rows > 1)
@@ -388,6 +398,17 @@ class TextField(val model: VField,
         size += 2
       }
     }
+
+    if (type == Type.TIMESTAMP) {
+      size += 3
+    } else if (type == Type.DATE) {
+      size += 5
+    } else if (type == Type.TIME) {
+      size += 5
+    } else {
+      size += 4
+    }
+
     // let the place to the autofill icon
     if (hasAutofill) {
       size += 1

@@ -137,7 +137,7 @@ class ClientForm : ReportSelectionForm() {
     command(item = graph) {
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
-        showChart(ChartSample)
+        showChart(ChartSample())
       }
     }
     command(item = list) {
@@ -166,7 +166,7 @@ class ClientForm : ReportSelectionForm() {
     command(item = graph) {
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
-        showChart(ChartSample)
+        showChart(ChartSample())
       }
     }
     command(item = list) {

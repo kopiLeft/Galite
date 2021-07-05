@@ -16,37 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Report style
- */
-::part(cell header-cell) {
-     background: #f2f2f2;
-     color: #505050;
+.richtext {
+    --wysiwyg-toolbar-background: #f8f8f8;
+    --wysiwyg-toolbar-color: #000000;
+    --wysiwyg-tool-icon-disabled-color: #dadada;
+
+    --wysiwyg-editable: {
+        border-left: #dadada 1px solid;
+        border-right: #dadada 1px solid;
+        border-bottom: #dadada 1px solid;
+    };
 }
 
-::part(cell) {
-     min-height: 16px;
-}
-
-vaadin-grid > vaadin-grid-cell-content {
-   height: 100%;
-}
-
-vaadin-grid > vaadin-grid-cell-content {
-    padding: var(--lumo-size-xxs);
-}
-
-vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
-    display: table;
-}
-
-.grid-cell-container-focused {
-    background: #bcdae6;
-}
-
-#main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-font-family:  Arial, sans-serif;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.750rem;
+.richtext:focus-within {
+    --wysiwyg-editable: {
+        border-left: #009bd4 1px solid;
+        border-right: #009bd4 1px solid;
+        border-bottom: #009bd4 1px solid;
+    };
 }

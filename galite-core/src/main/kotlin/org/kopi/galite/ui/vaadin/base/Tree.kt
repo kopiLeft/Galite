@@ -20,6 +20,8 @@ package org.kopi.galite.ui.vaadin.base
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Image
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -123,17 +125,22 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
 
   fun getNodeComponent(id: Int): TreeNodeComponent? = itemsIds[id]
 
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
   //----------------------------------------------------------
   // TREE IMPLEMENTATION
   //----------------------------------------------------------
   override fun collapseRow(row: Int) {
-    access {
+    access(currentUI) {
       collapse(itemsIds[row]?.item)
     }
   }
 
   override fun expandRow(row: Int) {
-    access {
+    access(currentUI) {
       expand(itemsIds[row]?.item)
     }
   }
@@ -201,7 +208,7 @@ class Tree(val root: TreeNode, private val isSuperUser: Boolean) : TreeGrid<Tree
      * @param isLeaf Is it a leaf node ?
      */
     fun setIcon(access: Int, isLeaf: Boolean) {
-      access {
+      access(currentUI) {
         when (access) {
           Module.ACS_FALSE -> if (isLeaf) {
             setItemIcon(Utils.getImage("form_p.png").resource)

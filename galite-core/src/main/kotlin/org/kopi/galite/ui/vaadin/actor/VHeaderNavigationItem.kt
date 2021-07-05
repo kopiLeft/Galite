@@ -15,34 +15,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.ui.vaadin.field
+package org.kopi.galite.ui.vaadin.actor
 
-import java.util.Arrays
+import com.vaadin.flow.component.Key
+import com.vaadin.flow.component.KeyModifier
 
-import com.vaadin.flow.component.KeyNotifier
-import com.vaadin.flow.component.combobox.ComboBox
-import com.vaadin.flow.component.dependency.CssImport
-
-/**
- * An Code field.
- */
-@CssImport.Container(value = [
-  CssImport(value = "./styles/galite/combobox.css", themeFor = "vaadin-text-field"),
-  CssImport(value = "./styles/galite/combobox.css", themeFor = "vaadin-combo-box")
-])
-class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String>>(ComboBox<String>()), KeyNotifier {
-
+class VHeaderNavigationItem : VNavigationItem() {
   init {
-    field.setItems(Arrays.stream(enumerations))
-    element.themeList.add("galite-combobox")
+    createComponent()
   }
 
-
-  override fun setMaxLength(maxLength: Int) {
-    //Nothing to Implement
+  override fun setDescription(key: Key?, keyModifier: KeyModifier?) {
+    // not used
   }
 
-  override fun initContent(): ComboBox<String> {
-    return field // FIXME
+  override fun setIcon(iconName: Any?) {
+    // not used
   }
+
+  override fun getClassname(): String = "header"
 }

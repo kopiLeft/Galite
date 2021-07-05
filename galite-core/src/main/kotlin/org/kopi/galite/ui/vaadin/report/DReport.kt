@@ -101,7 +101,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
    */
   fun reorder(newOrder: IntArray) {
     model.columnMoved(newOrder)
-    access {
+    access(currentUI) {
       table.setColumnOrder(
         newOrder.map { table.getColumnByKey(it.toString()) }
       )
@@ -159,7 +159,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun contentChanged() {
     if (this::table.isInitialized) {
-      access {
+      access(currentUI) {
         table.setItems(buildRows())
         table.model.fireContentChanged()
         val page = UI.getCurrent().page
@@ -181,7 +181,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   }
 
   override fun resetWidth() {
-    access {
+    access(currentUI) {
       table.resetWidth()
     }
   }

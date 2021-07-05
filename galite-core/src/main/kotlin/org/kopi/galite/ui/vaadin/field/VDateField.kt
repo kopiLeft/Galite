@@ -22,10 +22,12 @@ import java.time.format.DateTimeFormatter
 
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.datepicker.DatePicker
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * An Date field.
  */
+@CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-picker-text-field")
 class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
 
   init {

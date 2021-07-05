@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.Utils
 
 import com.vaadin.flow.component.AttachEvent
