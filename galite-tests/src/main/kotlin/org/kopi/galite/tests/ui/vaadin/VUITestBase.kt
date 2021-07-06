@@ -28,6 +28,7 @@ import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
+import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.contextmenu.HasMenuItems
 import com.vaadin.flow.component.textfield.PasswordField
 
@@ -57,7 +58,7 @@ open class GaliteVUITestBase: VUITestBase() {
     // Fill to username and password fields then click to the login button
     _get<VInputText> { id = "user_name" }._value = testUser
     _get<PasswordField> { id = "user_password" }._value = testPassword
-    _get<VInputButton> { id = "login_button" }._click()
+    _get<VInputButton> { id = "login_button" }._clickAsynch()
   }
 
   @Before
@@ -71,6 +72,14 @@ open class GaliteVUITestBase: VUITestBase() {
     Thread.sleep(500)
     MockVaadin.runUIQueue()
     action()
+  }
+
+  protected fun ClickNotifier<*>._clickAsynch(action: (() -> Unit)? = null) {
+    this._click()
+    MockVaadin.runUIQueue()
+    Thread.sleep(200)
+    MockVaadin.runUIQueue()
+    action?.invoke()
   }
 
   companion object {
