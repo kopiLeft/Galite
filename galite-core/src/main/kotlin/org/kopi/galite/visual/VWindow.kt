@@ -517,7 +517,28 @@ abstract class VWindow(override var dBContext: DBContext? = ApplicationContext.g
    * Try to handle an exception
    */
   fun fatalError(data: Any?, line: String, reason: Throwable) {
-     TODO()
+    /*try { TODO
+      if (inTransaction()) {
+        context.abortWork()
+      }
+    } catch (e: java.lang.Exception) {
+      ApplicationContext.reportTrouble(
+        "VWindow can not abort transaction",
+        line,
+        data?.toString() ?: "<no info about>",
+        e
+      )
+      e.printStackTrace()
+    }*/
+    if (ApplicationContext.getDefaults().isDebugModeEnabled) {
+      error("FATAL ERROR: " + reason.message)
+      reason.printStackTrace(System.err)
+    } else {
+      ApplicationContext.reportTrouble("VWindow", line, data?.toString() ?: "<no info about>", reason)
+      error(MessageCode.getMessage("VIS-00041"))
+    }
+
+    close(1)
   }
 
   // ----------------------------------------------------------------------

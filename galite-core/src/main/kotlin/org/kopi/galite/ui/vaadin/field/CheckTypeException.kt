@@ -52,7 +52,6 @@ class CheckTypeException(
     field.setBlink(true)
     NotificationUtils.showError(
       this,
-      MainWindow.instance,
       MainWindow.locale,
       messageKey,
       params

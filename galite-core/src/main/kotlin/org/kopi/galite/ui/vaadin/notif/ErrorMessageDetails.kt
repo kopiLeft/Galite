@@ -23,7 +23,6 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.details.Details
-import com.vaadin.flow.component.details.DetailsVariant
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.Scroller
@@ -48,6 +47,7 @@ class ErrorMessageDetails(message: String?, locale: String, val parent: Dialog) 
    */
   protected fun createContent() {
     scroller.className = "error-details"
+    scroller.height = "200px"
     message = VSpan()
     message!!.className = "details-message"
     scroller.content = message

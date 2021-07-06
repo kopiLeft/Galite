@@ -98,6 +98,7 @@ open class JApplicationTestBase : ApplicationTestBase() {
     init {
       ApplicationConfiguration.setConfiguration(
               object : ApplicationConfiguration() {
+                override val isDebugModeEnabled get() = true
                 override val version get(): String = "1.0"
                 override val applicationName get(): String = "MyApp"
                 override val informationText get(): String = "info"

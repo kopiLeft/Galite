@@ -43,8 +43,6 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
           password: String,
           schema: String?
   ): DBContext? {
-    val username = "admin"
-    val password = "admin"
     return try {
       DBContext().apply {
         this.defaultConnection = this.createConnection(driver, database, username, password, true, schema)
@@ -54,9 +52,13 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
     }
   }
 
+  override val isNoBugReport: Boolean
+    get() = true
+
   init {
     ApplicationConfiguration.setConfiguration(
             object : ApplicationConfiguration() {
+              override val isDebugModeEnabled: Boolean = true
               override val version get(): String = "1.0"
               override val applicationName get(): String = "MyApp"
               override val informationText get(): String = "info"

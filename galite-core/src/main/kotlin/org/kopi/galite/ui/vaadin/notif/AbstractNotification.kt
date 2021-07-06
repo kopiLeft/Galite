@@ -20,10 +20,10 @@ package org.kopi.galite.ui.vaadin.notif
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.common.VSpan
 import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.componentfactory.EnhancedDialog
-import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
@@ -46,7 +46,8 @@ import com.vaadin.flow.component.icon.VaadinIcon
 ])
 abstract class AbstractNotification(title: String?,
                                     message: String?,
-                                    protected val locale: String)
+                                    protected val locale: String,
+                                    val application: VApplication? = null)
   : EnhancedDialog(), Focusable<AbstractNotification> {
 
   //-------------------------------------------------

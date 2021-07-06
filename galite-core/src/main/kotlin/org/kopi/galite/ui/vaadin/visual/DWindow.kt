@@ -492,14 +492,6 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   /**
-   * Sets the window error.
-   * @param e The exception cause.
-   */
-  protected fun setWindowError(e: Throwable?) {
-    // TODO
-  }
-
-  /**
    * Reports if a message is shown while in a transaction.
    * @param The message to be displayed.
    */
@@ -555,11 +547,12 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun error(message: String?) {
-      val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
+      val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, application)
       val lock = Object()
 
       dialog.addNotificationListener(object : NotificationListener {
         override fun onClose(action: Boolean?) {
+          application.windowError = null // remove any further error.
           releaseLock(lock)
         }
       })
@@ -784,7 +777,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       exc!!.printStackTrace()
       // close the wait info window if it is attached to avoid connector hierarchy corruption.
       unsetWaitInfo()
-      setWindowError(exc)
+      application.windowError = exc
       if (getModel() != null) {
         getModel()!!.fatalError(getModel(), "VWindow.performActionImpl(final Action action)", exc)
       } else {
