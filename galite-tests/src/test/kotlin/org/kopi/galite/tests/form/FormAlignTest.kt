@@ -20,11 +20,13 @@ import java.util.Locale
 
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.BlockOption
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 
-object FormAlignTest : Form() {
-  override val locale = Locale.FRANCE
+val FormAlignTest = FormAlignTest_()
+class FormAlignTest_ : Form() {
+  override val locale = Locale.UK
   override val title = "form for test"
 
   val p1 = page("test page")
@@ -39,15 +41,19 @@ object FormAlignTest : Form() {
     }
     val totalPrice = visit(Domain<Int>(7), position = at(1, 2)) {}
 
-    align(targetBlock, totalPrice to targetBlock.price , totalQuantity to targetBlock.quantity)
+    align(targetBlock, totalQuantity to targetBlock.quantity, totalPrice to targetBlock.price)
   }
 }
 
-class TestAlign : FormBlock(10, 5, "Test block") {
+class TestAlign : FormBlock(10, 8, "Test block") {
 
-  val designation = visit(domain = Domain<String>(20), position = at(1, 1)) {
-    label = "Designation"
-    help = "The designation of product"
+  init {
+    options(BlockOption.NODETAIL)
+  }
+
+  val description = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "Description"
+    help = "The description of product"
   }
   val reference = visit(domain = Domain<String>(20), position = at(2, 1)) {
     label = "Reference"

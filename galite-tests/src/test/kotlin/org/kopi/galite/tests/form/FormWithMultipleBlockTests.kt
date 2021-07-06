@@ -16,9 +16,10 @@
  */
 package org.kopi.galite.tests.form
 
-import org.junit.Test
-import org.kopi.galite.tests.JApplicationTestBase
 import kotlin.test.assertEquals
+
+import org.junit.Test
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 
 class FormWithMultipleBlockTests : JApplicationTestBase() {
 

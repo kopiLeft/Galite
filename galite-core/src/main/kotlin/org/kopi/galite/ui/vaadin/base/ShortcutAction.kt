@@ -17,62 +17,56 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
+import com.vaadin.flow.component.Shortcuts
+import com.vaadin.flow.server.Command
 
 /**
  * A shortcut action represented by its key code and modifiers.
  *
- * @param caption The action caption.
  * @param key The action key code.
  * @param modifiers The action modifiers key.
+ * @param navigationAction lambda representing the action to perform
  */
-abstract class ShortcutAction(protected val caption: String,
-                              protected val key: Key,
-                              vararg modifiers: KeyModifier
-) {
+abstract class ShortcutAction<T: Component>(
+  protected val field: T,
+  private val key: Key,
+  private val modifiers: Array<out KeyModifier>,
+  protected val navigationAction: () -> Unit
+): Command {
 
-  protected val modifierMask: Int = createModifierMask(modifiers.toList())
+  override fun execute() {
+    performAction()
+  }
 
-  //---------------------------------------------------
-  // IMPLEMENTATIONS
-  //---------------------------------------------------
   /**
    * Performs the action handled by this shortcut.
    */
   abstract fun performAction()
 
-  /**
-   * Creates the action key.
-   * @return The action key.
-   */
-  fun getKey(): String {
-    // key is based on key & modifiers
-    return createKey(key, modifierMask)
+  fun registerShortcut() {
+    val registration = Shortcuts.addShortcutListener(
+      field,
+      this,
+      key,
+      *modifiers
+    ).listenOn(field)
+
+    registration.isBrowserDefaultAllowed = false
   }
 
-  companion object {
-    /**
-     * Creates a unique key for a key code and a modifier mask.
-     *
-     * @param keyCode The key code.
-     * @param modifierMask The modifier mask
-     * @return The unique key.
-     */
-    fun createKey(keyCode: Key, modifierMask: Int): String = "${keyCode.keys}-$modifierMask"
-
-    /**
-     * Creates the modifier mask of this shortcut action.
-     * @param modifiers The modifiers key.
-     * @return The modifier mask to be used.
-     */
-    fun createModifierMask(modifiers: Collection<KeyModifier>?): Int {
-      var modifiersMask = 0
-
-      modifiers?.forEach {
-        modifiersMask = modifiersMask or it.ordinal
+  protected fun <V> V.runAfterGetValue(function: () -> Unit) where V: Component, V: HasValue<*, *> {
+    // Workaround for issue: https://github.com/vaadin/flow/issues/5959
+    // Execute shortcut action when receiving the field's value using javascript call
+    // The field's value is used later to check if value has been changed
+    this.element.executeJs("return $0.value")
+      .then {
+        // Synchronize with server side
+        this.value = it?.asString()
+        function()
       }
-      return modifiersMask
-    }
   }
 }

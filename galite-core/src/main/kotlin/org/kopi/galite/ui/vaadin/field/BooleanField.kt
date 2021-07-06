@@ -24,6 +24,7 @@ import com.vaadin.flow.component.FocusNotifier
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
@@ -32,6 +33,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
  * @param trueRepresentation The representation of the true value.
  * @param falseRepresentation The representation of the false false
  */
+@CssImport("./styles/galite/checkbox.css")
 class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : ObjectField<Boolean>() {
 
   /**
@@ -50,15 +52,11 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
   private var forceHiddenVisibility = false
 
   init {
-    /*registerRpc(object : BooleanFieldServerRpc() { TODO
-      fun valueChanged(value: Boolean) {
-        setValue(value)
-        fireValueChangeEvent(value)
-      }
-    })*/
     className = Styles.BOOLEAN_FIELD
+    content.className = "k-boolean-field-content"
     yes.classNames.add("true")
     no.classNames.add("false")
+    setLabel(trueRepresentation, falseRepresentation)
     content.add(yes)
     content.add(no)
     // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
@@ -68,16 +66,10 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     no.addValueChangeListener(::onNoChange)
     yes.element.style["visibility"] = "hidden"
     no.element.style["visibility"] = "hidden"
-    content.element.style["border-bottom"] = "1px solid #dadada"
     content.element.addEventListener("mouseover") {
       isVisible = true
     }
-    content.element.addEventListener("focusin") {
-      content.element.style["border-bottom"] = "2px solid #a3a3a3"
-    }
-    content.element.addEventListener("focusout") {
-      content.element.style["border-bottom"] = "1px solid #dadada"
-    }
+
     content.element.addEventListener("mouseout") {
       if(value == null) {
         isVisible = false
@@ -99,7 +91,11 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
    * @param focus The field focus
    */
   fun setFocus(focus: Boolean) {
-    // getRpcProxy(BooleanFieldClientRpc::class.java).setFocus(focus) TODO
+    if(focus) {
+      focus()
+    } else {
+      blur()
+    }
   }
 
   /**
@@ -149,9 +145,9 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
     }
   }
 
-  override fun isVisible(): Boolean = (yes.element.style["visibility"].equals("visible")
-          && no.element.style["visibility"].equals("visible"))
-
+  override fun isVisible(): Boolean =
+    yes.element.style["visibility"].equals("visible")
+            && no.element.style["visibility"].equals("visible")
 
   override val isNull: Boolean
     get() = !yes.value && !no.value
@@ -184,6 +180,15 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
 
   override fun generateModelValue(): Boolean? = value
 
+  override fun addFocusListener(function: () -> Unit) {
+    yes.addFocusListener {
+      function()
+    }
+    no.addFocusListener {
+      function()
+    }
+  }
+
   override fun setEnabled(enabled: Boolean) {
     super.setEnabled(enabled)
     yes.isEnabled = enabled
@@ -203,26 +208,24 @@ class BooleanField(trueRepresentation: String?, falseRepresentation: String?) : 
 
   override fun checkValue(rec: Int) {}
 
-  fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    //FIX ME
+  private fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    //FIXME
     if (event.value) {
       no.value = false
     } else if (mandatory && !no.value) {
       yes.value = true
     }
     handleComponentVisiblity()
-    // ValueChangeEvent.fire(this, value) TODO
   }
 
-  fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
-    //FIX ME
+  private fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    //FIXME
     if (event.value) {
       yes.value = false
     } else if (mandatory && !yes.value) {
       no.value = true
     }
     handleComponentVisiblity()
-    // ValueChangeEvent.fire(this, value) TODO
   }
 
   /**

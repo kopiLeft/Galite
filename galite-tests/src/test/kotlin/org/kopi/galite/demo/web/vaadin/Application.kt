@@ -18,36 +18,17 @@ package org.kopi.galite.demo.web.vaadin
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.DBContext
-import org.kopi.galite.tests.VApplicationTestBase
-import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.tests.form.FormSample
-import org.kopi.galite.tests.form.FormWithFields
+import org.kopi.galite.tests.common.GaliteRegistry
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
-@SpringBootApplication
-open class Application : SpringBootServletInitializer()
-
-fun main(args: Array<String>) {
-  DBApplication.connectToDatabase()
-  DBSchemaTest.reset()
-  DBApplication.initDatabase()
-  DBApplication.initModules()
-  DBApplication.initUserRights()
-  runApplication<Application>(*args)
-}
-
-class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
-  override val sologanImage get() = "slogan.png"
-  override val logoImage get() = "logo_kopi.png"
+class GaliteApplication : VApplication(GaliteRegistry()) {
+  override val sologanImage get() = "ui/vaadin/slogan.png"
+  override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"
-  override val alternateLocale get() = Locale("de", "AT")
+  override val alternateLocale get() = Locale.UK
   override val supportedLocales
     get() =
       arrayOf(Locale.UK,
@@ -62,6 +43,8 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
           password: String,
           schema: String?
   ): DBContext? {
+    val username = "admin"
+    val password = "admin"
     return try {
       DBContext().apply {
         this.defaultConnection = this.createConnection(driver, database, username, password, true, schema)
@@ -74,18 +57,18 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
   init {
     ApplicationConfiguration.setConfiguration(
             object : ApplicationConfiguration() {
-              override fun getVersion(): String = ""
-              override fun getApplicationName(): String = ""
-              override fun getInformationText(): String = ""
-              override fun getLogFile(): String = ""
-              override fun getDebugMailRecipient(): String = ""
+              override val version get(): String = "1.0"
+              override val applicationName get(): String = "MyApp"
+              override val informationText get(): String = "info"
+              override val logFile get(): String = ""
+              override val debugMailRecipient get(): String = ""
+              override fun getSMTPServer(): String = ""
+              override val faxServer get(): String = ""
+              override val dictionaryServer get(): String = ""
               override fun mailErrors(): Boolean = false
               override fun logErrors(): Boolean = true
               override fun debugMessageInTransaction(): Boolean = true
-              override fun getSMTPServer(): String = ""
-              override fun getFaxServer(): String = ""
-              override fun getDictionaryServer(): String = ""
-              override fun getRExec(): Rexec = TODO()
+              override val RExec get(): Rexec = TODO()
               override fun getStringFor(var1: String): String = TODO()
               override fun getIntFor(var1: String): Int {
                 val var2 = this.getStringFor(var1)
@@ -100,32 +83,5 @@ class GaliteApplication : VApplication(VApplicationTestBase.GaliteRegistry()) {
               override fun useAcroread(): Boolean = TODO()
             }
     )
-  }
-}
-
-object DBApplication : DBSchemaTest() {
-
-  /**
-   * Inserts the modules names to include in the application.
-   */
-  fun initModules() {
-    transaction {
-      insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
-      insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
-      insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", FormSample::class)
-      insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", FormWithFields::class)
-    }
-  }
-
-  /**
-   * Adds rights to the [user] to access the application modules.
-   */
-  fun initUserRights(user: String = connectedUser) {
-    transaction {
-      insertIntoUserRights(user, "2000", true)
-      insertIntoUserRights(user, "1000", true)
-      insertIntoUserRights(user, "2009", true)
-      insertIntoUserRights(user, "2010", true)
-    }
   }
 }

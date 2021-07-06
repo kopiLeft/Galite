@@ -54,7 +54,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   init {
     // content.locale = application.defaultLocale.toString() TODO
     model.addFormListener(this)
-    //content.addFormListener(this) TODO
+    content.addFormListener(this)
     getModel()!!.setDisplay(this)
     val blockCount = vForm.getBlockCount()
     blockViews = arrayOfNulls(blockCount)
@@ -140,7 +140,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
    */
   fun gotoPage(i: Int) {
     currentPage = i
-    access {
+    access(currentUI) {
       content.gotoPage(i)
     }
   }
@@ -170,6 +170,7 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
                        block.model.isFollow,
                        block.model.noDetail())
     }
+    content.setBorder(block, page)
   }
 
   /**
@@ -192,6 +193,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
   }
 
   override fun onPageSelection(page: Int) {
+    // communicates the dirty values before leaving page
+    content.cleanDirtyValues(null)
+    content.disableAllBlocksActors()
     if (currentPage != page) {
       performAsyncAction(object : Action("setSelectedIndex") {
         override fun execute() {
@@ -309,23 +313,24 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     override fun blockChanged() {}
     override fun blockCleared() {}
     override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
-      //BackgroundThreadHandler.access(Runnable { TODO
-      if (pageCount == 1) {
-        return
-      }
-      //enable/disable tab of pages
-      val pageNumber = block.pageNumber
-      val blocks = vForm.blocks
-      if (newAccess) {
-        content.setEnabled(true, pageNumber)
-      } else {
-        // tab is visible (another visible block there?)
-        for (i in blocks.indices) {
-          if (pageNumber == blocks[i].pageNumber && blocks[i].isAccessible) {
-            return
-          }
+      access(currentUI) {
+        if (pageCount == 1) {
+          return@access
         }
-        content.setEnabled(false, pageNumber)
+        //enable/disable tab of pages
+        val pageNumber = block.pageNumber
+        val blocks = vForm.blocks
+        if (newAccess) {
+          content.setEnabled(true, pageNumber)
+        } else {
+          // tab is visible (another visible block there?)
+          for (i in blocks.indices) {
+            if (pageNumber == blocks[i].pageNumber && blocks[i].isAccessible) {
+              return@access
+            }
+          }
+          content.setEnabled(false, pageNumber)
+        }
       }
     }
 
@@ -351,9 +356,9 @@ class DForm(model: VForm) : DWindow(model), UForm, FormListener {
     // IMPLEMENTATION
     //---------------------------------------
     override fun blockRecordChanged(current: Int, count: Int) {
-      // TODO BackgroundThreadHandler.access(Runnable {
-      content.setPosition(current, count)
-      //})
+      access(currentUI) {
+        content.setPosition(current, count)
+      }
     }
   }
 }

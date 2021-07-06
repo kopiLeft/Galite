@@ -76,6 +76,7 @@ open class VActor(var menuIdent: String,
 
   fun performBasicAction() {
     handler!!.executeVoidTrigger(number)
+    action?.invoke()
   }
 
   // ----------------------------------------------------------------------

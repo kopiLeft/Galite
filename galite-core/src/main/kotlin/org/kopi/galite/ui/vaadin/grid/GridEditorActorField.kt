@@ -37,13 +37,23 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
   val type: Class<out String>
     get() = String::class.java
 
-  override fun setPresentationValue(newPresentationValue: Any?) {
+  override fun setPresentationValue(newPresentationValue: String?) {
     TODO("Not yet implemented")
   }
 
-  override fun generateModelValue(): Any? {
+  override fun generateModelValue(): String? {
     TODO("Not yet implemented")
   }
+
+  override fun doFocus() {
+    TODO("Not yet implemented")
+  }
+
+  override fun addFocusListener(focusFunction: () -> Unit) {
+    TODO("Not yet implemented")
+  }
+
+  override fun setBlink(blink: Boolean) {}
 
   /*override fun addNavigationListener(listener: NavigationListener?) {
     // NOT SUPPORTED

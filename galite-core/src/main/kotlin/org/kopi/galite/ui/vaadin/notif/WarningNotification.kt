@@ -40,7 +40,7 @@ open class WarningNotification(title: String?,
 
   override fun setButtons() {
     close = Button(LocalizedProperties.getString(locale, "CLOSE"))
-    close.addClickListener { close() }
+    close.addClickListener { fireOnClose(null) }
     close.isAutofocus = true
     buttons.add(close)
   }

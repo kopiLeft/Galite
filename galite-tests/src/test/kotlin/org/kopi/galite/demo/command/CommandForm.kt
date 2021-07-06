@@ -30,7 +30,7 @@ import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object CommandForm : ReportSelectionForm() {
+class CommandForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Commands"
   val page = page("Command")
@@ -46,56 +46,56 @@ object CommandForm : ReportSelectionForm() {
   }
 
   val autoFill = actor(
-    ident = "Autofill",
-    menu = action,
-    label = "Autofill",
-    help = "Autofill",
+          ident = "Autofill",
+          menu = action,
+          label = "Autofill",
+          help = "Autofill",
   )
 
   val list = actor(
-    ident = "list",
-    menu = action,
-    label = "list",
-    help = "Display List",
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
   ) {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
   }
 
   val resetBlock = actor(
-    ident = "reset",
-    menu = action,
-    label = "break",
-    help = "Reset Block",
+          ident = "reset",
+          menu = action,
+          label = "break",
+          help = "Reset Block",
   ) {
     key = Key.F3   // key is optional here
     icon = "break"  // icon is optional here
   }
 
   val serialQuery = actor(
-    ident = "serialQuery",
-    menu = action,
-    label = "serialQuery",
-    help = "serial query",
+          ident = "serialQuery",
+          menu = action,
+          label = "serialQuery",
+          help = "serial query",
   ) {
     key = Key.F6   // key is optional here
     icon = "serialquery"  // icon is optional here
   }
 
   val dynamicReport = actor(
-    ident = "dynamicReport",
-    menu = action,
-    label = "DynamicReport",
-    help = " Create Dynamic Report",
+          ident = "dynamicReport",
+          menu = action,
+          label = "DynamicReport",
+          help = " Create Dynamic Report",
   ) {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
 
-  val tb1 = insertBlock(BlockCommand, page) {
+  val tb1 = insertBlock(BlockCommand(), page) {
     command(item = report) {
       action = {
-        createReport(BlockCommand)
+        createReport(this@insertBlock)
       }
     }
 
@@ -124,11 +124,11 @@ object CommandForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return CommandR
+    return CommandR()
   }
 }
 
-object BlockCommand : FormBlock(1, 10, "Commands") {
+class BlockCommand : FormBlock(1, 10, "Commands") {
   val u = table(Command)
   val v = table(Client)
 
@@ -183,5 +183,5 @@ object CommandStatus : CodeDomain<String>() {
 }
 
 fun main() {
-  Application.runForm(formName = CommandForm)
+  Application.runForm(formName = CommandForm())
 }

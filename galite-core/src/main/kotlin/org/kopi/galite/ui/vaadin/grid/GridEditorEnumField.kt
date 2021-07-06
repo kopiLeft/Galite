@@ -20,4 +20,18 @@ package org.kopi.galite.ui.vaadin.grid
 /**
  * Server side implementation of an enumeration editor
  */
-class GridEditorEnumField(width: Int, enumerations: Array<String>) : GridEditorTextField(width)
+class GridEditorEnumField(width: Int, private val enumerations: Array<String>?) : GridEditorTextField(width) {
+
+  override fun check(text: String): Boolean {
+    if (enumerations != null && text != null) {
+      val s = text.toLowerCase()
+      for (i in enumerations.indices) {
+        if (enumerations.get(i).toLowerCase().startsWith(s)) {
+          return true
+        }
+      }
+      return false
+    }
+    return true
+  }
+}

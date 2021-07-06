@@ -21,14 +21,13 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.UActorField
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.field.ActorField
 
 import com.vaadin.flow.component.ClickEvent
-import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Div
 
 /**
  * UI Implementation of an actor field.
@@ -51,13 +50,13 @@ class DActorField(model: VFieldUI,
   // CONSTRUCTOR
   // --------------------------------------------------
   init {
-    //field.setCaption(getModel().label) TODO
+    field.setCaption(getModel().label)
     if (getModel().toolTip != null) {
-      //field.setDescription(Utils.createTooltip(getModel().toolTip)) TODO
+      field.setDescription(Utils.createTooltip(getModel().toolTip))
     }
     field.isEnabled = getModel().getDefaultAccess() >= VConstants.ACS_VISIT
     field.addClickHandler(this)
-    //setContent(field) TODO
+    add(field)
   }
 
   // --------------------------------------------------
@@ -88,9 +87,13 @@ class DActorField(model: VFieldUI,
   override fun forceFocus() {}
 
   override fun updateColor() {
-    //BackgroundThreadHandler.access(Runnable {  TODO
-    field.setColor(Utils.toString(foreground), Utils.toString(background))
-    //})
+    access(currentUI) {
+      field.setColor(Utils.toString(foreground), Utils.toString(background))
+    }
+  }
+
+  override fun valueChanged() {
+    // Nothing to do
   }
 
   override fun getObject(): Any? {

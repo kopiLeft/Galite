@@ -33,21 +33,21 @@ import org.kopi.galite.type.Decimal
 /**
  * Product Report
  */
-object ProductR : Report() {
+class ProductReport : Report() {
   override val locale = Locale.UK
 
   override val title = "Products"
 
   val action = menu("Action")
 
-  val greeting = actor(
-          ident = "greeting",
+  val quit = actor(
+          ident = "quit",
           menu = action,
-          label = "Greeting",
-          help = "Click me to show greeting",
+          label = "Quit",
+          help = "Quit",
   ) {
     key = Key.F1          // key is optional here
-    icon = "ask"  // icon is optional here
+    icon = "quit"  // icon is optional here
   }
 
   val csv = actor(
@@ -57,7 +57,7 @@ object ProductR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -67,7 +67,7 @@ object ProductR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -87,7 +87,7 @@ object ProductR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportPdf"  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) {
@@ -114,10 +114,28 @@ object ProductR : Report() {
     }
   }
 
-  val designation = field(Domain<String>(50)) {
-    label = "Designation"
-    help = "The product designation"
-    align = FieldAlignment.LEFT
+
+  val cmdQuit = command(item = quit) {
+    action = {
+      model.close()
+    }
+  }
+
+  val category = field(Category) {
+    label = "Category"
+    help = "The product category"
+    group = department
+  }
+
+  val department = field(Domain<String>(20)) {
+    label = "Department"
+    help = "The product department"
+    group = description
+  }
+
+  val description = field(Domain<String>(50)) {
+    label = "Description"
+    help = "The product description"
     format {
       object : VCellFormat() {
         override fun format(value: Any?): String {
@@ -127,30 +145,30 @@ object ProductR : Report() {
     }
   }
 
-  val category = field(Category) {
-    label = "Category"
-    help = "The product category"
-    align = FieldAlignment.LEFT
+  val supplier = field(Domain<String>(20)) {
+    label = "Supplier"
+    help = "The supplier"
   }
 
-  val taxName = field(Tax) {
+  val taxName = field(Domain<String>(10)) {
     label = "Tax"
     help = "The product tax name"
-    align = FieldAlignment.LEFT
   }
 
-  val price = field(Domain<Decimal>(20)) {
+  val price = field(Domain<Decimal>(10, 5)) {
     label = "Price"
     help = "The product unit price excluding VAT"
-    align = FieldAlignment.LEFT
   }
+
   val products = Product.selectAll()
 
   init {
     transaction {
       products.forEach { result ->
         add {
-          this[designation] = result[Product.designation]
+          this[description] = result[Product.description]
+          this[department] = result[Product.department]
+          this[supplier] = result[Product.supplier]
           this[category] = result[Product.category]
           this[taxName] = result[Product.taxName]
           this[price] = result[Product.price]

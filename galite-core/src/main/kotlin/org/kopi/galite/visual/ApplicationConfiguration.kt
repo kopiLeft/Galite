@@ -35,19 +35,19 @@ abstract class ApplicationConfiguration {
    * Property app.version
    * Returns the version of the application
    */
-  abstract fun getVersion(): String
+  abstract val version: String
 
   /**
    * Property app.name
    * Returns the application name
    */
-  abstract fun getApplicationName(): String
+  abstract val applicationName: String
 
   /**
    * Property app.comment
    * Returns the information text about this application
    */
-  abstract fun getInformationText(): String
+  abstract val informationText: String
 
   // --------------------------------------------------------------
   //   Application Debugging
@@ -57,12 +57,12 @@ abstract class ApplicationConfiguration {
    * Property debug.logfile
    * Returns the failure file to add errors
    */
-  abstract fun getLogFile(): String
+  abstract val logFile: String
 
   /**
    * Returns the debug mode (that you can change dynamically)
    */
-  open fun isDebugModeEnabled(): Boolean = false
+  open val isDebugModeEnabled: Boolean = false
 
   /**
    * Property debug.mail.recipient
@@ -70,7 +70,7 @@ abstract class ApplicationConfiguration {
    *
    * For instance: failure.sys-admin@aHost.com
    */
-  abstract fun getDebugMailRecipient(): String
+  abstract val debugMailRecipient: String
 
   abstract fun mailErrors(): Boolean
 
@@ -96,12 +96,12 @@ abstract class ApplicationConfiguration {
    * Property fax.server
    * Returns the name of the fax server to use.
    */
-  abstract fun getFaxServer(): String
+  abstract val faxServer: String
 
   /**
    * Returns a RExec command handler
    */
-  abstract fun getRExec(): Rexec
+  abstract val RExec: Rexec
 
   // --------------------------------------------------------------
   //   Spell checking
@@ -110,7 +110,7 @@ abstract class ApplicationConfiguration {
   /**
    * Returns the url of the Dictionary Server e.g. c:/aspell
    */
-  abstract fun getDictionaryServer(): String
+  abstract val dictionaryServer: String
 
   // --------------------------------------------------------------
   //   Basic Methods
@@ -198,7 +198,7 @@ abstract class ApplicationConfiguration {
     private var configuration: ApplicationConfiguration? = null
 
     fun getConfiguration(): ApplicationConfiguration? {
-      return if (ApplicationContext.applicationContext != null) {
+      return if (ApplicationContext.isApplicationContextInitialized) {
         ApplicationContext.applicationContext.getApplication().applicationConfiguration
       } else {
         configuration
@@ -206,7 +206,7 @@ abstract class ApplicationConfiguration {
     }
 
     fun setConfiguration(conf: ApplicationConfiguration) {
-      if (ApplicationContext.applicationContext != null) {
+      if (ApplicationContext.isApplicationContextInitialized) {
         ApplicationContext.applicationContext.getApplication().applicationConfiguration = conf
       } else {
         configuration = conf

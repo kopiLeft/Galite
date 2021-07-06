@@ -17,12 +17,18 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
+import org.kopi.galite.ui.vaadin.form.DGridBlock
+
 import com.vaadin.flow.component.Component
 
 /**
  * A block layout that contains a single component inside.
  */
-class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
+class SingleComponentBlockLayout(val block: DGridBlock) : SimpleBlockLayout(1, 1) {
+
+  init {
+    className = "multiple"
+  }
 
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -54,9 +60,5 @@ class SingleComponentBlockLayout : SimpleBlockLayout(1, 1) {
 
   override fun setBlockAlignment(original: Component, targets: IntArray, isChart: Boolean) {
     // not supported feature
-  }
-
-  init {
-    className = "multiple"
   }
 }

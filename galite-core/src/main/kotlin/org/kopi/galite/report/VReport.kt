@@ -391,21 +391,21 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
   @Throws(VException::class)
   fun editLine() {
     if (cmdOpenLine != null) {
-      executeVoidTrigger(cmdOpenLine!!.trigger)
+      cmdOpenLine!!.action?.invoke()
     }
   }
 
   @Throws(VException::class)
   fun setColumnData() {
     if (cmdEditColumn != null) {
-      executeVoidTrigger(cmdEditColumn!!.trigger)
+      cmdEditColumn!!.action?.invoke()
     }
   }
 
   @Throws(VException::class)
   fun setColumnInfo() {
     if (cmdColumnInfo != null) {
-      executeVoidTrigger(cmdColumnInfo!!.trigger)
+      cmdColumnInfo!!.action?.invoke()
     }
   }
 
@@ -552,7 +552,7 @@ abstract class VReport internal constructor(ctxt: DBContextHandler? = null)
       setCommandEnabled(cmdColumnInfo!!, column != -1)
     }
     if (cmdEditColumn != null) {
-      setCommandEnabled(cmdEditColumn!!, column != -1 && model.getAccessibleColumn(column)!!.addedAtRuntime)
+      setCommandEnabled(cmdEditColumn!!, column != -1 && model.getAccessibleColumn(column)!!.isAddedAtRuntime)
     }
   }
   // ----------------------------------------------------------------------

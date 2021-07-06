@@ -25,7 +25,12 @@ import org.kopi.galite.ui.vaadin.common.VContent
 import org.kopi.galite.ui.vaadin.common.VHeader
 import org.kopi.galite.ui.vaadin.common.VMain
 import org.kopi.galite.ui.vaadin.menu.ModuleList
+import org.kopi.galite.ui.vaadin.visual.DUserMenu
+import org.kopi.galite.ui.vaadin.visual.VApplication
+import org.kopi.galite.ui.vaadin.window.PopupWindow
+import org.kopi.galite.ui.vaadin.window.Window
 
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasSize
@@ -34,10 +39,10 @@ import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
-import com.vaadin.flow.component.applayout.AppLayout
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 /**
  * Main application window composed of a header and content.
@@ -49,26 +54,25 @@ import com.vaadin.flow.component.html.Div
  * @param logo The application logo
  * @param href The logo link.
  */
-@CssImport("./styles/galite/VLoginBox.css")
-class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout(), HasStyle, HasSize, Focusable<MainWindow> {
+@CssImport("./styles/galite/login.css")
+class MainWindow(locale: Locale, val logo: String, val href: String, val application: VApplication) : VerticalLayout(), HasStyle, HasSize, Focusable<MainWindow> {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
 
   private val listeners = mutableListOf<MainWindowListener>()
-  private var menus = mutableListOf<ModuleList>()
   private val header = VHeader()
   private val windowsLink = VWindows()
   private val welcome = VWelcome()
   private val content = VContent()
-  private val container = VWindowContainer()
   private val locale: String = locale.toString()
-  private var windowsList = mutableListOf<Component>()
+  internal var windowsList = mutableListOf<Component>()
   private val windows = mutableMapOf<Component, MenuItem>()
   private val windowsMenu = VWindowsDisplay()
-  private var currentWindow: Component? = null
-  private val originalWindowTitle: String? = null
+  private val container = VWindowContainer(windowsMenu.menu)
+  var currentWindow: Component? = null
+  private var originalWindowTitle: String = ""
 
   init {
     val main = VMain()
@@ -80,7 +84,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     setTarget("_blank")
 
     content.setContent(container)
-    addToNavbar(header)
+    add(header)
     val welcomeContainer = Div()
     welcomeContainer.setId("welcome_container")
     val horizontalAlignContainer = Div()
@@ -95,7 +99,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     main.setSizeFull()
     content.width = "100%"
     content.height = "100%"
-    setContent(main)
+    add(main)
     addLinksListeners()
     Shortcuts.addShortcutListener(this, this::goToPreviousPage, Key.PAGE_UP, KeyModifier.of("Alt"))
     Shortcuts.addShortcutListener(this, this::goToNextPage, Key.PAGE_DOWN, KeyModifier.of("Alt"))
@@ -117,7 +121,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setMainMenu(moduleList: ModuleList) {
     header.setMainMenu(moduleList)
-    menus.add(moduleList)
   }
 
   /**
@@ -135,9 +138,8 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    * Sets the user menu attached to this main window.
    * @param moduleList The user menu.
    */
-  fun setUserMenu(moduleList: ModuleList) {
+  fun setUserMenu(moduleList: DUserMenu) {
     welcome.setUserMenu(moduleList)
-    menus.add(moduleList)
   }
 
   /**
@@ -146,7 +148,6 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setAdminMenu(moduleList: ModuleList) {
     welcome.setAdminMenu(moduleList)
-    menus.add(moduleList)
   }
 
   /**
@@ -155,19 +156,41 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun setBookmarksMenu(menu: ModuleList) {
     welcome.setBookmarksMenu(menu)
-    menus.add(menu)
+  }
+
+  /**
+   * Sets the workspace context menu.
+   * @param menu The menu component.
+   */
+  fun setWorkspaceContextItemMenu(menu: ModuleList) {
+    welcome.setWorkspaceContextItemMenu(menu)
   }
 
   /**
    * Adds a window to this main window.
+   *
    * @param window The window to be added.
    * @param title The window title.
    */
   fun addWindow(window: Component, title: String) {
     windowsList.add(window)
     container.addWindow(window, title)
-    container.showWindow(window)
-    windowsMenu.addWindow(container, window, title)
+    currentWindow = container.showWindow(window)
+
+    val item = windowsMenu.addWindow(window, title)
+    // adding listener on the item to show the window in the container
+    item.addClickListener {
+
+      if (currentWindow != item.window) {
+        currentWindow = container.showWindow(item.window)
+        if (currentWindow is Window) {
+          (currentWindow as Window).goBackToLastFocusedTextField()
+          window.isVisible = true
+        }
+        //windowsMenu.setCurrent(item) TODO
+        windowsMenu.hideMenu()
+      }
+    }
   }
 
   /**
@@ -176,10 +199,17 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
    */
   fun removeWindow(window: Component) {
     windowsList.remove(window)
-    container.removeWindow(window)
-    /*if (window is PopupWindow) { TODO
-      (window as PopupWindow).fireOnClose() // fire close event
-    }*/
+    currentWindow = container.removeWindow(window)
+    windowsMenu.removeWindow(window)
+    if (currentWindow is Window) {
+      (currentWindow as Window).goBackToLastFocusedTextField()
+    }
+    if (windows.size <= 1) {
+      windowsLink.isEnabled = false
+    }
+    if (currentWindow == null) {
+      ui.get().page.setTitle(originalWindowTitle)
+    }
   }
 
   /**
@@ -324,12 +354,29 @@ class MainWindow(locale: Locale, val logo: String, val href: String) : AppLayout
     gotoWindow(false)
   }
 
+  override fun onAttach(attachEvent: AttachEvent?) {
+    originalWindowTitle = ui.get().internals.title.orEmpty()
+  }
+
   /**
    * Shows the next or previous window according to a flag
    * @param next Should we goto the next window ?
    * Otherwise, it is the previous window that must be shown.
    */
-  protected fun gotoWindow(next: Boolean) {
-    // TODO
+  internal fun gotoWindow(next: Boolean) {
+    if(container.isEmpty) {
+      return
+    }
+
+    currentWindow = if (next) {
+      container.showNextWindow()
+    } else {
+      container.showPreviousWindow()
+    }
+    if (currentWindow is Window) {
+      (currentWindow as Window).goBackToLastFocusedTextField()
+      // fireWindowVisible(currentWindow) TODO
+    }
+    // windowsMenu.setCurrent(currentWindow) TODO
   }
 }

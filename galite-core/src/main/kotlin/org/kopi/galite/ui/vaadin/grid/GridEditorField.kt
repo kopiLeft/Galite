@@ -23,16 +23,22 @@ import kotlin.collections.Collection
 
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.field.Field
+import org.kopi.galite.ui.vaadin.form.DBlock
+import org.kopi.galite.ui.vaadin.form.DGridEditorField
+import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.customfield.CustomField
-import com.vaadin.flow.router.NavigationEvent
 
 /**
  * A grid editor field implementation.
  */
-abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() {
+abstract class GridEditorField<T> protected constructor() : CustomField<T>(), ClickNotifier<GridEditorField<T>>, HasStyle {
+
+  lateinit var dGridEditorField: DGridEditorField<*>
 
   /**
    * The navigation delegation to server mode. Default to [NavigationDelegationMode.ALWAYS].
@@ -87,9 +93,11 @@ abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() 
   }
 
   init {
+    setWidthFull()
     //registerRpc(NavigationRpcHandler())
     //registerRpc(ClickRpcHandler())
   }
+
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -119,6 +127,31 @@ abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() 
     this.background = background
   }
 
+  override fun focus() {
+    super.focus()
+    parentWindow?.lasFocusedField = this
+    doFocus()
+  }
+
+  abstract fun doFocus()
+
+  abstract fun addFocusListener(focusFunction: () -> Unit)
+
+  /**
+   * Sets the blink state of this editor field.
+   * @param blink The blink state.
+   */
+  abstract fun setBlink(blink: Boolean)
+
+  /**
+   * Returns the parent window of this text editor.
+   * @return The parent window of this text editor.
+   */
+  val parentWindow: Window?
+    get() = (dGridEditorField.columnView.blockView as? DBlock)?.parent
+
+  var oldValue: String? = null
+
   //---------------------------------------------------
   // INNER CLASSES
   //---------------------------------------------------
@@ -130,49 +163,49 @@ abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() 
      * Fired when a goto next field event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoNextField(event: NavigationEvent?)
+    fun onGotoNextField()
 
     /**
      * Fired when a goto previous field event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoPrevField(event: NavigationEvent?)
+    fun onGotoPrevField()
 
     /**
      * Fired when a goto next block event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoNextBlock(event: NavigationEvent?)
+    fun onGotoNextBlock()
 
     /**
      * Fired when a goto previous record event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoPrevRecord(event: NavigationEvent?)
+    fun onGotoPrevRecord()
 
     /**
      * Fired when a goto next field event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoNextRecord(event: NavigationEvent?)
+    fun onGotoNextRecord()
 
     /**
      * Fired when a goto first record event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoFirstRecord(event: NavigationEvent?)
+    fun onGotoFirstRecord()
 
     /**
      * Fired when a goto last record event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoLastRecord(event: NavigationEvent?)
+    fun onGotoLastRecord()
 
     /**
      * Fired when a goto next empty mandatory field event is called by the user.
      * @param event The navigation event object
      */
-    fun onGotoNextEmptyMustfill(event: NavigationEvent?)
+    fun onGotoNextEmptyMustfill()
   }
 
   /**
@@ -189,25 +222,7 @@ abstract class GridEditorField<T> protected constructor() : CustomField<Any?>() 
   interface AutofillListener {
     /**
      * Fired when an autofill action is launched on the editor
-     * @param event The autofill event.
      */
-    fun onAutofill(event: AutofillEvent?)
+    fun onAutofill()
   }
-
-  /**
-   * The editor field click event
-   */
-  class AutofillEvent(source: Component?) {
-    companion object {
-      //---------------------------------------------------
-      // DATA MEMBERS
-      //---------------------------------------------------
-      val AUTOFILL_METHOD: Method? = null
-
-      init {
-        // TODO
-      }
-    }
-  }
-  // TODO
 }

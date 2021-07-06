@@ -29,9 +29,11 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.UserRights
 import org.kopi.galite.db.Users
 import org.kopi.galite.form.VBlockDefaultOuterJoin
-import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 
 class VBlockDefaultOuterJoinTests : JApplicationTestBase() {
+
+  val FormWithList = FormWithList()
 
   @Test
   fun getSearchTablesTest() {

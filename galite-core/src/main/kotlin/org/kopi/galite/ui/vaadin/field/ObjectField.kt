@@ -30,7 +30,7 @@ import com.vaadin.flow.component.customfield.CustomField
 /**
  * The Object field component.
  */
-abstract class ObjectField<T> : CustomField<T>(), HasStyle {
+abstract class ObjectField<T> : AbstractField<T>(), HasStyle {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -39,36 +39,6 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
 
   private val listeners = mutableListOf<ObjectFieldListener>()
 
-  /*private val rpc: ObjectFieldServerRpc = object : ObjectFieldServerRpc() { TODO
-    fun gotoPrevRecord() {
-      fireGotoPrevRecord()
-    }
-
-    fun gotoPrevField() {
-      fireGotoPrevField()
-    }
-
-    fun gotoNextRecord() {
-      fireGotoNextBlock()
-    }
-
-    fun gotoNextField() {
-      fireGotoNextField()
-    }
-
-    fun gotoNextBlock() {
-      fireGotoNextBlock()
-    }
-
-    fun gotoLastRecord() {
-      fireGotoLastRecord()
-    }
-
-    fun gotoFirstRecord() {
-      fireGotoFirstRecord()
-    }
-  }*/
-
   /**
    * Creates a new `ObjectField` instance.
    */
@@ -76,7 +46,7 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
     //registerRpc(rpc) TODO
     element.setAttribute("hideFocus", "true")
     element.setProperty("outline", "0px")
-    //addKeyDownHandler(NavigationHandler()) TODO
+    NavigationHandler().createNavigatorKeys()
     addFocusListener(::onFocus)
     addBlurListener(::onBlur)
     //sinkEvents(Event.ONKEYDOWN) TODO
@@ -176,20 +146,20 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
    * Returns `true` if this object field is `null`.
    * @return `true` if this object field is `null`.
    */
-  protected abstract val isNull: Boolean
+  override abstract val isNull: Boolean
 
   /**
    * Sets the object field color properties.
    * @param foreground The foreground color.
    * @param background The background color.
    */
-  internal abstract fun setColor(foreground: String?, background: String?)
+  abstract fun setColor(foreground: String?, background: String?)
 
   /**
    * Checks the internal value of this field.
    * @param rec The active record.
    */
-  protected abstract fun checkValue(rec: Int)
+  abstract override fun checkValue(rec: Int)
 
   /**
    * Sets the component visibility from the parent field.
@@ -204,40 +174,24 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
    * The object field key navigator.
    */
   private inner class KeyNavigator(
-          private val code: Int,
-          key: Key,
-          modifiers: Array<out KeyModifier>,
-  ) : ShortcutAction("key-navigator $code", key, *modifiers) {
+    field: ObjectField<*>,
+    key: Key,
+    modifiers: Array<out KeyModifier>,
+    navigationAction: () -> Unit
+  ) : ShortcutAction<ObjectField<*>>(field, key, modifiers, navigationAction) {
 
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun performAction() {
-      if (element.parent == null) {
-        return
-      }
-      when (code) {
-        KEY_TAB -> columnView!!.gotoNextField()
-        KEY_STAB -> columnView!!.gotoPrevField()
-        KEY_REC_UP -> columnView!!.gotoPrevRecord()
-        KEY_REC_DOWN -> columnView!!.gotoNextRecord()
-        KEY_REC_FIRST -> columnView!!.gotoFirstRecord()
-        KEY_REC_LAST -> columnView!!.gotoLastRecord()
-        // KEY_BLOCK -> connector.getFieldListener().gotoNextBlock() TODO
-        else -> {
-        }
-      }
+      navigationAction()
     }
   }
 
   /**
    * The object field navigation handler.
    */
-  private inner class NavigationHandler : ShortcutActionHandler() {
-
-    init {
-      createNavigatorKeys()
-    }
+  private inner class NavigationHandler {
 
     //---------------------------------------------------
     // IMPLEMENTATIONS
@@ -245,39 +199,30 @@ abstract class ObjectField<T> : CustomField<T>(), HasStyle {
     /**
      * Creates the navigation actions.
      */
-    protected fun createNavigatorKeys() {
-      addKeyNavigator(KEY_TAB, Key.ENTER, KeyModifier.of("AltGraph"))
-      addKeyNavigator(KEY_TAB, Key.TAB, KeyModifier.of("AltGraph"))
-      addKeyNavigator(KEY_STAB, Key.TAB, KeyModifier.of("Shift"))
-      addKeyNavigator(KEY_BLOCK, Key.ENTER, KeyModifier.of("Shift"))
-      addKeyNavigator(KEY_REC_UP, Key.PAGE_UP, KeyModifier.of("AltGraph"))
-      addKeyNavigator(KEY_REC_DOWN, Key.PAGE_DOWN, KeyModifier.of("AltGraph"))
-      addKeyNavigator(KEY_REC_FIRST, Key.HOME, KeyModifier.of("AltGraph"))
-      addKeyNavigator(KEY_REC_LAST, Key.END, KeyModifier.of("AltGraph"))
-      addKeyNavigator(KEY_STAB, Key.ARROW_LEFT, KeyModifier.of("Control"))
-      addKeyNavigator(KEY_TAB, Key.ARROW_RIGHT, KeyModifier.of("Control"))
-      addKeyNavigator(KEY_REC_UP, Key.ARROW_UP, KeyModifier.of("Control"))
-      addKeyNavigator(KEY_REC_DOWN, Key.ARROW_DOWN, KeyModifier.of("Control"))
+    fun createNavigatorKeys() {
+      addKeyNavigator(Key.ENTER) { columnView!!.gotoNextField() }
+      addKeyNavigator(Key.TAB) { columnView!!.gotoNextField() }
+      addKeyNavigator(Key.TAB, KeyModifier.of("Shift")) { columnView!!.gotoPrevField() }
+      addKeyNavigator(Key.ENTER, KeyModifier.of("Shift")) { fireGotoNextBlock() }
+      addKeyNavigator(Key.PAGE_UP) { columnView!!.gotoPrevRecord() }
+      addKeyNavigator(Key.PAGE_DOWN) { columnView!!.gotoNextRecord() }
+      addKeyNavigator(Key.HOME) { columnView!!.gotoFirstRecord() }
+      addKeyNavigator(Key.END) { columnView!!.gotoLastRecord() }
+      addKeyNavigator(Key.ARROW_LEFT, KeyModifier.of("Control")) { columnView!!.gotoPrevField() }
+      addKeyNavigator(Key.ARROW_RIGHT, KeyModifier.of("Control")) { columnView!!.gotoNextField() }
+      addKeyNavigator(Key.ARROW_UP, KeyModifier.of("Control")) { columnView!!.gotoPrevRecord() }
+      addKeyNavigator(Key.ARROW_DOWN, KeyModifier.of("Control")) { columnView!!.gotoNextRecord() }
     }
 
     /**
-   * Adds a key navigator action to this handler.
-   * @param code The navigator code.
-   * @param key The key code.
-   * @param modifiers The modifiers.
-   */
-    protected fun addKeyNavigator(code: Int, key: Key, vararg modifiers: KeyModifier) {
-      addAction(KeyNavigator(code, key, modifiers))
+     * Adds a key navigator action to this handler.
+     * @param key The key code.
+     * @param modifiers The modifiers.
+     * @param navigationAction lambda representing the action to perform
+     */
+    protected fun addKeyNavigator(key: Key, vararg modifiers: KeyModifier, navigationAction: () -> Unit) {
+      KeyNavigator(this@ObjectField, key, modifiers, navigationAction)
+        .registerShortcut()
     }
-  }
-
-  companion object {
-    private const val KEY_TAB = 0
-    private const val KEY_STAB = 1
-    private const val KEY_REC_UP = 2
-    private const val KEY_REC_DOWN = 3
-    private const val KEY_REC_FIRST = 4
-    private const val KEY_REC_LAST = 5
-    private const val KEY_BLOCK = 6
   }
 }

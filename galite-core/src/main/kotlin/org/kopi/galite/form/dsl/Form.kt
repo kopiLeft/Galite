@@ -61,6 +61,20 @@ abstract class Form : Window() {
   /**
    * Adds a new block to this form.
    *
+   * @param        buffer                 the buffer size of this block
+   * @param        visible                the number of visible elements
+   * @param        title                  the title of the block
+   */
+  fun FormPage.block(
+    buffer: Int,
+    visible: Int,
+    title: String,
+    init: FormBlock.() -> Unit
+  ): FormBlock = insertBlock(FormBlock(buffer, visible, title, title), this, init)
+
+  /**
+   * Adds a new block to this form.
+   *
    * @param        block                 the block to insert
    * @param        formPage              the page containing the block
    */
@@ -110,6 +124,21 @@ abstract class Form : Window() {
    */
   fun page(title: String): FormPage {
     val page = FormPage(pages.size, "Id\$${pages.size}", title)
+    pages.add(page)
+    return page
+  }
+
+  /**
+   * Adds a new page to this form. You can use this method to create Pages in your form, this is optional
+   * and will create a Tab for each page you create under the form's toolbar.
+   *
+   * @param        title                the title of the page
+   * @return       the form page. You can use it as a parameter to a block it to define that the block
+   * will be inserted in this page. You can put as much blocks you want in each page
+   */
+  fun page(title: String, init: FormPage.() -> Unit): FormPage {
+    val page = FormPage(pages.size, "Id\$${pages.size}", title)
+    page.init()
     pages.add(page)
     return page
   }
@@ -257,7 +286,7 @@ abstract class Form : Window() {
 
     blocks = formBlocks.map { formBlock ->
       formBlock.getBlockModel(this, source).also { vBlock ->
-        vBlock.setInfo(formBlock.pageNumber)
+        vBlock.setInfo(formBlock.pageNumber, this)
         vBlock.initIntern()
         formBlock.blockFields.forEach { formField ->
           formField.initialValues.forEach {

@@ -29,16 +29,21 @@ class VActorsRootNavigationItem : Button() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private var menu: VNavigationMenu = VNavigationMenu()
+  var menu: VNavigationMenu = VNavigationMenu()
   val rootIcon = Icon(VaadinIcon.ALIGN_JUSTIFY)
 
   init {
     className = "actors-rootNavigationItem"
+    element.setAttribute("part" ,"rootNavigation")
    // rootIcon.addStyleDependentName("actors")
     icon = rootIcon
-    menu = VNavigationMenu()
     menu.className = "actors-navigationMenu"
     this.addClickListener { onClick() }
+    menu.addDialogCloseActionListener {
+      menu.close()
+      element.removeAttribute("part")
+      element.setAttribute("part" ,"rootNavigation")
+    }
   }
 
   fun onClick() {
@@ -47,7 +52,7 @@ class VActorsRootNavigationItem : Button() {
       //parent.getElement().removeClassName("open")
     } else {
       menu.open()
-      //parent.getElement().addClassName("open")
+     element.setAttribute("part" ,"rootNavigation-open")
     }
   }
 

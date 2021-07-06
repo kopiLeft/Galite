@@ -17,16 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.dnd.DragSource
-import com.vaadin.flow.server.StreamVariable
-import org.kopi.galite.form.VBlock
-import org.kopi.galite.form.VField
-import org.kopi.galite.form.VImageField
-import org.kopi.galite.form.VStringField
-import org.kopi.galite.ui.vaadin.visual.VApplication
-import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.visual.VException
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -34,8 +24,18 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.*
+
 import javax.activation.MimetypesFileTypeMap
+
+import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VField
+import org.kopi.galite.form.VImageField
+import org.kopi.galite.form.VStringField
+import org.kopi.galite.visual.VException
+
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.dnd.DragSource
+import com.vaadin.flow.server.StreamVariable
 
 /**
  * The `DBlockDropHandler` is the block implementation
@@ -73,13 +73,6 @@ class DBlockDropHandler(private val block: VBlock,
 
   // val acceptCriterion: AcceptCriterion TODO
   //   get() = AcceptAll.get() TODO
-
-  /**
-   * Returns the application instance.
-   * @return The application instance.
-   */
-  protected val application: VApplication
-    get() = ApplicationContext.applicationContext.getApplication() as VApplication
 
   //---------------------------------------------------------
   // UTILS

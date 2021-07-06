@@ -42,7 +42,8 @@ object User : Table() {
   val cv = varchar("CURRICULUM VITAE", 70).nullable()
 }
 
-object FormSample : Form() {
+val FormSample = FormSample_()
+class FormSample_ : Form() {
   override val locale = Locale.UK
   override val title = "form for test"
 

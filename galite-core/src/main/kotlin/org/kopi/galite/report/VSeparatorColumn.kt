@@ -27,15 +27,7 @@ package org.kopi.galite.report
  * @param     groups          The index of the column grouped by this one or -1
  * @param     function        An (optional) summation function
  */
-class VSeparatorColumn(
-  ident: String,
-  options: Int,
-  align: Int,
-  groups: Int,
-  function: VCalculateColumn?,
-  width: Int,
-  format: VCellFormat?,
-) : VReportColumn("", 0, 0, 0, null, 1, 1, null) {
+class VSeparatorColumn: VReportColumn("", 0, 0, 0, null, 1, 1, null) {
   /**
    * No text here
    */

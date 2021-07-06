@@ -166,7 +166,7 @@ abstract class Report : Window() {
 
   // TODO add Decimal types
   fun MReport.addReportColumns() {
-    columns = fields.map {
+    val userFields = fields.map {
       if (it.group != null) {
         it.groupID = fields.indexOf(it.group)
       }
@@ -209,7 +209,8 @@ abstract class Report : Window() {
         column.label = it.label ?: ""
         column.help = it.help
       }
-    }.toTypedArray()
+    }
+    columns = (userFields + VSeparatorColumn()).toTypedArray()
   }
 
   private fun MReport.addReportLines() {
@@ -218,7 +219,8 @@ abstract class Report : Window() {
         it.data[field]
       }
 
-      addLine(list.toTypedArray())
+      // Last null value is added for the separator column
+      addLine((list + listOf(null)).toTypedArray())
     }
   }
 
@@ -265,6 +267,9 @@ abstract class Report : Window() {
           super.VKT_Triggers!!.add(fieldTriggerArray)
         }
 
+        // TODO: for separator column
+        super.VKT_Triggers!!.add(IntArray(Constants.TRG_TYPES.size))
+
         // COMMANDS TRIGGERS
         commands?.forEach {
           val fieldTriggerArray = IntArray(Constants.TRG_TYPES.size)
@@ -275,6 +280,7 @@ abstract class Report : Window() {
 
       override fun init() {
         setTitle(title)
+        super.setPageTitle(title)
         help = this@Report.help
         this.addActors(this@Report.actors.map { actor ->
           actor.buildModel(sourceFile)

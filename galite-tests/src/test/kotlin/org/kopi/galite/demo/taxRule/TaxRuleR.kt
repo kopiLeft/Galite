@@ -31,7 +31,7 @@ import org.kopi.galite.report.VReport
 /**
  * Tax Rules Report
  */
-object TaxRuleR : Report() {
+class TaxRuleR : Report() {
   override val locale = Locale.UK
 
   override val title = "TaxRules_Report"
@@ -45,7 +45,7 @@ object TaxRuleR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -55,7 +55,7 @@ object TaxRuleR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -75,7 +75,7 @@ object TaxRuleR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportPdf"  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) {

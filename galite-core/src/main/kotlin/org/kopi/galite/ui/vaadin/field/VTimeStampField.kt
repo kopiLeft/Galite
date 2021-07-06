@@ -22,10 +22,15 @@ import java.time.format.DateTimeFormatter
 
 import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.datetimepicker.DateTimePicker
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * A timestamp field.
  */
+@CssImport.Container(value = [
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-date-text-field"),
+  CssImport(value = "./styles/galite/datetime.css", themeFor = "vaadin-date-time-picker-time-text-field")
+])
 class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNotifier {
 
   override fun setPresentationValue(newPresentationValue: String?) {

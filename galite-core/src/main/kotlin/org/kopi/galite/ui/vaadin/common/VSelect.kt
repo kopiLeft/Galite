@@ -18,7 +18,6 @@
 package org.kopi.galite.ui.vaadin.common
 
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.Tag
 import com.vaadin.flow.data.binder.HasItems
@@ -26,15 +25,15 @@ import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.dom.Element
 
 @Tag(Tag.SELECT)
-class VSelect : Component(), HasSize, HasItems<Any>, HasComponents {
-  override fun setItems(items: MutableCollection<*>) {
-    this.items = items as ArrayList<String>
+class VSelect : Component(), HasSize, HasItems<String> {
+  override fun setItems(items: MutableCollection<String>) {
+    this.items = items.toMutableList()
 
     items.map { item: Any? ->
       addItem(item.toString(), item.toString())
     }
 
-    setSelectedValue(this.items.iterator().next().toString())
+    setSelectedValue(this.items.iterator().next())
   }
 
   /**
@@ -89,7 +88,7 @@ class VSelect : Component(), HasSize, HasItems<Any>, HasComponents {
   }
 
   private lateinit var selectedValue: String
-  private var items = arrayListOf<String>()
+  private var items = mutableListOf<String>()
   private val INSERT_AT_END = -1
 
   init {

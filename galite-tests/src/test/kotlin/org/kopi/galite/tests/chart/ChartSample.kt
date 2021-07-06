@@ -26,9 +26,9 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.VColor
 
-object ChartSample: Chart() {
+class ChartSample: Chart() {
   override val locale = Locale.UK
-  override val title = "area/population per city"
+  override val title = "Area/population per city"
   override val help = "This chart presents the area/population per city"
 
   val action = menu("Action")
@@ -75,12 +75,12 @@ object ChartSample: Chart() {
 
   // You can either change the chart type in INIT or CHARTTYPE trigger
   val init = trigger(INITCHART) {
-    chartType = VChartType.COLUMN
+    chartType = VChartType.BAR
   }
 
   // This is the type that will be taken because CHARTTYPE is executed after INIT
   val type = trigger(CHARTTYPE) {
-    VChartType.PIE
+    VChartType.BAR
   }
 
   init {
@@ -95,8 +95,8 @@ object ChartSample: Chart() {
     }
 
     city.add("Bizerte") {
-      this[population] = 368500
       this[area] = Decimal("568219")
+      this[population] = 368500
     }
   }
 }

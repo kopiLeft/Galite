@@ -19,22 +19,27 @@ package org.kopi.galite.ui.vaadin.form
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
+import org.kopi.galite.form.VActorField
 import org.kopi.galite.form.VBlock
+import org.kopi.galite.form.VBooleanField
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.SingleComponentBlockLayout
-import org.kopi.galite.ui.vaadin.list.ListFilter
+import org.kopi.galite.ui.vaadin.grid.GridEditorField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
 
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnResizeEvent
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
+import com.vaadin.flow.component.grid.editor.EditorImpl
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.textfield.TextField
@@ -42,11 +47,11 @@ import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.value.ValueChangeMode
-import com.vaadin.flow.function.SerializablePredicate
 
 /**
  * Grid based chart block implementation.
  */
+@CssImport(value = "./styles/galite/grid.css", themeFor = "vaadin-grid")
 open class DGridBlock(parent: DForm, model: VBlock)
   : DBlock(parent, model)
 /* ColumnResizeListener, SortListener TODO*/ {
@@ -54,10 +59,11 @@ open class DGridBlock(parent: DForm, model: VBlock)
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  protected lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
+  lateinit var grid: Grid<DGridBlockContainer.GridBlockItem>
 
   init {
     grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES)
+    grid.isHeightByRows = true
   }
 
   /*
@@ -81,7 +87,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * the editor to bind the last record. Typically, this is used when multiple
    * gotoRecord are called via the window action queue.
    */
-  private var itemToBeEdited: Int? = null
+  protected var itemToBeEdited: Int? = null
 
   /*
    * A flag used to force disabling the editor cancel when scroll is fired
@@ -91,11 +97,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Whereas, the editor should be cancelled when the edited item is not already in
    * the port view after a scroll fired by the user.
    */
-  private var doNotCancelEditor = false
+  private var doNotCancelEditor = true // TODO
 
   private var filterRow: HeaderRow? = null
 
   lateinit var editor: Editor<DGridBlockContainer.GridBlockItem>
+
+  val isEditorInitialized get() = ::editor.isInitialized
 
   override fun setSortedRecords(sortedRecords: IntArray) {
     if (!model.noDetail() && !inDetailMode()) {
@@ -111,31 +119,37 @@ open class DGridBlock(parent: DForm, model: VBlock)
    */
   override fun createFields() {
     super.createFields()
-    //BackgroundThreadHandler.access(Runnable { TODO
-    grid = Grid<DGridBlockContainer.GridBlockItem>()
-    /*grid = object : Grid(createContainerDataSource()) {
-      protected fun doEditItem() {
-        if (!inDetailMode()) {
-          updateEditors()
-          super.doEditItem()
-          enterRecord(getEditedItemId() as Int)
+    grid = object : Grid<DGridBlockContainer.GridBlockItem>() {
+      override fun createEditor(): Editor<DGridBlockContainer.GridBlockItem> {
+        return object : EditorImpl<DGridBlockContainer.GridBlockItem>(this, propertySet) {
+          override fun closeEditor() {
+            if(!doNotCancelEditor) {
+              super.closeEditor()
+            }
+          }
         }
       }
-    }*/
+    }
     editor = grid.editor
+    editor.addOpenListener {
+      if (!inDetailMode()) {
+        updateEditors()
+        enterRecord(it.item.record)
+      }
+    }
     grid.addSortListener(::sort)
     grid.setSelectionMode(Grid.SelectionMode.NONE)
-    //grid.setEditorEnabled(model.isAccessible)
-    //if (grid.isEditorEnabled()) {
-    //  grid.setEditorBuffered(false)
-    //}
+    grid.isEnabled = model.isAccessible
+    if (grid.isEnabled) {
+      editor.isBuffered = false
+    }
     grid.isColumnReorderingAllowed = false
     //grid.setColumnResizeMode(ColumnResizeMode.ANIMATED)
     //grid.setHeightMode(HeightMode.ROW)
-    //grid.setHeightByRows(model.displaySize)
     //grid.setCellStyleGenerator(DGridBlockCellStyleGenerator(model))
     grid.addColumnResizeListener(::columnResize)
     configure()
+    setHeightByRows(model.bufferSize, model.displaySize)
     //grid.setColumnOrder(columnsOrder)
     /*if (detailsGenerator != null) { TODO
       grid.setDetailsGenerator(detailsGenerator)
@@ -198,6 +212,17 @@ open class DGridBlock(parent: DForm, model: VBlock)
     //})
   }
 
+  private fun setHeightByRows(buffer: Int, rows: Int) {
+    if(buffer == rows) {
+      grid.isHeightByRows = true
+    } else {
+      grid.height = "calc(" +
+              "(1.04 * var(--lumo-size-m) + var(--_lumo-grid-border-width)) + " +
+              "(${rows * 38}px + ${rows -1} * var(--_lumo-grid-border-width))" +
+              ")"
+    }
+  }
+
   /**
    * Notifies the block that the UI is focused on the given record.
    * @param recno The record number
@@ -225,13 +250,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
           // in UI the edited record is in fact the next target record.
           // cursor moves to the next grid record before model do it cause
           // jumping between records is done by the UI.
-          // see EditorHandlingExtensionConnector#CustomEventHandler.
+          // TODO : DOC
           /*if (model.activeRecord != -1 && model.activeRecord != grid.getEditedItemId() as Int) { TODO
             editRecord(model.activeRecord)
           }*/
           throw e
         } finally {
-          doNotCancelEditor = false
+          //doNotCancelEditor = false todo
         }
       }
     })
@@ -242,12 +267,21 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun add(comp: UComponent?, constraints: Alignment) {}
+
   override fun blockAccessChanged(block: VBlock, newAccess: Boolean) {
-    // TODO
+    access(currentUI) {
+      if (editor.item != null) {
+        editor.cancel()
+      }
+      grid.isEnabled = newAccess
+      if (newAccess) {
+        editor.isBuffered = false
+      }
+    }
   }
 
   override fun createLayout(): BlockLayout {
-    return SingleComponentBlockLayout()
+    return SingleComponentBlockLayout(this)
   }
 
   override fun refresh(force: Boolean) {
@@ -257,6 +291,17 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   override fun getDisplayLine(recno: Int): Int {
     return 0
+  }
+
+
+  override fun getRecordFromDisplayLine(line: Int): Int {
+    return if (itemToBeEdited != null) {
+      itemToBeEdited!!
+    } else if (isEditorInitialized && editor.item != null) {
+      editor.item.record
+    } else {
+      super.getRecordFromDisplayLine(line)
+    }
   }
 
   /*override fun getRecordFromDisplayLine(line: Int): Int {
@@ -274,66 +319,39 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   override fun filterShown() {
     if (filterRow != null) {
+      access {
+        grid.element.themeList.remove("hidden-filter")
+        grid.element.themeList.add("shown-filter")
+      }
       return
     }
 
     access {
       filterRow = grid.appendHeaderRow()
-
       filterRow.also { element.classList.add("block-filter") }
       grid.columns.forEachIndexed { index, column ->
         val cell = filterRow!!.getCell(column)
         val filter = TextField()
         val search = Icon(VaadinIcon.SEARCH)
+        filter.setWidthFull()
 
         filter.suffixComponent = search
-        filter.className = "filter-text"
+        filter.className = "block-filter-text"
         filter.addValueChangeListener {
-          (grid.dataProvider as ListDataProvider).filter =
-                  ListFilter(index, filter.value, true, false) as SerializablePredicate<DGridBlockContainer.GridBlockItem>
+          (grid.dataProvider as ListDataProvider).filter = DGridBlockFilter(model.fields[index], filter.value, true, false)
         }
 
         filter.valueChangeMode = ValueChangeMode.EAGER
         cell.setComponent(filter)
       }
     }
-
-
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      filterRow = grid.appendHeaderRow()
-      // filterRow.setStyleName("block-filter")
-      for (propertyId in containerDatasource.containerPropertyIds) {
-        val cell: HeaderRow.HeaderCell = filterRow!!.getCell(propertyId)
-        val filter = TextField()
-        filter.setStyleName("filter-text")
-        filter.setImmediate(true)
-        filter.addTextChangeListener(object : TextChangeListener() {
-          fun textChange(event: TextChangeEvent) {
-            if (grid.isEditorActive()) {
-              grid.cancelEditor()
-            }
-            containerDatasource.removeContainerFilters(propertyId)
-            if (event.getText().length() > 0) {
-              containerDatasource.addContainerFilter(propertyId,
-                                                     event.getText(),
-                                                     true,
-                                                     false)
-            }
-          }
-        })
-        cell.setComponent(filter)
-      }
-    })*/
   }
 
   override fun filterHidden() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    if (filterRow != null) {
-      containerDatasource.removeAllContainerFilters()
-      //grid.removeHeaderRow(filterRow) TODO
-      filterRow = null
+    access {
+      grid.element.themeList.remove("shown-filter")
+      grid.element.themeList.add("hidden-filter")
     }
-    //})
   }
 
   override fun blockChanged() {
@@ -354,7 +372,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Scrolls the to beginning of the block
    */
   internal fun scrollToStart() {
-    access {
+    access(currentUI) {
       if (grid != null) {
         grid.scrollToStart()
       }
@@ -376,13 +394,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Cancels the grid editor
    */
   protected fun cancelEditor() {
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      if (grid != null) {
-        if (grid.isEditorEnabled() && grid.isEditorActive()) {
-          grid.cancelEditor()
+    access(currentUI) {
+      if (::grid.isInitialized) {
+        if (grid.isEnabled && editor.item != null) {
+          editor.cancel()
         }
       }
-    })*/
+    }
   }
 
   override fun fireValueChanged(col: Int, rec: Int, value: String?) {
@@ -404,17 +422,17 @@ open class DGridBlock(parent: DForm, model: VBlock)
   }
 
   override fun orderChanged() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    if (grid != null) {
-      cancelEditor()
-      clearSortOrder()
-      containerDatasource.doSort()
-      contentChanged()
-      if (model.activeRecord != -1) {
-        editRecord(model.activeRecord)
+    access(currentUI) {
+      if (grid != null) {
+        cancelEditor()
+        clearSortOrder()
+        containerDatasource.doSort()
+        contentChanged()
+        if (model.activeRecord != -1) {
+          editRecord(model.activeRecord)
+        }
       }
     }
-    //})
   }
 
   fun sort(
@@ -448,13 +466,15 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Notifies the data source that the content of the block has changed.
    */
   protected fun contentChanged() {
-    access {
-      grid.dataProvider.refreshAll()
-      // correct grid width to add scroll bar width
-      if (model.numberOfValidRecord > model.displaySize) {
-        if (!widthAlreadyAdapted) {
-          //grid.setWidth(grid.width.substring(0, grid.width.indexOfLast { it.isDigit() } + 1).toFloat() + 16, Unit.PIXELS)
-          widthAlreadyAdapted = true
+    if(::grid.isInitialized) {
+      access(currentUI) {
+        grid.dataProvider.refreshAll()
+        // correct grid width to add scroll bar width
+        if (model.numberOfValidRecord > model.displaySize) {
+          if (!widthAlreadyAdapted) {
+            //grid.setWidth(grid.width.substring(0, grid.width.indexOfLast { it.isDigit() } + 1).toFloat() + 16, Unit.PIXELS)
+            widthAlreadyAdapted = true
+          }
         }
       }
     }
@@ -464,7 +484,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Refreshes, i.e. causes the client side to re-render all rows.
    */
   protected fun refreshAllRows() {
-    access {
+    access(currentUI) {
       grid.dataProvider.refreshAll()
     }
   }
@@ -473,24 +493,41 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * Configures the columns of this block
    */
   protected fun configure() {
-    val width = 0
     val binder: Binder<DGridBlockContainer.GridBlockItem> = Binder()
+
     editor.binder = binder
 
     grid.addItemClickListener {
-      editor.editItem(it.item)
+      val gridEditorFieldToBeEdited = it.column.editorComponent as GridEditorField<*>
+
+      itemToBeEdited = it.item.record
+      gridEditorFieldToBeEdited.focus()
+      gridEditorFieldToBeEdited.dGridEditorField.onClick()
     }
 
     for (i in 0 until model.getFieldCount()) {
-      if (!model.fields[i].isInternal() && !model.fields[i].noChart()) {
+      val field = model.fields[i]
+
+      if (!field.isInternal() && !field.noChart()) {
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
 
         if (columnView.hasDisplays()) {
-          grid.addColumn { it.getValue(model.fields[i]) }
-            .setAutoWidth(true)
-            .setKey(i.toString())
-            .setHeader(columnView.editorField.label)
-            .setEditorComponent(columnView.editor)
+          val column = grid.addColumn { it.getValue(field) }
+                  .setKey(i.toString())
+                  .setHeader(columnView.editorField.label)
+                  .setEditorComponent(columnView.editor)
+                  .setResizable(true)
+
+          //column.setRenderer(columnView.editorField.createRenderer()) TODO
+          //column.setConverter(columnView.editorField.createConverter()) TODO
+          column.isSortable = field.isSortable()
+          column.width =
+                  when {
+                    field is VBooleanField -> "" + 46 + "px" // boolean field length
+                    field is VActorField -> "" + 148 + "px" // actor field field length
+                    else -> "" + (8 * field.width + 12) + "px" // add padding TODO
+                  }
+          column.isVisible = field.getDefaultAccess() != VConstants.ACS_HIDDEN
         }
       }
     }
@@ -500,33 +537,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
       items.add(DGridBlockContainer.GridBlockItem(it))
     }
     grid.setItems(items)
-    for (column in grid.columns) {
-      /*val field = getField(column.getPropertyId()) TODO
-      val columnView: DGridBlockFieldUI = columnViews.get(model.getFieldIndex(field))
-      if (columnView.hasDisplays()) {
-        column.setHidable(false)
-        column.setEditorField(columnView.editor)
-        column.setRenderer(columnView.editorField.createRenderer())
-        column.setConverter(columnView.editorField.createConverter())
-        column.isSortable = field.isSortable()
-        grid.getDefaultHeaderRow().getCell(column.getPropertyId()).setComponent(columnView.editorField.label)
-        if (field.isNumeric()) {
-          column.setWidth(FontMetrics.DIGIT.getWidth() * field.width + 12) // add padding
-        } else {
-          if (field is VBooleanField) {
-            column.setWidth(46) // boolean field length
-          } else if (field is VActorField) {
-            column.setWidth(148) // actor field field length
-          } else {
-            column.setWidth(FontMetrics.LETTER.getWidth() * field.width + 12) // add padding
-          }
-        }
-        column.setEditable(true)
-        column.setHidden(field.getDefaultAccess() == VConstants.ACS_HIDDEN)
-        width += column.width
-      }*/
-    }
-    //grid.setWidth((width + 16).toFloat(), Unit.PIXELS)
   }
 
   /**
@@ -554,7 +564,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @return true if the grid editor is active and an item is being edited.
    */
   val isEditorActive: Boolean
-    get() = editor.isOpen
+    get() = ::editor.isInitialized && editor.isOpen
 
   /**
    * Returns the edited record in this block
@@ -602,11 +612,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @param f The field model.
    */
   fun updateColumnAccess(f: VField, rec: Int) {
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      if (grid != null && grid.getColumn(model.getFieldIndex(f)) != null) {
-        grid.getColumn(model.getFieldIndex(f)).setHidden(f.getAccess(rec) == VConstants.ACS_HIDDEN)
+    access(currentUI) {
+      val column = grid.getColumnByKey(model.getFieldIndex(f).toString())
+
+      if (::grid.isInitialized && column != null) {
+        column.isVisible  = f.getAccess(rec) != VConstants.ACS_HIDDEN
       }
-    })*/
+    }
   }
 
   /**
@@ -614,9 +626,13 @@ open class DGridBlock(parent: DForm, model: VBlock)
    * @param row The row index
    */
   fun refreshRow(row: Int) {
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      grid.refreshRows(row)
-    })*/
+    if(::grid.isInitialized) {
+      access(currentUI) {
+        val itemToRefresh = grid.dataCommunicator.getItem(row)
+
+        grid.dataProvider.refreshItem(itemToRefresh)
+      }
+    }
   }
 
   /**
@@ -626,20 +642,22 @@ open class DGridBlock(parent: DForm, model: VBlock)
   fun editRecord(record: Int) {
     if (grid != null) {
       itemToBeEdited = record
-      /*BackgroundThreadHandler.access(Runnable { TODO
-        if (grid.isEditorEnabled()
-                && (grid.getEditedItemId() == null
+      access(currentUI) {
+        if (grid.isEnabled
+                && (editor.item == null
                         || (itemToBeEdited != null
-                        && grid.getEditedItemId() as Int != itemToBeEdited))) {
-          /*if (!containerDatasource.containsId(itemToBeEdited)) {
-            itemToBeEdited = containerDatasource.firstItemId()
-          }*/
-          doNotCancelEditor = true
+                        && editor.item.record != itemToBeEdited))
+        ) {
+          if(itemToBeEdited!! < 0 || itemToBeEdited!! >= grid.dataCommunicator.itemCount) {
+            itemToBeEdited = 0
+          }
+
+          // doNotCancelEditor = true TODO
           if (!inDetailMode()) {
-            grid.editItem(itemToBeEdited)
+            editor.editItem(grid.dataCommunicator.getItem(itemToBeEdited!!))
           }
         }
-      })*/
+      }
     }
   }
 }

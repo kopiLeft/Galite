@@ -20,18 +20,24 @@ package org.kopi.galite.ui.vaadin.visual
 import java.awt.Event
 import java.awt.event.KeyEvent
 
+import org.kopi.galite.ui.vaadin.actor.Actor
+import org.kopi.galite.ui.vaadin.actor.VActorNavigationItem
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
+import org.kopi.galite.visual.UActor
+import org.kopi.galite.visual.VActor
+import org.kopi.galite.ui.vaadin.base.Styles
+
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.ShortcutEventListener
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
-
-import org.kopi.galite.ui.vaadin.actor.Actor
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.Utils
-import org.kopi.galite.visual.UActor
-import org.kopi.galite.visual.VActor
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The `DActor` is the vaadin implementation of
@@ -44,15 +50,18 @@ import org.kopi.galite.visual.VActor
  * @param model The actor model.
  *
  */
+@CssImport("./styles/galite/actor.css")
 class DActor(private var model: VActor)
   : Actor(model.menuItem,
           Utils.createTooltip(getDescription(model)),
           model.menuName,
-          Utils.getFontAwesomeIcon(model.iconName),
+          Utils.getVaadinIcon(model.iconName),
           correctAcceleratorKey(model.acceleratorKey),
           correctAcceleratorModifier(model.acceleratorModifier)),
-        UActor,
-        ComponentEventListener<ClickEvent<Button>> {
+          UActor,
+          ComponentEventListener<ClickEvent<Button>> {
+
+  var item: VActorNavigationItem? = null
 
   init {
     isEnabled = false
@@ -71,13 +80,52 @@ class DActor(private var model: VActor)
     return model
   }
 
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
+  }
+
   override fun setEnabled(enabled: Boolean) {
-    access {
+    access(currentUI) {
+      if(!enabled) {
+        super.getElement().setAttribute("part", Styles.ACTOR + "-disabled")
+        super.getElement().setAttribute("class", Styles.ACTOR + "-disabled")
+      } else {
+        super.getElement().setAttribute("part", Styles.ACTOR)
+        super.getElement().setAttribute("class", Styles.ACTOR)
+      }
       super.setEnabled(enabled)
+      item?.isEnabled = enabled
     }
   }
 
   override fun onComponentEvent(event: ClickEvent<Button>) {
+    actionPerformed()
+  }
+
+  /**
+   * Creates an equivalent menu Item for this actor.
+   *
+   * @param navigationMenu the navigation menu which contains the navigation items.
+   * @return The actor menu item.
+   */
+  fun createNavigationItem(navigationMenu: VNavigationMenu): VActorNavigationItem {
+    return VActorNavigationItem(text,
+                                menu,
+                                acceleratorKey,
+                                modifiersKey,
+                                icon,
+                                navigationMenu,
+                                ::actionPerformed)
+      .also {
+        item = it
+        it.isEnabled = isEnabled
+      }
+  }
+
+  fun actionPerformed() {
     // fire the actor action
     if (isEnabled) {
       // clean all dirty values in the client side of the parent window.
@@ -136,7 +184,7 @@ class DActor(private var model: VActor)
             KeyEvent.VK_F11 -> Key.F11
             KeyEvent.VK_F12 -> Key.F12
             KeyEvent.VK_ESCAPE -> Key.ESCAPE
-            else -> throw Exception("Key Undefined")
+            else -> throw Exception("Key is undefined")
           }
         } catch (e: Exception) {
           Key.UNIDENTIFIED

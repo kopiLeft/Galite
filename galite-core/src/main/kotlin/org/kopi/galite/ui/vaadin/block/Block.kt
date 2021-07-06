@@ -24,6 +24,7 @@ import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VConstants
 import org.kopi.galite.ui.vaadin.field.CheckTypeException
 import org.kopi.galite.ui.vaadin.form.DBlock
+import org.kopi.galite.ui.vaadin.form.DGridEditorLabel
 import org.kopi.galite.ui.vaadin.form.Form
 import org.kopi.galite.ui.vaadin.form.Page
 import org.kopi.galite.ui.vaadin.main.MainWindow
@@ -108,7 +109,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * The model active record of this block.
    */
-  var activeRecord = -1
+  var activeRecord = 0
     get() = if (field in 0 until bufferSize) field else -1
     set(value) {
       if (initialized) {
@@ -342,14 +343,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   fun buildLayout() {
     if (layout == null) {
       layout = createLayout()
-      if (droppable) {
-        //dndWrapper = DragAndDropWrapper(layout) TODO
-        //dndWrapper.setImmediate(true)
-        //setContent(dndWrapper)
-        setContent(layout as Component)
-      } else {
-        setContent(layout as Component)
-      }
+      setContent(layout as Component)
     }
   }
 
@@ -495,13 +489,11 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * Sets the block caption.
    * @param caption The block caption.
-   * @param maxColumnPos The maximum column position.
    */
-  protected open fun setCaption(caption: String?) {
+  protected open fun setCaption(caption: String?, page: Page<*>?) {
     if (caption == null || caption.isEmpty()) {
       return
     }
-    val page: Page<*>? = parentPage
     this.caption = H4(caption)
     this.caption!!.className = "block-title"
     page?.setCaption(this)
@@ -516,9 +508,13 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
   /**
    * Layout components Creates the content of the block.
    */
-  protected open fun layout() {
+  fun layout() {
     // create detail block view.
     layout?.layout()
+  }
+
+  fun layoutAlignedComponents() {
+    layout?.layoutAlignedComponents()
   }
 
   open fun clear() {
@@ -602,20 +598,6 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
       field.setBackgroundColorAt(rec, background)
       field.updateColor(rec)
     }
-  }
-
-  /**
-   * Handles the content widget.
-   */
-  protected open fun handleContentComponent() {
-    // TODO
-  }
-
-  /**
-   * Sets the block content.
-   */
-  protected open fun setContent() {
-    // TODO
   }
 
   /**
@@ -1646,7 +1628,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
 
   fun onKeyPress(keyDownEvent: ShortcutEvent?) {
     if (isMulti() && noChart()) {
-      (parent.get() as Form).showBlockInfo(this)
+      (parent.get() as Form).showBlockInfo()
     }
   }
 

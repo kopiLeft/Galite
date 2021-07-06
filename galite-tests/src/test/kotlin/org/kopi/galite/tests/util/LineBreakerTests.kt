@@ -18,7 +18,7 @@
 package org.kopi.galite.tests.util
 
 import org.junit.Test
-import org.kopi.galite.tests.TestBase
+import org.kopi.galite.tests.common.TestBase
 import org.kopi.galite.util.LineBreaker
 import kotlin.test.assertEquals
 

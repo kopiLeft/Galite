@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import com.vaadin.flow.component.AttachEvent
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UBlock
@@ -25,6 +26,7 @@ import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VField
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.Block
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
@@ -32,6 +34,8 @@ import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VExecFailedException
 
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.dependency.CssImport
 
 /**
  * The `DBlock` is the vaadin implementation
@@ -40,6 +44,8 @@ import com.vaadin.flow.component.Component
  * @param parent The parent form.
  * @param model The block model.
  */
+
+@CssImport("./styles/galite/block.css")
 open class DBlock(val parent: DForm, final override val model: VBlock) : Block(model.isDroppable), UBlock {
 
   protected var formView: DForm = parent
@@ -55,7 +61,6 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     maxColumnPos = model.maxColumnPos
     displayedFields = model.displayedFields
     formView = parent
-    setBorder(model.border, model.title)
     model.addBlockListener(this)
     setBufferSize(model.bufferSize, model.displaySize)
     setSortedRecords(model.sortedRecords)
@@ -74,7 +79,7 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
     createFields()
 
     if (model.isDroppable) {
-      TODO()
+      //TODO()
       //setDropHandler(DBlockDropHandler(model))
       //setDragStartMode(DragStartMode.HTML5)
     }
@@ -253,9 +258,16 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
         }
       }
     }
-    // sends the model active record to client side.
-    // BackgroundThreadHandler.access(Runnable { fireActiveRecordChanged(model.getActiveRecord()) }) TODO: Do we need BackgroundThreadHandler?
-    fireActiveRecordChanged(model.activeRecord)
+    // Consider the model active record changes.
+    access(currentUI) {
+      fireActiveRecordChanged(model.activeRecord)
+    }
+  }
+
+  var currentUI: UI? = null
+
+  override fun onAttach(attachEvent: AttachEvent) {
+    currentUI = attachEvent.ui
   }
 
   open fun fireColorChanged(
@@ -344,9 +356,9 @@ open class DBlock(val parent: DForm, final override val model: VBlock) : Block(m
    * @param style The border style.
    * @param title The block title.
    */
-  private fun setBorder(style: Int, title: String?) {
+  internal fun setBorder(style: Int, title: String?, page: Page<*>?) {
     if (style != VConstants.BRD_NONE) {
-      title?.let { setCaption(it) }
+      title?.let { setCaption(it, page) }
     }
   }
 

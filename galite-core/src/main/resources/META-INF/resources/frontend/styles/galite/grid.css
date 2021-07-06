@@ -1,0 +1,140 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+ /*
+ * Report Group style
+ */
+[part~="cell"].level-0:not(:focus) {
+    background: var(--level-0) !important;
+}
+
+[part~="cell"].level-1:not(:focus) {
+    background: var(--level-1) !important;
+}
+
+[part~="cell"].level-2:not(:focus) {
+    background: var(--level-2) !important;
+}
+
+[part~="cell"].level-3:not(:focus) {
+    background: var(--level-3) !important;
+}
+
+[part~="cell"].level-4:not(:focus) {
+    background: var(--level-4) !important;
+}
+
+[part~="cell"].level-5:not(:focus) {
+    background: var(--level-5) !important;
+}
+
+[part~="cell"].level-6:not(:focus) {
+    background: var(--level-6) !important;
+}
+
+[part~="cell"].level-7:not(:focus) {
+    background: var(--level-7) !important;
+}
+
+[part~="cell"].level-8:not(:focus) {
+    background: var(--level-8) !important;
+}
+
+[part~="cell"].level-9:not(:focus) {
+    background: var(--level-9) !important;
+}
+
+[part~="cell"].level-10:not(:focus) {
+    background: var(--level-10) !important;
+}
+
+[part~="cell"].level-11:not(:focus) {
+    background: var(--level-11) !important;
+}
+
+[part~="cell"].level-12:not(:focus) {
+    background: var(--level-12) !important;
+}
+
+[part~="cell"].level-13:not(:focus) {
+    background: var(--level-13) !important;
+}
+
+[part~="cell"].level-14:not(:focus) {
+    background: var(--level-14) !important;
+}
+
+[part~="cell"].level-15:not(:focus) {
+    background: var(--level-15) !important;
+}
+
+[part~="cell"].level-16:not(:focus) {
+    background: var(--level-16) !important;
+}
+
+[part~="cell"].level-17:not(:focus) {
+    background: var(--level-17) !important;
+}
+
+[part~="cell"].level-18:not(:focus) {
+    background: var(--level-18) !important;
+}
+
+[part~="cell"].level-19:not(:focus) {
+    background: var(--level-19) !important;
+}
+
+[part~="cell"].level-20:not(:focus) {
+    background: var(--level-20) !important;
+}
+
+[part~="cell"].italic {
+    font-style: italic;
+}
+
+[part~="cell"].bold {
+    font-weight: bold;
+}
+
+[part~="cell"].separator {
+    background: #FF0000;
+}
+
+:host([theme="column-borders compact"]) [part~="cell"]:focus {
+    background: #bcdae6;
+}
+
+:host([theme="column-borders compact"]) {
+    --_lumo-grid-selected-row-color: none;
+}
+
+:host([theme="row-stripes"]) [part~="cell"] {
+    height: 38px;
+}
+
+[part="row"]:only-child [part~="header-cell"] {
+    min-height: var(--lumo-size-m);
+}
+
+:host([theme~="hidden-filter"]) #scroller #table #header [part~="row"]:nth-of-type(2) {
+    display: none;
+}
+
+:host([theme~="shown-filter"]) #scroller #table #header [part~="row"]:nth-of-type(2) {
+    display: flex;
+}

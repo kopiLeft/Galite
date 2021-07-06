@@ -23,14 +23,12 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.html.Div
 
-import org.kopi.galite.ui.vaadin.window.VActorPanel
-
 /**
  * The main window container component.
  * This component will be responsible of displaying only one window.
  * The control of the displayed component will be from outside.
  */
-class VWindowContainer : Div() {
+class VWindowContainer(val menu: VWindowsMenu) : Div() {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -77,10 +75,10 @@ class VWindowContainer : Div() {
    * @return The new shown component or `null` if no window is shown.
    */
   fun removeWindow(window: Component): Component? {
-    caption.setCaption("") // reset window caption
     // look for internal map.
     val caption = windowToCaptionMap.remove(window)
     if (caption != null) {
+      this.caption.setCaption("") // reset window caption
       pane.remove(window)
       if (windowToCaptionMap.isNotEmpty() && previousWindow != null) {
         // show previous window in the list
@@ -98,7 +96,7 @@ class VWindowContainer : Div() {
    */
   fun updateWindowTitle(window: Component, title: String) {
     windowToCaptionMap[window] = title
-    TODO()
+    caption.setCaption(title)
   }
 
   /**
@@ -112,8 +110,9 @@ class VWindowContainer : Div() {
     // show only if we find a mapping or the component in the pane dom
     if (windowToCaptionMap.contains(window) || pane.children.toArray().contains(window)) {
       if(currentWindow != window) {
-
+        menu.getItemFor(window)?.addClassName("item-selected")
         previousWindow = currentWindow
+        menu.getItemFor(previousWindow)?.removeClassName("item-selected")
         previousWindow?.isVisible = false
         currentWindow = window
         currentWindow?.isVisible = true
@@ -131,13 +130,35 @@ class VWindowContainer : Div() {
    * Shows the next window in the list.
    */
   fun showNextWindow(): Component? {
-    TODO()
+    var componentIndex: Int
+
+    componentIndex = getVisibleWindow()
+    componentIndex += 1
+    if (componentIndex >= windowToCaptionMap.count()) {
+      componentIndex = 0
+    }
+
+    return showWindow(getWindowAt(componentIndex))
   }
 
   /**
    * Shows the previous window in the list.
    */
   fun showPreviousWindow(): Component? {
-    TODO()
+    var componentIndex: Int
+
+    componentIndex = getVisibleWindow()
+    componentIndex -= 1
+    if (componentIndex < 0) {
+      componentIndex = windowToCaptionMap.count() - 1
+    }
+
+    return showWindow(getWindowAt(componentIndex))
   }
+
+  private fun getVisibleWindow(): Int = windowToCaptionMap.keys.indexOf(currentWindow)
+
+  private fun getWindowAt(index: Int): Component = windowToCaptionMap.keys.elementAt(index)
+
+  val isEmpty: Boolean get() = windowToCaptionMap.isEmpty()
 }

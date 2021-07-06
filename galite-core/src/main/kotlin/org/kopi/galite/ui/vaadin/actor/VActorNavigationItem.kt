@@ -17,13 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.actor
 
-import org.kopi.galite.visual.VActor
+import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
-import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.html.Image
-import com.vaadin.flow.component.html.Label
 
 /**
  * Constructs a new actor navigation menu item that fires a command when it is selected.
@@ -36,34 +33,23 @@ import com.vaadin.flow.component.html.Label
 class VActorNavigationItem(text: String,
                            val menu: String?,
                            acceleratorKey: Key?,
-                           keyModifier : KeyModifier?,
-                           icon: String?,
-                           val action: VActor?) : Button() {
+                           keyModifier: KeyModifier?,
+                           icon: Any?,
+                           val navigationmenu : VNavigationMenu,
+                           val action: () -> Unit) : VClickableNavigationItem() {
 
   init {
-    super.setText(text)
+    setCaption(text)
+    setDescription(acceleratorKey, keyModifier)
+    setIcon(icon)
 
-    if (icon != null) {
-      val img = Image()
-
-      img.src = icon
-      super.setIcon(img)
-      this.addClickListener {
-        action?.performAction()
-      }
+    addClickListener {
+      action()
+      navigationmenu.close()
     }
 
-    if (acceleratorKey != null && acceleratorKey != Key.UNIDENTIFIED) {
-      val modifier = keyModifier?.keys?.get(0)
-
-      this.addToSuffix(Label(if(modifier != null) modifier + "-" + acceleratorKey.keys[0] else acceleratorKey.keys[0]))
-      super.addClickShortcut(acceleratorKey)
-    }
-
-    className = getClassname()
+    createComponent()
   }
 
-  protected fun getClassname(): String {
-    return "actor-navigationItem"
-  }
+  override fun getClassname(): String = "actor-navigationItem"
 }

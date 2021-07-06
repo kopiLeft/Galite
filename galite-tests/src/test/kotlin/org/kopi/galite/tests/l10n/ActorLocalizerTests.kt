@@ -23,7 +23,7 @@ import org.jdom2.Element
 import org.junit.Test
 
 import org.kopi.galite.l10n.ActorLocalizer
-import org.kopi.galite.tests.TestBase
+import org.kopi.galite.tests.common.TestBase
 import org.kopi.galite.util.base.InconsistencyException
 
 import kotlin.test.assertEquals

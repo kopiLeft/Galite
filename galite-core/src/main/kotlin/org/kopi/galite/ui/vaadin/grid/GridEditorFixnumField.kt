@@ -26,4 +26,14 @@ class GridEditorFixnumField(
         maxValue: Double,
         maxScale: Int,
         fraction: Boolean
-) : GridEditorTextField(width)
+) : GridEditorTextField(width) {
+
+  override fun check(text: String): Boolean {
+    for (c in text) {
+      if (!(c >= '0' && c <= '9' || c == '.' || c == '-' || c == ' ' || c == ',' || c == '/')) {
+        return false
+      }
+    }
+    return true
+  }
+}

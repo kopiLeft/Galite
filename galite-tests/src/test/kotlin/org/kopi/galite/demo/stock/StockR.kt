@@ -33,9 +33,9 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
 
 /**
- * STock Report
+ * Stock Report
  */
-object StockR : Report() {
+class StockR : Report() {
   override val locale = Locale.UK
 
   override val title = "Stocks"
@@ -49,7 +49,7 @@ object StockR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -59,7 +59,7 @@ object StockR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -79,7 +79,7 @@ object StockR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportPdf"  // icon is optional here
   }
 
   val cmdCSV = command(item = csv) {
@@ -106,9 +106,9 @@ object StockR : Report() {
     }
   }
 
-  val designation = field(Domain<String>(25)) {
-    label = "Designation"
-    help = "The product designation"
+  val description = field(Domain<String>(25)) {
+    label = "Description"
+    help = "The product description"
     align = FieldAlignment.LEFT
   }
   val nameProvider = field(Domain<String>(25)) {
@@ -124,7 +124,7 @@ object StockR : Report() {
 
   val stocks = Stock.join(Provider, JoinType.INNER, Stock.idStckProv, Provider.idProvider)
           .join(Product, JoinType.INNER, Stock.idStckProv, Product.idPdt)
-          .slice(Stock.minAlert, Product.designation, Provider.nameProvider)
+          .slice(Stock.minAlert, Product.description, Provider.nameProvider)
           .selectAll()
 
   init {
@@ -132,7 +132,7 @@ object StockR : Report() {
       stocks.forEach { result ->
         add {
           this[minAlert] = result[Stock.minAlert]
-          this[designation] = result[Product.designation]
+          this[description] = result[Product.description]
           this[nameProvider] = result[Provider.nameProvider]
         }
       }

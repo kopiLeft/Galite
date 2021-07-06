@@ -33,7 +33,7 @@ open class VInputText() : Input(), KeyNotifier {
    * Creates the input text component.
    */
   init {
-    element.setAttribute("type", "text")
+    type = "text"
   }
 
   /**

@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.data.binder.Result
 import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
@@ -68,15 +67,19 @@ class DGridEditorActorField(
 
   override fun createRenderer(): Renderer<String?> {
     return object : ActorRenderer(getModel().label) {
-      /*fun click(event: RendererClickEvent?) { TODO
+      override fun onClick(item: String?) {
         columnView.executeAction()
-      }*/
+      }
     }
   }
 
-  override fun onClick(event: ClickEvent<*>?) {
+  override fun onClick() {
     // field action is performed in the window action queue
     // it is not like the other fields trigger
     columnView.executeAction()
+  }
+
+  override fun valueChanged() {
+    // Nothing to do
   }
 }

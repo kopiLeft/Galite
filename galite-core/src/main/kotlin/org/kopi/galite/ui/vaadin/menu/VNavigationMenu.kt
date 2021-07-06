@@ -19,12 +19,16 @@ package org.kopi.galite.ui.vaadin.menu
 
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dialog.Dialog
+import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.window.Window
 
 class VNavigationMenu : Dialog(), HasStyle {
+
   init {
     //this.setThemeVariants(EnhancedDialogVariant.SIZE_MEDIUM)
-    this.isDraggable = false
-    this.isResizable = false
+    isResizable = false
+    isDraggable = true
+    isCloseOnEsc = true
   }
   //---------------------------------------------------
   // IMPLEMENTATION
@@ -35,5 +39,11 @@ class VNavigationMenu : Dialog(), HasStyle {
    */
   fun setNavigationPanel(panel: VNavigationPanel) {
     add(panel)
+  }
+
+  override fun close() {
+    val lastActiveWindow = MainWindow.instance.currentWindow as? Window
+    super.close()
+    lastActiveWindow?.goBackToLastFocusedTextField()
   }
 }

@@ -145,13 +145,13 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /**
    * @param page the page number of this block
    */
-  fun setInfo(page: Int) {
+  fun setInfo(page: Int, form: VForm) {
     pageNumber = page
-    setInfo()
+    setInfo(form)
     buildCstr()
   }
 
-  protected open fun setInfo() {
+  protected open fun setInfo(form: VForm) {
     // Do nothing, should be redefined if some info
     // has to be set
   }
@@ -1276,7 +1276,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
           // - inserted to get information about the usage of this code
           // - can be removed if the method checkBlock is removed
           if (ApplicationContext.getDefaults() != null
-                  && ApplicationContext.getDefaults().isDebugModeEnabled()) {
+                  && ApplicationContext.getDefaults().isDebugModeEnabled) {
             if ((form.getDisplay() as UForm).runtimeDebugInfo != null) {
               (form.getDisplay() as UForm).runtimeDebugInfo!!.printStackTrace()
             }
@@ -2585,7 +2585,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   fun isChart(): Boolean = !noChart()
 
   /**
-   * Returns true iff this block can display more than one record.
+   * Returns true if this block can display more than one record.
    */
   fun isMulti(): Boolean = bufferSize > 1
 
@@ -2758,9 +2758,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         }
       }
     } else {
-      for (i in activeCommands.indices) {
-        val cmd: VCommand = activeCommands.elementAt(i)
-
+      activeCommands.forEach { cmd ->
         cmd.setEnabled(false)
       }
       activeCommands.clear()

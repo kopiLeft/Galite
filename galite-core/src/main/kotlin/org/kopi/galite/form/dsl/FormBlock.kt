@@ -307,7 +307,7 @@ open class FormBlock(var buffer: Int,
    *
    * @param field                the field
    */
-  fun <T : Comparable<T>?> follow(field: FormField<T>): FormPosition = FormDescriptionPosition(field)
+  fun follow(field: FormField<*>): FormPosition = FormDescriptionPosition(field)
 
   /**
    * creates and returns a form block index. It is used to define a value in the database
@@ -334,6 +334,21 @@ open class FormBlock(var buffer: Int,
     command.init()
     blockCommands.add(command)
     return command
+  }
+
+  /**
+   * Call and add a command to this block.
+   *
+   * PS: Block commands are commands accessible only from the block where they are called.
+   *
+   * @param window    the form linked to the command.
+   * @param command   the command.
+   */
+  fun command(window: Window, command: Command)  {
+    window.actors.add(command.item)
+    command(item = command.item) {
+      action = command.action
+    }
   }
 
   /**
@@ -385,7 +400,7 @@ open class FormBlock(var buffer: Int,
       if(positions.toMap().contains(field)) {
         val targetField = positions.toMap()[field]
 
-        targets.add(targetBlock.blockFields.indexOf(targetField) + 1)
+        targets.add(targetBlock.blockFields.indexOf(targetField))
       }
     }
 
@@ -458,6 +473,7 @@ open class FormBlock(var buffer: Int,
    * Saves current block (insert or update)
    */
   fun saveBlock() {
+    vBlock.validate()
     Commands.saveBlock(vBlock)
   }
 
@@ -754,9 +770,9 @@ open class FormBlock(var buffer: Int,
         }
       }
 
-      override fun setInfo() {
+      override fun setInfo(form: VForm) {
         blockFields.forEach {
-          it.setInfo(super.source)
+          it.setInfo(super.source, form)
         }
       }
 
@@ -773,6 +789,7 @@ open class FormBlock(var buffer: Int,
         super.bufferSize = buffer
         super.displaySize = visible
         super.pageNumber = this@FormBlock.pageNumber
+        super.border = this@FormBlock.border
         super.maxRowPos = this@FormBlock.maxRowPos
         super.maxColumnPos = this@FormBlock.maxColumnPos
         super.displayedFields = this@FormBlock.displayedFields

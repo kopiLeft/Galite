@@ -18,13 +18,28 @@
 package org.kopi.galite.ui.vaadin.base
 
 import java.util.Hashtable
+import java.util.concurrent.CompletableFuture
 
 import org.kopi.galite.base.Utils
+import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.visual.VColor
+
+import com.flowingcode.vaadin.addons.ironicons.AvIcons
+import com.flowingcode.vaadin.addons.ironicons.DeviceIcons
+import com.flowingcode.vaadin.addons.ironicons.EditorIcons
+import com.flowingcode.vaadin.addons.ironicons.FileIcons
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
+import com.flowingcode.vaadin.addons.ironicons.MapsIcons
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.dom.Element
 
 /**
  * Some vaadin version utilities to obtain images and resources.
  */
+@CssImport("./styles/galite/report.css")
 object Utils : Utils() {
 
   //---------------------------------------------------
@@ -100,7 +115,11 @@ object Utils : Utils() {
    * @return An Image or null if not found
    */
   fun getImageFromResource(directory: String, name: String): Image? {
-    TODO()
+    if(Utils::class.java.classLoader.getResource("META-INF/resources/$directory/$name") != null) { // FIXME
+      return Image("$directory/$name")
+    }
+
+    return null
   }
 
   /**
@@ -148,16 +167,18 @@ object Utils : Utils() {
    * @return The decoredted tooltip
    */
   fun createTooltip(content: String?): String {
-    return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>$content</div>"
+    //return "<div class=\"info\"><i class=\"fa fa-sort-asc\" aria-hidden=\"true\"></i>${content.orEmpty()}</div>" TODO
+    return content.orEmpty()
   }
 
   /**
-   * Returns the equivalent font awesome icon from the given icon name.
+   * Returns the equivalent icon from the given icon name.
+   *
    * @param iconName The model icon name.
-   * @return The font awesome icon.
+   * @return The equivalent vaadin or iron icon.
    */
-  fun getFontAwesomeIcon(iconName: String?): String? {
-    return pngToFontAwesomeMap[iconName]
+  fun getVaadinIcon(iconName: String?): Any? {
+    return pngToIconMap[iconName]
   }
 
   /**
@@ -176,6 +197,82 @@ object Utils : Utils() {
     }
   }
 
+  fun getOffsetLeft(element: Element?, ui: UI): Double {
+    val future = CompletableFuture<Double>()
+
+    ui.access {
+      ui.page
+        .executeJs("return $0.offsetLeft", element)
+        .then(Double::class.java) { value: Double ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
+  fun getOffsetWidth(element: Element?, ui: UI): Double {
+    val future = CompletableFuture<Double>()
+
+    ui.access {
+      ui.page
+        .executeJs("return $0.offsetWidth", element)
+        .then(Double::class.java) { value: Double ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
+  fun getWidth(element: Element?, ui: UI): String? {
+    val future = CompletableFuture<String>()
+
+    ui.access {
+      ui.page
+        .executeJs("return $0.width", element)
+        .then(String::class.java) { value ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
+  /**
+   * Gets the current position of the cursor.
+   *
+   * @param field the field to return its cursor position
+   * @return the cursor's position
+   */
+  fun getCursorPos(field: Component): Int {
+    val future = CompletableFuture<Int>()
+
+    BackgroundThreadHandler.access {
+      UI.getCurrent().page
+        .executeJs("return $0.shadowRoot.querySelector('[part=\"value\"]').selectionStart;", field.element)
+        .then(Int::class.java) { value: Int ->
+          future.complete(value)
+        }
+    }
+
+    return future.get()
+  }
+
+  fun Component.findMainWindow(): MainWindow? {
+    var mainWindow: MainWindow? = null
+    var parent: Component? = parent.orElse(null)
+
+    while (parent != null && mainWindow == null) {
+      if(parent is MainWindow) {
+        mainWindow = parent
+      }
+      parent = parent.parent.orElse(null)
+    }
+
+    return mainWindow
+  }
+
   /**
    * Returns the complete theme resource URL of the given resource path.
    * @param resourcePath The theme complete resource path.
@@ -188,172 +285,172 @@ object Utils : Utils() {
   // --------------------------------------------------
   // PRIVATE DATA
   // --------------------------------------------------
-  private const val VAADIN_RESOURCE_DIR = "org/kopi/galite/ui/vaadin"
+  private const val VAADIN_RESOURCE_DIR = "ui/vaadin"
   private const val THEME_DIR = "resource"
   private const val APPLICATION_DIR = "resources"
   private const val RESOURCE_DIR = "org/kopi/galite"
   val UKN_IMAGE = Image("$THEME_DIR/unknown.png")
   private val cache = Hashtable<String, Image>()
-  private var pngToFontAwesomeMap = mutableMapOf<String, String>()
+  private var pngToIconMap = mutableMapOf<String, Any>()
 
   init {
-    pngToFontAwesomeMap["all"] = "hand-paper-o"
-    pngToFontAwesomeMap["block"] = "ban"
-    pngToFontAwesomeMap["border"] = "cog"
-    pngToFontAwesomeMap["bread_crumb_separator"] = "angle-double-right"
-    pngToFontAwesomeMap["break"] = "times-circle"
-    pngToFontAwesomeMap["calendar"] = "calendar-o"
-    pngToFontAwesomeMap["collapsed"] = "folder-o"
-    pngToFontAwesomeMap["collapsed_p"] = "folder-o"
-    pngToFontAwesomeMap["copy"] = "files-o"
-    pngToFontAwesomeMap["delete"] = "trash-o"
-    pngToFontAwesomeMap["desk"] = "desktop"
-    pngToFontAwesomeMap["detail"] = "search-plus"
-    pngToFontAwesomeMap["detail_view"] = "search"
-    pngToFontAwesomeMap["down"] = "angle-double-down"
-    pngToFontAwesomeMap["duke"] = "expeditedssl"
-    pngToFontAwesomeMap["edit"] = "pencil-square-o"
-    pngToFontAwesomeMap["expanded_a"] = "folder-o"
-    pngToFontAwesomeMap["expanded"] = "folder-o"
-    pngToFontAwesomeMap["expanded_p"] = "folder-o"
-    pngToFontAwesomeMap["exportCsv"] = "file-text-o"
-    pngToFontAwesomeMap["exportPdf"] = "file-pdf-o"
-    pngToFontAwesomeMap["exportXlsx"] = "file-excel-o"
-    pngToFontAwesomeMap["foldColumn"] = "folder-o"
-    pngToFontAwesomeMap["fold"] = "folder-o"
-    pngToFontAwesomeMap["formula"] = "calculator"
-    pngToFontAwesomeMap["help"] = "question-circle-o"
-    pngToFontAwesomeMap["home"] = "home"
-    pngToFontAwesomeMap["insertline"] = "list-ol"
-    pngToFontAwesomeMap["insert"] = "pencil-square-o"
-    pngToFontAwesomeMap["list"] = "mouse-pointer"
-    pngToFontAwesomeMap["loading"] = "spinner"
-    pngToFontAwesomeMap["login_img"] = "coffee"
-    pngToFontAwesomeMap["mail"] = "envelope-o"
-    pngToFontAwesomeMap["menuquery"] = "file-text-o"
-    pngToFontAwesomeMap["note"] = "sticky-note-o"
-    pngToFontAwesomeMap["nothing"] = "file-o"
-    pngToFontAwesomeMap["open"] = "file-text-o"
-    pngToFontAwesomeMap["options"] = "cogs"
-    pngToFontAwesomeMap["preview"] = "file-text-o"
-    pngToFontAwesomeMap["print"] = "print"
-    pngToFontAwesomeMap["quit"] = "power-off"
-    pngToFontAwesomeMap["save"] = "floppy-o"
-    pngToFontAwesomeMap["searchop"] = "search"
-    pngToFontAwesomeMap["search"] = "search"
-    pngToFontAwesomeMap["serialquery"] = "binoculars"
-    pngToFontAwesomeMap["serviceoff"] = "toggle-off"
-    pngToFontAwesomeMap["serviceon"] = "toggle-on"
-    pngToFontAwesomeMap["store"] = "building-o"
-    pngToFontAwesomeMap["suggest"] = "phone"
-    pngToFontAwesomeMap["timeStamp"] = "clock-o"
-    pngToFontAwesomeMap["tri"] = "sort-alpha-desc"
-    pngToFontAwesomeMap["unfoldColumn"] = "folder-open-o"
-    pngToFontAwesomeMap["unfold"] = "folder-open-o"
-    pngToFontAwesomeMap["up"] = "angle-double-up"
-    pngToFontAwesomeMap["add"] = "floppy-o"
-    pngToFontAwesomeMap["align_center"] = "align-center"
-    pngToFontAwesomeMap["align_justify"] = "align-justify"
-    pngToFontAwesomeMap["align_left"] = "align-left"
-    pngToFontAwesomeMap["align_right"] = "align-right"
-    pngToFontAwesomeMap["apply"] = "cogs"
-    pngToFontAwesomeMap["area_chart"] = "area-chart"
-    pngToFontAwesomeMap["arrowfirst"] = "step-backward"
-    pngToFontAwesomeMap["arrowlast"] = "step-forward"
-    pngToFontAwesomeMap["arrowleft"] = "backward"
-    pngToFontAwesomeMap["arrowright"] = "forward"
-    pngToFontAwesomeMap["article"] = "file-text-o"
-    pngToFontAwesomeMap["ask"] = "question-circle"
-    pngToFontAwesomeMap["bar_chart"] = "bar-chart"
-    pngToFontAwesomeMap["bkup3"] = "exclamation-triangle"
-    pngToFontAwesomeMap["bkup"] = "exclamation-triangle"
-    pngToFontAwesomeMap["block2"] = "undo"
-    pngToFontAwesomeMap["board"] = "cogs"
-    pngToFontAwesomeMap["bold"] = "bold"
-    pngToFontAwesomeMap["bomb"] = "bomb"
-    pngToFontAwesomeMap["bookmark"] = "bookmark"
-    pngToFontAwesomeMap["boxarrow"] = "dropbox"
-    pngToFontAwesomeMap["bw"] = "step-backward"
-    pngToFontAwesomeMap["calculate"] = "calculator"
-    pngToFontAwesomeMap["cfolder"] = "folder"
-    pngToFontAwesomeMap["chart_view"] = "bar-chart"
-    pngToFontAwesomeMap["checkbox"] = "square-o"
-    pngToFontAwesomeMap["clip"] = "paperclip"
-    pngToFontAwesomeMap["collapsedb"] = "long-arrow-right"
-    pngToFontAwesomeMap["collapsed_f"] = "folder"
-    pngToFontAwesomeMap["collapsed_t"] = "folder-o"
-    pngToFontAwesomeMap["column_chart"] = "bar-chart"
-    pngToFontAwesomeMap["combo"] = "lightbulb-o"
-    pngToFontAwesomeMap["config"] = "wrench"
-    pngToFontAwesomeMap["convert"] = "exchange"
-    pngToFontAwesomeMap["cut"] = "scissors"
-    pngToFontAwesomeMap["deleteline"] = "list-ol"
-    pngToFontAwesomeMap["done"] = "check-square-o"
-    pngToFontAwesomeMap["error"] = "minus-circle"
-    pngToFontAwesomeMap["expandedb"] = "long-arrow-down"
-    pngToFontAwesomeMap["expanded_f"] = "folder-open"
-    pngToFontAwesomeMap["expanded_s"] = "folder-open"
-    pngToFontAwesomeMap["expanded_t"] = "folder-open"
-    pngToFontAwesomeMap["export"] = "cog"
-    pngToFontAwesomeMap["fax"] = "fax"
-    pngToFontAwesomeMap["fw"] = "step-forward"
-    pngToFontAwesomeMap["gifIcon"] = "file-image-o"
-    pngToFontAwesomeMap["green"] = "map-o"
-    pngToFontAwesomeMap["guide"] = "map-signs"
-    pngToFontAwesomeMap["ident"] = "long-arrow-right"
-    pngToFontAwesomeMap["index"] = "book"
-    pngToFontAwesomeMap["interrupt"] = "stop-circle-o"
-    pngToFontAwesomeMap["italic"] = "italic"
-    pngToFontAwesomeMap["jpgIcon"] = "picture-o"
-    pngToFontAwesomeMap["launch"] = "long-arrow-right"
-    pngToFontAwesomeMap["line_chart"] = "line-chart"
-    pngToFontAwesomeMap["lock"] = "lock"
-    pngToFontAwesomeMap["login"] = "user-circle"
-    pngToFontAwesomeMap["moneycheck"] = "money"
-    pngToFontAwesomeMap["money"] = "money"
-    pngToFontAwesomeMap["notice"] = "lightbulb-o"
-    pngToFontAwesomeMap["ofolder"] = "folder-open"
-    pngToFontAwesomeMap["pageFirst"] = "step-backward"
-    pngToFontAwesomeMap["pageLast"] = "step-forward"
-    pngToFontAwesomeMap["pageLeft"] = "backward"
-    pngToFontAwesomeMap["pageRight"] = "forward"
-    pngToFontAwesomeMap["password"] = "lock"
-    pngToFontAwesomeMap["paste"] = "clipboard"
-    pngToFontAwesomeMap["phone"] = "phone-square"
-    pngToFontAwesomeMap["pie_chart"] = "pie-chart"
-    pngToFontAwesomeMap["printoptions"] = "wrench"
-    pngToFontAwesomeMap["project"] = "cubes"
-    pngToFontAwesomeMap["red"] = "map-o"
-    pngToFontAwesomeMap["redo"] = "repeat"
-    pngToFontAwesomeMap["refresh"] = "refresh"
-    pngToFontAwesomeMap["reload"] = "refresh"
-    pngToFontAwesomeMap["report"] = "table"
-    pngToFontAwesomeMap["sec"] = "unlock"
-    pngToFontAwesomeMap["selected"] = "long-arrow-right"
-    pngToFontAwesomeMap["send"] = "paper-plane"
-    pngToFontAwesomeMap["sort"] = "sort-numeric-asc"
-    pngToFontAwesomeMap["split"] = "chain-broken"
-    pngToFontAwesomeMap["standard"] = "pencil"
-    pngToFontAwesomeMap["stick"] = "thumb-tack"
-    pngToFontAwesomeMap["stop"] = "times-circle-o"
-    pngToFontAwesomeMap["todo"] = "magic"
-    pngToFontAwesomeMap["top"] = "book"
-    pngToFontAwesomeMap["underline"] = "underline"
-    pngToFontAwesomeMap["undo"] = "undo"
-    pngToFontAwesomeMap["unident"] = "arrow-circle-left"
-    pngToFontAwesomeMap["unstick"] = "thumb-tack"
-    pngToFontAwesomeMap["update"] = "pencil-square-o"
-    pngToFontAwesomeMap["users"] = "users"
-    pngToFontAwesomeMap["utils"] = "cogs"
-    pngToFontAwesomeMap["validate"] = "check"
-    pngToFontAwesomeMap["wait"] = "clock-o"
-    pngToFontAwesomeMap["warning"] = "exclamation-triangle"
-    pngToFontAwesomeMap["window"] = "angle-right"
-    pngToFontAwesomeMap["yellow"] = "map-o"
-    pngToFontAwesomeMap["zoomheight"] = "search"
-    pngToFontAwesomeMap["zoomminus"] = "search-minus"
-    pngToFontAwesomeMap["zoomoptimal"] = "search"
-    pngToFontAwesomeMap["zoomplus"] = "search-plus"
-    pngToFontAwesomeMap["zoomwidth"] = "search"
+    pngToIconMap["all"] = VaadinIcon.HAND
+    pngToIconMap["block"] = VaadinIcon.BAN
+    pngToIconMap["border"] = VaadinIcon.COG
+    pngToIconMap["bread_crumb_separator"] = VaadinIcon.ANGLE_DOUBLE_RIGHT
+    pngToIconMap["break"] = VaadinIcon.CLOSE_CIRCLE
+    pngToIconMap["calendar"] = VaadinIcon.CALENDAR_O
+    pngToIconMap["collapsed"] = VaadinIcon.FOLDER_O
+    pngToIconMap["collapsed_p"] = VaadinIcon.FOLDER_O
+    pngToIconMap["copy"] = VaadinIcon.COPY
+    pngToIconMap["delete"] = VaadinIcon.TRASH
+    pngToIconMap["desk"] = VaadinIcon.DESKTOP
+    pngToIconMap["detail"] = VaadinIcon.SEARCH_PLUS
+    pngToIconMap["detail_view"] = VaadinIcon.SEARCH
+    pngToIconMap["down"] = VaadinIcon.ANGLE_DOUBLE_DOWN
+    pngToIconMap["duke"] = VaadinIcon.LOCK
+    pngToIconMap["edit"] = VaadinIcon.EDIT
+    pngToIconMap["expanded_a"] = VaadinIcon.FOLDER_OPEN_O
+    pngToIconMap["expanded"] = VaadinIcon.FOLDER_OPEN_O
+    pngToIconMap["expanded_p"] = VaadinIcon.FOLDER_OPEN_O
+    pngToIconMap["exportCsv"] = VaadinIcon.FILE_TEXT_O
+    pngToIconMap["exportPdf"] = FileIcons.PDF
+    pngToIconMap["exportXlsx"] = FileIcons.EXCEL
+    pngToIconMap["foldColumn"] = VaadinIcon.FOLDER_O
+    pngToIconMap["fold"] = VaadinIcon.FOLDER_O
+    pngToIconMap["formula"] = VaadinIcon.CALC
+    pngToIconMap["help"] = VaadinIcon.QUESTION_CIRCLE_O
+    pngToIconMap["home"] = VaadinIcon.HOME
+    pngToIconMap["insertline"] = VaadinIcon.LIST_OL
+    pngToIconMap["insert"] = VaadinIcon.INSERT
+    pngToIconMap["list"] = VaadinIcon.LIST
+    pngToIconMap["loading"] = VaadinIcon.SPINNER
+    pngToIconMap["login_img"] = VaadinIcon.COFFEE
+    pngToIconMap["mail"] = VaadinIcon.ENVELOPE_O
+    pngToIconMap["menuquery"] = VaadinIcon.FILE_TEXT_O
+    pngToIconMap["note"] = VaadinIcon.NOTEBOOK
+    pngToIconMap["nothing"] = VaadinIcon.FILE_O
+    pngToIconMap["open"] = VaadinIcon.FILE_TEXT_O
+    pngToIconMap["options"] = VaadinIcon.COG
+    pngToIconMap["preview"] = VaadinIcon.FILE_TEXT_O
+    pngToIconMap["print"] = VaadinIcon.PRINT
+    pngToIconMap["quit"] = VaadinIcon.POWER_OFF
+    pngToIconMap["save"] = IronIcons.SAVE
+    pngToIconMap["searchop"] = VaadinIcon.SEARCH
+    pngToIconMap["search"] = VaadinIcon.FILE_SEARCH
+    pngToIconMap["serialquery"] = VaadinIcon.RECORDS
+    pngToIconMap["serviceoff"] = DeviceIcons.SIGNAL_CELLULAR_OFF
+    pngToIconMap["serviceon"] = DeviceIcons.SIGNAL_CELLULAR_4_BAR
+    pngToIconMap["store"] = VaadinIcon.BUILDING_O
+    pngToIconMap["suggest"] = VaadinIcon.PHONE
+    pngToIconMap["timeStamp"] = VaadinIcon.CLOCK
+    pngToIconMap["tri"] = VaadinIcon.SORT
+    pngToIconMap["unfoldColumn"] = VaadinIcon.FOLDER_OPEN_O
+    pngToIconMap["unfold"] = VaadinIcon.FOLDER_OPEN_O
+    pngToIconMap["up"] = VaadinIcon.ANGLE_DOUBLE_UP
+    pngToIconMap["add"] = VaadinIcon.FILE_ADD
+    pngToIconMap["align_center"] = VaadinIcon.ALIGN_CENTER
+    pngToIconMap["align_justify"] = VaadinIcon.ALIGN_JUSTIFY
+    pngToIconMap["align_left"] = VaadinIcon.ALIGN_LEFT
+    pngToIconMap["align_right"] = VaadinIcon.ALIGN_RIGHT
+    pngToIconMap["apply"] = VaadinIcon.COGS
+    pngToIconMap["area_chart"] = VaadinIcon.SPLINE_AREA_CHART
+    pngToIconMap["arrowfirst"] = VaadinIcon.STEP_BACKWARD
+    pngToIconMap["arrowlast"] = VaadinIcon.STEP_FORWARD
+    pngToIconMap["arrowleft"] = VaadinIcon.BACKWARDS
+    pngToIconMap["arrowright"] = VaadinIcon.FORWARD
+    pngToIconMap["article"] = VaadinIcon.FILE_TEXT_O
+    pngToIconMap["ask"] = VaadinIcon.QUESTION_CIRCLE_O
+    pngToIconMap["bar_chart"] = VaadinIcon.BAR_CHART
+    pngToIconMap["bkup3"] = VaadinIcon.WARNING
+    pngToIconMap["bkup"] = VaadinIcon.WARNING
+    pngToIconMap["block2"] = IronIcons.UNDO
+    pngToIconMap["board"] = VaadinIcon.COGS
+    pngToIconMap["bold"] = VaadinIcon.BOLD
+    pngToIconMap["bomb"] = VaadinIcon.BOMB
+    pngToIconMap["bookmark"] = VaadinIcon.BOOKMARK
+    pngToIconMap["boxarrow"] = VaadinIcon.TOOLBOX
+    pngToIconMap["bw"] = VaadinIcon.STEP_FORWARD
+    pngToIconMap["calculate"] = VaadinIcon.CALC
+    pngToIconMap["cfolder"] = VaadinIcon.FOLDER
+    pngToIconMap["chart_view"] = VaadinIcon.CHART
+    pngToIconMap["checkbox"] = VaadinIcon.THIN_SQUARE
+    pngToIconMap["clip"] = VaadinIcon.PAPERCLIP
+    pngToIconMap["collapsedb"] = VaadinIcon.ARROWS_LONG_RIGHT
+    pngToIconMap["collapsed_f"] = VaadinIcon.FOLDER
+    pngToIconMap["collapsed_t"] = VaadinIcon.FOLDER_O
+    pngToIconMap["column_chart"] = VaadinIcon.BAR_CHART
+    pngToIconMap["combo"] = VaadinIcon.LIGHTBULB
+    pngToIconMap["config"] = VaadinIcon.WRENCH
+    pngToIconMap["convert"] = VaadinIcon.EXCHANGE
+    pngToIconMap["cut"] = VaadinIcon.SCISSORS
+    pngToIconMap["deleteline"] = VaadinIcon.LIST_OL
+    pngToIconMap["done"] = VaadinIcon.CHECK_SQUARE_O
+    pngToIconMap["error"] = VaadinIcon.MINUS_CIRCLE
+    pngToIconMap["expandedb"] = VaadinIcon.ARROW_LONG_DOWN
+    pngToIconMap["expanded_f"] = VaadinIcon.FOLDER_OPEN
+    pngToIconMap["expanded_s"] = VaadinIcon.FOLDER_OPEN
+    pngToIconMap["expanded_t"] = VaadinIcon.FOLDER_OPEN
+    pngToIconMap["export"] = VaadinIcon.COG
+    pngToIconMap["fax"] = VaadinIcon.PHONE
+    pngToIconMap["fw"] = VaadinIcon.STEP_FORWARD
+    pngToIconMap["gifIcon"] = VaadinIcon.FILE_PICTURE
+    pngToIconMap["green"] = MapsIcons.MAP
+    pngToIconMap["guide"] = IronIcons.HELP
+    pngToIconMap["ident"] = VaadinIcon.ARROWS_LONG_RIGHT
+    pngToIconMap["index"] = VaadinIcon.BOOK
+    pngToIconMap["interrupt"] = VaadinIcon.STOP
+    pngToIconMap["italic"] = VaadinIcon.ITALIC
+    pngToIconMap["jpgIcon"] = VaadinIcon.PICTURE
+    pngToIconMap["launch"] = VaadinIcon.ARROW_RIGHT
+    pngToIconMap["line_chart"] = VaadinIcon.LINE_CHART
+    pngToIconMap["lock"] = VaadinIcon.LOCK
+    pngToIconMap["login"] = IronIcons.ACCOUNT_CIRCLE
+    pngToIconMap["moneycheck"] = VaadinIcon.MONEY
+    pngToIconMap["money"] = VaadinIcon.MONEY
+    pngToIconMap["notice"] = IronIcons.LIGHTBULB_OUTLINE
+    pngToIconMap["ofolder"] = IronIcons.FOLDER_OPEN
+    pngToIconMap["pageFirst"] = AvIcons.SKIP_PREVIOUS
+    pngToIconMap["pageLast"] = AvIcons.SKIP_NEXT
+    pngToIconMap["pageLeft"] = AvIcons.FAST_REWIND
+    pngToIconMap["pageRight"] = AvIcons.FAST_FORWARD
+    pngToIconMap["password"] = VaadinIcon.PASSWORD
+    pngToIconMap["paste"] = VaadinIcon.PASTE
+    pngToIconMap["phone"] = VaadinIcon.PHONE
+    pngToIconMap["pie_chart"] = VaadinIcon.PIE_CHART
+    pngToIconMap["printoptions"] = VaadinIcon.WRENCH
+    pngToIconMap["project"] = VaadinIcon.CUBES
+    pngToIconMap["red"] = MapsIcons.MAP
+    pngToIconMap["redo"] = IronIcons.REDO
+    pngToIconMap["refresh"] = VaadinIcon.REFRESH
+    pngToIconMap["reload"] = VaadinIcon.REFRESH
+    pngToIconMap["report"] = VaadinIcon.GRID
+    pngToIconMap["sec"] = VaadinIcon.UNLOCK
+    pngToIconMap["selected"] = VaadinIcon.ARROWS_LONG_RIGHT
+    pngToIconMap["send"] = VaadinIcon.OUTBOX
+    pngToIconMap["sort"] = VaadinIcon.SORT
+    pngToIconMap["split"] = VaadinIcon.SPLIT
+    pngToIconMap["standard"] = VaadinIcon.PENCIL
+    pngToIconMap["stick"] = VaadinIcon.PIN
+    pngToIconMap["stop"] = VaadinIcon.STOP
+    pngToIconMap["todo"] = VaadinIcon.TASKS
+    pngToIconMap["top"] = VaadinIcon.BOOK
+    pngToIconMap["underline"] = VaadinIcon.UNDERLINE
+    pngToIconMap["undo"] = IronIcons.UNDO
+    pngToIconMap["unident"] = VaadinIcon.ARROW_CIRCLE_LEFT
+    pngToIconMap["unstick"] = VaadinIcon.PIN
+    pngToIconMap["update"] = EditorIcons.MODE_EDIT
+    pngToIconMap["users"] = VaadinIcon.USERS
+    pngToIconMap["utils"] = VaadinIcon.TOOLS
+    pngToIconMap["validate"] = VaadinIcon.CHECK
+    pngToIconMap["wait"] = DeviceIcons.ACCESS_TIME
+    pngToIconMap["warning"] = IronIcons.WARNING
+    pngToIconMap["window"] = IronIcons.CHEVRON_RIGHT
+    pngToIconMap["yellow"] = MapsIcons.MAP
+    pngToIconMap["zoomheight"] = VaadinIcon.VAADIN_H
+    pngToIconMap["zoomminus"] = VaadinIcon.SEARCH_MINUS
+    pngToIconMap["zoomoptimal"] = VaadinIcon.VAADIN_H
+    pngToIconMap["zoomplus"] = VaadinIcon.SEARCH_PLUS
+    pngToIconMap["zoomwidth"] = VaadinIcon.VAADIN_H
   }
 }

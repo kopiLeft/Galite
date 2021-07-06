@@ -18,6 +18,8 @@
 package org.kopi.galite.ui.vaadin.field
 
 import java.text.DecimalFormatSymbols
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 import org.kopi.galite.ui.vaadin.base.Styles
@@ -39,10 +41,10 @@ import com.vaadin.flow.component.KeyNotifier
 import com.vaadin.flow.component.KeyPressEvent
 import com.vaadin.flow.component.KeyUpEvent
 import com.vaadin.flow.component.textfield.Autocomplete
-
 import com.vaadin.flow.component.AbstractCompositeField
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.textfield.HasAutocomplete
+import com.vaadin.flow.component.textfield.HasPrefixAndSuffix
 import com.vaadin.flow.dom.DomEvent
 import com.vaadin.flow.shared.Registration
 
@@ -55,7 +57,7 @@ import com.vaadin.flow.shared.Registration
 open class InputTextField<C: AbstractField<C, out Any>> internal constructor(protected val field: C)
   : HasSize, AbstractCompositeField<C, InputTextField<C>, String>(null),
       KeyNotifier, HasStyle, BlurNotifier<InputTextField<C>>, Focusable<InputTextField<C>>,
-      HasAutocomplete
+      HasAutocomplete, HasPrefixAndSuffix
       /*, HasSelectionHandlers<Suggestion?>, SuggestionHandler, HasValue<String?> TODO*/ {
 
   /**
@@ -63,7 +65,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return The parent window of this text field.
    */
   val parentWindow: Window?
-    get() = parent
+    get() = fieldConnector.getWindow()
 
   // used while checking if FF has set input prompt as value
   private var validationStrategy: TextValidator? = null
@@ -82,7 +84,6 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   private var hasAutocomplete = false
   private var valueBeforeEdit: String? = ""
   private var align: String? = null
-  private var parent: Window? = null
   private var isCheckingValue = false
   /**
    * `true` if the state of this field is not synchronized with server side.
@@ -94,7 +95,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     className = Styles.TEXT_INPUT
     addKeyPressListener(::onKeyPress)
     addKeyUpListener(::onKeyUp)
-    element.addEventListener("paste", ::onPasteEvent)
+    //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
     addKeyDownListener(::onKeyDown)
     addFocusListener(::onFocus)
@@ -143,6 +144,17 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     return field.addValueChangeListener(listener)
   }
 
+  override fun getValue(): String? {
+    return format(field.value)
+  }
+
+  private fun format(s: Any?): String? =
+    if(s is LocalDate) {
+      s.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    } else {
+      s?.toString()
+    }
+
   override fun initContent(): C = field
 
   fun onKeyPress(event: KeyPressEvent) {
@@ -170,7 +182,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
       && validationStrategy != null && validationStrategy is EnumValidator
     ) {
       event.key.keys.forEach {
-        if (!validationStrategy!!.validate(java.lang.String.valueOf(it))) {
+        if (!validationStrategy!!.validate(it)) {
           cancelKey()
         }
       }
@@ -179,7 +191,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     // validate the whole text input.
     if (validationStrategy != null) {
       event.key.keys.forEach {
-        if (!validationStrategy!!.validate(value + java.lang.String.valueOf(it))) {
+        if (!validationStrategy!!.validate(value + it)) {
           cancelKey()
         }
       }
@@ -201,7 +213,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   private fun onPasteEvent(event: DomEvent) {
     // should validate text content
     if (validationStrategy != null) {
-      val before: String = value
+      val before = value
 
       if (!validationStrategy!!.validate(value)) {
         value = before
@@ -229,7 +241,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
       if (text != value) {
         fieldConnector.isChanged = true
       }
-      super.setValue(text)
+      setPresentationValue(text)
     }
     if (text != null) {
       valueBeforeEdit = text
@@ -314,7 +326,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   /**
    * Sets the text size.
    */
-  var size: Int
+  open var size: Int
     get() = element.getProperty("size").toInt()
     set(value) { element.setProperty("size", value.toString()) }
 
@@ -463,13 +475,14 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Sends all dirty values to the server side.
    * This will send all pending dirty values to be sure
    * that all necessary values are sent to the server model.
+   * TODO
    */
   internal fun sendDirtyValuesToServerSide() {
-    val window = parent!!
-    val block = connector.parent.get() as Block
+    val window = parentWindow
+    val block = connector.parent.get() as? Block
 
     if (block != null) {
-      window.cleanDirtyValues(block)
+      window!!.cleanDirtyValues(block)
     }
     // now the field is synchronized with server side.
     isAlreadySynchronized = true
@@ -486,8 +499,8 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return `true` if word wrap is used.
    */
   protected val isWordwrap: Boolean
-    protected get() {
-      val wrap: String = getElement().getAttribute("wrap")
+    get() {
+      val wrap: String = element.getAttribute("wrap")
       return "off" != wrap
     }
 
@@ -543,8 +556,8 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
 
       // look to the lower and upper convert type to detect if the field value has really changed
       when (strategy.getConvertType()) {
-        ConvertType.UPPER -> value.toUpperCase() != valueBeforeEdit!!.toUpperCase()
-        ConvertType.LOWER -> value.toLowerCase() != valueBeforeEdit!!.toLowerCase()
+        ConvertType.UPPER -> value?.toUpperCase() != valueBeforeEdit!!.toUpperCase()
+        ConvertType.LOWER -> value?.toLowerCase() != valueBeforeEdit!!.toLowerCase()
         else -> !value.equals(valueBeforeEdit)
       }
     } else {
@@ -555,10 +568,10 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Checks if the decimal separator must be changed.
    */
   protected fun maybeReplaceDecimalSeparator() {
-    if (validationStrategy is DecimalValidator && value.contains(".")) {
+    if (validationStrategy is DecimalValidator && value!!.contains(".")) {
       val dfs: DecimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale(MainWindow.locale)) // TODO
       if (dfs.decimalSeparator != '.') {
-        value = value.replace('.', dfs.decimalSeparator)
+        value = value?.replace('.', dfs.decimalSeparator)
       }
     }
   }
@@ -613,7 +626,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     return false
   }
 
-  fun setFocus(focused: Boolean) {
+  open fun setFocus(focused: Boolean) {
     if (focused) {
       focus()
     } else {
@@ -630,8 +643,8 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     fieldConnector.columnView!!.gotoNextField()
   }
 
-  protected fun onLoad() {
-    //super.onLoad()
+  protected open fun onLoad() {
+    //super.onLoad() TODO
     //Scheduler.get().scheduleFinally(object : ScheduledCommand() {
     //  fun execute() {
     //    parent = WidgetUtils.getParent(this@VInputTextField, VWindow::class.java)
@@ -639,7 +652,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     //})
   }
 
-  fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<C>>) {
+  open fun onBlur(event: BlurNotifier.BlurEvent<InputTextField<C>>) {
     // this is called twice on Chrome when e.g. changing tab while prompting
     // field focused - do not change settings on the second time
     if (focusedTextField !== this || focusedTextField == null) {
@@ -652,7 +665,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     recordNumber = -1 // set this field is not related to any record
   }
 
-  fun onFocus(event: FocusNotifier.FocusEvent<InputTextField<C>>) {
+  open fun onFocus(event: FocusNotifier.FocusEvent<InputTextField<C>>) {
     if (focusedTextField == this) {
       // already got the focus. give up
       return
@@ -713,7 +726,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Selects the content of this text input
    */
   private fun maybeSelectAll() {
-    if (value != null && value.isNotEmpty()) {
+    if (value != null && value!!.isNotEmpty()) {
       selectAll()
     }
   }
@@ -732,7 +745,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Cancel suggestions query if needed.
    */
   private fun maybeCancelSuggestions() {
-    if (value == null || value.isEmpty()) {
+    if (value == null || value!!.isEmpty()) {
       //cancelSuggestions()
       // restore the suggestions to be fetched
       // before GWT returns control to event browser
@@ -742,11 +755,11 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   }
 
   /**
-   * Returns the widget connector.
-   * @return The widget connector.
+   * Returns the text field container.
+   * @return The the text field container.
    */
-  protected val connector: org.kopi.galite.ui.vaadin.field.TextField
-    get() = super.getParent().get() as org.kopi.galite.ui.vaadin.field.TextField
+  internal val connector: TextField
+    get() = super.getParent().get() as TextField
 
   /**
    * Checks the value of this text field.
@@ -756,7 +769,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   fun checkValue(rec: Int) {
     isCheckingValue = true //!!! don't check twice on field blur
     if (validationStrategy != null) {
-      validationStrategy!!.checkType(this, if (value == null) "" else value.trim())
+      validationStrategy!!.checkType(this, if (value == null) "" else value!!.trim())
       if (!value.equals(fieldConnector.getCachedValueAt(rec))) {
         connector.markAsDirty(rec, value)
       }
@@ -778,7 +791,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    */
   private fun refreshSuggestions() {
     // Get the raw text.
-    val text: String = value
+    val text = value
 
     if (text == null || text.isEmpty() || text.length.toDouble() == getMaxLength()) {
       hideSuggestions()
@@ -847,7 +860,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * @return The parent field connector.
    */
   internal val fieldConnector: Field
-    get() = connector.parent.get() as Field
+    get() = connector.fieldParent
 
   /**
    * Checks if the content of this field is empty.
@@ -984,14 +997,13 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
   /**
    * Releases the content of this input field.
    */
-  fun release() {
+  open fun release() {
     validationStrategy = null
     currentText = null
     //oracle = null
     //display = null
     valueBeforeEdit = null
     align = null
-    parent = null
     //callback = null
     //suggestionCallback = null
   }
@@ -1052,11 +1064,15 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     }
   }*/
 
-  fun addStyleDependentName(className: String) {
-    // TODO
+  fun addStyleDependentName(dependentClassName: String) {
+    if(className != null) {
+      element.classList.add("${Styles.TEXT_INPUT}-$dependentClassName")
+    }
   }
 
-  fun removeStyleDependentName(className: String) {
-    // TODO
+  fun removeStyleDependentName(dependentClassName: String) {
+    if(className != null) {
+      element.classList.remove("${Styles.TEXT_INPUT}-$dependentClassName")
+    }
   }
 }

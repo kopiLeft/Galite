@@ -50,6 +50,8 @@ import com.vaadin.flow.data.binder.ValueContext
 import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.data.renderer.TextRenderer
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.customfield.CustomField
 
 /**
  * A grid text editor based on custom components.
@@ -59,7 +61,7 @@ class DGridTextEditorField(
         label: DGridEditorLabel?,
         align: Int,
         options: Int
-) : DGridEditorField<String?>(columnView, label, align, options), UTextField {
+) : DGridEditorField<String>(columnView, label, align, options), UTextField {
 
   // ----------------------------------------------------------------------
   // DATA MEMBERS
@@ -80,15 +82,27 @@ class DGridTextEditorField(
     } else {
       ScannerTransformer(editor)
     }
+    editor.addValueChangeListener(::valueChanged)
     // TODO
+  }
+
+  fun valueChanged(event: AbstractField.ComponentValueChangeEvent<out CustomField<*>, *>) {
+    if(event.isFromClient) {
+      checkText(event.value.toString(), true)
+    }
+  }
+
+  override fun valueChanged() {
+    checkText(editor.value, isChanged(editor.oldValue, editor.value)) // TODO
   }
 
   override fun getObject(): Any? = editor.value
 
   override fun updateText() {
     val newModelTxt = getModel().getText(getBlockView().getRecordFromDisplayLine(position))
-    access {
-      editor.value = transformer.toGui(newModelTxt)!!.trim()
+    access(currentUI) {
+      //editor.value = transformer.toGui(newModelTxt)!!.trim() FIXME
+      editor.value = transformer.toGui(newModelTxt)
     }
     if (modelHasFocus() && !selectionAfterUpdateDisabled) {
       selectionAfterUpdateDisabled = false
@@ -119,7 +133,7 @@ class DGridTextEditorField(
     super.reset()
   }
 
-  override fun getText(): String? = TODO()
+  override fun getText(): String? = editor.value?.toString()
 
   override fun setHasCriticalValue(b: Boolean) {}
 
@@ -133,21 +147,22 @@ class DGridTextEditorField(
 
   override fun createEditor(): GridEditorTextField {
 
-    val editor = createEditorField()
+    val editor: GridEditorTextField = createEditorField()
     //editor.setAlignment(columnView.getModel().getAlign()) TODO
     //editor.setAutocompleteLength(columnView.getModel().getAutocompleteLength())
     //editor.setHasAutocomplete(columnView.getModel().hasAutocomplete())
     //editor.setNavigationDelegationMode(getNavigationDelegationMode())
-    //editor.setHasAutofill(columnView.hasAutofill())
+    if (columnView.hasAutofill()) {
+      editor.setAutofill()
+    }
     //editor.setHasPreFieldTrigger(columnView.getModel().hasTrigger(VConstants.TRG_PREFLD))
     editor.addActors(actors)
     //editor.setConvertType(getConvertType(columnView.model))
-
     return editor
   }
 
-  override fun createConverter(): Converter<String?, Any?> {
-    return object : Converter<String?, Any?> {
+  override fun createConverter(): Converter<String, Any?> {
+    return object : Converter<String, Any?> {
       val presentationType: Class<String>
         get() = String::class.java
       val modelType: Class<Any>
@@ -159,7 +174,7 @@ class DGridTextEditorField(
 
       override fun convertToModel(value: String?, context: ValueContext?): Result<Any?> {
         return try {
-          Result.ok(getModel().toObject(transformer.toModel(value!!)))
+          Result.ok(getModel().toObject(transformer.toModel(value)!!))
         } catch (e: VException) {
           //throw ConversionException(e)
           TODO()
@@ -168,7 +183,7 @@ class DGridTextEditorField(
     }
   }
 
-  override fun createRenderer(): Renderer<String?> {
+  override fun createRenderer(): Renderer<String> {
     return TextRenderer()
   }
 
@@ -331,12 +346,12 @@ class DGridTextEditorField(
    */
   @Synchronized
   private fun enterMe() {
-    /*BackgroundThreadHandler.access(Runnable { TODO
+   access(currentUI) {
       if (scanner) {
-        getEditor().setValue(transformer.toGui(""))
+        editor.value = transformer.toGui("")
       }
-      getEditor().focus()
-    })*/
+      editor.focus()
+    }
   }
 
   /**
@@ -344,15 +359,33 @@ class DGridTextEditorField(
    * @param s The text to be checked.
    * @param changed Is value changed ?
    */
-  private fun checkText(s: String, changed: Boolean) {
-    val text: String = transformer.toModel(s)
+  private fun checkText(s: String?, changed: Boolean) {
+    val text = transformer.toModel(s)
     if (!transformer.checkFormat(text)) {
       return
     }
-    if (getModel().checkText(text) && changed) {
+    if (getModel().checkText(text!!) && changed) {
       getModel().isChangedUI = true
     }
     getModel().setChanged(changed)
+  }
+
+  /**
+   * Returns `true` if there is a difference between the old and the new text.
+   * @param oldText The old text value.
+   * @param newText The new text value.
+   * @return `true` if there is a difference between the old and the new text.
+   */
+  private fun isChanged(oldText: String?, newText: String?): Boolean {
+    var oldText: String? = oldText
+    var newText: String? = newText
+    if (oldText == null) {
+      oldText = "" // replace null by empty string to avoid null pointer exceptions
+    }
+    if (newText == null) {
+      newText = ""
+    }
+    return oldText != newText
   }
   // ----------------------------------------------------------------------
   // TRANSFORMERS IMPLEMENTATION
@@ -371,11 +404,11 @@ class DGridTextEditorField(
       return modelTxt
     }
 
-    override fun toModel(guiTxt: String): String {
+    override fun toModel(guiTxt: String?): String? {
       return guiTxt
     }
 
-    override fun checkFormat(guiTxt: String): Boolean {
+    override fun checkFormat(guiTxt: String?): Boolean {
       return if (row == 1) true else convertToSingleLine(guiTxt, col, row).length <= row * col
     }
 
@@ -387,9 +420,9 @@ class DGridTextEditorField(
        * @param row The row index.
        * @return The converted string.
        */
-      private fun convertToSingleLine(source: String, col: Int, row: Int): String =
+      private fun convertToSingleLine(source: String?, col: Int, row: Int): String =
               buildString {
-                val length = source.length
+                val length = source!!.length
                 var start = 0
                 while (start < length) {
                   var index = source.indexOf('\n', start)
@@ -445,25 +478,25 @@ class DGridTextEditorField(
    *
    * @param field The field view.
    */
-  internal class ScannerTransformer(private val field: GridEditorField<String?>) : ModelTransformer {
+  internal class ScannerTransformer(private val field: GridEditorField<String>) : ModelTransformer {
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
     override fun toGui(modelTxt: String?): String {
       return if (modelTxt == null || "" == modelTxt) {
         VlibProperties.getString("scan-ready")
-      } /*else if (!field.isReadOnly()) { TODO
+      } else if (!field.isReadOnly) {
         VlibProperties.getString("scan-read") + " " + modelTxt
-      }*/ else {
+      } else {
         VlibProperties.getString("scan-finished")
       }
     }
 
-    override fun toModel(guiTxt: String): String {
+    override fun toModel(guiTxt: String?): String? {
       return guiTxt
     }
 
-    override fun checkFormat(guiTxt: String): Boolean {
+    override fun checkFormat(guiTxt: String?): Boolean {
       return true
     }
   }
@@ -478,7 +511,7 @@ class DGridTextEditorField(
     //---------------------------------------
     // IMPLEMENTATIONS
     //---------------------------------------
-    override fun toModel(guiTxt: String): String = convertFixedTextToSingleLine(guiTxt, col, row)
+    override fun toModel(guiTxt: String?): String = convertFixedTextToSingleLine(guiTxt, col, row)
 
     override fun toGui(modelTxt: String?): String =
             buildString {
@@ -508,7 +541,7 @@ class DGridTextEditorField(
               }
             }
 
-    override fun checkFormat(guiTxt: String): Boolean = guiTxt.length <= row * col
+    override fun checkFormat(guiTxt: String?): Boolean = guiTxt!!.length <= row * col
 
     companion object {
       /**
@@ -518,9 +551,9 @@ class DGridTextEditorField(
        * @param row The row index.
        * @return The converted string.
        */
-      private fun convertFixedTextToSingleLine(source: String, col: Int, row: Int): String =
+      private fun convertFixedTextToSingleLine(source: String?, col: Int, row: Int): String =
               buildString {
-                val length = source.length
+                val length = source!!.length
                 var start = 0
                 while (start < length) {
                   var index = source.indexOf('\n', start)

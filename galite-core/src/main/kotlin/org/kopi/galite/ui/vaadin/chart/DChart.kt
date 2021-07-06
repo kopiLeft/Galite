@@ -21,16 +21,23 @@ import org.kopi.galite.chart.ChartTypeFactory
 import org.kopi.galite.chart.UChart
 import org.kopi.galite.chart.UChartType
 import org.kopi.galite.chart.VChart
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.VWindow
 
-import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * Creates a new chart view from its model.
  * @param model The chart model.
  */
-class DChart(model: VWindow) : DWindow(model), UChart, Focusable<DChart> {
+class DChart(model: VWindow) : DWindow(model), UChart {
+
+  //---------------------------------------------------
+  // DATA MEMBERS
+  //---------------------------------------------------
+  private val content = HorizontalLayout()
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
@@ -42,13 +49,13 @@ class DChart(model: VWindow) : DWindow(model), UChart, Focusable<DChart> {
   }
 
   override fun refresh() {
-    TODO()
+   // TODO()
   }
 
   override fun build() {}
 
   override fun typeChanged() {
-    TODO()
+//    TODO()
   }
 
   override fun setEnabled(enabled: Boolean) {
@@ -60,15 +67,24 @@ class DChart(model: VWindow) : DWindow(model), UChart, Focusable<DChart> {
   }
 
   override fun focus() {
-    TODO()
+//    TODO()
   }
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  override var type: UChartType = TODO()
+  override var type: UChartType? = null
     set(newType) {
-      TODO()
+      access {
+        if (field != null && newType != null) {
+          content.remove(field as Component)
+        }
+        if (newType != null) {
+          field = newType
+          newType.build()
+          content.add(newType as Component)
+        }
+      }
     }
 
   companion object {
@@ -81,6 +97,6 @@ class DChart(model: VWindow) : DWindow(model), UChart, Focusable<DChart> {
   //---------------------------------------------------
 
   init {
-
+    add(content)
   }
 }

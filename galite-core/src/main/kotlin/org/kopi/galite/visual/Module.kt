@@ -137,8 +137,12 @@ class Module(val id: Int,
   companion object {
     fun getExecutable(objectName: String?): Executable {
       return try {
-        (Class.forName(objectName).kotlin.objectInstance as? Window)?.model
-                ?: (Class.forName(objectName).newInstance() as Window).model
+        val instance = Class.forName(objectName).kotlin.objectInstance ?: Class.forName(objectName).newInstance()
+        return if(instance is Window) {
+          instance.model
+        } else {
+          instance as Executable
+        }
       } catch (iae: IllegalAccessException) {
         throw VRuntimeException(iae)
       } catch (ie: InstantiationException) {
@@ -155,7 +159,7 @@ class Module(val id: Int,
                   description: String,
                   icon: Image? = null): Executable? {
       return try {
-        if (ApplicationContext.getDefaults().isDebugModeEnabled()) {
+        if (ApplicationContext.getDefaults().isDebugModeEnabled) {
           System.gc()
           Thread.yield()
         }

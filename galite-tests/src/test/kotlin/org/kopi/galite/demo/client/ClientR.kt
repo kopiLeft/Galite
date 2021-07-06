@@ -22,12 +22,17 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.kopi.galite.demo.Client
+import org.kopi.galite.demo.command.BlockCommand
+import org.kopi.galite.demo.command.CommandForm
+import org.kopi.galite.demo.command.CommandR
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
+import org.kopi.galite.report.UReport
 import org.kopi.galite.report.VCellFormat
 import org.kopi.galite.report.VReport
+import org.kopi.galite.visual.WindowController
 
 /**
  * Client Report
@@ -46,7 +51,7 @@ class ClientR : Report() {
           help = "CSV Format",
   ) {
     key = Key.F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportCsv"  // icon is optional here
   }
 
   val xls = actor(
@@ -56,7 +61,7 @@ class ClientR : Report() {
           help = "Excel (XLS) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val xlsx = actor(
@@ -66,7 +71,7 @@ class ClientR : Report() {
           help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"  // icon is optional here
   }
 
   val pdf = actor(
@@ -76,7 +81,27 @@ class ClientR : Report() {
           help = "PDF Format",
   ) {
     key = Key.F9          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportPdf"  // icon is optional here
+  }
+
+  val editColumnData = actor(
+    ident = "EditColumnData",
+    menu = action,
+    label = "Edit Column Data",
+    help = "Edit Column Data",
+  ) {
+    key = Key.F8          // key is optional here
+    icon = "formula"  // icon is optional here
+  }
+
+  val helpForm = actor(
+          ident = "helpForm",
+          menu = action,
+          label = "Help",
+          help = " Help"
+  ) {
+    key = Key.F1
+    icon = "help"
   }
 
   val cmdCSV = command(item = csv) {
@@ -100,6 +125,21 @@ class ClientR : Report() {
   val cmdXLSX = command(item = xlsx) {
     action = {
       model.export(VReport.TYP_XLSX)
+    }
+  }
+
+  val helpCmd = command(item = helpForm) {
+    action = {
+      model.showHelp()
+    }
+  }
+
+  val editColumn = command(item = editColumnData) {
+    action = {
+      if ((model.getDisplay() as UReport).getSelectedColumn() != -1) {
+        val formula  = org.kopi.galite.demo.product.ProductForm()
+        WindowController.windowController.doModal(formula)
+      }
     }
   }
 

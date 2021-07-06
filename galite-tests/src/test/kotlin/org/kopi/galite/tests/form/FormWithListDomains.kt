@@ -17,6 +17,7 @@
 
 package org.kopi.galite.tests.form
 
+import java.io.File
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.select
@@ -24,13 +25,15 @@ import org.kopi.galite.db.Modules
 import org.kopi.galite.db.Users
 import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.domain.AutoComplete
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.ListDomain
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.visual.FileHandler
 
-object FormWithListDomains: Form() {
+class FormWithListDomains: Form() {
   val edit = menu("Edit")
   val autoFill = actor(
           ident = "Autofill",
@@ -52,21 +55,46 @@ object FormWithListDomains: Form() {
   )
   override val locale = Locale.UK
   override val title = "form to test list domains"
-  val userListBlock = insertBlock(UsersListBlock)
+  val userListBlock = insertBlock(UsersListBlock()) {
+
+    val file = visit(domain = Domain<String>(25), position = at(3, 1)) {
+      label = "test"
+      help = "The test"
+      command(item = autoFill) {
+        action = {
+
+          val file = FileHandler.fileHandler!!.openFile(model.getDisplay()!!, FileFilter());
+          if (file != null) {
+            value = file.absolutePath
+          }
+        }
+      }
+    }
+  }
 }
 
-object UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
-  val user = mustFill(domain = UsersList, position = at(1, 1)) {
+class FileFilter : FileHandler.FileFilter {
+  override fun accept(f: File?): Boolean {
+    return (f!!.isDirectory
+            || f.name.toLowerCase().endsWith(".xls")
+            || f.name.toLowerCase().endsWith(".xlsx"))
+  }
+
+  override val description: String
+    get() = "XLS/XLSX"
+}
+
+class UsersListBlock : FormBlock(1, 1, "UsersListBlock") {
+  val user = mustFill(domain = UsersList(), position = at(1, 1)) {
     label = "user"
     help = "The user"
   }
-  val module = mustFill(domain = Module, position = at(2, 1)) {
+  val module = mustFill(domain = Module(), position = at(2, 1)) {
     label = "module"
     help = "The module"
   }
 }
-
-object UsersList: ListDomain<Int>(20) {
+class UsersList: ListDomain<Int>(20) {
 
   override val table = query(
           Users.select {
@@ -75,7 +103,7 @@ object UsersList: ListDomain<Int>(20) {
   )
 
   override val access = {
-    SomeDictionnaryForm
+    SomeDictionnaryForm()
   }
 
   val autoComplete = complete(AutoComplete.LEFT, 1)
@@ -91,7 +119,7 @@ object UsersList: ListDomain<Int>(20) {
   }
 }
 
-object Module: ListDomain<String>(20) {
+class Module: ListDomain<String>(20) {
 
   override val table = Modules
 
@@ -109,13 +137,34 @@ object Module: ListDomain<String>(20) {
     "SYMBOL" keyOf Modules.symbol
   }
 }
-
-object SomeDictionnaryForm : DictionaryForm() {
+class SomeDictionnaryForm : DictionaryForm() {
   override val locale = Locale.UK
   override val title = "form for test"
 
   val action = menu("Action")
 
+  val edit = menu("Edit")
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = edit,
+    label = "Autofill",
+    help = "Autofill",
+  )
+
+  val quit = actor(
+    ident = "quit",
+    menu = action,
+    label = "quit",
+    help = "Quit",
+  ) {
+    key = Key.ESCAPE
+    icon = "quit"
+  }
+  val quitCmd = command(item = quit) {
+    action = {
+      quitForm()
+    }
+  }
   val list = actor(
           ident = "list",
           menu = action,
@@ -126,7 +175,7 @@ object SomeDictionnaryForm : DictionaryForm() {
     icon = "list"  // icon is optional here
   }
 
-  val block = insertBlock(UsersBlock) {
+  val block = insertBlock(UsersBlock()) {
     command(item = list) {
       action = {
         println("-----------Generating list-----------------")
@@ -137,7 +186,7 @@ object SomeDictionnaryForm : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = FormWithListDomains) {
+  Application.runForm(formName = FormWithListDomains()) {
     initModules()
   }
 }

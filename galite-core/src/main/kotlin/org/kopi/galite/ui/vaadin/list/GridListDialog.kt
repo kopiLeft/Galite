@@ -20,22 +20,30 @@ package org.kopi.galite.ui.vaadin.list
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VInputButton
+import org.kopi.galite.ui.vaadin.base.Utils
 import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.visual.ApplicationContext
 
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.flow.component.HasEnabled
+import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.KeyNotifier
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.dialog.Dialog
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.progressbar.ProgressBar
 
 /**
  * A list dialog
- * TODO: Implement this class with appropriate component
  */
-@CssImport("./styles/galite/Grid.css" , themeFor = "vaadin-grid")
-open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
+@CssImport.Container(value = [
+  CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid"),
+  CssImport("./styles/galite/list.css" , themeFor = "vcf-enhanced-dialog-overlay")
+])
+open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle {
 
   private var scrollBarAdded = false
   private var windowResized = false
@@ -43,6 +51,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
   private var lastActiveWindow: Window? = null
   protected val close = Button(LocalizedProperties.getString(locale, "CLOSE"))
   private var content: VerticalLayout = VerticalLayout()
+  protected var widthStyler = Div()
   protected var pattern: String? = null
   /**
    * This is used to display a new button under the dialog.
@@ -51,11 +60,11 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
   private var newText: String? = null
 
   init {
-    element.classList.add("listDialog")
+    className = Styles.LIST_DIALOG_CONTAINER
+    element.themeList.add(Styles.LIST_DIALOG_CONTAINER)
+    content.className = Styles.LIST_DIALOG
     content.element.setAttribute("hideFocus", "true")
     content.element.style["outline"] = "0px"
-    content.element.style["min-width"] = "400px"
-    content.className = Styles.LIST_DIALOG
     isResizable = true
   }
 
@@ -67,8 +76,49 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
   fun showListDialog() {
     // setNewText(newText) TODO
     // now show the list dialog
-    // now show the list dialog
-    open()
+    openAndExpand()
+  }
+
+  private fun openAndExpand() {
+    val ui = UI.getCurrent()
+    var width = ""
+    var columns = 0
+    val progress = Dialog(ProgressBar().also { it.isIndeterminate = true })
+
+    super.open()
+
+    progress.isCloseOnOutsideClick = false
+    progress.isCloseOnEsc = false
+
+    if(table!!.headerComponents.isNotEmpty()) {
+      height = "0px"
+      progress.open()
+    }
+    table!!.headerComponents.first().element.addAttachListener {
+      Thread {
+        table!!.headerComponents.forEach { header ->
+          val headerWidth = Utils.getWidth(header.parent.get().element, ui)
+          if (width == "") {
+            width = headerWidth.orEmpty()
+          } else if(headerWidth != null && headerWidth.isNotEmpty()) {
+            width = "$width + $headerWidth"
+          }
+
+          if(++columns == table!!.headerComponents.size) {
+            ui.access {
+              widthStyler.width = "calc(calc($width) + 20px)"
+              widthStyler.minWidth = "calc(calc($width) + 20px)"
+              progress.close()
+              height = null
+            }
+          }
+        }
+      }.start()
+    }
+  }
+
+  override fun open() {
+    showListDialog()
   }
 
   /**
@@ -124,21 +174,21 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
    * Forces the table to have scroll bars.
    */
   protected open fun forceScrollBar() {
-   /* val height: Double = table.getHeightByRows() * 41
-    if (!windowResized) {
-      if (hasVerticalScrollBar(height)) {
-        table.setWidth(table.getOffsetWidth() + 8 + "px") //add horizontal scroll bar width
-        scrollBarAdded = true
-      }
-    } else {
-      if (scrollBarAdded && !hasVerticalScrollBar(height)) {
-        table.setWidth(table.getOffsetWidth() - 16.toString() + "px") //remove horizontal scroll bar width
-        scrollBarAdded = false
-      } else if (!scrollBarAdded && hasVerticalScrollBar(height)) {
-        table.setWidth(table.getOffsetWidth() + 16 + "px") //add horizontal scroll bar width
-        scrollBarAdded = true
-      }
-    }*/
+    /* val height: Double = table.getHeightByRows() * 41
+     if (!windowResized) {
+       if (hasVerticalScrollBar(height)) {
+         table.setWidth(table.getOffsetWidth() + 8 + "px") //add horizontal scroll bar width
+         scrollBarAdded = true
+       }
+     } else {
+       if (scrollBarAdded && !hasVerticalScrollBar(height)) {
+         table.setWidth(table.getOffsetWidth() - 16.toString() + "px") //remove horizontal scroll bar width
+         scrollBarAdded = false
+       } else if (!scrollBarAdded && hasVerticalScrollBar(height)) {
+         table.setWidth(table.getOffsetWidth() + 16 + "px") //add horizontal scroll bar width
+         scrollBarAdded = true
+       }
+     }*/
   }
 
   /**
@@ -170,8 +220,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier {
       if (newForm != null) {
         content.add(newForm)
       }
-      add(content)
-      addToFooter(close)
+      add(widthStyler, content)
       addToFooter(close)
     }
 

@@ -130,4 +130,8 @@ abstract class DObjectField(model: VFieldUI,
   protected open fun blinkOnFocus(): Boolean {
     return true
   }
+
+  override fun valueChanged() {
+    // Nothing to do
+  }
 }

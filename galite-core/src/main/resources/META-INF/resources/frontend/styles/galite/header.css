@@ -1,0 +1,197 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+#header {
+    background-color: white;
+    display: table;
+    width: 100%;
+    margin: 0 auto;
+    height: 63px;
+}
+
+#module_list {
+    display: block;
+    max-width: 85%;
+    margin-left: 0;
+    height: 63px;
+}
+
+#module_list_empty {
+    width: 1px;
+}
+
+#welcome_container {
+    box-sizing: border-box;
+    display: table-cell;
+    vertical-align: middle;
+    width : 10%;
+    --lumo-font-size-m: 0.700rem;
+}
+
+#welcome_container > * {
+    display: inline;
+    padding-top: 15px;
+}
+
+/*
+ * Change Logo's style
+ */
+#companyLogo {
+    display: table-cell;
+    width: 10%;
+    border-right: 1px solid #dadada;
+    vertical-align: middle;
+    margin-left: 0;
+}
+
+#module_list_empty {
+    margin-left: none;
+}
+
+.logo-image {
+    vertical-align: middle;
+}
+
+/*
+ * Change the dots' style
+ */
+::part(overflow-button) {
+    --lumo-font-family:  Arial, sans-serif;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.800rem;
+    border-right: 1px solid #dadada;
+    height: 61px;
+    background-color: var(--lumo-tint);
+    box-sizing: border-box;
+}
+
+/**
+ * Change the dots' style when hovered
+ */
+::part(overflow-button):hover {
+    background-color: #d9f0f8;
+}
+
+/**
+ * Modules style
+ */
+#module_list :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
+    --lumo-font-family: Arial, sans-serif;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    --lumo-primary-color: var(--lumo-shade-50pct);
+    --lumo-font-size-m: 0.800rem;
+    border-right: 1px solid #dadada;
+    height: 61px;
+    box-sizing: border-box;
+}
+
+#module_list :not(#user_menu):first-child::part(menu-bar-button):hover {
+    background-color: #d9f0f8;
+}
+
+#welcome ::part(menu-bar-button) {
+    height : 60px;
+    --lumo-primary-text-color: var(--lumo-shade-70pct);
+    background:var(--lumo-tint);
+}
+
+#welcome ::part(menu-bar-button):hover {
+    background-color: #d9f0f8;
+}
+
+/**
+ * modules submenu style
+ */
+.vaadin-menu-item {
+    color: #8f8f8f;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+}
+
+/**
+ * Right Menus style
+ */
+#user_menu , #wrkcontext_menu , #bookmarks_menu , #admin_menu {
+    background-color: var(--lumo-tint);
+    margin: 0;
+    box-sizing: border-box;
+    padding: var(--lumo-space-xxs);
+}
+
+#module_list :not(#user_menu):first-child::part(menu-bar-button) {
+    background-color: var(--lumo-base-color);
+    border-right: 1px solid #dadada;
+    height: 63px;
+    box-sizing: border-box;
+    --lumo-space-m: 0;
+}
+
+#welcome #windows {
+    padding-top: 20px;
+    padding-right: 15px;
+    padding-left: 15px;
+    color: var(--lumo-shade-70pct);
+    margin: 0;
+    cursor: pointer;
+}
+
+#header ::part(menu-bar-button) {
+    cursor: pointer;
+}
+
+#header #welcome ::part(menu-bar-button) {
+    min-width: 0;
+    padding: 18px 10px;
+    text-transform: none;
+}
+
+/**
+ * switch window style
+ */
+.window-items-title, .window-items-container .item {
+    background: white;
+    color: #8f8f8f;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-style: italic !important;
+    font-size: 1em;
+}
+
+.window-items-title {
+    background: none;
+}
+
+.window-items-container .item {
+    border-bottom: 1px solid #dadada;
+    text-align: left;
+    padding: 20px 24px;
+    color: #8f8f8f;
+}
+
+.window-items-container .item:hover {
+    background: #d9f0f8;
+    cursor: pointer;
+}
+
+.window-items-container .item-selected {
+    color: #DCDCDC;
+}

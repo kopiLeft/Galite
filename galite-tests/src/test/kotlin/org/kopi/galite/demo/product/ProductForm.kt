@@ -22,14 +22,16 @@ import org.kopi.galite.demo.Application
 import org.kopi.galite.demo.Product
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.Access
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
+import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Image
 
-object ProductForm : ReportSelectionForm() {
+class ProductForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "Products"
   val page = page("Product")
@@ -51,20 +53,20 @@ object ProductForm : ReportSelectionForm() {
     icon = "preview"  // icon is optional here
   }
 
-  val block = insertBlock(BlockProduct, page) {
+  val block = insertBlock(BlockProduct(), page) {
     command(item = report) {
       action = {
-        createReport(BlockProduct)
+        createReport(this@insertBlock)
       }
     }
   }
 
   override fun createReport(): Report {
-    return ProductR
+    return ProductReport()
   }
 }
 
-object BlockProduct : FormBlock(1, 1, "Products") {
+class BlockProduct : FormBlock(1, 1, "Products") {
   val u = table(Product)
 
   val idPdt = hidden(domain = Domain<Int>(20)) {
@@ -72,12 +74,12 @@ object BlockProduct : FormBlock(1, 1, "Products") {
     help = "The product ID"
     columns(u.idPdt)
   }
-  val designation = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
-    label = "Designation"
-    help = "The product designation"
-    columns(u.designation)
+  val description = mustFill(domain = Domain<String>(50), position = at(1, 1)) {
+    label = "Description"
+    help = "The product description"
+    columns(u.description)
   }
-  val price = visit(domain = Domain<Decimal>(20), follow(designation)) {
+  val price = visit(domain = Domain<Decimal>(20), follow(description)) {
     label = "Price"
     help = "The product unit price excluding VAT"
     columns(u.price)
@@ -95,6 +97,10 @@ object BlockProduct : FormBlock(1, 1, "Products") {
   val photo = visit(domain = Domain<Image>(width = 100, height = 100), position = at(5, 1)) {
     label = "Image"
     help = "The product image"
+  }
+
+  init {
+    blockVisibility(Access.VISIT, Modes.QUERY)
   }
 }
 
@@ -120,5 +126,5 @@ object Tax : CodeDomain<String>() {
 }
 
 fun main() {
-  Application.runForm(formName = ProductForm)
+  Application.runForm(formName = ProductForm())
 }

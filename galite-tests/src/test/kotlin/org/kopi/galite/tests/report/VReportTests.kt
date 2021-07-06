@@ -41,7 +41,7 @@ import org.kopi.galite.report.VReport
 import org.kopi.galite.report.VReport.Companion.TYP_CSV
 import org.kopi.galite.report.VReport.Companion.TYP_XLS
 import org.kopi.galite.report.VReport.Companion.TYP_XLSX
-import org.kopi.galite.tests.JApplicationTestBase
+import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.VActor
 
@@ -217,7 +217,7 @@ class VReportTests: JApplicationTestBase() {
       assertEquals(Constants.ALG_DEFAULT, name.align)
       assertEquals(-1, name.groups)
       assertEquals(null, name.function)
-      assertEquals(true, name.visible)
+      assertEquals(true, name.isVisible)
       assertEquals(false, name.isFolded)
       // assertEquals(0, name.width) TODO
       // assertEquals(0, name.height) TODO

@@ -28,7 +28,7 @@ import org.kopi.galite.form.dsl.Modes
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 
-object TaxRuleForm : ReportSelectionForm() {
+class TaxRuleForm : ReportSelectionForm() {
   override val locale = Locale.UK
   override val title = "TaxRules"
   val page = page("TaxRule")
@@ -42,41 +42,47 @@ object TaxRuleForm : ReportSelectionForm() {
     key = Key.F8          // key is optional here
     icon = "preview"  // icon is optional here
   }
+  val autoFill = actor(
+    ident = "Autofill",
+    menu = action,
+    label = "Autofill",
+    help = "Autofill",
+  )
 
   val list = actor(
-    ident = "list",
-    menu = action,
-    label = "list",
-    help = "Display List",
+          ident = "list",
+          menu = action,
+          label = "list",
+          help = "Display List",
   ) {
     key = Key.F1   // key is optional here
     icon = "list"  // icon is optional here
   }
 
   val resetBlock = actor(
-    ident = "reset",
-    menu = action,
-    label = "break",
-    help = "Reset Block",
+          ident = "reset",
+          menu = action,
+          label = "break",
+          help = "Reset Block",
   ) {
     key = Key.F3   // key is optional here
     icon = "break"  // icon is optional here
   }
 
   val deleteBlock = actor(
-    ident = "deleteBlock",
-    menu = action,
-    label = "deleteBlock",
-    help = " deletes block",
+          ident = "deleteBlock",
+          menu = action,
+          label = "deleteBlock",
+          help = " deletes block",
   ) {
     key = Key.F5
     icon = "delete"
   }
 
-  val block = insertBlock(TaxRuleBlock, page) {
+  val block = insertBlock(TaxRuleBlock(), page) {
     command(item = report) {
       action = {
-        createReport(TaxRuleBlock)
+        createReport(this@insertBlock)
       }
     }
 
@@ -101,11 +107,11 @@ object TaxRuleForm : ReportSelectionForm() {
   }
 
   override fun createReport(): Report {
-    return TaxRuleR
+    return TaxRuleR()
   }
 }
 
-object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
+class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
   val u = table(TaxRule)
 
   val idTaxe = hidden(domain = Domain<Int>(20)) {
@@ -141,5 +147,5 @@ object TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
 }
 
 fun main() {
-  Application.runForm(formName = TaxRuleForm)
+  Application.runForm(formName = TaxRuleForm())
 }

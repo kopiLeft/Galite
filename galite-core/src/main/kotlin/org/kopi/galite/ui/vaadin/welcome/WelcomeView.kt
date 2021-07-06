@@ -96,13 +96,6 @@ class WelcomeView(locale: Locale,
   }
 
   /**
-   * Removes a login window listener.
-   * @param l The listener to be removed.
-   */
-  fun removeLoginWindowListener(l: LoginWindowListener?) { //loginWindow.addLoginWindowListener(l); TODO
-  }
-
-  /**
    * Registers a welcome screen listener on this component.
    * @param listener The listener to be registered.
    */
@@ -132,13 +125,6 @@ class WelcomeView(locale: Locale,
    */
   fun setSelectedLanguage(language: String) {
     loginWindow!!.setSelectedLanguage(language)
-  }
-
-  /**
-   * Fires an action performed event to all registered listeners.
-   */
-  protected fun fireLogin(username: String, password: String, language: String) {
-    fireEvent(WelcomeViewEvent(this, username, password, language))
   }
 
   /**

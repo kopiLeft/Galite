@@ -48,7 +48,7 @@ object FormWithChart: Form() {
       mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
       action = {
         println("---------------------------------- Generating a chart ----------------------------------")
-        showChart(ChartSample)
+        showChart(ChartSample())
       }
     }
   }

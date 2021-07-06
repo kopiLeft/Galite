@@ -27,12 +27,14 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
+import org.kopi.galite.ui.vaadin.event.TextFieldListener
+import org.kopi.galite.ui.vaadin.form.DTextField
+import org.kopi.galite.ui.vaadin.form.KeyNavigator
 
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.AttachEvent
+import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.customfield.CustomField
+import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.BeanValidationBinder
 
@@ -45,14 +47,21 @@ import com.vaadin.flow.data.binder.BeanValidationBinder
  * @param noEdit          Is it a no edit field.
  * @param align           The field text alignment.
  * @param hasAutofill     Tells if the field has an autofill command
+ * @param fieldParent     parent of this text field
  */
+@CssImport.Container(value = [
+  CssImport("./styles/galite/textfield.css"),
+  CssImport(value = "./styles/galite/textfield.css", themeFor = "vaadin-text-field")
+])
 class TextField(val model: VField,
                 val noEcho: Boolean,
                 val scanner: Boolean,
                 val noEdit: Boolean,
                 val align: Int,
-                val hasAutofill: Boolean)
-  : CustomField<Any?>(), HasStyle {
+                val hasAutofill: Boolean,
+                val fieldParent: DTextField
+)
+  : AbstractField<Any?>(), HasStyle {
 
   val field: InputTextField<*>
 
@@ -133,9 +142,11 @@ class TextField(val model: VField,
    */
   var validator: TextValidator? = null
 
+  private var autofill: IronIcon? = null
+
   internal var lastCommunicatedValue = ""
 
-  val listeners = mutableListOf<HasValue.ValueChangeListener<ComponentValueChangeEvent<*, *>>>()
+  private val textFieldListeners = mutableListOf<TextFieldListener>()
 
   init {
     col = model.width
@@ -150,18 +161,27 @@ class TextField(val model: VField,
     field.isEnabled = enabled
     add(field)
     if (hasAutofill) {
-      //TODO("AUTOFILL")
+      autofill = IronIcons.ARROW_DROP_DOWN.create()
+      autofill!!.style["cursor"] = "pointer" // TODO: move to css
+      autofill!!.addClickListener {
+        fireAutofill()
+      }
+      field.suffixComponent = autofill
+      autofill!!.isVisible = false
+      field.addFocusListener {
+        if (autofill != null) {
+          autofill!!.isVisible = true
+        }
+      }
+      field.addBlurListener {
+        if (autofill != null) {
+          autofill!!.isVisible = false
+        }
+      }
     }
-    setValidator()
   }
 
   val maxLength: Int get() = col * rows
-
-  override fun onAttach(attachEvent: AttachEvent) {
-    listeners.forEach {
-      field.addTextValueChangeListener(it)
-    }
-  }
 
   fun setFieldType() {
     // set field type according to the model
@@ -174,10 +194,10 @@ class TextField(val model: VField,
       is org.kopi.galite.form.VIntegerField -> {
         // integer field
         type = Type.INTEGER
-        if(model.minValue != null) {
+        if (model.minValue != null) {
           minval = model.minValue.toDouble()
         }
-        if(model.maxValue != null) {
+        if (model.maxValue != null) {
           maxval = model.maxValue.toDouble()
         }
       }
@@ -205,10 +225,10 @@ class TextField(val model: VField,
       is VFixnumField -> {
         // fixnum field
         type = Type.DECIMAL
-        if(model.minValue != null) {
+        if (model.minValue != null) {
           minval = model.minValue.toDouble()
         }
-        if(model.maxValue != null) {
+        if (model.maxValue != null) {
           maxval = model.maxValue.toDouble()
         }
         maxScale = model.maxScale
@@ -223,7 +243,6 @@ class TextField(val model: VField,
         throw IllegalArgumentException("unknown field model : " + model.javaClass.name)
       }
     }
-    // add navigation handler TODO
   }
 
   /**
@@ -242,7 +261,7 @@ class TextField(val model: VField,
   /**
    * Sets the validator of a text field.
    */
-  fun setValidator() {
+  fun setValidator(field: InputTextField<*>) {
     val binder = BeanValidationBinder(String::class.java)
     val bindingBuilder = binder.forField(field)
 
@@ -267,15 +286,32 @@ class TextField(val model: VField,
   }
 
   /**
+   * Sets the text transformation applied to the text widget according to the convert text
+   * @param text The text widget.
+   */
+  private fun setTextTransform(text: InputTextField<*>) {
+    when (convertType) {
+      ConvertType.UPPER -> text.element.style["text-transform"] = "uppercase"
+      ConvertType.LOWER -> text.element.style["text-transform"] = "lowercase"
+      ConvertType.NAME -> text.element.style["text-transform"] = "capitalize"
+      ConvertType.NONE -> text.element.style["text-transform"] = "none"
+    }
+  }
+
+  /**
    * Creates the attached text field component.
    * @return the attached text field component.
    */
   private fun createTextField(): InputTextField<*> {
     val text = createFieldComponent()
+
+    setValidator(text)
+    setTextTransform(text)
     if (noEdit) {
+      text.setTextValidator(NoeditValidator(maxLength))
       text.isReadOnly = true
     }
-    // TODO
+
     return text
   }
 
@@ -283,8 +319,9 @@ class TextField(val model: VField,
    * Creates the input component according to field state.
    * @return the input component
    */
-  protected fun createFieldComponent(): InputTextField<*> {
+  private fun createFieldComponent(): InputTextField<*> {
     var col = col
+    val size = getFieldSize()
     val text = if (noEcho && rows == 1) {
       VPasswordField(col)
     } else if (rows > 1) {
@@ -293,35 +330,48 @@ class TextField(val model: VField,
       }
       VTextAreaField().also {
         it.setRows(rows, visibleRows)
-        it.cols = col
+        it.width = (col * 10).toString() + "px"
         it.setWordwrap(true)
         // if fixed new line mode is used, we remove scroll bar from text area
         it.setFixedNewLine(!dynamicNewLine)
       }
-    } else if(type == Type.INTEGER) {
-      VIntegerField(col, minval!!, maxval!!)
-    } else if(isDecimal()) {
-      VFixnumField(col, maxScale, minval, maxval, fraction)
-    } else if(type == Type.CODE) {
-      VCodeField(enumerations)
-    }  else if(type == Type.TIME) {
-      VTimeField()
-    } else if(type == Type.TIMESTAMP) {
-      VTimeStampField()
-    } else if(isDate()) {
-      VDateField()
-    } else {
-      InputTextField(TextField()).also {
-        if(type == Type.WEEK) {
-          it.setInputType("week")
-        } else if (type == Type.MONTH) {
-          it.setInputType("month")
+    } else if(!fieldParent.hasAction) {
+      when (type) {
+        Type.INTEGER -> VIntegerField(col, minval!!, maxval!!)
+        Type.DECIMAL -> VFixnumField(col, maxScale, minval, maxval, fraction)
+        Type.CODE -> VCodeField(enumerations)
+        Type.TIME -> VTimeField()
+        Type.TIMESTAMP -> VTimeStampField()
+        Type.DATE -> VDateField()
+        else -> {
+          val textField = TextField()
+
+          InputTextField(textField).also {
+            if (type == Type.WEEK) {
+              it.setInputType("week")
+            } else if (type == Type.MONTH) {
+              it.setInputType("month")
+            }
+          }
         }
       }
-      // TODO
+    } else {
+      VInputButtonField(size)
     }
 
-    // TODO()
+    text.size = size
+    text.setMaxLength(maxLength)
+    text.maxWidth = "" + size + "em" // TODO: temporary styling
+    text.setWidthFull()
+    setWidthFull()
+    text.setHasAutocomplete(model.hasAutocomplete())
+    // add navigation handler.
+    TextFieldNavigationHandler.createNavigator(text, rows > 1)
+    textFieldListeners.add(KeyNavigator(model, text))
+    return text
+  }
+
+  private fun getFieldSize(): Int {
     var size = col
     // numeric fields are considered as monospaced fields
     if (isNumeric()) {
@@ -332,17 +382,23 @@ class TextField(val model: VField,
         size += 2
       }
     }
+
+    if (type == Type.TIMESTAMP) {
+      size += 3
+    } else if (type == Type.DATE) {
+      size += 5
+    } else if (type == Type.TIME) {
+      size += 5
+    } else {
+      size += 4
+    }
+
     // let the place to the autofill icon
     if (hasAutofill) {
       size += 1
     }
-    text.size = 1.coerceAtLeast(size)
-    text.setMaxLength(maxLength)
-    text.maxWidth = "" + col + "em" // TODO: temporary styling
-    text.setHasAutocomplete(model.hasAutocomplete())
-    // add navigation handler.
-    text.addKeyDownListener(TextFieldNavigationHandler.newInstance(text, rows > 1))
-    return text
+
+    return 1.coerceAtLeast(size)
   }
 
   /**
@@ -351,22 +407,6 @@ class TextField(val model: VField,
    */
   private fun isNumeric(): Boolean {
     return type != Type.STRING && type != Type.CODE
-  }
-
-  /**
-   * Returns true if the field should contains only decimals.
-   * @return True if the field should contains only decimals.
-   */
-  private fun isDecimal(): Boolean {
-    return type == Type.DECIMAL
-  }
-
-  /**
-   * Returns true if the field should contains only date.
-   * @return True if the field should contains only date.
-   */
-  private fun isDate(): Boolean {
-    return type == Type.DATE
   }
 
   /**
@@ -393,14 +433,6 @@ class TextField(val model: VField,
   }
 
   override fun generateModelValue(): Any? = field.value
-
-  /**
-   * Registers a text change listener
-   * @param l The text change listener.
-   */
-  fun addTextValueChangeListener(l: HasValue.ValueChangeListener<ComponentValueChangeEvent<*, *>>) {
-    listeners.add(l)
-  }
 
   /**
    * Communicates the widget text to server side.
@@ -434,6 +466,87 @@ class TextField(val model: VField,
    */
   internal fun needsSynchronization(): Boolean {
     return lastCommunicatedValue != value
+  }
+
+  /**
+   * Fires a print form event on this text field.
+   */
+  internal fun firePrintForm() {
+    for (l in textFieldListeners) {
+      l.printForm()
+    }
+  }
+
+  /**
+   * Fires a previous entry event on this text field.
+   */
+  internal fun firePreviousEntry() {
+    for (l in textFieldListeners) {
+      l.previousEntry()
+    }
+  }
+
+  /**
+   * Fires a next entry event on this text field.
+   */
+  internal fun fireNextEntry() {
+    for (l in textFieldListeners) {
+      l.previousEntry()
+    }
+  }
+
+  /**
+   * Fires a goto next block event on this text field.
+   */
+  internal fun fireGotoNextBlock() {
+    for (l in textFieldListeners) {
+      l.gotoNextBlock()
+    }
+  }
+
+  private fun fireAutofill() {
+    for (l in textFieldListeners) {
+      l.autofill()
+    }
+  }
+
+  override fun focus() {
+    field.parentWindow?.lasFocusedField = this
+    super.focus()
+  }
+
+  override fun addFocusListener(function: () -> Unit) {
+    field.addFocusListener {
+      function()
+    }
+  }
+
+  /**
+   * Sets the field color properties.
+   * @param foreground The foreground color.
+   * @param background The background color.
+   */
+  fun setColor(foreground: String?, background: String?) {
+    field.setColor(foreground, background)
+  }
+
+  /**
+   * Checks if the content of this field is empty.
+   * @return `true` if this field is empty.
+   */
+  override val isNull get(): Boolean = this.field.isNull
+
+  /**
+   * Checks the value of this text field.
+   * @param rec The active record.
+   * @throws CheckTypeException When field content is not valid
+   */
+  override fun checkValue(rec: Int) {
+    field.checkValue(rec)
+  }
+
+  override fun getValue(): String? {
+    return field.value
   }
 
   //---------------------------------------------------

@@ -206,7 +206,6 @@ abstract class Chart : Window() {
     }
 
   override val model: VChart by lazy {
-    genLocalization()
 
     object : VChart() {
       override val locale: Locale get() = this@Chart.locale ?: ApplicationContext.getDefaultLocale()

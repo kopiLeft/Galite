@@ -17,10 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.block
 
-import com.vaadin.flow.component.AttachEvent
-import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.formlayout.FormLayout
+import kotlin.math.max
+
 import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.common.VTable
+
+import com.vaadin.flow.component.Component
 
 /**
  * An abstract implementation for the block layout.
@@ -28,7 +30,9 @@ import org.kopi.galite.ui.vaadin.base.Styles
  * @param col The number of columns.
  * @param line The number of lines.
  */
-abstract class AbstractBlockLayout protected constructor(val col: Int, val line: Int) : FormLayout(), BlockLayout {
+abstract class AbstractBlockLayout protected constructor(val col: Int,
+                                                         val line: Int)
+  : VTable(line, max(1, col)), BlockLayout {
 
   /**
    * The number of columns
@@ -45,6 +49,7 @@ abstract class AbstractBlockLayout protected constructor(val col: Int, val line:
    */
   var constrains: MutableMap<Component?, ComponentConstraint?> = mutableMapOf()
 
+  protected var alignPane: AlignPanel? = null
   protected var components: Array<Array<Component?>>? = null
   protected var aligns: Array<Array<ComponentConstraint?>>? = null
 
@@ -61,10 +66,6 @@ abstract class AbstractBlockLayout protected constructor(val col: Int, val line:
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
-
-  override fun onAttach(attachEvent: AttachEvent?) {
-    layout()
-  }
 
   /**
    * Initialize the size of the layout
@@ -89,21 +90,24 @@ abstract class AbstractBlockLayout protected constructor(val col: Int, val line:
    * @param colSpan The column span width
    * @param rowSpan The row span width.
    */
-  open fun setComponent(formItem: Component?, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
-    addComponent(formItem, column, row, colSpan, rowSpan, false, false)
+  open fun setComponent(formItem: Component, column: Int, row: Int, colSpan: Int, rowSpan: Int) {
+    add(row, column, formItem)
     if (colSpan > 1) {
-      formItem!!.element.setAttribute("colspan", colSpan.toString())
+      setColSpan(row, column, colSpan.toString())
     }
     if (rowSpan > 1) {
-      formItem!!.element.setAttribute("rowspan", rowSpan.toString())
+      setRowSpan(row, column, rowSpan.toString())
     }
   }
 
-  open fun addAlignedComponent(widget: Component?, constraint: ComponentConstraint?) {
-    TODO()
+  override fun addAlignedComponent(component: Component, constraint: ComponentConstraint) {
+    alignPane?.addComponent(component, constraint)
   }
 
   override fun layoutAlignedComponents() {
-    TODO("Not yet implemented")
+    if (alignPane != null) {
+      add(0, 0, alignPane!!)
+      getCellAt(0, 0).style["width"] = "100%"
+    }
   }
 }

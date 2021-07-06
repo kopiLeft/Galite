@@ -35,6 +35,12 @@ class DChartHeaderLabel internal constructor(text: String?,
                                              var fieldIndex: Int,
                                              model: VBlock.OrderModel) : DLabel(text, help), UChartLabel {
 
+
+  var sortModel = model
+
+  init {
+    sortModel.addSortingListener(this)
+  }
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------
@@ -47,6 +53,4 @@ class DChartHeaderLabel internal constructor(text: String?,
   }
 
   override fun isEnabled(): Boolean = true
-
-  var sortModel = model
 }

@@ -19,12 +19,14 @@ package org.kopi.galite.ui.vaadin.chart
 
 import org.kopi.galite.chart.VDataSeries
 
+import com.github.appreciated.apexcharts.config.chart.Type
+
 /**
  * Creates a new pie chart from a given data series model.
  * @param title The chart title.
  * @param dataSeries The data series model.
  */
-class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(title, dataSeries) {
+class DPieChart(title: String?, dataSeries: Array<VDataSeries>) : DAbstractChartType(Type.pie, title, dataSeries) {
 
   //---------------------------------------------------
   // IMPLEMENTATIONS

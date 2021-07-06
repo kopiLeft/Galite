@@ -1,0 +1,67 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+/**
+ * Label and grid label style
+ */
+.k-label, .editor-label {
+    font-size: 12px !important;
+    font-family: Arial, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    color: #a3a3a3;
+}
+
+.k-label {
+    margin-top: 5px;
+    white-space: nowrap;
+}
+
+/**
+ * Disabled label styles
+ */
+.k-label.v-disabled span, .editor-label.v-disabled span {
+    color: #a3a3a3 !important;
+}
+
+/**
+ * Grid label styles
+ */
+.editor-label {
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis !important;
+    -ms-text-overflow: ellipsis !important;
+    text-overflow: ellipsis !important;
+}
+
+/**
+ * Mandatory label indicator styles
+ */
+.k-label span.mandatory {
+    color: #fd2020;
+    padding-left: 2px;
+}
+
+/**
+ * Label having action styles
+ */
+.k-label-has-action span.action {
+    color: #009bd4;
+    padding-left: 2px;
+}
