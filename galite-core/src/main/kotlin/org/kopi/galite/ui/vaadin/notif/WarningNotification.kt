@@ -29,9 +29,9 @@ import com.vaadin.flow.component.icon.VaadinIcon
  * @param message the warning notification message.
  * @param locale  the notification locale
  */
-open class WarningNotification(title: String?,
-                               message: String,
-                               locale: String)
+class WarningNotification(title: String?,
+                          message: String,
+                          locale: String)
   : AbstractNotification(title, message, locale) {
 
   //-------------------------------------------------

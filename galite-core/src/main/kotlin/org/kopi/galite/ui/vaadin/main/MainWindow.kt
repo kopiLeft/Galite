@@ -173,14 +173,13 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
    * @param title The window title.
    */
   fun addWindow(window: Component, title: String) {
+    val item = windowsMenu.addWindow(window, title)
+
     windowsList.add(window)
     container.addWindow(window, title)
     currentWindow = container.showWindow(window)
-
-    val item = windowsMenu.addWindow(window, title)
     // adding listener on the item to show the window in the container
     item.addClickListener {
-
       if (currentWindow != item.window) {
         currentWindow = container.showWindow(item.window)
         if (currentWindow is Window) {

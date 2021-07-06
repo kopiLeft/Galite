@@ -40,7 +40,7 @@ class TaxRuleForm : ReportSelectionForm() {
           help = "Create report",
   ) {
     key = Key.F8          // key is optional here
-    icon = "preview"  // icon is optional here
+    icon = "report"  // icon is optional here
   }
   val autoFill = actor(
     ident = "Autofill",
