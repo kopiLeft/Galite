@@ -163,5 +163,5 @@
 .k-form-page {
     overflow: auto;
     height: calc(100vh - 210px);
-    max-width: calc(100vw - 30px);
+    max-width: calc(100vw - 50px);
 }

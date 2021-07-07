@@ -47,17 +47,6 @@ class Page<T>(private var content: T) : Div()  where T: Component, T: FlexCompon
     className = Styles.FORM_PAGE
   }
 
-  override fun onAttach(attachEvent: AttachEvent) {
-    element.executeJs("return $0.clientWidth", this.element).then { width -> this.width = width.asNumber() }
-
-    access(attachEvent.ui) {
-      UI.getCurrent().page.addBrowserWindowResizeListener { event ->
-        this.style["max-width"] = (event.width - 30).toString() + "px"
-        style["overflow"] = "auto"
-      }
-    }
-  }
-
   //---------------------------------------------------
   // IMPLEMENTATIONS
   //---------------------------------------------------

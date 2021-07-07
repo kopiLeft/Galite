@@ -20,9 +20,12 @@
  * List Dialog style
  */
 .enhanced-dialog-content ::part(cell header-cell) {
-    color: #009bd4;
     background-color: #f2f2f2;
     padding: 0 !important;
+}
+
+.k-listdialog-table::part(cell header-cell) {
+    color: #009bd4;
 }
 
 /*
