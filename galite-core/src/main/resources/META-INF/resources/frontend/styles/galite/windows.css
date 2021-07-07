@@ -38,3 +38,18 @@
     cursor: pointer
 }
 
+.window-items-container .item {
+    border-bottom: 1px solid #dadada;
+    text-align: left;
+    padding: 20px 24px;
+    color: #8f8f8f;
+}
+
+.window-items-container .item:hover {
+    background: #d9f0f8;
+    cursor: pointer;
+}
+
+.window-items-container .item-selected {
+    color: #DCDCDC;
+}
