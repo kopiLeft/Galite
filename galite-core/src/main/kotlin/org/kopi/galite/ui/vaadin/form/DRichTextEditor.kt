@@ -25,10 +25,6 @@ import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.customfield.CustomField
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-
 /**
 * Rich text editor implementation based on CK editor for vaadin.
 */

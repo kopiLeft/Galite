@@ -30,10 +30,6 @@ import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.HasValue
 
 /**
- * A rich text field implementation based on QuillEditor
- */
-
-/**
  * A rich text field implementation based on wysiwyg-e
  */
 
