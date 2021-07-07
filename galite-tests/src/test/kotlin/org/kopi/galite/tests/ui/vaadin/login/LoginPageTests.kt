@@ -68,7 +68,7 @@ class LoginPageTests: GaliteVUITestBase() {
   fun `test login fails`() {
     userNameField._value = testUser
     passwordField._value = "incorrect password"
-    loginButton._click()
+    loginButton._clickAsynch()
 
     // Error displayed
     assertEquals("VIS-00054: Error during database login.", errorIndicator._text)
