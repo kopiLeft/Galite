@@ -63,6 +63,7 @@ import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.server.VaadinServlet
+import com.vaadin.flow.server.VaadinSession
 
 /**
  * The entry point for all Galite WEB applications.
@@ -465,8 +466,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     // TODO
   }
 
-  override val userIP: String
-    get() = TODO()
+  override val userIP: String get() = VaadinSession.getCurrent().browser.address
 
   //---------------------------------------------------
   // UTILS
