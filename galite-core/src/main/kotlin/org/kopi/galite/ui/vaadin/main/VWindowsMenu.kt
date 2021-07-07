@@ -50,18 +50,18 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
     val header = HorizontalLayout()
     val switch = HorizontalLayout(headerText, switchWindowIcon)
 
+    setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
     element.themeList.add("k-windowsMenu")
     header.className = "window-items-title"
     closeIcon.className = "close-icon"
-    header.add(switch)
-    header.add(closeIcon)
-    header.setFlexGrow(1.0, switch)
 
+    header.setFlexGrow(1.0, switch)
     closeIcon.addClickListener {
       close()
     }
 
-    setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    header.add(switch)
+    header.add(closeIcon)
     setHeader(header)
     setContent(items)
   }
