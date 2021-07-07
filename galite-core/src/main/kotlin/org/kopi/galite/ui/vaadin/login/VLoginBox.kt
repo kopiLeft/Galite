@@ -494,11 +494,13 @@ class VLoginBox : Div() {
     }
 
     fun setWaitInfo() {
+      login.isEnabled = false
       progress.isVisible = true
     }
 
     fun unsetWaitInfo() {
       progress.isVisible = false
+      login.isEnabled = true
     }
 
     //---------------------------------------
