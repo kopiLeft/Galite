@@ -21,6 +21,7 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VConstants
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.BlockLayout
 import org.kopi.galite.ui.vaadin.block.BlockListener
 import org.kopi.galite.ui.vaadin.block.ChartBlockLayout
@@ -196,7 +197,7 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
    * Updates the scroll bar position.
    */
   override fun updateScrollbar() {
-    //BackgroundThreadHandler.access(Runnable { TODO
+    access(currentUI) {
       val validRecords = model.numberOfValidRecord
       val dispSize = model.displaySize
 
@@ -204,6 +205,6 @@ open class DChartBlock(parent: DForm, model: VBlock) : DBlock(parent, model), Bl
                    validRecords,
                    validRecords > dispSize,
                    model.getNumberOfValidRecordBefore(getRecordFromDisplayLine(0)))
-    //})
+    }
   }
 }

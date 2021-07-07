@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.form
 
 import org.kopi.galite.form.VFieldUI
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.grid.GridEditorImageField
 
 import com.vaadin.flow.data.converter.Converter
@@ -56,13 +57,13 @@ class DGridEditorImageField(
   override fun getObject(): Any? = image
 
   fun setObject(s: Any?) {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    if (s != null) {
-      //editor.setImage(s as ByteArray?) TODO
-      setBlink(false)
-      setBlink(true)
+    access(currentUI) {
+      if (s != null) {
+        //editor.setImage(s as ByteArray?) TODO
+        setBlink(false)
+        setBlink(true)
+      }
     }
-    //})
     image = s as ByteArray?
   }
 
