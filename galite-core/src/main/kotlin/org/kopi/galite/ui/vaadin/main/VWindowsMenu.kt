@@ -61,10 +61,9 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
       close()
     }
 
-    this.setHeader(header)
-    this.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
-    element.themeList.add("k-windowsMenu")
-    this.setContent(items)
+    setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    setHeader(header)
+    setContent(items)
   }
 
   /**

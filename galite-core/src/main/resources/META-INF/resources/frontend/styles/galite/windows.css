@@ -53,3 +53,7 @@
 .window-items-container .item-selected {
     color: #DCDCDC;
 }
+
+.window-items-container .item:last-child {
+    border-bottom: none;
+}
