@@ -875,7 +875,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       download.element.setAttribute("download", true)
 
       val downloadButton = Button(LocalizedProperties.getString(locale, "downloadLabel"), Icon(VaadinIcon.DOWNLOAD_ALT))
-      val closeButton = Button(LocalizedProperties.getString(locale, "closeLabel"), Icon(VaadinIcon.CLOSE_CIRCLE))
+      val closeButton = Button(LocalizedProperties.getString(locale, "CLOSE"), Icon(VaadinIcon.CLOSE_CIRCLE))
 
       downloadButton.isDisableOnClick = true
       download.add(downloadButton)

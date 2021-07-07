@@ -167,12 +167,12 @@ pre {
     border-bottom: #009bd4 1px solid;
 }
 
-.download-file-buttons {
+.download-file-buttons, .k-upload-buttons {
     width: 100%;
     text-align: center;
 }
 
-.download-file-buttons vaadin-button {
+.download-file-buttons vaadin-button, .k-upload-buttons .k-input-button {
 	display: inline-block;
 	margin: 18px 8px 0 auto;
 	background: #009bd4;
