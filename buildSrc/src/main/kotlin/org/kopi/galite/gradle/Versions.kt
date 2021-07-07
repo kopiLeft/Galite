@@ -38,4 +38,5 @@ object Versions {
   const val JAVAX_SERVLET_API = "4.0.1"
 
   const val JFREE_CHART = "1.0.19"
+  const val WYSIWYG_EJAVA = "2.0.1"
 }

@@ -129,6 +129,7 @@ object TaxRule : Table("TAX_RULE") {
   val idTaxe = integer("ID").autoIncrement()
   val taxName = varchar("NAME", 20)
   val rate = integer("RATE_IN_PERCENTAGE")
+  val informations = varchar("INFORMATION", 200).nullable()
 
   override val primaryKey = PrimaryKey(idTaxe)
 }
@@ -287,14 +288,15 @@ fun addTaxRules() {
   addTaxRule(1, "tax 2", 22)
   addTaxRule(2, "tax 3", 13)
   addTaxRule(3, "tax 4", 9)
-  addTaxRule(4, "tax 5", 20)
+  addTaxRule(4, "tax 5", 20, "<strong>ABC</strong>")
 }
 
-fun addTaxRule(id: Int, taxName: String, rate: Int) {
+fun addTaxRule(id: Int, taxName: String, rate: Int, information: String? = null) {
   TaxRule.insert {
     it[idTaxe] = id
     it[TaxRule.taxName] = taxName
     it[TaxRule.rate] = rate
+    it[informations] = information
   }
 }
 

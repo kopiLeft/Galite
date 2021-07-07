@@ -116,7 +116,7 @@ class DBooleanField(
     }
   }
 
-  override fun getObject(): Any? = wrappedField.value
+  override fun getObject(): Any? = wrappedField!!.value
 
   override fun setBlink(b: Boolean) {
     access(currentUI) {

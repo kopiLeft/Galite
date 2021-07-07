@@ -79,7 +79,24 @@ class TaxRuleForm : ReportSelectionForm() {
     icon = "delete"
   }
 
+  val saveBlock = actor(
+          ident = "saveBlock",
+          menu = action,
+          label = "Save Block",
+          help = " Save Block",
+  ) {
+    key = Key.F9
+    icon = "save"
+  }
+
   val block = insertBlock(TaxRuleBlock(), page) {
+    command(item = saveBlock) {
+      action = {
+        println("-----------save-----------------" + informations.value)
+        saveBlock()
+      }
+    }
+
     command(item = report) {
       action = {
         createReport(this@insertBlock)
@@ -132,6 +149,14 @@ class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
     label = "Rate"
     help = "The tax rate in %"
     columns(u.rate) {
+      priority = 1
+    }
+  }
+
+  val informations = mustFill(domain = Domain<String?>(80, 50, 10), position = at(3, 1)) {
+    label = "tax informations"
+    help = "The tax informations"
+    columns(u.informations) {
       priority = 1
     }
   }

@@ -23,10 +23,11 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.ui.vaadin.field.RichTextField
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.ApplicationContext
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 
 /**
- * Rich text editor implementation based on CK editor for vaadin.
- */
+* Rich text editor implementation based on CK editor for vaadin.
+*/
 class DRichTextEditor(
         model: VFieldUI,
         label: DLabel?,
@@ -36,7 +37,7 @@ class DRichTextEditor(
         detail: Boolean
 ) : DField(model, label, align, options, detail),
         UTextField
-        /*Focusable<DRichTextEditor> , ValueChangeListener, NavigationListener TODO*/ {
+/*Focusable<DRichTextEditor> , ValueChangeListener, NavigationListener TODO*/ {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -53,9 +54,10 @@ class DRichTextEditor(
                            if (getModel().height == 1) 1 else (getModel() as VStringField).getVisibleHeight(),
                            model.model.isNoEdit(),
                            ApplicationContext.getDefaultLocale())
-    editor.addValueChangeListener {
+    editor.addTextValueChangeListener {
       valueChanged()
     }
+    setFieldContent(editor)
     //editor.addNavigationListener(this) TODO
     //setContent(editor) TODO
   }
@@ -96,9 +98,9 @@ class DRichTextEditor(
 
   override fun updateText() {
     val newModelTxt = getModel().getText(rowController.blockView.getRecordFromDisplayLine(position))
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.setValue(newModelTxt)
-    //})
+    access {
+      editor.setValue(newModelTxt)
+    }
   }
 
   override fun updateFocus() {
@@ -145,9 +147,9 @@ class DRichTextEditor(
    * Gets the focus to this editor.
    */
   private fun enterMe() {
-    //BackgroundThreadHandler.access(Runnable { TODO
-    editor.focus()
-    //})
+    access {
+      editor.focus()
+    }
   }
 
   // ----------------------------------------------------------------------

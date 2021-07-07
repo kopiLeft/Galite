@@ -81,6 +81,7 @@ class Utils {
         input.substring(0, last + 1)
       }
     }
+
     fun toSql(date: Date?): String = TODO()
 
     fun toSql(l: String?): String {

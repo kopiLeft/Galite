@@ -31,8 +31,8 @@ dependencies {
   // Vaadin dependencies
   implementation("com.vaadin", "vaadin-core") {
     listOf("com.vaadin.webjar", "org.webjars.bowergithub.insites",
-            "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
-            "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
+           "org.webjars.bowergithub.polymer", "org.webjars.bowergithub.polymerelements",
+           "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { group -> exclude(group = group) }
   }
 
@@ -68,6 +68,9 @@ dependencies {
 
   // Iron Icons dependency
   implementation("com.flowingcode.addons", "iron-icons", Versions.IRON_ICONS)
+
+  //Wysiwyg-e Rich Text Editor component for Java dependency
+  implementation("org.vaadin.pekka", "wysiwyg_e-java", Versions.WYSIWYG_EJAVA)
 
   // Compile only dependency for Vaadin servlet
   compileOnly("javax.servlet", "javax.servlet-api", Versions.JAVAX_SERVLET_API)
