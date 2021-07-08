@@ -493,6 +493,42 @@ open class FormBlock(var buffer: Int,
   }
 
   /**
+   * Sets the block into insert mode.
+   * @exception        VException        an exception may occur during DB access
+   */
+  fun insertMode() {
+    Commands.insertMode(vBlock)
+  }
+
+  /**
+   * Inserts an empty line in multi-block.
+   * @exception        VException        an exception may occur during DB access
+   */
+  fun insertLine() {
+    Commands.insertLine(vBlock)
+  }
+
+  /**
+   * Navigate between accessible blocks
+   * @exception        VException        an exception may occur during DB access
+   */
+  fun changeBlock() {
+    Commands.changeBlock(vBlock)
+  }
+
+  /**
+   * Sets the search operator for the current field
+   * @exception        VException        an exception may occur during DB access
+   */
+  fun searchOperator() {
+    Commands.setSearchOperator(vBlock)
+  }
+
+  fun showHideFilter() {
+    Commands.showHideFilter(vBlock)
+  }
+
+  /**
    * * Loads block from database
    */
   fun load() {
@@ -511,6 +547,13 @@ open class FormBlock(var buffer: Int,
    */
   fun DictionaryForm.recursiveQuery() {
     Commands.recursiveQuery(vBlock)
+  }
+
+  /**
+   * Menu query block, fetches selected record, then moves to next block
+   */
+  fun queryMove() {
+      Commands.queryMove(vBlock)
   }
 
   fun addDropList(dropList: MutableList<String>, field: FormField<*>): String? {

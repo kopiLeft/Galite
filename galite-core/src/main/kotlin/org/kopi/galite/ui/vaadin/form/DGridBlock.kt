@@ -39,8 +39,13 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.grid.HeaderRow
 import com.vaadin.flow.component.grid.editor.Editor
 import com.vaadin.flow.component.grid.editor.EditorImpl
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.event.SortEvent
+import com.vaadin.flow.data.provider.ListDataProvider
+import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * Grid based chart block implementation.
@@ -312,44 +317,41 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
   override fun filterShown() {
     if (filterRow != null) {
+      access {
+        grid.element.themeList.remove("hidden-filter")
+        grid.element.themeList.add("shown-filter")
+      }
       return
     }
-    /*BackgroundThreadHandler.access(Runnable { TODO
+
+    access {
       filterRow = grid.appendHeaderRow()
-      // filterRow.setStyleName("block-filter")
-      for (propertyId in containerDatasource.containerPropertyIds) {
-        val cell: HeaderRow.HeaderCell = filterRow!!.getCell(propertyId)
+      filterRow.also { element.classList.add("block-filter") }
+      grid.columns.forEachIndexed { index, column ->
+        val cell = filterRow!!.getCell(column)
         val filter = TextField()
-        filter.setStyleName("filter-text")
-        filter.setImmediate(true)
-        filter.addTextChangeListener(object : TextChangeListener() {
-          fun textChange(event: TextChangeEvent) {
-            if (grid.isEditorActive()) {
-              grid.cancelEditor()
-            }
-            containerDatasource.removeContainerFilters(propertyId)
-            if (event.getText().length() > 0) {
-              containerDatasource.addContainerFilter(propertyId,
-                                                     event.getText(),
-                                                     true,
-                                                     false)
-            }
-          }
-        })
+        val search = Icon(VaadinIcon.SEARCH)
+        filter.setWidthFull()
+
+        filter.suffixComponent = search
+        filter.className = "block-filter-text"
+        filter.addValueChangeListener {
+          (grid.dataProvider as ListDataProvider).filter = DGridBlockFilter(model.fields[index], filter.value, true, false)
+        }
+
+        filter.valueChangeMode = ValueChangeMode.EAGER
         cell.setComponent(filter)
       }
-    })*/
+    }
   }
 
   override fun filterHidden() {
-    access(currentUI) {
-      if (filterRow != null) {
-        containerDatasource.removeAllContainerFilters()
-        //grid.removeHeaderRow(filterRow) TODO
-        filterRow = null
-      }
+    access {
+      grid.element.themeList.remove("shown-filter")
+      grid.element.themeList.add("hidden-filter")
     }
   }
+
 
   override fun blockChanged() {
     refresh(true)
@@ -510,20 +512,20 @@ open class DGridBlock(parent: DForm, model: VBlock)
 
         if (columnView.hasDisplays()) {
           val column = grid.addColumn { it.getValue(field) }
-            .setKey(i.toString())
-            .setHeader(columnView.editorField.label)
-            .setEditorComponent(columnView.editor)
-            .setResizable(true)
+                  .setKey(i.toString())
+                  .setHeader(columnView.editorField.label)
+                  .setEditorComponent(columnView.editor)
+                  .setResizable(true)
 
           //column.setRenderer(columnView.editorField.createRenderer()) TODO
           //column.setConverter(columnView.editorField.createConverter()) TODO
           column.isSortable = field.isSortable()
           val width =
-            when (field) {
-              is VBooleanField -> 46 // boolean field length
-              is VActorField -> 148 // actor field field length
-              else -> 8 * field.width + 12  // add padding TODO
-            }
+                  when (field) {
+                    is VBooleanField -> 46 // boolean field length
+                    is VActorField -> 148 // actor field field length
+                    else -> 8 * field.width + 12  // add padding TODO
+                  }
 
           column.width = if(field.hasAutofill()) {
             "" + (width + 18) + "px" // Add more width for the autofill button
@@ -647,9 +649,9 @@ open class DGridBlock(parent: DForm, model: VBlock)
       itemToBeEdited = record
       access(currentUI) {
         if (grid.isEnabled
-          && (editor.item == null
-                  || (itemToBeEdited != null
-                  && editor.item.record != itemToBeEdited))
+                && (editor.item == null
+                        || (itemToBeEdited != null
+                        && editor.item.record != itemToBeEdited))
         ) {
           if(itemToBeEdited!! < 0 || itemToBeEdited!! >= grid.dataCommunicator.itemCount) {
             itemToBeEdited = 0

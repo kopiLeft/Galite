@@ -17,12 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
+import org.kopi.galite.form.VField
+
+import com.vaadin.flow.function.SerializablePredicate
+
 class DGridBlockFilter(
-        private val propertyId: Any?,
+        private val propertyId: VField,
         filterString: String,
         private val ignoreCase: Boolean,
         private val onlyMatchPrefix: Boolean
-) /* : Filter TODO*/ {
+) : SerializablePredicate<DGridBlockContainer.GridBlockItem> {
 
   private val filterString = if (ignoreCase) filterString.toLowerCase() else filterString
 
@@ -59,4 +63,20 @@ class DGridBlockFilter(
   }
 
   override fun hashCode(): Int = (propertyId?.hashCode() ?: 0) xor (filterString?.hashCode() ?: 0)
+
+  override fun test(grid: DGridBlockContainer.GridBlockItem): Boolean {
+    val value = if (ignoreCase) grid.getValue(propertyId).toString().toLowerCase()
+                  else grid.getValue(propertyId).toString()
+
+    if (onlyMatchPrefix) {
+      if (!value.startsWith(filterString)) {
+        return false
+      }
+    } else {
+      if (!value.contains(filterString)) {
+        return false
+      }
+    }
+    return true
+  }
 }

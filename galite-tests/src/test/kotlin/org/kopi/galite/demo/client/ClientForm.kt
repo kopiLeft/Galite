@@ -43,6 +43,15 @@ class ClientForm : ReportSelectionForm() {
     key = Key.ESCAPE          // key is optional here
     icon = "quit"  // icon is optional here
   }
+  val showHideFilter = actor(
+          ident = "ShowHideFilter",
+          menu = action,
+          label = "ShowHideFilter",
+          help = " Show Hide Filter",
+  ) {
+    key = Key.F4
+    icon = "searchop"
+  }
   val report = actor(
           ident = "report",
           menu = action,
@@ -153,6 +162,13 @@ class ClientForm : ReportSelectionForm() {
   }
 
   val salesBlock = insertBlock(sales(), clientsPage) {
+
+    command(item = showHideFilter) {
+      action = {
+        showHideFilter()
+      }
+    }
+
     command(item = report) {
       action = {
         createReport(this@insertBlock)
