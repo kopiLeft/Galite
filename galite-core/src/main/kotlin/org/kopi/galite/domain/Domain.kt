@@ -81,7 +81,7 @@ open class Domain<T>(val width: Int? = null,
                                       height ?: 1,
                                       visibleHeight ?: 1,
                                       0,  // TODO
-                                      false) // TODO
+                                      visibleHeight != null) // TODO
         Decimal::class -> VFixnumField(block.buffer,
                                        width!!,
                                        height ?: 6,

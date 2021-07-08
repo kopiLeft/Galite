@@ -76,10 +76,10 @@ class DActorField(model: VFieldUI,
 
   override fun updateAccess() {
     super.updateAccess()
-    //BackgroundThreadHandler.access(Runnable { TODO
-    field.isVisible = access != VConstants.ACS_HIDDEN
-    field.isEnabled = access >= VConstants.ACS_VISIT
-    //})
+    access(currentUI) {
+      field.isVisible = access != VConstants.ACS_HIDDEN
+      field.isEnabled = access >= VConstants.ACS_VISIT
+    }
   }
 
   override fun updateFocus() {}

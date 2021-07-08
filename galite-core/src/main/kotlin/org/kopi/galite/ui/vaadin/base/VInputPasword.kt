@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,29 +15,21 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.kopi.galite.gradle
+package org.kopi.galite.ui.vaadin.base
 
-object Versions {
+import com.vaadin.flow.component.html.Input
+import com.vaadin.flow.component.textfield.PasswordField
 
-  const val EXPOSED = "0.29.1"
-  const val H2 = "1.4.199"
-  const val  POSTGRES_NG = "0.8.6"
+/**
+ * An input text component.
+ */
+class VInputPassword : PasswordField() {
 
-  const val ITEXT = "2.1.5"
-  const val  GRAPH_BUILDER = "1.02"
-  const val HYLAFAX = "1.0.0"
-  const val GETOPT = "1.0.13"
-  const val JDOM = "2.0.5"
-  const val APACHE_POI = "4.1.2"
-
-  const val VAADIN = "18.0.3"
-
-  const val KARIBU_TESTING = "1.2.12"
-  const val ENHANCED_DIALOG = "1.0.4"
-  const val APEX_CHARTS = "2.0.0.beta10"
-  const val IRON_ICONS = "2.0.1"
-  const val JAVAX_SERVLET_API = "4.0.1"
-
-  const val JFREE_CHART = "1.0.19"
-  const val WYSIWYG_EJAVA = "2.0.1"
+  /**
+   * Creates the input text component.
+   */
+  init {
+    // Issue: https://vaadin.com/forum/thread/17399734/leverage-browser-save-password-feature
+    addToInput(Input())
+  }
 }

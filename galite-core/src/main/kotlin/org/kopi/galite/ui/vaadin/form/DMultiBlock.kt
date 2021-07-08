@@ -22,12 +22,10 @@ import org.kopi.galite.form.Alignment
 import org.kopi.galite.form.UMultiBlock
 import org.kopi.galite.form.VBlock
 import org.kopi.galite.form.VField
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.block.BlockLayout
-import org.kopi.galite.ui.vaadin.block.MultiBlockLayout
 import org.kopi.galite.visual.VException
 import org.kopi.galite.visual.VRuntimeException
-
-import com.vaadin.flow.component.Component
 
 /**
  * The `DMultiBlock` is the UI implementation
@@ -143,8 +141,8 @@ class DMultiBlock(parent: DForm, model: VBlock) : DChartBlock(parent, model), UM
       model.gotoRecord(getRecordFromDisplayLine(getDisplayLine()))
     }
     model.isDetailMode = !inDetailMode()
-    //BackgroundThreadHandler.access(Runnable { TODO
-    switchView(inDetailMode())
-    //})
+    access(currentUI) {
+      switchView(inDetailMode())
+    }
   }
 }

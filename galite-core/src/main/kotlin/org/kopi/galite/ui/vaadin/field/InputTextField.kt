@@ -97,7 +97,7 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     addKeyUpListener(::onKeyUp)
     //element.addEventListener("paste", ::onPasteEvent) // TODO
     //sinkEvents(Event.ONCONTEXTMENU) TODO
-    addKeyDownListener(::onKeyDown)
+    // addKeyDownListener(::onKeyDown) TODO
     addFocusListener(::onFocus)
     //addBlurListener(::onBlur)
     // TODO : disable context menu from showing up.
@@ -327,8 +327,8 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
    * Sets the text size.
    */
   open var size: Int
-    get() = element.getProperty("size").toInt()
-    set(value) { element.setProperty("size", value.toString()) }
+    get() = this.field.element.getProperty("size").toInt()
+    set(value) { this.element.setProperty("size", value.toString()) }
 
   /**
    * This method is responsible for updating the DOM or otherwise ensuring

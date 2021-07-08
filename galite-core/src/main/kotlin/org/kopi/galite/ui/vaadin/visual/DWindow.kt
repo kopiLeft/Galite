@@ -215,9 +215,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun performBasicAction(action: Action) {
-    //BackgroundThreadHandler.access(Runnable {  TODO
-    performActionImpl(action, false)
-    //})
+    access(currentUI) {
+      performActionImpl(action, false)
+    }
   }
 
   /**

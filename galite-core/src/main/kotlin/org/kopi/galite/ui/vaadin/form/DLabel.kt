@@ -187,9 +187,9 @@ open class DLabel(text: String?, help: String?) : SortableLabel(text), ULabel {
   override var infoText: String? = null
     set(info) {
       field = info
-      //BackgroundThreadHandler.access(Runnable { TODO
+      access(currentUI) {
         super@DLabel.infoText = info
-      //})
+      }
     }
 
   /**
