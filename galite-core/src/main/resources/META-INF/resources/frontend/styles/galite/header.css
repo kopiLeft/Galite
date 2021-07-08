@@ -163,35 +163,3 @@
     padding: 18px 10px;
     text-transform: none;
 }
-
-/**
- * switch window style
- */
-.window-items-title, .window-items-container .item {
-    background: white;
-    color: #8f8f8f;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    font-style: italic !important;
-    font-size: 1em;
-}
-
-.window-items-title {
-    background: none;
-}
-
-.window-items-container .item {
-    border-bottom: 1px solid #dadada;
-    text-align: left;
-    padding: 20px 24px;
-    color: #8f8f8f;
-}
-
-.window-items-container .item:hover {
-    background: #d9f0f8;
-    cursor: pointer;
-}
-
-.window-items-container .item-selected {
-    color: #DCDCDC;
-}

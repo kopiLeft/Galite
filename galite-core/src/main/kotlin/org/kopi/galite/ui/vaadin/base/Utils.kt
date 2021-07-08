@@ -32,14 +32,12 @@ import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.flowingcode.vaadin.addons.ironicons.MapsIcons
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.dom.Element
 
 /**
  * Some vaadin version utilities to obtain images and resources.
  */
-@CssImport("./styles/galite/report.css")
 object Utils : Utils() {
 
   //---------------------------------------------------
@@ -424,7 +422,7 @@ object Utils : Utils() {
     pngToIconMap["redo"] = IronIcons.REDO
     pngToIconMap["refresh"] = VaadinIcon.REFRESH
     pngToIconMap["reload"] = VaadinIcon.REFRESH
-    pngToIconMap["report"] = VaadinIcon.GRID
+    pngToIconMap["report"] = VaadinIcon.TABLE
     pngToIconMap["sec"] = VaadinIcon.UNLOCK
     pngToIconMap["selected"] = VaadinIcon.ARROWS_LONG_RIGHT
     pngToIconMap["send"] = VaadinIcon.OUTBOX

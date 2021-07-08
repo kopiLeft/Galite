@@ -28,13 +28,12 @@ import com.vaadin.flow.component.html.Div
  * This component will be responsible of displaying only one window.
  * The control of the displayed component will be from outside.
  */
-class VWindowContainer(val menu: VWindowsMenu) : Div() {
+class VWindowContainer(private val menu: VWindowsMenu) : Div() {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  private val windowToCaptionMap = mutableMapOf<Component, String>()
-  private var previousWindow : Component? = null
+  private val windowToCaptionMap = WindowMap()
   private var currentWindow : Component? = null
   private val pane = Div()
   private val caption: VCaption
@@ -75,6 +74,7 @@ class VWindowContainer(val menu: VWindowsMenu) : Div() {
    * @return The new shown component or `null` if no window is shown.
    */
   fun removeWindow(window: Component): Component? {
+    val previousWindow = windowToCaptionMap.previousWindowOf(window)
     // look for internal map.
     val caption = windowToCaptionMap.remove(window)
     if (caption != null) {
@@ -82,7 +82,7 @@ class VWindowContainer(val menu: VWindowsMenu) : Div() {
       pane.remove(window)
       if (windowToCaptionMap.isNotEmpty() && previousWindow != null) {
         // show previous window in the list
-        return showWindow(previousWindow!!)
+        return showWindow(previousWindow)
       }
     }
 
@@ -106,16 +106,16 @@ class VWindowContainer(val menu: VWindowsMenu) : Div() {
    * @param window The window to be shown.
    * @return The new shown widget or `null` if no window is shown.
    */
-  fun showWindow(window: Component): Component? {
+  fun showWindow(window: Component?): Component? {
     // show only if we find a mapping or the component in the pane dom
     if (windowToCaptionMap.contains(window) || pane.children.toArray().contains(window)) {
       if(currentWindow != window) {
         menu.getItemFor(window)?.addClassName("item-selected")
-        previousWindow = currentWindow
-        menu.getItemFor(previousWindow)?.removeClassName("item-selected")
-        previousWindow?.isVisible = false
+        menu.getItemFor(currentWindow)?.removeClassName("item-selected")
+        currentWindow?.isVisible = false
         currentWindow = window
-        currentWindow?.isVisible = true
+
+        window!!.isVisible = true
 
         caption.setCaption(windowToCaptionMap[window])
         UI.getCurrent().page.setTitle(caption.getCaption())
@@ -129,36 +129,72 @@ class VWindowContainer(val menu: VWindowsMenu) : Div() {
   /**
    * Shows the next window in the list.
    */
-  fun showNextWindow(): Component? {
-    var componentIndex: Int
-
-    componentIndex = getVisibleWindow()
-    componentIndex += 1
-    if (componentIndex >= windowToCaptionMap.count()) {
-      componentIndex = 0
-    }
-
-    return showWindow(getWindowAt(componentIndex))
-  }
+  fun showNextWindow(): Component? = showWindow(windowToCaptionMap.nextWindowOf(currentWindow))
 
   /**
    * Shows the previous window in the list.
    */
-  fun showPreviousWindow(): Component? {
-    var componentIndex: Int
-
-    componentIndex = getVisibleWindow()
-    componentIndex -= 1
-    if (componentIndex < 0) {
-      componentIndex = windowToCaptionMap.count() - 1
-    }
-
-    return showWindow(getWindowAt(componentIndex))
-  }
-
-  private fun getVisibleWindow(): Int = windowToCaptionMap.keys.indexOf(currentWindow)
-
-  private fun getWindowAt(index: Int): Component = windowToCaptionMap.keys.elementAt(index)
+  fun showPreviousWindow(): Component? = showWindow(windowToCaptionMap.previousWindowOf(currentWindow))
 
   val isEmpty: Boolean get() = windowToCaptionMap.isEmpty()
+
+  inner class WindowMap(private val windowMap: MutableMap<Component, String> = mutableMapOf()): MutableMap<Component, String> by windowMap {
+    private val windowList = mutableListOf<Component>()
+
+    override fun put(key: Component, value: String): String? {
+      windowList.add(key)
+      return windowMap.put(key, value)
+    }
+
+    override fun putAll(from: Map<out Component, String>) {
+      windowList.addAll(from.keys)
+      windowMap.putAll(from)
+    }
+
+    override fun putIfAbsent(key: Component, value: String): String? {
+      return super.putIfAbsent(key, value).also {
+        if(it != null) {
+          windowList.add(key)
+        }
+      }
+    }
+
+    override fun remove(key: Component): String? {
+      return windowMap.remove(key).also {
+        if(it != null) {
+          windowList.remove(key)
+        }
+      }
+    }
+
+    override fun remove(key: Component, value: String): Boolean {
+      return windowMap.remove(key, value).also {
+        if (it) {
+          windowList.remove(key)
+        }
+      }
+    }
+
+    fun nextWindowOf(window: Component?): Component? {
+      var componentIndex  = windowList.indexOf(window)
+
+      componentIndex += 1
+      if (componentIndex >= windowList.size) {
+        componentIndex = 0
+      }
+
+      return windowList.getOrNull(componentIndex)
+    }
+
+    fun previousWindowOf(window: Component?): Component? {
+      var componentIndex  = windowList.indexOf(window)
+
+      componentIndex -= 1
+      if (componentIndex < 0) {
+        componentIndex = windowToCaptionMap.count() - 1
+      }
+
+      return windowList.getOrNull(componentIndex)
+    }
+  }
 }

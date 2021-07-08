@@ -188,7 +188,9 @@ class Form(val pageCount: Int, val titles: Array<String>) : Div(), PositionPanel
     lastSelected?.removeClassName("selected-tab")
     pages[i]!!.isVisible = true
     selectPage(i)
-    tabPanel!!.getComponentAt(currentPage).element.classList.add("selected-tab")
+    if (tabPanel != null) {
+      tabPanel!!.getComponentAt(currentPage).element.classList.add("selected-tab")
+    }
   }
 
   /**

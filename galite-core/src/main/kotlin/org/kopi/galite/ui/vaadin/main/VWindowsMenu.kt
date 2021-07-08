@@ -17,17 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
-import org.kopi.galite.ui.vaadin.base.Styles
-
 import com.vaadin.componentfactory.EnhancedDialog
 import com.vaadin.componentfactory.theme.EnhancedDialogVariant
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Label
-import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
-import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
@@ -36,7 +32,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout
  * The menu aims to show the opened windows by the user.
  * From this menu, the user can switch to another window.
  */
-@CssImport("./styles/galite/list.css", themeFor = "vcf-enhanced-dialog-overlay")
+@CssImport.Container(value = [
+  CssImport("./styles/galite/windows.css", themeFor = "vcf-enhanced-dialog-overlay"),
+  CssImport("./styles/galite/windows.css")
+])
 class VWindowsMenu : EnhancedDialog(), HasStyle {
 
   private val items = VerticalLayout()
@@ -46,17 +45,25 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
   init {
     // Make sure that CSS styles specified for the default Menu classes
     // do not affect this menu
-    className = Styles.MAIN_WINDOW
-    val headerIcon = Icon(VaadinIcon.COPY_O)
+    val switchWindowIcon = VaadinIcon.BROWSER.create()
+    val closeIcon = VaadinIcon.CLOSE_CIRCLE.create()
     val header = HorizontalLayout()
+    val switch = HorizontalLayout(headerText, switchWindowIcon)
 
+    setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
+    element.themeList.add("k-windowsMenu")
     header.className = "window-items-title"
-    header.add(headerText, headerIcon)
-    header.alignItems = FlexComponent.Alignment.END
-    this.setHeader(header)
-    this.setThemeVariants(EnhancedDialogVariant.SIZE_SMALL)
-    element.themeList.add(Styles.MAIN_WINDOW)
-    this.setContent(items)
+    closeIcon.className = "close-icon"
+
+    header.setFlexGrow(1.0, switch)
+    closeIcon.addClickListener {
+      close()
+    }
+
+    header.add(switch)
+    header.add(closeIcon)
+    setHeader(header)
+    setContent(items)
   }
 
   /**
