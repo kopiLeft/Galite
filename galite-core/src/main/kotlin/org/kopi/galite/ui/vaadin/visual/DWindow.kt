@@ -871,19 +871,29 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
       })
       val locale = application.defaultLocale.toString()
       val download = Anchor(href, "")
+      val buttons = Div()
       download.element.setAttribute("download", true)
 
-      val button = Button(LocalizedProperties.getString(locale, "downloadLabel"), Icon(VaadinIcon.DOWNLOAD_ALT))
-      button.isDisableOnClick = true
-      download.add(button)
+      val downloadButton = Button(LocalizedProperties.getString(locale, "downloadLabel"), Icon(VaadinIcon.DOWNLOAD_ALT))
+      val closeButton = Button(LocalizedProperties.getString(locale, "CLOSE"), Icon(VaadinIcon.CLOSE_CIRCLE))
+
+      downloadButton.isDisableOnClick = true
+      download.add(downloadButton)
 
       val title = Div()
+      title.className ="download-file-title"
 
-      title.text = (LocalizedProperties.getString(locale, "downloadText") + " $name")
+      title.text = (LocalizedProperties.getString(locale, "downloadText") + ": $name")
+      buttons.add(download, closeButton)
+      buttons.className = "download-file-buttons"
 
-      Dialog().also {
-        it.add(VerticalLayout(title, download))
+      val dialog = Dialog().also {
+        it.add(VerticalLayout(title, buttons))
         it.open()
+      }
+
+      closeButton.addClickListener {
+        dialog.close()
       }
     }
   }

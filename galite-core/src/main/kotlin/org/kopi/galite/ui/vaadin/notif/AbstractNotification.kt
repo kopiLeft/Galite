@@ -71,10 +71,13 @@ abstract class AbstractNotification(title: String?,
     this.message.className = Styles.NOTIFICATION_MESSAGE
     this.message.style["white-space"] = "nowrap"
     buttons.className = Styles.NOTIFICATION_BUTTONS
+    this.title.className = "k-notification-title"
+    this.content.className = ".k-notification-content"
 
     setHeader(this.title)
     setNotificationMessage(message)
     icon.setSize("2.8em")
+    icon.className = "k-notification-icon"
     content.add(icon)
     content.add(this.message)
     setContent(content)
