@@ -19,8 +19,8 @@ package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedMessages
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
+import org.kopi.galite.ui.vaadin.visual.VApplication
 
-import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasComponents
 
 /**
@@ -37,10 +37,10 @@ object NotificationUtils {
    * @param messageKey The message key to be displayed.
    */
   fun showError(callback: NotificationListener?,
-                parent: Component,
                 locale: String,
-                messageKey: String) {
-    showError(callback, parent, locale, messageKey, null)
+                messageKey: String,
+                parent: VApplication? = null) {
+    showError(callback, locale, messageKey, null, parent = parent)
   }
 
   /**
@@ -53,13 +53,14 @@ object NotificationUtils {
    * @param params The message parameters.
    */
   fun showError(callback: NotificationListener?,
-                parent: Component,
                 locale: String,
                 messageKey: String,
-                vararg params: Any?) {
+                vararg params: Any?,
+                parent: VApplication? = null) {
     val error = ErrorNotification(LocalizedProperties.getString(locale, "Error"),
                                   LocalizedMessages.getMessage(locale, messageKey, params),
-                                  locale)
+                                  locale,
+                                  parent)
     if (callback != null) {
       error.addNotificationListener(callback)
     }

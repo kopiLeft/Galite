@@ -18,6 +18,7 @@
 package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
+import org.kopi.galite.ui.vaadin.visual.VApplication
 
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
@@ -34,19 +35,39 @@ import com.vaadin.flow.component.icon.VaadinIcon
  */
 class ErrorNotification(title: String?,
                         val message: String?,
-                        locale: String)
-  : AbstractNotification(title, message, locale) {
+                        locale: String,
+                        application: VApplication?)
+  : AbstractNotification(title, message, locale, application) {
+
+  //--------------------------------------------------
+  // DATA MEMBERS
+  //--------------------------------------------------
+  private var details: ErrorMessageDetails? = null
+  private lateinit var close: Button
+
+  //-------------------------------------------------
+  // CONSTRUCTOR
+  //-------------------------------------------------
+  init {
+    Shortcuts.addShortcutListener(this, this::onArrowUpEvent, Key.ARROW_UP)
+    Shortcuts.addShortcutListener(this, this::onArrowDownEvent, Key.ARROW_DOWN)
+  }
 
   //-------------------------------------------------
   // IMPLEMENTATION
   //-------------------------------------------------
 
   override fun setButtons() {
-    details = ErrorMessageDetails(message, locale, this)
     close = Button(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener { fireOnClose(null) }
     close.isAutofocus = true
     buttons.add(close)
+
+    if(application?.windowError != null) {
+      details = ErrorMessageDetails(application.windowError!!.toString(), locale, this)
+      details!!.element.setAttribute("aria-label", "Click me") // FIXME : do we need this?
+      footer.add(details)
+    }
   }
 
   override val iconName: VaadinIcon
@@ -57,22 +78,6 @@ class ErrorNotification(title: String?,
   }
 
   fun onArrowDownEvent(keyDownEvent: ShortcutEvent?) {
-    details.focus()
-  }
-
-  //--------------------------------------------------
-  // DATA MEMBERS
-  //--------------------------------------------------
-  private lateinit var details: ErrorMessageDetails
-  private lateinit var close: Button
-
-  //-------------------------------------------------
-  // CONSTRUCTOR
-  //-------------------------------------------------
-  init {
-    details.element.setAttribute("aria-label", "Click me")
-    footer.add(details)
-    Shortcuts.addShortcutListener(this, this::onArrowUpEvent, Key.ARROW_UP)
-    Shortcuts.addShortcutListener(this, this::onArrowDownEvent, Key.ARROW_DOWN)
+    details?.focus()
   }
 }

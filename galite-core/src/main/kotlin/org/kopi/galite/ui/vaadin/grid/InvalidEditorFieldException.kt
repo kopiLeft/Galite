@@ -45,7 +45,6 @@ class InvalidEditorFieldException(val field: GridEditorField<*>,
     field.setBlink(true)
     NotificationUtils.showError(
       this,
-      MainWindow.instance,
       MainWindow.locale,
       messageKey,
       params

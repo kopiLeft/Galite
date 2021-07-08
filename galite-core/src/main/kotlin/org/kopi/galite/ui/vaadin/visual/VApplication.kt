@@ -25,6 +25,7 @@ import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.FontMetrics
 import org.kopi.galite.ui.vaadin.base.StylesInjector
@@ -85,6 +86,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   //---------------------------------------------------
   private var mainWindow: MainWindow? = null
   private var welcomeView: WelcomeView? = null
+  internal var windowError: Throwable? = null // Sets the window error.
   private var askAnswer = 0
   var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
   var currentUI: UI? = null
@@ -113,24 +115,52 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
     val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+    val lock = Object()
 
-    showNotification(dialog)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(action: Boolean?) {
+        BackgroundThreadHandler.releaseLock(lock)
+      }
+    })
+    showNotification(dialog, lock)
   }
 
   override fun error(message: String?) {
-    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale)
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, this)
+    val lock = Object()
 
-    showNotification(dialog)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(action: Boolean?) {
+        windowError = null // remove any further error.
+        BackgroundThreadHandler.releaseLock(lock)
+      }
+    })
+    showNotification(dialog, lock)
   }
 
   override fun warn(message: String) {
     val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+    val lock = Object()
 
-    showNotification(dialog)
+    dialog.addNotificationListener(object : NotificationListener {
+      override fun onClose(action: Boolean?) {
+        BackgroundThreadHandler.releaseLock(lock)
+      }
+    })
+    showNotification(dialog, lock)
+  }
+
+  /**
+   * Displays a request dialog for a user interaction.
+   * @param message The message to be displayed in the dialog box.
+   */
+  fun ask(message: String): Boolean {
+    return ask(message, false) == MessageListener.AWR_YES
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
     val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+    val lock = Object()
 
     dialog.yesIsDefault = yesIsDefault
     dialog.addNotificationListener(object : NotificationListener {
@@ -140,11 +170,10 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
         } else {
           MessageListener.AWR_NO
         }
-        dialog.close()
+        BackgroundThreadHandler.releaseLock(lock)
       }
     })
-    // attach the notification to the application.
-    showNotification(dialog)
+    showNotification(dialog, lock)
 
     return askAnswer
   }
@@ -157,6 +186,16 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   protected open fun showNotification(notification: AbstractNotification) {
     access(currentUI) {
+      notification.show()
+    }
+  }
+
+  /**
+   * Shows a notification.
+   * @param notification The notification to be shown
+   */
+  protected open fun showNotification(notification: AbstractNotification, lock: Object) {
+    BackgroundThreadHandler.startAndWait(lock, currentUI) {
       notification.show()
     }
   }
