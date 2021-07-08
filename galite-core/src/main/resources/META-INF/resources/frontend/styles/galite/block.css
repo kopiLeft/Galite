@@ -112,10 +112,6 @@
     --lumo-text-field-size: var(--lumo-size-xxs);
 }
 
-.block-filter-text:focus-within {
-    border-bottom: #009bd4 1px solid;
-}
-
 .block-filter-text > iron-icon {
         font-size: 10px
 }
