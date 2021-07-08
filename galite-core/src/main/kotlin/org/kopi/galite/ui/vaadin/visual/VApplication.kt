@@ -411,7 +411,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   protected fun gotoWelcomeView() {
     if (mainWindow != null) {
       // it should be attached to the application.
-      removeAll()
+      mainWindow!!.clear()
       mainWindow = null
       menu = null
       localizationManager = null
