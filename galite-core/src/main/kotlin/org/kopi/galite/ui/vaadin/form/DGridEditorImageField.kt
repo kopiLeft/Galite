@@ -77,7 +77,7 @@ class DGridEditorImageField(
     TODO()
   }
 
-  override fun valueChanged() {
+  override fun valueChanged(oldValue: String?) {
     // Nothing to do
   }
 

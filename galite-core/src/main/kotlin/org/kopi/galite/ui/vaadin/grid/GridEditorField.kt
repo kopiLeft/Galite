@@ -17,8 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
-import java.lang.reflect.Method
-
 import kotlin.collections.Collection
 
 import org.kopi.galite.ui.vaadin.actor.Actor
@@ -27,16 +25,22 @@ import org.kopi.galite.ui.vaadin.form.DBlock
 import org.kopi.galite.ui.vaadin.form.DGridEditorField
 import org.kopi.galite.ui.vaadin.window.Window
 
+import com.vaadin.flow.component.AbstractCompositeField
+import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
+import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.HasStyle
-import com.vaadin.flow.component.customfield.CustomField
 
 /**
  * A grid editor field implementation.
  */
-abstract class GridEditorField<T> protected constructor() : CustomField<T>(), ClickNotifier<GridEditorField<T>>, HasStyle {
+abstract class GridEditorField<T> protected constructor() : AbstractCompositeField<Component, GridEditorField<T>, T>(null),
+  Focusable<GridEditorField<T>>,
+  HasSize,
+  ClickNotifier<GridEditorField<T>>, HasStyle {
 
   lateinit var dGridEditorField: DGridEditorField<*>
 
@@ -92,7 +96,7 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
     ALWAYS
   }
 
-  init {
+  override fun onAttach(attachEvent: AttachEvent?) {
     setWidthFull()
     //registerRpc(NavigationRpcHandler())
     //registerRpc(ClickRpcHandler())
@@ -149,8 +153,6 @@ abstract class GridEditorField<T> protected constructor() : CustomField<T>(), Cl
    */
   val parentWindow: Window?
     get() = (dGridEditorField.columnView.blockView as? DBlock)?.parent
-
-  var oldValue: String? = null
 
   //---------------------------------------------------
   // INNER CLASSES
