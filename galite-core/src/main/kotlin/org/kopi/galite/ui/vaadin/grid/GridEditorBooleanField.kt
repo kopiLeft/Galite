@@ -193,7 +193,9 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     } else if (mandatory && !no.value) {
       yes.value = true
     }
-    super.setModelValue(value, event.isFromClient)
+    if (value == true || value == null) {
+      setModelValue(value, event.isFromClient)
+    }
     handleComponentVisiblity()
   }
 
@@ -203,7 +205,9 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
     } else if (mandatory && !yes.value) {
       no.value = true
     }
-    super.setModelValue(value, event.isFromClient)
+    if (value == false || value == null) {
+      setModelValue(value, event.isFromClient)
+    }
     handleComponentVisiblity()
   }
 
@@ -230,6 +234,6 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
   }
 
   override fun doFocus() {
-    yes.focus()
+    focus()
   }
 }
