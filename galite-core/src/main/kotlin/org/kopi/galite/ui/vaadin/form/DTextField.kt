@@ -50,7 +50,7 @@ open class DTextField(
   // --------------------------------------------------
   // DATA MEMBERS
   // --------------------------------------------------
-  private lateinit var field: TextField // the text component
+  private val field: TextField // the text component
   protected var inside = false
   protected var noEdit = options and VConstants.FDO_NOEDIT != 0
   protected var scanner = options and VConstants.FDO_NOECHO != 0 && getModel().height > 1
@@ -68,18 +68,16 @@ open class DTextField(
     } else {
       ScannerTransformer(this)
     }
-    access(currentUI) {
-      field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
+    field = createFieldGUI(options and VConstants.FDO_NOECHO != 0, scanner, align)
 
-      field.field.addTextValueChangeListener {
-        if(it.isFromClient) {
-          valueChanged()
-        }
+    field.field.addTextValueChangeListener {
+      if(it.isFromClient) {
+        valueChanged()
       }
-
-      createContextMenu()
-      setFieldContent(field)
     }
+
+    createContextMenu()
+    setFieldContent(field)
   }
 
   override fun valueChanged() {

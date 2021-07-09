@@ -71,9 +71,9 @@ class FormTests: GaliteVUITestBase() {
       assertEquals(commandFormModel.title, windowCaption.getCaption())
     }
 
-    /*modulesMenu._clickItemWithCaptionAsynch("Products form") { FIXME
+    modulesMenu._clickItemWithCaptionAsynch("Products form") {
       assertEquals(productsFormModel.title, windowCaption.getCaption())
-    }*/
+    }
 
     modulesMenu._clickItemWithCaptionAsynch("Bills form") {
       assertEquals(billsFormModel.title, windowCaption.getCaption())
@@ -91,9 +91,9 @@ class FormTests: GaliteVUITestBase() {
       assertEquals(taxRulesFormModel.title, windowCaption.getCaption())
     }
 
-    /*modulesMenu._clickItemWithCaptionAsynch("Providers form") { FIXME
+    modulesMenu._clickItemWithCaptionAsynch("Providers form") {
       assertEquals(providersFormModel.title, windowCaption.getCaption())
-    }*/
+    }
   }
 
   companion object {

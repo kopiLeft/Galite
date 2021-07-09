@@ -17,7 +17,6 @@
  */
 package org.kopi.galite.ui.vaadin.upload
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.VInputButton
@@ -40,7 +39,7 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
   private val ok = VInputButton()
   private val cancel = VInputButton()
   private val buttons = HorizontalLayout(cancel, ok)
-  lateinit var upload: Upload
+  val upload: Upload = Upload(receiver)
 
   init {
     className = "k-upload"
@@ -51,10 +50,7 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
     buttons.className = "k-upload-buttons"
     setHeader(title)
     setFooter(buttons)
-    access {
-      upload = Upload(receiver)
-      add(upload)
-    }
+    add(upload)
     addHandlers()
   }
   //---------------------------------------------------
