@@ -118,5 +118,6 @@
 }
 
 .editor-field {
+    border-left: 1px solid #dadada;
     --lumo-text-field-size: var(--lumo-size-xxs);
 }

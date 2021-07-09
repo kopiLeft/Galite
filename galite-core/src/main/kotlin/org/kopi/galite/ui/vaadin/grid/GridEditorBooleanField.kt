@@ -54,7 +54,7 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
   private var forceHiddenVisibility = false
 
   init {
-    addClassNames(Styles.BOOLEAN_FIELD, "editor-booleanfield", "k-boolean-field-content")
+    addClassNames(Styles.BOOLEAN_FIELD, "editor-field", "editor-booleanfield", "k-boolean-field-content")
     yes.classNames.add("true")
     no.classNames.add("false")
     setWidthFull()
