@@ -111,6 +111,11 @@
     padding: 0;
     border-bottom: #a3a3a3 1px solid !important;
     --lumo-text-field-size: var(--lumo-size-xxs);
+    height: 100%;
+}
+
+.block-filter-text::part(input-field) {
+    height: 100%;
 }
 
 .block-filter-text > iron-icon {
@@ -119,5 +124,13 @@
 
 .editor-field {
     border-left: 1px solid #dadada;
+    padding: 0;
+    height: 100%;
     --lumo-text-field-size: var(--lumo-size-xxs);
+}
+
+
+.editor-field::part(input-field) {
+    height: 100%;
+    padding: 0;
 }
