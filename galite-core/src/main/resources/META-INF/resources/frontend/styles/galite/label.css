@@ -54,6 +54,7 @@
  * Mandatory label indicator styles
  */
 .k-label span.mandatory {
+    position: absolute;
     color: #fd2020;
     padding-left: 2px;
 }
