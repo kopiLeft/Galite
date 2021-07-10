@@ -234,6 +234,6 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
   }
 
   override fun doFocus() {
-    focus()
+    // DO NOTHING
   }
 }
