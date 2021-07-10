@@ -511,7 +511,7 @@ open class DGridBlock(parent: DForm, model: VBlock)
         val columnView: DGridBlockFieldUI = columnViews[i] as DGridBlockFieldUI
 
         if (columnView.hasDisplays()) {
-          val column = grid.addColumn { it.getValue(field) }
+          val column = grid.addColumn { columnView.editorField.format(it.getValue(field)) }
                   .setKey(i.toString())
                   .setHeader(columnView.editorField.label)
                   .setEditorComponent(columnView.editor)
