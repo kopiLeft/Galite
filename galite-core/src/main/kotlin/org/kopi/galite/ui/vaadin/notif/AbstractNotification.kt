@@ -115,7 +115,7 @@ abstract class AbstractNotification(title: String?,
    * @param action The user action.
    */
   protected fun fireOnClose(action: Boolean?) {
-    val lastActiveWindow = MainWindow.instance.currentWindow as? Window
+    val lastActiveWindow = application?.mainWindow?.currentWindow as? Window
 
     for (l in listeners) {
       l.onClose(action)
