@@ -132,7 +132,6 @@ open class DGridBlock(parent: DForm, model: VBlock)
     editor.addOpenListener {
       if (!inDetailMode()) {
         updateEditors()
-        enterRecord(it.item.record)
       }
     }
     grid.addSortListener(::sort)
@@ -500,6 +499,11 @@ open class DGridBlock(parent: DForm, model: VBlock)
       val gridEditorFieldToBeEdited = it.column.editorComponent as GridEditorField<*>
 
       itemToBeEdited = it.item.record
+
+      if (!inDetailMode()) {
+        enterRecord(it.item.record)
+      }
+
       gridEditorFieldToBeEdited.focus()
       gridEditorFieldToBeEdited.dGridEditorField.onClick()
     }

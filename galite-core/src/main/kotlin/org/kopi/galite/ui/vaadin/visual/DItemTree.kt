@@ -328,7 +328,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
     buttonsContainer.add(cancelButton)
     popupContent.add(buttonsContainer)
     // popupContent.setComponentAlignment(buttonsContainer, Alignment.MIDDLE_CENTER) TODO
-    inputDialog = PopupWindow()
+    inputDialog = PopupWindow(application.mainWindow)
     inputDialog!!.isModal = true
     inputDialog!!.setContent(popupContent)
     inputDialog!!.className = "inputdialog"

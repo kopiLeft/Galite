@@ -40,7 +40,8 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  protected val actors : VActorPanel = VActorPanel()
+  internal var mainWindow: MainWindow? = null
+  protected val actors : VActorPanel = VActorPanel(mainWindow)
   private var content: Component? = null
 
   /**
@@ -131,9 +132,9 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
    * @return `true` if the caption is set.
    */
   private fun maybeSetMainWindowCaption(caption: String): Boolean {
-    val parent = MainWindow.instance
+    val parent = mainWindow
 
-    if (parent.windowsList.contains(this)) {
+    if (parent != null && parent.windowsList.contains(this)) {
       parent.updateWindowTitle(this, caption)
       return true
     }

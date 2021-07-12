@@ -33,6 +33,10 @@ import com.vaadin.flow.component.dependency.CssImport
 ])
 class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNotifier {
 
+  init {
+    field.isAutoOpen = false
+  }
+
   override fun setPresentationValue(newPresentationValue: String?) {
     content.value = if(newPresentationValue != null && newPresentationValue.isNotEmpty()) {
       val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")

@@ -39,6 +39,7 @@ import org.kopi.galite.ui.vaadin.notif.InformationNotification
 import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
+import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.visual.Application
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
@@ -56,7 +57,6 @@ import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -84,7 +84,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   //---------------------------------------------------
   // DATA MEMBEERS
   //---------------------------------------------------
-  private var mainWindow: MainWindow? = null
+  internal var mainWindow: MainWindow? = null
   private var welcomeView: WelcomeView? = null
   internal var windowError: Throwable? = null // Sets the window error.
   private var askAnswer = 0
@@ -368,10 +368,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Attaches a window to this application.
    * @param window The window to be added.
    */
-  fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
+  fun addWindow(window: Window, title: String) {
     if (mainWindow != null) {
       access(currentUI) {
         window.setSizeFull()
+        window.mainWindow = mainWindow
         mainWindow!!.addWindow(window, title)
       }
     }
