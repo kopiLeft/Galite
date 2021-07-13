@@ -40,7 +40,7 @@ import com.vaadin.flow.shared.communication.PushMode
 open class VUITestBase : VApplicationTestBase() {
   fun setupRoutes() {
     MockVaadin.setup(routes!!)
-    UI.getCurrent().pushConfiguration.pushMode = PushMode.DISABLED
+    UI.getCurrent().pushConfiguration.pushMode = PushMode.MANUAL
   }
 
   companion object {
