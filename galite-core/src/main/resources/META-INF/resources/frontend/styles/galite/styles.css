@@ -114,23 +114,11 @@ a, a:hover {
 /**
  * help style
  */
-.help, .help > center > h1 {
+.help * {
     font-family: Arial, sans-serif !important;
     font-weight: 400 !important;
     font-style: normal !important;
     font-size: 12px !important;
-}
-
-.help > center > h1 {
-    font-size: 2.5em !important;
-    font-weight: bold;
-}
-
-.help > table > tbody > tr > td > dl > dt > h2 {
-    font-family: Arial, sans-serif !important;
-    font-weight: bold;
-    font-style: normal !important;
-    font-size: 1.5em;
 }
 
 pre {
