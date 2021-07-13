@@ -73,8 +73,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.demo.insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
-        org.kopi.galite.demo.insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", ClientForm::class)
+        org.kopi.galite.demo.initModules()
       }
     }
   }
