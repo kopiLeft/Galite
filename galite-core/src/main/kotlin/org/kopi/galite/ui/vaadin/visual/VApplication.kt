@@ -65,13 +65,14 @@ import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
+import com.vaadin.flow.shared.communication.PushMode
 
 /**
  * The entry point for all Galite WEB applications.
  *
  * @param registry The [Registry] object.
  */
-@Push
+@Push(PushMode.MANUAL)
 @Route("")
 @CssImport.Container(value = [
   CssImport("./styles/galite/styles.css"),

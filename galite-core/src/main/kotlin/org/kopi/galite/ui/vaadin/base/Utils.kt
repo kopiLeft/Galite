@@ -204,6 +204,7 @@ object Utils : Utils() {
         .then(Double::class.java) { value: Double ->
           future.complete(value)
         }
+      ui.push()
     }
 
     return future.get()
@@ -218,6 +219,7 @@ object Utils : Utils() {
         .then(Double::class.java) { value: Double ->
           future.complete(value)
         }
+      ui.push()
     }
 
     return future.get()
@@ -232,6 +234,7 @@ object Utils : Utils() {
         .then(String::class.java) { value ->
           future.complete(value)
         }
+      ui.push()
     }
 
     return future.get()
@@ -246,7 +249,7 @@ object Utils : Utils() {
   fun getCursorPos(field: Component): Int {
     val future = CompletableFuture<Int>()
 
-    BackgroundThreadHandler.access {
+    BackgroundThreadHandler.accessAndPush {
       UI.getCurrent().page
         .executeJs("return $0.shadowRoot.querySelector('[part=\"value\"]').selectionStart;", field.element)
         .then(Int::class.java) { value: Int ->

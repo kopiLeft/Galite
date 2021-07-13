@@ -21,6 +21,7 @@ import org.kopi.galite.common.Window
 import org.kopi.galite.preview.VPreviewWindow
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.VException
@@ -99,7 +100,7 @@ class VWindowController : WindowController() {
     popup.isModal = false
     popup.setContent(view)
     popup.setCaption(title) // put popup title
-    access {
+    accessAndPush {
       popup.open()
     }
   }
