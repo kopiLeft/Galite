@@ -525,8 +525,7 @@ class VLoginBox : Div() {
       className = Styles.LOGIN_BOX_PANE
       element.setAttribute("hideFocus", "true")
       element.style["outline"] = "0px"
-      progress.style["margin"] = "20px 0px 0px 0px"
-      progress.width = "80%"
+      progress.className = "login-progress-bar"
       progress.isIndeterminate = true
       progress.isVisible = false
       table = VSimpleTable()

@@ -256,3 +256,8 @@ vaadin-password-field {
 .k-loginBox input[type="button"]:hover {
     cursor: pointer;
 }
+
+.login-progress-bar {
+    margin: 20px 0px 0px 0px;
+    width: 80%;
+}
