@@ -63,37 +63,29 @@ class FormTests: GaliteVUITestBase() {
     mainWindow._expectOne<VWindowContainer>()
 
     // Assert title is displayed in window caption
-    modulesMenu._clickItemWithCaptionAsynch("Client form") {
-      assertEquals(clientFormModel.title, windowCaption.getCaption())
-    }
+    modulesMenu._clickItemWithCaptionAndWait("Client form")
+    assertEquals(clientFormModel.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAsynch("Commands form") {
-      assertEquals(commandFormModel.title, windowCaption.getCaption())
-    }
+    modulesMenu._clickItemWithCaptionAndWait("Commands form")
+    assertEquals(commandFormModel.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAsynch("Products form") {
-      assertEquals(productsFormModel.title, windowCaption.getCaption())
-    }
+    modulesMenu._clickItemWithCaptionAndWait("Products form")
+    assertEquals(productsFormModel.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAsynch("Bills form") {
-      assertEquals(billsFormModel.title, windowCaption.getCaption())
-    }
+    modulesMenu._clickItemWithCaptionAndWait("Bills form")
+    assertEquals(billsFormModel.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAsynch("Bills products") {
-      assertEquals(billsProductsFormModel.title, windowCaption.getCaption())
-    }
+    modulesMenu._clickItemWithCaptionAndWait("Bills products")
+    assertEquals(billsProductsFormModel.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAsynch("Stocks") {
-      assertEquals(stocksFormModel.title, windowCaption.getCaption())
-    }
+    modulesMenu._clickItemWithCaptionAndWait("Stocks")
+    assertEquals(stocksFormModel.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAsynch("Tax rules") {
-      assertEquals(taxRulesFormModel.title, windowCaption.getCaption())
-    }
+    modulesMenu._clickItemWithCaptionAndWait("Tax rules")
+    assertEquals(taxRulesFormModel.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAsynch("Providers form") {
-      assertEquals(providersFormModel.title, windowCaption.getCaption())
-    }
+    modulesMenu._clickItemWithCaptionAndWait("Providers form")
+    assertEquals(providersFormModel.title, windowCaption.getCaption())
   }
 
   companion object {
