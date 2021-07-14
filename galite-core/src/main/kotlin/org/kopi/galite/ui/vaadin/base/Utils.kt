@@ -258,6 +258,8 @@ object Utils : Utils() {
   }
 
   fun Component.findMainWindow(): MainWindow? {
+    if(this is MainWindow) return this
+
     var mainWindow: MainWindow? = null
     var parent: Component? = parent.orElse(null)
 

@@ -535,7 +535,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    */
   internal inner class MessageHandler : MessageListener {
     override fun notice(message: String) {
-      val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+      val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale, this@DWindow)
       val lock = Object()
 
       dialog.addNotificationListener(object : NotificationListener {
@@ -547,7 +547,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun error(message: String?) {
-      val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, application)
+      val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, this@DWindow)
       val lock = Object()
 
       dialog.addNotificationListener(object : NotificationListener {
@@ -560,7 +560,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun warn(message: String) {
-      val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+      val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale, this@DWindow)
       val lock = Object()
 
       dialog.addNotificationListener(object : NotificationListener {
@@ -580,7 +580,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun ask(message: String, yesIsDefault: Boolean): Int {
-      val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+      val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale, this@DWindow)
       val lock = Object()
 
       dialog.yesIsDefault = yesIsDefault

@@ -114,7 +114,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
-    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -126,7 +126,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun error(message: String?) {
-    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, this)
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -139,7 +139,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun warn(message: String) {
-    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -159,7 +159,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.yesIsDefault = yesIsDefault
@@ -206,7 +206,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override fun logout() {
     val dialog = ConfirmNotification(VlibProperties.getString("Question"),
                                      Message.getMessage("confirm_quit"),
-                                     notificationLocale)
+                                     notificationLocale,
+                                     mainWindow)
 
     dialog.yesIsDefault = false
     dialog.addNotificationListener(object : NotificationListener {
