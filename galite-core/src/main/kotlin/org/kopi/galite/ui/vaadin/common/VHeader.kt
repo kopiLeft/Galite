@@ -26,6 +26,9 @@ import com.vaadin.flow.component.dependency.CssImport
  */
 @CssImport("./styles/galite/header.css")
 class VHeader : HorizontalLayout() {
+  init {
+    this.setWidthFull()
+  }
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------

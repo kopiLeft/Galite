@@ -17,9 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.menu
 
+import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.menubar.MenuBar
 
 /**
  * The module list menu bar.
  */
+@CssImport(value = "./styles/galite/header.css", themeFor = "vaadin-menu-bar")
 class ModuleListMenu : MenuBar()
