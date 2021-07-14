@@ -59,7 +59,7 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
     // Fill to username and password fields then click to the login button
     _get<VInputText> { id = "user_name" }._value = testUser
     _get<PasswordField> { id = "user_password" }._value = testPassword
-    _get<VInputButton> { id = "login_button" }._click()
+    _get<VInputButton> { id = "login_button" }._clickAsynch()
   }
 
   @Before
@@ -77,6 +77,14 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
     MockVaadin.runUIQueue()
     Thread.sleep(duration)
     MockVaadin.runUIQueue()
+  }
+
+  protected fun ClickNotifier<*>._clickAsynch(action: (() -> Unit)? = null) {
+    this._click()
+    MockVaadin.runUIQueue()
+    Thread.sleep(200)
+    MockVaadin.runUIQueue()
+    action?.invoke()
   }
 
   companion object {

@@ -146,6 +146,14 @@ class VLoginWindow : Div() {
     loginBox.focus()
   }
 
+  fun setWaitInfo() {
+    loginBox.setWaitInfo()
+  }
+
+  fun unsetWaitInfo() {
+    loginBox.unsetWaitInfo()
+  }
+
   //---------------------------------------------------
 // DATA MEMBERS
 //---------------------------------------------------

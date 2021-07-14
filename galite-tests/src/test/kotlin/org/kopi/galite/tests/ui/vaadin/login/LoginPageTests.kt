@@ -53,21 +53,22 @@ class LoginPageTests: GaliteVUITestBase() {
     // Fill to username and password fields then click to the login button
     userNameField._value = testUser
     passwordField._value = testPassword
-    loginButton._click()
 
-    // No error shown
-    _expectNone<Span> { id = "post_error" }
-    // Welcome view is removed
-    _expectNone<WelcomeView>()
-    // Main view is displayed
-    _expect<MainWindow>(1)
+    loginButton._clickAsynch {
+      // No error shown
+      _expectNone<Span> { id = "post_error" }
+      // Welcome view is removed
+      _expectNone<WelcomeView>()
+      // Main view is displayed
+      _expect<MainWindow>(1)
+    }
   }
 
   @Test
   fun `test login fails`() {
     userNameField._value = testUser
     passwordField._value = "incorrect password"
-    loginButton._click()
+    loginButton._clickAsynch()
 
     // Error displayed
     assertEquals("VIS-00054: Error during database login.", errorIndicator._text)

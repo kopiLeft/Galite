@@ -458,7 +458,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     }
     welcomeView = WelcomeView(defaultLocale, supportedLocales, sologanImage, logoImage, logoHref)
     welcomeView!!.setSizeFull() // important to get the full screen size.
-    welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent -> onLogin(event) }
+    welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
+      welcomeView!!.setWaitInfo()
+      Thread {
+        access(currentUI) {
+          try {
+            onLogin(event)
+          } finally {
+            welcomeView?.unsetWaitInfo()
+          }
+        }
+      }.start()
+    }
     add(welcomeView)
   }
 

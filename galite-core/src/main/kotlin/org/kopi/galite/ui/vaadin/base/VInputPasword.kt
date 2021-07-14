@@ -25,11 +25,14 @@ import com.vaadin.flow.component.textfield.PasswordField
  */
 class VInputPassword : PasswordField() {
 
+  private val input = Input()
+
   /**
    * Creates the input text component.
    */
   init {
+    input.className = "input"
     // Issue: https://vaadin.com/forum/thread/17399734/leverage-browser-save-password-feature
-    addToInput(Input())
+    addToInput(input)
   }
 }
