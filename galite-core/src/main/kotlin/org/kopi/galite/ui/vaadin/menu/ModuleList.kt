@@ -37,6 +37,8 @@ open class ModuleList: Composite<Component>(), HasEnabled {
   var rootMenuItem: ModuleItem? = null
 
   init {
+    setId("module_list")
+
     if(getRootModuleItem() != null) {
       rootMenuItem = getRootModuleItem()
       rootMenuItem!!.rootItem = menu.addItem(rootMenuItem)
