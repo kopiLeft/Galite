@@ -26,11 +26,6 @@
     border: 1.2px solid #ddd;
 }
 
-.multiple vaadin-checkbox {
-    height: 60px;
-    padding-left: 0px;
-}
-
 .multiple ::part(checkbox)::after {
     border-width: 0.3em 0 0 0.3em;
     transform-origin: -0.2px -0.7px;
@@ -80,13 +75,9 @@
     vertical-align: middle;
 }
 
-vaadin-checkbox {
-    height: 38px;
-}
-
 .multiple .k-boolean-field-content {
-    height: 40px;
-    padding-bottom: 5px;
+    display: flex;
+    background-color: #ffffff;
 }
 .editor-booleanfield {
     --lumo-primary-color: #009bd4;

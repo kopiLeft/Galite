@@ -17,7 +17,12 @@
  */
 package org.kopi.galite.ui.vaadin.grid
 
-import org.kopi.galite.ui.vaadin.field.BooleanField
+import org.kopi.galite.ui.vaadin.base.Styles
+
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.component.checkbox.Checkbox
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * An editor for boolean field.
@@ -33,28 +38,66 @@ import org.kopi.galite.ui.vaadin.field.BooleanField
  * yes and no cannot be checked at the same time
  */
 class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: String?) : GridEditorField<Boolean?>() {
+  /**
+   * Sets the boolean field to be mandatory
+   * This will remove to choose the null option
+   * from the two check boxes
+   */
+  var mandatory = false
 
-  val wrappedField = BooleanField(trueRepresentation, falseRepresentation)
+  private var content: HorizontalLayout = HorizontalLayout()
+
+  private var yes: Checkbox = Checkbox()
+
+  private var no: Checkbox = Checkbox()
+
+  private var forceHiddenVisibility = false
 
   init {
-    wrappedField.setWidthFull()
-    className = "editor-booleanfield"
-    add(wrappedField)
+    addClassNames(Styles.BOOLEAN_FIELD, "editor-field", "editor-booleanfield", "k-boolean-field-content")
+    yes.classNames.add("true")
+    no.classNames.add("false")
+    setWidthFull()
+    setLabel(trueRepresentation, falseRepresentation)
+    content.add(yes)
+    content.add(no)
+    // content.setCellVerticalAlignment(yes, HasVerticalAlignment.ALIGN_BOTTOM) TODO
+    // content.setCellVerticalAlignment(no, HasVerticalAlignment.ALIGN_BOTTOM) TODO
+    yes.addValueChangeListener(::onYesChange)
+    no.addValueChangeListener(::onNoChange)
+    yes.element.style["visibility"] = "hidden"
+    no.element.style["visibility"] = "hidden"
+    content.element.addEventListener("mouseover") {
+      isVisible = true
+    }
+
+    content.element.addEventListener("mouseout") {
+      if(value == null) {
+        isVisible = false
+      }
+    }
+
+    addFocusListener {
+      onFocus()
+    }
+    addBlurListener {
+      onBlur()
+    }
   }
 
-  override fun setPresentationValue(newPresentationValue: Boolean?) {
-    wrappedField.value = newPresentationValue
-  }
+  //---------------------------------------------------
+  // IMPLEMENTATION
+  //---------------------------------------------------
 
-  override fun generateModelValue(): Boolean? = wrappedField.value
-
-  override fun doFocus() {
-    wrappedField.focus()
-  }
-
-  override fun addFocusListener(focusFunction: () -> Unit) {
-    wrappedField.addFocusListener {
-      focusFunction()
+  /**
+   * Sets the field focus.
+   * @param focus The field focus
+   */
+  fun setFocus(focus: Boolean) {
+    if(focus) {
+      focus()
+    } else {
+      blur()
     }
   }
 
@@ -63,12 +106,134 @@ class GridEditorBooleanField(trueRepresentation: String?, falseRepresentation: S
    * @param blink The blink state.
    */
   override fun setBlink(blink: Boolean) {
-    if(className != null) {
-      if (blink) {
-        element.classList.add("$className-blink")
-      } else {
-        element.classList.remove("$className-blink")
+    if (blink) {
+      element.classList.add(Styles.BOOLEAN_FIELD + "-blink")
+    } else {
+      element.classList.remove(Styles.BOOLEAN_FIELD + "-blink")
+    }
+  }
+
+  fun onBlur() {
+    if (value == null) {
+      isVisible = false
+    }
+  }
+
+  fun onFocus() {
+    isVisible = true
+  }
+
+  override fun setVisible(visible: Boolean) {
+    if (!forceHiddenVisibility && visible) {
+      yes.element.style["visibility"] = "visible"
+      no.element.style["visibility"] = "visible"
+      element.classList.add(Styles.BOOLEAN_FIELD + "-visible")
+    } else {
+      yes.element.style["visibility"] = "hidden"
+      no.element.style["visibility"] = "hidden"
+      element.classList.remove(Styles.BOOLEAN_FIELD + "-visible")
+    }
+  }
+
+  override fun isVisible(): Boolean =
+    yes.element.style["visibility"].equals("visible")
+            && no.element.style["visibility"].equals("visible")
+
+  /**
+   * Sets the value of this boolean field.
+   * @param value The field value.
+   */
+  override fun setValue(value: Boolean?) {
+    when {
+      value == null -> {
+        yes.value = false
+        no.value = false
+      }
+      value -> {
+        yes.value = true
+        no.value = false
+      }
+      else -> {
+        yes.value = false
+        no.value = true
       }
     }
+    handleComponentVisiblity()
+  }
+
+  override fun setPresentationValue(newPresentationValue: Boolean?) {
+    value = newPresentationValue
+  }
+
+  override fun addFocusListener(function: () -> Unit) {
+    yes.addFocusListener {
+      function()
+    }
+    no.addFocusListener {
+      function()
+    }
+  }
+
+  override fun setEnabled(enabled: Boolean) {
+    super.setEnabled(enabled)
+    yes.isEnabled = enabled
+    no.isEnabled = enabled
+  }
+
+  override fun getValue(): Boolean? =
+    if (!yes.value && !no.value) {
+      null
+    } else {
+      yes.value
+    }
+
+  private fun onYesChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    if (event.value) {
+      no.value = false
+    } else if (mandatory && !no.value) {
+      yes.value = true
+    }
+    if (value == true || value == null) {
+      setModelValue(value, event.isFromClient)
+    }
+    handleComponentVisiblity()
+  }
+
+  private fun onNoChange(event: HasValue.ValueChangeEvent<Boolean>) {
+    if (event.value) {
+      yes.value = false
+    } else if (mandatory && !yes.value) {
+      no.value = true
+    }
+    if (value == false || value == null) {
+      setModelValue(value, event.isFromClient)
+    }
+    handleComponentVisiblity()
+  }
+
+  /**
+   * Handles the component visibility according to its value.
+   */
+  protected fun handleComponentVisiblity() {
+    isVisible = value != null
+  }
+
+  /**
+   * Sets the tooltip of the checkbox buttons inside the boolean field.
+   *
+   * @param yes The localized label for true value.
+   * @param no The localized label for false value.
+   */
+  fun setLabel(yes: String?, no: String?) {
+    this.yes.element.setProperty("title", yes)
+    this.no.element.setProperty("title", no)
+  }
+
+  override fun initContent(): Component {
+    return content
+  }
+
+  override fun doFocus() {
+    // DO NOTHING
   }
 }

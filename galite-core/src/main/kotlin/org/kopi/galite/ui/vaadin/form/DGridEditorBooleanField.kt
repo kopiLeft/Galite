@@ -17,18 +17,19 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.HasValue
-import com.vaadin.flow.component.customfield.CustomField
-import com.vaadin.flow.data.binder.Result
-import com.vaadin.flow.data.binder.ValueContext
-import com.vaadin.flow.data.converter.Converter
-import com.vaadin.flow.data.renderer.Renderer
 import org.kopi.galite.form.UTextField
+import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.VFieldUI
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.grid.GridEditorBooleanField
 import org.kopi.galite.ui.vaadin.grid.GridEditorField
+
+import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.HasValue
+import com.vaadin.flow.data.binder.Result
+import com.vaadin.flow.data.binder.ValueContext
+import com.vaadin.flow.data.converter.Converter
+import com.vaadin.flow.data.renderer.Renderer
 
 class DGridEditorBooleanField(
         columnView: VFieldUI,
@@ -37,7 +38,7 @@ class DGridEditorBooleanField(
         options: Int
 ) : DGridEditorField<Boolean?>(columnView, label, align, options),
       UTextField,
-      HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<CustomField<Boolean?>, Boolean?>> {
+        HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<GridEditorField<Boolean?>, Boolean?>> {
 
   //---------------------------------------------------
   // DATA MEMBERS
@@ -88,14 +89,10 @@ class DGridEditorBooleanField(
 
   override fun updateAccess() {
     super.updateAccess()
-    /*BackgroundThreadHandler.access(Runnable { TODO
-      editor.setLabel(label.text)
-      if (getAccess() == VConstants.ACS_MUSTFILL) {
-        editor.setMandatory(true)
-      } else {
-        editor.setMandatory(false)
-      }
-    })*/
+    access {
+      // editor.setLabel(label.text) TODO
+      (editor as GridEditorBooleanField).mandatory = getAccess() == VConstants.ACS_MUSTFILL
+    }
   }
 
   override fun getObject(): String? = getText()
@@ -132,7 +129,7 @@ class DGridEditorBooleanField(
 
   override fun setSelectionAfterUpdateDisabled(disable: Boolean) {}
 
-  override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<CustomField<Boolean?>, Boolean?>) {
+  override fun valueChanged(event: AbstractField.ComponentValueChangeEvent<GridEditorField<Boolean?>, Boolean?>) {
     if(!event.isFromClient) {
       return
     }
@@ -149,7 +146,7 @@ class DGridEditorBooleanField(
     getModel().setChanged(true)
   }
 
-  override fun valueChanged() {
+  override fun valueChanged(oldValue: String?) {
     // Nothing to do
   }
 

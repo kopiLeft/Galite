@@ -51,7 +51,6 @@ import com.vaadin.flow.data.converter.Converter
 import com.vaadin.flow.data.renderer.Renderer
 import com.vaadin.flow.data.renderer.TextRenderer
 import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.customfield.CustomField
 
 /**
  * A grid text editor based on custom components.
@@ -86,14 +85,14 @@ class DGridTextEditorField(
     // TODO
   }
 
-  fun valueChanged(event: AbstractField.ComponentValueChangeEvent<out CustomField<*>, *>) {
+  fun valueChanged(event: AbstractField.ComponentValueChangeEvent<GridEditorField<String>, String>) {
     if(event.isFromClient) {
       checkText(event.value.toString(), true)
     }
   }
 
-  override fun valueChanged() {
-    checkText(editor.value, isChanged(editor.oldValue, editor.value)) // TODO
+  override fun valueChanged(oldValue: String?) {
+    checkText(editor.value, isChanged(oldValue, editor.value))
   }
 
   override fun getObject(): Any? = editor.value

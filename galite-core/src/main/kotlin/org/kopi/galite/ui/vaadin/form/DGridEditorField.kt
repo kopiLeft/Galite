@@ -82,7 +82,7 @@ abstract class DGridEditorField<T>(
 
   override fun getModel(): VField = columnView.model
 
-  abstract fun valueChanged()
+  abstract fun valueChanged(oldValue: String?)
 
   override fun getBlockView(): DGridBlock = columnView.blockView as DGridBlock
 

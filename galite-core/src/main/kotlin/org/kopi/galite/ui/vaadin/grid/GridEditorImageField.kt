@@ -19,6 +19,8 @@ package org.kopi.galite.ui.vaadin.grid
 
 import org.kopi.galite.ui.vaadin.common.VImage
 
+import com.vaadin.flow.component.Component
+
 /**
  * The server side implementation of an image grid editor.
  */
@@ -30,14 +32,17 @@ class GridEditorImageField : GridEditorField<Any?>() {
     className = "editor-imagefield"
     image.setWidthFull()
     image.setBorder(0)
-    add(image)
   }
 
   override fun setPresentationValue(newPresentationValue: Any?) {
     image.src = newPresentationValue.toString()
   }
 
-  override fun generateModelValue(): Any? = image.src
+  override fun getValue(): Any? = image.src
+
+  override fun initContent(): Component {
+    return image
+  }
 
   override fun doFocus() {
     image.focus()

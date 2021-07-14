@@ -22,31 +22,32 @@ import org.kopi.galite.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.ui.vaadin.base.Utils
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
+import com.vaadin.flow.component.AttachEvent
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.data.value.ValueChangeMode
 
 /**
  * A text field used as editor
  */
-open class GridEditorTextField(width: Int) : GridEditorField<String>() {
+open class GridEditorTextField(val width: Int) : GridEditorField<String>() {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  protected val wrappedField = TextField()
+  internal val wrappedField = TextField()
 
-  init {
+  override fun onAttach(attachEvent: AttachEvent?) {
+    super.onAttach(attachEvent)
     className = "editor-field"
-    add(wrappedField)
     wrappedField.setWidthFull()
     wrappedField.maxLength = width
-    addValueChangeListener {
+    wrappedField.addValueChangeListener {
       if(!check(it.value.orEmpty())) {
         value = it.oldValue
       }
-      oldValue = value
+      setModelValue(value, it.isFromClient)
     }
     createNavigationActions()
   }
@@ -55,7 +56,9 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     wrappedField.value = newPresentationValue.toString()
   }
 
-  override fun generateModelValue(): String? = wrappedField.value
+  override fun initContent(): Component {
+    return wrappedField
+  }
 
   override fun getValue(): String = wrappedField.value
 
@@ -179,14 +182,16 @@ open class GridEditorTextField(width: Int) : GridEditorField<String>() {
     // IMPLEMENTATIONS
     //---------------------------------------------------
     override fun performAction() {
+      val oldValue = value
+
       wrappedField.runAfterGetValue {
         // block any navigation request if suggestions is showing
         /*if (suggestionDisplay != null && suggestionDisplay.isSuggestionListShowingImpl()) { TODO
           return
         }*/
 
-        // first sends the text value to server side if changed
-        dGridEditorField.valueChanged()
+        // first sends the text value to model if changed
+        dGridEditorField.valueChanged(oldValue)
         navigationAction()
       }
     }
