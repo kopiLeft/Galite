@@ -119,6 +119,20 @@ class DGridEditorBooleanField(
     TODO()
   }
 
+  override fun format(input: Any?): Any? {
+    return when (input) {
+      true -> {
+        trueRepresentation
+      }
+      false -> {
+        falseRepresentation
+      }
+      else -> {
+        input
+      }
+    }
+  }
+
   override fun getText(): String? = getModel().toText(editor.value)
 
   override fun setHasCriticalValue(b: Boolean) {}

@@ -340,6 +340,8 @@ abstract class DGridEditorField<T>(
    */
   abstract fun createRenderer(): Renderer<T>
 
+  open fun format(input: Any?): Any? = input
+
   /**
    * Performs the auto fill action.
    */
