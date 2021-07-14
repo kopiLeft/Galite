@@ -18,13 +18,14 @@
 
 package org.kopi.galite.visual
 
+import kotlin.jvm.Throws
+
 import org.kopi.galite.base.Image
 import org.kopi.galite.common.Window
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.l10n.ModuleLocalizer
 import org.kopi.galite.util.base.InconsistencyException
-import kotlin.jvm.Throws
 
 /**
  * Represents an Module.
@@ -130,7 +131,7 @@ class Module(val id: Int,
     return if (priority == other.priority) {
       description.compareTo(other.description)
     } else {
-      priority - other.priority
+      priority.compareTo(other.priority)
     }
   }
 
