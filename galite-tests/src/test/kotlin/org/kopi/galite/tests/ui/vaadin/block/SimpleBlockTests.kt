@@ -24,7 +24,7 @@ import com.github.mvysny.kaributesting.v10._fireEvent
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.demo.client.ClientForm
+
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.field.TextField
@@ -33,7 +33,11 @@ import org.kopi.galite.ui.vaadin.menu.ModuleList
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.AbstractField
+import com.vaadin.flow.component.checkbox.Checkbox
 import com.vaadin.flow.component.menubar.MenuBar
+import org.kopi.galite.ui.vaadin.block.SimpleBlockLayout
+import org.kopi.galite.ui.vaadin.field.BooleanField
+import org.kopi.galite.ui.vaadin.form.DBooleanField
 
 class SimpleBlockTests: GaliteVUITestBase() {
 
@@ -65,6 +69,76 @@ class SimpleBlockTests: GaliteVUITestBase() {
     assertEquals("123", value)
   }
 
+  @Test
+  fun `test timeStamp field value is sent to model`() {
+    // Login
+    login()
+
+    // Open client form
+    modulesMenu._clickItemWithCaptionAndWait("Bills form")
+
+    // Find fields
+    val fields = _find<TextField> { classes = Styles.TEXT_FIELD }
+    val addressField = fields[0]
+    val dateField = fields[1]
+
+    dateField._clickAndWait(100)
+    // set field value
+    dateField._value = "2018-09-13 00:00:00"
+    val inputField = dateField.field.content as AbstractField<*, String?>
+    inputField._fireEvent(AbstractField.ComponentValueChangeEvent(inputField, inputField, "2018-09-13 00:00:00", true))
+
+    // Focus on another field
+    addressField._clickAndWait(100)
+
+    // Assert the value is sent to the model
+    val value = dateField.model.getTimestamp().toString()
+    assertEquals("2018-09-13 00:00:00.000000", value)
+  }
+
+  @Test
+  fun `test boolean field value is sent to model`() {
+    // Login
+    login()
+
+    // Open client form
+    modulesMenu._clickItemWithCaptionAndWait("Client form")
+
+    val simpleBlock  = _get<SimpleBlockLayout> { classes = "simple"}
+
+    // Find fields
+    val fields = _find<TextField> { classes = Styles.TEXT_FIELD }
+    val codeField = fields[0]
+
+    simpleBlock._get<DBooleanField> {}.wrappedField.isVisible = true
+    val content = simpleBlock._get<DBooleanField> {}._get<BooleanField> { classes = "k-boolean-field"}
+    val yes = content._get<Checkbox> { classes = "true" }
+    val no = content._get<Checkbox> { classes = "false" }
+
+    // Assert that checkbox is visible
+    assertEquals(true, yes.isVisible)
+    assertEquals(true, no.isVisible)
+    // set yes field value
+     yes._value = true
+
+    // Focus on another field
+    codeField._clickAndWait(100)
+
+    // Assert the value is sent to the model
+    assertEquals(true, yes.value)
+    assertEquals(false, no.value)
+
+    // set no field value
+    no._value = true
+
+    // Focus on another field
+    codeField._clickAndWait(100)
+
+    // Assert the value is sent to the model
+    assertEquals(false, yes.value)
+    assertEquals(true, no.value)
+  }
+
   companion object {
     /**
      * Defined your test specific modules
@@ -73,8 +147,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.demo.insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
-        org.kopi.galite.demo.insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", ClientForm::class)
+        org.kopi.galite.demo.initModules()
       }
     }
   }
