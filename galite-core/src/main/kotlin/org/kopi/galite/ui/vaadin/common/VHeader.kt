@@ -20,7 +20,6 @@ package org.kopi.galite.ui.vaadin.common
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.dependency.CssImport
-import com.vaadin.flow.component.orderedlayout.FlexComponent
 
 /**
  * The window header component.
@@ -29,7 +28,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 class VHeader : HorizontalLayout() {
   init {
     this.setWidthFull()
-    this.defaultVerticalComponentAlignment = FlexComponent.Alignment.CENTER
   }
   //---------------------------------------------------
   // DATA MEMBERS
