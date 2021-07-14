@@ -18,19 +18,18 @@
 package org.kopi.galite.ui.vaadin.menu
 
 import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
-import org.kopi.galite.ui.vaadin.main.MainWindow
 
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.Icon
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.dom.Element
 
-class VActorsRootNavigationItem(mainWindow: MainWindow?) : Button() {
+class VActorsRootNavigationItem : Button() {
 
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  var menu: VNavigationMenu = VNavigationMenu(mainWindow)
+  var menu: VNavigationMenu = VNavigationMenu(this)
   val rootIcon = Icon(VaadinIcon.ALIGN_JUSTIFY)
 
   init {

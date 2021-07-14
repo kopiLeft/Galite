@@ -20,12 +20,10 @@ package org.kopi.galite.ui.vaadin.window
 import org.kopi.galite.ui.vaadin.actor.Actor
 import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.base.VScrollablePanel
 import org.kopi.galite.ui.vaadin.block.Block
-import org.kopi.galite.ui.vaadin.field.AbstractField
 import org.kopi.galite.ui.vaadin.form.Form
-import org.kopi.galite.ui.vaadin.grid.GridEditorField
-import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 
 import com.vaadin.flow.component.Component
@@ -40,8 +38,7 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
   //---------------------------------------------------
   // DATA MEMBERS
   //---------------------------------------------------
-  internal var mainWindow: MainWindow? = null
-  protected val actors : VActorPanel = VActorPanel(mainWindow)
+  protected val actors : VActorPanel = VActorPanel()
   private var content: Component? = null
 
   /**
@@ -132,7 +129,7 @@ abstract class Window : VerticalLayout(), Focusable<Window> {
    * @return `true` if the caption is set.
    */
   private fun maybeSetMainWindowCaption(caption: String): Boolean {
-    val parent = mainWindow
+    val parent = findMainWindow()
 
     if (parent != null && parent.windowsList.contains(this)) {
       parent.updateWindowTitle(this, caption)

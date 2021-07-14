@@ -19,7 +19,6 @@ package org.kopi.galite.ui.vaadin.window
 
 import org.kopi.galite.ui.vaadin.actor.VActorsNavigationPanel
 import org.kopi.galite.ui.vaadin.base.Styles
-import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.menu.VActorsRootNavigationItem
 import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 
@@ -30,8 +29,8 @@ import com.vaadin.flow.component.menubar.MenuBar
 /**
  * The actor components container.
  */
-class VActorPanel(mainWindow: MainWindow?) : MenuBar() {
-  private val actorsNavigationItem = VActorsRootNavigationItem(mainWindow)
+class VActorPanel : MenuBar() {
+  private val actorsNavigationItem = VActorsRootNavigationItem()
   private val menu = Div()
   //---------------------------------------------------
   // CONSTRUCTOR

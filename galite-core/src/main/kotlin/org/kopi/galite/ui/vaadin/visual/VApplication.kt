@@ -372,7 +372,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     if (mainWindow != null) {
       access(currentUI) {
         window.setSizeFull()
-        window.mainWindow = mainWindow
         mainWindow!!.addWindow(window, title)
       }
     }

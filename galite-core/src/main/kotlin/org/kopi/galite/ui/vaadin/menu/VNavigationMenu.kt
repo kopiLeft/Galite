@@ -17,13 +17,13 @@
  */
 package org.kopi.galite.ui.vaadin.menu
 
-import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dialog.Dialog
 
-class VNavigationMenu(val mainWindow: MainWindow?) : Dialog(), HasStyle {
+class VNavigationMenu(private val rootNavigationItem: VActorsRootNavigationItem) : Dialog(), HasStyle {
 
   init {
     //this.setThemeVariants(EnhancedDialogVariant.SIZE_MEDIUM)
@@ -43,7 +43,7 @@ class VNavigationMenu(val mainWindow: MainWindow?) : Dialog(), HasStyle {
   }
 
   override fun close() {
-    val lastActiveWindow = mainWindow?.currentWindow as? Window
+    val lastActiveWindow = rootNavigationItem.findMainWindow()?.currentWindow as? Window
 
     super.close()
     lastActiveWindow?.goBackToLastFocusedTextField()
