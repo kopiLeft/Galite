@@ -30,7 +30,7 @@ class VInputButtonField(size: Int) : InputTextField<TextField>(TextField()),
 
   init {
     setInputType("button")
-    field.addFocusListener(this)
+    internalField.addFocusListener(this)
     addStyleDependentName("action")
     setWidth(size * CHAR_WIDTH, com.vaadin.flow.component.Unit.PIXELS)
   }

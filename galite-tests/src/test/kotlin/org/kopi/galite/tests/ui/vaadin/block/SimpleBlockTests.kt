@@ -24,7 +24,6 @@ import com.github.mvysny.kaributesting.v10._fireEvent
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
-import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.field.TextField
@@ -54,7 +53,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
 
     // set field value
     codeField._value = "123"
-    val inputField = codeField.field.content as AbstractField<*, String?>
+    val inputField = codeField.inputField.content as AbstractField<*, String?>
     inputField._fireEvent(AbstractField.ComponentValueChangeEvent(inputField, inputField, "123", true))
 
     // Focus on another field

@@ -25,16 +25,16 @@ import com.vaadin.flow.component.textfield.TextField
 class VIntegerField(width : Int, minval : Double, maxval : Double) : InputTextField<TextField>(TextField()) {
 
   init {
-    field.pattern = "[0-9]*"
-    field.isPreventInvalidInput = true
-    field.element.setProperty("min", minval)
-    field.element.setProperty("max", maxval)
+    internalField.pattern = "[0-9]*"
+    internalField.isPreventInvalidInput = true
+    internalField.element.setProperty("min", minval)
+    internalField.element.setProperty("max", maxval)
     this.width = width.toString()
   }
 
   override fun setMaxLength(maxLength: Int) {
-    field.maxLength = maxLength
+    internalField.maxLength = maxLength
   }
 
-  override fun getMaxLength(): Double = field.maxLength.toDouble()
+  override fun getMaxLength(): Double = internalField.maxLength.toDouble()
 }
