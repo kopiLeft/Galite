@@ -73,7 +73,7 @@ summary, time, mark, audio, video {
     background-color: white;
 }
 
-.galite *, .k-popup-window > *, .k-window-container > * {
+.galite *, .k-popup-window > *, .k-window-container > *, .k-form-page-content * {
 	font-family: Arial, sans-serif !important;
 	font-weight: 400 !important;
 	font-style: normal !important;

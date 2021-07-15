@@ -383,7 +383,10 @@ class TextField(val model: VField,
         6
       }
       Type.TIME -> {
-        2
+        5
+      }
+      Type.DATE -> {
+        7
       }
       else -> {
         3
