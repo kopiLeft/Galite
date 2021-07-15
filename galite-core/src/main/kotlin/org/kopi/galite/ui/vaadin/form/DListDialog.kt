@@ -96,7 +96,7 @@ class DListDialog(
     return handleClientResponse()
   }
 
-  override fun selectFromDialog(window: UWindow, showSingleEntry: Boolean): Int =
+  override fun selectFromDialog(window: UWindow?, showSingleEntry: Boolean): Int =
           selectFromDialog(window, null, showSingleEntry)
 
   /**
