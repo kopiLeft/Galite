@@ -41,6 +41,7 @@ import com.vaadin.flow.component.progressbar.ProgressBar
  */
 @CssImport.Container(value = [
   CssImport("./styles/galite/grid.css" , themeFor = "vaadin-grid"),
+  CssImport("./styles/galite/list.css" , themeFor = "vaadin-grid"),
   CssImport("./styles/galite/list.css" , themeFor = "vcf-enhanced-dialog-overlay")
 ])
 open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle {
@@ -216,6 +217,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
     set(table) {
       field = table
       field!!.className = Styles.LIST_DIALOG_TABLE
+      field!!.addThemeName(Styles.LIST_DIALOG_TABLE)
       content.add(field) // put table inside the focus panel
       if (newForm != null) {
         content.add(newForm)
