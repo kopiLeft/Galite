@@ -40,6 +40,7 @@ class PopupWindow : EnhancedDialog(), HasStyle {
     caption.className = Styles.POPUP_WINDOW_CAPTION
     isDraggable = true
     isResizable = true
+    isCloseOnOutsideClick = false
     addToHeader(caption)
   }
   //---------------------------------------------------
