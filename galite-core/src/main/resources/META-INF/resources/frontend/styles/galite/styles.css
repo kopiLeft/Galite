@@ -49,7 +49,11 @@ summary, time, mark, audio, video {
 	position: relative;
 }
 
-.k-textinput::part(input-field):hover, .kopi .k-textareainput:hover {
+.textarea::part(input-field) {
+	padding: 0;
+}
+
+.k-textinput::part(input-field):hover, .textarea::part(input-field):hover {
 	background: #d9f0f8;
 }
 
