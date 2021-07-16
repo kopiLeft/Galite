@@ -25,6 +25,7 @@ plugins {
 }
 
 vaadin {
+  optimizeBundle = false
   pnpmEnable = true
 }
 

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.visual
 
+import org.kopi.galite.ui.vaadin.menu.ModuleListMenu
 import org.kopi.galite.visual.VMenuTree
 
 /**
@@ -28,6 +29,11 @@ class DMainMenu(model: VMenuTree) : DMenu(model) {
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
+
+  override fun initContent(): ModuleListMenu {
+    menu.addThemeName("module_list")
+    return menu
+  }
 
   override val type: Int
     get() = VMenuTree.MAIN_MENU

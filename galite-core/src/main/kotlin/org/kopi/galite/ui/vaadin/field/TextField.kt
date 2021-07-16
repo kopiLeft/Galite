@@ -27,6 +27,7 @@ import org.kopi.galite.form.VStringField
 import org.kopi.galite.form.VTimeField
 import org.kopi.galite.form.VTimestampField
 import org.kopi.galite.form.VWeekField
+import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.event.TextFieldListener
 import org.kopi.galite.ui.vaadin.form.DTextField
 import org.kopi.galite.ui.vaadin.form.KeyNavigator
@@ -149,6 +150,7 @@ class TextField(val model: VField,
   private val textFieldListeners = mutableListOf<TextFieldListener>()
 
   init {
+    className = Styles.TEXT_FIELD
     col = model.width
     rows = model.height
     visibleRows = if (model.height == 1) 1 else (model as VStringField).getVisibleHeight()
@@ -291,10 +293,10 @@ class TextField(val model: VField,
    */
   private fun setTextTransform(text: InputTextField<*>) {
     when (convertType) {
-      ConvertType.UPPER -> text.element.style["text-transform"] = "uppercase"
-      ConvertType.LOWER -> text.element.style["text-transform"] = "lowercase"
-      ConvertType.NAME -> text.element.style["text-transform"] = "capitalize"
-      ConvertType.NONE -> text.element.style["text-transform"] = "none"
+      ConvertType.UPPER -> text.addClassName("transform-uppercase")
+      ConvertType.LOWER -> text.addClassName("transform-lowercase")
+      ConvertType.NAME -> text.addClassName("transform-capitalize")
+      ConvertType.NONE -> text.addClassName("transform-none")
     }
   }
 

@@ -24,10 +24,12 @@ import org.kopi.galite.ui.vaadin.base.VInputText
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
+import com.github.mvysny.kaributesting.v10.TestingLifecycleHook
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
+import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.contextmenu.HasMenuItems
 import com.vaadin.flow.component.textfield.PasswordField
 
@@ -52,12 +54,12 @@ open class VUITestBase : VApplicationTestBase() {
   }
 }
 
-open class GaliteVUITestBase: VUITestBase() {
+open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
   protected fun login() {
     // Fill to username and password fields then click to the login button
     _get<VInputText> { id = "user_name" }._value = testUser
     _get<PasswordField> { id = "user_password" }._value = testPassword
-    _get<VInputButton> { id = "login_button" }._click()
+    _get<VInputButton> { id = "login_button" }._clickAsynch()
   }
 
   @Before
@@ -65,12 +67,24 @@ open class GaliteVUITestBase: VUITestBase() {
     setupRoutes()
   }
 
-  protected fun HasMenuItems._clickItemWithCaptionAsynch(caption: String, action: () -> Unit) {
+  protected fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 500) {
     _clickItemWithCaption(caption)
+    Thread.sleep(duration)
+  }
+
+  protected fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
+    _click()
     MockVaadin.runUIQueue()
-    Thread.sleep(500)
+    Thread.sleep(duration)
     MockVaadin.runUIQueue()
-    action()
+  }
+
+  protected fun ClickNotifier<*>._clickAsynch(action: (() -> Unit)? = null) {
+    this._click()
+    MockVaadin.runUIQueue()
+    Thread.sleep(200)
+    MockVaadin.runUIQueue()
+    action?.invoke()
   }
 
   companion object {

@@ -59,16 +59,18 @@ class VWindowController : WindowController() {
     val builder = getWindowBuilder(model)
     if (builder != null) {
       try {
-        val view = builder.createWindow(model) as DWindow
-        view.run()
-        val application = getApplication()
-        if (application != null) {
-          if (model is VPreviewWindow
-                  || model is VHelpViewer
-                  || model is VMenuTree) {
-            showNotModalPopupWindow(view, model.getTitle())
-          } else {
-            application.addWindow(view, model.getTitle())
+        access {
+          val view = builder.createWindow(model) as DWindow
+          view.run()
+          val application = getApplication()
+          if (application != null) {
+            if (model is VPreviewWindow
+              || model is VHelpViewer
+              || model is VMenuTree) {
+              showNotModalPopupWindow(view, model.getTitle())
+            } else {
+              application.addWindow(view, model.getTitle())
+            }
           }
         }
       } catch (e: VException) {
@@ -132,15 +134,17 @@ class VWindowController : WindowController() {
       val builder = getWindowBuilder(model)
       if (builder != null) {
         try {
-          view = builder.createWindow(model) as DWindow
-          view!!.run()
-          val application = getApplication()
-          if (application != null) {
-            val popup = PopupWindow()
-            popup.isModal = true
-            popup.setContent(view!!)
-            popup.setCaption(model.getTitle()) // put popup title
-            popup.open()
+          access {
+            view = builder.createWindow(model) as DWindow
+            view!!.run()
+            val application = getApplication()
+            if (application != null) {
+              val popup = PopupWindow()
+              popup.isModal = true
+              popup.setContent(view!!)
+              popup.setCaption(model.getTitle()) // put popup title
+              popup.open()
+            }
           }
         } catch (e: VException) {
           throw VRuntimeException(e.message, e)

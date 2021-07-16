@@ -18,15 +18,12 @@
 
 #header {
     background-color: white;
-    display: table;
     width: 100%;
     margin: 0 auto;
     height: 63px;
 }
 
 #module_list {
-    display: block;
-    max-width: 85%;
     margin-left: 0;
     height: 63px;
 }
@@ -37,9 +34,9 @@
 
 #welcome_container {
     box-sizing: border-box;
-    display: table-cell;
     vertical-align: middle;
-    width : 10%;
+    min-width: 250px;
+    max-width: 300px;
     --lumo-font-size-m: 0.700rem;
 }
 
@@ -52,8 +49,7 @@
  * Change Logo's style
  */
 #companyLogo {
-    display: table-cell;
-    width: 10%;
+    width: 179px;
     border-right: 1px solid #dadada;
     vertical-align: middle;
     margin-left: 0;
@@ -65,6 +61,7 @@
 
 .logo-image {
     vertical-align: middle;
+    width: 172px;
 }
 
 /*
@@ -91,7 +88,8 @@
 /**
  * Modules style
  */
-#module_list :not(#user_menu):not(#wrkcontext_menu):not(#bookmarks_menu):not(#admin_menu)::part(menu-bar-button) {
+
+:host([theme~="module_list"]) [part~="menu-bar-button"] {
     --lumo-font-family: Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
@@ -99,10 +97,15 @@
     border-right: 1px solid #dadada;
     height: 61px;
     box-sizing: border-box;
+    background: var(--lumo-tint);
 }
 
-#module_list :not(#user_menu):first-child::part(menu-bar-button):hover {
+:host([theme~="module_list"]) [part~="menu-bar-button"]:hover {
     background-color: #d9f0f8;
+}
+
+:host([theme~="module_list"]) {
+    min-width: var(--lumo-size-m)
 }
 
 #welcome ::part(menu-bar-button) {
@@ -135,14 +138,6 @@
     margin: 0;
     box-sizing: border-box;
     padding: var(--lumo-space-xxs);
-}
-
-#module_list :not(#user_menu):first-child::part(menu-bar-button) {
-    background-color: var(--lumo-base-color);
-    border-right: 1px solid #dadada;
-    height: 63px;
-    box-sizing: border-box;
-    --lumo-space-m: 0;
 }
 
 #welcome #windows {
