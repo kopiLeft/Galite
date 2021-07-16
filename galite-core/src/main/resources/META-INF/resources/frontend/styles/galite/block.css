@@ -99,6 +99,14 @@
     display: -webkit-box;
 }
 
+.info-content .k-textfield, .info-content .k-textinput {
+    --lumo-text-field-size: none;
+}
+
+.info-content .k-textinput {
+    line-height: normal;
+}
+
 /*
  * multiple block Style
  */

@@ -79,11 +79,15 @@
 .multiple .k-boolean-field-content {
     display: flex;
     background-color: #ffffff;
-    border-bottom: 1px solid #dadada;
 }
 
 .editor-booleanfield {
     --lumo-primary-color: #009bd4;
+}
+
+.k-boolean-field-content {
+    display: inline;
+    border-bottom: 1px solid #dadada;
 }
 
 .k-boolean-field-content:focus-within {
