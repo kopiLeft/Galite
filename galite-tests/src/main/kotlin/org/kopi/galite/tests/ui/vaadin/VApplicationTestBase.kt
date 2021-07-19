@@ -45,8 +45,9 @@ import org.kopi.galite.visual.WindowController
  */
 open class VApplicationTestBase : ApplicationTestBase() {
 
+  protected val appInstance = GaliteApplication()
+
   init {
-    GaliteApplication()
     setupApplication()
   }
 
@@ -74,6 +75,8 @@ open class VApplicationTestBase : ApplicationTestBase() {
     override val logoImage get() = "logo_kopi.png"
     override val logoHref get() = "http://"
     override val alternateLocale get() = Locale.UK
+    override val title get() = "Galite demo"
+    override val favIcon get() = "ui/vaadin/window.gif"
     override val supportedLocales
       get() =
         arrayOf(Locale.FRANCE,

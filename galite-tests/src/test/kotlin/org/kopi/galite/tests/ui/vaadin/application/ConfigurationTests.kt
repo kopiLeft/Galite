@@ -14,20 +14,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.tests.ui.vaadin.application
 
-package org.kopi.galite.demo.web.vaadin
+import kotlin.test.assertEquals
 
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.server.AppShellSettings
-import com.vaadin.flow.server.PWA
+import org.junit.Test
+import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 
-/**
- * Use the @PWA annotation make the application installable on phones, tablets
- * and some desktop browsers.
- */
-@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/window.gif")
-class AppShell : AppShellConfigurator {
-  override fun configurePage(settings: AppShellSettings) {
-    settings.setPageTitle("Galite demo")
+import com.vaadin.flow.component.UI
+
+class ConfigurationTests: GaliteVUITestBase() {
+
+  @Test
+  fun `test page title`() {
+    assertEquals(appInstance.title, UI.getCurrent().internals.title)
   }
 }

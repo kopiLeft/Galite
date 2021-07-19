@@ -24,11 +24,16 @@ import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 
+import com.vaadin.flow.server.PWA
+
+@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/icon.png")
 class GaliteApplication : VApplication(GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"
   override val alternateLocale get() = Locale.UK
+  override val title get() = "Galite demo"
+  override val favIcon get() = "ui/vaadin/window.gif"
   override val supportedLocales
     get() =
       arrayOf(Locale.UK,

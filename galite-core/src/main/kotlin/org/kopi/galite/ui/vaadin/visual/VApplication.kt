@@ -60,9 +60,12 @@ import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
 
@@ -79,7 +82,8 @@ import com.vaadin.flow.server.VaadinSession
 ])
 @PreserveOnRefresh
 @Suppress("LeakingThis")
-abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
+abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
+  AppShellConfigurator, HasDynamicTitle {
 
   //---------------------------------------------------
   // DATA MEMBEERS
@@ -96,6 +100,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // ---------------------------------------------------------------------
 
   override val startupTime: Date = Date() // remembers the startup time
+
+  constructor(): this(Registry("", null))
 
   init {
     className = "galite"
@@ -518,6 +524,16 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   override val userIP: String get() = VaadinSession.getCurrent().browser.address
 
+  override fun configurePage(settings: AppShellSettings) {
+    pageTitle?.let {
+      settings.setPageTitle(it)
+    }
+    favIcon?.let {
+      settings.addLink("shortcut icon", it)
+      settings.addFavIcon("icon", it, "192x192")
+    }
+  }
+
   //---------------------------------------------------
   // UTILS
   // --------------------------------------------------
@@ -568,6 +584,27 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @return The alternate locale to be used when no default locale is specified.
    */
   protected abstract val alternateLocale: Locale
+
+  /**
+   * The page title.
+   */
+  open val title: String? = null
+
+  /**
+   * The page icon
+   */
+  open val favIcon: String? = null
+
+  override fun getPageTitle(): String? {
+    return pageTitle
+  }
+
+  internal fun setPageTitle(title: String) {
+    this.pageTitle = title
+    currentUI!!.internals.title = title
+  }
+
+  private var pageTitle: String? = title
 
   companion object {
 
