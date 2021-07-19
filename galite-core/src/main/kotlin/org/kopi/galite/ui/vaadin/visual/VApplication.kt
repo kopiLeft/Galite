@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.visual
 import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
+import java.util.ResourceBundle
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
@@ -281,16 +282,11 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    /*dBContext = login(getInitParameter("database")!!, FIXME: uncomment this.
+    dBContext = login(getInitParameter("database")!!,
                       getInitParameter("driver")!!,
                       username,
                       password,
-                      getInitParameter("schema")!!)*/
-    dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-                      "org.h2.Driver",
-                      username,
-                      password,
-                      null)
+                      getInitParameter("schema")!!)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -528,9 +524,16 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param key The parameter key.
    * @return The initialization parameter contained in the application descriptor file.
    */
-  protected fun getInitParameter(key: String?): String? {
-    return VaadinServlet.getCurrent()?.getInitParameter(key)
+  protected fun getInitParameter(key: String): String? {
+    return VaadinServlet.getCurrent()?.getInitParameter(key) ?: getConfigParameter(key)
   }
+
+  open var resourceFile = "config"
+
+  private val databaseProperties get() = ResourceBundle.getBundle(resourceFile)
+
+  private fun getConfigParameter(key: String): String? =
+    if (databaseProperties.containsKey(key)) databaseProperties.getString(key) else null
 
   //---------------------------------------------------
   // ABSTRACT MEMBERS TO CUSTOMIZE YOUR APPLICATION
