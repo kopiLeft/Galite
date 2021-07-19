@@ -346,6 +346,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * you should use it to define [Locale], debugMode...
    */
   fun initialize() {
+    configProperties = ResourceBundle.getBundle(resourceFile)
+
     if (registry != null) {
       registry.buildDependencies()
     }
@@ -476,16 +478,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   private fun checkLocale(locale: String): Boolean {
     val chars = locale.toCharArray()
-    return !(chars.size != 5 ||
-            chars[0] < 'a' ||
-            chars[0] > 'z' ||
-            chars[1] < 'a' ||
-            chars[1] > 'z' ||
-            chars[2] != '_' ||
-            chars[3] < 'A' ||
-            chars[3] > 'Z' ||
-            chars[4] < 'A' ||
-            chars[4] > 'Z')
+
+    if (chars.size != 5
+      || chars[0] < 'a' || chars[0] > 'z'
+      || chars[1] < 'a' || chars[1] > 'z'
+      || chars[2] != '_'
+      || chars[3] < 'A' || chars[3] > 'Z'
+      || chars[4] < 'A' || chars[4] > 'Z')
+    {
+      return false
+    }
+
+    return true
   }
 
   //---------------------------------------------------
@@ -528,12 +532,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     return VaadinServlet.getCurrent()?.getInitParameter(key) ?: getConfigParameter(key)
   }
 
-  open var resourceFile = "config"
+  open val resourceFile: String get() = "config"
 
-  private val databaseProperties get() = ResourceBundle.getBundle(resourceFile)
+  private lateinit var configProperties: ResourceBundle
 
   private fun getConfigParameter(key: String): String? =
-    if (databaseProperties.containsKey(key)) databaseProperties.getString(key) else null
+    if (configProperties.containsKey(key)) configProperties.getString(key) else null
 
   //---------------------------------------------------
   // ABSTRACT MEMBERS TO CUSTOMIZE YOUR APPLICATION

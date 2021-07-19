@@ -82,9 +82,18 @@ open class GaliteServlet : VaadinServlet(), SessionInitListener {
    */
   private fun checkLocale(locale: String): Boolean {
     val chars: CharArray = locale.toCharArray()
-    return if (chars.size != 5 || chars[0] < 'a' || chars[0] > 'z' || chars[1] < 'a' || chars[1] > 'z' || chars[2] != '_' || chars[3] < 'A' || chars[3] > 'Z' || chars[4] < 'A' || chars[4] > 'Z') {
-      false
-    } else true
+
+    if (chars.size != 5
+      || chars[0] < 'a' || chars[0] > 'z'
+      || chars[1] < 'a' || chars[1] > 'z'
+      || chars[2] != '_'
+      || chars[3] < 'A' || chars[3] > 'Z'
+      || chars[4] < 'A' || chars[4] > 'Z')
+    {
+      return false
+    }
+
+    return true
   }
 
   /**
@@ -138,6 +147,6 @@ open class GaliteServlet : VaadinServlet(), SessionInitListener {
   private var locale: Locale? = null
 
   companion object {
-    private const val VLIB_PROPERTIES_RESOURCE_FILE = "org/kopi/vkopi/lib/resource/VlibProperties"
+    private const val VLIB_PROPERTIES_RESOURCE_FILE = "org/kopi/galite/VlibProperties"
   }
 }
