@@ -286,7 +286,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
                       getInitParameter("driver")!!,
                       username,
                       password,
-                      getInitParameter("schema")!!)
+                      getInitParameter("schema"))
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
