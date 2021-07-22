@@ -293,13 +293,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     val driver = getInitParameter("driver")
     val schema  = getInitParameter("schema")
 
-    if(database== null) {
-      throw SQLException("The database url shouldn't be null")
-    }
-
-    if(driver == null) {
-      throw SQLException("The jdbc driver shouldn't be null")
-    }
+    requireNotNull(database) { "The database url shouldn't be null" }
+    requireNotNull(driver) { "The jdbc driver shouldn't be null" }
 
     dBContext = login(database,
                       driver,
