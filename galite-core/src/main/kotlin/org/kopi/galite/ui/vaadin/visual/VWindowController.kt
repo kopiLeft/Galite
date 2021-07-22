@@ -138,9 +138,7 @@ class VWindowController : WindowController() {
       val builder = getWindowBuilder(model)
       if (builder != null) {
         try {
-          accessAndAwait {
-            view = builder.createWindow(model) as DWindow
-          }
+          view = builder.createWindow(model) as DWindow
           view!!.run()
           val application = getApplication()
           if (application != null) {

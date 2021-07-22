@@ -83,6 +83,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>() {
    */
   fun setAutofill() {
     val autofillIcon  = IronIcons.ARROW_DROP_DOWN.create()
+    autofillIcon!!.style["cursor"] = "pointer" // TODO: move to css
     autofillIcon.addClickListener {
       dGridEditorField.onAutofill()
     }
