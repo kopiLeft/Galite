@@ -18,12 +18,12 @@
 package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.common.VSpan
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.componentfactory.EnhancedDialog
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.html.Div
@@ -47,7 +47,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 abstract class AbstractNotification(title: String?,
                                     message: String?,
                                     protected val locale: String,
-                                    val application: VApplication? = null)
+                                    val parent: Component?)
   : EnhancedDialog(), Focusable<AbstractNotification> {
 
   //-------------------------------------------------
@@ -115,7 +115,7 @@ abstract class AbstractNotification(title: String?,
    * @param action The user action.
    */
   protected fun fireOnClose(action: Boolean?) {
-    val lastActiveWindow = MainWindow.instance.currentWindow as? Window
+    val lastActiveWindow = parent?.findMainWindow()?.currentWindow as? Window
 
     for (l in listeners) {
       l.onClose(action)

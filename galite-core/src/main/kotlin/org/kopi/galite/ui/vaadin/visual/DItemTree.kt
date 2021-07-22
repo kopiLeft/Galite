@@ -22,6 +22,7 @@ import javax.swing.tree.TreeNode
 
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.window.PopupWindow
 import org.kopi.galite.visual.Item
 import org.kopi.galite.visual.MessageCode
@@ -328,7 +329,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
     buttonsContainer.add(cancelButton)
     popupContent.add(buttonsContainer)
     // popupContent.setComponentAlignment(buttonsContainer, Alignment.MIDDLE_CENTER) TODO
-    inputDialog = PopupWindow()
+    inputDialog = PopupWindow(findMainWindow())
     inputDialog!!.isModal = true
     inputDialog!!.setContent(popupContent)
     inputDialog!!.className = "inputdialog"

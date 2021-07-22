@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.notif
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 
 import com.vaadin.flow.component.ClickEvent
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
@@ -36,8 +37,9 @@ import com.vaadin.flow.component.icon.VaadinIcon
  */
 class ConfirmNotification(title: String?,
                           message: String,
-                          locale: String)
-  : AbstractNotification(title, message, locale) {
+                          locale: String,
+                          parent: Component?)
+  : AbstractNotification(title, message, locale, parent) {
 
   //-------------------------------------------------
   // IMPLEMENTATION

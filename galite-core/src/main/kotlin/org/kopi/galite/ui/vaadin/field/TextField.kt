@@ -37,7 +37,7 @@ import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.data.binder.BeanValidationBinder
+import com.vaadin.flow.data.binder.Binder
 
 /**
  * A text field component.
@@ -264,7 +264,7 @@ class TextField(val model: VField,
    * Sets the validator of a text field.
    */
   fun setValidator(field: InputTextField<*>) {
-    val binder = BeanValidationBinder(String::class.java)
+    val binder = Binder(String::class.java)
     val bindingBuilder = binder.forField(field)
 
     val validator = when (type) {

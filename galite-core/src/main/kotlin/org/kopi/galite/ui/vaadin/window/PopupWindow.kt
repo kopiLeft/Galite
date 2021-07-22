@@ -30,7 +30,7 @@ import com.vaadin.flow.component.dependency.CssImport
  */
 
 @CssImport("./styles/galite/dialog.css")
-class PopupWindow : EnhancedDialog(), HasStyle {
+class PopupWindow(val mainWindow: MainWindow?) : EnhancedDialog(), HasStyle {
 
   private val listeners = mutableListOf<CloseListener>()
   private var caption = VSpan()
@@ -55,7 +55,7 @@ class PopupWindow : EnhancedDialog(), HasStyle {
     super.close()
 
     // try to get it from the main window current shown window.
-    val lastActiveWindow = MainWindow.instance.currentWindow as? Window
+    val lastActiveWindow = mainWindow?.currentWindow as? Window
 
     if (lastActiveWindow != null) {
       // focus the window itself to activate attached actors.
