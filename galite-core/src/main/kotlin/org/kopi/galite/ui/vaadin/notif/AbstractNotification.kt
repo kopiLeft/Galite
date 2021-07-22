@@ -68,7 +68,6 @@ abstract class AbstractNotification(title: String?,
     element.setAttribute("hideFocus", true)
     element.style["outline"] = "0px"
     isDraggable = true
-    isModal = false
     this.message.className = Styles.NOTIFICATION_MESSAGE
     this.message.style["white-space"] = "nowrap"
     buttons.className = Styles.NOTIFICATION_BUTTONS

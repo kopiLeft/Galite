@@ -21,6 +21,7 @@ import org.kopi.galite.common.Window
 import org.kopi.galite.preview.VPreviewWindow
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
 import org.kopi.galite.ui.vaadin.window.PopupWindow
@@ -60,18 +61,21 @@ class VWindowController : WindowController() {
     val builder = getWindowBuilder(model)
     if (builder != null) {
       try {
-        access {
-          val view = builder.createWindow(model) as DWindow
-          view.run()
-          val application = getApplication()
-          if (application != null) {
-            if (model is VPreviewWindow
-              || model is VHelpViewer
-              || model is VMenuTree) {
-              showNotModalPopupWindow(view, model.getTitle())
-            } else {
-              application.addWindow(view, model.getTitle())
-            }
+        lateinit var view: DWindow
+
+        accessAndAwait {
+          view = builder.createWindow(model) as DWindow
+        }
+
+        view.run()
+        val application = getApplication()
+        if (application != null) {
+          if (model is VPreviewWindow
+            || model is VHelpViewer
+            || model is VMenuTree) {
+            showNotModalPopupWindow(view, model.getTitle())
+          } else {
+            application.addWindow(view, model.getTitle())
           }
         }
       } catch (e: VException) {
@@ -135,17 +139,15 @@ class VWindowController : WindowController() {
       val builder = getWindowBuilder(model)
       if (builder != null) {
         try {
-          access {
-            view = builder.createWindow(model) as DWindow
-            view!!.run()
-            val application = getApplication()
-            if (application != null) {
-              val popup = PopupWindow(application.mainWindow)
-              popup.isModal = true
-              popup.setContent(view!!)
-              popup.setCaption(model.getTitle()) // put popup title
-              popup.open()
-            }
+          view = builder.createWindow(model) as DWindow
+          view!!.run()
+          val application = getApplication()
+          if (application != null) {
+            val popup = PopupWindow(application.mainWindow)
+            popup.isModal = true
+            popup.setContent(view!!)
+            popup.setCaption(model.getTitle()) // put popup title
+            popup.open()
           }
         } catch (e: VException) {
           throw VRuntimeException(e.message, e)

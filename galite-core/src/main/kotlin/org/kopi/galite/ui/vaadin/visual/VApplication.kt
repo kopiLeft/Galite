@@ -27,6 +27,7 @@ import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.FontMetrics
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
@@ -463,7 +464,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
       welcomeView!!.setWaitInfo()
       Thread {
-        access(currentUI) {
+        accessAndPush(currentUI) {
           try {
             onLogin(event)
           } finally {

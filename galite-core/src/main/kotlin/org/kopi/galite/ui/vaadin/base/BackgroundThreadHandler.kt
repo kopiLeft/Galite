@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 
 import com.vaadin.flow.component.UI
@@ -58,6 +59,35 @@ object BackgroundThreadHandler {
       currentUI.access {
         command()
         currentUI.push()
+      }
+    }
+  }
+
+  /**
+   * Exclusive access to the UI from a background thread to perform some updates.
+   *
+   * This will awaits until computation completes.
+   *
+   * This method is used when you are creating a Vaadin component from a background thread. This will wait until
+   * initialization is finished to avoid NPE later.
+   *
+   *
+   * @param command the command which accesses the UI.
+   */
+  fun accessAndAwait(currentUI: UI? = null, command: () -> Unit) {
+    val currentUI = currentUI ?: locateUI()
+
+    if(currentUI == null) {
+      command()
+    } else {
+      try {
+        currentUI
+          .access(command)
+          .get()
+      } catch (executionException: ExecutionException) {
+        executionException.cause?.let {
+          throw it
+        }
       }
     }
   }
