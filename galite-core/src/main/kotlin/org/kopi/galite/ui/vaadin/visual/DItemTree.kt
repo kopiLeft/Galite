@@ -21,6 +21,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.window.PopupWindow
@@ -284,7 +285,7 @@ class DItemTree(model: VItemTree) : DWindow(model), UItemTree {
     if (inputDialog == null) {
       createInputDialog(localisation)
     }
-    access(currentUI) {
+    accessAndPush(currentUI) {
       editTextField.value = if (newItem) "" else if (localisation) if (item.localisedName != null) item.localisedName else "" else item.name
       editTextField.maxLength = maxLength
       editTextField.width = "" + maxLength + "em"

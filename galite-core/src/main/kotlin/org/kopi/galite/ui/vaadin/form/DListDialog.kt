@@ -23,7 +23,7 @@ import org.kopi.galite.form.VDictionary
 import org.kopi.galite.form.VForm
 import org.kopi.galite.form.VListDialog
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.ui.vaadin.list.GridListDialog
 import org.kopi.galite.ui.vaadin.list.ListTable
 import org.kopi.galite.ui.vaadin.notif.InformationNotification
@@ -355,7 +355,7 @@ class DListDialog(
    * Shows the dialog and wait until it is closed from client side.
    */
   protected fun showDialogAndWait() {
-    startAndWait(lock, currentUI) {
+    startAndWaitAndPush(lock, currentUI) {
       showListDialog()
     }
   }
@@ -384,7 +384,7 @@ class DListDialog(
         releaseLock(lock)
       }
     })
-    startAndWait(lock, currentUI) {
+    startAndWaitAndPush(lock, currentUI) {
       notice.show()
     }
   }

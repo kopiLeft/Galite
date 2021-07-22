@@ -114,6 +114,6 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
   }
 
   private fun releaseLockOnUpload() {
-    releaseLock(upload as Object)
+    releaseLock(receiver as Object)
   }
 }

@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.list
 
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.base.VInputButton
@@ -107,7 +108,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
           }
 
           if(++columns == table!!.headerComponents.size) {
-            ui.access {
+            accessAndPush(ui) {
               widthStyler.width = "calc(calc($width) + 20px)"
               widthStyler.minWidth = "calc(calc($width) + 20px)"
               progress.close()
