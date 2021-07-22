@@ -28,11 +28,12 @@
 
 .multiple ::part(checkbox)::after {
     border-width: 0.3em 0 0 0.3em;
-    transform-origin: -0.2px -0.7px;
+    transform-origin: -0.1px -0px;
 }
 
 .multiple :not(.true)::part(checkbox)::after {
-    left: 0.15em;
+    left: 0.17em;
+    font-size: 14px;
 }
 
 #main vaadin-grid, #main vaadin-grid > vaadin-grid-cell-content {
@@ -50,13 +51,13 @@
 
 ::part(checkbox)::after {
     border-width: 0.3em 0 0 0.3em;
-    transform-origin: -1.5px -1.2px;
+    transform-origin: -1px -0.5px
 }
 
 :not(.true)::part(checkbox)::after {
     opacity: none;
     transform: none;
-    font-size: 15;
+    font-size: 13px;
     font-weight: bold;
     position: absolute;
     top: 0em;
@@ -79,6 +80,7 @@
     display: flex;
     background-color: #ffffff;
 }
+
 .editor-booleanfield {
     --lumo-primary-color: #009bd4;
 }

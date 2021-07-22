@@ -363,9 +363,8 @@ class TextField(val model: VField,
 
     text.size = size
     text.setMaxLength(maxLength)
-    text.maxWidth = "" + size + "em" // TODO: temporary styling
-    text.setWidthFull()
-    setWidthFull()
+    text.width = "" + size + "ch" // TODO: temporary styling
+    text.element.style["box-sizing"] = "unset"
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
     TextFieldNavigationHandler.createNavigator(text, rows > 1)
@@ -375,24 +374,25 @@ class TextField(val model: VField,
 
   private fun getFieldSize(): Int {
     var size = col
-    // numeric fields are considered as monospaced fields
-    if (isNumeric()) {
-      size -= 1
-    } else {
-      // upper characters take wider place
-      if (convertType == ConvertType.UPPER) {
-        size += 2
-      }
+
+    // upper characters take wider place
+    if (convertType == ConvertType.UPPER) {
+      size += 2
     }
 
-    if (type == Type.TIMESTAMP) {
-      size += 3
-    } else if (type == Type.DATE) {
-      size += 5
-    } else if (type == Type.TIME) {
-      size += 5
-    } else {
-      size += 4
+    size += when (type) {
+      Type.TIMESTAMP -> {
+        6
+      }
+      Type.TIME -> {
+        5
+      }
+      Type.DATE -> {
+        7
+      }
+      else -> {
+        3
+      }
     }
 
     // let the place to the autofill icon
