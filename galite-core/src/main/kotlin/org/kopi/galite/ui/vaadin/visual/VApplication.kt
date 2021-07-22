@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.visual
 import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
+import java.util.MissingResourceException
 import java.util.ResourceBundle
 
 import org.kopi.galite.base.UComponent
@@ -91,6 +92,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var askAnswer = 0
   var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
   var currentUI: UI? = null
+  private val configProperties: ResourceBundle? =
+    try {
+      ResourceBundle.getBundle(resourceFile)
+    } catch (missingResourceException: MissingResourceException) {
+      null
+    }
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -346,8 +353,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * you should use it to define [Locale], debugMode...
    */
   fun initialize() {
-    configProperties = ResourceBundle.getBundle(resourceFile)
-
     if (registry != null) {
       registry.buildDependencies()
     }
@@ -534,10 +539,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
 
   open val resourceFile: String get() = "config"
 
-  private lateinit var configProperties: ResourceBundle
-
   private fun getConfigParameter(key: String): String? =
-    if (configProperties.containsKey(key)) configProperties.getString(key) else null
+    if (configProperties != null && configProperties.containsKey(key)) configProperties.getString(key) else null
 
   //---------------------------------------------------
   // ABSTRACT MEMBERS TO CUSTOMIZE YOUR APPLICATION
