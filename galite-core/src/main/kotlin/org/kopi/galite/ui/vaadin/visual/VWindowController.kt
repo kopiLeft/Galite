@@ -143,7 +143,7 @@ class VWindowController : WindowController() {
           view!!.run()
           val application = getApplication()
           if (application != null) {
-            val popup = PopupWindow()
+            val popup = PopupWindow(application.mainWindow)
             popup.isModal = true
             popup.setContent(view!!)
             popup.setCaption(model.getTitle()) // put popup title
