@@ -289,11 +289,23 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    dBContext = login(getInitParameter("database")!!,
-                      getInitParameter("driver")!!,
+    val database = getInitParameter("database")
+    val driver = getInitParameter("driver")
+    val schema  = getInitParameter("schema")
+
+    if(database== null) {
+      throw SQLException("The database url shouldn't be null")
+    }
+
+    if(driver == null) {
+      throw SQLException("The jdbc driver shouldn't be null")
+    }
+
+    dBContext = login(database,
+                      driver,
                       username,
                       password,
-                      getInitParameter("schema"))
+                      schema)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
