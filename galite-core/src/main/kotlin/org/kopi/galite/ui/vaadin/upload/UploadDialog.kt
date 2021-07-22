@@ -45,8 +45,7 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
     className = "k-upload"
     buttons.isSpacing = true
     buttons.justifyContentMode = FlexComponent.JustifyContentMode.CENTER
-    isModal = true
-    isCloseOnOutsideClick = true
+    isCloseOnOutsideClick = false
     buttons.className = "k-upload-buttons"
     setHeader(title)
     setFooter(buttons)
@@ -115,6 +114,6 @@ class UploadDialog(val receiver: Receiver) : EnhancedDialog(), HasStyle {
   }
 
   private fun releaseLockOnUpload() {
-    releaseLock(upload as Object)
+    releaseLock(receiver as Object)
   }
 }

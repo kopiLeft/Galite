@@ -27,6 +27,7 @@ import org.kopi.galite.report.VReport
 import org.kopi.galite.report.VReportRow
 import org.kopi.galite.report.VSeparatorColumn
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.visual.DWindow
 import org.kopi.galite.visual.Action
 import org.kopi.galite.visual.VException
@@ -101,7 +102,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
    */
   fun reorder(newOrder: IntArray) {
     model.columnMoved(newOrder)
-    access(currentUI) {
+    accessAndPush(currentUI) {
       table.setColumnOrder(
         newOrder.map { table.getColumnByKey(it.toString()) }
       )
@@ -159,7 +160,7 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
 
   override fun contentChanged() {
     if (this::table.isInitialized) {
-      access(currentUI) {
+      accessAndPush(currentUI) {
         table.setItems(buildRows())
         table.model.fireContentChanged()
         val page = UI.getCurrent().page

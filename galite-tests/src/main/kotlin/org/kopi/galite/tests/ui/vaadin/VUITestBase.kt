@@ -30,8 +30,10 @@ import com.github.mvysny.kaributesting.v10._clickItemWithCaption
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.ClickNotifier
+import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.contextmenu.HasMenuItems
 import com.vaadin.flow.component.textfield.PasswordField
+import com.vaadin.flow.shared.communication.PushMode
 
 /**
  * The high level class for all classes containing UI tests
@@ -39,6 +41,7 @@ import com.vaadin.flow.component.textfield.PasswordField
 open class VUITestBase : VApplicationTestBase() {
   fun setupRoutes() {
     MockVaadin.setup(routes!!)
+    UI.getCurrent().pushConfiguration.pushMode = PushMode.MANUAL
   }
 
   companion object {
@@ -59,7 +62,7 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
     // Fill to username and password fields then click to the login button
     _get<VInputText> { id = "user_name" }._value = testUser
     _get<PasswordField> { id = "user_password" }._value = testPassword
-    _get<VInputButton> { id = "login_button" }._clickAsynch()
+    _get<VInputButton> { id = "login_button" }._clickAndWait(100)
   }
 
   @Before
@@ -77,14 +80,6 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
     MockVaadin.runUIQueue()
     Thread.sleep(duration)
     MockVaadin.runUIQueue()
-  }
-
-  protected fun ClickNotifier<*>._clickAsynch(action: (() -> Unit)? = null) {
-    this._click()
-    MockVaadin.runUIQueue()
-    Thread.sleep(200)
-    MockVaadin.runUIQueue()
-    action?.invoke()
   }
 
   companion object {

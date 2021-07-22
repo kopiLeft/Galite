@@ -18,8 +18,9 @@
 package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.visual.VApplication
+import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.ShortcutEvent
 import com.vaadin.flow.component.Shortcuts
@@ -36,8 +37,8 @@ import com.vaadin.flow.component.icon.VaadinIcon
 class ErrorNotification(title: String?,
                         val message: String?,
                         locale: String,
-                        application: VApplication?)
-  : AbstractNotification(title, message, locale, application) {
+                        parent: Component?)
+  : AbstractNotification(title, message, locale, parent) {
 
   //--------------------------------------------------
   // DATA MEMBERS
@@ -58,6 +59,8 @@ class ErrorNotification(title: String?,
   //-------------------------------------------------
 
   override fun setButtons() {
+    val application = parent?.findMainWindow()?.application
+
     close = Button(LocalizedProperties.getString(locale, "CLOSE"))
     close.addClickListener { fireOnClose(null) }
     close.isAutofocus = true

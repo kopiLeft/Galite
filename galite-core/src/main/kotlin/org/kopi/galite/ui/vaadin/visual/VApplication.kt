@@ -27,6 +27,7 @@ import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.FontMetrics
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
@@ -39,6 +40,7 @@ import org.kopi.galite.ui.vaadin.notif.InformationNotification
 import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
+import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.visual.Application
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
@@ -56,7 +58,6 @@ import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -65,13 +66,14 @@ import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
+import com.vaadin.flow.shared.communication.PushMode
 
 /**
  * The entry point for all Galite WEB applications.
  *
  * @param registry The [Registry] object.
  */
-@Push
+@Push(PushMode.MANUAL)
 @Route("")
 @CssImport.Container(value = [
   CssImport("./styles/galite/styles.css"),
@@ -84,7 +86,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   //---------------------------------------------------
   // DATA MEMBEERS
   //---------------------------------------------------
-  private var mainWindow: MainWindow? = null
+  internal var mainWindow: MainWindow? = null
   private var welcomeView: WelcomeView? = null
   internal var windowError: Throwable? = null // Sets the window error.
   private var askAnswer = 0
@@ -114,7 +116,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
-    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -126,7 +128,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun error(message: String?) {
-    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, this)
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -139,7 +141,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun warn(message: String) {
-    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -159,7 +161,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.yesIsDefault = yesIsDefault
@@ -206,7 +208,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override fun logout() {
     val dialog = ConfirmNotification(VlibProperties.getString("Question"),
                                      Message.getMessage("confirm_quit"),
-                                     notificationLocale)
+                                     notificationLocale,
+                                     mainWindow)
 
     dialog.yesIsDefault = false
     dialog.addNotificationListener(object : NotificationListener {
@@ -368,7 +371,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Attaches a window to this application.
    * @param window The window to be added.
    */
-  fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
+  fun addWindow(window: Window, title: String) {
     if (mainWindow != null) {
       access(currentUI) {
         window.setSizeFull()
@@ -461,7 +464,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
       welcomeView!!.setWaitInfo()
       Thread {
-        access(currentUI) {
+        accessAndPush(currentUI) {
           try {
             onLogin(event)
           } finally {

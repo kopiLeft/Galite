@@ -41,5 +41,5 @@ interface UListDialog : UComponent {
    * @param showSingleEntry Show the `UListDialog` when it contains only a single entry ?
    * @return The selected element id.
    */
-  fun selectFromDialog(window: UWindow, showSingleEntry: Boolean): Int
+  fun selectFromDialog(window: UWindow?, showSingleEntry: Boolean): Int
 }
