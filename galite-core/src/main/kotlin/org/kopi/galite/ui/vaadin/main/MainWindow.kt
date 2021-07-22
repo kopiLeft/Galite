@@ -121,6 +121,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
    */
   fun setMainMenu(moduleList: ModuleList) {
     header.setMainMenu(moduleList)
+    header.expand(moduleList)
   }
 
   /**

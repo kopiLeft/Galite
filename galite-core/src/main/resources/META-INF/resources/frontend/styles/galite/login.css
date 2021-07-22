@@ -49,6 +49,7 @@ vaadin-password-field {
     box-sizing: border-box;
     border: 0;
     border-bottom: 1px solid #dadada;
+    padding: 0;
 }
 
 /**
@@ -180,7 +181,7 @@ vaadin-password-field {
 /**
  * Input texts styles
  */
-#user_password, #user_name {
+#user_password .input, #user_name {
     padding: 6px 3px 3px 3px !important;
     max-height: 40px;
 
@@ -199,6 +200,10 @@ vaadin-password-field {
 #user_password:focus, #user_name:focus {
     background: none;
     border-bottom: #009bd4 1px solid;
+}
+
+#user_password::part(input-field) {
+    border-radius: unset;
 }
 
 /**
@@ -250,4 +255,9 @@ vaadin-password-field {
  */
 .k-loginBox input[type="button"]:hover {
     cursor: pointer;
+}
+
+.login-progress-bar {
+    margin: 20px 0px 0px 0px;
+    width: 80%;
 }

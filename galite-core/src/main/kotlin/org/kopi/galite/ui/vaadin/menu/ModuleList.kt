@@ -17,14 +17,16 @@
  */
 package org.kopi.galite.ui.vaadin.menu
 
-import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Composite
+import com.vaadin.flow.component.HasEnabled
 import com.vaadin.flow.component.contextmenu.MenuItem
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 /**
  * The Module list Component.
  */
-open class ModuleList : HorizontalLayout(), HasComponents {
+open class ModuleList: Composite<Component>(), HasEnabled {
 
   private var isMain = false
 
@@ -41,8 +43,10 @@ open class ModuleList : HorizontalLayout(), HasComponents {
       rootMenuItem = getRootModuleItem()
       rootMenuItem!!.rootItem = menu.addItem(rootMenuItem)
     }
+  }
 
-    add(menu) // add it to container.
+  override fun initContent(): Component {
+    return HorizontalLayout(menu)
   }
 
   //---------------------------------------------------

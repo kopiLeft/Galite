@@ -19,9 +19,8 @@ package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedMessages
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
-import org.kopi.galite.ui.vaadin.visual.VApplication
 
-import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.Component
 
 /**
  * Utilities to show notifications in the client side.
@@ -37,10 +36,10 @@ object NotificationUtils {
    * @param messageKey The message key to be displayed.
    */
   fun showError(callback: NotificationListener?,
+                parent: Component?,
                 locale: String,
-                messageKey: String,
-                parent: VApplication? = null) {
-    showError(callback, locale, messageKey, null, parent = parent)
+                messageKey: String) {
+    showError(callback, parent, locale, messageKey, null)
   }
 
   /**
@@ -53,10 +52,10 @@ object NotificationUtils {
    * @param params The message parameters.
    */
   fun showError(callback: NotificationListener?,
+                parent: Component?,
                 locale: String,
                 messageKey: String,
-                vararg params: Any?,
-                parent: VApplication? = null) {
+                vararg params: Any?) {
     val error = ErrorNotification(LocalizedProperties.getString(locale, "Error"),
                                   LocalizedMessages.getMessage(locale, messageKey, params),
                                   locale,
@@ -76,7 +75,7 @@ object NotificationUtils {
    * @param messageKey The message key to be displayed.
    */
   fun showWarning(callback: NotificationListener?,
-                  parent: HasComponents,
+                  parent: Component?,
                   locale: String,
                   messageKey: String) {
     showWarning(callback, parent, locale, messageKey, null)
@@ -92,13 +91,14 @@ object NotificationUtils {
    * @param params The message parameters.
    */
   fun showWarning(callback: NotificationListener?,
-                  parent: HasComponents,
+                  parent: Component?,
                   locale: String,
                   messageKey: String,
                   vararg params: Any?) {
     val warning = WarningNotification(LocalizedProperties.getString(locale, "Warning"),
                                       LocalizedMessages.getMessage(locale, messageKey, params),
-                                      locale)
+                                      locale,
+                                      parent)
     if (callback != null) {
       warning.addNotificationListener(callback)
     }
@@ -114,7 +114,7 @@ object NotificationUtils {
    * @param messageKey The message key to be displayed.
    */
   fun showInformation(callback: NotificationListener?,
-                      parent: HasComponents,
+                      parent: Component?,
                       locale: String,
                       messageKey: String) {
     showInformation(callback, parent, locale, messageKey, null)
@@ -130,13 +130,14 @@ object NotificationUtils {
    * @param params The message parameters.
    */
   fun showInformation(callback: NotificationListener?,
-                      parent: HasComponents,
+                      parent: Component?,
                       locale: String,
                       messageKey: String,
                       vararg params: Any?) {
     val information = InformationNotification(LocalizedProperties.getString(locale, "Notice"),
                                               LocalizedMessages.getMessage(locale, messageKey, params),
-                                              locale)
+                                              locale,
+                                              parent)
     if (callback != null) {
       information.addNotificationListener(callback)
     }

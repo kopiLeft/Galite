@@ -82,7 +82,7 @@ abstract class DGridEditorField<T>(
 
   override fun getModel(): VField = columnView.model
 
-  abstract fun valueChanged()
+  abstract fun valueChanged(oldValue: String?)
 
   override fun getBlockView(): DGridBlock = columnView.blockView as DGridBlock
 
@@ -339,6 +339,8 @@ abstract class DGridEditorField<T>(
    * @return The editor renderer.
    */
   abstract fun createRenderer(): Renderer<T>
+
+  open fun format(input: Any?): Any? = input
 
   /**
    * Performs the auto fill action.

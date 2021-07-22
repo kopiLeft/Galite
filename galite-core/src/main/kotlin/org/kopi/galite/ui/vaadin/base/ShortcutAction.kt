@@ -17,6 +17,10 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import org.kopi.galite.ui.vaadin.field.VDateField
+import org.kopi.galite.ui.vaadin.field.VTimeField
+import org.kopi.galite.ui.vaadin.field.VTimeStampField
+
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.Key
@@ -62,11 +66,18 @@ abstract class ShortcutAction<T: Component>(
     // Workaround for issue: https://github.com/vaadin/flow/issues/5959
     // Execute shortcut action when receiving the field's value using javascript call
     // The field's value is used later to check if value has been changed
-    this.element.executeJs("return $0.value")
-      .then {
-        // Synchronize with server side
-        this.value = it?.asString()
+    if (this is VDateField || this is VTimeField || this is VTimeStampField) {
+      this.element.callJsFunction("blur").then {
         function()
       }
+
+    } else {
+      this.element.executeJs("return $0.value")
+        .then {
+          // Synchronize with server side
+          this.value = it?.asString()
+          function()
+        }
+    }
   }
 }

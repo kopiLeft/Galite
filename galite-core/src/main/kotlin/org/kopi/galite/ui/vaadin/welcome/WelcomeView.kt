@@ -159,6 +159,14 @@ class WelcomeView(locale: Locale,
     slogan?.let { setSloganImage(it) }
   }
 
+  fun setWaitInfo() {
+    loginWindow!!.setWaitInfo()
+  }
+
+  fun unsetWaitInfo() {
+    loginWindow!!.unsetWaitInfo()
+  }
+
   //---------------------------------------------------
 // DATA MEMBERS
 //---------------------------------------------------

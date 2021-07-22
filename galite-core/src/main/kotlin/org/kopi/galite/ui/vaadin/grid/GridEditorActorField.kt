@@ -41,7 +41,7 @@ class GridEditorActorField(caption: String?) : GridEditorField<String?>() {
     TODO("Not yet implemented")
   }
 
-  override fun generateModelValue(): String? {
+  override fun getValue(): String? {
     TODO("Not yet implemented")
   }
 

@@ -79,7 +79,7 @@ class DGridEditorActorField(
     columnView.executeAction()
   }
 
-  override fun valueChanged() {
+  override fun valueChanged(oldValue: String?) {
     // Nothing to do
   }
 }

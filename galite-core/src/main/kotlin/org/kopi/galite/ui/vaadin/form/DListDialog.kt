@@ -96,7 +96,7 @@ class DListDialog(
     return handleClientResponse()
   }
 
-  override fun selectFromDialog(window: UWindow, showSingleEntry: Boolean): Int =
+  override fun selectFromDialog(window: UWindow?, showSingleEntry: Boolean): Int =
           selectFromDialog(window, null, showSingleEntry)
 
   /**
@@ -373,9 +373,11 @@ class DListDialog(
    */
   protected fun handleTooManyRows() {
     val lock = Object()
+    val application = application
     val notice = InformationNotification(VlibProperties.getString("Notice"),
                                          MessageCode.getMessage("VIS-00028"),
-                                         application.defaultLocale.toString())
+                                         application.defaultLocale.toString(),
+                                         application.mainWindow)
 
     notice.addNotificationListener(object : NotificationListener {
       override fun onClose(action: Boolean?) {
