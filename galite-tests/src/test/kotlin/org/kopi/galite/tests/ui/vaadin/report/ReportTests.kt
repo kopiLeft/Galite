@@ -27,12 +27,13 @@ import org.kopi.galite.ui.vaadin.common.VCaption
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.VWindowContainer
 import org.kopi.galite.ui.vaadin.report.DReport
-import org.kopi.galite.ui.vaadin.report.DTable
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._getCellComponent
 import com.github.mvysny.kaributesting.v10._text
+import com.github.mvysny.kaributesting.v10.expectRows
+import com.vaadin.flow.component.grid.Grid
 
 class ReportTests: GaliteVUITestBase() {
 
@@ -61,8 +62,8 @@ class ReportTests: GaliteVUITestBase() {
     // Check that the displayed title is the same title defined using the DSL
     assertEquals(simpleReport.title, windowCaption.getCaption())
 
-    // Check data is correct
-    val report = _get<DTable>()
+    // Check that the grid data is correct
+    val report = _get<Grid<*>>()
     /** Last column contains empty strings. That represents the values for [org.kopi.galite.report.VSeparatorColumn] */
     val data = arrayOf(
       listOf("", "23", "", "2.000,37000", ""),
@@ -70,6 +71,7 @@ class ReportTests: GaliteVUITestBase() {
       listOf("SOFIA", "24", "", "2.000,55000", "")
     )
 
+    report.expectRows(data.size)
 
     data.forEachIndexed { index, it ->
       val row = report.columns.map {
