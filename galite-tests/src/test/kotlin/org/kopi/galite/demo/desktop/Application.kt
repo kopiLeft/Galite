@@ -47,10 +47,10 @@ object Application : DBSchemaTest() {
    */
   fun initModules() {
     transaction {
-      insertIntoModule("2000", "org/kopi/galite/test/Menu", 10)
-      insertIntoModule("1000", "org/kopi/galite/test/Menu", 10, "2000")
-      insertIntoModule("2009", "org/kopi/galite/test/Menu", 90, "1000", FormSample::class)
-      insertIntoModule("2010", "org/kopi/galite/test/Menu", 90, "1000", FormWithFields::class)
+      insertIntoModule("2000", "org/kopi/galite/demo/Menu", 10)
+      insertIntoModule("1000", "org/kopi/galite/demo/Menu", 10, "2000")
+      insertIntoModule("2009", "org/kopi/galite/demo/Menu", 90, "1000", FormSample::class)
+      insertIntoModule("2010", "org/kopi/galite/demo/Menu", 90, "1000", FormWithFields::class)
     }
   }
 

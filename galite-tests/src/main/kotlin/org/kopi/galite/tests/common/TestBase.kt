@@ -96,7 +96,7 @@ open class TestBase {
     assertEquals(expected.size, actual.size, "Size mismatch between the collections")
 
     expected.forEachIndexed { index, expectedElement ->
-      assertEquals(expectedElement, actual.elementAt(index))
+      assertEquals(expectedElement, actual.elementAt(index), "Element mismatch at index $index")
     }
   }
 
@@ -104,7 +104,7 @@ open class TestBase {
     assertEquals(expected.size, actual.size, "Size mismatch between the arrays")
 
     expected.forEachIndexed { index, expectedElement ->
-      assertEquals(expectedElement, actual.elementAt(index))
+      assertEquals(expectedElement, actual.elementAt(index), "Element mismatch at index $index")
     }
   }
 }
