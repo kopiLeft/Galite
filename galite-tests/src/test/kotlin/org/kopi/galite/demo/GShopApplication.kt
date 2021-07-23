@@ -43,7 +43,6 @@ import org.kopi.galite.tests.db.DBSchemaTest
 import org.kopi.galite.tests.form.FormWithFields
 import org.kopi.galite.tests.form.FormWithList
 import org.kopi.galite.tests.form.FormWithListDomains
-import org.kopi.galite.tests.form.FormWithReport
 import org.kopi.galite.type.Decimal
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -199,7 +198,7 @@ val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
 fun initModules() {
   transaction {
     insertIntoModule("1000", "org/kopi/galite/demo/Menu", 0)
-    insertIntoModule("1001", "org/kopi/galite/demo/Menu", 1, "1000", FormWithReport::class)
+    insertIntoModule("1001", "org/kopi/galite/demo/Menu", 1, "1000", ClientForm::class)
     insertIntoModule("2000", "org/kopi/galite/demo/Menu", 100)
     insertIntoModule("2001", "org/kopi/galite/demo/Menu", 101, "2000", CommandForm::class)
     insertIntoModule("3000", "org/kopi/galite/demo/Menu", 200)
