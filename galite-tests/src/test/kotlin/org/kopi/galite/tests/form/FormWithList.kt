@@ -115,6 +115,80 @@ class FormWithList : DictionaryForm() {
       }
     }
   }
+
+  inner class UsersBlock : FormBlock(1, 1, "Test block") {
+    val u = table(Users)
+    val unique = index(message = "ID should be unique")
+
+    init {
+      trigger(POSTQRY) {
+        block.uid[0] = id.value
+        block.load()
+      }
+    }
+    val id = hidden(domain = Domain<Int>(20)) {
+      label = "ID"
+      help = "The user id"
+      columns(u.id) {
+        index = unique
+      }
+    }
+    val uc = visit(domain = Domain<Int>(20), position = at(1, 2)) {
+      label = "UC"
+      help = "uc"
+      columns(u.uc)
+    }
+
+    val ts = visit(domain = Domain<Int>(20), position = at(1, 3)) {
+      label = "TS"
+      help = "ts"
+      columns(u.ts)
+    }
+
+    val shortName = visit(domain = Domain<String>(20), position = at(1, 4)) {
+      label = "Kurzname"
+      help = "Kurzname"
+      columns(u.shortName)
+    }
+
+    val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
+      label = "name"
+      help = "name"
+      columns(u.name) {
+        priority = 1
+      }
+    }
+
+    val character = visit(domain = Domain<String>(20), position = at(2, 2)) {
+      label = "character"
+      help = "character"
+      columns(u.character)
+    }
+
+    val active = visit(domain = Domain<Boolean>(1), position = at(2, 3)) {
+      label = "active"
+      help = "active"
+      columns(u.active)
+    }
+
+    val createdOn = visit(domain = Domain<Timestamp>(20), position = at(2, 4)) {
+      label = "createdOn"
+      help = "createdOn"
+      columns(u.createdOn)
+    }
+
+    val createdBy = visit(domain = Domain<Int>(10), position = at(2, 5)) {
+      label = "createdBy"
+      help = "createdBy"
+      columns(u.createdBy)
+    }
+
+    val changedBy = visit(domain = Domain<Int>(10), position = at(2, 6)) {
+      label = "changedBy"
+      help = "changedBy"
+      columns(u.changedBy)
+    }
+  }
 }
 
 object BlockSample : FormBlock(1, 1, "Test block") {
@@ -137,80 +211,6 @@ object BlockSample : FormBlock(1, 1, "Test block") {
       index = i
       priority = 1
     }
-  }
-}
-
-class UsersBlock : FormBlock(1, 1, "Test block") {
-  val u = table(Users)
-  val unique = index(message = "ID should be unique")
-
-  init {
-    trigger(POSTQRY) {
-      BlockWithManyTables().uid[0] = id.value
-      BlockWithManyTables().load()
-    }
-  }
-  val id = hidden(domain = Domain<Int>(20)) {
-    label = "ID"
-    help = "The user id"
-    columns(u.id) {
-      index = unique
-    }
-  }
-  val uc = visit(domain = Domain<Int>(20), position = at(1, 2)) {
-    label = "UC"
-    help = "uc"
-    columns(u.uc)
-  }
-
-  val ts = visit(domain = Domain<Int>(20), position = at(1, 3)) {
-    label = "TS"
-    help = "ts"
-    columns(u.ts)
-  }
-
-  val shortName = visit(domain = Domain<String>(20), position = at(1, 4)) {
-    label = "Kurzname"
-    help = "Kurzname"
-    columns(u.shortName)
-  }
-
-  val name = visit(domain = Domain<String>(20), position = at(2, 1)) {
-    label = "name"
-    help = "name"
-    columns(u.name) {
-      priority = 1
-    }
-  }
-
-  val character = visit(domain = Domain<String>(20), position = at(2, 2)) {
-    label = "character"
-    help = "character"
-    columns(u.character)
-  }
-
-  val active = visit(domain = Domain<Boolean>(1), position = at(2, 3)) {
-    label = "active"
-    help = "active"
-    columns(u.active)
-  }
-
-  val createdOn = visit(domain = Domain<Timestamp>(20), position = at(2, 4)) {
-    label = "createdOn"
-    help = "createdOn"
-    columns(u.createdOn)
-  }
-
-  val createdBy = visit(domain = Domain<Int>(10), position = at(2, 5)) {
-    label = "createdBy"
-    help = "createdBy"
-    columns(u.createdBy)
-  }
-
-  val changedBy = visit(domain = Domain<Int>(10), position = at(2, 6)) {
-    label = "changedBy"
-    help = "changedBy"
-    columns(u.changedBy)
   }
 }
 

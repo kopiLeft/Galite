@@ -58,6 +58,9 @@ dependencies {
   //Apache POI
   testImplementation("org.apache.poi", "poi", Versions.APACHE_POI)
   testImplementation("org.apache.poi", "poi-ooxml", Versions.APACHE_POI)
+
+  // EnhancedDialog dependency
+  testImplementation("com.vaadin.componentfactory", "enhanced-dialog", Versions.ENHANCED_DIALOG)
 }
 
 tasks {

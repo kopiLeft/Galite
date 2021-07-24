@@ -82,7 +82,7 @@ class LoginPageTests: GaliteVUITestBase() {
     fun initTestModules() {
       // Using modules defined in demo application
       transaction {
-        insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
+        insertIntoModule("1000", "org/kopi/galite/demo/Menu", 0)
       }
     }
   }
