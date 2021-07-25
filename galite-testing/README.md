@@ -10,7 +10,7 @@ To test the application functionalities you need first to login using `login(use
 ### Launching a module
 
 The main page of the application contains the menu of the available modules.
-####Example:
+#### Example:
 ![modules.png](../docs/modules.png)
 
 To open a form, galite testing provides two functions:
