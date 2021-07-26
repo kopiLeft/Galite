@@ -26,7 +26,7 @@ import org.kopi.galite.visual.ApplicationConfiguration
 
 import com.vaadin.flow.server.PWA
 
-@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/icon.png")
+@PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/window.gif")
 class GaliteApplication : VApplication(GaliteRegistry()) {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
