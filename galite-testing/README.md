@@ -1,6 +1,6 @@
 ## Galite Testing
 
-Galite testing gives you the ability to create unit test for your Galite application. 
+Galite testing gives you the ability to create unit tests for your Galite application. 
 
 It's based on [Karibu-Testing](https://github.com/mvysny/karibu-testing) (the vaadin unit testing library).
 
