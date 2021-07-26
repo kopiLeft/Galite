@@ -16,11 +16,12 @@
  */
 package org.kopi.galite.testing
 
+import org.kopi.galite.ui.vaadin.base.VInputButton
+import org.kopi.galite.ui.vaadin.base.VInputText
+
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.textfield.PasswordField
-import org.kopi.galite.ui.vaadin.base.VInputButton
-import org.kopi.galite.ui.vaadin.base.VInputText
 
 /**
  * Logins to the application.
