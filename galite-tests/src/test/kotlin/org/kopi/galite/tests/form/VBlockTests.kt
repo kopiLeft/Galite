@@ -24,10 +24,11 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.Ignore
 import org.junit.Test
 import org.kopi.galite.db.Users
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : JApplicationTestBase() {
@@ -91,9 +92,9 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  fun selectLookupTest() {
+  fun selectLookupTest_NoMatchingValueInTheTable() {
     FormWithList.model
-    FormWithList.block.moduleName[0] = "test"
+    FormWithList.block.shortName[0] = "test"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
@@ -101,7 +102,19 @@ class VBlockTests : JApplicationTestBase() {
       }
     }
 
-    assertEquals("VIS-00016: No matching value in MODULE.", vExecFailedException.message)
+    assertEquals(MessageCode.getMessage("VIS-00016", FormWithList.block.m.tableName), vExecFailedException.message)
+  }
+
+  @Test
+  fun selectLookupTest_Successful() {
+    FormWithList.model
+    FormWithList.block.shortName[0] = "1000"
+
+    transaction {
+      Application.initModules()
+      Application.initUserRights()
+      FormWithList.block.vBlock.refreshLookup(0)
+    }
   }
 
   @Test
