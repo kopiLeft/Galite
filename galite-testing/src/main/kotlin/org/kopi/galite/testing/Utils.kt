@@ -14,8 +14,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.testing
 
-rootProject.name = "Galite"
-include("galite-core")
-include("galite-testing")
-include("galite-tests")
+import com.github.mvysny.kaributesting.v10.MockVaadin
+import com.github.mvysny.kaributesting.v10._click
+import com.github.mvysny.kaributesting.v10._clickItemWithCaption
+import com.vaadin.flow.component.ClickNotifier
+import com.vaadin.flow.component.contextmenu.HasMenuItems
+
+fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 500) {
+  _clickItemWithCaption(caption)
+  Thread.sleep(duration)
+}
+
+fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
+  _click()
+  MockVaadin.runUIQueue()
+  Thread.sleep(duration)
+  MockVaadin.runUIQueue()
+}
