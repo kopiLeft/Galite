@@ -20,8 +20,8 @@ package org.kopi.galite.ui.vaadin.upload
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
 
@@ -40,9 +40,7 @@ class FileUploader : Receiver {
   /**
    * The file uploader component.
    */
-  private val uploadDialog = UploadDialog(this)
-
-  private val uploader = uploadDialog.upload
+  private lateinit var uploadDialog: UploadDialog
 
   /**
    * The output stream.
@@ -57,14 +55,6 @@ class FileUploader : Receiver {
   var fileName: String? = null
     private set
 
-  init {
-    //uploader.addProgressListener(::updateProgress)
-    uploader.addStartedListener(::uploadStarted)
-    //uploader.addFinishedListener(::uploadFinished)
-    uploader.addFailedListener(::uploadFailed)
-    uploadDialog.setLocale(application.defaultLocale.toString())
-  }
-
   //---------------------------------------------------
   // IMPLEMENTATION
   //---------------------------------------------------
@@ -76,7 +66,14 @@ class FileUploader : Receiver {
    */
   fun upload(mimeType: String?): ByteArray? {
     this.mimeType = mimeType
-    startAndWait(uploader as Object) {
+    startAndWaitAndPush(this as Object) {
+      uploadDialog = UploadDialog(this)
+      val uploader = uploadDialog.upload
+      //uploader.addProgressListener(::updateProgress)
+      uploader.addStartedListener(::uploadStarted)
+      //uploader.addFinishedListener(::uploadFinished)
+      uploader.addFailedListener(::uploadFailed)
+      uploadDialog.setLocale(application.defaultLocale.toString())
       //uploader.acceptedFileTypes.add(mimeType)
       uploadDialog.open()
     }
@@ -94,7 +91,7 @@ class FileUploader : Receiver {
    * Closes the uploader dialog containing the uploader.
    */
   fun close() {
-    access {
+    accessAndPush {
       uploadDialog.close()
     }
   }
@@ -121,7 +118,7 @@ class FileUploader : Receiver {
       }
     }
     if (!accepted) {
-      uploader.interruptUpload()
+      uploadDialog.upload.interruptUpload()
     }
   }
 

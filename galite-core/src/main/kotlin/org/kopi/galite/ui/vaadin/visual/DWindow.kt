@@ -27,8 +27,9 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 import org.kopi.galite.base.Utils
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.releaseLock
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWait
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.startAndWaitAndPush
 import org.kopi.galite.ui.vaadin.notif.AbstractNotification
 import org.kopi.galite.ui.vaadin.notif.ConfirmNotification
 import org.kopi.galite.ui.vaadin.notif.ErrorNotification
@@ -379,6 +380,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
         if (!waitDialog.isOpened) {
           waitDialog.open()
         }
+        currentUI?.push()
       }
     }
   }
@@ -392,6 +394,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
           waitDialog.setMaxTime(0)
           waitDialog.close()
         }
+        currentUI?.push()
       }
     }
   }
@@ -405,6 +408,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
         if (!progressDialog.isOpened) {
           progressDialog.open()
         }
+        currentUI?.push()
       }
     }
   }
@@ -418,6 +422,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
           progressDialog.totalJobs = 0
           progressDialog.close()
         }
+        currentUI?.push()
       }
     }
   }
@@ -437,7 +442,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
   }
 
   override fun setTitle(title: String) {
-    access(currentUI) {
+    accessAndPush(currentUI) {
       setCaption(title)
     }
   }
@@ -450,6 +455,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     access(currentUI) {
       synchronized(waitDialog) {
         waitDialog.setMessage(message)
+        currentUI?.push()
       }
     }
   }
@@ -535,7 +541,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    */
   internal inner class MessageHandler : MessageListener {
     override fun notice(message: String) {
-      val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+      val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale, this@DWindow)
       val lock = Object()
 
       dialog.addNotificationListener(object : NotificationListener {
@@ -547,7 +553,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun error(message: String?) {
-      val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, application)
+      val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, this@DWindow)
       val lock = Object()
 
       dialog.addNotificationListener(object : NotificationListener {
@@ -560,7 +566,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun warn(message: String) {
-      val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+      val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale, this@DWindow)
       val lock = Object()
 
       dialog.addNotificationListener(object : NotificationListener {
@@ -580,7 +586,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
     }
 
     override fun ask(message: String, yesIsDefault: Boolean): Int {
-      val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+      val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale, this@DWindow)
       val lock = Object()
 
       dialog.yesIsDefault = yesIsDefault
@@ -605,7 +611,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
      * @param notification The notification to be shown
      */
     internal fun showNotification(notification: AbstractNotification, lock: Object) {
-      startAndWait(lock, currentUI) {
+      startAndWaitAndPush(lock, currentUI) {
         notification.show()
       }
     }
@@ -640,6 +646,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
           if (!waitIndicator.isOpened) {
             waitIndicator.show()
           }
+          currentUI?.push()
         }
       }
     }
@@ -651,6 +658,7 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
             waitIndicator.setText(null)
             waitIndicator.close()
           }
+          currentUI?.push()
         }
       }
     }
@@ -803,8 +811,10 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
      */
     protected fun endAction() {
       setInAction()
-      /*synchronized(application) { BackgroundThreadHandler.updateUI() } TODO
-      application.setErrorHandler(null)*/
+      synchronized(application) {
+        BackgroundThreadHandler.updateUI(currentUI)
+      }
+      /*application.setErrorHandler(null) TODO */
     }
 
     /**

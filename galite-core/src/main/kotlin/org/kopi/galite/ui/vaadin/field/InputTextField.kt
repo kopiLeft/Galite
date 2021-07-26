@@ -108,29 +108,14 @@ open class InputTextField<C: AbstractField<C, out Any>> internal constructor(pro
     }
   }
 
-  companion object {
-    var focusedTextField: InputTextField<*>? = null
+  var focusedTextField: InputTextField<*>? = null
 
-    /**
-     * Returns the last focused text field.
-     * @return the last focused text field.
-     */
-    var lastFocusedTextField: InputTextField<*>? = null
-      private set
-
-    /**
-     * Returns the last focused field connector.
-     * @return the last focused text connector.
-     */
-    val lastFocusedField: Field?
-      get() {
-        return if (lastFocusedTextField != null) {
-          lastFocusedTextField!!.fieldConnector
-        } else {
-          null
-        }
-      }
-  }
+  /**
+   * Returns the last focused text field.
+   * @return the last focused text field.
+   */
+  var lastFocusedTextField: InputTextField<*>? = null
+    private set
 
   //---------------------------------------------------
   // IMPLEMENTATIONS
