@@ -91,21 +91,17 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  @Ignore("TODO: this doesn't seem to be right")
   fun selectLookupTest() {
     FormWithList.model
-    FormWithList.block3.ts[0] = 0
-    FormWithList.block3.shortName[0] = "admin"
-    FormWithList.block3.name[0] = "admin"
-    FormWithList.block3.character[0] = "admin"
+    FormWithList.block.moduleName[0] = "test"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        FormWithList.block3.vBlock.refreshLookup(0)
+        FormWithList.block.vBlock.refreshLookup(0)
       }
     }
 
-    assertEquals("VIS-00016: Aucune valeur appropriée dans KOPI_USERS.", vExecFailedException.message)
+    assertEquals("VIS-00016: No matching value in MODULE.", vExecFailedException.message)
   }
 
   @Test

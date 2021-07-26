@@ -2927,6 +2927,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
   /*
    *
    */
+  @Suppress("UNCHECKED_CAST")
   protected fun selectLookup(table: Table, recno: Int) {
     val columns = mutableListOf<Column<*>>()
     val conditions = mutableListOf<Op<Boolean>>()
@@ -2948,7 +2949,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
             val sql = field.getSql(recno)
 
             if (sql != "?") { // dont lookup for blobs...
-              if (field.getSql(recno)!!.equals(Utils.NULL_LITERAL)) {
+              if ((field.getSql(recno)) == Utils.NULL_LITERAL) {
                 conditions.add(Op.build { column.isNull() })
               } else {
                 conditions.add(Op.build { column eq field.getSql(recno)!! })
