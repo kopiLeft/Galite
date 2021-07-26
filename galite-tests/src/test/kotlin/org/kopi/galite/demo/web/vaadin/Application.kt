@@ -24,10 +24,12 @@ import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.util.Rexec
 import org.kopi.galite.visual.ApplicationConfiguration
 
+import com.vaadin.flow.component.page.AppShellConfigurator
+import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.PWA
 
 @PWA(name = "Galite Demo", shortName = "Demo", iconPath = "ui/vaadin/window.gif")
-class GaliteApplication : VApplication(GaliteRegistry()) {
+class GaliteApplication : VApplication(GaliteRegistry()), AppShellConfigurator {
   override val sologanImage get() = "ui/vaadin/slogan.png"
   override val logoImage get() = "logo_galite.png"
   override val logoHref get() = "http://"
@@ -90,5 +92,15 @@ class GaliteApplication : VApplication(GaliteRegistry()) {
               override fun useAcroread(): Boolean = TODO()
             }
     )
+  }
+
+  override fun configurePage(settings: AppShellSettings) {
+    pageTitle?.let {
+      settings.setPageTitle(it)
+    }
+    favIcon.let {
+      settings.addLink("shortcut icon", it)
+      settings.addFavIcon("icon", it, "192x192")
+    }
   }
 }

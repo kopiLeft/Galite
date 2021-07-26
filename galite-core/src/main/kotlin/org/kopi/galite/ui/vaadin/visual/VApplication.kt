@@ -61,12 +61,10 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
-import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
-import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.ServiceInitEvent
 import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
@@ -87,7 +85,7 @@ import com.vaadin.flow.shared.communication.PushMode
 @PreserveOnRefresh
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
-  AppShellConfigurator, HasDynamicTitle {
+  HasDynamicTitle {
 
   //---------------------------------------------------
   // DATA MEMBEERS
@@ -104,8 +102,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // ---------------------------------------------------------------------
 
   override val startupTime: Date = Date() // remembers the startup time
-
-  constructor(): this(Registry("", null))
 
   init {
     className = "galite"
@@ -528,16 +524,6 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override val userIP: String get() = VaadinSession.getCurrent().browser.address
-
-  override fun configurePage(settings: AppShellSettings) {
-    pageTitle?.let {
-      settings.setPageTitle(it)
-    }
-    favIcon?.let {
-      settings.addLink("shortcut icon", it)
-      settings.addFavIcon("icon", it, "192x192")
-    }
-  }
 
   //---------------------------------------------------
   // UTILS
