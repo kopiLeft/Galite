@@ -65,12 +65,9 @@ import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.component.page.Push
 import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
-import com.vaadin.flow.router.RouteConfiguration
-import com.vaadin.flow.router.RouterLayout
-import com.vaadin.flow.server.AppShellRegistry
+import com.vaadin.flow.router.Route
 import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.ServiceInitEvent
-import com.vaadin.flow.server.VaadinService
 import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
@@ -81,6 +78,7 @@ import com.vaadin.flow.shared.communication.PushMode
  *
  * @param registry The [Registry] object.
  */
+@Route("")
 @Push(PushMode.MANUAL)
 @CssImport.Container(value = [
   CssImport("./styles/galite/styles.css"),
@@ -89,7 +87,7 @@ import com.vaadin.flow.shared.communication.PushMode
 @PreserveOnRefresh
 @Suppress("LeakingThis")
 abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
-  AppShellConfigurator, HasDynamicTitle, RouterLayout {
+  AppShellConfigurator, HasDynamicTitle {
 
   //---------------------------------------------------
   // DATA MEMBEERS
@@ -632,13 +630,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 }
 
-class ServiceInitializer: VaadinServiceInitListener {
+class ApplicationServiceInitListener: VaadinServiceInitListener {
   override fun serviceInit(event: ServiceInitEvent) {
-    val routeConfiguration = RouteConfiguration.forApplicationScope()
-    val shell = AppShellRegistry.getInstance(VaadinService.getCurrent().context).shell as Class<out Component>
-
-    routeConfiguration.setRoute("", shell)
-
     event.source.addUIInitListener { uiInitEvent ->
       val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
       loadingIndicatorConfiguration.firstDelay = 500
