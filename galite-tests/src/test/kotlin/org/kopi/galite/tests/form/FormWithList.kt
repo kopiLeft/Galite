@@ -234,10 +234,10 @@ class BlockWithManyTables : FormBlock(20, 20, "Test block") {
     columns(m.id, r.module)
   }
 
-  val module = visit(domain = Domain<Int>(20), position = at(1, 1)) {
-    label = "module"
-    help = "module"
-    columns(r.module)
+  val shortName = visit(domain = Domain<String>(20), position = at(1, 1)) {
+    label = "short name"
+    help = "short name"
+    columns(m.shortName)
   }
 
   val name = visit(domain = Domain<String>(20), position = at(1, 2)) {
