@@ -4,4 +4,7 @@
     <!--Reports-->
     <module ident="1000" label="REPORTS" />
     <module ident="1001" label="Form with report" />
+    <!--Forms-->
+    <module ident="2000" label="FORMS" />
+    <module ident="2001" label="Form with list" />
 </modules>

@@ -17,6 +17,7 @@
 package org.kopi.galite.tests.module
 
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.kopi.galite.demo.command.CommandForm
 import org.kopi.galite.demo.insertIntoModule
 import org.kopi.galite.tests.form.FormWithReport
 
@@ -24,5 +25,7 @@ fun initModules() {
   transaction {
     insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
     insertIntoModule("1001", "org/kopi/galite/test/Menu", 1, "1000", FormWithReport::class)
+    insertIntoModule("2000", "org/kopi/galite/test/Menu", 100)
+    insertIntoModule("2001", "org/kopi/galite/test/Menu", 101, "2000", CommandForm::class)
   }
 }
