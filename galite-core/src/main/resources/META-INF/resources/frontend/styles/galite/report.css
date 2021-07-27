@@ -20,20 +20,18 @@
  * Report style
  */
 ::part(cell header-cell) {
-     background: #f2f2f2;
-     color: #505050;
+    background: #f2f2f2;
+    color: #505050;
 }
 
 ::part(cell) {
-     min-height: 16px;
+    min-height: 16px;
 }
 
 vaadin-grid > vaadin-grid-cell-content {
-   height: 100%;
-}
-
-vaadin-grid > vaadin-grid-cell-content {
+    height: 100%;
     padding: var(--lumo-size-xxs);
+    cursor: pointer;
 }
 
 vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
@@ -49,4 +47,15 @@ vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
     --lumo-primary-text-color: var(--lumo-shade-70pct);
     --lumo-primary-color: var(--lumo-shade-50pct);
     --lumo-font-size-m: 0.750rem;
+}
+
+::part(resize-handle) {
+    display: block;
+    height: 1.2em;
+    float: right;
+    background: #aaa;
+    cursor: e-resize;
+    cursor: col-resize;
+    width: 1px;
+    overflow: hidden;
 }
