@@ -2966,7 +2966,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
         val result = table.slice(columns).select(conditions.compoundAnd()).single()
         var j = 0
 
-        fields.forEachIndexed { index, field ->
+        fields.forEach { field ->
           if (field.lookupColumn(table) != null) {
             field.setQuery(recno, result, columns[j])
             j++

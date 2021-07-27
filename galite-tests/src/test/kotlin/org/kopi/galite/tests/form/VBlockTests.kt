@@ -92,7 +92,7 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  fun selectLookupTest_NoMatchingValueInTheTable() {
+  fun `test refreshLookup with no matching value in the table`() {
     FormWithList.model
     FormWithList.block.shortName[0] = "test"
 
@@ -106,7 +106,7 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  fun selectLookupTest_Successful() {
+  fun refreshLookupTest() {
     FormWithList.model
     FormWithList.block.shortName[0] = "1000"
 
