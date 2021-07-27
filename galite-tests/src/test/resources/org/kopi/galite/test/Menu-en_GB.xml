@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <modules>
-    <!--Clients-->
-    <module ident="1000" label="CLIENTS" help="Clients management" />
-    <module ident="1001" label="Client form" help="Clients management" />
-    <!--Commands-->
-    <module ident="2000" label="COMMANDS" help="Commands management" />
-    <module ident="2001" label="Commands form" help="Commands management" />
-    <!--Products-->
-    <module ident="3000" label="PRODUCTS" help="Products management" />
-    <module ident="3001" label="Products form" help="Products management" />
-    <!--Bills-->
-    <module ident="4000" label="BILLS" help="Bills management" />
-    <module ident="4001" label="Bills form" help="Bills management" />
-    <module ident="4010" label="Bills products" help="Bill of products" />
-    <!--Stocks-->
-    <module ident="5000" label="STOCKS" help="Stock management" />
-    <module ident="5001" label="Stocks" help="Stock management" />
-    <!--Tax-->
-    <module ident="6000" label="TAX RULES" help="Tax Rules management" />
-    <module ident="6001" label="Tax rules" help="Tax Rules management" />
-    <!--Providers-->
-    <module ident="7000" label="PROVIDERS" help="Providers management" />
-    <module ident="7001" label="Providers form" help="Providers management" />
+    <!--Reports-->
+    <module ident="1000" label="REPORTS" />
+    <module ident="1001" label="Form with report" />
 </modules>

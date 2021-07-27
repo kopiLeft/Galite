@@ -28,32 +28,30 @@ import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
+import org.kopi.galite.testing.open
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.common.VCaption
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.VWindowContainer
-import org.kopi.galite.ui.vaadin.menu.ModuleList
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
-import com.vaadin.flow.component.menubar.MenuBar
 
 class FormTests: GaliteVUITestBase() {
 
-  val modulesMenu get() = _get<ModuleList> { id = "module_list" }._get<MenuBar>()
   val mainWindow get() = _get<MainWindow>()
   val windowCaption get() =
     mainWindow
       ._get<VWindowContainer>()
       ._get<VCaption>()
-  val clientFormModel = ClientForm()
-  val commandFormModel = CommandForm()
-  val productsFormModel = ProductForm()
-  val billsFormModel = BillForm()
-  val billsProductsFormModel = BillProductForm()
-  val stocksFormModel = StockForm()
-  val taxRulesFormModel = TaxRuleForm()
-  val providersFormModel = ProviderForm()
+  val clientForm = ClientForm()
+  val commandForm = CommandForm()
+  val productsForm = ProductForm()
+  val billsForm = BillForm()
+  val billsProductsForm = BillProductForm()
+  val stocksForm = StockForm()
+  val taxRulesForm = TaxRuleForm()
+  val providersForm = ProviderForm()
 
   @Test
   fun `test forms are working`() {
@@ -63,29 +61,29 @@ class FormTests: GaliteVUITestBase() {
     mainWindow._expectOne<VWindowContainer>()
 
     // Assert title is displayed in window caption
-    modulesMenu._clickItemWithCaptionAndWait("Client form")
-    assertEquals(clientFormModel.title, windowCaption.getCaption())
+    clientForm.open()
+    assertEquals(clientForm.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAndWait("Commands form")
-    assertEquals(commandFormModel.title, windowCaption.getCaption())
+    commandForm.open()
+    assertEquals(commandForm.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAndWait("Products form")
-    assertEquals(productsFormModel.title, windowCaption.getCaption())
+    productsForm.open()
+    assertEquals(productsForm.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAndWait("Bills form")
-    assertEquals(billsFormModel.title, windowCaption.getCaption())
+    billsForm.open()
+    assertEquals(billsForm.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAndWait("Bills products")
-    assertEquals(billsProductsFormModel.title, windowCaption.getCaption())
+    billsProductsForm.open()
+    assertEquals(billsProductsForm.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAndWait("Stocks")
-    assertEquals(stocksFormModel.title, windowCaption.getCaption())
+    stocksForm.open()
+    assertEquals(stocksForm.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAndWait("Tax rules")
-    assertEquals(taxRulesFormModel.title, windowCaption.getCaption())
+    taxRulesForm.open()
+    assertEquals(taxRulesForm.title, windowCaption.getCaption())
 
-    modulesMenu._clickItemWithCaptionAndWait("Providers form")
-    assertEquals(providersFormModel.title, windowCaption.getCaption())
+    providersForm.open()
+    assertEquals(providersForm.title, windowCaption.getCaption())
   }
 
   companion object {

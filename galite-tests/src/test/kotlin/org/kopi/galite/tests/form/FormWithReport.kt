@@ -24,7 +24,7 @@ import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.tests.report.SimpleReport
 
-object FormWithReport : ReportSelectionForm() {
+class FormWithReport : ReportSelectionForm() {
   override val locale = Locale.UK
 
   override val title = "form for test"
@@ -56,5 +56,5 @@ object FormWithReport : ReportSelectionForm() {
 }
 
 fun main() {
-  Application.runForm(FormWithReport)
+  Application.runForm(FormWithReport())
 }
