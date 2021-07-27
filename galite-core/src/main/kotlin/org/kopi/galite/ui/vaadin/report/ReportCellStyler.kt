@@ -24,7 +24,7 @@ import org.kopi.galite.report.MReport
 import org.kopi.galite.report.Parameters
 import org.kopi.galite.report.VSeparatorColumn
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.html.Div
 
 /**
  * The `ReportCellStyler` is the dynamic report styler
@@ -44,7 +44,7 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
    * @param j           The column index of the cell.
    * @param component   The cell value container
    */
-  fun updateStyles(i: Int, j: Int, component: VerticalLayout) {
+  fun updateStyles(i: Int, j: Int, component: Div) {
     val column = model.getAccessibleColumn(j)
 
     if (column is VSeparatorColumn) {
@@ -63,7 +63,7 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
    * @param component the cell value container
    *
    */
-  private fun updateStyle(columnStyle: ColumnStyle, level: Int, component: VerticalLayout) {
+  private fun updateStyle(columnStyle: ColumnStyle, level: Int, component: Div) {
     val background = if (columnStyle.getBackground() != columnStyle.getBackground()) {
       columnStyle.getBackground()
     } else {
@@ -109,7 +109,7 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
     fontFamily: String,
     fontWeight: String,
     fontStyle: String,
-    component: VerticalLayout
+    component: Div
   ) {
     table.style["--level-$level"] = getCSSColor(background)
     component.style["color"] = getCSSColor(foreground)

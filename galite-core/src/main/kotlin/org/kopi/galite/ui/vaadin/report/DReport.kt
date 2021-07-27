@@ -194,9 +194,9 @@ class DReport(private val report: VReport) : DWindow(report), UReport {
   override fun getSelectedCell(): Point = Point(table.selectedColumn, table.selectedRow)
 
   override fun setColumnLabel(column: Int, label: String) {
-    //UI.getCurrent().access(Runnable { TODO
+    access(currentUI) {
       table.getColumnByKey(column.toString()).setHeader(label)
-    //})
+    }
   }
 
   /**

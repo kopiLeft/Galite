@@ -21,30 +21,16 @@ import kotlin.streams.toList
 
 import org.junit.Before
 import org.junit.BeforeClass
-import org.kopi.galite.common.Actor
-import org.kopi.galite.ui.vaadin.base.VInputButton
-import org.kopi.galite.ui.vaadin.base.VInputText
-import org.kopi.galite.ui.vaadin.main.MainWindow
-import org.kopi.galite.ui.vaadin.menu.ModuleList
-import org.kopi.galite.ui.vaadin.visual.DActor
-import org.kopi.galite.ui.vaadin.window.VActorPanel
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
 import com.github.mvysny.kaributesting.v10.TestingLifecycleHook
 import com.github.mvysny.kaributesting.v10._click
-import com.github.mvysny.kaributesting.v10._clickItemWithCaption
-import com.github.mvysny.kaributesting.v10._find
-import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10._value
 import com.github.mvysny.kaributesting.v10.testingLifecycleHook
 import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.contextmenu.HasMenuItems
 import com.vaadin.flow.component.contextmenu.MenuItemBase
-import com.vaadin.flow.component.menubar.MenuBar
-import com.vaadin.flow.component.textfield.PasswordField
 import com.vaadin.flow.shared.communication.PushMode
 
 /**
@@ -70,8 +56,6 @@ open class VUITestBase : VApplicationTestBase() {
 }
 
 open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
-  private val modulesMenu get() = _get<ModuleList> { id = "module_list" }._get<MenuBar>()
-  private val mainWindow get() = _get<MainWindow>()
 
   init {
     testingLifecycleHook = this
@@ -81,50 +65,12 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
    * Logins to the application
    */
   protected fun login() {
-    // Fill to username and password fields then click to the login button
-    _get<VInputText> { id = "user_name" }._value = testUser
-    _get<PasswordField> { id = "user_password" }._value = testPassword
-    _get<VInputButton> { id = "login_button" }._clickAndWait(100)
-  }
-
-  /**
-   * Opens a specific form
-   *
-   * @param form the form class
-   */
-  protected fun openForm(form: String) {
-    modulesMenu._clickItemWithCaptionAndWait(form)
-  }
-
-  /**
-   * Triggers a specific command.
-   *
-   * @receiver the actor of the command to trigger.
-   */
-  protected fun Actor.triggerCommand() {
-    val actors = mainWindow
-      ._get<VActorPanel> {  }
-      ._find<DActor> {  }
-
-    val actor = actors.single {
-      it.getModel() == this.model
-    }
-
-    actor._clickAndWait(100)
-
-    // Wait after completing the view creation.
-    // VWindowController.doNotModal() is crating the view synchronously.
-    Thread.sleep(500)
+    org.kopi.galite.testing.login(testUser, testPassword)
   }
 
   @Before
   fun createRoutes() {
     setupRoutes()
-  }
-
-  protected fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 500) {
-    _clickItemWithCaption(caption)
-    Thread.sleep(duration)
   }
 
   protected fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {

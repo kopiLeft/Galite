@@ -77,7 +77,7 @@ class ProductReport : Report() {
           help = "Excel (XLSX) Format",
   ) {
     key = Key.SHIFT_F8          // key is optional here
-    icon = "export"  // icon is optional here
+    icon = "exportXlsx"
   }
 
   val pdf = actor(

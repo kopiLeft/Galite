@@ -25,19 +25,17 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
 import org.kopi.galite.demo.client.ClientForm
+import org.kopi.galite.testing.open
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.base.Styles
 import org.kopi.galite.ui.vaadin.field.TextField
-import org.kopi.galite.ui.vaadin.menu.ModuleList
 
-import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.AbstractField
-import com.vaadin.flow.component.menubar.MenuBar
 
 class SimpleBlockTests: GaliteVUITestBase() {
 
-  val modulesMenu get() = _get<ModuleList> { id = "module_list" }._get<MenuBar>()
+  val clientForm = ClientForm()
 
   @Test
   fun `test field value is sent to model`() {
@@ -45,7 +43,7 @@ class SimpleBlockTests: GaliteVUITestBase() {
     login()
 
     // Open client form
-    modulesMenu._clickItemWithCaptionAndWait("Client form")
+    clientForm.open()
 
     // Find fields
     val fields = _find<TextField> { classes = Styles.TEXT_FIELD }

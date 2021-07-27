@@ -29,6 +29,7 @@ import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
+import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.function.ValueProvider
@@ -198,10 +199,10 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   ) : ValueProvider<DReport.ReportModelItem, Component> {
     var column: Column<DReport.ReportModelItem>? = null
 
-    override fun apply(source: DReport.ReportModelItem): Component = VerticalLayout().also { layout ->
-      layout.className = "grid-cell-container"
-      layout.add(source.getValueAt(columnIndex))
-      layout.setSizeFull()
+    override fun apply(source: DReport.ReportModelItem): Component = Div().also { component ->
+      component.className = "grid-cell-container"
+      component.add(source.getValueAt(columnIndex))
+      component.setSizeFull()
 
       column?.textAlign = if (columnModel.align == Constants.ALG_RIGHT) {
         ColumnTextAlign.END
@@ -209,7 +210,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
         ColumnTextAlign.START
       }
 
-      cellStyler.updateStyles(source.rowIndex, columnIndex, layout)
+      cellStyler.updateStyles(source.rowIndex, columnIndex, component)
     }
   }
 }
