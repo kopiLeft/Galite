@@ -70,8 +70,6 @@ open class VUITestBase : VApplicationTestBase() {
 }
 
 open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
-  private val modulesMenu get() = _get<ModuleList> { id = "module_list" }._get<MenuBar>()
-  private val mainWindow get() = _get<MainWindow>()
 
   init {
     testingLifecycleHook = this
@@ -81,40 +79,7 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
    * Logins to the application
    */
   protected fun login() {
-    // Fill to username and password fields then click to the login button
-    _get<VInputText> { id = "user_name" }._value = testUser
-    _get<PasswordField> { id = "user_password" }._value = testPassword
-    _get<VInputButton> { id = "login_button" }._clickAndWait(100)
-  }
-
-  /**
-   * Opens a specific form
-   *
-   * @param form the form class
-   */
-  protected fun openForm(form: String) {
-    modulesMenu._clickItemWithCaptionAndWait(form)
-  }
-
-  /**
-   * Triggers a specific command.
-   *
-   * @receiver the actor of the command to trigger.
-   */
-  protected fun Actor.triggerCommand() {
-    val actors = mainWindow
-      ._get<VActorPanel> {  }
-      ._find<DActor> {  }
-
-    val actor = actors.single {
-      it.getModel() == this.model
-    }
-
-    actor._clickAndWait(100)
-
-    // Wait after completing the view creation.
-    // VWindowController.doNotModal() is crating the view synchronously.
-    Thread.sleep(500)
+    org.kopi.galite.testing.login(testUser, testPassword)
   }
 
   @Before

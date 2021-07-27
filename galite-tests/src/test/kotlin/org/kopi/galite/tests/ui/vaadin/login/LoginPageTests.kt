@@ -28,7 +28,6 @@ import org.kopi.galite.ui.vaadin.common.VSelect
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 
-import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._expect
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._get

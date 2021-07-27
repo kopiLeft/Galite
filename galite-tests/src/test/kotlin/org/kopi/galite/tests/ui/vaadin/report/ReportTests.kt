@@ -20,6 +20,8 @@ import kotlin.test.assertEquals
 
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.form.FormWithReport
 import org.kopi.galite.tests.report.SimpleReport
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
@@ -51,7 +53,7 @@ class ReportTests: GaliteVUITestBase() {
     login()
 
     // Opens a form that contain a report command
-    openForm("Simple report")
+    formWithReport.open(200)
 
     // Trigger the report command
     formWithReport.report.triggerCommand()

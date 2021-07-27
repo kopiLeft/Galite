@@ -3,5 +3,5 @@
 <modules>
     <!--Reports-->
     <module ident="1000" label="REPORTS" />
-    <module ident="1001" label="Simple report" />
+    <module ident="1001" label="Form with report" />
 </modules>
