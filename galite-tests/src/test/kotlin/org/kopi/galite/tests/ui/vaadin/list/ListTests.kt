@@ -23,6 +23,8 @@ import org.kopi.galite.demo.addClients
 import org.kopi.galite.demo.addCmds
 import org.kopi.galite.demo.command.CommandForm
 import org.kopi.galite.demo.createGShopApplicationTables
+import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.form.DListDialog
 
@@ -42,7 +44,7 @@ class ListTests: GaliteVUITestBase() {
     login()
 
     // Opens a form that contain a list command
-    openForm("Form with list")
+    formWithList.open()
 
     // Trigger the report command
     formWithList.list.triggerCommand()
