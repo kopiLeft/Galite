@@ -69,6 +69,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
     content.element.style["outline"] = "0px"
     isResizable = true
     isCloseOnOutsideClick = false
+    isCloseOnEsc = false
   }
 
   //---------------------------------------------------
