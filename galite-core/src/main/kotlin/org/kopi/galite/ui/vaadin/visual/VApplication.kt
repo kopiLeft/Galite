@@ -62,8 +62,11 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.server.ServiceInitEvent
+import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
 import com.vaadin.flow.shared.communication.PushMode
@@ -73,15 +76,16 @@ import com.vaadin.flow.shared.communication.PushMode
  *
  * @param registry The [Registry] object.
  */
-@Push(PushMode.MANUAL)
 @Route("")
+@Push(PushMode.MANUAL)
 @CssImport.Container(value = [
   CssImport("./styles/galite/styles.css"),
   CssImport("./styles/galite/common.css")
 ])
 @PreserveOnRefresh
 @Suppress("LeakingThis")
-abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
+abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
+  HasDynamicTitle {
 
   //---------------------------------------------------
   // DATA MEMBEERS
@@ -572,6 +576,27 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   protected abstract val alternateLocale: Locale
 
+  /**
+   * The page title.
+   */
+  open val title: String? = null
+
+  /**
+   * The page icon
+   */
+  open val favIcon: String? = null
+
+  override fun getPageTitle(): String? {
+    return pageTitle
+  }
+
+  internal fun setPageTitle(title: String) {
+    this.pageTitle = title
+    currentUI!!.internals.title = title
+  }
+
+  private var pageTitle: String? = title
+
   companion object {
 
     /** Application instance */
@@ -587,6 +612,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       ImageHandler.imageHandler = VImageHandler()
       WindowController.windowController = VWindowController()
       UIFactory.uiFactory = VUIFactory()
+    }
+  }
+}
+
+class ApplicationServiceInitListener: VaadinServiceInitListener {
+  override fun serviceInit(event: ServiceInitEvent) {
+    event.source.addUIInitListener { uiInitEvent ->
+      val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
+      loadingIndicatorConfiguration.firstDelay = 500
     }
   }
 }
