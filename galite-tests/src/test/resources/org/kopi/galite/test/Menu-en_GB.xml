@@ -7,4 +7,5 @@
     <!--Forms-->
     <module ident="2000" label="FORMS" />
     <module ident="2001" label="Form with list" />
+    <module ident="2002" label="Clients form" />
 </modules>

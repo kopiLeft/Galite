@@ -16,10 +16,18 @@
  */
 package org.kopi.galite.testing
 
+import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.window.Window
+
 import com.github.mvysny.kaributesting.v10.MockVaadin
+import com.github.mvysny.kaributesting.v10._blur
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
+import com.github.mvysny.kaributesting.v10._find
+import com.github.mvysny.kaributesting.v10._get
 import com.vaadin.flow.component.ClickNotifier
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.contextmenu.HasMenuItems
 
 fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 500) {
@@ -32,4 +40,28 @@ fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
   MockVaadin.runUIQueue()
   Thread.sleep(duration)
   MockVaadin.runUIQueue()
+}
+
+inline fun <reified T: Component> findInMainWindow(): List<T> {
+  val mainWindow = _get<MainWindow>()
+
+  return mainWindow._find()
+}
+
+fun <T> T.blurOnLastField() where T: Focusable<*>, T: Component {
+  val mainWindow = _get<MainWindow>()
+  val lastFocusedField = (mainWindow.currentWindow as? Window)?.lasFocusedField
+
+  if (lastFocusedField != this) {
+    org.kopi.galite.testing.blurOnLastField()
+  }
+}
+
+fun blurOnLastField() {
+  val mainWindow = _get<MainWindow>()
+  val lastFocusedField = (mainWindow.currentWindow as? Window)?.lasFocusedField
+
+  if(lastFocusedField is Component) {
+    lastFocusedField._blur()
+  }
 }

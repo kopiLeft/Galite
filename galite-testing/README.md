@@ -41,6 +41,11 @@ Open the first form in the [menu](#example). Opening this form should take less 
 openForm("Client form", 200)
 ```
 > `Form.open()` automatically lookup the formCaption in all menus. If the form belongs to many menus you can use `Form.open(menu)`. 
+
 ### Triggering a command
 
 To simulate a click on an actor, which triggers a command action, you can use `Actor.triggerCommand(duration)`. The `duration` parameter represents how much time it takes for the command to finish its action.
+
+### Entering a block
+
+To enter a block you can use `Block.enter()`. This function will focus on the first field if it's a simple block, and it will open the first item of the grid's editor if it's a multiple block.
