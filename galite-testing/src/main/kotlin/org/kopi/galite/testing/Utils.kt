@@ -16,6 +16,8 @@
  */
 package org.kopi.galite.testing
 
+import org.kopi.galite.visual.ApplicationContext
+
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._clickItemWithCaption
@@ -29,7 +31,13 @@ fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 
 
 fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
   _click()
+  waitAndRunUIQueue(duration)
+}
+
+fun waitAndRunUIQueue(duration: Long) {
   MockVaadin.runUIQueue()
   Thread.sleep(duration)
   MockVaadin.runUIQueue()
 }
+
+val defaultLocale get() = ApplicationContext.applicationContext.getApplication().defaultLocale.toString()
