@@ -28,6 +28,7 @@ import com.github.mvysny.kaributesting.v10._fireEvent
 import com.github.mvysny.kaributesting.v10._get
 import com.github.mvysny.kaributesting.v10._value
 import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent
+import com.vaadin.flow.component.ClickNotifier
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValueAndElement
 import com.vaadin.flow.component.grid.Grid
@@ -61,6 +62,33 @@ fun <T> FormField<T>.edit(value: T): UField {
   editorField as HasValueAndElement<ComponentValueChangeEvent<*, Any?>, Any?>
   editorField._value = value
   editorField._fireEvent(ComponentValueChangeEvent<Component, Any?>(editorField, editorField, oldValue, true))
+
+  return field
+}
+
+/**
+ * Click on a field.
+ */
+fun <T> FormField<T>.click(): UField {
+  val mainWindow = _get<MainWindow>()
+  lateinit var field: UField
+
+  val editorField  = if (this.block.vBlock.isMulti()) {
+    val column = mainWindow
+      ._find<Grid.Column<*>>()
+      .single { (it.editorComponent as GridEditorField<*>).dGridEditorField.getModel() eq this.vField }
+    val gridEditorField = (column.editorComponent as GridEditorField<*>)
+
+    field = gridEditorField.dGridEditorField
+    gridEditorField
+  } else {
+    val fields = mainWindow._find<DField>()
+
+    field = fields.single { it.getModel() eq this.vField }
+    field.wrappedField
+  }
+
+  (editorField as ClickNotifier<*>)._clickAndWait()
 
   return field
 }

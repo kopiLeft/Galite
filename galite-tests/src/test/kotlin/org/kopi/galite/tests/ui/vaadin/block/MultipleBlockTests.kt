@@ -21,6 +21,7 @@ import kotlin.test.assertEquals
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.testing.click
 import org.kopi.galite.testing.edit
 import org.kopi.galite.testing.editRecord
 import org.kopi.galite.testing.enter
@@ -33,7 +34,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
   val clientForm = ClientForm().also { it.model }
 
   @Test
-  fun `test multiple-block data is sent to model`() {
+  fun `test multiple-block data is sent to model after going to next record`() {
     // Login
     login()
 
@@ -46,8 +47,29 @@ class MultipleBlockTests: GaliteVUITestBase() {
     // Enters the id field editor
     val field = clientForm.salesBlock.idClt.edit("100")
 
-    // Enters the id field editor
+    // Go to the next record
     clientForm.salesBlock.editRecord(1)
+
+    // Check that values are sent to the model
+    assertEquals("100", field.getModel().getString(0))
+  }
+
+  @Test
+  fun `test multiple-block data is sent to model after going to next field`() {
+    // Login
+    login()
+
+    // Open client form
+    clientForm.open()
+
+    // Enters the sales block
+    clientForm.salesBlock.enter()
+
+    // Enters the id field editor
+    val field = clientForm.salesBlock.idClt.edit("100")
+
+    // Go to the next field
+    clientForm.salesBlock.description.click()
 
     // Check that values are sent to the model
     assertEquals("100", field.getModel().getString(0))
