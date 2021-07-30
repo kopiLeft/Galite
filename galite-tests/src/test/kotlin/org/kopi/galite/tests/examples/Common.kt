@@ -26,59 +26,58 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.type.Decimal
 import org.kopi.galite.type.Image
 
-class Common {
-   class Traineeship : FormBlock(1, 1, "Training") {
-    val t = table(Training)
+class Traineeship : FormBlock(1, 10, "Training") {
+  val t = table(Training)
 
-    val trainingID = visit(domain = Domain<Int>(25), position = at(1, 1)) {
-      label = "training ID"
-      help = "training ID"
-      columns(t.id) {
-        priority = 1
-      }
+  val trainingID = visit(domain = Domain<Int>(25), position = at(1, 1)) {
+    label = "training ID"
+    help = "training ID"
+    columns(t.id) {
+      priority = 1
     }
-    val trainingName = visit(domain = Domain<String>(50), position = at(2, 1)) {
-      label = "training Name"
-      help = "training Name"
-      columns(t.trainingName) {
-        priority = 1
-      }
+  }
+  val trainingName = visit(domain = Domain<String>(50), position = at(2, 1)) {
+    label = "training Name"
+    help = "training Name"
+    columns(t.trainingName) {
+      priority = 1
     }
-    val trainingType = visit(domain = Type, position = follow(trainingName)) {
-      label = "training Type"
-      help = "training Type"
-      columns(t.type) {
-        priority = 1
-      }
+  }
+  val trainingType = visit(domain = Type, position = follow(trainingName)) {
+    label = "training Type"
+    help = "training Type"
+    columns(t.type) {
+      priority = 1
     }
-    val trainingPrice = visit(domain = Domain<Decimal>(10), position = at(3, 1)) {
-      label = "training Price"
-      help = "training Price"
-      columns(t.price) {
-        priority = 1
-      }
+  }
+  val trainingPrice = visit(domain = Domain<Decimal>(10), position = at(3, 1)) {
+    label = "training Price"
+    help = "training Price"
+    columns(t.price) {
+      priority = 1
     }
-    val active = visit(domain = Domain<Boolean>(2), position = at(4, 1)) {
-      label = "active?"
-      help = "active"
-      columns(t.active) {
-        priority = 1
-      }
+  }
+  val active = visit(domain = Domain<Boolean>(2), position = at(4, 1)) {
+    label = "active?"
+    help = "active"
+    columns(t.active) {
+      priority = 1
     }
-    val photo = visit(domain = Domain<Image>(100, 100), position = at(9, 1)) {
-      label = "photo"
-      help = "photo"
-      columns(t.photo)
-    }
-    val informations = visit(domain = Domain<String?>(80, 50, 10), position = at(10, 1)) {
-      label = "training informations"
-      help = "The training informations"
-      columns(t.informations) {
-        priority = 1
-      }
+  }
+  val photo = visit(domain = Domain<Image>(100, 100), position = at(9, 1)) {
+    label = "photo"
+    help = "photo"
+    columns(t.photo)
+  }
+  val informations = visit(domain = Domain<String?>(80, 50, 10), position = at(10, 1)) {
+    label = "training informations"
+    help = "The training informations"
+    columns(t.informations) {
+      priority = 1
     }
   }
 }
+
 fun addTrainings() {
   addTraining(1, "training 1", "HTML", Decimal("1149.24").value, "informations training 1")
   addTraining(2, "training 2", "JAVA", Decimal("219.6").value,  "informations training 2")

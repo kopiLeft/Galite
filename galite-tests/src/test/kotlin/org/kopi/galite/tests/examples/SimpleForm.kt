@@ -40,10 +40,10 @@ class SimpleForm : DictionaryForm() {
     help = "Autofill",
   )
 
-  val block = insertBlock(Traineeship())
+  val block = insertBlock(TraineeshipWithAllFieldTypes())
 }
 
-class Traineeship : FormBlock(1, 1, "Training") {
+class TraineeshipWithAllFieldTypes : FormBlock(1, 1, "Training") {
   val t = table(Training)
 
   val trainingID = visit(domain = Domain<Int>(25), position = at(1, 1)) {

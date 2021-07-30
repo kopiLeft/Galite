@@ -27,10 +27,10 @@ import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
-class ComplexForm : DictionaryForm() {
+class MutlipeBlockForm : DictionaryForm() {
   override val locale = Locale.UK
 
-  override val title = "Complex Form"
+  override val title = "Training Form"
   val page1 = page("page1")
   val page2 = page("page2")
   val action = menu("Action")
@@ -46,8 +46,8 @@ class ComplexForm : DictionaryForm() {
     label = "list",
     help = "Display List",
   ) {
-    key = Key.F1   // key is optional here
-    icon = "list"  // icon is optional here
+    key = Key.F2
+    icon = "list"
   }
   val query = actor(
     ident = "query",
@@ -55,8 +55,8 @@ class ComplexForm : DictionaryForm() {
     label = "query",
     help = "query",
   ) {
-    key = Key.F2   // key is optional here
-    icon = "list"  // icon is optional here
+    key = Key.F3
+    icon = "list"
   }
   val changeBlock = actor(
     ident = "change Block",
@@ -64,8 +64,8 @@ class ComplexForm : DictionaryForm() {
     label = "change Block",
     help = "change Block",
   ) {
-    key = Key.F2   // key is optional here
-    icon = "refresh"  // icon is optional here
+    key = Key.F4
+    icon = "refresh"
   }
   val resetBlock = actor(
     ident = "reset",
@@ -73,8 +73,8 @@ class ComplexForm : DictionaryForm() {
     label = "break",
     help = "Reset Block",
   ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
+    key = Key.F5
+    icon = "break"
   }
   val showHideFilter = actor(
     ident = "ShowHideFilter",
@@ -82,11 +82,20 @@ class ComplexForm : DictionaryForm() {
     label = "ShowHideFilter",
     help = " Show Hide Filter",
   ) {
-    key = Key.F4
+    key = Key.F6
     icon = "searchop"
   }
+  val add = actor(
+    ident = "add",
+    menu = action,
+    label = "add",
+    help = " add",
+  ) {
+    key = Key.F10
+    icon = "add"
+  }
 
-  val block = insertBlock(Common.Traineeship(), page1) {
+  val block = insertBlock(Traineeship(), page1) {
     trigger(POSTQRY) {
       block2.trainingId[0] = trainingID.value
       block2.load()
@@ -119,6 +128,11 @@ class ComplexForm : DictionaryForm() {
     command(item = showHideFilter) {
       action = {
         showHideFilter()
+      }
+    }
+    command(item = add) {
+      action = {
+        insertLine()
       }
     }
   }
@@ -199,5 +213,5 @@ class ComplexForm : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = ComplexForm())
+  Application.runForm(formName = MutlipeBlockForm())
 }

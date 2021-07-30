@@ -19,39 +19,47 @@ package org.kopi.galite.tests.ui.vaadin.form
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 
-class SimpleFormTests : GaliteVUITestBase() {
+class MultipleBlockFormTests : GaliteVUITestBase() {
 
   @Test
-  fun `test integer field value is sent to model`() {
+  fun `test list command`() {
     //TODO
     /*
-      test integer field -> trainingID
-      test string field -> trainingName
-      test decimal field -> trainingPrice
-      test datetime field -> date
-      test week field -> week
-      test month field -> month
-      test time field -> time
+      check that the list dialog is displayed & that contain a correct data,
+      then chose a row and check that first and second block contains data
      */
   }
 
   @Test
-  fun `test list field value is sent to model`() {
+  fun `test changeBlock command`() {
     //TODO
+    /*
+      click on changeBlock commands and check that list dialog with correct name of blocks is displayed
+     */
   }
 
   @Test
-  fun `test boolean field value is sent to model`() {
+  fun `test showHideFilter command`() {
     //TODO
+    /*
+      in the second block click on showHideFilter commands
+      and check that new row of filter is displayed in the grid
+     */
   }
 
   @Test
-  fun `test image field value is sent to model`() {
+  fun `test add command`() {
     //TODO
+    /*
+      in the second block click on add commands
+     */
   }
 
   @Test
-  fun `test richText field value is sent to model`() {
+  fun `test tabs command`() {
     //TODO
+    /*
+      click on the second tabs and display new page
+     */
   }
 }

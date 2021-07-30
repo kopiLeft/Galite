@@ -45,8 +45,8 @@ class CommandsForm : ReportSelectionForm() {
     label = "list",
     help = "Display List",
   ) {
-    key = Key.F1   // key is optional here
-    icon = "list"  // icon is optional here
+    key = Key.F2
+    icon = "list"
   }
   val resetBlock = actor(
     ident = "reset",
@@ -54,8 +54,8 @@ class CommandsForm : ReportSelectionForm() {
     label = "break",
     help = "Reset Block",
   ) {
-    key = Key.F3   // key is optional here
-    icon = "break"  // icon is optional here
+    key = Key.F11
+    icon = "break"
   }
   val serialQuery = actor(
     ident = "serialQuery",
@@ -63,8 +63,8 @@ class CommandsForm : ReportSelectionForm() {
     label = "serialQuery",
     help = "serial query",
   ) {
-    key = Key.F6   // key is optional here
-    icon = "serialquery"  // icon is optional here
+    key = Key.F6
+    icon = "serialquery"
   }
   val report = actor(
     ident = "report",
@@ -72,8 +72,8 @@ class CommandsForm : ReportSelectionForm() {
     label = "CreateReport",
     help = "Create report",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
+    key = Key.F8
+    icon = "report"
   }
   val dynamicReport = actor(
     ident = "dynamicReport",
@@ -81,17 +81,8 @@ class CommandsForm : ReportSelectionForm() {
     label = "DynamicReport",
     help = " Create Dynamic Report",
   ) {
-    key = Key.F8          // key is optional here
-    icon = "report"  // icon is optional here
-  }
-  val add = actor(
-    ident = "add",
-    menu = action,
-    label = "add",
-    help = " add",
-  ) {
-    key = Key.F10
-    icon = "add"
+    key = Key.F9
+    icon = "report"
   }
   val saveBlock = actor(
     ident = "saveBlock",
@@ -99,7 +90,7 @@ class CommandsForm : ReportSelectionForm() {
     label = "Save Block",
     help = " Save Block",
   ) {
-    key = Key.F9
+    key = Key.F3
     icon = "save"
   }
   val deleteBlock = actor(
@@ -108,10 +99,10 @@ class CommandsForm : ReportSelectionForm() {
     label = "deleteBlock",
     help = " deletes block",
   ) {
-    key = Key.F5
+    key = Key.F4
     icon = "delete"
   }
-  val search = actor(
+  val Operator = actor(
     ident = "search",
     menu = action,
     label = "search",
@@ -126,8 +117,8 @@ class CommandsForm : ReportSelectionForm() {
     label = "quit",
     help = "Quit",
   ) {
-    key = Key.ESCAPE          // key is optional here
-    icon = "quit"  // icon is optional here
+    key = Key.ESCAPE
+    icon = "quit"
   }
   val helpForm = actor(
     ident = "helpForm",
@@ -149,7 +140,7 @@ class CommandsForm : ReportSelectionForm() {
     }
   }
 
-  val block = insertBlock(Common.Traineeship()) {
+  val block = insertBlock(Traineeship()) {
     command(item = list) {
       action = {
         recursiveQuery()
@@ -175,11 +166,6 @@ class CommandsForm : ReportSelectionForm() {
         createDynamicReport()
       }
     }
-    command(item = add) {
-      action = {
-        insertLine()
-      }
-    }
     command(item = saveBlock) {
       action = {
         saveBlock()
@@ -190,13 +176,12 @@ class CommandsForm : ReportSelectionForm() {
         deleteBlock()
       }
     }
-    command(item = search) {
+    command(item = Operator) {
       action = {
         searchOperator()
       }
     }
   }
-
 
   init {
     transaction {
