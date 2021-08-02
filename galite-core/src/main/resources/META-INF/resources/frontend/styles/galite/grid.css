@@ -20,87 +20,192 @@
  * Report Group style
  */
 [part~="cell"].level-0:not(:focus) {
-    background: var(--level-0) !important;
+    background: var(--level-0-background) !important;
+    color: var(--level-0-color) !important;
+    font-size: var(--level-0-font-size) !important;
+    font-family: var(--level-0-font-family) !important;
+    font-weight: var(--level-0-font-weight) !important;
+    font-style: var(--level-0-font-style) !important;
 }
 
 [part~="cell"].level-1:not(:focus) {
-    background: var(--level-1) !important;
+    background: var(--level-1-background) !important;
+    color: var(--level-1-color) !important;
+    font-size: var(--level-1-font-size) !important;
+    font-family: var(--level-1-font-family) !important;
+    font-weight: var(--level-1-font-weight) !important;
+    font-style: var(--level-1-font-style) !important;
 }
 
 [part~="cell"].level-2:not(:focus) {
-    background: var(--level-2) !important;
+    background: var(--level-2-background) !important;
+    color: var(--level-2-color) !important;
+    font-size: var(--level-2-font-size) !important;
+    font-family: var(--level-2-font-family) !important;
+    font-weight: var(--level-2-font-weight) !important;
+    font-style: var(--level-2-font-style) !important;
 }
 
 [part~="cell"].level-3:not(:focus) {
-    background: var(--level-3) !important;
+    background: var(--level-3-background) !important;
+    color: var(--level-3-color) !important;
+    font-size: var(--level-3-font-size) !important;
+    font-family: var(--level-3-font-family) !important;
+    font-weight: var(--level-3-font-weight) !important;
+    font-style: var(--level-3-font-style) !important;
 }
 
 [part~="cell"].level-4:not(:focus) {
-    background: var(--level-4) !important;
+    background: var(--level-4-background) !important;
+    color: var(--level-4-color) !important;
+    font-size: var(--level-4-font-size) !important;
+    font-family: var(--level-4-font-family) !important;
+    font-weight: var(--level-4-font-weight) !important;
+    font-style: var(--level-4-font-style) !important;
 }
 
 [part~="cell"].level-5:not(:focus) {
-    background: var(--level-5) !important;
+    background: var(--level-5-background) !important;
+    color: var(--level-5-color) !important;
+    font-size: var(--level-5-font-size) !important;
+    font-family: var(--level-5-font-family) !important;
+    font-weight: var(--level-5-font-weight) !important;
+    font-style: var(--level-5-font-style) !important;
 }
 
 [part~="cell"].level-6:not(:focus) {
-    background: var(--level-6) !important;
+    background: var(--level-6-background) !important;
+    color: var(--level-6-color) !important;
+    font-size: var(--level-6-font-size) !important;
+    font-family: var(--level-6-font-family) !important;
+    font-weight: var(--level-6-font-weight) !important;
+    font-style: var(--level-6-font-style) !important;
 }
 
 [part~="cell"].level-7:not(:focus) {
-    background: var(--level-7) !important;
+    background: var(--level-7-background) !important;
+    color: var(--level-7-color) !important;
+    font-size: var(--level-7-font-size) !important;
+    font-family: var(--level-7-font-family) !important;
+    font-weight: var(--level-7-font-weight) !important;
+    font-style: var(--level-7-font-style) !important;
 }
 
 [part~="cell"].level-8:not(:focus) {
-    background: var(--level-8) !important;
+    background: var(--level-8-background) !important;
+    color: var(--level-8-color) !important;
+    font-size: var(--level-8-font-size) !important;
+    font-family: var(--level-8-font-family) !important;
+    font-weight: var(--level-8-font-weight) !important;
+    font-style: var(--level-8-font-style) !important;
 }
 
 [part~="cell"].level-9:not(:focus) {
-    background: var(--level-9) !important;
+    background: var(--level-9-background) !important;
+    color: var(--level-9-color) !important;
+    font-size: var(--level-9-font-size) !important;
+    font-family: var(--level-9-font-family) !important;
+    font-weight: var(--level-9-font-weight) !important;
+    font-style: var(--level-9-font-style) !important;
 }
 
 [part~="cell"].level-10:not(:focus) {
-    background: var(--level-10) !important;
+    background: var(--level-10-background) !important;
+    color: var(--level-10-color) !important;
+    font-size: var(--level-10-font-size) !important;
+    font-family: var(--level-10-font-family) !important;
+    font-weight: var(--level-10-font-weight) !important;
+    font-style: var(--level-10-font-style) !important;
 }
 
 [part~="cell"].level-11:not(:focus) {
-    background: var(--level-11) !important;
+    background: var(--level-11-background) !important;
+    color: var(--level-11-color) !important;
+    font-size: var(--level-11-font-size) !important;
+    font-family: var(--level-11-font-family) !important;
+    font-weight: var(--level-11-font-weight) !important;
+    font-style: var(--level-11-font-style) !important;
 }
 
 [part~="cell"].level-12:not(:focus) {
-    background: var(--level-12) !important;
+    background: var(--level-12-background) !important;
+    color: var(--level-12-color) !important;
+    font-size: var(--level-12-font-size) !important;
+    font-family: var(--level-12-font-family) !important;
+    font-weight: var(--level-12-font-weight) !important;
+    font-style: var(--level-12-font-style) !important;
 }
 
 [part~="cell"].level-13:not(:focus) {
-    background: var(--level-13) !important;
+    background: var(--level-13-background) !important;
+    color: var(--level-13-color) !important;
+    font-size: var(--level-13-font-size) !important;
+    font-family: var(--level-13-font-family) !important;
+    font-weight: var(--level-13-font-weight) !important;
+    font-style: var(--level-13-font-style) !important;
 }
 
 [part~="cell"].level-14:not(:focus) {
-    background: var(--level-14) !important;
+    background: var(--level-14-background) !important;
+    color: var(--level-14-color) !important;
+    font-size: var(--level-14-font-size) !important;
+    font-family: var(--level-14-font-family) !important;
+    font-weight: var(--level-14-font-weight) !important;
+    font-style: var(--level-14-font-style) !important;
 }
 
 [part~="cell"].level-15:not(:focus) {
-    background: var(--level-15) !important;
+    background: var(--level-15-background) !important;
+    color: var(--level-15-color) !important;
+    font-size: var(--level-15-font-size) !important;
+    font-family: var(--level-15-font-family) !important;
+    font-weight: var(--level-15-font-weight) !important;
+    font-style: var(--level-15-font-style) !important;
 }
 
 [part~="cell"].level-16:not(:focus) {
-    background: var(--level-16) !important;
+    background: var(--level-16-background) !important;
+    color: var(--level-16-color) !important;
+    font-size: var(--level-16-font-size) !important;
+    font-family: var(--level-16-font-family) !important;
+    font-weight: var(--level-16-font-weight) !important;
+    font-style: var(--level-16-font-style) !important;
 }
 
 [part~="cell"].level-17:not(:focus) {
-    background: var(--level-17) !important;
+    background: var(--level-17-background) !important;
+    color: var(--level-17-color) !important;
+    font-size: var(--level-17-font-size) !important;
+    font-family: var(--level-17-font-family) !important;
+    font-weight: var(--level-17-font-weight) !important;
+    font-style: var(--level-17-font-style) !important;
 }
 
 [part~="cell"].level-18:not(:focus) {
-    background: var(--level-18) !important;
+    background: var(--level-18-background) !important;
+    color: var(--level-18-color) !important;
+    font-size: var(--level-18-font-size) !important;
+    font-family: var(--level-18-font-family) !important;
+    font-weight: var(--level-18-font-weight) !important;
+    font-style: var(--level-18-font-style) !important;
 }
 
 [part~="cell"].level-19:not(:focus) {
-    background: var(--level-19) !important;
+    background: var(--level-19-background) !important;
+    color: var(--level-19-color) !important;
+    font-size: var(--level-19-font-size) !important;
+    font-family: var(--level-19-font-family) !important;
+    font-weight: var(--level-19-font-weight) !important;
+    font-style: var(--level-19-font-style) !important;
 }
 
 [part~="cell"].level-20:not(:focus) {
-    background: var(--level-20) !important;
+    background: var(--level-20-background) !important;
+    color: var(--level-20-color) !important;
+    font-size: var(--level-20-font-size) !important;
+    font-family: var(--level-20-font-family) !important;
+    font-weight: var(--level-20-font-weight) !important;
+    font-style: var(--level-20-font-style) !important;
 }
 
 [part~="cell"].italic {
