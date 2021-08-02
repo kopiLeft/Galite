@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.grid
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.ui.vaadin.base.runAfterGetValue
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.AttachEvent
