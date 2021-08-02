@@ -135,6 +135,7 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
       it.setKey(key.toString())
         .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
+        .setSortable(false)
     }
   }
 
