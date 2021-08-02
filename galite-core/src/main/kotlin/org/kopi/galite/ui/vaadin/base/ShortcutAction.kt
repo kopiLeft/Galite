@@ -71,7 +71,6 @@ fun <V> V.runAfterGetValue(function: () -> Unit) where V: Component, V: HasValue
     this.element.callJsFunction("blur").then {
       function()
     }
-
   } else {
     this.element.executeJs("return $0.value")
       .then {
