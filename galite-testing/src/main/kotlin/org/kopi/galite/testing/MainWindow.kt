@@ -70,7 +70,7 @@ fun Form.lookupFormCaption(menu: String? = null): String {
   val manager = LocalizationManager(ApplicationContext.getDefaultLocale(), Locale.getDefault())
 
   val source = when {
-    sources.isEmpty() -> throw Exception(Form::class.qualifiedName + " was not found in any menu")
+    sources.isEmpty() -> throw Exception(this::class.qualifiedName + " was not found in any menu")
     sources.size == 1 -> sources[0]
     menu != null -> sources.first { it.first.contains(menu) }
     else -> sources[0]
