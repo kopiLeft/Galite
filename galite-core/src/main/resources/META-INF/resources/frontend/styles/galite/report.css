@@ -36,14 +36,6 @@ vaadin-grid > vaadin-grid-cell-content {
     padding: var(--lumo-size-xxs);
 }
 
-vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
-    display: table;
-}
-
-.grid-cell-container-focused {
-    background: #bcdae6;
-}
-
 #main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
     --lumo-font-family:  Arial, sans-serif;
     --lumo-primary-text-color: var(--lumo-shade-70pct);

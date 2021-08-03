@@ -24,8 +24,6 @@ import org.kopi.galite.report.MReport
 import org.kopi.galite.report.Parameters
 import org.kopi.galite.report.VSeparatorColumn
 
-import com.vaadin.flow.component.html.Div
-
 /**
  * The `ReportCellStyler` is the dynamic report styler
  *
@@ -42,9 +40,8 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
    *
    * @param i           The row index of the cell.
    * @param j           The column index of the cell.
-   * @param component   The cell value container
    */
-  fun updateStyles(i: Int, j: Int, component: Div) {
+  fun updateStyles(i: Int, j: Int) {
     val column = model.getAccessibleColumn(j)
 
     if (column is VSeparatorColumn) {
@@ -52,7 +49,7 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
     }
     val style = column!!.getStyles()[0]
 
-    updateStyle(style, model.getRow(i)!!.level, component)
+    updateStyle(style, model.getRow(i)!!.level)
   }
 
   /**
@@ -60,10 +57,9 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
    *
    * @param columnStyle The [ColumnStyle].
    * @param level The column level.
-   * @param component the cell value container
    *
    */
-  private fun updateStyle(columnStyle: ColumnStyle, level: Int, component: Div) {
+  private fun updateStyle(columnStyle: ColumnStyle, level: Int) {
     val background = if (columnStyle.getBackground() != columnStyle.getBackground()) {
       columnStyle.getBackground()
     } else {
@@ -95,7 +91,7 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
       parameters.font.isItalic
     }
 
-    setStyle(level, background, foreground,fontSize, fontFamily, fontWeight(isBold), fontStyle(isItalic), component)
+    setStyle(level, background, foreground,fontSize, fontFamily, fontWeight(isBold), fontStyle(isItalic))
   }
 
   /**
@@ -109,14 +105,13 @@ class ReportCellStyler(private val model: MReport, private val parameters: Param
     fontFamily: String,
     fontWeight: String,
     fontStyle: String,
-    component: Div
   ) {
-    table.style["--level-$level"] = getCSSColor(background)
-    component.style["color"] = getCSSColor(foreground)
-    component.style["font-size"] = fontSize.toString()
-    component.style["font-family"] = fontFamily
-    component.style["font-weight"] = fontWeight
-    component.style["font-style"] = fontStyle
+    table.style["--level-$level-background"] = getCSSColor(background)
+    table.style["--level-$level-color"] = getCSSColor(foreground)
+    table.style["--level-$level-font-size"] = fontSize.toString()
+    table.style["--level-$level-font-family"] = fontFamily
+    table.style["--level-$level-font-weight"] = fontWeight
+    table.style["--level-$level-font-style"] = fontStyle
   }
 
   /**
