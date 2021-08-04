@@ -64,8 +64,6 @@ class VWindowsMenu : EnhancedDialog(), HasStyle {
     header.add(closeIcon)
     setHeader(header)
     setContent(items)
-    isCloseOnOutsideClick = false
-    isCloseOnEsc = false
   }
 
   /**
