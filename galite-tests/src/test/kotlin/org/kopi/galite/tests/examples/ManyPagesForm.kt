@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+package org.kopi.galite.tests.examples
+
+import java.util.Locale
+
+import org.kopi.galite.demo.Application
+import org.kopi.galite.domain.Domain
+import org.kopi.galite.form.dsl.DictionaryForm
+import org.kopi.galite.form.dsl.FormBlock
+
+
+class ManyPagesForm : DictionaryForm() {
+  override val locale = Locale.UK
+  override val title = "Clients"
+  val clientsPage= page("Clients")
+  val contactsPage= page("Contacts")
+  val detailsPage= page("Details")
+  val clientsBlock = insertBlock(Clients(), clientsPage)
+  val contactsBlock = insertBlock(Contacts(), contactsPage)
+  val detailsBlock = insertBlock(Details(), detailsPage)
+
+  inner class Clients : FormBlock(1, 100, "Clients") {
+    val idClt = visit(domain = Domain<Int>(30), position = at(1, 1)) {
+      label = "ID"
+      help = "The client id"
+    }
+  }
+
+  inner class Contacts : FormBlock(1, 100, "Contacts") {
+    val contact = visit(domain = Domain<String>(30 ), position = at(1, 1)) {
+      label = "contact"
+      help = "The contact"
+    }
+  }
+
+  inner class Details : FormBlock(1, 100, "Details") {
+    val detail = visit(domain = Domain<String>(30, 30), position = at(1, 1)) {
+      label = "detail"
+      help = "The detail"
+    }
+  }
+}
+
+fun main() {
+  Application.runForm(formName = ManyPagesForm())
+}

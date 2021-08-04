@@ -31,12 +31,10 @@ import org.kopi.galite.report.Report
 import org.kopi.galite.tests.chart.ChartSample
 import org.kopi.galite.tests.form.FormWithChart
 import org.kopi.galite.type.Decimal
-import org.kopi.galite.visual.MessageCode
 
 import org.kopi.galite.visual.VExecFailedException
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.kopi.galite.visual.MessageCode.getMessage
 
 
 class ClientForm : ReportSelectionForm() {

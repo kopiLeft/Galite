@@ -79,7 +79,7 @@ class ListTests: GaliteVUITestBase() {
         addClients()
         addCmds()
       }
-      org.kopi.galite.tests.module.initModules()
+      org.kopi.galite.tests.examples.initModules()
     }
   }
 }
