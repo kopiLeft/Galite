@@ -140,7 +140,7 @@ class TrainingR : Report() {
     }
   }
 
-  val type = field(Domain<String>(25)) {
+  val type = field(Domain<Int>(25)) {
     label = "training type"
     help = "The training type"
     align = FieldAlignment.LEFT
@@ -177,8 +177,6 @@ class TrainingR : Report() {
     help = "disponibility"
     align = FieldAlignment.LEFT
   }
-
-
 
   val training = Training.selectAll()
 

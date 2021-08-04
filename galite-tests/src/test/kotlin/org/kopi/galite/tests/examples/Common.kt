@@ -79,13 +79,13 @@ class Traineeship : FormBlock(1, 10, "Training") {
 }
 
 fun addTrainings() {
-  addTraining(1, "training 1", "HTML", Decimal("1149.24").value, "informations training 1")
-  addTraining(2, "training 2", "JAVA", Decimal("219.6").value,  "informations training 2")
-  addTraining(3, "training 3", "PYTHON", Decimal("146.9").value,  "informations training 3")
-  addTraining(4, "training 4", "JAVA", Decimal("3129.7").value, "informations training 4")
+  addTraining(1, "training 1", 3, Decimal("1149.24").value, "informations training 1")
+  addTraining(2, "training 2", 1, Decimal("219.6").value,  "informations training 2")
+  addTraining(3, "training 3", 2, Decimal("146.9").value,  "informations training 3")
+  addTraining(4, "training 4", 1, Decimal("3129.7").value, "informations training 4")
 }
 
-fun addTraining(num: Int, name: String, category: String, amount: BigDecimal, info: String? = null) {
+fun addTraining(num: Int, name: String, category: Int, amount: BigDecimal, info: String? = null) {
   Training.insert {
     it[id] = num
     it[trainingName] = name
@@ -125,7 +125,7 @@ fun addCenter(num: Int, name: String,
 object Training : Table("TRAINING") {
   val id = integer("ID")
   val trainingName = varchar("Name", 25)
-  val type = varchar("type", 25)
+  val type = integer("type")
   val price = decimal("UNIT_PRICE", 9, 3)
   val active = bool("ACTIVE",)
   val photo = blob("PHOTO").nullable()
@@ -147,10 +147,10 @@ object Center : Table("Center") {
   override val primaryKey = PrimaryKey(id, name = "PK_CENTER_ID")
 }
 
-object Type : CodeDomain<String>() {
+object Type : CodeDomain<Int>() {
   init {
-    "JAVA" keyOf "JAVA"
-    "PYTHON" keyOf "PYTHON"
-    "HTML" keyOf "HTML"
+    "JAVA" keyOf 1
+    "PYTHON" keyOf 2
+    "HTML" keyOf 3
   }
 }
