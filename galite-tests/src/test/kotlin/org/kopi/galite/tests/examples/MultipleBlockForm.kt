@@ -27,7 +27,7 @@ import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 
-class MutlipeBlockForm : DictionaryForm() {
+class MultipleBlockForm : DictionaryForm() {
   override val locale = Locale.UK
 
   override val title = "Training Form"
@@ -213,5 +213,5 @@ class MutlipeBlockForm : DictionaryForm() {
 }
 
 fun main() {
-  Application.runForm(formName = MutlipeBlockForm())
+  Application.runForm(formName = MultipleBlockForm())
 }

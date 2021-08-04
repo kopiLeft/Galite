@@ -83,7 +83,7 @@ class ReportTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      org.kopi.galite.tests.module.initModules()
+      org.kopi.galite.tests.examples.initModules()
     }
   }
 }
