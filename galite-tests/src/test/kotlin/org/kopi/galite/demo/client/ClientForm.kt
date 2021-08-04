@@ -77,7 +77,7 @@ class ClientForm : ReportSelectionForm() {
           label = "list",
           help = "Display List",
   ) {
-    key = Key.F1   // key is optional here
+    key = Key.F10
     icon = "list"  // icon is optional here
   }
 

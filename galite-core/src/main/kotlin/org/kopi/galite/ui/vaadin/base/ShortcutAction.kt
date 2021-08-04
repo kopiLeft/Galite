@@ -61,23 +61,22 @@ abstract class ShortcutAction<T: Component>(
 
     registration.isBrowserDefaultAllowed = false
   }
+}
 
-  protected fun <V> V.runAfterGetValue(function: () -> Unit) where V: Component, V: HasValue<*, *> {
-    // Workaround for issue: https://github.com/vaadin/flow/issues/5959
-    // Execute shortcut action when receiving the field's value using javascript call
-    // The field's value is used later to check if value has been changed
-    if (this is VDateField || this is VTimeField || this is VTimeStampField) {
-      this.element.callJsFunction("blur").then {
+fun <V> V.runAfterGetValue(function: () -> Unit) where V: Component, V: HasValue<*, *> {
+  // Workaround for issue: https://github.com/vaadin/flow/issues/5959
+  // Execute shortcut action when receiving the field's value using javascript call
+  // The field's value is used later to check if value has been changed
+  if (this is VDateField || this is VTimeField || this is VTimeStampField) {
+    this.element.callJsFunction("blur").then {
+      function()
+    }
+  } else {
+    this.element.executeJs("return $0.value")
+      .then {
+        // Synchronize with server side
+        this.value = it?.asString()
         function()
       }
-
-    } else {
-      this.element.executeJs("return $0.value")
-        .then {
-          // Synchronize with server side
-          this.value = it?.asString()
-          function()
-        }
-    }
   }
 }

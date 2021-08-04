@@ -206,9 +206,9 @@ abstract class DWindow protected constructor(private var model: VWindow?) : Wind
    */
   private fun registerShortcutKey(actor: DActor, acceleratorKey: Key, modifiersKey: KeyModifier?) {
     val registration = if (modifiersKey != null) {
-      Shortcuts.addShortcutListener(this, actor::actionPerformed, acceleratorKey, modifiersKey)
+      Shortcuts.addShortcutListener(this, actor::shortcutActionPerformed, acceleratorKey, modifiersKey)
     } else {
-      Shortcuts.addShortcutListener(this, actor::actionPerformed, acceleratorKey)
+      Shortcuts.addShortcutListener(this, actor::shortcutActionPerformed, acceleratorKey)
     }
 
     registration.isBrowserDefaultAllowed = false
