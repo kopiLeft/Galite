@@ -31,7 +31,6 @@
 vaadin-grid > vaadin-grid-cell-content {
     height: 100%;
     padding: var(--lumo-size-xxs);
-    cursor: pointer;
 }
 
 vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
@@ -51,11 +50,14 @@ vaadin-grid > vaadin-grid-cell-content .grid-cell-container {
 
 ::part(resize-handle) {
     display: block;
-    height: 1.2em;
     float: right;
     background: #aaa;
     cursor: e-resize;
     cursor: col-resize;
     width: 1px;
     overflow: hidden;
+}
+
+vaadin-grid.report > vaadin-grid-cell-content {
+    cursor: pointer;
 }
