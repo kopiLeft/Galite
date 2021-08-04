@@ -57,8 +57,11 @@ object BackgroundThreadHandler {
       command()
     } else {
       currentUI.access {
-        command()
-        currentUI.push()
+        try {
+          command()
+        } finally {
+          currentUI.push()
+        }
       }
     }
   }

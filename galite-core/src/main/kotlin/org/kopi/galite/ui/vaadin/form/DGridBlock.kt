@@ -335,7 +335,9 @@ open class DGridBlock(parent: DForm, model: VBlock)
         filter.suffixComponent = search
         filter.className = "block-filter-text"
         filter.addValueChangeListener {
-          (grid.dataProvider as ListDataProvider).filter = DGridBlockFilter(model.fields[index], filter.value, true, false)
+          val field = (column.editorComponent as GridEditorField<*>).dGridEditorField.getModel()
+
+          (grid.dataProvider as ListDataProvider).filter = DGridBlockFilter(field, filter.value, true, false)
         }
 
         filter.valueChangeMode = ValueChangeMode.EAGER

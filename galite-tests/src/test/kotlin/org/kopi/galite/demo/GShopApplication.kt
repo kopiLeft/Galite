@@ -59,8 +59,16 @@ object Client : Table("CLIENTS") {
   val countryClt = varchar("COUNTRY", 30)
   val cityClt = varchar("CITY", 30)
   val zipCodeClt = integer("ZIP_CODE")
+  val activeClt = bool("ACTIVE")
 
   override val primaryKey = PrimaryKey(idClt, name = "PK_CLIENT_ID")
+}
+
+object Purchase: Table("PURCHASE") {
+  val id = integer("ID").autoIncrement()
+  val idClt = integer("CLIENT").references(Client.idClt)
+  val idPdt = integer("PRODUCT").references(Product.idPdt)
+  val quantity = integer("QUANTITY")
 }
 
 object Product : Table("PRODUCTS") {
@@ -166,6 +174,7 @@ object Application : DBSchemaTest() {
       addClients()
       addTaxRules()
       addProducts()
+      addSales()
       addFourns()
       addStocks()
       addCmds()
@@ -193,7 +202,7 @@ fun createGShopApplicationTables() {
 }
 
 val list_Of_GShopApplicationTables = listOf(Client, Product, Stock, Provider,
-                                 Bill, TaxRule, Command, BillProduct)
+                                 Bill, TaxRule, Command, BillProduct, Purchase)
 
 fun initModules() {
   transaction {
@@ -226,13 +235,22 @@ fun insertIntoModule(shortname: String,
 }
 
 fun addClients() {
-  addClient(0, "Hichem", "Fazai", "10,Rue du Lac", 28, "example@mail", "Tunisia", "Megrine", 2001)
-  addClient(1, "Mohamed", "Salah", "10,Rue Lac", 56, "example@mail", "Tunisia", "Megrine", 2001)
-  addClient(2, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "example@mail", "Tunisia", "Tunis", 6000)
-  addClient(3, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "example@mail", "Tunisia", "Mourouj", 5003)
+  addClient(1, "Oussama", "Mellouli", "Marsa, tunis", 38, "example@mail", "Tunisia", "Tunis", 2001)
+  addClient(2, "Mohamed", "Salah", "10,Rue Lac", 56, "example@mail", "Tunisia", "Megrine", 2001)
+  addClient(3, "Khaled", "Guesmi", "14,Rue Mongi Slim", 35, "example@mail", "Tunisia", "Tunis", 6000)
+  addClient(4, "Ahmed", "Bouaroua", "10,Rue du Lac", 22, "example@mail", "Tunisia", "Mourouj", 5003)
 }
 
-fun addClient(id: Int, firstName: String, lastName: String, address: String, age: Int, email: String, country: String, city: String, zipcode: Int) {
+fun addClient(id: Int,
+              firstName: String,
+              lastName: String,
+              address: String,
+              age: Int,
+              email: String,
+              country: String,
+              city: String,
+              zipcode: Int,
+              active: Boolean = true) {
   Client.insert {
     it[idClt] = id
     it[firstNameClt] = firstName
@@ -243,6 +261,7 @@ fun addClient(id: Int, firstName: String, lastName: String, address: String, age
     it[countryClt] = country
     it[cityClt] = city
     it[zipCodeClt] = zipcode
+    it[activeClt] = active
   }
 }
 
@@ -251,6 +270,13 @@ fun addProducts() {
   addProduct(1, "description Product 1", "cat 2", "tax 2", "Men","Supplier 0", Decimal("314").value)
   addProduct(2, "description Product 2", "cat 3", "tax 2", "Women","Supplier 0", Decimal("180").value)
   addProduct(3, "description Product 3", "cat 1", "tax 3", "Children","Supplier 0", Decimal("65").value)
+}
+
+fun addSales() {
+  addSale(1, 0, 1)
+  addSale(1, 1, 1)
+  addSale(1, 2, 2)
+  addSale(1, 3, 3)
 }
 
 fun addProduct(id: Int, description: String, category: String, taxName: String, department: String, supplier: String, price: BigDecimal) {
@@ -262,6 +288,14 @@ fun addProduct(id: Int, description: String, category: String, taxName: String, 
     it[Product.category] = category
     it[Product.taxName] = taxName
     it[Product.price] = price
+  }
+}
+
+fun addSale(client: Int, product: Int, qty: Int) {
+  Purchase.insert {
+    it[idClt] = client
+    it[idPdt] = product
+    it[quantity] = qty
   }
 }
 
@@ -333,16 +367,16 @@ fun addStock(id: Int, idStck: Int, minAlerte: Int) {
 }
 
 fun addCmds() {
-  addCmd(0, 0, DateTime.parse("2020-01-03"), "check", "in preparation")
-  addCmd(1, 0, DateTime.parse("2020-01-01"), "check", "available")
-  addCmd(2, 1, DateTime.parse("2021-05-03"), "bank card", "delivered")
-  addCmd(3, 2, DateTime.parse("2021-05-13"), "cash", "canceled")
+  addCmd(0, 1, DateTime.parse("2020-01-03"), "check", "in preparation")
+  addCmd(1, 1, DateTime.parse("2020-01-01"), "check", "available")
+  addCmd(2, 2, DateTime.parse("2021-05-03"), "bank card", "delivered")
+  addCmd(3, 3, DateTime.parse("2021-05-13"), "cash", "canceled")
 }
 
-fun addCmd(num: Int, id: Int, date: DateTime, payment: String, status: String) {
+fun addCmd(num: Int, client: Int, date: DateTime, payment: String, status: String) {
   Command.insert {
     it[numCmd] = num
-    it[idClt] = id
+    it[idClt] = client
     it[dateCmd] = date
     it[paymentMethod] = payment
     it[statusCmd] = status
