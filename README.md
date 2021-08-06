@@ -4,6 +4,7 @@ Galite Framework
 
 ![license](http://img.shields.io/badge/license-LGPL_v2.1-lightgrey.svg?style=flat)
 ![build](https://github.com/kopiLeft/Galite/workflows/Build/badge.svg)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FkopiLeft%2FGalite.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FkopiLeft%2FGalite?ref=badge_shield)
 
 Welcome to **Galite**, the framework of [kopiLeft](https://github.com/kopiLeft) with an expressive elegant syntax based on Kotlin DSL to create great applications.
 
@@ -297,3 +298,6 @@ If you have any questions, you can create a question issue.
 ## License
 
 Galite framework is licensed under the LGPLv2.1. See [COPYING](COPYING)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FkopiLeft%2FGalite.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FkopiLeft%2FGalite?ref=badge_large)
