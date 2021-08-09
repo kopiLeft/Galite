@@ -41,9 +41,9 @@ object Center : Table("Center") {
   val centerName = varchar("centerName", 25)
   val address = varchar("ADDRESS", 50)
   val mail = varchar("EMAIL", 25)
-  val country = varchar("COUNTRY", 30)
-  val city = varchar("CITY", 30)
-  val zipCode = integer("ZIP_CODE")
+  val country = varchar("COUNTRY", 30).nullable()
+  val city = varchar("CITY", 30).nullable()
+  val zipCode = integer("ZIP_CODE").nullable()
   val refTraining = integer("TRAINING_REFERENCE").references(Training.id)
 
   override val primaryKey = PrimaryKey(id, name = "PK_CENTER_ID")
