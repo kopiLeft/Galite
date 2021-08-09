@@ -3060,7 +3060,7 @@ abstract class VBlock(var form: VForm) : VConstants, DBContextHandler, ActionHan
       checkUniqueIndices(recno)
 
       /* fill with next id if not given as argument and not overridden */
-      //fillIdField(recno, id)
+      fillIdField(recno, id)
 
       if (!blockHasNoUcOrTsField()) {
         assert(ucField != null || tsField != null) { "UC or TS field must exist (Block = $name)." }

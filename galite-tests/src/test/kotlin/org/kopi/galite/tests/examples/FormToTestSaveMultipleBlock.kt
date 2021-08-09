@@ -16,7 +16,8 @@
  */
 package org.kopi.galite.tests.examples
 
-import org.jetbrains.exposed.sql.SchemaUtils
+import java.util.Locale
+
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Application
 import org.kopi.galite.domain.Domain
@@ -24,7 +25,7 @@ import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.DictionaryForm
 import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
-import java.util.*
+import org.kopi.galite.visual.VExecFailedException
 
 class FormToTestSaveMultipleBlock : DictionaryForm() {
   override val locale = Locale.UK
@@ -37,42 +38,6 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     label = "Autofill",
     help = "Autofill",
   )
-  val list = actor(
-    ident = "list",
-    menu = action,
-    label = "list",
-    help = "Display List",
-  ) {
-    key = Key.F2
-    icon = "list"
-  }
-  val query = actor(
-    ident = "query",
-    menu = action,
-    label = "query",
-    help = "query",
-  ) {
-    key = Key.F3
-    icon = "list"
-  }
-  val changeBlock = actor(
-    ident = "change Block",
-    menu = action,
-    label = "change Block",
-    help = "change Block",
-  ) {
-    key = Key.F4
-    icon = "refresh"
-  }
-  val resetBlock = actor(
-    ident = "reset",
-    menu = action,
-    label = "break",
-    help = "Reset Block",
-  ) {
-    key = Key.F5
-    icon = "break"
-  }
   val saveBlock = actor(
     ident = "saveBlock",
     menu = action,
@@ -88,42 +53,27 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
       block2.trainingId[0] = trainingID.value
       block2.load()
     }
-
-    command(item = list) {
-      action = {
-        println("-----------Generating list-----------------")
-        recursiveQuery()
-      }
-    }
-    command(item = query) {
-      action = {
-        queryMove()
-      }
-    }
-    command(item = changeBlock) {
-      action = {
-        changeBlock()
-      }
-    }
   }
 
   val block2 = insertBlock(Centers()) {
     command(item = saveBlock) {
       action = {
-        vBlock.setMode(VConstants.MOD_UPDATE)
-        val rec: Int = vBlock.activeRecord
+        val b = vBlock
+        val rec: Int = b.activeRecord
 
-        transaction {
-          vBlock.save()
+        b.validate()
+
+        if (!b.isFilled()) {
+          b.currentRecord = 0
+          throw VExecFailedException()
         }
 
-        vBlock.form.gotoBlock(vBlock)
-        vBlock.gotoRecord(if (vBlock.isRecordFilled(rec)) rec + 1 else rec)
-      }
-    }
-    command(item = resetBlock) {
-      action = {
-        resetBlock()
+        transaction {
+          b.save()
+        }
+
+        b.form.gotoBlock(b)
+        b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
       }
     }
   }
@@ -170,21 +120,6 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
       help = "mail"
       columns(c.mail)
     }
-    val country = visit(domain = Domain<String>(20), position = at(1, 4)) {
-      label = "country"
-      help = "country"
-      columns(c.country)
-    }
-    val city = visit(domain = Domain<String>(20), position = at(1, 5)) {
-      label = "city"
-      help = "city"
-      columns(c.city)
-    }
-    val zipCode = visit(domain = Domain<Int>(5), position = at(1, 6)) {
-      label = "zipCode"
-      help = "zipCode"
-      columns(c.zipCode)
-    }
 
     init {
       border = VConstants.BRD_LINE
@@ -200,15 +135,8 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
 
     }
   }
-  init {
-    transaction {
-      SchemaUtils.create(Training, Center)
-      addTrainings()
-      addCenters()
-    }
-  }
 }
 
 fun main() {
-  Application.runForm(formName = MutlipeBlockForm())
+  Application.runForm(formName = FormToTestSaveMultipleBlock())
 }
