@@ -30,7 +30,7 @@ cd Galite
 
 The app will be running on http://localhost:8080
 
-When the app is started, the login page is displayed. For demo purposes, a user is inserted into the database with the fallowing parameters:
+When the app is started, the login page is displayed. For demo purposes, a user is inserted into the database with the following parameters:
 ```
 login = admin
 password = admin
