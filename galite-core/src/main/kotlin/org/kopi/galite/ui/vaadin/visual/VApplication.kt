@@ -20,6 +20,8 @@ package org.kopi.galite.ui.vaadin.visual
 import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
+import java.util.MissingResourceException
+import java.util.ResourceBundle
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
@@ -96,6 +98,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var askAnswer = 0
   var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
   var currentUI: UI? = null
+  private val configProperties: ResourceBundle? =
+    try {
+      ResourceBundle.getBundle(resourceFile)
+    } catch (missingResourceException: MissingResourceException) {
+      null
+    }
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -288,16 +296,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    /*dBContext = login(getInitParameter("database")!!, FIXME: uncomment this.
-                      getInitParameter("driver")!!,
+    val database = getInitParameter("database")
+    val driver = getInitParameter("driver")
+    val schema  = getInitParameter("schema")
+
+    requireNotNull(database) { "The database url shouldn't be null" }
+    requireNotNull(driver) { "The jdbc driver shouldn't be null" }
+
+    dBContext = login(database,
+                      driver,
                       username,
                       password,
-                      getInitParameter("schema")!!)*/
-    dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-                      "org.h2.Driver",
-                      username,
-                      password,
-                      null)
+                      schema)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -487,16 +497,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   private fun checkLocale(locale: String): Boolean {
     val chars = locale.toCharArray()
-    return !(chars.size != 5 ||
-            chars[0] < 'a' ||
-            chars[0] > 'z' ||
-            chars[1] < 'a' ||
-            chars[1] > 'z' ||
-            chars[2] != '_' ||
-            chars[3] < 'A' ||
-            chars[3] > 'Z' ||
-            chars[4] < 'A' ||
-            chars[4] > 'Z')
+
+    if (chars.size != 5
+      || chars[0] < 'a' || chars[0] > 'z'
+      || chars[1] < 'a' || chars[1] > 'z'
+      || chars[2] != '_'
+      || chars[3] < 'A' || chars[3] > 'Z'
+      || chars[4] < 'A' || chars[4] > 'Z')
+    {
+      return false
+    }
+
+    return true
   }
 
   //---------------------------------------------------
@@ -535,9 +547,14 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param key The parameter key.
    * @return The initialization parameter contained in the application descriptor file.
    */
-  protected fun getInitParameter(key: String?): String? {
-    return VaadinServlet.getCurrent()?.getInitParameter(key)
+  protected fun getInitParameter(key: String): String? {
+    return VaadinServlet.getCurrent()?.getInitParameter(key) ?: getConfigParameter(key)
   }
+
+  open val resourceFile: String get() = "config"
+
+  private fun getConfigParameter(key: String): String? =
+    if (configProperties != null && configProperties.containsKey(key)) configProperties.getString(key) else null
 
   //---------------------------------------------------
   // ABSTRACT MEMBERS TO CUSTOMIZE YOUR APPLICATION
