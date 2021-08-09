@@ -22,6 +22,11 @@ plugins {
   id("org.springframework.boot") version "2.4.0"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
   id("com.vaadin") version "0.17.0.1"
+  application
+}
+
+application {
+  mainClass.set("org.kopi.galite.demo.GShopApplicationKt")
 }
 
 vaadin {
@@ -51,10 +56,10 @@ dependencies {
   implementation("org.jdom", "jdom2", Versions.JDOM)
 
   // Exposed dependencies
-  testImplementation ("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
+  implementation("org.jetbrains.exposed", "exposed-jdbc", Versions.EXPOSED)
 
-  testImplementation("com.h2database", "h2", Versions.H2)
-  testImplementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", Versions.POSTGRES_NG)
+  implementation("com.h2database", "h2", Versions.H2)
+  implementation("com.impossibl.pgjdbc-ng", "pgjdbc-ng", Versions.POSTGRES_NG)
 
   //Apache POI
   testImplementation("org.apache.poi", "poi", Versions.APACHE_POI)

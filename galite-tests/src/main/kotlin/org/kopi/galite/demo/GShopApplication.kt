@@ -40,9 +40,6 @@ import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.tests.form.FormWithFields
-import org.kopi.galite.tests.form.FormWithList
-import org.kopi.galite.tests.form.FormWithListDomains
 import org.kopi.galite.type.Decimal
 
 import org.springframework.boot.autoconfigure.SpringBootApplication

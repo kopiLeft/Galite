@@ -28,8 +28,6 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.chart.ChartSample
-import org.kopi.galite.tests.form.FormWithChart
 import org.kopi.galite.type.Decimal
 
 import org.kopi.galite.visual.VExecFailedException
@@ -126,7 +124,7 @@ class ClientForm : ReportSelectionForm() {
   }
   val graph = actor (
           ident =  "graph",
-          menu =   FormWithChart.action,
+          menu =   action,
           label =  "Graph",
           help =   "show graph values",
   ) {
