@@ -210,8 +210,6 @@ class ClientForm : ReportSelectionForm() {
     }
 
     init {
-
-
       command(item = report) {
         action = {
           createReport(this@Clients)

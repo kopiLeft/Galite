@@ -446,7 +446,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Closes the database connection
    */
   protected fun closeConnection() {
-    // FIXME
+    try {
+      if (dBContext != null) {
+        dBContext!!.close()
+        dBContext = null
+      }
+    } catch (e: SQLException) {
+      // we don't care, we reinitialize the connection
+      dBContext = null
+    }
   }
 
   /**
