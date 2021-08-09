@@ -20,6 +20,8 @@ import java.util.Locale
 
 import org.kopi.galite.demo.Client
 import org.kopi.galite.demo.Application
+import org.kopi.galite.demo.Product
+import org.kopi.galite.demo.Purchase
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.FormBlock
@@ -27,6 +29,11 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
 import org.kopi.galite.type.Decimal
+
+import org.kopi.galite.visual.VExecFailedException
+
+import org.jetbrains.exposed.sql.transactions.transaction
+
 
 class ClientForm : ReportSelectionForm() {
   override val locale = Locale.UK
@@ -80,6 +87,16 @@ class ClientForm : ReportSelectionForm() {
     icon = "save"
   }
 
+  val interSave = actor(
+          ident = "interSave",
+          menu = action,
+          label = "Save and load",
+          help = " Save and load",
+  ) {
+    key = Key.F11
+    icon = "save"
+  }
+
   val autoFill = actor(
     ident = "Autofill",
     menu = action,
@@ -129,156 +146,197 @@ class ClientForm : ReportSelectionForm() {
   val clientsPage= page("Clients")
   val contactsPage= page("Contacts")
   val detailsPage= page("Details")
+  val clientsBlock = insertBlock(Clients(), clientsPage)
+  val salesBlock = insertBlock(Sales(), clientsPage)
 
-  val block = insertBlock(Clients(), clientsPage) {
-    command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+  inner class Clients : FormBlock(1, 100, "Clients") {
+    val c = table(Client)
+
+    val idClt = visit(domain = Domain<Int>(30), position = at(1, 1..2)) {
+      label = "ID"
+      help = "The client id"
+      columns(c.idClt)
+      value = 1
     }
-    command(item = dynamicReport) {
-      action = {
-        createDynamicReport()
-      }
+    val fstnameClt = visit(domain = Domain<String>(25), position = at(2, 1)) {
+      label = "First Name"
+      help = "The client first name"
+      columns(c.firstNameClt)
     }
-    command(item = graph) {
-      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
-      action = {
-        showChart(ChartSample())
-      }
+    val nameClt = visit(domain = Domain<String>(25), position = at(2, 2)) {
+      label = "Last name"
+      help = "The client last name"
+      columns(c.lastNameClt)
     }
-    command(item = list) {
-      action = {
-        recursiveQuery()
-      }
+    val ageClt = visit(domain = Domain<Int>(3), position = at(2, 3)) {
+      label = "Age"
+      help = "The client age"
+      columns(c.ageClt)
     }
-    command(item = saveBlock) {
-      action = {
-        saveBlock()
+    val email = visit(domain = Domain<String>(25), position = at(3, 1)) {
+      label = "Email"
+      help = "The mail adress"
+      columns(c.mail)
+    }
+    val addressClt = visit(domain = Domain<String>(20), position = at(3, 2)) {
+      label = "Address"
+      help = "The client address"
+      columns(c.addressClt)
+    }
+    val countryClt = visit(domain = Domain<String>(12), position = at(4, 1)) {
+      label = "Country"
+      help = "The client country"
+      columns(c.countryClt)
+    }
+    val cityClt = visit(domain = Domain<String>(12), position = at(4, 2)) {
+      label = "City"
+      help = "The client city"
+      columns(c.cityClt)
+    }
+    val zipCodeClt = visit(domain = Domain<Int>(12), position = follow(cityClt)) {
+      label = "Zip code"
+      help = "The client zip code"
+      columns(c.zipCodeClt)
+    }
+    val active = visit(domain = Domain<Boolean>(), position = at(5, 1)) {
+      label = "Active ?"
+      help = "Is the user active?"
+      columns(c.activeClt)
+    }
+
+    val PostqryTrigger = trigger(POSTQRY) {
+      salesBlock.idClt[0] = idClt.value
+      salesBlock.load()
+    }
+
+    init {
+      command(item = report) {
+        action = {
+          createReport(this@Clients)
+        }
+      }
+      command(item = dynamicReport) {
+        action = {
+          createDynamicReport()
+        }
+      }
+      command(item = graph) {
+        mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+        action = {
+          showChart(ChartSample())
+        }
+      }
+      command(item = list) {
+        action = {
+          recursiveQuery()
+        }
+      }
+      command(item = saveBlock) {
+        action = {
+          saveBlock()
+        }
       }
     }
   }
 
-  val salesBlock = insertBlock(sales(), clientsPage) {
+  inner class Sales : FormBlock(10, 10, "Sales") {
+    val C = table(Client)
+    val S = table(Purchase)
+    val P = table(Product)
 
-    command(item = showHideFilter) {
-      action = {
-        showHideFilter()
-      }
+    val idClt = hidden(domain = Domain<Int>(5)) {
+      label = "ID"
+      help = "The client id"
+      columns(C.idClt, S.idClt)
     }
 
-    command(item = report) {
-      action = {
-        createReport(this@insertBlock)
-      }
+    val idPdt = hidden(domain = Domain<Int>(5)) {
+      label = "ID"
+      help = "The product id"
+      columns(P.idPdt, S.idPdt)
     }
-    command(item = dynamicReport) {
-      action = {
-        createDynamicReport()
-      }
+
+    val id = visit(domain = Domain<Int>(5), position = at(1, 1..2)) {
+      label = "ID"
+      help = "The item id"
+      columns(S.id)
     }
-    command(item = graph) {
-      mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
-      action = {
-        showChart(ChartSample())
-      }
+    val description = visit(domain = Domain<String>(25), position = at(2, 1)) {
+      label = "Description"
+      help = "The item description"
+      columns(P.description)
     }
-    command(item = list) {
-      action = {
-        recursiveQuery()
-      }
+    val quantity = visit(domain = Domain<Int>(7), position = at(2, 2)) {
+      label = "Quantity"
+      help = "The number of items"
+      columns(S.quantity)
     }
-    command(item = saveBlock) {
-      action = {
-        saveBlock()
+    val price = visit(domain = Domain<Decimal>(10, 5), position = at(2, 2)) {
+      label = "Price"
+      help = "The item price"
+      columns(P.price)
+    }
+
+    init {
+      border = VConstants.BRD_LINE
+
+      command(item = showHideFilter) {
+        action = {
+          showHideFilter()
+        }
+      }
+
+      command(item = report) {
+        action = {
+          createReport(this@Sales)
+        }
+      }
+      command(item = dynamicReport) {
+        action = {
+          createDynamicReport()
+        }
+      }
+      command(item = graph) {
+        mode(VConstants.MOD_UPDATE, VConstants.MOD_INSERT, VConstants.MOD_QUERY)
+        action = {
+          showChart(ChartSample())
+        }
+      }
+      command(item = list) {
+        action = {
+          recursiveQuery()
+        }
+      }
+      command(item = saveBlock) {
+        action = {
+          saveBlock()
+        }
+      }
+      command(item = interSave) {
+        action = {
+          val b = salesBlock.vBlock
+          val rec: Int = b.activeRecord
+
+          b.validate()
+
+          if (!b.isFilled()) {
+            b.currentRecord = 0
+            throw VExecFailedException()
+          }
+
+          transaction {
+            b.save()
+          }
+
+          gotoBlock(b)
+          b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
+        }
       }
     }
   }
 
   override fun createReport(): Report {
     return ClientR()
-  }
-}
-
-class Clients : FormBlock(1, 1, "Clients") {
-  val u = table(Client)
-
-  val idClt = visit(domain = Domain<Int>(30), position = at(1, 1..2)) {
-    label = "ID"
-    help = "The client id"
-    columns(u.idClt)
-  }
-  val fstnameClt = visit(domain = Domain<String>(25), position = at(2, 1)) {
-    label = "First Name"
-    help = "The client first name"
-    columns(u.firstNameClt)
-  }
-  val nameClt = visit(domain = Domain<String>(25), position = at(2, 2)) {
-    label = "Last name"
-    help = "The client last name"
-    columns(u.lastNameClt)
-  }
-  val ageClt = visit(domain = Domain<Int>(3), position = at(2, 3)) {
-    label = "Age"
-    help = "The client age"
-    columns(u.ageClt)
-  }
-  val email = visit(domain = Domain<String>(25), position = at(3, 1)) {
-    label = "Email"
-    help = "The mail adress"
-    columns(u.mail)
-  }
-  val addressClt = visit(domain = Domain<String>(20), position = at(3, 2)) {
-    label = "Address"
-    help = "The client address"
-    columns(u.addressClt)
-  }
-  val countryClt = visit(domain = Domain<String>(12), position = at(4, 1)) {
-    label = "Country"
-    help = "The client country"
-    columns(u.countryClt)
-  }
-  val cityClt = visit(domain = Domain<String>(12), position = at(4, 2)) {
-    label = "City"
-    help = "The client city"
-    columns(u.cityClt)
-  }
-  val zipCodeClt = visit(domain = Domain<Int>(12), position = follow(cityClt)) {
-    label = "Zip code"
-    help = "The client zip code"
-    columns(u.zipCodeClt)
-  }
-  val active = visit(domain = Domain<Boolean>(), position = at(5, 1)) {
-    label = "Active ?"
-    help = "Is the user active?"
-  }
-
-  init {
-    nameClt[0] = "test"
-  }
-}
-
-class sales : FormBlock(10, 10, "Sales") {
-
-  val idClt = visit(domain = Domain<String>(5), position = at(1, 1..2)) {
-    label = "ID"
-    help = "The item id"
-  }
-  val description = visit(domain = Domain<String>(25), position = at(2, 1)) {
-    label = "Description"
-    help = "The item description"
-  }
-  val quantity = visit(domain = Domain<Int>(7), position = at(2, 2)) {
-    label = "Quantity"
-    help = "The number of items"
-  }
-  val price = visit(domain = Domain<Decimal>(10, 5), position = at(2, 2)) {
-    label = "Price"
-    help = "The item price"
-  }
-
-  init {
-    border = VConstants.BRD_LINE
   }
 }
 

@@ -22,7 +22,7 @@ import org.kopi.galite.form.VField
 import com.vaadin.flow.function.SerializablePredicate
 
 class DGridBlockFilter(
-        private val propertyId: VField,
+        private val field: VField,
         filterString: String,
         private val ignoreCase: Boolean,
         private val onlyMatchPrefix: Boolean
@@ -35,7 +35,7 @@ class DGridBlockFilter(
   // --------------------------------------------------
 
   fun appliesToProperty(propertyId: Any): Boolean {
-    return this.propertyId == propertyId
+    return this.field == propertyId // TODO
   }
 
   override fun equals(obj: Any?): Boolean {
@@ -50,7 +50,7 @@ class DGridBlockFilter(
     val o = obj
 
     // Checks the properties one by one
-    if (propertyId != o.propertyId && o.propertyId != null && o.propertyId != propertyId) {
+    if (field != o.field && o.field != null && o.field != field) {
       return false
     }
     if (filterString != o.filterString && o.filterString != null && o.filterString != filterString) {
@@ -62,11 +62,11 @@ class DGridBlockFilter(
     return onlyMatchPrefix == o.onlyMatchPrefix
   }
 
-  override fun hashCode(): Int = (propertyId?.hashCode() ?: 0) xor (filterString?.hashCode() ?: 0)
+  override fun hashCode(): Int = (field?.hashCode() ?: 0) xor (filterString?.hashCode() ?: 0)
 
-  override fun test(grid: DGridBlockContainer.GridBlockItem): Boolean {
-    val value = if (ignoreCase) grid.getValue(propertyId).toString().toLowerCase()
-                  else grid.getValue(propertyId).toString()
+  override fun test(item: DGridBlockContainer.GridBlockItem): Boolean {
+    val value = if (ignoreCase) item.getValue(field).toString().toLowerCase()
+                  else item.getValue(field).toString()
 
     if (onlyMatchPrefix) {
       if (!value.startsWith(filterString)) {

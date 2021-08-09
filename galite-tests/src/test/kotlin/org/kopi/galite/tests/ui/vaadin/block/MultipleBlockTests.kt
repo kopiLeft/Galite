@@ -83,7 +83,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
     @JvmStatic
     fun initTestModules() {
       transaction {
-        org.kopi.galite.tests.module.initModules()
+        org.kopi.galite.tests.examples.initModules()
       }
     }
   }
