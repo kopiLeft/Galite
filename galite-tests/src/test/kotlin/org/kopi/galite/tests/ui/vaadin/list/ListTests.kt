@@ -58,9 +58,9 @@ class ListTests: GaliteVUITestBase() {
     // Check that the grid data is correct
     val grid = _get<DListDialog>()._get<Grid<*>>()
     val data = arrayOf(
-      arrayOf("0", "check", "available"),
-      arrayOf("1", "bank card", "delivered"),
-      arrayOf("2", "cash", "canceled")
+      arrayOf("1", "check", "available"),
+      arrayOf("2", "bank card", "delivered"),
+      arrayOf("3", "cash", "canceled")
     )
 
     grid.expectRows(data.size)
@@ -79,7 +79,7 @@ class ListTests: GaliteVUITestBase() {
         addClients()
         addCmds()
       }
-      org.kopi.galite.tests.module.initModules()
+      org.kopi.galite.tests.examples.initModules()
     }
   }
 }

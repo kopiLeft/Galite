@@ -18,24 +18,34 @@ package org.kopi.galite.tests.ui.vaadin.form
 
 import kotlin.test.assertEquals
 
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.demo.addClients
+import org.kopi.galite.demo.addProducts
+import org.kopi.galite.demo.addSales
+import org.kopi.galite.demo.addTaxRules
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
 import org.kopi.galite.demo.client.ClientForm
 import org.kopi.galite.demo.command.CommandForm
+import org.kopi.galite.demo.createGShopApplicationTables
 import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
+import org.kopi.galite.testing.findBlock
 import org.kopi.galite.testing.open
+import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.common.VCaption
+import org.kopi.galite.ui.vaadin.form.DGridBlock
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.VWindowContainer
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
+import com.github.mvysny.kaributesting.v10.expectRow
 
 class FormTests: GaliteVUITestBase() {
 
@@ -44,7 +54,7 @@ class FormTests: GaliteVUITestBase() {
     mainWindow
       ._get<VWindowContainer>()
       ._get<VCaption>()
-  val clientForm = ClientForm()
+  val clientForm = ClientForm().also { it.model }
   val commandForm = CommandForm()
   val productsForm = ProductForm()
   val billsForm = BillForm()
@@ -86,6 +96,26 @@ class FormTests: GaliteVUITestBase() {
     assertEquals(providersForm.title, windowCaption.getCaption())
   }
 
+  @Test
+  fun `load multiple block then check data in the grid`() {
+    // Login
+    login()
+    // Open for block
+    clientForm.open()
+    clientForm.list.triggerCommand()
+    val block = clientForm.salesBlock.findBlock() as DGridBlock
+    val data = arrayOf(
+      arrayOf("1", "description Product 0", "1", "263,00000"),
+      arrayOf("2", "description Product 1", "1", "314,00000"),
+      arrayOf("3", "description Product 2", "2", "180,00000"),
+      arrayOf("4", "description Product 3", "3", "65,00000")
+    )
+
+    data.forEachIndexed { index, row ->
+      block.grid.expectRow(index, *row)
+    }
+  }
+
   companion object {
     /**
      * Defined your test specific modules
@@ -93,6 +123,13 @@ class FormTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
+      transaction {
+        createGShopApplicationTables()
+        addClients()
+        addTaxRules()
+        addProducts()
+        addSales()
+      }
       // Using modules defined in demo application
       org.kopi.galite.demo.initModules()
     }

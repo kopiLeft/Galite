@@ -207,6 +207,11 @@ class ClientR : Report() {
     align = FieldAlignment.LEFT
   }
 
+  val activeClt = field(Domain<Boolean>()) {
+    label = "Status"
+    help = "Is the client active?"
+  }
+
   val clients = Client.selectAll()
 
   init {
@@ -220,6 +225,7 @@ class ClientR : Report() {
           this[countryClt] = result[Client.countryClt]
           this[cityClt] = result[Client.cityClt]
           this[zipCodeClt] = result[Client.zipCodeClt]
+          this[activeClt] = result[Client.activeClt]
         }
       }
     }

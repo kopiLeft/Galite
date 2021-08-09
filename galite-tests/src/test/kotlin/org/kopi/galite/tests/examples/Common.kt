@@ -16,10 +16,6 @@
  */
 package org.kopi.galite.tests.examples
 
-import java.math.BigDecimal
-
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.dsl.FormBlock
@@ -76,75 +72,6 @@ class Traineeship : FormBlock(1, 10, "Training") {
       priority = 1
     }
   }
-}
-
-fun addTrainings() {
-  addTraining(1, "training 1", 3, Decimal("1149.24").value, "informations training 1")
-  addTraining(2, "training 2", 1, Decimal("219.6").value,  "informations training 2")
-  addTraining(3, "training 3", 2, Decimal("146.9").value,  "informations training 3")
-  addTraining(4, "training 4", 1, Decimal("3129.7").value, "informations training 4")
-}
-
-fun addTraining(num: Int, name: String, category: Int, amount: BigDecimal, info: String? = null) {
-  Training.insert {
-    it[id] = num
-    it[trainingName] = name
-    it[type] = category
-    it[price] = amount
-    it[active] = true
-    it[informations] = info
-  }
-}
-
-fun addCenters() {
-  addCenter(1, "Center 1", "10,Rue Lac", "example@mail", "Tunisia", "Megrine", 2001, 2)
-  addCenter(2, "Center 2", "14,Rue Mongi Slim", "example@mail", "Tunisia", "Tunis", 6000, 1)
-  addCenter(3, "Center 3", "10,Rue du Lac", "example@mail", "Tunisia", "Mourouj", 5003, 3)
-  addCenter(4, "Center 4", "10,Rue du Lac", "example@mail", "Tunisia", "Megrine", 2001, 4)
-}
-
-fun addCenter(num: Int, name: String,
-              centerAdress: String,
-              email: String,
-              centerCountry: String,
-              centerCity: String,
-              centerZipCode: Int,
-              training: Int) {
-  Center.insert {
-    it[id] = num
-    it[centerName] = name
-    it[address] = centerAdress
-    it[mail] = email
-    it[country] = centerCountry
-    it[city] = centerCity
-    it[zipCode] = centerZipCode
-    it[refTraining] = training
-  }
-}
-
-object Training : Table("TRAINING") {
-  val id = integer("ID")
-  val trainingName = varchar("Name", 25)
-  val type = integer("type")
-  val price = decimal("UNIT_PRICE", 9, 3)
-  val active = bool("ACTIVE",)
-  val photo = blob("PHOTO").nullable()
-  val informations = varchar("INFORMATION", 200).nullable()
-
-  override val primaryKey = PrimaryKey(id, name = "PK_TRAINING_ID")
-}
-
-object Center : Table("Center") {
-  val id = integer("ID")
-  val centerName = varchar("centerName", 25)
-  val address = varchar("ADDRESS", 50)
-  val mail = varchar("EMAIL", 25)
-  val country = varchar("COUNTRY", 30).nullable()
-  val city = varchar("CITY", 30).nullable()
-  val zipCode = integer("ZIP_CODE").nullable()
-  val refTraining = integer("TRAINING_REFERENCE").references(Training.id)
-
-  override val primaryKey = PrimaryKey(id, name = "PK_CENTER_ID")
 }
 
 object Type : CodeDomain<Int>() {
