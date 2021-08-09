@@ -6,12 +6,14 @@ It's based on [Karibu-Testing](https://github.com/mvysny/karibu-testing) (the va
 
 In the next sections we'll see the functions that Galite testing provides in order to simulate user actions over your application.
 
-### Simulating the login to the application
+### Simulating the login and logout to the application
 
 To test the application functionalities you need first to login using `login(userName, password)`.
 > Note: you may consider to login with a user that has access to the functionalities you want to test. 
 > 
 > Or you can simply login with a user that has access to all your application modules.
+
+After login, and once you are in the main window you can logout from the application using `logout()`
 
 ### Launching a module
 

@@ -354,9 +354,8 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
     gotoWindow(false)
   }
 
-  fun clear() {
+  fun resetTitle() {
     application.setPageTitle(originalWindowTitle)
-    removeAll()
   }
 
   override fun onAttach(attachEvent: AttachEvent?) {
