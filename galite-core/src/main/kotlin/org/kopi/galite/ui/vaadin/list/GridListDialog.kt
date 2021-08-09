@@ -68,6 +68,7 @@ open class GridListDialog : EnhancedDialog(), HasEnabled, KeyNotifier, HasStyle 
     content.element.setAttribute("hideFocus", "true")
     content.element.style["outline"] = "0px"
     isResizable = true
+    isCloseOnOutsideClick = false
   }
 
   //---------------------------------------------------
