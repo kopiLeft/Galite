@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013-2020 kopiLeft Services SARL, Tunis TN
- * Copyright (c) 1990-2020 kopiRight Managed Solutions GmbH, Wien AT
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,30 +14,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+package org.kopi.galite.testing
+
+import org.kopi.galite.common.Window
+import org.kopi.galite.ui.vaadin.main.MainWindow
+import org.kopi.galite.ui.vaadin.visual.DWindow
+import org.kopi.galite.visual.VWindow
+
+import com.github.mvysny.kaributesting.v10._find
+import com.github.mvysny.kaributesting.v10._get
 
 /**
- * Report style
+ * Returns the model from the created Vaadin component.
+ *
+ * @receiver the window.
  */
-::part(cell header-cell) {
-     background: #f2f2f2;
-     color: #505050;
+fun Window.getModelFromComponent(): VWindow {
+  val mainWindow = _get<MainWindow>()
+  val windows = mainWindow
+    ._find<DWindow>()
+
+  val window = windows.single {
+    it.getModel()!! eq this.model
+  }
+
+  return window.getModel()!!
 }
 
-::part(cell) {
-     min-height: 16px;
-}
-
-vaadin-grid > vaadin-grid-cell-content {
-   height: 100%;
-}
-
-vaadin-grid > vaadin-grid-cell-content {
-    padding: var(--lumo-size-xxs);
-}
-
-#main vaadin-grid ,#main vaadin-grid > vaadin-grid-cell-content {
-    --lumo-font-family:  Arial, sans-serif;
-    --lumo-primary-text-color: var(--lumo-shade-70pct);
-    --lumo-primary-color: var(--lumo-shade-50pct);
-    --lumo-font-size-m: 0.750rem;
+infix fun VWindow.eq(window: VWindow): Boolean {
+  return this.getTitle() == window.getTitle()
+          && this.source == window.source
 }

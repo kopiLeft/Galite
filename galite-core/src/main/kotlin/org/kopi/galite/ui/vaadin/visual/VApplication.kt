@@ -20,6 +20,8 @@ package org.kopi.galite.ui.vaadin.visual
 import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
+import java.util.MissingResourceException
+import java.util.ResourceBundle
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
@@ -62,8 +64,11 @@ import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.server.ServiceInitEvent
+import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
 import com.vaadin.flow.shared.communication.PushMode
@@ -73,15 +78,16 @@ import com.vaadin.flow.shared.communication.PushMode
  *
  * @param registry The [Registry] object.
  */
-@Push(PushMode.MANUAL)
 @Route("")
+@Push(PushMode.MANUAL)
 @CssImport.Container(value = [
   CssImport("./styles/galite/styles.css"),
   CssImport("./styles/galite/common.css")
 ])
 @PreserveOnRefresh
 @Suppress("LeakingThis")
-abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
+abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
+  HasDynamicTitle {
 
   //---------------------------------------------------
   // DATA MEMBEERS
@@ -92,6 +98,12 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   private var askAnswer = 0
   var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
   var currentUI: UI? = null
+  private val configProperties: ResourceBundle? =
+    try {
+      ResourceBundle.getBundle(resourceFile)
+    } catch (missingResourceException: MissingResourceException) {
+      null
+    }
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -284,16 +296,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    /*dBContext = login(getInitParameter("database")!!, FIXME: uncomment this.
-                      getInitParameter("driver")!!,
+    val database = getInitParameter("database")
+    val driver = getInitParameter("driver")
+    val schema  = getInitParameter("schema")
+
+    requireNotNull(database) { "The database url shouldn't be null" }
+    requireNotNull(driver) { "The jdbc driver shouldn't be null" }
+
+    dBContext = login(database,
+                      driver,
                       username,
                       password,
-                      getInitParameter("schema")!!)*/
-    dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-                      "org.h2.Driver",
-                      username,
-                      password,
-                      null)
+                      schema)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -484,16 +498,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   private fun checkLocale(locale: String): Boolean {
     val chars = locale.toCharArray()
-    return !(chars.size != 5 ||
-            chars[0] < 'a' ||
-            chars[0] > 'z' ||
-            chars[1] < 'a' ||
-            chars[1] > 'z' ||
-            chars[2] != '_' ||
-            chars[3] < 'A' ||
-            chars[3] > 'Z' ||
-            chars[4] < 'A' ||
-            chars[4] > 'Z')
+
+    if (chars.size != 5
+      || chars[0] < 'a' || chars[0] > 'z'
+      || chars[1] < 'a' || chars[1] > 'z'
+      || chars[2] != '_'
+      || chars[3] < 'A' || chars[3] > 'Z'
+      || chars[4] < 'A' || chars[4] > 'Z')
+    {
+      return false
+    }
+
+    return true
   }
 
   //---------------------------------------------------
@@ -532,9 +548,14 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param key The parameter key.
    * @return The initialization parameter contained in the application descriptor file.
    */
-  protected fun getInitParameter(key: String?): String? {
-    return VaadinServlet.getCurrent()?.getInitParameter(key)
+  protected fun getInitParameter(key: String): String? {
+    return VaadinServlet.getCurrent()?.getInitParameter(key) ?: getConfigParameter(key)
   }
+
+  open val resourceFile: String get() = "config"
+
+  private fun getConfigParameter(key: String): String? =
+    if (configProperties != null && configProperties.containsKey(key)) configProperties.getString(key) else null
 
   //---------------------------------------------------
   // ABSTRACT MEMBERS TO CUSTOMIZE YOUR APPLICATION
@@ -573,6 +594,27 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   protected abstract val alternateLocale: Locale
 
+  /**
+   * The page title.
+   */
+  open val title: String? = null
+
+  /**
+   * The page icon
+   */
+  open val favIcon: String? = null
+
+  override fun getPageTitle(): String? {
+    return pageTitle
+  }
+
+  internal fun setPageTitle(title: String) {
+    this.pageTitle = title
+    currentUI!!.internals.title = title
+  }
+
+  private var pageTitle: String? = title
+
   companion object {
 
     /** Application instance */
@@ -588,6 +630,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       ImageHandler.imageHandler = VImageHandler()
       WindowController.windowController = VWindowController()
       UIFactory.uiFactory = VUIFactory()
+    }
+  }
+}
+
+class ApplicationServiceInitListener: VaadinServiceInitListener {
+  override fun serviceInit(event: ServiceInitEvent) {
+    event.source.addUIInitListener { uiInitEvent ->
+      val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
+      loadingIndicatorConfiguration.firstDelay = 500
     }
   }
 }

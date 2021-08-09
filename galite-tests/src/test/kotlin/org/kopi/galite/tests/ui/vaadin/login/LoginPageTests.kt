@@ -79,9 +79,9 @@ class LoginPageTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      // Using modules defined in demo application
+      // Insert one module from test application just to test the login feature.
       transaction {
-        insertIntoModule("1000", "org/kopi/galite/demo/Menu", 0)
+        insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
       }
     }
   }

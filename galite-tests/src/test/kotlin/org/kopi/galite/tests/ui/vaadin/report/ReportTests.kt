@@ -32,8 +32,7 @@ import org.kopi.galite.ui.vaadin.report.DReport
 
 import com.github.mvysny.kaributesting.v10._expectOne
 import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10._getCellComponent
-import com.github.mvysny.kaributesting.v10._text
+import com.github.mvysny.kaributesting.v10.expectRow
 import com.github.mvysny.kaributesting.v10.expectRows
 import com.vaadin.flow.component.grid.Grid
 
@@ -68,19 +67,15 @@ class ReportTests: GaliteVUITestBase() {
     val report = _get<Grid<*>>()
     /** Last column contains empty strings. That represents the values for [org.kopi.galite.report.VSeparatorColumn] */
     val data = arrayOf(
-      listOf("", "23", "", "2.000,37000", ""),
-      listOf("SAMI", "22", "", "2.000,00000", ""),
-      listOf("SOFIA", "24", "", "2.000,55000", "")
+      arrayOf("", "23", "", "2.000,37000", ""),
+      arrayOf("SAMI", "22", "", "2.000,00000", ""),
+      arrayOf("SOFIA", "24", "", "2.000,55000", "")
     )
 
     report.expectRows(data.size)
 
     data.forEachIndexed { index, it ->
-      val row = report.columns.map {
-        report._getCellComponent(index, it.key)._text
-      }
-
-      assertCollectionsEquals(it, row)
+      report.expectRow(index, *it)
     }
   }
 

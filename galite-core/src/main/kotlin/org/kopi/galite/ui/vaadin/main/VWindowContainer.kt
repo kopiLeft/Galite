@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.main
 
+import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
 import org.kopi.galite.ui.vaadin.common.VCaption
 
 import com.vaadin.flow.component.Component
@@ -118,7 +119,7 @@ class VWindowContainer(private val menu: VWindowsMenu) : Div() {
         window!!.isVisible = true
 
         caption.setCaption(windowToCaptionMap[window])
-        UI.getCurrent().page.setTitle(caption.getCaption())
+        findMainWindow()!!.application.setPageTitle(caption.getCaption())
       }
       return window
     }

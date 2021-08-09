@@ -26,8 +26,6 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.tests.chart.ChartSample
-import org.kopi.galite.tests.form.FormWithChart
 import org.kopi.galite.type.Decimal
 
 class ClientForm : ReportSelectionForm() {
@@ -68,7 +66,7 @@ class ClientForm : ReportSelectionForm() {
           label = "list",
           help = "Display List",
   ) {
-    key = Key.F1   // key is optional here
+    key = Key.F10
     icon = "list"  // icon is optional here
   }
 
@@ -109,7 +107,7 @@ class ClientForm : ReportSelectionForm() {
   }
   val graph = actor (
           ident =  "graph",
-          menu =   FormWithChart.action,
+          menu =   action,
           label =  "Graph",
           help =   "show graph values",
   ) {

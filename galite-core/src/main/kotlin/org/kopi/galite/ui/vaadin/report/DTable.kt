@@ -29,7 +29,6 @@ import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.grid.ColumnTextAlign
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
-import com.vaadin.flow.component.html.Div
 import com.vaadin.flow.component.html.Span
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.function.ValueProvider
@@ -131,11 +130,12 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
     val provider = ColumnValueProvider(key, column)
 
-    return super.addComponentColumn(provider).also {
+    return super.addColumn(provider).also {
       provider.column = it
       it.setKey(key.toString())
         .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
+        .setSortable(false)
     }
   }
 
@@ -196,21 +196,19 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   inner class ColumnValueProvider(
     private val columnIndex: Int,
     private val columnModel: VReportColumn
-  ) : ValueProvider<DReport.ReportModelItem, Component> {
+  ) : ValueProvider<DReport.ReportModelItem, String> {
     var column: Column<DReport.ReportModelItem>? = null
 
-    override fun apply(source: DReport.ReportModelItem): Component = Div().also { component ->
-      component.className = "grid-cell-container"
-      component.add(source.getValueAt(columnIndex))
-      component.setSizeFull()
-
+    override fun apply(source: DReport.ReportModelItem): String {
       column?.textAlign = if (columnModel.align == Constants.ALG_RIGHT) {
         ColumnTextAlign.END
       } else {
         ColumnTextAlign.START
       }
 
-      cellStyler.updateStyles(source.rowIndex, columnIndex, component)
+      cellStyler.updateStyles(source.rowIndex, columnIndex)
+
+      return source.getValueAt(columnIndex)
     }
   }
 }

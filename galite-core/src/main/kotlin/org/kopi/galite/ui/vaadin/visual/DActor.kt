@@ -28,6 +28,12 @@ import org.kopi.galite.ui.vaadin.menu.VNavigationMenu
 import org.kopi.galite.visual.UActor
 import org.kopi.galite.visual.VActor
 import org.kopi.galite.ui.vaadin.base.Styles
+import org.kopi.galite.ui.vaadin.base.Utils.findMainWindow
+import org.kopi.galite.ui.vaadin.base.runAfterGetValue
+import org.kopi.galite.ui.vaadin.field.TextField
+import org.kopi.galite.ui.vaadin.form.DGridEditorField
+import org.kopi.galite.ui.vaadin.grid.GridEditorTextField
+import org.kopi.galite.ui.vaadin.window.Window
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.ClickEvent
@@ -128,13 +134,43 @@ class DActor(private var model: VActor)
   fun actionPerformed() {
     // fire the actor action
     if (isEnabled) {
-      // clean all dirty values in the client side of the parent window.
-      /*getWindow().cleanDirtyValues(getBlock()) TODO
-      if (VEditorTextField.getLastFocusedEditor() != null) {
-        // fires text change event for grid editors
-        VEditorTextField.getLastFocusedEditor().valueChanged(false)
-      }*/
       model.performAction()
+    }
+  }
+
+  fun shortcutActionPerformed() {
+    // fire the actor action
+    if (isEnabled) {
+      // clean all dirty values in the client side of the parent window.
+      /*getWindow().cleanDirtyValues(getBlock()) TODO */
+      val lasFocusedField = (findMainWindow()?.currentWindow as? Window)?.lasFocusedField
+      var valueChanged: (() -> Unit)? = null
+
+      val field = if (lasFocusedField != null) {
+        // fires text change event for grid editors
+        when (lasFocusedField) {
+          is TextField -> {
+            valueChanged = { lasFocusedField.field.fieldConnector.valueChanged() }
+            lasFocusedField.field
+          }
+          is DGridEditorField<*> -> {
+            valueChanged = { lasFocusedField.valueChanged(lasFocusedField.editor.value?.toString()) }
+            (lasFocusedField.editor as? GridEditorTextField)?.wrappedField
+          }
+          else -> null
+        }
+      } else {
+        null
+      }
+
+      if (field == null) {
+        model.performAction()
+      } else {
+        field.runAfterGetValue {
+          valueChanged?.let { it() }
+          model.performAction()
+        }
+      }
     }
   }
 
