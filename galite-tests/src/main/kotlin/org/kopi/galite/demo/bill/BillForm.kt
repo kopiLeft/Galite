@@ -28,6 +28,7 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
+import org.kopi.galite.type.Date
 import org.kopi.galite.type.Decimal
 
 class BillForm : ReportSelectionForm() {
@@ -78,7 +79,7 @@ class BlockBill : FormBlock(1, 1, "Bills") {
     help = "The bill address"
     columns(u.addressBill)
   }
-  val dateBill = mustFill(domain = Domain<DateTime>(25), position = at(2, 1)) {
+  val dateBill = mustFill(domain = Domain<Date>(25), position = at(2, 1)) {
     label = "Date"
     help = "The bill date"
     columns(u.dateBill)

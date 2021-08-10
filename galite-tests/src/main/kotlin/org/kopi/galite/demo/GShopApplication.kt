@@ -23,6 +23,7 @@ import kotlin.reflect.KClass
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.`java-time`.date
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.jodatime.CurrentDateTime
 import org.jetbrains.exposed.sql.jodatime.datetime
@@ -45,6 +46,7 @@ import org.kopi.galite.type.Decimal
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
+import java.time.LocalDate
 
 object Client : Table("CLIENTS") {
   val idClt = integer("ID").autoIncrement()
@@ -123,7 +125,7 @@ object Command : Table("COMMANDS") {
 object Bill : Table("BILLS") {
   val numBill = integer("BILL_NUMBER").autoIncrement()
   val addressBill = varchar("BILL_ADDRESS", 50)
-  val dateBill = datetime("BILL_DATE").defaultExpression(CurrentDateTime())
+  val dateBill = date("BILL_DATE")
   val amountWithTaxes = decimal("AMOUNT_TO_PAY", 9, 3).references(BillProduct.amountWithTaxes)
   val refCmd = integer("COMMAND_REFERENCE").references(Command.numCmd)
 
@@ -332,13 +334,13 @@ fun addTaxRule(id: Int, taxName: String, rate: Int, information: String? = null)
 }
 
 fun addBills() {
-  addBill(0, "Bill address 0", DateTime.parse("2018-09-13"), Decimal("3129.7").value, 0)
-  addBill(1, "Bill address 1", DateTime.parse("2020-02-16"), Decimal("1149.24").value, 1)
-  addBill(2, "Bill address 2", DateTime.parse("2019-05-13"), Decimal("219.6").value, 2)
-  addBill(3, "Bill address 3", DateTime.parse("2019-01-12"), Decimal("146.9").value, 3)
+  addBill(0, "Bill address 0", LocalDate.parse("2018-09-13"), Decimal("3129.7").value, 0)
+  addBill(1, "Bill address 1", LocalDate.parse("2020-02-16"), Decimal("1149.24").value, 1)
+  addBill(2, "Bill address 2", LocalDate.parse("2019-05-13"), Decimal("219.6").value, 2)
+  addBill(3, "Bill address 3", LocalDate.parse("2019-01-12"), Decimal("146.9").value, 3)
 }
 
-fun addBill(num: Int, address: String, date: DateTime, amount: BigDecimal, ref: Int) {
+fun addBill(num: Int, address: String, date: LocalDate, amount: BigDecimal, ref: Int) {
   Bill.insert {
     it[numBill] = num
     it[addressBill] = address
