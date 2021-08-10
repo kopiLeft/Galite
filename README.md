@@ -263,7 +263,7 @@ class ChartSample: Chart() {
     label = "area (ha)"
 
     color {
-      VColor.GREEN
+      VColor.BLUE
     }
   }
 
