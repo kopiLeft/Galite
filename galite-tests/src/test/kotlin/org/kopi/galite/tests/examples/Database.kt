@@ -39,6 +39,8 @@ object Training : Table("TRAINING") {
 
 object Center : Table("Center") {
   val id = integer("ID")
+  val uc = integer("UC").default(0)
+  val ts = integer("TS").default(0)
   val centerName = varchar("centerName", 25)
   val address = varchar("ADDRESS", 50)
   val mail = varchar("EMAIL", 25)
