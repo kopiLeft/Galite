@@ -48,13 +48,6 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     icon = "save"
   }
 
-  val block = insertBlock(Trainee()) {
-    trigger(POSTQRY) {
-      block2.trainingId[0] = trainingID.value
-      block2.load()
-    }
-  }
-
   val block2 = insertBlock(Centers()) {
     command(item = saveBlock) {
       action = {
@@ -78,24 +71,10 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     }
   }
 
-  class Trainee: FormBlock(1, 10, "Training") {
-    val t = table(Training)
-
-    val trainingID = visit(domain = Domain<Int>(25), position = at(1, 1)) {
-      label = "training ID"
-      help = "training ID"
-      columns(t.id) {
-        priority = 1
-      }
-    }
-  }
-
   class Centers : FormBlock(20, 20, "Centers") {
     val c = table(Center)
 
-    val unique = index(message = "ID should be unique")
-
-    val CenterId = visit(domain = Domain<Int>(20), position = at(1, 1)) {
+    val centerId = hidden(domain = Domain<Int>(20)) {
       label = "center id"
       help = "The Center id"
       columns(c.id)
@@ -123,16 +102,6 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
 
     init {
       border = VConstants.BRD_LINE
-    }
-  }
-
-  class SimpleBlock : FormBlock(1, 1, "Simple block") {
-    val contact = visit(domain = Domain<String>(20), position = at(1, 1)) {
-      label = "contact"
-      help = "The contact"
-    }
-    val name = visit(domain = Domain<String>(20), position = follow(contact)) {
-
     }
   }
 }
