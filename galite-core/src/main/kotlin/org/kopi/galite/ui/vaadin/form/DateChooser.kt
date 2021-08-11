@@ -17,7 +17,8 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import java.util.*
+import java.time.LocalDate
+import java.util.Calendar
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.ui.vaadin.visual.VApplication
@@ -30,7 +31,6 @@ import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.datepicker.DatePicker
 import org.kopi.galite.type.Month
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
-import java.time.LocalDate
 
 /**
  * The `DateChooser` is date selection component.
