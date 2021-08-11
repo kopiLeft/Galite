@@ -20,12 +20,11 @@ package org.kopi.galite.demo.desktop
 import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
-
+import org.kopi.galite.demo.client.ClientForm
+import org.kopi.galite.demo.command.CommandForm
 import org.kopi.galite.form.dsl.Form
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
 import org.kopi.galite.tests.db.DBSchemaTest
-import org.kopi.galite.tests.form.FormSample
-import org.kopi.galite.tests.form.FormWithFields
 
 val testLocale: Locale = Locale.FRANCE
 
@@ -49,8 +48,8 @@ object Application : DBSchemaTest() {
     transaction {
       insertIntoModule("2000", "org/kopi/galite/demo/Menu", 10)
       insertIntoModule("1000", "org/kopi/galite/demo/Menu", 10, "2000")
-      insertIntoModule("2009", "org/kopi/galite/demo/Menu", 90, "1000", FormSample::class)
-      insertIntoModule("2010", "org/kopi/galite/demo/Menu", 90, "1000", FormWithFields::class)
+      insertIntoModule("2009", "org/kopi/galite/demo/Menu", 90, "1000", ClientForm::class)
+      insertIntoModule("2010", "org/kopi/galite/demo/Menu", 90, "1000", CommandForm::class)
     }
   }
 

@@ -21,6 +21,7 @@ import kotlin.streams.toList
 
 import org.junit.Before
 import org.junit.BeforeClass
+import org.kopi.galite.testing.waitAndRunUIQueue
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
@@ -75,9 +76,7 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
 
   protected fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
     _click()
-    MockVaadin.runUIQueue()
-    Thread.sleep(duration)
-    MockVaadin.runUIQueue()
+    waitAndRunUIQueue(duration)
   }
 
   // TODO: Remove this method when using Karibu-Testing 1.3.1

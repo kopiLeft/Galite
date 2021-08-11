@@ -18,8 +18,6 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Application
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
@@ -180,13 +178,6 @@ class CommandsForm : ReportSelectionForm() {
       action = {
         searchOperator()
       }
-    }
-  }
-
-  init {
-    transaction {
-      SchemaUtils.create(Training)
-      addTrainings()
     }
   }
 }

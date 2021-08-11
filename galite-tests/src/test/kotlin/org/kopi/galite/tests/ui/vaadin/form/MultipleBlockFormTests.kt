@@ -16,7 +16,10 @@
  */
 package org.kopi.galite.tests.ui.vaadin.form
 
+import org.junit.BeforeClass
 import org.junit.Test
+import org.kopi.galite.tests.examples.initData
+import org.kopi.galite.tests.examples.initModules
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 
 class MultipleBlockFormTests : GaliteVUITestBase() {
@@ -61,5 +64,14 @@ class MultipleBlockFormTests : GaliteVUITestBase() {
     /*
       click on the second tabs and display new page
      */
+  }
+
+  companion object {
+    @BeforeClass
+    @JvmStatic
+    fun initTestModules() {
+      initData()
+      initModules()
+    }
   }
 }

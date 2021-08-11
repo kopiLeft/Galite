@@ -18,9 +18,8 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Application
+import org.kopi.galite.demo.connectToDatabase
 import org.kopi.galite.domain.Domain
 import org.kopi.galite.form.VConstants
 import org.kopi.galite.form.dsl.DictionaryForm
@@ -203,15 +202,10 @@ class MultipleBlockForm : DictionaryForm() {
 
     }
   }
-  init {
-    transaction {
-      SchemaUtils.create(Training, Center)
-      addTrainings()
-      addCenters()
-    }
-  }
 }
 
 fun main() {
+  connectToDatabase()
+  initData()
   Application.runForm(formName = MultipleBlockForm())
 }

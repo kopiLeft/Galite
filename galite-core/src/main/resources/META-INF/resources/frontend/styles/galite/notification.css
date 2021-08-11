@@ -77,3 +77,7 @@
     background: transparent;
     padding-bottom: 25px;
 }
+
+:host([theme~="notification"]) [part="dialog-content"] {
+    overflow-x: auto;
+}

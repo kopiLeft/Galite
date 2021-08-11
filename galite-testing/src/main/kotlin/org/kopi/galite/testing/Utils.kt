@@ -18,6 +18,7 @@ package org.kopi.galite.testing
 
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.window.Window
+import org.kopi.galite.visual.ApplicationContext
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10._blur
@@ -37,6 +38,10 @@ fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 
 
 fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
   _click()
+  waitAndRunUIQueue(duration)
+}
+
+fun waitAndRunUIQueue(duration: Long) {
   MockVaadin.runUIQueue()
   Thread.sleep(duration)
   MockVaadin.runUIQueue()
@@ -65,3 +70,5 @@ fun blurOnLastField() {
     lastFocusedField._blur()
   }
 }
+
+val defaultLocale get() = ApplicationContext.applicationContext.getApplication().defaultLocale.toString()
