@@ -29,6 +29,7 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.datepicker.DatePicker
 import org.kopi.galite.type.Month
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import java.time.LocalDate
 
 /**
@@ -136,7 +137,12 @@ class DateChooser(private var selectedDate: Date?,
      * @return The selected date.
      */
     fun selectDate(date: Date, reference: Component): Date? {
-      val chooser = DateChooser(date, reference)
+      lateinit var chooser: DateChooser
+
+      accessAndAwait {
+        chooser = DateChooser(date, reference)
+      }
+
       return chooser.doModal(date)
     }
 
