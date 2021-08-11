@@ -37,7 +37,7 @@ import com.vaadin.flow.component.HasStyle
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.icon.IronIcon
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.data.binder.BeanValidationBinder
+import com.vaadin.flow.data.binder.Binder
 
 /**
  * A text field component.
@@ -264,7 +264,7 @@ class TextField(val model: VField,
    * Sets the validator of a text field.
    */
   fun setValidator(field: InputTextField<*>) {
-    val binder = BeanValidationBinder(String::class.java)
+    val binder = Binder(String::class.java)
     val bindingBuilder = binder.forField(field)
 
     val validator = when (type) {
@@ -353,9 +353,8 @@ class TextField(val model: VField,
 
     text.size = size
     text.setMaxLength(maxLength)
-    text.maxWidth = "" + size + "em" // TODO: temporary styling
-    text.setWidthFull()
-    setWidthFull()
+    text.width = "" + size + "ch" // TODO: temporary styling
+    text.element.style["box-sizing"] = "unset"
     text.setHasAutocomplete(model.hasAutocomplete())
     // add navigation handler.
     TextFieldNavigationHandler.createNavigator(text, rows > 1)
@@ -365,24 +364,25 @@ class TextField(val model: VField,
 
   private fun getFieldSize(): Int {
     var size = col
-    // numeric fields are considered as monospaced fields
-    if (isNumeric()) {
-      size -= 1
-    } else {
-      // upper characters take wider place
-      if (convertType == ConvertType.UPPER) {
-        size += 2
-      }
+
+    // upper characters take wider place
+    if (convertType == ConvertType.UPPER) {
+      size += 2
     }
 
-    if (type == Type.TIMESTAMP) {
-      size += 3
-    } else if (type == Type.DATE) {
-      size += 5
-    } else if (type == Type.TIME) {
-      size += 5
-    } else {
-      size += 4
+    size += when (type) {
+      Type.TIMESTAMP -> {
+        6
+      }
+      Type.TIME -> {
+        5
+      }
+      Type.DATE -> {
+        7
+      }
+      else -> {
+        3
+      }
     }
 
     // let the place to the autofill icon

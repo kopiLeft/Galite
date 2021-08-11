@@ -28,7 +28,8 @@ import com.vaadin.flow.component.dependency.CssImport
  */
 @CssImport.Container(value = [
   CssImport(value = "./styles/galite/combobox.css", themeFor = "vaadin-text-field"),
-  CssImport(value = "./styles/galite/combobox.css", themeFor = "vaadin-combo-box")
+  CssImport(value = "./styles/galite/combobox.css", themeFor = "vaadin-combo-box"),
+  CssImport(value = "./styles/galite/combobox.css", themeFor = "vaadin-combo-box-item")
 ])
 class VCodeField(enumerations : Array<String>?) : InputTextField<ComboBox<String>>(ComboBox<String>()), KeyNotifier {
 

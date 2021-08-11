@@ -132,7 +132,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
   fun updateWindowTitle(window: Component, title: String) {
     container.updateWindowTitle(window, title)
     windowsMenu.updateCaption(window, title)
-    ui.get().page.setTitle(title)
+    application.setPageTitle(title)
   }
 
   /**
@@ -208,7 +208,7 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
       windowsLink.isEnabled = false
     }
     if (currentWindow == null) {
-      ui.get().page.setTitle(originalWindowTitle)
+      application.setPageTitle(originalWindowTitle)
     }
   }
 
@@ -354,9 +354,8 @@ class MainWindow(locale: Locale, val logo: String, val href: String, val applica
     gotoWindow(false)
   }
 
-  fun clear() {
-    ui.get().page.setTitle(originalWindowTitle)
-    removeAll()
+  fun resetTitle() {
+    application.setPageTitle(originalWindowTitle)
   }
 
   override fun onAttach(attachEvent: AttachEvent?) {

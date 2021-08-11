@@ -20,6 +20,8 @@ package org.kopi.galite.ui.vaadin.visual
 import java.sql.SQLException
 import java.util.Date
 import java.util.Locale
+import java.util.MissingResourceException
+import java.util.ResourceBundle
 
 import org.kopi.galite.base.UComponent
 import org.kopi.galite.db.DBContext
@@ -27,6 +29,7 @@ import org.kopi.galite.l10n.LocalizationManager
 import org.kopi.galite.print.PrintManager
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.base.FontMetrics
 import org.kopi.galite.ui.vaadin.base.StylesInjector
 import org.kopi.galite.ui.vaadin.main.MainWindow
@@ -39,6 +42,7 @@ import org.kopi.galite.ui.vaadin.notif.InformationNotification
 import org.kopi.galite.ui.vaadin.notif.WarningNotification
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 import org.kopi.galite.ui.vaadin.welcome.WelcomeViewEvent
+import org.kopi.galite.ui.vaadin.window.Window
 import org.kopi.galite.visual.Application
 import org.kopi.galite.visual.ApplicationConfiguration
 import org.kopi.galite.visual.ApplicationContext
@@ -56,40 +60,50 @@ import org.kopi.galite.visual.WindowController
 
 import com.vaadin.flow.component.AttachEvent
 import com.vaadin.flow.component.Component
-import com.vaadin.flow.component.HasSize
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.dependency.CssImport
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.page.Push
+import com.vaadin.flow.router.HasDynamicTitle
 import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.router.Route
+import com.vaadin.flow.server.ServiceInitEvent
+import com.vaadin.flow.server.VaadinServiceInitListener
 import com.vaadin.flow.server.VaadinServlet
 import com.vaadin.flow.server.VaadinSession
+import com.vaadin.flow.shared.communication.PushMode
 
 /**
  * The entry point for all Galite WEB applications.
  *
  * @param registry The [Registry] object.
  */
-@Push
 @Route("")
+@Push(PushMode.MANUAL)
 @CssImport.Container(value = [
   CssImport("./styles/galite/styles.css"),
   CssImport("./styles/galite/common.css")
 ])
 @PreserveOnRefresh
 @Suppress("LeakingThis")
-abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener {
+abstract class VApplication(override val registry: Registry) : VerticalLayout(), Application, MainWindowListener,
+  HasDynamicTitle {
 
   //---------------------------------------------------
   // DATA MEMBEERS
   //---------------------------------------------------
-  private var mainWindow: MainWindow? = null
+  internal var mainWindow: MainWindow? = null
   private var welcomeView: WelcomeView? = null
   internal var windowError: Throwable? = null // Sets the window error.
   private var askAnswer = 0
   var stylesInjector: StylesInjector = StylesInjector() // the styles injector attached with this application instance.
   var currentUI: UI? = null
+  private val configProperties: ResourceBundle? =
+    try {
+      ResourceBundle.getBundle(resourceFile)
+    } catch (missingResourceException: MissingResourceException) {
+      null
+    }
 
   // ---------------------------------------------------------------------
   // Failure cause informations
@@ -114,7 +128,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   // MESSAGE LISTENER IMPLEMENTATION
   // ---------------------------------------------------------------------
   override fun notice(message: String) {
-    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale)
+    val dialog = InformationNotification(VlibProperties.getString("Notice"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -126,7 +140,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun error(message: String?) {
-    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, this)
+    val dialog = ErrorNotification(VlibProperties.getString("Error"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -139,7 +153,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun warn(message: String) {
-    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale)
+    val dialog = WarningNotification(VlibProperties.getString("Warning"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.addNotificationListener(object : NotificationListener {
@@ -159,7 +173,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   }
 
   override fun ask(message: String, yesIsDefault: Boolean): Int {
-    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale)
+    val dialog = ConfirmNotification(VlibProperties.getString("Question"), message, notificationLocale, mainWindow)
     val lock = Object()
 
     dialog.yesIsDefault = yesIsDefault
@@ -206,7 +220,8 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
   override fun logout() {
     val dialog = ConfirmNotification(VlibProperties.getString("Question"),
                                      Message.getMessage("confirm_quit"),
-                                     notificationLocale)
+                                     notificationLocale,
+                                     mainWindow)
 
     dialog.yesIsDefault = false
     dialog.addNotificationListener(object : NotificationListener {
@@ -281,16 +296,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @see login
    */
   private fun connectToDatabase(username: String, password: String) {
-    /*dBContext = login(getInitParameter("database")!!, FIXME: uncomment this.
-                      getInitParameter("driver")!!,
+    val database = getInitParameter("database")
+    val driver = getInitParameter("driver")
+    val schema  = getInitParameter("schema")
+
+    requireNotNull(database) { "The database url shouldn't be null" }
+    requireNotNull(driver) { "The jdbc driver shouldn't be null" }
+
+    dBContext = login(database,
+                      driver,
                       username,
                       password,
-                      getInitParameter("schema")!!)*/
-    dBContext = login("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-                      "org.h2.Driver",
-                      username,
-                      password,
-                      null)
+                      schema)
     // check if context is created
     if (dBContext == null) {
       throw SQLException(MessageCode.getMessage("VIS-00054"))
@@ -368,7 +385,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Attaches a window to this application.
    * @param window The window to be added.
    */
-  fun <T> addWindow(window: T, title: String) where T: Component, T: HasSize {
+  fun addWindow(window: Window, title: String) {
     if (mainWindow != null) {
       access(currentUI) {
         window.setSizeFull()
@@ -429,7 +446,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * Closes the database connection
    */
   protected fun closeConnection() {
-    // FIXME
+    try {
+      if (dBContext != null) {
+        dBContext!!.close()
+        dBContext = null
+      }
+    } catch (e: SQLException) {
+      // we don't care, we reinitialize the connection
+      dBContext = null
+    }
   }
 
   /**
@@ -449,8 +474,9 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   protected fun gotoWelcomeView() {
     if (mainWindow != null) {
-      // it should be attached to the application.
-      mainWindow!!.clear()
+      mainWindow!!.resetTitle()
+      // it should be detached to the application.
+      remove(mainWindow)
       mainWindow = null
       menu = null
       localizationManager = null
@@ -461,7 +487,7 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
     welcomeView!!.addWelcomeViewListener { event: WelcomeViewEvent ->
       welcomeView!!.setWaitInfo()
       Thread {
-        access(currentUI) {
+        accessAndPush(currentUI) {
           try {
             onLogin(event)
           } finally {
@@ -480,16 +506,18 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   private fun checkLocale(locale: String): Boolean {
     val chars = locale.toCharArray()
-    return !(chars.size != 5 ||
-            chars[0] < 'a' ||
-            chars[0] > 'z' ||
-            chars[1] < 'a' ||
-            chars[1] > 'z' ||
-            chars[2] != '_' ||
-            chars[3] < 'A' ||
-            chars[3] > 'Z' ||
-            chars[4] < 'A' ||
-            chars[4] > 'Z')
+
+    if (chars.size != 5
+      || chars[0] < 'a' || chars[0] > 'z'
+      || chars[1] < 'a' || chars[1] > 'z'
+      || chars[2] != '_'
+      || chars[3] < 'A' || chars[3] > 'Z'
+      || chars[4] < 'A' || chars[4] > 'Z')
+    {
+      return false
+    }
+
+    return true
   }
 
   //---------------------------------------------------
@@ -528,9 +556,14 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    * @param key The parameter key.
    * @return The initialization parameter contained in the application descriptor file.
    */
-  protected fun getInitParameter(key: String?): String? {
-    return VaadinServlet.getCurrent()?.getInitParameter(key)
+  protected fun getInitParameter(key: String): String? {
+    return VaadinServlet.getCurrent()?.getInitParameter(key) ?: getConfigParameter(key)
   }
+
+  open val resourceFile: String get() = "config"
+
+  private fun getConfigParameter(key: String): String? =
+    if (configProperties != null && configProperties.containsKey(key)) configProperties.getString(key) else null
 
   //---------------------------------------------------
   // ABSTRACT MEMBERS TO CUSTOMIZE YOUR APPLICATION
@@ -569,6 +602,27 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
    */
   protected abstract val alternateLocale: Locale
 
+  /**
+   * The page title.
+   */
+  open val title: String? = null
+
+  /**
+   * The page icon
+   */
+  open val favIcon: String? = null
+
+  override fun getPageTitle(): String? {
+    return pageTitle
+  }
+
+  internal fun setPageTitle(title: String) {
+    this.pageTitle = title
+    currentUI!!.internals.title = title
+  }
+
+  private var pageTitle: String? = title
+
   companion object {
 
     /** Application instance */
@@ -584,6 +638,15 @@ abstract class VApplication(override val registry: Registry) : VerticalLayout(),
       ImageHandler.imageHandler = VImageHandler()
       WindowController.windowController = VWindowController()
       UIFactory.uiFactory = VUIFactory()
+    }
+  }
+}
+
+class ApplicationServiceInitListener: VaadinServiceInitListener {
+  override fun serviceInit(event: ServiceInitEvent) {
+    event.source.addUIInitListener { uiInitEvent ->
+      val loadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
+      loadingIndicatorConfiguration.firstDelay = 500
     }
   }
 }

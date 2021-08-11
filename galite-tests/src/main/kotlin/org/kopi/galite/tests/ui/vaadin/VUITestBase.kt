@@ -17,21 +17,22 @@
 
 package org.kopi.galite.tests.ui.vaadin
 
+import kotlin.streams.toList
+
 import org.junit.Before
 import org.junit.BeforeClass
-import org.kopi.galite.ui.vaadin.base.VInputButton
-import org.kopi.galite.ui.vaadin.base.VInputText
+import org.kopi.galite.testing.waitAndRunUIQueue
 
 import com.github.mvysny.kaributesting.v10.MockVaadin
 import com.github.mvysny.kaributesting.v10.Routes
 import com.github.mvysny.kaributesting.v10.TestingLifecycleHook
 import com.github.mvysny.kaributesting.v10._click
-import com.github.mvysny.kaributesting.v10._clickItemWithCaption
-import com.github.mvysny.kaributesting.v10._get
-import com.github.mvysny.kaributesting.v10._value
+import com.github.mvysny.kaributesting.v10.testingLifecycleHook
 import com.vaadin.flow.component.ClickNotifier
-import com.vaadin.flow.component.contextmenu.HasMenuItems
-import com.vaadin.flow.component.textfield.PasswordField
+import com.vaadin.flow.component.Component
+import com.vaadin.flow.component.UI
+import com.vaadin.flow.component.contextmenu.MenuItemBase
+import com.vaadin.flow.shared.communication.PushMode
 
 /**
  * The high level class for all classes containing UI tests
@@ -39,6 +40,7 @@ import com.vaadin.flow.component.textfield.PasswordField
 open class VUITestBase : VApplicationTestBase() {
   fun setupRoutes() {
     MockVaadin.setup(routes!!)
+    UI.getCurrent().pushConfiguration.pushMode = PushMode.MANUAL
   }
 
   companion object {
@@ -55,11 +57,16 @@ open class VUITestBase : VApplicationTestBase() {
 }
 
 open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
+
+  init {
+    testingLifecycleHook = this
+  }
+
+  /**
+   * Logins to the application
+   */
   protected fun login() {
-    // Fill to username and password fields then click to the login button
-    _get<VInputText> { id = "user_name" }._value = testUser
-    _get<PasswordField> { id = "user_password" }._value = testPassword
-    _get<VInputButton> { id = "login_button" }._clickAsynch()
+    org.kopi.galite.testing.login(testUser, testPassword)
   }
 
   @Before
@@ -67,24 +74,18 @@ open class GaliteVUITestBase: VUITestBase(), TestingLifecycleHook {
     setupRoutes()
   }
 
-  protected fun HasMenuItems._clickItemWithCaptionAndWait(caption: String, duration: Long = 500) {
-    _clickItemWithCaption(caption)
-    Thread.sleep(duration)
-  }
-
   protected fun ClickNotifier<*>._clickAndWait(duration: Long = 500) {
     _click()
-    MockVaadin.runUIQueue()
-    Thread.sleep(duration)
-    MockVaadin.runUIQueue()
+    waitAndRunUIQueue(duration)
   }
 
-  protected fun ClickNotifier<*>._clickAsynch(action: (() -> Unit)? = null) {
-    this._click()
-    MockVaadin.runUIQueue()
-    Thread.sleep(200)
-    MockVaadin.runUIQueue()
-    action?.invoke()
+  // TODO: Remove this method when using Karibu-Testing 1.3.1
+  override fun getAllChildren(component: Component): List<Component> {
+    return if (component is MenuItemBase<*, *, *>) {
+      (component.children.toList() + component.subMenu.items).distinct()
+    } else {
+      super.getAllChildren(component)
+    }
   }
 
   companion object {

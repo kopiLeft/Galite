@@ -19,10 +19,9 @@ package org.kopi.galite.tests.ui.vaadin.main
 import kotlin.test.assertEquals
 
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Test
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
-
+import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
 
 import com.github.mvysny.kaributesting.v10._expectOne
@@ -37,9 +36,6 @@ class MainWindowTests: GaliteVUITestBase() {
   val modulesLayout get() = _get<ModuleList> { id = "module_list" }
 
   @Test
-  // https://github.com/mvysny/karibu-testing/issues/76
-  // FIXME: enable this test when using the version > 1.3.1 of karibu-testing
-  @Ignore("Main module names are not visible, They are added into ModuleItem which is not visible")
   fun `test modules are loaded in main window after login`() {
     // Login
     login()
@@ -51,7 +47,15 @@ class MainWindowTests: GaliteVUITestBase() {
     val clientsModules =
       modulesMenu
         ._find<MenuItem>()
-        .map { it._text }
+        .map {
+          val moduleItems = it._find<ModuleItem>()
+
+          if(moduleItems.count() == 1) {
+            moduleItems.single()._text
+          } else {
+            it._text
+          }
+        }
 
     assertEquals(
       listOf(

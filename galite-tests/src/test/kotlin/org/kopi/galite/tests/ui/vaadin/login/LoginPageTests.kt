@@ -28,7 +28,6 @@ import org.kopi.galite.ui.vaadin.common.VSelect
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.welcome.WelcomeView
 
-import com.github.mvysny.kaributesting.v10._click
 import com.github.mvysny.kaributesting.v10._expect
 import com.github.mvysny.kaributesting.v10._expectNone
 import com.github.mvysny.kaributesting.v10._get
@@ -54,21 +53,20 @@ class LoginPageTests: GaliteVUITestBase() {
     userNameField._value = testUser
     passwordField._value = testPassword
 
-    loginButton._clickAsynch {
-      // No error shown
-      _expectNone<Span> { id = "post_error" }
-      // Welcome view is removed
-      _expectNone<WelcomeView>()
-      // Main view is displayed
-      _expect<MainWindow>(1)
-    }
+    loginButton._clickAndWait(100)
+    // No error shown
+    _expectNone<Span> { id = "post_error" }
+    // Welcome view is removed
+    _expectNone<WelcomeView>()
+    // Main view is displayed
+    _expect<MainWindow>(1)
   }
 
   @Test
   fun `test login fails`() {
     userNameField._value = testUser
     passwordField._value = "incorrect password"
-    loginButton._clickAsynch()
+    loginButton._clickAndWait(100)
 
     // Error displayed
     assertEquals("VIS-00054: Error during database login.", errorIndicator._text)
@@ -81,7 +79,7 @@ class LoginPageTests: GaliteVUITestBase() {
     @BeforeClass
     @JvmStatic
     fun initTestModules() {
-      // Using modules defined in demo application
+      // Insert one module from test application just to test the login feature.
       transaction {
         insertIntoModule("1000", "org/kopi/galite/test/Menu", 0)
       }

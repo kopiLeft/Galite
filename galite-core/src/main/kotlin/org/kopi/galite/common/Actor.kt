@@ -49,6 +49,8 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
   var keyCode = 0
   var keyModifier = 0
 
+  var model: VActor? = null
+
   private fun checkKey(key: Key?) {
     if (key == null) {
       keyModifier = 0
@@ -78,5 +80,6 @@ class Actor(val ident: String, val menu: Menu, val label: String, val help: Stri
             it.menuName = menu.label
             it.menuItem = label
             it.help = help
+            model = it
           }
 }

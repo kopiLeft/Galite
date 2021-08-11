@@ -17,6 +17,7 @@
  */
 package org.kopi.galite.ui.vaadin.base
 
+import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 
 import com.vaadin.flow.component.UI
@@ -46,6 +47,55 @@ object BackgroundThreadHandler {
   }
 
   /**
+   * Exclusive access to the UI from a background thread to perform some updates.
+   * @param command the command which accesses the UI.
+   */
+  fun accessAndPush(currentUI: UI? = null, command: () -> Unit) {
+    val currentUI = currentUI ?: locateUI()
+
+    if(currentUI == null) {
+      command()
+    } else {
+      currentUI.access {
+        try {
+          command()
+        } finally {
+          currentUI.push()
+        }
+      }
+    }
+  }
+
+  /**
+   * Exclusive access to the UI from a background thread to perform some updates.
+   *
+   * This will awaits until computation completes.
+   *
+   * This method is used when you are creating a Vaadin component from a background thread. This will wait until
+   * initialization is finished to avoid NPE later.
+   *
+   *
+   * @param command the command which accesses the UI.
+   */
+  fun accessAndAwait(currentUI: UI? = null, command: () -> Unit) {
+    val currentUI = currentUI ?: locateUI()
+
+    if(currentUI == null) {
+      command()
+    } else {
+      try {
+        currentUI
+          .access(command)
+          .get()
+      } catch (executionException: ExecutionException) {
+        executionException.cause?.let {
+          throw it
+        }
+      }
+    }
+  }
+
+  /**
    * Starts a task asynchronously and blocks the current thread. The lock will be released
    * if a notify signal is send to the blocking object.
    *
@@ -54,6 +104,25 @@ object BackgroundThreadHandler {
    */
   fun startAndWait(lock: Object, currentUI: UI? = null, command: () -> Unit) {
     access(currentUI = currentUI, command = command)
+
+    synchronized(lock) {
+      try {
+        lock.wait()
+      } catch (e: InterruptedException) {
+        e.printStackTrace()
+      }
+    }
+  }
+
+  /**
+   * Starts a task asynchronously and blocks the current thread. The lock will be released
+   * if a notify signal is send to the blocking object.
+   *
+   * @param lock      The lock object.
+   * @param command   The command which accesses the UI.
+   */
+  fun startAndWaitAndPush(lock: Object, currentUI: UI? = null, command: () -> Unit) {
+    accessAndPush(currentUI = currentUI, command = command)
 
     synchronized(lock) {
       try {
@@ -76,6 +145,12 @@ object BackgroundThreadHandler {
 
   fun setUI(ui: UI?) {
     uiThreadLocal.set(ui)
+  }
+
+  fun updateUI(ui: UI?) {
+    ui?.accessSynchronously {
+      ui.push()
+    }
   }
 
   fun locateUI(): UI? = UI.getCurrent() ?: uiThreadLocal.get()

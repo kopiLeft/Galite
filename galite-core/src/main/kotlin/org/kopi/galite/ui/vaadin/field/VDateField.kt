@@ -32,6 +32,7 @@ class VDateField : InputTextField<DatePicker>(DatePicker()), KeyNotifier {
 
   init {
     internalField.isClearButtonVisible = true
+    internalField.isAutoOpen = false
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {

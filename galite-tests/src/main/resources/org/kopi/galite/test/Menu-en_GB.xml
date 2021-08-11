@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modules>
+    <!--Reports-->
+    <module ident="1000" label="REPORTS" />
+    <module ident="1001" label="Form with report" />
+    <!--Forms-->
+    <module ident="2000" label="FORMS" />
+    <module ident="2001" label="Form with list" />
+    <module ident="2002" label="Form example" />
+    <module ident="2003" label="Form to test multiple block" />
+</modules>

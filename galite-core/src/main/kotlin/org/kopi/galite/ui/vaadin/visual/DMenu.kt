@@ -23,7 +23,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeNode
 
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler
-import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndPush
 import org.kopi.galite.ui.vaadin.menu.ModuleItem
 import org.kopi.galite.ui.vaadin.menu.ModuleList
 import org.kopi.galite.ui.vaadin.wait.WaitWindow
@@ -201,14 +201,14 @@ abstract class DMenu protected constructor(private val model: VMenuTree) : Modul
   override fun setWaitDialog(message: String, maxtime: Int) {}
   override fun unsetWaitDialog() {}
   override fun setWaitInfo(message: String?) {
-    access(currentUI) {
+    accessAndPush(currentUI) {
       waitIndicator.setText(message)
       waitIndicator.show()
     }
   }
 
   override fun unsetWaitInfo() {
-    access(currentUI) {
+    accessAndPush(currentUI) {
       waitIndicator.setText(null)
       waitIndicator.close()
     }

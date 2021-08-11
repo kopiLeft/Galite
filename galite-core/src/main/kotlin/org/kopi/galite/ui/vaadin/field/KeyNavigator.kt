@@ -17,9 +17,11 @@
  */
 package org.kopi.galite.ui.vaadin.field
 
+import org.kopi.galite.ui.vaadin.base.ShortcutAction
+import org.kopi.galite.ui.vaadin.base.runAfterGetValue
+
 import com.vaadin.flow.component.Key
 import com.vaadin.flow.component.KeyModifier
-import org.kopi.galite.ui.vaadin.base.ShortcutAction
 
 /**
  * A text field input key navigator action.

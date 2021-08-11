@@ -25,6 +25,8 @@
         border-left: #dadada 1px solid;
         border-right: #dadada 1px solid;
         border-bottom: #dadada 1px solid;
+        overflow: auto;
+        line-height: normal;
     };
 }
 
@@ -33,5 +35,7 @@
         border-left: #009bd4 1px solid;
         border-right: #009bd4 1px solid;
         border-bottom: #009bd4 1px solid;
+        line-height: normal;
+        overflow: auto;
     };
 }

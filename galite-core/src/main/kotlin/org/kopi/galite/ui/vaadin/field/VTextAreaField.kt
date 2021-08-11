@@ -24,6 +24,11 @@ import com.vaadin.flow.component.textfield.TextArea
  * TODO : All the class must be implemented
  */
 class VTextAreaField : InputTextField<TextArea>(TextArea()) {
+
+  init {
+    className = "textarea"
+  }
+
   var cols: Int = 0
 
   fun setRows(rows: Int, visibleRows: Int) {

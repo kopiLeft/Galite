@@ -19,7 +19,7 @@
  /*
  * List Dialog style
  */
-.enhanced-dialog-content ::part(cell header-cell) {
+:host([theme="k-listdialog-container"]) [part="header-cell"] {
     background-color: #f2f2f2;
     padding: 0 !important;
 }
@@ -31,8 +31,7 @@
 /*
  * List Table header styles
  */
-.enhanced-dialog-content vaadin-grid,
-.enhanced-dialog-content  vaadin-grid > vaadin-grid-cell-content {
+:host([theme="k-listdialog-table"]) [part~="cell"] {
     padding: 8px 12px 8px 12px !important;
      font-family: Arial, sans-serif !important;
      font-weight: 400 !important;
@@ -40,23 +39,8 @@
      font-size: 12px !important;
 }
 
-.enhanced-dialog-content vaadin-grid,
-.enhanced-dialog-content vaadin-grid > vaadin-grid-cell-content:hover {
+:host([theme="k-listdialog-table"]) [part~="cell"] :hover {
     cursor: pointer;
-}
-
-.k-listdialog~::part(header) {
-    padding: 0;
-    border-bottom: 0;
-}
-
-.k-listdialog-container~::part(header) {
-    padding: 0;
-    border-bottom: 0;
-}
-
-.k-listdialog-container~::part(dialog-content) {
-    padding: 0;
 }
 
 .k-listdialog-table > * {

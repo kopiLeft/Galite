@@ -20,6 +20,7 @@ package org.kopi.galite.ui.vaadin.grid
 import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.access
 import org.kopi.galite.ui.vaadin.base.ShortcutAction
 import org.kopi.galite.ui.vaadin.base.Utils
+import org.kopi.galite.ui.vaadin.base.runAfterGetValue
 
 import com.flowingcode.vaadin.addons.ironicons.IronIcons
 import com.vaadin.flow.component.AttachEvent
@@ -83,6 +84,7 @@ open class GridEditorTextField(val width: Int) : GridEditorField<String>() {
    */
   fun setAutofill() {
     val autofillIcon  = IronIcons.ARROW_DROP_DOWN.create()
+    autofillIcon!!.style["cursor"] = "pointer" // TODO: move to css
     autofillIcon.addClickListener {
       dGridEditorField.onAutofill()
     }

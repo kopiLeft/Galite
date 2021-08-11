@@ -19,6 +19,7 @@ package org.kopi.galite.ui.vaadin.notif
 
 import org.kopi.galite.ui.vaadin.base.LocalizedProperties
 
+import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
 
@@ -31,8 +32,9 @@ import com.vaadin.flow.component.icon.VaadinIcon
  */
 class InformationNotification(title: String?,
                               message: String,
-                              locale: String)
-  : AbstractNotification(title, message, locale) {
+                              locale: String,
+                              parent: Component?)
+  : AbstractNotification(title, message, locale, parent) {
 
   //-------------------------------------------------
   // IMPLEMENTATION

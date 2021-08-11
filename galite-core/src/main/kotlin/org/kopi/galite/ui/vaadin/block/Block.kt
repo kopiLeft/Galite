@@ -834,7 +834,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
           i += 1
         }
         if (i == bufferSize || !isRecordAccessible(getDataPosition(i))) {
-          NotificationUtils.showError(null, MainWindow.locale, "00015")
+          NotificationUtils.showError(null, this, MainWindow.locale, "00015")
         } else {
           // get position in data of next record in sorted order
           changeActiveRecord(getDataPosition(i))
@@ -874,7 +874,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
           i -= 1
         }
         if (i == -1 || !isRecordAccessible(getDataPosition(i))) {
-          NotificationUtils.showError(null, MainWindow.locale, "00015")
+          NotificationUtils.showError(null, this, MainWindow.locale, "00015")
         } else {
           // get position in data of previous record in sorted order
           changeActiveRecord(getDataPosition(i))
@@ -900,7 +900,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
       if (!isMulti() && activeField!!.getFieldListener() != null) {
         activeField!!.getFieldListener()!!.gotoFirstRecord()
       } else if (noMove()) {
-        NotificationUtils.showError(null, MainWindow.locale, "00025")
+        NotificationUtils.showError(null, this, MainWindow.locale, "00025")
       } else {
         if (activeRecord == -1) {
           return  //no active record we give up
@@ -915,7 +915,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
           i += 1
         }
         if (i == bufferSize || !isRecordAccessible(i)) {
-          NotificationUtils.showError(null, MainWindow.locale, "00015")
+          NotificationUtils.showError(null, this, MainWindow.locale, "00015")
           return
         }
         try {
@@ -948,7 +948,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
       if (!isMulti() && activeField!!.getFieldListener() != null) {
         activeField!!.getFieldListener()!!.gotoLastRecord()
       } else if (noMove()) {
-        NotificationUtils.showError(null, MainWindow.locale, "00025")
+        NotificationUtils.showError(null, this, MainWindow.locale, "00025")
       } else {
         if (activeRecord == -1) {
           return  //no active record we give up
@@ -963,7 +963,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
           i -= 1
         }
         if (i == 0 || !isRecordAccessible(i)) {
-          NotificationUtils.showError(null, MainWindow.locale, "00015")
+          NotificationUtils.showError(null, this, MainWindow.locale, "00015")
           return
         }
         try {
@@ -987,7 +987,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
    */
   protected open fun changeActiveRecord(rec: Int) {
     if (noMove()) {
-      NotificationUtils.showError(null, MainWindow.locale, "00025")
+      NotificationUtils.showError(null, this, MainWindow.locale, "00025")
     } else {
       var act: ColumnView?
       act = activeField
@@ -1138,7 +1138,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
         recno++
       }
       if (noMove() || isSortedRecordDeleted(getDataPosition(recno))) {
-        NotificationUtils.showError(null, MainWindow.locale, "00025")
+        NotificationUtils.showError(null, this, MainWindow.locale, "00025")
       } else {
         var lastVisibleRec = recno
         var nbDisplay = displaySize - 1
@@ -1167,7 +1167,7 @@ abstract class Block(private val droppable: Boolean) : VerticalLayout(), HasEnab
             getDataPosition(lastVisibleRec)
           }
           if (noMove() || !isRecordAccessible(nextRec)) {
-            NotificationUtils.showError(null, MainWindow.locale, "00025")
+            NotificationUtils.showError(null, this, MainWindow.locale, "00025")
           } else {
             changeActiveRecord(nextRec)
           }

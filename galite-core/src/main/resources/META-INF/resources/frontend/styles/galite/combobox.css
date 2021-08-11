@@ -44,3 +44,10 @@
 [part~='input-field']:hover {
 	background: #d9f0f8;
 }
+
+:host {
+    font-family: Arial, sans-serif !important;
+	font-weight: 400 !important;
+	font-style: normal !important;
+	font-size: 12px;
+}

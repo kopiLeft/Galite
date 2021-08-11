@@ -24,10 +24,11 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.Ignore
 import org.junit.Test
 import org.kopi.galite.db.Users
+import org.kopi.galite.demo.desktop.Application
 import org.kopi.galite.tests.ui.swing.JApplicationTestBase
+import org.kopi.galite.visual.MessageCode
 import org.kopi.galite.visual.VExecFailedException
 
 class VBlockTests : JApplicationTestBase() {
@@ -91,21 +92,29 @@ class VBlockTests : JApplicationTestBase() {
   }
 
   @Test
-  @Ignore("TODO: this doesn't seem to be right")
-  fun selectLookupTest() {
+  fun `test refreshLookup with no matching value in the table`() {
     FormWithList.model
-    FormWithList.block3.ts[0] = 0
-    FormWithList.block3.shortName[0] = "admin"
-    FormWithList.block3.name[0] = "admin"
-    FormWithList.block3.character[0] = "admin"
+    FormWithList.block.shortName[0] = "test"
 
     val vExecFailedException = assertFailsWith<VExecFailedException> {
       transaction {
-        FormWithList.block3.vBlock.refreshLookup(0)
+        FormWithList.block.vBlock.refreshLookup(0)
       }
     }
 
-    assertEquals("VIS-00016: Aucune valeur appropriée dans KOPI_USERS.", vExecFailedException.message)
+    assertEquals(MessageCode.getMessage("VIS-00016", FormWithList.block.m.tableName), vExecFailedException.message)
+  }
+
+  @Test
+  fun refreshLookupTest() {
+    FormWithList.model
+    FormWithList.block.shortName[0] = "1000"
+
+    transaction {
+      Application.initModules()
+      Application.initUserRights()
+      FormWithList.block.vBlock.refreshLookup(0)
+    }
   }
 
   @Test

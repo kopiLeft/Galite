@@ -130,11 +130,12 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   fun addColumn(key: Int, column: VReportColumn = model.accessibleColumns[key]!!): Column<DReport.ReportModelItem> {
     val provider = ColumnValueProvider(key, column)
 
-    return super.addComponentColumn(provider).also {
+    return super.addColumn(provider).also {
       provider.column = it
       it.setKey(key.toString())
         .setResizable(true)
         .setClassNameGenerator(ColumnStyleGenerator(model.model, column))
+        .setSortable(false)
     }
   }
 
@@ -195,21 +196,19 @@ class DTable(val model: VTable) : Grid<DReport.ReportModelItem>(), UTable {
   inner class ColumnValueProvider(
     private val columnIndex: Int,
     private val columnModel: VReportColumn
-  ) : ValueProvider<DReport.ReportModelItem, Component> {
+  ) : ValueProvider<DReport.ReportModelItem, String> {
     var column: Column<DReport.ReportModelItem>? = null
 
-    override fun apply(source: DReport.ReportModelItem): Component = VerticalLayout().also { layout ->
-      layout.className = "grid-cell-container"
-      layout.add(source.getValueAt(columnIndex))
-      layout.setSizeFull()
-
+    override fun apply(source: DReport.ReportModelItem): String {
       column?.textAlign = if (columnModel.align == Constants.ALG_RIGHT) {
         ColumnTextAlign.END
       } else {
         ColumnTextAlign.START
       }
 
-      cellStyler.updateStyles(source.rowIndex, columnIndex, layout)
+      cellStyler.updateStyles(source.rowIndex, columnIndex)
+
+      return source.getValueAt(columnIndex)
     }
   }
 }
