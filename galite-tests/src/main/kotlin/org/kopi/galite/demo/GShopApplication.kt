@@ -17,6 +17,7 @@
 package org.kopi.galite.demo
 
 import java.math.BigDecimal
+import java.time.LocalDate
 
 import kotlin.reflect.KClass
 
@@ -25,11 +26,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.date
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.jodatime.CurrentDateTime
-import org.jetbrains.exposed.sql.jodatime.datetime
 import org.jetbrains.exposed.sql.transactions.transaction
-
-import org.joda.time.DateTime
 
 import org.kopi.galite.demo.bill.BillForm
 import org.kopi.galite.demo.billproduct.BillProductForm
@@ -46,7 +43,6 @@ import org.kopi.galite.type.Decimal
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
-import java.time.LocalDate
 
 object Client : Table("CLIENTS") {
   val idClt = integer("ID").autoIncrement()
@@ -115,7 +111,7 @@ object BillProduct : Table("BILL_PRODUCT") {
 object Command : Table("COMMANDS") {
   val numCmd = integer("ID").autoIncrement()
   val idClt = integer("CLIENT_ID").references(Client.idClt)
-  val dateCmd = datetime("COMMAND_DATE").defaultExpression(CurrentDateTime())
+  val dateCmd = date("COMMAND_DATE")
   val paymentMethod = varchar("PAYMENT_METHOD", 50)
   val statusCmd = varchar("COMMAND_STATUS", 30)
 
@@ -366,13 +362,13 @@ fun addStock(id: Int, idStck: Int, minAlerte: Int) {
 }
 
 fun addCmds() {
-  addCmd(0, 1, DateTime.parse("2020-01-03"), "check", "in preparation")
-  addCmd(1, 1, DateTime.parse("2020-01-01"), "check", "available")
-  addCmd(2, 2, DateTime.parse("2021-05-03"), "bank card", "delivered")
-  addCmd(3, 3, DateTime.parse("2021-05-13"), "cash", "canceled")
+  addCmd(0, 1, LocalDate.parse("2020-01-03"), "check", "in preparation")
+  addCmd(1, 1, LocalDate.parse("2020-01-01"), "check", "available")
+  addCmd(2, 2, LocalDate.parse("2021-05-03"), "bank card", "delivered")
+  addCmd(3, 3, LocalDate.parse("2021-05-13"), "cash", "canceled")
 }
 
-fun addCmd(num: Int, client: Int, date: DateTime, payment: String, status: String) {
+fun addCmd(num: Int, client: Int, date: LocalDate, payment: String, status: String) {
   Command.insert {
     it[numCmd] = num
     it[idClt] = client

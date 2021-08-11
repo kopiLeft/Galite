@@ -21,8 +21,6 @@ import java.util.Locale
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.joda.time.DateTime
-
 import org.kopi.galite.demo.Command
 import org.kopi.galite.domain.CodeDomain
 import org.kopi.galite.domain.Domain
@@ -30,6 +28,7 @@ import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.report.FieldAlignment
 import org.kopi.galite.report.Report
 import org.kopi.galite.report.VReport
+import org.kopi.galite.type.Date
 
 /**
  * Command Report
@@ -118,7 +117,7 @@ class CommandR : Report() {
     align = FieldAlignment.LEFT
 
   }
-  val dateCmd = field(Domain<DateTime>(50)) {
+  val dateCmd = field(Domain<Date>(50)) {
     label = "Command date"
     help = "The command date"
     align = FieldAlignment.LEFT
