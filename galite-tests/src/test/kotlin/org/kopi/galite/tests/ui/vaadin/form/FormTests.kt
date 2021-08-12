@@ -34,12 +34,11 @@ import org.kopi.galite.demo.product.ProductForm
 import org.kopi.galite.demo.provider.ProviderForm
 import org.kopi.galite.demo.stock.StockForm
 import org.kopi.galite.demo.taxRule.TaxRuleForm
-import org.kopi.galite.testing.findBlock
+import org.kopi.galite.testing.findMultipleBlock
 import org.kopi.galite.testing.open
 import org.kopi.galite.testing.triggerCommand
 import org.kopi.galite.tests.ui.vaadin.GaliteVUITestBase
 import org.kopi.galite.ui.vaadin.common.VCaption
-import org.kopi.galite.ui.vaadin.form.DGridBlock
 import org.kopi.galite.ui.vaadin.main.MainWindow
 import org.kopi.galite.ui.vaadin.main.VWindowContainer
 
@@ -103,7 +102,7 @@ class FormTests: GaliteVUITestBase() {
     // Open for block
     clientForm.open()
     clientForm.list.triggerCommand()
-    val block = clientForm.salesBlock.findBlock() as DGridBlock
+    val block = clientForm.salesBlock.findMultipleBlock()
     val data = arrayOf(
       arrayOf("1", "description Product 0", "1", "263,00000"),
       arrayOf("2", "description Product 1", "1", "314,00000"),

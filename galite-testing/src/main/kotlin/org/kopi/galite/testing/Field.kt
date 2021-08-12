@@ -89,6 +89,13 @@ fun <T> FormField<T>.edit(value: T): UField {
 }
 
 /**
+ * Edit a form field.
+ *
+ * @param value the value to set to this field.
+ */
+fun <T> FormField<T>.editText(value: String?): UField = edit(value as T)
+
+/**
  * Click on a field.
  */
 fun <T> FormField<T>.click(): UField {

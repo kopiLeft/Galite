@@ -88,6 +88,10 @@ class FormExample : DictionaryForm() {
       label = "Week"
       help = "The week"
     }
+    val codeDomain = visit(domain = Type, position = at(10, 1)) {
+      label = "codeDomain"
+      help = "A code-domain field"
+    }
 
     init {
       border = VConstants.BRD_LINE
