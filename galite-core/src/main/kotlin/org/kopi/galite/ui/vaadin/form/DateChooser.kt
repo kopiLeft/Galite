@@ -17,19 +17,20 @@
  */
 package org.kopi.galite.ui.vaadin.form
 
-import java.util.*
+import java.time.LocalDate
+import java.util.Calendar
 
 import org.kopi.galite.base.UComponent
+import org.kopi.galite.type.Date
+import org.kopi.galite.type.Month
+import org.kopi.galite.ui.vaadin.base.BackgroundThreadHandler.accessAndAwait
 import org.kopi.galite.ui.vaadin.visual.VApplication
 import org.kopi.galite.visual.ApplicationContext
-import org.kopi.galite.type.Date
 
 import com.vaadin.flow.component.AbstractField
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasValue
 import com.vaadin.flow.component.datepicker.DatePicker
-import org.kopi.galite.type.Month
-import java.time.LocalDate
 
 /**
  * The `DateChooser` is date selection component.
@@ -136,7 +137,12 @@ class DateChooser(private var selectedDate: Date?,
      * @return The selected date.
      */
     fun selectDate(date: Date, reference: Component): Date? {
-      val chooser = DateChooser(date, reference)
+      lateinit var chooser: DateChooser
+
+      accessAndAwait {
+        chooser = DateChooser(date, reference)
+      }
+
       return chooser.doModal(date)
     }
 

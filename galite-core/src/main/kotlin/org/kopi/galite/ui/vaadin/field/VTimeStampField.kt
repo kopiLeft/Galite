@@ -34,7 +34,7 @@ import com.vaadin.flow.component.dependency.CssImport
 class VTimeStampField : InputTextField<DateTimePicker>(DateTimePicker()), KeyNotifier {
 
   init {
-    field.isAutoOpen = false
+    internalField.isAutoOpen = false
   }
 
   override fun setPresentationValue(newPresentationValue: String?) {

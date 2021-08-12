@@ -51,8 +51,8 @@ class VTextAreaField : InputTextField<TextArea>(TextArea()) {
   }
 
   override fun setMaxLength(maxLength: Int) {
-    field.maxLength = maxLength
+    internalField.maxLength = maxLength
   }
 
-  override fun getMaxLength(): Double = field.maxLength.toDouble()
+  override fun getMaxLength(): Double = internalField.maxLength.toDouble()
 }
