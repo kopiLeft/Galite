@@ -42,7 +42,7 @@ class MultipleBlockTests: GaliteVUITestBase() {
   val formExample = FormExample().also { it.model }
 
   @Before
-  fun loginToTheApp() {
+  fun `login to the App`() {
     login()
   }
 
