@@ -25,7 +25,6 @@ import org.kopi.galite.demo.Product
 import org.kopi.galite.demo.Purchase
 import org.kopi.galite.domain.BOOL
 import org.kopi.galite.domain.DECIMAL
-import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.VConstants
@@ -33,7 +32,6 @@ import org.kopi.galite.form.dsl.FormBlock
 import org.kopi.galite.form.dsl.Key
 import org.kopi.galite.form.dsl.ReportSelectionForm
 import org.kopi.galite.report.Report
-import org.kopi.galite.type.Decimal
 import org.kopi.galite.visual.VExecFailedException
 
 class ClientForm : ReportSelectionForm() {
