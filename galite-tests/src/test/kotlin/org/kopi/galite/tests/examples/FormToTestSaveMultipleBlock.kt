@@ -20,6 +20,7 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Application
+import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.VConstants
@@ -48,37 +49,61 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     key = Key.F9
     icon = "save"
   }
+  val list = actor(
+    ident = "list",
+    menu = action,
+    label = "list",
+    help = "List data",
+  ) {
+    key = Key.F5
+    icon = "list"
+  }
+  val block = insertBlock(Trainee())
+  val multipleBlock = insertBlock(Centers())
 
-  val block2 = insertBlock(Centers()) {
-    command(item = saveBlock) {
-      action = {
-        val b = vBlock
-        val rec: Int = b.activeRecord
+  inner class Trainee: FormBlock(1, 1, "Training") {
+    val t = table(Training)
 
-        b.validate()
+    val trainingID = visit(domain = Domain<Int>(25), position = at(1, 1)) {
+      label = "training ID"
+      help = "training ID"
+      columns(t.id) {
+        priority = 1
+      }
+    }
 
-        if (!b.isFilled()) {
-          b.currentRecord = 0
-          throw VExecFailedException()
+    init {
+      trigger(POSTQRY) {
+        multipleBlock.load()
+      }
+
+      command(item = list) {
+        action = {
+          transaction {
+            recursiveQuery()
+          }
         }
-
-        transaction {
-          b.save()
-        }
-
-        b.form.gotoBlock(b)
-        b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
       }
     }
   }
 
-  class Centers : FormBlock(20, 20, "Centers") {
+  inner class Centers : FormBlock(20, 20, "Centers") {
     val c = table(Center)
 
     val centerId = hidden(domain = INT(20)) {
       label = "center id"
       help = "The Center id"
       columns(c.id)
+    }
+    val ts = hidden(domain = Domain<Int>(20)) {
+      label = "ts"
+      value = 0
+      columns(c.ts)
+    }
+    val uc = hidden(domain = Domain<Int>(20)) {
+      label = "uc"
+      value = 0
+      columns(c.uc)
     }
     val trainingId = visit(domain = INT(20), position = at(1, 1)) {
       label = "training id"
@@ -103,6 +128,27 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
 
     init {
       border = VConstants.BRD_LINE
+
+      command(item = saveBlock) {
+        action = {
+          val b = vBlock
+          val rec: Int = b.activeRecord
+
+          b.validate()
+
+          if (!b.isFilled()) {
+            b.currentRecord = 0
+            throw VExecFailedException()
+          }
+
+          transaction {
+            b.save()
+          }
+
+          b.form.gotoBlock(b)
+          b.gotoRecord(if (b.isRecordFilled(rec)) rec + 1 else rec)
+        }
+      }
     }
   }
 }
