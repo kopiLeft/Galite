@@ -52,14 +52,9 @@ import org.kopi.galite.type.Week
 open class Domain<T>(val width: Int? = null,
                      val height: Int? = null,
                      val visibleHeight: Int? = null) {
-  companion object {
-    operator fun <T: Decimal?> invoke(width: Int, scale: Int): Domain<Decimal> =
-            Domain(width, scale, null)
-  }
 
   protected var isFraction = false
   protected var styled: Boolean = false
-
   val ident: String = this::class.java.simpleName
 
   /**
