@@ -51,6 +51,10 @@ class STRING(width: Int,
               convert: Convert? = null,
               styled: Boolean = false) :
           this(width, 1, 0, null, convert, styled)
+
+  init {
+    this.styled = styled
+  }
 }
 
 /**

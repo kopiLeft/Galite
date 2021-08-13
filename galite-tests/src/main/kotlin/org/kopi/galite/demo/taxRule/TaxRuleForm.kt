@@ -155,7 +155,7 @@ class TaxRuleBlock : FormBlock(1, 10, "TaxRule") {
     }
   }
 
-  val informations = visit(domain = STRING(80, 50, 10, true), position = at(3, 1)) {
+  val informations = visit(domain = STRING(80, 50, 10, true, styled = true), position = at(3, 1)) {
     label = "tax informations"
     help = "The tax informations"
     columns(u.informations) {
