@@ -34,7 +34,6 @@ import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.PWA
 
-
 @SpringBootApplication
 open class TestApplication : SpringBootServletInitializer()
 
