@@ -18,9 +18,6 @@ package org.kopi.galite.tests.examples
 
 import java.util.Locale
 
-import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.server.AppShellSettings
-import com.vaadin.flow.server.PWA
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.db.DBContext
 import org.kopi.galite.demo.connectToDatabase
@@ -32,6 +29,10 @@ import org.kopi.galite.visual.ApplicationConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
+
+import com.vaadin.flow.component.page.AppShellConfigurator
+import com.vaadin.flow.server.AppShellSettings
+import com.vaadin.flow.server.PWA
 
 
 @SpringBootApplication

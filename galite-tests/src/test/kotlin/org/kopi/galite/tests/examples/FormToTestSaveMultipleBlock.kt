@@ -127,7 +127,6 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
     init {
       border = VConstants.BRD_LINE
 
-
       command(item = saveBlock) {
         action = {
           val b = vBlock
