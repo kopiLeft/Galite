@@ -20,7 +20,6 @@ import java.util.Locale
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kopi.galite.demo.Application
-import org.kopi.galite.domain.Domain
 import org.kopi.galite.domain.INT
 import org.kopi.galite.domain.STRING
 import org.kopi.galite.form.VConstants
@@ -64,7 +63,7 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
   inner class Trainee: FormBlock(1, 1, "Training") {
     val t = table(Training)
 
-    val trainingID = visit(domain = Domain<Int>(25), position = at(1, 1)) {
+    val trainingID = visit(domain = INT(25), position = at(1, 1)) {
       label = "training ID"
       help = "training ID"
       columns(t.id) {
@@ -95,12 +94,12 @@ class FormToTestSaveMultipleBlock : DictionaryForm() {
       help = "The Center id"
       columns(c.id)
     }
-    val ts = hidden(domain = Domain<Int>(20)) {
+    val ts = hidden(domain = INT(20)) {
       label = "ts"
       value = 0
       columns(c.ts)
     }
-    val uc = hidden(domain = Domain<Int>(20)) {
+    val uc = hidden(domain = INT(20)) {
       label = "uc"
       value = 0
       columns(c.uc)
